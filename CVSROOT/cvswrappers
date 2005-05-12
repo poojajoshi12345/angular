@@ -27,3 +27,4 @@
 *.war -k 'b'
 *.doc -k 'b'
 *.class -k 'b'
+*.cur -k 'b'
