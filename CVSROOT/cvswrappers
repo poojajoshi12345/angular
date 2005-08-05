@@ -28,3 +28,4 @@
 *.doc -k 'b'
 *.class -k 'b'
 *.cur -k 'b'
+*.zip -k 'b'
