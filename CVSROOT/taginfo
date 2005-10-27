@@ -18,3 +18,5 @@
 #
 # If the name "ALL" appears as a regular expression it is always used
 # in addition to the first matching regex or "DEFAULT".
+src /home/cvs/filters/webfocus/src_tag_filter
+tools /home/cvs/filters/webfocus/src_tag_filter
