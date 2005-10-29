@@ -18,5 +18,53 @@
 #
 # If the name "ALL" appears as a regular expression it is always used
 # in addition to the first matching regex or "DEFAULT".
-src /home/cvs/filters/webfocus/src_tag_filter
-tools /home/cvs/filters/webfocus/src_tag_filter
+#
+# This is from the Users Manual, added by Peter Lenahan 10/29/05
+#  http://bs2000.fujitsu-siemens.com/download/Goodies/SMAWPlus/SMAWPcvs/html/cvs_18.html#SEC181
+#
+#     C.5 Taginfo 
+#
+#     The `taginfo' file defines programs to execute when someone executes a
+#     tag or rtag command. The `taginfo' file has the standard form for administrative
+#     files (see section Reference manual for Administrative files), where each line
+#     is a regular expression followed by a command to execute. 
+#     
+#     In addition to the common format strings (see section The common syntax), `taginfo' supports: 
+#     
+#     b  -  tag type (T for branch, N for not-branch, or ? for unknown, as during delete operations) 
+#     
+#     o  -  operation (add for tag, mov for tag -F, or del for tag -d) 
+#     
+#     t  -  tag name 
+#     
+#     {sVv}   - file attributes, where: 
+#     
+#     s  -  file name 
+#     
+#     V  -  old version number (for a move or delete operation) 
+#     
+#     v  -  new version number (for an add or move operation) 
+#     
+#     For example, some valid format strings are `%%', `%p', `%t', `%s', `%{s}', and `%{sVv}'. 
+#     
+#     Currently, if no format strings are specified, a default string of ` %t %o %p %{sv}' 
+#     will be appended to the command line template before replacement is performed, but this
+#     feature is deprecated. It is simply in place so that legacy repositories will remain
+#     compatible with the new CVS application. For information on updating, see section
+#     Updating legacy repositories to stop using deprecated command line template formats. 
+#     
+#     A non-zero exit of the filter program will cause the tag to be aborted. 
+#     
+#     Here is an example of using `taginfo' to log tag and rtag commands. In the `taginfo' file put: 
+#     
+#       ALL /usr/local/cvsroot/CVSROOT/loggit %t %b %o %p %{sVv}
+#        
+#     
+#        Where `/usr/local/cvsroot/CVSROOT/loggit' contains the following script: 
+#     
+#          #!/bin/sh
+#     	 echo "$@" >>/home/kingdon/cvsroot/CVSROOT/taglog
+#     	  
+#     
+src /home/cvs/filters/webfocus/src_tag_filter  %t %o %p %{sVv} %b
+tools /home/cvs/filters/webfocus/src_tag_filter %t %o %p %{sVv} %b 
