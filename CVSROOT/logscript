@@ -1,0 +1,4 @@
+#!/bin/ksh
+filename=%1
+userid=$(echo $(id) | sed -e's/).*//' -e's/.*(//')
+echo "$(date '+%Y-%m-%d'), $userid, $filename"
