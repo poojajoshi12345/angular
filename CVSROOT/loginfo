@@ -24,3 +24,4 @@
 #DEFAULT (echo ""; id; echo %s; date; cat) >> $CVSROOT/CVSROOT/commitlog
 # or
 DEFAULT (echo ""; id; echo %{sVv}; date; cat) >> /home/cvs/webfocus/CVSROOT/commitlog
+ALL (/home/cvs/webfocus/CVSROOT/logscript %{sVv}) >> /home/cvs/webfocus/CVSROOT/commitlog.csv
