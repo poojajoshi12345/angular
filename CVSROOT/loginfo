@@ -26,4 +26,4 @@
 DEFAULT (echo ""; id; echo %{sVv}; date; cat) >> /home/cvs/webfocus/CVSROOT/commitlog
 # Placing the "cat" command at the beginning, is required by the loginfo to prevent a broken pipe problem.
 # however the script ignores the contents 
-ALL (cat ; /home/cvs/webfocus/CVSROOT/logscript %c %p %{sVv}; ) >> /home/cvs/webfocus/CVSROOT/commitlog.csv
+ALL (cat > /dev/null ; /home/cvs/webfocus/CVSROOT/logscript %c %p %{sVv}; ) >> /home/cvs/webfocus/CVSROOT/commitlog.csv
