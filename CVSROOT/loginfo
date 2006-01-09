@@ -23,5 +23,7 @@
 # For example:
 #DEFAULT (echo ""; id; echo %s; date; cat) >> $CVSROOT/CVSROOT/commitlog
 # or
-DEFAULT (echo ""; id; echo %1{sVv}; date; cat) >> /home/cvs/webfocus/CVSROOT/commitlog
-ALL (/home/cvs/webfocus/CVSROOT/logscript %1{sVv}) >> /home/cvs/webfocus/CVSROOT/commitlog.csv
+DEFAULT (echo ""; id; echo %{sVv}; date; cat) >> /home/cvs/webfocus/CVSROOT/commitlog
+# Placing the "cat" command at the beginning, is required by the loginfo to prevent a broken pipe problem.
+# however the script ignores the contents 
+ALL (cat ; /home/cvs/webfocus/CVSROOT/logscript %c %p %{sVv}; ) >> /home/cvs/webfocus/CVSROOT/commitlog.csv
