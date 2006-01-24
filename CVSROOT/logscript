@@ -1,3 +1,3 @@
 #!/bin/ksh
 userid=$(echo $(id) | sed -e's/).*//' -e's/.*(//')
-echo "$(date '+%Y-%m-%d %T.%N'), $userid, $*"
+echo "$(date '+%Y-%m-%d %T.%N'), $userid, $PPID, $$, $*"
