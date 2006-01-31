@@ -24,11 +24,6 @@
 # For example:
 #DEFAULT (echo ""; id; echo %s; date; cat) >> $CVSROOT/CVSROOT/commitlog
 # or
-
-
-
-
-
 DEFAULT (echo "::::::::::::::::::::::::::::::::::::::::::::"; userid=$(echo $(id) | sed -e's/).*//' -e's/.*(//');echo "$(date '+%Y-%m-%d %T.%N'), $userid" ; echo %c %p %s %v; date; echo "---Comments---"; cat) >> /home/cvs/webfocus/CVSROOT/commitlog
 # Placing the "cat" command at the beginning, is required by the loginfo to prevent a broken pipe problem.
 # however the script ignores the contents 
