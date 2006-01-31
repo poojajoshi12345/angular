@@ -20,4 +20,4 @@ do
 	done
 	cat
 	echo "::::::::::::::::::::::::::::::::::::::::::::"
-done >> $logfile
+done >> $log_file
