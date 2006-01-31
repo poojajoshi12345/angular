@@ -7,5 +7,12 @@ id | sed -e's/).*//' -e's/.*(//'
 # %c %p %s %v;
 echo Command=$1
 echo Path=$2
-echo Filename=$3
-echo Revision=$4
+shift
+shift
+while [[ $# -gt 0 ]]
+do
+   echo Filename=$1 
+   echo Revision=$2
+   shift
+   shift
+done
