@@ -1,18 +1,22 @@
 #!/bin/ksh
-echo "::::::::::::::::::::::::::::::::::::::::::::"
-echo -n "DateTime="
-date '+%Y-%m-%d %T'
-echo -n "User="
-id | sed -e's/).*//' -e's/.*(//'
-# %c %p %s %v;
-echo Command=$1
-echo Path=$2
-shift
-shift
-while [[ $# -gt 0 ]]
+for redirect in here
 do
-   echo Filename=$1 
-   echo Revision=$2
-   shift
-   shift
-done
+	echo -n "DateTime="
+	date '+%Y-%m-%d %T'
+	echo -n "User="
+	id | sed -e's/).*//' -e's/.*(//'
+	# %c %p %s %v;
+	echo Command=$1
+	echo Path=$2
+	shift
+	shift
+	while [[ $# -gt 0 ]]
+	do
+	   echo Filename=$1 
+	   echo Revision=$2
+	   shift
+	   shift
+	done
+	cat
+	echo "::::::::::::::::::::::::::::::::::::::::::::"
+done >> /home/cvs/webfocus/CVSROOT/commitlog
