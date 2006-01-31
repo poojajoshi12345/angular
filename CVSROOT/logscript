@@ -1,5 +1,5 @@
 #!/bin/ksh
-log_file="/home/cvs/webfocus/CVSROOT/commitlog.$(date '+%Y-%m-%d')"
+log_file="/home/cvs/logs/commitlog.$(date '+%Y-%m-%d')"
 for redirect in here
 do
 	echo -n "DateTime="
