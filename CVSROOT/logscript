@@ -1,5 +1,10 @@
 #!/bin/ksh
 log_file="/home/cvs/logs/commitlog.$(date '+%Y-%m-%d')"
+if [[ ! -e "$log_file" ]]
+then
+   touch $log_file
+   chmod 666 $log_file
+fi
 for redirect in here
 do
 	echo -n "DateTime="
