@@ -1,28 +1,23 @@
 #!/bin/ksh
-log_file="/home/cvs/logs/commitlog.$(date '+%Y-%m-%d')"
-if [[ ! -e "$log_file" ]]
-then
-   touch $log_file
-   chmod 666 $log_file
+
+date=$(date '+%Y%m%d-%H%M%S')
+day=${date%-*}
+logfile="/home/cvs/logs/commitlog.$day"
+if [[ ! -e "$logfile" ]]; then
+ touch $logfile
+ chmod 666 $logfile
 fi
-for redirect in here
-do
-	echo -n "DateTime="
-	date '+%Y-%m-%d %T'
-	echo -n "User="
-	id | sed -e's/).*//' -e's/.*(//'
+for redirect in here; do
+  echo "DateTime=$date"
+  echo -n "User="
+  id | sed -e's/).*//' -e's/.*(//'
 	# %c %p %s %v;
-	echo Command=$1
-	echo Path=$2
-	shift
-	shift
-	while [[ $# -gt 0 ]]
-	do
-	   echo Filename=$1 
-	   echo Revision=$2
-	   shift
-	   shift
-	done
-	cat
-	echo "::::::::::::::::::::::::::::::::::::::::::::"
-done >> $log_file
+  echo Command=$1; shift
+  echo Path=$1; shift
+  while [[ $# -gt 0 ]]; do
+    echo Filename=$1; shift
+    echo Revision=$1; shift
+  done
+  cat
+  echo "::::::::::::::::::::::::::::::::::::::::::::"
+done >> $logfile
