@@ -13,6 +13,7 @@
 #
 # If the name "ALL" appears as a regular expression it is always used
 # in addition to the first matching regex or "DEFAULT".
+apache/log4j-1_2_8 /home/apachex/bin/filters/log4j-1_2_8.filter %r/%p %s
 apache/applet_xalan-j_2_2_0 /home/apachex/bin/filters/applet_xalan-j_2_2_0.filter %r/%p %s
 apache/applet_xerces-1_4_4 /home/apachex/bin/filters/applet_xerces-1_4_4.filter %r/%p %s
 apache/applet_xml-commons-1.0.b2 /home/apachex/bin/filters/applet_xml-commons-1.0.b2.filter %r/%p %s
