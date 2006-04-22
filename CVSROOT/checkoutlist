@@ -13,3 +13,4 @@
 # comment lines begin with '#'
 logscript The log script is a required file to creat logging of user commits
 .cvsignore
+users
