@@ -14,3 +14,7 @@
 logscript The log script is a required file to creat logging of user commits
 .cvsignore
 users
+admin_scripts/branch_tag_Read_Write_Access.txt
+admin_scripts/branch_tags_allowed
+admin_scripts/branch_tags_locked
+admin_scripts/src_tag_filter

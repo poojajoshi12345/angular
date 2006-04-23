@@ -1,0 +1,61 @@
+#!/bin/ksh
+log_result() {
+      echo $0:$userid:$TAGNAME:$OPERATION:$REPOSITORY:$REVISION:$1 >> /home/cvs/webfocus/CVSROOT/tag_filter.log
+
+}
+DIR="/home/cvs/filters/webfocus"
+#ADMINISTRATORS are allowed to move and delete tags and branches.
+ADMINISTRATORS="$(cat $DIR/branch_tag_Read_Write_Access.txt)"
+BAD=1
+GOOD=0
+TAGNAME="$1"
+OPERATION="$2"
+# values for OPERATION are "add" for tag, "mov" for tag -F, and "del" for tag -d
+REPOSITORY="$3"
+REVISION="$4"
+#
+# get  the userid
+#
+#uid=4647(cvs) gid=200(prog) groups=200(prog)
+id=$(id)
+part1=${id%) gid=*}
+userid=${part1##*\(}
+#   echo $userid
+for ADMIN in $ADMINISTRATORS
+do
+   if [[ "$userid" == "$ADMIN" ]]
+   then
+	  log_result  GOOD 1
+      exit $GOOD
+   fi
+done
+#
+# Everyone is allowed to add a a tag to a file
+#
+if [[ "$OPERATION" == "add" ]] 
+then
+   
+   for TAG_LOCKED in $(cat ${DIR}/branch_tags_locked)
+   do
+	  if [[ "$TAGNAME" == "$TAG_LOCKED" ]]
+	  then
+	     log_result  BAD 2
+         exit $BAD
+	  fi
+   done
+#
+# The TAGNAME will be a new tag name so don't compare it to existing names.
+#
+#   for TAG_ALLOWED in $(cat ${DIR}/branch_tags_allowed)
+#   do
+#      if [[ "$TAGNAME" == "$TAG_ALLOWED" ]]
+#      then
+         log_result  GOOD 3
+         exit $GOOD
+#      fi
+#   done
+#   log_result  BAD 4
+#   exit $BAD
+fi
+log_result  BAD 5
+exit $BAD
