@@ -5,7 +5,7 @@ log_result() {
 }
 DIR="/home/cvs/webfocus/CVSROOT/admin_scripts"
 #ADMINISTRATORS are allowed to move and delete tags and branches.
-ADMINISTRATORS="$(cat $DIR/branch_tag_Read_Write_Access.txt)"
+ADMINISTRATORS="$(cat $DIR/intl_branch_tag_Read_Write_Access.txt)"
 BAD=1
 GOOD=0
 TAGNAME="$1"
