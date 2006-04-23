@@ -76,7 +76,8 @@ field_demos /home/cvs/webfocus/CVSROOT/admin_scripts/src_tag_filter %t %o %p %{s
 lib /home/cvs/webfocus/CVSROOT/admin_scripts/src_tag_filter %t %o %p %{sVv} %b 
 lists /home/cvs/webfocus/CVSROOT/admin_scripts/src_tag_filter %t %o %p %{sVv} %b 
 portals /home/cvs/webfocus/CVSROOT/admin_scripts/src_tag_filter %t %o %p %{sVv} %b 
-src/intl /home/cvs/webfocus/CVSROOT/admin_scripts/src_tag_filter %t %o %p %{sVv} %b 
+src/intl /home/cvs/webfocus/CVSROOT/admin_scripts/intl_tag_filter %t %o %p %{sVv} %b 
+src/ibi/intl /home/cvs/webfocus/CVSROOT/admin_scripts/intl_tag_filter %t %o %p %{sVv} %b 
 src /home/cvs/webfocus/CVSROOT/admin_scripts/src_tag_filter  %t %o %p %{sVv} %b
 tools /home/cvs/webfocus/CVSROOT/admin_scripts/src_tag_filter %t %o %p %{sVv} %b 
 staticContentServer /home/cvs/webfocus/CVSROOT/admin_scripts/src_tag_filter %t %o %p %{sVv} %b 
