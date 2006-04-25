@@ -76,7 +76,7 @@ caster.ibi.nls -d caster/java/ibi/nls caster/java/ibi/nls caster/java/ibi/nls/IB
 caster.META-INF -d caster/META-INF caster/META-INF caster/META-INF/mime.types
 
 caster.properties -d caster/properties caster/properties
-caster.src  -d caster/java/ibi/awt src/ibi/awt src/ibi/awt/IBIResfile.java
+caster.src  -d caster/java/ibi/awt src/ibi/awt IBIResfile.java
 #CASTER.MODULE -a caster.ibi.mrcgi caster.ibi.search caster.ibi.util caster.ibi.mrutil caster.ibi.gen caster.ibi.srv.util caster.ibi.srv caster.ibi.awt caster.ibi.webfoc caster.ibi.webfoc.wfsecurity.encryption.defenc caster.java.ibi.webfoc.wfsecurity.encryption caster.java.ibi.webfoc.wfsecurity.encryption.wiredes caster.java.ibi.webfoc.wfsecurity.encryption.wiretripledes caster.java.ibi.webfoc.wfutil caster.ibi.intl caster.ibi.nls caster.META-INF caster.properties 
 #CASTER.MODULE -a caster.ibi.mrcgi caster/java/ibi/awt/IBIResfile.java
 CASTER.MODULE -a caster/properties  caster.src
