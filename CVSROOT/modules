@@ -37,7 +37,17 @@ caster.bincfg -d caster/bincfg caster/bincfg
 #caster.ibi.mrcgi -d caster/java/ibi/mrcgi caster/java/ibi/mrcgi  caster/java/ibi/mrcgi/IBIMRFlags.java caster/java/ibi/mrcgi/IBIMRCookieEncrypt.java caster/java/ibi/mrcgi/IBIProgressCallback.java
 caster.ibi.mrcgi -d caster/java/ibi/mrcgi caster/java/ibi/mrcgi  
 
-caster.ibi.search -d caster/java/ibi/search caster/java/ibi/search  caster/java/ibi/search/SearchException.java caster/java/ibi/search/InputStreamDataSource.java caster/java/ibi/search/GoogleSearchAdapter.java caster/java/ibi/search/SearchAdapter.java caster/java/ibi/search/google/GSAPartSource.java caster/java/ibi/search/FeedDataSource.java caster/java/ibi/search/SecurityCallback.java caster/java/ibi/search/test/SearchAdapterTest.java caster/java/ibi/search/Document.java
+#caster.ibi.search -d caster/java/ibi/search caster/java/ibi/search  caster/java/ibi/search/SearchException.java caster/java/ibi/search/InputStreamDataSource.java caster/java/ibi/search/GoogleSearchAdapter.java caster/java/ibi/search/SearchAdapter.java 
+CASTER  caster \
+caster/java/ibi/search/FeedDataSource.java 
+
+caster/java/ibi/search/test/SearchAdapterTest.java 
+
+#caster/java/ibi/search/google/GSAPartSource.java 
+
+
+#caster.ibi.search -d caster/java/ibi/search caster/java/ibi/search  caster/java/ibi/search/SearchException.java caster/java/ibi/search/InputStreamDataSource.java caster/java/ibi/search/GoogleSearchAdapter.java caster/java/ibi/search/SearchAdapter.java caster/java/ibi/search/google/GSAPartSource.java caster/java/ibi/search/FeedDataSource.java caster/java/ibi/search/SecurityCallback.java caster/java/ibi/search/test/SearchAdapterTest.java caster/java/ibi/search/Document.java
+caster.ibi.search -d caster/java/ibi/search caster/java/ibi/search  SearchException.java InputStreamDataSource.java GoogleSearchAdapter.java SearchAdapter.java GSAPartSource.java FeedDataSource.java /SecurityCallback.java /SearchAdapterTest.java caster/java/ibi/search/Document.java
 
 caster.ibi.util -d caster/java/ibi/util caster/java/ibi/util  caster/java/ibi/util/IBIDlgCreator_interface.java caster/java/ibi/util/URLDecoder.java caster/java/ibi/util/IBIDateConverter.java caster/java/ibi/util/ImageInterface.java caster/java/ibi/util/IBIurl.java caster/java/ibi/util/Pool.java caster/java/ibi/util/IBIStringString.java caster/java/ibi/util/IBIAppletConfig.java caster/java/ibi/util/URLEncoder.java
 
