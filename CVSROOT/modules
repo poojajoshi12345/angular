@@ -34,7 +34,7 @@
 caster.rar caster/rar
 caster.bincfg caster/bincfg
 
-caster.ibi.mrcgi -d caster/java/ibi/mrcgi caster/java/ibi/mrcgi/IBIProgressCallback.java caster/java/ibi/mrcgi/IBIMRFlags.java caster/java/ibi/mrcgi/IBIMRCookieEncrypt.java
+caster.ibi.mrcgi -d caster/java/ibi/mrcgi  caster/java/ibi/mrcgi/IBIMRFlags.java caster/java/ibi/mrcgi/IBIMRCookieEncrypt.java caster/java/ibi/mrcgi/IBIProgressCallback.java
 
 caster.ibi.search -d caster/java/ibi/search caster/java/ibi/search/SearchException.java caster/java/ibi/search/InputStreamDataSource.java caster/java/ibi/search/GoogleSearchAdapter.java caster/java/ibi/search/SearchAdapter.java caster/java/ibi/search/google/GSAPartSource.java caster/java/ibi/search/FeedDataSource.java caster/java/ibi/search/SecurityCallback.java caster/java/ibi/search/test/SearchAdapterTest.java caster/java/ibi/search/Document.java
 
