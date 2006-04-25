@@ -48,7 +48,7 @@ caster.ibi.srv.util -d caster/java/ibi/srv/util caster/java/ibi/srv/util/AppServ
 
 caster.ibi.srv -d caster/java/ibi/srv/graph caster/java/ibi/srv/graph/PerspectivePool.java caster/java/ibi/srv/graph/ImageMapWriter.java caster/java/ibi/srv/graph/IBIPerspectiveObjectNew.java caster/java/ibi/srv/graph/ImageMapWriterForNew.java caster/java/ibi/srv/graph/IBIGraphDefault.java caster/java/ibi/srv/graph/ImageMapWriterForJS.java caster/java/ibi/srv/graph/DDColObj.java caster/java/ibi/srv/graph/IBIPerspective.java caster/java/ibi/srv/graph/ImageMapWriterForOld.java caster/java/ibi/srv/graph/IBIPerspectiveObject.java
 
-caster.ibi.awt -d caster/java/ibi/awt caster/java/ibi/awt/IBIResfile.java
+caster.ibi.awt -d caster/java/ibi/awt caster/java/ibi/awt caster/java/ibi/awt/IBIResfile.java
 
 caster.ibi.webfoc -d caster/java/ibi/webfoc/wfapi caster/java/ibi/webfoc/wfapi/IBICreateCGIGif.java 
 caster.ibi.webfoc.wfsecurity.encryption.defenc -d caster/java/ibi/webfoc/wfsecurity/encryption/defenc caster/java/ibi/webfoc/wfsecurity/encryption/defenc/WFDefaultEncryption.java 
