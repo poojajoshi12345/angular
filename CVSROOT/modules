@@ -38,8 +38,6 @@ caster.bincfg -d caster/bincfg caster/bincfg
 caster.ibi.mrcgi -d caster/java/ibi/mrcgi caster/java/ibi/mrcgi  
 
 #caster.ibi.search -d caster/java/ibi/search caster/java/ibi/search  caster/java/ibi/search/SearchException.java caster/java/ibi/search/InputStreamDataSource.java caster/java/ibi/search/GoogleSearchAdapter.java caster/java/ibi/search/SearchAdapter.java 
-CASTER  caster \
-caster/java/ibi/search/FeedDataSource.java 
 
 caster/java/ibi/search/test/SearchAdapterTest.java 
 
