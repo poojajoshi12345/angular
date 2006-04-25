@@ -34,30 +34,35 @@
 caster.rar caster/rar
 caster.bincfg caster/bincfg
 
-caster.ibi.mrcgi caster/java/ibi/mrcgi/IBIProgressCallback.java caster/java/ibi/mrcgi/IBIMRFlags.java caster/java/ibi/mrcgi/IBIMRCookieEncrypt.java
+caster.ibi.mrcgi -d caster/java/ibi/mrcgi caster/java/ibi/mrcgi/IBIProgressCallback.java caster/java/ibi/mrcgi/IBIMRFlags.java caster/java/ibi/mrcgi/IBIMRCookieEncrypt.java
 
-caster.ibi.search caster/java/ibi/search/SearchException.java caster/java/ibi/search/InputStreamDataSource.java caster/java/ibi/search/GoogleSearchAdapter.java caster/java/ibi/search/SearchAdapter.java caster/java/ibi/search/google/GSAPartSource.java caster/java/ibi/search/FeedDataSource.java caster/java/ibi/search/SecurityCallback.java caster/java/ibi/search/test/SearchAdapterTest.java caster/java/ibi/search/Document.java
+caster.ibi.search -d caster/java/ibi/search caster/java/ibi/search/SearchException.java caster/java/ibi/search/InputStreamDataSource.java caster/java/ibi/search/GoogleSearchAdapter.java caster/java/ibi/search/SearchAdapter.java caster/java/ibi/search/google/GSAPartSource.java caster/java/ibi/search/FeedDataSource.java caster/java/ibi/search/SecurityCallback.java caster/java/ibi/search/test/SearchAdapterTest.java caster/java/ibi/search/Document.java
 
-caster.ibi.util caster/java/ibi/util/IBIDlgCreator_interface.java caster/java/ibi/util/URLDecoder.java caster/java/ibi/util/IBIDateConverter.java caster/java/ibi/util/ImageInterface.java caster/java/ibi/util/IBIurl.java caster/java/ibi/util/Pool.java caster/java/ibi/util/IBIStringString.java caster/java/ibi/util/IBIAppletConfig.java caster/java/ibi/util/URLEncoder.java
+caster.ibi.util -d caster/java/ibi/util caster/java/ibi/util/IBIDlgCreator_interface.java caster/java/ibi/util/URLDecoder.java caster/java/ibi/util/IBIDateConverter.java caster/java/ibi/util/ImageInterface.java caster/java/ibi/util/IBIurl.java caster/java/ibi/util/Pool.java caster/java/ibi/util/IBIStringString.java caster/java/ibi/util/IBIAppletConfig.java caster/java/ibi/util/URLEncoder.java
 
-caster.ibi.mrutil caster/java/ibi/mrutil/IBIMRParseAlert.java
+caster.ibi.mrutil -d caster/java/ibi/mrutil caster/java/ibi/mrutil/IBIMRParseAlert.java
 
-caster.ibi.gen caster/java/ibi/gen
+caster.ibi.gen -d caster/java/ibi/gen caster/java/ibi/gen
 
-caster.ibi/srv.util caster/java/ibi/srv/util/AppServerFlags.java caster/java/ibi/srv/util/Base64.java caster/java/ibi/srv/util/JSCom3Log4jAppender.java caster/java/ibi/srv/util/StackLocation.java
+caster.ibi.srv.util -d caster/java/ibi/srv/util caster/java/ibi/srv/util/AppServerFlags.java caster/java/ibi/srv/util/Base64.java caster/java/ibi/srv/util/JSCom3Log4jAppender.java caster/java/ibi/srv/util/StackLocation.java
 
-caster.ibi.srv caster/java/ibi/srv/graph/PerspectivePool.java caster/java/ibi/srv/graph/ImageMapWriter.java caster/java/ibi/srv/graph/IBIPerspectiveObjectNew.java caster/java/ibi/srv/graph/ImageMapWriterForNew.java caster/java/ibi/srv/graph/IBIGraphDefault.java caster/java/ibi/srv/graph/ImageMapWriterForJS.java caster/java/ibi/srv/graph/DDColObj.java caster/java/ibi/srv/graph/IBIPerspective.java caster/java/ibi/srv/graph/ImageMapWriterForOld.java caster/java/ibi/srv/graph/IBIPerspectiveObject.java
+caster.ibi.srv -d caster/java/ibi/srv/graph caster/java/ibi/srv/graph/PerspectivePool.java caster/java/ibi/srv/graph/ImageMapWriter.java caster/java/ibi/srv/graph/IBIPerspectiveObjectNew.java caster/java/ibi/srv/graph/ImageMapWriterForNew.java caster/java/ibi/srv/graph/IBIGraphDefault.java caster/java/ibi/srv/graph/ImageMapWriterForJS.java caster/java/ibi/srv/graph/DDColObj.java caster/java/ibi/srv/graph/IBIPerspective.java caster/java/ibi/srv/graph/ImageMapWriterForOld.java caster/java/ibi/srv/graph/IBIPerspectiveObject.java
 
-caster.ibi.awt caster/java/ibi/awt/IBIResfile.java
+caster.ibi.awt -d caster/java/ibi/awt caster/java/ibi/awt/IBIResfile.java
 
-caster.ibi.webfoc caster/java/ibi/webfoc/wfapi/IBICreateCGIGif.java caster/java/ibi/webfoc/wfsecurity/encryption/defenc/WFDefaultEncryption.java caster/java/ibi/webfoc/wfsecurity/encryption/WFWireEncryptionInterface.java caster/java/ibi/webfoc/wfsecurity/encryption/wiredes/WFWireDES.java caster/java/ibi/webfoc/wfsecurity/encryption/wiredes/WFWireDESKeyFile.java caster/java/ibi/webfoc/wfsecurity/encryption/WFWireBlockCipher.java caster/java/ibi/webfoc/wfsecurity/encryption/wiretripledes/WFWireTripleDES.java caster/java/ibi/webfoc/wfsecurity/encryption/wiretripledes/WFWireTripleDESKeyFile.java caster/java/ibi/webfoc/wfutil/WFTrace.java caster/java/ibi/webfoc/wfutil/WFEncryptionInterface.java caster/java/ibi/webfoc/wfutil/IDSTMREUserAdministrator.java
+caster.ibi.webfoc -d caster/java/ibi/webfoc/wfapi caster/java/ibi/webfoc/wfapi/IBICreateCGIGif.java 
+caster.ibi.webfoc.wfsecurity.encryption.defenc -d caster/java/ibi/webfoc/wfsecurity/encryption/defenc caster/java/ibi/webfoc/wfsecurity/encryption/defenc/WFDefaultEncryption.java 
+caster.java.ibi.webfoc.wfsecurity.encryption -d caster/java/ibi/webfoc/wfsecurity/encryption caster/java/ibi/webfoc/wfsecurity/encryption/WFWireEncryptionInterface.java 
+caster.java.ibi.webfoc.wfsecurity.encryption.wiredes -d caster/java/ibi/webfoc/wfsecurity/encryption/wiredes caster/java/ibi/webfoc/wfsecurity/encryption/wiredes/WFWireDES.java caster/java/ibi/webfoc/wfsecurity/encryption/wiredes/WFWireDESKeyFile.java 
+caster.java.ibi.webfoc.wfsecurity.encryption -d caster/java/ibi/webfoc/wfsecurity/encryption caster/java/ibi/webfoc/wfsecurity/encryption/WFWireBlockCipher.java 
+caster.java.ibi.webfoc.wfsecurity.encryption.wiretripledes -d caster/java/ibi/webfoc/wfsecurity/encryption/wiretripledes caster/java/ibi/webfoc/wfsecurity/encryption/wiretripledes/WFWireTripleDES.java caster/java/ibi/webfoc/wfsecurity/encryption/wiretripledes/WFWireTripleDESKeyFile.java 
+caster.java.ibi.webfoc.wfutil -d caster/java/ibi/webfoc/wfutil caster/java/ibi/webfoc/wfutil/WFTrace.java caster/java/ibi/webfoc/wfutil/WFEncryptionInterface.java caster/java/ibi/webfoc/wfutil/IDSTMREUserAdministrator.java
 
-caster.ibi.intl caster/java/ibi/intl/CategoryMessages.properties caster/java/ibi/intl/ScheduleMessages.properties caster/java/ibi/intl/LogMessages.properties caster/java/ibi/intl/LibraryContentMessages.properties caster/java/ibi/intl/CasterUtilities.properties caster/java/ibi/intl/enduser.properties caster/java/ibi/intl/AddressBookMessages.properties caster/java/ibi/intl/CasterConfig.properties caster/java/ibi/intl/CasterSchedule.properties caster/java/ibi/intl/UserMessages.properties caster/java/ibi/intl/CasterLib.properties caster/java/ibi/intl/CasterMessages.properties caster/java/ibi/intl/Scheduler.properties caster/java/ibi/intl/main.properties caster/java/ibi/intl/CasterLog.properties caster/java/ibi/intl/errorcode.properties caster/java/ibi/intl/console.properties caster/java/ibi/intl/CasterAccess.properties caster/java/ibi/intl/Migrate.properties caster/java/ibi/intl/CasterAddr.properties caster/java/ibi/intl/library.properties caster/java/ibi/intl/AnnotationMessages.properties caster/java/ibi/intl/CasterUser.properties caster/java/ibi/intl/LibraryAccessMessages.properties
+caster.ibi.intl -d caster/java/ibi/intl caster/java/ibi/intl/CategoryMessages.properties caster/java/ibi/intl/ScheduleMessages.properties caster/java/ibi/intl/LogMessages.properties caster/java/ibi/intl/LibraryContentMessages.properties caster/java/ibi/intl/CasterUtilities.properties caster/java/ibi/intl/enduser.properties caster/java/ibi/intl/AddressBookMessages.properties caster/java/ibi/intl/CasterConfig.properties caster/java/ibi/intl/CasterSchedule.properties caster/java/ibi/intl/UserMessages.properties caster/java/ibi/intl/CasterLib.properties caster/java/ibi/intl/CasterMessages.properties caster/java/ibi/intl/Scheduler.properties caster/java/ibi/intl/main.properties caster/java/ibi/intl/CasterLog.properties caster/java/ibi/intl/errorcode.properties caster/java/ibi/intl/console.properties caster/java/ibi/intl/CasterAccess.properties caster/java/ibi/intl/Migrate.properties caster/java/ibi/intl/CasterAddr.properties caster/java/ibi/intl/library.properties caster/java/ibi/intl/AnnotationMessages.properties caster/java/ibi/intl/CasterUser.properties caster/java/ibi/intl/LibraryAccessMessages.properties
 
-caster.ibi.nls caster/java/ibi/nls/IBInls.java caster/java/ibi/nls/IBInlsInterface.java caster/java/ibi/nls/IBInlsUtil.java
+caster.ibi.nls -d caster/java/ibi/nls caster/java/ibi/nls/IBInls.java caster/java/ibi/nls/IBInlsInterface.java caster/java/ibi/nls/IBInlsUtil.java
 
-caster.META-INF caster/META-INF/mime.types
+caster.META-INF -d caster/META-INF caster/META-INF/mime.types
 
-caster.properties caster/properties
+caster.properties -d caster/properties
 
-caster.module -a caster.rar caster.bincfg caster.ibi.mrcgi caster.ibi.search caster.ibi.util caster.ibi.mrutil caster.ibi.gen caster.ibi/srv.util caster.ibi.srv caster.ibi.awt caster.ibi.webfoc caster.ibi.intl caster.ibi.nls caster.META-INF caster.properties 
