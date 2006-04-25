@@ -52,9 +52,11 @@ caster.ibi.awt -d caster/java/ibi/awt caster/java/ibi/awt/IBIResfile.java
 
 caster.ibi.webfoc -d caster/java/ibi/webfoc/wfapi caster/java/ibi/webfoc/wfapi/IBICreateCGIGif.java 
 caster.ibi.webfoc.wfsecurity.encryption.defenc -d caster/java/ibi/webfoc/wfsecurity/encryption/defenc caster/java/ibi/webfoc/wfsecurity/encryption/defenc/WFDefaultEncryption.java 
-caster.java.ibi.webfoc.wfsecurity.encryption -d caster/java/ibi/webfoc/wfsecurity/encryption caster/java/ibi/webfoc/wfsecurity/encryption/WFWireEncryptionInterface.java 
+
+caster.java.ibi.webfoc.wfsecurity.encryption -d caster/java/ibi/webfoc/wfsecurity/encryption caster/java/ibi/webfoc/wfsecurity/encryption/WFWireBlockCipher.java caster/java/ibi/webfoc/wfsecurity/encryption/WFWireEncryptionInterface.java 
+
 caster.java.ibi.webfoc.wfsecurity.encryption.wiredes -d caster/java/ibi/webfoc/wfsecurity/encryption/wiredes caster/java/ibi/webfoc/wfsecurity/encryption/wiredes/WFWireDES.java caster/java/ibi/webfoc/wfsecurity/encryption/wiredes/WFWireDESKeyFile.java 
-caster.java.ibi.webfoc.wfsecurity.encryption -d caster/java/ibi/webfoc/wfsecurity/encryption caster/java/ibi/webfoc/wfsecurity/encryption/WFWireBlockCipher.java 
+
 caster.java.ibi.webfoc.wfsecurity.encryption.wiretripledes -d caster/java/ibi/webfoc/wfsecurity/encryption/wiretripledes caster/java/ibi/webfoc/wfsecurity/encryption/wiretripledes/WFWireTripleDES.java caster/java/ibi/webfoc/wfsecurity/encryption/wiretripledes/WFWireTripleDESKeyFile.java 
 caster.java.ibi.webfoc.wfutil -d caster/java/ibi/webfoc/wfutil caster/java/ibi/webfoc/wfutil/WFTrace.java caster/java/ibi/webfoc/wfutil/WFEncryptionInterface.java caster/java/ibi/webfoc/wfutil/IDSTMREUserAdministrator.java
 
@@ -67,4 +69,4 @@ caster.META-INF -d caster/META-INF caster/META-INF/mime.types
 caster.properties -d caster/properties
 
 
-CASTER.MODULE -a caster.ibi.mrcgi caster.ibi.search caster.ibi.util caster.ibi.mrutil caster.ibi.gen caster.ibi.srv.util caster.ibi.srv caster.ibi.awt caster.ibi.webfoc caster.ibi.webfoc.wfsecurity.encryption.defenc caster.java.ibi.webfoc.wfsecurity.encryption caster.java.ibi.webfoc.wfsecurity.encryption.wiredes caster.java.ibi.webfoc.wfsecurity.encryption caster.java.ibi.webfoc.wfsecurity.encryption.wiretripledes caster.java.ibi.webfoc.wfutil caster.ibi.intl caster.ibi.nls caster.META-INF caster.properties 
+CASTER.MODULE -a caster.ibi.mrcgi caster.ibi.search caster.ibi.util caster.ibi.mrutil caster.ibi.gen caster.ibi.srv.util caster.ibi.srv caster.ibi.awt caster.ibi.webfoc caster.ibi.webfoc.wfsecurity.encryption.defenc caster.java.ibi.webfoc.wfsecurity.encryption caster.java.ibi.webfoc.wfsecurity.encryption.wiredes caster.java.ibi.webfoc.wfsecurity.encryption.wiretripledes caster.java.ibi.webfoc.wfutil caster.ibi.intl caster.ibi.nls caster.META-INF caster.properties 
