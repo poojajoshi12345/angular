@@ -13,7 +13,6 @@
 #
 # If the name "ALL" appears as a regular expression it is always used
 # in addition to the first matching regex or "DEFAULT".
-ALL /home/Pkg_Admin/code/chklock.pl %p
 apache/log4j-1_2_8 /home/apachex/bin/apache/filters/log4j-1_2_8.filter %r/%p %s
 apache/log4j-1_2_13 /home/apachex/bin/apache/filters/log4j-1_2_13.filter %r/%p %s
 apache/applet_xalan-j_2_2_0 /home/apachex/bin/apache/filters/applet_xalan-j_2_2_0.filter %r/%p %s

@@ -66,6 +66,7 @@
 #     	 echo "$@" >>/home/kingdon/cvsroot/CVSROOT/taglog
 #     	  
 #     
+ALL /home/Pkg_Admin/code/taginfo.pl %b %o %r %p %t
 apache /home/cvs/webfocus/CVSROOT/admin_scripts/src_tag_filter %t %o %p %{sVv} %b 
 betty /home/cvs/webfocus/CVSROOT/admin_scripts/src_tag_filter %t %o %p %{sVv} %b 
 caster /home/cvs/webfocus/CVSROOT/admin_scripts/src_tag_filter %t %o %p %{sVv} %b 
