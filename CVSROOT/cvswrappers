@@ -48,6 +48,7 @@
 *.mht -k 'kv'
 *.txt -k 'kv'
 *.doc -k 'b'
+*.java -k 'kv'
 
 
 
