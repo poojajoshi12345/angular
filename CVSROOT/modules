@@ -31,5 +31,5 @@
 #modulename  -d <target directory>  <source directory> [ <un-qualified list of files> ]
 #caster.src  -d caster/java/ibi/awt src/ibi/awt         IBIResfile.java
 #CASTER.MODULE -a caster/properties  caster.src
-abcdef -a tools !java_bin/DependencyFinder java_bin caster/properties
+abcdef -a tools java_bin !java_bin/DependencyFinder caster/properties
 
