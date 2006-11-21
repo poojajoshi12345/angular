@@ -27,7 +27,7 @@
 #DEFAULT (/home/cvs/webfocus/CVSROOT/logscript %c %p %{sv}) >> /home/cvs/webfocus/CVSROOT/commitlog
 #DEFAULT (/home/cvs/webfocus/CVSROOT/logscript %c %p %{sv})
 #ALL /home/Pkg_Admin/code/loginfo.pl %c %p %{sv}
-ALL /home/Pkg_Admin/code/loginfo.pl %c %p %r %{sv}
+ALL /home/Pkg_Admin/code/loginfo2.pl ${COMMITID} %c %p %r %{sv}
 
 # Placing the "cat" command at the beginning, is required by the loginfo to prevent a broken pipe problem.
 # however the script ignores the contents 
