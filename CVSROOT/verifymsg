@@ -29,4 +29,4 @@
 # One thing that should be noted is the the ALL keyword is not
 # supported.  There can be only one entry that matches a given
 # repository.
-. /home/Pkg_Admin/code/verifymsg2.pl ${COMMITID} %r %p %l
+. /home/Pkg_Admin/code/verifymsg.pl ${COMMITID} %r %p %l
