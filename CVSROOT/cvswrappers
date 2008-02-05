@@ -49,7 +49,4 @@
 *.txt -k 'kv'
 *.doc -k 'b'
 *.java -k 'kv'
-
-
-
-
+*.vbs -k 'b'
