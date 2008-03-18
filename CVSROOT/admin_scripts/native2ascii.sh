@@ -41,8 +41,8 @@ outputdir=${Repository_and_Path##*webfocus/}
 
 echo Repository_and_Path=$Repository_and_Path >> $TEMP
 echo LastDirectoryName=$LastDirectoryName >> $TEMP
-echo checkoutdir="$TEMPdir" >> $TEMP
-echo checkinpdir="$inputdir" >> $TEMP
+echo checkoutdir="${outputdir}" >> $TEMP
+echo checkinpdir="${inputdir}" >> $TEMP
 
 #
 # Multiple files may be in a single return, so collect their names.
