@@ -21,3 +21,4 @@ admin_scripts/src_tag_filter
 admin_scripts/intl_tag_filter
 admin_scripts/intl_branch_tag_Read_Write_Access.txt
 admin_scripts/native2ascii.sh
+admin_scripts/native2ascii_cron.sh
