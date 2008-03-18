@@ -33,7 +33,9 @@ dynamic_file_name="myfile_$(date  '+%Y_%m_%d_%H' )"
 done
 set >>  /tmp/intl_return.txt
 echo ==Entries======= >> /tmp/intl_return.txt
-cat CVS/Entries >> /tmp/intl_return.txt
+FIRSTLINE=$(head -1 CVS/Entries)
+TAGNAME=${FIRSTLINE##*/?}
+echo BRANCHNAME=$TAGNAME >> /tmp/intl_return.txt
 echo ========= >> /tmp/intl_return.txt
 stdin=$(cat)
 echo -n 'stdin="'>> /tmp/intl_return.txt
