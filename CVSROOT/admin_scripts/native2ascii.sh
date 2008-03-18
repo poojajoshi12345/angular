@@ -16,5 +16,24 @@ shift
 while [[ "$1" != ""  ]]; do
    filename=$1
    shift
+   
+#Returns the directory path of the "files" variable
+directoryname="${filename%/*}"
+
+LastDirectoryName=${Repository_and_Path##*/}
+#File_extension_with the current date
+dynamic_file_name="myfile_$(date  '+%Y_%m_%d_%H' )"
+
+   
+   
+   
    echo ${Repository_and_Path} ${filename}>> /tmp/intl_return.txt
+   
+   
 done
+set >>  /tmp/intl_return.txt
+
+stdin=$(cat)
+echo -n 'stdin="'>> /tmp/intl_return.txt
+echo -n $stdin >> /tmp/intl_return.txt
+echo  '"' >> /tmp/intl_return.txt
