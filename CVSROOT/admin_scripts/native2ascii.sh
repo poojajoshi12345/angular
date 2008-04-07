@@ -49,9 +49,12 @@ echo checkinpdir="${inputdir}" >> $TEMP
 #
 while [[ "$1" != ""  ]]; do
    filename=$1
+   filetype=${filename##*.}
    shift
-   checkoutfiles="${checkoutfiles} ${outputdir}/${filename} "
-   checkinfiles="${checkinfiles} ${inputdir}/${filename} "
+   if [[ "$filetype" = "js" || "$filetype" = "txt" ]]; then
+     checkoutfiles="${checkoutfiles} ${outputdir}/${filename} "
+     checkinfiles="${checkinfiles} ${inputdir}/${filename} "
+   fi
 done
 
 echo -n 'checkoutfiles="'>> $TEMP
@@ -62,5 +65,8 @@ echo -n 'checkinfiles="' >> $TEMP
 echo -n $checkinfiles >> $TEMP
 echo '"' >> $TEMP
 chmod +x $TEMP
-cp -p $TEMP $OUTPUT
+
+if [[ -n $checkinfiles ]]; then
+  cp -p $TEMP $OUTPUT
+fi
 rm $TEMP
