@@ -12,6 +12,8 @@ fi
 WORKDIR=/tmp/native2ascii.$$
 [[ -d $WORKDIR ]] && rm -rf 
 mkdir $WORKDIR
+
+#
 # WORKDIR=~Toshifumi_Kojima/test       # TESTING ONLY !!
 
 cd $WORKDIR
