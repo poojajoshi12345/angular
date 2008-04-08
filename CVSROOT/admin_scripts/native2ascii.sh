@@ -68,5 +68,6 @@ chmod +x $TEMP
 
 if [[ -n $checkinfiles ]]; then
   cp -p $TEMP $OUTPUT
+  echo "ksh native2ascii_cron.sh ${OUTPUT}" | at now + 1 minutes
 fi
 rm $TEMP

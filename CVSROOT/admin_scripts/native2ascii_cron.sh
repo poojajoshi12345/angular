@@ -143,7 +143,7 @@ repos=/home/cvs/webfocus
 
            #  commit
            cd ${temp_checkin}
-           cvs -d $repos commit -m "Pkg_Admin: Automatically run native2ascii on this file, see the file intl_${fullfname} \nfor the actual file to return" ${fullfname}  
+           cvs -d $repos commit -m "Ran native2ascii on this file, see the file intl_${fullfname} \nfor the actual file to return" ${fullfname}  
 #
 #  for DEBUG ONLY
 #          ksh
