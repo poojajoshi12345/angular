@@ -69,6 +69,8 @@ chmod +x $TEMP
 if [[ -n $checkinfiles ]]; then
   cp -p $TEMP $OUTPUT
   cd /tmp
-  echo "/bin/ksh /home/cvs/webfocus/CVSROOT/admin_scripts/native2ascii_cron.sh ${OUTPUT}" | at now + 1 minutes
+  #echo "/bin/ksh /home/cvs/webfocus/CVSROOT/admin_scripts/native2ascii_cron.sh ${OUTPUT}" | at now + 1 minutes
+  echo "/bin/ksh /home/cvs/webfocus/CVSROOT/admin_scripts/native2ascii_cron.sh ${OUTPUT}" \
+     >>/home/cvs/webfocus/CVSROOT/admin_scripts//native2ascii.log
 fi
 rm $TEMP
