@@ -67,19 +67,19 @@
 #     	  
 #     
 ALL /home/Pkg_Admin/code/taginfo.pl %b %o %r %p %t
-apache /home/cvs/webfocus/CVSROOT/admin_scripts/src_tag_filter %t %o %p %{sVv} %b 
-betty /home/cvs/webfocus/CVSROOT/admin_scripts/src_tag_filter %t %o %p %{sVv} %b 
-caster /home/cvs/webfocus/CVSROOT/admin_scripts/src_tag_filter %t %o %p %{sVv} %b 
-chartEngine /home/cvs/webfocus/CVSROOT/admin_scripts/src_tag_filter %t %o %p %{sVv} %b 
-config /home/cvs/webfocus/CVSROOT/admin_scripts/src_tag_filter %t %o %p %{sVv} %b 
-dataMediator /home/cvs/webfocus/CVSROOT/admin_scripts/src_tag_filter %t %o %p %{sVv} %b 
-field_demos /home/cvs/webfocus/CVSROOT/admin_scripts/src_tag_filter %t %o %p %{sVv} %b 
-lib /home/cvs/webfocus/CVSROOT/admin_scripts/src_tag_filter %t %o %p %{sVv} %b 
-lists /home/cvs/webfocus/CVSROOT/admin_scripts/src_tag_filter %t %o %p %{sVv} %b 
-portals /home/cvs/webfocus/CVSROOT/admin_scripts/src_tag_filter %t %o %p %{sVv} %b 
-src/intl /home/cvs/webfocus/CVSROOT/admin_scripts/intl_tag_filter %t %o %p %{sVv} %b 
-src/ibi/intl /home/cvs/webfocus/CVSROOT/admin_scripts/intl_tag_filter %t %o %p %{sVv} %b 
-src /home/cvs/webfocus/CVSROOT/admin_scripts/src_tag_filter  %t %o %p %{sVv} %b
-tools /home/cvs/webfocus/CVSROOT/admin_scripts/src_tag_filter %t %o %p %{sVv} %b 
-staticContentServer /home/cvs/webfocus/CVSROOT/admin_scripts/src_tag_filter %t %o %p %{sVv} %b 
+#apache /home/cvs/webfocus/CVSROOT/admin_scripts/src_tag_filter %t %o %p %{sVv} %b 
+#betty /home/cvs/webfocus/CVSROOT/admin_scripts/src_tag_filter %t %o %p %{sVv} %b 
+#caster /home/cvs/webfocus/CVSROOT/admin_scripts/src_tag_filter %t %o %p %{sVv} %b 
+#chartEngine /home/cvs/webfocus/CVSROOT/admin_scripts/src_tag_filter %t %o %p %{sVv} %b 
+#config /home/cvs/webfocus/CVSROOT/admin_scripts/src_tag_filter %t %o %p %{sVv} %b 
+#dataMediator /home/cvs/webfocus/CVSROOT/admin_scripts/src_tag_filter %t %o %p %{sVv} %b 
+#field_demos /home/cvs/webfocus/CVSROOT/admin_scripts/src_tag_filter %t %o %p %{sVv} %b 
+#lib /home/cvs/webfocus/CVSROOT/admin_scripts/src_tag_filter %t %o %p %{sVv} %b 
+#lists /home/cvs/webfocus/CVSROOT/admin_scripts/src_tag_filter %t %o %p %{sVv} %b 
+#portals /home/cvs/webfocus/CVSROOT/admin_scripts/src_tag_filter %t %o %p %{sVv} %b 
+#src/intl /home/cvs/webfocus/CVSROOT/admin_scripts/intl_tag_filter %t %o %p %{sVv} %b 
+#src/ibi/intl /home/cvs/webfocus/CVSROOT/admin_scripts/intl_tag_filter %t %o %p %{sVv} %b 
+#src /home/cvs/webfocus/CVSROOT/admin_scripts/src_tag_filter  %t %o %p %{sVv} %b
+#tools /home/cvs/webfocus/CVSROOT/admin_scripts/src_tag_filter %t %o %p %{sVv} %b 
+#staticContentServer /home/cvs/webfocus/CVSROOT/admin_scripts/src_tag_filter %t %o %p %{sVv} %b 
 
