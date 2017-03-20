@@ -1,0 +1,59 @@
+﻿/*Copyright 1996-2016 Information Builders, Inc. All rights reserved.*/
+/* $Revision$: */
+
+.ibx-collapsible {
+    z-index: 10000;
+}
+
+.ibx-collapsible.open.autohide {
+    pointer-events: auto;
+}
+
+.ibx-collapsible-left-push {
+    transition: margin-left .3s;
+    position: static;
+}
+
+.ibx-collapsible-left-overlay {
+    transition: left .3s;
+	top: 0px;
+	bottom: 0px;
+    position: absolute;
+}
+
+.ibx-collapsible-right-push {
+    transition: margin-right .3s;
+    position: static;
+}
+
+.ibx-collapsible-right-overlay {
+    transition: right .3s;
+	top: 0px;
+	bottom: 0px;
+    position: absolute;
+}
+
+.ibx-collapsible-up-push {
+    transition: margin-top .3s;
+    position: static;
+}
+
+.ibx-collapsible-up-overlay {
+    transition: top .3s;
+	left: 0px;
+	right: 0px;
+    position: absolute;
+}
+
+.ibx-collapsible-down-push {
+    transition: margin-bottom .3s;
+    position: static;
+}
+
+.ibx-collapsible-down-overlay {
+    transition: bottom .3s;
+	left: 0px;
+	right: 0px;
+    position: absolute;
+}
+

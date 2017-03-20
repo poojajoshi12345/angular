@@ -1,0 +1,182 @@
+/*Copyright 1996-2016 Information Builders, Inc. All rights reserved.*/
+// $Revision$:
+
+/******************************************************************************
+	SPINNER
+******************************************************************************/
+function IbxSpinner()
+{
+	if (_biInPrototype) return;
+	IbxTextField.call(this);
+	this._widgetCtor = $.ibi.ibxGrid;
+	application.getWindow().addEventListener("resize", this._onWindowResize, this);
+	this.addEventListener("resize", this._onResize, this);
+}
+_p = _biExtend(IbxSpinner, IbxTextField, "IbxSpinner");
+IbxSpinner.base = IbxTextField.prototype;
+
+
+$.widget("ibi.ibxSpinner", $.ibi.ibxTextField, 
+{
+	options:
+	{
+		"value": 50,
+		"min" :0,
+		"max" :100,
+		"step" :1,
+
+		btnGroupClass:"ibx-spinner-btn-grp",
+		btnUpClass:"ibx-spinner-btn-up",
+		btnUpOptions:
+		{
+		},
+		btnDownClass:"ibx-spinner-btn-down",
+		btnDownOptions:
+		{
+		},
+	},
+	_widgetClass:"ibx-spinner",
+	_create:function()
+	{
+		var prevValue = this.options.value;
+		this._super();
+		var options = this.options;
+
+		this._btnUp = $("<div tabIndex='0'>").ibxButton().on("mousedown mouseup mouseout", this._onBtnEvent.bind(this)).addClass(options.btnUpClass);
+		this._btnDown = $("<div tabIndex='0'>").ibxButton().on("mousedown mouseup mouseout", this._onBtnEvent.bind(this)).addClass(options.btnDownClass);
+		this._btnBox = $("<div>").ibxVButtonGroup().ibxWidget("addButton", this._btnUp).ibxWidget("addButton", this._btnDown).addClass(options.btnGroupClass);
+		this._textInput.addClass("ibx-spinner-text-input");
+		this.element.on("ibx_textchanging", this._onTextChanging.bind(this)).append(this._btnBox);
+		if (options.value > options.max)
+			options.value = options.max;
+		if (options.value < options.min)
+			options.value = options.min;
+		options.value = this._adjustStep(prevValue, options.min, options.max, options.step);
+		this._setValue(options.value, true);
+	},
+	_destroy:function()
+	{
+		this._super();
+	},
+	_intervalId: null,
+	_bUp: true,
+	_cleared: false,
+	_onBtnEvent:function(e)
+	{
+		if(e.type == "mouseup" || e.type == "mouseout")
+		{
+			clearInterval(this._intervalId);
+			this._intervalId = null;
+			this._cleared = true;
+		}
+		else
+		if(e.type == "mousedown")
+		{
+			this._cleared = false;
+			this._bUp = $(e.currentTarget).hasClass(this.options.btnUpClass);
+			this._stepSpinner(this._bUp);
+			setTimeout(function(e)
+			{
+				if (!this._cleared)
+				{
+					if (this._intervalId)
+						clearInterval(this._intervalId);
+					this._intervalId = setInterval(this._onPressTimer.bind(this), 100);
+				}
+			}.bind(this), 200);
+		}
+	},
+	_onPressTimer:function(e)
+	{
+		this._stepSpinner(this._bUp);
+	},
+	_setValue: function (value, bFormat)
+	{
+		this.options.value = parseInt(value, 10);
+		this.options.text = bFormat && this.options.fnFormat ? this.options.fnFormat(value) : value;
+		this._textInput.val(this.options.text);
+		this.refresh();
+		this._trigger("change", null, this._getInfo());
+		this._trigger("set_form_value", null, { "elem": this.element, "value": value });
+	},
+	_onKeyDown: function (e)
+	{
+		this._super(e);
+
+		if (e.which == 38) // up
+		{
+			this._stepSpinner(true);
+			e.preventDefault();
+		}
+		else if (e.which == 40) // down
+		{
+			this._stepSpinner(false);
+			e.preventDefault();
+		}
+	},
+	_onBlur: function (e)
+	{
+		var value = this._textInput.val();
+		var numValue = parseInt(value, 10);
+		if (isNaN(numValue))
+			numValue = this.options.min;
+		if (numValue > this.options.max)
+			numValue = this.options.max;
+		if (numValue < this.options.min)
+			numValue = this.options.min;
+		var newValue = this._adjustStep(numValue, this.options.min, this.options.max, this.options.step);
+		if (this.options.value != newValue)
+		{
+			this._setValue(newValue, true);
+			this._trigger("textchanged", e, this.element);
+		}
+	},
+	_onTextChanging: function (e, txtField)
+	{
+		if (!jQuery.isNumeric(e.key) && e.which != 37 && e.which != 38 && e.which != 39 && e.which != 40 && e.which != 8 && e.which != 46 && e.which != 190)
+			e.preventDefault();
+	},
+	_stepSpinner: function (bUp)
+	{
+		var info = this._getInfo();
+		if (bUp)
+		{
+			info.value += info.step;
+			if (info.value > info.max)
+				info.value = info.max;
+		}
+		else
+		{
+			info.value -= info.step;
+			if (info.value < info.min)
+				info.value = info.min;
+		}
+		info.value = this._adjustStep(info.value, info.min, info.max, info.step);
+		this._setValue(info.value, true);
+		this.refresh();
+	},
+	_adjustStep: function (val, min, max, step)
+	{
+		var lower = Math.min(Math.floor((val - min) / step) * step + min, max);
+		var higher = Math.min(Math.ceil((val - min) / step) * step + min, max);
+
+		if (val - lower < higher - val)
+			return lower;
+		else
+			return higher;
+	},
+	_getInfo: function ()
+	{
+		return { elem: this.element, value: parseInt(this.options.value, 10), min: parseInt(this.options.min, 10), max: parseInt(this.options.max, 10), step: parseInt(this.options.step, 10) };
+	},
+	refresh: function ()
+	{
+		this._super();
+	}
+});
+$.ibi.ibxSpinner.statics = 
+{
+};
+
+
+//# sourceURL=spinner.ibx.js

@@ -1,0 +1,114 @@
+/*Copyright 1996-2016 Information Builders, Inc. All rights reserved.*/
+/* $Revision$: */
+
+.ibx-dialog
+{
+	padding:.25em;
+}
+
+.ibx-dialog.std .ibx-dialog-title-bar
+{
+	border-radius:.3em;
+	border:2px solid;
+}
+.ibx-dialog.std.plain .ibx-dialog-title-bar
+{
+	color:darkgray;
+	border-color:darkgray;
+}
+.ibx-dialog.std.error .ibx-dialog-title-bar
+{
+	color:crimson;
+	border-color:crimson;
+}
+.ibx-dialog.std.warning .ibx-dialog-title-bar
+{
+	color:orange;
+	border-color:orange;
+}
+.ibx-dialog.std.information .ibx-dialog-title-bar
+{
+	color:royalblue;
+	border-color:royalblue;
+}
+.ibx-dialog.std.question .ibx-dialog-title-bar
+{
+	color:forestgreen;
+	border-color:forestgreen;
+}
+
+.ibx-title-bar-caption
+{
+	flex:1 1 auto;
+}
+.ibx-dialog.std .ibx-title-bar-caption::before
+{
+	font-family: 'Material Icons';
+	font-weight:bold;
+	font-size:1.5em;
+	content:"\E001";
+	margin-right:.25em;
+}
+
+.ibx-title-bar-close-button
+{
+	color:inherit;
+	border:none;
+	padding-right:.25em;
+}
+.ibx-title-bar-close-button:hover
+{
+	border:none;
+}
+.ibx-title-bar-close-button::before
+{
+	font-family: 'Material Icons';
+	content:"\E14C";
+}
+
+.ibx-dialog-content
+{
+	flex:1 1 auto;
+	overflow:hidden;
+	margin-top:.25em;
+}
+
+.ibx-dialog-button-box
+{
+	margin-top:.25em;
+}
+
+.ibx-dialog-ok-button, .ibx-dialog-cancel-button
+{
+	flex: 0 1 7em;
+}
+.ibx-dialog-cancel-button
+{
+	margin-right:.25em;
+}
+
+.ibx-dialog-confirm-message
+{
+	color:black;
+}
+
+.ibx-dialog-input-ctrl-box
+{
+	margin-bottom:.5em;
+}
+
+.ibx-dialog-input-label
+{
+	flex:1 1 auto;
+	margin-right:.5em;
+	color:gray;
+}
+
+.ibx-dialog-input-ctrl input
+{
+	flex:1 1 auto;
+	border:none;
+	outline:none;
+	border-radius:initial;
+	border-bottom:1px solid black;
+}

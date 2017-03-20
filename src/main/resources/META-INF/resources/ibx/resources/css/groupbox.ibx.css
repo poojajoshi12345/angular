@@ -1,0 +1,27 @@
+﻿/*Copyright 1996-2016 Information Builders, Inc. All rights reserved.*/
+/* $Revision$: */
+
+.ibx-group-box {
+    border: 1px solid #ccc;
+    border-radius: 0.3em;
+    padding: 0.5em;
+    margin: 0.5em;
+}
+
+.ibx-group-label-pos-top {
+    padding-top: 1.5em;
+}
+
+.ibx-group-label-pos-bottom {
+    padding-bottom: 1.5em;
+}
+
+.ibx-group-box-label {
+    background-color: white;
+    color: #ccc;
+    padding-left: 0.3em;
+    padding-right: 0.3em;
+    margin-right: 0.3em;
+    margin-left: 0.3em;
+}
+

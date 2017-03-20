@@ -1,0 +1,93 @@
+/*Copyright 1996-2016 Information Builders, Inc. All rights reserved.*/
+// $Revision$:
+<?xml version="1.0" encoding="UTF-8"?>
+<ibx-res-bundle name="ibx_resourece_bundle.xml">
+	<res_bundles>
+	</res_bundles>
+
+	<strings>
+		<string-file src=""/>
+		<string-bundle>
+		<![CDATA[
+		]]>
+		</string-bundle>
+	</strings>
+
+	<styles>
+		<style-file src="./resources/etc/jquery/jquery-ui-1.12.1/jquery-ui.css"/>
+		<style-file src="./resources/etc/gridstack/gridstack.css"/>
+		<style-file src="./resources/etc/material-icons/iconfont/material-icons.css"/>
+		<style-file src="./resources/etc/font-awesome/css/font-awesome.css"/>
+		<style-file src="./resources/css/base.ibx.css"/>
+		<style-file src="./resources/css/widget.ibx.css"/>
+		<style-file src="./resources/css/collapsible.ibx.css"/>
+		<style-file src="./resources/css/flexbox.ibx.css"/>
+		<style-file src="./resources/css/grid.ibx.css"/>
+		<style-file src="./resources/css/splitter.ibx.css"/>
+		<style-file src="./resources/css/control.ibx.css"/>
+		<style-file src="./resources/css/text.ibx.css"/>
+		<style-file src="./resources/css/textarea.ibx.css"/>
+		<style-file src="./resources/css/spinner.ibx.css"/>
+		<style-file src="./resources/css/button.ibx.css"/>
+		<style-file src="./resources/css/slider.ibx.css"/>
+		<style-file src="./resources/css/popup.ibx.css"/>
+		<style-file src="./resources/css/dialog.ibx.css"/>
+		<style-file src="./resources/css/form.ibx.css"/>
+		<style-file src="./resources/css/tabs.ibx.css"/>
+		<style-file src="./resources/css/accordion.ibx.css"/>
+		<style-file src="./resources/css/menu.ibx.css"/>
+		<style-file src="./resources/css/groupbox.ibx.css"/>
+		<style-file src="./resources/css/gridstack.ibx.css"/>
+		<style-file src="./resources/css/select.ibx.css"/>
+		<style-file src="./resources/css/base.ibx.css"/>
+		<style-sheet name="ibx_test_simple_styles">
+		<![CDATA[
+		]]>
+		</style-sheet>
+	</styles>
+
+	<markup>
+		<markup-file src="./ibx_test_simple_markup1.xml"/>
+		<markup-block>
+		</markup-block>
+	</markup>
+
+	<scripts>
+		<script-file src="./resources/etc/jquery/jquery-3.1.1.js"/>
+		<script-file src="./resources/etc/jquery/jquery-ui-1.12.1/jquery-ui.js"/>
+		<script-file src="./resources/etc/gridstack/underscore.js"/>
+		<script-file src="./resources/etc/gridstack/gridstack.js"/>
+		<script-file src="./resources/js/bi_patches.ibx.js"/>
+		<script-file src="./resources/js/resources.ibx.js"/>
+		<script-file src="./resources/js/events.ibx.js"/>
+		<script-file src="./resources/js/util.ibx.js"/>
+		<script-file src="./resources/js/ibfs.ibx.js"/>
+		<script-file src="./resources/js/mutationobserver.ibx.js"/>
+		<script-file src="./resources/js/widget.ibx.js"/>
+		<script-file src="./resources/js/collapsible.ibx.js"/>
+		<script-file src="./resources/js/flexbox.ibx.js"/>
+		<script-file src="./resources/js/grid.ibx.js"/>
+		<script-file src="./resources/js/splitter.ibx.js"/>
+		<script-file src="./resources/js/label.ibx.js"/>
+		<script-file src="./resources/js/control.ibx.js"/>
+		<script-file src="./resources/js/text.ibx.js"/>
+		<script-file src="./resources/js/textarea.ibx.js"/>
+		<script-file src="./resources/js/spinner.ibx.js"/>
+		<script-file src="./resources/js/button.ibx.js"/>
+		<script-file src="./resources/js/slider.ibx.js"/>
+		<script-file src="./resources/js/popup.ibx.js"/>
+		<script-file src="./resources/js/dialog.ibx.js"/>
+		<script-file src="./resources/js/radiogroup.ibx.js"/>
+		<script-file src="./resources/js/form.ibx.js"/>
+		<script-file src="./resources/js/tabs.ibx.js"/>
+		<script-file src="./resources/js/accordion.ibx.js"/>
+		<script-file src="./resources/js/menu.ibx.js"/>
+		<script-file src="./resources/js/groupbox.ibx.js"/>
+		<script-file src="./resources/js/gridstack.ibx.js"/>
+		<script-file src="./resources/js/select.ibx.js"/>
+		<script-block name="ibx_test_simple_res1_block1">
+		<![CDATA[
+		]]>
+		</script-block>
+	</scripts>
+</ibx-res-bundle>

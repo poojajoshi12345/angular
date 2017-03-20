@@ -1,0 +1,84 @@
+/*Copyright 1996-2017 Information Builders, Inc. All rights reserved.*/
+/* $Revision$: */
+
+.ibx-select {
+    border-radius: 0.2em;
+    border: 1px solid #ccc;
+    background-color: white;
+    padding: 0.2em;
+}
+
+.ibx-select > .ibx-button {
+    margin-left: 0.2em;
+}
+
+.ibx-select > input {
+    outline: none;
+    border-bottom:none;
+}
+
+.ibx-select > input:hover {
+    outline: none;
+    border-bottom:none;
+}
+
+.ibx-select-list {
+}
+
+.ibx-select-item {
+}
+
+.ibx-select-type-combo {
+}
+
+.ibx-select-type-list {
+}
+
+.ibx-select-type-drop-down-combo {
+}
+
+.ibx-select-type-drop-down-list {
+}
+
+.ibx-select-type-combo > .ibx-select-list {
+    border-top: 1px solid #ccc;
+    margin-top: 0.2em;
+    flex: 1 1 auto;
+}
+
+.ibx-select-type-list > .ibx-select-list {
+    flex: 1 1 auto;
+}
+
+.sel-selected:not(.ibx-select-check-item):not(.ibx-select-radio-item),
+.sel-selected:not(.ibx-select-check-item):not(.ibx-select-radio-item):hover,
+.sel-selected:not(.ibx-select-check-item):not(.ibx-select-radio-item):focus{
+    background-color:#39f;
+    color: white;
+}
+
+.sel-selected.ibx-select-check-item, 
+.sel-selected.ibx-select-radio-item
+{
+    background-color:initial;
+}
+
+.sel-selected.ibx-select-check-item:hover, 
+.sel-selected.ibx-select-radio-item:hover
+{
+	background-color:#ddd;
+}
+
+.sel-selected.ibx-select-check-item:focus, 
+.sel-selected.ibx-select-radio-item:focus
+{
+	background-color:#ddd;
+}
+
+.ibx-select-group {
+    font-weight: bold;
+}
+
+.ibx-select-group-item {
+}
+

@@ -1,0 +1,97 @@
+﻿/*Copyright 1996-2016 Information Builders, Inc. All rights reserved.*/
+/* $Revision$: */
+
+.ibx-menu
+{
+	padding:3px;
+	border:1px solid #888;
+	border-radius:0px;
+	box-shadow:.3em .3em .5em 0 gray;
+	overflow:hidden;
+	font-size:1em;
+}
+
+/*have to override the ibx-widget-disabled class*/
+.ibx-menu.ibx-menu-disabled
+{
+	opacity:1;
+	pointer-events:all;
+}
+
+/*essentially disable all the children of the menu*/
+.ibx-menu.ibx-menu-disabled > .ibx-widget
+{
+	opacity:.5;
+	pointer-events:none;
+}
+
+/*submenus have the same font size as parent*/
+.ibx-menu .ibx-menu
+{
+	font-size:1em;
+}
+
+.ibx-menu-box
+{
+}
+
+.ibx-menu-item:hover
+{
+	background-color:#ddd;
+}
+
+.ibx-menu-separator
+{
+	margin-top:.25em;
+	margin-bottom:.25em;
+	border-top:1px solid #ccc;
+}
+
+
+.ibx-menu-item:focus
+{
+	box-shadow:none;
+	background-color:#eee;
+}
+
+.ibx-menu-item-label
+{
+	flex:1 0 auto;
+}
+
+.ibx-menu-item-marker
+{
+	font-family:"Material Icons";
+	font-size:1em;
+	color:#888;
+	width:1.5em;
+}
+
+.ibx-menu-item-marker::before
+{
+	margin-left:.25em;
+}
+
+.ibx-marker-uncheck::before
+{
+	content:"\e835";
+}
+.ibx-marker-check::before
+{
+	content:"\e834";
+}
+
+.ibx-marker-radio-uncheck::before
+{
+	content:"\e836";
+}
+.ibx-marker-radio-check::before
+{
+	content:"\e837";
+}
+
+.ibx-marker-sub::before
+{
+	/*content:"\e5cc"; chevron right*/
+	content:"\e037";/*play arrow*/
+}

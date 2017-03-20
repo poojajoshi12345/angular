@@ -1,0 +1,360 @@
+/*Copyright 1996-2016 Information Builders, Inc. All rights reserved.*/
+// $Revision$:
+
+//Simple string formatting function
+function sformat()
+{
+    var s = arguments[0];
+	var i = arguments.length;
+    while (i--)
+        s = s.replace(new RegExp('\\{' + i + '\\}', 'gm'), arguments[i]);
+    return s;
+}
+
+(function()
+{
+	/**** Platform checks ****/
+	var ua = navigator.userAgent;
+	var pc = window.ibxPlatformCheck = 
+	{
+		"isEdge": ((ua.match(".*Windows NT 10.0.*") != null) && (ua.match(".*Edge*.") != null)),
+		"isIE": (ua.match(".*Trident.*") != null),
+		"isFirefox": (ua.match(".*Firefox.*") != null),
+		"isAndroid": (ua.match(".*Andoid.*") != null),
+		"isChrome": (ua.match(".*Chrome.*") != null),
+		"isiPad": (ua.match(".*iPad.*") != null),
+		"isiPhone": (ua.match(".*iPhone.*") != null)
+	};
+	$.extend(pc, 
+	{
+		"isSafari":(ua.match(".*Safari.*") && !pc.isChrome),
+		"isIOS": (pc.isiPad || pc.isiPhone),
+		"isMobile": (pc.isIOS || pc.isAndroid)
+	});
+})();
+
+if(jQuery)
+{
+	//Custom jQuery selectors
+	jQuery.expr[":"]["biComponent"] = function(elem)
+	{
+		return $(elem).prop("_biComponent") ? true : false;
+	};
+	jQuery.expr[":"]["biFocusRoot"] = function(elem)
+	{
+		return elem._biComponent ? elem._biComponent.isFocusRoot() : false;
+	};
+	jQuery.expr[":"]["ibxWidget"] = function(elem)
+	{
+		return $(elem).data("ibxWidget") ? true : false;
+	};
+	jQuery.expr[":"]["ibxNameRoot"] = function(elem)
+	{
+		elem = $(elem);
+		var widget = elem.data("ibxWidget");
+		var nameRoot = widget ? widget.options.nameRoot : elem.attr("data-ibx-nameroot");
+		return nameRoot;
+	};
+	jQuery.expr[":"]["ibxRadioGroup"] = function(elem, idx, meta, stack)
+	{
+		elem = $(elem);
+		var name = meta[3]
+		var selector = sformat(".ibx-radio-group-control-{1}", name);
+		return elem.is(selector);
+	};
+	jQuery.expr[":"]["ibxFocusable"] = function(elem)
+	{
+		var el = $(elem);
+		var tabIndex = el.attr("tabIndex")
+		var visible = (el.css("visibility") != "hidden" && el.css("display") != "none");
+		var ret = ((tabIndex >= 0) && visible);
+		return ret;
+	};
+	jQuery.expr[":"]["openPopup"] = function(elem, idx, meta, stack)
+	{
+		elem = $(elem);
+		var zLimits = meta[3] ? meta[3].split(",") : [];
+		var zMin = $.isNumeric(zLimits[0]) ? zLimits[0] : 0;
+		var zMax = $.isNumeric(zLimits[1]) ? zLimits[1] : Infinity;
+		var zIndex = parseInt(elem.css("zIndex"), 10);
+		zIndex = $.isNumeric(zIndex) ? zIndex : 0;
+		return (elem.is(".ibx-popup:not(.pop-closed)") &&  zIndex >= zMin && zIndex <= zMax);
+	};
+	jQuery.expr[":"]["modalPopup"] = function(elem)
+	{
+		return $(elem).is(".ibx-popup.pop-modal");
+	};
+	jQuery.expr[":"]["menuPopup"] = function(elem)
+	{
+		return $(elem).is(".ibx-popup.ibx-menu");
+	};
+	jQuery.expr[":"]["openMenuPopup"] = function(elem)
+	{
+		return $(elem).is(":openPopup:menuPopup");
+	};
+	jQuery.expr[":"]["openModalPopup"] = function(elem)
+	{
+		return $(elem).is(":openPopup:modalPopup");
+	};
+	jQuery.expr[":"]["autoClose"] = function(elem)
+	{
+		elem = $(elem);
+		return (elem.is(".ibx-popup")) ? elem.ibxWidget("option", "autoClose") : false;
+	};
+	jQuery.expr[":"]["hasSubMenu"] = function(elem)
+	{
+		var subMenu = $(elem).data("ibxSubMenu") || $(elem).children(".ibx-menu").length;
+		return subMenu ? true : false;
+	};
+
+	//simple plugin to get the zIndex of the 0th element.
+	jQuery.fn["zIndex"] = function()
+	{
+		return parseInt(this.css("zIndex"), 10);
+	};
+
+	//Sorts elements on zIndex (in descending order).
+	function fnSortZIndex(el1, el2)
+	{
+		el1 = jQuery(el1);
+		el2 = jQuery(el2);
+
+		var z1 = parseInt(el1.css("zIndex"), 10);
+		var z2 = parseInt(el2.css("zIndex"), 10);
+
+		if(z1 == z2)
+			return 0;
+		if(z1 > z2)
+			return -1;
+		if(z1 < z2)
+			return 1;
+	}
+}
+
+
+/****
+	MediaQuery is used to wrap the idea of creating javascript breakpoints to our code.  Also allows
+	manipulation of the <meta name="viewport"> tag.
+****/
+function MediaQuery()
+{
+	/* Default Resgistered Media Query Lists */
+	MediaQuery.addQuery("iPad", "(min-device-width: 768px) and (max-device-width: 1024px)");
+	MediaQuery.addQuery("iPadPortrait", "(min-device-width: 768px) and (max-device-width: 1024px) and (orientation: portrait)");
+	MediaQuery.addQuery("iPadLandscape", "(min-device-width: 768px) and (max-device-width: 1024px) and (orientation: landscape)");
+
+	MediaQuery.addQuery("iPhone4", "(min-device-width: 320px) and (max-device-width: 480px)");
+	MediaQuery.addQuery("iPhone4Portrait", "(min-device-width: 320px) and (max-device-width: 480px) and (orientation: portrait)");
+	MediaQuery.addQuery("iPhone4Landscape", "(min-device-width: 320px) and (max-device-width: 480px) and (orientation: landscape)");
+
+	MediaQuery.addQuery("iPhone5", "(min-device-width: 320px) and (max-device-width: 568px)");
+	MediaQuery.addQuery("iPhone5Portrait", "(min-device-width: 320px) and (max-device-width: 568px) and (orientation: portrait)");
+	MediaQuery.addQuery("iPhone5Landscape", "(min-device-width: 320px) and (max-device-width: 568px) and (orientation: landscape)");
+
+	MediaQuery.addQuery("iPhone6", "(min-device-width: 375px) and (max-device-width: 667px)");
+	MediaQuery.addQuery("iPhone6Portrait", "(min-device-width: 375px) and (max-device-width: 667px) and (orientation: portrait)");
+	MediaQuery.addQuery("iPhone6Landscape", "(min-device-width: 375px) and (max-device-width: 667px) and (orientation: landscape)");
+
+	MediaQuery.addQuery("iPhone6P", "(min-device-width: 414px) and (max-device-width: 736px)");
+	MediaQuery.addQuery("iPhone6PPortrait", "(min-device-width: 414px) and (max-device-width: 736px) and (orientation: portrait)");
+	MediaQuery.addQuery("iPhone6PLandscape", "(min-device-width: 414px) and (max-device-width: 736px) and (orientation: landscape)");
+};
+MediaQuery.EVENT_MEDIA_CHANGE = "mediaqueryhange";
+MediaQuery._queries = {};
+MediaQuery.getQueries = function getQueries(bMatches)
+{
+	return bMatches ? $.map(MediaQuery._queries, function(mql){return mql.matches ? mql : null;}) : MediaQuery._queries;
+};
+MediaQuery.refresh = function refresh()
+{
+	for(var key in MediaQuery._queries)
+		MediaQuery._onMediaQueryListEvent(MediaQuery._queries[key]);
+};
+MediaQuery.addQuery = function(name, query)
+{
+	if(!window.matchMedia) //[BIP-580] Not supported in IE9
+		return;
+
+	if(MediaQuery._queries[name])
+		MediaQuery.removeQuery(name);
+
+	MediaQuery._queries[name] = mql = window.matchMedia(query);
+	mql.name = name;
+	mql.addListener(MediaQuery._onMediaQueryListEvent);
+	MediaQuery._onMediaQueryListEvent(mql);
+	return mql;
+};
+MediaQuery.removeQuery = function (name)
+{
+	mql = this._queries[name];
+	mql.removeListener(MediaQuery._onMediaQueryListEvent);
+	delete MediaQuery._queries[name];
+	return mql;
+};
+MediaQuery._onMediaQueryListEvent = function(mql)
+{
+	var mql = (mql.target) ? mql.target : mql;
+	$(window).trigger(MediaQuery.EVENT_MEDIA_CHANGE, mql);
+};
+MediaQuery.setViewPort = function(vpInfo)
+{
+	var vpElem = document.querySelector("meta[name=viewport]");
+	if(vpInfo)
+	{
+		var vpCurrent = MediaQuery.getViewPort();
+		for(var key in vpInfo)
+			vpCurrent[key] = vpInfo[key];
+
+		var strContent = "";
+		for(var key in vpCurrent)
+			strContent += key + "=" + vpCurrent[key] + ",";
+		strContent = strContent.substring(0, strContent.lastIndexOf(","));
+
+		if(vpElem)
+			vpElem.setAttribute("content", strContent);
+		else
+		{
+			vpElem = document.createElement("meta");
+			vpElem.setAttribute("name", "viewport");
+			vpElem.setAttribute("content", strContent);
+			document.querySelector("head").appendChild(vpElem);
+		}
+	}
+	else
+	if(vpElem)
+		vpElem.parentNode.removeChild(vpElem);
+
+};
+MediaQuery.getViewPort = function()
+{
+	var vpInfo = {};
+	var vpElem = document.querySelector("meta[name=viewport]");
+	if(vpElem)
+	{
+		var arContent = vpElem.getAttribute("content").split(",");
+		for(var i = 0; i < arContent.length; ++i)
+		{
+			var keyVal = arContent[i].split("=");
+			vpInfo[keyVal[0].replace(/ /g, "")] = keyVal[1].replace(/ /g, "");
+		}
+	}
+	return vpInfo;
+};
+if(window.matchMedia)//Declare the static singleton if browser supports the matchMedia functionality.
+	new MediaQuery();
+
+/******************************************************************************
+		USED FOR BUILDING WEBAPI WRAPPERS
+******************************************************************************/
+function WebApi(webAppContext, webAppName, options)
+{
+	this.setExOptions($.extend(true, WebApi.statics.defaultExInfo, options));
+	this._defaultExInfo.appContext = webAppContext;
+	this._defaultExInfo.appName = webAppName;
+}
+var _p = WebApi.prototype = new Object();
+
+WebApi.statics = 
+{
+	defaultExInfo:
+	{
+		webApi:null,
+		appContext:"",
+		appName:"",
+		relPath:"",
+		parms:{},
+		data:{},
+		public:true,
+		async:true,
+		ppCtx:this,
+		ppFun:null,
+		result:null,
+		jqNamespace:false,
+		eNamespace:"webapi",
+		ePreCall:"pre_call",
+		ePostCall:"post_call",
+		eSuccess:"success",
+		eFail:"fail",
+		tStart:null,
+		tReturn:null,
+		tComplete:null,
+		ajax:
+		{
+			cache:false,
+			contentType:"application/x-www-form-urlencoded",
+			context:this,
+			data:{},
+			dataType:"xml",
+			method:"POST",
+			url:"",
+		}
+	}
+};
+
+WebApi.genEventType = function(eventType, exInfo)
+{
+	return sformat("{1}{2}{3}", exInfo.eNamespace, exInfo.jqNamespace ? "" : "_",  eventType);
+};
+
+WebApi.genExecOptions = function(parms, data, ajax, options)
+{
+	options = $.extend(true, {parms:{}, data:{}, ajax:{data:{}}}, options);
+	$.extend(true, options.parms, parms);
+	$.extend(true, options.data, data);
+	$.extend(true, options.ajax, ajax);
+	return options;
+};
+
+_p.getExOptions = function(){return this._defaultExInfo;};
+_p.setExOptions = function(options)
+{
+	this._defaultExInfo = $.extend(true, this._defaultExInfo, options);
+};
+
+_p.exec = function exec(options)
+{
+	var exInfo = this._getExInfo();
+	$.extend(true, exInfo, options);
+	$.extend(true, exInfo.ajax.data, exInfo.parms);
+	exInfo.ajax.async = exInfo.async;
+	exInfo.ajax.url =  sformat("{1}/{2}{3}", exInfo.appContext, exInfo.appName,  exInfo.relPath ? ("/" + exInfo.relPath) : "");
+	var res = $.ajax(exInfo.ajax).exInfo;
+	return res;
+};
+
+_p._getExInfo = function()
+{
+	var exInfo = $.extend(true, {}, this.getExOptions())
+	exInfo.ajax.beforeSend = this._onBeforeSend.bind(this, exInfo);
+	exInfo.ajax.complete = this._onComplete.bind(this, exInfo);
+	exInfo.ajax.success = this._onSuccess.bind(this, exInfo);
+	exInfo.ajax.error = this._onError.bind(this, exInfo);
+	return exInfo;
+};
+_p._onBeforeSend = function(exInfo, xhr, settings)
+{
+	exInfo.xhr = xhr;
+	exInfo.tStart = new Date();
+	$(window).trigger(WebApi.genEventType(exInfo.ePreCall, exInfo), exInfo);
+};
+_p._onSuccess = function(exInfo, res, status, xhr)
+{
+	exInfo.tReturn = new Date();
+	exInfo.result = (exInfo.ppFun) ? exInfo.ppFun.call(exInfo.ppCtx, res, exInfo) : res;
+	if(exInfo.public || exInfo.async)
+		$(window).trigger(WebApi.genEventType(exInfo.eSuccess, exInfo), exInfo);
+};
+_p._onComplete = function(exInfo, xhr, status)
+{
+	exInfo.tComplete = new Date();
+	xhr.exInfo = exInfo;
+	$(window).trigger(WebApi.genEventType(exInfo.ePostCall, exInfo), exInfo);
+};
+_p._onError = function(exInfo, xhr, error, errorType)
+{
+	exInfo.tReturn = new Date();
+	$(window).trigger(WebApi.genEventType(exInfo.eError, exInfo), exInfo);
+};
+
+
+//# sourceURL=util.ibx.js

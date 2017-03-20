@@ -1,0 +1,83 @@
+/*Copyright 1996-2016 Information Builders, Inc. All rights reserved.*/
+/* $Revision$: */
+
+.ibx-accordion-pane
+{
+	border:1px solid silver;
+	border-radius:.25em;
+	padding:.25em;
+}
+
+.ibx-accordion-page
+{
+	flex:0 1 auto;
+	border:1px solid silver;
+	border-top:none;
+	overflow:hidden;
+}
+.ibx-accordion-page.acc-pg-closed/*stop closed pages from getting squished when pane is really small*/
+{
+	flex-shrink:0;
+}
+.ibx-accordion-page.acc-pg-stretch:not(.acc-pg-closed)/*stretch open pages to fill all available space*/
+{
+	flex-grow:1;
+}
+
+.ibx-accordion-button, .ibx-accordion-button:hover
+{
+	background-color:#ccc;
+}
+
+.ibx-accordion-button.acc-btn-closed
+{
+	background-color: #eee;
+}
+
+.ibx-accordion-page-content
+{
+	flex: 1 1 auto;
+	overflow:auto;
+	opacity:1;
+	transition:opacity .3s, max-height .3s ease-in-out;
+}
+.ibx-accordion-page-content.acc-cnt-closed
+{
+	opacity:0;
+	max-height:0px;
+}
+
+.ibx-accordion-button
+{
+	flex:0 0 auto;
+	border:none;
+}
+.ibx-accordion-button.checked
+{
+	border:none;
+}
+
+.ibx-accordion-button:active
+{
+	box-shadow:none;
+}
+.ibx-accordion-button:hover
+{
+	border:none;
+}
+.ibx-accordion-button-text
+{
+	flex:1 1 auto;
+	font-size: 1.5em;
+	font-weight:bold;
+}
+
+/*animate the open/close glyph*/
+.ibx-label-glyph
+{
+	transition:transform .3s;
+}
+.ibx-label-glyph.acc-rotate-glyph
+{
+	transform:rotate(90deg);
+}

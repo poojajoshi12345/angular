@@ -1,0 +1,220 @@
+﻿/*Copyright 1996-2016 Information Builders, Inc. All rights reserved.*/
+/* $Revision$: */
+
+
+/* Start button classes */
+
+.ibx-button,
+.ibx-button:hover[disabled]
+{
+    padding: 0.3em 0.6em;
+    cursor: pointer;
+    border-radius: 0.2em;
+
+    color: #373a3c;
+    background-color: transparent;
+    border: 1px solid #ccc;
+
+}
+/* Chrome user agent sets the cursor for a label to default */
+.ibx-button label {
+    cursor: pointer;
+}
+
+.ibx-button:hover {
+    color: #373a3c;
+    background-color: #eee;
+    border: 1px solid #aaa;
+}
+/* End button classes */
+
+
+/* Start check box classes */
+
+.ibx-check-box,
+.ibx-check-box:hover[disabled]
+{
+    padding: 0.3em 0.6em;
+    cursor: pointer;
+    border-radius: 0.2em;
+
+    color: #373a3c;
+    background-color: transparent;
+    border: 1px solid #ccc;
+
+}
+/* Chrome user agent sets the cursor for a label to default */
+.ibx-check-box label {
+    cursor: pointer;
+}
+
+.ibx-check-box:hover {
+    color: #373a3c;
+    background-color: #eee;
+    border: 1px solid #aaa;
+}
+
+.ibx-check-box.checked {
+    background-color: #ccc;
+    border: 1px solid #555;
+}
+
+/* End check box classes */
+
+/* Begin switch classes */
+
+.ibx-switch {
+    display: inline-flex;
+    align-items: center;
+}
+
+.ibx-switch-spacer {
+    flex: 1 0 auto;
+    width: 0.3em;
+}
+
+/* The actual switch from the switch control */
+.ibx-switch-ctrl {
+    position: relative;
+    width: 2em;
+    height: 1em;
+}
+
+.ibx-switch-ctrl > .ibx-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+.ibx-switch-ctrl > .ibx-slider:before {
+    position: absolute;
+    content: "";
+    height: 0.86em;
+    width: 0.86em;
+    top: 0.07em;
+    bottom: 0.07em;
+    left: 0.07em;
+    right: 0.07em;
+    background-color: #ffffff;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+.ibx-switch.checked .ibx-slider:before {
+    -webkit-transform: translateX(1em);
+    -ms-transform: translateX(1em);
+    transform: translateX(1em);
+}
+
+.ibx-switch .ibx-slider {
+    background-color: #bbb;
+}
+
+.ibx-switch.checked .ibx-slider {
+    background-color: #555;
+}
+
+/* Disabled switch styling */
+.ibx-switch[data-enabled='false'] .ibx-slider,
+.ibx-switch[data-enabled='false']:hover .ibx-slider {
+    background-color: #eee;
+}
+
+/* Make the switch round */
+.ibx-switch-ctrl > .ibx-slider.round {
+    border-radius: 0.9em;
+}
+
+.ibx-switch-ctrl > .ibx-slider.round:before {
+    border-radius: 50%;
+}
+
+/* End switch classes */
+
+/* Button group classes */
+
+.ibx-button-group-horizontal > .ibx-check-box,
+.ibx-button-group-horizontal > .ibx-button,
+.ibx-button-group-horizontal > .ibx-switch,
+.ibx-button-group-horizontal > .ibx-check-box.checked.hide-check
+{
+    box-shadow: none;
+    border: 1px solid #ccc;
+    border-right: none;
+    border-radius: 0em;
+}
+
+.ibx-button-group-horizontal > .ibx-check-box:focus,
+.ibx-button-group-horizontal > .ibx-button:focus,
+.ibx-button-group-horizontal > .ibx-switch:focus,
+.ibx-button-group-horizontal > .ibx-check-box.checked.hide-check:focus,
+.ibx-button-group-vertical > .ibx-check-box:focus,
+.ibx-button-group-vertical > .ibx-button:focus,
+.ibx-button-group-vertical > .ibx-switch:focus,
+.ibx-button-group-vertical > .ibx-check-box.checked.hide-check:focus
+{
+    box-shadow: inset 0 0 0.15em 0 black;
+}
+
+.ibx-button-group-vertical > .ibx-check-box,
+.ibx-button-group-vertical > .ibx-button,
+.ibx-button-group-vertical > .ibx-switch,
+.ibx-button-group-vertical > .ibx-check-box.checked.hide-check{
+    box-shadow: none;
+    border: 1px solid #ccc;
+    border-bottom: none;
+    border-radius: 0em;
+}
+
+/* Left button */
+
+.ibx-button-group-horizontal > .ibx-check-box.ibx-button-group-first,
+.ibx-button-group-horizontal > .ibx-button.ibx-button-group-first,
+.ibx-button-group-horizontal > .ibx-switch.ibx-button-group-first,
+.ibx-button-group-horizontal > .ibx-check-box.ibx-button-group-first.checked.hide-check
+ {
+    border-radius: 0.2em;
+    border-bottom-right-radius: 0em;
+    border-top-right-radius: 0em;
+}
+
+.ibx-button-group-vertical > .ibx-check-box.ibx-button-group-first,
+.ibx-button-group-vertical > .ibx-button.ibx-button-group-first,
+.ibx-button-group-vertical > .ibx-switch.ibx-button-group-first,
+.ibx-button-group-vertical > .ibx-check-box.ibx-button-group-first.checked.hide-check {
+    border-radius: 0.2em;
+    border-bottom-right-radius: 0em;
+    border-bottom-left-radius: 0em;
+}
+
+/* Right button */
+
+.ibx-button-group-horizontal > .ibx-check-box.ibx-button-group-last,
+.ibx-button-group-horizontal > .ibx-button.ibx-button-group-last,
+.ibx-button-group-horizontal > .ibx-switch.ibx-button-group-last,
+.ibx-button-group-horizontal > .ibx-check-box.ibx-button-group-last.checked.hide-check {
+    border-radius: 0.2em;
+    border-bottom-left-radius: 0em;
+    border-top-left-radius: 0em;
+    border-right: 1px solid #ccc;
+}
+
+.ibx-button-group-vertical > .ibx-check-box.ibx-button-group-last,
+.ibx-button-group-vertical > .ibx-button.ibx-button-group-last,
+.ibx-button-group-vertical > .ibx-switch.ibx-button-group-last,
+.ibx-button-group-vertical > .ibx-check-box.ibx-button-group-last.checked.hide-check {
+    border-radius: 0.2em;
+    border-top-left-radius: 0em;
+    border-top-right-radius: 0em;
+    border-bottom: 1px solid #ccc;
+}
+
+.ibx-button-group-member {
+    flex: 1 1 auto;
+}
+
