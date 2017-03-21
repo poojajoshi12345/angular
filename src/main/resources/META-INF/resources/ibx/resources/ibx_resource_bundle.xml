@@ -24,6 +24,7 @@ $Revision$:-->
 		<style-file src="./resources/css/flexbox.ibx.css"/>
 		<style-file src="./resources/css/grid.ibx.css"/>
 		<style-file src="./resources/css/splitter.ibx.css"/>
+		<style-file src="./resources/css/label.ibx.css"/>
 		<style-file src="./resources/css/control.ibx.css"/>
 		<style-file src="./resources/css/text.ibx.css"/>
 		<style-file src="./resources/css/textarea.ibx.css"/>
