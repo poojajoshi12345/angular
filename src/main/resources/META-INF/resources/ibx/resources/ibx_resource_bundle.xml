@@ -6,7 +6,7 @@ $Revision$:-->
 	</res_bundles>
 
 	<strings>
-		<string-file src=""/>
+		<string-file src="./resources/strings/strings.en.ibx.txt"/>
 		<string-bundle>
 		<![CDATA[
 		]]>

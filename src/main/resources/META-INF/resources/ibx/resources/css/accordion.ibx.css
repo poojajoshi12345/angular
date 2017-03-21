@@ -73,11 +73,11 @@
 }
 
 /*animate the open/close glyph*/
-.ibx-label-glyph
+.ibx-accordion-button .ibx-label-glyph
 {
 	transition:transform .3s;
 }
-.ibx-label-glyph.acc-rotate-glyph
+.ibx-accordion-button .ibx-label-glyph.acc-rotate-glyph
 {
 	transform:rotate(90deg);
 }

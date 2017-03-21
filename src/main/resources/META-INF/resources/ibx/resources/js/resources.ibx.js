@@ -76,6 +76,7 @@ _p.loadBundle = function(xDoc, xhr)
 {
 	var name = xhr._name;
 	var xDoc = $(xDoc);
+	var head = $("head");
 	var bundles = xDoc.find("ibx-res-bundle");
 	for(var i = 0; i < bundles.length; ++i)
 	{
@@ -83,28 +84,72 @@ _p.loadBundle = function(xDoc, xhr)
 		var name = name || bundle.attr("name");
 		bundle.attr("name", name);
 
-		var dfd = $.Deferred();
-		var files = bundle.find("script-file");
-		files.each(function(idx, file)
-		{
-			var file = $(file);
-			var src = this.getContextPath() + file.attr("src");
-			$.get({async:false, url:src, dataType:"text"}).done(function(content, status, xhr)
-			{
-				var script = $("<script type='text/javascript'>");
-				script.text(content);
-				$("head").append(script);
-			});
-		}.bind(this));
-
-		files = bundle.find("style-file");
+		//load all css files
+		var files = bundle.find("style-file");
 		files.each(function(idx, file)
 		{
 			var link = $("<link rel='stylesheet' type='text/css'>");
 			var src = this.getContextPath() + $(file).attr("src");
 			link.attr("href", src);
-			$("head").append(link);
+			head.append(link);
 		}.bind(this));
+
+		//load inline css styles
+		styleBlocks = bundle.find("style-sheet").each(function(idx, styleBlock)
+		{
+			styleBlock = $(styleBlock);
+			var content = styleBlock.text();
+			if((/\S/g).test(content))
+			{
+				var styleNode = $("<style type='text/css'>").text(content);
+				head.append(styleNode);
+			}
+		});
+
+		//load all string and script files
+		files = bundle.find("string-file, script-file");
+		files.each(function(idx, file)
+		{
+			file = $(file);
+			var src = this.getContextPath() + file.attr("src");
+			$.get({async:false, url:src, dataType:"text"}).done(function(content, status, xhr)
+			{
+				if((/\S/g).test(content))
+				{
+					var script = $("<script type='text/javascript'>");
+					script.text(content);
+					head.append(script);
+				}
+			});
+		}.bind(this));
+
+		//load all inline string bundles
+		var stringBundles = bundle.find("string-bundle");
+		stringBundles.each(function(idx, stringBundle)
+		{
+			stringBundle = $(stringBundle);
+			var content = stringBundle.text();
+			if((/\S/g).test(content))
+			{
+				var strBundle = JSON.parse(content);
+				ibxResourceMgr.addStringBundle(strBundle);
+			}
+		}.bind(this));
+
+		//load all inline scripts
+		var scriptBlocks = bundle.find("script-block");
+		scriptBlocks.each(function(idx, scriptBlock)
+		{
+			scriptBlock = $(scriptBlock);
+			var content = scriptBlock.text();
+			if((/\S/g).test(content))
+			{
+				var script = $("<script type='text/javascript'>");
+				script.text(content);
+				head.append(script);
+			}
+		}.bind(this));
+
 	};
 	this._rootBundle.find("ibx-root-res-bundle").append(bundles);
 	xhr._deferred.resolve();
