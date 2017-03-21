@@ -58,7 +58,6 @@ $Revision$:-->
 		<script-file src="./resources/etc/gridstack/underscore.js"/>
 		<script-file src="./resources/etc/gridstack/gridstack.js"/>
 		<script-file src="./resources/js/bi_patches.ibx.js"/>
-		<script-file src="./resources/js/resources.ibx.js"/>
 		<script-file src="./resources/js/events.ibx.js"/>
 		<script-file src="./resources/js/util.ibx.js"/>
 		<script-file src="./resources/js/ibfs.ibx.js"/>

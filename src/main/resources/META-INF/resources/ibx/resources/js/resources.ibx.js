@@ -46,17 +46,21 @@ _p.addStringBundle = function(bundle)
 
 _p.addBundle = function(url, data)
 {
-	
-	var xhr = $.get(url, data);
-	xhr._src = url;
-	xhr._resLoaded = $.Deferred();
-	xhr.progress(this._onBundleProgress.bind(this)).done(this._onBundleLoaded.bind(this)).fail(this._onBundleLoadError.bind(this));
-	return $.when(xhr, xhr._resLoaded);
+	var resLoaded = $.Deferred(function(dfd)
+	{
+		var xhr = $.get(url, data);
+		xhr._deferred = dfd;
+		xhr._src = url;
+		xhr.done(this._onBundleLoaded.bind(this))
+		xhr.fail(this._onBundleLoadError.bind(this))
+		xhr.progress(this._onBundleProgress.bind(this));
+	}.bind(this));
+	return $.when(resLoaded);
 }
 _p._onBundleLoaded = function(xDoc, status, xhr)
 {
 	xDoc._xhr = xhr;
-	this.loadBundle(xDoc, xhr._src);
+	this.loadBundle(xDoc, xhr);
 };
 _p._onBundleLoadError = function(xhr, status, msg)
 {
@@ -68,9 +72,9 @@ _p._onBundleProgress = function()
 };
 
 //load the actual resource bundle here...can be called directly, or from an xhr load.
-_p.loadBundle = function(xDoc, name)
+_p.loadBundle = function(xDoc, xhr)
 {
-	var resLoaded = $.Deferred();
+	var name = xhr._name;
 	var xDoc = $(xDoc);
 	var bundles = xDoc.find("ibx-res-bundle");
 	for(var i = 0; i < bundles.length; ++i)
@@ -81,19 +85,29 @@ _p.loadBundle = function(xDoc, name)
 
 		var dfd = $.Deferred();
 		var files = bundle.find("script-file");
-		for(var j = 0; j < files.length; ++j)
+		files.each(function(idx, file)
 		{
-			var file = $(files[j]);
+			var file = $(file);
 			var src = this.getContextPath() + file.attr("src");
-			var xhr = $.get({url:src, dataType:"script"}).done(function(dfd, content, status, xhr)
+			$.get({async:false, url:src, dataType:"text"}).done(function(content, status, xhr)
 			{
-				console.log("resolved", arguments);
-			}.bind(dfd));
-		}
-		resLoaded.resolve();//resolve the promise
+				var script = $("<script type='text/javascript'>");
+				script.text(content);
+				$("head").append(script);
+			});
+		}.bind(this));
+
+		files = bundle.find("style-file");
+		files.each(function(idx, file)
+		{
+			var link = $("<link rel='stylesheet' type='text/css'>");
+			var src = this.getContextPath() + $(file).attr("src");
+			link.attr("href", src);
+			$("head").append(link);
+		}.bind(this));
 	};
 	this._rootBundle.find("ibx-root-res-bundle").append(bundles);
-	return resLoaded;
+	xhr._deferred.resolve();
 };
 
 _p.getResource = function(selector, ibxBind)
