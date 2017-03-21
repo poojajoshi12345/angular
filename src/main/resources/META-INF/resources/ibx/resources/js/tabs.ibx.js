@@ -79,8 +79,11 @@ $.widget("ibi.ibxTabPane", $.ibi.ibxFlexBox,
 	{
 		if (key == "position")
 		{
-			this._tabBar.ibxTabGroup("option", "direction", (value == "left" || value == "right") ? "column" : "row");
-			this._tabBar.ibxTabGroup("option", "position", value);
+			if (this._tabBar)
+			{
+				this._tabBar.ibxTabGroup("option", "direction", (value == "left" || value == "right") ? "column" : "row");
+				this._tabBar.ibxTabGroup("option", "position", value);
+			}
 			switch (value)
 			{
 				default:
