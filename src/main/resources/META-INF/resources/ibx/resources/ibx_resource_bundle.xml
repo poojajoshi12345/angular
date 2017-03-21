@@ -47,7 +47,6 @@ $Revision$:-->
 	</styles>
 
 	<markup>
-		<markup-file src="./ibx_test_simple_markup1.xml"/>
 		<markup-block>
 		</markup-block>
 	</markup>

@@ -8,8 +8,9 @@
 ****/
 function ibx(fn, path, autoBind)
 {
-	if(!ibx.loaded)
+	if(!ibx.loaded && !ibx._isLoading)
 	{
+		ibx._isLoading = !ibx.loaded;
 		ibx.setPath(path);
 
 		var scripts = 
@@ -52,6 +53,7 @@ function ibx(fn, path, autoBind)
 						}
 
 						ibx._loaded = true;
+						ibx._isLoading = !ibx._loaded;
 						ibx._loadPromise.then(fn);
 						ibx._loadPromise.resolve(ibx);//let everyone know the system is booted.
 					});
@@ -63,7 +65,7 @@ function ibx(fn, path, autoBind)
 	if(typeof(fn) === "function")
 	{
 		if(!ibx._loaded)
-			throws("You haven't started the ibx subsystem!");
+			throw("You haven't started the ibx subsystem!");
 		ibx._loadPromise.then(fn);
 	}
 	return ibx;
