@@ -248,10 +248,14 @@ if(window.matchMedia)//Declare the static singleton if browser supports the matc
 ******************************************************************************/
 function WebApi(webAppContext, webAppName, options)
 {
-	this.setExOptions($.extend(true, WebApi.statics.defaultExInfo, options));
-	this._defaultExInfo.appContext = webAppContext;
-	this._defaultExInfo.appName = webAppName;
-	this._defaultExInfo.ppCtx = this;
+	var webApiOptions = 
+	{
+		appContext: webAppContext,
+		appName: webAppName,
+		ppCtx: this
+	};
+	options = $.extend({},  WebApi.statics.defaultExInfo, webApiOptions, options);
+	this.setExOptions(options);
 }
 var _p = WebApi.prototype = new Object();
 
@@ -288,6 +292,12 @@ WebApi.statics =
 			dataType:"xml",
 			method:"POST",
 			url:"",
+		},
+		deferred:null,
+		done:function(fn)
+		{
+			this.deferred.done(fn);
+			return this;//support chaining.
 		}
 	}
 };
@@ -317,15 +327,18 @@ _p.exec = function exec(options)
 	var exInfo = this._getExInfo();
 	$.extend(true, exInfo, options);
 	$.extend(true, exInfo.ajax.data, exInfo.parms);
+	exInfo.deferred = $.Deferred();
 	exInfo.ajax.async = exInfo.async;
 	exInfo.ajax.url =  sformat("{1}/{2}{3}", exInfo.appContext, exInfo.appName,  exInfo.relPath ? ("/" + exInfo.relPath) : "");
-	var res = $.ajax(exInfo.ajax).exInfo;
-	return res;
+	$.ajax(exInfo.ajax);
+	return exInfo;
 };
 
 _p._getExInfo = function()
 {
 	var exInfo = $.extend(true, {}, this.getExOptions())
+	exInfo.webApi = this;
+	exInfo.deferred = $.Deferred();
 	exInfo.ajax.beforeSend = this._onBeforeSend.bind(this, exInfo);
 	exInfo.ajax.complete = this._onComplete.bind(this, exInfo);
 	exInfo.ajax.success = this._onSuccess.bind(this, exInfo);
@@ -350,6 +363,7 @@ _p._onComplete = function(exInfo, xhr, status)
 	exInfo.tComplete = new Date();
 	xhr.exInfo = exInfo;
 	$(window).trigger(WebApi.genEventType(exInfo.ePostCall, exInfo), exInfo);
+	(status == "success") ? exInfo.deferred.resolve(exInfo) : exInfo.deferred.reject(exInfo);
 };
 _p._onError = function(exInfo, xhr, error, errorType)
 {
