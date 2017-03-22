@@ -10,7 +10,7 @@ function ibxResourceManager()
 	this._rootBundle = $($.parseXML("<ibx-root-res-bundle>\n</ibx-root-res-bundle>"));
 	this._styleSheet = $("<style type='text/css'>").prop("id", "ibxResourceManager_"+this._tmpId).appendTo("head");
 	this.language = "en";
-	this.strings = {"en":{}}
+	this.strings = {"en":{}};
 }
 var _p = ibxResourceManager.prototype = new Object();
 
@@ -51,12 +51,12 @@ _p.addBundle = function(url, data)
 		var xhr = $.get(url, data);
 		xhr._deferred = dfd;
 		xhr._src = url;
-		xhr.done(this._onBundleLoaded.bind(this))
-		xhr.fail(this._onBundleLoadError.bind(this))
+		xhr.done(this._onBundleLoaded.bind(this));
+		xhr.fail(this._onBundleLoadError.bind(this));
 		xhr.progress(this._onBundleProgress.bind(this));
 	}.bind(this));
 	return $.when(resLoaded);
-}
+};
 _p._onBundleLoaded = function(xDoc, status, xhr)
 {
 	xDoc._xhr = xhr;
@@ -150,7 +150,7 @@ _p.loadBundle = function(xDoc, xhr)
 			}
 		}.bind(this));
 
-	};
+	}
 	this._rootBundle.find("ibx-root-res-bundle").append(bundles);
 	
 	if(xhr._deferred)
@@ -159,7 +159,7 @@ _p.loadBundle = function(xDoc, xhr)
 
 _p.getResource = function(selector, ibxBind)
 {
-	var markup = (new XMLSerializer()).serializeToString(this._rootBundle.find(selector || "").get(0))
+	var markup = (new XMLSerializer()).serializeToString(this._rootBundle.find(selector || "").get(0));
 	if(!markup)
 	{
 		console.error("Failed to load resource from ibxResourceBundle");
