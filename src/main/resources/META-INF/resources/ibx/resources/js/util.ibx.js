@@ -251,6 +251,7 @@ function WebApi(webAppContext, webAppName, options)
 	this.setExOptions($.extend(true, WebApi.statics.defaultExInfo, options));
 	this._defaultExInfo.appContext = webAppContext;
 	this._defaultExInfo.appName = webAppName;
+	this._defaultExInfo.ppCtx = this;
 }
 var _p = WebApi.prototype = new Object();
 
@@ -266,7 +267,7 @@ WebApi.statics =
 		data:{},
 		public:true,
 		async:true,
-		ppCtx:this,
+		ppCtx:null,
 		ppFun:null,
 		result:null,
 		jqNamespace:false,
