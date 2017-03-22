@@ -152,7 +152,9 @@ _p.loadBundle = function(xDoc, xhr)
 
 	};
 	this._rootBundle.find("ibx-root-res-bundle").append(bundles);
-	xhr._deferred.resolve();
+	
+	if(xhr._deferred)
+		xhr._deferred.resolve();
 };
 
 _p.getResource = function(selector, ibxBind)
