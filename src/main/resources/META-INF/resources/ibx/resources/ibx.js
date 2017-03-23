@@ -45,7 +45,7 @@ function ibx(fn, path, autoBind)
 					ibxResourceMgr.setContextPath(ibx._path);
 					ibxResourceMgr.addBundle(ibx._path + "./resources/ibx_resource_bundle.xml").then(function()
 					{
-						if(ibx._loadPromise)
+						if(ibx._loadPromise._autoBind)
 						{
 							var bindingRoots = $(".ibx-binding-root:not(.ibx-bound)");
 							$.ibi.ibxWidget.bindElements(bindingRoots);
