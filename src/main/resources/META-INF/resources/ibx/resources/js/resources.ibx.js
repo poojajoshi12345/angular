@@ -177,12 +177,13 @@ _p.loadBundle = function(xDoc, xhr)
 
 _p.getResource = function(selector, ibxBind)
 {
-	var markup = (new XMLSerializer()).serializeToString(this._rootBundle.find(selector || "").get(0));
+	var resource = this._rootBundle.find(selector).get(0);
+	if(!resource)
+		throw(sformat("ibxResourceMgr failed to find resrouce: {1}", selector));
+
+	var markup = (new XMLSerializer()).serializeToString(resource);
 	if(!markup)
-	{
-		console.error("Failed to load resource from ibxResourceBundle");
-		debugger;
-	}
+		throw(sformat("ibxResourceMgr failed to load resource: {1}", selector));
 
 	markup = $(markup);
 	if(ibxBind)

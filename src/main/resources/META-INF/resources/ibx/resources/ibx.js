@@ -8,7 +8,7 @@
 ****/
 function ibx(fn, path, autoBind)
 {
-	if(!ibx.loaded && !ibx._isLoading)
+	if(!ibx._loaded && !ibx._isLoading)
 	{
 		ibx._isLoading = !ibx.loaded;
 		ibx.setPath(path);
