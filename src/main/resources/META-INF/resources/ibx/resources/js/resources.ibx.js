@@ -7,7 +7,7 @@
 function ibxResourceManager()
 {
 	this._tmpId = ibxResourceManager._id++;
-	this._rootBundle = $($.parseXML("<ibx-root-res-bundle>\n</ibx-root-res-bundle>"));
+	this._rootBundle = $($.parseXML("<ibx-root-res-bundle><markup></markup></ibx-root-res-bundle>"));
 	this._styleSheet = $("<style type='text/css'>").prop("id", "ibxResourceManager_"+this._tmpId).appendTo("head");
 	this.language = "en";
 	this.strings = {"en":{}};
@@ -77,6 +77,7 @@ _p.loadBundle = function(xDoc, xhr)
 	var name = xhr._name;
 	var xDoc = $(xDoc);
 	var head = $("head");
+	var rootBundle = this._rootBundle.find("ibx-root-res-bundle");
 	var bundles = xDoc.find("ibx-res-bundle");
 	for(var i = 0; i < bundles.length; ++i)
 	{
@@ -105,6 +106,25 @@ _p.loadBundle = function(xDoc, xhr)
 				head.append(styleNode);
 			}
 		});
+
+		//load all markup files
+		files = bundle.find("markup-file");
+		files.each(function(idx, file)
+		{
+			file = $(file);
+			var src = this.getContextPath() + file.attr("src");
+			$.get({async:false, url:src, dataType:"text", data:file}).done(function(file, content, status, xhr)
+			{
+				rootBundle.children("markup").append($(content));
+			}.bind(this, file));
+		}.bind(this));
+
+		//load all inline markup
+		files = bundle.find("markup-block");
+		files.each(function(idx, markup)
+		{
+			rootBundle.children("markup").append($(markup).clone());
+		}.bind(this));
 
 		//load all string and script files
 		files = bundle.find("string-file, script-file");
@@ -149,10 +169,8 @@ _p.loadBundle = function(xDoc, xhr)
 				head.append(script);
 			}
 		}.bind(this));
-
 	}
-	this._rootBundle.find("ibx-root-res-bundle").append(bundles);
-	
+
 	if(xhr._deferred)
 		xhr._deferred.resolve();
 };
