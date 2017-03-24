@@ -6,7 +6,6 @@
 ******************************************************************************/
 function ibxResourceManager()
 {
-	this._tmpId = ibxResourceManager._id++;
 	this._rootBundle = $($.parseXML("<ibx-root-res-bundle><markup></markup></ibx-root-res-bundle>"));
 	this._styleSheet = $("<style type='text/css'>").prop("id", "ibxResourceManager_"+this._tmpId).appendTo("head");
 	this.language = "en";
@@ -14,7 +13,9 @@ function ibxResourceManager()
 }
 var _p = ibxResourceManager.prototype = new Object();
 
-ibxResourceManager._id = 0;//id used for temporary variable name.
+ibxResourceManager.loadedBundles = {};
+ibxResourceManager.loadedFiles = {};
+
 _p._rootBundle = null;
 _p._styleSheet = null;
 
@@ -46,29 +47,29 @@ _p.addStringBundle = function(bundle)
 
 _p.addBundle = function(url, data)
 {
-	var resLoaded = $.Deferred(function(dfd)
-	{
-		var xhr = $.get(url, data);
-		xhr._deferred = dfd;
-		xhr._src = url;
-		xhr.done(this._onBundleLoaded.bind(this));
-		xhr.fail(this._onBundleLoadError.bind(this));
-		xhr.progress(this._onBundleProgress.bind(this));
-	}.bind(this));
-	return $.when(resLoaded);
+	if(ibxResourceManager.loadedBundles[url])
+		return ibxResourceManager.loadedBundles[url];
+
+	var resLoaded = $.Deferred();
+	var xhr = $.get(url, data);
+	xhr._resLoaded = resLoaded;
+	xhr._src = url;
+	xhr.done(this._onBundleFileLoaded.bind(this));
+	xhr.fail(this._onBundleFileLoadError.bind(this));
+	xhr.progress(this._onBundleFileProgress.bind(this));
+	return $.when(resLoaded, xhr);
 };
-_p._onBundleLoaded = function(xDoc, status, xhr)
+_p._onBundleFileLoaded = function(xDoc, status, xhr)
 {
 	xDoc._xhr = xhr;
 	this.loadBundle(xDoc, xhr);
 };
-_p._onBundleLoadError = function(xhr, status, msg)
+_p._onBundleFileLoadError = function(xhr, status, msg)
 {
-	console.error("ibxResourceManager Bundle Load Error", arguments);
+	console.error("ibxResourceManager Bundle Load Error", xhr);
 };
-_p._onBundleProgress = function()
+_p._onBundleFileProgress = function()
 {
-	console.log("Progress", arguments);
 };
 
 //load the actual resource bundle here...can be called directly, or from an xhr load.
@@ -171,8 +172,9 @@ _p.loadBundle = function(xDoc, xhr)
 		}.bind(this));
 	}
 
-	if(xhr._deferred)
-		xhr._deferred.resolve();
+	ibxResourceManager.loadedBundles[xhr._src] = xhr._resLoaded;
+	if(xhr._resLoaded)
+		xhr._resLoaded.resolve();
 };
 
 _p.getResource = function(selector, ibxBind)

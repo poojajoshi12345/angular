@@ -43,7 +43,7 @@ function ibx(fn, path, autoBind)
 				$.get(url).then(function()
 				{
 					ibxResourceMgr.setContextPath(ibx._path);
-					ibxResourceMgr.addBundle(ibx._path + "./resources/ibx_resource_bundle.xml").then(function()
+					ibxResourceMgr.addBundle(ibx._path + "./resources/ibx_resource_bundle.xml").done(function()
 					{
 						if(ibx._loadPromise._autoBind)
 						{
@@ -66,7 +66,7 @@ function ibx(fn, path, autoBind)
 	{
 		if(!ibx._loaded)
 			throw("You haven't started the ibx subsystem!");
-		ibx._loadPromise.then(fn);
+		ibx._loadPromise.done(fn);
 	}
 	return ibx;
 }
