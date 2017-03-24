@@ -181,13 +181,17 @@ _p.getResource = function(selector, ibxBind)
 	if(!resource)
 		throw(sformat("ibxResourceMgr failed to find resrouce: {1}", selector));
 
+	//get the xml out of the resource bundle as a string (essentially making a clone/copy)
 	var markup = (new XMLSerializer()).serializeToString(resource);
 	if(!markup)
 		throw(sformat("ibxResourceMgr failed to load resource: {1}", selector));
-
 	markup = $(markup);
+
+	//will autobind if element is an ibx type thing, and user didn't explicitly say NO!
+	ibxBind = (markup.attr("data-ibx-type") && (typeof(ibxBind) === "undefined")) ? true : ibxBind;
 	if(ibxBind)
 		$.ibi.ibxWidget.bindElements(markup);
+
 	return markup;
 };
 

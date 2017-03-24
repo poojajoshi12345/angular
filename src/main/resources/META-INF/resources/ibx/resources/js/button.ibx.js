@@ -17,7 +17,6 @@ $.widget("ibi.ibxButton", $.ibi.ibxLabel,
 	options:
 		{
 			"iconPosition": "left",
-			"inline": false,
 		},
 	_widgetClass: "ibx-button",
 	_create: function ()
