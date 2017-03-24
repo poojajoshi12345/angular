@@ -45,7 +45,7 @@ IbxWidget.addWidgetFunction = function(wClass, fnName)
 	wClass.prototype[fnName] = function()
 	{
 		return this._widget[fnName].apply(this._widget, arguments);
-	}
+	};
 };
 IbxWidget.addWidgetEvent = function(wClass, eType, eventNamespace)
 {
@@ -59,7 +59,7 @@ IbxWidget.addWidgetMember = function(wClass, mName, wName, biClass, bAnonymous)
 	var _p = wClass.prototype;
 	_p._widgetMembers = _p._widgetMembers || {};
 	_p._widgetMembers[mName] = {"wName": wName, "biClass": biClass, "bAnonymous": !!bAnonymous};
-}
+};
 IbxWidget.addWidgetProperty = function(wClass, sName, mapTo)
 {
 	var p = wClass.prototype;
@@ -135,7 +135,7 @@ IbxWidget.addWidgetProperty(IbxWidget,"defaultFocused");
 IbxWidget.addWidgetProperty(IbxWidget, "ctxMenu");
 IbxWidget.addWidgetProperty(IbxWidget,"disabled");
 
-IbxWidget.addWidgetProperty(IbxWidget, "subProperty", "subObject.subsubobject.subProperty")
+IbxWidget.addWidgetProperty(IbxWidget, "subProperty", "subObject.subsubobject.subProperty");
 
 _p._tagName = "DIV";
 _p._widget = null;
@@ -234,7 +234,7 @@ _p._onWidgetDestroyed = function(e)
 	this._widgetDestroyed = true;
 	if(!this._disposed)
 		this.dispose();
-}
+};
 
 _p._focusRoot = false;
 _p.setFocusRoot = function(bIsRoot){this._focusRoot = bIsRoot;};
@@ -249,7 +249,7 @@ _p.getFocusRoot = function()
 _p.getActiveComponent = function ()
 {
 	return null;
-}
+};
 _p.getTabIndex = function()
 {
 	return this.getHtmlProperty("tabIndex");
@@ -262,7 +262,7 @@ _p.setTabIndex = function(idx)
 
 _p._mapPropToOption = function(pName, oValue)
 {
-	return {"name":pName, "value":oValue}
+	return {"name":pName, "value":oValue};
 };
 _p.mapPropsToOptions = function(props)
 {
@@ -331,7 +331,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 			bAdd ? this.element.addClass(cls) : this.element.removeClass(cls);
 		}
 	},
-	created:function(){return this._created},
+	created:function(){return this._created;},
 	_created:false,
 	_createWidget:function(options, element)
 	{
@@ -362,7 +362,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 		this.element.removeData("_ibxPrecreateMemberVariables");
 		this._super();
 	},
-	destroyed:function(){return this._destroyed},
+	destroyed:function(){return this._destroyed;},
 	_destroyed:false,
 	_destroy:function()
 	{
@@ -561,7 +561,7 @@ $.ibi.ibxWidget.getIbxMarkupOptions = function(el)
 $.ibi.ibxWidget.parseIbxOptions = function(opts)
 {
 	return eval("("+ opts +")");
-}
+};
 $.ibi.ibxWidget.coercePropVal = function (val)
 {
 	if (typeof (val) == "string")
