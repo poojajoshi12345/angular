@@ -522,9 +522,8 @@ $.ibi.ibxWidget.bindElements = function(elements)
 		}
 		catch(ex)
 		{
-			console.error("ERROR: binding ibxWidget", ex);
-			console.error("ERROR: element being bound", element[0]);
-			debugger;
+			console.error("TypeError:", element[0]);
+			throw new TypeError("Error Binding ibxWidget!");
 		}
 	}.bind(this));
 	return elBound;
