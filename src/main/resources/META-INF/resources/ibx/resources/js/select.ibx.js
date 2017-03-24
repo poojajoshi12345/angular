@@ -602,7 +602,12 @@ $.widget("ibi.ibxSelectCheckItem", $.ibi.ibxCheckMenuItem,
 			userValue: "",
 			endMarker: false,
 		},
-	_widgetClass: "ibx-select-item ibx-select-check-item",
+	_widgetClass: "ibx-select-check-item",
+	_create: function ()
+	{
+		this.element.addClass('ibx-select-item');
+		this._super();
+	},
 	_onMenuItemClick: function (e)
 	{
 		if ($.ibi.ibxSelectItem.statics.isDropDown.call(this))
@@ -643,7 +648,12 @@ $.widget("ibi.ibxSelectRadioItem", $.ibi.ibxRadioMenuItem,
 			userValue: "",
 			endMarker: false,
 		},
-	_widgetClass: "ibx-select-item ibx-select-radio-item",
+	_widgetClass: "ibx-select-radio-item",
+	_create: function ()
+	{
+		this.element.addClass('ibx-select-item');
+		this._super();
+	},
 	_onMenuItemClick: function (e)
 	{
 		if ($.ibi.ibxSelectItem.statics.isDropDown.call(this))
