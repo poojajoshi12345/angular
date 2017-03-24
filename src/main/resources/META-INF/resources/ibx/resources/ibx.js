@@ -4,7 +4,7 @@
 
 /****
 	You can attach a function to ibx at any point and it is guaranteed to be called after the
-	system is booted. This is just like jQuery...YEEEEEEE HAAAAAAAAW!
+	system is booted. YEEEEEEE HAAAAAAAAW!
 ****/
 function ibx(fn, path, autoBind)
 {

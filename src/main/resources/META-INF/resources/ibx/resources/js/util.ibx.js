@@ -52,7 +52,7 @@ if(jQuery)
 	{
 		elem = $(elem);
 		var widget = elem.data("ibxWidget");
-		var nameRoot = widget ? widget.options.nameRoot : elem.attr("data-ibx-nameroot");
+		var nameRoot = widget ? widget.options.nameRoot : elem.attr("data-ibx-name-root");
 		return nameRoot;
 	};
 	jQuery.expr[":"]["ibxRadioGroup"] = function(elem, idx, meta, stack)

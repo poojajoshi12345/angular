@@ -305,6 +305,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 	options:
 	{
 		"class":"",
+		"nameRoot":false,
 		"focusRoot":false,
 		"defaultFocused":false,
 		"ctxMenu":null,
