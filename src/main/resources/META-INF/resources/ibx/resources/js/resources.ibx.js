@@ -50,6 +50,8 @@ _p.addBundle = function(url, data)
 	if(ibxResourceManager.loadedBundles[url])
 		return ibxResourceManager.loadedBundles[url];
 
+	console.error("loading multiple resource bundles...");
+	console.error("addBundle were figuring out about when with multiple vs just resloaded...");
 	var resLoaded = $.Deferred();
 	var xhr = $.get(url, data);
 	xhr._resLoaded = resLoaded;
@@ -90,10 +92,13 @@ _p.loadBundle = function(xDoc, xhr)
 		var files = bundle.find("style-file");
 		files.each(function(idx, file)
 		{
-			var link = $("<link rel='stylesheet' type='text/css'>");
 			var src = this.getContextPath() + $(file).attr("src");
-			link.attr("href", src);
-			head.append(link);
+			if(!ibxResourceManager.loadedFiles[src])
+			{
+				var link = $("<link rel='stylesheet' type='text/css'>");
+				link.attr("href", src);
+				head.append(link);
+			}
 		}.bind(this));
 
 		//load inline css styles
@@ -112,17 +117,19 @@ _p.loadBundle = function(xDoc, xhr)
 		files = bundle.find("markup-file");
 		files.each(function(idx, file)
 		{
-			file = $(file);
-			var src = this.getContextPath() + file.attr("src");
-			$.get({async:false, url:src, dataType:"text", data:file}).done(function(file, content, status, xhr)
+			var src = this.getContextPath() + $(file).attr("src");
+			if(!ibxResourceManager.loadedFiles[src])
 			{
-				rootBundle.children("markup").append($(content));
-			}.bind(this, file));
+				$.get({async:false, url:src, contentType:"text"}).done(function(content, status, xhr)
+				{
+					rootBundle.children("markup").append($(content).find("markup-block"));
+				});
+			}
 		}.bind(this));
 
 		//load all inline markup
-		files = bundle.find("markup-block");
-		files.each(function(idx, markup)
+		var markupBlocks = bundle.find("markup-block");
+		markupBlocks.each(function(idx, markup)
 		{
 			rootBundle.children("markup").append($(markup).clone());
 		}.bind(this));
@@ -131,17 +138,19 @@ _p.loadBundle = function(xDoc, xhr)
 		files = bundle.find("string-file, script-file");
 		files.each(function(idx, file)
 		{
-			file = $(file);
-			var src = this.getContextPath() + file.attr("src");
-			$.get({async:false, url:src, dataType:"text"}).done(function(content, status, xhr)
+			var src = this.getContextPath() + $(file).attr("src");
+			if(!ibxResourceManager.loadedFiles[src])
 			{
-				if((/\S/g).test(content))
+				$.get({async:false, url:src, dataType:"text"}).done(function(content, status, xhr)
 				{
-					var script = $("<script type='text/javascript'>");
-					script.text(content);
-					head.append(script);
-				}
-			});
+					if((/\S/g).test(content))
+					{
+						var script = $("<script type='text/javascript'>");
+						script.text(content);
+						head.append(script);
+					}
+				});
+			}
 		}.bind(this));
 
 		//load all inline string bundles
