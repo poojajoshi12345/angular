@@ -50,8 +50,6 @@ _p.addBundle = function(url, data)
 	if(ibxResourceManager.loadedBundles[url])
 		return ibxResourceManager.loadedBundles[url];
 
-	console.error("loading multiple resource bundles...");
-	console.error("addBundle were figuring out about when with multiple vs just resloaded...");
 	var resLoaded = $.Deferred();
 	var xhr = $.get(url, data);
 	xhr._resLoaded = resLoaded;
@@ -98,6 +96,7 @@ _p.loadBundle = function(xDoc, xhr)
 				var link = $("<link rel='stylesheet' type='text/css'>");
 				link.attr("href", src);
 				head.append(link);
+				ibxResourceManager.loadedFiles[src] = true;
 			}
 		}.bind(this));
 
@@ -123,6 +122,7 @@ _p.loadBundle = function(xDoc, xhr)
 				$.get({async:false, url:src, contentType:"text"}).done(function(content, status, xhr)
 				{
 					rootBundle.children("markup").append($(content).find("markup-block"));
+					ibxResourceManager.loadedFiles[src] = true;
 				});
 			}
 		}.bind(this));
@@ -149,6 +149,7 @@ _p.loadBundle = function(xDoc, xhr)
 						script.text(content);
 						head.append(script);
 					}
+					ibxResourceManager.loadedFiles[src] = true;
 				});
 			}
 		}.bind(this));
