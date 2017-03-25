@@ -57,7 +57,7 @@ _p.addBundle = function(url, data)
 	xhr.done(this._onBundleFileLoaded.bind(this));
 	xhr.fail(this._onBundleFileLoadError.bind(this));
 	xhr.progress(this._onBundleFileProgress.bind(this));
-	return $.when(resLoaded, xhr);
+	return resLoaded;//$.when(resLoaded, xhr);
 };
 _p._onBundleFileLoaded = function(xDoc, status, xhr)
 {
@@ -75,7 +75,7 @@ _p._onBundleFileProgress = function()
 //load the actual resource bundle here...can be called directly, or from an xhr load.
 _p.loadBundle = function(xDoc, xhr)
 {
-	var name = xhr._name;
+	var bundleLoaded = (xhr && xhr._resLoaded) ? xhr._resLoaded : $.Deferred();
 	var xDoc = $(xDoc);
 	var head = $("head");
 	var rootBundle = this._rootBundle.find("ibx-root-res-bundle");
@@ -180,11 +180,15 @@ _p.loadBundle = function(xDoc, xhr)
 				head.append(script);
 			}
 		}.bind(this));
+		ibxResourceManager.loadedBundles[name || xhr._src || "anonymous"] = bundleLoaded;
 	}
 
-	ibxResourceManager.loadedBundles[xhr._src] = xhr._resLoaded;
-	if(xhr._resLoaded)
-		xhr._resLoaded.resolve();
+	//give the main thread a chance to render what's been loaded before resolving the promise
+	window.setTimeout(function()
+	{
+		bundleLoaded.resolve(bundle, this);
+	}, 0);
+	return bundleLoaded;
 };
 
 _p.getResource = function(selector, ibxBind)
