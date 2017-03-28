@@ -26,6 +26,7 @@ $.widget("ibi.ibxDialog", $.ibi.ibxPopup,
 		"nameRoot":true,
 		"template":".dialog-template",
 		"type":"std",
+		"modal":true,
 		"autoClose":false,
 		"draggable":true,
 		"resizable":false,
@@ -102,10 +103,11 @@ $.widget("ibi.ibxDialog", $.ibi.ibxPopup,
 });
 $.ibi.ibxDialog.createMessageDialog = function(options)
 {
+	options.type += " std";
 	var dlg = $("<div>").ibxDialog(options);
-	var msg = dlg.message = $(options.message);
+	var msg = $("<div>").ibxLabel(options.messageOptions).addClass("ibx-dialog-message");
 	dlg.append(msg);
-	dlg.ibxWidget("member", "contentBox").ibxWidget({justify:"center", align:"center"}).css("padding", "1em");
+	dlg.ibxWidget("member", "contentBox").css("padding", ".5em");
 	$.ibi.ibxWidget.bindElements(dlg);
 	return dlg;
 };
