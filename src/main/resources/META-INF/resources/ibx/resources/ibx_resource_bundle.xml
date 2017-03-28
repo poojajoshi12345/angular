@@ -49,6 +49,20 @@ $Revision$:-->
 
 	<markup>
 		<markup-block>
+			<div data-ibx-type="ibxDialog" data-ibx-name-root="true" class="dialog-template">
+				<div data-ibx-type="ibxVBox" data-ibx-name="vbMain" data-ibxp-align="stretch" data-ibxp-default-focused="cancel">
+					<div data-ibx-type="ibxHBox" data-ibx-name="titleBox" data-ibxp-align="center" class="ibx-dialog-title-bar">
+						<div data-ibx-type="ibxLabel" data-ibx-name="caption" data-ibxp-justify="start" class="ibx-title-bar-caption"></div>
+						<div data-ibx-type="ibxButton" data-ibx-name="titleClose" class="ibx-title-bar-close-button"></div>
+					</div>
+					<div data-ibx-type="ibxVBox" data-ibx-name="contentBox" data-ibxp-align="stretch" class="ibx-dialog-content"></div>						
+					<div data-ibx-type='ibxHBox' data-ibx-name='btnBox' data-ibxp-justify='end' data-ibxp-align='center' class='ibx-dialog-button-box'>
+						<div data-ibx-type='ibxButton' data-ibx-name='btnApply' data-ibxp-text="Apply" data-ibxp-icon-position='top' class='ibx-dialog-apply-button' tabIndex='1'></div>
+						<div data-ibx-type='ibxButton' data-ibx-name='btnCancel' data-ibxp-text="Cancel" data-ibxp-icon-position='top' class='ibx-dialog-cancel-button' tabIndex='1'></div>
+						<div data-ibx-type='ibxButton' data-ibx-name='btnOK' data-ibxp-text="OK" data-ibxp-icon-position='top' class='ibx-dialog-ok-button' tabIndex='1'></div>
+					</div>
+				</div>
+			</div>
 		</markup-block>
 	</markup>
 

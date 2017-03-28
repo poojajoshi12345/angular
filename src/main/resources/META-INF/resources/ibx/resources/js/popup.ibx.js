@@ -40,7 +40,7 @@ $.widget("ibi.ibxPopup", $.ibi.ibxWidget,
 	options:
 	{
 		"focusRoot":true,
-		"modal":true,
+		"modal":false,
 		"autoClose":true,
 		"escapeToClose":true,
 		"destroyOnClose":true,

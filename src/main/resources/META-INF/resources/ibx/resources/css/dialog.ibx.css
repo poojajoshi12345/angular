@@ -78,11 +78,11 @@
 	margin-top:.25em;
 }
 
-.ibx-dialog-ok-button, .ibx-dialog-cancel-button
+.ibx-dialog-ok-button, .ibx-dialog-cancel-button, .ibx-dialog-apply-button
 {
 	flex: 0 1 7em;
 }
-.ibx-dialog-cancel-button
+.ibx-dialog-cancel-button, .ibx-dialog-apply-button
 {
 	margin-right:.25em;
 }
