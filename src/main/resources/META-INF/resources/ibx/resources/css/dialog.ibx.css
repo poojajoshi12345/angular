@@ -113,39 +113,34 @@
 	border-bottom:1px solid black;
 }
 
-
-.ibx-dialog.information .ibx-dialog-message::before
+.ibx-dialog.std .ibx-dialog-message::before
 {
 	font-family:"Material Icons";
 	font-size:2em;
+	margin-right:5px;
+}
+
+.ibx-dialog.information .ibx-dialog-message::before
+{
 	content:"\E88E";
-	margin-right:.5em;
 	color:royalblue;
 }
 
 .ibx-dialog.question .ibx-dialog-message::before
 {
-	font-family:"Material Icons";
-	font-size:2em;
 	content:"\E887";
-	margin-right:.5em;
 	color:forestgreen;
 }
 
 .ibx-dialog.warning .ibx-dialog-message::before
 {
-	font-family:"Material Icons";
-	font-size:2em;
 	content:"\E002";
-	margin-right:.5em;
 	color:orange;
 }
 
 .ibx-dialog.error .ibx-dialog-message::before
 {
-	font-family:"Material Icons";
-	font-size:2em;
 	content:"\E925";
-	margin-right:.5em;
 	color:crimson;
 }
+

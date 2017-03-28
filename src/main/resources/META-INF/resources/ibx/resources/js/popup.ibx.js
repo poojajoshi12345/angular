@@ -42,6 +42,7 @@ $.widget("ibi.ibxPopup", $.ibi.ibxWidget,
 		"focusRoot":true,
 		"modal":false,
 		"autoClose":true,
+		"draggable":false,
 		"escapeToClose":true,
 		"destroyOnClose":true,
 		"autoFocus":true,
@@ -151,6 +152,7 @@ $.widget("ibi.ibxPopup", $.ibi.ibxWidget,
 		var options = this.options;
 		this.element.addClass($.ibi.ibxPopup.statics.effect[options.effect]);
 		options.modal ? this.element.addClass("pop-modal") : this.element.removeClass("pop-modal");
+		this.element.draggable({disabled:!options.draggable});
 	}
 });
 
