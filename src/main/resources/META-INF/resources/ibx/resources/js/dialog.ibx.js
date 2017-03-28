@@ -105,7 +105,7 @@ $.ibi.ibxDialog.createMessageDialog = function(options)
 {
 	options.type += " std";
 	var dlg = $("<div>").ibxDialog(options);
-	var msg = $("<div>").ibxLabel(options.messageOptions).addClass("ibx-dialog-message");
+	var msg = $("<div data-ibx-name='message'>").ibxLabel(options.messageOptions).addClass("ibx-dialog-message");
 	dlg.append(msg);
 	dlg.ibxWidget("member", "contentBox").css("padding", "5px");
 	$.ibi.ibxWidget.bindElements(dlg);
