@@ -3,10 +3,14 @@
 
 .ibx-dialog
 {
-	padding:.25em;
 }
 
-.ibx-dialog-main-box
+.ibx-dialog.std
+{
+	padding: .5em;
+}
+
+.ibx-dialog.std:not(.dlg-auto-size) > .ibx-dialog-main-box
 {
 	position:absolute;
 	left:0px;
@@ -20,33 +24,44 @@
 	flex:0 0 auto;
 }
 
+.ibx-dialog-content
+{
+	flex:0 0 auto;
+	overflow:hidden;
+	margin-top:.25em;
+}
 
-.ibx-dialog.std .ibx-dialog-title-bar
+.ibx-dialog-button-box
+{
+	margin-top:.25em;
+}
+
+.ibx-dialog.std .ibx-dialog-title-box
 {
 	border-radius:.3em;
 	border:2px solid;
 }
-.ibx-dialog.std.plain .ibx-dialog-title-bar
+.ibx-dialog.std.plain .ibx-dialog-title-box
 {
 	color:darkgray;
 	border-color:darkgray;
 }
-.ibx-dialog.std.error .ibx-dialog-title-bar
+.ibx-dialog.std.error .ibx-dialog-title-box
 {
 	color:crimson;
 	border-color:crimson;
 }
-.ibx-dialog.std.warning .ibx-dialog-title-bar
+.ibx-dialog.std.warning .ibx-dialog-title-box
 {
 	color:orange;
 	border-color:orange;
 }
-.ibx-dialog.std.information .ibx-dialog-title-bar
+.ibx-dialog.std.information .ibx-dialog-title-box
 {
 	color:royalblue;
 	border-color:royalblue;
 }
-.ibx-dialog.std.question .ibx-dialog-title-bar
+.ibx-dialog.std.question .ibx-dialog-title-box
 {
 	color:forestgreen;
 	border-color:forestgreen;
@@ -79,18 +94,6 @@
 {
 	font-family: 'Material Icons';
 	content:"\E14C";
-}
-
-.ibx-dialog-content
-{
-	flex:1 1 auto;
-	overflow:hidden;
-	margin-top:.25em;
-}
-
-.ibx-dialog-button-box
-{
-	margin-top:.25em;
 }
 
 .ibx-dialog-ok-button, .ibx-dialog-cancel-button, .ibx-dialog-apply-button

@@ -49,17 +49,17 @@ $Revision$:-->
 
 	<markup>
 		<markup-block>
-			<div data-ibx-type="ibxDialog" data-ibx-name-root="true" class="dialog-template" data-ibxp-default-focused="cancel">
-				<div data-ibx-type="ibxVBox" data-ibx-name="vbMain" data-ibxp-align="stretch" class="ibx-dialog-main-box">
-					<div data-ibx-type="ibxHBox" data-ibx-name="titleBox" data-ibxp-align="center" class="ibx-dialog-title-box">
-						<div data-ibx-type="ibxLabel" data-ibx-name="caption" data-ibxp-justify="start" class="ibx-title-bar-caption"></div>
-						<div data-ibx-type="ibxButton" data-ibx-name="titleClose" class="ibx-title-bar-close-button"></div>
+			<div class="dialog-template" data-ibx-type="ibxDialog" data-ibx-name-root="true" data-ibxp-default-focused="cancel">
+				<div class="ibx-dialog-main-box" data-ibx-type="ibxVBox" data-ibx-name="vbMain" data-ibxp-align="stretch">
+					<div class="ibx-dialog-title-box" data-ibx-type="ibxHBox" data-ibx-name="titleBox" data-ibxp-align="center">
+						<div class="ibx-title-bar-caption" data-ibx-type="ibxLabel" data-ibx-name="caption" data-ibxp-justify="start"></div>
+						<div class="ibx-title-bar-close-button" data-ibx-type="ibxButton" data-ibx-name="titleClose"></div>
 					</div>
-					<div data-ibx-type="ibxVBox" data-ibx-name="contentBox" data-ibxp-align="stretch" class="ibx-dialog-content"></div>						
-					<div data-ibx-type='ibxHBox' data-ibx-name='btnBox' data-ibxp-justify='end' data-ibxp-align='center' class='ibx-dialog-button-box'>
-						<div data-ibx-type='ibxButton' data-ibx-name='btnApply' data-ibxp-text="Apply" data-ibxp-icon-position='top' class='ibx-dialog-apply-button' tabIndex='1'></div>
-						<div data-ibx-type='ibxButton' data-ibx-name='btnCancel' data-ibxp-text="Cancel" data-ibxp-icon-position='top' class='ibx-dialog-cancel-button' tabIndex='1'></div>
-						<div data-ibx-type='ibxButton' data-ibx-name='btnOK' data-ibxp-text="OK" data-ibxp-icon-position='top' class='ibx-dialog-ok-button' tabIndex='1'></div>
+					<div class="ibx-dialog-content" data-ibx-type="ibxVBox" data-ibx-name="contentBox" data-ibxp-align="stretch"></div>						
+					<div class='ibx-dialog-button-box' data-ibx-type='ibxHBox' data-ibx-name='btnBox' data-ibxp-justify='end' data-ibxp-align='center'>
+						<div class='ibx-dialog-apply-button' data-ibx-type='ibxButton' data-ibx-name='btnApply' data-ibxp-text="Apply" data-ibxp-icon-position='top' tabIndex='1'></div>
+						<div class='ibx-dialog-cancel-button' data-ibx-type='ibxButton' data-ibx-name='btnCancel' data-ibxp-text="Cancel" data-ibxp-icon-position='top' tabIndex='1'></div>
+						<div class='ibx-dialog-ok-button' data-ibx-type='ibxButton' data-ibx-name='btnOK' data-ibxp-text="OK" data-ibxp-icon-position='top' tabIndex='1'></div>
 					</div>
 				</div>
 			</div>
