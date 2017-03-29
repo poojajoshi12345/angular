@@ -81,8 +81,8 @@
 	flex-wrap:wrap-reverse;
 }
 
-/*Justification or Packing*/
-.ibx-flexbox.fbx-justify-start
+/*Justification or Packing of content*/
+.ibx-flexbox.fbx-justify-content-start
 {
 	-webkit-box-pack:start;
 	-moz-box-pack:start;
@@ -90,7 +90,7 @@
 	-ms-flex-pack:start;
 	justify-content:flex-start;
 }
-.ibx-flexbox.fbx-justify-end
+.ibx-flexbox.fbx-justify-content-end
 {
 	-webkit-box-pack:end;
 	-moz-box-pack:end;
@@ -98,7 +98,7 @@
 	-ms-flex-pack:end;
 	justify-content:flex-end;
 }
-.ibx-flexbox.fbx-justify-center
+.ibx-flexbox.fbx-justify-content-center
 {
 	-webkit-box-pack:center;
 	-moz-box-pack:center;
@@ -106,7 +106,7 @@
 	-ms-flex-pack:center;
 	justify-content:center;
 }
-.ibx-flexbox.fbx-justify-space-between
+.ibx-flexbox.fbx-justify-content-space-between
 {
 	-webkit-box-pack:justify;
 	-moz-box-pack:justify;
@@ -114,13 +114,24 @@
 	-ms-flex-pack:justify;
 	justify-content:space-between;
 }
-.ibx-flexbox.fbx-justify-space-around
+.ibx-flexbox.fbx-justify-content-space-around
 {
 	-webkit-box-pack:justify;
 	-moz-box-pack:justify;
 	-webkit-justify-content:space-around;
 	-ms-flex-pack:justify;
 	justify-content:space-around;
+}
+
+/*Justification or Packing of items - NOT SUPPORTED, STILL IN WORKING DRAFT*/
+.ibx-flexbox.fbx-justify-items-start
+{
+}
+.ibx-flexbox.fbx-justify-items-end
+{
+}
+.ibx-flexbox.fbx-justify-items-center
+{
 }
 
 /*Alignment of items in a given row*/

@@ -42,6 +42,8 @@ $.widget("ibi.ibxFlexBox", $.ibi.ibxWidget,
 		"direction":"row",
 		"wrap":true,
 		"justify":"start",
+		"justifyItems":"start",
+		"justifyContent":"start",
 		"align":"start",
 		"alignItems":"start",
 		"alignContent":"start"
@@ -108,11 +110,25 @@ $.ibi.ibxFlexBox.statics =
 		},
 		"justify":
 		{
-			"start":"fbx-justify-start",
-			"end":"fbx-justify-end",
-			"center":"fbx-justify-center",
-			"spaceBetween":"fbx-justify-space-between",
-			"spaceAround":"fbx-justify-space-around"
+			"start":"fbx-justify-content-start fbx-justify-items-start",
+			"end":"fbx-justify-content-end fbx-justify-items-end",
+			"center":"fbx-justify-content-center fbx-justify-items-center",
+			"spaceBetween":"fbx-justify-content-space-between",
+			"spaceAround":"fbx-justify-content-space-around"
+		},
+		"justifyContent":
+		{
+			"start":"fbx-justify-content-start",
+			"end":"fbx-justify-content-end",
+			"center":"fbx-justify-content-center",
+			"spaceBetween":"fbx-justify-content-space-between",
+			"spaceAround":"fbx-justify-content-space-around"
+		},
+		"justifyItems":
+		{
+			"start":"fbx-justify-items-start",
+			"end":"fbx-justify-items-end",
+			"center":"fbx-justify-items-center",
 		},
 		"align":
 		{
