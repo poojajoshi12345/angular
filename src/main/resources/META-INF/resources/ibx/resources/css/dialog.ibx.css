@@ -6,6 +6,21 @@
 	padding:.25em;
 }
 
+.ibx-dialog-main-box
+{
+	position:absolute;
+	left:0px;
+	top:0px;
+	right:0px;
+	bottom:0px;
+}
+
+.ibx-dialog-title-box, .ibx-dialog-button-box
+{
+	flex:0 0 auto;
+}
+
+
 .ibx-dialog.std .ibx-dialog-title-bar
 {
 	border-radius:.3em;

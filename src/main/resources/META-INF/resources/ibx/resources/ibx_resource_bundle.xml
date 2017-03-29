@@ -49,9 +49,9 @@ $Revision$:-->
 
 	<markup>
 		<markup-block>
-			<div data-ibx-type="ibxDialog" data-ibx-name-root="true" class="dialog-template">
-				<div data-ibx-type="ibxVBox" data-ibx-name="vbMain" data-ibxp-align="stretch" data-ibxp-default-focused="cancel">
-					<div data-ibx-type="ibxHBox" data-ibx-name="titleBox" data-ibxp-align="center" class="ibx-dialog-title-bar">
+			<div data-ibx-type="ibxDialog" data-ibx-name-root="true" class="dialog-template" data-ibxp-default-focused="cancel">
+				<div data-ibx-type="ibxVBox" data-ibx-name="vbMain" data-ibxp-align="stretch" class="ibx-dialog-main-box">
+					<div data-ibx-type="ibxHBox" data-ibx-name="titleBox" data-ibxp-align="center" class="ibx-dialog-title-box">
 						<div data-ibx-type="ibxLabel" data-ibx-name="caption" data-ibxp-justify="start" class="ibx-title-bar-caption"></div>
 						<div data-ibx-type="ibxButton" data-ibx-name="titleClose" class="ibx-title-bar-close-button"></div>
 					</div>
