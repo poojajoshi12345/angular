@@ -116,13 +116,5 @@ $.ibi.ibxDialog.createMessageDialog = function(options)
 
 $.ibi.ibxDialog.statics = 
 {
-	type:
-	{
-		plain:"std plain",
-		error:"std error",
-		information:"std information",
-		warning:"std warning",
-		question:"std question"
-	},
 };
 //# sourceURL=dialog.ibx.js
