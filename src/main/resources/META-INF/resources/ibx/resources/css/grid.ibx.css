@@ -30,3 +30,8 @@
 	}
 }
 */
+
+.ibx-grid2 {
+    display: grid;
+    display:-ms-grid;
+}

@@ -80,4 +80,68 @@ $.ibi.ibxGrid.statics =
 };
 
 
+$.widget("ibi.ibxGrid2", $.ibi.ibxWidget,
+{
+	options:
+	{
+		"columns": "",
+		"rows": "",
+	},
+	_widgetClass: "ibx-grid2",
+	_create: function ()
+	{
+		this._super();
+		this.element.ibxMutationObserver(
+		{
+			listen: true,
+			fnAddedNodes: this._onChildAdded.bind(this),
+			fnRemovedNodes: this._onChildRemoved.bind(this),
+			init: { childList: true }
+		});
+	},
+	_onChildAdded: function (node, mutation)
+	{
+		this.refresh();
+	},
+	_onChildRemoved: function (node, mutation)
+	{
+	},
+	_destroy: function ()
+	{
+		this._super();
+	},
+	refresh: function ()
+	{
+		this._super();
+		var options = this.options;
+
+		// webkit
+		this.element.css('grid-template-columns', options.columns);
+		this.element.css('grid-template-rows', options.rows);
+
+		// IE
+		this.element[0].style.msGridColumns = options.columns;
+		this.element[0].style.msGridRows = options.rows;
+
+		this.element.children().each(function (idx, cell)
+		{
+			cell = $(cell);
+			var col = cell.data("ibxColumn") || (idx+1);
+			var colSpan = cell.data("ibxColumnSpan") || 1;
+			var row = cell.data("ibxRow") || 1;
+			var rowSpan = cell.data("ibxRowSpan") || 1;
+
+			// webkit
+			cell.css('grid-area', row + " / " + col + " / " + (row + rowSpan) + " / " + (col + colSpan));
+
+			// IE
+			cell[0].style.msGridColumn = col;
+			cell[0].style.msGridColumnSpan = colSpan;
+			cell[0].style.msGridRow = row;
+			cell[0].style.msGridRowSpan = rowSpan;
+		});
+	}
+});
+
+
 //# sourceURL=grid.ibx.js
