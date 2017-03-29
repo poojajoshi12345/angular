@@ -7,6 +7,7 @@
 function ibxResourceManager()
 {
 	this._rootBundle = $($.parseXML("<ibx-root-res-bundle><markup></markup></ibx-root-res-bundle>"));
+	this._bindingDiv = $("<div class='ibx-resource-manager-binding-div' style='display:none'></div>");
 	this._styleSheet = $("<style type='text/css'>").prop("id", "ibxResourceManager_"+this._tmpId).appendTo("head");
 	this.language = "en";
 	this.strings = {"en":{}};
@@ -206,7 +207,12 @@ _p.getResource = function(selector, ibxBind)
 	//will autobind if element is an ibx type thing, and user didn't explicitly say NO!
 	ibxBind = (markup.attr("data-ibx-type") && (typeof(ibxBind) === "undefined")) ? true : ibxBind;
 	if(ibxBind)
+	{
+		this._bindingDiv.empty().append(markup).appendTo("body");
 		$.ibi.ibxWidget.bindElements(markup);
+		markup.detach();
+		this._bindingDiv.detach();
+	}
 
 	return markup;
 };
