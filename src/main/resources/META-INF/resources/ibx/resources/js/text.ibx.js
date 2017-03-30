@@ -122,6 +122,8 @@ $.widget("ibi.ibxTextField", $.ibi.ibxLabel,
 			this._textInput.attr("id", this.options.forId);
 		else
 			this._textInput.removeAttr("id");
+		this._text.removeAttr("for");
+		this._glyph.removeAttr("for");
 		if (this.options.readonly)
 			this._textInput.attr("readonly");
 		else

@@ -204,6 +204,8 @@ $.widget("ibi.ibxCheckBox", $.ibi.ibxLabel,
 			this._check.attr("id", this.options.forId);
 		else
 			this._check.removeAttr("id");
+		this._text.removeAttr("for");
+		this._glyph.removeAttr("for");
 		if (this.options.disabled)
 			this._check.prop("disabled", true);
 		else
