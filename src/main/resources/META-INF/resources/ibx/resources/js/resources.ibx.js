@@ -46,13 +46,14 @@ _p.addStringBundle = function(bundle)
 	this.strings[bundle.language] = $.extend(this.strings[bundle.language], bundle.strings);
 };
 
-_p.addBundle = function(url, data)
+_p.addBundle = function(info, data)
 {
+	var url = (typeof(info) === "string") ? info : info.url;
 	if(ibxResourceManager.loadedBundles[url])
 		return ibxResourceManager.loadedBundles[url];
 
 	var resLoaded = $.Deferred();
-	var xhr = $.get(url, data);
+	var xhr = $.get(info, data);
 	xhr._resLoaded = resLoaded;
 	xhr._src = url;
 	xhr.done(this._onBundleFileLoaded.bind(this));
@@ -93,7 +94,9 @@ _p.loadBundle = function(xDoc, xhr)
 		{
 			file = $(file);
 			var src = this.getContextPath() + file.attr("src");
-			this.addBundle(src);
+			console.log("Before", bundle.attr("name"))
+			this.addBundle({url:src, async:false});
+			console.log("After", bundle.attr("name"))
 		}.bind(this));
 
 		//load all css files
