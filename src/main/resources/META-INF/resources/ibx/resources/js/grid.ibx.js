@@ -85,7 +85,11 @@ $.widget("ibi.ibxGrid2", $.ibi.ibxWidget,
 	options:
 	{
 		"columns": "",
+		"columnsIe": "",
+		"columnsWebkit": "",
 		"rows": "",
+		"rowsIe": "",
+		"rowsWebkit": "",
 	},
 	_widgetClass: "ibx-grid2",
 	_create: function ()
@@ -116,12 +120,12 @@ $.widget("ibi.ibxGrid2", $.ibi.ibxWidget,
 		var options = this.options;
 
 		// webkit
-		this.element.css('grid-template-columns', options.columns);
-		this.element.css('grid-template-rows', options.rows);
+		this.element.css('grid-template-columns', options.columnWebkit ? options.columnWebkit: options.columns);
+		this.element.css('grid-template-rows', options.rowsWebkit ? options.rowsWebkit : options.rows);
 
 		// IE
-		this.element[0].style.msGridColumns = options.columns;
-		this.element[0].style.msGridRows = options.rows;
+		this.element[0].style.msGridColumns = options.columnsIe ? options.columnsIe : options.columns;
+		this.element[0].style.msGridRows = options.rowsIe ? options.rowsIe : options.rows;
 
 		this.element.children().each(function (idx, cell)
 		{
