@@ -87,8 +87,17 @@ _p.loadBundle = function(xDoc, xhr)
 		var name = name || bundle.attr("name");
 		bundle.attr("name", name);
 
+		//load all dependency bundles
+		var files = bundle.find("res-bundle");
+		files.each(function(idx, file)
+		{
+			file = $(file);
+			var src = this.getContextPath() + file.attr("src");
+			this.addBundle(src);
+		}.bind(this));
+
 		//load all css files
-		var files = bundle.find("style-file");
+		files = bundle.find("style-file");
 		files.each(function(idx, file)
 		{
 			var src = this.getContextPath() + $(file).attr("src");
@@ -194,18 +203,22 @@ _p.loadBundle = function(xDoc, xhr)
 
 _p.getResource = function(selector, ibxBind)
 {
-	var resource = this._rootBundle.find(selector).get(0);
-	if(!resource)
+	var resource = this._rootBundle.find(selector);
+	if(!resource.length)
 		throw(sformat("ibxResourceMgr failed to find resrouce: {1}", selector));
 
 	//get the xml out of the resource bundle as a string (essentially making a clone/copy)
-	var markup = (new XMLSerializer()).serializeToString(resource);
-	if(!markup)
+	var markup = "";
+	resource.each(function(idx, res)
+	{
+		markup += (new XMLSerializer()).serializeToString(res);
+	}.bind(this));
+	if(!markup.length)
 		throw(sformat("ibxResourceMgr failed to load resource: {1}", selector));
 	markup = $(markup);
 
 	//will autobind if element is an ibx type thing, and user didn't explicitly say NO!
-	ibxBind = (markup.attr("data-ibx-type") && (typeof(ibxBind) === "undefined")) ? true : ibxBind;
+	ibxBind = (markup.find("[data-ibx-type]").length && (typeof(ibxBind) === "undefined")) ? true : ibxBind;
 	if(ibxBind)
 	{
 		this._bindingDiv.empty().append(markup).appendTo("body");
