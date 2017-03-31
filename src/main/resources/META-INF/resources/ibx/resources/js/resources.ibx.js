@@ -65,17 +65,19 @@ _p._onBundleFileLoaded = function(xDoc, status, xhr)
 {
 	xDoc._xhr = xhr;
 
-	//load all dependency bundles...must be done before calling loadBundle...and must be
-	//async to ensure all dependencies are handled
+	var bundles = [];
 	var files = $(xDoc).find("res-bundle");
 	files.each(function(idx, file)
 	{
 		file = $(file);
 		var src = this.getContextPath() + file.attr("src");
-		this.addBundle({url:src, async:false});
+		bundles.push(this.addBundle(src));
 	}.bind(this));
 	
-	this.loadBundle(xDoc, xhr);//now load the current bundle.
+	$.when.apply($, bundles).done(function()
+	{
+		this.loadBundle(xDoc, xhr);//now load the current bundle.
+	}.bind(this));
 };
 _p._onBundleFileLoadError = function(xhr, status, msg)
 {
