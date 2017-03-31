@@ -68,7 +68,7 @@ $.widget("ibi.ibxLabel", $.ibi.ibxFlexBox,
 	refresh:function()
 	{
 		var options = this.options;
-		var title = this.element.prop("title");
+		var title = this.element.prop("title") || options.text;
 
 		this._text.html(options.text).attr("class", options.textElClass).css({"white-space":options.textWrap ? "" : "nowrap", "text-align": options.textWrap ? "center" : ""}).css("display", options.text ? "" : "none");
 		this._glyph.html(options.glyph).attr("class", options.glyphClasses).addClass(options.glyphElClass).css("display", (options.glyph || options.glyphClasses) ? "" : "none");
@@ -86,7 +86,7 @@ $.widget("ibi.ibxLabel", $.ibi.ibxFlexBox,
 			this._glyph.removeClass(this.options.glyphElSpacerClass);
 		
 		this.element.removeClass("icon-left icon-top icon-right icon-bottom")
-		this.element.addClass("icon-" + options.iconPosition).prop("title", title || options.text);
+		this.element.addClass("icon-" + options.iconPosition).prop("title", title);
 		this.options.forId ? this._text.attr("for", this.options.forId) : this._text.removeAttr("for");
 		this.options.forId ? this._glyph.attr("for", this.options.forId) : this._glyph.removeAttr("for");
 		this._super();
