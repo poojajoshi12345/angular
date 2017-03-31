@@ -14,7 +14,6 @@ function ibxResourceManager()
 }
 var _p = ibxResourceManager.prototype = new Object();
 
-ibxResourceManager._nAnonBundle = 0;
 ibxResourceManager.loadedBundles = {};
 ibxResourceManager.loadedFiles = {};
 
@@ -65,23 +64,7 @@ _p.addBundle = function(info, data)
 _p._onBundleFileLoaded = function(xDoc, status, xhr)
 {
 	xDoc._xhr = xhr;
-
-	//First load the dependency Resource Bundles...this will chain to any depth,
-	//but will not reload previously loaded bundles.
-	var bundles = [];
-	var files = $(xDoc).find("res-bundle");
-	files.each(function(idx, file)
-	{
-		file = $(file);
-		var src = this.getContextPath() + file.attr("src");
-		bundles.push(this.addBundle(src));
-	}.bind(this));
-	
-	//Then load the actual Resource Bundles specified.
-	$.when.apply($, bundles).done(function()
-	{
-		this.loadBundle(xDoc, xhr);
-	}.bind(this));
+	this.loadBundle(xDoc, xhr);
 };
 _p._onBundleFileLoadError = function(xhr, status, msg)
 {
@@ -91,7 +74,7 @@ _p._onBundleFileProgress = function()
 {
 };
 
-//load the actual resource bundle here...can be called directly, or from an xhr load.
+//load the actual resource bundle here...can be called directly, or from an xhr load (promise/deferred fullfilled/done)
 _p.loadBundle = function(xDoc, xhr)
 {
 	var bundleLoaded = (xhr && xhr._resLoaded) ? xhr._resLoaded : $.Deferred();
@@ -101,7 +84,17 @@ _p.loadBundle = function(xDoc, xhr)
 	var bundles = xDoc.find("ibx-res-bundle");
 	for(var i = 0; i < bundles.length; ++i)
 	{
-		bundle = $(bundles.get(i));
+		//First load the dependency Resource Bundles...this will chain to any depth
+		var files = $(bundles.get(i)).find("res-bundle");
+		files.each(function(idx, file)
+		{
+			file = $(file);
+			var src = ibxResourceMgr.getContextPath() + file.attr("src");
+			ibxResourceMgr.addBundle({url:src, async:false});
+		});
+
+		//save bundle reference here, as doing before the recursion above will cause closure issues.
+		var bundle = $(bundles.get(i));
 		var name = name || bundle.attr("name");
 		bundle.attr("name", name);
 
@@ -201,15 +194,17 @@ _p.loadBundle = function(xDoc, xhr)
 		}.bind(this));
 
 		//now load all forward reference Resource Bundles (packages) that this bundle wants to load.
-		var packages = $(xDoc).find("package");
-		packages.each(function(idx, pkg)
+		var files = $(bundles.get(i)).find("package");
+		files.each(function(idx, file)
 		{
-			pkg = $(pkg);
-			var src = this.getContextPath() + pkg.attr("src");
-			ibxResourceMgr.addBundle(src);
-		}.bind(this));
+			file = $(file);
+			var src = ibxResourceMgr.getContextPath() + file.attr("src");
+			ibxResourceMgr.addBundle({url:src, async:false});
+		});
 
-		ibxResourceManager.loadedBundles[xhr._src || ("anonymous" + ++ibxResourceManager._nAnonBundle)] = bundleLoaded;
+		//save that this bundles has been loaded.
+		if(xhr._src)
+			ibxResourceManager.loadedBundles[xhr._src] = bundleLoaded;
 	}
 
 	//give the main thread a chance to render what's been loaded before resolving the promise
