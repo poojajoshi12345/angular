@@ -13,26 +13,27 @@ function ibx(fn, path, autoBind)
 		ibx._isLoading = !ibx.loaded;
 		ibx.setPath(path);
 
+		//things to preload for ibx.  Everything else is in the root resource bundle
 		var scripts = 
 		[
 			"<link type='text/css' rel='stylesheet' href='" + ibx._path + "./resources/css/base.ibx.css'></link>",
 			"<script type='text/javascript' src='" + ibx._path + "./resources/etc/jquery/jquery-3.1.1.js'></script>",
-			"<script type='text/javascript' src='" + ibx._path + "./resources/etc/jquery/jquery-ui-1.12.1/jquery-ui.js'></script>"
 		];
 		document.open();
 		document.write(scripts.join(""));
 		document.close();
 
+		//wait for jquery to be loaded...then boot ibx
 		var dateStart = new Date();
 		ibx._loadTimer = window.setInterval(function()
 		{
 			if((new Date()) - dateStart > ibx.loadTimeout)
 			{
 				window.clearInterval(ibx._loadTimer);
-				throw("error loading ibx subsystem");
+				throw("Error loading pre ibx resources: " + scripts);
 			}
 
-			if(window.$ && window.$.ui)
+			if(window.$)
 			{
 				window.clearInterval(ibx._loadTimer);
 
@@ -46,16 +47,13 @@ function ibx(fn, path, autoBind)
 					ibxResourceMgr.addBundle(ibx._path + "./resources/ibx_resource_bundle.xml").done(function()
 					{
 						if(ibx._loadPromise._autoBind)
-						{
-							var bindingRoots = $(".ibx-binding-root:not(.ibx-bound)");
-							$.ibi.ibxWidget.bindElements(bindingRoots);
-							bindingRoots.addClass("ibx-bound");
-						}
+							$.ibi.ibxWidget.bindElements();
 
 						ibx._loaded = true;
 						ibx._isLoading = !ibx._loaded;
 						ibx._loadPromise.then(fn);
 						ibx._loadPromise.resolve(ibx);//let everyone know the system is booted.
+						$(".ibx-root").addClass("ibx-loaded");//display all ibx-roots, now that we are loaded.
 					});
 				});
 			}
@@ -65,12 +63,12 @@ function ibx(fn, path, autoBind)
 	if(typeof(fn) === "function")
 	{
 		if(!ibx._loaded)
-			throw("You haven't started the ibx subsystem!");
+			throw("ibx subsystem is not loaded!");
 		ibx._loadPromise.done(fn);
 	}
 	return ibx;
 }
-ibx.loadTimeout = 10000;
+ibx.loadTimeout = 10000;//can't get preloads in running state by this interval, then bail!
 ibx._loaded = false;
 ibx._loadPromise = null;
 ibx._path = "";

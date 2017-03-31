@@ -34,11 +34,12 @@ body
 	-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 
-.ibx-binding-root
+/*hide from here down so we can load/bind ibx before showing markup...usually added to <body>*/
+.ibx-root
 {
 	display:none;
 }
-.ibx-binding-root.ibx-bound
+.ibx-root.ibx-loaded
 {
 	display:block;
 }
