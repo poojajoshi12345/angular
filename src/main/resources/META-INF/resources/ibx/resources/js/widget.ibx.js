@@ -492,8 +492,8 @@ $.ibi.ibxWidget.bindElements = function(elements)
 
 		try
 		{
-			//construct any unconstructed children first
-			var childWidgets = element.children("[data-ibx-type]");
+			//construct any unconstructed ancestors first
+			var childWidgets = element.find("[data-ibx-type]");
 			var childBound = $.ibi.ibxWidget.bindElements(childWidgets);
 			elBound = elBound.add(childBound);
 
