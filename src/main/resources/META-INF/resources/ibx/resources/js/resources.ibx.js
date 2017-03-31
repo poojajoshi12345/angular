@@ -199,13 +199,23 @@ _p.loadBundle = function(xDoc, xhr)
 				head.append(script);
 			}
 		}.bind(this));
+
+		//now load all forward reference Resource Bundles (packages) that this bundle wants to load.
+		var packages = $(xDoc).find("package");
+		packages.each(function(idx, pkg)
+		{
+			pkg = $(pkg);
+			var src = this.getContextPath() + pkg.attr("src");
+			ibxResourceMgr.addBundle(src);
+		}.bind(this));
+
 		ibxResourceManager.loadedBundles[xhr._src || ("anonymous" + ++ibxResourceManager._nAnonBundle)] = bundleLoaded;
 	}
 
 	//give the main thread a chance to render what's been loaded before resolving the promise
 	window.setTimeout(function()
 	{
-		bundleLoaded.resolve(bundle, this);
+		bundleLoaded.resolve(bundles, this);
 	}, 0);
 	return bundleLoaded;
 };
