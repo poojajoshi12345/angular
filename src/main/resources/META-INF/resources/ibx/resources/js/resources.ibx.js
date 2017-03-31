@@ -14,6 +14,7 @@ function ibxResourceManager()
 }
 var _p = ibxResourceManager.prototype = new Object();
 
+ibxResourceManager._nAnonBundle = 0;
 ibxResourceManager.loadedBundles = {};
 ibxResourceManager.loadedFiles = {};
 
@@ -59,12 +60,14 @@ _p.addBundle = function(info, data)
 	xhr.done(this._onBundleFileLoaded.bind(this));
 	xhr.fail(this._onBundleFileLoadError.bind(this));
 	xhr.progress(this._onBundleFileProgress.bind(this));
-	return resLoaded;//$.when(resLoaded, xhr);
+	return resLoaded;
 };
 _p._onBundleFileLoaded = function(xDoc, status, xhr)
 {
 	xDoc._xhr = xhr;
 
+	//First load the dependency Resource Bundles...this will chain to any depth,
+	//but will not reload previously loaded bundles.
 	var bundles = [];
 	var files = $(xDoc).find("res-bundle");
 	files.each(function(idx, file)
@@ -74,9 +77,10 @@ _p._onBundleFileLoaded = function(xDoc, status, xhr)
 		bundles.push(this.addBundle(src));
 	}.bind(this));
 	
+	//Then load the actual Resource Bundles specified.
 	$.when.apply($, bundles).done(function()
 	{
-		this.loadBundle(xDoc, xhr);//now load the current bundle.
+		this.loadBundle(xDoc, xhr);
 	}.bind(this));
 };
 _p._onBundleFileLoadError = function(xhr, status, msg)
@@ -195,7 +199,7 @@ _p.loadBundle = function(xDoc, xhr)
 				head.append(script);
 			}
 		}.bind(this));
-		ibxResourceManager.loadedBundles[name || xhr._src || "anonymous"] = bundleLoaded;
+		ibxResourceManager.loadedBundles[xhr._src || ("anonymous" + ++ibxResourceManager._nAnonBundle)] = bundleLoaded;
 	}
 
 	//give the main thread a chance to render what's been loaded before resolving the promise
