@@ -1,4 +1,4 @@
-<%@ page import="System.out.*, java.io.*,java.util.*" %>
+<%@ page import="java.io.*,java.util.*" %>
 <%@ page import="com.ibi.util.IBIBufferedReader, com.ibi.util.PathTraversal, com.ibi.util.PathTraversalException" %>
 <%
 	response.addHeader("Pragma", "no-cache");
