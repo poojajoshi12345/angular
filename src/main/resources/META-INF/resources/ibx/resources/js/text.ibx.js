@@ -42,31 +42,27 @@ $.widget("ibi.ibxTextField", $.ibi.ibxLabel,
 			"ctrlType": "text",
 			"forId": "",
 			"fnFormat": null,
+			optionsMap:
+			{
+				text:"textInputValue"
+			}
 		},
 	_widgetClass: "ibx-text-field",
 	_valueOnFocus: null,
 	_create: function ()
 	{
 		this._super();
-		this._text.hide();
 		this._textInput = $('<input class="ibx-default-ctrl-focus" type="' + this.options.ctrlType + '"></input>');
 		this.element.append(this._textInput);
 		this._textInput.on("blur", this._onBlur.bind(this)).on("input", this._onInput.bind(this)).on("keydown", this._onKeyDown.bind(this));
-		this._setValue(this.options.text, true);
-	},
-	_setOption: function (key, value)
-	{
-		this._super(key, value);
-		if (key == "text" && this._textInput) // only do this after create
-			this._setValue(value, true);
+		this._setValue(this.options.textInputValue, true);
 	},
 	_setValue: function (value, bFormat)
 	{
-		this.options.text = bFormat && this.options.fnFormat ? this.options.fnFormat(value) : value;
-		this._textInput.val(this.options.text);
+		this.options.textInputValue = bFormat && this.options.fnFormat ? this.options.fnFormat(value) : value;
 		this.refresh();
 		this._trigger("change", null, this.element);
-		this._trigger("set_form_value", null, { "elem": this.element, "value": this.options.text });
+		this._trigger("set_form_value", null, { "elem": this.element, "value": this.options.textInputValue });
 	},
 	selectAll: function ()
 	{
@@ -92,7 +88,7 @@ $.widget("ibi.ibxTextField", $.ibi.ibxLabel,
 	_onInput: function (e)
 	{
 		var value = this._textInput.val();
-		if (this.options.text != value)
+		if (this.options.textInputValue != value)
 		{
 			this._setValue(value);
 			this._trigger("textchanged", e, this.element);
@@ -103,7 +99,7 @@ $.widget("ibi.ibxTextField", $.ibi.ibxLabel,
 		if (fnFormat)
 		{
 			this.options.fnFormat = fnFormat.bind(this);
-			this._setValue(this.options.text, true);
+			this._setValue(this.options.textInputValue, true);
 			this.refresh();
 		}
 		else
@@ -122,6 +118,9 @@ $.widget("ibi.ibxTextField", $.ibi.ibxLabel,
 			this._textInput.attr("id", this.options.forId);
 		else
 			this._textInput.removeAttr("id");
+
+		this._textInput.val(this.options.textInputValue);
+
 		this._text.removeAttr("for");
 		this._glyph.removeAttr("for");
 		if (this.options.readonly)
