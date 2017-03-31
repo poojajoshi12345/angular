@@ -565,7 +565,8 @@ $.ibi.ibxWidget.parseIbxOptions = function(opts)
 };
 $.ibi.ibxWidget.coercePropVal = function (val)
 {
-	if (typeof (val) == "string" && val)
+return val;
+	if(typeof(val) == "string")
 	{
 		var tempVal = $.trim(val.toLowerCase());
 		if (tempVal == "true")
