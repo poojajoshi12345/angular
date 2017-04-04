@@ -521,16 +521,13 @@ $.ibi.ibxWidget.bindElements = function(elements)
 		if(element.is("[data-ibx-type]") && !element.is(":ibxWidget"))
 		{
 			var widgetType = element.attr("data-ibx-type");
-			try
+			if($.ibi[widgetType])
 			{
 				var widget = $.ibi[widgetType].call($.ibi, {}, element);
 				elBound = elBound.add(widget.element);
 			}
-			catch(ex)
-			{
-				console.error("TypeError:", element[0]);
-				throw new TypeError("Unknown ibxWidget type: " + widgetType);
-			}
+			else
+				eval("debugger");
 		}
 	}.bind(this));
 	return elBound;
