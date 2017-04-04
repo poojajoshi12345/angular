@@ -63,6 +63,7 @@ $.widget("ibi.ibxAccordionPane", $.ibi.ibxFlexBox,
 	},
 	_destroy:function()
 	{
+		this.element.ibxMutationObserver('destroy');
 		this._super();
 	},
 	_init:function()
@@ -210,6 +211,7 @@ $.widget("ibi.ibxAccordionPage", $.ibi.ibxFlexBox,
 	},
 	_destroy:function()
 	{
+		this.element.ibxMutationObserver('destroy');
 		this.element.append(this._content.children());
 		this._button.ibxWidget("destroy");
 		this._content.ibxWidget("destroy");

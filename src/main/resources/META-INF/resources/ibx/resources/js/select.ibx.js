@@ -495,6 +495,7 @@ $.widget("ibi.ibxSelect", $.ibi.ibxTextField,
 	},
 	_destroy: function ()
 	{
+		this.element.ibxMutationObserver('destroy');
 		this._super();
 		if (this._dropButton)
 			this._dropButton.remove();
@@ -789,6 +790,7 @@ $.widget("ibi.ibxSelectGroup", $.ibi.ibxLabel,
 	},
 	_destroy: function ()
 	{
+		this.element.ibxMutationObserver('destroy');
 		this._super();
 	},
 	refresh: function ()

@@ -112,6 +112,7 @@ $.widget("ibi.ibxGrid2", $.ibi.ibxWidget,
 	},
 	_destroy: function ()
 	{
+		this.element.ibxMutationObserver('destroy');
 		this._super();
 	},
 	refresh: function ()

@@ -75,6 +75,7 @@ $.widget("ibi.ibxDialog", $.ibi.ibxPopup,
 	},
 	_destroy:function()
 	{
+		this.element.ibxMutationObserver('destroy');
 		this._super();
 	},
 	_init:function()
