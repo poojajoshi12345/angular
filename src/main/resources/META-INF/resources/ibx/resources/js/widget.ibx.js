@@ -351,8 +351,9 @@ $.widget("ibi.ibxWidget", $.Widget,
 		this.element.on("contextmenu", this._onWidgetContextMenu.bind(this));
 		this._adjustWidgetClasses(true);
 
-		//get the static options from markup (data-ibx-options/data-ibxp-xxx), and set 'em!
-		this._setOptions($.ibi.ibxWidget.getIbxMarkupOptions(this.element));
+		//merge in the markup options into the current options...they will be correctly assigned
+		//(options map) when init is called after all creates are finished.
+		$.extend(this.options, $.ibi.ibxWidget.getIbxMarkupOptions(this.element));
 	
 		//Ritalin, if ya know what I mean!
 		this.element.children("[tabindex]").first().focus();
@@ -379,7 +380,8 @@ $.widget("ibi.ibxWidget", $.Widget,
 	},
 	_init:function()
 	{
-		this._setOptions(this.options);//this repects the options map when creating/initializing a widget.
+		//_setOptions will respect the options map.
+		this._setOptions(this.options);
 		this.refresh();
 	},
 	option:function(key, value)
@@ -394,7 +396,10 @@ $.widget("ibi.ibxWidget", $.Widget,
 	{
 		//map option to option.option.xxx. Used mostly for Bindows markup property setting.
 		if(this.options.optionsMap[key])
+		{
 			this.option(this.options.optionsMap[key], value);
+			delete this.options[key];//mapped option keys should be removed from main options object so things don't get set twice (like text on a label).
+		}
 		else
 			this._super(key, value);
 
