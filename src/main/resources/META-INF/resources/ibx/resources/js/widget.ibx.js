@@ -527,7 +527,10 @@ $.ibi.ibxWidget.bindElements = function(elements)
 				elBound = elBound.add(widget.element);
 			}
 			else
-				eval("debugger");
+			{
+				console.error("Unknown ibxWidget type:", widgetType, element[0]);
+				debugger;
+			}
 		}
 	}.bind(this));
 	return elBound;
