@@ -70,7 +70,7 @@ $.widget("ibi.ibxLabel", $.ibi.ibxFlexBox,
 		var options = this.options;
 		var title = this.element.prop("title") || options.text;
 
-		this._text.html(options.text).attr("class", options.textElClass).css({"white-space":options.textWrap ? "" : "nowrap", "text-align": options.textWrap ? "center" : ""});
+		this._text.html(options.text).attr("class", options.textElClass).css({"white-space":options.textWrap ? "" : "nowrap"});
 		this._glyph.html(options.glyph).attr("class", options.glyphClasses).addClass(options.glyphElClass).css("display", (options.glyph || options.glyphClasses) ? "" : "none");
 		this._icon.prop("src", options.icon).attr("class", options.iconElClass).css("display", options.icon ? "" : "none");
 		
