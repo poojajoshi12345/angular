@@ -3,11 +3,11 @@
 function IbxTextField()
 {
 	if (_biInPrototype) return;
-	IbxLabel.call(this);
+	IbxWidget.call(this);
 	this._widgetCtor = $.ibi.ibxTextField;
 }
-var _p = _biExtend(IbxTextField, IbxLabel, "IbxTextField");
-IbxTextField.base = IbxLabel.prototype;
+var _p = _biExtend(IbxTextField, IbxWidget, "IbxTextField");
+IbxTextField.base = IbxWidget.prototype;
 IbxWidget.addWidgetProperty(IbxTextField, "readonly");
 IbxWidget.addWidgetProperty(IbxTextField, "size");
 IbxWidget.addWidgetProperty(IbxTextField, "maxlength");
@@ -26,10 +26,11 @@ IbxWidget.addWidgetEvent(IbxTextField, "action");
 IbxWidget.addWidgetProperty(IbxTextField, "forId");
 
 
-$.widget("ibi.ibxTextField", $.ibi.ibxLabel,
+$.widget("ibi.ibxTextField", $.ibi.ibxWidget,
 {
 	options:
 		{
+			"text": "",
 			"readonly": false,
 			"size": 0,
 			"maxlength": 0,
@@ -42,10 +43,6 @@ $.widget("ibi.ibxTextField", $.ibi.ibxLabel,
 			"ctrlType": "text",
 			"forId": "",
 			"fnFormat": null,
-			optionsMap:
-			{
-				text:"textInputValue"
-			}
 		},
 	_widgetClass: "ibx-text-field",
 	_valueOnFocus: null,
@@ -55,14 +52,14 @@ $.widget("ibi.ibxTextField", $.ibi.ibxLabel,
 		this._textInput = $('<input class="ibx-default-ctrl-focus" type="' + this.options.ctrlType + '"></input>');
 		this.element.append(this._textInput);
 		this._textInput.on("blur", this._onBlur.bind(this)).on("input", this._onInput.bind(this)).on("keydown", this._onKeyDown.bind(this));
-		this._setValue(this.options.textInputValue, true);
+		this._setValue(this.options.text, true);
 	},
 	_setValue: function (value, bFormat)
 	{
-		this.options.textInputValue = bFormat && this.options.fnFormat ? this.options.fnFormat(value) : value;
+		this.options.text = bFormat && this.options.fnFormat ? this.options.fnFormat(value) : value;
 		this.refresh();
 		this._trigger("change", null, this.element);
-		this._trigger("set_form_value", null, { "elem": this.element, "value": this.options.textInputValue });
+		this._trigger("set_form_value", null, { "elem": this.element, "value": this.options.text });
 	},
 	selectAll: function ()
 	{
@@ -88,7 +85,7 @@ $.widget("ibi.ibxTextField", $.ibi.ibxLabel,
 	_onInput: function (e)
 	{
 		var value = this._textInput.val();
-		if (this.options.textInputValue != value)
+		if (this.options.text != value)
 		{
 			this._setValue(value);
 			this._trigger("textchanged", e, this.element);
@@ -99,7 +96,7 @@ $.widget("ibi.ibxTextField", $.ibi.ibxLabel,
 		if (fnFormat)
 		{
 			this.options.fnFormat = fnFormat.bind(this);
-			this._setValue(this.options.textInputValue, true);
+			this._setValue(this.options.text, true);
 			this.refresh();
 		}
 		else
@@ -119,10 +116,8 @@ $.widget("ibi.ibxTextField", $.ibi.ibxLabel,
 		else
 			this._textInput.removeAttr("id");
 
-		this._textInput.val(this.options.textInputValue);
+		this._textInput.val(this.options.text);
 
-		this._text.removeAttr("for");
-		this._glyph.removeAttr("for");
 		if (this.options.readonly)
 			this._textInput.attr("readonly");
 		else
@@ -159,7 +154,6 @@ $.widget("ibi.ibxTextField", $.ibi.ibxLabel,
 			this._textInput.attr("required");
 		else
 			this._textInput.removeAttr("required");
-		this._glyph.addClass(this.options.glyphElSpacerClass);
 	}
 });
 //# sourceURL=text.ibx.js
