@@ -2,12 +2,16 @@
 <!--Copyright 1996-2016 Information Builders, Inc. All rights reserved.
 $Revision$:-->
 <ibx-res-bundle name="ibx_resourece_bundle.xml">
+	<!--dependencies loaded before this resource bundle-->
 	<res-bundles>
 	</res-bundles>
 
+	<!--resources loaded AFTER this resource bundle-->
 	<packages>
+		<package src="./resources/markup/dialog_package.ibx.xml"/>
 	</packages>
 
+	<!--style dependencies-->
 	<styles>
 		<style-file src="./resources/etc/jquery/jquery-ui-1.12.1/jquery-ui.css"/>
 		<style-file src="./resources/etc/gridstack/gridstack.css"/>
@@ -37,11 +41,25 @@ $Revision$:-->
 		<style-file src="./resources/css/select.ibx.css"/>
 		<style-file src="./resources/css/base.ibx.css"/>
 		<style-sheet name="">
-		<![CDATA[
+			<![CDATA[
 		]]>
 		</style-sheet>
 	</styles>
 
+	<!--string dependencies-->
+	<strings>
+		<string-file src="./resources/strings/strings.en.ibx.txt"/>
+		<string-bundle>
+			<![CDATA[
+		]]>
+		</string-bundle>
+	</strings>
+
+	<!--markup dependencies-->
+	<markup>
+	</markup>
+
+	<!--script dependencies-->
 	<scripts>
 		<script-file src="./resources/etc/jquery/jquery-ui-1.12.1/jquery-ui.js"/>
 		<script-file src="./resources/etc/gridstack/underscore.js"/>
@@ -75,36 +93,8 @@ $Revision$:-->
 		<script-file src="./resources/js/gridstack.ibx.js"/>
 		<script-file src="./resources/js/select.ibx.js"/>
 		<script-block name="">
-		<![CDATA[
+			<![CDATA[
 		]]>
 		</script-block>
-
-		<strings>
-			<string-file src="./resources/strings/strings.en.ibx.txt"/>
-			<string-bundle>
-			<![CDATA[
-			]]>
-			</string-bundle>
-		</strings>
-
-		<markup>
-			<markup-block>
-				<div class="dialog-template" data-ibx-type="ibxDialog" data-ibx-name-root="true" data-ibxp-default-focused="cancel">
-					<div class="ibx-dialog-main-box" data-ibx-type="ibxVBox" data-ibx-name="vbMain" data-ibxp-align="stretch">
-						<div class="ibx-dialog-title-box" data-ibx-type="ibxHBox" data-ibx-name="titleBox" data-ibxp-align="center">
-							<div class="ibx-title-bar-caption" data-ibx-type="ibxLabel" data-ibx-name="caption" data-ibxp-justify="start"></div>
-							<div class="ibx-title-bar-close-button" data-ibx-type="ibxButton" data-ibx-name="titleClose"></div>
-						</div>
-						<div class="ibx-dialog-content" data-ibx-type="ibxVBox" data-ibx-name="contentBox" data-ibxp-align="stretch"></div>
-						<div class='ibx-dialog-button-box' data-ibx-type='ibxHBox' data-ibx-name='btnBox' data-ibxp-justify='end' data-ibxp-align='center'>
-							<div class='ibx-dialog-apply-button' data-ibx-type='ibxButton' data-ibx-name='btnApply' data-ibxp-text="Apply" data-ibxp-icon-position='top' tabIndex='1'></div>
-							<div class='ibx-dialog-cancel-button' data-ibx-type='ibxButton' data-ibx-name='btnCancel' data-ibxp-text="Cancel" data-ibxp-icon-position='top' tabIndex='1'></div>
-							<div class='ibx-dialog-ok-button' data-ibx-type='ibxButton' data-ibx-name='btnOK' data-ibxp-text="OK" data-ibxp-icon-position='top' tabIndex='1'></div>
-						</div>
-					</div>
-				</div>
-			</markup-block>
-		</markup>
-
 	</scripts>
 </ibx-res-bundle>
