@@ -4,27 +4,21 @@
 /******************************************************************************
 	GRID
 ******************************************************************************/
-$.widget("ibi.ibxGrid", $.ibi.ibxHBox, 
+$.widget("ibi.ibxFlexGrid", $.ibi.ibxHBox, 
 {
 	options:
 	{
 		"columnCount":12,
 		"wrap":true,
 	},
-	_widgetClass:"ibx-grid",
+	_widgetClass:"ibx-flex-grid",
 	_create:function()
 	{
 		this._super();
-		$(window).on(MediaQuery.EVENT_MEDIA_CHANGE, this._onMediaChange.bind(this));
 	},
 	_destroy:function()
 	{
 		this._super();
-	},
-	_onMediaChange:function(e, mql)
-	{
-		if(mql.matches)
-			this.refresh();
 	},
 	_colSize:-1,
 	colSize:function()
@@ -40,18 +34,18 @@ $.widget("ibi.ibxGrid", $.ibi.ibxHBox,
 		{
 			cell = $(cell);
 			var colSpan = cell.data("ibxColSpan") || 1;
-			var cellClasses = sformat("ibx-grid-cell ibx-grid-span-{1}", colSpan);
+			var cellClasses = sformat("ibx-flex-grid-cell ibx-flex-grid-span-{1}", colSpan);
 			var width = (colSpan * colSize);
 			cell.addClass(cellClasses).css("width", sformat("{1}%", width));
 		}.bind(this, colSize));
 	}
 });
-$.ibi.ibxGrid.statics = 
+$.ibi.ibxFlexGrid.statics = 
 {
 };
 
 
-$.widget("ibi.ibxGrid2", $.ibi.ibxWidget,
+$.widget("ibi.ibxGrid", $.ibi.ibxWidget,
 {
 	options:
 	{
@@ -62,7 +56,7 @@ $.widget("ibi.ibxGrid2", $.ibi.ibxWidget,
 		"rowsIe": "",
 		"rowsWebkit": "",
 	},
-	_widgetClass: "ibx-grid2",
+	_widgetClass: "ibx-grid",
 	_create: function ()
 	{
 		this._super();
