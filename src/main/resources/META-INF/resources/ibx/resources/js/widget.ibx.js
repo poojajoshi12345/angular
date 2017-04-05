@@ -54,7 +54,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 
 		//merge in the markup options into the current options...they will be correctly assigned
 		//(options map) when init is called after all creates are finished.
-		$.extend(this.options, $.ibi.ibxWidget.getIbxMarkupOptions(this.element));
+		$.extend(this.options, ibx.getIbxMarkupOptions(this.element));
 	
 		//Ritalin, if ya know what I mean!
 		this.element.children("[tabindex]").first().focus();
@@ -184,119 +184,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 		options.defaultFocused ? this.element.addClass("ibx-default-focused") : this.element.removeClass("ibx-default-focused");
 	}
 });
-
-
-$.ibi.ibxWidget.bindElements = function(elements)
-{
-	//get elements to bind
-	var elBound = $();
-	var elBind = elements ? $(elements) : $("[data-ibx-type]");
-
-	//construct all the widgets
-	elBind.each(function(idx, el)
-	{
-		var element = $(el);
-		var noBind = $.ibi.ibxWidget.coercePropVal(element.attr("data-ibx-no-bind"));
-		if(noBind)
-			return;
-
-		//construct any unconstructed ancestors first
-		var childWidgets = element.find("[data-ibx-type]");
-		var childBound = $.ibi.ibxWidget.bindElements(childWidgets);
-		elBound = elBound.add(childBound);
-
-		//hook up member variables to the closest nameRoot
-		var memberName = element.attr("data-ibx-name");
-		if(memberName)
-		{
-			var nameRoot = element.closest(":ibxNameRoot");
-			var nameRootWidget = nameRoot.data("ibxWidget");
-			if(nameRootWidget)
-				nameRootWidget[memberName] = element;//nameRoot created, set directly
-			else
-			{
-				//nameRoot not created, so store member variable to be set in widget._create
-				var memberData = nameRoot.data("_ibxPrecreateMemberVariables") || {};
-				memberData[memberName] = element;
-				nameRoot.data("_ibxPrecreateMemberVariables", memberData);
-			}
-		}
-
-		//then construct the parent element, if not already constructed.
-		if(element.is("[data-ibx-type]") && !element.is(":ibxWidget"))
-		{
-			var widgetType = element.attr("data-ibx-type");
-			if($.ibi[widgetType])
-			{
-				var widget = $.ibi[widgetType].call($.ibi, {}, element);
-				elBound = elBound.add(widget.element);
-			}
-			else
-			{
-				console.error("Unknown ibxWidget type:", widgetType, element[0]);
-				debugger;
-			}
-		}
-	}.bind(this));
-	return elBound;
-};
-$.ibi.ibxWidget.getIbxMarkupOptions = function(el)
-{
-	el = $(el);
-
-	//first get the ibx-options value and convert that to individual options.
-	var ibxOptions = el.attr("data-ibx-options") || "{}";
-	var options = this.parseIbxOptions(ibxOptions);
-
-	//then overlay any specific options on top.
-	var attrs = $(el).prop("attributes");
-	for(var i = 0; i < attrs.length; ++i)
-	{
-		var attr = attrs[i];
-		var name = attr.name;
-		if(name.search("data-ibxp-") == 0)
-		{
-			var prop = name.replace("data-ibxp-", "");
-			prop = $.camelCase(prop);
-			var option = attr.value[0] == "{" ? this.parseIbxOptions(attr.value) : null; //check for '{' to see if we parse as object.
-			options[prop] = option ? $.extend(true, options[prop], option) : attr.value;
-		}
-	}
-
-	//go through the options and make sure the true/false/1/0 strings are turned into native types.
-	$.each(options, function(name, value)
-	{
-		this[name] = $.ibi.ibxWidget.coercePropVal(value);
-	}.bind(options));
-	return options;
-};
-$.ibi.ibxWidget.parseIbxOptions = function(opts)
-{
-	return eval("("+ opts +")");
-};
-$.ibi.ibxWidget.coercePropVal = function (val)
-{
-	if(typeof(val) == "string" && val.length)
-	{
-		var tempVal = $.trim(val.toLowerCase());
-		if (tempVal == "true")
-			val = true;
-		else
-		if (tempVal == "false")
-			val = false;
-		else
-		if (!isNaN(tempVal = Number(val)))
-			val = tempVal;
-	}
-	return val;
-};
-
 $.ibi.ibxWidget.statics = 
 {
 };
-
-$(function()
-{
-	//$.ibi.ibxWidget.bindElements()
-});
 //# sourceURL=widget.ibx.js

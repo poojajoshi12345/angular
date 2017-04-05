@@ -37,7 +37,7 @@ $.widget("ibi.ibxDialog", $.ibi.ibxPopup,
 		{
 			var dlgRes = ibxResourceMgr.getResource(this.options.template, false);
 			this.element.append(dlgRes.children());
-			$.ibi.ibxWidget.bindElements(this.element);
+			ibx.bindElements(this.element);
 		}
 
 		options.dragHandle = this.titleBox;
@@ -93,7 +93,7 @@ $.ibi.ibxDialog.createMessageDialog = function(options)
 	var dlg = $("<div>").ibxDialog(options);
 	var msg = $("<div data-ibx-name='message'>").ibxLabel(options.messageOptions).addClass("ibx-dialog-message");
 	dlg.append(msg);
-	$.ibi.ibxWidget.bindElements(dlg);
+	ibx.bindElements(dlg);
 	return dlg;
 };
 

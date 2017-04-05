@@ -51,7 +51,7 @@ $.widget("ibi.ibxMutationObserver", $.Widget,
 		{
 			$.each(mutation.addedNodes, function(mutation, idx, node)
 			{
-				$.ibi.ibxWidget.bindElements(node);
+				ibx.bindElements(node);
 				options.fnAddedNodes(node, mutation);
 			}.bind(this, mutation));
 

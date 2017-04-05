@@ -236,7 +236,7 @@ _p.getResource = function(selector, ibxBind)
 	if(ibxBind)
 	{
 		this._bindingDiv.empty().append(markup).appendTo("body");
-		$.ibi.ibxWidget.bindElements(markup);
+		ibx.bindElements(markup);
 		markup.detach();
 		this._bindingDiv.detach();
 	}
