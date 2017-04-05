@@ -1,27 +1,5 @@
 /*Copyright 1996-2016 Information Builders, Inc. All rights reserved.*/
 // $Revision$:
-function IbxTextArea()
-{
-	if (_biInPrototype) return;
-	IbxWidget.call(this);
-	this._widgetCtor = $.ibi.ibxTextArea;
-}
-var _p = _biExtend(IbxTextArea, IbxWidget, "IbxTextArea");
-IbxTextArea.base = IbxWidget.prototype;
-IbxWidget.addWidgetProperty(IbxTextArea, "readonly");
-IbxWidget.addWidgetProperty(IbxTextArea, "cols");
-IbxWidget.addWidgetProperty(IbxTextArea, "rows");
-IbxWidget.addWidgetProperty(IbxTextArea, "maxlength");
-IbxWidget.addWidgetProperty(IbxTextArea, "placeholder");
-IbxWidget.addWidgetProperty(IbxTextArea, "required");
-IbxWidget.addWidgetProperty(IbxTextArea, "wrap");
-IbxWidget.addWidgetFunction(IbxTextArea, "selectAll");
-IbxWidget.addWidgetEvent(IbxTextArea, "textchanging");
-IbxWidget.addWidgetEvent(IbxTextArea, "textchanged");
-IbxWidget.addWidgetEvent(IbxTextArea, "action");
-IbxWidget.addWidgetProperty(IbxTextArea, "forId");
-
-
 $.widget("ibi.ibxTextArea", $.ibi.ibxWidget,
 {
 	options:

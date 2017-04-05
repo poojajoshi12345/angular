@@ -34,7 +34,7 @@ $.widget("ibi.ibxMutationObserver", $.Widget,
 	},
 	_destroy:function()
 	{
-		options.mutationObserver.disconnect();
+		this.options.mutationObserver.disconnect();
 		this._super();
 	},
 	_init:function()

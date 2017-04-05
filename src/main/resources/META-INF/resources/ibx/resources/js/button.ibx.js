@@ -2,16 +2,6 @@
 // $Revision$:
 
 //////////////////////////////////////////////////////////////////////////
-function IbxButton()
-{
-	if (_biInPrototype) return;
-	IbxLabel.call(this);
-	this._widgetCtor = $.ibi.ibxButton;
-}
-var _p = _biExtend(IbxButton, IbxLabel, "IbxButton");
-IbxButton.base = IbxLabel.prototype;
-
-
 $.widget("ibi.ibxButton", $.ibi.ibxLabel,
 {
 	options:
@@ -50,24 +40,6 @@ $.widget("ibi.ibxButton", $.ibi.ibxLabel,
 });
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-function IbxCheckBox()
-{
-	if (_biInPrototype) return;
-	IbxLabel.call(this);
-	this._widgetCtor = $.ibi.ibxCheckBox;
-}
-var _p = _biExtend(IbxCheckBox, IbxLabel, "IbxCheckBox");
-IbxCheckBox.base = IbxLabel.prototype;
-IbxWidget.addWidgetEvent(IbxCheckBox, "change");
-IbxWidget.addWidgetProperty(IbxCheckBox, "checked");
-IbxWidget.addWidgetProperty(IbxCheckBox, "hideCheck");
-IbxWidget.addWidgetProperty(IbxCheckBox, "checkPosition");
-IbxWidget.addWidgetProperty(IbxCheckBox, "checkElClass");
-IbxWidget.addWidgetProperty(IbxCheckBox, "check", "checked");
-IbxWidget.addWidgetProperty(IbxCheckBox, "group");
-IbxWidget.addWidgetProperty(IbxCheckBox, "forId");
-IbxWidget.addWidgetProperty(IbxCheckBox, "userValue");
-
 $.widget("ibi.ibxCheckBox", $.ibi.ibxLabel,
 {
 	options:
@@ -214,16 +186,6 @@ $.widget("ibi.ibxCheckBox", $.ibi.ibxLabel,
 });
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-function IbxRadioButton()
-{
-	if (_biInPrototype) return;
-	IbxCheckBox.call(this);
-	this._widgetCtor = $.ibi.ibxRadioButton;
-}
-var _p = _biExtend(IbxRadioButton, IbxCheckBox, "IbxRadioButton");
-IbxRadioButton.base = IbxCheckBox.prototype;
-
-
 $.widget("ibi.ibxRadioButton", $.ibi.ibxCheckBox,
 {
 	options:
@@ -242,21 +204,6 @@ $.widget("ibi.ibxRadioButton", $.ibi.ibxCheckBox,
 });
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-function IbxSwitch()
-{
-	if (_biInPrototype) return;
-	IbxCheckBox.call(this);
-	this._widgetCtor = $.ibi.ibxSwitch;
-}
-var _p = _biExtend(IbxSwitch, IbxCheckBox, "IbxSwitch");
-IbxSwitch.base = IbxCheckBox.prototype;
-IbxWidget.addWidgetEvent(IbxSwitch, "change");
-IbxWidget.addWidgetProperty(IbxSwitch, "switchPosition");
-IbxWidget.addWidgetProperty(IbxSwitch, "spacerElClass");
-IbxWidget.addWidgetProperty(IbxSwitch, "switchElClass");
-
-
 $.widget("ibi.ibxSwitch", $.ibi.ibxCheckBox,
 {
 	options:
@@ -299,73 +246,6 @@ $.widget("ibi.ibxSwitch", $.ibi.ibxCheckBox,
 });
 
 //////////////////////////////////////////////////////////////////////////
-function IbxButtonGroup()
-{
-	if (_biInPrototype) return;
-	IbxFlexBox.call(this);
-	this._widgetCtor = $.ibi.ibxButtonGroup;
-}
-var _p = _biExtend(IbxButtonGroup, IbxFlexBox, "IbxButtonGroup");
-IbxButtonGroup.base = IbxFlexBox.prototype;
-IbxWidget.addWidgetProperty(IbxButtonGroup, "groupSelection");
-IbxWidget.addWidgetProperty(IbxButtonGroup, "groupName", "name");
-IbxWidget.addWidgetFunction(IbxButtonGroup, "addButton");
-IbxWidget.addWidgetFunction(IbxButtonGroup, "removeButton");
-IbxWidget.addWidgetFunction(IbxButtonGroup, "removeAll");
-IbxWidget.addWidgetFunction(IbxButtonGroup, "selectNext");
-IbxWidget.addWidgetFunction(IbxButtonGroup, "selectPrevious");
-IbxWidget.addWidgetFunction(IbxButtonGroup, "selected");
-IbxWidget.addWidgetFunction(IbxButtonGroup, "value");
-IbxWidget.addWidgetFunction(IbxButtonGroup, "form");
-
-function IbxHButtonGroup()
-{
-	if (_biInPrototype) return;
-	IbxButtonGroup.call(this);
-	this._widgetCtor = $.ibi.ibxHButtonGroup;
-}
-var _p = _biExtend(IbxHButtonGroup, IbxButtonGroup, "IbxHButtonGroup");
-IbxHButtonGroup.base = IbxButtonGroup.prototype;
-
-function IbxVButtonGroup()
-{
-	if (_biInPrototype) return;
-	IbxButtonGroup.call(this);
-	this._widgetCtor = $.ibi.ibxVButtonGroup;
-}
-var _p = _biExtend(IbxVButtonGroup, IbxButtonGroup, "IbxVButtonGroup");
-IbxVButtonGroup.base = IbxButtonGroup.prototype;
-
-function IbxSelectionButtonGroup()
-{
-	if (_biInPrototype) return;
-	IbxButtonGroup.call(this);
-	this._widgetCtor = $.ibi.ibxSelectionButtonGroup;
-}
-var _p = _biExtend(IbxSelectionButtonGroup, IbxButtonGroup, "IbxSelectionButtonGroup");
-IbxSelectionButtonGroup.base = IbxButtonGroup.prototype;
-
-
-function IbxHSelectionButtonGroup()
-{
-	if (_biInPrototype) return;
-	IbxSelectionButtonGroup.call(this);
-	this._widgetCtor = $.ibi.ibxHSelectionButtonGroup;
-}
-var _p = _biExtend(IbxHSelectionButtonGroup, IbxSelectionButtonGroup, "IbxHSelectionButtonGroup");
-IbxHSelectionButtonGroup.base = IbxSelectionButtonGroup.prototype;
-
-function IbxVSelectionButtonGroup()
-{
-	if (_biInPrototype) return;
-	IbxSelectionButtonGroup.call(this);
-	this._widgetCtor = $.ibi.ibxVSelectionButtonGroup;
-}
-var _p = _biExtend(IbxVSelectionButtonGroup, IbxSelectionButtonGroup, "IbxVSelectionButtonGroup");
-IbxVSelectionButtonGroup.base = IbxSelectionButtonGroup.prototype;
-
-
-
 $.widget("ibi.ibxButtonGroup", $.ibi.ibxFlexBox,
 {
 	options:

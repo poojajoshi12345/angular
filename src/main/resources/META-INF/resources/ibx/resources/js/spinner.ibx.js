@@ -4,18 +4,6 @@
 /******************************************************************************
 	SPINNER
 ******************************************************************************/
-function IbxSpinner()
-{
-	if (_biInPrototype) return;
-	IbxTextField.call(this);
-	this._widgetCtor = $.ibi.ibxGrid;
-	application.getWindow().addEventListener("resize", this._onWindowResize, this);
-	this.addEventListener("resize", this._onResize, this);
-}
-_p = _biExtend(IbxSpinner, IbxTextField, "IbxSpinner");
-IbxSpinner.base = IbxTextField.prototype;
-
-
 $.widget("ibi.ibxSpinner", $.ibi.ibxTextField, 
 {
 	options:

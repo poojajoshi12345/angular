@@ -1,38 +1,5 @@
 /*Copyright 1996-2016 Information Builders, Inc. All rights reserved.*/
 // $Revision$:
-function IbxFlexBox()
-{
-	if (_biInPrototype) return;
-		IbxWidget.call(this);
-	this._widgetCtor = $.ibi.ibxFlexBox;
-}
-var _p = _biExtend(IbxFlexBox, IbxWidget, "IbxFlexBox");
-IbxFlexBox.base = IbxWidget.prototype;
-IbxWidget.addWidgetProperty(IbxFlexBox,"inline");
-IbxWidget.addWidgetProperty(IbxFlexBox,"direction");
-IbxWidget.addWidgetProperty(IbxFlexBox,"wrap");
-IbxWidget.addWidgetProperty(IbxFlexBox,"justify");
-IbxWidget.addWidgetProperty(IbxFlexBox,"align");
-IbxWidget.addWidgetProperty(IbxFlexBox,"alignItems");
-IbxWidget.addWidgetProperty(IbxFlexBox,"alignContent");
-
-function IbxHBox()
-{
-	if (_biInPrototype) return;
-		IbxFlexBox.call(this);
-	this._widgetCtor = $.ibi.ibxHBox;
-}
-var _p = _biExtend(IbxHBox, IbxFlexBox, "IbxHBox");
-IbxHBox.base = IbxFlexBox.prototype;
-
-function IbxVBox()
-{
-	if (_biInPrototype) return;
-		IbxFlexBox.call(this);
-	this._widgetCtor = $.ibi.ibxVBox;
-}
-var _p = _biExtend(IbxVBox, IbxFlexBox, "IbxVBox");
-IbxVBox.base = IbxFlexBox.prototype;
 
 $.widget("ibi.ibxFlexBox", $.ibi.ibxWidget, 
 {

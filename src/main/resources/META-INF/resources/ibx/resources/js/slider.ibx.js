@@ -1,46 +1,5 @@
 /*Copyright 1996-2016 Information Builders, Inc. All rights reserved.*/
 // $Revision$:
-function IbxSlider()
-{
-	if (_biInPrototype) return;
-	IbxLabel.call(this);
-	this._widgetCtor = $.ibi.ibxSlider;
-}
-var _p = _biExtend(IbxSlider, IbxLabel, "IbxSlider");
-IbxSlider.base = IbxLabel.prototype;
-IbxWidget.addWidgetProperty(IbxSlider, "value");
-IbxWidget.addWidgetProperty(IbxSlider, "min");
-IbxWidget.addWidgetProperty(IbxSlider, "max");
-IbxWidget.addWidgetProperty(IbxSlider, "range");
-IbxWidget.addWidgetProperty(IbxSlider, "step");
-IbxWidget.addWidgetProperty(IbxSlider, "lock");
-IbxWidget.addWidgetProperty(IbxSlider, "orientation");
-IbxWidget.addWidgetProperty(IbxSlider, "edge");
-IbxWidget.addWidgetProperty(IbxSlider, "markerShape");
-IbxWidget.addWidgetProperty(IbxSlider, "textPosition");
-
-IbxWidget.addWidgetEvent(IbxTextField, "start");
-IbxWidget.addWidgetEvent(IbxTextField, "stop");
-IbxWidget.addWidgetEvent(IbxTextField, "change");
-
-function IbxHSlider()
-{
-	if (_biInPrototype) return;
-	IbxSlider.call(this);
-	this._widgetCtor = $.ibi.ibxHSlider;
-}
-var _p = _biExtend(IbxHSlider, IbxSlider, "IbxHSlider");
-IbxHSlider.base = IbxSlider.prototype;
-
-function IbxVSlider()
-{
-	if (_biInPrototype) return;
-	IbxSlider.call(this);
-	this._widgetCtor = $.ibi.ibxVSlider;
-}
-var _p = _biExtend(IbxVSlider, IbxSlider, "IbxVSlider");
-IbxVSlider.base = IbxSlider.prototype;
-
 
 $.widget("ibi.ibxSlider", $.ibi.ibxLabel,
 {
@@ -301,35 +260,6 @@ $.widget("ibi.ibxSlider", $.ibi.ibxLabel,
 
 $.widget("ibi.ibxHSlider", $.ibi.ibxSlider, { options: { orientation: "horizontal" } });
 $.widget("ibi.ibxVSlider", $.ibi.ibxSlider, { options: { orientation: "vertical" } });
-
-function IbxRange()
-{
-	if (_biInPrototype) return;
-	IbxSlider.call(this);
-	this._widgetCtor = $.ibi.ibxRange;
-}
-var _p = _biExtend(IbxRange, IbxSlider, "IbxRange");
-IbxRange.base = IbxSlider.prototype;
-IbxWidget.addWidgetProperty(IbxSlider, "value2");
-IbxWidget.addWidgetProperty(IbxSlider, "lock2");
-
-function IbxHRange()
-{
-	if (_biInPrototype) return;
-	IbxRange.call(this);
-	this._widgetCtor = $.ibi.ibxHRange;
-}
-var _p = _biExtend(IbxHRange, IbxRange, "IbxHRange");
-IbxHRange.base = IbxRange.prototype;
-
-function IbxVRange()
-{
-	if (_biInPrototype) return;
-	IbxRange.call(this);
-	this._widgetCtor = $.ibi.ibxVRange;
-}
-var _p = _biExtend(IbxVRange, IbxRange, "IbxVRange");
-IbxVRange.base = IbxRange.prototype;
 
 
 $.widget("ibi.ibxRange", $.ibi.ibxSlider,

@@ -2,36 +2,6 @@
 // $Revision$:
 
 //////////////////////////////////////////////////////////////////////////
-function IbxGridStack()
-{
-	if (_biInPrototype) return;
-	IbxWidget.call(this);
-	this._widgetCtor = $.ibi.ibxGridStack;
-}
-var _p = _biExtend(IbxGridStack, IbxWidget, "IbxGridStack");
-IbxGridStack.base = IbxWidget.prototype;
-IbxWidget.addWidgetProperty(IbxGridStack, "width");
-IbxWidget.addWidgetProperty(IbxGridStack, "height");
-IbxWidget.addWidgetProperty(IbxGridStack, "cellHeight");
-IbxWidget.addWidgetProperty(IbxGridStack, "verticalMargin");
-IbxWidget.addWidgetProperty(IbxGridStack, "auto");
-IbxWidget.addWidgetProperty(IbxGridStack, "minWidth");
-IbxWidget.addWidgetProperty(IbxGridStack, "float");
-IbxWidget.addWidgetProperty(IbxGridStack, "staticGrid");
-IbxWidget.addWidgetProperty(IbxGridStack, "animate");
-IbxWidget.addWidgetProperty(IbxGridStack, "alwaysShowResizeHandle");
-IbxWidget.addWidgetProperty(IbxGridStack, "resizable");
-IbxWidget.addWidgetProperty(IbxGridStack, "draggable");
-IbxWidget.addWidgetProperty(IbxGridStack, "disableDrag");
-IbxWidget.addWidgetProperty(IbxGridStack, "disableResize");
-IbxWidget.addWidgetProperty(IbxGridStack, "rtl");
-IbxWidget.addWidgetProperty(IbxGridStack, "removable");
-IbxWidget.addWidgetProperty(IbxGridStack, "removeTimeout");
-IbxWidget.addWidgetProperty(IbxGridStack, "verticalMarginUnit");
-IbxWidget.addWidgetProperty(IbxGridStack, "cellHeightUnit");
-IbxWidget.addWidgetProperty(IbxGridStack, "minHeight");
-
-
 $.widget("ibi.ibxGridStack", $.ibi.ibxWidget,
 {
 	options:

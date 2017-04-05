@@ -1,39 +1,5 @@
 /*Copyright 1996-2016 Information Builders, Inc. All rights reserved.*/
 // $Revision$:
-function IbxPopup()
-{
-	if (_biInPrototype) return;
-		IbxWidget.call(this);
-	this._widgetCtor = $.ibi.ibxPopup;
-	
-	//Both ibx and Bindows want to handle modal focusing...and they don't play well together...so turn on Bindows, and turn off ibx.
-	this.setFocusRoot(true);//turn on bindows modal focusing.
-	this.setFocusRootIbx(false);//turn off ibx modal focusing.
-}
-_p = _biExtend(IbxPopup, IbxWidget, "IbxPopup");
-IbxPopup.base = IbxWidget.prototype;
-
-IbxWidget.addWidgetProperty(IbxPopup,"modal");
-IbxWidget.addWidgetProperty(IbxPopup,"autoClose");
-IbxWidget.addWidgetProperty(IbxPopup,"escapeToClose");
-IbxWidget.addWidgetProperty(IbxPopup,"destroyOnClose");
-IbxWidget.addWidgetProperty(IbxPopup,"autoFocus");
-IbxWidget.addWidgetProperty(IbxPopup,"position");
-IbxWidget.addWidgetProperty(IbxPopup,"posMy");
-IbxWidget.addWidgetProperty(IbxPopup,"posAt");
-IbxWidget.addWidgetProperty(IbxPopup,"posOf");
-IbxWidget.addWidgetProperty(IbxPopup,"posCollision");
-IbxWidget.addWidgetProperty(IbxPopup,"posUsing");
-IbxWidget.addWidgetProperty(IbxPopup,"posWithin");
-IbxWidget.addWidgetProperty(IbxPopup,"effect");
-IbxWidget.addWidgetProperty(IbxPopup,"position");
-IbxWidget.addWidgetFunction(IbxPopup,"open");
-IbxWidget.addWidgetFunction(IbxPopup,"close");
-IbxWidget.addWidgetFunction(IbxPopup,"isOpen");
-
-IbxWidget.addWidgetEvent(IbxPopup,"open");
-IbxWidget.addWidgetEvent(IbxPopup,"beforeclose");
-IbxWidget.addWidgetEvent(IbxPopup,"close");
 
 $.widget("ibi.ibxPopup", $.ibi.ibxWidget, 
 {

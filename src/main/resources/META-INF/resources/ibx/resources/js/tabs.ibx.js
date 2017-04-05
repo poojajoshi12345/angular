@@ -4,46 +4,6 @@
 /******************************************************************************
 	TAB PANE WIDGETS
 ******************************************************************************/
-function IbxTabPane()
-{
-	if (_biInPrototype) return;
-	IbxFlexBox.call(this);
-	this._widgetCtor = $.ibi.ibxTabPane;
-}
-_p = _biExtend(IbxTabPane, IbxFlexBox, "IbxTabPane");
-IbxTabPane.base = IbxFlexBox.prototype;
-IbxWidget.addWidgetProperty(IbxTabPane, "position");
-IbxWidget.addWidgetProperty(IbxTabPane, "tabBar");
-IbxWidget.addWidgetProperty(IbxTabPane, "tabBarOptions");
-IbxWidget.addWidgetProperty(IbxTabPane, "selected");
-IbxWidget.addWidgetFunction(IbxTabPane, "next");
-IbxWidget.addWidgetFunction(IbxTabPane, "previous");
-IbxWidget.addWidgetMember(IbxTabPane, "_tabBar", "_tabBar", IbxTabGroup);
-IbxWidget.addWidgetEvent(IbxTabPane, "change");
-
-_p.getTabBar = function () { return this._tabBar; };
-
-_p.add = function (oChild, oBefore, bAnonymous)
-{
-	IbxTabPane.base.add.call(this, oChild, oBefore, bAnonymous);
-	if (this._widget)
-		this._widget.addPage(oChild._element);
-};
-
-_p.remove = function (oChild)
-{
-	IbxTabPane.base.remove.call(this, oChild);
-	if (this._widget)
-		this._widget.removePage(oChild._element);
-};
-
-_p.removeAll = function ()
-{
-	IbxTabPane.base.removeAll.call(this);
-	if (this._widget)
-		this._widget.removeAll();
-};
-
 $.widget("ibi.ibxTabPane", $.ibi.ibxFlexBox,
 {
 	options:
@@ -184,26 +144,9 @@ $.ibi.ibxTabPane.statics =
 {
 };
 
-
-
 /******************************************************************************
 	TAB PAGE WIDGETS
 ******************************************************************************/
-function IbxTabPage()
-{
-	if (_biInPrototype) return;
-		IbxWidget.call(this);
-	this._widgetCtor = $.ibi.ibxTabPage;
-}
-_p = _biExtend(IbxTabPage, IbxWidget, "IbxTabPage");
-IbxTabPage.base = IbxWidget.prototype;
-IbxWidget.addWidgetProperty(IbxTabPage, "tabOptions");
-IbxWidget.addWidgetProperty(IbxTabPage,"tabButton");
-IbxWidget.addWidgetProperty(IbxTabPage, "selected");
-IbxWidget.addWidgetMember(IbxTabPage, "_tabButton", "_tabButton", IbxTabButton);
-
-_p.getTabButton = function(){return this._tabButton;};
-
 $.widget("ibi.ibxTabPage", $.ibi.ibxWidget, 
 {
 	options:
@@ -265,16 +208,6 @@ $.ibi.ibxTabPage.statics =
 /******************************************************************************
 	TAB BUTTON
 ******************************************************************************/
-function IbxTabButton()
-{
-	if (_biInPrototype) return;
-	IbxRadioButton.call(this);
-	this._widgetCtor = $.ibi.ibxTabButton;
-}
-var _p = _biExtend(IbxTabButton, IbxRadioButton, "IbxTabButton");
-IbxTabButton.base = IbxRadioButton.prototype;
-
-
 $.widget("ibi.ibxTabButton", $.ibi.ibxRadioButton,
 {
 	options:
@@ -306,34 +239,6 @@ $.widget("ibi.ibxTabButton", $.ibi.ibxRadioButton,
 /******************************************************************************
 	TAB GROUP
 ******************************************************************************/
-function IbxTabGroup()
-{
-	if (_biInPrototype) return;
-	IbxButtonGroup.call(this);
-	this._widgetCtor = $.ibi.ibxTabGroup;
-}
-var _p = _biExtend(IbxTabGroup, IbxButtonGroup, "IbxTabGroup");
-IbxTabGroup.base = IbxButtonGroup.prototype;
-IbxWidget.addWidgetProperty(IbxTabGroup, "position");
-
-function IbxHTabGroup()
-{
-	if (_biInPrototype) return;
-	IbxTabGroup.call(this);
-	this._widgetCtor = $.ibi.ibxHTabGroup;
-}
-var _p = _biExtend(IbxHTabGroup, IbxTabGroup, "IbxHTabGroup");
-IbxHTabGroup.base = IbxTabGroup.prototype;
-
-function IbxVTabGroup()
-{
-	if (_biInPrototype) return;
-	IbxTabGroup.call(this);
-	this._widgetCtor = $.ibi.ibxVTabGroup;
-}
-var _p = _biExtend(IbxVTabGroup, IbxTabGroup, "IbxVTabGroup");
-IbxVTabGroup.base = IbxTabGroup.prototype;
-
 $.widget("ibi.ibxTabGroup", $.ibi.ibxButtonGroup,
 {
 	options:

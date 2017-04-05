@@ -4,37 +4,6 @@
 /******************************************************************************
 	IbxMenu
 ******************************************************************************/
-function IbxMenu()
-{
-	if (_biInPrototype) return;
-	IbxPopup.call(this);
-	this._widgetCtor = $.ibi.ibxMenu;
-}
-var _p = _biExtend(IbxMenu, IbxPopup, "IbxMenu");
-IbxMenu.base = IbxPopup.prototype;
-IbxWidget.addWidgetEvent(IbxMenu, "select");
-IbxWidget.addWidgetMember(IbxMenu, "_box", "_box", IbxVBox);
-IbxWidget.addWidgetFunction(IbxMenu, "closeSubMenus");
-
-_p.add = function(oChild, oBefore, bAnonymous)
-{
-	IbxMenu.base.add.call(this, oChild, oBefore, bAnonymous);
-	if(this._widget)
-		this._widget.add(oChild._element);
-};
-_p.remove = function(oChild)
-{
-	IbxMenu.base.remove.call(this, oChild);
-	if(this._widget)
-		this._widget.remove(oChild._element);
-};
-_p.removeAll = function()
-{
-	IbxMenu.base.removeAll.call(this);
-	if(this._widget)
-		this._widget.removeAll();
-};
-
 $.widget("ibi.ibxMenu", $.ibi.ibxPopup,
 {
 	options:
@@ -121,15 +90,6 @@ $.ibi.ibxMenu.statics =
 	Just a menu that is always a child of the body when open, and puts
 	itself back under it's DOM parent when closed.
 ******************************************************************************/
-function IbxContextMenu()
-{
-	if (_biInPrototype) return;
-	IbxMenu.call(this);
-	this._widgetCtor = $.ibi.ibxContextMenu;
-}
-var _p = _biExtend(IbxContextMenu, IbxMenu, "IbxContextMenu");
-IbxContextMenu.base = IbxMenu.prototype;
-
 $.widget("ibi.ibxContextMenu", $.ibi.ibxMenu,
 {
 	_widgetClass: "ibx-context-menu",
@@ -153,27 +113,6 @@ $.ibi.ibxContextMenu.statics =
 /******************************************************************************
 	IbxMenuItem
 ******************************************************************************/
-function IbxMenuItem(text)
-{
-	if (_biInPrototype) return;
-	IbxHBox.call(this);
-	this._widgetCtor = $.ibi.ibxMenuItem;
-	this.setText(text);
-}
-var _p = _biExtend(IbxMenuItem, IbxHBox, "IbxMenuItem");
-IbxMenuItem.base = IbxHBox.prototype;
-IbxWidget.addWidgetProperty(IbxMenuItem, "labelOptions");
-IbxWidget.addWidgetProperty(IbxMenuItem, "text");
-IbxWidget.addWidgetProperty(IbxMenuItem, "type");
-IbxWidget.addWidgetProperty(IbxMenuItem, "markerClass");
-IbxWidget.addWidgetProperty(IbxMenuItem, "startMarkerClass");
-IbxWidget.addWidgetProperty(IbxMenuItem, "endMarkerClass");
-IbxWidget.addWidgetProperty(IbxMenuItem, "labelClass");
-IbxWidget.addWidgetFunction(IbxMenuItem, "subMenu");
-IbxWidget.addWidgetFunction(IbxMenuItem, "addSubMenu");
-IbxWidget.addWidgetFunction(IbxMenuItem, "removeSubMenu");
-IbxWidget.addWidgetFunction(IbxMenuItem, "closeSubMenu");
-
 $.widget("ibi.ibxMenuItem", $.ibi.ibxHBox,
 {
 	options:
@@ -319,16 +258,6 @@ $.ibi.ibxMenuItem.statics =
 /******************************************************************************
 	IbxCheckMenuItem
 ******************************************************************************/
-function IbxCheckMenuItem()
-{
-	if (_biInPrototype) return;
-	IbxMenuItem.call(this);
-	this._widgetCtor = $.ibi.ibxCheckMenuItem;
-}
-var _p = _biExtend(IbxCheckMenuItem, IbxMenuItem, "IbxCheckMenuItem");
-IbxCheckMenuItem.base = IbxMenuItem.prototype;
-IbxWidget.addWidgetProperty(IbxCheckMenuItem, "checked");
-
 $.widget("ibi.ibxCheckMenuItem", $.ibi.ibxMenuItem,
 {
 	options:
@@ -359,16 +288,6 @@ $.ibi.ibxCheckMenuItem.statics =
 /******************************************************************************
 	IbxRadioMenuItem
 ******************************************************************************/
-function IbxRadioMenuItem()
-{
-	if (_biInPrototype) return;
-		IbxCheckMenuItem.call(this);
-	this._widgetCtor = $.ibi.ibxRadioMenuItem;
-}
-var _p = _biExtend(IbxRadioMenuItem, IbxCheckMenuItem, "IbxRadioMenuItem");
-IbxRadioMenuItem.base = IbxCheckMenuItem.prototype;
-IbxWidget.addWidgetProperty(IbxRadioMenuItem, "group");
-
 $.widget("ibi.ibxRadioMenuItem", $.ibi.ibxCheckMenuItem,
 {
 	options:
@@ -411,17 +330,8 @@ $.ibi.ibxRadioMenuItem.statics =
 
 /******************************************************************************
 	IbxMenuSeparator
+	Just a utility widget for handling a menu separator...really just sets the class on the div.
 ******************************************************************************/
-function IbxMenuSeparator()
-{
-	if (_biInPrototype) return;
-	IbxWidget.call(this);
-	this._widgetCtor = $.ibi.ibxMenuSeparator;
-}
-var _p = _biExtend(IbxMenuSeparator, IbxWidget, "IbxMenuSeparator");
-IbxMenuItem.base = IbxWidget.prototype;
-
-//Just a utility widget for handling a menu separator...really just sets the class on the div.
 $.widget("ibi.ibxMenuSeparator", $.ibi.ibxWidget,{options:{},_widgetClass: "ibx-menu-separator",});
 
 //# sourceURL=menu.ibx.js

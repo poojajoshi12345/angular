@@ -1,36 +1,5 @@
 /*Copyright 1996-2016 Information Builders, Inc. All rights reserved.*/
 // $Revision$:
-function IbxSplitter()
-{
-	if (_biInPrototype) return;
-		IbxWidget.call(this);
-	this._widgetCtor = $.ibi.ibxSplitter;
-}
-var _p = _biExtend(IbxSplitter, IbxWidget, "IbxSplitter");
-IbxSplitter.base = IbxWidget.prototype;
-IbxWidget.addWidgetProperty(IbxSplitter, "orientation")
-IbxWidget.addWidgetProperty(IbxSplitter, "resizeElements")
-IbxWidget.addWidgetProperty(IbxSplitter, "autoReset")
-IbxWidget.addWidgetFunction(IbxSplitter, "reset")
-IbxWidget.addWidgetEvent(IbxSplitter, "resize")
-
-function IbxHSplitter()
-{
-	if (_biInPrototype) return;
-		IbxSplitter.call(this);
-	this._widgetCtor = $.ibi.ibxHSplitter;
-}
-var _p = _biExtend(IbxHSplitter, IbxSplitter, "IbxHSplitter");
-IbxHSplitter.base = IbxSplitter.prototype;
-
-function IbxVSplitter()
-{
-	if (_biInPrototype) return;
-		IbxSplitter.call(this);
-	this._widgetCtor = $.ibi.ibxVSplitter;
-}
-var _p = _biExtend(IbxVSplitter, IbxSplitter, "IbxVSplitter");
-IbxHSplitter.base = IbxSplitter.prototype;
 
 $.widget("ibi.ibxSplitter", $.ibi.ibxWidget, 
 {

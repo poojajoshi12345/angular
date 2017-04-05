@@ -1,18 +1,5 @@
 /*Copyright 1996-2016 Information Builders, Inc. All rights reserved.*/
 // $Revision$:
-function IbxRadioGroup()
-{
-	if (_biInPrototype) return;
-	IbxWidget.call(this);
-	this._widgetCtor = $.ibi.ibxRadioGroup;
-}
-var _p = _biExtend(IbxRadioGroup, IbxWidget, "IbxRadioGroup");
-IbxRadioGroup.base = IbxWidget.prototype;
-IbxWidget.addWidgetProperty(IbxRadioGroup, "groupName", "name");
-IbxWidget.addWidgetFunction(IbxRadioGroup, "selectNext");
-IbxWidget.addWidgetFunction(IbxRadioGroup, "selectPrevious");
-IbxWidget.addWidgetFunction(IbxRadioGroup, "selected");
-IbxWidget.addWidgetFunction(IbxRadioGroup, "userValue");
 
 $.widget("ibi.ibxRadioGroup", $.ibi.ibxWidget,
 {

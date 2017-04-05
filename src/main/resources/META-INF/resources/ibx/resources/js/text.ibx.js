@@ -1,30 +1,5 @@
 /*Copyright 1996-2016 Information Builders, Inc. All rights reserved.*/
 // $Revision$:
-function IbxTextField()
-{
-	if (_biInPrototype) return;
-	IbxWidget.call(this);
-	this._widgetCtor = $.ibi.ibxTextField;
-}
-var _p = _biExtend(IbxTextField, IbxWidget, "IbxTextField");
-IbxTextField.base = IbxWidget.prototype;
-IbxWidget.addWidgetProperty(IbxTextField, "readonly");
-IbxWidget.addWidgetProperty(IbxTextField, "size");
-IbxWidget.addWidgetProperty(IbxTextField, "maxlength");
-IbxWidget.addWidgetProperty(IbxTextField, "autocomplete");
-IbxWidget.addWidgetProperty(IbxTextField, "autocorrect");
-IbxWidget.addWidgetProperty(IbxTextField, "autocapitalize");
-IbxWidget.addWidgetProperty(IbxTextField, "spellcheck");
-IbxWidget.addWidgetProperty(IbxTextField, "placeholder");
-IbxWidget.addWidgetProperty(IbxTextField, "required");
-IbxWidget.addWidgetProperty(IbxTextField, "ctrlType");
-IbxWidget.addWidgetProperty(IbxTextField, "text");
-IbxWidget.addWidgetFunction(IbxTextField, "selectAll");
-IbxWidget.addWidgetEvent(IbxTextField, "textchanging");
-IbxWidget.addWidgetEvent(IbxTextField, "textchanged");
-IbxWidget.addWidgetEvent(IbxTextField, "action");
-IbxWidget.addWidgetProperty(IbxTextField, "forId");
-
 
 $.widget("ibi.ibxTextField", $.ibi.ibxWidget,
 {

@@ -1,28 +1,5 @@
 /*Copyright 1996-2017 Information Builders, Inc. All rights reserved.*/
 // $Revision$:
-function IbxSelect()
-{
-	if (_biInPrototype) return;
-	IbxTextField.call(this);
-	this._widgetCtor = $.ibi.ibxSelect;
-	this.addEventListener("create", this._onCreate, this);
-}
-var _p = _biExtend(IbxSelect, IbxTextField, "IbxSelect");
-IbxSelect.base = IbxTextField.prototype;
-IbxWidget.addWidgetProperty(IbxSelect, "type");
-IbxWidget.addWidgetProperty(IbxSelect, "multiSelect");
-IbxWidget.addWidgetProperty(IbxSelect, "userValue");
-IbxWidget.addWidgetMember(IbxSelect, "_list", "_list", IbxPopup);
-IbxWidget.addWidgetFunction(IbxSelect, "addItems");
-IbxWidget.addWidgetFunction(IbxSelect, "sort");
-IbxWidget.addWidgetFunction(IbxSelect, "getSortType");
-IbxWidget.addWidgetFunction(IbxSelect, "selected");
-
-_p._onCreate = function (e)
-{
-	this.setTabIndex(1);
-	this._list.setTabIndex(1);
-};
 
 $.widget("ibi.ibxSelect", $.ibi.ibxTextField,
 {
@@ -541,18 +518,6 @@ $.ibi.ibxSelect.statics =
 	}
 };
 
-
-function IbxSelectItem()
-{
-	if (_biInPrototype) return;
-	IbxMenuItem.call(this);
-	this._widgetCtor = $.ibi.ibxSelectItem;
-}
-var _p = _biExtend(IbxSelectItem, IbxMenuItem, "IbxSelectItem");
-IbxSelectItem.base = IbxMenuItem.prototype;
-IbxWidget.addWidgetProperty(IbxSelectItem, "userValue");
-IbxWidget.addWidgetProperty(IbxSelectItem, "selected");
-
 $.widget("ibi.ibxSelectItem", $.ibi.ibxMenuItem,
 {
 	options:
@@ -583,17 +548,6 @@ $.widget("ibi.ibxSelectItem", $.ibi.ibxMenuItem,
 	},
 
 });
-
-function IbxSelectCheckItem()
-{
-	if (_biInPrototype) return;
-	IbxCheckMenuItem.call(this);
-	this._widgetCtor = $.ibi.ibxSelectCheckItem;
-}
-var _p = _biExtend(IbxSelectCheckItem, IbxCheckMenuItem, "IbxSelectCheckItem");
-IbxSelectCheckItem.base = IbxCheckMenuItem.prototype;
-IbxWidget.addWidgetProperty(IbxSelectCheckItem, "userValue");
-IbxWidget.addWidgetProperty(IbxSelectCheckItem, "selected");
 
 $.widget("ibi.ibxSelectCheckItem", $.ibi.ibxCheckMenuItem,
 {
@@ -629,17 +583,6 @@ $.widget("ibi.ibxSelectCheckItem", $.ibi.ibxCheckMenuItem,
 		this._super();
 	},
 });
-
-function IbxSelectRadioItem()
-{
-	if (_biInPrototype) return;
-	IbxRadioMenuItem.call(this);
-	this._widgetCtor = $.ibi.ibxSelectRadioItem;
-}
-var _p = _biExtend(IbxSelectRadioItem, IbxRadioMenuItem, "IbxSelectRadioItem");
-IbxSelectRadioItem.base = IbxRadioMenuItem.prototype;
-IbxWidget.addWidgetProperty(IbxSelectRadioItem, "userValue");
-IbxWidget.addWidgetProperty(IbxSelectRadioItem, "selected");
 
 $.widget("ibi.ibxSelectRadioItem", $.ibi.ibxRadioMenuItem,
 {
@@ -733,16 +676,6 @@ $.ibi.ibxSelectItem.statics =
 		return this.element.closest('.ibx-select-list').hasClass('ibx-menu');
 	},
 };
-
-function IbxSelectGroup()
-{
-	if (_biInPrototype) return;
-	IbxLabel.call(this);
-	this._widgetCtor = $.ibi.ibxSelectGroup;
-}
-var _p = _biExtend(IbxSelectGroup, IbxLabel, "IbxSelectGroup");
-IbxSelectGroup.base = IbxLabel.prototype;
-IbxWidget.addWidgetProperty(IbxSelectGroup, "userValue");
 
 $.widget("ibi.ibxSelectGroup", $.ibi.ibxLabel,
 {

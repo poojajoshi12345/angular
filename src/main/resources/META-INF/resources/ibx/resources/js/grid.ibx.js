@@ -4,35 +4,6 @@
 /******************************************************************************
 	GRID
 ******************************************************************************/
-function IbxGrid()
-{
-	if (_biInPrototype) return;
-		IbxHBox.call(this);
-	this._widgetCtor = $.ibi.ibxGrid;
-	application.getWindow().addEventListener("resize", this._onWindowResize, this);
-	this.addEventListener("resize", this._onResize, this);
-}
-_p = _biExtend(IbxGrid, IbxHBox, "IbxGrid");
-IbxGrid.base = IbxHBox.prototype;
-IbxWidget.addWidgetProperty(IbxGrid,"columnCount");
-IbxGrid.setColSpan = function(o, colSpan)
-{
-	o._setHtmlAttribute("data-ibx-col-span", colSpan);
-};
-_p._onWindowResize = function(e)
-{
-	this._onResize(e);
-};
-_p._onResize = function(e)
-{
-	var children = this._children;
-	for(var i = 0; i < children.length; ++i)
-	{
-		children[i].layoutComponent();
-		children[i].layoutAllChildren();
-	}
-};
-
 $.widget("ibi.ibxGrid", $.ibi.ibxHBox, 
 {
 	options:

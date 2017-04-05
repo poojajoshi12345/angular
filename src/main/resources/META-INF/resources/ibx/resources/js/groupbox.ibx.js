@@ -1,24 +1,6 @@
 /*Copyright 1996-2016 Information Builders, Inc. All rights reserved.*/
 // $Revision$:
 
-//////////////////////////////////////////////////////////////////////////
-function IbxGroupBox()
-{
-	if (_biInPrototype) return;
-	IbxWidget.call(this);
-	this._widgetCtor = $.ibi.ibxGroupBox;
-}
-var _p = _biExtend(IbxGroupBox, IbxWidget, "IbxGroupBox");
-IbxGroupBox.base = IbxWidget.prototype;
-IbxWidget.addWidgetProperty(IbxGroupBox, "titlePosition");
-IbxWidget.addWidgetProperty(IbxGroupBox, "text");
-IbxWidget.addWidgetProperty(IbxGroupBox, "glyph");
-IbxWidget.addWidgetProperty(IbxGroupBox, "glyphClasses");
-IbxWidget.addWidgetProperty(IbxGroupBox, "icon");
-IbxWidget.addWidgetProperty(IbxGroupBox, "iconPosition");
-IbxWidget.addWidgetProperty(IbxGroupBox, "labelOptions");
-
-
 $.widget("ibi.ibxGroupBox", $.ibi.ibxWidget,
 {
 	options:

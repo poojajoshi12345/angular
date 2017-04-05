@@ -5,39 +5,6 @@
 	ACCORDION PANE
 ******************************************************************************/
 
-function IbxAccordionPane()
-{
-	if (_biInPrototype) return;
-	IbxFlexBox.call(this);
-	this._widgetCtor = $.ibi.ibxAccordionPane;
-}
-var _p = _biExtend(IbxAccordionPane, IbxFlexBox, "IbxAccordionPane");
-IbxAccordionPane.base = IbxFlexBox.prototype;
-IbxWidget.addWidgetProperty(IbxAccordionPane, "pageStretch");
-IbxWidget.addWidgetMember(IbxAccordionPane, "_group", "_group", IbxRadioGroup);
-IbxWidget.addWidgetFunction(IbxAccordionPane, "next");
-IbxWidget.addWidgetFunction(IbxAccordionPane, "previous");
-IbxWidget.addWidgetProperty(IbxAccordionPane, "selected");
-
-function IbxHAccordionPane()
-{
-	if (_biInPrototype) return;
-	IbxAccordionPane.call(this);
-	this._widgetCtor = $.ibi.ibxHAccordionPane;
-}
-var _p = _biExtend(IbxHAccordionPane, IbxAccordionPane, "IbxHAccordionPane");
-IbxHAccordionPane.base = IbxAccordionPane.prototype;
-
-function IbxVAccordionPane()
-{
-	if (_biInPrototype) return;
-	IbxAccordionPane.call(this);
-	this._widgetCtor = $.ibi.ibxVAccordionPane;
-}
-var _p = _biExtend(IbxVAccordionPane, IbxAccordionPane, "IbxVAccordionPane");
-IbxVAccordionPane.base = IbxAccordionPane.prototype;
-
-
 $.widget("ibi.ibxAccordionPane", $.ibi.ibxFlexBox, 
 {
 	options:
@@ -123,30 +90,6 @@ $.ibi.ibxAccordionPane.statics =
 /******************************************************************************
 	ACCORDION PAGE
 ******************************************************************************/
-function IbxAccordionPage(text)
-{
-	if (_biInPrototype) return;
-	IbxFlexBox.call(this);
-	this._widgetCtor = $.ibi.ibxAccordionPage;
-	this.setText(text);
-}
-var _p = _biExtend(IbxAccordionPage, IbxFlexBox, "IbxAccordionPage");
-IbxAccordionPage.base = IbxFlexBox.prototype;
-IbxWidget.addWidgetEvent(IbxAccordionPage, "change");
-IbxWidget.addWidgetProperty(IbxAccordionPage, "autoClose");
-IbxWidget.addWidgetProperty(IbxAccordionPage, "btnOptions");
-IbxWidget.addWidgetProperty(IbxAccordionPage, "btnOptionsOpen");
-IbxWidget.addWidgetProperty(IbxAccordionPage, "text");
-IbxWidget.addWidgetProperty(IbxAccordionPage, "glyph");
-IbxWidget.addWidgetProperty(IbxAccordionPage, "glyphClasses");
-IbxWidget.addWidgetProperty(IbxAccordionPage, "textOpen");
-IbxWidget.addWidgetProperty(IbxAccordionPage, "glyphOpen");
-IbxWidget.addWidgetProperty(IbxAccordionPage, "glyphClassesOpen");
-
-IbxWidget.addWidgetProperty(IbxAccordionPage, "selected"); 
-IbxWidget.addWidgetMember(IbxAccordionPage, "_button", "_button", IbxButton, true);
-IbxWidget.addWidgetMember(IbxAccordionPage, "_content", "_content", IbxFlexBox, true);
-
 $.widget("ibi.ibxAccordionPage", $.ibi.ibxFlexBox, 
 {
 	options:

@@ -1,23 +1,5 @@
 /*Copyright 1996-2016 Information Builders, Inc. All rights reserved.*/
 // $Revision$:
-function IbxDialog()
-{
-	if (_biInPrototype) return;
-		IbxPopup.call(this);
-	this._widgetCtor = $.ibi.ibxDialog;
-}
-_p = _biExtend(IbxDialog, IbxPopup, "IbxDialog");
-IbxDialog.base = IbxPopup.prototype;
-
-IbxWidget.addWidgetMember(IbxDialog, "vbMain", "vbMain", IbxVBox);
-IbxWidget.addWidgetMember(IbxDialog, "titleBox", "titleBox", IbxHBox);
-IbxWidget.addWidgetMember(IbxDialog, "titleClose", "titleClose", IbxButton);
-IbxWidget.addWidgetMember(IbxDialog, "caption", "caption", IbxLabel);
-IbxWidget.addWidgetMember(IbxDialog, "contentBox", "contentBox", IbxVBox);
-IbxWidget.addWidgetEvent(IbxDialog, "focusing");
-
-IbxWidget.addWidgetProperty(IbxDialog, "type");
-IbxWidget.addWidgetProperty(IbxDialog, "caption");
 
 $.widget("ibi.ibxDialog", $.ibi.ibxPopup, 
 {

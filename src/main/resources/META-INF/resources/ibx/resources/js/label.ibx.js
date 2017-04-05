@@ -1,25 +1,5 @@
 /*Copyright 1996-2016 Information Builders, Inc. All rights reserved.*/
 // $Revision$:
-function IbxLabel(sText)
-{
-	if (_biInPrototype) return;
-		IbxFlexBox.call(this);
-	this._widgetCtor = $.ibi.ibxLabel;
-	this.setText(sText);
-}
-var _p = _biExtend(IbxLabel, IbxFlexBox, "IbxLabel");
-IbxLabel.base = IbxFlexBox.prototype;
-IbxLabel.base = IbxFlexBox.prototype;
-IbxWidget.addWidgetProperty(IbxLabel,"text");
-IbxWidget.addWidgetProperty(IbxLabel,"textWrap");
-IbxWidget.addWidgetProperty(IbxLabel,"glyph");
-IbxWidget.addWidgetProperty(IbxLabel,"glyphClasses");
-IbxWidget.addWidgetProperty(IbxLabel,"icon");
-IbxWidget.addWidgetProperty(IbxLabel,"iconPosition");
-IbxWidget.addWidgetProperty(IbxLabel,"textElClass");
-IbxWidget.addWidgetProperty(IbxLabel,"iconElClass");
-IbxWidget.addWidgetProperty(IbxLabel,"glyphElClass");
-IbxWidget.addWidgetProperty(IbxLabel,"forId");
 
 $.widget("ibi.ibxLabel", $.ibi.ibxFlexBox, 
 {
