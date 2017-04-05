@@ -35,6 +35,7 @@ $.widget("ibi.ibxSpinner", $.ibi.ibxTextField,
 		this._btnBox = $("<div>").ibxVButtonGroup().ibxWidget("addButton", this._btnUp).ibxWidget("addButton", this._btnDown).addClass(options.btnGroupClass);
 		this._textInput.addClass("ibx-spinner-text-input");
 		this.element.on("ibx_textchanging", this._onTextChanging.bind(this)).append(this._btnBox);
+		this._textInput.css('width', '1px');
 		if (options.value > options.max)
 			options.value = options.max;
 		if (options.value < options.min)

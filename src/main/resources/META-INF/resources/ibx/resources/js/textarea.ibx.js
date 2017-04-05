@@ -1,6 +1,6 @@
 /*Copyright 1996-2016 Information Builders, Inc. All rights reserved.*/
 // $Revision$:
-$.widget("ibi.ibxTextArea", $.ibi.ibxWidget,
+$.widget("ibi.ibxTextArea", $.ibi.ibxFlexBox,
 {
 	options:
 		{
@@ -14,6 +14,12 @@ $.widget("ibi.ibxTextArea", $.ibi.ibxWidget,
 			"wrap": "",
 			"forId": "",
 			"fnFormat": null,
+
+			/*ibxFlexBox default options*/
+			"inline": true,
+			"wrap": "false",
+			"justify": "center",
+			"align": "center",
 		},
 	_widgetClass: "ibx-text-area",
 	_valueOnFocus: null,

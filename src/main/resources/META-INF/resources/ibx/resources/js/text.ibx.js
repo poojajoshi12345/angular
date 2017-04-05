@@ -1,7 +1,7 @@
 /*Copyright 1996-2016 Information Builders, Inc. All rights reserved.*/
 // $Revision$:
 
-$.widget("ibi.ibxTextField", $.ibi.ibxWidget,
+$.widget("ibi.ibxTextField", $.ibi.ibxFlexBox,
 {
 	options:
 		{
@@ -18,6 +18,12 @@ $.widget("ibi.ibxTextField", $.ibi.ibxWidget,
 			"ctrlType": "text",
 			"forId": "",
 			"fnFormat": null,
+
+			/*ibxFlexBox default options*/
+			"inline": true,
+			"wrap": "false",
+			"justify": "center",
+			"align": "center",
 		},
 	_widgetClass: "ibx-text-field",
 	_valueOnFocus: null,

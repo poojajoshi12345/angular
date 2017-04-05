@@ -86,7 +86,7 @@ $.widget("ibi.ibxGrid", $.ibi.ibxWidget,
 		var options = this.options;
 
 		// webkit
-		this.element.css('grid-template-columns', options.columnWebkit ? options.columnWebkit: options.columns);
+		this.element.css('grid-template-columns', options.columnWebkit ? options.columnWebkit : options.columns);
 		this.element.css('grid-template-rows', options.rowsWebkit ? options.rowsWebkit : options.rows);
 
 		// IE
