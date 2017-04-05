@@ -159,10 +159,14 @@ $.widget("ibi.ibxWidget", $.Widget,
 	},
 	_onWidgetContextMenu:function(e)
 	{
-		if(!this.options.ctxMenu || !this.element.is(e.currentTarget))
+		var ctxEvent = $.Event(e);
+		ctxEvent.type = "ibx_ctxmenu";
+
+		var ret = this.element.trigger(ctxEvent);
+		if(ctxEvent.isDefaultPrevented() || (!this.options.ctxMenu || !this.element.is(e.currentTarget)))
 			return;
 
-		var ctxMenu = $(this.options.ctxMenu);
+		ctxMenu = ctxEvent.result || $(this.options.ctxMenu);
 		if(ctxMenu.length)
 		{
 			ctxMenu.ibxWidget("option", "position", {my:"", at:""});
