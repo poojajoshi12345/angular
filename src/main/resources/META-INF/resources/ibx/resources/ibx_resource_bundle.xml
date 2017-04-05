@@ -52,6 +52,7 @@ $Revision$:-->
 		<script-file src="./resources/js/ibfs.ibx.js"/>
 		<script-file src="./resources/js/mutationobserver.ibx.js"/>
 		<script-file src="./resources/js/widget.ibx.js"/>
+		<script-file src="./resources/js/draggable.ibx.js"/>
 		<script-file src="./resources/js/collapsible.ibx.js"/>
 		<script-file src="./resources/js/flexbox.ibx.js"/>
 		<script-file src="./resources/js/grid.ibx.js"/>
