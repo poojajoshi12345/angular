@@ -2,7 +2,110 @@
 // $Revision$:
 
 /******************************************************************************
-	GRID
+	CSS GRID
+******************************************************************************/
+$.widget("ibi.ibxGrid", $.ibi.ibxWidget,
+{
+	options:
+	{
+		"inline":false,
+		"autoFlow":"",
+
+		"justify":"start",
+		"justifyContent":"start",
+		
+		"align":"start",
+		"alignContent":"start",
+
+		"areas":"",
+
+		"columns":"", //length unit, auto, min-content, max-content, minmax(a,b), (fr)actional
+		"columnGap":"",
+		"autoColumns":"",
+
+		"rows": "", //length unit, auto, min-content, max-content, minmax(a,b), (fr)actional
+		"rowGap":"",
+		"autoRows":"",
+	},
+	_widgetClass: "ibx-grid",
+	_create: function ()
+	{
+		this._super();
+		this.element.ibxMutationObserver(
+		{
+			listen: true,
+			fnAddedNodes: this._onChildAdded.bind(this),
+			fnRemovedNodes: this._onChildRemoved.bind(this),
+			init: { childList: true }
+		});
+	},
+	_onChildAdded: function (node, mutation)
+	{
+		this.refresh();
+	},
+	_onChildRemoved: function (node, mutation)
+	{
+	},
+	_destroy: function ()
+	{
+		this.element.ibxMutationObserver('destroy');
+		this._super();
+	},
+	refresh: function ()
+	{
+		this._super();
+		var options = this.options;
+
+		options.inline ? this.element.addClass("gd-inline") : this.element.removeClass("gd-inline");
+
+		var gridCss = 
+		{
+			"grid-template-columns":options.cols,
+			"grid-template-rows":options.rows,
+			"grid-columns":options.cols,
+			"grid-rows":options.rows,
+			"justify-items":options.justify,
+			"align-items":options.align,
+		}
+		this.element.css(gridCss);
+
+		this.element.children().each(function(options, idx, cell)
+		{
+			cell = $(cell);
+			var css = 
+			{
+				"grid-column":			cell.data("ibxCol")  || (idx + 1),
+				"grid-column-span":		cell.data("ibxColSpan") || 1,
+				"grid-column-align":	cell.data("ibxJustifySelf") || options.justify,
+				"justify-self":			cell.data("ibxJustifySelf"),
+
+				"grid-row":				cell.data("ibxRow")  || 1,
+				"grid-row-span":		cell.data("ibxRowSpan") || 1,
+				"grid-row-align":		cell.data("ibxAlignSelf") || options.justify,
+				"align-self":			cell.data("ibxAlignSelf"),
+			}
+			cell.css(css).addClass("ibx-grid-cell");
+		}.bind(this, options));		
+	}
+});
+
+/****
+	These extensions are what stops jQuery from adding 'px' to these properties when setting $().css(xxx, yyy).
+	Also, jQuery is smart enough to know how to map gridColumn into msGridColumn, for example.
+****/
+$.extend($.cssNumber, 
+{
+	gridColumn:true,
+	gridColumnSpan:true,
+	gridcolumnAlign:true,
+	gridRow:true,
+	gridRowSpan:true,
+	gridRowAlign:true
+});
+
+
+/******************************************************************************
+	FLEX GRID
 ******************************************************************************/
 $.widget("ibi.ibxFlexGrid", $.ibi.ibxHBox, 
 {
@@ -43,75 +146,4 @@ $.widget("ibi.ibxFlexGrid", $.ibi.ibxHBox,
 $.ibi.ibxFlexGrid.statics = 
 {
 };
-
-
-$.widget("ibi.ibxGrid", $.ibi.ibxWidget,
-{
-	options:
-	{
-		"columns": "",
-		"columnsIe": "",
-		"columnsWebkit": "",
-		"rows": "",
-		"rowsIe": "",
-		"rowsWebkit": "",
-	},
-	_widgetClass: "ibx-grid",
-	_create: function ()
-	{
-		this._super();
-		this.element.ibxMutationObserver(
-		{
-			listen: true,
-			fnAddedNodes: this._onChildAdded.bind(this),
-			fnRemovedNodes: this._onChildRemoved.bind(this),
-			init: { childList: true }
-		});
-	},
-	_onChildAdded: function (node, mutation)
-	{
-		this.refresh();
-	},
-	_onChildRemoved: function (node, mutation)
-	{
-	},
-	_destroy: function ()
-	{
-		this.element.ibxMutationObserver('destroy');
-		this._super();
-	},
-	refresh: function ()
-	{
-		this._super();
-		var options = this.options;
-
-		// webkit
-		this.element.css('grid-template-columns', options.columnWebkit ? options.columnWebkit : options.columns);
-		this.element.css('grid-template-rows', options.rowsWebkit ? options.rowsWebkit : options.rows);
-
-		// IE
-		this.element[0].style.msGridColumns = options.columnsIe ? options.columnsIe : options.columns;
-		this.element[0].style.msGridRows = options.rowsIe ? options.rowsIe : options.rows;
-
-		this.element.children().each(function (idx, cell)
-		{
-			cell = $(cell);
-			var col = cell.data("ibxColumn") || (idx+1);
-			var colSpan = cell.data("ibxColumnSpan") || 1;
-			var row = cell.data("ibxRow") || 1;
-			var rowSpan = cell.data("ibxRowSpan") || 1;
-
-			// webkit
-			cell.css('grid-area', row + " / " + col + " / " + (row + rowSpan) + " / " + (col + colSpan));
-
-			// IE
-			cell[0].style.msGridColumn = col;
-			cell[0].style.msGridColumnSpan = colSpan;
-			cell[0].style.msGridRow = row;
-			cell[0].style.msGridRowSpan = rowSpan;
-		});
-	}
-});
-
-
 //# sourceURL=grid.ibx.js
