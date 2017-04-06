@@ -21,9 +21,8 @@ $.widget("ibi.ibxGridStack", $.ibi.ibxWidget,
 		this.element.addClass("grid-stack");
 		this.element.css('min-height', this.options.minHeight + "px");
 		this._super();
-
 	},
-	addCell: function (cell, x, y, width, height, autoPosition, minWidth, maxWidth)
+	addCell: function (cell, x, y, width, height)
 	{
 		this.element.css('min-height', "initial");
 		var grid = this.element.data('gridstack');
@@ -31,7 +30,7 @@ $.widget("ibi.ibxGridStack", $.ibi.ibxWidget,
 		var innercell = $("<div class='grid-stack-item-content' style='overflow:hidden;'>");
 		outercell.append(innercell);
 		innercell.append(cell);
-		grid.addWidget(outercell, x, y, width, height, autoPosition, minWidth, maxWidth);
+		grid.addWidget(outercell, x, y, width, height);
 	},
 	removeCell: function (cell, detachNode)
 	{
@@ -42,7 +41,7 @@ $.widget("ibi.ibxGridStack", $.ibi.ibxWidget,
 			{
 				var grid = this.element.data('gridstack');
 				grid.removeWidget(el, detachNode);
-				if (this.element.children().length == 0)
+				if (this.element.children('.grid-stack-item').length == 0)
 					this.element.css('min-height', this.options.minHeight + "px");
 			}.bind(this));
 		}
