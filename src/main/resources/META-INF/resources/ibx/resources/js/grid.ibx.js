@@ -11,17 +11,17 @@ $.widget("ibi.ibxGrid", $.ibi.ibxWidget,
 		"inline":false,
 		"autoFlow":"",
 
-		"justify":"start",
-		"justifyContent":"start",
+		"justify":"",
+		"justifyContent":"",
 		
-		"align":"start",
-		"alignContent":"start",
+		"align":"",
+		"alignContent":"",
 
 		"areas":"",
 
-		"columns":"", //length unit, auto, min-content, max-content, minmax(a,b), (fr)actional
-		"columnGap":"",
-		"autoColumns":"",
+		"cols":"", //length unit, auto, min-content, max-content, minmax(a,b), (fr)actional
+		"colGap":"",
+		"autoCols":"",
 
 		"rows": "", //length unit, auto, min-content, max-content, minmax(a,b), (fr)actional
 		"rowGap":"",
