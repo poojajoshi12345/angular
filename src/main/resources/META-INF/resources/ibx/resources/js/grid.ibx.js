@@ -56,33 +56,32 @@ $.widget("ibi.ibxGrid", $.ibi.ibxWidget,
 		this._super();
 		var options = this.options;
 
-		options.inline ? this.element.addClass("gd-inline") : this.element.removeClass("gd-inline");
-
 		var gridCss = 
 		{
-			"grid-template-columns":options.cols,
-			"grid-template-rows":options.rows,
-			"grid-columns":options.cols,
-			"grid-rows":options.rows,
-			"justify-items":options.justify,
-			"align-items":options.align,
+			"grid-template-columns":	options.cols,
+			"grid-template-rows":		options.rows,
+			"grid-columns":				options.cols,
+			"grid-rows":				options.rows,
+			"justify-items":			options.justify,
+			"align-items":				options.align,
 		}
 		this.element.css(gridCss);
+		options.inline ? this.element.addClass("gd-inline") : this.element.removeClass("gd-inline");
 
 		this.element.children().each(function(options, idx, cell)
 		{
 			cell = $(cell);
 			var css = 
 			{
-				"grid-column":			cell.data("ibxCol")  || (idx + 1),
+				"grid-column":			cell.data("ibxCol") || (idx + 1),
 				"grid-column-span":		cell.data("ibxColSpan") || 1,
-				"grid-column-align":	cell.data("ibxJustifySelf") || options.justify,
-				"justify-self":			cell.data("ibxJustifySelf"),
+				"grid-column-align":	cell.data("ibxJustify") || options.justify,
+				"justify-self":			cell.data("ibxJustify"),
 
-				"grid-row":				cell.data("ibxRow")  || 1,
+				"grid-row":				cell.data("ibxRow") || 1,
 				"grid-row-span":		cell.data("ibxRowSpan") || 1,
-				"grid-row-align":		cell.data("ibxAlignSelf") || options.justify,
-				"align-self":			cell.data("ibxAlignSelf"),
+				"grid-row-align":		cell.data("ibxAlign") || options.justify,
+				"align-self":			cell.data("ibxAlign"),
 			}
 			cell.css(css).addClass("ibx-grid-cell");
 		}.bind(this, options));		
@@ -90,17 +89,15 @@ $.widget("ibi.ibxGrid", $.ibi.ibxWidget,
 });
 
 /****
-	These extensions are what stops jQuery from adding 'px' to these properties when setting $().css(xxx, yyy).
-	Also, jQuery is smart enough to know how to map gridColumn into msGridColumn, for example.
+	These extensions are what stops jQuery from adding 'px' to these properties when setting $(xxx).css(yyy, zzz).
+	jQuery is also smart enough to check if these properties are vendor prefixed when setting them (-ms, -moz, -webkit)
 ****/
 $.extend($.cssNumber, 
 {
 	gridColumn:true,
 	gridColumnSpan:true,
-	gridcolumnAlign:true,
 	gridRow:true,
 	gridRowSpan:true,
-	gridRowAlign:true
 });
 
 
