@@ -8,7 +8,7 @@ $.widget("ibi.ibxGridStack", $.ibi.ibxWidget,
 		{
 			minHeight: 300,
 			width: 12,
-			float: true,
+			float: false,
 			acceptWidgets: '.grid-stack-item',
 			resizable: {
 				handles: 'se, s, sw'
