@@ -5,15 +5,20 @@
 .ibx-grid-stack {
 }
 
-.grid-stack > .grid-stack-item {
+.grid-stack .grid-stack-item {
+    transition: left .3s, top .3s, height .4s, width .4s;
 }
 
-.grid-stack > .grid-stack-item > .grid-stack-item-content {
+.grid-stack .grid-stack-item.ui-draggable-dragging,
+.grid-stack .grid-stack-item.ui-resizable-resizing {
+    transition: all 0s;
+}
+
+.grid-stack .grid-stack-item > .grid-stack-item-content {
 }
 
 .grid-stack .grid-stack-placeholder > .placeholder-content {
     background-color: #57a8fa;
     opacity: .5;
 }
-
 

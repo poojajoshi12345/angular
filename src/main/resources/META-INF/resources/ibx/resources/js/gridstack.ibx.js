@@ -8,11 +8,13 @@ $.widget("ibi.ibxGridStack", $.ibi.ibxWidget,
 		{
 			minHeight: 300,
 			width: 12,
-			float: false,
+			float: true,
 			acceptWidgets: '.grid-stack-item',
 			resizable: {
 				handles: 'se, s, sw'
 			},
+			defaultCellWidth: 4,
+			defaultCellHeight: 4,
 		},
 	_widgetClass: "ibx-grid-stack",
 	_create: function ()
@@ -24,6 +26,8 @@ $.widget("ibi.ibxGridStack", $.ibi.ibxWidget,
 	},
 	addCell: function (cell, x, y, width, height)
 	{
+		width = width || this.options.defaultCellWidth;
+		height = height || this.options.defaultCellHeight;
 		this.element.css('min-height', "initial");
 		var grid = this.element.data('gridstack');
 		var outercell = $("<div class='grid-stack-item'>");
