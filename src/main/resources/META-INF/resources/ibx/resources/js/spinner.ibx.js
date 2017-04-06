@@ -26,10 +26,10 @@ $.widget("ibi.ibxSpinner", $.ibi.ibxTextField,
 	_widgetClass:"ibx-spinner",
 	_create:function()
 	{
-		var prevValue = this.options.value;
+		this._inCreate = true;
 		this._super();
+		this._inCreate = false;
 		var options = this.options;
-
 		this._btnUp = $("<div tabIndex='0'>").ibxButton().on("mousedown mouseup mouseout", this._onBtnEvent.bind(this)).addClass(options.btnUpClass);
 		this._btnDown = $("<div tabIndex='0'>").ibxButton().on("mousedown mouseup mouseout", this._onBtnEvent.bind(this)).addClass(options.btnDownClass);
 		this._btnBox = $("<div>").ibxVButtonGroup().ibxWidget("addButton", this._btnUp).ibxWidget("addButton", this._btnDown).addClass(options.btnGroupClass);
@@ -40,7 +40,7 @@ $.widget("ibi.ibxSpinner", $.ibi.ibxTextField,
 			options.value = options.max;
 		if (options.value < options.min)
 			options.value = options.min;
-		options.value = this._adjustStep(prevValue, options.min, options.max, options.step);
+		options.value = this._adjustStep(options.value, options.min, options.max, options.step);
 		this._setValue(options.value, true);
 	},
 	_destroy:function()
@@ -81,8 +81,10 @@ $.widget("ibi.ibxSpinner", $.ibi.ibxTextField,
 	},
 	_setValue: function (value, bFormat)
 	{
+		if (this._inCreate)
+			return;
 		this.options.value = parseInt(value, 10);
-		this.options.textInputValue = bFormat && this.options.fnFormat ? this.options.fnFormat(value) : value;
+		this.options.text = bFormat && this.options.fnFormat ? this.options.fnFormat(value) : value;
 		this.refresh();
 		this._trigger("change", null, this._getInfo());
 		this._trigger("set_form_value", null, { "elem": this.element, "value": value });
