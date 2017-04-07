@@ -232,7 +232,7 @@ _p.getResource = function(selector, ibxBind)
 	markup = $(markup);
 
 	//will autobind if element is an ibx type thing, and user didn't explicitly say NO!
-	ibxBind = (markup.find("[data-ibx-type]").length && (typeof(ibxBind) === "undefined")) ? true : ibxBind;
+	ibxBind = ((markup.is("[data-ibx-type]") || markup.find("[data-ibx-type]").length) && (typeof(ibxBind) === "undefined")) ? true : ibxBind;
 	if(ibxBind)
 	{
 		this._bindingDiv.empty().append(markup).appendTo("body");
