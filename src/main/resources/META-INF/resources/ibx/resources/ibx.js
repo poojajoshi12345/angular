@@ -47,7 +47,9 @@ function ibx(fn, path, autoBind)
 					ibxResourceMgr.addBundle(ibx._path + "./resources/ibx_resource_bundle.xml").done(function()
 					{
 						if(ibx._loadPromise._autoBind)
+						{
 							ibx.bindElements();
+						}
 
 						ibx._loaded = true;
 						ibx._isLoading = !ibx._loaded;

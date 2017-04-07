@@ -52,10 +52,6 @@ $.widget("ibi.ibxWidget", $.Widget,
 		this.element.on("contextmenu", this._onWidgetContextMenu.bind(this));
 		this._adjustWidgetClasses(true);
 
-		//merge in the markup options into the current options...they will be correctly assigned
-		//(options map) when init is called after all creates are finished.
-		$.extend(this.options, ibx.getIbxMarkupOptions(this.element));
-	
 		//Ritalin, if ya know what I mean!
 		this.element.children("[tabindex]").first().focus();
 		
@@ -82,7 +78,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 	_init:function()
 	{
 		//_setOptions will respect the options map.
-		this._setOptions(this.options);
+		this.option($.extend(true, {}, this.options, ibx.getIbxMarkupOptions(this.element)));
 		this.refresh();
 	},
 	option:function(key, value)

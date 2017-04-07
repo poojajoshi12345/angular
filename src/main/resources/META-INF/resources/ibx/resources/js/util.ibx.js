@@ -36,6 +36,10 @@ function sformat()
 if(jQuery)
 {
 	//Custom jQuery selectors
+	jQuery.expr[":"]["displayNone"] = function(elem)
+	{
+		return ($(elem).css("display") == "none")
+	};
 	jQuery.expr[":"]["biComponent"] = function(elem)
 	{
 		return $(elem).prop("_biComponent") ? true : false;

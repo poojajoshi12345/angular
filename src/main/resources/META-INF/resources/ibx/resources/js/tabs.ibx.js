@@ -156,6 +156,11 @@ $.widget("ibi.ibxTabPage", $.ibi.ibxWidget,
 		tabOptions:
 		{
 			text:"Tab Button"
+		},
+
+		optionsMap:
+		{
+			text:"tabOptions.text"
 		}
 	},
 	_widgetClass:"ibx-tab-page",

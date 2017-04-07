@@ -79,7 +79,7 @@ $.widget("ibi.ibxCheckBox", $.ibi.ibxLabel,
 	},
 	_setOption: function (key, value)
 	{
-		if (key == "group" && this.options.group != value)
+		if (key == "group")
 		{
 			if (this.options.group)
 			{
@@ -380,7 +380,7 @@ $.widget("ibi.ibxButtonGroup", $.ibi.ibxFlexBox,
 	},
 	_fixFirstLast: function ()
 	{
-		var all = this.element.children(".ibx-widget").not(this._group);
+		var all = this.element.children(".ibx-widget:not(:displayNone)").not(this._group);
 		all.removeClass('ibx-button-group-last ibx-button-group-first');
 		$(all[0]).addClass("ibx-button-group-first");
 		$(all[all.length - 1]).addClass("ibx-button-group-last");
