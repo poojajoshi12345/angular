@@ -9,6 +9,16 @@ $.widget("ibi.ibxGrid", $.ibi.ibxWidget,
 	options:
 	{
 		"inline":false,
+
+		"cols":"",
+		"autoCols":"",
+		"colGap":"",
+
+		"rows":"",
+		"autoRows":"",
+		"rowGap":"",
+
+		"areas":"",
 		"autoFlow":"",
 
 		"justify":"",
@@ -16,16 +26,6 @@ $.widget("ibi.ibxGrid", $.ibi.ibxWidget,
 		
 		"align":"",
 		"alignContent":"",
-
-		"areas":"",
-
-		"cols":"", //length unit, auto, min-content, max-content, minmax(a,b), (fr)actional
-		"colGap":"",
-		"autoCols":"",
-
-		"rows": "", //length unit, auto, min-content, max-content, minmax(a,b), (fr)actional
-		"rowGap":"",
-		"autoRows":"",
 	},
 	_widgetClass: "ibx-grid",
 	_create: function ()
@@ -58,11 +58,22 @@ $.widget("ibi.ibxGrid", $.ibi.ibxWidget,
 
 		var gridCss = 
 		{
-			"grid-template-columns":	options.cols,
-			"grid-template-rows":		options.rows,
+			//IE...do before so standard CSS can override in compliant browsers
 			"grid-columns":				options.cols,
 			"grid-rows":				options.rows,
+
+			//Standard CSS
+			"grid-template-columns":	options.cols,
+			"grid-auto-columns":		options.autoCols,
+			"grid-template-rows":		options.rows,
+			"grid-auto-rows":			options.autoRows,
+			"grid-template-areas":		options.areas, //each line must be quoted, ex: " 'a1 a1 a1''a2 . a2''a3 . a3' "
+			"grid-auto-flow":			options.autoFlow,
+			"grid-column-gap":			options.colGap,
+			"grid-row-gap":				options.rowGap,
+			"justify-content":			options.justifyContent,
 			"justify-items":			options.justify,
+			"align-content":			options.alignContent,
 			"align-items":				options.align,
 		}
 		this.element.css(gridCss);
@@ -71,17 +82,37 @@ $.widget("ibi.ibxGrid", $.ibi.ibxWidget,
 		this.element.children().each(function(options, idx, cell)
 		{
 			cell = $(cell);
+			var cellData = cell.data();
+			var colInfo = cellData.ibxCol ? cellData.ibxCol.toString().split("/") : [];
+			var colStart = colInfo[0] || "";
+			var colEnd = colInfo[1] || "";
+			var rowInfo = cellData.ibxRow ? cellData.ibxRow.toString().split("/") : [];
+			var rowStart = rowInfo[0] || "";
+			var rowEnd = rowInfo[1] || "";
 			var css = 
 			{
-				"grid-column":			cell.data("ibxCol") || (idx + 1),
-				"grid-column-span":		cell.data("ibxColSpan") || 1,
+				//IE Columns...do before so standard CSS can override in compliant browsers
+				"grid-column":			colStart,
+				"grid-column-span":		colEnd.replace("span", ""),
 				"grid-column-align":	cell.data("ibxJustify") || options.justify,
+
+				//IE Rows...do before so standard CSS can override in compliant browsers
+				"grid-row":				rowStart,
+				"grid-row-span":		rowEnd.replace("span", ""),
+				"grid-row-align":		cell.data("ibxAlign") || options.justify,
+
+				//Standard CSS Columns
+				"grid-column-start":	colStart,
+				"grid-column-end":		colEnd,
 				"justify-self":			cell.data("ibxJustify"),
 
-				"grid-row":				cell.data("ibxRow") || 1,
-				"grid-row-span":		cell.data("ibxRowSpan") || 1,
-				"grid-row-align":		cell.data("ibxAlign") || options.justify,
+				//Standard CSS Rows
+				"grid-row-start":		rowStart,
+				"grid-row-end":			rowEnd,
 				"align-self":			cell.data("ibxAlign"),
+
+				//Standard CSS not supported by IE
+				"grid-area":			cell.data("ibxArea"),
 			}
 			cell.css(css).addClass("ibx-grid-cell");
 		}.bind(this, options));		
@@ -95,8 +126,12 @@ $.widget("ibi.ibxGrid", $.ibi.ibxWidget,
 $.extend($.cssNumber, 
 {
 	gridColumn:true,
+	gridColumnStart:true,
+	gridColumnEnd:true,
 	gridColumnSpan:true,
 	gridRow:true,
+	gridRowStart:true,
+	gridRowEnd:true,
 	gridRowSpan:true,
 });
 
