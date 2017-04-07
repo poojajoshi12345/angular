@@ -135,6 +135,7 @@ $.widget("ibi.ibxRadioGroup", $.ibi.ibxWidget,
 		var el = $(el);
 		$(".ibx-radio-group-" + this.options.name).not(el).removeClass('radio-group-checked').ibxWidget('checked', false);
 		el.addClass('radio-group-checked');
+		this._trigger("change", null, this.element);
 		this._trigger("set_form_value", null, { "elem": el, "value": this._getItemUserValue(el) });
 	},
 	selected: function (element)
