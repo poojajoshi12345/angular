@@ -195,7 +195,7 @@ $.widget("ibi.ibxMenuItem", $.ibi.ibxHBox,
 				this._trigger("close_sub_menus", null, this.element);
 				if(this.subMenu())
 					this._onMenuItemClick();
-			}.bind(this), 400);
+			}.bind(this), 100);
 		}
 		e.stopPropagation();
 	},
