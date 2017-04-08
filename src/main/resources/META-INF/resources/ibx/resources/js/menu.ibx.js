@@ -298,6 +298,10 @@ $.widget("ibi.ibxRadioMenuItem", $.ibi.ibxCheckMenuItem,
 	_create:function()
 	{
 		this._super();
+	},
+	_init:function()
+	{
+		this._super();
 		var groups = $(sformat(":ibxRadioGroup({1})", this.options.group));
 		groups.ibxRadioGroup("addControl", this.element);
 	},
