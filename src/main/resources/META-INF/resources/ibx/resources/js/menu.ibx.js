@@ -234,6 +234,10 @@ $.widget("ibi.ibxMenuItem", $.ibi.ibxHBox,
 		this.element.append(subMenu);
 		this.refresh();
 	},
+	userValue:function()
+	{
+		return this.options.userValue;
+	},
 	refresh:function()
 	{
 		this._super();
