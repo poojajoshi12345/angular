@@ -8,7 +8,7 @@ $.widget("ibi.ibxSplitter", $.ibi.ibxWidget,
 		"orientation":"vertical",
 		"resizeElements":"left",
 		"autoReset":true,
-		"location":null,
+		"location": null,
 	},
 	_widgetClass:"ibx-splitter",
 	_create:function()
@@ -20,6 +20,10 @@ $.widget("ibi.ibxSplitter", $.ibi.ibxWidget,
 		this._e2Info =  {el:e2, width:e2.width(), height:e2.height()};
 		this._fnSplitterMouseEvent = this._onSplitterMouseEvent.bind(this);//must save for later removal because of bind.
 		this.element.on("mousedown dblclick", this._fnSplitterMouseEvent);
+	},
+	_reverseMouseDirection: function (e)
+	{
+		false;
 	},
 	_onSplitterMouseEvent:function(e)
 	{
@@ -48,8 +52,9 @@ $.widget("ibi.ibxSplitter", $.ibi.ibxWidget,
 			var s2 = bVertical ? el2.width() : el2.height();
 			var m1 = parseInt(el1.css(bVertical ? "min-width" : "min-height"), 10);
 			var m2 = parseInt(el2.css(bVertical ? "min-width" : "min-height"), 10);
-			var dx = (e.screenX - this._eLast.screenX);
-			var dy = (e.screenY - this._eLast.screenY);
+
+			var dx = (e.screenX - this._eLast.screenX) * (this._reverseMouseDirection() ? -1 : 1);
+			var dy = (e.screenY - this._eLast.screenY) * (this._reverseMouseDirection() ? -1 : 1);
 
 			var s1Val = bVertical ? (s1+dx) : (s1+dy);
 			s1Val = s1Val < m1 ? m1 : s1Val;
@@ -95,6 +100,17 @@ $.widget("ibi.ibxSplitter", $.ibi.ibxWidget,
 });
 $.widget("ibi.ibxHSplitter", $.ibi.ibxSplitter, {options:{orientation:"horizontal"}, _widgetClass:"ibx-splitter-horizontal"});
 $.widget("ibi.ibxVSplitter", $.ibi.ibxSplitter, {options:{orientation:"vertical"}, _widgetClass:"ibx-splitter-vertical"});
+
+$.widget("ibi.ibxBoxSplitter", $.ibi.ibxSplitter,
+{	
+	_reverseMouseDirection: function (e)
+	{
+		return (this.options.resizeElements.search(/right|bottom/g) != -1);
+	},
+});
+
+$.widget("ibi.ibxBoxHSplitter", $.ibi.ibxBoxSplitter, { options: { orientation: "horizontal" }, _widgetClass: "ibx-splitter-horizontal" });
+$.widget("ibi.ibxBoxVSplitter", $.ibi.ibxBoxSplitter, { options: { orientation: "vertical" }, _widgetClass: "ibx-splitter-vertical" });
 
 $.ibi.ibxSplitter.statics = 
 {
