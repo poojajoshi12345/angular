@@ -32,6 +32,12 @@ $.widget("ibi.ibxLabel", $.ibi.ibxFlexBox,
 	{
 		this._super();
 		var options = this.options;
+
+		//move any text children to the _text element in the label
+		var contentText = this.element.text();
+		this.element.text("");
+		options.text += contentText;
+
 		this._icon = $("<img>").addClass(options.iconElClass);
 		this._glyph = $("<label>").addClass(options.glyphElClass);
 		this._text = $("<label>").addClass(options.textElClass);

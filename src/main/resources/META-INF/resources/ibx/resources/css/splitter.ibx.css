@@ -5,8 +5,8 @@
 {
 	flex:0 0 auto;
 	align-self:stretch;
-	min-width:5px;
-	min-height:5px;
+	min-width:2px;
+	min-height:2px;
 	pointer-events:auto;
 }
 
