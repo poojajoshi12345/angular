@@ -78,7 +78,7 @@ $.widget("ibi.ibxDialog", $.ibi.ibxPopup,
 	{
 		this._super();
 		var options = this.options;
-		this.caption.ibxLabel(options.captionLabelOptions);
+		this.caption.ibxLabel(options.captionLabelOptions).prop("tabIndex");
 		this.titleClose.css("display", options.closeButton ? "" : "none");
 		this.btnOK.css("display", options.buttons.search("ok") != -1 ? "" : "none");
 		this.btnCancel.css("display", options.buttons.search("cancel") != -1 ? "" : "none");

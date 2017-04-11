@@ -21,6 +21,7 @@
 
 .ibx-dialog-title-box, .ibx-dialog-button-box
 {
+	padding:.15em;
 	flex:0 0 auto;
 }
 
