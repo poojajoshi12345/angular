@@ -5,9 +5,10 @@
 {
 	flex:0 0 auto;
 	align-self:stretch;
-	min-width:2px;
-	min-height:2px;
 	pointer-events:auto;
+	min-width:5px;
+	min-height:5px;
+	background-color:#eee;
 }
 
 .ibx-splitter-v:active, .ibx-splitter-h:active
@@ -37,26 +38,3 @@
 	cursor:ns-resize;
 }
 
-@media (min-device-width: 320px) and (max-device-width: 700px)
-{
-	.ibx-splitter-v
-	{
-		min-width:25px;
-	}
-	.ibx-splitter-h
-	{
-		min-height:25px;
-	}
-}
-
-@media (min-device-width: 768px) and (max-device-width: 1024px)
-{
-	.ibx-splitter-v
-	{
-		min-width:25px;
-	}
-	.ibx-splitter-h
-	{
-		min-height:25px;
-	}
-}

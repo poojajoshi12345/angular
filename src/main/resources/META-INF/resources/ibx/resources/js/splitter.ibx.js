@@ -6,7 +6,7 @@ $.widget("ibi.ibxSplitter", $.ibi.ibxWidget,
 	options:
 	{
 		"orientation":"vertical",
-		"resizeElements":"left",
+		"resizeElements":"both",
 		"autoReset":true,
 		"location": null,
 	},
@@ -58,11 +58,17 @@ $.widget("ibi.ibxSplitter", $.ibi.ibxWidget,
 
 			var s1Val = bVertical ? (s1+dx) : (s1+dy);
 			s1Val = s1Val < m1 ? m1 : s1Val;
+
+			var s2Val = bVertical ? (s2-dx) : (s2-dy);
+			s2Val = s2Val < m2 ? m2 : s2Val;
+
+			//don't let either side get smaller than 0
+			if(s1Val <= 0 || s2Val <= 0)
+				return;
+
 			if(this.options.resizeElements.search(/left|top|both/g) != -1)
 				bVertical ? el1.width(s1Val) : el1.height(s1Val);
 
-			var s2Val = bVertical ? (s2+dx) : (s2+dy);
-			s2Val = s2Val < m2 ? m2 : s2Val;
 			if(this.options.resizeElements.search(/right|bottom|both/g) != -1)
 				bVertical ? el2.width(s2Val) : el2.height(s2Val);
 
