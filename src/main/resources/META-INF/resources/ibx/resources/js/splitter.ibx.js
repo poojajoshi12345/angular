@@ -6,9 +6,7 @@ $.widget("ibi.ibxSplitter", $.ibi.ibxWidget,
 	options:
 	{
 		"orientation":"vertical",
-		"resizeElements":"both",
 		"autoReset":true,
-		"location": null,
 	},
 	_widgetClass:"ibx-splitter",
 	_create:function()
@@ -66,11 +64,9 @@ $.widget("ibi.ibxSplitter", $.ibi.ibxWidget,
 			if(s1Val <= 0 || s2Val <= 0)
 				return;
 
-			if(this.options.resizeElements.search(/left|top|both/g) != -1)
-				bVertical ? el1.width(s1Val) : el1.height(s1Val);
-
-			if(this.options.resizeElements.search(/right|bottom|both/g) != -1)
-				bVertical ? el2.width(s2Val) : el2.height(s2Val);
+			//set the actual widths
+			bVertical ? el1.width(s1Val) : el1.height(s1Val);
+			bVertical ? el2.width(s2Val) : el2.height(s2Val);
 
 			this._trigger("resize", null, {"el1":el1, "el2":el2, "dx":dx, "dy":dy});
 			this._eLast = e;
@@ -99,25 +95,10 @@ $.widget("ibi.ibxSplitter", $.ibi.ibxWidget,
 		var options = this.options;
 		var bVertical = (options.orientation == "vertical");
 		this.element.removeClass("ibx-splitter-v ibx-splitter-h").addClass(bVertical ? "ibx-splitter-v" : "ibx-splitter-h");
-		if(options.location)
-		{
-		}
 	}
 });
 $.widget("ibi.ibxHSplitter", $.ibi.ibxSplitter, {options:{orientation:"horizontal"}, _widgetClass:"ibx-splitter-horizontal"});
 $.widget("ibi.ibxVSplitter", $.ibi.ibxSplitter, {options:{orientation:"vertical"}, _widgetClass:"ibx-splitter-vertical"});
-
-$.widget("ibi.ibxBoxSplitter", $.ibi.ibxSplitter,
-{	
-	_reverseMouseDirection: function (e)
-	{
-		return (this.options.resizeElements.search(/right|bottom/g) != -1);
-	},
-});
-
-$.widget("ibi.ibxBoxHSplitter", $.ibi.ibxBoxSplitter, { options: { orientation: "horizontal" }, _widgetClass: "ibx-splitter-horizontal" });
-$.widget("ibi.ibxBoxVSplitter", $.ibi.ibxBoxSplitter, { options: { orientation: "vertical" }, _widgetClass: "ibx-splitter-vertical" });
-
 $.ibi.ibxSplitter.statics = 
 {
 }
