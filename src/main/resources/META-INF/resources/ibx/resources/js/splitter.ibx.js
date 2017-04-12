@@ -12,16 +12,8 @@ $.widget("ibi.ibxSplitter", $.ibi.ibxWidget,
 	_create:function()
 	{
 		this._super();
-		var e1 = this.element.prev();
-		this._e1Info = {el:e1, width:e1.width(), height:e1.height()};
-		var e2 = this.element.next();
-		this._e2Info =  {el:e2, width:e2.width(), height:e2.height()};
 		this._fnSplitterMouseEvent = this._onSplitterMouseEvent.bind(this);//must save for later removal because of bind.
 		this.element.on("mousedown dblclick", this._fnSplitterMouseEvent);
-	},
-	_reverseMouseDirection: function (e)
-	{
-		false;
 	},
 	_onSplitterMouseEvent:function(e)
 	{
@@ -29,10 +21,21 @@ $.widget("ibi.ibxSplitter", $.ibi.ibxWidget,
 		var eType = e.type;
 		if(eType == "mousedown")
 		{
+			if(!this._initialized)
+			{
+				//save initial sizes for dblclick reset.
+				var e1 = this.element.prev();
+				this._e1Info = {el:e1, width:e1.outerWidth(), height:e1.outerHeight()};
+				var e2 = this.element.next();
+				this._e2Info =  {el:e2, width:e2.outerWidth(), height:e2.outerHeight()};
+				this._initialized = true;
+			}
+
 			$(document.body).addClass(bVertical ? "ibx-body-splitter-v" : "ibx-body-splitter-h").css("pointerEvents", "none");
 			$(document).on("mouseup mousemove", this._fnSplitterMouseEvent);
 			this._eLast = e;
 		}
+		else
 		if(eType == "mouseup")
 		{
 			$(document.body).removeClass("ibx-body-splitter-v ibx-body-splitter-h").css("pointerEvents", "");
@@ -50,9 +53,8 @@ $.widget("ibi.ibxSplitter", $.ibi.ibxWidget,
 			var s2 = bVertical ? el2.width() : el2.height();
 			var m1 = parseInt(el1.css(bVertical ? "min-width" : "min-height"), 10);
 			var m2 = parseInt(el2.css(bVertical ? "min-width" : "min-height"), 10);
-
-			var dx = (e.screenX - this._eLast.screenX) * (this._reverseMouseDirection() ? -1 : 1);
-			var dy = (e.screenY - this._eLast.screenY) * (this._reverseMouseDirection() ? -1 : 1);
+			var dx = e.screenX - this._eLast.screenX;
+			var dy = e.screenY - this._eLast.screenY;
 
 			var s1Val = bVertical ? (s1+dx) : (s1+dy);
 			s1Val = s1Val < m1 ? m1 : s1Val;
@@ -72,7 +74,7 @@ $.widget("ibi.ibxSplitter", $.ibi.ibxWidget,
 			this._eLast = e;
 		}
 		else
-		if(eType == "dlbclick")
+		if(eType == "dblclick")
 		{
 			if(this.options.autoReset)
 				this.reset();
