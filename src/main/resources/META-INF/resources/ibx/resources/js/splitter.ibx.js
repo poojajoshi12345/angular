@@ -57,12 +57,12 @@ $.widget("ibi.ibxSplitter", $.ibi.ibxWidget,
 			var dy = e.screenY - this._eLast.screenY;
 
 			var s1Val = bVertical ? (s1+dx) : (s1+dy);
-			s1Val = s1Val < m1 ? m1 : s1Val;
+			s1Val = s1Val <= m1 ? 0 : s1Val;
 
 			var s2Val = bVertical ? (s2-dx) : (s2-dy);
-			s2Val = s2Val < m2 ? m2 : s2Val;
+			s2Val = s2Val <= m2 ? 0 : s2Val;
 
-			//don't let either side get smaller than 0
+			//don't let either side get smaller than 0 or min-width (min-height) calculated above
 			if(s1Val <= 0 || s2Val <= 0)
 				return;
 
