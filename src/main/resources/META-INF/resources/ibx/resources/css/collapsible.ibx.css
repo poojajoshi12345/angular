@@ -2,7 +2,6 @@
 /* $Revision$: */
 
 .ibx-collapsible {
-    z-index: 10000;
 }
 
 .ibx-collapsible.open.autohide {
@@ -33,24 +32,24 @@
     position: absolute;
 }
 
-.ibx-collapsible-up-push {
+.ibx-collapsible-top-push {
     transition: margin-top .3s;
     position: static;
 }
 
-.ibx-collapsible-up-overlay {
+.ibx-collapsible-top-overlay {
     transition: top .3s;
 	left: 0px;
 	right: 0px;
     position: absolute;
 }
 
-.ibx-collapsible-down-push {
+.ibx-collapsible-bottom-push {
     transition: margin-bottom .3s;
     position: static;
 }
 
-.ibx-collapsible-down-overlay {
+.ibx-collapsible-bottom-overlay {
     transition: bottom .3s;
 	left: 0px;
 	right: 0px;
