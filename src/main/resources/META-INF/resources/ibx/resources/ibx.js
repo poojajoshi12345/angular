@@ -16,7 +16,7 @@ function ibx(fn, path, autoBind)
 		//things to preload for ibx.  Everything else is in the root resource bundle
 		var scripts = 
 		[
-			"<link type='text/css' rel='stylesheet' href='" + ibx._path + "./resources/css/base.ibx.css'></link>",
+			"<link type='text/css' rel='stylesheet' href='" + ibx._path + "./resources/css/base.ibx.css'/>",
 			"<script type='text/javascript' src='" + ibx._path + "./resources/etc/jquery/jquery-3.1.1.js'></script>",
 		];
 		document.open();
