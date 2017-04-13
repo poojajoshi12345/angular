@@ -133,10 +133,13 @@ $.widget("ibi.ibxRadioGroup", $.ibi.ibxWidget,
 	_setSelected: function (el)
 	{
 		var el = $(el);
-		$(".ibx-radio-group-" + this.options.name).not(el).removeClass('radio-group-checked').ibxWidget('checked', false);
-		el.addClass('radio-group-checked');
-		this._trigger("set_form_value", null, { "elem": el, "value": this._getItemUserValue(el) });
-		this._trigger("change", null, this.element);
+		if (el.length > 0)
+		{
+			$(".ibx-radio-group-" + this.options.name).not(el).removeClass('radio-group-checked').ibxWidget('checked', false);
+			el.addClass('radio-group-checked');
+			this._trigger("set_form_value", null, { "elem": el, "value": this._getItemUserValue(el) });
+			this._trigger("change", null, el);
+		}
 	},
 	selected: function (element)
 	{
