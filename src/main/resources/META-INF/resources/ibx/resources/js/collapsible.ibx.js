@@ -8,6 +8,7 @@ $.widget("ibi.ibxCollapsible", $.Widget,
 		"direction": "left",
 		"mode": "push",
 		"startCollapsed": false,
+		"transition":"",
 		"collapsedClass": "collapsed",
 		"autoClose": false,
 		"gap": 0,
@@ -101,8 +102,10 @@ $.widget("ibi.ibxCollapsible", $.Widget,
 		}
 
 		this.element.removeClass("ibx-collapsible ibx-collapsible-left-push ibx-collapsible-left-overlay ibx-collapsible-right-push ibx-collapsible-right-overlay ibx-collapsible-up-push ibx-collapsible-up-overlay ibx-collapsible-down-push ibx-collapsible-down-overlay");
-		this.element.addClass("ibx-collapsible ibx-collapsible-" + this.options.direction + "-" + this.options.mode);
+		this.element.addClass(sformat("ibx-collapsible ibx-collapsible-{1}-{2}", this.options.direction, this.options.mode));
+		this.element.css("transition", (options.transition) ? sformat("margin-{1} {2}", this.options.direction, options.transition) : "");
 		this.options.autoClose ? this.element.addClass("auto-close") : this.element.removeClass("auto-close");
+
 	}
 });
 //# sourceURL=collapsible.ibx.js
