@@ -25,9 +25,10 @@ $.widget("ibi.ibxCollapsible", $.Widget,
 		this.widgetEventPrefix = "ibx_";
 		this.element.data("ibxWidget", this);
 		this.element.data("ibiIbxWidget", this);
+		this.element.addClass("ibx-collapsible");
 		this.element.on("transitionend", this._onTransitioned.bind(this))
-		$(window).on("mousedown", this._onWindowMouseDown.bind(this));
-		this.element.on("mousedown", this._onMouseDown.bind(this));
+		this.element.on("click", this._onMouseEvent.bind(this));
+		this._boundWindowMouseEvent = this._onWindowMouseEvent.bind(this);
 		this._super();
 	},
 	_destroy:function()
@@ -40,26 +41,6 @@ $.widget("ibi.ibxCollapsible", $.Widget,
 	{
 		//don't call super as close/open calls refresh
 		this.options.startCollapsed ? this.close() : this.open();
-	},
-	_onWindowMouseDown: function (e)
-	{
-		if(this.options.autoClose && this.isOpen())
-		{
-			//close all open auto close collapsible and then let body get pointer events again.
-			$(".ibx-collapsible:autoClose").ibxCollapsible("close");
-			$("body").removeClass("body-collapsible-auto-close");
-		}
-	},
-	_onMouseDown: function (e)
-	{
-		e.stopPropagation();
-	},
-	_onTransitioned: function (e)
-	{ 
-		if (this.isOpen())
-			this._trigger("open", null, this.element);
-		else
-			this._trigger("close", null, this.element);
 	},
 	_isOpen:false,
 	isOpen:function()
@@ -78,7 +59,7 @@ $.widget("ibi.ibxCollapsible", $.Widget,
 	},
 	close: function ()
 	{
-		if (!this.options.disabled && this._trigger("beforeclose", null, this.element))
+		if(!this.options.disabled && this._trigger("beforeclose", null, this.element))
 		{
 			this._isOpen = false;
 			this.refresh();
@@ -87,6 +68,32 @@ $.widget("ibi.ibxCollapsible", $.Widget,
 	toggle: function ()
 	{
 		(this.isOpen()) ? this.close() : this.open();
+	},
+	_onWindowMouseEvent: function (e)
+	{
+		if(this.options.autoClose && this.isOpen())
+		{
+			//close all open auto close collapsible and then let body get pointer events again.
+			this.close();
+			$("body").removeClass("body-collapsible-auto-close");
+		}
+	},
+	_onMouseEvent: function (e)
+	{
+		e.stopPropagation();
+	},
+	_onTransitioned: function (e)
+	{ 
+		if (this.isOpen())
+		{
+			$(window).on("click", this._boundWindowMouseEvent);
+			this._trigger("open", null, this.element);
+		}
+		else
+		{
+			$(window).off("click", this._boundWindowMouseEvent);
+			this._trigger("close", null, this.element);
+		}
 	},
 	refresh: function ()
 	{
@@ -103,8 +110,8 @@ $.widget("ibi.ibxCollapsible", $.Widget,
 			this.element.removeClass("open");
 		}
 
-		this.element.removeClass("ibx-collapsible ibx-collapsible-left-push ibx-collapsible-left-overlay ibx-collapsible-right-push ibx-collapsible-right-overlay ibx-collapsible-up-push ibx-collapsible-up-overlay ibx-collapsible-down-push ibx-collapsible-down-overlay");
-		this.element.addClass(sformat("ibx-collapsible ibx-collapsible-{1}-{2}", this.options.direction, this.options.mode));
+		this.element.removeClass("ibx-collapsible-left-push ibx-collapsible-left-overlay ibx-collapsible-right-push ibx-collapsible-right-overlay ibx-collapsible-up-push ibx-collapsible-up-overlay ibx-collapsible-down-push ibx-collapsible-down-overlay");
+		this.element.addClass(sformat("ibx-collapsible-{1}-{2}", this.options.direction, this.options.mode));
 		this.element.css("transition", (options.transition) ? sformat("margin-{1} {2}", this.options.direction, options.transition) : "");
 		this.options.autoClose ? this.element.addClass("auto-close") : this.element.removeClass("auto-close");
 

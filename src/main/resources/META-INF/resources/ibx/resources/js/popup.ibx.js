@@ -131,7 +131,7 @@ function ibxPopupManager()
 {
 	$(window).on("ibx_popup_mgr_open ibx_popup_mgr_close", ibxPopupManager.onPopupEvent.bind(this));
 	window.addEventListener("mousedown", ibxPopupManager.onWindowEvent.bind(this), true);
-	this._gp = $("<div class='ibx-popup-glass-pane'>");
+	this._gp = $("<div class='ibx-popup-glass-pane'>").on("mousedown mouseup click", function(e){e.stopPropagation();});
 };
 ibxPopupManager.onPopupEvent = function(e, popup)
 {
