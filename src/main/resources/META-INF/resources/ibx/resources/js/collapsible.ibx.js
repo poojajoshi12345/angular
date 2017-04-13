@@ -9,7 +9,7 @@ $.widget("ibi.ibxCollapsible", $.Widget,
 		"mode": "push",
 		"startCollapsed": false,
 		"collapsedClass": "collapsed",
-		"autohide": false,
+		"autoClose": false,
 		"gap": 0,
 	},
 	_create:function()
@@ -21,6 +21,7 @@ $.widget("ibi.ibxCollapsible", $.Widget,
 			"margin-right":this.element.css("margin-right"),
 			"margin-bottom":this.element.css("margin-bottom"),
 		}
+		this.element.data("ibiIbxWidget", this);
 		this.element.on("transitionend", this._onTransitioned.bind(this))
 		$(window).on("mousedown", this._onWindowMouseDown.bind(this));
 		this.element.on("mousedown", this._onMouseDown.bind(this));
@@ -39,9 +40,16 @@ $.widget("ibi.ibxCollapsible", $.Widget,
 	},
 	_onWindowMouseDown: function (e)
 	{
+		if(this.options.autoClose && this.isOpen())
+		{
+			//close all open auto close collapsible and then let body get pointer events again.
+			$(".ibx-collapsible:autoClose").ibxCollapsible("close");
+			$("body").removeClass("body-collapsible-auto-close");
+		}
 	},
 	_onMouseDown: function (e)
 	{
+		e.stopPropagation();
 	},
 	_onTransitioned: function (e)
 	{ 
@@ -61,6 +69,8 @@ $.widget("ibi.ibxCollapsible", $.Widget,
 		{
 			this._isOpen = true;
 			this.refresh();
+			if(this.options.autoClose)
+				$("body").addClass("body-collapsible-auto-close");
 		}
 	},
 	close: function ()
@@ -92,7 +102,7 @@ $.widget("ibi.ibxCollapsible", $.Widget,
 
 		this.element.removeClass("ibx-collapsible ibx-collapsible-left-push ibx-collapsible-left-overlay ibx-collapsible-right-push ibx-collapsible-right-overlay ibx-collapsible-up-push ibx-collapsible-up-overlay ibx-collapsible-down-push ibx-collapsible-down-overlay");
 		this.element.addClass("ibx-collapsible ibx-collapsible-" + this.options.direction + "-" + this.options.mode);
-		this.options.autohide ? this.element.addClass("autohide") : this.element.removeClass("autohide");
+		this.options.autoClose ? this.element.addClass("auto-close") : this.element.removeClass("auto-close");
 	}
 });
 //# sourceURL=collapsible.ibx.js

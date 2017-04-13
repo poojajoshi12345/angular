@@ -103,7 +103,7 @@ if(jQuery)
 	jQuery.expr[":"]["autoClose"] = function(elem)
 	{
 		elem = $(elem);
-		return (elem.is(".ibx-popup")) ? elem.ibxWidget("option", "autoClose") : false;
+		return elem.ibxWidget("option", "autoClose");
 	};
 	jQuery.expr[":"]["hasSubMenu"] = function(elem)
 	{
