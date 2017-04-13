@@ -47,6 +47,7 @@ $.widget("ibi.ibxAccordionPane", $.ibi.ibxFlexBox,
 			node.ibxAccordionPage("option", "groupName", groupName);
 			this._group.ibxRadioGroup("addControl", node);
 		}
+		this.refresh();
 	},
 	_onChildRemoved:function(node, mutation)
 	{
