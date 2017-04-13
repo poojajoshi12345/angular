@@ -15,7 +15,6 @@
 .ibx-menu.ibx-menu-disabled
 {
 	opacity:1;
-	pointer-events:all;
 }
 
 /*essentially disable all the children of the menu*/

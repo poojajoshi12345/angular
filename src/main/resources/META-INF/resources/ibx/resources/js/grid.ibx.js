@@ -67,14 +67,14 @@ $.widget("ibi.ibxGrid", $.ibi.ibxWidget,
 			"grid-auto-columns":		options.autoCols,
 			"grid-template-rows":		options.rows,
 			"grid-auto-rows":			options.autoRows,
-			"grid-template-areas":		options.areas, //each line must be quoted, ex: " 'a1 a1 a1''a2 . a2''a3 . a3' "
+			"grid-template-areas":		options.areas,				//each line must be quoted, ex: " 'a1 a1 a1''a2 . a2''a3 . a3' "
 			"grid-auto-flow":			options.autoFlow,
 			"grid-column-gap":			options.colGap,
 			"grid-row-gap":				options.rowGap,
-			"justify-content":			options.justifyContent,
-			"justify-items":			options.justify,
-			"align-content":			options.alignContent,
-			"align-items":				options.align,
+			"justify-content":			options.justifyContent,		//stretch - default
+			"justify-items":			options.justify,			//stretch - default
+			"align-content":			options.alignContent,		//stretch - default
+			"align-items":				options.align,				//stretch - default
 		}
 		this.element.css(gridCss);
 		options.inline ? this.element.addClass("gd-inline") : this.element.removeClass("gd-inline");

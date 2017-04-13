@@ -3,6 +3,7 @@
 
 .ibx-popup-glass-pane
 {
+	pointer-events:all;
 	position:fixed;
 	left:0px;
 	top:0px;
@@ -15,6 +16,7 @@
 
 .ibx-popup
 {
+	pointer-events:all;
 	position:relative;
 	display:inline-block;
 	z-index:1000000;

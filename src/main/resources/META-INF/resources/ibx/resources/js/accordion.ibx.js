@@ -222,6 +222,7 @@ $.widget("ibi.ibxAccordionPage", $.ibi.ibxFlexBox,
 			this.refresh();
 			this._trigger("change");
 		}
+		return this;
 	},
 	refresh:function()
 	{
