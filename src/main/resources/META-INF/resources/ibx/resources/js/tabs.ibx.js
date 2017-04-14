@@ -200,7 +200,6 @@ $.widget("ibi.ibxTabPage", $.ibi.ibxWidget,
 	button: function () { return this._tabButton; },
 	_onPageFocus: function (e)
 	{
-		debugger;
 		this._tabButton.focus();
 	},
 	checked: function (bChecked)
