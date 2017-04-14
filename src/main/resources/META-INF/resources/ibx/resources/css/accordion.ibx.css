@@ -6,6 +6,7 @@
 	border:1px solid silver;
 	border-radius:.25em;
 	padding:.25em;
+    overflow: auto;
 }
 
 .ibx-accordion-page

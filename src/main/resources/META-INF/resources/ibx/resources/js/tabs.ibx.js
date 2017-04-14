@@ -265,6 +265,7 @@ $.widget("ibi.ibxTabGroup", $.ibi.ibxButtonGroup,
 	{
 		position: "top",
 		groupSelection: true,
+		wrap: true,
 	},
 	_create: function ()
 	{
