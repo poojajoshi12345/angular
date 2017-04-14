@@ -39,6 +39,9 @@ $.widget("ibi.ibxCollapsible", $.Widget,
 	_init:function()
 	{
 		//don't call super as close/open calls refresh
+		if(this.element.hasClass("menu-bar"))
+			var x = 10;
+		this.element.addClass("ibx-collapsible-initializing");//stop transition while initializing
 		this.options.startCollapsed ? this.close() : this.open();
 		this._onTransitionEnd();
 	},
@@ -51,6 +54,7 @@ $.widget("ibi.ibxCollapsible", $.Widget,
 	{
 		if (!this.options.disabled && this._trigger("beforeopen", null, this.element))
 		{
+			this.element.removeClass("ibx-collapsible-initializing")//first time opening...allow transitions.
 			this._isOpen = true;
 			this.refresh();
 			if(this.options.autoClose)
@@ -83,7 +87,7 @@ $.widget("ibi.ibxCollapsible", $.Widget,
 		e.stopPropagation();
 	},
 	_onTransitionEnd: function (e)
-	{ 
+	{
 		if (this.isOpen())
 		{
 			$(window).on("click", this._boundWindowMouseEvent);

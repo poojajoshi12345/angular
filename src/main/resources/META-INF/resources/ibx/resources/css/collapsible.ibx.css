@@ -16,3 +16,8 @@
 {
     transition: margin .3s;
 }
+
+.ibx-collapsible.ibx-collapsible-initializing
+{
+	transition:all 0s;
+}
