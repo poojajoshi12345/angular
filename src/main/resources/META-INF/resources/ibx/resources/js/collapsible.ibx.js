@@ -100,13 +100,12 @@ $.widget("ibi.ibxCollapsible", $.Widget,
 		var options = this.options;
 
 		this.options.autoClose ? this.element.addClass("auto-close") : this.element.removeClass("auto-close");
+		var nMargin = 0;
 		if(this.isOpen())
-			this.element.css("margin-" + options.direction, this._marginInfo["margin-" + options.direction]);
+			nMargin = this._marginInfo["margin-" + options.direction];
 		else
-		{
-			var nMargin = (options.direction == "left" || options.direction == "right") ? this.element.outerWidth(true) : this.element.outerHeight(true);
-			this.element.css("margin-" + options.direction, (nMargin * -1) + options.gap);
-		}
+			nMargin = options.gap + -1 * ((options.direction == "left" || options.direction == "right") ? this.element.outerWidth(true) : this.element.outerHeight(true));
+		this.element.css("margin-" + options.direction, nMargin);
 	}
 });
 //# sourceURL=collapsible.ibx.js

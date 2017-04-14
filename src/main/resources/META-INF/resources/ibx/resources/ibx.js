@@ -54,8 +54,11 @@ function ibx(fn, path, autoBind)
 						ibx._loaded = true;
 						ibx._isLoading = !ibx._loaded;
 						ibx._loadPromise.then(fn);
+						ibx._loadPromise.then(function()
+						{
+							$(".ibx-root").addClass("ibx-loaded");//display all ibx-roots, now that we are loaded.
+						});
 						ibx._loadPromise.resolve(ibx);//let everyone know the system is booted.
-						$(".ibx-root").addClass("ibx-loaded");//display all ibx-roots, now that we are loaded.
 					});
 				});
 			}

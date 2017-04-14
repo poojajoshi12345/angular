@@ -37,11 +37,11 @@ body
 /*hide from here down so we can load/bind ibx before showing markup...usually added to <body>*/
 .ibx-root
 {
-	display:none;
+	visibility:hidden;
 }
 .ibx-root.ibx-loaded
 {
-	display:block;
+	visibility:inherit;
 }
 
 input
