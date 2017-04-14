@@ -109,11 +109,11 @@ $.widget("ibi.ibxAccordionPage", $.ibi.ibxFlexBox,
 			justify:"start",
 			iconPosition:"right",
 			glyph:"chevron_right",
-			glyphClasses:"material-icons md-24"
+			glyphClasses:"material-icons"
 		},
 		btnOptionsOpen:
 		{
-			glyphClasses:"material-icons md-24 acc-rotate-glyph"
+			glyphClasses:"material-icons acc-rotate-glyph"
 		},
 		contentOptions:
 		{
