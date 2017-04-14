@@ -10,7 +10,6 @@ $.widget("ibi.ibxCollapsible", $.Widget,
 		"startCollapsed": false,
 		"collapsedClass": "collapsed",
 		"autoClose": false,
-		"transition":"",
 		"gap": 0,
 	},
 	_create:function()
@@ -26,7 +25,7 @@ $.widget("ibi.ibxCollapsible", $.Widget,
 		this.element.data("ibxWidget", this);
 		this.element.data("ibiIbxWidget", this);
 		this.element.addClass("ibx-collapsible");
-		this.element.on("transitionend", this._onTransitioned.bind(this))
+		this.element.on("transitionend", this._onTransitionEnd.bind(this))
 		this.element.on("click", this._onMouseEvent.bind(this));
 		this._boundWindowMouseEvent = this._onWindowMouseEvent.bind(this);
 		this._super();
@@ -41,6 +40,7 @@ $.widget("ibi.ibxCollapsible", $.Widget,
 	{
 		//don't call super as close/open calls refresh
 		this.options.startCollapsed ? this.close() : this.open();
+		this._onTransitionEnd();
 	},
 	_isOpen:false,
 	isOpen:function()
@@ -82,7 +82,7 @@ $.widget("ibi.ibxCollapsible", $.Widget,
 	{
 		e.stopPropagation();
 	},
-	_onTransitioned: function (e)
+	_onTransitionEnd: function (e)
 	{ 
 		if (this.isOpen())
 		{
@@ -98,23 +98,15 @@ $.widget("ibi.ibxCollapsible", $.Widget,
 	refresh: function ()
 	{
 		var options = this.options;
+
+		this.options.autoClose ? this.element.addClass("auto-close") : this.element.removeClass("auto-close");
 		if(this.isOpen())
-		{
 			this.element.css("margin-" + options.direction, this._marginInfo["margin-" + options.direction]);
-			this.element.addClass("open");
-		}
 		else
 		{
 			var nMargin = (options.direction == "left" || options.direction == "right") ? this.element.outerWidth(true) : this.element.outerHeight(true);
 			this.element.css("margin-" + options.direction, (nMargin * -1) + options.gap);
-			this.element.removeClass("open");
 		}
-
-		this.element.removeClass("ibx-collapsible-left-push ibx-collapsible-left-overlay ibx-collapsible-right-push ibx-collapsible-right-overlay ibx-collapsible-up-push ibx-collapsible-up-overlay ibx-collapsible-down-push ibx-collapsible-down-overlay");
-		this.element.addClass(sformat("ibx-collapsible-{1}-{2}", this.options.direction, this.options.mode));
-		this.element.css("transition", (options.transition) ? sformat("margin-{1} {2}", this.options.direction, options.transition) : "");
-		this.options.autoClose ? this.element.addClass("auto-close") : this.element.removeClass("auto-close");
-
 	}
 });
 //# sourceURL=collapsible.ibx.js
