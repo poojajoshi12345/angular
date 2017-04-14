@@ -348,10 +348,15 @@ $.widget("ibi.ibxButtonGroup", $.ibi.ibxFlexBox,
 		else
 			return null;
 	},
-	addButton: function (button)
+	addButton: function (button, before)
 	{
 		var button = $(button);
-		this.element.append(button);
+		var before = $(before);
+		if (before && this.element.has(before).length > 0)
+			button.insertBefore(before);
+		else
+			this.element.append(button);
+
 		if (this._group)
 		{
 			button.on("ibx_change", this._onSelected.bind(this))
