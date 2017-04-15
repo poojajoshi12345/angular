@@ -386,9 +386,9 @@ $.widget("ibi.ibxButtonGroup", $.ibi.ibxFlexBox,
 	_fixFirstLast: function ()
 	{
 		var all = this.element.children(".ibx-widget:not(:displayNone)").not(this._group);
-		all.removeClass('ibx-button-group-last ibx-button-group-first');
-		$(all[0]).addClass("ibx-button-group-first");
-		$(all[all.length - 1]).addClass("ibx-button-group-last");
+		all.removeClass('ibx-button-group-first ibx-button-group-last');
+		//all.first().addClass("ibx-button-group-first");
+		//all.last().addClass("ibx-button-group-last");
 	},
 	removeAll: function ()
 	{

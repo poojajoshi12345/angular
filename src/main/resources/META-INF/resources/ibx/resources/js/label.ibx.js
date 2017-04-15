@@ -61,7 +61,7 @@ $.widget("ibi.ibxLabel", $.ibi.ibxFlexBox,
 		else
 			this._icon.removeClass(this.options.iconElSpacerClass);
 		
-		if((options.glyph || options.glyphClasses) && options.text)
+		if((options.iconPosition == "left" || options.iconPosition == "right") && (options.glyph || options.glyphClasses) && options.text)
 			this._glyph.addClass(this.options.glyphElSpacerClass);
 		else
 			this._glyph.removeClass(this.options.glyphElSpacerClass);
