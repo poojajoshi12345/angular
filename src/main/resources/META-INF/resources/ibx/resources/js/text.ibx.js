@@ -18,6 +18,8 @@ $.widget("ibi.ibxTextField", $.ibi.ibxFlexBox,
 			"ctrlType": "text",
 			"forId": "",
 			"fnFormat": null,
+			"textAlign": "",
+			"textOverflow": "",
 
 			/*ibxFlexBox default options*/
 			"inline": true,
@@ -135,6 +137,14 @@ $.widget("ibi.ibxTextField", $.ibi.ibxFlexBox,
 			this._textInput.attr("required");
 		else
 			this._textInput.removeAttr("required");
+		if (this.options.textAlign)
+			this._textInput.css("text-align", this.options.textAlign);
+		else
+			this._textInput.css("text-align", "");
+		if (this.options.textOverflow)
+			this._textInput.css("text-overflow", this.options.textOverflow);
+		else
+			this._textInput.css("text-overflow", "");
 	}
 });
 //# sourceURL=text.ibx.js

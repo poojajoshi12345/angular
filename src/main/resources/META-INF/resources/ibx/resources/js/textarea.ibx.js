@@ -14,6 +14,7 @@ $.widget("ibi.ibxTextArea", $.ibi.ibxFlexBox,
 			"wrap": "",
 			"forId": "",
 			"fnFormat": null,
+			"textAlign": "",
 
 			/*ibxFlexBox default options*/
 			"inline": true,
@@ -139,6 +140,10 @@ $.widget("ibi.ibxTextArea", $.ibi.ibxFlexBox,
 			this._textInput.attr("wrap", this.options.wrap);
 		else
 			this._textInput.removeAttr("wrap");
+		if (this.options.textAlign)
+			this._textInput.css("text-align", this.options.textAlign);
+		else
+			this._textInput.css("text-align", "");
 	}
 });
 //# sourceURL=textarea.ibx.js
