@@ -49,12 +49,19 @@ $.widget("ibi.ibxTabPane", $.ibi.ibxFlexBox,
 		if (node.is(".ibx-tab-page"))
 		{
 			node.css("flex", "1 1 auto").addClass("tpg-hidden").on("keydown", this._onPageKeyDown.bind(this));
-			var next = node.next('.ibx-tab-page');
-			if (next.length > 0)
-				next = next.ibxWidget('button');
+			var button = node.ibxWidget('button');
+			var nextPage = node.next('.ibx-tab-page');
+			if (nextPage.length > 0)
+			{
+				nextButton = nextPage.ibxWidget('button');
+				if ($.contains(this._tabBar[0], nextButton[0]))
+					button.insertBefore(nextButton);
+				else
+					this._tabBar.append(button);
+			}
 			else
-				next = null;
-			this._tabBar.ibxTabGroup("addButton", node.ibxWidget('button'), next);
+				this._tabBar.append(button);
+			button.removeClass("ibx-button-group-member");
 		}
 		this.refresh();
 	},
@@ -270,12 +277,6 @@ $.widget("ibi.ibxTabGroup", $.ibi.ibxButtonGroup,
 	_create: function ()
 	{
 		this._super();
-	},
-	addButton: function (button, before)
-	{
-		this._super(button, before);
-		var button = $(button);
-		button.removeClass("ibx-button-group-member");
 	},
 	_fixFirstLast: function ()
 	{

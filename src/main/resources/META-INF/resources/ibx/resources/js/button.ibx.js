@@ -260,6 +260,7 @@ $.widget("ibi.ibxButtonGroup", $.ibi.ibxFlexBox,
 	_group: null,
 	_create: function ()
 	{
+		this._onSelectedBound = this._onSelected.bind(this);
 		this._super();
 		if (!this.options.name)
 		{
@@ -269,10 +270,40 @@ $.widget("ibi.ibxButtonGroup", $.ibi.ibxFlexBox,
 			this.options.name = this.element.attr("id");
 		}
 		this.element.on("keydown", this._onKeyDown.bind(this));
+		this.element.ibxMutationObserver(
+		{
+			listen: true,
+			fnAddedNodes: this._onChildAdded.bind(this),
+			fnRemovedNodes: this._onChildRemoved.bind(this),
+			init: { childList: true }
+		});
 	},
 	_destroy: function ()
 	{
 		this._super();
+	},
+	_onChildAdded: function (node, mutation)
+	{
+		node = $(node);
+		if (this._group && node.is('.ibx-button, .ibx-check-box'))
+		{
+			node.on("ibx_change", this._onSelectedBound)
+			node.addClass("ibx-button-group-member");
+			node.ibxWidget('option', 'group', this.options.name);
+			this._group.ibxWidget('addControl', node);
+		}
+		this.refresh();
+	},
+	_onChildRemoved: function (node, mutation)
+	{
+		node = $(node);
+		if (this._group && node.is('.ibx-button, .ibx-check-box'))
+		{
+			node.off("ibx_change", this._onSelectedBound)
+			node.removeClass("ibx-button-group-member");
+			this._group.ibxWidget('removeControl', node);
+		}
+		this.refresh();
 	},
 	_createGroupSelection: function ()
 	{
@@ -327,6 +358,7 @@ $.widget("ibi.ibxButtonGroup", $.ibi.ibxFlexBox,
 		}
 		e.preventDefault();
 	},
+	_onSelectedBound: null,
 	_onSelected: function (e)
 	{
 		this._trigger("selected", null, this.element);
@@ -348,54 +380,12 @@ $.widget("ibi.ibxButtonGroup", $.ibi.ibxFlexBox,
 		else
 			return null;
 	},
-	addButton: function (button, before)
-	{
-		var button = $(button);
-		var before = $(before);
-		if (before && this.element.has(before).length > 0)
-			button.insertBefore(before);
-		else
-			this.element.append(button);
-
-		if (this._group)
-		{
-			button.on("ibx_change", this._onSelected.bind(this))
-			button.addClass("ibx-button-group-member");
-			button.ibxWidget('option', 'group', this.options.name);
-			this._group.ibxWidget('addControl', button);
-		}
-		this._fixFirstLast();
-	},
-	removeButton: function (button)
-	{
-		if (typeof (button) == "number")
-		{
-			var all = this.element.children(".ibx-widget").not(this._group);
-			if (button < 0 || button > all.length - 1)
-				return;
-			else
-				button = $(all[button]);
-		}
-		else
-			button = $(button);
-		if (this._group)
-			this._group.ibxWidget('removeControl', button);
-		button.remove();
-		this._fixFirstLast();
-	},
 	_fixFirstLast: function ()
 	{
 		var all = this.element.children(".ibx-widget:not(:displayNone)").not(this._group);
 		all.removeClass('ibx-button-group-first ibx-button-group-last');
 		all.first().addClass("ibx-button-group-first");
 		all.last().addClass("ibx-button-group-last");
-	},
-	removeAll: function ()
-	{
-		this.element.children(".ibx-widget").not(this._group).each(function (idx, el)
-		{
-			this.removeButton(el);
-		}.bind(this));
 	},
 	refresh: function ()
 	{

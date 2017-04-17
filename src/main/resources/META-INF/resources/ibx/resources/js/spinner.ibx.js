@@ -32,7 +32,9 @@ $.widget("ibi.ibxSpinner", $.ibi.ibxTextField,
 		var options = this.options;
 		this._btnUp = $("<div tabIndex='0'>").ibxButton().on("mousedown mouseup mouseout", this._onBtnEvent.bind(this)).addClass(options.btnUpClass);
 		this._btnDown = $("<div tabIndex='0'>").ibxButton().on("mousedown mouseup mouseout", this._onBtnEvent.bind(this)).addClass(options.btnDownClass);
-		this._btnBox = $("<div>").ibxVButtonGroup().ibxWidget("addButton", this._btnUp).ibxWidget("addButton", this._btnDown).addClass(options.btnGroupClass);
+		this._btnBox = $("<div>").ibxVButtonGroup().addClass(options.btnGroupClass);
+		this._btnBox.append(this._btnUp);
+		this._btnBox.append(this._btnDown);
 		this._textInput.addClass("ibx-spinner-text-input");
 		this.element.on("ibx_textchanging", this._onTextChanging.bind(this)).append(this._btnBox);
 		this._textInput.css('width', '1px');
