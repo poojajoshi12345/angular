@@ -26,18 +26,23 @@ $.widget("ibi.ibxSpinner", $.ibi.ibxTextField,
 	_widgetClass:"ibx-spinner",
 	_create:function()
 	{
-		this._inCreate = true;
 		this._super();
-		this._inCreate = false;
-		var options = this.options;
-		this._btnUp = $("<div tabIndex='0'>").ibxButton().on("mousedown mouseup mouseout", this._onBtnEvent.bind(this)).addClass(options.btnUpClass);
-		this._btnDown = $("<div tabIndex='0'>").ibxButton().on("mousedown mouseup mouseout", this._onBtnEvent.bind(this)).addClass(options.btnDownClass);
-		this._btnBox = $("<div>").ibxVButtonGroup().addClass(options.btnGroupClass);
+		this._btnUp = $("<div tabIndex='0'>").ibxButton().on("mousedown mouseup mouseout", this._onBtnEvent.bind(this));
+		this._btnDown = $("<div tabIndex='0'>").ibxButton().on("mousedown mouseup mouseout", this._onBtnEvent.bind(this));
+		this._btnBox = $("<div>").ibxVButtonGroup();
 		this._btnBox.append(this._btnUp);
 		this._btnBox.append(this._btnDown);
 		this._textInput.addClass("ibx-spinner-text-input");
 		this.element.on("ibx_textchanging", this._onTextChanging.bind(this)).append(this._btnBox);
 		this._textInput.css('width', '1px');
+	},
+	_init: function ()
+	{
+		this._super();
+		var options = this.options;
+		this._btnUp.addClass(options.btnUpClass);
+		this._btnDown.addClass(options.btnDownClass);
+		this._btnBox.addClass(options.btnGroupClass);
 		if (options.value > options.max)
 			options.value = options.max;
 		if (options.value < options.min)
@@ -45,7 +50,7 @@ $.widget("ibi.ibxSpinner", $.ibi.ibxTextField,
 		options.value = this._adjustStep(options.value, options.min, options.max, options.step);
 		this._setValue(options.value, true);
 	},
-	_destroy:function()
+	_destroy: function ()
 	{
 		this._super();
 	},
@@ -83,8 +88,6 @@ $.widget("ibi.ibxSpinner", $.ibi.ibxTextField,
 	},
 	_setValue: function (value, bFormat)
 	{
-		if (this._inCreate)
-			return;
 		this.options.value = parseInt(value, 10);
 		this.options.text = bFormat && this.options.fnFormat ? this.options.fnFormat(value) : value;
 		this.refresh();

@@ -31,14 +31,23 @@ $.widget("ibi.ibxSlider", $.ibi.ibxLabel,
 		this.element.on("mousedown", this._fnSliderMouseEvent);
 		this._slider.on("keydown", this._onSliderKeyDown.bind(this));
 
+		window.setTimeout(this._initSlider.bind(this), 1);
+	},
+	_init: function ()
+	{
+		this._super();
 		var options = this.options;
 		if (options.value < options.min)
 			options.value = options.min;
 		if (options.value > options.max)
 			options.value = options.max;
 		options.value = this._adjustStep(options.value, options.min, options.max, options.step);
-
-		window.setTimeout(this._initSlider.bind(this), 1);
+	},
+	_initSlider: function ()
+	{
+		this._setValue("" + this.options.value, this._getInfo());
+		this.refresh();
+		this._slider.show();
 	},
 	_setValue: function (value, data)
 	{
@@ -46,12 +55,6 @@ $.widget("ibi.ibxSlider", $.ibi.ibxLabel,
 		this.refresh();
 		this._trigger("change", null, data);
 		this._trigger("set_form_value", null, { "elem": this.element, "value": value });
-	},
-	_initSlider: function ()
-	{
-		this._setValue("" + this.options.value, this._getInfo());
-		this.refresh();
-		this._slider.show();
 	},
 	_activeSlider: null,
 	_focusSlider: function (e)
