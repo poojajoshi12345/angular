@@ -54,7 +54,8 @@ $.widget("ibi.ibxCollapsible", $.Widget,
 	{
 		if (!this.options.disabled && this._trigger("beforeopen", null, this.element))
 		{
-			this.element.removeClass("ibx-collapsible-initializing")//first time opening...allow transitions.
+			//remove the initializing class that stops transitions. Could be done just first time, but really doesn't matter to do it every time
+			this.element.removeClass("ibx-collapsible-initializing")
 			this._isOpen = true;
 			this.refresh();
 			if(this.options.autoClose)
