@@ -159,7 +159,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 		ctxEvent.type = "ibx_ctxmenu";
 
 		var ret = this.element.trigger(ctxEvent);
-		if(ctxEvent.isDefaultPrevented() || (!this.options.ctxMenu || !this.element.is(e.currentTarget)))
+		if(ctxEvent.isDefaultPrevented() || !this.element.is(e.currentTarget))
 			return;
 
 		ctxMenu = ctxEvent.result || $(this.options.ctxMenu);
