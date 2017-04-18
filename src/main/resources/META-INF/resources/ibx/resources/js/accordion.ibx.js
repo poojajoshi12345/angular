@@ -168,8 +168,18 @@ $.widget("ibi.ibxAccordionPage", $.ibi.ibxFlexBox,
 	{
 		this._super();
 		this.element.children(":not(.ibx-accordion-button, .ibx-accordion-page-content)").detach().appendTo(this.element);
+		this.element.on("transitionend", this._onTransitionEnd.bind(this))
 	},
-	_onChildAdded:function(node, mutation)
+	_onTransitionEnd: function (e)
+	{
+		if (e.originalEvent.propertyName == "max-height")
+		{
+			// remove max-height at the end of the transition, so the page's content can grow as needed.
+			// max-height is really used just for animation when page closed/opened.
+			this._content.css("max-height", "");
+		}
+	},
+	_onChildAdded: function (node, mutation)
 	{
 		node = $(node);
 		if(!node.is(this._content) && !node.is(this._button))
@@ -234,7 +244,11 @@ $.widget("ibi.ibxAccordionPage", $.ibi.ibxFlexBox,
 		//DO NOT MOVE THIS, MUST BE DONE BEFORE CLASS ADJUSTMENTS BELOW!
 		//add max-height first, so transition will work when acc-cnt-closed is removed.
 		var nHeight = this._content.prop("scrollHeight")
-		this._content.css("max-height", selected ? nHeight+"px" : "");
+		this._content.css("max-height", nHeight + "px");
+		// THIS WILL FORCE A BROSER REFLOW, so setting max-height to 0px down bellow, will trigger the animation.
+		this.element[0].offsetHeight;
+		if (!selected)
+			this._content.css("max-height", "");
 		this._content.ibxWidget("option", "disabled", !selected);
 
 		//DO NOT MOVE THIS, MUST BE DONE AFTER HEIGHT ADJUSTMENT ABOVE!
