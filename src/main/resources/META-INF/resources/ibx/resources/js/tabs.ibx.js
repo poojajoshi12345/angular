@@ -61,7 +61,6 @@ $.widget("ibi.ibxTabPane", $.ibi.ibxFlexBox,
 			}
 			else
 				this._tabBar.append(button);
-			button.removeClass("ibx-button-group-member");
 		}
 		this.refresh();
 	},
@@ -251,6 +250,7 @@ $.widget("ibi.ibxTabButton", $.ibi.ibxRadioButton,
 	refresh: function ()
 	{
 		this._super();
+		this.element.removeClass("ibx-button-group-member");
 		var tabPage = this.options.tabPage || $();
 		if (this.options.checked)
 		{
