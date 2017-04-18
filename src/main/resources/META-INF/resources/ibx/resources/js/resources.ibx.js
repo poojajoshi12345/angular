@@ -215,9 +215,13 @@ _p.loadBundle = function(xDoc, xhr)
 	return bundleLoaded;
 };
 
-_p.getResource = function(selector, ibxBind)
+_p.getResource = function(selector, ibxBind, forceCreate)
 {
-	var resource = this._rootBundle.find(selector);
+	//first, has the resource been loaded...and do we want it, or create a new instance
+	var resource = $(selector);
+	if(forceCreate || !resource.length)
+		resource = this._rootBundle.find(selector);
+
 	if(!resource.length)
 		throw(sformat("ibxResourceMgr failed to find resrouce: {1}", selector));
 
