@@ -53,8 +53,7 @@
 .sel-selected:not(.ibx-select-check-item):not(.ibx-select-radio-item),
 .sel-selected:not(.ibx-select-check-item):not(.ibx-select-radio-item):hover,
 .sel-selected:not(.ibx-select-check-item):not(.ibx-select-radio-item):focus{
-    background-color:#39f;
-    color: white;
+    background-color:#ccc;
 }
 
 .sel-selected.ibx-select-check-item, 

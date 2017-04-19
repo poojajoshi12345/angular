@@ -41,7 +41,7 @@ $Revision$:-->
 		<style-file src="./resources/css/select.ibx.css"/>
 		<style-file src="./resources/css/base.ibx.css"/>
 		<style-sheet name="">
-			<![CDATA[
+		<![CDATA[
 		]]>
 		</style-sheet>
 	</styles>
@@ -50,7 +50,7 @@ $Revision$:-->
 	<strings>
 		<string-file src="./resources/strings/strings.en.ibx.txt"/>
 		<string-bundle>
-			<![CDATA[
+		<![CDATA[
 		]]>
 		</string-bundle>
 	</strings>
@@ -93,7 +93,7 @@ $Revision$:-->
 		<script-file src="./resources/js/gridstack.ibx.js"/>
 		<script-file src="./resources/js/select.ibx.js"/>
 		<script-block name="">
-			<![CDATA[
+		<![CDATA[
 		]]>
 		</script-block>
 	</scripts>
