@@ -253,7 +253,7 @@
 .ibx-double-listbox:before {
   content: "\e93b";
 }
-.ibx-button-group:before {
+.ibx-btn-group:before {
   content: "\e93c";
 }
 .ibx-slider:before {
