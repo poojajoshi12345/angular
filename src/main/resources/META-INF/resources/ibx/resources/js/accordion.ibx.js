@@ -118,7 +118,6 @@ $.widget("ibi.ibxAccordionPage", $.ibi.ibxFlexBox,
 		},
 		contentOptions:
 		{
-			mutationObserver:true
 		},
 
 		optionsMap:

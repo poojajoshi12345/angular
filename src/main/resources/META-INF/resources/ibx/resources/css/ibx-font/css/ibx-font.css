@@ -1,0 +1,264 @@
+﻿/*Copyright 1996-2016 Information Builders, Inc. All rights reserved.*/
+/* $Revision$: */
+
+@font-face {
+	font-family: 'ibx Icons';
+	font-weight: normal;
+	font-style: normal;
+	src: url('../fonts/ibx-font.eot');
+	src: url('../fonts/ibx-font.eot') format('embedded-opentype'),
+         url('../fonts/ibx-font.woff') format('woff'),
+         url('../fonts/ibx-font.ttf') format('truetype'),
+         url('../fonts/ibx-font.svg') format('svg');
+}
+
+.ibx-icons{
+	font-family: 'ibx Icons';
+	font-weight: normal;
+	font-style: normal;
+	font-size:24px;
+	display:inline-block;
+	line-height:1;
+	text-transform:none;
+	letter-spacing:normal;
+	word-wrap:normal;
+	white-space:nowrap;
+	direction:ltr;
+
+	/* Support for all WebKit browsers. */
+	-webkit-font-smoothing: antialiased;
+	/* Support for Safari and Chrome. */
+	text-rendering: optimizeLegibility;
+
+	/* Support for Firefox. */
+	-moz-osx-font-smoothing: grayscale;
+
+	/* Support for IE. */
+	font-feature-settings: 'liga';
+}
+
+.ibx-camera:before {
+  content: "\e91c";
+}
+.ibx-popout:before {
+  content: "\e91b";
+}
+.ibx-arrow_upward:before {
+  content: "\e90d";
+}
+.ibx-arrow_forward:before {
+  content: "\e90e";
+}
+.ibx-arrow_downward:before {
+  content: "\e90f";
+}
+.ibx-arrow_back:before {
+  content: "\e915";
+}
+.ibx-folder-upload:before {
+  content: "\e917";
+}
+.ibx-database:before {
+  content: "\e919";
+}
+.ibx-books:before {
+  content: "\e91a";
+}
+.ibx-download:before {
+  content: "\e90c";
+}
+.ibx-new-database:before {
+  content: "\e910";
+}
+.ibx-new-page:before {
+  content: "\e913";
+}
+.ibx-new-chart:before {
+  content: "\e911";
+}
+.ibx-new-visualization:before {
+  content: "\e914";
+}
+.ibx-new-table:before {
+  content: "\e912";
+}
+.ibx-clear-canvas:before {
+  content: "\e944";
+}
+.ibx-lasso:before {
+  content: "\e918";
+}
+.ibx-panel-properties:before {
+  content: "\e90a";
+}
+.ibx-panel-menu:before {
+  content: "\e916";
+}
+.ibx-panel-properties-hover:before {
+  content: "\e90b";
+}
+.ibx-cell-merge:before {
+  content: "\e925";
+}
+.ibx-cell-split:before {
+  content: "\e92a";
+}
+.ibx-row-insert-after:before {
+  content: "\e92c";
+}
+.ibx-row-insert-before:before {
+  content: "\e92b";
+}
+.ibx-label-top:before {
+  content: "\e927";
+}
+.ibx-label-left:before {
+  content: "\e928";
+}
+.ibx-label-right:before {
+  content: "\e929";
+}
+.ibx-label-none:before {
+  content: "\e926";
+}
+.ibx-filter-bar:before {
+  content: "\e922";
+}
+.ibx-filter-modal:before {
+  content: "\e923";
+}
+.ibx-panel-hidden:before {
+  content: "\e909";
+}
+.ibx-dimension:before {
+  content: "\e91e";
+}
+.ibx-calculation:before {
+  content: "\e920";
+}
+.ibx-measure:before {
+  content: "\e91f";
+}
+.ibx-widget-save-as:before {
+  content: "\e900";
+}
+.ibx-layer:before {
+  content: "\e903";
+}
+.ibx-select-square:before {
+  content: "\e904";
+}
+.ibx-select-poly:before {
+  content: "\e905";
+}
+.ibx-clear-square:before {
+  content: "\e906";
+}
+.ibx-select-radial:before {
+  content: "\e907";
+}
+.ibx-zoom-layer:before {
+  content: "\e908";
+}
+.ibx-panel-add:before {
+  content: "\e91d";
+}
+.ibx-times:before {
+  content: "\e921";
+}
+.ibx-preview:before {
+  content: "\e924";
+}
+.ibx-floppy:before {
+  content: "\e92d";
+}
+.ibx-arrow-left:before {
+  content: "\e92e";
+}
+.ibx-arrow-right:before {
+  content: "\e93f";
+}
+.ibx-save:before {
+  content: "\e943";
+}
+.ibx-bold:before {
+  content: "\e945";
+}
+.ibx-italic:before {
+  content: "\e946";
+}
+.ibx-underline:before {
+  content: "\e947";
+}
+.ibx-align-left:before {
+  content: "\e949";
+}
+.ibx-align-center:before {
+  content: "\e94a";
+}
+.ibx-align-right:before {
+  content: "\e94b";
+}
+.ibx-rotate:before {
+  content: "\e942";
+}
+.ibx-file-visualization:before {
+  content: "\e941";
+}
+.ibx-recent:before {
+  content: "\e940";
+}
+.ibx-panel:before {
+  content: "\e92f";
+}
+.ibx-panel-no-header:before {
+  content: "\e930";
+}
+.ibx-panel-tab:before {
+  content: "\e931";
+}
+.ibx-panel-accordion:before {
+  content: "\e932";
+}
+.ibx-panel-slider:before {
+  content: "\e933";
+}
+.ibx-panel-slideout:before {
+  content: "\e934";
+}
+.ibx-panel-accordion-filter:before {
+  content: "\e935";
+}
+.ibx-panel-easy-selector:before {
+  content: "\e936";
+}
+.ibx-panel-filter:before {
+  content: "\e937";
+}
+.ibx-grid-three-column:before {
+  content: "\e938";
+}
+.ibx-circle-up:before {
+  content: "\e901";
+}
+.ibx-circle-right:before {
+  content: "\e902";
+}
+.ibx-dropdown:before {
+  content: "\e939";
+}
+.ibx-listbox:before {
+  content: "\e93a";
+}
+.ibx-double-listbox:before {
+  content: "\e93b";
+}
+.ibx-button-group:before {
+  content: "\e93c";
+}
+.ibx-slider:before {
+  content: "\e93d";
+}
+.ibx-slider-range:before {
+  content: "\e93e";
+}

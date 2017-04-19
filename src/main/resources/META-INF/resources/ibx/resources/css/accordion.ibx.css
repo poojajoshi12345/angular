@@ -38,7 +38,7 @@
 .ibx-accordion-page-content
 {
 	flex: 1 1 auto;
-	overflow:auto;
+	overflow:hidden;
 	opacity:1;
 	transition:opacity .3s, max-height .3s ease-in-out;
 }

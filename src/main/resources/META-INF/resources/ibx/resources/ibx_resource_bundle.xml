@@ -17,6 +17,9 @@ $Revision$:-->
 		<style-file src="./resources/etc/gridstack/gridstack.css"/>
 		<style-file src="./resources/etc/material-icons/iconfont/material-icons.css"/>
 		<style-file src="./resources/etc/font-awesome/css/font-awesome.css"/>
+
+		<style-file src="./resources/css/ibx-font/css/ibx-font.css"/>
+
 		<style-file src="./resources/css/base.ibx.css"/>
 		<style-file src="./resources/css/widget.ibx.css"/>
 		<style-file src="./resources/css/collapsible.ibx.css"/>
