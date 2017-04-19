@@ -34,6 +34,10 @@
 {
 	background-color: #eee;
 }
+.ibx-accordion-button.acc-btn-hide
+{
+	display:none;
+}
 
 .ibx-accordion-page-content
 {

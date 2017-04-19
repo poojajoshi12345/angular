@@ -103,6 +103,7 @@ $.widget("ibi.ibxAccordionPage", $.ibi.ibxFlexBox,
 		align:"stretch",
 		wrap:false,
 		selected:false,
+		btnShow:true,
 		btnPosition:"start",
 		btnOptions:
 		{
@@ -250,6 +251,7 @@ $.widget("ibi.ibxAccordionPage", $.ibi.ibxFlexBox,
 		//set the button options and also its position
 		opts = $.extend({}, this.options.btnOptions, selected ? options.btnOptionsOpen : null);
 		this._button.ibxButton("option", opts).css("order", (options.btnPosition == "end") ? 1 : -1);
+		options.btnShow ? this._button.removeClass("acc-btn-hide") : this._button.addClass("acc-btn-hide");
 
 		//DO NOT MOVE THIS, MUST BE DONE BEFORE CLASS ADJUSTMENTS BELOW!
 		//Here's what's going on here...we need to set the max-height so the transition effect will work
