@@ -103,6 +103,7 @@ $.widget("ibi.ibxAccordionPage", $.ibi.ibxFlexBox,
 		align:"stretch",
 		wrap:false,
 		selected:false,
+		btnPosition:"start",
 		btnOptions:
 		{
 			text:"Accordion Page",
@@ -191,11 +192,12 @@ $.widget("ibi.ibxAccordionPage", $.ibi.ibxFlexBox,
 	getValue:$.noop,
 	checked:function(checked)
 	{
-		return this.selected(checked);
+		
+		return (this.options.autoClose) ? this.selected(checked) : this;
 	},
 	_onBtnChange:function(e)
 	{
-		this.checked(!this.options.selected);
+		this.selected(!this.options.selected);
 	},
 	_onPageFocus:function(e)
 	{
@@ -230,7 +232,9 @@ $.widget("ibi.ibxAccordionPage", $.ibi.ibxFlexBox,
 		{
 			this.options.selected = selected;
 			this.refresh();
-			this._trigger("change");
+			this._trigger( selected ? "open" : "close");
+			if(this.options.autoClose)
+				this._trigger("change");
 		}
 		return this;
 	},
@@ -240,23 +244,27 @@ $.widget("ibi.ibxAccordionPage", $.ibi.ibxFlexBox,
 		var options = this.options;
 		var selected = options.selected;
 
+		//disable the content, if desired
+		this._content.ibxWidget("option", "disabled", !selected);
+
+		//set the button options and also its position
+		opts = $.extend({}, this.options.btnOptions, selected ? options.btnOptionsOpen : null);
+		this._button.ibxButton("option", opts).css("order", (options.btnPosition == "end") ? 1 : -1);
+
 		//DO NOT MOVE THIS, MUST BE DONE BEFORE CLASS ADJUSTMENTS BELOW!
-		//add max-height first, so transition will work when acc-cnt-closed is removed.
+		//Here's what's going on here...we need to set the max-height so the transition effect will work
+		//when the 'closed' css class is added/removed below.
+		//THE CALL TO 'offsetHeight' will force the browser to reflow the document.
 		var nHeight = this._content.prop("scrollHeight")
 		this._content.css("max-height", nHeight + "px");
-		// THIS WILL FORCE A BROSER REFLOW, so setting max-height to 0px down bellow, will trigger the animation.
 		this.element[0].offsetHeight;
 		if (!selected)
 			this._content.css("max-height", "");
-		this._content.ibxWidget("option", "disabled", !selected);
 
 		//DO NOT MOVE THIS, MUST BE DONE AFTER HEIGHT ADJUSTMENT ABOVE!
 		selected ? this.element.removeClass("acc-pg-closed") : this.element.addClass("acc-pg-closed");
 		selected ? this._button.removeClass("acc-btn-closed") : this._button.addClass("acc-btn-closed");
 		selected ? this._content.removeClass("acc-cnt-closed") : this._content.addClass("acc-cnt-closed");
-
-		opts = $.extend({}, this.options.btnOptions, selected ? options.btnOptionsOpen : null);
-		this._button.ibxButton("option", opts);
 	}
 });
 $.ibi.ibxAccordionPage.statics = 
