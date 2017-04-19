@@ -21,7 +21,7 @@ $.widget("ibi.ibxLabel", $.ibi.ibxFlexBox,
 		/*ibxFlexBox default options*/
 		"inline":true,
 		"wrap":"false",
-		"justify":"center",
+		"justify":"left",
 		"align":"center",
 	},
 	_widgetClass:"ibx-label",
