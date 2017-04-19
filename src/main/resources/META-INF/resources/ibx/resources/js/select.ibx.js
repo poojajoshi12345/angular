@@ -19,6 +19,17 @@ $.widget("ibi.ibxSelect", $.ibi.ibxTextField,
 	_create: function ()
 	{
 		this._super();
+		this.element.ibxMutationObserver(
+		{
+			listen: true,
+			fnAddedNodes: this._onChildAdded.bind(this),
+			fnRemovedNodes: this._onChildRemoved.bind(this),
+			init: { childList: true }
+		});
+	},
+	_init: function ()
+	{
+		this._super();
 		if (this._isDropDown())
 		{
 			this.options.wrap = false;
@@ -42,17 +53,6 @@ $.widget("ibi.ibxSelect", $.ibi.ibxTextField,
 				this._textInput.on('click', this._onTextClick.bind(this));
 		}
 		this._createPopup();
-		this.element.ibxMutationObserver(
-		{
-			listen: true,
-			fnAddedNodes: this._onChildAdded.bind(this),
-			fnRemovedNodes: this._onChildRemoved.bind(this),
-			init: { childList: true }
-		});
-	},
-	_init: function ()
-	{
-		this._super();
 		this.element.children(".ibx-menu-item, .ibx-select-group").detach().appendTo(this.element);
 	},
 	_onChildAdded: function (node, mutation)
