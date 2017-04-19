@@ -36,7 +36,7 @@ function ibx(fn, path, autoBind)
 			if(window.$)
 			{
 				//save the current inline head style block so they can be moved after all ibx loaded css files.
-				var styles = $("head > style").detach();
+				//var styles = $("head > style").detach();
 
 				//jquery is loaded...stop polling and continue bootstrapping ibx...
 				window.clearInterval(ibx._loadTimer);
@@ -60,7 +60,7 @@ function ibx(fn, path, autoBind)
 						ibx._loadPromise.then(fn);
 						ibx._loadPromise.then(function()
 						{
-							$("head").append(styles);//append the inline style blocks back to end of head.
+							//$("head").append(styles);//append the inline style blocks back to end of head.
 							$(".ibx-root").addClass("ibx-loaded");//display all ibx-roots, now that we are loaded.
 						});
 						ibx._loadPromise.resolve(ibx);//let everyone know the system is booted.
