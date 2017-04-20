@@ -54,6 +54,7 @@ $.widget("ibi.ibxSelect", $.ibi.ibxTextField,
 		}
 		this._createPopup();
 		this.element.children(".ibx-menu-item, .ibx-select-group").detach().appendTo(this.element);
+		this.refresh();
 	},
 	_onChildAdded: function (node, mutation)
 	{
@@ -485,7 +486,7 @@ $.widget("ibi.ibxSelect", $.ibi.ibxTextField,
 		switch (this.options.type)
 		{
 			default:
-				this._textInput.prop("readonly", false);
+				this._textInput.prop("readonly", this.options.readonly);
 				break;
 
 			case "drop-down-list":
