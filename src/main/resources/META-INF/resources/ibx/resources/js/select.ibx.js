@@ -273,6 +273,7 @@ $.widget("ibi.ibxSelect", $.ibi.ibxTextField,
 		var menuItem = this._isDropDown() ? $(e.originalEvent.target) : $(e.originalEvent.currentTarget);
 
 		var bKeepAnchor = (e.originalEvent.type == 'ibx_menu_item_click' && e.originalEvent.keepAnchor);
+		var bSynthetic = (e.originalEvent.type == 'ibx_menu_item_click' && e.originalEvent.synthetic);
 		if (e.originalEvent.shiftKey)
 		{
 			bKeepAnchor = true;
@@ -329,7 +330,7 @@ $.widget("ibi.ibxSelect", $.ibi.ibxTextField,
 			this._setSelection(menuItem, false, false);
 		}
 
-		if (this.options.multiSelect)
+		if (this.options.multiSelect || bSynthetic)
 			e.preventDefault();
 
 	},
@@ -646,6 +647,7 @@ $.ibi.ibxSelectItem.statics =
 		event.ctrlKey = e.ctrlKey;
 		event.shiftKey = e.shiftKey;
 		event.keepAnchor = e.shiftKey;
+		event.synthetic = true;
 
 		if (e.keyCode == 38)//up
 		{
