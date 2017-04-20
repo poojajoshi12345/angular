@@ -193,7 +193,6 @@ $.widget("ibi.ibxAccordionPage", $.ibi.ibxFlexBox,
 	getValue:$.noop,
 	checked:function(checked)
 	{
-		console.log(this.options.btnOptions.text, this.options.autoClose);
 		return (this.options.autoClose) ? this.selected(checked) : this;
 	},
 	_onBtnChange:function(e)

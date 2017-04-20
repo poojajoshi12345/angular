@@ -506,7 +506,8 @@ $.widget("ibi.ibxSelect", $.ibi.ibxTextField,
 $.widget("ibi.ibxComboBox", $.ibi.ibxSelect, {options:{type:"drop-down-combo"}});
 $.widget("ibi.ibxComboBoxSimple", $.ibi.ibxSelect, {options:{type:"combo"}});
 $.widget("ibi.ibxListBox", $.ibi.ibxSelect, {options:{type:"drop-down-list"}});
-$.widget("ibi.ibxListBoxSimple", $.ibi.ibxSelect, {options:{type:"list"}});
+$.widget("ibi.ibxListBoxSimple", $.ibi.ibxComboBoxSimple, {options:{readonly:true}});
+$.widget("ibi.ibxList", $.ibi.ibxSelect, {options:{type:"list"}});
 
 $.ibi.ibxSelect.statics =
 {
