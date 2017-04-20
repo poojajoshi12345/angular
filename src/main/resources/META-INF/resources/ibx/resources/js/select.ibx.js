@@ -6,6 +6,7 @@ $.widget("ibi.ibxSelect", $.ibi.ibxTextField,
 	options:
 		{
 			// accepted values: "drop-down-combo" (default), "combo", "drop-down-list", "list"
+			"btnShow": true,
 			"type": "drop-down-combo",
 			"userValue": "",
 			"multiSelect": false,
@@ -497,6 +498,8 @@ $.widget("ibi.ibxSelect", $.ibi.ibxTextField,
 				this._textInput.prop("readonly", true);
 				break;
 		}
+		if (this._dropButton)
+			this.options.btnShow ? this._dropButton.show() : this._dropButton.hide();
 		this.element.removeClass('ibx-select-type-combo ibx-select-type-list ibx-select-type-drop-down-combo ibx-select-type-drop-down-list');
 		switch (this.options.type)
 		{
