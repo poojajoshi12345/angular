@@ -83,8 +83,8 @@ $.widget("ibi.ibxAccordionPane", $.ibi.ibxFlexBox,
 		this._group.ibxRadioGroup("selected", this.options.selected);
 	}
 });
-$.widget("ibi.ibxHAccordionPane", $.ibi.ibxAccordionPane, {options:{direction:"row",wrap:false}, _widgetClass:"ibx-accordion-horizontal"});
-$.widget("ibi.ibxVAccordionPane", $.ibi.ibxAccordionPane, {options:{direction:"column",wrap:false}, _widgetClass:"ibx-accordion-vertical"});
+$.widget("ibi.ibxHAccordionPane", $.ibi.ibxAccordionPane, {options:{direction:"row"}, _widgetClass:"ibx-accordion-pane-horizontal"});
+$.widget("ibi.ibxVAccordionPane", $.ibi.ibxAccordionPane, {options:{direction:"column"}, _widgetClass:"ibx-accordion-pane-vertical"});
 $.ibi.ibxAccordionPane.statics = 
 {
 };
@@ -268,6 +268,8 @@ $.widget("ibi.ibxAccordionPage", $.ibi.ibxFlexBox,
 		selected ? this._content.removeClass("acc-cnt-closed") : this._content.addClass("acc-cnt-closed");
 	}
 });
+$.widget("ibi.ibxHAccordionPage", $.ibi.ibxAccordionPage, {options:{direction:"row"}, _widgetClass:"ibx-accordion-page-horizontal"});
+$.widget("ibi.ibxVAccordionPage", $.ibi.ibxAccordionPage, {options:{direction:"column"}, _widgetClass:"ibx-accordion-page-vertical"});
 $.ibi.ibxAccordionPage.statics = 
 {
 };
