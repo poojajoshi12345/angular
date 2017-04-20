@@ -34,7 +34,7 @@ $.widget("ibi.ibxTextField", $.ibi.ibxFlexBox,
 		this._super();
 		this._textInput = $('<input class="ibx-default-ctrl-focus" type="' + this.options.ctrlType + '"></input>');
 		this.element.append(this._textInput);
-		this._textInput.on("blur", this._onBlur.bind(this)).on("input", this._onInput.bind(this)).on("keydown", this._onKeyDown.bind(this));
+		this._textInput.on("blur", this._onBlur.bind(this)).on("focus", this._onFocus.bind(this)).on("input", this._onInput.bind(this)).on("keydown", this._onKeyDown.bind(this));
 		this._setValue(this.options.text, true);
 	},
 	_setValue: function (value, bFormat)
@@ -48,9 +48,15 @@ $.widget("ibi.ibxTextField", $.ibi.ibxFlexBox,
 	{
 		this._textInput.select();
 	},
+	_onFocus: function ()
+	{
+		this._focusVal = this.options.text;
+	},
 	_onBlur: function ()
 	{
-		this._setValue(this._textInput.val(), true);
+		var newVal = this._textInput.val();
+		if (newVal != this._focusVal)
+			this._setValue(newVal, true);
 	},
 	_onKeyDown: function (e)
 	{
@@ -70,7 +76,7 @@ $.widget("ibi.ibxTextField", $.ibi.ibxFlexBox,
 		var value = this._textInput.val();
 		if (this.options.text != value)
 		{
-			this._setValue(value);
+			this.options.text = value;
 			this._trigger("textchanged", e, this.element);
 		}
 	},

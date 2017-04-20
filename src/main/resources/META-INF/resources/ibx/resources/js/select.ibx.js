@@ -360,7 +360,7 @@ $.widget("ibi.ibxSelect", $.ibi.ibxTextField,
 		this._trigger("change", null, this.element);
 		this._trigger("set_form_value", null, { "elem": this.element, "value": this._getUserValue() });
 	},
-	_setSelection: function (menuItem, bKeep, bKeepAnchor, bNoUpdate)
+	_setSelection: function (menuItem, bKeep, bKeepAnchor, bNoUpdate, bNoChange)
 	{
 		var menuItem = $(menuItem);
 		if (menuItem.hasClass('ibx-select-check-item'))
@@ -389,8 +389,11 @@ $.widget("ibi.ibxSelect", $.ibi.ibxTextField,
 		this._list.find('.sel-selected.ibx-select-check-item').each(function (index, el) { $(el).data('ibxWidget')._setOption('checked', true); })
 		if (!bNoUpdate)
 			this._updateText();
-		this._trigger("change", null, this.element);
-		this._trigger("set_form_value", null, { "elem": this.element, "value": this._getUserValue() });
+		if (!bNoChange)
+		{
+			this._trigger("change", null, this.element);
+			this._trigger("set_form_value", null, { "elem": this.element, "value": this._getUserValue() });
+		}
 	},
 	_getUserValue: function ()
 	{
@@ -438,7 +441,7 @@ $.widget("ibi.ibxSelect", $.ibi.ibxTextField,
 			{
 				if (0 == $(el).data('ibxWidget').option('text').toLowerCase().indexOf(searchText))
 				{
-					this._setSelection(el, false, false, true);
+					this._setSelection(el, false, false, true, true);
 					bFound = true;
 					return false;
 				}
@@ -446,7 +449,7 @@ $.widget("ibi.ibxSelect", $.ibi.ibxTextField,
 		}
 		if (!bFound)
 		{
-			this._setSelection(null, false, false, true);
+			this._setSelection(null, false, false, true, true);
 		}
 	},
 	_openPopup: function ()
@@ -504,11 +507,11 @@ $.widget("ibi.ibxSelect", $.ibi.ibxTextField,
 		}
 	}
 });
-$.widget("ibi.ibxComboBox", $.ibi.ibxSelect, {options:{type:"drop-down-combo"}});
-$.widget("ibi.ibxComboBoxSimple", $.ibi.ibxSelect, {options:{type:"combo"}});
-$.widget("ibi.ibxListBox", $.ibi.ibxSelect, {options:{type:"drop-down-list"}});
-$.widget("ibi.ibxListBoxSimple", $.ibi.ibxComboBoxSimple, {options:{readonly:true}});
-$.widget("ibi.ibxList", $.ibi.ibxSelect, {options:{type:"list"}});
+$.widget("ibi.ibxComboBox", $.ibi.ibxSelect, { options: { type: "drop-down-combo" }, _widgetClass: "ibx-combo-box" });
+$.widget("ibi.ibxComboBoxSimple", $.ibi.ibxSelect, { options: { type: "combo" }, _widgetClass: "ibx-combo-box-simple" });
+$.widget("ibi.ibxListBox", $.ibi.ibxSelect, { options: { type: "drop-down-list" }, _widgetClass: "ibx-list-box" });
+$.widget("ibi.ibxListBoxSimple", $.ibi.ibxComboBoxSimple, { options: { readonly: true }, _widgetClass: "ibx-combo-box-simple" });
+$.widget("ibi.ibxList", $.ibi.ibxSelect, { options: { type: "list" }, _widgetClass: "ibx-list" });
 
 $.ibi.ibxSelect.statics =
 {
