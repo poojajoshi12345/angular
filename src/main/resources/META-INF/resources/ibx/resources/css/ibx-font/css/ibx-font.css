@@ -256,9 +256,9 @@
 .ibx-btn-group:before {
   content: "\e93c";
 }
-.ibx-slider:before {
+.ibx-slider-char:before {
   content: "\e93d";
 }
-.ibx-slider-range:before {
+.ibx-slider-range-char:before {
   content: "\e93e";
 }
