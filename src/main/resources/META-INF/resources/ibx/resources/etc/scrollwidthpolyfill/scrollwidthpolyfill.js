@@ -108,7 +108,7 @@ var polyScrollWidth = (function (document, window) {
               var csKeys = Object.keys(computedStyles.__proto__);
               csKeys.forEach(function(prop) {
                   initStyle[prop] = computedStyles[prop];
-              })
+              });
               el.style = initStyle;
           }
           
