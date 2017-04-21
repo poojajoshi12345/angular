@@ -59,11 +59,20 @@ $.widget("ibi.ibxTextField", $.ibi.ibxFlexBox,
 		var scrollWidth;
 		this._textInput.css('min-width', '0px');
 		if (val.length == 0)
-			this._textInput.val(this._textInput.prop('placeholder'));
-		var scrollWidth = this._textInput[0].scrollWidth;
-		if (val.length == 0)
-			this._textInput.val("");
-		this._textInput.css('min-width', scrollWidth + "px");
+		{
+			var placeholder = this._textInput.prop('placeholder');
+			if (placeholder.length == 0)
+				scrollWidth = "10em";
+			else
+			{
+				this._textInput.val(placeholder);
+				scrollWidth = this._textInput[0].scrollWidth + "px";
+				this._textInput.val("");
+			}
+		}
+		else
+			scrollWidth = this._textInput[0].scrollWidth + "px";
+		this._textInput.css('min-width', scrollWidth);
 	},
 	_onFocus: function ()
 	{
