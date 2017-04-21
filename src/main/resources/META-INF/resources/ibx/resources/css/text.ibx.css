@@ -9,6 +9,7 @@
 }
 
 .ibx-text-field > input {
+	color:inherit;
     border-bottom: 1px solid #ccc;
 }
 
