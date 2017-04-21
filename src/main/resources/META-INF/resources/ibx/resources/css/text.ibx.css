@@ -8,6 +8,10 @@
     min-width: 0px;
 }
 
+.ibx-text-field.txt-auto-size input {
+    flex: 0 0 auto;
+}
+
 .ibx-text-field > input {
 	color:inherit;
     border-bottom: 1px solid #ccc;

@@ -6,7 +6,15 @@
     border: 1px solid #ccc;
     background-color: white;
     padding: 0.2em;
-	width:15em;
+	width:10em;
+}
+
+.ibx-select.txt-auto-size {
+    width: auto;
+}
+
+.ibx-select input {
+	width:10em;
 }
 
 .ibx-select > .ibx-button {

@@ -6,6 +6,7 @@ $.widget("ibi.ibxTextField", $.ibi.ibxFlexBox,
 	options:
 		{
 			"text": "",
+			"autoSize": false,
 			"readonly": false,
 			"size": 0,
 			"maxlength": 0,
@@ -35,6 +36,11 @@ $.widget("ibi.ibxTextField", $.ibi.ibxFlexBox,
 		this.element.append(this._textInput);
 		this._textInput.on("blur", this._onBlur.bind(this)).on("focus", this._onFocus.bind(this)).on("input", this._onInput.bind(this)).on("keydown", this._onKeyDown.bind(this));
 		this._setValue(this.options.text, true);
+		this.element.on("ibx_change", function (e)
+		{
+			if (this.options.autoSize)
+				this._setAutoSize();
+		}.bind(this));
 	},
 	_setValue: function (value, bFormat)
 	{
@@ -46,6 +52,18 @@ $.widget("ibi.ibxTextField", $.ibi.ibxFlexBox,
 	selectAll: function ()
 	{
 		this._textInput.select();
+	},
+	_setAutoSize: function ()
+	{
+		var val = this._textInput.val();
+		var scrollWidth;
+		this._textInput.css('min-width', '0px');
+		if (val.length == 0)
+			this._textInput.val(this._textInput.prop('placeholder'));
+		var scrollWidth = this._textInput[0].scrollWidth;
+		if (val.length == 0)
+			this._textInput.val("");
+		this._textInput.css('min-width', scrollWidth + "px");
 	},
 	_onFocus: function ()
 	{
@@ -150,6 +168,13 @@ $.widget("ibi.ibxTextField", $.ibi.ibxFlexBox,
 			this._textInput.css("text-overflow", this.options.textOverflow);
 		else
 			this._textInput.css("text-overflow", "");
+		if (this.options.autoSize)
+		{
+			this.element.addClass('txt-auto-size');
+			this._setAutoSize();
+		}
+		else
+			this.element.removeClass('txt-auto-size');
 	}
 });
 //# sourceURL=text.ibx.js
