@@ -173,8 +173,7 @@ $.widget("ibi.ibxSelect", $.ibi.ibxTextField,
 				if (itemUserValue == value && this.options.userValue != itemUserValue)
 				{
 					this.options.userValue = itemUserValue;
-					$(el).trigger("click");
-					return true;
+					return false;
 				}
 			}.bind(this));
 			return this;
