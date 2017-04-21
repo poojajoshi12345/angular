@@ -22,79 +22,17 @@
 			<jsp:include page="/WEB-INF/jsp/global/wf_globals.jsp" flush="false" />
 			ibx(function()
 			{
-				$(".add-bucket").on("click", function(e)
+				ibxResourceMgr.addBundle("./test_res_bundle.xml").done(function(e)
 				{
-					var fieldBucket = $("<div>").mzFieldBucket();
-					$(".field-buckets").append(fieldBucket);
-				});
-
-				$.widget("ibi.mzFieldBucket", $.ibi.ibxGrid, 
-				{
-					options:
+					$(".add-bucket").on("click", function(e)
 					{
-						nameRoot:true,
-						inline:true,
-						cols:"auto 1fr auto",
-						rows:"auto auto",
-					},
-					_widgetClass:"mz-field-bucket",
-					_create:function()
-					{
-						this._super();
-						var markup = $(".field-bucket-res").children().clone(true);
-						this.element.append(markup);
-						this.element.find("[data-ibx-no-bind]").removeAttr("data-ibx-no-bind");
-						ibx.bindElements(this.element);
-						this._deleteBucket.on("click", this.deleteBucket.bind(this));
-					},
-					_destroy:function()
-					{
-						this._super();
-					},
-					deleteBucket:function(e)
-					{
-						this.element.remove();
-					},
-					refresh:function()
-					{
-						this._super();
-					}
+						var fieldBucket = $("<div>").mzFieldBucket();
+						fieldBucket.appendTo(".field-buckets").ibxWidget("refresh");
+					});
 				});
 			}, applicationContext + "/ibx/", ".ibx-root");
 		</script>
 		<style type="text/css">
-			.mz-field-bucket
-			{
-				color:#888;
-			}
-			.mz-fb-how-sort:hover
-			{
-				color:black;
-			}
-			.mz-fb-how-aggregate
-			{
-			}
-			.mz-fb-delete-bucket
-			{
-				font-size:1.5em;
-				color:transparent;
-			}
-			.mz-fb-delete-bucket:hover
-			{
-				color:red;
-			}
-			
-			.mz-fb-select
-			{
-				padding:0px;
-				border:none;
-				width:150px;
-			}
-			.mz-fb-select-field
-			{
-				color:black;
-				font-size:1.5em;
-			}
 		</style>
 
 		<style type="text/css">
@@ -139,40 +77,6 @@
 					<div class="field-buckets" data-ibx-type="ibxHBox">
 					</div>
 					<div class="add-bucket" data-ibx-type="ibxLabel" data-ibxp-glyph="add_box" data-ibxp-glyph-classes="material-icons md-48"></div>
-				</div>
-			</div>
-		</div>
-
-		<div data-ibx-no-bind="true" class="field-bucket-res" style="display:none">
-			<div class="mz-fb-how-sort" data-ibx-name="_howSort" data-ibx-type="ibxLabel" data-ibx-col="1" data-ibx-row="1/span 2" data-ibxp-glyph="swap_vert" data-ibxp-glyph-classes="material-icons md-24"></div>
-			<div class="mz-fb-how-aggregate mz-fb-select" data-ibx-name="_howAggregate" data-ibx-type="ibxListBox" data-ibx-col="2" data-ibx-row="1" data-ibxp-btn-show="false">
-				<div data-ibx-type="ibxSelectItem" data-ibxp-text="Summary" data-ibxp-selected="true"></div>
-				<div data-ibx-type="ibxSelectItem" data-ibxp-text="Average"></div>
-				<div data-ibx-type="ibxSelectItem" data-ibxp-text="Maximum"></div>
-				<div data-ibx-type="ibxSelectItem" data-ibxp-text="Minimum"></div>
-			</div>
-			<div class="mz-fb-delete-bucket" data-ibx-name="_deleteBucket" data-ibx-type="ibxLabel" data-ibx-col="3" data-ibx-row="1" data-ibxp-glyph="highlight_off" data-ibxp-glyph-classes="material-icons"></div>
-			<div class="mz-fb-select-field mz-fb-select" data-ibx-name="_fieldSelector" data-ibx-type="ibxListBox" data-ibx-col="2/span 2" data-ibx-row="2" data-ibxp-btn-show="false" data-ibxp-placeholder="Select Field...">
-				<div data-ibx-type="ibxSelectGroup" data-ibxp-text="Group 1">
-					<div data-ibx-type="ibxSelectItem" data-ibxp-text="a b c"></div>
-					<div data-ibx-type="ibxSelectItem" data-ibxp-text="aa bb cc"></div>
-					<div data-ibx-type="ibxSelectItem" data-ibxp-text="aaa bbb ccc"></div>
-					<div data-ibx-type="ibxSelectItem" data-ibxp-text="aaaa bbbb cccc"></div>
-					<div data-ibx-type="ibxSelectItem" data-ibxp-text="aaaaa bbbbb ccccc"></div>
-				</div>
-				<div data-ibx-type="ibxSelectGroup" data-ibxp-text="Group 2">
-					<div data-ibx-type="ibxSelectItem" data-ibxp-text="a b c"></div>
-					<div data-ibx-type="ibxSelectItem" data-ibxp-text="aa bb cc"></div>
-					<div data-ibx-type="ibxSelectItem" data-ibxp-text="aaa bbb ccc"></div>
-					<div data-ibx-type="ibxSelectItem" data-ibxp-text="aaaa bbbb cccc"></div>
-					<div data-ibx-type="ibxSelectItem" data-ibxp-text="aaaaa bbbbb ccccc"></div>
-				</div>
-				<div data-ibx-type="ibxSelectGroup" data-ibxp-text="Group 3">
-					<div data-ibx-type="ibxSelectItem" data-ibxp-text="a b c"></div>
-					<div data-ibx-type="ibxSelectItem" data-ibxp-text="aa bb cc"></div>
-					<div data-ibx-type="ibxSelectItem" data-ibxp-text="aaa bbb ccc"></div>
-					<div data-ibx-type="ibxSelectItem" data-ibxp-text="aaaa bbbb cccc"></div>
-					<div data-ibx-type="ibxSelectItem" data-ibxp-text="aaaaa bbbbb ccccc"></div>
 				</div>
 			</div>
 		</div>
