@@ -84,11 +84,11 @@
 				color:red;
 			}
 			
-			.mz-field-bucket .mz-fb-select
+			.mz-fb-select
 			{
 				padding:0px;
 				border:none;
-				width:100px;
+				width:150px;
 			}
 			.mz-fb-select-field
 			{
@@ -153,11 +153,27 @@
 			</div>
 			<div class="mz-fb-delete-bucket" data-ibx-name="_deleteBucket" data-ibx-type="ibxLabel" data-ibx-col="3" data-ibx-row="1" data-ibxp-glyph="highlight_off" data-ibxp-glyph-classes="material-icons"></div>
 			<div class="mz-fb-select-field mz-fb-select" data-ibx-name="_fieldSelector" data-ibx-type="ibxListBox" data-ibx-col="2/span 2" data-ibx-row="2" data-ibxp-btn-show="false" data-ibxp-placeholder="Select Field...">
-				<div data-ibx-type="ibxSelectItem" data-ibxp-text="a b c"></div>
-				<div data-ibx-type="ibxSelectItem" data-ibxp-text="aa bb cc"></div>
-				<div data-ibx-type="ibxSelectItem" data-ibxp-text="aaa bbb ccc"></div>
-				<div data-ibx-type="ibxSelectItem" data-ibxp-text="aaaa bbbb cccc"></div>
-				<div data-ibx-type="ibxSelectItem" data-ibxp-text="aaaaa bbbbb ccccc"></div>
+				<div data-ibx-type="ibxSelectGroup" data-ibxp-text="Group 1">
+					<div data-ibx-type="ibxSelectItem" data-ibxp-text="a b c"></div>
+					<div data-ibx-type="ibxSelectItem" data-ibxp-text="aa bb cc"></div>
+					<div data-ibx-type="ibxSelectItem" data-ibxp-text="aaa bbb ccc"></div>
+					<div data-ibx-type="ibxSelectItem" data-ibxp-text="aaaa bbbb cccc"></div>
+					<div data-ibx-type="ibxSelectItem" data-ibxp-text="aaaaa bbbbb ccccc"></div>
+				</div>
+				<div data-ibx-type="ibxSelectGroup" data-ibxp-text="Group 2">
+					<div data-ibx-type="ibxSelectItem" data-ibxp-text="a b c"></div>
+					<div data-ibx-type="ibxSelectItem" data-ibxp-text="aa bb cc"></div>
+					<div data-ibx-type="ibxSelectItem" data-ibxp-text="aaa bbb ccc"></div>
+					<div data-ibx-type="ibxSelectItem" data-ibxp-text="aaaa bbbb cccc"></div>
+					<div data-ibx-type="ibxSelectItem" data-ibxp-text="aaaaa bbbbb ccccc"></div>
+				</div>
+				<div data-ibx-type="ibxSelectGroup" data-ibxp-text="Group 3">
+					<div data-ibx-type="ibxSelectItem" data-ibxp-text="a b c"></div>
+					<div data-ibx-type="ibxSelectItem" data-ibxp-text="aa bb cc"></div>
+					<div data-ibx-type="ibxSelectItem" data-ibxp-text="aaa bbb ccc"></div>
+					<div data-ibx-type="ibxSelectItem" data-ibxp-text="aaaa bbbb cccc"></div>
+					<div data-ibx-type="ibxSelectItem" data-ibxp-text="aaaaa bbbbb ccccc"></div>
+				</div>
 			</div>
 		</div>
 	</body>
