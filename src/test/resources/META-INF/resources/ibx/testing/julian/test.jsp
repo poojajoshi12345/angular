@@ -22,16 +22,44 @@
 			<jsp:include page="/WEB-INF/jsp/global/wf_globals.jsp" flush="false" />
 			ibx(function()
 			{
-				$(".select-field, .select").on("ibx_change", function(e)
+				$(".add-bucket").on("click", function(e)
 				{
-					var select = $(e.target);
-					var txt = select.find("input");
-
-					//txt.css({"width": "0px"});
-					var width = txt.prop("scrollWidth");
-					txt.css({"width": width + "px"});
+					var fieldBucket = $("<div>").mzFieldBucket();
+					$(".field-buckets").append(fieldBucket);
 				});
 
+				$.widget("ibi.mzFieldBucket", $.ibi.ibxGrid, 
+				{
+					options:
+					{
+						nameRoot:true,
+						inline:true,
+						cols:"auto 1fr auto",
+						rows:"auto auto"
+					},
+					_widgetClass:"mz-field-bucket",
+					_create:function()
+					{
+						this._super();
+						var markup = $(".field-bucket-res").children().clone(true);
+						this.element.append(markup);
+						this.element.find("[data-ibx-no-bind]").removeAttr("data-ibx-no-bind");
+						ibx.bindElements(this.element);
+						this._deleteBucket.on("click", this.deleteBucket.bind(this));
+					},
+					_destroy:function()
+					{
+						this._super();
+					},
+					deleteBucket:function(e)
+					{
+						this.element.remove();
+					},
+					refresh:function()
+					{
+						this._super();
+					}
+				});
 			}, applicationContext + "/ibx/", true);
 		</script>
 
@@ -119,97 +147,36 @@
 		</style>
 	</head>
 	<body class="ibx-root">
-
-		<div class="select" data-ibx-type="ibxListBox" data-ibxp-justify="start" data-ibxp-btn-show="false" data-ibxp-placeholder="Select Test...">
-			<div data-ibx-type="ibxSelectItem" data-ibxp-text="aaa"></div>
-			<div data-ibx-type="ibxSelectItem" data-ibxp-text="aaa aaa"></div>
-			<div data-ibx-type="ibxSelectItem" data-ibxp-text="aaa aaa aaa"></div>
-			<div data-ibx-type="ibxSelectItem" data-ibxp-text="sdfasdf asdfasdf"></div>
-			<div data-ibx-type="ibxSelectItem" data-ibxp-text="MODsdfaasdfsadfasdfasdfEL"></div>
-			<div data-ibx-type="ibxSelectItem" data-ibxp-text="Masasdfasdf as a asdfasdf sdODEL"></div>
-			<div data-ibx-type="ibxSelectItem" data-ibxp-text="MOasdfaasd  asdfsd asdf asdf asdf asdf as fDEL"></div>
-		</div>
-
-
-
 		<div class="query-box" data-ibx-type="ibxHBox" data-ibxp-align="stretch">
-			<div class="bucket-container" data-ibx-type="ibxVBox">
+			<div class="bucket-container" data-ibx-no-bind="true" data-ibx-type="ibxVBox">
 				<div class="bucket-label" data-ibx-type="ibxLabel" data-ibxp-text="Measures"></div>
 				<div class="bucket-content" data-ibx-type="ibxHBox" data-ibxp-align="center">
-					<div class="buckets" data-ibx-type="ibxHBox">
-						<div class="field-bucket" data-ibx-type="ibxGrid" data-ibxp-inline="true" data-ibxp-cols="auto 1fr auto" data-ibxp-rows="auto auto">
-							<div class="sort-field" data-ibx-type="ibxLabel" data-ibx-col="1" data-ibx-row="1/span 2" data-ibxp-glyph="swap_vert" data-ibxp-glyph-classes="material-icons md-24"></div>
-							<div class="aggregate-field" data-ibx-type="ibxListBox" data-ibx-col="2" data-ibx-row="1" data-ibxp-btn-show="false">
-								<div data-ibx-type="ibxSelectItem" data-ibxp-text="Summary" data-ibxp-selected="true"></div>
-								<div data-ibx-type="ibxSelectItem" data-ibxp-text="Average"></div>
-								<div data-ibx-type="ibxSelectItem" data-ibxp-text="Maximum"></div>
-								<div data-ibx-type="ibxSelectItem" data-ibxp-text="Minimum"></div>
-							</div>
-							<div class="clear-field" data-ibx-type="ibxLabel" data-ibx-col="3" data-ibx-row="1" data-ibxp-glyph="highlight_off" data-ibxp-glyph-classes="material-icons"></div>
-							<div class="select-field" data-ibx-type="ibxListBox" data-ibx-col="2/span 2" data-ibx-row="2" data-ibxp-btn-show="false" data-ibxp-placeholder="Select Field...">
-								<div data-ibx-type="ibxSelectItem" data-ibxp-text="COUNTRY"></div>
-								<div data-ibx-type="ibxSelectItem" data-ibxp-text="CAR"></div>
-								<div data-ibx-type="ibxSelectItem" data-ibxp-text="MODEL"></div>
-								<div data-ibx-type="ibxSelectItem" data-ibxp-text="asdasdfasdf"></div>
-								<div data-ibx-type="ibxSelectItem" data-ibxp-text="MODsdfaasdfsadfasdfasdfEL"></div>
-								<div data-ibx-type="ibxSelectItem" data-ibxp-text="MasdODEL"></div>
-								<div data-ibx-type="ibxSelectItem" data-ibxp-text="MOasdfasd asdf asdf asdf asdf as fDEL"></div>
-							</div>
-						</div>
+					<div class="field-buckets" data-ibx-type="ibxHBox">
 					</div>
 					<div class="add-bucket" data-ibx-type="ibxLabel" data-ibxp-glyph="add_box" data-ibxp-glyph-classes="material-icons md-48"></div>
 				</div>
 			</div>
 		</div>
 
+		<div data-ibx-no-bind="true" class="field-bucket-res" style="display:none">
+			<div data-ibx-no-bind="true" class="sort-field" data-ibx-name="_howSort" data-ibx-type="ibxLabel" data-ibx-col="1" data-ibx-row="1/span 2" data-ibxp-glyph="swap_vert" data-ibxp-glyph-classes="material-icons md-24"></div>
+			<div data-ibx-no-bind="true" class="aggregate-field" data-ibx-name="_howAggregate" data-ibx-type="ibxListBox" data-ibx-col="2" data-ibx-row="1" data-ibxp-btn-show="false">
+				<div data-ibx-no-bind="true" data-ibx-type="ibxSelectItem" data-ibxp-text="Summary" data-ibxp-selected="true"></div>
+				<div data-ibx-no-bind="true" data-ibx-type="ibxSelectItem" data-ibxp-text="Average"></div>
+				<div data-ibx-no-bind="true" data-ibx-type="ibxSelectItem" data-ibxp-text="Maximum"></div>
+				<div data-ibx-no-bind="true" data-ibx-type="ibxSelectItem" data-ibxp-text="Minimum"></div>
+			</div>
+			<div data-ibx-no-bind="true" class="clear-field" data-ibx-name="_deleteBucket" data-ibx-type="ibxLabel" data-ibx-col="3" data-ibx-row="1" data-ibxp-glyph="highlight_off" data-ibxp-glyph-classes="material-icons"></div>
+			<div data-ibx-no-bind="true" class="select-field" data-ibx-name="_fieldSelectord" data-ibx-type="ibxListBox" data-ibx-col="2/span 2" data-ibx-row="2" data-ibxp-btn-show="false" data-ibxp-placeholder="Select Field...">
+				<div data-ibx-no-bind="true" data-ibx-type="ibxSelectItem" data-ibxp-text="COUNTRY"></div>
+				<div data-ibx-no-bind="true" data-ibx-type="ibxSelectItem" data-ibxp-text="CAR"></div>
+				<div data-ibx-no-bind="true" data-ibx-type="ibxSelectItem" data-ibxp-text="MODEL"></div>
+				<div data-ibx-no-bind="true" data-ibx-type="ibxSelectItem" data-ibxp-text="asdasdfasdf"></div>
+				<div data-ibx-no-bind="true" data-ibx-type="ibxSelectItem" data-ibxp-text="MODsdfaasdfsadfasdfasdfEL"></div>
+				<div data-ibx-no-bind="true" data-ibx-type="ibxSelectItem" data-ibxp-text="MasdODEL"></div>
+				<div data-ibx-no-bind="true" data-ibx-type="ibxSelectItem" data-ibxp-text="MOasdfasd asdf asdf asdf asdf as fDEL"></div>
+			</div>
+		</div>
 	</body>
 </html>
 
-<!--
-		<div class="field-bucket" data-ibx-type="ibxGrid" data-ibxp-inline="true" data-ibxp-cols="auto 1fr auto" data-ibxp-rows="auto auto">
-			<div class="sort-field" data-ibx-type="ibxLabel" data-ibx-col="1" data-ibx-row="1/span 2" data-ibxp-glyph="swap_vert" data-ibxp-glyph-classes="material-icons md-24"></div>
-			<div class="aggregate-field" data-ibx-type="ibxLabel" data-ibx-col="2" data-ibx-row="1" data-ibxp-text="Sum of"></div>
-			<div class="clear-field" data-ibx-type="ibxLabel" data-ibx-col="3" data-ibx-row="1" data-ibxp-glyph="clear" data-ibxp-glyph-classes="material-icons"></div>
-			<div class="select-field" data-ibx-type="ibxListBox" data-ibx-col="2/span 2" data-ibx-row="2" data-ibxp-placeholder="Select Field...">
-				<div data-ibx-type="ibxSelectItem" data-ibxp-text="COUNTRY"></div>
-				<div data-ibx-type="ibxSelectItem" data-ibxp-text="CAR"></div>
-				<div data-ibx-type="ibxSelectItem" data-ibxp-text="asdasdfasdf"></div>
-				<div data-ibx-type="ibxSelectItem" data-ibxp-text="MODsdfaasdfsadfasdfasdfEL"></div>
-				<div data-ibx-type="ibxSelectItem" data-ibxp-text="MasdODEL"></div>
-				<div data-ibx-type="ibxSelectItem" data-ibxp-text="MOasdfasd asdf asdf asdf asdf as fDEL"></div>
-			</div>
-		</div>
-
-
-
-		 <div data-ibx-type="ibxComboBox" data-ibxp-inline="true" data-ibxp-placeholder="ibxComboBox"> 
-               <div data-ibx-type="ibxSelectItem" data-ibxp-text="Item1"></div> 
-               <div data-ibx-type="ibxSelectItem" data-ibxp-text="Item2"></div> 
-               <div data-ibx-type="ibxSelectItem" data-ibxp-text="Item3"></div> 
-               <div data-ibx-type="ibxSelectItem" data-ibxp-text="Item4"></div> 
-          </div> 
-          <div data-ibx-type="ibxComboBoxSimple" data-ibxp-inline="true" data-ibxp-placeholder="ibxComboBoxSimple"> 
-               <div data-ibx-type="ibxSelectItem" data-ibxp-text="Item1"></div> 
-               <div data-ibx-type="ibxSelectItem" data-ibxp-text="Item2"></div> 
-               <div data-ibx-type="ibxSelectItem" data-ibxp-text="Item3"></div> 
-               <div data-ibx-type="ibxSelectItem" data-ibxp-text="Item4"></div> 
-          </div> 
-          <div data-ibx-type="ibxListBox" data-ibxp-inline="true" data-ibxp-placeholder="ibxListBox"> 
-               <div data-ibx-type="ibxSelectItem" data-ibxp-text="Item1"></div> 
-               <div data-ibx-type="ibxSelectItem" data-ibxp-text="Item2"></div> 
-               <div data-ibx-type="ibxSelectItem" data-ibxp-text="Item3"></div> 
-               <div data-ibx-type="ibxSelectItem" data-ibxp-text="Item4"></div> 
-          </div> 
-          <div data-ibx-type="ibxListBoxSimple" data-ibxp-inline="true" data-ibxp-placeholder="ibxListBoxSimple"> 
-               <div data-ibx-type="ibxSelectItem" data-ibxp-text="Item1"></div> 
-               <div data-ibx-type="ibxSelectItem" data-ibxp-text="Item2"></div> 
-               <div data-ibx-type="ibxSelectItem" data-ibxp-text="Item3"></div> 
-               <div data-ibx-type="ibxSelectItem" data-ibxp-text="Item4"></div> 
-          </div> 
-          <div data-ibx-type="ibxList" data-ibxp-inline="true"> 
-               <div data-ibx-type="ibxSelectItem" data-ibxp-text="Item1"></div> 
-               <div data-ibx-type="ibxSelectItem" data-ibxp-text="Item2"></div> 
-               <div data-ibx-type="ibxSelectItem" data-ibxp-text="Item3"></div> 
-               <div data-ibx-type="ibxSelectItem" data-ibxp-text="Item4"></div> 
-          </div> 
--->
