@@ -59,7 +59,7 @@
 					<div data-ibx-type="ibxSelectItem" data-ibxp-text="Minimum" data-ibxp-user-value="min"></div>
 				</div>
 				<div class="mz-fb-delete-bucket" data-ibx-name="_deleteBucket" data-ibx-type="ibxLabel" data-ibx-col="3" data-ibx-row="1" data-ibxp-glyph="highlight_off" data-ibxp-glyph-classes="material-icons"></div>
-				<div class="mz-fb-select-field mz-fb-select" data-ibx-name="_fieldSelector" data-ibx-type="ibxListBox" data-ibx-col="2/span 2" data-ibx-row="2" data-ibxp-auto-size="true" data-ibxp-btn-show="false" data-ibxp-placeholder="Select Field...">
+				<div class="mz-fb-select-field mz-fb-select" data-ibx-name="_fieldSelector" data-ibx-type="ibxListBoxSimple" data-ibx-col="2/span 2" data-ibx-row="2" data-ibxp-auto-size="true" data-ibxp-btn-show="false" data-ibxp-placeholder="Select Field...">
 					<div data-ibx-type="ibxSelectGroup" data-ibxp-text="Group 1">
 						<div data-ibx-type="ibxSelectItem" data-ibxp-text="a b c" data-ibxp-user-value="abc"></div>
 						<div data-ibx-type="ibxSelectItem" data-ibxp-text="aa bb cc" data-ibxp-user-value="aabbcc"></div>
@@ -106,22 +106,21 @@
 				},
 				deleteBucket:function(e)
 				{
-					this.element.remove();
+					//this.element.remove();
 				},
 				_onSortChange:function(e)
 				{
-					this._setOption("howSort", this._howSort.ibxWidget("checked") ? "ascending" : "descending");
-					this.refresh();
+					//this._setOption("howSort", this._howSort.ibxWidget("checked") ? "ascending" : "descending");
+					//this.refresh();
 				},
 				_onAggregateChange:function(e)
 				{
-					this._setOption("howAggregate", this._howAggregate.ibxWidget("userValue"));
-					this.refresh();
+					//this._setOption("howAggregate", this._howAggregate.ibxWidget("userValue"));
+					//this.refresh();
 				},
 				_onFieldChange:function(e)
 				{
 					this._setOption("fieldName", this._fieldSelector.ibxWidget("userValue"));
-					//this.refresh();
 				},
 				refresh:function()
 				{
