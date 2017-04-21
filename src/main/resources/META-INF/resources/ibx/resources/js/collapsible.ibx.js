@@ -104,7 +104,7 @@ $.widget("ibi.ibxCollapsible", $.Widget,
 	{
 		var options = this.options;
 
-		this.options.autoClose ? this.element.addClass("auto-close") : this.element.removeClass("auto-close");
+		options.autoClose ? this.element.addClass("auto-close") : this.element.removeClass("auto-close");
 		var nMargin = 0;
 		if(this.isOpen())
 			nMargin = this._marginInfo["margin-" + options.direction];

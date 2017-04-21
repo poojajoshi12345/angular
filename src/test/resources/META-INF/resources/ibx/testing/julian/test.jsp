@@ -60,7 +60,7 @@
 						this._super();
 					}
 				});
-			}, applicationContext + "/ibx/", true);
+			}, applicationContext + "/ibx/", ".ibx-root");
 		</script>
 		<style type="text/css">
 			.mz-field-bucket
@@ -133,7 +133,7 @@
 	</head>
 	<body class="ibx-root">
 		<div class="query-box" data-ibx-type="ibxHBox" data-ibxp-align="stretch">
-			<div class="bucket-container" data-ibx-no-bind="true" data-ibx-type="ibxVBox">
+			<div class="bucket-container" data-ibx-type="ibxVBox">
 				<div class="bucket-label" data-ibx-type="ibxLabel" data-ibxp-text="Measures"></div>
 				<div class="bucket-content" data-ibx-type="ibxHBox" data-ibxp-align="center">
 					<div class="field-buckets" data-ibx-type="ibxHBox">
@@ -144,20 +144,20 @@
 		</div>
 
 		<div data-ibx-no-bind="true" class="field-bucket-res" style="display:none">
-			<div data-ibx-no-bind="true" class="mz-fb-how-sort" data-ibx-name="_howSort" data-ibx-type="ibxLabel" data-ibx-col="1" data-ibx-row="1/span 2" data-ibxp-glyph="swap_vert" data-ibxp-glyph-classes="material-icons md-24"></div>
-			<div data-ibx-no-bind="true" class="mz-fb-how-aggregate mz-fb-select" data-ibx-name="_howAggregate" data-ibx-type="ibxListBox" data-ibx-col="2" data-ibx-row="1" data-ibxp-btn-show="false">
-				<div data-ibx-no-bind="true" data-ibx-type="ibxSelectItem" data-ibxp-text="Summary" data-ibxp-selected="true"></div>
-				<div data-ibx-no-bind="true" data-ibx-type="ibxSelectItem" data-ibxp-text="Average"></div>
-				<div data-ibx-no-bind="true" data-ibx-type="ibxSelectItem" data-ibxp-text="Maximum"></div>
-				<div data-ibx-no-bind="true" data-ibx-type="ibxSelectItem" data-ibxp-text="Minimum"></div>
+			<div class="mz-fb-how-sort" data-ibx-name="_howSort" data-ibx-type="ibxLabel" data-ibx-col="1" data-ibx-row="1/span 2" data-ibxp-glyph="swap_vert" data-ibxp-glyph-classes="material-icons md-24"></div>
+			<div class="mz-fb-how-aggregate mz-fb-select" data-ibx-name="_howAggregate" data-ibx-type="ibxListBox" data-ibx-col="2" data-ibx-row="1" data-ibxp-btn-show="false">
+				<div data-ibx-type="ibxSelectItem" data-ibxp-text="Summary" data-ibxp-selected="true"></div>
+				<div data-ibx-type="ibxSelectItem" data-ibxp-text="Average"></div>
+				<div data-ibx-type="ibxSelectItem" data-ibxp-text="Maximum"></div>
+				<div data-ibx-type="ibxSelectItem" data-ibxp-text="Minimum"></div>
 			</div>
-			<div data-ibx-no-bind="true" class="mz-fb-delete-bucket" data-ibx-name="_deleteBucket" data-ibx-type="ibxLabel" data-ibx-col="3" data-ibx-row="1" data-ibxp-glyph="highlight_off" data-ibxp-glyph-classes="material-icons"></div>
-			<div data-ibx-no-bind="true" class="mz-fb-select-field mz-fb-select" data-ibx-name="_fieldSelector" data-ibx-type="ibxListBox" data-ibx-col="2/span 2" data-ibx-row="2" data-ibxp-btn-show="false" data-ibxp-placeholder="Select Field...">
-				<div data-ibx-no-bind="true" data-ibx-type="ibxSelectItem" data-ibxp-text="a b c"></div>
-				<div data-ibx-no-bind="true" data-ibx-type="ibxSelectItem" data-ibxp-text="aa bb cc"></div>
-				<div data-ibx-no-bind="true" data-ibx-type="ibxSelectItem" data-ibxp-text="aaa bbb ccc"></div>
-				<div data-ibx-no-bind="true" data-ibx-type="ibxSelectItem" data-ibxp-text="aaaa bbbb cccc"></div>
-				<div data-ibx-no-bind="true" data-ibx-type="ibxSelectItem" data-ibxp-text="aaaaa bbbbb ccccc"></div>
+			<div class="mz-fb-delete-bucket" data-ibx-name="_deleteBucket" data-ibx-type="ibxLabel" data-ibx-col="3" data-ibx-row="1" data-ibxp-glyph="highlight_off" data-ibxp-glyph-classes="material-icons"></div>
+			<div class="mz-fb-select-field mz-fb-select" data-ibx-name="_fieldSelector" data-ibx-type="ibxListBox" data-ibx-col="2/span 2" data-ibx-row="2" data-ibxp-btn-show="false" data-ibxp-placeholder="Select Field...">
+				<div data-ibx-type="ibxSelectItem" data-ibxp-text="a b c"></div>
+				<div data-ibx-type="ibxSelectItem" data-ibxp-text="aa bb cc"></div>
+				<div data-ibx-type="ibxSelectItem" data-ibxp-text="aaa bbb ccc"></div>
+				<div data-ibx-type="ibxSelectItem" data-ibxp-text="aaaa bbbb cccc"></div>
+				<div data-ibx-type="ibxSelectItem" data-ibxp-text="aaaaa bbbbb ccccc"></div>
 			</div>
 		</div>
 	</body>

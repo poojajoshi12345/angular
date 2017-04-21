@@ -50,17 +50,18 @@ function ibx(fn, path, autoBind)
 					ibxResourceMgr.setContextPath(ibx._path);
 					ibxResourceMgr.addBundle(ibx._path + "./resources/ibx_resource_bundle.xml").done(function()
 					{
-						if(ibx._loadPromise._autoBind)
-						{
-							ibx.bindElements();
-						}
+						//bool means just bind everything...string means select these and bind them
+						var autoBind = ibx._loadPromise._autoBind;
+						if(autoBind)
+							ibx.bindElements((typeof(autoBind) === "string") ? autoBind : "");
 
+						$("head").append(inlineStyles);//append the inline style blocks back to end of head.
+						
 						ibx._loaded = true;
 						ibx._isLoading = !ibx._loaded;
 						ibx._loadPromise.then(fn);
 						ibx._loadPromise.then(function()
 						{
-							$("head").append(inlineStyles);//append the inline style blocks back to end of head.
 							$(".ibx-root").addClass("ibx-loaded");//display all ibx-roots, now that we are loaded.
 						});
 						ibx._loadPromise.resolve(ibx);//let everyone know the system is booted.
@@ -96,12 +97,9 @@ ibx.bindElements = function(elements)
 	elBind.each(function(idx, el)
 	{
 		var element = $(el);
-		var noBind = ibx.coercePropVal(element.attr("data-ibx-no-bind"));
-		if(noBind)
-			return;
 
-		//construct any unconstructed ancestors first
-		var childWidgets = element.find("[data-ibx-type]");
+		//construct any unconstructed children first...ignore any no-binds.
+		var childWidgets = element.children("[data-ibx-type]:not([data-ibx-no-bind])");
 		var childBound = ibx.bindElements(childWidgets);
 		elBound = elBound.add(childBound);
 
