@@ -65,7 +65,8 @@ $Revision$:-->
 	<!--script dependencies-->
 	<scripts>
 		<script-file src="./resources/etc/jquery/jquery-ui-1.12.1/jquery-ui.js"/>
-		<script-file src="./resources/etc/gridstack/underscore.js"/>
+    <script-file src="./resources/etc/scrollwidthpolyfill/scrollwidthpolyfill.js"/>
+    <script-file src="./resources/etc/gridstack/underscore.js"/>
 		<script-file src="./resources/etc/gridstack/gridstack.js"/>
 		<script-file src="./resources/js/bi_patches.ibx.js"/>
 		<script-file src="./resources/js/events.ibx.js"/>
