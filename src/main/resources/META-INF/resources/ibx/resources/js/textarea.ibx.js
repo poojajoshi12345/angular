@@ -19,7 +19,6 @@ $.widget("ibi.ibxTextArea", $.ibi.ibxFlexBox,
 			/*ibxFlexBox default options*/
 			"inline": true,
 			"wrap": "false",
-			"justify": "center",
 			"align": "center",
 		},
 	_widgetClass: "ibx-text-area",
