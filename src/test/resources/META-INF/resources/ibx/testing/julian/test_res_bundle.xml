@@ -50,7 +50,7 @@
 	<markup>
 		<markup-block>
 			<div class="field-bucket-res">
-				<div class="mz-fb-how-sort" data-ibx-name="_howSort" data-ibx-type="ibxCheckBoxSimple" data-ibx-col="1" data-ibx-row="1/span 2" data-ibxp-glyph="arrow_upward" data-ibxp-glyph-classes="material-icons md-24"></div>
+				<div class="mz-fb-how-sort" data-ibx-name="_howSort" data-ibx-type="ibxCheckBoxSimple" data-ibxp-checked="true" data-ibx-col="1" data-ibx-row="1/span 2" data-ibxp-glyph="arrow_upward" data-ibxp-glyph-classes="material-icons md-24"></div>
 				<div class="mz-fb-how-aggregate mz-fb-select" data-ibx-name="_howAggregate" data-ibx-type="ibxListBox" data-ibx-col="2" data-ibx-row="1" data-ibxp-auto-size="true" data-ibxp-btn-show="false">
 					<div data-ibx-type="ibxSelectItem" data-ibxp-text="Summary" data-ibxp-user-value="sum" data-ibxp-selected="true"></div>
 					<div data-ibx-type="ibxSelectItem" data-ibxp-text="Average" data-ibxp-user-value="avg"></div>
@@ -128,7 +128,6 @@
 					this._howSort.prop("title", (options.howSort == "ascending") ? "Sort Ascending" : "Sort Descending");
 					this._howAggregate.ibxWidget("userValue", options.howAggregate).ibxWidget("refresh");//need to refresh so placeholder autosize will work.
 					this._fieldSelector.ibxWidget("userValue", options.fieldName).ibxWidget("refresh");//need to refresh so placeholder autosize will work.
-					console.dir(options);
 				}
 			});
 			//# sourceURL=test_res_bundle.xml

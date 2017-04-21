@@ -33,8 +33,6 @@
 				});
 			}, applicationContext + "/ibx/", ".ibx-root");
 		</script>
-		<style type="text/css">
-		</style>
 
 		<style type="text/css">
 			.query-box
@@ -67,6 +65,11 @@
 			.add-bucket:hover
 			{
 				color:#888;
+			}
+
+			.field-buckets > .mz-field-bucket
+			{
+				margin-right:1em;
 			}
 		</style>
 	</head>
