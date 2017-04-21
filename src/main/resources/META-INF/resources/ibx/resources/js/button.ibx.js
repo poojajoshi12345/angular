@@ -142,13 +142,14 @@ $.widget("ibi.ibxCheckBox", $.ibi.ibxLabel,
 		if (typeof (value) == "undefined")
 			return this.options.checked;
 		else
+		if(this.options.checked != value)
 		{
 			this.options.checked = value;
 			this._trigger("set_form_value", null, { "elem": this.element, "value": this.options.userValue });
 			this._trigger("change", null, this.element);
 			this.refresh();
-			return this;
 		}
+		return this;
 	},
 	refresh: function ()
 	{
@@ -182,6 +183,15 @@ $.widget("ibi.ibxCheckBox", $.ibi.ibxLabel,
 			this._check.prop("disabled", true);
 		else
 			this._check.removeProp("disabled");
+	}
+});
+$.widget("ibi.ibxCheckBoxSimple", $.ibi.ibxCheckBox,
+{
+	_widgetClass: "ibx-check-box-simple",
+	refresh: function()
+	{
+		this._super();
+		this.element.removeClass("checked ibx-check-box");
 	}
 });
 

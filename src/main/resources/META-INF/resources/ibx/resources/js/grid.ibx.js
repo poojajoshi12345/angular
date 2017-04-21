@@ -31,6 +31,10 @@ $.widget("ibi.ibxGrid", $.ibi.ibxWidget,
 	_create: function ()
 	{
 		this._super();
+	},
+	init:function()
+	{
+		this._super();
 		this.element.ibxMutationObserver(
 		{
 			listen: true,

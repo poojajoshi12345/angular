@@ -129,8 +129,8 @@
 					var options = this.options;
 
 					this._howSort.ibxWidget("option", "glyph", (options.howSort == "ascending") ? "arrow_upward" : "arrow_downward");
-					this._howAggregate.ibxWidget("userValue", options.howAggregate);
-					this._fieldSelector.ibxWidget("userValue", options.fieldName);
+					this._howAggregate.ibxWidget("userValue", options.howAggregate).ibxWidget("refresh");//need to refresh so placeholder autosize will work.
+					this._fieldSelector.ibxWidget("userValue", options.fieldName).ibxWidget("refresh");//need to refresh so placeholder autosize will work.
 					console.dir(options);
 				}
 			});

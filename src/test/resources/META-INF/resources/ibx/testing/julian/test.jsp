@@ -27,7 +27,8 @@
 					$(".add-bucket").on("click", function(e)
 					{
 						var fieldBucket = $("<div>").mzFieldBucket();
-						fieldBucket.appendTo(".field-buckets").ibxWidget("refresh");
+						$(".field-buckets").append(fieldBucket);
+						fieldBucket.ibxWidget("refresh");
 					});
 				});
 			}, applicationContext + "/ibx/", ".ibx-root");

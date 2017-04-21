@@ -30,7 +30,6 @@ $.widget("ibi.ibxSelect", $.ibi.ibxTextField,
 	},
 	_init: function ()
 	{
-		this._super();
 		if (this._isDropDown())
 		{
 			this.options.wrap = false;
@@ -55,7 +54,7 @@ $.widget("ibi.ibxSelect", $.ibi.ibxTextField,
 		}
 		this._createPopup();
 		this.element.children(".ibx-menu-item, .ibx-select-group").detach().appendTo(this.element);
-		this.refresh();
+		this._super();
 	},
 	_onChildAdded: function (node, mutation)
 	{
@@ -171,8 +170,9 @@ $.widget("ibi.ibxSelect", $.ibi.ibxTextField,
 			this._list.find('.ibx-select-item').each(function (index, el)
 			{
 				var itemUserValue = $(el).ibxWidget('option', 'userValue');
-				if (itemUserValue == value)
+				if (itemUserValue == value && this.options.userValue != itemUserValue)
 				{
+					this.options.userValue = itemUserValue;
 					$(el).trigger("click");
 					return true;
 				}
