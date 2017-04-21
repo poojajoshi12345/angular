@@ -99,7 +99,7 @@ ibx.bindElements = function(elements)
 		var element = $(el);
 
 		//construct any unconstructed children first...ignore any no-binds.
-		var childWidgets = element.children("[data-ibx-type]:not([data-ibx-no-bind])");
+		var childWidgets = element.children(":not([data-ibx-no-bind])");
 		var childBound = ibx.bindElements(childWidgets);
 		elBound = elBound.add(childBound);
 
