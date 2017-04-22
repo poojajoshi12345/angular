@@ -24,10 +24,22 @@
 			{
 				ibxResourceMgr.addBundle("./test_res_bundle.xml").done(function(e)
 				{
-					$(".add-bucket").on("click", function(e)
+					$(".add-measure-bucket").on("click", function(e)
 					{
 						var fieldBucket = $("<div>").mzFieldBucket();
-						$(".field-buckets").append(fieldBucket);
+						$(".measure-buckets").append(fieldBucket);
+						fieldBucket.ibxWidget("refresh");
+					});
+					$(".add-group-bucket").on("click", function(e)
+					{
+						var fieldBucket = $("<div>").mzFieldBucket();
+						$(".group-buckets").append(fieldBucket);
+						fieldBucket.ibxWidget("refresh");
+					});
+					$(".add-color-bucket").on("click", function(e)
+					{
+						var fieldBucket = $("<div>").mzFieldBucket();
+						$(".color-buckets").append(fieldBucket);
 						fieldBucket.ibxWidget("refresh");
 					});
 				});
@@ -50,7 +62,7 @@
 			{
 				font-weight:bold;
 				color:#fc6619;
-				margin-right:3px;
+				margin:0 3px 0 3px;
 			}
 
 			.bucket-content
@@ -78,11 +90,29 @@
 			<div class="bucket-container" data-ibx-type="ibxVBox">
 				<div class="bucket-label" data-ibx-type="ibxLabel" data-ibxp-text="Measures"></div>
 				<div class="bucket-content" data-ibx-type="ibxHBox" data-ibxp-align="center">
-					<div class="field-buckets" data-ibx-type="ibxHBox">
+					<div class="measure-buckets" data-ibx-type="ibxHBox">
 					</div>
-					<div class="add-bucket" data-ibx-type="ibxLabel" data-ibxp-glyph="add_box" data-ibxp-glyph-classes="material-icons md-48"></div>
+					<div class="add-measure-bucket add-bucket" data-ibx-type="ibxLabel" data-ibxp-glyph="add_box" data-ibxp-glyph-classes="material-icons md-48"></div>
 				</div>
 			</div>
+			<div class="bucket-container" data-ibx-type="ibxVBox">
+				<div class="bucket-label" data-ibx-type="ibxLabel" data-ibxp-text="Groups"></div>
+				<div class="bucket-content" data-ibx-type="ibxHBox" data-ibxp-align="center">
+					<div class="group-buckets" data-ibx-type="ibxHBox">
+					</div>
+					<div class="add-group-bucket add-bucket" data-ibx-type="ibxLabel" data-ibxp-glyph="add_box" data-ibxp-glyph-classes="material-icons md-48"></div>
+				</div>
+			</div>
+			<div class="bucket-container" data-ibx-type="ibxVBox">
+				<div class="bucket-label" data-ibx-type="ibxLabel" data-ibxp-text="Colors"></div>
+				<div class="bucket-content" data-ibx-type="ibxHBox" data-ibxp-align="center">
+					<div class="color-buckets" data-ibx-type="ibxHBox">
+					</div>
+					<div class="add-color-bucket add-bucket" data-ibx-type="ibxLabel" data-ibxp-glyph="add_box" data-ibxp-glyph-classes="material-icons md-48"></div>
+				</div>
+			<!--
+			</div>
+			-->
 		</div>
 	</body>
 </html>
