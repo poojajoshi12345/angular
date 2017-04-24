@@ -272,6 +272,16 @@ $.widget("ibi.ibxButtonGroup", $.ibi.ibxFlexBox,
 	{
 		this._onSelectedBound = this._onSelected.bind(this);
 		this._super();
+		this.element.ibxMutationObserver(
+		{
+			listen: true,
+			fnAddedNodes: this._onChildAdded.bind(this),
+			fnRemovedNodes: this._onChildRemoved.bind(this),
+			init: { childList: true }
+		});
+	},
+	_init: function ()
+	{
 		if (!this.options.name)
 		{
 			var id = this.element.attr("id");
@@ -280,13 +290,8 @@ $.widget("ibi.ibxButtonGroup", $.ibi.ibxFlexBox,
 			this.options.name = this.element.attr("id");
 		}
 		this.element.on("keydown", this._onKeyDown.bind(this));
-		this.element.ibxMutationObserver(
-		{
-			listen: true,
-			fnAddedNodes: this._onChildAdded.bind(this),
-			fnRemovedNodes: this._onChildRemoved.bind(this),
-			init: { childList: true }
-		});
+		this.element.children(".ibx-button, .ibx-check-box").detach().appendTo(this.element);
+		this._super();
 	},
 	_destroy: function ()
 	{
