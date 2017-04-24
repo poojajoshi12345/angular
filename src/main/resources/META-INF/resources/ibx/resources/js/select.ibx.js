@@ -15,6 +15,7 @@ $.widget("ibi.ibxSelect", $.ibi.ibxTextField,
 			"autocorrect": "off",
 			"autocapitalize": "off",
 			"spellcheck": "false",
+			"listClasses": "",
 		},
 	_widgetClass: "ibx-select",
 	_create: function ()
@@ -179,6 +180,7 @@ $.widget("ibi.ibxSelect", $.ibi.ibxTextField,
 			return this;
 		}
 	},
+	list: function () { return this._list; },
 	selected: function (element)
 	{
 		if (typeof (element) == "undefined")
@@ -255,6 +257,7 @@ $.widget("ibi.ibxSelect", $.ibi.ibxTextField,
 	},
 	_onTextClick: function (e)
 	{
+		this._dontFocusText = true;
 		this._openPopup();
 	},
 	_onButtonClick: function (e)
@@ -262,7 +265,10 @@ $.widget("ibi.ibxSelect", $.ibi.ibxTextField,
 		if (this._listWidget.isOpen())
 			this._listWidget.close();
 		else
+		{
+			this._dontFocusText = true;
 			this._openPopup();
+		}
 	},
 	_onTextChanged: function (e)
 	{
@@ -342,7 +348,7 @@ $.widget("ibi.ibxSelect", $.ibi.ibxTextField,
 		if (anchor.length == 0)
 		{
 			anchor = this._list.find('.ibx-select-item').first();
-			this._setSelection(anchor, false, false);
+			//this._setSelection(anchor, false, false);
 		}
 		anchor.focus();
 	},
@@ -508,6 +514,9 @@ $.widget("ibi.ibxSelect", $.ibi.ibxTextField,
 			case "combo": this.element.addClass('ibx-select-type-combo'); break;
 			case "list": this.element.addClass('ibx-select-type-list'); break;
 		}
+
+		if (this.options.listClasses && this._list)
+			this._list.addClass(this.options.listClasses);
 	}
 });
 $.widget("ibi.ibxComboBox", $.ibi.ibxSelect, { options: { type: "drop-down-combo" }, _widgetClass: "ibx-combo-box" });
