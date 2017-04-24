@@ -64,6 +64,10 @@ $.widget("ibi.ibxCheckBox", $.ibi.ibxLabel,
 		this.element.on("click", this._onClick.bind(this));
 		this.element.on("keydown", this._onKeyDown.bind(this));
 		this.element.on("focus", this._onFocus.bind(this))
+	},
+	_init: function ()
+	{
+		this._super();
 		this._trigger("set_form_value", null, { "elem": this.element, "value": this.options.checked ? this.options.userValue : "" });
 	},
 	userValue: function (value)
