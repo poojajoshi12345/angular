@@ -643,14 +643,18 @@ $.ibi.ibxSelectItem.statics =
 {
 	onMenuItemKeyEvent: function (e)
 	{
-		if (e.keyCode == 37 || e.keyCode == 13) // close popup on left arrow or enter
+		var isDropDown = $.ibi.ibxSelectItem.statics.isDropDown.call(this);
+
+		if (isDropDown && (e.keyCode == 13 || e.keyCode == 9)) // close popup on enter or tab
 		{
 			e.stopPropagation();
 			e.preventDefault();
-			if ($.ibi.ibxSelectItem.statics.isDropDown.call(this))
-				this.element.closest('.ibx-menu').data('ibxWidget').close();
-			else
-				this.element.closest('ibx-select').focus();
+			this.element.closest('.ibx-menu').data('ibxWidget').close();
+			return;
+		}
+
+		if (!isDropDown && e.keyCode == 9) // Normal tab behaviour for non-drop-down
+		{
 			return;
 		}
 
@@ -666,9 +670,11 @@ $.ibi.ibxSelectItem.statics =
 			if (prev)
 			{
 				prev.focus();
-				prev.trigger(event, prev);
+				if (isDropDown)
+					prev.trigger(event, prev);
 			}
 			e.stopPropagation();
+			e.preventDefault();
 		}
 		else if (e.keyCode == 40)//down
 		{
@@ -676,20 +682,23 @@ $.ibi.ibxSelectItem.statics =
 			if (next)
 			{
 				next.focus();
-				next.trigger(event, next);
+				if (isDropDown)
+					next.trigger(event, next);
 			}
 			e.stopPropagation();
+			e.preventDefault();
 		}
-		else if (e.keyCode == 32)//enter/space
+		else if (e.keyCode == 32 || e.keyCode == 13) // select item on space and enter with non-drop-down
 		{
 			this.element.trigger(event, this.element);
 			e.stopPropagation();
+			e.preventDefault();
 		}
 		else
 		{
 			this._super(e);
+			e.preventDefault();
 		}
-		e.preventDefault();
 
 	},
 	setOption: function (key, value)
