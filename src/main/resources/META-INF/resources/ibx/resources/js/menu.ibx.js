@@ -166,6 +166,9 @@ $.widget("ibi.ibxMenuItem", $.ibi.ibxHBox,
 		else
 		if(e.keyCode == 13 || e.keyCode == 32)//enter/space
 			this.element.trigger("click");
+
+		if(e.keyCode != 34  && e.keyCode != 33)//ignore page down/up
+			e.preventDefault();
 	},
 	_onMenuItemClick:function(e)
 	{
