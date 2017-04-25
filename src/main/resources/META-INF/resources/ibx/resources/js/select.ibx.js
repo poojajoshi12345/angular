@@ -689,6 +689,8 @@ $.ibi.ibxSelectItem.statics =
 		{
 			this._super(e);
 		}
+		e.preventDefault();
+
 	},
 	setOption: function (key, value)
 	{
