@@ -150,27 +150,28 @@ $.widget("ibi.ibxMenuItem", $.ibi.ibxHBox,
 		{
 			"click":this._onMenuItemClick.bind(this),
 			"mouseenter":this._onMenuItemMouseEvent.bind(this),
-			"mouseleave":this._onMenuItemMouseEvent.bind(this),
-			"keydown":this._onMenuItemKeyEvent.bind(this)
+			"mouseleave": this._onMenuItemMouseEvent.bind(this),
+			"keydown": this._onMenuItemKeyEvent.bind(this)
 		});
 		this.addSubMenu(this.element.children(".ibx-menu"));
 		this._super();
 	},
-	_onMenuItemKeyEvent:function(e)
+	_onMenuItemKeyEvent: function (e)
 	{
-		if(e.keyCode == 37 || e.keyCode == 38)//left/up
-			this.element.prevAll(":ibxFocusable").first().focus();
+		var menuItem = $(e.target);
+		if (e.keyCode == 37 || e.keyCode == 38)//left/up
+			menuItem.prevAll(":ibxFocusable").first().focus();
 		else
-		if(e.keyCode == 39 || e.keyCode == 40)//right/down
-			this.element.nextAll(":ibxFocusable").first().focus();
-		else
-		if(e.keyCode == 13 || e.keyCode == 32)//enter/space
-			this.element.trigger("click");
+			if (e.keyCode == 39 || e.keyCode == 40)//right/down
+				menuItem.nextAll(":ibxFocusable").first().focus();
+			else
+				if (e.keyCode == 13 || e.keyCode == 32)//enter/space
+					menuItem.trigger("click");
 
-		if(e.keyCode != 34  && e.keyCode != 33)//ignore page down/up
+		if (e.keyCode != 9)
 			e.preventDefault();
 	},
-	_onMenuItemClick:function(e)
+	_onMenuItemClick: function (e)
 	{
 		window.clearTimeout(this._subTimer);
 
