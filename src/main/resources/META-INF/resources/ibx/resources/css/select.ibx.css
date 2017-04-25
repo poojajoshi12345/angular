@@ -22,12 +22,10 @@
 }
 
 .ibx-select > input {
-    outline: none;
     border-bottom:none;
 }
 
 .ibx-select > input:hover {
-    outline: none;
     border-bottom:none;
 }
 
