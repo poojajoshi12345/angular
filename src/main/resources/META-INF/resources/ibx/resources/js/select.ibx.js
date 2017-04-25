@@ -245,7 +245,7 @@ $.widget("ibi.ibxSelect", $.ibi.ibxTextField,
 					this._listWidget.close();
 			}
 		}
-		else if (e.keyCode != 37 && e.keyCode != 39) // open popup for everything except left/right arrows
+		else if (e.keyCode != 37 && e.keyCode != 39 && !e.shiftKey && !e.ctrlKey) // open popup for everything except left/right arrows
 		{
 			if (this._isDropDown())
 			{
@@ -668,6 +668,7 @@ $.ibi.ibxSelectItem.statics =
 				prev.focus();
 				prev.trigger(event, prev);
 			}
+			e.stopPropagation();
 		}
 		else if (e.keyCode == 40)//down
 		{
@@ -677,14 +678,17 @@ $.ibi.ibxSelectItem.statics =
 				next.focus();
 				next.trigger(event, next);
 			}
+			e.stopPropagation();
 		}
 		else if (e.keyCode == 32)//enter/space
 		{
 			this.element.trigger(event, this.element);
+			e.stopPropagation();
 		}
 		else
+		{
 			this._super(e);
-		e.stopPropagation();
+		}
 	},
 	setOption: function (key, value)
 	{
