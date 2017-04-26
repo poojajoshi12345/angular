@@ -10,127 +10,38 @@
 	<styles>
 		<style-sheet>
 		<![CDATA[
-			.mz-field-bucket
-			{
-				color:#888;
-			}
-			.mz-fb-how-sort
-			{
-			}
-			.mz-fb-how-sort:hover
-			{
-				color:black;
-			}
-			.mz-fb-how-aggregate
-			{
-			}
-			.mz-fb-delete-bucket
-			{
-				font-size:1.25em;
-				color:transparent;
-			}
-			.mz-field-bucket:hover .mz-fb-delete-bucket
-			{
-				color:tomato;
-			}
-			.mz-fb-select
-			{
-				padding:0px;
-				border:none;
-			}
-			.mz-fb-select-field
-			{
-				color:black;
-				font-size:1.5em;
-			}
 		]]>
 		</style-sheet>
 	</styles>
 
 	<markup>
 		<markup-block>
-			<div class="field-bucket-res">
-				<div class="mz-fb-how-sort" data-ibx-name="_howSort" data-ibx-type="ibxCheckBoxSimple" data-ibxp-checked="true" data-ibx-col="1" data-ibx-row="1/span 2" data-ibxp-glyph="arrow_upward" data-ibxp-glyph-classes="material-icons md-24"></div>
-				<div class="mz-fb-how-aggregate mz-fb-select" data-ibx-name="_howAggregate" data-ibx-type="ibxListBox" data-ibx-col="2" data-ibx-row="1" data-ibxp-auto-size="true" data-ibxp-btn-show="false">
-					<div data-ibx-type="ibxSelectItem" data-ibxp-text="Summary" data-ibxp-user-value="sum" data-ibxp-selected="true"></div>
-					<div data-ibx-type="ibxSelectItem" data-ibxp-text="Average" data-ibxp-user-value="avg"></div>
-					<div data-ibx-type="ibxSelectItem" data-ibxp-text="Maximum" data-ibxp-user-value="max"></div>
-					<div data-ibx-type="ibxSelectItem" data-ibxp-text="Minimum" data-ibxp-user-value="min"></div>
-				</div>
-				<div class="mz-fb-delete-bucket" data-ibx-name="_deleteBucket" data-ibx-type="ibxLabel" data-ibx-col="3" data-ibx-row="1" data-ibxp-glyph="close" data-ibxp-glyph-classes="material-icons"></div>
-				<div class="mz-fb-select-field mz-fb-select" data-ibx-name="_fieldSelector" data-ibx-type="ibxListBox" data-ibx-col="2/span 2" data-ibx-row="2" data-ibxp-auto-size="true" data-ibxp-btn-show="false" data-ibxp-placeholder="Select Field...">
-					<div data-ibx-type="ibxSelectGroup" data-ibxp-text="Group 1">
-						<div data-ibx-type="ibxSelectItem" data-ibxp-text="a b c" data-ibxp-user-value="abc"></div>
-						<div data-ibx-type="ibxSelectItem" data-ibxp-text="aa bb cc" data-ibxp-user-value="aabbcc"></div>
-						<div data-ibx-type="ibxSelectItem" data-ibxp-text="aaa bbb ccc" data-ibxp-user-value="aaabbbccc"></div>
-						<div data-ibx-type="ibxSelectItem" data-ibxp-text="aaaa bbbb cccc" data-ibxp-user-value="aaaabbbbcccc"></div>
-						<div data-ibx-type="ibxSelectItem" data-ibxp-text="aaaaa bbbbb ccccc" data-ibxp-user-value="aaaaabbbbbccccc"></div>
-					</div>
-				</div>
-			</div>
 		</markup-block>
 	</markup>
 
 	<scripts>
 		<script-block>
 		<![CDATA[
-			$.widget("ibi.mzFieldBucket", $.ibi.ibxGrid, 
+			$.widget("ibi.ibxTestWidget", $.ibi.ibxWidget, 
 			{
 				options:
 				{
-					nameRoot:true,
-					inline:true,
-					cols:"auto 1fr auto",
-					rows:"auto auto",
-					howSort:"ascending",
-					howAggregate:"summary",
-					fieldName:""
 				},
-				_widgetClass:"mz-field-bucket",
+				_widgetClass:"ibx-test-widget",
 				_create:function()
 				{
 					this._super();
-					var markup = ibxResourceMgr.getResource(".field-bucket-res", false).children();
-					this.element.append(markup);
-					ibx.bindElements(this.element);
-
-					this._deleteBucket.on("click", this.deleteBucket.bind(this));
-					this._howSort.on("ibx_change", this._onSortChange.bind(this));
-					this._howAggregate.on("ibx_change", this._onAggregateChange.bind(this));
-					this._fieldSelector.on("ibx_change", this._onFieldChange.bind(this));
 				},
 				_destroy:function()
 				{
 					this._super();
 				},
-				deleteBucket:function(e)
-				{
-					this.element.remove();
-				},
-				_onSortChange:function(e)
-				{
-					this._setOption("howSort", this._howSort.ibxWidget("checked") ? "ascending" : "descending");
-				},
-				_onAggregateChange:function(e)
-				{
-					this._setOption("howAggregate", this._howAggregate.ibxWidget("userValue"));
-				},
-				_onFieldChange:function(e)
-				{
-					this._setOption("fieldName", this._fieldSelector.ibxWidget("userValue"));
-				},
 				refresh:function()
 				{
 					this._super();
-					var options = this.options;
-
-					this._howSort.ibxWidget("option", "glyph", (options.howSort == "ascending") ? "arrow_upward" : "arrow_downward");
-					this._howSort.prop("title", (options.howSort == "ascending") ? "Sort Ascending" : "Sort Descending");
-					this._howAggregate.ibxWidget("userValue", options.howAggregate).ibxWidget("refresh");//need to refresh so placeholder autosize will work.
-					this._fieldSelector.ibxWidget("userValue", options.fieldName).ibxWidget("refresh");//need to refresh so placeholder autosize will work.
 				}
 			});
-			//# sourceURL=test_res_bundle.xml
+			//# sourceURL=ibxtestwidget.xml
 		]]>
 		</script-block>
 	</scripts>
