@@ -110,9 +110,7 @@
 					</div>
 					<div class="add-color-bucket add-bucket" data-ibx-type="ibxLabel" data-ibxp-glyph="add_box" data-ibxp-glyph-classes="material-icons md-48"></div>
 				</div>
-			<!--
 			</div>
-			-->
 		</div>
 	</body>
 </html>
