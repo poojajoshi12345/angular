@@ -560,10 +560,6 @@ $.widget("ibi.ibxSelectItem", $.ibi.ibxMenuItem,
 				this.element.closest('.ibx-select-list').data('ibxWidget')._trigger("select", e, this.element);
 		}
 	},
-	_onMenuItemKeyEvent: function (e)
-	{
-		$.ibi.ibxSelectItem.statics.onMenuItemKeyEvent.call(this, e);
-	},
 	_setOption: function (key, value)
 	{
 		$.ibi.ibxSelectItem.statics.setOption.call(this, key, value);
@@ -591,10 +587,6 @@ $.widget("ibi.ibxSelectCheckItem", $.ibi.ibxCheckMenuItem,
 			this._super(e);
 		else
 			this.element.closest('.ibx-select-list').data('ibxWidget')._trigger("select", e, this.element);
-	},
-	_onMenuItemKeyEvent: function (e)
-	{
-		$.ibi.ibxSelectItem.statics.onMenuItemKeyEvent.call(this, e);
 	},
 	_setOption: function (key, value)
 	{
@@ -627,10 +619,6 @@ $.widget("ibi.ibxSelectRadioItem", $.ibi.ibxRadioMenuItem,
 		else
 			this.element.closest('.ibx-select-list').data('ibxWidget')._trigger("select", e, this.element);
 	},
-	_onMenuItemKeyEvent: function (e)
-	{
-		$.ibi.ibxSelectItem.statics.onMenuItemKeyEvent.call(this, e);
-	},
 	_setOption: function (key, value)
 	{
 		$.ibi.ibxSelectItem.statics.setOption.call(this, key, value);
@@ -641,66 +629,6 @@ $.widget("ibi.ibxSelectRadioItem", $.ibi.ibxRadioMenuItem,
 
 $.ibi.ibxSelectItem.statics =
 {
-	onMenuItemKeyEvent: function (e)
-	{
-		var isDropDown = $.ibi.ibxSelectItem.statics.isDropDown.call(this);
-
-		if (isDropDown && (e.keyCode == 13 || e.keyCode == 9)) // close popup on enter or tab
-		{
-			e.stopPropagation();
-			e.preventDefault();
-			this.element.closest('.ibx-menu').data('ibxWidget').close();
-			return;
-		}
-
-		if (!isDropDown && e.keyCode == 9) // Normal tab behaviour for non-drop-down
-		{
-			return;
-		}
-
-		var event = jQuery.Event('click');
-		event.ctrlKey = e.ctrlKey;
-		event.shiftKey = e.shiftKey;
-		event.keepAnchor = e.shiftKey;
-		event.synthetic = true;
-
-		if (e.keyCode == 38)//up
-		{
-			var prev = this.element.prevAll('.ibx-select-item').first();
-			if (prev)
-			{
-				prev.focus();
-				if (isDropDown)
-					prev.trigger(event, prev);
-			}
-			e.stopPropagation();
-			e.preventDefault();
-		}
-		else if (e.keyCode == 40)//down
-		{
-			var next = this.element.nextAll('.ibx-select-item').first();
-			if (next)
-			{
-				next.focus();
-				if (isDropDown)
-					next.trigger(event, next);
-			}
-			e.stopPropagation();
-			e.preventDefault();
-		}
-		else if (e.keyCode == 32 || e.keyCode == 13) // select item on space and enter with non-drop-down
-		{
-			this.element.trigger(event, this.element);
-			e.stopPropagation();
-			e.preventDefault();
-		}
-		else
-		{
-			this._super(e);
-			e.preventDefault();
-		}
-
-	},
 	setOption: function (key, value)
 	{
 		this._super(key, value);
