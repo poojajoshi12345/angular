@@ -16,6 +16,7 @@ $.widget("ibi.ibxSelect", $.ibi.ibxTextField,
 			"autocapitalize": "off",
 			"spellcheck": "false",
 			"listClasses": "",
+			"filter": false,
 		},
 	_widgetClass: "ibx-select",
 	_create: function ()
@@ -98,6 +99,7 @@ $.widget("ibi.ibxSelect", $.ibi.ibxTextField,
 			this._list = $("<div>").ibxMenu();
 			this._listWidget = this._list.data("ibxWidget");
 			this._listWidget._setOption("position", { my: "left top", at: "left bottom+1px", of: this.element });
+			this._list.css('min-width', this.element.outerWidth()+"px");
 		}
 		else
 		{
@@ -285,7 +287,7 @@ $.widget("ibi.ibxSelect", $.ibi.ibxTextField,
 			bKeepAnchor = true;
 			// select block - select between current anchor and current item.
 			//				- if no current anchor, select from beginning to current item
-			var all = this._list.find('.ibx-select-item');
+			var all = this._list.find('.ibx-select-item:ibxFocusable');
 			all.removeClass('sel-selected');
 			var anchor = this._list.find('.sel-anchor').first();
 			if (anchor.length == 0)
@@ -347,7 +349,7 @@ $.widget("ibi.ibxSelect", $.ibi.ibxTextField,
 			anchor = this._list.find('.sel-selected').first();
 		if (anchor.length == 0)
 		{
-			anchor = this._list.find('.ibx-select-item').first();
+			anchor = this._list.find('.ibx-select-item:ibxFocusable').first();
 			//this._setSelection(anchor, false, false);
 		}
 		anchor.focus();
@@ -436,6 +438,10 @@ $.widget("ibi.ibxSelect", $.ibi.ibxTextField,
 			return;
 		this._setOption("text", this._getText());
 	},
+	_applyFilter: function ()
+	{
+		return (this.options.type == "drop-down-combo" || this.options.type == "combo") && this.options.filter;
+	},
 	_setHighlight: function ()
 	{
 		this._list.find('.ibx-select-radio-item,.ibx-select-check-item').each(function (index, el) { $(el).data('ibxWidget')._setOption('checked', false); })
@@ -448,15 +454,47 @@ $.widget("ibi.ibxSelect", $.ibi.ibxTextField,
 			{
 				if (0 == $(el).data('ibxWidget').option('text').toLowerCase().indexOf(searchText))
 				{
-					this._setSelection(el, false, false, true, true);
+					if (!bFound)
+						this._setSelection(el, false, false, true, true);
 					bFound = true;
-					return false;
+					if (!this._applyFilter())
+						return false;
+					else
+						$(el).show();
+				}
+				else
+				{
+					if (this._applyFilter())
+						$(el).hide();
 				}
 			}.bind(this));
 		}
+		else
+		{
+			if (this._applyFilter())
+			{
+				this._list.find(".ibx-select-item").each(function (index, el)
+				{
+					$(el).show();
+				});
+			}
+		}
+
 		if (!bFound)
 		{
 			this._setSelection(null, false, false, true, true);
+		}
+
+		// Hide empty groups when filtering
+		if (this._applyFilter())
+		{
+			this._list.find(".ibx-select-group").each(function (index, el)
+			{
+				if (this._list.find(".ibx-radio-group-" + $(el).attr("id") + ":ibxFocusable").length > 0)
+					$(el).show();
+				else
+					$(el).hide();
+			}.bind(this));
 		}
 	},
 	_openPopup: function ()
@@ -660,7 +698,7 @@ $.ibi.ibxSelectItem.statics =
 
 			if (e.keyCode == 38)//up
 			{
-				var prev = this.element.prevAll('.ibx-select-item').first();
+				var prev = this.element.prevAll('.ibx-select-item:ibxFocusable').first();
 				if (prev)
 				{
 					prev.focus();
@@ -669,7 +707,7 @@ $.ibi.ibxSelectItem.statics =
 			}
 			else //down
 			{
-				var next = this.element.nextAll('.ibx-select-item').first();
+				var next = this.element.nextAll('.ibx-select-item:ibxFocusable').first();
 				if (next)
 				{
 					next.focus();
@@ -694,7 +732,7 @@ $.ibi.ibxSelectItem.statics =
 
 			if (e.keyCode == 38)//up
 			{
-				var prev = this.element.prevAll('.ibx-select-item').first();
+				var prev = this.element.prevAll('.ibx-select-item:ibxFocusable').first();
 				if (prev)
 				{
 					prev.focus();
@@ -703,7 +741,7 @@ $.ibi.ibxSelectItem.statics =
 			}
 			else if (e.keyCode == 40)//down
 			{
-				var next = this.element.nextAll('.ibx-select-item').first();
+				var next = this.element.nextAll('.ibx-select-item:ibxFocusable').first();
 				if (next)
 				{
 					next.focus();
