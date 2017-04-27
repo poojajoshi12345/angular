@@ -74,6 +74,13 @@ _p._onBundleFileProgress = function()
 {
 };
 
+_p.getResPath = function(src)
+{
+	if(!(/^[/\\]/).test(src))
+		src = ibxResourceMgr.getContextPath() + src;
+	return src;
+};
+
 //load the actual resource bundle here...can be called directly, or from an xhr load (promise/deferred fullfilled/done)
 _p.loadBundle = function(xDoc, xhr)
 {
@@ -88,10 +95,9 @@ _p.loadBundle = function(xDoc, xhr)
 		var files = $(bundles.get(i)).find("res-bundle");
 		files.each(function(idx, file)
 		{
-			file = $(file);
-			var src = ibxResourceMgr.getContextPath() + file.attr("src");
+			var src = this.getResPath( $(file).attr("src"));
 			ibxResourceMgr.addBundle({url:src, async:false});
-		});
+		}.bind(this));
 
 		//save bundle reference here, as doing before the recursion above will cause closure issues.
 		var bundle = $(bundles.get(i));
@@ -102,7 +108,7 @@ _p.loadBundle = function(xDoc, xhr)
 		files = bundle.find("style-file");
 		files.each(function(idx, file)
 		{
-			var src = this.getContextPath() + $(file).attr("src");
+			var src = this.getResPath( $(file).attr("src"));
 			if(!ibxResourceManager.loadedFiles[src])
 			{
 				var link = $("<link rel='stylesheet' type='text/css'>");
@@ -128,7 +134,7 @@ _p.loadBundle = function(xDoc, xhr)
 		files = bundle.find("markup-file");
 		files.each(function(idx, file)
 		{
-			var src = this.getContextPath() + $(file).attr("src");
+			var src = this.getResPath( $(file).attr("src"));
 			if(!ibxResourceManager.loadedFiles[src])
 			{
 				$.get({async:false, url:src, contentType:"text"}).done(function(content, status, xhr)
@@ -150,7 +156,7 @@ _p.loadBundle = function(xDoc, xhr)
 		files = bundle.find("string-file, script-file");
 		files.each(function(idx, file)
 		{
-			var src = this.getContextPath() + $(file).attr("src");
+			var src = this.getResPath( $(file).attr("src"));
 			if(!ibxResourceManager.loadedFiles[src])
 			{
 				$.get({async:false, url:src, dataType:"text"}).done(function(content, status, xhr)
