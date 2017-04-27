@@ -96,10 +96,9 @@ $.widget("ibi.ibxSelect", $.ibi.ibxTextField,
 	{
 		if (this._isDropDown())
 		{
-			this._list = $("<div>").ibxMenu();
+			this._list = $("<div>").ibxMenu({ "position": { my: "left top", at: "left bottom+1px", of: this.element }, "autoFocus": !this._isEditable() });
 			this._listWidget = this._list.data("ibxWidget");
-			this._listWidget._setOption("position", { my: "left top", at: "left bottom+1px", of: this.element });
-			this._list.css('min-width', this.element.outerWidth()+"px");
+			this._list.css('min-width', this.element.outerWidth() + "px");
 		}
 		else
 		{
@@ -116,13 +115,30 @@ $.widget("ibi.ibxSelect", $.ibi.ibxTextField,
 			if (!this._dontFocusText)
 				this._textInput.focus();
 			else
-				this._focusSelItem();
+			{
+				if (!this._isEditable())
+					this._focusSelItem();
+			}
 			this._dontFocusText = false;
 		}.bind(this)).on("ibx_beforeclose", function(e, closeData)
 		{
 			if (closeData && $.contains(this.element[0], closeData.target))
 				return false;
 		}.bind(this));
+	},
+	_isEditable: function ()
+	{
+		switch (this.options.type)
+		{
+			case "drop-down-combo":
+			case "combo":
+				return true;
+
+			default:
+			case "drop-down-list":
+			case "list":
+				return false;
+		}
 	},
 	_isDropDown: function ()
 	{
@@ -440,7 +456,7 @@ $.widget("ibi.ibxSelect", $.ibi.ibxTextField,
 	},
 	_applyFilter: function ()
 	{
-		return (this.options.type == "drop-down-combo" || this.options.type == "combo") && this.options.filter;
+		return this._isEditable() && this.options.filter;
 	},
 	_setHighlight: function ()
 	{
