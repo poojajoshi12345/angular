@@ -218,6 +218,7 @@ _p.loadBundle = function(xDoc, xhr)
 _p.getResource = function(selector, ibxBind, forceCreate)
 {
 	//first, has the resource been loaded...and do we want it, or create a new instance
+	forceCreate = (forceCreate === undefined) ? true : forceCreate;
 	var resource = $(selector);
 	if(forceCreate || !resource.length)
 		resource = this._rootBundle.find(selector);
