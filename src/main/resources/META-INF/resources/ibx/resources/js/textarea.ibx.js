@@ -8,7 +8,7 @@ $.widget("ibi.ibxTextArea", $.ibi.ibxFlexBox,
 			"readonly": "",
 			"cols": "",
 			"rows": "",
-			"maxlength": "",
+			"maxLength": "",
 			"placeholder": "",
 			"required": "",
 			"wrap": "",
@@ -128,8 +128,8 @@ $.widget("ibi.ibxTextArea", $.ibi.ibxFlexBox,
 			this._textInput.css("height", "100%");
 			this._textInput.removeAttr("rows");
 		}
-		if (this.options.maxlength)
-			this._textInput.attr("maxlength", this.options.maxlength);
+		if (this.options.maxLength)
+			this._textInput.attr("maxlength", this.options.maxLength);
 		else
 			this._textInput.removeAttr("maxlength");
 		if (this.options.placeholder)
