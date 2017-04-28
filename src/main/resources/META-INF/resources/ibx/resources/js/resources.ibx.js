@@ -81,14 +81,16 @@ _p._onBundleFileProgress = function()
 
 _p.getResPath = function(src)
 {
-	if(!(/^[/\\]/).test(src))
-		src = ibxResourceMgr.getContextPath() + src;
-
 	//give interested parties the ability to modify the resource uri
 	var evt = new Event("ibx_res_mgr_resolve_uri");
 	evt.ibxResData = {ibxResourceMgr:this, uriIn:src, uriOut:null};
 	window.dispatchEvent(evt);
-	return evt.ibxResData.uriOut || evt.ibxResData.uriIn;
+
+	var src = evt.ibxResData.uriOut || evt.ibxResData.uriIn;
+	if(!(/^[/\\]/).test(src))
+		src = ibxResourceMgr.getContextPath() + src;
+
+	return src;
 };
 
 //load the actual resource bundle here...can be called directly, or from an xhr load (promise/deferred fullfilled/done)
