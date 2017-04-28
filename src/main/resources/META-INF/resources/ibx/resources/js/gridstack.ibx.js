@@ -15,6 +15,7 @@ $.widget("ibi.ibxGridStack", $.ibi.ibxWidget,
 			},
 			defaultCellWidth: 4,
 			defaultCellHeight: 4,
+			animate: true,
 		},
 	_widgetClass: "ibx-grid-stack",
 	_create: function ()
@@ -34,7 +35,9 @@ $.widget("ibi.ibxGridStack", $.ibi.ibxWidget,
 		var innercell = $("<div class='grid-stack-item-content' style='overflow:hidden;'>");
 		outercell.append(innercell);
 		innercell.append(cell);
-		grid.addWidget(outercell, x, y, width, height);
+		//outercell.attr('data-gs-locked', true);
+		grid.addWidget(outercell, x, y, width, height, false);
+		//outercell.data('_gridstack_node').locked = false;
 	},
 	removeCell: function (cell, detachNode)
 	{
