@@ -42,6 +42,7 @@ $.widget("ibi.ibxCollapsible", $.Widget,
 		if(this.element.hasClass("menu-bar"))
 			var x = 10;
 		this.element.addClass("ibx-collapsible-initializing");//stop transition while initializing
+		this._isOpen = this.options.startCollapsed;
 		this.options.startCollapsed ? this.close() : this.open();
 		this._onTransitionEnd();
 	},
@@ -52,7 +53,7 @@ $.widget("ibi.ibxCollapsible", $.Widget,
 	},
 	open: function ()
 	{
-		if (!this.options.disabled && this._trigger("beforeopen", null, this.element))
+		if (!this.isOpen() && !this.options.disabled && this._trigger("beforeopen", null, this.element))
 		{
 			//remove the initializing class that stops transitions. Could be done just first time, but really doesn't matter to do it every time
 			this.element.removeClass("ibx-collapsible-initializing")
@@ -64,7 +65,7 @@ $.widget("ibi.ibxCollapsible", $.Widget,
 	},
 	close: function ()
 	{
-		if(!this.options.disabled && this._trigger("beforeclose", null, this.element))
+		if (this.isOpen() && !this.options.disabled && this._trigger("beforeclose", null, this.element))
 		{
 			this._isOpen = false;
 			this.refresh();
