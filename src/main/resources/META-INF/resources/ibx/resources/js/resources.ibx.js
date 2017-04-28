@@ -82,7 +82,8 @@ _p._onBundleFileProgress = function()
 _p.getResPath = function(src)
 {
 	//give interested parties the ability to modify the resource uri
-	var evt = new Event("ibx_res_mgr_resolve_uri");
+	var evt = document.createEvent("Event");
+	evt.initEvent("ibx_res_mgr_resolve_uri", true, true);
 	evt.ibxResData = {ibxResourceMgr:this, uriIn:src, uriOut:null};
 	window.dispatchEvent(evt);
 
