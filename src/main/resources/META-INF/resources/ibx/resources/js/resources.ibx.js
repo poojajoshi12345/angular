@@ -14,6 +14,8 @@ function ibxResourceManager()
 }
 var _p = ibxResourceManager.prototype = new Object();
 
+ibxResourceManager.RESOLVE_LOAD_URI = "ibx_res_mgr_resolve_load_uri";
+
 ibxResourceManager.loadedBundles = {};
 ibxResourceManager.loadedFiles = {};
 
@@ -78,7 +80,12 @@ _p.getResPath = function(src)
 {
 	if(!(/^[/\\]/).test(src))
 		src = ibxResourceMgr.getContextPath() + src;
-	return src;
+
+	//give interested parties the ability to modify the resource uri
+	var evt = jQuery.Event(ibxResourceManager.RESOLVE_RES_URI);
+	evt.ibxResData = {ibxResourceMgr:this, url:src};
+	$(window).trigger(evt);
+	return evt.result || src;
 };
 
 //load the actual resource bundle here...can be called directly, or from an xhr load (promise/deferred fullfilled/done)
