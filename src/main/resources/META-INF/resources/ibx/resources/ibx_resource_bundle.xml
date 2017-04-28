@@ -8,41 +8,41 @@ $Revision$:-->
 
 	<!--resources loaded AFTER this resource bundle-->
 	<packages>
-		<package src="./resources/markup/dialog_package.ibx.xml"/>
+		<package src="./markup/dialog_package.ibx.xml"/>
 	</packages>
 
 	<!--style dependencies-->
 	<styles>
-		<style-file src="./resources/etc/jquery/jquery-ui-1.12.1/jquery-ui.css"/>
-		<style-file src="./resources/etc/gridstack/gridstack.css"/>
-		<style-file src="./resources/etc/material-icons/iconfont/material-icons.css"/>
-		<style-file src="./resources/etc/font-awesome/css/font-awesome.css"/>
+		<style-file src="./etc/jquery/jquery-ui-1.12.1/jquery-ui.css"/>
+		<style-file src="./etc/gridstack/gridstack.css"/>
+		<style-file src="./etc/material-icons/iconfont/material-icons.css"/>
+		<style-file src="./etc/font-awesome/css/font-awesome.css"/>
 
-		<style-file src="./resources/css/ibx-font/css/ibx-font.css"/>
+		<style-file src="./css/ibx-font/css/ibx-font.css"/>
 
-		<style-file src="./resources/css/base.ibx.css"/>
-		<style-file src="./resources/css/widget.ibx.css"/>
-		<style-file src="./resources/css/collapsible.ibx.css"/>
-		<style-file src="./resources/css/flexbox.ibx.css"/>
-		<style-file src="./resources/css/grid.ibx.css"/>
-		<style-file src="./resources/css/splitter.ibx.css"/>
-		<style-file src="./resources/css/label.ibx.css"/>
-		<style-file src="./resources/css/control.ibx.css"/>
-		<style-file src="./resources/css/text.ibx.css"/>
-		<style-file src="./resources/css/textarea.ibx.css"/>
-		<style-file src="./resources/css/spinner.ibx.css"/>
-		<style-file src="./resources/css/button.ibx.css"/>
-		<style-file src="./resources/css/slider.ibx.css"/>
-		<style-file src="./resources/css/popup.ibx.css"/>
-		<style-file src="./resources/css/dialog.ibx.css"/>
-		<style-file src="./resources/css/form.ibx.css"/>
-		<style-file src="./resources/css/tabs.ibx.css"/>
-		<style-file src="./resources/css/accordion.ibx.css"/>
-		<style-file src="./resources/css/menu.ibx.css"/>
-		<style-file src="./resources/css/groupbox.ibx.css"/>
-		<style-file src="./resources/css/gridstack.ibx.css"/>
-		<style-file src="./resources/css/select.ibx.css"/>
-		<style-file src="./resources/css/base.ibx.css"/>
+		<style-file src="./css/base.ibx.css"/>
+		<style-file src="./css/widget.ibx.css"/>
+		<style-file src="./css/collapsible.ibx.css"/>
+		<style-file src="./css/flexbox.ibx.css"/>
+		<style-file src="./css/grid.ibx.css"/>
+		<style-file src="./css/splitter.ibx.css"/>
+		<style-file src="./css/label.ibx.css"/>
+		<style-file src="./css/control.ibx.css"/>
+		<style-file src="./css/text.ibx.css"/>
+		<style-file src="./css/textarea.ibx.css"/>
+		<style-file src="./css/spinner.ibx.css"/>
+		<style-file src="./css/button.ibx.css"/>
+		<style-file src="./css/slider.ibx.css"/>
+		<style-file src="./css/popup.ibx.css"/>
+		<style-file src="./css/dialog.ibx.css"/>
+		<style-file src="./css/form.ibx.css"/>
+		<style-file src="./css/tabs.ibx.css"/>
+		<style-file src="./css/accordion.ibx.css"/>
+		<style-file src="./css/menu.ibx.css"/>
+		<style-file src="./css/groupbox.ibx.css"/>
+		<style-file src="./css/gridstack.ibx.css"/>
+		<style-file src="./css/select.ibx.css"/>
+		<style-file src="./css/base.ibx.css"/>
 		<style-sheet name="">
 		<![CDATA[
 		]]>
@@ -51,7 +51,7 @@ $Revision$:-->
 
 	<!--string dependencies-->
 	<strings>
-		<string-file src="./resources/strings/strings.en.ibx.txt"/>
+		<string-file src="./strings/strings.en.ibx.txt"/>
 		<string-bundle>
 		<![CDATA[
 		]]>
@@ -64,38 +64,38 @@ $Revision$:-->
 
 	<!--script dependencies-->
 	<scripts>
-		<script-file src="./resources/etc/jquery/jquery-ui-1.12.1/jquery-ui.js"/>
-    <script-file src="./resources/etc/scrollwidthpolyfill/scrollwidthpolyfill.js"/>
-    <script-file src="./resources/etc/gridstack/underscore.js"/>
-		<script-file src="./resources/etc/gridstack/gridstack.js"/>
-		<script-file src="./resources/js/bi_patches.ibx.js"/>
-		<script-file src="./resources/js/events.ibx.js"/>
-		<script-file src="./resources/js/util.ibx.js"/>
-		<script-file src="./resources/js/ibfs.ibx.js"/>
-		<script-file src="./resources/js/mutationobserver.ibx.js"/>
-		<script-file src="./resources/js/widget.ibx.js"/>
-		<script-file src="./resources/js/draggable.ibx.js"/>
-		<script-file src="./resources/js/collapsible.ibx.js"/>
-		<script-file src="./resources/js/flexbox.ibx.js"/>
-		<script-file src="./resources/js/grid.ibx.js"/>
-		<script-file src="./resources/js/splitter.ibx.js"/>
-		<script-file src="./resources/js/label.ibx.js"/>
-		<script-file src="./resources/js/control.ibx.js"/>
-		<script-file src="./resources/js/text.ibx.js"/>
-		<script-file src="./resources/js/textarea.ibx.js"/>
-		<script-file src="./resources/js/spinner.ibx.js"/>
-		<script-file src="./resources/js/button.ibx.js"/>
-		<script-file src="./resources/js/slider.ibx.js"/>
-		<script-file src="./resources/js/popup.ibx.js"/>
-		<script-file src="./resources/js/dialog.ibx.js"/>
-		<script-file src="./resources/js/radiogroup.ibx.js"/>
-		<script-file src="./resources/js/form.ibx.js"/>
-		<script-file src="./resources/js/tabs.ibx.js"/>
-		<script-file src="./resources/js/accordion.ibx.js"/>
-		<script-file src="./resources/js/menu.ibx.js"/>
-		<script-file src="./resources/js/groupbox.ibx.js"/>
-		<script-file src="./resources/js/gridstack.ibx.js"/>
-		<script-file src="./resources/js/select.ibx.js"/>
+		<script-file src="./etc/jquery/jquery-ui-1.12.1/jquery-ui.js"/>
+    <script-file src="./etc/scrollwidthpolyfill/scrollwidthpolyfill.js"/>
+    <script-file src="./etc/gridstack/underscore.js"/>
+		<script-file src="./etc/gridstack/gridstack.js"/>
+		<script-file src="./js/bi_patches.ibx.js"/>
+		<script-file src="./js/events.ibx.js"/>
+		<script-file src="./js/util.ibx.js"/>
+		<script-file src="./js/ibfs.ibx.js"/>
+		<script-file src="./js/mutationobserver.ibx.js"/>
+		<script-file src="./js/widget.ibx.js"/>
+		<script-file src="./js/draggable.ibx.js"/>
+		<script-file src="./js/collapsible.ibx.js"/>
+		<script-file src="./js/flexbox.ibx.js"/>
+		<script-file src="./js/grid.ibx.js"/>
+		<script-file src="./js/splitter.ibx.js"/>
+		<script-file src="./js/label.ibx.js"/>
+		<script-file src="./js/control.ibx.js"/>
+		<script-file src="./js/text.ibx.js"/>
+		<script-file src="./js/textarea.ibx.js"/>
+		<script-file src="./js/spinner.ibx.js"/>
+		<script-file src="./js/button.ibx.js"/>
+		<script-file src="./js/slider.ibx.js"/>
+		<script-file src="./js/popup.ibx.js"/>
+		<script-file src="./js/dialog.ibx.js"/>
+		<script-file src="./js/radiogroup.ibx.js"/>
+		<script-file src="./js/form.ibx.js"/>
+		<script-file src="./js/tabs.ibx.js"/>
+		<script-file src="./js/accordion.ibx.js"/>
+		<script-file src="./js/menu.ibx.js"/>
+		<script-file src="./js/groupbox.ibx.js"/>
+		<script-file src="./js/gridstack.ibx.js"/>
+		<script-file src="./js/select.ibx.js"/>
 		<script-block name="">
 		<![CDATA[
 		]]>

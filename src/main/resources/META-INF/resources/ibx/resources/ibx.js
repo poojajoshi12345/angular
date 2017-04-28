@@ -6,18 +6,22 @@
 	You can attach a function to ibx at any point and it is guaranteed to be called after the
 	system is booted. YEEEEEEE HAAAAAAAAW!
 ****/
-function ibx(fn, path, autoBind)
+function ibx(fn, autoBind)
 {
 	if(!ibx._loaded && !ibx._isLoading)
 	{
+		//resolve where ibx is loading from.
+		var ibxScript = document.querySelector("script[src*='ibx.js']");
+		var ibxPath = ibxScript.getAttribute("src").replace("ibx.js", "");
+		ibx.setPath(ibxPath);
+
 		ibx._isLoading = !ibx.loaded;
-		ibx.setPath(path);
 
 		//things to preload for ibx.  Everything else is in the root resource bundle
 		var scripts = 
 		[
-			"<link type='text/css' rel='stylesheet' href='" + ibx._path + "./resources/css/base.ibx.css'/>",
-			"<script type='text/javascript' src='" + ibx._path + "./resources/etc/jquery/jquery-3.1.1.js'></script>",
+			"<link type='text/css' rel='stylesheet' href='" + ibx._path + "./css/base.ibx.css'/>",
+			"<script type='text/javascript' src='" + ibx._path + "./etc/jquery/jquery-3.1.1.js'></script>",
 		];
 		document.open();
 		document.write(scripts.join(""));
@@ -44,11 +48,11 @@ function ibx(fn, path, autoBind)
 				ibx._loadPromise = $.Deferred();
 				ibx._loadPromise._autoBind = autoBind;
 
-				var url = ibx._path + "./resources/js/resources.ibx.js";
+				var url = ibx._path + "./js/resources.ibx.js";
 				$.get(url).then(function()
 				{
 					ibxResourceMgr.setContextPath(ibx._path);
-					ibxResourceMgr.addBundle(ibx._path + "./resources/ibx_resource_bundle.xml").done(function()
+					ibxResourceMgr.addBundle(ibx._path + "./ibx_resource_bundle.xml").done(function()
 					{
 						//bool means just bind everything...string means select these and bind them
 						var autoBind = ibx._loadPromise._autoBind;

@@ -22,19 +22,44 @@
 	<scripts>
 		<script-block>
 		<![CDATA[
-			$.widget("ibi.ibxTestWidget", $.ibi.ibxWidget, 
+			$.widget("ibi.ibxCarousel", $.ibi.ibxFlexBox, 
 			{
 				options:
 				{
+					inline:true
 				},
-				_widgetClass:"ibx-test-widget",
+				_widgetClass:"ibx-carousel",
 				_create:function()
 				{
 					this._super();
+					var buff1 = this._buffer1 = $("<div>");
+					var buff2 = this._buffer2 = $("<div>");
+
+					this.element.ibxMutationObserver(
+					{
+						listen:true,
+						fnAddedNodes:this._onChildEvent.bind(this),
+						fnRemovedNodes:this._onChildEvent.bind(this),
+						init:{childList:true}
+					});
+					this.element.children().detach().appendTo(this.element);
 				},
 				_destroy:function()
 				{
 					this._super();
+				},
+				_onChildEvent:function(node, mutation)
+				{
+					if(mutation.removedNodes.length)
+					{
+					}
+					else
+					if(mutation.addedNodes.length)
+					{
+					}
+					
+					var nChildren = this.element.children();
+					console.log(nChildren.length, node, mutation);
 				},
 				refresh:function()
 				{

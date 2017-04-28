@@ -26,13 +26,29 @@
 				{
 					ibx.bindElements();
 				});
-			}, applicationContext + "/ibx/", false);
+			}, false);
 		</script>
 
 		<style type="text/css">
+			.test-carousel
+			{
+				position:absolute;
+				left:25px;
+				top:25px;
+				width:400px;
+				height:100px;
+				border:1px solid black;
+			}
 		</style>
 	</head>
 	<body class="ibx-root">
+		<div class="test-carousel" data-ibx-type="ibxCarousel">
+			<div>Item 1</div>
+			<div>Item 2</div>
+			<div>Item 3</div>
+			<div>Item 4</div>
+			<div>Item 5</div>
+		</div>
 	</body>
 </html>
 
