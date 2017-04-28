@@ -48,14 +48,19 @@ _p.addStringBundle = function(bundle)
 
 _p.addBundle = function(info, data)
 {
-	var url = (typeof(info) === "string") ? info : info.url;
-	if(ibxResourceManager.loadedBundles[url])
-		return ibxResourceManager.loadedBundles[url];
+	//resolve bundle's uri
+	info = (typeof(info) === "string") ? {url:info} : info;
+	info.url = this.getResPath(info.url);
 
+	//is it already loaded?
+	if(ibxResourceManager.loadedBundles[info.url])
+		return ibxResourceManager.loadedBundles[info.url];
+
+	//...no, so let's get loadin'!
 	var resLoaded = $.Deferred();
 	var xhr = $.get(info, data);
 	xhr._resLoaded = resLoaded;
-	xhr._src = url;
+	xhr._src = info.url;
 	xhr.done(this._onBundleFileLoaded.bind(this));
 	xhr.fail(this._onBundleFileLoadError.bind(this));
 	xhr.progress(this._onBundleFileProgress.bind(this));
