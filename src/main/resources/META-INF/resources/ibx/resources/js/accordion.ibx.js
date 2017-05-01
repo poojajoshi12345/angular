@@ -257,13 +257,10 @@ $.widget("ibi.ibxAccordionPage", $.ibi.ibxFlexBox,
 		//when the 'closed' css class is added/removed below.
 		//THE CALL TO 'offsetHeight' will force the browser to reflow the document.
 		var nHeight = this._content.prop("scrollHeight")
-		if (nHeight > 0)
-		{
-			this._content.css("max-height", nHeight + "px");
-			this.element[0].offsetHeight;
-			if (!selected)
-				this._content.css("max-height", "");
-		}
+		this._content.css("max-height", nHeight + "px");
+		this.element[0].offsetHeight;
+		if (!selected)
+			this._content.css("max-height", "");
 
 		//DO NOT MOVE THIS, MUST BE DONE AFTER HEIGHT ADJUSTMENT ABOVE!
 		selected ? this.element.removeClass("acc-pg-closed") : this.element.addClass("acc-pg-closed");
