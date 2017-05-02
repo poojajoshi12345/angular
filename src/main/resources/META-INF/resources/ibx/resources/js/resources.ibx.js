@@ -169,19 +169,25 @@ _p.loadBundle = function(xDoc, xhr)
 		files = bundle.find("string-file, script-file");
 		files.each(function(idx, file)
 		{
+			var file = $(file);
 			var src = this.getResPath( $(file).attr("src"));
 			if(!ibxResourceManager.loadedFiles[src])
 			{
-				$.get({async:false, url:src, dataType:"text"}).done(function(content, status, xhr)
+				if(file.attr("link") == "true")
+					$("<script type='text/javascript' src='" + src + "'>").appendTo("head");
+				else
 				{
-					if((/\S/g).test(content))
+					$.get({async:false, url:src, dataType:"text"}).done(function(content, status, xhr)
 					{
-						var script = $("<script type='text/javascript'>");
-						script.text(content);
-						head.append(script);
-					}
-					ibxResourceManager.loadedFiles[src] = true;
-				});
+						if((/\S/g).test(content))
+						{
+							var script = $("<script type='text/javascript'>");
+							script.text(content);
+							head.append(script);
+						}
+						ibxResourceManager.loadedFiles[src] = true;
+					});
+				}
 			}
 		}.bind(this));
 
