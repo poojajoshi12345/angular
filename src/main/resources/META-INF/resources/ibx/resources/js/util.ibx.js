@@ -256,9 +256,13 @@ function WebApi(webAppContext, webAppName, options)
 	{
 		appContext: webAppContext,
 		appName: webAppName,
-		ppCtx: this
+		ppCtx: this,
+		ajax:
+		{
+			context:this
+		}
 	};
-	options = $.extend({},  WebApi.statics.defaultExInfo, webApiOptions, options);
+	options = $.extend(true, {},  WebApi.statics.defaultExInfo, webApiOptions, options);
 	this.setExOptions(options);
 }
 var _p = WebApi.prototype = new Object();
@@ -274,7 +278,6 @@ WebApi.statics =
 		parms:{},
 		data:{},
 		public:true,
-		async:true,
 		ppCtx:null,
 		ppFun:null,
 		result:null,
@@ -287,16 +290,23 @@ WebApi.statics =
 		tStart:null,
 		tReturn:null,
 		tComplete:null,
+
+		//async and dataType are exposed at root object because they are commonly set.
+		//they get copied into the ajax options in _p.exec.
+		//note: ajax.context is set in WebApi constructor, as it's instance based.
+		async:true,
+		dataType:"xml",
 		ajax:
 		{
 			cache:false,
 			contentType:"application/x-www-form-urlencoded",
-			context:this,
+			context:null,
 			data:{},
-			dataType:"xml",
 			method:"POST",
 			url:"",
 		},
+
+		//promise stuff.
 		deferred:null,
 		done:function(fn)
 		{
@@ -332,7 +342,8 @@ _p.exec = function exec(options)
 	$.extend(true, exInfo, options);
 	$.extend(true, exInfo.ajax.data, exInfo.parms);
 	exInfo.deferred = $.Deferred();
-	exInfo.ajax.async = exInfo.async;
+	exInfo.ajax.async = exInfo.async; //copy the outer value to the actual ajax option
+	exInfo.ajax.dataType = exInfo.dataType; //copy the outer value to the actual ajax option
 	exInfo.ajax.url =  sformat("{1}/{2}{3}", exInfo.appContext, exInfo.appName,  exInfo.relPath ? ("/" + exInfo.relPath) : "");
 	$.ajax(exInfo.ajax);
 	return exInfo;
