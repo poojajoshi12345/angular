@@ -38,6 +38,14 @@ $.widget("ibi.ibxGridStack", $.ibi.ibxWidget,
 		//outercell.attr('data-gs-locked', true);
 		grid.addWidget(outercell, x, y, width, height, false);
 		//outercell.data('_gridstack_node').locked = false;
+		this.element.on('resizestart', function (event, ui)
+		{
+			$("iframe").css("pointer-events", "none");
+		});
+		this.element.on('resizestop', function (event, elem)
+		{
+			$("iframe").css("pointer-events", "");
+		});
 	},
 	removeCell: function (cell, detachNode)
 	{
