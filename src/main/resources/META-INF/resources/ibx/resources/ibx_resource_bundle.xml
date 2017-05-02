@@ -42,7 +42,7 @@ $Revision$:-->
 		<style-file src="./css/groupbox.ibx.css"/>
 		<style-file src="./css/gridstack.ibx.css"/>
 		<style-file src="./css/select.ibx.css"/>
-		<style-file src="./css/base.ibx.css"/>
+		<style-file src="./css/iframe.ibx.css"/>
 		<style-sheet name="">
 		<![CDATA[
 		]]>
@@ -96,6 +96,7 @@ $Revision$:-->
 		<script-file src="./js/groupbox.ibx.js"/>
 		<script-file src="./js/gridstack.ibx.js"/>
 		<script-file src="./js/select.ibx.js"/>
+		<script-file src="./js/iframe.ibx.js"/>
 		<script-block name="">
 		<![CDATA[
 		]]>
