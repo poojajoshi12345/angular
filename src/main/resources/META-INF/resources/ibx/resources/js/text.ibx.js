@@ -10,9 +10,9 @@ $.widget("ibi.ibxTextField", $.ibi.ibxFlexBox,
 			"readonly": false,
 			"size": 0,
 			"maxLength": 0,
-			"autoComplete": false,
-			"autoCorrect": false,
-			"autoCapitalize": false,
+			"autoComplete": "off",
+			"autoCorrect": "off",
+			"autoCapitalize": "off",
 			"spellCheck": false,
 			"placeholder": "",
 			"required": false,
@@ -145,22 +145,12 @@ $.widget("ibi.ibxTextField", $.ibi.ibxFlexBox,
 			this._textInput.attr("maxlength", this.options.maxLength);
 		else
 			this._textInput.removeAttr("maxlength");
-		if (this.options.autoComplete)
-			this._textInput.attr("autocomplete", this.options.autoComplete);
-		else
-			this._textInput.removeAttr("autocomplete");
-		if (this.options.autoCorrect)
-			this._textInput.attr("autocorrect", this.options.autoCorrect);
-		else
-			this._textInput.removeAttr("autocorrect");
-		if (this.options.autoCapitalize)
-			this._textInput.attr("autocapitalize", this.options.autoCapitalize);
-		else
-			this._textInput.removeAttr("autocapitalize");
-		if (this.options.spellCheck)
-			this._textInput.attr("spellcheck", this.options.spellCheck);
-		else
-			this._textInput.removeAttr("spellcheck");
+
+		this._textInput.attr("autocomplete", this.options.autoComplete);
+		this._textInput.attr("autocorrect", this.options.autoCorrect);
+		this._textInput.attr("autocapitalize", this.options.autoCapitalize);
+		this._textInput.attr("spellcheck", this.options.spellCheck ? "true" : "false");
+
 		if (this.options.placeholder)
 			this._textInput.attr("placeholder", this.options.placeholder);
 		else
