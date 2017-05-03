@@ -13,7 +13,7 @@ $.widget("ibi.ibxTextField", $.ibi.ibxFlexBox,
 			"autoComplete": "off",
 			"autoCorrect": "off",
 			"autoCapitalize": "off",
-			"spellCheck": false,
+			"spellCheck": "off",
 			"placeholder": "",
 			"required": false,
 			"ctrlType": "text",
@@ -149,7 +149,7 @@ $.widget("ibi.ibxTextField", $.ibi.ibxFlexBox,
 		this._textInput.attr("autocomplete", this.options.autoComplete);
 		this._textInput.attr("autocorrect", this.options.autoCorrect);
 		this._textInput.attr("autocapitalize", this.options.autoCapitalize);
-		this._textInput.attr("spellcheck", this.options.spellCheck ? "true" : "false");
+		this._textInput.attr("spellcheck", this.options.spellCheck != "off" ? "true" : "false");
 
 		if (this.options.placeholder)
 			this._textInput.attr("placeholder", this.options.placeholder);
