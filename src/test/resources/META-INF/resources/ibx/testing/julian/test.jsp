@@ -49,7 +49,7 @@
 		</style>
 	</head>
 	<body class="ibx-root">
-		<div class="test-csl" data-ibx-type="ibxCarousel" data-ibx-name-root="true">
+		<div class="test-csl" data-ibx-type="ibxCarousel">
 		</div>
 	</body>
 </html>

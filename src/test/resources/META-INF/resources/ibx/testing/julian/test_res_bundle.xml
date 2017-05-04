@@ -24,13 +24,24 @@
 				border:1px solid black;				
 			}
 
+			.ibx-crsl-prev-btn, .ibx-crsl-next-btn
+			{
+				font-size:2em;
+				font-weight:bold;
+			}
+
+
 			.ibx-crsl-page-mark
 			{
 				height:5px;
 				width:5px;
-				border:1px solid #ccc;
+				border:1px solid #aaa;
 				border-radius:50%;
 				margin:2px;
+			}
+			.crsl-mark-sel
+			{
+				background-color:#888;
 			}
 		]]>
 		</style-sheet>
@@ -39,19 +50,19 @@
 	<markup>
 		<markup-block>
 			<div class="res-ibx-carousel-body">
-				<div class="ibx-crsl-prev-box" data-ibx-name='prevBox' data-ibx-type="ibxHBox" data-ibx-align="center" data-ibx-col="1" data-ibx-row="1/span 2">
-					<div class="ibx-crsl-prev-btn" data-ibx-name="prevBtn" data-ibx-type="ibxLabel" data-ibxp-glyph="keyboard_arrow_left" data-ibxp-glyph-classes="material-icons"></div>
+				<div class="ibx-crsl-prev-box" data-ibx-name='boxPrev' data-ibx-type="ibxHBox" data-ibx-align="center" data-ibx-col="1" data-ibx-row="1/span 2">
+					<div class="ibx-crsl-prev-btn" data-ibx-name="btnPrev" data-ibx-type="ibxLabel" data-ibxp-glyph="keyboard_arrow_left" data-ibxp-glyph-classes="material-icons"></div>
 				</div>
-				<div class="ibx-crsl-next-box" data-ibx-name='nextBox' data-ibx-type="ibxHBox" data-ibx-align="center" data-ibx-col="3" data-ibx-row="1/span 2">
-					<div class="ibx-crsl-next-btn" data-ibx-name="nextBtn" data-ibx-type="ibxLabel" data-ibxp-glyph="keyboard_arrow_right" data-ibxp-glyph-classes="material-icons"></div>
+				<div class="ibx-crsl-next-box" data-ibx-name='boxNext' data-ibx-type="ibxHBox" data-ibx-align="center" data-ibx-col="3" data-ibx-row="1/span 2">
+					<div class="ibx-crsl-next-btn" data-ibx-name="btnNext" data-ibx-type="ibxLabel" data-ibxp-glyph="keyboard_arrow_right" data-ibxp-glyph-classes="material-icons"></div>
 				</div>
-				<div class="ibx-crsl-page-markers" data-ibx-name='pagesBox' data-ibx-type="ibxHBox" data-ibxp-justify="center" data-ibx-col="1/span 3" data-ibx-row="3">
+				<div class="ibx-crsl-page-markers" data-ibx-name='boxPageMarkers' data-ibx-type="ibxHBox" data-ibxp-justify="center" data-ibx-col="1/span 3" data-ibx-row="3">
 					<div class="ibx-crsl-page-mark"></div>
-					<div class="ibx-crsl-page-mark"></div>
+					<div class="ibx-crsl-page-mark crsl-mark-sel"></div>
 					<div class="ibx-crsl-page-mark"></div>
 				</div>
 				
-				<div class="ibx-crsl-items" data-ibx-name='itemsBox' data-ibx-type="ibxHBox" data-ibx-col="2" data-ibx-row="2">items</div>
+				<div class="ibx-crsl-items" data-ibx-name='boxItems' data-ibx-type="ibxHBox" data-ibx-col="2" data-ibx-row="2">items</div>
 			</div>
 		</markup-block>
 	</markup>
@@ -71,18 +82,10 @@
 				_widgetClass:"ibx-carousel",
 				_create:function()
 				{
-					this._super();
+					var children = this.element.children().detach();
 					var body = ibxResourceMgr.getResource(".res-ibx-carousel-body");
 					this.element.append(body.children());
 					ibx.bindElements(this.element);
-
-					this.element.ibxMutationObserver(
-					{
-						listen:true,
-						fnAddedNodes:this._childAdded.bind(this),
-						init:{childList:true} 
-					});
-					//this.element.children().detach().appendTo(this.element);
 				},
 				_destroy:function()
 				{
@@ -102,7 +105,7 @@
 					this._super();
 				}
 			});
-			//# sourceURL=ibxtestwidget.xml
+			//# sourceURL=test_res_bundle.xml
 		]]>
 		</script-block>
 	</scripts>
