@@ -114,7 +114,7 @@ ibx.bindElements = function(elements)
 			var nameRoot = element.closest(":ibxNameRoot");
 			var nameRootWidget = nameRoot.data("ibxWidget");
 			if(nameRootWidget)
-				nameRootWidget[memberName] = element;//nameRoot created, set directly
+				nameRootWidget.member(memberName, element);//nameRoot created, set directly
 			else
 			{
 				//nameRoot not created, so store member variable to be set in widget._create

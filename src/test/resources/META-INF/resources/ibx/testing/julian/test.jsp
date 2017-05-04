@@ -22,13 +22,20 @@
 			<jsp:include page="/WEB-INF/jsp/global/wf_globals.jsp" flush="false" />
 			ibx(function()
 			{
-			}, true);
+				$.widget("ibi.ibxCarouselle", $.ibi.ibxWidget,
+				{
+				});
+				ibx.bindElements();
+			}, false);
 		</script>
 
 		<style type="text/css">
 		</style>
 	</head>
 	<body class="ibx-root">
+		<div data-ibx-type="ibxCarouselle" data-ibx-name-root="true">
+			<div data-ibx-name="xrefresh"></div>
+		</div>
 	</body>
 </html>
 

@@ -57,7 +57,11 @@ $.widget("ibi.ibxWidget", $.Widget,
 		
 		//assign memember variables
 		var memberData = this.element.data("_ibxPrecreateMemberVariables");
-		$.extend(this, memberData);
+		$.each(memberData, function(memberName, memberValue)
+		{
+			this.member(memberName, memberValue);
+		}.bind(this));
+
 		this.element.removeData("_ibxPrecreateMemberVariables");
 		this._super();
 	},
@@ -125,9 +129,18 @@ $.widget("ibi.ibxWidget", $.Widget,
 				$el.prop("tabIndex", $el.data("ibxDisabledTabIndex")).data("ibxDisabledTabIndex", null);
 		}.bind(this, value));
 	},
-	member:function(member)
+	member:function(memberName, value)
 	{
-		return this[member];
+		var ret = this;
+		if(value === undefined)
+			ret = this[memberName];
+		else
+		{
+			if(this[memberName])
+				console.warn("Overwriting member '" + memberName + "' in nameroot, info=>", {nameRoot:this, memberExisting:this[memberName], memberOverwrite:value});
+			this[memberName] = value;
+		}
+		return ret;
 	},
 	_onFocusRootEvent:function(e)
 	{
