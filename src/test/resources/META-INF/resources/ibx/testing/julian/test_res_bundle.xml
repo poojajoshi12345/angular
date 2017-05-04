@@ -86,6 +86,14 @@
 					var body = ibxResourceMgr.getResource(".res-ibx-carousel-body");
 					this.element.append(body.children());
 					ibx.bindElements(this.element);
+					this.element.ibxMutationObserver(
+					{
+						listen:true,
+						fnAddedNodes:this._childAdded.bind(this),
+						init:{childList:true} 
+					});
+					this._super();
+					this.boxItems.append(children);
 				},
 				_destroy:function()
 				{
