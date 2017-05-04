@@ -10,59 +10,95 @@
 	<styles>
 		<style-sheet>
 		<![CDATA[
+			.ibx-crsl-prev-box, .ibx-crsl-next-box
+			{
+				border:1px solid black;
+			}
+			.ibx-crsl-items
+			{
+				margin:3px;
+				border:1px solid black;
+			}
+			.ibx-crsl-page-markers
+			{
+				border:1px solid black;				
+			}
+
+			.ibx-crsl-page-mark
+			{
+				height:5px;
+				width:5px;
+				border:1px solid #ccc;
+				border-radius:50%;
+				margin:2px;
+			}
 		]]>
 		</style-sheet>
 	</styles>
 
 	<markup>
 		<markup-block>
+			<div class="res-ibx-carousel-body">
+				<div class="ibx-crsl-prev-box" data-ibx-name='prevBox' data-ibx-type="ibxHBox" data-ibx-align="center" data-ibx-col="1" data-ibx-row="1/span 2">
+					<div class="ibx-crsl-prev-btn" data-ibx-name="prevBtn" data-ibx-type="ibxLabel" data-ibxp-glyph="keyboard_arrow_left" data-ibxp-glyph-classes="material-icons"></div>
+				</div>
+				<div class="ibx-crsl-next-box" data-ibx-name='nextBox' data-ibx-type="ibxHBox" data-ibx-align="center" data-ibx-col="3" data-ibx-row="1/span 2">
+					<div class="ibx-crsl-next-btn" data-ibx-name="nextBtn" data-ibx-type="ibxLabel" data-ibxp-glyph="keyboard_arrow_right" data-ibxp-glyph-classes="material-icons"></div>
+				</div>
+				<div class="ibx-crsl-page-markers" data-ibx-name='pagesBox' data-ibx-type="ibxHBox" data-ibxp-justify="center" data-ibx-col="1/span 3" data-ibx-row="3">
+					<div class="ibx-crsl-page-mark"></div>
+					<div class="ibx-crsl-page-mark"></div>
+					<div class="ibx-crsl-page-mark"></div>
+				</div>
+				
+				<div class="ibx-crsl-items" data-ibx-name='itemsBox' data-ibx-type="ibxHBox" data-ibx-col="2" data-ibx-row="2">items</div>
+			</div>
 		</markup-block>
 	</markup>
 
 	<scripts>
 		<script-block>
 		<![CDATA[
-			$.widget("ibi.ibxCarousel", $.ibi.ibxFlexBox, 
+			$.widget("ibi.ibxCarousel", $.ibi.ibxGrid,
 			{
 				options:
 				{
-					inline:true
+					nameRoot:true,
+					cols:"auto 1fr auto",
+					rows:"auto 1fr auto",
+					page:0,
 				},
 				_widgetClass:"ibx-carousel",
 				_create:function()
 				{
 					this._super();
-					var buff1 = this._buffer1 = $("<div>");
-					var buff2 = this._buffer2 = $("<div>");
+					var body = ibxResourceMgr.getResource(".res-ibx-carousel-body");
+					this.element.append(body.children());
+					ibx.bindElements(this.element);
 
 					this.element.ibxMutationObserver(
 					{
 						listen:true,
-						fnAddedNodes:this._onChildEvent.bind(this),
-						fnRemovedNodes:this._onChildEvent.bind(this),
-						init:{childList:true}
+						fnAddedNodes:this._childAdded.bind(this),
+						init:{childList:true} 
 					});
-					this.element.children().detach().appendTo(this.element);
+					//this.element.children().detach().appendTo(this.element);
 				},
 				_destroy:function()
 				{
 					this._super();
 				},
-				_onChildEvent:function(node, mutation)
+				_childAdded:function(mutation)
 				{
-					if(mutation.removedNodes.length)
-					{
-					}
-					else
-					if(mutation.addedNodes.length)
-					{
-					}
-					
-					var nChildren = this.element.children();
-					console.log(nChildren.length, node, mutation);
+					console.log("_childAdded", mutation);
+				},
+				_childRemoved:function(mutation)
+				{
+					console.log("_childRemoved", mutation);
 				},
 				refresh:function()
 				{
+					var options = this.options;
 					this._super();
 				}
 			});

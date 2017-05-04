@@ -22,20 +22,57 @@
 			<jsp:include page="/WEB-INF/jsp/global/wf_globals.jsp" flush="false" />
 			ibx(function()
 			{
-				$.widget("ibi.ibxCarouselle", $.ibi.ibxWidget,
+				ibxResourceMgr.addBundle("../testing/julian/test_res_bundle.xml").done(function(resBundle, window)
 				{
+					ibx.bindElements();
 				});
-				ibx.bindElements();
 			}, false);
 		</script>
-
 		<style type="text/css">
+			.test-csl
+			{
+				position:absolute;
+				left:50px;
+				top:50px;
+				width:800px;
+				height:250px;
+				border:1px solid black;
+			}
+
+			.test-csl-item
+			{
+				width:100px;
+				height:100px;
+				margin:5px;
+				border:1px solid red;
+			}
 		</style>
 	</head>
 	<body class="ibx-root">
-		<div data-ibx-type="ibxCarouselle" data-ibx-name-root="true">
-			<div data-ibx-name="xrefresh"></div>
+		<div class="test-csl" data-ibx-type="ibxCarousel" data-ibx-name-root="true">
 		</div>
 	</body>
 </html>
 
+			<!--
+			<div class="test-csl-item">Carousel Item</div>
+			<div class="test-csl-item">Carousel Item</div>
+			<div class="test-csl-item">Carousel Item</div>
+			<div class="test-csl-item">Carousel Item</div>
+			<div class="test-csl-item">Carousel Item</div>
+			<div class="test-csl-item">Carousel Item</div>
+
+			<div class="test-csl-item">Carousel Item</div>
+			<div class="test-csl-item">Carousel Item</div>
+			<div class="test-csl-item">Carousel Item</div>
+			<div class="test-csl-item">Carousel Item</div>
+			<div class="test-csl-item">Carousel Item</div>
+			<div class="test-csl-item">Carousel Item</div>
+
+			<div class="test-csl-item">Carousel Item</div>
+			<div class="test-csl-item">Carousel Item</div>
+			<div class="test-csl-item">Carousel Item</div>
+			<div class="test-csl-item">Carousel Item</div>
+			<div class="test-csl-item">Carousel Item</div>
+			<div class="test-csl-item">Carousel Item</div>
+			-->
