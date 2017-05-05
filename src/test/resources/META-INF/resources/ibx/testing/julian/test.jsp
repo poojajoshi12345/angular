@@ -34,7 +34,7 @@
 				position:absolute;
 				left:50px;
 				top:50px;
-				width:800px;
+				width:500px;
 				height:250px;
 				border:1px solid black;
 			}
@@ -50,29 +50,29 @@
 	</head>
 	<body class="ibx-root">
 		<div class="test-csl" data-ibx-type="ibxCarousel">
+			<div class="test-csl-item">Carousel Item</div>
+			<div class="test-csl-item">Carousel Item</div>
+			<div class="test-csl-item">Carousel Item</div>
+			<div class="test-csl-item">Carousel Item</div>
+			<div class="test-csl-item">Carousel Item</div>
+			<div class="test-csl-item">Carousel Item</div>
+
+			<div class="test-csl-item">Carousel Item</div>
+			<div class="test-csl-item">Carousel Item</div>
+			<div class="test-csl-item">Carousel Item</div>
+			<div class="test-csl-item">Carousel Item</div>
+			<div class="test-csl-item">Carousel Item</div>
+			<div class="test-csl-item">Carousel Item</div>
+
+			<div class="test-csl-item">Carousel Item</div>
+			<div class="test-csl-item">Carousel Item</div>
+			<div class="test-csl-item">Carousel Item</div>
+			<div class="test-csl-item">Carousel Item</div>
+			<div class="test-csl-item">Carousel Item</div>
+			<div class="test-csl-item">Carousel Item</div>
 		</div>
 	</body>
 </html>
 
 			<!--
-			<div class="test-csl-item">Carousel Item</div>
-			<div class="test-csl-item">Carousel Item</div>
-			<div class="test-csl-item">Carousel Item</div>
-			<div class="test-csl-item">Carousel Item</div>
-			<div class="test-csl-item">Carousel Item</div>
-			<div class="test-csl-item">Carousel Item</div>
-
-			<div class="test-csl-item">Carousel Item</div>
-			<div class="test-csl-item">Carousel Item</div>
-			<div class="test-csl-item">Carousel Item</div>
-			<div class="test-csl-item">Carousel Item</div>
-			<div class="test-csl-item">Carousel Item</div>
-			<div class="test-csl-item">Carousel Item</div>
-
-			<div class="test-csl-item">Carousel Item</div>
-			<div class="test-csl-item">Carousel Item</div>
-			<div class="test-csl-item">Carousel Item</div>
-			<div class="test-csl-item">Carousel Item</div>
-			<div class="test-csl-item">Carousel Item</div>
-			<div class="test-csl-item">Carousel Item</div>
 			-->
