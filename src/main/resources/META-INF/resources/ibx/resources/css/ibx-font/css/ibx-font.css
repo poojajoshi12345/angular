@@ -38,6 +38,73 @@
 	font-feature-settings: 'liga';
 }
 
+.ibx-glyph-folder {
+    color: #fcce58;
+}
+.ibx-glyph-fex {
+    color: #4fa03d;
+}
+.ibx-glyph-fex-chart {
+    color: #2A5699;
+}
+.ibx-glyph-fex-visualization {
+    color: #e1542b;
+}
+.ibx-glyph-fex-alert {
+    color: #fcce58;
+}
+.ibx-glyph-file-pdf {
+    color: #E01E00;
+}
+.ibx-glyph-file-excel {
+    color: #1F7246;
+}
+.ibx-glyph-file-powerpoint {
+    color: #D04626;
+}
+.ibx-glyph-file-word {
+    color: #2A5699;
+}
+.ibx-glyph-file-html {
+    color: #5388be;
+}
+.ibx-glyph-file-css {
+    color: #fcce58;
+}
+.ibx-glyph-file-sty {
+    color: #e1542b;
+}
+.ibx-glyph-file-visdis {
+    color: #e1542b;
+}
+.ibx-glyph-file-json {
+    color: #4fa03d;
+}
+.ibx-glyph-url {
+    color: #5388be;
+}
+.ibx-glyph-shortcut {
+    color: #5388be;
+}
+.ibx-glyph-reporting-object {
+    color: #5388be;
+}
+.ibx-glyph-schedule {
+    color: #4fa03d;
+}
+.ibx-glyph-library {
+    color: #e1542b;
+}
+.ibx-glyph-deferred-ticket {
+    color: #fcce58;
+}
+.ibx-glyph-blog {
+    color: #5388be;
+}
+.ibx-glyph-portal {
+    color: #5388be;
+}
+
 .ibx-glyph-key:before {
   content: "\e98f";
 }
