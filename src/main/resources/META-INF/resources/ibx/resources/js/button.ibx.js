@@ -38,6 +38,8 @@ $.widget("ibi.ibxButton", $.ibi.ibxLabel,
 		this._super();
 	}
 });
+$.widget("ibi.ibxButtonSimple", $.ibi.ibxButton, {options:{}, _widgetClass:"ibx-button-simple"});
+
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 $.widget("ibi.ibxCheckBox", $.ibi.ibxLabel,

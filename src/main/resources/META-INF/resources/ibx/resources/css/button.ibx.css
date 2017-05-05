@@ -26,8 +26,20 @@
     background-color: #eee;
     border: 1px solid #aaa;
 }
-/* End button classes */
 
+.ibx-button:active
+{
+	background-color:#ddd;
+}
+
+.ibx-button-simple, .ibx-button-simple:hover, .ibx-button-simple:hover[disabled], .ibx-button-simple:focus
+{
+	padding:0px;
+	border-radius:0px;
+	border:none;
+	box-shadow:none;
+}
+/* End button classes */
 
 /* Start check box classes */
 
