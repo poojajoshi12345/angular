@@ -34,6 +34,7 @@ $.widget("ibi.ibxSplitter", $.ibi.ibxWidget,
 			$(document.body).addClass(bVertical ? "ibx-body-splitter-v" : "ibx-body-splitter-h").css("pointerEvents", "none");
 			$(document).on("mouseup mousemove", this._fnSplitterMouseEvent);
 			this._eLast = e;
+			this._trigger("resizestart", null, { "el1": this.element.prev(), "el2": this.element.next() });
 		}
 		else
 		if(eType == "mouseup")
@@ -41,6 +42,7 @@ $.widget("ibi.ibxSplitter", $.ibi.ibxWidget,
 			$(document.body).removeClass("ibx-body-splitter-v ibx-body-splitter-h").css("pointerEvents", "");
 			$(document).off("mouseup mousemove", this._fnSplitterMouseEvent);
 			delete this._eLast;
+			this._trigger("resizeend", null, { "el1": this.element.prev(), "el2": this.element.next() });
 		}
 		else
 		if(eType == "mousemove")
@@ -70,14 +72,17 @@ $.widget("ibi.ibxSplitter", $.ibi.ibxWidget,
 			bVertical ? el1.width(s1Val) : el1.height(s1Val);
 			bVertical ? el2.width(s2Val) : el2.height(s2Val);
 
-			this._trigger("resize", null, {"el1":el1, "el2":el2, "dx":dx, "dy":dy});
+			this._trigger("resize", null, { "el1": el1, "el2": el2, "dx": dx, "dy": dy });
 			this._eLast = e;
 		}
 		else
 		if(eType == "dblclick")
 		{
-			if(this.options.autoReset)
+			if (this.options.autoReset)
+			{
 				this.reset();
+				this._trigger("reset", null, { "el1": el1, "el2": el2, "dx": dx, "dy": dy });
+			}
 		}
 	},
 	_destroy:function()
