@@ -58,6 +58,11 @@ $.widget("ibi.ibxSelect", $.ibi.ibxTextField,
 		this.element.children(".ibx-menu-item, .ibx-select-group").detach().appendTo(this.element);
 		this._super();
 	},
+	add:function(el, sibling, before)
+	{
+		this._super(el, sibling, before);
+		this._onChildAdded(el);
+	},
 	_onChildAdded: function (node, mutation)
 	{
 		node = $(node);
@@ -89,8 +94,19 @@ $.widget("ibi.ibxSelect", $.ibi.ibxTextField,
 			}
 		}
 	},
+	remove:function(el)
+	{
+		var parent = (this._isDropDown()) ? this._listWidget.add(node) : this._list.append(node);
+		if(parent)
+			parent.ibxWidget("remove", node)
+		this._onChildRemoved(node);
+	},
 	_onChildRemoved: function (node, mutation)
 	{
+	},
+	listChildren:function()
+	{
+		return this._isDropDown ? this._listWidget.children(".ibx-select-item") : this._list.children(".ibx-select-item");
 	},
 	_createPopup: function ()
 	{
