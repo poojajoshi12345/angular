@@ -3,12 +3,12 @@
 
 @font-face {
   font-family: 'ibx Icons';
-  src:  url('../fonts/ibx-font.eot?d84one');
-  src:  url('../fonts/ibx-font.eot?d84one#iefix') format('embedded-opentype'),
-    url('../fonts/ibx-font.woff2?d84one') format('woff2'),
-    url('../fonts/ibx-font.ttf?d84one') format('truetype'),
-    url('../fonts/ibx-font.woff?d84one') format('woff'),
-    url('../fonts/ibx-font.svg?d84one#ibx-fonts') format('svg');
+  src:  url('../fonts/ibx-font.eot?qgqvz1');
+  src:  url('../fonts/ibx-font.eot?qgqvz1#iefix') format('embedded-opentype'),
+    url('../fonts/ibx-font.woff2?qgqvz1') format('woff2'),
+    url('../fonts/ibx-font.ttf?qgqvz1') format('truetype'),
+    url('../fonts/ibx-font.woff?qgqvz1') format('woff'),
+    url('../fonts/ibx-font.svg?qgqvz1#ibx-fonts') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -489,11 +489,14 @@
 .ibx-glyph-paint-brush:before {
   content: "\e99a";
 }
-.ibx-glyph-bar-chart:before {
+.ibx-glyph-bar-chart-small:before {
   content: "\f080";
 }
-.ibx-glyph-bar-chart-o:before {
-  content: "\f080";
+.ibx-glyph-expand:before {
+  content: "\f065";
+}
+.ibx-glyph-compress:before {
+  content: "\f066";
 }
 .ibx-glyph-panel:before {
   content: "\e935";
