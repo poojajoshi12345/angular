@@ -66,6 +66,18 @@ $.widget("ibi.ibxDialog", $.ibi.ibxPopup,
 		this.element.children().not(this.vbMain).detach().appendTo(this.element);
 		this.refresh();
 	},
+	children:function(selector)
+	{
+		return this.contentBox.ibxWidget("children", selector);
+	},
+	add:function(el, sibling, before)
+	{
+		this._onChildAdded(el);
+	},
+	remove:function(el)
+	{
+		this.contentBox.ibxWidget("remove", el);
+	},
 	_onChildAdded:function(node, mutation)
 	{
 		this.contentBox.append(node);
