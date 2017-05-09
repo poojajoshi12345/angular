@@ -54,7 +54,8 @@ $.widget("ibi.ibxSelect", $.ibi.ibxTextField,
 				this._textInput.on('click', this._onTextClick.bind(this));
 		}
 		this._createPopup();
-		this.element.children(".ibx-menu-item, .ibx-select-group").detach().appendTo(this.element);
+		var children = this.element.children(".ibx-menu-item, .ibx-select-group").detach();
+		this.add(children);
 		this._super();
 	},
 	children:function(selector)
@@ -814,29 +815,26 @@ $.widget("ibi.ibxSelectGroup", $.ibi.ibxLabel,
 		{
 			listen: true,
 			fnAddedNodes: this._onChildAdded.bind(this),
-			fnRemovedNodes: this._onChildRemoved.bind(this),
 			init: { childList: true }
 		});
+	},
+	add:function(el, sibling, before)
+	{
+		this._onChildAdded(el);
+	},
+	remove:function(el)
+	{
+		this._super(el);
 	},
 	_onChildAdded: function (node, mutation)
 	{
 		node = $(node);
-		if (this.options.selectCtrl)
-		{
-			var select = this.options.selectCtrl.data('ibxWidget');
-			if (select)
-			{
-				var children = this.element.parent().children('.ibx-radio-group-' + $(this.element).attr("id"));
-				var after = this.element;
-				if (children.length > 0)
-					after = children[children.length - 1];
-				node.prepend($("<div>").addClass("ibx-menu-item-marker")).addClass('ibx-select-group-item ibx-radio-group-' + $(this.element).attr("id"));
-				node.insertAfter(after);
-			}
-		}
-	},
-	_onChildRemoved: function (node, mutation)
-	{
+		var children = this.element.parent().children('.ibx-radio-group-' + $(this.element).attr("id"));
+		var after = this.element;
+		if (children.length > 0)
+			after = children[children.length - 1];
+		node.prepend($("<div>").addClass("ibx-menu-item-marker")).addClass('ibx-select-group-item ibx-radio-group-' + $(this.element).attr("id"));
+		node.insertAfter(after);
 	},
 	_destroy: function ()
 	{

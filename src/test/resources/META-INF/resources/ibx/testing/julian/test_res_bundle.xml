@@ -62,6 +62,12 @@
 
 	<markup>
 		<markup-block>
+			<div class="test-select" data-ibx-type="ibxSelect" data-ibx-name-root="true">
+				<div class="group1" data-ibx-type="ibxSelectGroup" data-ibx-name="group1" data-ibxp-text="Group1"></div>
+				<div class="group2" data-ibx-type="ibxSelectGroup" data-ibx-name="group2" data-ibxp-text="Group2"></div>
+			</div>
+
+
 			<div class="res-ibx-carousel-body">
 				<div class="ibx-crsl-prev-box" data-ibx-name='boxPrev' data-ibx-type="ibxHBox" data-ibx-align="center" data-ibx-col="1" data-ibx-row="1/span 2">
 					<div class="ibx-crsl-prev-btn" data-ibx-name="btnPrev" data-ibx-type="ibxLabel" data-ibxp-glyph="keyboard_arrow_left" data-ibxp-glyph-classes="material-icons"></div>

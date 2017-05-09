@@ -25,24 +25,22 @@
 				ibxResourceMgr.addBundle("../testing/julian/test_res_bundle.xml").done(function(resBundle, window)
 				{
 					ibx.bindElements();
+
+					var testSelect = ibxResourceMgr.getResource(".test-select");
+
+					var group = testSelect.ibxWidget("member", "group1");
+					for(var i = 0; i < 5; ++i)
+						group.ibxWidget("add", $("<div>").ibxSelectItem({text:"Group 1 Item" + i}));
+
+					var group = testSelect.ibxWidget("member", "group2");
+					for(var i = 0; i < 5; ++i)
+						group.ibxWidget("add", $("<div>").ibxSelectItem({text:"Group 2 Item" + i}));
+
+					$("body").append(testSelect);
+
 				});
 				$(".btn-pop").on("click", function(e)
 				{
-					var pop = $(".grid-pop").data("ibxWidget");
-					pop.isOpen() ? pop.close() : pop.open();
-
-					var grid = $(".grid-test");
-					grid.empty();
-					for(var i = 0; i < 4; ++i)
-					{
-						for(var j = 0; j < 3; ++j)
-						{
-							var cell = $(sformat("<div data-ibx-type='ibxLabel' data-ibxp-text='Cell_{1}_{2}' data-ibx-col='{3}/span 1' data-ibx-row='{4}/span 1'><div>",
-								i+1, j+1, j+1, i+1));
-							grid.append(cell);
-						}
-					}
-					ibx.bindElements(grid);
 				});
 			}, false);
 		</script>
@@ -68,10 +66,6 @@
 	</head>
 	<body class="ibx-root">
 		<div class="btn-pop" data-ibx-type="ibxButton" data-ibxp-text="Popup..."></div>
-		<div class="grid-pop" data-ibx-type="ibxPopup" data-ibxp-destroy-on-close="false">
-			<div class="grid-test" data-ibx-type="ibxGrid" data-ibxp-cols="50px 50px 50px" data-ibxp-rows="50px 50px 50px 50px">
-			</div>
-		</div>
 
 		<div class="test-csl" data-ibx-type="ibxCarousel">
 			<div class="test-csl-item">Carousel Item</div>

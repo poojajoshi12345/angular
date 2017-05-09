@@ -131,7 +131,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 	},
 	member:function(memberName, value)
 	{
-		var ret = this;
+		var ret = null;
 		if(value === undefined)
 			ret = this[memberName];
 		else
@@ -140,7 +140,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 				console.warn("Overwriting member '" + memberName + "' in nameroot, info=>", {nameRoot:this, memberExisting:this[memberName], memberOverwrite:value});
 			this[memberName] = value;
 		}
-		return ret;
+		return ret || $();
 	},
 	_onFocusRootEvent:function(e)
 	{
