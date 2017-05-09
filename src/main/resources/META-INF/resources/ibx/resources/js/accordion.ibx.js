@@ -59,6 +59,7 @@ $.widget("ibi.ibxAccordionPane", $.ibi.ibxFlexBox,
 			this._group.ibxRadioGroup("removeControl", node);
 		}
 	},
+	
 	group:function(){return this._group;},
 	next:function()
 	{
@@ -179,6 +180,18 @@ $.widget("ibi.ibxAccordionPage", $.ibi.ibxFlexBox,
 			// max-height is really used just for animation when page closed/opened.
 			this._content.css("max-height", "");
 		}
+	},
+	children:function(selector)
+	{
+		return this._content.ibxWidget("children", selector);
+	},
+	add:function(el, sibling, before)
+	{
+		this._onChildAdded(el);
+	},
+	remove:function(el)
+	{
+		this._content.ibxWidget("remove", el);
 	},
 	_onChildAdded: function (node, mutation)
 	{

@@ -185,6 +185,10 @@ $.widget("ibi.ibxWidget", $.Widget,
 			e.preventDefault();
 		}
 	},
+	children:function(selector)
+	{
+		return this.element.children(selector);
+	},
 	add:function(el, elSibling, before)
 	{
 		el = $(el);
@@ -196,12 +200,12 @@ $.widget("ibi.ibxWidget", $.Widget,
 			before ? el.insertBefore(elSibling) : el.insertAfter(elSibling);
 		else
 			before ? this.element.prepend(el) : this.element.append(el);
-		return this;
+		this.refresh();
 	},
 	remove:function(el)
 	{
 		this.element.children().filter(el).detach();
-		return this;
+		this.refresh();
 	},
 	refresh:function()
 	{

@@ -29,28 +29,18 @@ $.widget("ibi.ibxMenu", $.ibi.ibxPopup,
 	{
 		this._super();
 	},
+	children:function(selector)
+	{
+		selector = selector || ".ibx-menu-item, .ibx-menu-separator";
+		return this._box.children(selector);
+	},
 	add:function(menuItem)
 	{
-		
-		menuItem = $(menuItem);
-		this._box.append(menuItem);
-		this.refresh()
+		this._box.ibxWidget("add", menuItem);
 	},
 	remove:function(menuItem)
 	{
-		menuItem = $(menuItem);
-		menuItem.detach();
-		this.refresh()
-	},
-	removeAll:function()
-	{
-		this.element.children(".ibx-menu-item").each(function(idx, el)
-		{
-			el = $(el)
-			this.remove(el);
-			el.detach();
-		}.bind(this));
-		this.refresh();
+		this._box.ibxWidget("remove", menuItem);
 	},
 	_onMenuItemClick:function(e, menuItem)
 	{

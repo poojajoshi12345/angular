@@ -26,7 +26,6 @@ $.widget("ibi.ibxSelect", $.ibi.ibxTextField,
 		{
 			listen: true,
 			fnAddedNodes: this._onChildAdded.bind(this),
-			fnRemovedNodes: this._onChildRemoved.bind(this),
 			init: { childList: true }
 		});
 	},
@@ -58,10 +57,18 @@ $.widget("ibi.ibxSelect", $.ibi.ibxTextField,
 		this.element.children(".ibx-menu-item, .ibx-select-group").detach().appendTo(this.element);
 		this._super();
 	},
+	children:function(selector)
+	{
+		selector = selector || ".ibx-select-item";
+		return this._listWidget.children(selector);
+	},
 	add:function(el, sibling, before)
 	{
-		this._super(el, sibling, before);
 		this._onChildAdded(el);
+	},
+	remove:function(el)
+	{
+		this._listWidget.remove(el);
 	},
 	_onChildAdded: function (node, mutation)
 	{
@@ -93,20 +100,6 @@ $.widget("ibi.ibxSelect", $.ibi.ibxTextField,
 					this._setSelection(node, true);
 			}
 		}
-	},
-	remove:function(el)
-	{
-		var parent = (this._isDropDown()) ? this._listWidget.add(node) : this._list.append(node);
-		if(parent)
-			parent.ibxWidget("remove", node)
-		this._onChildRemoved(node);
-	},
-	_onChildRemoved: function (node, mutation)
-	{
-	},
-	listChildren:function()
-	{
-		return this._isDropDown ? this._listWidget.children(".ibx-select-item") : this._list.children(".ibx-select-item");
 	},
 	_createPopup: function ()
 	{
