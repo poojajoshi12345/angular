@@ -9,6 +9,7 @@ $.widget("ibi.ibxMutationObserver", $.Widget,
 	options:
 	{
 		listen:false,
+		autoBind:false,
 		fnAll:$.noop,
 		fnAddedNodes:$.noop,
 		fnRemovedNodes:$.noop,
@@ -51,7 +52,8 @@ $.widget("ibi.ibxMutationObserver", $.Widget,
 		{
 			$.each(mutation.addedNodes, function(mutation, idx, node)
 			{
-				ibx.bindElements(node);
+				if(options.autoBind)
+					ibx.bindElements(node);
 				options.fnAddedNodes(node, mutation);
 			}.bind(this, mutation));
 
