@@ -31,10 +31,6 @@ $.widget("ibi.ibxGrid", $.ibi.ibxWidget,
 	_create: function ()
 	{
 		this._super();
-	},
-	init:function()
-	{
-		this._super();
 		this.element.ibxMutationObserver(
 		{
 			listen: true,
@@ -49,6 +45,7 @@ $.widget("ibi.ibxGrid", $.ibi.ibxWidget,
 	},
 	_onChildRemoved: function (node, mutation)
 	{
+		this.refresh();
 	},
 	_destroy: function ()
 	{
