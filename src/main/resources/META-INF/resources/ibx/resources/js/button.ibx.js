@@ -326,6 +326,8 @@ $.widget("ibi.ibxButtonGroup", $.ibi.ibxFlexBox,
 			}.bind(this));
 			this.refresh();
 		}
+
+		this._super(el);
 	},
 	_createGroupSelection: function ()
 	{
