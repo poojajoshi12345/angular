@@ -53,7 +53,7 @@ $.widget("ibi.ibxSelect", $.ibi.ibxTextField,
 	},
 	children:function(selector)
 	{
-		selector = selector || ".ibx-select-item";
+		selector = selector || ".ibx-select-item, ibx-select-group";
 		return this._listWidget.children(selector);
 	},
 	add:function(el, sibling, before)
@@ -378,6 +378,10 @@ $.widget("ibi.ibxSelect", $.ibi.ibxTextField,
 			this._updateText();
 		this._trigger("change", null, this.element);
 		this._trigger("set_form_value", null, { "elem": this.element, "value": this._getUserValue() });
+	},
+	selectItem: function (el)
+	{
+		this._setSelection(el, false);
 	},
 	_setSelection: function (menuItem, bKeep, bKeepAnchor, bNoUpdate, bNoChange)
 	{
@@ -796,13 +800,15 @@ $.widget("ibi.ibxSelectGroup", $.ibi.ibxLabel,
 	add:function(el, sibling, before)
 	{
 		el = $(el);
-		el.each(function(idx, el)
+		el.each(function (idx, el)
 		{
 			el = $(el);
 			var children = this.element.parent().children('.ibx-radio-group-' + $(this.element).attr("id"));
 			var after = (children.length == 0) ? this.element : after = children[children.length - 1];
 			el.prepend($("<div>").addClass("ibx-menu-item-marker")).addClass('ibx-select-group-item ibx-radio-group-' + $(this.element).attr("id"));
 			el.insertAfter(after);
+			if (el.ibxWidget('option', 'selected'))
+				this.options.selectCtrl.ibxWidget('selectItem', el);
 		}.bind(this));
 	},
 	refresh: function ()
