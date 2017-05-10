@@ -31,25 +31,9 @@ $.widget("ibi.ibxGrid", $.ibi.ibxWidget,
 	_create: function ()
 	{
 		this._super();
-		this.element.ibxMutationObserver(
-		{
-			listen: true,
-			fnAddedNodes: this._onChildAdded.bind(this),
-			fnRemovedNodes: this._onChildRemoved.bind(this),
-			init: { childList: true }
-		});
-	},
-	_onChildAdded: function (node, mutation)
-	{
-		this.refresh();
-	},
-	_onChildRemoved: function (node, mutation)
-	{
-		this.refresh();
 	},
 	_destroy: function ()
 	{
-		this.element.ibxMutationObserver('destroy');
 		this._super();
 	},
 	refresh: function ()

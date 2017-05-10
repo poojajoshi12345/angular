@@ -61,8 +61,8 @@ $.widget("ibi.ibxWidget", $.Widget,
 		{
 			this.member(memberName, memberValue);
 		}.bind(this));
-
 		this.element.removeData("_ibxPrecreateMemberVariables");
+
 		this._super();
 	},
 	destroyed:function(){return this._destroyed;},
@@ -193,9 +193,6 @@ $.widget("ibi.ibxWidget", $.Widget,
 	{
 		el = $(el);
 		elSibling = $(elSibling);
-		var parent = el.parent().data("ibxWidget");
-		if(parent)
-			parent.remove(el);
 		if(elSibling.length)
 			before ? el.insertBefore(elSibling) : el.insertAfter(elSibling);
 		else
@@ -205,7 +202,6 @@ $.widget("ibi.ibxWidget", $.Widget,
 	remove:function(el)
 	{
 		this.element.children().filter(el).detach();
-		this.refresh();
 	},
 	refresh:function()
 	{
@@ -215,7 +211,5 @@ $.widget("ibi.ibxWidget", $.Widget,
 		options.defaultFocused ? this.element.addClass("ibx-default-focused") : this.element.removeClass("ibx-default-focused");
 	}
 });
-$.ibi.ibxWidget.statics = 
-{
-};
+
 //# sourceURL=widget.ibx.js

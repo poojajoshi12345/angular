@@ -21,45 +21,37 @@ $.widget("ibi.ibxAccordionPane", $.ibi.ibxFlexBox,
 		this._super();
 		this._group = $("<div>").uniqueId().appendTo(this.element);
 		this._group.ibxRadioGroup({name:this._group.prop("id")}).on("ibx_change", this._onPageChange.bind(this));
-		this.element.ibxMutationObserver(
+		this.add(this.element.children(".ibx-accordion-page"));
+	},
+	children:function(selector)
+	{
+		return this._super(selector || ".ibx-accordion-page");
+	},
+	add:function(el, sibling, before)
+	{
+		this._super(el, sibling, before);
+
+		el = $(el);
+		el.filter(".ibx-accordion-page").each(function(idx, el)
 		{
-			listen:true,
-			fnAddedNodes:this._onChildAdded.bind(this),
-			fnRemovedNodes:this._onChildRemoved.bind(this),
-			init:{childList:true}
-		});
-	},
-	_destroy:function()
-	{
-		this.element.ibxMutationObserver('destroy');
-		this._super();
-	},
-	_init:function()
-	{
-		this._super();
-		this.element.children(".ibx-accordion-page").detach().appendTo(this.element);
-	},
-	_onChildAdded:function(node, mutation)
-	{
-		node = $(node);
-		if(node.is(".ibx-accordion-page"))
-		{
+			el = $(el);
 			var groupName = this._group.ibxWidget("option", "name");
-			node.ibxAccordionPage("option", "groupName", groupName);
-			this._group.ibxRadioGroup("addControl", node);
-		}
+			el.ibxAccordionPage("option", "groupName", groupName);
+			this._group.ibxRadioGroup("addControl", el);
+		}.bind(this));
 		this.refresh();
 	},
-	_onChildRemoved:function(node, mutation)
+	remove:function(el)
 	{
-		node = $(node);
-		if(node.is(".ibx-accordion-page"))
+		el = $(el);
+		el.filter(".ibx-accordion-page").each(function(idx, el)
 		{
-			node.ibxAccordionPage("option", "groupName", "");
-			this._group.ibxRadioGroup("removeControl", node);
-		}
+			el = $(el);
+			el.ibxAccordionPage("option", "groupName", "");
+			this._group.ibxRadioGroup("removeControl", el);
+		}.bind(this));
+		this._super(el);
 	},
-	
 	group:function(){return this._group;},
 	next:function()
 	{
@@ -139,26 +131,20 @@ $.widget("ibi.ibxAccordionPage", $.ibi.ibxFlexBox,
 	_widgetClass:"ibx-accordion-page",
 	_create:function()
 	{
+		this._super();
 
 		this.element.on("keydown", this._onPageKeyEvent.bind(this));
 		this.element.on("focus", this._onPageFocus.bind(this));
-		this.element.ibxMutationObserver(
-		{
-			listen:true,
-			fnAddedNodes:this._onChildAdded.bind(this),
-			init:{childList:true}
-		});
-
 		var content = this._content = $("<div class='ibx-accordion-page-content'>").ibxWidget(this.options.contentOptions);
 		var btn = this._button = $("<div tabIndex='0'>").on("click", this._onBtnChange.bind(this));
 		btn.data("accPage", this.element).ibxButton(this.options.btnOptions).addClass("ibx-accordion-button");
-
 		this.element.append(btn, content)
-		this._super();
+
+		this.add(this.element.children(":not(.ibx-accordion-button, .ibx-accordion-page-content)"));
+		this.element.on("transitionend", this._onTransitionEnd.bind(this))
 	},
 	_destroy:function()
 	{
-		this.element.ibxMutationObserver('destroy');
 		this.element.append(this._content.children());
 		this._button.ibxWidget("destroy");
 		this._content.ibxWidget("destroy");
@@ -166,12 +152,6 @@ $.widget("ibi.ibxAccordionPage", $.ibi.ibxFlexBox,
 	},
 	button:function(){return this._button;},
 	content:function(){return this._content;},
-	_init:function()
-	{
-		this._super();
-		this.element.children(":not(.ibx-accordion-button, .ibx-accordion-page-content)").detach().appendTo(this.element);
-		this.element.on("transitionend", this._onTransitionEnd.bind(this))
-	},
 	_onTransitionEnd: function (e)
 	{
 		if (e.originalEvent.propertyName == "max-height")
@@ -187,21 +167,18 @@ $.widget("ibi.ibxAccordionPage", $.ibi.ibxFlexBox,
 	},
 	add:function(el, sibling, before)
 	{
-		this._onChildAdded(el);
+		el = $(el);
+		if(!el.is(this._content) && !el.is(this._button))
+		{
+			this._content.append(el);
+			this.refresh();
+		}
 	},
 	remove:function(el)
 	{
 		this._content.ibxWidget("remove", el);
 	},
-	_onChildAdded: function (node, mutation)
-	{
-		node = $(node);
-		if(!node.is(this._content) && !node.is(this._button))
-		{
-			this._content.append(node);
-			this.refresh();
-		}
-	},
+
 	/*Needed so this object can be part of an ibxRadioGroup.*/
 	getValue:$.noop,
 	checked:function(checked)
@@ -265,6 +242,7 @@ $.widget("ibi.ibxAccordionPage", $.ibi.ibxFlexBox,
 		this._button.ibxButton("option", opts).css("order", (options.btnPosition == "end") ? 1 : -1);
 		options.btnShow ? this._button.removeClass("acc-btn-hide") : this._button.addClass("acc-btn-hide");
 
+		/*
 		//DO NOT MOVE THIS, MUST BE DONE BEFORE CLASS ADJUSTMENTS BELOW!
 		//Here's what's going on here...we need to set the max-height so the transition effect will work
 		//when the 'closed' css class is added/removed below.
@@ -274,6 +252,7 @@ $.widget("ibi.ibxAccordionPage", $.ibi.ibxFlexBox,
 		this.element[0].offsetHeight;
 		if (!selected)
 			this._content.css("max-height", "");
+		*/
 
 		//DO NOT MOVE THIS, MUST BE DONE AFTER HEIGHT ADJUSTMENT ABOVE!
 		selected ? this.element.removeClass("acc-pg-closed") : this.element.addClass("acc-pg-closed");
@@ -283,9 +262,6 @@ $.widget("ibi.ibxAccordionPage", $.ibi.ibxFlexBox,
 });
 $.widget("ibi.ibxHAccordionPage", $.ibi.ibxAccordionPage, {options:{direction:"row"}, _widgetClass:"ibx-accordion-page-horizontal"});
 $.widget("ibi.ibxVAccordionPage", $.ibi.ibxAccordionPage, {options:{direction:"column"}, _widgetClass:"ibx-accordion-page-vertical"});
-$.ibi.ibxAccordionPage.statics = 
-{
-};
 
 //# sourceURL=accordion.ibx.js
 

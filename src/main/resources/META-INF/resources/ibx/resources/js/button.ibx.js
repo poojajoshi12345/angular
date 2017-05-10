@@ -276,13 +276,6 @@ $.widget("ibi.ibxButtonGroup", $.ibi.ibxFlexBox,
 	{
 		this._onSelectedBound = this._onSelected.bind(this);
 		this._super();
-		this.element.ibxMutationObserver(
-		{
-			listen: true,
-			fnAddedNodes: this._onChildAdded.bind(this),
-			fnRemovedNodes: this._onChildRemoved.bind(this),
-			init: { childList: true }
-		});
 	},
 	_init: function ()
 	{
@@ -294,35 +287,43 @@ $.widget("ibi.ibxButtonGroup", $.ibi.ibxFlexBox,
 			this.options.name = this.element.attr("id");
 		}
 		this.element.on("keydown", this._onKeyDown.bind(this));
-		this.element.children(".ibx-button, .ibx-check-box").detach().appendTo(this.element);
+		this.add(this.element.children(".ibx-button, .ibx-check-box"));
 		this._super();
 	},
-	_destroy: function ()
+	children:function(selector)
 	{
-		this._super();
+		return this._super(selector || ".ibx-button, .ibx-check-box");
 	},
-	_onChildAdded: function (node, mutation)
+	add:function(el, sibling, before)
 	{
-		node = $(node);
-		if (this._group && node.is('.ibx-button, .ibx-check-box'))
+		if(this._group)
 		{
-			node.on("ibx_change", this._onSelectedBound)
-			node.addClass("ibx-button-group-member");
-			node.ibxWidget('option', 'group', this.options.name);
-			this._group.ibxWidget('addControl', node);
+			el = $(el).filter(".ibx-button, .ibx-check-box");
+			el.each(function(idx, el)
+			{
+				el = $(el);
+				el.on("ibx_change", this._onSelectedBound)
+				el.addClass("ibx-button-group-member");
+				el.ibxWidget('option', 'group', this.options.name);
+				this._group.ibxWidget('addControl', el);
+			}.bind(this));
+			this.refresh();
 		}
-		this.refresh();
 	},
-	_onChildRemoved: function (node, mutation)
+	remove:function(el)
 	{
-		node = $(node);
-		if (this._group && node.is('.ibx-button, .ibx-check-box'))
+		if(this._group)
 		{
-			node.off("ibx_change", this._onSelectedBound)
-			node.removeClass("ibx-button-group-member");
-			this._group.ibxWidget('removeControl', node);
+			el = $(el).filter(".ibx-button, .ibx-check-box");
+			el.each(function(idx, el)
+			{
+				el = $(el);
+				el.off("ibx_change", this._onSelectedBound)
+				el.removeClass("ibx-button-group-member");
+				this._group.ibxWidget('removeControl', el);
+			}.bind(this));
+			this.refresh();
 		}
-		this.refresh();
 	},
 	_createGroupSelection: function ()
 	{

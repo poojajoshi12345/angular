@@ -47,23 +47,11 @@ $.widget("ibi.ibxDialog", $.ibi.ibxPopup,
 		this.btnOK.on("click", this.close.bind(this, "ok"));
 		if(options.defaultFocused == "close")
 			dlg.titleClose.ibxWidget("option", "defaulFocused", true);
-		
-		this.element.ibxMutationObserver(
-		{
-			listen:true,
-			fnAddedNodes:this._onChildAdded.bind(this),
-			init:{childList:true}
-		});
-	},
-	_destroy:function()
-	{
-		this.element.ibxMutationObserver('destroy');
-		this._super();
 	},
 	_init:function()
 	{
 		this._super();
-		this.element.children().not(this.vbMain).detach().appendTo(this.element);
+		this.add(this.element.children().not(this.vbMain));
 		this.refresh();
 	},
 	children:function(selector)
@@ -72,15 +60,11 @@ $.widget("ibi.ibxDialog", $.ibi.ibxPopup,
 	},
 	add:function(el, sibling, before)
 	{
-		this._onChildAdded(el);
+		this.contentBox.ibxWidget("add", el, sibling, before);
 	},
 	remove:function(el)
 	{
 		this.contentBox.ibxWidget("remove", el);
-	},
-	_onChildAdded:function(node, mutation)
-	{
-		this.contentBox.append(node);
 	},
 	apply:function(e)
 	{
@@ -102,9 +86,9 @@ $.widget("ibi.ibxDialog", $.ibi.ibxPopup,
 $.ibi.ibxDialog.createMessageDialog = function(options)
 {
 	options = $.extend(true, {}, {type:"std", messageOptions:{justify:"start"}}, options);
-	var dlg = $("<div>").ibxDialog(options);
 	var msg = $("<div data-ibx-name='message'>").ibxLabel(options.messageOptions).addClass("ibx-dialog-message");
-	dlg.append(msg);
+	var dlg = $("<div>").ibxDialog(options);
+	dlg.ibxWidget("add", msg);
 	ibx.bindElements(dlg);
 	return dlg;
 };

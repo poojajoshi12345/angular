@@ -9,7 +9,7 @@ $.widget("ibi.ibxMutationObserver", $.Widget,
 	options:
 	{
 		listen:false,
-		autoBind:false,
+		autoBindAdded:false,
 		fnAll:$.noop,
 		fnAddedNodes:$.noop,
 		fnRemovedNodes:$.noop,
