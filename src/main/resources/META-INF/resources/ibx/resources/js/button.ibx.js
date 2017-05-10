@@ -404,6 +404,10 @@ $.widget("ibi.ibxButtonGroup", $.ibi.ibxFlexBox,
 		else
 			return null;
 	},
+	group: function ()
+	{
+		return this._group;
+	},
 	_fixFirstLast: function ()
 	{
 		var all = this.element.children(".ibx-widget:not(:displayNone)").not(this._group);
