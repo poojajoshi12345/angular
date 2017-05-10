@@ -515,10 +515,7 @@ $.widget("ibi.ibxSelect", $.ibi.ibxTextField,
 			{
 				$("body").append(this._list);
 				this._listWidget.open();
-				if (!this._listWidth)
-					this._listWidth = this._list.width();
-				if (this._listWidth < this.element.width())
-					this._list.width(this.element.width());
+				this._list.css('min-width', this.element.outerWidth() + "px");
 			}
 		}
 		this._dontOpen = false;
