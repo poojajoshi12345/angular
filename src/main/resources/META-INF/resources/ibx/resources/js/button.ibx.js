@@ -296,6 +296,8 @@ $.widget("ibi.ibxButtonGroup", $.ibi.ibxFlexBox,
 	},
 	add:function(el, sibling, before)
 	{
+		this._super(el, sibling, before);
+
 		if(this._group)
 		{
 			el = $(el).filter(".ibx-button, .ibx-check-box");
