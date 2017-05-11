@@ -294,9 +294,9 @@ $.widget("ibi.ibxButtonGroup", $.ibi.ibxFlexBox,
 	{
 		return this._super(selector || ".ibx-button, .ibx-check-box");
 	},
-	add:function(el, sibling, before)
+	add:function(el, sibling, before, refresh)
 	{
-		this._super(el, sibling, before);
+		this._super(el, sibling, before, refresh);
 
 		if(this._group)
 		{
@@ -311,7 +311,7 @@ $.widget("ibi.ibxButtonGroup", $.ibi.ibxFlexBox,
 			this.refresh();
 		}
 	},
-	remove:function(el)
+	remove:function(el, refresh)
 	{
 		if(this._group)
 		{
@@ -326,7 +326,7 @@ $.widget("ibi.ibxButtonGroup", $.ibi.ibxFlexBox,
 			this.refresh();
 		}
 
-		this._super(el);
+		this._super(el, refresh);
 	},
 	_createGroupSelection: function ()
 	{

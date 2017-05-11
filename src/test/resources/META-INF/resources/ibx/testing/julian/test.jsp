@@ -26,24 +26,16 @@
 				{
 					ibx.bindElements();
 
-					var testSelect = ibxResourceMgr.getResource(".test-select");
-
-					var group = testSelect.ibxWidget("member", "group1");
-					for(var i = 0; i < 5; ++i)
-						group.ibxWidget("add", $("<div>").ibxSelectItem({text:"Group 1 Item" + i}));
-
-					var selIdx = 0;
-					var group = testSelect.ibxWidget("member", "group2");
-					for(var i = 0; i < 5; ++i)
-						group.ibxWidget("add", $("<div>").ibxSelectItem({text:"Group 2 Item" + i, selected:(selIdx == i)}));
-					/*
-					*/
-
-					$("body").append(testSelect);
-
-				});
-				$(".btn-pop").on("click", function(e)
-				{
+					var testGrid = $(".test-grid");
+					for(var i = 1; i < 5; ++i)
+					{
+						for(var j = 1; j < 5; ++j)
+						{
+							var cell = $("<div class='test-grid-item'>").ibxButton({text:sformat("Button: {1}/{2}", i, j)});
+							cell.data({ibxRow:sformat("{1}/span 1", i), ibxCol:sformat("{1}/span 1", j)});
+							testGrid.ibxWidget("add", cell, null, false, true);
+						}
+					}
 				});
 			}, false);
 		</script>
@@ -65,11 +57,22 @@
 				margin:5px;
 				border:1px solid red;
 			}
+
+			.test-grid
+			{
+				border:1px solid black;
+			}
+			.test-grid-item
+			{
+				border:1px solid red;
+			}
 		</style>
 	</head>
 	<body class="ibx-root">
-		<div class="test" data-ibx-type="ibxWidget" data-ibxp-listen-mutations="true"></div>
+		<div class="test-grid" data-ibx-type="ibxGrid" data-ibxp-rows="1fr 1fr 1fr 1fr" data-ibxp-cols="1fr 1fr 1fr 1fr">
+		</div>
 
+		<!--
 		<div class="test-csl" data-ibx-type="ibxCarousel">
 			<div class="test-csl-item">Carousel Item</div>
 			<div class="test-csl-item">Carousel Item</div>
@@ -92,6 +95,7 @@
 			<div class="test-csl-item">Carousel Item</div>
 			<div class="test-csl-item">Carousel Item</div>
 		</div>
+		-->
 	</body>
 </html>
 

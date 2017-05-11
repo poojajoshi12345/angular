@@ -39,9 +39,9 @@ $.widget("ibi.ibxTabPane", $.ibi.ibxFlexBox,
 	{
 		return this._super(selector || ".ibx-tab-page");
 	},
-	add:function(el, sibling, before)
+	add:function(el, sibling, before, refresh)
 	{
-		this._super(el, sibling, before);
+		this._super(el, sibling, before, refresh);
 
 		el = $(el).filter(".ibx-tab-page");
 		el.each(function(idx, el)
@@ -56,14 +56,14 @@ $.widget("ibi.ibxTabPane", $.ibi.ibxFlexBox,
 				if ($.contains(this._tabBar[0], nextButton[0]))
 					button.insertBefore(nextButton);
 				else
-					this._tabBar.append(button);
+					this._tabBar.ibxWidget("add", button, null, null, true);
 			}
 			else
-				this._tabBar.append(button);
+				this._tabBar.ibxWidget("add", button, null, null, true);
 		}.bind(this));
 		this.refresh();
 	},
-	remove:function(el)
+	remove:function(el, refresh)
 	{
 		el = $(el).filter(".ibx-tab-page");
 		el.each(function(idx, el)

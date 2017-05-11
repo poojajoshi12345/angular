@@ -34,13 +34,13 @@ $.widget("ibi.ibxMenu", $.ibi.ibxPopup,
 		selector = selector || ".ibx-menu-item, .ibx-menu-separator";
 		return this._box.children(selector);
 	},
-	add:function(menuItem)
+	add:function(menuItem, sibling, before, refresh)
 	{
-		this._box.ibxWidget("add", menuItem);
+		this._box.ibxWidget("add", menuItem, sibling, before, refresh);
 	},
-	remove:function(menuItem)
+	remove:function(menuItem, refresh)
 	{
-		this._box.ibxWidget("remove", menuItem);
+		this._box.ibxWidget("remove", menuItem, refresh);
 	},
 	_onMenuItemClick:function(e, menuItem)
 	{

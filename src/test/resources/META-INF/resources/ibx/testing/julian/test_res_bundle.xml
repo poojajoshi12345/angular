@@ -132,7 +132,6 @@
 				_childAdded:function(child, mutation)
 				{
 					child = $(child);
-					console.dir(child);
 					child.removeClass("ibx-grid-cell").addClass("ibx-crsl-item");
 					this.boxItems.append(child);
 				},

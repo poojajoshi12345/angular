@@ -58,13 +58,13 @@ $.widget("ibi.ibxDialog", $.ibi.ibxPopup,
 	{
 		return this.contentBox.ibxWidget("children", selector);
 	},
-	add:function(el, sibling, before)
+	add:function(el, sibling, before, refresh)
 	{
-		this.contentBox.ibxWidget("add", el, sibling, before);
+		this.contentBox.ibxWidget("add", el, sibling, before, refresh);
 	},
 	remove:function(el)
 	{
-		this.contentBox.ibxWidget("remove", el);
+		this.contentBox.ibxWidget("remove", el, refresh);
 	},
 	apply:function(e)
 	{

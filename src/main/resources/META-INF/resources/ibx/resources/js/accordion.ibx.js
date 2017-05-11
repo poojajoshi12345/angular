@@ -27,9 +27,9 @@ $.widget("ibi.ibxAccordionPane", $.ibi.ibxFlexBox,
 	{
 		return this._super(selector || ".ibx-accordion-page");
 	},
-	add:function(el, sibling, before)
+	add:function(el, sibling, before, refresh)
 	{
-		this._super(el, sibling, before);
+		this._super(el, sibling, before, false);
 
 		el = $(el);
 		el.filter(".ibx-accordion-page").each(function(idx, el)
@@ -41,7 +41,7 @@ $.widget("ibi.ibxAccordionPane", $.ibi.ibxFlexBox,
 		}.bind(this));
 		this.refresh();
 	},
-	remove:function(el)
+	remove:function(el, refresh)
 	{
 		el = $(el);
 		el.filter(".ibx-accordion-page").each(function(idx, el)
@@ -50,7 +50,7 @@ $.widget("ibi.ibxAccordionPane", $.ibi.ibxFlexBox,
 			el.ibxAccordionPage("option", "groupName", "");
 			this._group.ibxRadioGroup("removeControl", el);
 		}.bind(this));
-		this._super(el);
+		this._super(el, refresh);
 	},
 	group:function(){return this._group;},
 	next:function()
@@ -136,11 +136,11 @@ $.widget("ibi.ibxAccordionPage", $.ibi.ibxFlexBox,
 		this.element.on("keydown", this._onPageKeyEvent.bind(this));
 		this.element.on("focus", this._onPageFocus.bind(this));
 		var content = this._content = $("<div class='ibx-accordion-page-content'>").ibxWidget(this.options.contentOptions);
-		var btn = this._button = $("<div tabIndex='0'>").on("click", this._onBtnChange.bind(this));
+		var btn = this._button = $("<div tabIndex='0' class='ibx-accordion-page-button'>").on("click", this._onBtnChange.bind(this));
 		btn.data("accPage", this.element).ibxButton(this.options.btnOptions).addClass("ibx-accordion-button");
 		this.element.append(btn, content)
 		this.element.on("transitionend", this._onTransitionEnd.bind(this))
-		this.add(this.element.children(":not(.ibx-accordion-button, .ibx-accordion-page-content)"));
+		this.add(this.element.children());
 	},
 	_destroy:function()
 	{
@@ -155,15 +155,13 @@ $.widget("ibi.ibxAccordionPage", $.ibi.ibxFlexBox,
 	{
 		return this._content.ibxWidget("children", selector);
 	},
-	add:function(el, sibling, before)
+	add:function(el, sibling, before, refresh)
 	{
-		el = $(el);
-		if(!el.is(this._content) && !el.is(this._button))
-			this._content.append(el);
+		this._content.ibxWidget("add", $(el).not(".ibx-accordion-page-button, .ibx-accordion-page-content"), sibling, before, refresh);
 	},
-	remove:function(el)
+	remove:function(el, refresh)
 	{
-		this._content.ibxWidget("remove", el);
+		this._content.ibxWidget("remove", el, refresh);
 	},
 
 	/*Needed so this object can be part of an ibxRadioGroup.*/
@@ -238,17 +236,11 @@ $.widget("ibi.ibxAccordionPage", $.ibi.ibxFlexBox,
 		this._button.ibxButton("option", opts).css("order", (options.btnPosition == "end") ? 1 : -1);
 		options.btnShow ? this._button.removeClass("acc-btn-hide") : this._button.addClass("acc-btn-hide");
 
-		/*
-		//DO NOT MOVE THIS, MUST BE DONE BEFORE CLASS ADJUSTMENTS BELOW!
-		//Here's what's going on here...we need to set the max-height so the transition effect will work
-		//when the 'closed' css class is added/removed below.
-		//THE CALL TO 'offsetHeight' will force the browser to reflow the document.
+		this._content.prop("offsetHeight");
 		var nHeight = this._content.prop("scrollHeight")
 		this._content.css("max-height", nHeight + "px");
-		this.element[0].offsetHeight;
 		if (!selected)
 			this._content.css("max-height", "");
-		*/
 
 		selected ? this.element.removeClass("acc-pg-closed") : this.element.addClass("acc-pg-closed");
 		selected ? this._button.removeClass("acc-btn-closed") : this._button.addClass("acc-btn-closed");
