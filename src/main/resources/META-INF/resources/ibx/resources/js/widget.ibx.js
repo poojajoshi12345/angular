@@ -189,7 +189,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 	{
 		return this.element.children(selector);
 	},
-	add:function(el, elSibling, before)
+	add:function(el, elSibling, before, refresh)
 	{
 		el = $(el);
 		elSibling = $(elSibling);
@@ -197,11 +197,15 @@ $.widget("ibi.ibxWidget", $.Widget,
 			before ? el.insertBefore(elSibling) : el.insertAfter(elSibling);
 		else
 			before ? this.element.prepend(el) : this.element.append(el);
-		this.refresh();
+
+		if(refresh)
+			this.refresh();
 	},
-	remove:function(el)
+	remove:function(el, refresh)
 	{
 		this.element.children().filter(el).detach();
+		if(refresh)
+			this.refresh();
 	},
 	refresh:function()
 	{

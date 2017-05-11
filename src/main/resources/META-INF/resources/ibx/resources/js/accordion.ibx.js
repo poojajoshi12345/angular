@@ -139,9 +139,8 @@ $.widget("ibi.ibxAccordionPage", $.ibi.ibxFlexBox,
 		var btn = this._button = $("<div tabIndex='0'>").on("click", this._onBtnChange.bind(this));
 		btn.data("accPage", this.element).ibxButton(this.options.btnOptions).addClass("ibx-accordion-button");
 		this.element.append(btn, content)
-
-		this.add(this.element.children(":not(.ibx-accordion-button, .ibx-accordion-page-content)"));
 		this.element.on("transitionend", this._onTransitionEnd.bind(this))
+		this.add(this.element.children(":not(.ibx-accordion-button, .ibx-accordion-page-content)"));
 	},
 	_destroy:function()
 	{
@@ -152,15 +151,6 @@ $.widget("ibi.ibxAccordionPage", $.ibi.ibxFlexBox,
 	},
 	button:function(){return this._button;},
 	content:function(){return this._content;},
-	_onTransitionEnd: function (e)
-	{
-		if (e.originalEvent.propertyName == "max-height")
-		{
-			// remove max-height at the end of the transition, so the page's content can grow as needed.
-			// max-height is really used just for animation when page closed/opened.
-			this._content.css("max-height", "");
-		}
-	},
 	children:function(selector)
 	{
 		return this._content.ibxWidget("children", selector);
@@ -169,10 +159,7 @@ $.widget("ibi.ibxAccordionPage", $.ibi.ibxFlexBox,
 	{
 		el = $(el);
 		if(!el.is(this._content) && !el.is(this._button))
-		{
 			this._content.append(el);
-			this.refresh();
-		}
 	},
 	remove:function(el)
 	{
@@ -228,6 +215,15 @@ $.widget("ibi.ibxAccordionPage", $.ibi.ibxFlexBox,
 		}
 		return this;
 	},
+	_onTransitionEnd: function (e)
+	{
+		if (e.originalEvent.propertyName == "max-height")
+		{
+			// remove max-height at the end of the transition, so the page's content can grow as needed.
+			// max-height is really used just for animation when page closed/opened.
+			this._content.css("max-height", "");
+		}
+	},
 	refresh:function()
 	{
 		this._super();
@@ -254,7 +250,6 @@ $.widget("ibi.ibxAccordionPage", $.ibi.ibxFlexBox,
 			this._content.css("max-height", "");
 		*/
 
-		//DO NOT MOVE THIS, MUST BE DONE AFTER HEIGHT ADJUSTMENT ABOVE!
 		selected ? this.element.removeClass("acc-pg-closed") : this.element.addClass("acc-pg-closed");
 		selected ? this._button.removeClass("acc-btn-closed") : this._button.addClass("acc-btn-closed");
 		selected ? this._content.removeClass("acc-cnt-closed") : this._content.addClass("acc-cnt-closed");
