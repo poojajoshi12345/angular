@@ -141,6 +141,10 @@ $.widget("ibi.ibxAccordionPage", $.ibi.ibxFlexBox,
 		this.element.append(btn, content)
 		this.element.on("transitionend", this._onTransitionEnd.bind(this))
 		this.add(this.element.children());
+		
+		//much as I hate timers, this refresh is needed so the accordion page will have the correct content when created
+		//and so that the animations for open/close will work correctly.
+		window.setTimeout(function(){this.refresh();}.bind(this), 0);
 	},
 	_destroy:function()
 	{
@@ -236,9 +240,9 @@ $.widget("ibi.ibxAccordionPage", $.ibi.ibxFlexBox,
 		this._button.ibxButton("option", opts).css("order", (options.btnPosition == "end") ? 1 : -1);
 		options.btnShow ? this._button.removeClass("acc-btn-hide") : this._button.addClass("acc-btn-hide");
 
-		this._content.prop("offsetHeight");
 		var nHeight = this._content.prop("scrollHeight")
 		this._content.css("max-height", nHeight + "px");
+		this.element[0].offsetHeight;
 		if (!selected)
 			this._content.css("max-height", "");
 
@@ -249,6 +253,7 @@ $.widget("ibi.ibxAccordionPage", $.ibi.ibxFlexBox,
 });
 $.widget("ibi.ibxHAccordionPage", $.ibi.ibxAccordionPage, {options:{direction:"row"}, _widgetClass:"ibx-accordion-page-horizontal"});
 $.widget("ibi.ibxVAccordionPage", $.ibi.ibxAccordionPage, {options:{direction:"column"}, _widgetClass:"ibx-accordion-page-vertical"});
+
 
 //# sourceURL=accordion.ibx.js
 
