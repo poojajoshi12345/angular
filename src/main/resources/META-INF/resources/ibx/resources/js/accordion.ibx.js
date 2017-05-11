@@ -240,12 +240,22 @@ $.widget("ibi.ibxAccordionPage", $.ibi.ibxFlexBox,
 		this._button.ibxButton("option", opts).css("order", (options.btnPosition == "end") ? 1 : -1);
 		options.btnShow ? this._button.removeClass("acc-btn-hide") : this._button.addClass("acc-btn-hide");
 
-		var nHeight = this._content.prop("scrollHeight")
-		this._content.css("max-height", nHeight + "px");
-		this.element[0].offsetHeight;
-		if (!selected)
+
+		/****
+			Figure out the desired height of the content so we can apply the max-height property which triggers the transition animation.
+			WE ONLY DO THIS WHEN HEIGHT IS NOT 0 AS 0 WILL NOT CAUSE THE ANIMATION TO BE TRIGGERED AND THE MAX-HEIGHT WILL NOT BE REMOVED.
+		****/
+		var nHeight = this._content.prop("scrollHeight") 
+		if(nHeight != 0)
+		{
+			this._content.css("max-height", nHeight + "px"); 
+			this.element[0].offsetHeight;//this causes the document to reflow and trigger the max-height animation
+		}
+
+		if(!selected)
 			this._content.css("max-height", "");
 
+		//DO NOT MOVE THIS CODE ABOVER THE max-height CALCULATION CODE ABOVE!!!!!!
 		selected ? this.element.removeClass("acc-pg-closed") : this.element.addClass("acc-pg-closed");
 		selected ? this._button.removeClass("acc-btn-closed") : this._button.addClass("acc-btn-closed");
 		selected ? this._content.removeClass("acc-cnt-closed") : this._content.addClass("acc-cnt-closed");
