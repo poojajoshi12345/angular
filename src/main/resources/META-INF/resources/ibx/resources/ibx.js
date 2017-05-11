@@ -83,6 +83,7 @@ function ibx(fn, autoBind)
 	}
 	return ibx;
 }
+ibx.version = "0.1";
 ibx.loadTimeout = 10000;//can't get preloads in running state by this interval, then bail!
 ibx._loaded = false;
 ibx._loadPromise = null;
