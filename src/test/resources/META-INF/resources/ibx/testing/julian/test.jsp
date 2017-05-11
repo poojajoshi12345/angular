@@ -32,9 +32,12 @@
 					for(var i = 0; i < 5; ++i)
 						group.ibxWidget("add", $("<div>").ibxSelectItem({text:"Group 1 Item" + i}));
 
+					var selIdx = 0;
 					var group = testSelect.ibxWidget("member", "group2");
 					for(var i = 0; i < 5; ++i)
-						group.ibxWidget("add", $("<div>").ibxSelectItem({text:"Group 2 Item" + i}));
+						group.ibxWidget("add", $("<div>").ibxSelectItem({text:"Group 2 Item" + i, selected:(selIdx == i)}));
+					/*
+					*/
 
 					$("body").append(testSelect);
 
@@ -65,7 +68,7 @@
 		</style>
 	</head>
 	<body class="ibx-root">
-		<div class="btn-pop" data-ibx-type="ibxButton" data-ibxp-text="Popup..."></div>
+		<div class="test" data-ibx-type="ibxWidget" data-ibxp-listen-mutations="true"></div>
 
 		<div class="test-csl" data-ibx-type="ibxCarousel">
 			<div class="test-csl-item">Carousel Item</div>

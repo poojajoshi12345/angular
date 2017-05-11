@@ -107,16 +107,10 @@
 				{
 					this._super();
 					var children = this.element.children().detach();
-					var body = ibxResourceMgr.getResource(".res-ibx-carousel-body", false);
-					this.element.append(body.children());
+					var resCaoursel = ibxResourceMgr.getResource(".res-ibx-carousel-body", false);
+					this.element.append(resCaoursel.children());
 					ibx.bindElements(this.element);
-					this.element.ibxMutationObserver(
-					{
-						listen:true,
-						fnAddedNodes:this._childAdded.bind(this),
-						init:{childList:true} 
-					});
-					this.element.append(children);
+					this.add(children);
 				},
 				_destroy:function()
 				{
@@ -138,6 +132,7 @@
 				_childAdded:function(child, mutation)
 				{
 					child = $(child);
+					console.dir(child);
 					child.removeClass("ibx-grid-cell").addClass("ibx-crsl-item");
 					this.boxItems.append(child);
 				},
