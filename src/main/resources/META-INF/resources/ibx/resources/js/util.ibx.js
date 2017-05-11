@@ -135,6 +135,25 @@ if(jQuery)
 	}
 }
 
+//search currently loaded stylesheets for defined rules of selector.
+function FindStyleRules(selector)
+{
+	selector = selector.replace(".", "\.");
+	var ret = [];
+	var sheets = document.styleSheets;
+	for(var i = 0; i < sheets.length; ++i)
+	{
+		var sheet = sheets[i];
+		var rules = sheet.cssRules;
+		for(var j = 0; j < rules.length; ++j)
+		{
+			var rule = rules[j];
+			if(rule.selectorText && rule.selectorText.indexOf(selector) != -1)
+				ret.push(rule);
+		}
+	}
+	return ret;
+}
 
 /****
 	MediaQuery is used to wrap the idea of creating javascript breakpoints to our code.  Also allows
