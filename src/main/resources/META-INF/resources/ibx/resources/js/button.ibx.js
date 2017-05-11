@@ -307,7 +307,6 @@ $.widget("ibi.ibxButtonGroup", $.ibi.ibxFlexBox,
 				el.on("ibx_change", this._onSelectedBound)
 				el.addClass("ibx-button-group-member");
 				el.ibxWidget('option', 'group', this.options.name);
-				this._group.ibxWidget('addControl', el);
 			}.bind(this));
 			this.refresh();
 		}
