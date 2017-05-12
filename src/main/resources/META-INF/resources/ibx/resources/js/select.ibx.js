@@ -86,6 +86,10 @@ $.widget("ibi.ibxSelect", $.ibi.ibxTextField,
 			}
 		}.bind(this, sibling, before, refresh));
 	},
+	remove: function (el, refresh)
+	{
+		this._listWidget.remove(el, refresh);
+	},
 	_createPopup: function ()
 	{
 		if (this._isDropDown())
