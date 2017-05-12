@@ -104,12 +104,12 @@ $.widget("ibi.ibxAccordionPage", $.ibi.ibxFlexBox,
 			textElClass:"ibx-label-text ibx-accordion-button-text",
 			justify:"start",
 			iconPosition:"right",
-			glyph:"chevron_right",
-			glyphClasses:"material-icons"
+			glyph:"",
+			glyphClasses:"ibx-icons ibx-glyph-chevron-right"
 		},
 		btnOptionsOpen:
 		{
-			glyphClasses:"material-icons acc-rotate-glyph"
+			glyphClasses:"ibx-icons ibx-glyph-chevron-down"
 		},
 		contentOptions:
 		{

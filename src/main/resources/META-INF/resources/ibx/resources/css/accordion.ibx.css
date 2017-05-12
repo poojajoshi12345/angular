@@ -38,7 +38,10 @@
 {
 	display:none;
 }
-
+.ibx-accordion-page-button
+{
+	height:25px;
+}
 .ibx-accordion-page-content
 {
 	flex: 1 1 auto;
@@ -73,8 +76,6 @@
 .ibx-accordion-button-text
 {
 	flex:1 1 auto;
-	font-size: 1em;
-	font-weight:bold;
 }
 
 /*animate the open/close glyph*/
