@@ -207,6 +207,10 @@ $.widget("ibi.ibxWidget", $.Widget,
 		if(refresh)
 			this.refresh();
 	},
+	refreshEx: function (childRefresh)
+	{
+		this.element.find(':ibxWidget').filter(childRefresh || '*').ibxWidget('refresh');
+	},
 	refresh:function()
 	{
 		var options = this.options;
