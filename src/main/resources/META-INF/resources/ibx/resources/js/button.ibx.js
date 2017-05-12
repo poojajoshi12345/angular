@@ -337,6 +337,14 @@ $.widget("ibi.ibxButtonGroup", $.ibi.ibxFlexBox,
 		this._group.hide();
 		this.element.append(this._group);
 		this._group.ibxRadioGroup({ name: this.options.name, form: this.options.form });
+
+		this.element.children(".ibx-widget").not(this._group).each(function (idx, el)
+		{
+			el = $(el);
+			el.on("ibx_change", this._onSelectedBound)
+			el.addClass("ibx-button-group-member");
+			el.ibxWidget('option', 'group', this.options.name);
+		}.bind(this));
 	},
 	_removeGroupSelection: function ()
 	{
@@ -345,6 +353,7 @@ $.widget("ibi.ibxButtonGroup", $.ibi.ibxFlexBox,
 
 		this.element.children(".ibx-widget").not(this._group).each(function (idx, el)
 		{
+			el = $(el);
 			el.off("ibx_change", this._onSelected.bind(this))
 			el.removeClass("ibx-button-group-member");
 			el.ibxWidget('option', 'group', "");
