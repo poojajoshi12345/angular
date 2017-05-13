@@ -25,20 +25,6 @@
 				xborder:1px solid black;				
 			}
 
-			.ibx-crsl-prev-btn, .ibx-crsl-next-btn
-			{
-				font-size:1.5em;
-				font-weight:bold;
-			}
-			.ibx-crsl-prev-btn:hover, .ibx-crsl-next-btn:hover
-			{
-				background-color:#ddd;
-			}
-			.ibx-crsl-prev-btn:active, .ibx-crsl-next-btn:active
-			{
-				background-color:#bbb;
-			}
-
 			.ibx-crsl-items
 			{
 				overflow:hidden;
@@ -62,23 +48,14 @@
 
 	<markup>
 		<markup-block>
-			<div class="test-select" data-ibx-type="ibxSelect" data-ibx-name-root="true">
-				<div class="group1" data-ibx-type="ibxSelectGroup" data-ibx-name="group1" data-ibxp-text="Group1"></div>
-				<div class="group2" data-ibx-type="ibxSelectGroup" data-ibx-name="group2" data-ibxp-text="Group2"></div>
-			</div>
-
-
 			<div class="res-ibx-carousel-body">
 				<div class="ibx-crsl-prev-box" data-ibx-name='boxPrev' data-ibx-type="ibxHBox" data-ibx-align="center" data-ibx-col="1" data-ibx-row="1/span 2">
-					<div class="ibx-crsl-prev-btn" data-ibx-name="btnPrev" data-ibx-type="ibxLabel" data-ibxp-glyph="keyboard_arrow_left" data-ibxp-glyph-classes="material-icons"></div>
+					<div class="ibx-crsl-prev-btn" data-ibx-name="btnPrev" data-ibx-type="ibxButtonSimple" data-ibxp-glyph="keyboard_arrow_left" data-ibxp-glyph-classes="material-icons"></div>
 				</div>
 				<div class="ibx-crsl-next-box" data-ibx-name='boxNext' data-ibx-type="ibxHBox" data-ibx-align="center" data-ibx-col="3" data-ibx-row="1/span 2">
-					<div class="ibx-crsl-next-btn" data-ibx-name="btnNext" data-ibx-type="ibxLabel" data-ibxp-glyph="keyboard_arrow_right" data-ibxp-glyph-classes="material-icons"></div>
+					<div class="ibx-crsl-next-btn" data-ibx-name="btnNext" data-ibx-type="ibxButtonSimple" data-ibxp-glyph="keyboard_arrow_right" data-ibxp-glyph-classes="material-icons"></div>
 				</div>
 				<div class="ibx-crsl-page-markers" data-ibx-name='boxPageMarkers' data-ibx-type="ibxHBox" data-ibxp-justify="center" data-ibx-col="1/span 3" data-ibx-row="3">
-					<div class="ibx-crsl-page-mark crsl-mark-sel"></div>
-					<div class="ibx-crsl-page-mark"></div>
-					<div class="ibx-crsl-page-mark"></div>
 				</div>
 				
 				<div class="ibx-crsl-items" data-ibx-name='boxItems' data-ibx-type="ibxHBox" data-ibxp-wrap="true" data-ibxp-justify="spaceAround" data-ibxp-align-content="start" data-ibxp-align-items="spaceAround" data-ibx-col="2" data-ibx-row="2/span 2fr"></div>
@@ -110,35 +87,62 @@
 					var resCaoursel = ibxResourceMgr.getResource(".res-ibx-carousel-body", false);
 					this.element.append(resCaoursel.children());
 					ibx.bindElements(this.element);
+					this.btnPrev.on("click", this._onPrev.bind(this));
+					this.btnNext.on("click", this._onNext.bind(this));
 					this.add(children);
+
+					this.element.on("swipeleft", this._onNext.bind(this));
+					this.element.on("swiperight", this._onPrev.bind(this));
 				},
 				_destroy:function()
 				{
 					this._super();
 				},
+				_setPage:function(nPage)
+				{
+				},
+				_onPrev:function(e)
+				{
+					this.options.page -= this.options.page > 0 ? 1 : 0;
+					this.refresh();
+				},
+				_onNext:function(e)
+				{
+					this.options.page += this.options.page < this.pages()-1 ? 1 : 0;
+					this.refresh();
+				},
 				children:function(selector)
 				{
 					return this.boxItems.ibxWidget("children", selector);
 				},
-				add:function(el, elSibling, before)
+				add:function(el, sibling, before)
 				{
-					this._childAdded(el);
+					el = $(el)
+					el.addClass("ibx-crsl-item");
+					this.boxItems.ibxWidget("add", el, sibling, before);
 				},
 				remove:function(el)
 				{
 					this.boxItems.ibxWidget("remove", el);
 					this.refresh();
 				},
-				_childAdded:function(child, mutation)
+				pages:function()
 				{
-					child = $(child);
-					child.removeClass("ibx-grid-cell").addClass("ibx-crsl-item");
-					this.boxItems.append(child);
+					return 5;
 				},
 				refresh:function()
 				{
-					var options = this.options;
 					this._super();
+					var options = this.options;
+
+					this.boxPageMarkers.css("display", options.showPageMarkers ? "" : "none");
+					this.btnPrev.css("display", options.showPrevButton ? "" : "none");
+					this.btnNext.css("display", options.showNextButton ? "" : "none");
+
+					this.boxPageMarkers.empty();
+					var pages = this.pages();
+					for(var i = 0; i < pages; ++i)
+						$("<div class='ibx-crsl-page-mark'>").addClass((i == options.page) ? "crsl-mark-sel" : "").appendTo(this.boxPageMarkers);
 				}
 			});
 			//# sourceURL=test_res_bundle.xml

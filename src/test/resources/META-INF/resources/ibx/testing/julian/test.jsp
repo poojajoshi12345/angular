@@ -69,10 +69,6 @@
 		</style>
 	</head>
 	<body class="ibx-root">
-		<div class="test-grid" data-ibx-type="ibxGrid" data-ibxp-rows="1fr 1fr 1fr 1fr" data-ibxp-cols="1fr 1fr 1fr 1fr">
-		</div>
-
-		<!--
 		<div class="test-csl" data-ibx-type="ibxCarousel">
 			<div class="test-csl-item">Carousel Item</div>
 			<div class="test-csl-item">Carousel Item</div>
@@ -95,9 +91,8 @@
 			<div class="test-csl-item">Carousel Item</div>
 			<div class="test-csl-item">Carousel Item</div>
 		</div>
-		-->
 	</body>
 </html>
 
-			<!--
-			-->
+
+
