@@ -59,11 +59,12 @@
 				var loaded = Ibfs.load("<%=request.getContextPath()%>", WFGlobals.ses_auth_parm, WFGlobals.ses_auth_val);
 					loaded.done(function(ibfs)
 					{
-						//ibfs.login("admin", "admin").done(function()
-						//{
-							var rootItem = new IbfsRootItem(ibfs);
-							$(".left-bar").append(rootItem.getElement());							
-						//});
+						var path="<%=request.getParameter("path")%>";
+						if(path=="null")path="IBFS:/WFC/Repository";
+						if(path.indexOf("IBFS:") == -1)
+							path = "IBFS:/WFC/Repository/"+path;						
+						var rootItem = new IbfsRootItem(ibfs,path);
+						$(".left-bar").append(rootItem.getElement());			
 					});
 				
 			}, true);
