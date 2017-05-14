@@ -23,71 +23,52 @@
 			<jsp:include page="/WEB-INF/jsp/global/wf_globals.jsp" flush="false" />
 
 			ibx(function()
-			{
-			
-			
+			{	
+				var phone=false;
+				if ($(window).width() < 480 || $(window).height() < 480) phone=true;  			
+
 				$(".button-bar > .ibx-button").on("click", function(e)
 				{
 					var btn =  $(e.currentTarget);
 					var bar = btn.data("user-data");
 					$((bar == ".all") ? ".grid-bar" : bar).ibxCollapsible("toggle");
 				});
-
-				$(".button-bar").ibxCollapsible({direction:"left"});
-				$(".toggle-button-bar").on("click", function(e){$(".button-bar").ibxCollapsible("toggle");});				
+										
 				$(".left-bar").ibxCollapsible({autoClose:false, direction:"left", startCollapsed:false});				
 				
 				$(".frame-out").droppable().on("drop", function(e, ui)
 				{
 					var type = ui.helper.data('type');
 					var item = JSON.parse(ui.helper.data('item'));				
-				
-					var uriExec = sformat("{1}/run.bip?BIP_REQUEST_TYPE=BIP_LAUNCH&BIP_folder={2}&BIP_item={3}", applicationContext,
-						encodeURIComponent(item.parentPath), encodeURIComponent(item.name));					
-					
-					$(".frame-out").ibxWidget("option", "src", uriExec);
-					$(".fex-text").text(item.description);
+					runIt(item);					
 				});
-				
-				
-				$(".open-menu-bar").on("click", function(e){$(".menu-bar").ibxCollapsible("toggle");});
-				$(".menu-bar").ibxCollapsible({autoClose:true, direction:"right", startCollapsed:true}).on("ibx_beforeopen ibx_beforeclose", function(e)
-				{
-					if(e.type == "ibx_beforeopen")
-						$(".open-menu-bar").css({opacity:0, transition:"opacity .3s"});
-					else
-						$(".open-menu-bar").css({opacity:1, transition:"opacity .3s"});
-				});
+								
 				$( document ).on( "treedoubleclick", function(e, item)
-				{							
-					var uriExec = sformat("{1}/run.bip?BIP_REQUEST_TYPE=BIP_LAUNCH&BIP_folder={2}&BIP_item={3}", applicationContext,
-						encodeURIComponent(item.parentPath), encodeURIComponent(item.name));					
-					$(".frame-out").ibxWidget("option", "src", uriExec);
-					$(".fex-text").text(item.description);					
+				{	
+					runIt(item);											
 				});	
-
 				
-
-				$(".menu-button").on("click", function(e)
+				function runIt(item)
 				{
-					var btn = $(e.currentTarget);
-					var menu = $(btn.data("menu"));
-					menu.ibxMenu("option", {posMy:"left top", posAt:"left bottom", posOf:e.currentTarget});
-					menu.ibxMenu("open");
-				});
+					var uriExec = sformat("{1}/run.bip?BIP_REQUEST_TYPE=BIP_LAUNCH&BIP_folder={2}&BIP_item={3}", applicationContext,
+						encodeURIComponent(item.parentPath), encodeURIComponent(item.name));									
+					$(".frame-out").ibxWidget("option", "src", uriExec);
+					$(".fex-text").text(item.description);	
+					if(phone)$(".left-bar").ibxCollapsible("toggle");				
+				};				
 				var loaded = Ibfs.load("<%=request.getContextPath()%>", WFGlobals.ses_auth_parm, WFGlobals.ses_auth_val);
 					loaded.done(function(ibfs)
 					{
-						ibfs.login("admin", "admin").done(function()
-						{
+						//ibfs.login("admin", "admin").done(function()
+						//{
 							var rootItem = new IbfsRootItem(ibfs);
 							$(".left-bar").append(rootItem.getElement());							
-						});
+						//});
 					});
 				
 			}, true);
 			
-			//# sourceURL=splitter_ibx_sample
+			
 		</script>
 		<link rel="stylesheet" type="text/css" href="tree.pd.css">
 		
@@ -163,7 +144,7 @@
 	</head>
 	<body class="ibx-root">
 		<div class="outer-grid-container-for-ios-bug"> 
-			<div class="grid-main" data-ibx-type="ibxGrid" data-ibxp-cols="auto 1fr auto" data-ibxp-rows="auto auto 1fr auto" data-ibx-align="stretch">
+			<div class="grid-main" data-ibx-type="ibxGrid" data-ibxp-cols="auto 1fr auto" data-ibxp-rows="auto auto 1fr auto" >
 				<div class="tool-bar" data-ibx-type="ibxHBox" data-ibx-align="center" data-ibx-col="1/span 2" data-ibx-row="1/span 1">
 					<div class="button-bar" data-ibx-type="ibxHBox" data-ibx-align="center">						
 						<div data-user-data=".left-bar" data-ibx-type="ibxButton" data-ibxp-glyph="menu" data-ibxp-glyph-classes="material-icons"></div>																						
