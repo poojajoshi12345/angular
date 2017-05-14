@@ -110,14 +110,15 @@ _p.expand = function (expand)
 
  
 //encapsulates the static root IBFS:.
-function IbfsRootItem(ibfs)
+function IbfsRootItem(ibfs, path)
 {
-	var item =
-	{
-		description: "IBFS Root",
-		fullPath: "IBFS:/WFC/Repository",
-		container: true
-	}
+	
+		item =	
+		{
+			descripton: "",
+			fullPath: path,
+			container: true
+		}	
 	IbfsItem.call(this, item, ibfs, -IbfsItem.folderPadding);
 	this._label.hide();
 	this.toggle();
