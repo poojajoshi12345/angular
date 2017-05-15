@@ -381,8 +381,12 @@ $.widget("ibi.ibxSelect", $.ibi.ibxTextField,
 		}
 		if (!bNoUpdate)
 			this._updateText();
-		this._trigger("change", null, this.element);
+		this._trigger("change", null, { "item": menuItem });
 		this._trigger("set_form_value", null, { "elem": this.element, "value": this._getUserValue() });
+	},
+	selectItems: function (elems)
+	{
+		this._setSelection(elems, true, true, false, true);
 	},
 	selectItem: function (el)
 	{
@@ -419,7 +423,7 @@ $.widget("ibi.ibxSelect", $.ibi.ibxTextField,
 			this._updateText();
 		if (!bNoChange)
 		{
-			this._trigger("change", null, this.element);
+			this._trigger("change", null, {"item": menuItem});
 			this._trigger("set_form_value", null, { "elem": this.element, "value": this._getUserValue() });
 		}
 	},
