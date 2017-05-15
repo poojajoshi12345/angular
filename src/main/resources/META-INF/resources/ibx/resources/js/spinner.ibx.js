@@ -167,6 +167,8 @@ $.widget("ibi.ibxSpinner", $.ibi.ibxTextField,
 	refresh: function ()
 	{
 		this._super();
+		if (this._btnBox)
+			this._btnBox.ibxWidget('refresh');
 	}
 });
 $.ibi.ibxSpinner.statics = 
