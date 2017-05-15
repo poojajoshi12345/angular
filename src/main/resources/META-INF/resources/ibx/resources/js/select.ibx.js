@@ -520,6 +520,14 @@ $.widget("ibi.ibxSelect", $.ibi.ibxTextField,
 			}.bind(this));
 		}
 	},
+	closePopup: function ()
+	{
+		this._listWidget.close();
+	},
+	openPopup: function ()
+	{
+		this._openPopup();
+	},
 	_openPopup: function ()
 	{
 		if (!this._dontOpen)
