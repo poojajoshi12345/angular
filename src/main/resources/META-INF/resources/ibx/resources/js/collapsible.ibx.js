@@ -104,14 +104,15 @@ $.widget("ibi.ibxCollapsible", $.Widget,
 	refresh: function ()
 	{
 		var options = this.options;
+		var isOpen = this.isOpen();
 
 		options.autoClose ? this.element.addClass("auto-close") : this.element.removeClass("auto-close");
 		var nMargin = 0;
-		if(this.isOpen())
+		if(isOpen)
 			nMargin = this._marginInfo["margin-" + options.direction];
 		else
 			nMargin = options.gap + -1 * ((options.direction == "left" || options.direction == "right") ? this.element.outerWidth(true) : this.element.outerHeight(true));
-		this.element.css("margin-" + options.direction, nMargin);
+		this.element.css("margin-" + options.direction, nMargin).css("opacity", isOpen ? 1 : 0);
 	}
 });
 //# sourceURL=collapsible.ibx.js
