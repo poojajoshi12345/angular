@@ -11,6 +11,8 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 		nameRoot:true,
 		align:"stretch",
 		showPageMarkers:false,
+		showPrevButton:true,
+		showNextButton:true,
 		step:25,
 		stepRate:25,
 	},
@@ -57,6 +59,7 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 		{
 			this._eLast = e;
 			this._scrolling = true;
+			e.preventDefault();
 		}
 		else
 		if(e.type == "mouseup" || e.type == "mouseleave")
@@ -100,5 +103,7 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 		this._super();
 		var options = this.options;
 		this._pageMarkers.css("display", options.showPageMarkers ? "" : "none");
+		this._prevBtn.css("display", options.showPrevButton ? "" : "none");
+		this._nextBtn.css("display", options.showNextButton ? "" : "none");
 	}
 });
