@@ -61,7 +61,12 @@ _p.getElement = function () { return this._element; };
 _p.getWidget = function () { return this._widget; };
 _p._onClick = function (e)
 {
-	this.toggle();
+	if (!this._item.container)
+	{
+		$(document).trigger( "treedoubleclick", this._item );
+	}
+	else 
+		this.toggle();
 	e.stopPropagation();
 };
 _p._onDblClick = function (e)
@@ -113,7 +118,7 @@ _p.expand = function (expand)
 function IbfsRootItem(ibfs, path)
 {
 	
-		item =	
+		var item =	
 		{
 			descripton: "",
 			fullPath: path,
