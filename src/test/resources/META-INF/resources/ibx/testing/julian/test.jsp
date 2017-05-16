@@ -22,6 +22,16 @@
 			<jsp:include page="/WEB-INF/jsp/global/wf_globals.jsp" flush="false" />
 			ibx(function()
 			{
+				var tree = $(".ibfs-tree");
+
+				tree.ibxCollapsible();
+				for(var i = 0; i < 100; ++i)
+					tree.append($("<div>").text("item_" + i));
+
+				$(".tree-btn").on("click", function(e)
+				{
+					$(".ibfs-tree").ibxCollapsible("toggle");
+				});
 			}, true);
 		</script>
 		<style type="text/css">
@@ -31,190 +41,60 @@
 				width:100%;
 				height:100%;
 			}
-			.main-box
+			.main-grid
 			{
 				position:absolute;
-				border:1px solid #ccc;
 				left:5px;
 				top:5px;
 				right:5px;
 				bottom:5px;
 			}
-			.title-bar
+			.layout-block
 			{
-				flex:0 0 auto;
-				height:4em;
-				background-color:#337ab7
+				margin:4px;
+				border:1px solid #ccc;
+				border-radius:3px;
 			}
-			.title-label
+			.title-box
 			{
-				margin-left:2em;
-				color:white;
-				font-size:1.5em;
+				padding:10px;
 			}
-			.toolbar
+
+			.tree-btn
 			{
-				color:#aaa;
-				flex:0 0 auto;
-				padding:5px;
-				border-bottom:1px solid #ccc;
+				font-size:18px;
 			}
-			.crumb-box
+
+			.ibfs-tree-container
 			{
-			}
-			.toolbar-spacer
-			{
-				flex:1 1 auto;
-			}
-			.txt-search
-			{
-				margin-right:20px;
-			}
-			.btn-refresh, .btn-how-view
-			{
-				color:#aaa;
-				font-size:1.5em;
-				margin-right:20px;
-			}
-			.explore-box
-			{
-				flex:1 1 auto;
+				position:relative;
+				width:200px;
+				overflow:auto;
 			}
 			.ibfs-tree
 			{
-				flex:0 0 200px;
-				border-right:1px solid #ccc;
-			}
-			.content-box
-			{
-				flex:1 1 0px;
-			}
-			.create-new-box
-			{
-				flex:0 0 auto;
-				border-bottom:1px solid #ccc;
-			}
-			.content-title-bar
-			{
-				margin:10px;
-			}
-			.content-title-label
-			{
-				font-size:11px;
-				color:#aaa;
-			}
-			.content-title-spacer
-			{
-				flex:1 1 auto;
-			}
-			.content-title-btn
-			{
-				font-size:1.5em;
-				color:#aaa;
-			}
-			.content-title-btn .ibx-label-text
-			{
-				font-size:11px;
-			}
-			.create-new-items-box
-			{
-				margin-bottom:10px;
-			}
-			.create-new-item
-			{
-				margin:10px;
-			}
-			.create-new-item .ibx-label-glyph
-			{
-				font-size:4em;
-			}
-			.create-new-item .ibx-label-text
-			{
-				color:#aaa;
-				font-size:11px;
-			}
-			.files-box
-			{
-				flex:1 1 auto;
-				background-color:#e4f1f9
-
-			}
-			.files-box-files
-			{
-				padding:10px;
+				position:absolute;
+				left:0px;
+				bottom:0px;
+				right:0px;
+				top:0px;
 				overflow:auto;
 			}
-			.file-item
+
+			.wf-output
 			{
-				width:200px;
-				height:200px;
-				margin:10px;
-				background-color:white;
-				border-bottom:2px solid #ccc;
 			}
 		</style>
 	</head>
 	<body class="ibx-root">
-		<div class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
-			<div class="title-bar" data-ibx-type="ibxHBox" data-ibxp-align="center">
-				<div class="title-label" data-ibx-type="ibxLabel" data-ibxp-text="Content"></div>
+		<div class="main-grid" data-ibx-type="ibxGrid" data-ibxp-cols="auto 1fr" data-ibxp-rows="auto 1fr">
+			<div class="title-box layout-block" data-ibx-type="ibxHBox" data-ibx-col="1/span 2" data-ibx-row="1/span 1" data-ibxp-align="center">
+				<div class="tree-btn" data-ibx-type="ibxButtonSimple" data-ibxp-glyph="menu" data-ibxp-glyph-classes="material-icons"></div>
 			</div>
-
-			<div class="toolbar" data-ibx-type="ibxHBox" data-ibxp-align="stretch">
-				<div class="crumb-box" data-ibx-type="ibxHBox" data-ibxp-align="center">
-					<div data-ibx-type="ibxLabel" data-ibxp-text="Crumb1 >"></div>
-					<div data-ibx-type="ibxLabel" data-ibxp-text="Crumb2 >"></div>
-					<div data-ibx-type="ibxLabel" data-ibxp-text="Crumb3 >"></div>
-				</div>
-				<div class="toolbar-spacer"></div> 
-				<div class="txt-search" data-ibx-type="ibxTextField" data-ibxp-placeholder="Search..."></div>
-				<div class="btn-refresh" data-ibx-type="ibxButtonSimple" data-ibxp-glyph="list" data-ibxp-glyph-classes="material-icons"></div>
-				<div class="btn-how-view" data-ibx-type="ibxButtonSimple" data-ibxp-glyph="autorenew" data-ibxp-glyph-classes="material-icons"></div>
+			<div class="ibfs-tree-container layout-block" data-ibx-type="ibxWidget" data-ibx-col="1/span 1" data-ibx-row="2/span 200">
+				<div class="ibfs-tree"></div>
 			</div>
-
-			<div class="explore-box" data-ibx-type="ibxHBox" data-ibxp-align="stretch">
-				<div class="ibfs-tree">TREE</div>
-				<div class="content-box" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
-					<div class="create-new-box" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
-						<div class="content-title-bar" data-ibx-type="ibxHBox" data-ibxp-align="center">
-							<div class="content-title-label" data-ibx-type="ibxLabel" data-ibxp-text="Create New"></div>
-							<div class="content-title-spacer"></div>
-							<div class="content-title-btn" data-ibx-type="ibxButtonSimple" data-ibxp-glyph="keyboard_arrow_up" data-ibxp-glyph-classes="material-icons"></div>
-						</div>
-						<div class="create-new-items-box" data-ibx-type="ibxHBox" data-ibxp-align="center" data-ibxp-wrap="true">
-							<div class="create-new-item" data-ibx-type="ibxButtonSimple" data-ibxp-text="Folder" data-ibxp-icon-position="top" data-ibxp-glyph="face" data-ibxp-glyph-classes="material-icons"></div>
-							<div class="create-new-item" data-ibx-type="ibxButtonSimple" data-ibxp-text="Data Set" data-ibxp-icon-position="top" data-ibxp-glyph="face" data-ibxp-glyph-classes="material-icons"></div>
-							<div class="create-new-item" data-ibx-type="ibxButtonSimple" data-ibxp-text="Chart" data-ibxp-icon-position="top" data-ibxp-glyph="face" data-ibxp-glyph-classes="material-icons"></div>
-							<div class="create-new-item" data-ibx-type="ibxButtonSimple" data-ibxp-text="Report" data-ibxp-icon-position="top" data-ibxp-glyph="face" data-ibxp-glyph-classes="material-icons"></div>
-							<div class="create-new-item" data-ibx-type="ibxButtonSimple" data-ibxp-text="Page" data-ibxp-icon-position="top" data-ibxp-glyph="face" data-ibxp-glyph-classes="material-icons"></div>
-							<div class="create-new-item" data-ibx-type="ibxButtonSimple" data-ibxp-text="Portal" data-ibxp-icon-position="top" data-ibxp-glyph="face" data-ibxp-glyph-classes="material-icons"></div>
-							<div class="create-new-item" data-ibx-type="ibxButtonSimple" data-ibxp-text="Alert" data-ibxp-icon-position="top" data-ibxp-glyph="face" data-ibxp-glyph-classes="material-icons"></div>
-							<div class="create-new-item" data-ibx-type="ibxButtonSimple" data-ibxp-text="More" data-ibxp-icon-position="top" data-ibxp-glyph="face" data-ibxp-glyph-classes="material-icons"></div>
-						</div>
-					</div>
-
-					<div class="files-box" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
-						<div class="content-title-bar" data-ibx-type="ibxHBox" data-ibxp-align="center">
-							<div class="content-title-label" data-ibx-type="ibxLabel" data-ibxp-text="Files"></div>
-							<div class="content-title-spacer"></div>
-							<div class="content-title-btn" data-ibx-type="ibxButtonSimple" data-ibxp-text="Title" data-ibxp-icon-position="right" data-ibxp-glyph="keyboard_arrow_up" data-ibxp-glyph-classes="material-icons"></div>
-						</div>
-						<div class="files-box-files" data-ibx-type="ibxHBox" data-ibxp-wrap="true">
-							<div class="file-item"></div>
-							<div class="file-item"></div>
-							<div class="file-item"></div>
-							<div class="file-item"></div>
-							<div class="file-item"></div>
-							<div class="file-item"></div>
-							<div class="file-item"></div>
-							<div class="file-item"></div>
-							<div class="file-item"></div>
-							<div class="file-item"></div>
-							<div class="file-item"></div>
-						</div>
-					</div>
-				</div>
-			</div>
+			<div class="wf-output layout-block" data-ibx-type="ibxIFrame" data-ibx-col="2/span 1" data-ibx-row="2/span 200" data-ibxp-src="about:blank"></div>
 		</div>
 	</body>
 </html>
