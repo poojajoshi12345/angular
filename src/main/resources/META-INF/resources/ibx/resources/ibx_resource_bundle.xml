@@ -8,7 +8,6 @@ $Revision$:-->
 
 	<!--resources loaded AFTER this resource bundle-->
 	<packages>
-		<package src="./markup/dialog_package.ibx.xml"/>
 	</packages>
 
 	<!--style dependencies-->
@@ -39,6 +38,7 @@ $Revision$:-->
 		<style-file src="./css/tabs.ibx.css"/>
 		<style-file src="./css/accordion.ibx.css"/>
 		<style-file src="./css/menu.ibx.css"/>
+		<style-file src="./css/carousel.ibx.css"/>
 		<style-file src="./css/groupbox.ibx.css"/>
 		<style-file src="./css/gridstack.ibx.css"/>
 		<style-file src="./css/select.ibx.css"/>
@@ -60,6 +60,34 @@ $Revision$:-->
 
 	<!--markup dependencies-->
 	<markup>
+		<markup-block>
+			<div class="dialog-template" data-ibx-type="ibxDialog" data-ibx-name-root="true" data-ibxp-default-focused="cancel">
+				<div class="ibx-dialog-main-box" data-ibx-type="ibxVBox" data-ibx-name="vbMain" data-ibxp-align="stretch">
+					<div class="ibx-dialog-title-box" data-ibx-type="ibxHBox" data-ibx-name="titleBox" data-ibxp-align="center">
+						<div class="ibx-title-bar-caption" data-ibx-type="ibxLabel" data-ibx-name="caption" data-ibxp-justify="start"></div>
+						<div class="ibx-title-bar-close-button" tabIndex="1" data-ibx-type="ibxButton" data-ibx-name="titleClose"></div>
+					</div>
+					<div class="ibx-dialog-content" data-ibx-type="ibxVBox" data-ibx-name="contentBox" data-ibxp-align="stretch"></div>
+					<div class='ibx-dialog-button-box' data-ibx-type='ibxHBox' data-ibx-name='btnBox' data-ibxp-justify='end' data-ibxp-align='center'>
+						<div class='ibx-dialog-apply-button' data-ibx-type='ibxButton' data-ibx-name='btnApply' data-ibxp-text="Apply" data-ibxp-icon-position='top' tabIndex='1'></div>
+						<div class='ibx-dialog-cancel-button' data-ibx-type='ibxButton' data-ibx-name='btnCancel' data-ibxp-text="Cancel" data-ibxp-icon-position='top' tabIndex='1'></div>
+						<div class='ibx-dialog-ok-button' data-ibx-type='ibxButton' data-ibx-name='btnOK' data-ibxp-text="OK" data-ibxp-icon-position='top' tabIndex='1'></div>
+					</div>
+				</div>
+			</div>
+			<div class="res-ibx-carousel-body">
+				<div class="ibx-csl-items-container" data-ibx-name="_itemsContainer" data-ibx-type="ibxHBox" data-ibxp-align="center">
+					<div class="ibx-csl-prev-btn" data-ibx-name="_prevBtn" data-ibx-type="ibxButtonSimple" data-ibxp-glyph="keyboard_arrow_left" data-ibxp-glyph-classes="material-icons"></div>
+					<div class="ibx-csl-items-box" data-ibx-name="_itemsBox" data-ibx-type="ibxHBox" data-ibxp-align="center"></div>
+					<div class="ibx-csl-next-btn" data-ibx-name="_nextBtn" data-ibx-type="ibxButtonSimple" data-ibxp-glyph="keyboard_arrow_right" data-ibxp-glyph-classes="material-icons"></div>
+				</div>
+				<div class="ibx-csl-page-markers" data-ibx-name="_pageMarkers" data-ibx-type="ibxHBox" data-ibxp-justify="center" data-ibxp-align="center">
+					<div class="ibx-csl-page-marker"></div>
+					<div class="ibx-csl-page-marker ibx-csl-page-selected"></div>
+					<div class="ibx-csl-page-marker"></div>
+				</div>
+			</div>
+		</markup-block>
 	</markup>
 
 	<!--script dependencies-->
@@ -93,6 +121,7 @@ $Revision$:-->
 		<script-file src="./js/tabs.ibx.js"/>
 		<script-file src="./js/accordion.ibx.js"/>
 		<script-file src="./js/menu.ibx.js"/>
+		<script-file src="./js/carousel.ibx.js"/>
 		<script-file src="./js/groupbox.ibx.js"/>
 		<script-file src="./js/gridstack.ibx.js"/>
 		<script-file src="./js/select.ibx.js"/>

@@ -10,141 +10,18 @@
 	<styles>
 		<style-sheet>
 		<![CDATA[
-			.ibx-crsl-prev-box, .ibx-crsl-next-box
-			{
-				xborder:1px solid black;
-			}
-			.ibx-crsl-items
-			{
-				margin:3px;
-				border:1px solid #ccc;
-				border-radius:3px;
-			}
-			.ibx-crsl-page-markers
-			{
-				xborder:1px solid black;				
-			}
-
-			.ibx-crsl-items
-			{
-				overflow:hidden;
-			}
-
-			.ibx-crsl-page-mark
-			{
-				height:5px;
-				width:5px;
-				border:1px solid #aaa;
-				border-radius:50%;
-				margin:2px;
-			}
-			.crsl-mark-sel
-			{
-				background-color:#888;
-			}
 		]]>
 		</style-sheet>
 	</styles>
 
 	<markup>
 		<markup-block>
-			<div class="res-ibx-carousel-body">
-				<div class="ibx-crsl-prev-box" data-ibx-name='boxPrev' data-ibx-type="ibxHBox" data-ibx-align="center" data-ibx-col="1" data-ibx-row="1/span 2">
-					<div class="ibx-crsl-prev-btn" data-ibx-name="btnPrev" data-ibx-type="ibxButtonSimple" data-ibxp-glyph="keyboard_arrow_left" data-ibxp-glyph-classes="material-icons"></div>
-				</div>
-				<div class="ibx-crsl-next-box" data-ibx-name='boxNext' data-ibx-type="ibxHBox" data-ibx-align="center" data-ibx-col="3" data-ibx-row="1/span 2">
-					<div class="ibx-crsl-next-btn" data-ibx-name="btnNext" data-ibx-type="ibxButtonSimple" data-ibxp-glyph="keyboard_arrow_right" data-ibxp-glyph-classes="material-icons"></div>
-				</div>
-				<div class="ibx-crsl-page-markers" data-ibx-name='boxPageMarkers' data-ibx-type="ibxHBox" data-ibxp-justify="center" data-ibx-col="1/span 3" data-ibx-row="3">
-				</div>
-				
-				<div class="ibx-crsl-items" data-ibx-name='boxItems' data-ibx-type="ibxHBox" data-ibxp-wrap="true" data-ibxp-justify="spaceAround" data-ibxp-align-content="start" data-ibxp-align-items="spaceAround" data-ibx-col="2" data-ibx-row="2/span 2fr"></div>
-			</div>
 		</markup-block>
 	</markup>
 
 	<scripts>
 		<script-block>
 		<![CDATA[
-			$.widget("ibi.ibxCarousel", $.ibi.ibxGrid,
-			{
-				options:
-				{
-					nameRoot:true,
-					cols:"auto 1fr auto",
-					rows:"auto 1fr auto",
-					page:0,
-
-					showPageMarkers:true,
-					showPrevButton:true,
-					showNextButton:true,
-				},
-				_widgetClass:"ibx-carousel",
-				_create:function()
-				{
-					this._super();
-					var children = this.element.children().detach();
-					var resCaoursel = ibxResourceMgr.getResource(".res-ibx-carousel-body", false);
-					this.element.append(resCaoursel.children());
-					ibx.bindElements(this.element);
-					this.btnPrev.on("click", this._onPrev.bind(this));
-					this.btnNext.on("click", this._onNext.bind(this));
-					this.add(children);
-
-					this.element.on("swipeleft", this._onNext.bind(this));
-					this.element.on("swiperight", this._onPrev.bind(this));
-				},
-				_destroy:function()
-				{
-					this._super();
-				},
-				_setPage:function(nPage)
-				{
-				},
-				_onPrev:function(e)
-				{
-					this.options.page -= this.options.page > 0 ? 1 : 0;
-					this.refresh();
-				},
-				_onNext:function(e)
-				{
-					this.options.page += this.options.page < this.pages()-1 ? 1 : 0;
-					this.refresh();
-				},
-				children:function(selector)
-				{
-					return this.boxItems.ibxWidget("children", selector);
-				},
-				add:function(el, sibling, before)
-				{
-					el = $(el)
-					el.addClass("ibx-crsl-item");
-					this.boxItems.ibxWidget("add", el, sibling, before);
-				},
-				remove:function(el)
-				{
-					this.boxItems.ibxWidget("remove", el);
-					this.refresh();
-				},
-				pages:function()
-				{
-					return 5;
-				},
-				refresh:function()
-				{
-					this._super();
-					var options = this.options;
-
-					this.boxPageMarkers.css("display", options.showPageMarkers ? "" : "none");
-					this.btnPrev.css("display", options.showPrevButton ? "" : "none");
-					this.btnNext.css("display", options.showNextButton ? "" : "none");
-
-					this.boxPageMarkers.empty();
-					var pages = this.pages();
-					for(var i = 0; i < pages; ++i)
-						$("<div class='ibx-crsl-page-mark'>").addClass((i == options.page) ? "crsl-mark-sel" : "").appendTo(this.boxPageMarkers);
-				}
-			});
 			//# sourceURL=test_res_bundle.xml
 		]]>
 		</script-block>

@@ -7,7 +7,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>WebFOCUS Welcome Page</title>
+		<title>ibx test</title>
 		<meta http-equiv="X-UA-Compatible" content="IE=EDGE" >
 		<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
 		<meta http-equiv="Pragma" content="no-cache" />
@@ -22,79 +22,47 @@
 			<jsp:include page="/WEB-INF/jsp/global/wf_globals.jsp" flush="false" />
 			ibx(function()
 			{
-				var tree = $(".ibfs-tree");
-
-				tree.ibxCollapsible();
-				for(var i = 0; i < 100; ++i)
-					tree.append($("<div>").text("item_" + i));
-
-				$(".tree-btn").on("click", function(e)
+				ibxResourceMgr.addBundle("../testing/julian/test_res_bundle.xml").done(function(resBundle, window)
 				{
-					$(".ibfs-tree").ibxCollapsible("toggle");
 				});
+
+				var carousel = $(".test-csl");
+				for(var i = 0; i < 20; ++i)
+				{
+					carousel.ibxWidget("add", $("<div class='test-csl-item'>Item_" + i + "</div>"));
+				}
 			}, true);
 		</script>
 		<style type="text/css">
-			body
-			{
-				margin:0px;
-				width:100%;
-				height:100%;
-			}
-			.main-grid
+			.test-csl
 			{
 				position:absolute;
-				left:5px;
-				top:5px;
-				right:5px;
-				bottom:5px;
+				left:50px;
+				top:50px;
+				width:500px;
+				border:1px solid black;
 			}
-			.layout-block
+
+			.test-csl-item
 			{
-				margin:4px;
+				width:100px;
+				height:100px;
 				border:1px solid #ccc;
-				border-radius:3px;
-			}
-			.title-box
-			{
-				padding:10px;
+				margin:3px;
 			}
 
-			.tree-btn
+			.test-grid
 			{
-				font-size:18px;
+				border:1px solid black;
 			}
-
-			.ibfs-tree-container
+			.test-grid-item
 			{
-				position:relative;
-				width:200px;
-				overflow:auto;
-			}
-			.ibfs-tree
-			{
-				position:absolute;
-				left:0px;
-				bottom:0px;
-				right:0px;
-				top:0px;
-				overflow:auto;
-			}
-
-			.wf-output
-			{
+				border:1px solid red;
 			}
 		</style>
 	</head>
 	<body class="ibx-root">
-		<div class="main-grid" data-ibx-type="ibxGrid" data-ibxp-cols="auto 1fr" data-ibxp-rows="auto 1fr">
-			<div class="title-box layout-block" data-ibx-type="ibxHBox" data-ibx-col="1/span 2" data-ibx-row="1/span 1" data-ibxp-align="center">
-				<div class="tree-btn" data-ibx-type="ibxButtonSimple" data-ibxp-glyph="menu" data-ibxp-glyph-classes="material-icons"></div>
-			</div>
-			<div class="ibfs-tree-container layout-block" data-ibx-type="ibxWidget" data-ibx-col="1/span 1" data-ibx-row="2/span 200">
-				<div class="ibfs-tree"></div>
-			</div>
-			<div class="wf-output layout-block" data-ibx-type="ibxIFrame" data-ibx-col="2/span 1" data-ibx-row="2/span 200" data-ibxp-src="about:blank"></div>
+		<div class="test-csl" data-ibx-type="ibxCarousel">
 		</div>
 	</body>
 </html>
