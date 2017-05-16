@@ -14,7 +14,7 @@
 
 .ibx-collapsible
 {
-    transition: margin .3s;
+    transition: margin .3s, opacity .3s;
 }
 
 .ibx-collapsible.ibx-collapsible-initializing

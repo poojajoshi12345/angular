@@ -73,24 +73,7 @@ $.widget("ibi.ibxCollapsible", $.Widget,
 	},
 	toggle: function ()
 	{
-		if (this.isOpen())
-		{
-			if (this.element.hasClass("pd-left-pane"))
-				$("#toggleleft").removeClass("pd-toolbar-button-active");
-			else
-				if (this.element.hasClass("pd-right-pane"))
-					$("#toggleright").removeClass("pd-toolbar-button-active");				
-			this.close();
-		}
-		else
-		{
-			if (this.element.hasClass("pd-left-pane"))
-				$("#toggleleft").addClass("pd-toolbar-button-active");
-			else
-				if (this.element.hasClass("pd-right-pane"))
-					$("#toggleright").addClass("pd-toolbar-button-active");				
-			this.open();
-		} 
+		(this.isOpen()) ? this.close() : this.open();
 	},
 	_onWindowMouseEvent: function (e)
 	{
