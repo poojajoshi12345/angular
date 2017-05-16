@@ -52,7 +52,7 @@ function IbfsItem(item, ibfs, padding)
 	//container for children
 	if (item.container)
 		this._children = $("<div class='ibfs-children'>").ibxVBox({ align: "stretch", justifiy: "start" }).appendTo(this._element);
-};
+}
 IbfsItem.folderPadding = 10;
 IbfsItem.filePadding = 30;
 
@@ -86,7 +86,7 @@ _p.expand = function (expand)
 		this._expanded = expand;
 		var glyph = "folder";
 
-		this._children.empty()
+		this._children.empty();
 		if (this._expanded)
 		{
 			if (this._glyphClassesSel)
@@ -116,14 +116,13 @@ _p.expand = function (expand)
  
 //encapsulates the static root IBFS:.
 function IbfsRootItem(ibfs, path)
-{
-	
+{	
 		var item =	
 		{
 			descripton: "",
 			fullPath: path,
 			container: true
-		}	
+		};	
 	IbfsItem.call(this, item, ibfs, -IbfsItem.folderPadding);
 	this._label.hide();
 	this.toggle();
