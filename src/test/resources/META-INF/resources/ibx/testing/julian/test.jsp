@@ -7,7 +7,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>ibx test</title>
+		<title>WebFOCUS Welcome Page</title>
 		<meta http-equiv="X-UA-Compatible" content="IE=EDGE" >
 		<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
 		<meta http-equiv="Pragma" content="no-cache" />
@@ -22,74 +22,199 @@
 			<jsp:include page="/WEB-INF/jsp/global/wf_globals.jsp" flush="false" />
 			ibx(function()
 			{
-				ibxResourceMgr.addBundle("../testing/julian/test_res_bundle.xml").done(function(resBundle, window)
-				{
-					ibx.bindElements();
-
-					var testGrid = $(".test-grid");
-					for(var i = 1; i < 5; ++i)
-					{
-						for(var j = 1; j < 5; ++j)
-						{
-							var cell = $("<div class='test-grid-item'>").ibxButton({text:sformat("Button: {1}/{2}", i, j)});
-							cell.data({ibxRow:sformat("{1}/span 1", i), ibxCol:sformat("{1}/span 1", j)});
-							testGrid.ibxWidget("add", cell, null, false, true);
-						}
-					}
-				});
-			}, false);
+			}, true);
 		</script>
 		<style type="text/css">
-			.test-csl
+			body
+			{
+				margin:0px;
+				width:100%;
+				height:100%;
+			}
+			.main-box
 			{
 				position:absolute;
-				left:50px;
-				top:50px;
-				width:500px;
-				height:250px;
-				border:1px solid black;
+				border:1px solid #ccc;
+				left:5px;
+				top:5px;
+				right:5px;
+				bottom:5px;
 			}
+			.title-bar
+			{
+				flex:0 0 auto;
+				height:4em;
+				background-color:#337ab7
+			}
+			.title-label
+			{
+				margin-left:2em;
+				color:white;
+				font-size:1.5em;
+			}
+			.toolbar
+			{
+				color:#aaa;
+				flex:0 0 auto;
+				padding:5px;
+				border-bottom:1px solid #ccc;
+			}
+			.crumb-box
+			{
+			}
+			.toolbar-spacer
+			{
+				flex:1 1 auto;
+			}
+			.txt-search
+			{
+				margin-right:20px;
+			}
+			.btn-refresh, .btn-how-view
+			{
+				color:#aaa;
+				font-size:1.5em;
+				margin-right:20px;
+			}
+			.explore-box
+			{
+				flex:1 1 auto;
+			}
+			.ibfs-tree
+			{
+				flex:0 0 200px;
+				border-right:1px solid #ccc;
+			}
+			.content-box
+			{
+				flex:1 1 0px;
+			}
+			.create-new-box
+			{
+				flex:0 0 auto;
+				border-bottom:1px solid #ccc;
+			}
+			.content-title-bar
+			{
+				margin:10px;
+			}
+			.content-title-label
+			{
+				font-size:11px;
+				color:#aaa;
+			}
+			.content-title-spacer
+			{
+				flex:1 1 auto;
+			}
+			.content-title-btn
+			{
+				font-size:1.5em;
+				color:#aaa;
+			}
+			.content-title-btn .ibx-label-text
+			{
+				font-size:11px;
+			}
+			.create-new-items-box
+			{
+				margin-bottom:10px;
+			}
+			.create-new-item
+			{
+				margin:10px;
+			}
+			.create-new-item .ibx-label-glyph
+			{
+				font-size:4em;
+			}
+			.create-new-item .ibx-label-text
+			{
+				color:#aaa;
+				font-size:11px;
+			}
+			.files-box
+			{
+				flex:1 1 auto;
+				background-color:#e4f1f9
 
-			.test-csl-item
-			{
-				width:100px;
-				height:100px;
-				margin:5px;
-				border:1px solid red;
 			}
-
-			.test-grid
+			.files-box-files
 			{
-				border:1px solid black;
+				padding:10px;
+				overflow:auto;
 			}
-			.test-grid-item
+			.file-item
 			{
-				border:1px solid red;
+				width:200px;
+				height:200px;
+				margin:10px;
+				background-color:white;
+				border-bottom:2px solid #ccc;
 			}
 		</style>
 	</head>
 	<body class="ibx-root">
-		<div class="test-csl" data-ibx-type="ibxCarousel">
-			<div class="test-csl-item">Carousel Item</div>
-			<div class="test-csl-item">Carousel Item</div>
-			<div class="test-csl-item">Carousel Item</div>
-			<div class="test-csl-item">Carousel Item</div>
-			<div class="test-csl-item">Carousel Item</div>
-			<div class="test-csl-item">Carousel Item</div>
+		<div class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
+			<div class="title-bar" data-ibx-type="ibxHBox" data-ibxp-align="center">
+				<div class="title-label" data-ibx-type="ibxLabel" data-ibxp-text="Content"></div>
+			</div>
 
-			<div class="test-csl-item">Carousel Item</div>
-			<div class="test-csl-item">Carousel Item</div>
-			<div class="test-csl-item">Carousel Item</div>
-			<div class="test-csl-item">Carousel Item</div>
-			<div class="test-csl-item">Carousel Item</div>
-			<div class="test-csl-item">Carousel Item</div>
+			<div class="toolbar" data-ibx-type="ibxHBox" data-ibxp-align="stretch">
+				<div class="crumb-box" data-ibx-type="ibxHBox" data-ibxp-align="center">
+					<div data-ibx-type="ibxLabel" data-ibxp-text="Crumb1 >"></div>
+					<div data-ibx-type="ibxLabel" data-ibxp-text="Crumb2 >"></div>
+					<div data-ibx-type="ibxLabel" data-ibxp-text="Crumb3 >"></div>
+				</div>
+				<div class="toolbar-spacer"></div> 
+				<div class="txt-search" data-ibx-type="ibxTextField" data-ibxp-placeholder="Search..."></div>
+				<div class="btn-refresh" data-ibx-type="ibxButtonSimple" data-ibxp-glyph="list" data-ibxp-glyph-classes="material-icons"></div>
+				<div class="btn-how-view" data-ibx-type="ibxButtonSimple" data-ibxp-glyph="autorenew" data-ibxp-glyph-classes="material-icons"></div>
+			</div>
 
-			<div class="test-csl-item">Carousel Item</div>
-			<div class="test-csl-item">Carousel Item</div>
-			<div class="test-csl-item">Carousel Item</div>
-			<div class="test-csl-item">Carousel Item</div>
-			<div class="test-csl-item">Carousel Item</div>
-			<div class="test-csl-item">Carousel Item</div>
+			<div class="explore-box" data-ibx-type="ibxHBox" data-ibxp-align="stretch">
+				<div class="ibfs-tree">TREE</div>
+				<div class="content-box" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
+					<div class="create-new-box" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
+						<div class="content-title-bar" data-ibx-type="ibxHBox" data-ibxp-align="center">
+							<div class="content-title-label" data-ibx-type="ibxLabel" data-ibxp-text="Create New"></div>
+							<div class="content-title-spacer"></div>
+							<div class="content-title-btn" data-ibx-type="ibxButtonSimple" data-ibxp-glyph="keyboard_arrow_up" data-ibxp-glyph-classes="material-icons"></div>
+						</div>
+						<div class="create-new-items-box" data-ibx-type="ibxHBox" data-ibxp-align="center" data-ibxp-wrap="true">
+							<div class="create-new-item" data-ibx-type="ibxButtonSimple" data-ibxp-text="Folder" data-ibxp-icon-position="top" data-ibxp-glyph="face" data-ibxp-glyph-classes="material-icons"></div>
+							<div class="create-new-item" data-ibx-type="ibxButtonSimple" data-ibxp-text="Data Set" data-ibxp-icon-position="top" data-ibxp-glyph="face" data-ibxp-glyph-classes="material-icons"></div>
+							<div class="create-new-item" data-ibx-type="ibxButtonSimple" data-ibxp-text="Chart" data-ibxp-icon-position="top" data-ibxp-glyph="face" data-ibxp-glyph-classes="material-icons"></div>
+							<div class="create-new-item" data-ibx-type="ibxButtonSimple" data-ibxp-text="Report" data-ibxp-icon-position="top" data-ibxp-glyph="face" data-ibxp-glyph-classes="material-icons"></div>
+							<div class="create-new-item" data-ibx-type="ibxButtonSimple" data-ibxp-text="Page" data-ibxp-icon-position="top" data-ibxp-glyph="face" data-ibxp-glyph-classes="material-icons"></div>
+							<div class="create-new-item" data-ibx-type="ibxButtonSimple" data-ibxp-text="Portal" data-ibxp-icon-position="top" data-ibxp-glyph="face" data-ibxp-glyph-classes="material-icons"></div>
+							<div class="create-new-item" data-ibx-type="ibxButtonSimple" data-ibxp-text="Alert" data-ibxp-icon-position="top" data-ibxp-glyph="face" data-ibxp-glyph-classes="material-icons"></div>
+							<div class="create-new-item" data-ibx-type="ibxButtonSimple" data-ibxp-text="More" data-ibxp-icon-position="top" data-ibxp-glyph="face" data-ibxp-glyph-classes="material-icons"></div>
+						</div>
+					</div>
+
+					<div class="files-box" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
+						<div class="content-title-bar" data-ibx-type="ibxHBox" data-ibxp-align="center">
+							<div class="content-title-label" data-ibx-type="ibxLabel" data-ibxp-text="Files"></div>
+							<div class="content-title-spacer"></div>
+							<div class="content-title-btn" data-ibx-type="ibxButtonSimple" data-ibxp-text="Title" data-ibxp-icon-position="right" data-ibxp-glyph="keyboard_arrow_up" data-ibxp-glyph-classes="material-icons"></div>
+						</div>
+						<div class="files-box-files" data-ibx-type="ibxHBox" data-ibxp-wrap="true">
+							<div class="file-item"></div>
+							<div class="file-item"></div>
+							<div class="file-item"></div>
+							<div class="file-item"></div>
+							<div class="file-item"></div>
+							<div class="file-item"></div>
+							<div class="file-item"></div>
+							<div class="file-item"></div>
+							<div class="file-item"></div>
+							<div class="file-item"></div>
+							<div class="file-item"></div>
+						</div>
+					</div>
+				</div>
+			</div>
 		</div>
 	</body>
 </html>
