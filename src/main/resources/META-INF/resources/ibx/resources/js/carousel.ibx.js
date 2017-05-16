@@ -24,7 +24,13 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 		ibx.bindElements(this.element);
 		this._prevBtn.on("mousedown mouseup", this._onPrev.bind(this));
 		this._nextBtn.on("mousedown mouseup", this._onNext.bind(this));
-		this._itemsBox.on("mousedown mouseup mousemove mouseleave", this._onDragScroll.bind(this));
+		
+		//on ios let the device do the scrolling...otherwise we handle it.
+		if(ibxPlatformCheck.isIOS)
+			this._itemsBox.css({"overflow":"auto", "-webkit-overflow-scrolling":"touch"});
+		else
+			this._itemsBox.on("mousedown mouseup mousemove mouseleave", this._onDragScroll.bind(this));
+
 		this.add(children);
 	},
 	children:function(selector)
@@ -44,6 +50,9 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 	},
 	_onDragScroll:function(e)
 	{
+		if(ibxPlatformCheck.isIOS)
+		{
+		}
 		if(e.type == "mousedown")
 		{
 			this._eLast = e;
