@@ -62,7 +62,7 @@
 						if(path.indexOf("IBFS:") == -1)
 							path = "IBFS:/WFC/Repository/"+path;						
 						var rootItem = new IbfsRootItem(ibfs,path);
-						$(".left-bar").append(rootItem.getElement());			
+						$(".ibfs-tree").append(rootItem.getElement());			
 					});
 				
 			}, true);
@@ -85,15 +85,19 @@
 				right:15px;
 				bottom:15px;
 			}
+			body
+			{
+				margin:0px;
+				width:100%;
+				height:100%;
+			}
 			.grid-main
 			{
-				position:absolute;
-				//border:1px solid #ccc;
+				position:absolute;				
 				left:5px;
 				top:5px;
 				right:5px;
-				bottom:5px;
-				//border:1px solid red;
+				bottom:5px;				
 			}
 			.tool-bar
 			{
@@ -106,29 +110,14 @@
 			{
 				margin-right:3px;
 			}
-			.tool-bar-title
-			{
-				flex:1 1 auto;
-			}
+						
 			
-			.menu-bar
-			{
-				font-size:.8em;
-			}		
-
-			.top-bar 
-			{
-				height:24px;
-			}
 			.left-bar
 			{
-			
-				width:200px;
-				border:1px solid green;
-			
-				
+				position:relative;					
+				width:200px;				
 				overflow:auto;								 
-				-webkit-overflow-scrolling: scroll; 
+				//-webkit-overflow-scrolling: scroll; 
 				border:1px solid gray;
 			}
 			.button-bar
@@ -157,10 +146,7 @@
 				border-radius:3px;
 			}
 
-			.frame-out
-			{
-				
-			}			
+					
 			.title-box
 			{
 				
@@ -168,8 +154,24 @@
 			}
 			.tree-btn
 			{
-				border: 1px solid #aaa;
+				//border: 1px solid #aaa;
 				padding: 4px;
+				font-size:18px;
+			}
+			.layout-block
+			{
+				margin:4px;
+				border:1px solid #ccc;
+				border-radius:3px;
+			}
+			.ibfs-tree
+			{
+				position:absolute;
+				left:0px;
+				bottom:0px;
+				right:0px;
+				top:0px;
+				overflow:auto;
 			}
 		</style>
 	</head>
@@ -178,7 +180,7 @@
 <%--	
 		<div class="outer-grid-container-for-ios-bug"> 
 			<div class="grid-main" data-ibx-type="ibxGrid" data-ibxp-cols="auto 1fr auto" data-ibxp-rows="auto auto 1fr auto" >
-				<div class="tool-bar" data-ibx-type="ibxHBox" data-ibx-align="center" data-ibx-col="1/span 2" data-ibx-row="1/span 1">
+				<div class="tool-bar layout-block" data-ibx-type="ibxHBox" data-ibx-align="center" data-ibx-col="1/span 2" data-ibx-row="1/span 1">
 					<div class="button-bar" data-ibx-type="ibxHBox" data-ibx-align="center">						
 						<div class="tree-btn" data-ibx-type="ibxButton" data-ibxp-glyph="menu" data-ibxp-glyph-classes="material-icons"></div>																						
 					</div>
@@ -196,19 +198,17 @@
 --%>
 	
 		<div class="grid-main" data-ibx-type="ibxGrid" data-ibxp-cols="auto 1fr" data-ibxp-rows="auto 1fr">
-			<div class="title-box" data-ibx-type="ibxHBox" data-ibx-col="1/span 1" data-ibx-row="1/span 1" data-ibx-align="center">
+			<div class="title-box layout-block" data-ibx-type="ibxHBox" data-ibx-col="1/span 1" data-ibx-row="1/span 1" data-ibxp-align="center">
 				<div class="tree-btn" data-ibx-type="ibxButtonSimple" data-ibxp-glyph="menu" data-ibxp-glyph-classes="material-icons"></div>								
 			</div>				
-			<div class="fex-text" data-ibx-type="ibxHBox" data-ibxp-justify="center" data-ibxp-align="center" data-ibx-col="2/span 1" data-ibx-row="1/span 1" ></div>	
+			<div class="fex-text layout-block" data-ibx-type="ibxHBox" data-ibxp-justify="center" data-ibxp-align="center" data-ibx-col="2/span 1" data-ibx-row="1/span 1" ></div>	
 			
-			<div class="left-bar" data-ibx-type="ibxWidget" data-ibx-col="1/span 1" data-ibx-row="2/span 1"></div>
+			<div class="left-bar layout-block" data-ibx-type="ibxWidget" data-ibx-col="1/span 1" data-ibx-row="2/span 200">
+				<div class="ibfs-tree"></div>
+			</div>
 
-			<div class="frame-out" data-ibx-type="ibxIFrame" data-ibx-col="2/span 1fr" data-ibx-row="2/span 1fr" data-ibxp-src="./iframe_placeholder.jsp"></div>
-		</div>
-	
-		
-
-			
+			<div class="frame-out layout-block" data-ibx-type="ibxIFrame" data-ibx-col="2/span 1" data-ibx-row="2/span 200" data-ibxp-src="./iframe_placeholder.jsp"></div>
+		</div>			
 		
 	</body>
 </html>
