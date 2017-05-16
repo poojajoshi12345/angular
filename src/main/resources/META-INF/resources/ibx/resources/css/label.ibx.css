@@ -20,17 +20,25 @@
 	font-size:inherit; /*because material-icons defines a default font size as 24px.*/
 }
 
-.ibx-label-glyph.ibx-glyph-spacer
+.icon-left .ibx-label-glyph.ibx-glyph-spacer
 {
 	margin-right:.5em;
+}
+.icon-right .ibx-label-glyph.ibx-glyph-spacer
+{
+	margin-left:.5em;
 }
 
 .ibx-label-icon
 {
 }
-.ibx-label-icon.ibx-icon-spacer
+.icon-left .ibx-label-icon.ibx-icon-spacer
 {
 	margin-right:.5em;
+}
+.icon-right .ibx-label-icon.ibx-icon-spacer
+{
+	margin-left:.5em;
 }
 
 .ibx-label.icon-left
