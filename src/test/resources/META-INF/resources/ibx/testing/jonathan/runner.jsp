@@ -25,13 +25,11 @@
 			ibx(function()
 			{	
 				var phone=false;
-				if ($(window).width() < 480 || $(window).height() < 480) phone=true;  			
-
-				$(".button-bar > .ibx-button").on("click", function(e)
+				if ($(window).width() < 480 || $(window).height() < 480) phone=true;				
+				
+				$(".tree-btn").on("click", function(e)
 				{
-					var btn =  $(e.currentTarget);
-					var bar = btn.data("user-data");
-					$((bar == ".all") ? ".grid-bar" : bar).ibxCollapsible("toggle");
+					$(".left-bar").ibxCollapsible("toggle");
 				});
 										
 				$(".left-bar").ibxCollapsible({autoClose:false, direction:"left", startCollapsed:false});				
@@ -64,7 +62,7 @@
 						if(path.indexOf("IBFS:") == -1)
 							path = "IBFS:/WFC/Repository/"+path;						
 						var rootItem = new IbfsRootItem(ibfs,path);
-						$(".left-bar").append(rootItem.getElement());			
+						$(".ibfs-tree").append(rootItem.getElement());			
 					});
 				
 			}, true);
@@ -87,12 +85,19 @@
 				right:15px;
 				bottom:15px;
 			}
+			body
+			{
+				margin:0px;
+				width:100%;
+				height:100%;
+			}
 			.grid-main
 			{
-				height:100%;
-				overflow:hidden;
-				border:1px solid gray;
-				border-radius:3px;
+				position:absolute;				
+				left:5px;
+				top:5px;
+				right:5px;
+				bottom:5px;				
 			}
 			.tool-bar
 			{
@@ -105,31 +110,14 @@
 			{
 				margin-right:3px;
 			}
-			.tool-bar-title
-			{
-				flex:1 1 auto;
-			}
-			.bottom-bar
-			{
-				//border:1px solid gray;	
-				height: 2px;
-				
-			}
-			.menu-bar
-			{
-				font-size:.8em;
-			}		
-
-			.top-bar 
-			{
-				height:24px;
-			}
+						
+			
 			.left-bar
 			{
-				width:200px;
-				overflow:auto;
-				//overflow-x:scroll;				 
-				-webkit-overflow-scrolling: scroll; 
+				position:relative;					
+				width:200px;				
+				overflow:auto;								 
+				//-webkit-overflow-scrolling: scroll; 
 				border:1px solid gray;
 			}
 			.button-bar
@@ -137,18 +125,64 @@
 				width:50%;
 			}
 			.fex-text
-			{				
-				align:center;
+			{
+				
 				text-align:center;
+				padding:3px;
+				background-color:white;
+				border-bottom: 1px solid #aaa;
+				z-index:1;	
+			}
+			.outer-box
+			{
+				position:absolute;
+				left:15px;
+				top:15px;
+				right:15px;
+				bottom:15px;
+				height:95%;
+				overflow:hidden;				
+				border:1px solid gray;
+				border-radius:3px;
+			}
+
+					
+			.title-box
+			{
+				
+				padding:10px;
+			}
+			.tree-btn
+			{
+				//border: 1px solid #aaa;
+				padding: 4px;
+				font-size:18px;
+			}
+			.layout-block
+			{
+				margin:4px;
+				border:1px solid #ccc;
+				border-radius:3px;
+			}
+			.ibfs-tree
+			{
+				position:absolute;
+				left:0px;
+				bottom:0px;
+				right:0px;
+				top:0px;
+				overflow:auto;
 			}
 		</style>
 	</head>
+	
 	<body class="ibx-root">
+<%--	
 		<div class="outer-grid-container-for-ios-bug"> 
 			<div class="grid-main" data-ibx-type="ibxGrid" data-ibxp-cols="auto 1fr auto" data-ibxp-rows="auto auto 1fr auto" >
-				<div class="tool-bar" data-ibx-type="ibxHBox" data-ibx-align="center" data-ibx-col="1/span 2" data-ibx-row="1/span 1">
+				<div class="tool-bar layout-block" data-ibx-type="ibxHBox" data-ibx-align="center" data-ibx-col="1/span 2" data-ibx-row="1/span 1">
 					<div class="button-bar" data-ibx-type="ibxHBox" data-ibx-align="center">						
-						<div data-user-data=".left-bar" data-ibx-type="ibxButton" data-ibxp-glyph="menu" data-ibxp-glyph-classes="material-icons"></div>																						
+						<div class="tree-btn" data-ibx-type="ibxButton" data-ibxp-glyph="menu" data-ibxp-glyph-classes="material-icons"></div>																						
 					</div>
 					<div class="fex-text" data-ibx-type="ibxHBox" ></div>								
 				</div> 						
@@ -161,7 +195,21 @@
 									
 			</div>
 		</div>
+--%>
+	
+		<div class="grid-main" data-ibx-type="ibxGrid" data-ibxp-cols="auto 1fr" data-ibxp-rows="auto 1fr">
+			<div class="title-box layout-block" data-ibx-type="ibxHBox" data-ibx-col="1/span 1" data-ibx-row="1/span 1" data-ibxp-align="center">
+				<div class="tree-btn" data-ibx-type="ibxButtonSimple" data-ibxp-glyph="menu" data-ibxp-glyph-classes="material-icons"></div>								
+			</div>				
+			<div class="fex-text layout-block" data-ibx-type="ibxHBox" data-ibxp-justify="center" data-ibxp-align="center" data-ibx-col="2/span 1" data-ibx-row="1/span 1" ></div>	
+			
+			<div class="left-bar layout-block" data-ibx-type="ibxWidget" data-ibx-col="1/span 1" data-ibx-row="2/span 200">
+				<div class="ibfs-tree"></div>
+			</div>
 
+			<div class="frame-out layout-block" data-ibx-type="ibxIFrame" data-ibx-col="2/span 1" data-ibx-row="2/span 200" data-ibxp-src="./iframe_placeholder.jsp"></div>
+		</div>			
+		
 	</body>
 </html>
 
