@@ -76,22 +76,22 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 	}
 });
 
-$.widget("ibi.ibxHCarousel", $.ibi.ibxCarousel,{_widgetClass:"_ibxHCarousel"});
+$.widget("ibi.ibxHCarousel", $.ibi.ibxCarousel,{_widgetClass:"ibx-h-carousel"});
 $.widget("ibi.ibxVCarousel", $.ibi.ibxCarousel,
 {
 	options:
 	{
 		direction:"row",
 	},
-	_widgetClass:"_ibxVCarousel",
+	_widgetClass:"ibx-v-carousel",
 	_create:function()
 	{
 		this._super();
 		this._itemsContainer.ibxWidget("option", "direction", "column");
 		this._itemsBox.ibxWidget("option", "direction", "column");
 		this._pageMarkers.ibxWidget("option", "direction", "column");
-		this._prevBtn.ibxWidget("option", {"iconPosition": "top", "glyph": "keyboard_arrow_up"});
-		this._nextBtn.ibxWidget("option", {"iconPosition": "top", "glyph": "keyboard_arrow_down"});
+		this._prevBtn.ibxWidget("option", {"iconPosition": "top"});
+		this._nextBtn.ibxWidget("option", {"iconPosition": "top"});
 	},
 	_scroll:function(startScrolling, beginning)
 	{

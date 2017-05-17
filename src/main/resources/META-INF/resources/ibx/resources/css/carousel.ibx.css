@@ -18,9 +18,30 @@
 
 .ibx-csl-prev-btn, .ibx-csl-next-btn
 {
+	font-family:Material Icons;
 	flex:0 0 auto;
 	font-size:1.5em;
 	align-self:stretch;
+}
+
+.ibx-csl-prev-btn::after
+{
+	content:"\E314";
+}
+
+.ibx-csl-next-btn::after
+{
+	content:"\E315";
+}
+
+.ibx-v-carousel .ibx-csl-prev-btn::after
+{
+	content:"\E316";
+}
+
+.ibx-v-carousel .ibx-csl-next-btn::after
+{
+	content:"\E313";
 }
 
 .ibx-csl-page-markers
