@@ -91,7 +91,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 	{
 		//retrieve mapped options.
 		if(typeof key === "string" && this.options.optionsMap[key] && !value)
-			return this._super(this.options.optionsMap[key], value);
+			return this._super(this.options.optionsMap[key]);
 		else
 			return this._superApply(arguments);
 	},
