@@ -49,7 +49,6 @@ $.widget("ibi.ibxWidget", $.Widget,
 		this.element.data("ibxWidget", this);
 		this.element.data("ibiIbxWidget", this);
 		this.element.attr("data-ibx-type", this.widgetName);
-		this._onDragScrollBound = this._onDragScroll.bind(this);
 		this.element.on("click keydown keypress", this._onFocusRootEvent.bind(this));
 		this.element.on("contextmenu", this._onWidgetContextMenu.bind(this));
 		this._adjustWidgetClasses(true);
@@ -188,28 +187,6 @@ $.widget("ibi.ibxWidget", $.Widget,
 			e.preventDefault();
 		}
 	},
-	_onDragScroll:function(e)
-	{
-		if(e.type == "mousedown")
-		{
-			this._eLast = e;
-			this._scrolling = true;
-			e.preventDefault();
-		}
-		else
-		if(e.type == "mouseup" || e.type == "mouseleave")
-			this._scrolling = false;
-		else
-		if(this._scrolling && e.type == "mousemove")
-		{
-			var dx = e.screenX - this._eLast.screenX;
-			var dy = e.screenY - this._eLast.screenY;
-			var sl = this.element.prop("scrollLeft");
-			var st = this.element.prop("scrollTop");
-			this.element.prop({"scrollLeft": sl - dx, "scrollTop": st - dy});
-			this._eLast = e;
-		}
-	},
 	children:function(selector)
 	{
 		return this.element.children(selector);
@@ -242,18 +219,6 @@ $.widget("ibi.ibxWidget", $.Widget,
 		this.element.addClass(options.class);
 		options.focusRoot ? this.element.addClass("ibx-focus-root") : this.element.removeClass("ibx-focus-root");
 		options.defaultFocused ? this.element.addClass("ibx-default-focused") : this.element.removeClass("ibx-default-focused");
-
-		//allow content drag scrolling (panning)
-		if(options.dragScrolling)
-		{
-			//on ios let the device do the scrolling...otherwise we handle it.
-			if(ibxPlatformCheck.isIOS)
-				this._itemsBox.css({"overflow":"auto", "-webkit-overflow-scrolling":"touch"});
-			else
-				this.element.on("mousedown mouseup mousemove mouseleave", this._onDragScrollBound);
-		}
-		else
-			this.element.off("mousedown mouseup mousemove mouseleave", this._onDragScrollBound);
 	}
 });
 

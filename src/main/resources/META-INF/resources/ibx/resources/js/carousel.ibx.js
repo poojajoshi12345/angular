@@ -15,16 +15,6 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 		showNextButton:true,
 		step:25,
 		stepRate:25,
-		
-		itemsBoxOptions:
-		{
-			dragScrolling:true,
-		},
-
-		optionsMap:
-		{
-			dragScrolling:"itemsBoxOptions.dragScrolling"
-		}
 	},
 	_widgetClass:"ibx-carousel",
 	_create:function()
@@ -36,6 +26,7 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 		ibx.bindElements(this.element);
 		this._prevBtn.on("mousedown mouseup", this._onPrev.bind(this));
 		this._nextBtn.on("mousedown mouseup", this._onNext.bind(this));
+		this._itemsBox.ibxDragScrolling();
 		this.add(children);
 	},
 	children:function(selector)
@@ -84,7 +75,6 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 		this._pageMarkers.css("display", options.showPageMarkers ? "" : "none");
 		this._prevBtn.css("display", options.showPrevButton ? "" : "none");
 		this._nextBtn.css("display", options.showNextButton ? "" : "none");
-		this._itemsBox.ibxWidget("option", options.itemsBoxOptions);
 	}
 });
 
