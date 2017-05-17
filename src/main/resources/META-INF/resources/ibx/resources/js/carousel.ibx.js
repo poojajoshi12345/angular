@@ -85,15 +85,15 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 		this._scroll(bDown, true) 
 	},
 	_scrollTimer:null,
-	_scroll:function(start, right)
+	_scroll:function(startScrolling, beginning)
 	{
-		if(start)
+		if(startScrolling)
 		{
-			this._scrollTimer = window.setInterval(function(itemsBox, right)
+			this._scrollTimer = window.setInterval(function(itemsBox, beginning)
 			{
 				var sl = itemsBox.prop("scrollLeft");
-				itemsBox.prop("scrollLeft", sl + (right ? this.options.step : -this.options.step));
-			}.bind(this, this._itemsBox, right), this.options.stepRate); 
+				itemsBox.prop("scrollLeft", sl + (beginning ? this.options.step : -this.options.step));
+			}.bind(this, this._itemsBox, beginning), this.options.stepRate); 
 		}
 		else
 			window.clearInterval(this._scrollTimer);
@@ -107,3 +107,38 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 		this._nextBtn.css("display", options.showNextButton ? "" : "none");
 	}
 });
+
+$.widget("ibi.ibxHCarousel", $.ibi.ibxCarousel,{_widgetClass:"_ibxHCarousel"});
+$.widget("ibi.ibxVCarousel", $.ibi.ibxCarousel,
+{
+	options:
+	{
+		direction:"column"
+	},
+	_widgetClass:"_ibxVCarousel",
+	_create:function()
+	{
+		this._super();
+		this.options.direction = "column";
+		this._itemsContainer.ibxWidget("option", "direction", "column");
+		this._itemsBox.ibxWidget("option", "direction", "column");
+		this._pageMarkers.ibxWidget("option", "direction", "column");
+		this._prevBtn.ibxWidget("option", {"iconPosition": "top", "glyph": "keyboard_arrow_up"});
+		this._nextBtn.ibxWidget("option", {"iconPosition": "top", "glyph": "keyboard_arrow_down"});
+	},
+	_scroll:function(startScrolling, beginning)
+	{
+		if(startScrolling)
+		{
+			this._scrollTimer = window.setInterval(function(itemsBox, beginning)
+			{
+				var sl = itemsBox.prop("scrollTop");
+				itemsBox.prop("scrollTop", sl + (beginning ? this.options.step : -this.options.step));
+			}.bind(this, this._itemsBox, beginning), this.options.stepRate); 
+		}
+		else
+			window.clearInterval(this._scrollTimer);
+	},
+});
+
+//# sourceURL=carousel.ibx.js
