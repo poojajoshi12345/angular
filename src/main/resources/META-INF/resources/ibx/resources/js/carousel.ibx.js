@@ -15,6 +15,16 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 		showNextButton:true,
 		step:25,
 		stepRate:25,
+		
+		itemsBoxOptions:
+		{
+			dragScrolling:true,
+		},
+
+		optionsMap:
+		{
+			dragScrolling:"itemsBoxOptions.dragScrolling"
+		}
 	},
 	_widgetClass:"ibx-carousel",
 	_create:function()
@@ -26,13 +36,6 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 		ibx.bindElements(this.element);
 		this._prevBtn.on("mousedown mouseup", this._onPrev.bind(this));
 		this._nextBtn.on("mousedown mouseup", this._onNext.bind(this));
-		
-		//on ios let the device do the scrolling...otherwise we handle it.
-		if(ibxPlatformCheck.isIOS)
-			this._itemsBox.css({"overflow":"auto", "-webkit-overflow-scrolling":"touch"});
-		else
-			this._itemsBox.on("mousedown mouseup mousemove mouseleave", this._onDragScroll.bind(this));
-
 		this.add(children);
 	},
 	children:function(selector)
@@ -49,30 +52,6 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 	{
 		$(el).removeClass("ibx-csl-item");
 		this._itemsBox.ibxWidget("remove", el, refresh);
-	},
-	_onDragScroll:function(e)
-	{
-		if(ibxPlatformCheck.isIOS)
-		{
-		}
-		if(e.type == "mousedown")
-		{
-			this._eLast = e;
-			this._scrolling = true;
-			e.preventDefault();
-		}
-		else
-		if(e.type == "mouseup" || e.type == "mouseleave")
-			this._scrolling = false;
-		else
-		if(this._scrolling && e.type == "mousemove")
-		{
-			var dx = e.screenX - this._eLast.screenX;
-			var dy = e.screenY - this._eLast.screenY;
-			var sl = this._itemsBox.prop("scrollLeft");
-			this._itemsBox.prop("scrollLeft", sl - dx);
-			this._eLast = e;
-		}
 	},
 	_onPrev:function(e)
 	{
@@ -105,6 +84,7 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 		this._pageMarkers.css("display", options.showPageMarkers ? "" : "none");
 		this._prevBtn.css("display", options.showPrevButton ? "" : "none");
 		this._nextBtn.css("display", options.showNextButton ? "" : "none");
+		this._itemsBox.ibxWidget("option", options.itemsBoxOptions);
 	}
 });
 
@@ -113,7 +93,7 @@ $.widget("ibi.ibxVCarousel", $.ibi.ibxCarousel,
 {
 	options:
 	{
-		direction:"column"
+		direction:"column",
 	},
 	_widgetClass:"_ibxVCarousel",
 	_create:function()

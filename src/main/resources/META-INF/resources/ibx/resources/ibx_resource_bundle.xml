@@ -78,7 +78,7 @@ $Revision$:-->
 			<div class="res-ibx-carousel-body">
 				<div class="ibx-csl-items-container" data-ibx-name="_itemsContainer" data-ibx-type="ibxHBox" data-ibxp-align="center">
 					<div class="ibx-csl-prev-btn" data-ibx-name="_prevBtn" data-ibx-type="ibxButtonSimple" data-ibxp-glyph="keyboard_arrow_left" data-ibxp-glyph-classes="material-icons"></div>
-					<div class="ibx-csl-items-box" data-ibx-name="_itemsBox" data-ibx-type="ibxHBox" data-ibxp-align="center"></div>
+					<div class="ibx-csl-items-box" data-ibx-name="_itemsBox" data-ibx-type="ibxHBox" data-ibxp-align="center" data-ibxp-drag-scrolling="true"></div>
 					<div class="ibx-csl-next-btn" data-ibx-name="_nextBtn" data-ibx-type="ibxButtonSimple" data-ibxp-glyph="keyboard_arrow_right" data-ibxp-glyph-classes="material-icons"></div>
 				</div>
 				<div class="ibx-csl-page-markers" data-ibx-name="_pageMarkers" data-ibx-type="ibxHBox" data-ibxp-justify="center" data-ibxp-align="center">
@@ -92,9 +92,8 @@ $Revision$:-->
 
 	<!--script dependencies-->
 	<scripts>
-		<script-file src="./etc/jquery/jquery-ui-1.12.1/jquery-ui.js"/>
-    <script-file src="./etc/scrollwidthpolyfill/scrollwidthpolyfill.js"/>
-    <script-file src="./etc/gridstack/underscore.js"/>
+		<script-file src="./etc/scrollwidthpolyfill/scrollwidthpolyfill.js"/>
+		<script-file src="./etc/gridstack/underscore.js"/>
 		<script-file src="./etc/gridstack/gridstack.js"/>
 		<script-file src="./js/bi_patches.ibx.js"/>
 		<script-file src="./js/events.ibx.js"/>
