@@ -48,8 +48,10 @@
 					});	
 					function itemdiv(item)
 					{
-						var divstring='<div class="file-item" <a><img class="item-image" src="' + item.thumbPath + '"></a>';
+						var jsonitem=JSON.stringify(item);
+						var divstring='<div class="file-item" data-item = "' + jsonitem + '" <a><img class="item-image" src="' + item.thumbPath + '"></a>';
 						divstring = divstring + '<p class="image-text">' + item.description + '</p></div>';
+						
 						return divstring;
 					};	
 				
@@ -130,6 +132,7 @@
 			.create-new-box
 			{
 				flex:0 0 auto;
+				height: 141px;
 				border-bottom:1px solid #ccc;
 			}
 			.content-title-bar
@@ -162,6 +165,9 @@
 			.create-new-item
 			{
 				margin:10px;
+				height:110px;
+				width: 100px;
+								
 			}
 			.create-new-item .ibx-label-glyph
 			{
@@ -170,7 +176,11 @@
 			.create-new-item .ibx-label-text
 			{
 				color:#aaa;
-				font-size:11px;
+				font-size:11px;				
+			}
+			.create-new-item img
+			{
+				margin-top: 20px;				
 			}
 			.files-box
 			{
@@ -234,14 +244,38 @@
 							<div class="content-title-btn" data-ibx-type="ibxButtonSimple" data-ibxp-glyph="keyboard_arrow_up" data-ibxp-glyph-classes="material-icons"></div>
 						</div>
 						<div class="create-new-items-box" data-ibx-type="ibxHBox" data-ibxp-align="center" data-ibxp-wrap="true">
-							<div class="create-new-item" data-ibx-type="ibxButtonSimple" data-ibxp-text="Folder" data-ibxp-icon-position="top" data-ibxp-glyph="face" data-ibxp-glyph-classes="material-icons"></div>
-							<div class="create-new-item" data-ibx-type="ibxButtonSimple" data-ibxp-text="Data Set" data-ibxp-icon-position="top" data-ibxp-glyph="face" data-ibxp-glyph-classes="material-icons"></div>
-							<div class="create-new-item" data-ibx-type="ibxButtonSimple" data-ibxp-text="Chart" data-ibxp-icon-position="top" data-ibxp-glyph="face" data-ibxp-glyph-classes="material-icons"></div>
-							<div class="create-new-item" data-ibx-type="ibxButtonSimple" data-ibxp-text="Report" data-ibxp-icon-position="top" data-ibxp-glyph="face" data-ibxp-glyph-classes="material-icons"></div>
-							<div class="create-new-item" data-ibx-type="ibxButtonSimple" data-ibxp-text="Page" data-ibxp-icon-position="top" data-ibxp-glyph="face" data-ibxp-glyph-classes="material-icons"></div>
-							<div class="create-new-item" data-ibx-type="ibxButtonSimple" data-ibxp-text="Portal" data-ibxp-icon-position="top" data-ibxp-glyph="face" data-ibxp-glyph-classes="material-icons"></div>
-							<div class="create-new-item" data-ibx-type="ibxButtonSimple" data-ibxp-text="Alert" data-ibxp-icon-position="top" data-ibxp-glyph="face" data-ibxp-glyph-classes="material-icons"></div>
-							<div class="create-new-item" data-ibx-type="ibxButtonSimple" data-ibxp-text="More" data-ibxp-icon-position="top" data-ibxp-glyph="face" data-ibxp-glyph-classes="material-icons"></div>
+							<div class="create-new-item" data-ibx-type="ibxButtonSimple" data-ibxp-text="Folder" data-ibxp-icon-position="top"
+							data-ibxp-icon="images/folder.png" data-ibxp->  
+							<%--data-ibxp-glyph="face" data-ibxp-glyph-classes="material-icons">--%>
+							</div>
+							<div class="create-new-item" data-ibx-type="ibxButtonSimple" data-ibxp-text="Data Set" data-ibxp-icon-position="top" 
+							data-ibxp-icon="images/dataset.png" >  
+							<%--data-ibxp-glyph="face" data-ibxp-glyph-classes="material-icons">--%>							
+							</div>
+							<div class="create-new-item" data-ibx-type="ibxButtonSimple" data-ibxp-text="Chart" data-ibxp-icon-position="top"
+							<%--data-ibxp-glyph="face" data-ibxp-glyph-classes="material-icons">--%>
+							data-ibxp-icon="images/chart.png" >
+							</div>
+							<div class="create-new-item" data-ibx-type="ibxButtonSimple" data-ibxp-text="Report" data-ibxp-icon-position="top" 
+							<%--data-ibxp-glyph="face" data-ibxp-glyph-classes="material-icons">--%>
+							data-ibxp-icon="images/report.png" >
+							</div>
+							<div class="create-new-item" data-ibx-type="ibxButtonSimple" data-ibxp-text="Page" data-ibxp-icon-position="top" 
+							<%--data-ibxp-glyph="face" data-ibxp-glyph-classes="material-icons">--%>
+							data-ibxp-icon="images/page.png" >
+							</div>
+							<div class="create-new-item" data-ibx-type="ibxButtonSimple" data-ibxp-text="Portal" data-ibxp-icon-position="top" 
+							<%--data-ibxp-glyph="face" data-ibxp-glyph-classes="material-icons">--%>
+							data-ibxp-icon="images/portal.png" >
+							</div>
+							<div class="create-new-item" data-ibx-type="ibxButtonSimple" data-ibxp-text="Alert" data-ibxp-icon-position="top" 
+							<%--data-ibxp-glyph="face" data-ibxp-glyph-classes="material-icons">--%>
+							data-ibxp-icon="images/alert.png" >
+							</div>
+							<div class="create-new-item" data-ibx-type="ibxButtonSimple" data-ibxp-text="More" data-ibxp-icon-position="top" 
+							<%--data-ibxp-glyph="face" data-ibxp-glyph-classes="material-icons">--%>
+							data-ibxp-icon="images/more.png" >
+							</div>
 						</div>
 					</div>
 
