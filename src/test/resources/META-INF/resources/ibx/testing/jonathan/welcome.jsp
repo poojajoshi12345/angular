@@ -65,8 +65,8 @@
 						window.open(uriExec);		
 					};						
 					function editIt(item)
-					{
-						var fullitem=item.parentPath + '/' + item.name;
+					{debugger;
+						var fullitem=item.parentPath + item.name;
 						var uriExec = sformat("{1}/ia?is508=false&&item={2}&tool=Report", applicationContext,
 							encodeURIComponent(fullitem));									
 						window.open(uriExec);		
