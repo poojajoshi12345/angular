@@ -81,13 +81,12 @@ $.widget("ibi.ibxVCarousel", $.ibi.ibxCarousel,
 {
 	options:
 	{
-		direction:"column",
+		direction:"row",
 	},
 	_widgetClass:"_ibxVCarousel",
 	_create:function()
 	{
 		this._super();
-		this.options.direction = "column";
 		this._itemsContainer.ibxWidget("option", "direction", "column");
 		this._itemsBox.ibxWidget("option", "direction", "column");
 		this._pageMarkers.ibxWidget("option", "direction", "column");

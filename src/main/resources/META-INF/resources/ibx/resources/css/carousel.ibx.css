@@ -7,6 +7,7 @@
 ******************************************************************************/
 .ibx-csl-items-container
 {
+	flex:1 1 auto;
 }
 
 .ibx-csl-items-box
@@ -20,6 +21,11 @@
 	flex:0 0 auto;
 	font-size:1.5em;
 	align-self:stretch;
+}
+
+.ibx-csl-page-markers
+{
+	flex:1 1 auto;
 }
 
 .ibx-csl-page-marker
