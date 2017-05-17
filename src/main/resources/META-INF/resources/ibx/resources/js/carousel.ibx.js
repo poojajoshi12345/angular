@@ -24,8 +24,8 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 		var resBody = ibxResourceMgr.getResource(".res-ibx-carousel-body", false);
 		this.element.append(resBody.children());
 		ibx.bindElements(this.element);
-		this._prevBtn.on("mousedown mouseup", this._onPrev.bind(this));
-		this._nextBtn.on("mousedown mouseup", this._onNext.bind(this));
+		this._prevBtn.on("mousedown mouseup mouseleave", this._onPrev.bind(this));
+		this._nextBtn.on("mousedown mouseup mouseleave", this._onNext.bind(this));
 		this._itemsBox.ibxDragScrolling();
 		this.add(children);
 	},
@@ -46,13 +46,11 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 	},
 	_onPrev:function(e)
 	{
-		var bDown = (e.type == "mousedown");
-		this._scroll(bDown, false) 
+		this._scroll(e.type == "mousedown", false) 
 	},
 	_onNext:function(e)
 	{
-		var bDown = (e.type == "mousedown");
-		this._scroll(bDown, true) 
+		this._scroll(e.type == "mousedown", true) 
 	},
 	_scrollTimer:null,
 	_scroll:function(startScrolling, beginning)
