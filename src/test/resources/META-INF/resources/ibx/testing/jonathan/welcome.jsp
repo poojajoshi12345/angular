@@ -20,10 +20,11 @@
 		<Script src="tree.pd2.js" type="text/javascript"></script>
 		
 		<script type="text/javascript">
+			var itemlist=[];
 			<jsp:include page="/WEB-INF/jsp/global/wf_globals.jsp" flush="false" />
 			ibx(function()
 			{
-			
+				
 					var loaded = Ibfs.load("<%=request.getContextPath()%>", WFGlobals.ses_auth_parm, WFGlobals.ses_auth_val);
 					loaded.done(function(ibfs)
 					{
@@ -36,26 +37,88 @@
 					});
 					
 					$( document ).on( "addanitem", function(e, item)
-					{						
-						
+					{				
+						itemlist.push(item);
 						var divstring = itemdiv(item);						
 						$(".files-box-files").append(divstring);															
 					});	
 					
 					$( document ).on( "clearitems", function(e, item)
 					{
-						$( ".files-box-files" ).empty();										
+						$( ".files-box-files" ).empty();
+						itemlist=[];										
 					});	
 					function itemdiv(item)
 					{
 						var jsonitem=JSON.stringify(item);
-						var divstring='<div class="file-item" data-item = "' + jsonitem + '" <a><img class="item-image" src="' + item.thumbPath + '"></a>';
-						divstring = divstring + '<p class="image-text">' + item.description + '</p></div>';
+						var divstring='<div class="file-item" <a><img class="item-image" src="' + item.thumbPath + '"></a>';
+						divstring = divstring + '<div class="image-text">' + item.description + 
+						'<div class="image-menu" onclick="filemenu(this, \'' +  item.name +'\')" </div> </div></div>';
 						
 						return divstring;
-					};	
+					};
+					
+					function runIt(item)
+					{
+						var uriExec = sformat("{1}/run.bip?BIP_REQUEST_TYPE=BIP_LAUNCH&BIP_folder={2}&BIP_item={3}", applicationContext,
+						encodeURIComponent(item.parentPath), encodeURIComponent(item.name));									
+						window.open(uriExec);		
+					};						
+					function editIt(item)
+					{
+						var fullitem=item.parentPath + '/' + item.name;
+						var uriExec = sformat("{1}/ia?is508=false&&item={2}&tool=Report", applicationContext,
+							encodeURIComponent(fullitem));									
+						window.open(uriExec);		
+					};					
+					$( document ).on( "showitemmenu", function(e, ibfsitem, contextitem)
+					{					
+						var options = 
+						{
+						my:"left top",
+						at:"left bottom",
+						of:contextitem
+						}
+						var initialized = $(".edit-menu").data("initialized");
+						$(".edit-menu").data('ibxWidget').mimenuitemrun.data("ibfsitem",ibfsitem);
+						$(".edit-menu").data('ibxWidget').mimenuitemedit.data("ibfsitem",ibfsitem);	
+						if(!initialized)
+						{				
+							$(".edit-menu").data('ibxWidget').mimenuitemrun.on("ibx_menu_item_click",function(e)
+							{
+								var ibfsitem = $(e.target).data("ibfsitem");
+								runIt(ibfsitem);
+								});									
+							$(".edit-menu").data('ibxWidget').mimenuitemedit.on("ibx_menu_item_click",function(e)
+							{
+								var ibfsitem = $(e.target).data("ibfsitem");
+								editIt(ibfsitem);							
+							});
+							$(".edit-menu").data("initialized",true);
+						}
+						
+						$(".edit-menu").ibxContextMenu("open").position(options);
+					});		
+						
 				
 			}, true);
+			
+			function filemenu(contextitem, name)
+					{
+						ilen=itemlist.length;						
+						
+						//find the name in itemlist...
+						for (i=0; i<ilen; i++)
+						{
+							ibfsitem=itemlist[i];
+							if(ibfsitem.name == name)	
+							{					
+								
+								$(document).trigger( "showitemmenu", [ ibfsitem, contextitem] );
+								break;
+							}
+						}	
+					};	
 			
 		</script>
 		<link rel="stylesheet" type="text/css" href="tree.pd.css">
@@ -210,13 +273,31 @@
 			.image-text
 			{
 				text-align: center;
-				font-family = 'Hind', sans-serif;
-				font-size = 14px;
+				font-family: 'Hind', sans-serif;
+				font-size: 14px;
+				margin-top:6px;
+				height: 20px;
+				
+			}
+			.image-menu
+			{
+				height:20px;
+				width:18px;
+				float:right;
+				position:relative;
+				right:4px;
+				margin-top:0px;
+				background:url(images/vertical.png);
 				
 			}
 		</style>
 	</head>
 	<body class="ibx-root">
+		<div class="edit-menu" data-ibx-name-root="true" data-ibx-type="ibxContextMenu" data-ibxp-destroy-on-close="false">
+			<div data-ibx-type="ibxMenuItem" data-ibx-name="mimenuitemrun" data-ibxp-text="Run/View" data-ibxp-glyph="content_cut" data-ibxp-glyph-classes="material-icons"></div>
+			<div data-ibx-type="ibxMenuSeparator"></div>
+			<div data-ibx-type="ibxMenuItem" data-ibx-name="mimenuitemedit" data-ibxp-text="Edit" data-ibxp-glyph="content_copy" data-ibxp-glyph-classes="material-icons"></div>
+		</div>
 		<div class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
 			<div class="title-bar" data-ibx-type="ibxHBox" data-ibxp-align="center">
 				<div class="title-label" data-ibx-type="ibxLabel" data-ibxp-text="Content"></div>
@@ -304,6 +385,7 @@
 				</div>
 			</div>
 		</div>
+		
 	</body>
 </html>
 
