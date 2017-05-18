@@ -12,6 +12,8 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 		align:"stretch",
 		showPageMarkers:false,
 		pageMarkersPos:"end",
+		pageMarkerClass:"ibx-csl-page-marker",
+		pageMarkerSelectedClass:"ibx-csl-page-selected",
 		showPrevButton:true,
 		showNextButton:true,
 		step:25,
@@ -107,7 +109,7 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 		var pageInfo = this._getPageInfo(metrics);
 		for(var i = 0; i < pageInfo.pages; ++i)
 		{
-			var pageMarker = $(sformat("<div class='ibx-csl-page-marker {1}'>", i == pageInfo.curPage ? "ibx-csl-page-selected" : ""));
+			var pageMarker = $(sformat("<div class='{1} {2}'>", this.options.pageMarkerClass, i == pageInfo.curPage ? this.options.pageMarkerSelectedClass : ""));
 			pageMarker.prop("title", "Page - " + (i + 1));
 			pageMarker.data("ibxPageMarkerInfo", {"pageNo":i, "metrics":metrics}).on("click", this._onPageMarkerClick.bind(this));
 			this._pageMarkers.append(pageMarker)
