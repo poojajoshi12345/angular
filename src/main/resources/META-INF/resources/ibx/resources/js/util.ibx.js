@@ -29,7 +29,7 @@ function sformat()
 	{
 		"isSafari":(ua.match(".*Safari.*") && !pc.isChrome),
 		"isIOS": (pc.isiPad || pc.isiPhone),
-		"isMobile": (pc.isIOS || pc.isAndroid)
+		"isMobile": (pc.isiPad || pc.isiPhone || pc.isAndroid)
 	});
 })();
 
