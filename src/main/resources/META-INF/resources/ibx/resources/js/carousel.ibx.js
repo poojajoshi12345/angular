@@ -85,7 +85,8 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 	_onPageMarkerClick:function(e)
 	{
 		var pageMarker = $(e.currentTarget);
-		var metrics = pageMarker.data("cslPageInfo");
+		var markerInfo = pageMarker.data("ibxPageMarkerInfo");
+		this._itemsBox.prop("scrollLeft", markerInfo.metrics.pageWidth * markerInfo.pageNo);
 	},
 	_adjustPageMarkers:function()
 	{
@@ -106,7 +107,8 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 		for(var i = 0; i < pageInfo.pages; ++i)
 		{
 			var pageMarker = $(sformat("<div class='ibx-csl-page-marker {1}'>", i == pageInfo.curPage ? "ibx-csl-page-selected" : ""));
-			pageMarker.data("cslPageInfo", {"pageNo":i, "metrics":metrics}).on("click", this._onPageMarkerClick.bind(this));
+			pageMarker.prop("title", "Page - " + (i + 1));
+			pageMarker.data("ibxPageMarkerInfo", {"pageNo":i, "metrics":metrics}).on("click", this._onPageMarkerClick.bind(this));
 			this._pageMarkers.append(pageMarker)
 		}
 	},
@@ -162,7 +164,12 @@ $.widget("ibi.ibxVCarousel", $.ibi.ibxCarousel,
 	{
 		return {pages: Math.floor(metrics.scrollHeight / metrics.pageHeight) || 1, curPage: Math.floor(metrics.scrollTop / metrics.pageHeight)};
 	},
-
+	_onPageMarkerClick:function(e)
+	{
+		var pageMarker = $(e.currentTarget);
+		var markerInfo = pageMarker.data("ibxPageMarkerInfo");
+		this._itemsBox.prop("scrollTop", markerInfo.metrics.pageHeight * markerInfo.pageNo);
+	},
 });
 
 //# sourceURL=carousel.ibx.js

@@ -47,16 +47,15 @@
 
 .ibx-csl-page-marker
 {
-	width:5px;
-	height:5px;
+	width:6px;
+	height:6px;
 	margin:2px;
 	border:1px solid #ccc;
 	border-radius:50%;
-	xcursor:pointer;
 }
 .ibx-csl-page-marker:hover
 {
-	background-color:black;
+	border-color:black;
 }
 
 .ibx-csl-page-marker.ibx-csl-page-selected
