@@ -86,7 +86,6 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 	{
 		var pageMarker = $(e.currentTarget);
 		var metrics = pageMarker.data("cslPageInfo");
-		debugger;
 	},
 	_adjustPageMarkers:function()
 	{
