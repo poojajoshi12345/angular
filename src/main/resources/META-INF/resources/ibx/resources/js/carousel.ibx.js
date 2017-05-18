@@ -11,6 +11,7 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 		nameRoot:true,
 		align:"stretch",
 		showPageMarkers:false,
+		pageMarkersPos:"end",
 		showPrevButton:true,
 		showNextButton:true,
 		step:25,
@@ -126,6 +127,9 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 
 		this._adjustPageMarkers();
 		this._pageMarkers.css("display", options.showPageMarkers ? "" : "none");
+		(options.pageMarkersPos == "start")
+			? this._pageMarkers.insertBefore(this._itemsContainer)
+			: this._pageMarkers.insertAfter(this._itemsContainer);
 	}
 });
 
