@@ -28,6 +28,17 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 		this._nextBtn.on("mousedown mouseup mouseleave", this._onNext.bind(this));
 		this._itemsBox.ibxDragScrolling();
 		this.add(children);
+
+		//propagate the dragscroll event to this object.
+		this._itemsBox.on("scroll", function(e)
+		{
+			this._adjustPageMarkers();
+			this._trigger("scroll", e, this);
+		}.bind(this));
+	},
+	_destroy:function()
+	{
+		this.remove(this.children());
 	},
 	children:function(selector)
 	{
@@ -61,10 +72,41 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 			{
 				var sl = itemsBox.prop("scrollLeft");
 				itemsBox.prop("scrollLeft", sl + (beginning ? this.options.step : -this.options.step));
+				this._trigger("scroll", null, this);
+				this._adjustPageMarkers();
 			}.bind(this, this._itemsBox, beginning), this.options.stepRate); 
 		}
 		else
 			window.clearInterval(this._scrollTimer);
+	},
+	_adjustPageMarkers:function()
+	{
+		var metrics = 
+		{
+			scrollWidth:	this._itemsBox.css("overflow", "auto").prop("scrollWidth"),
+			scrollHeight:	this._itemsBox.prop("scrollHeight"),
+			scrollLeft:		this._itemsBox.prop("scrollLeft"),
+			scrollTop:		this._itemsBox.prop("scrollTop"),
+			pageWidth:		this._itemsBox.prop("offsetWidth"),
+			pageHeight:		this._itemsBox.prop("offsetHeight"),
+		};
+		metrics = $.extend(metrics, 
+		{
+			hPages:			Math.floor(metrics.scrollWidth / metrics.pageWidth),
+			vPages:			Math.floor(metrics.scrollHeight / metrics.pageHeight),
+			hCurPage:		Math.floor(metrics.scrollLeft / metrics.pageWidth),
+			vCurPage:		Math.floor(metrics.scrollTop / metrics.pageHeight),
+		});
+
+		this._pageMarkers.empty();
+		for(var i = 0; i < metrics.hPages; ++i)
+		{
+			var pageMarker = $(sformat("<div class='ibx-csl-page-marker {1}'>", i == metrics.hCurPage ? "ibx-csl-page-selected" : ""));
+			pageMarker.data("cslPageInfo", {"pageNo":i, "metrics":metrics});
+			this._pageMarkers.append(pageMarker)
+		}
+		//console.log(scrollWidth, scrollHeight, hPages, vPages, hCurPage, vCurPage);
+		this._itemsBox.css("overflow", "");
 	},
 	refresh:function()
 	{
