@@ -99,24 +99,21 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 			pageWidth:		this._itemsBox.prop("offsetWidth") || 1,
 			pageHeight:		this._itemsBox.prop("offsetHeight") || 1,
 		};
-
-		var hPages = Math.floor(metrics.scrollWidth / metrics.pageWidth) || 1;
-		var vPages = Math.floor(metrics.scrollHeight / metrics.pageHeight) || 1;
-		var hCurPage = Math.floor(metrics.scrollLeft / metrics.pageWidth);
-		var vCurPage = Math.floor(metrics.scrollTop / metrics.pageHeight);
 		this._itemsBox.css("overflow", overFlow);
 
 		this._pageMarkers.empty();
-		for(var i = 0; i < hPages; ++i)
+		var pageInfo = this._getPageInfo(metrics);
+		for(var i = 0; i < pageInfo.pages; ++i)
 		{
-			var pageMarker = $(sformat("<div class='ibx-csl-page-marker {1}'>", i == hCurPage ? "ibx-csl-page-selected" : ""));
+			var pageMarker = $(sformat("<div class='ibx-csl-page-marker {1}'>", i == pageInfo.curPage ? "ibx-csl-page-selected" : ""));
 			pageMarker.data("cslPageInfo", {"pageNo":i, "metrics":metrics}).on("click", this._onPageMarkerClick.bind(this));
 			this._pageMarkers.append(pageMarker)
 		}
 	},
-	_getPageMarkers:function(metrics)
+	_getPageInfo:function(metrics)
 	{
-	}
+		return {pages: Math.floor(metrics.scrollWidth / metrics.pageWidth) || 1, curPage: Math.floor(metrics.scrollLeft / metrics.pageWidth)};
+	},
 	refresh:function()
 	{
 		this._super();
@@ -161,6 +158,11 @@ $.widget("ibi.ibxVCarousel", $.ibi.ibxCarousel,
 		else
 			window.clearInterval(this._scrollTimer);
 	},
+	_getPageInfo:function(metrics)
+	{
+		return {pages: Math.floor(metrics.scrollHeight / metrics.pageHeight) || 1, curPage: Math.floor(metrics.scrollTop / metrics.pageHeight)};
+	},
+
 });
 
 //# sourceURL=carousel.ibx.js
