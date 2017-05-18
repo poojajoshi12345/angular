@@ -21,6 +21,7 @@
 		
 		<script type="text/javascript">
 			var itemlist=[];
+			var currentPath='';
 			<jsp:include page="/WEB-INF/jsp/global/wf_globals.jsp" flush="false" />
 			ibx(function()
 			{
@@ -44,9 +45,30 @@
 					});	
 					
 					$( document ).on( "clearitems", function(e, item)
-					{
+					{debugger;
 						$( ".files-box-files" ).empty();
-						itemlist=[];										
+						itemlist=[];
+						// set the breadcrumb
+						currentPath=item.fullPath;
+						var pathitems=currentPath.split("/");
+						$(".crumb-box").empty();
+						var ilen=pathitems.length;
+						var start = 0;
+						for(i=0; i<ilen;i++)
+						{							
+							var itemx = pathitems[i];
+							if(start > 0)
+							{
+								var carat = ' ';
+								if(start > 1)carat = ' > ';							
+								start++;	
+								var divstring = '<div class="crumb-item">' + carat + itemx + ' </div>';								
+								//var divstring = '<div data-ibx-type="ibxLabel" data-ibxp-text= "' + itemx '"></div>';
+								$(".crumb-box").append(divstring);								
+							}
+							else 
+								if(itemx == "WFC")start=1;
+						}									
 					});	
 					function itemdiv(item)
 					{
@@ -65,11 +87,20 @@
 						window.open(uriExec);		
 					};						
 					function editIt(item)
-					{debugger;
-						var fullitem=item.parentPath + item.name;
-						var uriExec = sformat("{1}/ia?is508=false&&item={2}&tool=Report", applicationContext,
-							encodeURIComponent(fullitem));									
-						window.open(uriExec);		
+					{						
+						var toolProperties=item.clientInfo.properties.tool;						
+						if(toolProperties && toolProperties.indexOf("infoAssist")>-1)
+						{					
+							var fullitem=item.parentPath + item.name;
+							var uriExec = sformat("{1}/ia?is508=false&&item={2}&tool=Report", applicationContext,
+								encodeURIComponent(fullitem));									
+							window.open(uriExec);
+						}
+						else
+						{
+							if(!toolProperties)toolProperties="";
+							alert("tool not implemented: " + toolProperties);
+						}				
 					};					
 					$( document ).on( "showitemmenu", function(e, ibfsitem, contextitem)
 					{					
@@ -118,7 +149,28 @@
 								break;
 							}
 						}	
-					};	
+					};
+				function newReport()
+				{					
+					if(currentPath == "")alert("select a folder");
+					else
+					{
+						var uriExec = sformat("{1}/ia?is508=false&&item={2}&tool=Report", applicationContext,
+							encodeURIComponent(currentPath));									
+						window.open(uriExec);		
+					}
+				};
+				
+				function newChart()
+				{					
+					if(currentPath == "")alert("select a folder");
+					else
+					{
+						var uriExec = sformat("{1}/ia?is508=false&&item={2}&tool=Chart", applicationContext,
+							encodeURIComponent(currentPath));									
+						window.open(uriExec);		
+					}
+				};				
 			
 		</script>
 		<link rel="stylesheet" type="text/css" href="tree.pd.css">
@@ -304,10 +356,12 @@
 			</div>
 
 			<div class="toolbar" data-ibx-type="ibxHBox" data-ibxp-align="stretch">
-				<div class="crumb-box" data-ibx-type="ibxHBox" data-ibxp-align="center">
-					<div data-ibx-type="ibxLabel" data-ibxp-text="Crumb1 >"></div>
+				<div class="crumb-box" data-ibx-type="ibxHBox" data-ibxp-align="center">				
+					<div data-ibx-type="ibxLabel" data-ibxp-text="Repository >"></div>	
+<%--									
 					<div data-ibx-type="ibxLabel" data-ibxp-text="Crumb2 >"></div>
 					<div data-ibx-type="ibxLabel" data-ibxp-text="Crumb3 >"></div>
+--%>					
 				</div>
 				<div class="toolbar-spacer"></div> 
 				<div class="txt-search" data-ibx-type="ibxTextField" data-ibxp-placeholder="Search..."></div>
@@ -335,11 +389,11 @@
 							</div>
 							<div class="create-new-item" data-ibx-type="ibxButtonSimple" data-ibxp-text="Chart" data-ibxp-icon-position="top"
 							<%--data-ibxp-glyph="face" data-ibxp-glyph-classes="material-icons">--%>
-							data-ibxp-icon="images/chart.png" >
+							onclick="newChart()" data-ibxp-icon="images/chart.png" >
 							</div>
 							<div class="create-new-item" data-ibx-type="ibxButtonSimple" data-ibxp-text="Report" data-ibxp-icon-position="top" 
 							<%--data-ibxp-glyph="face" data-ibxp-glyph-classes="material-icons">--%>
-							data-ibxp-icon="images/report.png" >
+							onclick="newReport()" data-ibxp-icon="images/report.png" >
 							</div>
 							<div class="create-new-item" data-ibx-type="ibxButtonSimple" data-ibxp-text="Page" data-ibxp-icon-position="top" 
 							<%--data-ibxp-glyph="face" data-ibxp-glyph-classes="material-icons">--%>
