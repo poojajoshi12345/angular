@@ -44,9 +44,39 @@
 						$(".files-box-files").append(divstring);															
 					});	
 					
+					$(document).on("doneadding", function(e)
+					{
+						
+						ilen=itemlist.length;
+						var titleadd="<div class='flex-grid-cell-title' data-ibx-col='1'>Title</div><div class='flex-grid-cell-title' data-ibx-col='2'>Summary</div><div class='flex-grid-cell-title' data-ibx-col='3'>Last Modified Date</div><div class='flex-grid-cell-title' data-ibx-col='4'>Type</div>";
+						$(".grid-main").empty();
+						$(".grid-main").append(titleadd);									
+												
+						if(ilen > 0)
+						{
+							
+							for (i=0; i<ilen; i++)
+							{
+								var ibfsitem=itemlist[i];
+								var d = new Date(ibfsitem.dateLastModified);
+								var s = (ibfsitem.summary)? ibfsitem.summary : "None";
+								var toadd="<div class='flex-grid-cell' data-ibx-col='1'>" + ibfsitem.description + "</div>";
+								toadd += "<div class='flex-grid-cell' data-ibx-col='2'>" + s +" </div>";								
+								toadd += "<div class='flex-grid-cell' data-ibx-col='3'>" + d + "</div>";
+								toadd += "<div class='flex-grid-cell' data-ibx-col='4'>" + ibfsitem.clientInfo.type + "</div>";							
+								
+								$(".grid-main").append(toadd);								
+							}
+						}	
+					
+						
+						
+					});
+					
 					$( document ).on( "clearitems", function(e, item)
-					{debugger;
+					{
 						$( ".files-box-files" ).empty();
+						$(".grid-main").empty();	
 						itemlist=[];
 						// set the breadcrumb
 						currentPath=item.fullPath;
@@ -101,7 +131,16 @@
 							if(!toolProperties)toolProperties="";
 							alert("tool not implemented: " + toolProperties);
 						}				
-					};					
+					};
+					
+					$(".files-listing").hide();
+					
+					$(".btn-how-view").on("click", function(e)
+					{
+						$(".files-listing").toggle();
+						$(".files-box-files").toggle();
+					});
+										
 					$( document ).on( "showitemmenu", function(e, ibfsitem, contextitem)
 					{					
 						var options = 
@@ -180,6 +219,7 @@
 				margin:0px;
 				width:100%;
 				height:100%;
+				font-family: 'Hind', sans-serif;
 			}
 			.main-box
 			{
@@ -237,7 +277,7 @@
 				right:0px;
 				top:0px;
 				overflow:auto;			
-				flex:0 0 200px;
+				flex:0 0 250px;
 				border-right:1px solid #ccc;
 			}
 			.content-box
@@ -279,7 +319,7 @@
 			}
 			.create-new-item
 			{
-				margin:10px;
+				//margin:4px;
 				height:110px;
 				width: 100px;
 								
@@ -305,14 +345,14 @@
 			}
 			.files-box-files
 			{
-				padding:10px;
+				padding:4px;
 				overflow:auto;
 			}
 			.file-item
 			{
 				width:220px;
 				height:200px;
-				margin:10px;
+				margin:4px;
 				background-color:white;
 				border-bottom:2px solid #ccc;
 			}
@@ -342,6 +382,29 @@
 				background:url(images/vertical.png);
 				
 			}
+			.flex-grid-cell-title
+			{
+				font-size: 14px;
+				font-weight: bold;
+				padding-top: 10px;
+				padding-botton: 10px;
+				padding-left: 15px;
+				padding-right: 0px;
+			}
+			.flex-grid-cell
+			{
+				font-size: 14px;
+				font-weight: normal;
+				padding-top: 10px;
+				padding-botton: 10px;
+				padding-left: 15px;
+				padding-right: 0px;
+			}
+			.files-listing
+			{
+				overflow: auto;
+				background-color: white;
+			}			
 		</style>
 	</head>
 	<body class="ibx-root">
@@ -357,16 +420,12 @@
 
 			<div class="toolbar" data-ibx-type="ibxHBox" data-ibxp-align="stretch">
 				<div class="crumb-box" data-ibx-type="ibxHBox" data-ibxp-align="center">				
-					<div data-ibx-type="ibxLabel" data-ibxp-text="Repository >"></div>	
-<%--									
-					<div data-ibx-type="ibxLabel" data-ibxp-text="Crumb2 >"></div>
-					<div data-ibx-type="ibxLabel" data-ibxp-text="Crumb3 >"></div>
---%>					
+					<div data-ibx-type="ibxLabel" data-ibxp-text="Repository >"></div>				
 				</div>
 				<div class="toolbar-spacer"></div> 
 				<div class="txt-search" data-ibx-type="ibxTextField" data-ibxp-placeholder="Search..."></div>
-				<div class="btn-refresh" data-ibx-type="ibxButtonSimple" data-ibxp-glyph="list" data-ibxp-glyph-classes="material-icons"></div>
-				<div class="btn-how-view" data-ibx-type="ibxButtonSimple" data-ibxp-glyph="autorenew" data-ibxp-glyph-classes="material-icons"></div>
+				<div class="btn-how-view" data-ibx-type="ibxButtonSimple" data-ibxp-glyph="list" data-ibxp-glyph-classes="material-icons"></div>
+				<div class="btn-refresh" data-ibx-type="ibxButtonSimple" data-ibxp-glyph="autorenew" data-ibxp-glyph-classes="material-icons"></div>
 			</div>
 
 			<div class="explore-box" data-ibx-type="ibxHBox" data-ibxp-align="stretch">
@@ -434,6 +493,23 @@
 							<div class="file-item">10</div>
 							<div class="file-item">11</div>
 						--%>	
+						</div>
+						
+							<div class="files-listing" data-ibx-name="tabFlexGrid" >								
+								<div class="grid-main" data-ibx-type="ibxGrid" data-ibxp-cols="auto auto auto auto" data-ibxp-rows="auto auto auto auto">
+									<div class="flex-grid-cell-title" data-ibx-col="1">Title</div>
+									<div class="flex-grid-cell-title" data-ibx-col="2">Summary</div>
+									<div class="flex-grid-cell-title" data-ibx-col="3">Last Modified Date</div>
+									<div class="flex-grid-cell-title" data-ibx-col="4">Type</div>
+
+									<div class="flex-grid-cell" data-ibx-col="1">grid cell</div>
+									<div class="flex-grid-cell" data-ibx-col="2">grid cell</div>
+									<div class="flex-grid-cell" data-ibx-col="3">grid cell</div>
+									<div class="flex-grid-cell" data-ibx-col="4">grid cell</div>
+						
+								</div>
+							</div>
+							
 						</div>
 					</div>
 				</div>

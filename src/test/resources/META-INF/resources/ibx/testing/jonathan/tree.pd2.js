@@ -20,7 +20,13 @@ function IbfsItem(item, ibfs, padding)
 	}
 	else
 	{
-		this._glyphClasses = item.clientInfo.typeInfo.glyphClasses ? item.clientInfo.typeInfo.glyphClasses : "ibx-icons ibx-glyph-unknown";
+		if(item.clientInfo.typeInfo)
+		{	
+			this._glyphClasses = item.clientInfo.typeInfo.glyphClasses ? item.clientInfo.typeInfo.glyphClasses : "ibx-icons ibx-glyph-file-unknown";
+		}
+		else
+			this._glyphClasses = "ibx-icons ibx-glyph-file-unknown";	
+
 	}
 	this._label = $("<div class='ibfs-label' style='padding-left:" + this._padding + "px;'>").ibxLabel({ glyph: this._glyph, glyphClasses: this._glyphClasses, wrap: false, justify: "start", text: item.description }).addClass("ibfs-item").addClass(item.container ? "ibfs_folder" : "ibfs_file");
 	this._element.append(this._label); //dom element bound to widget.
@@ -111,7 +117,9 @@ _p.expand = function (expand)
 						$(document).trigger( "addanitem", item );
 					}	
 				}.bind(this));
+				$(document).trigger("doneadding");
 			}.bind(this));
+			
 		}
 		else
 		{
@@ -130,12 +138,14 @@ function IbfsRootItem(ibfs, path)
 {	
 		var item =	
 		{
-			descripton: "",
+			description: "Repository",
 			fullPath: path,
 			container: true
 		};	
-	IbfsItem.call(this, item, ibfs, -IbfsItem.folderPadding);
-	this._label.hide();
+		
+	IbfsItem.call(this, item, ibfs, IbfsItem.folderPadding);	
+	
+	//this._label.hide();
 	this.toggle();
 }
 _p = IbfsRootItem.prototype = IbfsItem.prototype;
