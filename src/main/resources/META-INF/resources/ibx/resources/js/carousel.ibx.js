@@ -81,6 +81,7 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 	},
 	_adjustPageMarkers:function()
 	{
+		var overFlow = this._itemsBox.css("overflow");
 		var metrics = 
 		{
 			scrollWidth:	this._itemsBox.css("overflow", "auto").prop("scrollWidth"),
@@ -106,7 +107,7 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 			this._pageMarkers.append(pageMarker)
 		}
 		//console.log(scrollWidth, scrollHeight, hPages, vPages, hCurPage, vCurPage);
-		this._itemsBox.css("overflow", "");
+		this._itemsBox.css("overflow", overflow);
 	},
 	refresh:function()
 	{
