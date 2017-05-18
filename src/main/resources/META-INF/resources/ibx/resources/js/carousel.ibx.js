@@ -15,6 +15,7 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 		showNextButton:true,
 		step:25,
 		stepRate:25,
+		alignChildren:"center"
 	},
 	_widgetClass:"ibx-carousel",
 	_create:function()
@@ -26,7 +27,7 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 		ibx.bindElements(this.element);
 		this._prevBtn.on("mousedown mouseup mouseleave", this._onPrev.bind(this));
 		this._nextBtn.on("mousedown mouseup mouseleave", this._onNext.bind(this));
-		this._itemsBox.ibxDragScrolling();
+		this._itemsBox.ibxDragScrolling({overflowY:"hidden"});
 		this.add(children);
 
 		//propagate the dragscroll event to this object.
@@ -49,11 +50,13 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 	{
 		$(el).addClass("ibx-csl-item");
 		this._itemsBox.ibxWidget("add", el, sibling, before, refresh);
+		this.refresh()
 	},
 	remove:function(el, refresh)
 	{
-		$(el).removeClass("ibx-csl-item");
 		this._itemsBox.ibxWidget("remove", el, refresh);
+		$(el).removeClass("ibx-csl-item");
+		this.refresh();
 	},
 	_onPrev:function(e)
 	{
@@ -73,11 +76,17 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 				var sl = itemsBox.prop("scrollLeft");
 				itemsBox.prop("scrollLeft", sl + (beginning ? this.options.step : -this.options.step));
 				this._trigger("scroll", null, this);
-				this._adjustPageMarkers();
+				this.refresh();
 			}.bind(this, this._itemsBox, beginning), this.options.stepRate); 
 		}
 		else
 			window.clearInterval(this._scrollTimer);
+	},
+	_onPageMarkerClick:function(e)
+	{
+		var pageMarker = $(e.currentTarget);
+		var metrics = pageMarker.data("cslPageInfo");
+		debugger;
 	},
 	_adjustPageMarkers:function()
 	{
@@ -88,34 +97,37 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 			scrollHeight:	this._itemsBox.prop("scrollHeight"),
 			scrollLeft:		this._itemsBox.prop("scrollLeft"),
 			scrollTop:		this._itemsBox.prop("scrollTop"),
-			pageWidth:		this._itemsBox.prop("offsetWidth"),
-			pageHeight:		this._itemsBox.prop("offsetHeight"),
+			pageWidth:		this._itemsBox.prop("offsetWidth") || 1,
+			pageHeight:		this._itemsBox.prop("offsetHeight") || 1,
 		};
-		metrics = $.extend(metrics, 
-		{
-			hPages:			Math.floor(metrics.scrollWidth / metrics.pageWidth),
-			vPages:			Math.floor(metrics.scrollHeight / metrics.pageHeight),
-			hCurPage:		Math.floor(metrics.scrollLeft / metrics.pageWidth),
-			vCurPage:		Math.floor(metrics.scrollTop / metrics.pageHeight),
-		});
+
+		var hPages = Math.floor(metrics.scrollWidth / metrics.pageWidth) || 1;
+		var vPages = Math.floor(metrics.scrollHeight / metrics.pageHeight) || 1;
+		var hCurPage = Math.floor(metrics.scrollLeft / metrics.pageWidth);
+		var vCurPage = Math.floor(metrics.scrollTop / metrics.pageHeight);
+		this._itemsBox.css("overflow", overFlow);
 
 		this._pageMarkers.empty();
-		for(var i = 0; i < metrics.hPages; ++i)
+		for(var i = 0; i < hPages; ++i)
 		{
-			var pageMarker = $(sformat("<div class='ibx-csl-page-marker {1}'>", i == metrics.hCurPage ? "ibx-csl-page-selected" : ""));
-			pageMarker.data("cslPageInfo", {"pageNo":i, "metrics":metrics});
+			var pageMarker = $(sformat("<div class='ibx-csl-page-marker {1}'>", i == hCurPage ? "ibx-csl-page-selected" : ""));
+			pageMarker.data("cslPageInfo", {"pageNo":i, "metrics":metrics}).on("click", this._onPageMarkerClick.bind(this));
 			this._pageMarkers.append(pageMarker)
 		}
-		//console.log(scrollWidth, scrollHeight, hPages, vPages, hCurPage, vCurPage);
-		this._itemsBox.css("overflow", overflow);
 	},
+	_getPageMarkers:function(metrics)
+	{
+	}
 	refresh:function()
 	{
 		this._super();
 		var options = this.options;
-		this._pageMarkers.css("display", options.showPageMarkers ? "" : "none");
 		this._prevBtn.css("display", options.showPrevButton ? "" : "none");
 		this._nextBtn.css("display", options.showNextButton ? "" : "none");
+		this._itemsBox.ibxWidget("option", "align", options.alignChildren);
+
+		this._adjustPageMarkers();
+		this._pageMarkers.css("display", options.showPageMarkers ? "" : "none");
 	}
 });
 
@@ -135,6 +147,7 @@ $.widget("ibi.ibxVCarousel", $.ibi.ibxCarousel,
 		this._pageMarkers.ibxWidget("option", "direction", "column");
 		this._prevBtn.ibxWidget("option", {"iconPosition": "top"});
 		this._nextBtn.ibxWidget("option", {"iconPosition": "top"});
+		this._itemsBox.ibxDragScrolling({overflowX:"hidden", overflowY:"auto"});
 	},
 	_scroll:function(startScrolling, beginning)
 	{

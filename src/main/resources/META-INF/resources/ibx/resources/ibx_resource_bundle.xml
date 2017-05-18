@@ -38,11 +38,11 @@ $Revision$:-->
 		<style-file src="./css/tabs.ibx.css"/>
 		<style-file src="./css/accordion.ibx.css"/>
 		<style-file src="./css/menu.ibx.css"/>
-		<style-file src="./css/carousel.ibx.css"/>
 		<style-file src="./css/groupbox.ibx.css"/>
 		<style-file src="./css/gridstack.ibx.css"/>
 		<style-file src="./css/select.ibx.css"/>
 		<style-file src="./css/iframe.ibx.css"/>
+		<style-file src="./css/carousel.ibx.css"/>
 		<style-sheet name="">
 		<![CDATA[
 		]]>
@@ -76,15 +76,12 @@ $Revision$:-->
 				</div>
 			</div>
 			<div class="res-ibx-carousel-body">
-				<div class="ibx-csl-items-container" data-ibx-name="_itemsContainer" data-ibx-type="ibxHBox" data-ibxp-align="center">
+				<div class="ibx-csl-items-container" data-ibx-name="_itemsContainer" data-ibx-type="ibxHBox" data-ibxp-align="stretch">
 					<div class="ibx-csl-prev-btn" data-ibx-name="_prevBtn" data-ibx-type="ibxButtonSimple"></div>
-					<div class="ibx-csl-items-box" data-ibx-name="_itemsBox" data-ibx-type="ibxHBox" data-ibxp-align="center"></div>
+					<div class="ibx-csl-items-box" data-ibx-name="_itemsBox" data-ibx-type="ibxHBox" data-ibxp-align="start"></div>
 					<div class="ibx-csl-next-btn" data-ibx-name="_nextBtn" data-ibx-type="ibxButtonSimple"></div>
 				</div>
 				<div class="ibx-csl-page-markers" data-ibx-name="_pageMarkers" data-ibx-type="ibxHBox" data-ibxp-justify="center" data-ibxp-align="center">
-					<div class="ibx-csl-page-marker"></div>
-					<div class="ibx-csl-page-marker ibx-csl-page-selected"></div>
-					<div class="ibx-csl-page-marker"></div>
 				</div>
 			</div>
 		</markup-block>
@@ -120,11 +117,11 @@ $Revision$:-->
 		<script-file src="./js/tabs.ibx.js"/>
 		<script-file src="./js/accordion.ibx.js"/>
 		<script-file src="./js/menu.ibx.js"/>
-		<script-file src="./js/carousel.ibx.js"/>
 		<script-file src="./js/groupbox.ibx.js"/>
 		<script-file src="./js/gridstack.ibx.js"/>
 		<script-file src="./js/select.ibx.js"/>
 		<script-file src="./js/iframe.ibx.js"/>
+		<script-file src="./js/carousel.ibx.js"/>
 		<script-block name="">
 		<![CDATA[
 		]]>
