@@ -18,7 +18,6 @@
 .ibx-label-glyph
 {
 	font-size:inherit; /*because material-icons defines a default font size as 24px.*/
-	cursor:inherit;
 }
 
 .icon-left .ibx-label-glyph.ibx-glyph-spacer

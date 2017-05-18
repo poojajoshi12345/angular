@@ -3,11 +3,9 @@
 
 .ibx-accordion-pane
 {
-	/*
 	border:1px solid silver;
 	border-radius:.25em;
 	padding:.25em;
-	*/
     overflow: auto;
 }
 
@@ -40,10 +38,7 @@
 {
 	display:none;
 }
-.ibx-accordion-page-button
-{
-	height:30px;
-}
+
 .ibx-accordion-page-content
 {
 	flex: 1 1 auto;
@@ -78,6 +73,8 @@
 .ibx-accordion-button-text
 {
 	flex:1 1 auto;
+	font-size: 1em;
+	font-weight:bold;
 }
 
 /*animate the open/close glyph*/

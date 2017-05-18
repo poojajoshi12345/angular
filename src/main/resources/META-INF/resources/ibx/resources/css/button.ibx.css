@@ -88,8 +88,8 @@
 /* The actual switch from the switch control */
 .ibx-switch-ctrl {
     position: relative;
-  	width: 42px;
-   	height: 24px;
+    width: 2em;
+    height: 1em;
 }
 
 .ibx-switch-ctrl > .ibx-slider {
@@ -106,27 +106,29 @@
 .ibx-switch-ctrl > .ibx-slider:before {
     position: absolute;
     content: "";
-  	height: 22px;
-   	width: 22px;
-  	left: .8px;
-  	bottom: 1px;
+    height: 0.86em;
+    width: 0.86em;
+    top: 0.07em;
+    bottom: 0.07em;
+    left: 0.07em;
+    right: 0.07em;
     background-color: #ffffff;
     -webkit-transition: .4s;
     transition: .4s;
 }
 
 .ibx-switch.checked .ibx-slider:before {
-	-webkit-transform: translateX(18px);
-	-ms-transform: translateX(18px);
-	transform: translateX(18px);
+    -webkit-transform: translateX(1em);
+    -ms-transform: translateX(1em);
+    transform: translateX(1em);
 }
 
 .ibx-switch .ibx-slider {
-    background-color: #ccc;
+    background-color: #bbb;
 }
 
 .ibx-switch.checked .ibx-slider {
-    background-color: #23b7e5;
+    background-color: #555;
 }
 
 /* Disabled switch styling */
@@ -137,7 +139,7 @@
 
 /* Make the switch round */
 .ibx-switch-ctrl > .ibx-slider.round {
-  border-radius: 20px;
+    border-radius: 0.9em;
 }
 
 .ibx-switch-ctrl > .ibx-slider.round:before {
