@@ -48,24 +48,28 @@
 					{
 						
 						ilen=itemlist.length;
-						var titleadd="<div class='flex-grid-cell-title' data-ibx-col='1'>Title</div><div class='flex-grid-cell-title' data-ibx-col='2'>Summary</div><div class='flex-grid-cell-title' data-ibx-col='3'>Last Modified Date</div><div class='flex-grid-cell-title' data-ibx-col='4'>Type</div>";
+						var titleadd="<div class='flex-grid-cell-title' data-ibx-col='1'></div><div class='flex-grid-cell-title' data-ibx-col='2'>Title</div><div class='flex-grid-cell-title' data-ibx-col='3'>Summary</div><div class='flex-grid-cell-title' data-ibx-col='4'>Last Modified Date</div><div class='flex-grid-cell-title' data-ibx-col='5'></div>";
 						$(".grid-main").empty();
 						$(".grid-main").append(titleadd);									
 												
 						if(ilen > 0)
 						{
-							
+							debugger;
 							for (i=0; i<ilen; i++)
 							{
 								var ibfsitem=itemlist[i];
 								var d = new Date(ibfsitem.dateLastModified);
+								var ddate = d.toLocaleDateString() + "  " + d.toLocaleTimeString();
 								var s = (ibfsitem.summary)? ibfsitem.summary : "None";
-								var toadd="<div class='flex-grid-cell' data-ibx-col='1'>" + ibfsitem.description + "</div>";
-								toadd += "<div class='flex-grid-cell' data-ibx-col='2'>" + s +" </div>";								
-								toadd += "<div class='flex-grid-cell' data-ibx-col='3'>" + d + "</div>";
-								toadd += "<div class='flex-grid-cell' data-ibx-col='4'>" + ibfsitem.clientInfo.type + "</div>";							
+								var toadd="<div class='flex-grid-cell' data-ibx-col='1'><div data-ibx-type='ibxLabel' data-ibxp-glyph-classes='"
+									+ ibfsitem.clientInfo.typeInfo.glyphClasses + "'></div></div>";								
+								toadd +="<div class='flex-grid-cell' data-ibx-col='2'>" + ibfsitem.description + "</div>";
+								toadd += "<div class='flex-grid-cell' data-ibx-col='3'>" + s +" </div>";								
+								toadd += "<div class='flex-grid-cell' data-ibx-col='4'>" + ddate + "</div>";
+								toadd += "<div class='flex-grid-cell' data-ibx-type='ibxLabel' data-ibx-col='5' data-ibxp-glyph-classes='ibx-icons ibx-glyph-folder'></div>";							
 								
-								$(".grid-main").append(toadd);								
+								$(".grid-main").append(toadd);		
+								ibx.bindElements(".grid-main");						
 							}
 						}	
 					
@@ -496,16 +500,24 @@
 						</div>
 						
 							<div class="files-listing" data-ibx-name="tabFlexGrid" >								
-								<div class="grid-main" data-ibx-type="ibxGrid" data-ibxp-cols="auto auto auto auto" data-ibxp-rows="auto auto auto auto">
-									<div class="flex-grid-cell-title" data-ibx-col="1">Title</div>
-									<div class="flex-grid-cell-title" data-ibx-col="2">Summary</div>
-									<div class="flex-grid-cell-title" data-ibx-col="3">Last Modified Date</div>
-									<div class="flex-grid-cell-title" data-ibx-col="4">Type</div>
+								<div class="grid-main" data-ibx-type="ibxGrid" data-ibxp-cols="auto auto auto auto auto" >
+								    <div class="flex-grid-cell-title" data-ibx-col="1"></div>
+									<div class="flex-grid-cell-title" data-ibx-col="2">Title</div>
+									<div class="flex-grid-cell-title" data-ibx-col="3">Summary</div>
+									<div class="flex-grid-cell-title" data-ibx-col="4">Last Modified Date</div>
+									<div class="flex-grid-cell-title" data-ibx-col="5"></div>
+
+<div class='flex-grid-cell' data-ibx-type='ibxLabel' data-ibx-col='1' data-ibxp-glyph-classes='ibx-icons ibx-glyph-fex-document'></div>
+<div class='flex-grid-cell' data-ibx-col='2'>111111111TEST</div>
+<div class='flex-grid-cell' data-ibx-col='3'>None </div>
+<div class='flex-grid-cell' data-ibx-col='4'>Tue Dec 13 2016 12:06:38 GMT-0500 (Eastern Standard Time)</div>
+<div class='flex-grid-cell' data-ibx-type='ibxLabel' data-ibx-col='5' data-ibxp-glyph-classes='ibx-icons ibx-glyph-folder'></div>
 
 									<div class="flex-grid-cell" data-ibx-col="1">grid cell</div>
 									<div class="flex-grid-cell" data-ibx-col="2">grid cell</div>
 									<div class="flex-grid-cell" data-ibx-col="3">grid cell</div>
 									<div class="flex-grid-cell" data-ibx-col="4">grid cell</div>
+									<div class="flex-grid-cell" data-ibx-type="ibxLabel" data-ibx-col="5" data-ibxp-glyph-classes="ibx-icons ibx-glyph-folder"></div>
 						
 								</div>
 							</div>
