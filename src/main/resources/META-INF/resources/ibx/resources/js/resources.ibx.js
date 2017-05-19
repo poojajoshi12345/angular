@@ -46,6 +46,16 @@ _p.addStringBundle = function(bundle)
 	this.strings[bundle.language] = $.extend(this.strings[bundle.language], bundle.strings);
 };
 
+_p.addBundles = function(bundles)
+{
+	var deferreds = [];
+	$(bundles).each(function(deferreds ,idx, bundle)
+	{
+		deferreds.push(this.addBundle(bundle));
+	}.bind(this, deferreds));
+	return $.when.apply($, deferreds);
+};
+
 _p.addBundle = function(info, data)
 {
 	//resolve bundle's uri

@@ -18,20 +18,22 @@
 		<!--include this script...will boot ibx into the running state-->
 		<Script src="<%=request.getContextPath()%>/ibx/resources/ibx.js" type="text/javascript"></script>
 		
+
 		<script type="text/javascript">
 			<jsp:include page="/WEB-INF/jsp/global/wf_globals.jsp" flush="false" />
+
+			var bundles = ["../testing/julian/test_res_bundle.xml", "../testing/samples/res_bundle/resources/res_bundle.xml"];
 			ibx(function()
 			{
-				ibxResourceMgr.addBundle("../testing/julian/test_res_bundle.xml").done(function(resBundle, window)
-				{
-				});
+				var calc = ibxResourceMgr.getResource(".sample-calculator");
+				$("body").append(calc);
 
 				var carousel = $(".test-csl");
 				for(var i = 0; i < 20; ++i)
 				{
 					carousel.ibxWidget("add", $("<div class='test-csl-item'>Item_" + i + "</div>"));
 				}
-			}, true);
+			}, bundles, true);
 		</script>
 		<style type="text/css">
 			.test-csl
@@ -50,19 +52,10 @@
 				border:1px solid #ccc;
 				margin:3px;
 			}
-
-			.test-grid
-			{
-				border:1px solid black;
-			}
-			.test-grid-item
-			{
-				border:1px solid red;
-			}
 		</style>
 	</head>
 	<body class="ibx-root">
-		<div class="test-csl" data-ibx-type="ibxCarousel">
+		<div class="test-csl" data-ibx-type="ibxHCarousel" data-ibxp-show-page-markers="true">
 		</div>
 	</body>
 </html>

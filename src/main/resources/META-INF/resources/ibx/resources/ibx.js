@@ -3,11 +3,49 @@
 
 
 /****
-	You can attach a function to ibx at any point and it is guaranteed to be called after the
-	system is booted. YEEEEEEE HAAAAAAAAW!
+	ibx can be called with the following parameters and signatures...
+	
+	parms:
+		function:	to call upon load
+		array:		resource packages to load after ibx boots
+		bool:		when loaded autobind all markup
+
+	signatures (overloads):
+		ibx(function, bool)
+		ibx(function, array, bool)
+		ibx(array, bool)
+		ibx(array)
+		ibx(bool)
+}
 ****/
-function ibx(fn, autoBind)
+function ibx()
 {
+	var fn = null;
+	var resPackages = [];
+	var autoBind = false;
+	var args = arguments;
+	var a1 = args[0];
+	var a2 = args[1];
+	var a3 = args[2];
+
+	if(typeof(a1) === "function")
+		fn = a1;
+	else
+	if(a1 instanceof Array)
+		resPackages == a1
+	else
+	if(typeof(a1) === "boolean")
+		autoBind = a1;
+
+	if(a2 instanceof Array)
+		resPackages = a2;
+	else
+	if(typeof(a2) === "boolean")
+		autoBind = a2;
+
+	if(typeof(a3) === "boolean")
+		autoBind = a3;
+
 	if(!ibx._loaded && !ibx._isLoading)
 	{
 		//resolve where ibx is loading from.
@@ -48,12 +86,15 @@ function ibx(fn, autoBind)
 
 				ibx._loadPromise = $.Deferred();
 				ibx._loadPromise._autoBind = autoBind;
+				ibx._loadPromise._resPackages = resPackages;
 
 				var url = ibx._path + "./js/resources.ibx.js";
 				$.get(url).then(function()
 				{
 					ibxResourceMgr.setContextPath(ibx._path);
-					ibxResourceMgr.addBundle(ibx._path + "./ibx_resource_bundle.xml").done(function()
+					var packages = ibx._loadPromise._resPackages;
+					packages.unshift(ibx._path + "./ibx_resource_bundle.xml");
+					ibxResourceMgr.addBundles(packages).done(function()
 					{
 						//bool means just bind everything...string means select these and bind them
 						var autoBind = ibx._loadPromise._autoBind;
@@ -91,7 +132,6 @@ ibx._loadPromise = null;
 ibx._path = "";
 ibx.getPath = function(){return ibx._path;};
 ibx.setPath = function(path){ibx._path = path;};
-
 
 ibx.bindElements = function(elements)
 {
