@@ -11,8 +11,9 @@
 		bool:		when loaded autobind all markup
 
 	signatures (overloads):
-		ibx(function, bool)
 		ibx(function, array, bool)
+		ibx(function, array)
+		ibx(function, bool)
 		ibx(array, bool)
 		ibx(array)
 		ibx(bool)

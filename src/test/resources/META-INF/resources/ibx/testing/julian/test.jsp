@@ -21,19 +21,20 @@
 
 		<script type="text/javascript">
 			<jsp:include page="/WEB-INF/jsp/global/wf_globals.jsp" flush="false" />
-
 			var packages = ["../testing/julian/test_res_bundle.xml"];
 			ibx(function()
 			{
-				var carousel = $(".test-csl");
-				for(var i = 0; i < 20; ++i)
+				var select = $(".test-widget");
+				for(var i = 0; i < 10; ++i)
 				{
-					carousel.ibxWidget("add", $("<div class='test-csl-item'>Item_" + i + "</div>"));
+					var selectItem = $("<div>").ibxSelectItem({text:sformat("Item{1}", i), selected:i%2, userValue:i});
+					select.ibxWidget("add", selectItem);
 				}
+
 			}, packages, true);
 		</script>
 		<style type="text/css">
-			.test-csl
+			.test-widget
 			{
 				position:absolute;
 				left:50px;
@@ -41,18 +42,10 @@
 				width:500px;
 				border:1px solid black;
 			}
-
-			.test-csl-item
-			{
-				width:100px;
-				height:100px;
-				border:1px solid #ccc;
-				margin:3px;
-			}
 		</style>
 	</head>
 	<body class="ibx-root">
-		<div class="test-csl" data-ibx-type="ibxHCarousel" data-ibxp-show-page-markers="true">
+		<div class="test-widget" data-ibx-type="ibxSelect" data-ibxp-multi-select="true">
 		</div>
 	</body>
 </html>
