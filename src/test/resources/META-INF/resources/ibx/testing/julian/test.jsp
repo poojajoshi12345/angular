@@ -22,18 +22,15 @@
 		<script type="text/javascript">
 			<jsp:include page="/WEB-INF/jsp/global/wf_globals.jsp" flush="false" />
 
-			var bundles = ["../testing/julian/test_res_bundle.xml", "../testing/samples/res_bundle/resources/res_bundle.xml"];
+			var packages = ["../testing/julian/test_res_bundle.xml"];
 			ibx(function()
 			{
-				var calc = ibxResourceMgr.getResource(".sample-calculator");
-				$("body").append(calc);
-
 				var carousel = $(".test-csl");
 				for(var i = 0; i < 20; ++i)
 				{
 					carousel.ibxWidget("add", $("<div class='test-csl-item'>Item_" + i + "</div>"));
 				}
-			}, bundles, true);
+			}, packages, true);
 		</script>
 		<style type="text/css">
 			.test-csl
@@ -59,6 +56,4 @@
 		</div>
 	</body>
 </html>
-
-
 
