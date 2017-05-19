@@ -54,7 +54,7 @@
 												
 						if(ilen > 0)
 						{
-							debugger;
+							
 							for (i=0; i<ilen; i++)
 							{
 								var ibfsitem=itemlist[i];
@@ -66,7 +66,7 @@
 								toadd +="<div class='flex-grid-cell' data-ibx-col='2'>" + ibfsitem.description + "</div>";
 								toadd += "<div class='flex-grid-cell' data-ibx-col='3'>" + s +" </div>";								
 								toadd += "<div class='flex-grid-cell' data-ibx-col='4'>" + ddate + "</div>";
-								toadd += "<div class='flex-grid-cell' data-ibx-type='ibxLabel' data-ibx-col='5' data-ibxp-glyph-classes='ibx-icons ibx-glyph-folder'></div>";							
+								toadd += "<div class='flex-grid-cell cell-image' data-ibx-type='ibxLabel' data-ibx-col='5' onclick='filemenu(this, \"" +  ibfsitem.name + "\");'></div>";							
 								
 								$(".grid-main").append(toadd);		
 								ibx.bindElements(".grid-main");						
@@ -408,8 +408,16 @@
 			{
 				overflow: auto;
 				background-color: white;
-			}			
-		</style>
+			}	
+			.cell-image
+			{
+				background-image:url(images/vertical.png);
+				background-repeat: no-repeat;				
+				background-size: 19px 28px;
+				align: bottom;				
+			}					
+	}
+	</style>
 	</head>
 	<body class="ibx-root">
 		<div class="edit-menu" data-ibx-name-root="true" data-ibx-type="ibxContextMenu" data-ibxp-destroy-on-close="false">
@@ -500,18 +508,12 @@
 						</div>
 						
 							<div class="files-listing" data-ibx-name="tabFlexGrid" >								
-								<div class="grid-main" data-ibx-type="ibxGrid" data-ibxp-cols="auto auto auto auto auto" >
+								<div class="grid-main" data-ibx-type="ibxGrid" data-ibxp-cols="30px auto auto auto auto" >
 								    <div class="flex-grid-cell-title" data-ibx-col="1"></div>
 									<div class="flex-grid-cell-title" data-ibx-col="2">Title</div>
 									<div class="flex-grid-cell-title" data-ibx-col="3">Summary</div>
 									<div class="flex-grid-cell-title" data-ibx-col="4">Last Modified Date</div>
 									<div class="flex-grid-cell-title" data-ibx-col="5"></div>
-
-<div class='flex-grid-cell' data-ibx-type='ibxLabel' data-ibx-col='1' data-ibxp-glyph-classes='ibx-icons ibx-glyph-fex-document'></div>
-<div class='flex-grid-cell' data-ibx-col='2'>111111111TEST</div>
-<div class='flex-grid-cell' data-ibx-col='3'>None </div>
-<div class='flex-grid-cell' data-ibx-col='4'>Tue Dec 13 2016 12:06:38 GMT-0500 (Eastern Standard Time)</div>
-<div class='flex-grid-cell' data-ibx-type='ibxLabel' data-ibx-col='5' data-ibxp-glyph-classes='ibx-icons ibx-glyph-folder'></div>
 
 									<div class="flex-grid-cell" data-ibx-col="1">grid cell</div>
 									<div class="flex-grid-cell" data-ibx-col="2">grid cell</div>
