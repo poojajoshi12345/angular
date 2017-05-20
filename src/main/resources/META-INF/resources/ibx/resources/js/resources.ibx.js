@@ -259,7 +259,7 @@ _p.getResource = function(selector, ibxBind, forceCreate)
 		resource = this._rootBundle.find(selector);
 
 	if(!resource.length)
-		throw(sformat("ibxResourceMgr failed to find resrouce: {1}", selector));
+		throw(sformat("ibxResourceMgr failed to find resource: {1}", selector));
 
 	//get the xml out of the resource bundle as a string (essentially making a clone/copy)
 	var markup = "";
