@@ -27,6 +27,7 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 		var children = this.element.children();
 		var resBody = ibxResourceMgr.getResource(".res-ibx-carousel-body", false);
 		this.element.append(resBody.children());
+		this.element.on("keydown", this._onItemsKeyEvent.bind(this));
 		ibx.bindElements(this.element);
 		this._prevBtn.on("mousedown mouseup mouseleave", this._onPrev.bind(this));
 		this._nextBtn.on("mousedown mouseup mouseleave", this._onNext.bind(this));
@@ -69,18 +70,36 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 	{
 		this._scroll(e.type == "mousedown", true) 
 	},
+	_onItemsKeyEvent:function(e)
+	{
+		var nScroll = this._itemsBox.prop("scrollLeft");
+		if(e.keyCode == 37)
+			this._scroll(true, true, true);
+		else
+		if(e.keyCode == 39)
+			this._scroll(true, false, true);
+	},
 	_scrollTimer:null,
-	_scroll:function(startScrolling, beginning)
+	_scroll:function(startScrolling, beginning, incremental)
 	{
 		if(startScrolling)
 		{
-			this._scrollTimer = window.setInterval(function(itemsBox, beginning)
+			if(incremental)
 			{
-				var sl = itemsBox.prop("scrollLeft");
-				itemsBox.prop("scrollLeft", sl + (beginning ? this.options.step : -this.options.step));
-				this._trigger("scroll", null, this);
-				this.refresh();
-			}.bind(this, this._itemsBox, beginning), this.options.stepRate); 
+				var nScroll = this._itemsBox.prop("scrollLeft");
+				var delta = nScroll + (beginning ? -this.options.step : this.options.step);
+				this._itemsBox.prop("scrollLeft", delta);
+			}
+			else
+			{
+				this._scrollTimer = window.setInterval(function(itemsBox, beginning)
+				{
+					var sl = itemsBox.prop("scrollLeft");
+					itemsBox.prop("scrollLeft", sl + (beginning ? this.options.step : -this.options.step));
+					this._trigger("scroll", null, this);
+					this.refresh();
+				}.bind(this, this._itemsBox, beginning), this.options.stepRate); 
+			}
 		}
 		else
 			window.clearInterval(this._scrollTimer);
@@ -109,7 +128,7 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 		var pageInfo = this._getPageInfo(metrics);
 		for(var i = 0; i < pageInfo.pages; ++i)
 		{
-			var pageMarker = $(sformat("<div class='{1} {2}'>", this.options.pageMarkerClass, i == pageInfo.curPage ? this.options.pageMarkerSelectedClass : ""));
+			var pageMarker = $(sformat("<div class='{1} {2}' tabIndex='1'>", this.options.pageMarkerClass, i == pageInfo.curPage ? this.options.pageMarkerSelectedClass : ""));
 			pageMarker.prop("title", "Page - " + (i + 1));
 			pageMarker.data("ibxPageMarkerInfo", {"pageNo":i, "metrics":metrics}).on("click", this._onPageMarkerClick.bind(this));
 			this._pageMarkers.append(pageMarker)
@@ -153,15 +172,33 @@ $.widget("ibi.ibxVCarousel", $.ibi.ibxCarousel,
 		this._nextBtn.ibxWidget("option", {"iconPosition": "top"});
 		this._itemsBox.ibxDragScrolling({overflowX:"hidden", overflowY:"auto"});
 	},
-	_scroll:function(startScrolling, beginning)
+	_onItemsKeyEvent:function(e)
+	{
+		var nScroll = this._itemsBox.prop("scrollLeft");
+		if(e.keyCode == 38)
+			this._scroll(true, true, true);
+		else
+		if(e.keyCode == 40)
+			this._scroll(true, false, true);
+	},
+	_scroll:function(startScrolling, beginning, incremental)
 	{
 		if(startScrolling)
 		{
-			this._scrollTimer = window.setInterval(function(itemsBox, beginning)
+			if(incremental)
 			{
-				var sl = itemsBox.prop("scrollTop");
-				itemsBox.prop("scrollTop", sl + (beginning ? this.options.step : -this.options.step));
-			}.bind(this, this._itemsBox, beginning), this.options.stepRate); 
+				var nScroll = this._itemsBox.prop("scrollTop");
+				var delta = nScroll + (beginning ? -this.options.step : this.options.step);
+				this._itemsBox.prop("scrollTop", delta);
+			}
+			else
+			{
+				this._scrollTimer = window.setInterval(function(itemsBox, beginning)
+				{
+					var sl = itemsBox.prop("scrollTop");
+					itemsBox.prop("scrollTop", sl + (beginning ? this.options.step : -this.options.step));
+				}.bind(this, this._itemsBox, beginning), this.options.stepRate); 
+			}
 		}
 		else
 			window.clearInterval(this._scrollTimer);
