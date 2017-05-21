@@ -76,10 +76,7 @@
 								$(".grid-main").append(toadd);		
 								ibx.bindElements(".grid-main");						
 							}
-						}	
-					
-						
-						
+						}						
 					});
 					
 					$( document ).on( "clearitems", function(e, item)
@@ -207,8 +204,9 @@
 						
 						$(".edit-menu").ibxContextMenu("open").position(options);
 					});		
-						
 				
+						
+					newitemsbox(true);
 			}, true);
 			
 			function filemenu(contextitem, name)
@@ -247,8 +245,74 @@
 							encodeURIComponent(currentPath));									
 						window.open(uriExec);		
 					}
+				};
+				function morebuttons()
+				{
+					$(".create-new-box").css("height","282px");
+					newitemsbox(false);
+				};
+				function lessbuttons()
+				{
+					$(".create-new-box").css("height","141px");
+					newitemsbox(true);
+				};
+				
+				function newitemsbox(small)				
+				{
+					if(small)
+					{
+					var buttons = [
+						["Folder", "images/folder.png", ""],
+						["Data Set","images/dataset.png", ""],
+						["Chart","images/chart.png", "newChart()"],
+						["Report","images/report.png", "newReport()"],
+						["Page","images/page.png",""],
+						["Portal","images/portal.png",""],
+						["Alert","images/alert.png",""],
+						["More","images/more.png", "morebuttons()"]
+					];
+					
+					}
+					else
+					{
+						var buttons = [
+						["Folder", "images/folder.png", ""],
+						["Data Set","images/dataset.png", ""],
+						["Connect","images/connect.png", ""],
+						["Chart","images/chart.png", "newChart()"],
+						["Visualization","images/visualization.png", "newChart()"],
+						["Report","images/report.png", "newReport()"],
+						["Reporting Object","images/reportingobject.png", "newReport()"],
+						["Sample Content","images/samplecontent.png", "newReport()"],
+						["Page","images/page.png",""],
+						["Portal","images/portal.png",""],
+						["Alert","images/alert.png",""],
+						["Text Editor","images/texteditor.png",""],
+						["URL","images/url.png",""],
+						["Shortcut", "images/shortcut.png",""],
+						["Less","images/more.png", "lessbuttons()"]
+					];
+				
+					}
+					$(".create-new-items-box").empty();
+					
+					var ilen = buttons.length;
+					for (i=0; i<ilen; i++)
+					{
+						divtext=createnewitembutton(buttons[i][0], buttons[i][1], buttons[i][2]);
+						$(".create-new-items-box").append(divtext);
+					}
+					ibx.bindElements(".create-new-items-box");		
+					
+				};
+				function createnewitembutton(text,image,clickevent)
+				{
+					var divtext= "<div class='create-new-item' data-ibx-type='ibxButtonSimple' data-ibxp-text='" + text + "' data-ibxp-icon-position='top'";					
+					if(clickevent.length>0)divtext+=" onclick='" + clickevent +"' ";
+					divtext+=" data-ibxp-icon='" + image + "'></div>";
+					return divtext;					
 				};				
-			
+				
 		</script>
 		<link rel="stylesheet" type="text/css" href="tree.pd.css">
 		<style type="text/css">
@@ -326,6 +390,7 @@
 			{
 				flex:0 0 auto;
 				height: 141px;
+				width: 800px;
 				border-bottom:1px solid #ccc;
 			}
 			.content-title-bar
@@ -543,7 +608,7 @@
 							<%--data-ibxp-glyph="face" data-ibxp-glyph-classes="material-icons">--%>
 							data-ibxp-icon="images/more.png" >
 							</div>
-						</div>
+						</div>						
 					</div>
 
 					<div class="files-box" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
