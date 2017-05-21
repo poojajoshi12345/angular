@@ -158,11 +158,25 @@
 					};
 					
 					$(".files-listing").hide();
+					$(".tree-showcollapse-button").hide();
 					
 					$(".btn-how-view").on("click", function(e)
 					{
 						$(".files-listing").toggle();
 						$(".files-box-files").toggle();
+					});
+					
+					$(".tree-collapse-button").on("click", function(e)
+					{
+						$(".ibfs-tree").toggle();
+						$(".tree-collapse-button").toggle();
+						$(".tree-showcollapse-button").toggle();						
+					});
+					$(".tree-showcollapse-button").on("click", function(e)
+					{
+						$(".ibfs-tree").toggle();
+						$(".tree-collapse-button").toggle();
+						$(".tree-showcollapse-button").toggle();						
 					});
 										
 					$( document ).on( "showitemmenu", function(e, ibfsitem, contextitem)
@@ -439,7 +453,25 @@
 			.list-icon-col
 			{
 				font-size: 18px;
-			}				
+			}
+			.tree-button-box
+			{
+				width:25px;
+			}
+			.tree-button-spacer
+			{
+				height:50%;
+			}
+			.tree-collapse-button 
+			{
+				font-size: 25px;		
+				
+			}		
+			.tree-showcollapse-button
+			{
+				font-size: 25px;		
+				
+			}						
 	}
 	</style>
 	</head>
@@ -466,6 +498,11 @@
 
 			<div class="explore-box" data-ibx-type="ibxHBox" data-ibxp-align="stretch">
 				<div class="ibfs-tree"></div>
+				<div class="tree-button-box" data-ibxp-align="center">
+					<div class="tree-button-spacer"></div>
+					<div class="tree-collapse-button" data-ibx-type="ibxButtonSimple" data-ibxp-glyph="keyboard_arrow_left" data-ibxp-glyph-classes="material-icons" ></div>
+					<div class="tree-showcollapse-button" data-ibx-type="ibxButtonSimple" data-ibxp-glyph="keyboard_arrow_right" data-ibxp-glyph-classes="material-icons" ></div>
+				</div>								
 				<div class="content-box" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
 					<div class="create-new-box" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
 						<div class="content-title-bar" data-ibx-type="ibxHBox" data-ibxp-align="center">

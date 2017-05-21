@@ -15,8 +15,8 @@ function IbfsItem(item, ibfs, padding)
 
 	if (item.container)
 	{
-		this._glyphClasses = "ibx-icons ibx-glyph-plus";
-		this._glyphClassesSel = "ibx-icons ibx-glyph-minus";
+		this._glyphClasses = "ibx-icons ibx-glyph-plus-small";
+		this._glyphClassesSel = "ibx-icons ibx-glyph-minus-small";
 	}
 	else
 	{
