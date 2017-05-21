@@ -56,13 +56,18 @@
 						{
 							
 							for (i=0; i<ilen; i++)
-							{
+							{								
 								var ibfsitem=itemlist[i];
+								var glyphs = "ibx-icons ibx-glyph-file-unknown";	
+								if(ibfsitem.clientInfo.typeInfo)
+								{	
+									glyphs = ibfsitem.clientInfo.typeInfo.glyphClasses
+								}
 								var d = new Date(ibfsitem.dateLastModified);
 								var ddate = d.toLocaleDateString() + "  " + d.toLocaleTimeString();
 								var s = (ibfsitem.summary)? ibfsitem.summary : "None";
-								var toadd="<div class='flex-grid-cell' data-ibx-col='1'><div data-ibx-type='ibxLabel' data-ibxp-glyph-classes='"
-									+ ibfsitem.clientInfo.typeInfo.glyphClasses + "'></div></div>";								
+								var toadd="<div class='flex-grid-cell list-icon-col' data-ibx-col='1' ><div data-ibx-type='ibxLabel' data-ibxp-glyph-classes='"
+									+ glyphs + "'></div></div>";								
 								toadd +="<div class='flex-grid-cell' data-ibx-col='2'>" + ibfsitem.description + "</div>";
 								toadd += "<div class='flex-grid-cell' data-ibx-col='3'>" + s +" </div>";								
 								toadd += "<div class='flex-grid-cell' data-ibx-col='4'>" + ddate + "</div>";
@@ -116,8 +121,23 @@
 					
 					function runIt(item)
 					{
-						var uriExec = sformat("{1}/run.bip?BIP_REQUEST_TYPE=BIP_LAUNCH&BIP_folder={2}&BIP_item={3}", applicationContext,
-						encodeURIComponent(item.parentPath), encodeURIComponent(item.name));									
+						// check the type						
+						var uriExec;
+						if(item.type == "BIPWFCPortalItem")
+						{
+							var pth = item.fullPath;
+							var repstring = "IBFS:/WFC/Repository/"
+							var i = pth.indexOf(repstring);
+							if(i>-1)pth=pth.substring(i+repstring.length);
+							i = pth.indexOf(".");
+							if(i>-1)pth=pth.substring(0,i);
+							uriExec = applicationContext + "/portal/" + pth;																	
+						}
+						else
+						{
+							uriExec = sformat("{1}/run.bip?BIP_REQUEST_TYPE=BIP_LAUNCH&BIP_folder={2}&BIP_item={3}", applicationContext,
+								encodeURIComponent(item.parentPath), encodeURIComponent(item.name));
+						}									
 						window.open(uriExec);		
 					};						
 					function editIt(item)
@@ -415,7 +435,11 @@
 				background-repeat: no-repeat;				
 				background-size: 19px 28px;
 				align: bottom;				
-			}					
+			}	
+			.list-icon-col
+			{
+				font-size: 18px;
+			}				
 	}
 	</style>
 	</head>
