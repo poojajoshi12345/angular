@@ -163,6 +163,16 @@
 						$(".files-box-files").toggle();
 					});
 					
+					$(".content-title-btn").on("click", function(e)
+					{
+						$(".create-new-items-box").toggle();
+						if($(".create-new-items-box").css('display') == 'none')						
+							$(".create-new-box").css("height","30px");
+						else
+							$(".create-new-box").css("height","141px");	
+							
+					});
+					
 					$(".tree-collapse-button").on("click", function(e)
 					{
 						$(".ibfs-tree").toggle();
@@ -576,38 +586,7 @@
 							<div class="content-title-btn" data-ibx-type="ibxButtonSimple" data-ibxp-glyph="keyboard_arrow_up" data-ibxp-glyph-classes="material-icons"></div>
 						</div>
 						<div class="create-new-items-box" data-ibx-type="ibxHBox" data-ibxp-align="center" data-ibxp-wrap="true">
-							<div class="create-new-item" data-ibx-type="ibxButtonSimple" data-ibxp-text="Folder" data-ibxp-icon-position="top"
-							data-ibxp-icon="images/folder.png" data-ibxp->  
-							<%--data-ibxp-glyph="face" data-ibxp-glyph-classes="material-icons">--%>
-							</div>
-							<div class="create-new-item" data-ibx-type="ibxButtonSimple" data-ibxp-text="Data Set" data-ibxp-icon-position="top" 
-							data-ibxp-icon="images/dataset.png" >  
-							<%--data-ibxp-glyph="face" data-ibxp-glyph-classes="material-icons">--%>							
-							</div>
-							<div class="create-new-item" data-ibx-type="ibxButtonSimple" data-ibxp-text="Chart" data-ibxp-icon-position="top"
-							<%--data-ibxp-glyph="face" data-ibxp-glyph-classes="material-icons">--%>
-							onclick="newChart()" data-ibxp-icon="images/chart.png" >
-							</div>
-							<div class="create-new-item" data-ibx-type="ibxButtonSimple" data-ibxp-text="Report" data-ibxp-icon-position="top" 
-							<%--data-ibxp-glyph="face" data-ibxp-glyph-classes="material-icons">--%>
-							onclick="newReport()" data-ibxp-icon="images/report.png" >
-							</div>
-							<div class="create-new-item" data-ibx-type="ibxButtonSimple" data-ibxp-text="Page" data-ibxp-icon-position="top" 
-							<%--data-ibxp-glyph="face" data-ibxp-glyph-classes="material-icons">--%>
-							data-ibxp-icon="images/page.png" >
-							</div>
-							<div class="create-new-item" data-ibx-type="ibxButtonSimple" data-ibxp-text="Portal" data-ibxp-icon-position="top" 
-							<%--data-ibxp-glyph="face" data-ibxp-glyph-classes="material-icons">--%>
-							data-ibxp-icon="images/portal.png" >
-							</div>
-							<div class="create-new-item" data-ibx-type="ibxButtonSimple" data-ibxp-text="Alert" data-ibxp-icon-position="top" 
-							<%--data-ibxp-glyph="face" data-ibxp-glyph-classes="material-icons">--%>
-							data-ibxp-icon="images/alert.png" >
-							</div>
-							<div class="create-new-item" data-ibx-type="ibxButtonSimple" data-ibxp-text="More" data-ibxp-icon-position="top" 
-							<%--data-ibxp-glyph="face" data-ibxp-glyph-classes="material-icons">--%>
-							data-ibxp-icon="images/more.png" >
-							</div>
+							
 						</div>						
 					</div>
 
@@ -618,35 +597,12 @@
 							<div class="content-title-btn" data-ibx-type="ibxButtonSimple" data-ibxp-text="Title" data-ibxp-icon-position="right" data-ibxp-glyph="keyboard_arrow_up" data-ibxp-glyph-classes="material-icons"></div>
 						</div>
 						<div class="files-box-files"  data-ibx-type="ibxHBox" data-ibxp-wrap="true">
-						<%--
-							<div class="file-item">1</div>
-							<div class="file-item">2</div>
-							<div class="file-item">3</div>
-							<div class="file-item">4</div>
-							<div class="file-item">5</div>
-							<div class="file-item">6</div>
-							<div class="file-item">7</div>
-							<div class="file-item">8</div>
-							<div class="file-item">9</div>
-							<div class="file-item">10</div>
-							<div class="file-item">11</div>
-						--%>	
+						
 						</div>
 						
 							<div class="files-listing" data-ibx-name="tabFlexGrid" >								
 								<div class="grid-main" data-ibx-type="ibxGrid" data-ibxp-cols="30px auto auto auto auto" >
-								    <div class="flex-grid-cell-title" data-ibx-col="1"></div>
-									<div class="flex-grid-cell-title" data-ibx-col="2">Title</div>
-									<div class="flex-grid-cell-title" data-ibx-col="3">Summary</div>
-									<div class="flex-grid-cell-title" data-ibx-col="4">Last Modified Date</div>
-									<div class="flex-grid-cell-title" data-ibx-col="5"></div>
-
-									<div class="flex-grid-cell" data-ibx-col="1">grid cell</div>
-									<div class="flex-grid-cell" data-ibx-col="2">grid cell</div>
-									<div class="flex-grid-cell" data-ibx-col="3">grid cell</div>
-									<div class="flex-grid-cell" data-ibx-col="4">grid cell</div>
-									<div class="flex-grid-cell" data-ibx-type="ibxLabel" data-ibx-col="5" data-ibxp-glyph-classes="ibx-icons ibx-glyph-folder"></div>
-						
+								    
 								</div>
 							</div>
 							
