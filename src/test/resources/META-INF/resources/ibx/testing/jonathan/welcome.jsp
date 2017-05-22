@@ -22,6 +22,7 @@
 		<script type="text/javascript">
 			var itemlist=[];
 			var currentPath='';
+			var newitemsboxsmall=true;
 			<jsp:include page="/WEB-INF/jsp/global/wf_globals.jsp" flush="false" />
 			ibx(function()
 			{
@@ -169,7 +170,10 @@
 						if($(".create-new-items-box").css('display') == 'none')						
 							$(".create-new-box").css("height","30px");
 						else
-							$(".create-new-box").css("height","141px");	
+						{
+							var size=(newitemsboxsmall)?"141px":"282px";
+							$(".create-new-box").css("height",size);
+						}		
 							
 					});
 					
@@ -216,7 +220,7 @@
 					});		
 				
 						
-					newitemsbox(true);
+					newitemsbox(newitemsboxsmall);
 			}, true);
 			
 			function filemenu(contextitem, name)
@@ -271,12 +275,14 @@
 				function morebuttons()
 				{
 					$(".create-new-box").css("height","282px");
-					newitemsbox(false);
+					newitemsboxsmall=false;
+					newitemsbox(newitemsboxsmall);
 				};
 				function lessbuttons()
 				{
 					$(".create-new-box").css("height","141px");
-					newitemsbox(true);
+					newitemsboxsmall=true;
+					newitemsbox(newitemsboxsmall);
 				};
 				
 				function newitemsbox(small)				
