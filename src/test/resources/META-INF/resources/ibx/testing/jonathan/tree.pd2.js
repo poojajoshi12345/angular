@@ -83,9 +83,7 @@ _p._onClick = function (e)
 };
 
 _p._refresh = function (item)
-{debugger;
-	
-	
+{	
 	this._ibfs.listItems(item.fullPath, null, null, { asJSON: true, clientSort: false }).done(function (exInfo)
 			{
 				$.each(exInfo.result, function (idx, item)
@@ -101,11 +99,7 @@ _p._refresh = function (item)
 					}	
 				});
 				$(document).trigger("doneadding");
-			});
-			
-	
-	
-	
+			});	
 };
 _p._onDblClick = function (e)
 {	

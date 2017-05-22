@@ -51,7 +51,7 @@
 					
 					$(document).on("doneadding", function(e)
 					{
-						
+						ibx.bindElements(".files-box-files");		
 						ilen=itemlist.length;
 						var titleadd="<div class='flex-grid-cell-title' data-ibx-col='1'></div><div class='flex-grid-cell-title' data-ibx-col='2'>Title</div><div class='flex-grid-cell-title' data-ibx-col='3'>Summary</div><div class='flex-grid-cell-title' data-ibx-col='4'>Last Modified Date</div><div class='flex-grid-cell-title' data-ibx-col='5'></div>";
 						$(".grid-main").empty();
@@ -118,10 +118,15 @@
 						}									
 					};	
 					function itemdiv(item)
-					{
-						var jsonitem=JSON.stringify(item);
-						var divstring='<div class="file-item" <a><img class="item-image" src="' + item.thumbPath + '"></a>';
-						divstring = divstring + '<div class="image-text">' + item.description + 
+					{debugger;
+						var glyphs = "ibx-icons ibx-glyph-file-unknown";	
+						if(item.clientInfo.typeInfo)
+						{	
+							glyphs = item.clientInfo.typeInfo.glyphClasses
+						}
+						var glyphdiv="<div class='image-icon' data-ibx-type='ibxLabel' data-ibxp-glyph-classes='"	+ glyphs + "'></div>";						
+						var divstring='<div class="file-item" <a><img class="item-image" src="' + item.thumbPath + '"></a>';						
+						divstring = divstring + '<div class="image-text">' + glyphdiv + item.description + 
 						'<div class="image-menu" onclick="filemenu(this, \'' +  item.name +'\')" </div> </div></div>';
 						
 						return divstring;
@@ -206,7 +211,7 @@
 						$(".tree-showcollapse-button").toggle();						
 					});
 					$(".btn-refresh").on("click", function(e)
-					{debugger;
+					{
 						if(currentItem)
 						{
 							clearitems(currentItem);
@@ -539,6 +544,15 @@
 				background:url(images/vertical.png);
 				
 			}
+			.image-icon
+			{
+				height:20px;
+				width:18px;
+				float:left;
+				postion:relative;	
+				font-size: 18px;		
+			}
+				
 			.flex-grid-cell-title
 			{
 				font-size: 14px;
