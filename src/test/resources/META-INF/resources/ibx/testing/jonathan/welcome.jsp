@@ -256,6 +256,18 @@
 						window.open(uriExec);		
 					}
 				};
+				
+				function newIA(tool)
+				{
+					if(currentPath == "")alert("select a folder");
+					else
+					{
+						var uriExec = sformat("{1}/ia?is508=false&&item={2}&tool={3}", applicationContext,
+							encodeURIComponent(currentPath),tool);									
+						window.open(uriExec);		
+					}
+				};
+				
 				function morebuttons()
 				{
 					$(".create-new-box").css("height","282px");
@@ -274,11 +286,11 @@
 					var buttons = [
 						["Folder", "images/folder.png", ""],
 						["Data Set","images/dataset.png", ""],
-						["Chart","images/chart.png", "newChart()"],
-						["Report","images/report.png", "newReport()"],
+						["Chart","images/chart.png", "newIA(\"chart\")"],
+						["Report","images/report.png", "newIA(\"report\")"],
 						["Page","images/page.png",""],
 						["Portal","images/portal.png",""],
-						["Alert","images/alert.png",""],
+						["Alert","images/alert.png","newIA(\"alert\")"],
 						["More","images/more.png", "morebuttons()"]
 					];
 					
@@ -289,14 +301,14 @@
 						["Folder", "images/folder.png", ""],
 						["Data Set","images/dataset.png", ""],
 						["Connect","images/connect.png", ""],
-						["Chart","images/chart.png", "newChart()"],
-						["Visualization","images/visualization.png", "newChart()"],
-						["Report","images/report.png", "newReport()"],
-						["Reporting Object","images/reportingobject.png", "newReport()"],
-						["Sample Content","images/samplecontent.png", "newReport()"],
+						["Chart","images/chart.png", "newIA(\"chart\")"],
+						["Visualization","images/visualization.png", "newIA(\"idis\")"],
+						["Report","images/report.png", "newIA(\"report\")"],
+						["Reporting Object","images/reportingobject.png", "newIA(\"reportingobject\")"],
+						["Sample Content","images/samplecontent.png", ""],
 						["Page","images/page.png",""],
 						["Portal","images/portal.png",""],
-						["Alert","images/alert.png",""],
+						["Alert","images/alert.png","newIA(\"alert\""],
 						["Text Editor","images/texteditor.png",""],
 						["URL","images/url.png",""],
 						["Shortcut", "images/shortcut.png",""],
