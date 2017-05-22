@@ -3,12 +3,12 @@
 
 @font-face {
   font-family: 'ibx Icons';
-  src:  url('../fonts/ibx-font.eot?h6xa8e');
-  src:  url('../fonts/ibx-font.eot?h6xa8e#iefix') format('embedded-opentype'),
-    url('../fonts/ibx-font.woff2?h6xa8e') format('woff2'),
-    url('../fonts/ibx-font.ttf?h6xa8e') format('truetype'),
-    url('../fonts/ibx-font.woff?h6xa8e') format('woff'),
-    url('../fonts/ibx-font.svg?h6xa8e#ibx-fonts') format('svg');
+  src:  url('../fonts/ibx-font.eot?c2gfr0');
+  src:  url('../fonts/ibx-font.eot?c2gfr0#iefix') format('embedded-opentype'),
+    url('../fonts/ibx-font.woff2?c2gfr0') format('woff2'),
+    url('../fonts/ibx-font.ttf?c2gfr0') format('truetype'),
+    url('../fonts/ibx-font.woff?c2gfr0') format('woff'),
+    url('../fonts/ibx-font.svg?c2gfr0#ibx-fonts') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -65,6 +65,9 @@
 .ibx-glyph-file-word {
     color: #2A5699;
 }
+.ibx-glyph-html5 {
+    color: #e34f26;
+}
 .ibx-glyph-file-html {
     color: #5388be;
 }
@@ -104,7 +107,6 @@
 .ibx-glyph-portal {
     color: #5388be;
 }
-
 .ibx-glyph-key:before {
   content: "\e98f";
 }
@@ -233,6 +235,9 @@
 }
 .ibx-glyph-user:before {
   content: "\e91b";
+}
+.ibx-glyph-html5:before {
+  content: "\e99d";
 }
 .ibx-glyph-new:before {
   content: "\e99b";
