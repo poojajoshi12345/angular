@@ -59,6 +59,8 @@ function IbfsItem(item, ibfs, padding)
 	if (item.container)
 		this._children = $("<div class='ibfs-children'>").ibxVBox({ align: "stretch", justifiy: "start" }).appendTo(this._element);
 }
+
+
 IbfsItem.folderPadding = 10;
 IbfsItem.filePadding = 30;
 
@@ -79,6 +81,32 @@ _p._onClick = function (e)
 	}	
 	e.stopPropagation();
 };
+
+_p._refresh = function (item)
+{debugger;
+	
+	
+	this._ibfs.listItems(item.fullPath, null, null, { asJSON: true, clientSort: false }).done(function (exInfo)
+			{
+				$.each(exInfo.result, function (idx, item)
+				{
+					var ibfsItem = new IbfsItem(item, this._ibfs, this._padding + (item.container ? IbfsItem.folderPadding : IbfsItem.filePadding));
+					if(item.container)
+					{	
+						//this._children.append(ibfsItem.getElement());
+					}	
+					else
+					{							
+						$(document).trigger( "addanitem", item );
+					}	
+				});
+				$(document).trigger("doneadding");
+			});
+			
+	
+	
+	
+};
 _p._onDblClick = function (e)
 {	
 	if (!this._item.container)
@@ -88,6 +116,9 @@ _p._onDblClick = function (e)
 	e.stopPropagation();
 };
 _p._expanded = false;
+
+	
+
 _p.toggle = function () { this.expand(!this._expanded); };
 _p.expand = function (expand)
 {
@@ -148,6 +179,8 @@ function IbfsRootItem(ibfs, path)
 	//this._label.hide();
 	this.toggle();
 }
+
+	
 _p = IbfsRootItem.prototype = IbfsItem.prototype;
 
 //# sourceURL=tree.pd.js

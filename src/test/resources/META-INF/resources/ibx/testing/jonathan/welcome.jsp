@@ -22,8 +22,11 @@
 		<script type="text/javascript">
 			var itemlist=[];
 			var currentPath='';
+			var currentItem=null;
 			var newitemsboxsmall=true;
+			var rootItem=null;
 			var newitemsheight=["141px","282px","30px"];
+			
 			<jsp:include page="/WEB-INF/jsp/global/wf_globals.jsp" flush="false" />
 			ibx(function()
 			{
@@ -35,7 +38,7 @@
 						if(path=="null")path="IBFS:/WFC/Repository";
 						if(path.indexOf("IBFS:") == -1)
 							path = "IBFS:/WFC/Repository/"+path;						
-						var rootItem = new IbfsRootItem(ibfs,path);
+						rootItem = new IbfsRootItem(ibfs,path);
 						$(".ibfs-tree").append(rootItem.getElement());			
 					});
 					
@@ -82,10 +85,16 @@
 					});
 					
 					$( document ).on( "clearitems", function(e, item)
-					{
-						$( ".files-box-files" ).empty();
+					{   
+						clearitems(item);
+					});
+					
+					function clearitems(item)
+					{	
+						$(".files-box-files").empty();
 						$(".grid-main").empty();	
 						itemlist=[];
+						currentItem = item;
 						// set the breadcrumb
 						currentPath=item.fullPath;
 						var pathitems=currentPath.split("/");
@@ -107,7 +116,7 @@
 							else 
 								if(itemx == "WFC")start=1;
 						}									
-					});	
+					};	
 					function itemdiv(item)
 					{
 						var jsonitem=JSON.stringify(item);
@@ -195,6 +204,14 @@
 						$(".ibfs-tree").toggle();
 						$(".tree-collapse-button").toggle();
 						$(".tree-showcollapse-button").toggle();						
+					});
+					$(".btn-refresh").on("click", function(e)
+					{debugger;
+						if(currentItem)
+						{
+							clearitems(currentItem);
+							rootItem._refresh(currentItem);
+						}
 					});
 										
 					$( document ).on( "showitemmenu", function(e, ibfsitem, contextitem)
