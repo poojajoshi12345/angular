@@ -23,6 +23,7 @@
 			var itemlist=[];
 			var currentPath='';
 			var newitemsboxsmall=true;
+			var newitemsheight=["141px","282px","30px"];
 			<jsp:include page="/WEB-INF/jsp/global/wf_globals.jsp" flush="false" />
 			ibx(function()
 			{
@@ -164,17 +165,23 @@
 						$(".files-box-files").toggle();
 					});
 					
+					$(".content-title-btn2").hide();
+					
 					$(".content-title-btn").on("click", function(e)
 					{
 						$(".create-new-items-box").toggle();
-						if($(".create-new-items-box").css('display') == 'none')						
-							$(".create-new-box").css("height","30px");
-						else
-						{
-							var size=(newitemsboxsmall)?"141px":"282px";
-							$(".create-new-box").css("height",size);
-						}		
-							
+						$(".create-new-box").css("height",newitemsheight[2]);
+						$(".content-title-btn").hide();
+						$(".content-title-btn2").show();	
+					});	
+					$(".content-title-btn2").on("click", function(e)
+					{
+						$(".create-new-items-box").toggle();
+						$(".content-title-btn2").hide();
+						$(".content-title-btn").show();					
+					
+						var size=(newitemsboxsmall)?newitemsheight[0]:newitemsheight[1];
+						$(".create-new-box").css("height",size);								
 					});
 					
 					$(".tree-collapse-button").on("click", function(e)
@@ -239,31 +246,26 @@
 							}
 						}	
 					};
-				function newReport()
-				{					
-					if(currentPath == "")alert("select a folder");
-					else
-					{
-						var uriExec = sformat("{1}/ia?is508=false&&item={2}&tool=Report", applicationContext,
-							encodeURIComponent(currentPath));									
-						window.open(uriExec);		
-					}
-				};
 				
-				function newChart()
-				{					
-					if(currentPath == "")alert("select a folder");
-					else
-					{
-						var uriExec = sformat("{1}/ia?is508=false&&item={2}&tool=Chart", applicationContext,
-							encodeURIComponent(currentPath));									
-						window.open(uriExec);		
-					}
-				};
 				
 				function newIA(tool)
 				{
-					if(currentPath == "")alert("select a folder");
+					if(currentPath == "")
+					{
+						var options = 
+						{
+							type:"std information",
+							caption: "New",
+							buttons:"ok",
+							messageOptions:
+							{
+								text:"This action requires that a folder be selected"
+							}
+						};
+						var dlg = $.ibi.ibxDialog.createMessageDialog(options);
+						dlg.ibxDialog("open");
+						//alert("select a folder");
+					}
 					else
 					{
 						var uriExec = sformat("{1}/ia?is508=false&&item={2}&tool={3}", applicationContext,
@@ -274,13 +276,13 @@
 				
 				function morebuttons()
 				{
-					$(".create-new-box").css("height","282px");
+					$(".create-new-box").css("height",newitemsheight[1]);
 					newitemsboxsmall=false;
 					newitemsbox(newitemsboxsmall);
 				};
 				function lessbuttons()
 				{
-					$(".create-new-box").css("height","141px");
+					$(".create-new-box").css("height",newitemsheight[0]);
 					newitemsboxsmall=true;
 					newitemsbox(newitemsboxsmall);
 				};
@@ -419,7 +421,7 @@
 				flex:0 0 auto;
 				height: 141px;
 				width: 800px;
-				border-bottom:1px solid #ccc;
+				//border-bottom:1px solid #ccc;
 			}
 			.content-title-bar
 			{
@@ -440,7 +442,12 @@
 				font-size:1.5em;
 				color:#aaa;
 			}
-			.content-title-btn .ibx-label-text
+			.content-title-btn2
+			{
+				font-size:1.5em;
+				color:#aaa;
+			}
+			.content-title-btn .ibx-label-text 
 			{
 				font-size:11px;
 			}
@@ -471,7 +478,9 @@
 			.files-box
 			{
 				flex:1 1 auto;
-				background-color:#e4f1f9
+				background-color:#e4f1f9;
+				border-top:1px solid #ccc;
+				
 
 			}
 			.files-box-files
@@ -602,6 +611,7 @@
 							<div class="content-title-label" data-ibx-type="ibxLabel" data-ibxp-text="Create New"></div>
 							<div class="content-title-spacer"></div>
 							<div class="content-title-btn" data-ibx-type="ibxButtonSimple" data-ibxp-glyph="keyboard_arrow_up" data-ibxp-glyph-classes="material-icons"></div>
+							<div class="content-title-btn2" data-ibx-type="ibxButtonSimple" data-ibxp-glyph="keyboard_arrow_down" data-ibxp-glyph-classes="material-icons"></div>
 						</div>
 						<div class="create-new-items-box" data-ibx-type="ibxHBox" data-ibxp-align="center" data-ibxp-wrap="true">
 							
