@@ -48,8 +48,9 @@ $.widget("ibi.ibxSelect", $.ibi.ibxTextField,
 				this._textInput.on('click', this._onTextClick.bind(this));
 		}
 		this._createPopup();
-		this.add(this.element.children(".ibx-menu-item, .ibx-select-group"));
 		this._super();
+		this.add(this.element.children(".ibx-menu-item, .ibx-select-group"));
+		this.refresh();
 	},
 	children:function(selector)
 	{
@@ -181,19 +182,79 @@ $.widget("ibi.ibxSelect", $.ibi.ibxTextField,
 	userValue: function (value)
 	{
 		if (typeof (value) == "undefined")
-			return this._list.find('.sel-selected').first().ibxWidget('option', 'userValue');
+		{
+			var selected = this._list.find('.sel-selected');
+
+			if (this.options.multiSelect)
+			{
+				// return an array of user values
+				var ret = [];
+				selected.each(function (index, el)
+				{
+					ret.push($(el).ibxWidget('option', 'userValue'));
+				}.bind(this));
+				return ret;
+			}
+			else
+			{
+				return (selected.length == 0 ? null : selected.first().ibxWidget('option', 'userValue'));
+			}
+		}
 		else
 		{
-			this._list.find('.ibx-select-item').each(function (index, el)
+			this._removeSelection(this._list.find('.ibx-select-item'), false, true, true);
+
+			if (this.options.multiSelect)
 			{
-				var itemUserValue = $(el).ibxWidget('option', 'userValue');
-				if (itemUserValue == value && this.options.userValue != itemUserValue)
+
+				var userValues;
+				if (value instanceof Array)
+					userValues = value;
+				else
 				{
-					this.options.userValue = itemUserValue;
-					this.selectItem(el);
-					return false;
+					userValues = [];
+					userValues.push(value);
 				}
-			}.bind(this));
+
+				var selItems = [];
+
+				this._list.find('.ibx-select-item').each(function (index, el)
+				{
+					var itemUserValue = $(el).ibxWidget('option', 'userValue');
+					for (var i = 0; i < userValues.length; i++)
+					{
+						if (itemUserValue == userValues[i])
+						{
+							selItems.push(el);
+							break;
+						}
+					}
+				}.bind(this));
+
+				if (selItems.length > 0)
+					this.selectItems(selItems);
+			}
+			else
+			{
+				if (value instanceof Array)
+				{
+					if (value.length == 0)
+						return this;
+					else
+						value = value[0];
+				}
+
+				this._list.find('.ibx-select-item').each(function (index, el)
+				{
+					var itemUserValue = $(el).ibxWidget('option', 'userValue');
+					if (itemUserValue == value)
+					{
+						this.selectItem(el);
+						return false;
+					}
+				}.bind(this));
+			}
+
 			return this;
 		}
 	},
@@ -369,9 +430,12 @@ $.widget("ibi.ibxSelect", $.ibi.ibxTextField,
 		}
 		anchor.focus();
 	},
-	_removeSelection: function (menuItem, bKeepAnchor, bNoUpdate)
+	_removeSelection: function (menuItem, bKeepAnchor, bNoUpdate, bNoChange)
 	{
 		var menuItem = $(menuItem);
+		if (menuItem.length == 0)
+			return;
+
 		menuItem.removeClass("sel-selected");
 		menuItem.data('ibxWidget').option('checked', false);
 		if (!bKeepAnchor)
@@ -381,25 +445,65 @@ $.widget("ibi.ibxSelect", $.ibi.ibxTextField,
 		}
 		if (!bNoUpdate)
 			this._updateText();
-		this._trigger("change", null, { "item": menuItem });
-		this._trigger("set_form_value", null, { "elem": this.element, "value": this._getUserValue() });
+		if (!bNoChange)
+		{
+			this._trigger("change", null, { "item": menuItem });
+			this._trigger("set_form_value", null, { "elem": this.element, "value": this._getUserValue() });
+		}
+	},
+	selectAll: function ()
+	{
+		this._resetHighlight();
+		var items;
+		if (this.options.multiSelect)
+			items = this._list.find('.ibx-select-item');
+		else
+			items = this._list.find('.ibx-select-item').first();
+
+		this._setSelection(items, false, false, false, false);
+	},
+	removeSelection: function ()
+	{
+		this._resetHighlight();
+		this._removeSelection(this._list.find('.ibx-select-item'), false, false, false);
+		this.options.userValue = '';
 	},
 	selectItems: function (elems)
 	{
-		this._setSelection(elems, true, true, false, true);
+		this._resetHighlight();
+		this._removeSelection(this._list.find('.ibx-select-item'), false, true, true);
+
+		if (this.options.multiSelect)
+		{
+			if (elems.length > 0)
+				this.options.userValue = $(elems[0]).ibxWidget('userValue');
+			else
+				this.options.userValue = '';
+			this._setSelection(elems);
+		}
+		else
+		{
+			this.options.userValue = $(elems[0]).ibxWidget('userValue');
+			this._selectItem(elems[0]);
+		}
 	},
 	selectItem: function (el)
 	{
+		this._resetHighlight();
+		this.options.userValue = $(el).ibxWidget('userValue');
 		this._setSelection(el, false);
 	},
 	_setSelection: function (menuItem, bKeep, bKeepAnchor, bNoUpdate, bNoChange)
 	{
 		var menuItem = $(menuItem);
+		if (menuItem.length == 0)
+			return;
+
 		if (menuItem.hasClass('ibx-select-check-item'))
 		{
 			if (!bKeep && menuItem.hasClass('sel-selected'))
 			{
-				this._removeSelection(menuItem, bKeepAnchor, bNoUpdate);
+				this._removeSelection(menuItem, bKeepAnchor, bNoUpdate, true);
 				return;
 			}
 			bKeep = true;
@@ -465,17 +569,34 @@ $.widget("ibi.ibxSelect", $.ibi.ibxTextField,
 	{
 		return this._isEditable() && this.options.filter;
 	},
+	_fnMatch: null,
+	match: function (fnMatch)
+	{
+		this._fnMatch = fnMatch;
+		this._setHighlight();
+	},
+	_resetHighlight: function ()
+	{
+		if (this._applyFilter())
+		{
+			this._list.find(".ibx-select-item").each(function (index, el)
+			{
+				$(el).show();
+			});
+		}
+	},
 	_setHighlight: function ()
 	{
 		this._list.find('.ibx-select-radio-item,.ibx-select-check-item').each(function (index, el) { $(el).data('ibxWidget')._setOption('checked', false); })
 		this._list.find('.sel-selected').removeClass('sel-selected');
 		var bFound = false;
-		var searchText = this._textInput.val().toLowerCase();
+		var searchText = this._textInput.val();
 		if (searchText)
 		{
 			this._list.find(".ibx-select-item").each(function (index, el)
 			{
-				if (0 == $(el).data('ibxWidget').option('text').toLowerCase().indexOf(searchText))
+				var itemText = $(el).data('ibxWidget').option('text');
+				if (this._fnMatch ? (this._fnMatch(searchText, itemText)) : (0 == itemText.toLowerCase().indexOf(searchText.toLowerCase())))
 				{
 					if (!bFound)
 						this._setSelection(el, false, false, true, true);
