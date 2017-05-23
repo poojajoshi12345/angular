@@ -21,7 +21,12 @@
 
 		<script type="text/javascript">
 			<jsp:include page="/WEB-INF/jsp/global/wf_globals.jsp" flush="false" />
-			var packages = ["../testing/julian/test_res_bundle.xml"];
+			var packages =
+			[
+				"../testing/julian/test_res_bundle.xml",
+				"../testing/samples/ibfs/resources/ibfs_bundle.xml",
+			];
+			
 			ibx(function()
 			{
 				var select = $(".test-widget");
