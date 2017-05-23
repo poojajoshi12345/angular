@@ -46,20 +46,14 @@ _p.addStringBundle = function(bundle)
 	this.strings[bundle.language] = $.extend(this.strings[bundle.language], bundle.strings);
 };
 
-_p._onBundleLoaded = function(bundles, allLoaded)
+//daisy chain the loading of the bundles so their dependencies are honored.
+_p.addBundles = function(bundles, allLoaded)
 {
-	var bundle = bundles.shift();
-	if(bundle)
-		this.addBundle(bundle).done(this._onBundleLoaded.bind(this, bundles, allLoaded));
+	var allLoaded = allLoaded || $.Deferred();
+	if(bundles.length)
+		this.addBundle(bundles.shift()).done(this.addBundles.bind(this, bundles, allLoaded));
 	else
 		allLoaded.resolve();
-};
-
-//daisy chain the loading of the bundles so their dependencies are honored.
-_p.addBundles = function(bundles)
-{
-	var allLoaded = $.Deferred();
-	this.addBundle(bundles.shift()).done(this._onBundleLoaded.bind(this, bundles, allLoaded));
 	return allLoaded;
 };
 
