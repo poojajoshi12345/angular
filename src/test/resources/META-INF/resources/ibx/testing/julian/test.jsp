@@ -19,18 +19,9 @@
 		<Script src="<%=request.getContextPath()%>/ibx/resources/ibx.js" type="text/javascript"></script>
 		<script type="text/javascript">
 			<jsp:include page="/WEB-INF/jsp/global/wf_globals.jsp" flush="false" />
-			var packages =
-			[
-				"../testing/julian/test_res_bundle.xml",
-				"../testing/samples/ibfs/resources/ibfs_bundle.xml",
-				"../testing/samples/popups/resources/popups_bundle.xml",
-				"../testing/samples/ibxhier/resources/ibxhier_res_bundle.xml",
-				"../testing/samples/grid/resources/grid_res_bundle.xml",
-				"../testing/samples/res_bundle/resources/res_bundle.xml",
-			];
 			ibx(function()
 			{
-			}, packages, true);
+			}, ["../testing/julian/test_res_bundle.xml"], true);
 		</script>
 		<style type="text/css">
 		</style>

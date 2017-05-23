@@ -22,11 +22,11 @@
 
 .icon-left .ibx-label-glyph.ibx-glyph-spacer
 {
-	margin-right:.5em;
+	margin-right:4px;
 }
 .icon-right .ibx-label-glyph.ibx-glyph-spacer
 {
-	margin-left:.5em;
+	margin-left:4px;
 }
 
 .ibx-label-icon
@@ -34,11 +34,11 @@
 }
 .icon-left .ibx-label-icon.ibx-icon-spacer
 {
-	margin-right:.5em;
+	margin-right:4px;
 }
 .icon-right .ibx-label-icon.ibx-icon-spacer
 {
-	margin-left:.5em;
+	margin-left:4px;
 }
 
 .ibx-label.icon-left
