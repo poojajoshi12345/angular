@@ -442,7 +442,7 @@
 			{
 				flex:0 0 auto;
 				height: 141px;
-				width: 800px;
+				width: 1200px;
 				//border-bottom:1px solid #ccc;
 			}
 			.content-title-bar
