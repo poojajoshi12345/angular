@@ -43,11 +43,14 @@ $.widget("ibi.ibxIFrame", $.ibi.ibxWidget,
 	{
 		this._super();
 		var options = this.options;
-		this._iFrame.prop(
-		{
-			name:options.name,
-			src:options.src,
-		});
+		var frmOptions = {};
+		var curSrc = this._iFrame.attr("src");
+		var curName = this._iFrame.prop("name");
+		if(curSrc != options.src)
+			frmOptions.src = options.src;
+		if(curName != options.name)
+			frmOptions.name = options.name;
+		this._iFrame.prop(frmOptions);
 	}
 });
 //# sourceURL=iframe.ibx.js
