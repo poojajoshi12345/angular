@@ -26,6 +26,7 @@
 			var newitemsboxsmall=true;
 			var rootItem=null;
 			var newitemsheight=["141px","282px","30px"];
+			var boxItems='';
 			
 			<jsp:include page="/WEB-INF/jsp/global/wf_globals.jsp" flush="false" />
 			ibx(function()
@@ -45,16 +46,21 @@
 					$( document ).on( "addanitem", function(e, item)
 					{				
 						itemlist.push(item);
-						var divstring = itemdiv(item);						
+						var divstring = itemdiv(item);	
+						//boxItems+=divstring;					
 						$(".files-box-files").append(divstring);															
 					});	
 					
 					$(document).on("doneadding", function(e)
 					{
-						ibx.bindElements(".files-box-files");		
+						
+						//$(".files-box-files").append(boxItems);						
+						ibx.bindElements(".files-box-files");	
+						boxItems="";	
 						ilen=itemlist.length;
 						var titleadd="<div class='flex-grid-cell-title' data-ibx-col='1'></div><div class='flex-grid-cell-title' data-ibx-col='2'>Title</div><div class='flex-grid-cell-title' data-ibx-col='3'>Summary</div><div class='flex-grid-cell-title' data-ibx-col='4'>Last Modified Date</div><div class='flex-grid-cell-title' data-ibx-col='5'></div>";
 						$(".grid-main").empty();
+						
 						$(".grid-main").append(titleadd);									
 												
 						if(ilen > 0)
@@ -76,12 +82,14 @@
 								toadd +="<div class='flex-grid-cell' data-ibx-col='2'>" + ibfsitem.description + "</div>";
 								toadd += "<div class='flex-grid-cell' data-ibx-col='3'>" + s +" </div>";								
 								toadd += "<div class='flex-grid-cell' data-ibx-col='4'>" + ddate + "</div>";
-								toadd += "<div class='flex-grid-cell cell-image' data-ibx-type='ibxLabel' data-ibx-col='5' onclick='filemenu(this, \"" +  ibfsitem.name + "\");'></div>";							
+								toadd += "<div class='flex-grid-cell cell-image' data-ibxp-glyph-classes='fa fa-ellipsis-v' data-ibx-type='ibxLabel' data-ibx-col='5' onclick='filemenu(this, \"" +  ibfsitem.name + "\");'></div>";							
 								
 								$(".grid-main").append(toadd);		
-								ibx.bindElements(".grid-main");						
+								ibx.bindElements(".grid-main");
+												
 							}
-						}						
+						}	
+												
 					});
 					
 					$( document ).on( "clearitems", function(e, item)
@@ -91,6 +99,8 @@
 					
 					function clearitems(item)
 					{	
+						
+
 						$(".files-box-files").empty();
 						$(".grid-main").empty();	
 						itemlist=[];
@@ -110,7 +120,6 @@
 								if(start > 1)carat = ' > ';							
 								start++;	
 								var divstring = '<div class="crumb-item">' + carat + itemx + ' </div>';								
-								//var divstring = '<div data-ibx-type="ibxLabel" data-ibxp-text= "' + itemx '"></div>';
 								$(".crumb-box").append(divstring);								
 							}
 							else 
@@ -118,16 +127,17 @@
 						}									
 					};	
 					function itemdiv(item)
-					{debugger;
+					{
 						var glyphs = "ibx-icons ibx-glyph-file-unknown";	
 						if(item.clientInfo.typeInfo)
 						{	
 							glyphs = item.clientInfo.typeInfo.glyphClasses
 						}
-						var glyphdiv="<div class='image-icon' data-ibx-type='ibxLabel' data-ibxp-glyph-classes='"	+ glyphs + "'></div>";						
-						var divstring='<div class="file-item" <a><img class="item-image" src="' + item.thumbPath + '"></a>';						
-						divstring = divstring + '<div class="image-text">' + glyphdiv + item.description + 
-						'<div class="image-menu" onclick="filemenu(this, \'' +  item.name +'\')" </div> </div></div>';
+						var glyphdiv=sformat("<div class='image-icon' data-ibx-type='ibxLabel' data-ibxp-glyph-classes=' {1} '></div>", glyphs);							
+						var divstring=sformat('<div class="file-item" <a><img class="item-image" src=" {1} "></a>', item.thumbPath);						
+						var itemname = "'" + item.name + "'";
+						divstring = divstring += sformat('<div class="image-text"> {1} {2} <div class="image-menu" 	onclick="filemenu(this,  {3} )" </div> </div></div>',
+							glyphdiv, item.description, itemname);							
 						
 						return divstring;
 					};
@@ -154,19 +164,32 @@
 						window.open(uriExec);		
 					};						
 					function editIt(item)
-					{						
+					{					
 						var toolProperties=item.clientInfo.properties.tool;						
-						if(toolProperties && toolProperties.indexOf("infoAssist")>-1)
-						{					
+						if(toolProperties && (toolProperties.indexOf("infoAssist")>-1 || toolProperties.indexOf("DataVisualization")>-1 || toolProperties.indexOf("rotool")>-1
+							|| toolProperties.indexOf("alert")>-1))
+						{
+							var tool="report";
+							if(toolProperties.indexOf("rotool")>-1)tool="reportingobject";					
 							var fullitem=item.parentPath + item.name;
-							var uriExec = sformat("{1}/ia?is508=false&&item={2}&tool=Report", applicationContext,
-								encodeURIComponent(fullitem));									
+							var uriExec = sformat("{1}/ia?is508=false&&item={2}&tool={3}", applicationContext,
+								encodeURIComponent(fullitem),tool);									
 							window.open(uriExec);
 						}
 						else
 						{
-							if(!toolProperties)toolProperties="";
-							alert("tool not implemented: " + toolProperties);
+							if(toolProperties == "editor")
+							{
+								var uriExec = sformat("{1}/tools/portlets/resources/markup/sharep/SPEditorBoot.jsp?folderPath={2}&description={3}&itemName={4}&isReferenced=true&type=item",			
+									applicationContext,	encodeURIComponent(currentPath), item.description, item.name);									
+								window.open(uriExec);
+							}
+							else
+							{ 
+								if(!toolProperties)toolProperties="";
+								var message="Tool not implemented: " + toolProperties;
+								warningmessage(message);								
+							}	
 						}				
 					};
 					
@@ -177,6 +200,11 @@
 					{
 						$(".files-listing").toggle();
 						$(".files-box-files").toggle();
+						var isVisible = $('.files-box-files').is(':visible');
+						if (isVisible)
+							$(".files-box").css("background-color","#e4f1f9");
+						else
+							$(".files-box").css("background-color","white");
 					});
 					
 					$(".content-title-btn2").hide();
@@ -274,19 +302,7 @@
 				{
 					if(currentPath == "")
 					{
-						var options = 
-						{
-							type:"std information",
-							caption: "New",
-							buttons:"ok",
-							messageOptions:
-							{
-								text:"This action requires that a folder be selected"
-							}
-						};
-						var dlg = $.ibi.ibxDialog.createMessageDialog(options);
-						dlg.ibxDialog("open");
-						//alert("select a folder");
+						warningmessage("This action requires that a folder be selected");						
 					}
 					else
 					{
@@ -294,6 +310,37 @@
 							encodeURIComponent(currentPath),tool);									
 						window.open(uriExec);		
 					}
+				};
+				function warningmessage(message)
+				{
+					var options = 
+						{
+							type:"std information",
+							caption: "New",
+							buttons:"ok",
+							messageOptions:
+							{
+								text: message
+							}
+						};
+						var dlg = $.ibi.ibxDialog.createMessageDialog(options);
+						dlg.ibxDialog("open");						
+				};
+				function newEditor()
+				{
+					if(currentPath == "")
+						warningmessage("This action requires that a folder be selected");
+					else
+					{	
+						var uriExec = sformat("{1}/tools/portlets/resources/markup/sharep/SPEditorBoot.jsp?folderPath={2}&description=&itemName=&isReferenced=true&type=folder",			
+							applicationContext,	encodeURIComponent(currentPath));									
+						window.open(uriExec);
+					}				
+				};
+				function newPage2()
+				{
+					var uriExec = sformat("{1}/tools/pd/pd.jsp",applicationContext);
+					window.open(uriExec);
 				};
 				
 				function morebuttons()
@@ -314,35 +361,34 @@
 					if(small)
 					{
 					var buttons = [
-						["Folder", "images/folder.png", ""],
-						["Data Set","images/dataset.png", ""],
-						["Chart","images/chart.png", "newIA(\"chart\")"],
-						["Report","images/report.png", "newIA(\"report\")"],
-						["Page","images/page.png",""],
-						["Portal","images/portal.png",""],
-						["Alert","images/alert.png","newIA(\"alert\")"],
-						["More","images/more.png", "morebuttons()"]
+						["Folder", "fa fa-folder", "", "yellow"],
+						["Data Set","fa fa-upload", "", "green"],
+						["Chart","ibx-icons ibx-glyph-fex-chart", "newIA(\"chart\")", "purple"],
+						["Report","ibx-icons ibx-glyph-fex", "newIA(\"report\")", "purple"],
+						["Page","ibx-icons ibx-glyph-page","newPage2()", "teel"],
+						["Portal","ibx-icons ibx-glyph-portal","", "teel"],
+						["Alert","fa fa-bell","newIA(\"alert\")", "red"],
+						["More","fa fa-ellipsis-h", "morebuttons()","black"]
 					];
-					
-					}
+										}
 					else
 					{
 						var buttons = [
-						["Folder", "images/folder.png", ""],
-						["Data Set","images/dataset.png", ""],
-						["Connect","images/connect.png", ""],
-						["Chart","images/chart.png", "newIA(\"chart\")"],
-						["Visualization","images/visualization.png", "newIA(\"idis\")"],
-						["Report","images/report.png", "newIA(\"report\")"],
-						["Reporting Object","images/reportingobject.png", "newIA(\"reportingobject\")"],
-						["Sample Content","images/samplecontent.png", ""],
-						["Page","images/page.png",""],
-						["Portal","images/portal.png",""],
-						["Alert","images/alert.png","newIA(\"alert\""],
-						["Text Editor","images/texteditor.png",""],
-						["URL","images/url.png",""],
-						["Shortcut", "images/shortcut.png",""],
-						["Less","images/more.png", "lessbuttons()"]
+						["Folder", "fa fa-folder", "", "yellow"],
+						["Data Set","fa fa-upload", "", "green"],
+						["Connect","fa fa-database", "","green"],
+						["Chart","ibx-icons ibx-glyph-fex-chart", "newIA(\"chart\")", "purple"],
+						["Visualization","fa fa-line-chart", "newIA(\"idis\")","purple"],
+						["Report","ibx-icons ibx-glyph-fex", "newIA(\"report\")", "purple"],
+						["Reporting Object","fa fa-cube", "newIA(\"reportingobject\")","purple"],
+						["Sample Content","fa fa-pie-chart", "","purple"],
+						["Page","ibx-icons ibx-glyph-page","newPage2()","teel"],
+						["Portal","ibx-icons ibx-glyph-portal","", "teel"],
+						["Alert","fa fa-bell","newIA(\"alert\")", "red"],
+						["Text Editor","fa fa-pencil-square-o","newEditor()", "teel"],
+						["URL","fa fa-external-link-square","","teel"],
+						["Shortcut", "fa fa-link","","teel"],
+						["Less","fa fa-ellipsis-h", "lessbuttons()","black"]
 					];
 				
 					}
@@ -351,18 +397,17 @@
 					var ilen = buttons.length;
 					for (i=0; i<ilen; i++)
 					{
-						divtext=createnewitembutton(buttons[i][0], buttons[i][1], buttons[i][2]);
+						divtext=createnewitembutton(buttons[i][0], buttons[i][1], buttons[i][2], buttons[i][3]);
 						$(".create-new-items-box").append(divtext);
 					}
 					ibx.bindElements(".create-new-items-box");		
 					
 				};
-				function createnewitembutton(text,image,clickevent)
+				function createnewitembutton(text,image,clickevent,color)
 				{
-					var divtext= "<div class='create-new-item' data-ibx-type='ibxButtonSimple' data-ibxp-text='" + text + "' data-ibxp-icon-position='top'";					
-					if(clickevent.length>0)divtext+=" onclick='" + clickevent +"' ";
-					divtext+=" data-ibxp-icon='" + image + "'></div>";
-					return divtext;					
+					var divtext = sformat("<div class='create-new-item create-new-item-{1}' data-ibx-type='ibxButtonSimple' data-ibxp-text='{2}' data-ibxp-icon-position='top'  data-ibxp-glyph-classes='{3}' onclick='{4}' ></div>",
+						color,text,image,clickevent);					
+					return divtext;														
 				};				
 				
 		</script>
@@ -398,7 +443,7 @@
 			}
 			.toolbar
 			{
-				color:#aaa;
+				color:rgb(102,102,102);
 				flex:0 0 auto;
 				padding:5px;
 				border-bottom:1px solid #ccc;
@@ -416,7 +461,7 @@
 			}
 			.btn-refresh, .btn-how-view
 			{
-				color:#aaa;
+				color:rgb(102,102,102);
 				font-size:1.5em;
 				margin-right:20px;
 			}
@@ -452,7 +497,7 @@
 			.content-title-label
 			{
 				font-size:14px;
-				color:#aaa;
+				color: rgb(102,102,102);
 				font-family = 'Hind', sans-serif;
 			}
 			.content-title-spacer
@@ -462,12 +507,12 @@
 			.content-title-btn
 			{
 				font-size:1.5em;
-				color:#aaa;
+				color: rgb(102,102,102);
 			}
 			.content-title-btn2
 			{
 				font-size:1.5em;
-				color:#aaa;
+				color: rgb(102,102,102);
 			}
 			.content-title-btn .ibx-label-text 
 			{
@@ -477,20 +522,64 @@
 			{
 				margin-bottom:10px;
 			}
-			.create-new-item
+			.create-new-item 
 			{
 				//margin:4px;
 				height:110px;
 				width: 100px;
-								
+				font-size: 12px;				
+				color: rgb(102,102,102);
+												
 			}
 			.create-new-item .ibx-label-glyph
 			{
-				font-size:4em;
+				font-size:20px;
+				//background-color: red;
+				margin-bottom: 6px;
+				margin-top: 8px;
+				color: white;
+				border-radius:50%;
+				border: 18px solid;
+				//border-color: red;
+			}
+			.create-new-item-red .ibx-label-glyph
+			{
+				border-color: red;
+				background-color: red;
+			}
+			.create-new-item-green .ibx-label-glyph
+			{
+				border-color: green;
+				background-color: green;
+			}
+			.create-new-item-blue .ibx-label-glyph
+			{
+				border-color: blue;
+				background-color: blue;
+			}
+			.create-new-item-yellow .ibx-label-glyph
+			{
+				border-color: rgb(250, 215, 50);
+				background-color: rgb(250, 215, 50);
+			}
+			.create-new-item-teel .ibx-label-glyph
+			{
+				border-color: rgba(25,169,213,.7);
+				background-color: rgba(25,169,213,.7);
+			}
+			.create-new-item-purple .ibx-label-glyph
+			{
+				border-color: rgb(114,102,186);
+				background-color: rgb(114,102,186);
+			}
+			.create-new-item-black .ibx-label-glyph
+			{
+				border-color: black;
+				background-color: black;
 			}
 			.create-new-item .ibx-label-text
 			{
-				color:#aaa;
+				color: rgb(102,102,102);
 				font-size:11px;				
 			}
 			.create-new-item img
@@ -509,6 +598,7 @@
 			{
 				padding:4px;
 				overflow:auto;
+				background-color:#e4f1f9;
 			}
 			.file-item
 			{
@@ -558,9 +648,11 @@
 				font-size: 14px;
 				font-weight: bold;
 				padding-top: 10px;
-				padding-botton: 10px;
+				padding-bottom: 10px;
 				padding-left: 15px;
-				padding-right: 0px;
+				padding-right: 0px;				
+				border-bottom:1px solid #ccc;
+				
 			}
 			.flex-grid-cell
 			{
@@ -576,12 +668,18 @@
 				overflow: auto;
 				background-color: white;
 			}	
-			.cell-image
+			.cell-image .ibx-label-glyph
 			{
-				background-image:url(images/vertical.png);
-				background-repeat: no-repeat;				
-				background-size: 19px 28px;
-				align: bottom;				
+				//background-image:url(images/vertical.png);
+				//background-repeat: no-repeat;				
+				//background-size: 19px 28px;
+				padding-top: 4px;
+				padding-bottom: 4px;
+				padding-left: 8px;
+				padding-right: 8px;
+				background-color:white;
+				//align: bottom;	
+				border: 1px solid #ccc;			
 			}	
 			.list-icon-col
 			{
@@ -650,18 +748,18 @@
 					</div>
 
 					<div class="files-box" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
-						<div class="content-title-bar" data-ibx-type="ibxHBox" data-ibxp-align="center">
+						<%--<div class="content-title-bar" data-ibx-type="ibxHBox" data-ibxp-align="center">
 							<div class="content-title-label" data-ibx-type="ibxLabel" data-ibxp-text="Files"></div>
 							<div class="content-title-spacer"></div>
 							<div class="content-title-btn" data-ibx-type="ibxButtonSimple" data-ibxp-text="Title" data-ibxp-icon-position="right" data-ibxp-glyph="keyboard_arrow_up" data-ibxp-glyph-classes="material-icons"></div>
 						</div>
+						--%>
 						<div class="files-box-files"  data-ibx-type="ibxHBox" data-ibxp-wrap="true">
 						
-						</div>
+						</div>						
 						
-							<div class="files-listing" data-ibx-name="tabFlexGrid" >								
-								<div class="grid-main" data-ibx-type="ibxGrid" data-ibxp-cols="30px auto auto auto auto" >
-								    
+							<div class="files-listing" data-ibx-name="tabFlexGrid" >															
+								<div class="grid-main" data-ibx-type="ibxGrid" data-ibxp-cols="30px auto auto auto auto" >								    
 								</div>
 							</div>
 							
