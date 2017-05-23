@@ -136,9 +136,9 @@
 						var glyphdiv=sformat("<div class='image-icon' data-ibx-type='ibxLabel' data-ibxp-glyph-classes=' {1} '></div>", glyphs);							
 						var divstring=sformat('<div class="file-item" <a><img class="item-image" src=" {1} "></a>', item.thumbPath);						
 						var itemname = "'" + item.name + "'";
-						divstring = divstring += sformat('<div class="image-text"> {1} {2} <div class="image-menu" 	onclick="filemenu(this,  {3} )" </div> </div></div>',
+						divstring = divstring += sformat('<div data-ibx-type="ibxHBox" data-ibxp-align="stretch"> {1} <div class="image-text" data-ibx-type="ibxLabel" data-ibxp-justify="center" data-ibxp-text="{2}"></div> <div class="image-menu" 	onclick="filemenu(this,  {3} )" </div> </div></div>',
 							glyphdiv, item.description, itemname);							
-						
+						debugger;
 						return divstring;
 					};
 					
@@ -614,35 +614,43 @@
 				width: 90%;
 				object-fit: contain;				
 			}
+			
+			.image-icon
+			{
+				height:20px;
+				width:24px;
+				float:left;
+				postion:relative;	
+				font-size: 18px;
+				margin-top: 6px;		
+			}
+				
 			.image-text
 			{
 				text-align: center;
 				font-family: 'Hind', sans-serif;
 				font-size: 14px;
-				margin-top:6px;
+				margin-top:4px;
 				height: 20px;
+				text-overflow: ellipsis;
+				overflow:hidden;
+				white-space: nowrap;					
+				flex: 1 1 auto;			
 				
 			}
 			.image-menu
 			{
 				height:20px;
-				width:18px;
+				min-width:18px;
 				float:right;
 				position:relative;
 				right:4px;
-				margin-top:0px;
+				margin-top:4px;				
 				background:url(images/vertical.png);
 				
-			}
-			.image-icon
-			{
-				height:20px;
-				width:18px;
-				float:left;
-				postion:relative;	
-				font-size: 18px;		
-			}
 				
+			}
+			
 			.flex-grid-cell-title
 			{
 				font-size: 14px;
