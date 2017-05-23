@@ -202,6 +202,7 @@ $.widget("ibi.ibxSelect", $.ibi.ibxTextField,
 		}
 		else
 		{
+			this._resetHighlight();
 			this._removeSelection(this._list.find('.ibx-select-item'), false, true, true);
 
 			if (this.options.multiSelect)
@@ -577,13 +578,8 @@ $.widget("ibi.ibxSelect", $.ibi.ibxTextField,
 	},
 	_resetHighlight: function ()
 	{
-		if (this._applyFilter())
-		{
-			this._list.find(".ibx-select-item").each(function (index, el)
-			{
-				$(el).show();
-			});
-		}
+		this._list.find(".ibx-select-item").show();
+		this._list.find(".ibx-select-group").show();
 	},
 	_setHighlight: function ()
 	{
@@ -612,34 +608,27 @@ $.widget("ibi.ibxSelect", $.ibi.ibxTextField,
 						$(el).hide();
 				}
 			}.bind(this));
-		}
-		else
-		{
+
+			// Hide empty groups when filtering
 			if (this._applyFilter())
 			{
-				this._list.find(".ibx-select-item").each(function (index, el)
+				this._list.find(".ibx-select-group").each(function (index, el)
 				{
-					$(el).show();
-				});
+					if (this._list.find(".ibx-radio-group-" + $(el).attr("id") + ":ibxFocusable").length > 0)
+						$(el).show();
+					else
+						$(el).hide();
+				}.bind(this));
 			}
 		}
+		else
+			this._resetHighlight();
 
 		if (!bFound)
 		{
 			this._setSelection(null, false, false, true, true);
 		}
 
-		// Hide empty groups when filtering
-		if (this._applyFilter())
-		{
-			this._list.find(".ibx-select-group").each(function (index, el)
-			{
-				if (this._list.find(".ibx-radio-group-" + $(el).attr("id") + ":ibxFocusable").length > 0)
-					$(el).show();
-				else
-					$(el).hide();
-			}.bind(this));
-		}
 	},
 	closePopup: function ()
 	{
