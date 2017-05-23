@@ -14,6 +14,7 @@ $.widget("ibi.ibxPopup", $.ibi.ibxWidget,
 		"destroyOnClose":true,
 		"autoFocus":true,
 		"effect":"none",
+		"closeOnTimer":-1,
 		"position":
 		{
 			/* for my/at position values see: http://api.jqueryui.com/position/ */
@@ -83,6 +84,16 @@ $.widget("ibi.ibxPopup", $.ibi.ibxWidget,
 						this.element.find(".ibx-default-focused").first().focus();//then the first default focused item specified
 					}
 					this._trigger("open");
+
+					//auto close the dialog after the specified time.
+					if(this.options.closeOnTimer >= 0)
+					{
+						window.setTimeout(function()
+						{
+							this.close();
+						}.bind(this), this.options.closeOnTimer);
+					}
+
 				}
 			}.bind(this));
 			this._trigger("popup_mgr_open", null, this.element);
