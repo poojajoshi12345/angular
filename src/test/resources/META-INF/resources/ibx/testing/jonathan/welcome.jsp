@@ -45,14 +45,24 @@
 					});
 					
 					$( document ).on( "addanitem", function(e, item)
-					{				
+					{
+						if(itemlist.length == 0)
+						{
+							var divstring = '<div class="content-title-label-files" data-ibx-type="ibxLabel" data-ibxp-text="Files"></div>';
+							$(".files-box-files").append(divstring);
+						}												
 						itemlist.push(item);
 						var divstring = itemdiv(item);											
 						$(".files-box-files").append(divstring);															
 					});	
 					
 					$( document ).on( "addafolderitem", function(e, item)
-					{				
+					{
+						if(folderlist.length == 0)
+						{
+							var divstring = '<div class="content-title-label-folders" data-ibx-type="ibxLabel" data-ibxp-text="Folders"></div>';
+							$(".folders-box-folders").append(divstring);
+						}						
 						folderlist.push(item);
 						var divstring = folderdiv(item);	
 						$(".folders-box-folders").append(divstring);															
@@ -152,10 +162,10 @@
 					function folderdiv(item)
 					{
 						
-						var glyphdiv="<div class='image-icon' data-ibx-type='ibxLabel' data-ibxp-glyph-classes='fa fa-folder'></div>";
+						var glyphdiv="<div class='folder-image-icon' data-ibx-type='ibxLabel'  data-ibxp-glyph-classes='fa fa-folder'></div>";
 						var divstring='<div class="folder-item">';						
 						var itemname = "'" + item.name + "'";
-						divstring = divstring += sformat('<div data-ibx-type="ibxHBox" data-ibxp-align="stretch"> {1} <div class="image-text" data-ibx-type="ibxLabel" data-ibxp-justify="center" data-ibxp-text="{2}"></div> <div class="image-menu" 	onclick="filemenu(this,  {3} )" </div> </div></div>',
+						divstring = divstring += sformat('<div data-ibx-type="ibxHBox" data-ibxp-align="stretch"> {1} <div class="image-text" data-ibx-type="ibxLabel" data-ibxp-justify="center" data-ibxp-text="{2}"></div> <div class="image-menu" 	onclick="foldermenu(this,  {3} )" </div> </div></div>',
 							glyphdiv, item.description, itemname);	
 						return divstring;
 					}
@@ -210,6 +220,21 @@
 							}	
 						}				
 					};
+					function openfolder(item)
+					{						
+						clearitems(item);
+						rootItem._refresh(item);
+						
+					};
+					function deletefolder(item)
+					{
+					};
+					function changefoldertitle(item)
+					{
+					};
+					function refreshfolder(item)
+					{
+					};
 					
 					$(".files-listing").hide();
 					$(".tree-showcollapse-button").hide();
@@ -217,6 +242,7 @@
 					$(".btn-how-view").on("click", function(e)
 					{
 						$(".files-listing").toggle();
+						$(".folders-box-folders").toggle();
 						$(".files-box-files").toggle();
 						var isVisible = $('.files-box-files').is(':visible');
 						if (isVisible)
@@ -298,8 +324,48 @@
 						}
 						
 						$(".edit-menu").ibxContextMenu("open").position(options);
-					});		
-				
+					});	
+						
+					$( document ).on( "showfoldermenu", function(e, ibfsitem, contextitem)
+					{					
+						var options = 
+						{
+						my:"left top",
+						at:"left bottom",
+						of:contextitem
+						}
+						var initialized = $(".folder-menu").data("initialized");
+						$(".folder-menu").data('ibxWidget').fomenuitemopen.data("ibfsitem",ibfsitem);
+						$(".folder-menu").data('ibxWidget').fomenuitemdelete.data("ibfsitem",ibfsitem);	
+						$(".folder-menu").data('ibxWidget').fomenuitemchangetitle.data("ibfsitem",ibfsitem);
+						$(".folder-menu").data('ibxWidget').fomenuitemrefresh.data("ibfsitem",ibfsitem);
+						if(!initialized)
+						{				
+							$(".folder-menu").data('ibxWidget').fomenuitemopen.on("ibx_menu_item_click",function(e)
+							{
+								var ibfsitem = $(e.target).data("ibfsitem");
+								openfolder(ibfsitem);
+							});									
+							$(".folder-menu").data('ibxWidget').fomenuitemdelete.on("ibx_menu_item_click",function(e)
+							{
+								var ibfsitem = $(e.target).data("ibfsitem");
+								deletefolder(ibfsitem);							
+							});
+							$(".folder-menu").data('ibxWidget').fomenuitemchangetitle.on("ibx_menu_item_click",function(e)
+							{
+								var ibfsitem = $(e.target).data("ibfsitem");
+								changefoldertitle(ibfsitem);							
+							});
+							$(".folder-menu").data('ibxWidget').fomenuitemrefresh.on("ibx_menu_item_click",function(e)
+							{
+								var ibfsitem = $(e.target).data("ibfsitem");
+								refreshfolder(ibfsitem);							
+							});
+							$(".folder-menu").data("initialized",true);
+						}
+						
+						$(".folder-menu").ibxContextMenu("open").position(options);
+					});	
 						
 					newitemsbox(newitemsboxsmall);
 			}, true);
@@ -320,7 +386,22 @@
 							}
 						}	
 					};
-				
+				function foldermenu(contextitem, name)
+					{
+						ilen=folderlist.length;						
+						
+						//find the name in folderlist...
+						for (i=0; i<ilen; i++)
+						{
+							ibfsitem=folderlist[i];
+							if(ibfsitem.name == name)	
+							{					
+								
+								$(document).trigger( "showfoldermenu", [ ibfsitem, contextitem] );
+								break;
+							}
+						}	
+					};
 				
 				function newIA(tool)
 				{
@@ -382,22 +463,9 @@
 				
 				function newitemsbox(small)				
 				{
-					if(small)
-					{
+					// The 'create new' box...
+					var buttonlist=[];
 					var buttons = [
-						["Folder", "fa fa-folder", "", "yellow"],
-						["Data Set","fa fa-upload", "", "green"],
-						["Chart","ibx-icons ibx-glyph-fex-chart", "newIA(\"chart\")", "purple"],
-						["Report","ibx-icons ibx-glyph-fex", "newIA(\"report\")", "purple"],
-						["Page","ibx-icons ibx-glyph-page","newPage2()", "teel"],
-						["Portal","ibx-icons ibx-glyph-portal","", "teel"],
-						["Alert","fa fa-bell","newIA(\"alert\")", "red"],
-						["More","fa fa-ellipsis-h", "morebuttons()","black"]
-					];
-										}
-					else
-					{
-						var buttons = [
 						["Folder", "fa fa-folder", "", "yellow"],
 						["Data Set","fa fa-upload", "", "green"],
 						["Connect","fa fa-database", "","green"],
@@ -412,16 +480,22 @@
 						["Text Editor","fa fa-pencil-square-o","newEditor()", "teel"],
 						["URL","fa fa-external-link-square","","teel"],
 						["Shortcut", "fa fa-link","","teel"],
-						["Less","fa fa-ellipsis-h", "lessbuttons()","black"]
-					];
+						["Less","fa fa-ellipsis-h", "lessbuttons()","black"],
+						["More","fa fa-ellipsis-h", "morebuttons()","black"]
+					];					
+					if(small)
+						buttonlist=[0,1,3,5,8,9,10,15];
+					else
+						buttonlist=[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14];
 				
-					}
+					
 					$(".create-new-items-box").empty();
 					
-					var ilen = buttons.length;
+					var ilen = buttonlist.length;
 					for (i=0; i<ilen; i++)
 					{
-						divtext=createnewitembutton(buttons[i][0], buttons[i][1], buttons[i][2], buttons[i][3]);
+						var k=buttonlist[i];
+						divtext=createnewitembutton(buttons[k][0], buttons[k][1], buttons[k][2], buttons[k][3]);
 						$(".create-new-items-box").append(divtext);
 					}
 					ibx.bindElements(".create-new-items-box");		
@@ -749,7 +823,32 @@
 			{
 				font-size: 25px;		
 				
-			}						
+			}
+			.ibx-menu-item-label
+			{
+				font-size: 14px;
+				margin-top: 2px;
+				margin-bottom:2px;
+			}	
+			.folder-image-icon
+			{			
+				height:20px;
+				width:24px;
+				float:left;
+				postion:relative;	
+				font-size: 18px;
+				margin-top: 6px;			
+				color: rgb(250, 215, 50);
+			}
+			.content-title-label-folders, .content-title-label-files
+			{
+				font-size: 14px;
+				width:100%;
+				margin-top: 5px;
+				margin-bottom: 5px;
+				margin-left: 4px;
+			}
+							
 	}
 	</style>
 	</head>
@@ -758,6 +857,13 @@
 			<div data-ibx-type="ibxMenuItem" data-ibx-name="mimenuitemrun" data-ibxp-text="Run/View" data-ibxp-glyph="content_cut" data-ibxp-glyph-classes="material-icons"></div>
 			<div data-ibx-type="ibxMenuSeparator"></div>
 			<div data-ibx-type="ibxMenuItem" data-ibx-name="mimenuitemedit" data-ibxp-text="Edit" data-ibxp-glyph="content_copy" data-ibxp-glyph-classes="material-icons"></div>
+		</div>
+		<div class="folder-menu" data-ibx-name-root="true" data-ibx-type="ibxContextMenu" data-ibxp-destroy-on-close="false">
+			<div data-ibx-type="ibxMenuItem" data-ibx-name="fomenuitemopen" data-ibxp-text="Open" data-ibxp-glyph="content_cut" data-ibxp-glyph-classes="material-icons"></div>
+			<div data-ibx-type="ibxMenuSeparator"></div>
+			<div data-ibx-type="ibxMenuItem" data-ibx-name="fomenuitemdelete" data-ibxp-text="Delete" data-ibxp-glyph="content_copy" data-ibxp-glyph-classes="material-icons"></div>
+	        <div data-ibx-type="ibxMenuItem" data-ibx-name="fomenuitemchangetitle" data-ibxp-text="Change Title" data-ibxp-glyph="content_copy" data-ibxp-glyph-classes="material-icons"></div>
+	        <div data-ibx-type="ibxMenuItem" data-ibx-name="fomenuitemrefresh" data-ibxp-text="Refresh" data-ibxp-glyph="content_copy" data-ibxp-glyph-classes="material-icons"></div>		
 		</div>
 		<div class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
 			<div class="title-bar" data-ibx-type="ibxHBox" data-ibxp-align="center">
@@ -805,9 +911,10 @@
 						</div>
 					--%>
 						<div class="folders-box-folders" data-ibx-type="ibxHBox" data-ibxp-wrap="true">
+							
 						</div>	
 						<div class="files-box-files"  data-ibx-type="ibxHBox" data-ibxp-wrap="true">
-						
+							
 						</div>						
 						
 							<div class="files-listing" data-ibx-name="tabFlexGrid" >															
