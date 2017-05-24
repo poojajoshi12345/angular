@@ -48,7 +48,7 @@
     					$('.ibfs-tree').hide();
     					$('.tree-button-box').hide(); 
     					$('.create-new-items-box').hide();    					
-						$(".create-new-box").css("height",newitemsheight[2]);	
+						$(".create-new-box").hide();	
 						$(".content-title-btn").hide();
 						$(".content-title-btn2").hide();  					
   					} 
@@ -56,7 +56,8 @@
   					{
 						 $('.ibfs-tree').show();
 						 $('.tree-button-box').show(); 
-						 $('.create-new-items-box').show(); 
+						 $('.create-new-items-box').show();
+						 $(".create-new-box").show(); 
 						 $(".content-title-btn").show();
 						 $(".content-title-btn2").hide();   
     				}
@@ -65,7 +66,7 @@
     						$('.ibfs-tree').hide();
     						$('.tree-button-box').hide();
     						$('.create-new-items-box').hide(); 
-    						$(".create-new-box").css("height",newitemsheight[2]);	
+    						$(".create-new-box").hide();	
     						$(".content-title-btn").hide();
 						 	$(".content-title-btn2").hide();          
   						} 
@@ -75,6 +76,7 @@
 							$('.tree-button-box').show();
 							$('.create-new-items-box').show();  
 							var size=(newitemsboxsmall)?newitemsheight[0]:newitemsheight[1];
+							$(".create-new-box").show();
 							$(".create-new-box").css("height",size);
 							$(".content-title-btn").show();
 						 	$(".content-title-btn2").hide();   	     
@@ -109,11 +111,11 @@
 					{											
 						ibx.bindElements(".files-box-files");
 						ibx.bindElements(".folders-box-folders");	
+						// build the list view....
 						boxItems="";	
 						ilen=itemlist.length;
 						var titleadd="<div class='flex-grid-cell-title' data-ibx-col='1'></div><div class='flex-grid-cell-title' data-ibx-col='2'>Title</div><div class='flex-grid-cell-title' data-ibx-col='3'>Summary</div><div class='flex-grid-cell-title' data-ibx-col='4'>Last Modified Date</div><div class='flex-grid-cell-title' data-ibx-col='5'></div>";
-						$(".grid-main").empty();
-						
+						$(".grid-main").empty();						
 						$(".grid-main").append(titleadd);									
 												
 						if(ilen > 0)
