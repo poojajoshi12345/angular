@@ -44,24 +44,30 @@
 						$(".ibfs-tree").append(rootItem.getElement());			
 					});
 					
-					if ($(this).width() < 1025) {
+					if ($(this).width() < 1100) {
     					$('.ibfs-tree').hide();
     					$('.tree-button-box').hide(); 
     					$('.create-new-items-box').hide();    					
-						$(".create-new-box").css("height",newitemsheight[2]);	  					
+						$(".create-new-box").css("height",newitemsheight[2]);	
+						$(".content-title-btn").hide();
+						$(".content-title-btn2").hide();  					
   					} 
   					else 
   					{
 						 $('.ibfs-tree').show();
 						 $('.tree-button-box').show(); 
-						 $('.create-new-items-box').show();    
+						 $('.create-new-items-box').show(); 
+						 $(".content-title-btn").show();
+						 $(".content-title-btn2").hide();   
     				}
     				$(window).resize(function() {
-						if ($(this).width() < 1025) {
+						if ($(this).width() < 1100) {
     						$('.ibfs-tree').hide();
     						$('.tree-button-box').hide();
     						$('.create-new-items-box').hide(); 
-    						$(".create-new-box").css("height",newitemsheight[2]);	       
+    						$(".create-new-box").css("height",newitemsheight[2]);	
+    						$(".content-title-btn").hide();
+						 	$(".content-title-btn2").hide();          
   						} 
   						else 
   						{
@@ -69,7 +75,9 @@
 							$('.tree-button-box').show();
 							$('.create-new-items-box').show();  
 							var size=(newitemsboxsmall)?newitemsheight[0]:newitemsheight[1];
-							$(".create-new-box").css("height",size);	     
+							$(".create-new-box").css("height",size);
+							$(".content-title-btn").show();
+						 	$(".content-title-btn2").hide();   	     
     					}
 					});
 					
@@ -614,7 +622,8 @@
 			{
 				flex:0 0 auto;
 				height: 141px;
-				width: 1200px;
+				//width: 1200px;
+				width: 100%;
 				//border-bottom:1px solid #ccc;
 			}
 			.content-title-bar
@@ -922,8 +931,8 @@
 			 			<div class="content-title-bar" data-ibx-type="ibxHBox" data-ibxp-align="center">
 							<div class="content-title-label" data-ibx-type="ibxLabel" data-ibxp-text="Create New"></div>
 							<div class="content-title-spacer"></div>
-							<div class="content-title-btn" data-ibx-type="ibxButtonSimple" data-ibxp-glyph="keyboard_arrow_up" data-ibxp-glyph-classes="material-icons"></div>
-							<div class="content-title-btn2" data-ibx-type="ibxButtonSimple" data-ibxp-glyph="keyboard_arrow_down" data-ibxp-glyph-classes="material-icons"></div>
+							<div class="content-title-btn" data-ibx-type="ibxButtonSimple"  data-ibxp-glyph="keyboard_arrow_up" data-ibxp-glyph-classes="material-icons"></div>
+							<div class="content-title-btn2" data-ibx-type="ibxButtonSimple"  data-ibxp-glyph="keyboard_arrow_down" data-ibxp-glyph-classes="material-icons"></div>
 						</div>
 						
 						<div class="create-new-items-box" data-ibx-type="ibxHBox" data-ibxp-align="center" data-ibxp-wrap="true">
