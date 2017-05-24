@@ -23,7 +23,7 @@
 			var itemlist=[];
 			var folderlist=[];
 			var currentPath='';
-			var currentItem=null;
+			
 			var newitemsboxsmall=true;
 			var rootItem=null;
 			var newitemsheight=["141px","282px","30px"];
@@ -147,38 +147,60 @@
 					
 					$( document ).on( "clearitems", function(e, item)
 					{   
-						clearitems(item);
+						clearitems(item.fullPath);
 					});
 					
-					function clearitems(item)
+					function clearitems(fullPath)
 					{	
 						$(".files-box-files").empty();
 						$(".folders-box-folders").empty();
 						$(".grid-main").empty();	
 						itemlist=[];
 						folderlist=[];
-						currentItem = item;
+						
 						// set the breadcrumb
-						currentPath=item.fullPath;
+						currentPath=fullPath;
 						var pathitems=currentPath.split("/");
 						$(".crumb-box").empty();
 						var ilen=pathitems.length;
 						var start = 0;
+						var xpath = "";
+						
 						for(i=0; i<ilen;i++)
-						{							
+						{														
 							var itemx = pathitems[i];
+							xpath += itemx ;
+							if(i < ilen-1)xpath+="/";							
 							if(start > 0)
 							{
+								var crumbitem=crumbbutton(xpath,itemx);
 								var carat = ' ';
-								if(start > 1)carat = ' > ';							
-								start++;	
-								var divstring = '<div class="crumb-item">' + carat + itemx + ' </div>';								
-								$(".crumb-box").append(divstring);								
+								if(start > 1)carat = '&nbsp;>&nbsp;';							
+								start++;								
+								$(".crumb-box").append(carat);
+								$(".crumb-box").append(crumbitem);
+																
 							}
 							else 
 								if(itemx == "WFC")start=1;
 						}									
 					};
+					
+					function crumbbutton(path, text)
+					{						
+						var crumbitem = $("<div>").ibxLabel({"text":text}).data("ibfsPath", path).addClass("crumb-button");
+						
+						$(crumbitem).on("click", function(e)
+						{
+							
+							var path = $(this).data("ibfsPath");
+							clearitems(path);
+							rootItem._refresh(path);
+							
+						});	
+						return crumbitem;
+					};					
+					
 					// file item boxes	
 					function itemdiv(item)
 					{
@@ -195,6 +217,7 @@
 						
 						return divstring;
 					};
+					
 					// folder item boxes
 					function folderdiv(item)
 					{
@@ -258,9 +281,10 @@
 						}				
 					};
 					function openfolder(item)
-					{						
-						clearitems(item);
-						rootItem._refresh(item);
+					{					
+						var path=item.fullPath;	
+						clearitems(path);
+						rootItem._refresh(path);
 						
 					};
 					function deletefolder(item)
@@ -327,10 +351,10 @@
 					});
 					$(".btn-refresh").on("click", function(e)
 					{
-						if(currentItem)
+						if(currentPath != "")
 						{
-							clearitems(currentItem);
-							rootItem._refresh(currentItem);
+							clearitems(currentPath);
+							rootItem._refresh(currentPath);
 						}
 					});
 										
