@@ -331,10 +331,79 @@ $.ibi.ibxRadioMenuItem.statics =
 };
 
 /******************************************************************************
-	IbxMenuSeparator
+	jibxMenuSeparator
 	Just a utility widget for handling a menu separator...really just sets the class on the div.
 ******************************************************************************/
 $.widget("ibi.ibxMenuSeparator", $.ibi.ibxWidget,{options:{},_widgetClass: "ibx-menu-separator",});
+
+/******************************************************************************
+	ibxMenuBar
+	Simple derivation of ibxHBox...really just for readability
+******************************************************************************/
+$.widget("ibi.ibxMenuBar", $.ibi.ibxHBox, {options:{}, _widgetClass:"ibx-menu-bar"});
+
+/******************************************************************************
+	ibxMenuButton
+	Let's you define a button that will show a menu
+******************************************************************************/
+$.widget("ibi.ibxMenuButton", $.ibi.ibxButtonSimple,
+{
+	options:
+	{
+		"position":
+		{
+			/* for my/at position values see: http://api.jqueryui.com/position/ */
+			"my":"left top",
+			"at":"left bottom",
+			"of":null,
+			"collision":"flip",
+			"using":null,
+			"within":null,
+		},
+
+		"optionsMap":
+		{
+			"posMy":"position.my",
+			"posAt":"position.at",
+			"posOf":"position.of",
+			"posCollision":"position.collision",
+			"posUsing":"position.using",
+			"posWithin":"position.within"
+		}		
+	},
+	_widgetClass: "ibx-menu-button",
+	_create:function()
+	{
+		this._super();
+		this.options.position.of = this.element[0];
+		this.element.on("click", this._onClick.bind(this));
+		this.menu(this.element.children(".ibx-menu"));
+	},
+	_onClick:function(e)
+	{
+		if(this._menu)
+			this._menu.ibxWidget("open");
+	},
+	_menu:null,
+	menu:function(menu)
+	{
+		if(!menu)
+			return this._menu;
+		else
+			this._menu = menu;
+	},
+	refresh:function()
+	{
+		this._super();
+		var options = this.options;
+		if(this._menu)
+			this._menu.ibxWidget("option", {destroOnClose:false,position:options.position});
+	}
+});
+
+$.widget("ibi.ibxMenuButtonSeparator", $.ibi.ibxWidget,{options:{},_widgetClass: "ibx-menu-button-separator",});
+
+
 
 //# sourceURL=menu.ibx.js
 

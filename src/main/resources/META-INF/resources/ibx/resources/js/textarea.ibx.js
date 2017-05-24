@@ -6,8 +6,6 @@ $.widget("ibi.ibxTextArea", $.ibi.ibxFlexBox,
 		{
 			"text": "",
 			"readonly": "",
-			"cols": "",
-			"rows": "",
 			"maxLength": "",
 			"placeholder": "",
 			"required": "",
@@ -18,15 +16,15 @@ $.widget("ibi.ibxTextArea", $.ibi.ibxFlexBox,
 
 			/*ibxFlexBox default options*/
 			"inline": true,
-			"wrap": "false",
-			"align": "center",
+			"wrap": false,
+			"align": "stretch",
 		},
 	_widgetClass: "ibx-text-area",
 	_valueOnFocus: null,
 	_create: function ()
 	{
 		this._super();
-		this._textInput = $('<textarea class="ibx-default-ctrl-focus"></textarea>');
+		this._textInput = $('<textarea class="ibx-default-ctrl-focus"></textarea>').css("flex", "1 1 auto");
 		this.element.append(this._textInput);
 		this._textInput.on("blur", this._onBlur.bind(this)).on("focus", this._onFocus.bind(this)).on("input", this._onInput.bind(this)).on("keydown", this._onKeyDown.bind(this));
 		this._setValue(this.options.text, true);
@@ -60,16 +58,7 @@ $.widget("ibi.ibxTextArea", $.ibi.ibxFlexBox,
 	},
 	_onKeyDown: function (e)
 	{
-		if (e.which == 13) // enter
-		{
-			this._setValue(this._textInput.val(), true);
-			this._trigger("action", e, this.element);
-			e.preventDefault();
-		}
-		else
-		{
-			this._trigger("textchanging", e, this.element);
-		}
+		this._trigger("textchanging", e, this.element);
 	},
 	_onInput: function (e)
 	{
@@ -108,26 +97,6 @@ $.widget("ibi.ibxTextArea", $.ibi.ibxFlexBox,
 			this._textInput.attr("readonly");
 		else
 			this._textInput.removeAttr("readonly");
-		if (this.options.cols)
-		{
-			this._textInput.css("width", "");
-			this._textInput.attr("cols", this.options.cols);
-		}
-		else
-		{
-			this._textInput.css("width", "100%");
-			this._textInput.removeAttr("cols");
-		}
-		if (this.options.rows)
-		{
-			this._textInput.css("height", "");
-			this._textInput.attr("rows", this.options.rows);
-		}
-		else
-		{
-			this._textInput.css("height", "100%");
-			this._textInput.removeAttr("rows");
-		}
 		if (this.options.maxLength)
 			this._textInput.attr("maxlength", this.options.maxLength);
 		else

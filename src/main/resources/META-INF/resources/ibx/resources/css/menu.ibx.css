@@ -99,3 +99,16 @@
 	/*content:"\e5cc"; chevron right*/
 	content:"\e037";/*play arrow*/
 }
+
+/***********************************MENU BAR/BUTTON CLASSES***********************************/
+.ibx-menu-bar
+{
+}
+			
+.ibx-menu-bar .ibx-menu-button
+{
+	padding:3px;
+	margin-right:3px;
+}
+
+
