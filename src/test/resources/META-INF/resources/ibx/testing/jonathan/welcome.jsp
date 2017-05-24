@@ -21,6 +21,7 @@
 		
 		<script type="text/javascript">
 			var itemlist=[];
+			var folderlist=[];
 			var currentPath='';
 			var currentItem=null;
 			var newitemsboxsmall=true;
@@ -46,16 +47,21 @@
 					$( document ).on( "addanitem", function(e, item)
 					{				
 						itemlist.push(item);
-						var divstring = itemdiv(item);	
-						//boxItems+=divstring;					
+						var divstring = itemdiv(item);											
 						$(".files-box-files").append(divstring);															
 					});	
 					
+					$( document ).on( "addafolderitem", function(e, item)
+					{				
+						folderlist.push(item);
+						var divstring = folderdiv(item);	
+						$(".folders-box-folders").append(divstring);															
+					});	
+					
 					$(document).on("doneadding", function(e)
-					{
-						
-						//$(".files-box-files").append(boxItems);						
-						ibx.bindElements(".files-box-files");	
+					{											
+						ibx.bindElements(".files-box-files");
+						ibx.bindElements(".folders-box-folders");	
 						boxItems="";	
 						ilen=itemlist.length;
 						var titleadd="<div class='flex-grid-cell-title' data-ibx-col='1'></div><div class='flex-grid-cell-title' data-ibx-col='2'>Title</div><div class='flex-grid-cell-title' data-ibx-col='3'>Summary</div><div class='flex-grid-cell-title' data-ibx-col='4'>Last Modified Date</div><div class='flex-grid-cell-title' data-ibx-col='5'></div>";
@@ -99,11 +105,11 @@
 					
 					function clearitems(item)
 					{	
-						
-
 						$(".files-box-files").empty();
+						$(".folders-box-folders").empty();
 						$(".grid-main").empty();	
 						itemlist=[];
+						folderlist=[];
 						currentItem = item;
 						// set the breadcrumb
 						currentPath=item.fullPath;
@@ -125,7 +131,8 @@
 							else 
 								if(itemx == "WFC")start=1;
 						}									
-					};	
+					};
+					// file item boxes	
 					function itemdiv(item)
 					{
 						var glyphs = "ibx-icons ibx-glyph-file-unknown";	
@@ -138,9 +145,20 @@
 						var itemname = "'" + item.name + "'";
 						divstring = divstring += sformat('<div data-ibx-type="ibxHBox" data-ibxp-align="stretch"> {1} <div class="image-text" data-ibx-type="ibxLabel" data-ibxp-justify="center" data-ibxp-text="{2}"></div> <div class="image-menu" 	onclick="filemenu(this,  {3} )" </div> </div></div>',
 							glyphdiv, item.description, itemname);							
-						debugger;
+						
 						return divstring;
 					};
+					// folder item boxes
+					function folderdiv(item)
+					{
+						
+						var glyphdiv="<div class='image-icon' data-ibx-type='ibxLabel' data-ibxp-glyph-classes='fa fa-folder'></div>";
+						var divstring='<div class="folder-item">';						
+						var itemname = "'" + item.name + "'";
+						divstring = divstring += sformat('<div data-ibx-type="ibxHBox" data-ibxp-align="stretch"> {1} <div class="image-text" data-ibx-type="ibxLabel" data-ibxp-justify="center" data-ibxp-text="{2}"></div> <div class="image-menu" 	onclick="filemenu(this,  {3} )" </div> </div></div>',
+							glyphdiv, item.description, itemname);	
+						return divstring;
+					}
 					
 					function runIt(item)
 					{
@@ -202,9 +220,15 @@
 						$(".files-box-files").toggle();
 						var isVisible = $('.files-box-files').is(':visible');
 						if (isVisible)
+						{
 							$(".files-box").css("background-color","#e4f1f9");
+							//$(".content-title-bar").show();
+						}	
 						else
+						{
 							$(".files-box").css("background-color","white");
+							//$(".content-title-bar").hide();
+						}	
 					});
 					
 					$(".content-title-btn2").hide();
@@ -600,6 +624,12 @@
 				overflow:auto;
 				background-color:#e4f1f9;
 			}
+			.folders-box-folders
+			{
+				padding:4px;
+				overflow:auto;
+				background-color:#e4f1f9;
+			}
 			.file-item
 			{
 				width:220px;
@@ -608,6 +638,15 @@
 				background-color:white;
 				border-bottom:2px solid #ccc;
 			}
+			.folder-item
+			{
+				width:220px;
+				height:42px;
+				margin:4px;
+				background-color:white;
+				border-bottom:2px solid #ccc;
+			}
+			
 			.item-image
 			{
 				height: 80%;
@@ -744,24 +783,29 @@
 				</div>								
 				<div class="content-box" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
 					<div class="create-new-box" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
-						<div class="content-title-bar" data-ibx-type="ibxHBox" data-ibxp-align="center">
+					
+			 			<div class="content-title-bar" data-ibx-type="ibxHBox" data-ibxp-align="center">
 							<div class="content-title-label" data-ibx-type="ibxLabel" data-ibxp-text="Create New"></div>
 							<div class="content-title-spacer"></div>
 							<div class="content-title-btn" data-ibx-type="ibxButtonSimple" data-ibxp-glyph="keyboard_arrow_up" data-ibxp-glyph-classes="material-icons"></div>
 							<div class="content-title-btn2" data-ibx-type="ibxButtonSimple" data-ibxp-glyph="keyboard_arrow_down" data-ibxp-glyph-classes="material-icons"></div>
 						</div>
+						
 						<div class="create-new-items-box" data-ibx-type="ibxHBox" data-ibxp-align="center" data-ibxp-wrap="true">
 							
 						</div>						
 					</div>
 
 					<div class="files-box" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
-						<%--<div class="content-title-bar" data-ibx-type="ibxHBox" data-ibxp-align="center">
+					<%--
+						<div class="content-title-bar" data-ibx-type="ibxHBox" data-ibxp-align="center">
 							<div class="content-title-label" data-ibx-type="ibxLabel" data-ibxp-text="Files"></div>
 							<div class="content-title-spacer"></div>
 							<div class="content-title-btn" data-ibx-type="ibxButtonSimple" data-ibxp-text="Title" data-ibxp-icon-position="right" data-ibxp-glyph="keyboard_arrow_up" data-ibxp-glyph-classes="material-icons"></div>
 						</div>
-						--%>
+					--%>
+						<div class="folders-box-folders" data-ibx-type="ibxHBox" data-ibxp-wrap="true">
+						</div>	
 						<div class="files-box-files"  data-ibx-type="ibxHBox" data-ibxp-wrap="true">
 						
 						</div>						

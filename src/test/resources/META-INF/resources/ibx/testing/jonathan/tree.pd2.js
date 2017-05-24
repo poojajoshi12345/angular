@@ -92,6 +92,7 @@ _p._refresh = function (item)
 					if(item.container)
 					{	
 						//this._children.append(ibfsItem.getElement());
+						$(document).trigger( "addafolderitem", item );
 					}	
 					else
 					{							
@@ -134,7 +135,8 @@ _p.expand = function (expand)
 				{
 					var ibfsItem = new IbfsItem(item, this._ibfs, this._padding + (item.container ? IbfsItem.folderPadding : IbfsItem.filePadding));
 					if(item.container)
-					{	
+					{
+						$(document).trigger( "addafolderitem", item );
 						this._children.append(ibfsItem.getElement());
 					}	
 					else
