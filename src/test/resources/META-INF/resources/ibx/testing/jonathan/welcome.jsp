@@ -112,40 +112,59 @@
 						ibx.bindElements(".files-box-files");
 						ibx.bindElements(".folders-box-folders");	
 						// build the list view....
-						boxItems="";	
-						ilen=itemlist.length;
+						
 						var titleadd="<div class='flex-grid-cell-title' data-ibx-col='1'></div><div class='flex-grid-cell-title' data-ibx-col='2'>Title</div><div class='flex-grid-cell-title' data-ibx-col='3'>Summary</div><div class='flex-grid-cell-title' data-ibx-col='4'>Last Modified Date</div><div class='flex-grid-cell-title' data-ibx-col='5'></div>";
 						$(".grid-main").empty();						
-						$(".grid-main").append(titleadd);									
-												
+						$(".grid-main").append(titleadd);
+						var ilen=folderlist.length;
+						var glyph="fa fa-folder";
+						var i=0;
+						debugger;
+						if(ilen > 0)
+						{
+							for (i=0; i < ilen; i++)
+							{								
+								var ibfsitem=folderlist[i];							
+								addgriditem(ibfsitem, glyph, false);												
+							}
+						}
+						ilen=itemlist.length;						
 						if(ilen > 0)
 						{
 							
 							for (i=0; i<ilen; i++)
 							{								
 								var ibfsitem=itemlist[i];
-								var glyphs = "ibx-icons ibx-glyph-file-unknown";	
+								var glyph = "ibx-icons ibx-glyph-file-unknown";	
 								if(ibfsitem.clientInfo.typeInfo)
 								{	
-									glyphs = ibfsitem.clientInfo.typeInfo.glyphClasses
+									glyph = ibfsitem.clientInfo.typeInfo.glyphClasses
 								}
-								var d = new Date(ibfsitem.dateLastModified);
-								var ddate = d.toLocaleDateString() + "  " + d.toLocaleTimeString();
-								var s = (ibfsitem.summary)? ibfsitem.summary : "None";
-								var toadd="<div class='flex-grid-cell list-icon-col' data-ibx-col='1' ><div data-ibx-type='ibxLabel' data-ibxp-glyph-classes='"
-									+ glyphs + "'></div></div>";								
-								toadd +="<div class='flex-grid-cell' data-ibx-col='2'>" + ibfsitem.description + "</div>";
-								toadd += "<div class='flex-grid-cell' data-ibx-col='3'>" + s +" </div>";								
-								toadd += "<div class='flex-grid-cell' data-ibx-col='4'>" + ddate + "</div>";
-								toadd += "<div class='flex-grid-cell cell-image' data-ibxp-glyph-classes='fa fa-ellipsis-v' data-ibx-type='ibxLabel' data-ibx-col='5' onclick='filemenu(this, \"" +  ibfsitem.name + "\");'></div>";							
-								
-								$(".grid-main").append(toadd);		
-								ibx.bindElements(".grid-main");
-												
+								addgriditem(ibfsitem, glyph, false);											
 							}
 						}	
 												
 					});
+					function addgriditem(ibfsitem,glyph, folder)
+					{
+							var d = new Date(ibfsitem.dateLastModified);
+							var ddate = d.toLocaleDateString() + "  " + d.toLocaleTimeString();
+							var s = (ibfsitem.summary)? ibfsitem.summary : "None";
+							var toadd="<div class='flex-grid-cell list-icon-col' data-ibx-col='1' ><div data-ibx-type='ibxLabel' data-ibxp-glyph-classes='"
+								+ glyph + "'></div></div>";								
+							toadd +="<div class='flex-grid-cell' data-ibx-col='2'>" + ibfsitem.description + "</div>";
+							toadd += "<div class='flex-grid-cell' data-ibx-col='3'>" + s +" </div>";								
+							toadd += "<div class='flex-grid-cell' data-ibx-col='4'>" + ddate + "</div>";
+							toadd += "<div class='flex-grid-cell cell-image' data-ibxp-glyph-classes='fa fa-ellipsis-v' data-ibx-type='ibxLabel' data-ibx-col='5' onclick=";
+							if(folder)
+								toadd +="'foldermenu(this, \"" +  ibfsitem.name + "\");'></div>";
+							else
+								toadd +="'filemenu(this, \"" +  ibfsitem.name + "\");'></div>";							
+								
+							$(".grid-main").append(toadd);		
+							ibx.bindElements(".grid-main");					
+					};
+					
 					
 					$( document ).on( "clearitems", function(e, item)
 					{   
