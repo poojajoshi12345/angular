@@ -24,6 +24,10 @@ $.widget("ibi.ibxGridStack", $.ibi.ibxWidget,
 		this.element.addClass("grid-stack");
 		this.element.css('min-height', this.options.minHeight + "px");
 		this._super();
+		// Stop bubbling of jquery ui events "resize", "drag", "drop"
+		this.element.on('resize', function (event) { event.stopPropagation(); });
+		this.element.on('drag', function (event) { event.stopPropagation(); });
+		this.element.on('drop', function (event) { event.stopPropagation(); });
 	},
 	addCell: function (cell, x, y, width, height)
 	{
