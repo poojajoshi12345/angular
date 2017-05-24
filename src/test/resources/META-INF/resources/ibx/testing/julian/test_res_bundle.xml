@@ -16,6 +16,8 @@
 
 	<markup>
 		<markup-block>
+			<div data-ibx-type="mkTextEditor">
+			</div>
 		</markup-block>
 	</markup>
 
