@@ -31,8 +31,8 @@
 			
 			<jsp:include page="/WEB-INF/jsp/global/wf_globals.jsp" flush="false" />
 			ibx(function()
-			{
-				
+			{		
+					
 					var loaded = Ibfs.load("<%=request.getContextPath()%>", WFGlobals.ses_auth_parm, WFGlobals.ses_auth_val);
 					loaded.done(function(ibfs)
 					{
@@ -42,6 +42,35 @@
 							path = "IBFS:/WFC/Repository/"+path;						
 						rootItem = new IbfsRootItem(ibfs,path);
 						$(".ibfs-tree").append(rootItem.getElement());			
+					});
+					
+					if ($(this).width() < 1025) {
+    					$('.ibfs-tree').hide();
+    					$('.tree-button-box').hide(); 
+    					$('.create-new-items-box').hide();    					
+						$(".create-new-box").css("height",newitemsheight[2]);	  					
+  					} 
+  					else 
+  					{
+						 $('.ibfs-tree').show();
+						 $('.tree-button-box').show(); 
+						 $('.create-new-items-box').show();    
+    				}
+    				$(window).resize(function() {
+						if ($(this).width() < 1025) {
+    						$('.ibfs-tree').hide();
+    						$('.tree-button-box').hide();
+    						$('.create-new-items-box').hide(); 
+    						$(".create-new-box").css("height",newitemsheight[2]);	       
+  						} 
+  						else 
+  						{
+							$('.ibfs-tree').show();
+							$('.tree-button-box').show();
+							$('.create-new-items-box').show();  
+							var size=(newitemsboxsmall)?newitemsheight[0]:newitemsheight[1];
+							$(".create-new-box").css("height",size);	     
+    					}
 					});
 					
 					$( document ).on( "addanitem", function(e, item)
