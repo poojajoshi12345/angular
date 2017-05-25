@@ -29,17 +29,16 @@ $.widget("ibi.ibxAccordionPane", $.ibi.ibxFlexBox,
 	},
 	add:function(el, sibling, before, refresh)
 	{
-		this._super(el, sibling, before, false);
-
 		el = $(el);
-		el.filter(".ibx-accordion-page").each(function(idx, el)
+		el.filter(".ibx-accordion-page").each(function (idx, el)
 		{
 			el = $(el);
 			var groupName = this._group.ibxWidget("option", "name");
 			el.ibxAccordionPage("option", "groupName", groupName);
 			this._group.ibxRadioGroup("addControl", el);
 		}.bind(this));
-		this.refresh();
+
+		this._super(el, sibling, before, false);
 	},
 	remove:function(el, refresh)
 	{
@@ -135,7 +134,7 @@ $.widget("ibi.ibxAccordionPage", $.ibi.ibxFlexBox,
 
 		this.element.on("keydown", this._onPageKeyEvent.bind(this));
 		this.element.on("focus", this._onPageFocus.bind(this));
-		var content = this._content = $("<div class='ibx-accordion-page-content'>").ibxWidget(this.options.contentOptions);
+		var content = this._content = $("<div class='ibx-accordion-page-content'>").ibxWidget(this.options.contentOptions).css('max-height', '0px');
 		var btn = this._button = $("<div tabIndex='0' class='ibx-accordion-page-button'>").on("click", this._onBtnChange.bind(this));
 		btn.data("accPage", this.element).ibxButton(this.options.btnOptions).addClass("ibx-accordion-button");
 		this.element.append(btn, content)
@@ -244,8 +243,9 @@ $.widget("ibi.ibxAccordionPage", $.ibi.ibxFlexBox,
 		/****
 			Figure out the desired height of the content so we can apply the max-height property which triggers the transition animation.
 			WE ONLY DO THIS WHEN HEIGHT IS NOT 0 AS 0 WILL NOT CAUSE THE ANIMATION TO BE TRIGGERED AND THE MAX-HEIGHT WILL NOT BE REMOVED.
+			In create we set max-height to 0 to force the initial transition.
 		****/
-		var nHeight = this._content.prop("scrollHeight") 
+		var nHeight = this._content.prop("scrollHeight");
 		if(nHeight != 0)
 		{
 			this._content.css("max-height", nHeight + "px"); 
