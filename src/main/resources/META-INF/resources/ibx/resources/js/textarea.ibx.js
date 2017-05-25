@@ -7,6 +7,10 @@ $.widget("ibi.ibxTextArea", $.ibi.ibxFlexBox,
 			"text": "",
 			"readonly": "",
 			"maxLength": "",
+			"autoComplete": "off",
+			"autoCorrect": "off",
+			"autoCapitalize": "off",
+			"spellCheck": "off",
 			"placeholder": "",
 			"required": "",
 			"wrap": "",
@@ -117,6 +121,11 @@ $.widget("ibi.ibxTextArea", $.ibi.ibxFlexBox,
 			this._textInput.css("text-align", this.options.textAlign);
 		else
 			this._textInput.css("text-align", "");
+
+		this._textInput.attr("autocomplete", this.options.autoComplete);
+		this._textInput.attr("autocorrect", this.options.autoCorrect);
+		this._textInput.attr("autocapitalize", this.options.autoCapitalize);
+		this._textInput.attr("spellcheck", this.options.spellCheck != "off" ? "true" : "false");
 	}
 });
 //# sourceURL=textarea.ibx.js
