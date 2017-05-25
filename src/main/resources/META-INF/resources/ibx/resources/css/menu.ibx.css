@@ -101,14 +101,18 @@
 }
 
 /***********************************MENU BAR/BUTTON CLASSES***********************************/
-.ibx-menu-bar
+.ibx-hmenu-bar, .ibx-vmenu-bar
 {
 }
 			
-.ibx-menu-bar .ibx-menu-button
+.ibx-hmenu-bar .ibx-menu-button
 {
-	padding:3px;
-	margin-right:3px;
+	padding:5px;
 }
 
+.ibx-hmenu-bar .ibx-menu-button-separator
+{
+	margin:2px;
+	border-left:1px solid #ccc;
+}
 

@@ -340,7 +340,7 @@ $.widget("ibi.ibxMenuSeparator", $.ibi.ibxWidget,{options:{},_widgetClass: "ibx-
 	ibxMenuBar
 	Simple derivation of ibxHBox...really just for readability
 ******************************************************************************/
-$.widget("ibi.ibxMenuBar", $.ibi.ibxHBox, {options:{}, _widgetClass:"ibx-menu-bar"});
+$.widget("ibi.ibxHMenuBar", $.ibi.ibxHBox, {options:{align:"stretch"}, _widgetClass:"ibx-hmenu-bar"});
 
 /******************************************************************************
 	ibxMenuButton
@@ -376,7 +376,7 @@ $.widget("ibi.ibxMenuButton", $.ibi.ibxButtonSimple,
 	{
 		this._super();
 		this.options.position.of = this.element[0];
-		this.element.on("click", this._onClick.bind(this));
+		this.element.prop("tabIndex", 0).on("click", this._onClick.bind(this));
 		this.menu(this.element.children(".ibx-menu"));
 	},
 	_onClick:function(e)
