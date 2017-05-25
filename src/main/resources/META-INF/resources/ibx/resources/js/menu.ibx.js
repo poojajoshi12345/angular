@@ -338,9 +338,11 @@ $.widget("ibi.ibxMenuSeparator", $.ibi.ibxWidget,{options:{},_widgetClass: "ibx-
 
 /******************************************************************************
 	ibxMenuBar
-	Simple derivation of ibxHBox...really just for readability
+	Simple derivation of ibxHBox/ibxVBox...really just for readability
 ******************************************************************************/
-$.widget("ibi.ibxHMenuBar", $.ibi.ibxHBox, {options:{align:"stretch"}, _widgetClass:"ibx-hmenu-bar"});
+$.widget("ibi.ibxMenuBar", $.ibi.ibxHBox, {options:{align:"stretch"}, _widgetClass:"ibx-hmenu-bar"});
+$.widget("ibi.ibxHMenuBar", $.ibi.ibxMenuBar, {options:{}, _widgetClass:"ibx-hmenu-bar"});
+$.widget("ibi.ibxVMenuBar", $.ibi.ibxMenuBar, {options:{direction:"column"}, _widgetClass:"ibx-vmenu-bar"});
 
 /******************************************************************************
 	ibxMenuButton

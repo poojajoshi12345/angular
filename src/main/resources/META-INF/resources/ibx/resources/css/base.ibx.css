@@ -2,16 +2,16 @@
 /* $Revision$: */
 
 /* Rules for sizing the icon. */
-.material-icons.md-9 .ibx-icons.ibx-9 { font-size: 9px; }
-.material-icons.md-10, .ibx-icons.ibx-10 { font-size: 10px; }
-.material-icons.md-11, .ibx-icons.ibx-11 { font-size: 11px; }
-.material-icons.md-12, .ibx-icons.ibx-12 { font-size: 12px; }
-.material-icons.md-14, .ibx-icons.ibx-14 { font-size: 14px; }
-.material-icons.md-18, .ibx-icons.ibx-18 { font-size: 18px; }
-.material-icons.md-24, .ibx-icons.ibx-24 { font-size: 24px; }
-.material-icons.md-36, .ibx-icons.ibx-36 { font-size: 36px; }
-.material-icons.md-48, .ibx-icons.ibx-48 { font-size: 48px; }
-.material-icons.md-64, .ibx-icons.ibx-64 { font-size: 64px; }
+.material-icons.md-9,	.fa.fa-9,	.ibx-icons.ibx-9	{ font-size: 9px; }
+.material-icons.md-10,	.fa.fa-10,	.ibx-icons.ibx-10	{ font-size: 10px; }
+.material-icons.md-11,	.fa.fa-11,	.ibx-icons.ibx-11	{ font-size: 11px; }
+.material-icons.md-12,	.fa.fa-12,	.ibx-icons.ibx-12	{ font-size: 12px; }
+.material-icons.md-14,	.fa.fa-14,	.ibx-icons.ibx-14	{ font-size: 14px; }
+.material-icons.md-18,	.fa.fa-18,	.ibx-icons.ibx-18	{ font-size: 18px; }
+.material-icons.md-24,	.fa.fa-24,	.ibx-icons.ibx-24	{ font-size: 24px; }
+.material-icons.md-36,	.fa.fa-36,	.ibx-icons.ibx-36	{ font-size: 36px; }
+.material-icons.md-48,	.fa.fa-48,	.ibx-icons.ibx-48	{ font-size: 48px; }
+.material-icons.md-64,	.fa.fa-64,	.ibx-icons.ibx-64	{ font-size: 64px; }
 
 /* Rules for using icons as black on a light background. */
 .material-icons.md-dark, .ibx-icons.ibx-dark { color: rgba(0, 0, 0, 0.54); }
