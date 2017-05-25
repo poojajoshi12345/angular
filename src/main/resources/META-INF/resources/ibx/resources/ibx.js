@@ -79,9 +79,6 @@ function ibx()
 
 			if(window.$)
 			{
-				//save the current inline head style block so they can be moved after all ibx loaded css files.
-				var inlineStyles = $("head > style").detach();
-
 				//jquery is loaded...stop polling and continue bootstrapping ibx...
 				window.clearInterval(ibx._loadTimer);
 
@@ -92,6 +89,9 @@ function ibx()
 				var url = ibx._path + "./js/resources.ibx.js";
 				$.get(url).then(function()
 				{
+					//save the current inline head style blocks so they can be moved after all ibx loaded css files.
+					var inlineStyles = $("head > style").detach();
+
 					ibxResourceMgr.setContextPath(ibx._path);
 					var packages = ibx._loadPromise._resPackages;
 					packages.unshift(ibx._path + "./ibx_resource_bundle.xml");
