@@ -38,7 +38,18 @@ $.widget("ibi.ibxButton", $.ibi.ibxLabel,
 		this._super();
 	}
 });
-$.widget("ibi.ibxButtonSimple", $.ibi.ibxButton, {options:{}, _widgetClass:"ibx-button-simple"});
+
+//just a simple button...essentially a label with some event handling.
+$.widget("ibi.ibxButtonSimple", $.ibi.ibxButton,
+{
+	options:{},
+	_widgetClass:"ibx-button-simple",
+	_create:function()
+	{
+		this._super();
+		this.element.removeClass("ibx-button");
+	}
+});
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
