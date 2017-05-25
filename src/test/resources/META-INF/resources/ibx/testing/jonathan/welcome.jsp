@@ -28,6 +28,7 @@
 			var rootItem=null;
 			var newitemsheight=["141px","282px","30px"];
 			var boxItems='';
+			var newitemsshown=true;
 			
 			<jsp:include page="/WEB-INF/jsp/global/wf_globals.jsp" flush="false" />
 			ibx(function()
@@ -45,88 +46,117 @@
 					});
 					
 					if ($(this).width() < 1100) {
-    					$('.ibfs-tree').hide();
+						hideitems();										
+  					}  					
+    				$(window).resize(function() {
+						if ($(this).width() < 1100) {						
+							hideitems();						        
+  						} 
+  						else 
+  						{
+  							showitems();  							  
+    					}
+					});
+					
+					// hide tree and new items box
+					function hideitems()
+					{
+						$('.ibfs-tree').hide();
     					$('.tree-button-box').hide(); 
     					$('.create-new-items-box').hide();    					
 						$(".create-new-box").hide();	
 						$(".content-title-btn").hide();
-						$(".content-title-btn2").hide();  					
-  					} 
-  					else 
-  					{
-						 $('.ibfs-tree').show();
-						 $('.tree-button-box').show(); 
-						 $('.create-new-items-box').show();
-						 $(".create-new-box").show(); 
-						 $(".content-title-btn").show();
-						 $(".content-title-btn2").hide();   
-    				}
-    				$(window).resize(function() {
-						if ($(this).width() < 1100) {
-    						$('.ibfs-tree').hide();
-    						$('.tree-button-box').hide();
-    						$('.create-new-items-box').hide(); 
-    						$(".create-new-box").hide();	
-    						$(".content-title-btn").hide();
-						 	$(".content-title-btn2").hide();          
-  						} 
-  						else 
-  						{
-							$('.ibfs-tree').show();
-							$('.tree-button-box').show();
-							$('.create-new-items-box').show();  
+						$(".content-title-btn2").hide();		
+							
+					};
+					// show tree and new items box
+					function showitems()
+					{
+						$('.ibfs-tree').show();
+						$('.tree-button-box').show();						
+						$(".create-new-box").show();						
+						if(newitemsshown)
+						{									
+							$('.create-new-items-box').show();					
+							
 							var size=(newitemsboxsmall)?newitemsheight[0]:newitemsheight[1];
-							$(".create-new-box").show();
 							$(".create-new-box").css("height",size);
-							$(".content-title-btn").show();
-						 	$(".content-title-btn2").hide();   	     
-    					}
-					});
+							
+						}	
+						$(".content-title-btn").show();
+						$(".content-title-btn2").hide();   
+					};
 					
 					$( document ).on( "addanitem", function(e, item)
-					{
-						if(itemlist.length == 0)
-						{
-							var divstring = '<div class="content-title-label-files" data-ibx-type="ibxLabel" data-ibxp-text="Files"></div>';
-							$(".files-box-files").append(divstring);
-						}												
-						itemlist.push(item);
-						var divstring = itemdiv(item);											
-						$(".files-box-files").append(divstring);															
+					{																	
+						itemlist.push(item);																					
 					});	
 					
 					$( document ).on( "addafolderitem", function(e, item)
-					{
-						if(folderlist.length == 0)
-						{
-							var divstring = '<div class="content-title-label-folders" data-ibx-type="ibxLabel" data-ibxp-text="Folders"></div>';
-							$(".folders-box-folders").append(divstring);
-						}						
-						folderlist.push(item);
-						var divstring = folderdiv(item);	
-						$(".folders-box-folders").append(divstring);															
+					{										
+						folderlist.push(item);																				
 					});	
 					
 					$(document).on("doneadding", function(e)
-					{											
+					{					
+						// build the image view...
+						var ilen=folderlist.length;
+						if(ilen > 0)
+						{
+							var divstring = '<div class="content-title-label-folders" data-ibx-type="ibxLabel" data-ibxp-text="Folders"></div>';
+							//$(".folders-box-folders").append(divstring);
+							$(".files-box-files").append(divstring);
+							for (i=0; i < ilen; i++)
+							{								
+								var ibfsitem=folderlist[i];														
+								divstring = folderdiv(ibfsitem);	
+								//$(".folders-box-folders").append(divstring);
+								$(".files-box-files").append(divstring);																
+							}
+							//ibx.bindElements(".folders-box-folders");	
+						}
+						
+						ilen=itemlist.length;
+											
+						if(ilen > 0)
+						{
+							var divstring = '<div class="content-title-label-files" data-ibx-type="ibxLabel" data-ibxp-text="Files"></div>';
+							$(".files-box-files").append(divstring);							
+							for (i=0; i<ilen; i++)
+							{								
+								var ibfsitem=itemlist[i];
+								var glyph = "ibx-icons ibx-glyph-file-unknown";	
+								if(ibfsitem.clientInfo.typeInfo)
+								{	
+									glyph = ibfsitem.clientInfo.typeInfo.glyphClasses
+								}
+								divstring = itemdiv(ibfsitem);
+																			
+								$(".files-box-files").append(divstring);																			
+							}							
+							//ibx.bindElements(".files-box-files");
+						}						
+											
 						ibx.bindElements(".files-box-files");
-						ibx.bindElements(".folders-box-folders");	
+													
 						// build the list view....
 						
 						var titleadd="<div class='flex-grid-cell-title' data-ibx-col='1'></div><div class='flex-grid-cell-title' data-ibx-col='2'>Title</div><div class='flex-grid-cell-title' data-ibx-col='3'>Summary</div><div class='flex-grid-cell-title' data-ibx-col='4'>Last Modified Date</div><div class='flex-grid-cell-title' data-ibx-col='5'></div>";
 						$(".grid-main").empty();						
 						$(".grid-main").append(titleadd);
-						var ilen=folderlist.length;
+						ilen=folderlist.length;
 						var glyph="fa fa-folder";
 						var i=0;
-						debugger;
+						
 						if(ilen > 0)
 						{
 							for (i=0; i < ilen; i++)
 							{								
-								var ibfsitem=folderlist[i];							
-								addgriditem(ibfsitem, glyph, false);												
-							}
+								var ibfsitem=folderlist[i];
+								if(ibfsitem.description == "SKO 2017")
+									debugger;							
+								addgriditem(ibfsitem, glyph, true);												
+							}							
 						}
 						ilen=itemlist.length;						
 						if(ilen > 0)
@@ -142,17 +172,20 @@
 								}
 								addgriditem(ibfsitem, glyph, false);											
 							}
-						}	
-												
+						}
+						
+						ibx.bindElements(".grid-main");	
+											
 					});
-					function addgriditem(ibfsitem,glyph, folder)
+					function addgriditem(ibfsitem, glyph, folder)
 					{
 							var d = new Date(ibfsitem.dateLastModified);
 							var ddate = d.toLocaleDateString() + "  " + d.toLocaleTimeString();
 							var s = (ibfsitem.summary)? ibfsitem.summary : "None";
-							var toadd="<div class='flex-grid-cell list-icon-col' data-ibx-col='1' ><div data-ibx-type='ibxLabel' data-ibxp-glyph-classes='"
-								+ glyph + "'></div></div>";								
-							toadd +="<div class='flex-grid-cell' data-ibx-col='2'>" + ibfsitem.description + "</div>";
+							var c = (folder)? " list-folder-icon ": "";
+							var toadd = sformat("<div class='flex-grid-cell list-icon-col {1} ' data-ibx-col='1' ><div data-ibx-type='ibxLabel' data-ibxp-glyph-classes='	{2} '></div></div>", c, glyph);			
+							toadd += sformat("<div class='flex-grid-cell' data-ibx-col='2'> {1} </div>", ibfsitem.description);
+							//toadd +="<div class='flex-grid-cell' data-ibx-col='2'>" + ibfsitem.description + "</div>";
 							toadd += "<div class='flex-grid-cell' data-ibx-col='3'>" + s +" </div>";								
 							toadd += "<div class='flex-grid-cell' data-ibx-col='4'>" + ddate + "</div>";
 							toadd += "<div class='flex-grid-cell cell-image' data-ibxp-glyph-classes='fa fa-ellipsis-v' data-ibx-type='ibxLabel' data-ibx-col='5' onclick=";
@@ -162,7 +195,7 @@
 								toadd +="'filemenu(this, \"" +  ibfsitem.name + "\");'></div>";							
 								
 							$(".grid-main").append(toadd);		
-							ibx.bindElements(".grid-main");					
+							//ibx.bindElements(".grid-main");					
 					};
 					
 					
@@ -172,12 +205,13 @@
 					});
 					
 					function clearitems(fullPath)
-					{	
+					{
 						$(".files-box-files").empty();
 						$(".folders-box-folders").empty();
-						$(".grid-main").empty();	
-						itemlist=[];
-						folderlist=[];
+						$(".grid-main").empty();
+						itemlist.length=0;
+						folderlist.length=0;	
+						
 						
 						// set the breadcrumb
 						currentPath=fullPath;
@@ -246,7 +280,7 @@
 						var glyphdiv="<div class='folder-image-icon' data-ibx-type='ibxLabel'  data-ibxp-glyph-classes='fa fa-folder'></div>";
 						var divstring='<div class="folder-item">';						
 						var itemname = "'" + item.name + "'";
-						divstring = divstring += sformat('<div data-ibx-type="ibxHBox" data-ibxp-align="stretch"> {1} <div class="image-text" data-ibx-type="ibxLabel" data-ibxp-justify="center" data-ibxp-text="{2}"></div> <div class="image-menu" 	onclick="foldermenu(this,  {3} )" </div> </div></div>',
+						divstring = divstring += sformat('<div data-ibx-type="ibxHBox" data-ibxp-align="stretch" class="folder-div"> {1} <div class="image-text" data-ibx-type="ibxLabel" data-ibxp-justify="center" data-ibxp-text="{2}"></div> <div class="image-menu" 	onclick="foldermenu(this,  {3} )" </div> </div></div>',
 							glyphdiv, item.description, itemname);	
 						return divstring;
 					}
@@ -343,19 +377,22 @@
 					
 					$(".content-title-btn").on("click", function(e)
 					{
-						$(".create-new-items-box").toggle();
+						//$(".create-new-items-box").toggle();
+						$(".create-new-items-box").hide();
 						$(".create-new-box").css("height",newitemsheight[2]);
 						$(".content-title-btn").hide();
-						$(".content-title-btn2").show();	
+						$(".content-title-btn2").show();
+						newitemsshown=false;		
 					});	
 					$(".content-title-btn2").on("click", function(e)
 					{
-						$(".create-new-items-box").toggle();
+						$(".create-new-items-box").show();
 						$(".content-title-btn2").hide();
 						$(".content-title-btn").show();					
 					
 						var size=(newitemsboxsmall)?newitemsheight[0]:newitemsheight[1];
-						$(".create-new-box").css("height",size);								
+						$(".create-new-box").css("height",size);
+						newitemsshown=true;								
 					});
 					
 					$(".tree-collapse-button").on("click", function(e)
@@ -831,7 +868,8 @@
 				text-overflow: ellipsis;
 				overflow:hidden;
 				white-space: nowrap;					
-				flex: 1 1 auto;			
+				flex: 1 1 auto;	
+				margin-left:4px;		
 				
 			}
 			.image-menu
@@ -843,6 +881,7 @@
 				right:4px;
 				margin-top:4px;				
 				background:url(images/vertical.png);
+				margin-right:4px;
 				
 				
 			}
@@ -891,7 +930,7 @@
 			}
 			.tree-button-box
 			{
-				width:25px;
+				width:20px;
 			}
 			.tree-button-spacer
 			{
@@ -899,12 +938,15 @@
 			}
 			.tree-collapse-button 
 			{
-				font-size: 25px;		
+				font-size: 20px;
+				border:1px solid #ccc;								
 				
 			}		
 			.tree-showcollapse-button
 			{
-				font-size: 25px;		
+				font-size: 20px;
+				border:1px solid #ccc;
+						
 				
 			}
 			.ibx-menu-item-label
@@ -922,6 +964,11 @@
 				font-size: 18px;
 				margin-top: 6px;			
 				color: rgb(250, 215, 50);
+				margin-left: 4px;
+			}
+			.list-folder-icon
+			{
+				color: rgb(250, 215, 50);
 			}
 			.content-title-label-folders, .content-title-label-files
 			{
@@ -930,6 +977,10 @@
 				margin-top: 5px;
 				margin-bottom: 5px;
 				margin-left: 4px;
+			}
+			.folder-div
+			{
+				margin-top: 4px;
 			}
 							
 	}
@@ -993,10 +1044,12 @@
 							<div class="content-title-btn" data-ibx-type="ibxButtonSimple" data-ibxp-text="Title" data-ibxp-icon-position="right" data-ibxp-glyph="keyboard_arrow_up" data-ibxp-glyph-classes="material-icons"></div>
 						</div>
 					--%>
-						<div class="folders-box-folders" data-ibx-type="ibxHBox" data-ibxp-wrap="true">
+					<%--
+						<div class="folders-box-folders" data-ibx-type="ibxHBox" data-ibxp-wrap="true" data-ibxp-align="center">
 							
-						</div>	
-						<div class="files-box-files"  data-ibx-type="ibxHBox" data-ibxp-wrap="true">
+						</div>
+					--%>		
+						<div class="files-box-files"  data-ibx-type="ibxHBox" data-ibxp-wrap="true" >
 							
 						</div>						
 						
