@@ -29,6 +29,8 @@
 			var newitemsheight=["141px","282px","30px"];
 			var boxItems='';
 			var newitemsshown=true;
+			var sortedvalue="description";
+			var sortedorder="up";
 			
 			<jsp:include page="/WEB-INF/jsp/global/wf_globals.jsp" flush="false" />
 			ibx(function()
@@ -98,8 +100,18 @@
 					});	
 					
 					$(document).on("doneadding", function(e)
-					{					
+					{
+						buildviews();
+					});
+					
+					function buildviews()
+					{
+							
+						$(".files-box-files").empty();
+						$(".folders-box-folders").empty();
+						$(".grid-main").empty();				
 						// build the image view...
+						// folders						
 						var ilen=folderlist.length;
 						if(ilen > 0)
 						{
@@ -114,10 +126,9 @@
 								$(".files-box-files").append(divstring);																
 							}
 							//ibx.bindElements(".folders-box-folders");	
-						}
-						
-						ilen=itemlist.length;
-											
+						}	
+						// files					
+						ilen=itemlist.length;											
 						if(ilen > 0)
 						{
 							var divstring = '<div class="content-title-label-files" data-ibx-type="ibxLabel" data-ibxp-text="Files"></div>';
@@ -133,17 +144,43 @@
 								divstring = itemdiv(ibfsitem);
 																			
 								$(".files-box-files").append(divstring);																			
-							}							
-							//ibx.bindElements(".files-box-files");
+							}						
+							
 						}						
 											
 						ibx.bindElements(".files-box-files");
 													
 						// build the list view....
 						
-						var titleadd="<div class='flex-grid-cell-title' data-ibx-col='1'></div><div class='flex-grid-cell-title' data-ibx-col='2'>Title</div><div class='flex-grid-cell-title' data-ibx-col='3'>Summary</div><div class='flex-grid-cell-title' data-ibx-col='4'>Last Modified Date</div><div class='flex-grid-cell-title' data-ibx-col='5'></div>";
+						var glyphdescription="";
+						var glyphdate="";
+						if(sortedvalue=="description")
+						{
+							glyphdescription="keyboard_arrow_up";
+							if(sortedorder=="up")glyphdescription="keyboard_arrow_down";
+						}
+						else if(sortedvalue=="dateLastModified")
+						{
+							glyphdate="keyboard_arrow_up";
+							if(sortedorder=="up")glyphdate="keyboard_arrow_down";
+						}	 
+						var titleadd="<div class='flex-grid-cell-title ' data-ibx-col='1'></div>";
+						titleadd+="<div class='flex-grid-cell-title' data-ibx-col='2' ";
+						titleadd+="onclick='sortitems(\"description\")' ";
+						titleadd+="class='flex-grid-cell-title' data-ibxp-icon-position='right' data-ibxp-glyph='";
+						titleadd+=glyphdescription + "' data-ibxp-glyph-classes='material-icons' data-ibx-type='ibxLabel' ";
+						titleadd+="data-ibxp-text='Title'></div>";
+						titleadd+="<div class='flex-grid-cell-title' data-ibx-col='3'>Summary</div>";
+						titleadd+="<div class='flex-grid-cell-title' data-ibx-col='4' onclick='sortitems(\"dateLastModified\")'";
+						
+						titleadd+="class='flex-grid-cell-title' data-ibxp-icon-position='right' data-ibxp-glyph='";
+						titleadd+=glyphdate + "' data-ibxp-glyph-classes='material-icons' data-ibx-type='ibxLabel' ";
+						titleadd+="data-ibxp-text='Last Modified Date'></div>";			
+						
+						titleadd+="<div class='flex-grid-cell-title' data-ibx-col='5'></div>";
 						$(".grid-main").empty();						
 						$(".grid-main").append(titleadd);
+						
 						ilen=folderlist.length;
 						var glyph="fa fa-folder";
 						var i=0;
@@ -153,8 +190,8 @@
 							for (i=0; i < ilen; i++)
 							{								
 								var ibfsitem=folderlist[i];
-								if(ibfsitem.description == "SKO 2017")
-									debugger;							
+								//if(ibfsitem.description == "SKO 2017")
+								//	debugger;							
 								addgriditem(ibfsitem, glyph, true);												
 							}							
 						}
@@ -176,42 +213,38 @@
 						
 						ibx.bindElements(".grid-main");	
 											
-					});
+					};
+					
 					function addgriditem(ibfsitem, glyph, folder)
 					{
 							var d = new Date(ibfsitem.dateLastModified);
 							var ddate = d.toLocaleDateString() + "  " + d.toLocaleTimeString();
-							var s = (ibfsitem.summary)? ibfsitem.summary : "None";
+							var summary = (ibfsitem.summary)? ibfsitem.summary : "None";
 							var c = (folder)? " list-folder-icon ": "";
+							var xfunction = (folder)? "foldermenu" : "filemenu";
+							
 							var toadd = sformat("<div class='flex-grid-cell list-icon-col {1} ' data-ibx-col='1' ><div data-ibx-type='ibxLabel' data-ibxp-glyph-classes='	{2} '></div></div>", c, glyph);			
-							toadd += sformat("<div class='flex-grid-cell' data-ibx-col='2'> {1} </div>", ibfsitem.description);
-							//toadd +="<div class='flex-grid-cell' data-ibx-col='2'>" + ibfsitem.description + "</div>";
-							toadd += "<div class='flex-grid-cell' data-ibx-col='3'>" + s +" </div>";								
-							toadd += "<div class='flex-grid-cell' data-ibx-col='4'>" + ddate + "</div>";
-							toadd += "<div class='flex-grid-cell cell-image' data-ibxp-glyph-classes='fa fa-ellipsis-v' data-ibx-type='ibxLabel' data-ibx-col='5' onclick=";
-							if(folder)
-								toadd +="'foldermenu(this, \"" +  ibfsitem.name + "\");'></div>";
-							else
-								toadd +="'filemenu(this, \"" +  ibfsitem.name + "\");'></div>";							
-								
-							$(".grid-main").append(toadd);		
-							//ibx.bindElements(".grid-main");					
+							toadd += sformat("<div class='flex-grid-cell' data-ibx-col='2'> {1} </div>", ibfsitem.description);	
+							toadd += sformat("<div class='flex-grid-cell' data-ibx-col='3'> {1} </div>", summary);
+							toadd += sformat("<div class='flex-grid-cell' data-ibx-col='4'> {1} </div>", ddate);
+							toadd += sformat("<div class='flex-grid-cell cell-image' data-ibxp-glyph-classes='fa fa-ellipsis-v' data-ibx-type='ibxLabel' data-ibx-col='5' onclick= ' {1} (this, \"{2}\");'></div>",
+								xfunction, ibfsitem.name);								
+							$(".grid-main").append(toadd);												
 					};
-					
-					
+										
 					$( document ).on( "clearitems", function(e, item)
 					{   
 						clearitems(item.fullPath);
 					});
 					
+					// clear all items and buld breadcrumb...
 					function clearitems(fullPath)
 					{
 						$(".files-box-files").empty();
 						$(".folders-box-folders").empty();
 						$(".grid-main").empty();
 						itemlist.length=0;
-						folderlist.length=0;	
-						
+						folderlist.length=0;						
 						
 						// set the breadcrumb
 						currentPath=fullPath;
@@ -246,12 +279,10 @@
 						var crumbitem = $("<div>").ibxLabel({"text":text}).data("ibfsPath", path).addClass("crumb-button");
 						
 						$(crumbitem).on("click", function(e)
-						{
-							
+						{							
 							var path = $(this).data("ibfsPath");
 							clearitems(path);
-							rootItem._refresh(path);
-							
+							rootItem._refresh(path);							
 						});	
 						return crumbitem;
 					};					
@@ -275,8 +306,7 @@
 					
 					// folder item boxes
 					function folderdiv(item)
-					{
-						
+					{						
 						var glyphdiv="<div class='folder-image-icon' data-ibx-type='ibxLabel'  data-ibxp-glyph-classes='fa fa-folder'></div>";
 						var divstring='<div class="folder-item">';						
 						var itemname = "'" + item.name + "'";
@@ -285,6 +315,8 @@
 						return divstring;
 					}
 					
+					
+					// run an item
 					function runIt(item)
 					{
 						// check the type						
@@ -305,7 +337,8 @@
 								encodeURIComponent(item.parentPath), encodeURIComponent(item.name));
 						}									
 						window.open(uriExec);		
-					};						
+					};
+					// edit an item						
 					function editIt(item)
 					{					
 						var toolProperties=item.clientInfo.properties.tool;						
@@ -579,6 +612,76 @@
 					newitemsboxsmall=true;
 					newitemsbox(newitemsboxsmall);
 				};
+				// sort all items
+				function sortitems(key)
+					{						
+					  if(itemlist.length > 0)
+					  {	
+					  	$(".flex-grid-cell-title-description").ibxWidget("option", "glyph", "keyboard_arrow_up");
+					  	
+						if(key == sortedvalue && sortedorder == "down")
+						{
+							// sort up...	
+							if(key=="description")
+							{								
+								itemlist.sort(function(a, b) 
+								{								
+									var nameA = a.description; 
+									nameA=nameA.toLowerCase();
+									var nameB = b.description;
+									nameB=nameB.toLowerCase();									
+									if (nameA < nameB)return -1;									
+  									if (nameA > nameB)return 1;  																			
+									return 0;
+								});
+							}
+							else if(key=="dateLastModified")
+							{
+								itemlist.sort(function(a, b) 
+								{								
+									var nameA = a.dateLastModified; 
+									var nameB = b.dateLastModified; 
+									if (nameA < nameB)return -1;
+									if (nameA > nameB)return 1;  																		
+									return 0;
+								});							
+							}
+							sortedorder = "up";
+						}
+						else
+						{
+							// sort down....								
+							if(key=="description")
+							{								
+								itemlist.sort(function(a, b) 
+								{								
+									var nameA = a.description; 
+									nameA=nameA.toLowerCase();
+									var nameB = b.description;
+									nameB=nameB.toLowerCase();										
+									if (nameA < nameB)return 1;									
+  									if (nameA > nameB)return -1;  																			
+									return 0;
+								});
+							}
+							else if(key=="dateLastModified")
+							{
+								itemlist.sort(function(a, b) 
+								{								
+									var nameA = a.dateLastModified; 
+									var nameB = b.dateLastModified; 
+									if (nameA < nameB)return 1;
+									if (nameA > nameB)return -1;  																		
+									return 0;
+								});							
+							}
+							sortedorder = "down";
+							sortedvalue = key;							
+						}
+						$(document).trigger("doneadding");	
+					  }										
+					};
+					
 				
 				function newitemsbox(small)				
 				{
@@ -656,7 +759,7 @@
 			{
 				margin-left:2em;
 				color:white;
-				font-size:1.5em;
+				font-size:1.8em;
 			}
 			.toolbar
 			{
@@ -667,6 +770,7 @@
 			}
 			.crumb-box
 			{
+				font-size: 14px;
 			}
 			.toolbar-spacer
 			{
