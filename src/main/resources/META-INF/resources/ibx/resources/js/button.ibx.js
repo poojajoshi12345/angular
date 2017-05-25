@@ -170,11 +170,6 @@ $.widget("ibi.ibxCheckBox", $.ibi.ibxLabel,
 	{
 		this._super();
 		this._check.addClass(this.options.checkElClass);
-		if (this.options.checkPosition == "left")
-			this._check.css("order", -2);
-		else
-			this._check.css("order", "");
-
 		if (this.options.hideCheck)
 			this._check.hide();
 		else
@@ -202,11 +197,30 @@ $.widget("ibi.ibxCheckBox", $.ibi.ibxLabel,
 });
 $.widget("ibi.ibxCheckBoxSimple", $.ibi.ibxCheckBox,
 {
+	options:
+	{
+		showMarker: false,
+	},
 	_widgetClass: "ibx-check-box-simple",
+	_create: function ()
+	{
+		this._super();
+		this._startMarker = $("<div class='ibx-check-box-simple-marker'>");
+		this.add(this._startMarker, this.children()[0], true);
+	},
 	refresh: function()
 	{
 		this._super();
+
+		if (this.options.showMarker)
+			this._startMarker.show();
+		else
+			this._startMarker.hide();
+
 		this.element.removeClass("checked ibx-check-box");
+
+		this._startMarker.removeClass("ibx-check-box-simple-marker-check ibx-check-box-simple-marker-uncheck");
+		this._startMarker.addClass(this.options.checked ? "ibx-check-box-simple-marker-check" : "ibx-check-box-simple-marker-uncheck");
 	}
 });
 
@@ -225,6 +239,36 @@ $.widget("ibi.ibxRadioButton", $.ibi.ibxCheckBox,
 	refresh: function ()
 	{
 		this._super();
+	}
+});
+
+$.widget("ibi.ibxRadioButtonSimple", $.ibi.ibxRadioButton,
+{
+	options:
+	{
+		showMarker: false,
+		startMarkerClass: "ibx-radio-button-simple-marker",
+	},
+	_widgetClass: "ibx-radio-button-simple",
+	_create: function ()
+	{
+		this._super();
+		this._startMarker = $("<div class='ibx-radio-button-simple-marker'>");
+		this.add(this._startMarker, this.children()[0], true);
+	},
+	refresh: function ()
+	{
+		this._super();
+
+		if (this.options.showMarker)
+			this._startMarker.show();
+		else
+			this._startMarker.hide();
+
+		this.element.removeClass("checked ibx-check-box ibx-radio-button");
+
+		this._startMarker.removeClass("ibx-radio-button-simple-marker-check ibx-radio-button-simple-marker-uncheck");
+		this._startMarker.addClass(this.options.checked ? "ibx-radio-button-simple-marker-check" : "ibx-radio-button-simple-marker-uncheck");
 	}
 });
 

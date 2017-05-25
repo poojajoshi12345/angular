@@ -51,11 +51,7 @@
 }
 .ibx-label.icon-right
 {
-	flex-direction:row;
-}
-.ibx-label.icon-right > .ibx-label-text
-{
-	order:-1;
+	flex-direction:row-reverse;
 }
 .ibx-label.icon-bottom
 {
