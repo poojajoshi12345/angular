@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ibx-res-bundle name="home_bundle.xml">
+	<res-bundles>
+	</res-bundles>
+	
+	<strings>
+		<string-bundle>
+			<![CDATA[
+			]]>
+		</string-bundle>
+	</strings>
+
+	<styles>
+		<style-sheet>
+			<![CDATA[
+				.test-notify-popup-content
+				{
+					padding:10px;
+				}
+				.test-notify-popup.ibx-popup.pop-effect-fade, .test-notify-popup.ibx-popup.pop-effect-fade.pop-closed
+				{
+					transition:opacity 1s, visibility 1s;
+				}
+			]]>
+		</style-sheet>
+	</styles>
+
+	<markup>
+		<markup-block>
+			<div class="content-title-label-files" data-ibx-type="ibxLabel" data-ibxp-text="Files" ></div>
+			<div class="content-title-label-folders" data-ibx-type="ibxLabel" data-ibxp-text="Folders" ></div>			
+		</markup-block>
+	</markup>
+
+	<scripts>
+		<script-block name="popups_script_block">
+			<![CDATA[
+				//# sourceURL=popups_bundle_script
+			]]>
+		</script-block>
+	</scripts>
+</ibx-res-bundle>
