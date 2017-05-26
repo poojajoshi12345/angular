@@ -51,9 +51,17 @@
 }
 .ibx-label.icon-right
 {
-	flex-direction:row-reverse;
+	flex-direction:row;
+}
+.ibx-label.icon-right > .ibx-label-text
+{
+	order:-1;
 }
 .ibx-label.icon-bottom
 {
-	flex-direction:column-reverse;
+	flex-direction:column;
+}
+.ibx-label.icon-bottom > .ibx-label-text
+{
+	order: -1;
 }
