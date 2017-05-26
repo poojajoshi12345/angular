@@ -331,14 +331,14 @@ $.ibi.ibxRadioMenuItem.statics =
 };
 
 /******************************************************************************
-	jibxMenuSeparator
+	ibxMenuSeparator
 	Just a utility widget for handling a menu separator...really just sets the class on the div.
 ******************************************************************************/
 $.widget("ibi.ibxMenuSeparator", $.ibi.ibxWidget,{options:{},_widgetClass: "ibx-menu-separator",});
 
 /******************************************************************************
 	ibxMenuBar
-	Simple derivation of ibxHBox/ibxVBox...really just for readability
+	Simple derivation of ibxHBox/ibxVBox...mostly for markup readability
 ******************************************************************************/
 $.widget("ibi.ibxMenuBar", $.ibi.ibxHBox, {options:{align:"stretch"}, _widgetClass:"ibx-menu-bar"});
 $.widget("ibi.ibxHMenuBar", $.ibi.ibxMenuBar, {options:{}, _widgetClass:"ibx-hmenu-bar"});
@@ -386,9 +386,6 @@ $.widget("ibi.ibxMenuButton", $.ibi.ibxButtonSimple,
 		if(this._menu)
 		{
 			var options = this.options;
-			var bVertical = this.element.parent().is(".ibx-vmenu-bar");
-			if(bVertical)
-				options.position.at = "right top";
 			this._menu.ibxWidget("option", {destroOnClose:false,position:options.position}).ibxWidget("open");
 		}
 	},
@@ -406,6 +403,11 @@ $.widget("ibi.ibxMenuButton", $.ibi.ibxButtonSimple,
 	}
 });
 
+//defined types mostly for markup readability
+$.widget("ibi.ibxHMenuButton", $.ibi.ibxMenuButton,{options:{},_widgetClass: "ibx-hmenu-button"});
+$.widget("ibi.ibxVMenuButton", $.ibi.ibxMenuButton,{options:{position:{at:"right top"}},_widgetClass: "ibx-vmenu-button"});
+
+//separator between menu buttons
 $.widget("ibi.ibxMenuButtonSeparator", $.ibi.ibxWidget,{options:{},_widgetClass: "ibx-menu-button-separator",});
 
 //# sourceURL=menu.ibx.js
