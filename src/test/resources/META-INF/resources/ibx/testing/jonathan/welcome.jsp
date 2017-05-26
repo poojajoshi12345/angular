@@ -31,6 +31,8 @@
 			var newitemsshown=true;
 			var sortedvalue="description";
 			var sortedorder="up";
+			var files_label=null;
+			var folders_label=null;
 			
 			<jsp:include page="/WEB-INF/jsp/global/wf_globals.jsp" flush="false" />
 			ibx(function()
@@ -47,6 +49,7 @@
 						$(".ibfs-tree").append(rootItem.getElement());			
 					});
 					
+					// hide items on smaller windows...
 					if ($(this).width() < 1100) {
 						hideitems();										
   					}  					
@@ -106,18 +109,25 @@
 					
 					function buildviews()
 					{
-							
+						//debugger;
+						if($(".content-title-label-files").length > 0)files_label=$(".content-title-label-files");	
+						if($(".content-title-label-folders").length > 0)folders_label=$(".content-title-label-folders");
 						$(".files-box-files").empty();
-						$(".folders-box-folders").empty();
+						
+						//$(".folders-box-folders").empty();
 										
 						// build the image view...
 						// folders						
 						var ilen=folderlist.length;
 						if(ilen > 0)
 						{
-							var divstring = '<div class="content-title-label-folders" data-ibx-type="ibxLabel" data-ibxp-text="Folders"></div>';
-							//$(".folders-box-folders").append(divstring);
-							$(".files-box-files").append(divstring);
+							//var divstring = '<div class="content-title-label-folders" data-ibx-type="ibxLabel" data-ibxp-text="Folders"></div>';
+							//$(".folders-box-folders").append(divstring);							
+							if(folders_label)
+							{
+								$(".files-box-files").append(folders_label);
+								//folders_label = $(".content-title-label-folders");
+							}	
 							for (i=0; i < ilen; i++)
 							{								
 								var ibfsitem=folderlist[i];														
@@ -131,8 +141,13 @@
 						ilen=itemlist.length;											
 						if(ilen > 0)
 						{
-							var divstring = '<div class="content-title-label-files" data-ibx-type="ibxLabel" data-ibxp-text="Files"></div>';
-							$(".files-box-files").append(divstring);							
+							//var divstring = '<div class="content-title-label-files" data-ibx-type="ibxLabel" data-ibxp-text="Files"></div>';
+							//$(".files-box-files").append(divstring);
+							if(files_label)
+							{
+								$(".files-box-files").append(files_label);
+								//files_label = $(".content-title-label-files");					
+							}															
 							for (i=0; i<ilen; i++)
 							{								
 								var ibfsitem=itemlist[i];
@@ -165,16 +180,11 @@
 							glyphdate="keyboard_arrow_up";
 							if(sortedorder=="up")glyphdate="keyboard_arrow_down";
 						}
-						// update the sort order icons..						
-						
-						
-						
+						// update the sort order icons..
 						$(".grid-title-col2").ibxLabel("option", "glyph", glyphdescription);
 						$(".grid-title-col4").ibxLabel("option", "glyph", glyphdate);
 						// clear the grid...
 						$('#title-end').nextAll('div').remove();
-						
-						
 						// add the folders
 						ilen=folderlist.length;
 						var glyph="fa fa-folder";
@@ -215,6 +225,11 @@
 							var c = (folder)? " list-folder-icon ": "";
 							var xfunction = (folder)? "foldermenu" : "filemenu";
 							
+							
+							//var label1 = $("<div>").ibxLabel({ glyphClasses: glyph, col:1});							
+							//label1.addClass("flex-grid-cell list-icon-col " + c);
+							//var label2 = $("<div>").ibxLabel 
+								
 							var toadd = sformat("<div class='flex-grid-cell list-icon-col {1} ' data-ibx-col='1' ><div data-ibx-type='ibxLabel' data-ibxp-glyph-classes='	{2} '></div></div>", c, glyph);			
 							toadd += sformat("<div class='flex-grid-cell' data-ibx-col='2'> {1} </div>", ibfsitem.description);	
 							toadd += sformat("<div class='flex-grid-cell' data-ibx-col='3'> {1} </div>", summary);
@@ -511,7 +526,14 @@
 						$(".folder-menu").ibxContextMenu("open").position(options);
 					});	
 						
+					// display the new items box
 					newitemsbox(newitemsboxsmall);
+					// grab some titles from the markup...
+					//debugger;
+					files_label = $(".content-title-label-files").detach();
+					folders_label = $(".content-title-label-folders").detach();
+						
+					
 			}, true);
 			
 			function filemenu(contextitem, name)
@@ -1151,13 +1173,10 @@
 							<div class="content-title-btn" data-ibx-type="ibxButtonSimple" data-ibxp-text="Title" data-ibxp-icon-position="right" data-ibxp-glyph="keyboard_arrow_up" data-ibxp-glyph-classes="material-icons"></div>
 						</div>
 					--%>
-					<%--
-						<div class="folders-box-folders" data-ibx-type="ibxHBox" data-ibxp-wrap="true" data-ibxp-align="center">
-							
-						</div>
-					--%>		
+					
 						<div class="files-box-files"  data-ibx-type="ibxHBox" data-ibxp-wrap="true" >
-							
+						<div class="content-title-label-files" data-ibx-type="ibxLabel" >Files</div>
+						<div class="content-title-label-folders" data-ibx-type="ibxLabel" >Folders</div>	
 						</div>	
 						
 						
