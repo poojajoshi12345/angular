@@ -7,6 +7,7 @@ $.widget("ibi.ibxLabel", $.ibi.ibxFlexBox,
 	{
 		"text":"",
 		"textWrap":false,
+		"textAlign":"",
 		"icon":"",
 		"iconPosition":"left",
 		"glyph":"",
@@ -51,7 +52,7 @@ $.widget("ibi.ibxLabel", $.ibi.ibxFlexBox,
 		var options = this.options;
 		var title = this.element.prop("title") || options.text;
 
-		this._text.html(options.text).attr("class", options.textElClass).css({"white-space":options.textWrap ? "" : "nowrap"});
+		this._text.html(options.text).attr("class", options.textElClass).css({"text-align":options.textAlign, "white-space":options.textWrap ? "" : "nowrap"});
 		this._glyph.html(options.glyph).attr("class", options.glyphClasses).addClass(options.glyphElClass).css("display", (options.glyph || options.glyphClasses) ? "" : "none");
 		this._icon.prop("src", options.icon).attr("class", options.iconElClass).css("display", options.icon ? "" : "none");
 		
