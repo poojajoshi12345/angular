@@ -74,6 +74,11 @@
     border: 1px solid #555;
 }
 
+.icon-right > .ibx-native-input,
+.icon-bottom > .ibx-native-input {
+   order: 2;
+}
+
 .ibx-check-box-simple-marker
 {
 	font-family:"Material Icons";
@@ -103,14 +108,28 @@
 .ibx-radio-button-simple-marker
 {
 	font-family:"Material Icons";
-	font-size:1em;
-	color:#888;
-	width:1.5em;
 }
 
-.ibx-radio-button-simple-marker::before
+.icon-left > .ibx-radio-button-simple-marker
+{
+	margin-right:.25em;
+}
+
+.icon-right > .ibx-radio-button-simple-marker
 {
 	margin-left:.25em;
+   order: 3;
+}
+
+.icon-top > .ibx-radio-button-simple-marker
+{
+	margin-bottom:.25em;
+}
+
+.icon-bottom > .ibx-radio-button-simple-marker
+{
+	margin-top:.25em;
+   order: 3;
 }
 
 .ibx-radio-button-simple-marker-uncheck::before
@@ -121,6 +140,7 @@
 {
 	content:"\e837";
 }
+
 
 /* End radio button classes */
 
@@ -197,6 +217,16 @@
 
 .ibx-switch-ctrl > .ibx-slider.round:before {
     border-radius: 50%;
+}
+
+.icon-right > .ibx-switch-spacer,
+.icon-bottom > .ibx-switch-spacer {
+    order: 3;
+}
+
+.icon-right > .ibx-switch-ctrl,
+.icon-bottom > .ibx-switch-ctrl {
+    order: 4;
 }
 
 /* End switch classes */
