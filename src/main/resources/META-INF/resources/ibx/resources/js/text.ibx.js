@@ -174,6 +174,8 @@ $.widget("ibi.ibxTextField", $.ibi.ibxFlexBox,
 		}
 		else
 			this.element.removeClass('txt-auto-size');
+
+		this._textInput.css("width", this.options.autoSize ? "1px" : "");
 	}
 });
 //# sourceURL=text.ibx.js
