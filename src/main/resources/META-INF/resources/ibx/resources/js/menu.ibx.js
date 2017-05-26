@@ -340,7 +340,7 @@ $.widget("ibi.ibxMenuSeparator", $.ibi.ibxWidget,{options:{},_widgetClass: "ibx-
 	ibxMenuBar
 	Simple derivation of ibxHBox/ibxVBox...really just for readability
 ******************************************************************************/
-$.widget("ibi.ibxMenuBar", $.ibi.ibxHBox, {options:{align:"stretch"}, _widgetClass:"ibx-hmenu-bar"});
+$.widget("ibi.ibxMenuBar", $.ibi.ibxHBox, {options:{align:"stretch"}, _widgetClass:"ibx-menu-bar"});
 $.widget("ibi.ibxHMenuBar", $.ibi.ibxMenuBar, {options:{}, _widgetClass:"ibx-hmenu-bar"});
 $.widget("ibi.ibxVMenuBar", $.ibi.ibxMenuBar, {options:{direction:"column"}, _widgetClass:"ibx-vmenu-bar"});
 
@@ -384,7 +384,13 @@ $.widget("ibi.ibxMenuButton", $.ibi.ibxButtonSimple,
 	_onClick:function(e)
 	{
 		if(this._menu)
-			this._menu.ibxWidget("open");
+		{
+			var options = this.options;
+			var bVertical = this.element.parent().is(".ibx-vmenu-bar");
+			if(bVertical)
+				options.position.at = "right top";
+			this._menu.ibxWidget("option", {destroOnClose:false,position:options.position}).ibxWidget("open");
+		}
 	},
 	_menu:null,
 	menu:function(menu)
@@ -397,15 +403,10 @@ $.widget("ibi.ibxMenuButton", $.ibi.ibxButtonSimple,
 	refresh:function()
 	{
 		this._super();
-		var options = this.options;
-		if(this._menu)
-			this._menu.ibxWidget("option", {destroOnClose:false,position:options.position});
 	}
 });
 
 $.widget("ibi.ibxMenuButtonSeparator", $.ibi.ibxWidget,{options:{},_widgetClass: "ibx-menu-button-separator",});
-
-
 
 //# sourceURL=menu.ibx.js
 

@@ -105,7 +105,7 @@
 {
 }
 			
-.ibx-hmenu-bar .ibx-menu-button
+.ibx-menu-bar .ibx-menu-button
 {
 	padding:5px;
 }
@@ -116,3 +116,8 @@
 	border-left:1px solid #ccc;
 }
 
+.ibx-vmenu-bar .ibx-menu-button-separator
+{
+	margin:2px;
+	border-top:1px solid #ccc;
+}
