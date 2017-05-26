@@ -10,11 +10,12 @@
 
 .ibx-slider-horizontal {
     height:1.2em;
+	width:100px;
 }
 
 .ibx-slider-vertical {
     width:1.2em;
-
+	height:100px;
 }
 
 .ibx-slider-text-position-start.ibx-slider-horizontal {
