@@ -352,6 +352,7 @@ $.widget("ibi.ibxMenuButton", $.ibi.ibxButtonSimple,
 {
 	options:
 	{
+		"menu":null,
 		"position":
 		{
 			/* for my/at position values see: http://api.jqueryui.com/position/ */
@@ -379,23 +380,12 @@ $.widget("ibi.ibxMenuButton", $.ibi.ibxButtonSimple,
 		this._super();
 		this.options.position.of = this.element[0];
 		this.element.prop("tabIndex", 0).on("click", this._onClick.bind(this));
-		this.menu(this.element.children(".ibx-menu"));
+		this.options.menu = this.element.children(".ibx-menu");
 	},
 	_onClick:function(e)
 	{
-		if(this._menu)
-		{
-			var options = this.options;
-			this._menu.ibxWidget("option", {destroOnClose:false,position:options.position}).ibxWidget("open");
-		}
-	},
-	_menu:null,
-	menu:function(menu)
-	{
-		if(!menu)
-			return this._menu;
-		else
-			this._menu = menu;
+		var options = this.options;
+		$(options.menu).ibxWidget("option", {destroOnClose:false,position:options.position}).ibxWidget("open");
 	},
 	refresh:function()
 	{
