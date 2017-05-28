@@ -1,0 +1,356 @@
+			body
+			{
+				margin:0px;
+				width:100%;
+				height:100%;
+				font-family: 'Hind', sans-serif;
+			}
+			.main-box
+			{
+				position:absolute;
+				border:1px solid #ccc;
+				left:5px;
+				top:5px;
+				right:5px;
+				bottom:5px;
+			}
+			.title-bar
+			{
+				flex:0 0 auto;
+				height:4em;
+				background-color:#337ab7
+			}
+			.title-label
+			{
+				margin-left:2em;
+				color:white;
+				font-size:1.8em;
+			}
+			.toolbar
+			{
+				color:rgb(102,102,102);
+				flex:0 0 auto;
+				padding:5px;
+				border-bottom:1px solid #ccc;
+			}
+			.crumb-box
+			{
+				font-size: 14px;
+			}
+			.toolbar-spacer
+			{
+				flex:1 1 auto;
+			}
+			.txt-search
+			{
+				margin-right:20px;
+			}
+			.btn-refresh, .btn-how-view
+			{
+				color:rgb(102,102,102);
+				font-size:1.5em;
+				margin-right:20px;
+			}
+			.explore-box
+			{
+				flex:1 1 auto;
+			}
+			.ibfs-tree
+			{				
+				left:0px;
+				bottom:0px;
+				right:0px;
+				top:0px;
+				overflow:auto;			
+				flex:0 0 250px;
+				border-right:1px solid #ccc;
+			}
+			.content-box
+			{
+				flex:1 1 0px;
+			}
+			.create-new-box
+			{
+				flex:0 0 auto;
+				height: 141px;
+				//width: 1200px;
+				width: 100%;
+				//border-bottom:1px solid #ccc;
+			}
+			.content-title-bar
+			{
+				margin:10px;
+			}
+			.content-title-label
+			{
+				font-size:14px;
+				color: rgb(102,102,102);
+				font-family = 'Hind', sans-serif;
+			}
+			.content-title-spacer
+			{
+				flex:1 1 auto;
+			}
+			.content-title-btn
+			{
+				font-size:1.5em;
+				color: rgb(102,102,102);
+			}
+			.content-title-btn2
+			{
+				font-size:1.5em;
+				color: rgb(102,102,102);
+			}
+			.content-title-btn .ibx-label-text 
+			{
+				font-size:11px;
+			}
+			.create-new-items-box
+			{
+				margin-bottom:10px;
+			}
+			.create-new-item 
+			{
+				//margin:4px;
+				height:110px;
+				width: 100px;
+				font-size: 12px;				
+				color: rgb(102,102,102);
+												
+			}
+			.create-new-item .ibx-label-glyph
+			{
+				font-size:20px;
+				//background-color: red;
+				margin-bottom: 6px;
+				margin-top: 8px;
+				color: white;
+				border-radius:50%;
+				border: 18px solid;
+				//border-color: red;
+			}
+			.create-new-item-red .ibx-label-glyph
+			{
+				border-color: red;
+				background-color: red;
+			}
+			.create-new-item-green .ibx-label-glyph
+			{
+				border-color: green;
+				background-color: green;
+			}
+			.create-new-item-blue .ibx-label-glyph
+			{
+				border-color: blue;
+				background-color: blue;
+			}
+			.create-new-item-yellow .ibx-label-glyph
+			{
+				border-color: rgb(250, 215, 50);
+				background-color: rgb(250, 215, 50);
+			}
+			.create-new-item-teel .ibx-label-glyph
+			{
+				border-color: rgba(25,169,213,.7);
+				background-color: rgba(25,169,213,.7);
+			}
+			.create-new-item-purple .ibx-label-glyph
+			{
+				border-color: rgb(114,102,186);
+				background-color: rgb(114,102,186);
+			}
+			.create-new-item-black .ibx-label-glyph
+			{
+				border-color: black;
+				background-color: black;
+			}
+			.create-new-item .ibx-label-text
+			{
+				color: rgb(102,102,102);
+				font-size:11px;				
+			}
+			.create-new-item img
+			{
+				margin-top: 20px;				
+			}
+			.files-box
+			{
+				flex:1 1 auto;
+				background-color:#e4f1f9;
+				border-top:1px solid #ccc;
+				
+
+			}
+			.files-box-files
+			{
+				padding:4px;
+				overflow:auto;
+				background-color:#e4f1f9;
+			}
+			.folders-box-folders
+			{
+				padding:4px;
+				overflow:auto;
+				background-color:#e4f1f9;
+			}
+			.file-item
+			{
+				width:220px;
+				height:200px;
+				margin:4px;
+				background-color:white;
+				border-bottom:2px solid #ccc;
+			}
+			.folder-item
+			{
+				width:220px;
+				height:42px;
+				margin:4px;
+				background-color:white;
+				border-bottom:2px solid #ccc;
+			}
+			
+			.item-image
+			{
+				height: 80%;
+				width: 90%;
+				object-fit: contain;				
+			}
+			
+			.image-icon
+			{
+				height:20px;
+				width:24px;
+				float:left;
+				postion:relative;	
+				font-size: 18px;
+				margin-top: 6px;		
+			}
+				
+			.image-text
+			{
+				text-align: center;
+				font-family: 'Hind', sans-serif;
+				font-size: 14px;
+				margin-top:4px;
+				height: 20px;
+				text-overflow: ellipsis;
+				overflow:hidden;
+				white-space: nowrap;					
+				flex: 1 1 auto;	
+				margin-left:4px;		
+				
+			}
+			.image-menu
+			{
+				height:20px;
+				min-width:18px;
+				float:right;
+				position:relative;
+				right:4px;
+				margin-top:4px;				
+				background:url(../images/vertical.png);
+				margin-right:4px;
+				
+				
+			}
+			
+			.flex-grid-cell-title
+			{
+				font-size: 14px;
+				font-weight: bold;
+				padding-top: 10px;
+				padding-bottom: 10px;
+				padding-left: 15px;
+				padding-right: 0px;				
+				border-bottom:1px solid #ccc;
+				text-align: left;
+				
+			}
+			.flex-grid-cell
+			{
+				font-size: 14px;
+				font-weight: normal;
+				padding-top: 10px;
+				padding-botton: 10px;
+				padding-left: 15px;
+				padding-right: 0px;
+			}
+			.files-listing
+			{
+				overflow: auto;
+				background-color: white;
+			}	
+			.cell-image .ibx-label-glyph
+			{
+				//background-image:url(images/vertical.png);
+				//background-repeat: no-repeat;				
+				//background-size: 19px 28px;
+				padding-top: 4px;
+				padding-bottom: 4px;
+				padding-left: 8px;
+				padding-right: 8px;
+				background-color:white;
+				//align: bottom;	
+				border: 1px solid #ccc;			
+			}	
+			.list-icon-col
+			{
+				font-size: 18px;
+			}
+			.tree-button-box
+			{
+				width:20px;
+			}
+			.tree-button-spacer
+			{
+				height:50%;
+			}
+			.tree-collapse-button 
+			{
+				font-size: 20px;
+				border:1px solid #ccc;								
+				
+			}		
+			.tree-showcollapse-button
+			{
+				font-size: 20px;
+				border:1px solid #ccc;
+						
+				
+			}
+			.ibx-menu-item-label
+			{
+				font-size: 14px;
+				margin-top: 2px;
+				margin-bottom:2px;
+			}	
+			.folder-image-icon
+			{			
+				height:20px;
+				width:24px;
+				float:left;
+				postion:relative;	
+				font-size: 18px;
+				margin-top: 6px;			
+				color: rgb(250, 215, 50);
+				margin-left: 4px;
+			}
+			.list-folder-icon
+			{
+				color: rgb(250, 215, 50);
+			}
+			.content-title-label-folders, .content-title-label-files
+			{
+				font-size: 14px;
+				width:100%;
+				margin-top: 5px;
+				margin-bottom: 5px;
+				margin-left: 4px;
+			}
+			.folder-div
+			{
+				margin-top: 4px;
+			}
+							
+	
