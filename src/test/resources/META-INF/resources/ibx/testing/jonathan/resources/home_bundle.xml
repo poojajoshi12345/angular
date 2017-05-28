@@ -28,7 +28,19 @@
 	<markup>
 		<markup-block>
 			<div class="content-title-label-files" data-ibx-type="ibxLabel" data-ibxp-text="Files" ></div>
-			<div class="content-title-label-folders" data-ibx-type="ibxLabel" data-ibxp-text="Folders" ></div>			
+			<div class="content-title-label-folders" data-ibx-type="ibxLabel" data-ibxp-text="Folders" ></div>	
+			<div class="edit-menu" data-ibx-name-root="true" data-ibx-type="ibxContextMenu" data-ibxp-destroy-on-close="false">
+				<div data-ibx-type="ibxMenuItem" data-ibx-name="mimenuitemrun" data-ibxp-text="Run/View" data-ibxp-glyph="content_cut" data-ibxp-glyph-classes="material-icons"></div>
+				<div data-ibx-type="ibxMenuSeparator"></div>
+				<div data-ibx-type="ibxMenuItem" data-ibx-name="mimenuitemedit" data-ibxp-text="Edit" data-ibxp-glyph="content_copy" data-ibxp-glyph-classes="material-icons"></div>
+			</div>
+			<div class="folder-menu" data-ibx-name-root="true" data-ibx-type="ibxContextMenu" data-ibxp-destroy-on-close="false">
+				<div data-ibx-type="ibxMenuItem" data-ibx-name="fomenuitemopen" data-ibxp-text="Open" data-ibxp-glyph="content_cut" data-ibxp-glyph-classes="material-icons"></div>
+				<div data-ibx-type="ibxMenuSeparator"></div>
+				<div data-ibx-type="ibxMenuItem" data-ibx-name="fomenuitemdelete" data-ibxp-text="Delete" data-ibxp-glyph="content_copy" data-ibxp-glyph-classes="material-icons"></div>
+		        <div data-ibx-type="ibxMenuItem" data-ibx-name="fomenuitemchangetitle" data-ibxp-text="Change Title" data-ibxp-glyph="content_copy" data-ibxp-glyph-classes="material-icons"></div>
+		        <div data-ibx-type="ibxMenuItem" data-ibx-name="fomenuitemrefresh" data-ibxp-text="Refresh" data-ibxp-glyph="content_copy" data-ibxp-glyph-classes="material-icons"></div>		
+		</div>		
 		</markup-block>
 	</markup>
 
