@@ -464,25 +464,26 @@
 						at:"left bottom",
 						of:contextitem
 						}
-						var initialized = $(".edit-menu").data("initialized");
-						$(".edit-menu").data('ibxWidget').mimenuitemrun.data("ibfsitem",ibfsitem);
-						$(".edit-menu").data('ibxWidget').mimenuitemedit.data("ibfsitem",ibfsitem);	
+						var edit_menu = ibxResourceMgr.getResource(".edit-menu");
+						var initialized = $(edit_menu).data("initialized");
+						$(edit_menu).data('ibxWidget').mimenuitemrun.data("ibfsitem",ibfsitem);
+						$(edit_menu).data('ibxWidget').mimenuitemedit.data("ibfsitem",ibfsitem);	
 						if(!initialized)
 						{				
-							$(".edit-menu").data('ibxWidget').mimenuitemrun.on("ibx_menu_item_click",function(e)
+							$(edit_menu).data('ibxWidget').mimenuitemrun.on("ibx_menu_item_click",function(e)
 							{
 								var ibfsitem = $(e.target).data("ibfsitem");
 								runIt(ibfsitem);
 								});									
-							$(".edit-menu").data('ibxWidget').mimenuitemedit.on("ibx_menu_item_click",function(e)
+							$(edit_menu).data('ibxWidget').mimenuitemedit.on("ibx_menu_item_click",function(e)
 							{
 								var ibfsitem = $(e.target).data("ibfsitem");
 								editIt(ibfsitem);							
 							});
-							$(".edit-menu").data("initialized",true);
+							$(edit_menu).data("initialized",true);
 						}
 						
-						$(".edit-menu").ibxContextMenu("open").position(options);
+						$(edit_menu).ibxContextMenu("open").position(options);
 					});	
 						
 					$( document ).on( "showfoldermenu", function(e, ibfsitem, contextitem)
@@ -493,37 +494,38 @@
 						at:"left bottom",
 						of:contextitem
 						}
-						var initialized = $(".folder-menu").data("initialized");
-						$(".folder-menu").data('ibxWidget').fomenuitemopen.data("ibfsitem",ibfsitem);
-						$(".folder-menu").data('ibxWidget').fomenuitemdelete.data("ibfsitem",ibfsitem);	
-						$(".folder-menu").data('ibxWidget').fomenuitemchangetitle.data("ibfsitem",ibfsitem);
-						$(".folder-menu").data('ibxWidget').fomenuitemrefresh.data("ibfsitem",ibfsitem);
+						var folder_menu = ibxResourceMgr.getResource(".folder-menu");
+						var initialized = $(folder_menu).data("initialized");
+						$(folder_menu).data('ibxWidget').fomenuitemopen.data("ibfsitem",ibfsitem);
+						$(folder_menu).data('ibxWidget').fomenuitemdelete.data("ibfsitem",ibfsitem);	
+						$(folder_menu).data('ibxWidget').fomenuitemchangetitle.data("ibfsitem",ibfsitem);
+						$(folder_menu).data('ibxWidget').fomenuitemrefresh.data("ibfsitem",ibfsitem);
 						if(!initialized)
 						{				
-							$(".folder-menu").data('ibxWidget').fomenuitemopen.on("ibx_menu_item_click",function(e)
+							$(folder_menu).data('ibxWidget').fomenuitemopen.on("ibx_menu_item_click",function(e)
 							{
 								var ibfsitem = $(e.target).data("ibfsitem");
 								openfolder(ibfsitem);
 							});									
-							$(".folder-menu").data('ibxWidget').fomenuitemdelete.on("ibx_menu_item_click",function(e)
+							$(folder_menu).data('ibxWidget').fomenuitemdelete.on("ibx_menu_item_click",function(e)
 							{
 								var ibfsitem = $(e.target).data("ibfsitem");
 								deletefolder(ibfsitem);							
 							});
-							$(".folder-menu").data('ibxWidget').fomenuitemchangetitle.on("ibx_menu_item_click",function(e)
+							$(folder_menu).data('ibxWidget').fomenuitemchangetitle.on("ibx_menu_item_click",function(e)
 							{
 								var ibfsitem = $(e.target).data("ibfsitem");
 								changefoldertitle(ibfsitem);							
 							});
-							$(".folder-menu").data('ibxWidget').fomenuitemrefresh.on("ibx_menu_item_click",function(e)
+							$(folder_menu).data('ibxWidget').fomenuitemrefresh.on("ibx_menu_item_click",function(e)
 							{
 								var ibfsitem = $(e.target).data("ibfsitem");
 								refreshfolder(ibfsitem);							
 							});
-							$(".folder-menu").data("initialized",true);
+							$(folder_menu).data("initialized",true);
 						}
 						
-						$(".folder-menu").ibxContextMenu("open").position(options);
+						$(folder_menu).ibxContextMenu("open").position(options);
 					});	
 						
 					// display the new items box
@@ -539,19 +541,7 @@
 		<link rel="stylesheet" type="text/css" href="resources/css/tree_home.css">
 		<link rel="stylesheet" type="text/css" href="resources/css/home.css">
 	</head>
-	<body class="ibx-root">
-		<div class="edit-menu" data-ibx-name-root="true" data-ibx-type="ibxContextMenu" data-ibxp-destroy-on-close="false">
-			<div data-ibx-type="ibxMenuItem" data-ibx-name="mimenuitemrun" data-ibxp-text="Run/View" data-ibxp-glyph="content_cut" data-ibxp-glyph-classes="material-icons"></div>
-			<div data-ibx-type="ibxMenuSeparator"></div>
-			<div data-ibx-type="ibxMenuItem" data-ibx-name="mimenuitemedit" data-ibxp-text="Edit" data-ibxp-glyph="content_copy" data-ibxp-glyph-classes="material-icons"></div>
-		</div>
-		<div class="folder-menu" data-ibx-name-root="true" data-ibx-type="ibxContextMenu" data-ibxp-destroy-on-close="false">
-			<div data-ibx-type="ibxMenuItem" data-ibx-name="fomenuitemopen" data-ibxp-text="Open" data-ibxp-glyph="content_cut" data-ibxp-glyph-classes="material-icons"></div>
-			<div data-ibx-type="ibxMenuSeparator"></div>
-			<div data-ibx-type="ibxMenuItem" data-ibx-name="fomenuitemdelete" data-ibxp-text="Delete" data-ibxp-glyph="content_copy" data-ibxp-glyph-classes="material-icons"></div>
-	        <div data-ibx-type="ibxMenuItem" data-ibx-name="fomenuitemchangetitle" data-ibxp-text="Change Title" data-ibxp-glyph="content_copy" data-ibxp-glyph-classes="material-icons"></div>
-	        <div data-ibx-type="ibxMenuItem" data-ibx-name="fomenuitemrefresh" data-ibxp-text="Refresh" data-ibxp-glyph="content_copy" data-ibxp-glyph-classes="material-icons"></div>		
-		</div>
+	<body class="ibx-root">		
 		<div class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
 			<div class="title-bar" data-ibx-type="ibxHBox" data-ibxp-align="center">
 				<div class="title-label" data-ibx-type="ibxLabel" data-ibxp-text="Content"></div>
