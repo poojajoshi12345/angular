@@ -40,7 +40,15 @@
 				<div data-ibx-type="ibxMenuItem" data-ibx-name="fomenuitemdelete" data-ibxp-text="Delete" data-ibxp-glyph="content_copy" data-ibxp-glyph-classes="material-icons"></div>
 		        <div data-ibx-type="ibxMenuItem" data-ibx-name="fomenuitemchangetitle" data-ibxp-text="Change Title" data-ibxp-glyph="content_copy" data-ibxp-glyph-classes="material-icons"></div>
 		        <div data-ibx-type="ibxMenuItem" data-ibx-name="fomenuitemrefresh" data-ibxp-text="Refresh" data-ibxp-glyph="content_copy" data-ibxp-glyph-classes="material-icons"></div>		
-		</div>		
+			</div>
+			<div class='cell-col1 flex-grid-cell list-icon-col    ' data-ibx-col='1' ></div>
+			<div class='cell-col1-2' data-ibx-type='ibxLabel' ></div>
+			
+			<div class='cell-col2 flex-grid-cell' data-ibx-col='2' data-ibx-type='ibxLabel' data-ibxp-text='Common'></div>
+			<div class='cell-col3 flex-grid-cell' data-ibx-col='3' data-ibx-type='ibxLabel' data-ibxp-text='None'></div>
+			<div class='cell-col4 flex-grid-cell' data-ibx-col='4' data-ibx-type='ibxLabel' data-ibxp-text='5/17/2016  4:48:15 PM'></div>
+			<div class='cell-col5 flex-grid-cell cell-image' data-ibxp-glyph-classes='fa fa-ellipsis-v' data-ibx-type='ibxLabel' data-ibx-col='5' onclick= ' foldermenu (this, "Common");'>
+			</div>		
 		</markup-block>
 	</markup>
 
