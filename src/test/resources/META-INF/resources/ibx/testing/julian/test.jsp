@@ -32,13 +32,14 @@
 				});
 				$(".wait-spot").on("click", function(e)
 				{
-					$(".wait-spot").append(ibx.waiting)
+					$(this).append(ibx.waiting)
 				});
 			}, ["../testing/julian/test_res_bundle.xml"], true);
 		</script>
 		<style type="text/css">
 			.wait-spot
 			{
+				position:relative;
 				display:inline-block;
 				border:1px solid red;
 				width:200px;
