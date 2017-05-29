@@ -122,7 +122,7 @@ function buildviews()
 		var glyph = "ibx-icons ibx-glyph-file-unknown";	
 		if(ibfsitem.clientInfo.typeInfo)
 		{	
-			glyph = ibfsitem.clientInfo.typeInfo.glyphClasses
+			glyph = ibfsitem.clientInfo.typeInfo.glyphClasses;
 		}
 		divstring = itemdiv(ibfsitem);
 													
@@ -177,7 +177,7 @@ function buildviews()
 			var glyph = "ibx-icons ibx-glyph-file-unknown";	
 			if(ibfsitem.clientInfo.typeInfo)
 			{	
-				glyph = ibfsitem.clientInfo.typeInfo.glyphClasses
+				glyph = ibfsitem.clientInfo.typeInfo.glyphClasses;
 			}
 			addgriditem(ibfsitem, glyph, false);											
 		}
@@ -222,7 +222,7 @@ function itemdiv(item)
 	var glyphs = "ibx-icons ibx-glyph-file-unknown";	
 	if(item.clientInfo.typeInfo)
 	{	
-		glyphs = item.clientInfo.typeInfo.glyphClasses
+		glyphs = item.clientInfo.typeInfo.glyphClasses;
 	}
 	var glyphdiv=sformat("<div class='image-icon' data-ibx-type='ibxLabel' data-ibxp-glyph-classes=' {1} '></div>", glyphs);							
 	var divstring=sformat('<div class="file-item" <a><img class="item-image" src=" {1} "></a>', item.thumbPath);						
@@ -306,7 +306,7 @@ $( document ).on( "showitemmenu", function(e, ibfsitem, contextitem)
 	my:"left top",
 	at:"left bottom",
 	of:contextitem
-	}
+	};
 	var edit_menu = ibxResourceMgr.getResource(".edit-menu");
 	var initialized = $(edit_menu).data("initialized");
 	$(edit_menu).data('ibxWidget').mimenuitemrun.data("ibfsitem",ibfsitem);
@@ -336,7 +336,7 @@ $( document ).on( "showfoldermenu", function(e, ibfsitem, contextitem)
 	my:"left top",
 	at:"left bottom",
 	of:contextitem
-	}
+	};
 	var folder_menu = ibxResourceMgr.getResource(".folder-menu");
 	var initialized = $(folder_menu).data("initialized");
 	$(folder_menu).data('ibxWidget').fomenuitemopen.data("ibfsitem",ibfsitem);
