@@ -355,5 +355,57 @@
 			{
 				margin-top: 4px;
 			}
-							
-	
+			.form-field-filler			
+			{
+				height:20px;
+				width:40%;
+			}
+			.title-form-grid
+			{
+				color: rgb(102,102,102);
+			}
+			.form-field-title
+			{
+				font-size: 14px;
+				font-weight: bold;
+				margin-top:5px;
+				margin-bottom:5px;
+				height: 30px;
+				width: 400px;
+				
+			}
+			.form-field-text
+			{
+				font-size:14px;				
+				margin-top:5px;
+				margin-bottom:5px;
+				padding: 4px;
+				height: 30px;
+				width: 400px;
+				font-size: 14px;
+				
+			}	
+			.form-title
+			{
+				margin-top: 20px;
+				margin-bottom:20px;
+				padding-top: 20px;
+				padding-bottom: 20px;
+				font-size: 18px;
+				font-weight: bold;
+				color: rgb(102,102,102);
+			}
+			.form-cancel-button
+			{
+				padding: 4px;
+				margin: 8px;
+				font-size: 14px;
+				font-weight: bold;
+			}			
+			.form-ok-button 
+			{
+				padding: 4px;
+				margin: 8px;
+				font-size: 14px;
+				font-weight: bold;
+			}	

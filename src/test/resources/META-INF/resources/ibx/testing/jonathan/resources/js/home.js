@@ -21,6 +21,7 @@ function openfolder(item)
 };
 function deletefolder(item)
 {
+	deleteItem(item);
 };
 function changefoldertitle(item)
 {
@@ -80,6 +81,41 @@ else
 			warningmessage(message);								
 		}	
 	}				
+};
+function deleteItem(item)
+{
+	var text = "Are you sure you want to delete "+item.description;
+	var options = 
+	{
+		type:"std warning",
+		caption:"Delete",
+		buttons:"okcancel",
+		messageOptions:{text:text}
+	};
+	var dlg = $.ibi.ibxDialog.createMessageDialog(options);
+	
+	var x=dlg.ibxDialog($("btnOK"));
+	
+	dlg.ibxDialog("open").on("ibx_close", function(e, btn)
+			{
+				if(btn=="ok")
+				{
+					// prepare the delete....
+				}		
+			});
+
+		
+};
+
+function ajaxCall(path)
+{
+	$.ajax({
+	    url: path,
+	    dataType: "xml",
+	    success: function(data) {
+	        alert(data);
+	    }
+	});	
 };
 
 
@@ -435,7 +471,16 @@ function warningmessage(message)
 };
 function newFolder()
 {
-		warningmessage("Not Implemented");
+	// show the dialog....
+	var form = ibxResourceMgr.getResource(".title-form");
+	
+	$(".files-listing").hide();
+	$(".files-box-files").hide();
+	$(".content-box").hide();
+	$(".dialog-area").append(form);
+	$(".dialog-area").show();
+	
+	//		warningmessage("Not Implemented");
 };
 function newDomain()
 {

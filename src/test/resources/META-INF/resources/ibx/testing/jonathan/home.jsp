@@ -38,7 +38,7 @@
 			<jsp:include page="/WEB-INF/jsp/global/wf_globals.jsp" flush="false" />
 			ibx(function()
 			{		
-				debugger;	
+					
 					var loaded = Ibfs.load("<%=request.getContextPath()%>", WFGlobals.ses_auth_parm, WFGlobals.ses_auth_val);
 					loaded.done(function(ibfs)
 					{
@@ -96,12 +96,10 @@
 					$(".files-listing").hide();
 					$(".tree-showcollapse-button").hide();
 					$(".content-title-btn2").hide();
+					$(".dialog-area").hide();
 					
 					// display the new items box
-					newitemsbox(newitemsboxsmall);			
-					
-					
-					
+					newitemsbox(newitemsboxsmall);	
 					
 					$(".btn-how-view").on("click", function(e)
 					{
@@ -120,8 +118,6 @@
 							//$(".content-title-bar").hide();
 						}	
 					});
-							
-					
 					
 					$(".content-title-btn").on("click", function(e)
 					{
@@ -170,8 +166,7 @@
 			}, ["../testing/jonathan/resources/home_bundle.xml"], true);		
 			
 		</script>
-		<script src="resources/js/home.js" type="text/javascript"></script>	
-		
+		<script src="resources/js/home.js" type="text/javascript"></script>			
 		
 		<link rel="stylesheet" type="text/css" href="resources/css/tree_home.css">
 		<link rel="stylesheet" type="text/css" href="resources/css/home.css">
@@ -198,7 +193,9 @@
 					<div class="tree-button-spacer"></div>
 					<div class="tree-collapse-button" data-ibx-type="ibxButtonSimple" data-ibxp-glyph="keyboard_arrow_left" data-ibxp-glyph-classes="material-icons" ></div>
 					<div class="tree-showcollapse-button" data-ibx-type="ibxButtonSimple" data-ibxp-glyph="keyboard_arrow_right" data-ibxp-glyph-classes="material-icons" ></div>
-				</div>								
+				</div>	
+				<div class="dialog-area"  >
+			 	</div>							
 				<div class="content-box" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
 					<div class="create-new-box" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
 					
@@ -211,7 +208,9 @@
 						
 						<div class="create-new-items-box" data-ibx-type="ibxHBox" data-ibxp-align="center" data-ibxp-wrap="true">
 							
-						</div>						
+						</div>	
+
+					 						
 					</div>
 
 					<div class="files-box" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
@@ -222,7 +221,8 @@
 							<div class="content-title-btn" data-ibx-type="ibxButtonSimple" data-ibxp-text="Title" data-ibxp-icon-position="right" data-ibxp-glyph="keyboard_arrow_up" data-ibxp-glyph-classes="material-icons"></div>
 						</div>
 					--%>
-					
+					 	
+					 	
 						<div class="files-box-files"  data-ibx-type="ibxHBox" data-ibxp-wrap="true" >
 						
 						</div>	
