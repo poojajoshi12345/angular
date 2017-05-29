@@ -569,11 +569,11 @@ function newitemsbox(small)
 		["Shortcut", "fa fa-link","","teel"],
 		["Less","fa fa-ellipsis-h", "lessbuttons()","black"],
 		["More","fa fa-ellipsis-h", "morebuttons()","black"],
-		["Domain", "fa fa-folder", "newDomain()", "yellow"]
+		["Domain", "fa fa-globe", "newDomain()", "yellow"]
 	];	
 	if(currentPath=="" || currentPath.endsWith("Repository"))
 	{
-		buttonlist=[0,16];
+		buttonlist=[16,0];
 	}	
 	else if(small)
 		buttonlist=[0,1,3,5,8,9,10,15];
