@@ -93,83 +93,15 @@
 						$(".content-title-btn2").hide();   
 					};
 					
-					// display the new items box
-					newitemsbox(newitemsboxsmall);
-					
-					
-					
-					
-					// run an item
-					function runIt(item)
-					{
-						// check the type						
-						var uriExec;
-						if(item.type == "BIPWFCPortalItem")
-						{
-							var pth = item.fullPath;
-							var repstring = "IBFS:/WFC/Repository/"
-							var i = pth.indexOf(repstring);
-							if(i>-1)pth=pth.substring(i+repstring.length);
-							i = pth.indexOf(".");
-							if(i>-1)pth=pth.substring(0,i);
-							uriExec = applicationContext + "/portal/" + pth;																	
-						}
-						else
-						{
-							uriExec = sformat("{1}/run.bip?BIP_REQUEST_TYPE=BIP_LAUNCH&BIP_folder={2}&BIP_item={3}", applicationContext,
-								encodeURIComponent(item.parentPath), encodeURIComponent(item.name));
-						}									
-						window.open(uriExec);		
-					};
-					// edit an item						
-					function editIt(item)
-					{					
-						var toolProperties=item.clientInfo.properties.tool;						
-						if(toolProperties && (toolProperties.indexOf("infoAssist")>-1 || toolProperties.indexOf("DataVisualization")>-1 || toolProperties.indexOf("rotool")>-1
-							|| toolProperties.indexOf("alert")>-1))
-						{
-							var tool="report";
-							if(toolProperties.indexOf("rotool")>-1)tool="reportingobject";					
-							var fullitem=item.parentPath + item.name;
-							var uriExec = sformat("{1}/ia?is508=false&&item={2}&tool={3}", applicationContext,
-								encodeURIComponent(fullitem),tool);									
-							window.open(uriExec);
-						}
-						else
-						{
-							if(toolProperties == "editor")
-							{
-								var uriExec = sformat("{1}/tools/portlets/resources/markup/sharep/SPEditorBoot.jsp?folderPath={2}&description={3}&itemName={4}&isReferenced=true&type=item",			
-									applicationContext,	encodeURIComponent(currentPath), item.description, item.name);									
-								window.open(uriExec);
-							}
-							else
-							{ 
-								if(!toolProperties)toolProperties="";
-								var message="Tool not implemented: " + toolProperties;
-								warningmessage(message);								
-							}	
-						}				
-					};
-					function openfolder(item)
-					{					
-						var path=item.fullPath;	
-						clearitems(path);
-						rootItem._refresh(path);
-						
-					};
-					function deletefolder(item)
-					{
-					};
-					function changefoldertitle(item)
-					{
-					};
-					function refreshfolder(item)
-					{
-					};
-					
 					$(".files-listing").hide();
 					$(".tree-showcollapse-button").hide();
+					$(".content-title-btn2").hide();
+					
+					// display the new items box
+					newitemsbox(newitemsboxsmall);			
+					
+					
+					
 					
 					$(".btn-how-view").on("click", function(e)
 					{
@@ -179,8 +111,8 @@
 						var isVisible = $('.files-box-files').is(':visible');
 						if (isVisible)
 						{
-							$(".files-box").css("background-color","#e4f1f9");
-							//$(".content-title-bar").show();
+						$(".files-box").css("background-color","#e4f1f9");
+						//$(".content-title-bar").show();
 						}	
 						else
 						{
@@ -188,10 +120,8 @@
 							//$(".content-title-bar").hide();
 						}	
 					});
+							
 					
-					
-					
-					$(".content-title-btn2").hide();
 					
 					$(".content-title-btn").on("click", function(e)
 					{
@@ -234,78 +164,6 @@
 						}
 					});
 										
-					$( document ).on( "showitemmenu", function(e, ibfsitem, contextitem)
-					{					
-						var options = 
-						{
-						my:"left top",
-						at:"left bottom",
-						of:contextitem
-						}
-						var edit_menu = ibxResourceMgr.getResource(".edit-menu");
-						var initialized = $(edit_menu).data("initialized");
-						$(edit_menu).data('ibxWidget').mimenuitemrun.data("ibfsitem",ibfsitem);
-						$(edit_menu).data('ibxWidget').mimenuitemedit.data("ibfsitem",ibfsitem);	
-						if(!initialized)
-						{				
-							$(edit_menu).data('ibxWidget').mimenuitemrun.on("ibx_menu_item_click",function(e)
-							{
-								var ibfsitem = $(e.target).data("ibfsitem");
-								runIt(ibfsitem);
-								});									
-							$(edit_menu).data('ibxWidget').mimenuitemedit.on("ibx_menu_item_click",function(e)
-							{
-								var ibfsitem = $(e.target).data("ibfsitem");
-								editIt(ibfsitem);							
-							});
-							$(edit_menu).data("initialized",true);
-						}
-						
-						$(edit_menu).ibxContextMenu("open").position(options);
-					});	
-						
-					$( document ).on( "showfoldermenu", function(e, ibfsitem, contextitem)
-					{					
-						var options = 
-						{
-						my:"left top",
-						at:"left bottom",
-						of:contextitem
-						}
-						var folder_menu = ibxResourceMgr.getResource(".folder-menu");
-						var initialized = $(folder_menu).data("initialized");
-						$(folder_menu).data('ibxWidget').fomenuitemopen.data("ibfsitem",ibfsitem);
-						$(folder_menu).data('ibxWidget').fomenuitemdelete.data("ibfsitem",ibfsitem);	
-						$(folder_menu).data('ibxWidget').fomenuitemchangetitle.data("ibfsitem",ibfsitem);
-						$(folder_menu).data('ibxWidget').fomenuitemrefresh.data("ibfsitem",ibfsitem);
-						if(!initialized)
-						{				
-							$(folder_menu).data('ibxWidget').fomenuitemopen.on("ibx_menu_item_click",function(e)
-							{
-								var ibfsitem = $(e.target).data("ibfsitem");
-								openfolder(ibfsitem);
-							});									
-							$(folder_menu).data('ibxWidget').fomenuitemdelete.on("ibx_menu_item_click",function(e)
-							{
-								var ibfsitem = $(e.target).data("ibfsitem");
-								deletefolder(ibfsitem);							
-							});
-							$(folder_menu).data('ibxWidget').fomenuitemchangetitle.on("ibx_menu_item_click",function(e)
-							{
-								var ibfsitem = $(e.target).data("ibfsitem");
-								changefoldertitle(ibfsitem);							
-							});
-							$(folder_menu).data('ibxWidget').fomenuitemrefresh.on("ibx_menu_item_click",function(e)
-							{
-								var ibfsitem = $(e.target).data("ibfsitem");
-								refreshfolder(ibfsitem);							
-							});
-							$(folder_menu).data("initialized",true);
-						}
-						
-						$(folder_menu).ibxContextMenu("open").position(options);
-					});	
-						
 					
 					
 						
