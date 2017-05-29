@@ -196,7 +196,7 @@
 							};
 							
 							function addgriditem(ibfsitem, glyph, folder)
-							{debugger;
+							{
 									var d = new Date(ibfsitem.dateLastModified);
 									var ddate = d.toLocaleDateString() + "  " + d.toLocaleTimeString();
 									var summary = (ibfsitem.summary)? ibfsitem.summary : "None";
