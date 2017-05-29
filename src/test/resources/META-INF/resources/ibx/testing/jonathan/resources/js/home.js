@@ -90,6 +90,7 @@ $(document).on("doneadding", function(e)
 	
 function buildviews()
 {
+	newitemsbox(newitemsboxsmall);
 	$(".files-box-files").empty();			
 	// build the image view...
 	
@@ -432,6 +433,14 @@ function warningmessage(message)
 		var dlg = $.ibi.ibxDialog.createMessageDialog(options);
 		dlg.ibxDialog("open");						
 };
+function newFolder()
+{
+		warningmessage("Not Implemented");
+};
+function newDomain()
+{
+		warningmessage("Not Implemented");
+};
 function newEditor()
 {
 		if(currentPath == "")
@@ -544,7 +553,7 @@ function newitemsbox(small)
 	// The 'create new' box...
 	var buttonlist=[];
 	var buttons = [
-		["Folder", "fa fa-folder", "", "yellow"],
+		["Folder", "fa fa-folder", "newFolder()", "yellow"],
 		["Data Set","fa fa-upload", "", "green"],
 		["Connect","fa fa-database", "","green"],
 		["Chart","ibx-icons ibx-glyph-fex-chart", "newIA(\"chart\")", "purple"],
@@ -559,9 +568,14 @@ function newitemsbox(small)
 		["URL","fa fa-external-link-square","","teel"],
 		["Shortcut", "fa fa-link","","teel"],
 		["Less","fa fa-ellipsis-h", "lessbuttons()","black"],
-		["More","fa fa-ellipsis-h", "morebuttons()","black"]
-	];					
-	if(small)
+		["More","fa fa-ellipsis-h", "morebuttons()","black"],
+		["Domain", "fa fa-folder", "newDomain()", "yellow"]
+	];	
+	if(currentPath=="" || currentPath.endsWith("Repository"))
+	{
+		buttonlist=[0,16];
+	}	
+	else if(small)
 		buttonlist=[0,1,3,5,8,9,10,15];
 	else
 		buttonlist=[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14];
