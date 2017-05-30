@@ -24,7 +24,7 @@
 		<script type="text/javascript">
 			var itemlist=[];
 			var folderlist=[];
-			var currentPath='';
+			var currentPath='IBFS:/WFC/Repository';
 			
 			var newitemsboxsmall=true;
 			var rootItem=null;
@@ -33,15 +33,20 @@
 			var newitemsshown=true;
 			var sortedvalue="description";
 			var sortedorder="up";
+			var SesAuthParmPair="";
+			var SesAuthParm="";
+			var SesAuthParmVal="";
 			
 			
 			<jsp:include page="/WEB-INF/jsp/global/wf_globals.jsp" flush="false" />
 			ibx(function()
-			{		
-					
+			{		debugger;
+					SesAuthParmPair=WFGlobals.getSesAuthParmPair(); 
+					SesAuthParm=WFGlobals.getSesAuthParm();
+					SesAuthParmVal=WFGlobals.getSesAuthVal(); 
 					var loaded = Ibfs.load("<%=request.getContextPath()%>", WFGlobals.ses_auth_parm, WFGlobals.ses_auth_val);
 					loaded.done(function(ibfs)
-					{
+					{						
 						var path="<%=request.getParameter("path")%>";
 						if(path=="null")path="IBFS:/WFC/Repository";
 						if(path.indexOf("IBFS:") == -1)

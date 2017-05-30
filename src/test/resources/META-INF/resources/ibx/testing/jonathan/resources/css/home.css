@@ -355,10 +355,15 @@
 			{
 				margin-top: 4px;
 			}
+			.dialog-area
+			{
+				//width:100%;
+				flex:0 0 50%;
+			}
 			.form-field-filler			
 			{
 				height:20px;
-				width:40%;
+				//width:40%;
 			}
 			.title-form-grid
 			{
@@ -371,7 +376,8 @@
 				margin-top:5px;
 				margin-bottom:5px;
 				height: 30px;
-				width: 400px;
+				//width: 50%;
+				//width: 400px;
 				
 			}
 			.form-field-text
@@ -381,7 +387,8 @@
 				margin-bottom:5px;
 				padding: 4px;
 				height: 30px;
-				width: 400px;
+				//width: 400px;
+				//width: 50%;
 				font-size: 14px;
 				
 			}	

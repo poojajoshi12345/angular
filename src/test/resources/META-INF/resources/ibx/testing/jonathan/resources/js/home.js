@@ -107,15 +107,27 @@ function deleteItem(item)
 		
 };
 
-function ajaxCall(path)
+function postCall(path,data)
 {
-	$.ajax({
-	    url: path,
-	    dataType: "xml",
-	    success: function(data) {
-	        alert(data);
-	    }
-	});	
+	$.post(path, data , function(result){
+        debugger;
+    });
+	//$.ajax({
+    //    data: data,
+     //   type: "POST",
+      //  url: path,
+     //   
+     //   contentType: "application/x-www-form-urlencoded",
+     //   dataType: 'json'
+     //   
+	//}).done(function(msg){
+	//	debugger;
+	//});
+	
+	
+	
+	
+	
 };
 
 
@@ -469,18 +481,52 @@ function warningmessage(message)
 		var dlg = $.ibi.ibxDialog.createMessageDialog(options);
 		dlg.ibxDialog("open");						
 };
+var form;
 function newFolder()
 {
 	// show the dialog....
-	var form = ibxResourceMgr.getResource(".title-form");
-	
-	$(".files-listing").hide();
-	$(".files-box-files").hide();
+	form = ibxResourceMgr.getResource(".title-form");	
 	$(".content-box").hide();
+	$(".dialog-area").empty();
 	$(".dialog-area").append(form);
 	$(".dialog-area").show();
 	
-	//		warningmessage("Not Implemented");
+	$(form).find(".form-ok-button").click(function(e)
+	{debugger;
+		var title=$(form).find(".form-field-text").ibxWidget('option', 'text');
+		if(title.length > 0)
+		{
+				// replace blanks with underscores
+				name=title.toLowerCase();
+			 	name=name.replace(/ /g,"_");
+			 				
+			 	var uriExec = sformat("{1}/wfirs", applicationContext);
+			 	var ibfsobject=sformat('<object _jt="IBFSMRObject" container="true" description="{1}" summary="  "></object>', title);
+			 	var randomnum = Math.floor(Math.random() * 100000);	
+			 	var argument=
+			 	{
+			 		IBFS_path: currentPath + "/" + name,
+			 		IBFS_action: "put",
+			 		IBFS_object: ibfsobject,
+			 		IBFS_replace: true,
+			 		IBFS_private: "__null",
+			 		IBFS_args: "__null",
+			 		IBIWF_SES_AUTH_TOKEN: SesAuthParmVal,
+			 		IBFS_random: randomnum,
+			 		IBFS_service: "ibfs"
+			 	};
+			 	postCall(uriExec,argument);	
+		}
+	});
+	$(form).find(".form-cancel-button").click(function()
+	{
+		$(".content-box").show();
+		$(".dialog-area").hide();
+	});
+			
+	
+	
+
 };
 function newDomain()
 {

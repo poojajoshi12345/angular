@@ -51,7 +51,7 @@
 			</div>	
 			<div class="title-form" >
 				<div class="form-title" data-ibx-type="ibxLabel" data-ibxp-text="Create New Folder"></div>															
-				<div class="title-form-grid" data-ibx-type="ibxGrid" data-ibxp-cols="auto auto" data-ibxp-rows="auto auto auto auto" width="80%">								
+				<div class="title-form-grid" data-ibx-type="ibxGrid" data-ibxp-cols="50% 50%" data-ibxp-rows="auto auto auto auto" >								
 						<div class="form-field-title" data-ibx-type="ibxLabel" data-ibxp-text="Title:" data-ibx-col="1" data-ibx-row="1"></div>
 						<div tabindex="1" class="form-field-text" data-ibx-type="ibxTextField" data-ibxp-placeholder="Enter Title Here" data-ibx-col="2" data-ibx-row="1"></div>
 						<div class="form-field-filler" data-ibx-row="2" data-ibx-type="ibxLabel" data-ibxp-text="" data-ibx-col="1"></div>
