@@ -36,6 +36,9 @@
 			var SesAuthParmPair="";
 			var SesAuthParm="";
 			var SesAuthParmVal="";
+			var autoOpen=null;
+			var autoOpenDone=false;
+			var inAutoOpen=false;
 			
 			
 			<jsp:include page="/WEB-INF/jsp/global/wf_globals.jsp" flush="false" />

@@ -7,8 +7,11 @@ $( document ).on( "addanitem", function(e, item)
 });	
 
 $( document ).on( "addafolderitem", function(e, item)
-{										
-	folderlist.push(item);																				
+{									
+	folderlist.push(item);
+	// check if autoopen
+	if(autoOpen == null && !autoOpenDone && item.clientInfo.properties.autoopen == "on")
+		autoOpen=item;	
 });
 
 
@@ -161,7 +164,9 @@ function postCall(path,data,wfirsflag)
 									refreshfolder(currentPath);	
 								}	
 								else
-								{
+								{									
+									var message = $(status).attr('message');
+									warningmessage(message);	
 									
 								}
 							}
@@ -178,7 +183,19 @@ function postCall(path,data,wfirsflag)
 
 $(document).on("doneadding", function(e)
 	{
-		buildviews();
+		
+		if(autoOpen != null)
+		{
+			currentPath=autoOpen.fullPath;
+			inAutoOpen=true;
+			autoOpen=null;
+			refreshfolder(currentPath);			
+		}
+		else
+		{
+			autoOpenDone=true;
+			buildviews();
+		}	
 	});
 	
 function buildviews()
@@ -255,9 +272,7 @@ function buildviews()
 	{
 		for (i=0; i < ilen; i++)
 		{								
-			var ibfsitem=folderlist[i];
-			//if(ibfsitem.description == "SKO 2017")
-			//	debugger;							
+			var ibfsitem=folderlist[i];										
 			addgriditem(ibfsitem, glyph, true);												
 		}							
 	}
