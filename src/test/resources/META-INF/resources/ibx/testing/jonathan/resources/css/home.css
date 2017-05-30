@@ -244,20 +244,20 @@
 				margin-left:4px;		
 				
 			}
-			.image-menu
+						
+			.image-menu2
 			{
 				height:20px;
+				font-size: 16px;
 				min-width:18px;
 				float:right;
 				position:relative;
 				right:4px;
-				margin-top:4px;				
-				background:url(../images/vertical.png);
+				margin-top:6px;				
 				margin-right:4px;
 				
 				
 			}
-			
 			.flex-grid-cell-title
 			{
 				font-size: 14px;
@@ -416,3 +416,8 @@
 				font-size: 14px;
 				font-weight: bold;
 			}	
+			.ibx-popup
+			{
+				font-size:14px;
+				padding: 12px;
+			}

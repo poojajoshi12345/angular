@@ -28,6 +28,8 @@ function changefoldertitle(item)
 };
 function refreshfolder(item)
 {
+	clearitems(currentPath);
+	rootItem._refresh(currentPath);
 };
 
 // run an item
@@ -89,44 +91,87 @@ function deleteItem(item)
 	{
 		type:"std warning",
 		caption:"Delete",
-		buttons:"okcancel",
+		buttons:"okcancel",		
 		messageOptions:{text:text}
 	};
-	var dlg = $.ibi.ibxDialog.createMessageDialog(options);
+	var dlg = $.ibi.ibxDialog.createMessageDialog(options);	
 	
-	var x=dlg.ibxDialog($("btnOK"));
 	
 	dlg.ibxDialog("open").on("ibx_close", function(e, btn)
+	{
+			if(btn=="ok")
 			{
-				if(btn=="ok")
+				// prepare the delete....
+				var uriExec = sformat("{1}/wfirs", applicationContext);					
+				var randomnum = Math.floor(Math.random() * 100000);	
+				var argument=
 				{
-					// prepare the delete....
-				}		
-			});
-
-		
+						IBFS_path: item.fullPath,
+						IBFS_action: "delete",
+						IBFS_args: "__null",
+						IBIWF_SES_AUTH_TOKEN: SesAuthParmVal,
+						IBFS_random: randomnum,			 		
+						IBFS_service: "ibfs"
+				};
+				postCall(uriExec,argument,true);				
+				
+			}	
+	});
 };
 
-function postCall(path,data)
-{
-	$.post(path, data , function(result){
-        debugger;
-    });
-	//$.ajax({
-    //    data: data,
-     //   type: "POST",
-      //  url: path,
-     //   
-     //   contentType: "application/x-www-form-urlencoded",
-     //   dataType: 'json'
-     //   
-	//}).done(function(msg){
-	//	debugger;
-	//});
+function postCall(path,data,wfirsflag)
+{	
 	
-	
-	
-	
+	var outputformat=wfirsflag?"xml":"html";
+	var retstatus=false;
+	$.post(path, data , function(retdata, status){
+              
+		if(status=="success")
+		{
+			if(wfirsflag)
+			{	
+				$(retdata).children().each(function()
+				{
+					var tagName=this.tagName;
+					if(tagName=="ibfsrpc")
+					{
+						var retcode=$(this).attr('returncode');	
+						if(retcode=="10000")
+						{
+							refreshfolder(currentPath);	
+						}
+					}
+					
+				});
+			}
+			else
+			{
+				xmlDoc = $.parseXML( retdata );
+				var response=$(xmlDoc).find("RESPONSE")
+				{
+						var x = $(response).find("ACTION_DATA");
+						if(x)
+						{
+							var status = $(x).find("status");
+							if(status)
+							{	
+								var retvalue = $(status).attr('result');
+								if(retvalue && retvalue=="success")
+								{
+									refreshfolder(currentPath);	
+								}	
+								else
+								{
+									
+								}
+							}
+						}		
+							
+				}			
+				
+			}
+		}
+    }, outputformat);
 	
 };
 
@@ -276,7 +321,7 @@ function itemdiv(item)
 	var glyphdiv=sformat("<div class='image-icon' data-ibx-type='ibxLabel' data-ibxp-glyph-classes=' {1} '></div>", glyphs);							
 	var divstring=sformat('<div class="file-item" <a><img class="item-image" src=" {1} "></a>', item.thumbPath);						
 	var itemname = "'" + item.name + "'";
-	divstring = divstring += sformat('<div data-ibx-type="ibxHBox" data-ibxp-align="stretch"> {1} <div class="image-text" data-ibx-type="ibxLabel" data-ibxp-justify="center" data-ibxp-text="{2}"></div> <div class="image-menu" 	onclick="filemenu(this,  {3} )" </div> </div></div>',
+	divstring = divstring += sformat('<div data-ibx-type="ibxHBox" data-ibxp-align="stretch"> {1} <div class="image-text" data-ibx-type="ibxLabel" data-ibxp-justify="center" data-ibxp-text="{2}"></div> <div class="image-menu2" data-ibxp-glyph-classes="fa fa-ellipsis-v" data-ibx-type="ibxLabel"	onclick="filemenu(this,  {3} )" </div> </div></div>',
 		glyphdiv, item.description, itemname);							
 	
 	return divstring;
@@ -288,7 +333,7 @@ function folderdiv(item)
 	var glyphdiv="<div class='folder-image-icon' data-ibx-type='ibxLabel'  data-ibxp-glyph-classes='fa fa-folder'></div>";
 	var divstring='<div class="folder-item">';						
 	var itemname = "'" + item.name + "'";
-	divstring = divstring += sformat('<div data-ibx-type="ibxHBox" data-ibxp-align="stretch" class="folder-div"> {1} <div class="image-text" data-ibx-type="ibxLabel" data-ibxp-justify="center" data-ibxp-text="{2}"></div> <div class="image-menu" 	onclick="foldermenu(this,  {3} )" </div> </div></div>',
+	divstring = divstring += sformat('<div data-ibx-type="ibxHBox" data-ibxp-align="stretch" class="folder-div"> {1} <div class="image-text" data-ibx-type="ibxLabel" data-ibxp-justify="center" data-ibxp-text="{2}"></div> <div class="image-menu2" data-ibxp-glyph-classes="fa fa-ellipsis-v" data-ibx-type="ibxLabel"	onclick="foldermenu(this,  {3} )" </div> </div></div>',
 		glyphdiv, item.description, itemname);	
 	return divstring;
 }
@@ -359,18 +404,24 @@ $( document ).on( "showitemmenu", function(e, ibfsitem, contextitem)
 	var edit_menu = ibxResourceMgr.getResource(".edit-menu");
 	var initialized = $(edit_menu).data("initialized");
 	$(edit_menu).data('ibxWidget').mimenuitemrun.data("ibfsitem",ibfsitem);
-	$(edit_menu).data('ibxWidget').mimenuitemedit.data("ibfsitem",ibfsitem);	
+	$(edit_menu).data('ibxWidget').mimenuitemedit.data("ibfsitem",ibfsitem);
+	$(edit_menu).data('ibxWidget').mimenuitemdelete.data("ibfsitem",ibfsitem);	
 	if(!initialized)
 	{				
 		$(edit_menu).data('ibxWidget').mimenuitemrun.on("ibx_menu_item_click",function(e)
 		{
 			var ibfsitem = $(e.target).data("ibfsitem");
 			runIt(ibfsitem);
-			});									
+		});									
 		$(edit_menu).data('ibxWidget').mimenuitemedit.on("ibx_menu_item_click",function(e)
 		{
 			var ibfsitem = $(e.target).data("ibfsitem");
 			editIt(ibfsitem);							
+		});
+		$(edit_menu).data('ibxWidget').mimenuitemdelete.on("ibx_menu_item_click",function(e)
+		{
+			var ibfsitem = $(e.target).data("ibfsitem");
+			deleteItem(ibfsitem);							
 		});
 		$(edit_menu).data("initialized",true);
 	}
@@ -492,30 +543,53 @@ function newFolder()
 	$(".dialog-area").show();
 	
 	$(form).find(".form-ok-button").click(function(e)
-	{debugger;
+	{
 		var title=$(form).find(".form-field-text").ibxWidget('option', 'text');
 		if(title.length > 0)
 		{
+			
 				// replace blanks with underscores
 				name=title.toLowerCase();
 			 	name=name.replace(/ /g,"_");
-			 				
+			 	/*
+			 	var lastChar=currentPath.charAt(currentPath.length-1);
+			 	var slash="/";
+			 	if(lastChar == "/")slash="";			 	
+			 	pathtouse=currentPath + slash + name;						
 			 	var uriExec = sformat("{1}/wfirs", applicationContext);
 			 	var ibfsobject=sformat('<object _jt="IBFSMRObject" container="true" description="{1}" summary="  "></object>', title);
 			 	var randomnum = Math.floor(Math.random() * 100000);	
 			 	var argument=
 			 	{
-			 		IBFS_path: currentPath + "/" + name,
+			 		IBFS_path: pathtouse,
 			 		IBFS_action: "put",
 			 		IBFS_object: ibfsobject,
 			 		IBFS_replace: true,
 			 		IBFS_private: "__null",
 			 		IBFS_args: "__null",
 			 		IBIWF_SES_AUTH_TOKEN: SesAuthParmVal,
-			 		IBFS_random: randomnum,
+			 		IBFS_random: randomnum,			 		
 			 		IBFS_service: "ibfs"
 			 	};
-			 	postCall(uriExec,argument);	
+			 	postCall(uriExec,argument);
+			 	*/	
+			 	
+			 	var uriExec = sformat("{1}/createfolder.bip", applicationContext);
+			 	var randomnum = Math.floor(Math.random() * 100000);	
+			 	var argument=
+			 	{
+			 		BIP_REQUEST_TYPE: "BIP_CREATE_NEW_FOLDER",		
+			 		container: currentPath,
+			 		name: name,
+			 		desc: title,
+			 		summary: " ",			 		
+			 		IBIWF_SES_AUTH_TOKEN: SesAuthParmVal,
+			 		IBI_random: randomnum				 		
+			 	};
+			 	
+			 	postCall(uriExec,argument,false);	
+			 	$(".content-box").show();
+				$(".dialog-area").hide();
 		}
 	});
 	$(form).find(".form-cancel-button").click(function()

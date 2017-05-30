@@ -40,7 +40,7 @@
 			
 			<jsp:include page="/WEB-INF/jsp/global/wf_globals.jsp" flush="false" />
 			ibx(function()
-			{		debugger;
+			{		
 					SesAuthParmPair=WFGlobals.getSesAuthParmPair(); 
 					SesAuthParm=WFGlobals.getSesAuthParm();
 					SesAuthParmVal=WFGlobals.getSesAuthVal(); 
