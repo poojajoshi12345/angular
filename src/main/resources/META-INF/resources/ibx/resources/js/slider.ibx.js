@@ -11,6 +11,7 @@ $.widget("ibi.ibxSlider", $.ibi.ibxGrid,
 			"step": 1,
 			"lock": false,
 			"orientation": "horizontal",
+			"flip": false,
 			"edge": "inside",
 			"markerShape": "rectangle",
 			"minTextPos": "none",
@@ -168,24 +169,25 @@ $.widget("ibi.ibxSlider", $.ibi.ibxGrid,
 		var outerWidth = this._sliderWrapper.outerWidth();
 		var outerHeight = this._sliderWrapper.outerHeight();
 		var value = this.options.value;
+		var flip = this.options.flip;
 
 		if (this.options.orientation == "horizontal")
 		{
 			if (mouseX <= posX)
-				value = min;
+				value = flip ? max : min;
 			else if (mouseX >= posX + outerWidth)
-				value = max;
+				value = flip ? min : max;
 			else
-				value = Math.round((mouseX - posX) * (max - min) / outerWidth + min);
+				value = Math.round((flip ? (posX + outerWidth - mouseX) : (mouseX - posX)) * (max - min) / outerWidth + min);
 		}
 		else
 		{
 			if (mouseY <= posY)
-				value = min;
+				value = flip ? min : max;
 			else if (mouseY >= posY + outerHeight)
-				value = max;
+				value = flip ? max : min;
 			else
-				value = Math.round((mouseY - posY) * (max - min) / outerHeight + min);
+				value = Math.round((flip ? (mouseY - posY) : (posY + outerHeight - mouseY)) * (max - min) / outerHeight + min);
 		}
 
 		return this._adjustStep(value, min, max, this.options.step);
@@ -237,6 +239,21 @@ $.widget("ibi.ibxSlider", $.ibi.ibxGrid,
 	{
 		this._super();
 	},
+	_flip: function (val)
+	{
+		if (this.options.flip)
+		{
+			switch (val)
+			{
+				case 1: return 3;
+				case 2: return 2;
+				case 3: return 1;
+				default: return val;
+			}
+		}
+		else
+			return val;
+	},
 	refresh: function ()
 	{
 		this._labelMin.ibxWidget('option', 'text', this._getFormattedText("min"));
@@ -252,25 +269,29 @@ $.widget("ibi.ibxSlider", $.ibi.ibxGrid,
 			default:
 			case 'none':
 				this._labelMin.hide();
-				this._labelMin.data('ibxRow', horiz?'2':'1');
-				this._labelMin.data('ibxCol', horiz?'1':'2');
+				this._labelMin.data('ibxRow', this._flip(horiz ? 2 : 3));
+				this._labelMin.data('ibxCol', this._flip(horiz ? 1 : 2));
+
 				wrapperStart = 1;
 				break;
 			case 'start':
-				this._labelMin.data('ibxRow', horiz?'1':'1');
-				this._labelMin.data('ibxCol', horiz?'1':'1');
+				this._labelMin.data('ibxRow', this._flip(horiz ? 1 : 3));
+				this._labelMin.data('ibxCol', this._flip(horiz ? 1 : 1));
+
 				this._labelMin.show();
 				wrapperStart = 1;
 				break;
 			case 'center':
-				this._labelMin.data('ibxRow', horiz?'2':'1');
-				this._labelMin.data('ibxCol', horiz?'1':'2');
+				this._labelMin.data('ibxRow', this._flip(horiz ? 2 : 3));
+				this._labelMin.data('ibxCol', this._flip(horiz ? 1 : 2));
+
 				this._labelMin.show();
 				wrapperStart = 2;
 				break;
 			case 'end':
-				this._labelMin.data('ibxRow', horiz?'3':'1');
-				this._labelMin.data('ibxCol', horiz?'1':'3');
+				this._labelMin.data('ibxRow', this._flip(horiz ? 3 : 3));
+				this._labelMin.data('ibxCol', this._flip(horiz ? 1 : 3));
+
 				this._labelMin.show();
 				wrapperStart = 1;
 				break;
@@ -283,25 +304,28 @@ $.widget("ibi.ibxSlider", $.ibi.ibxGrid,
 			default:
 			case 'none':
 				this._labelMax.hide();
-				this._labelMax.data('ibxRow', horiz?'2':'3');
-				this._labelMax.data('ibxCol', horiz?'3':'2');
+				this._labelMax.data('ibxRow', this._flip(horiz ? 2 : 1));
+				this._labelMax.data('ibxCol', this._flip(horiz ? 3 : 2));
+
 				wrapperEnd = 3;
 				break;
 			case 'start':
-				this._labelMax.data('ibxRow', horiz?'1':'3');
-				this._labelMax.data('ibxCol', horiz?'3':'1');
+				this._labelMax.data('ibxRow', this._flip(horiz ? 1 : 1));
+				this._labelMax.data('ibxCol', this._flip(horiz ? 3 : 1));
+
 				this._labelMax.show();
 				wrapperEnd = 3;
 				break;
 			case 'center':
-				this._labelMax.data('ibxRow', horiz?'2':'3');
-				this._labelMax.data('ibxCol', horiz?'3':'2');
+				this._labelMax.data('ibxRow', this._flip(horiz ? 2 : 1));
+				this._labelMax.data('ibxCol', this._flip(horiz ? 3 : 2));
+
 				this._labelMax.show();
 				wrapperEnd = 2;
 				break;
 			case 'end':
-				this._labelMax.data('ibxRow', horiz?'3':'3');
-				this._labelMax.data('ibxCol', horiz?'3':'3');
+				this._labelMax.data('ibxRow', this._flip(horiz ? 3 : 1));
+				this._labelMax.data('ibxCol', this._flip(horiz ? 3 : 3));
 				this._labelMax.show();
 				wrapperEnd = 3;
 				break;
@@ -312,23 +336,24 @@ $.widget("ibi.ibxSlider", $.ibi.ibxGrid,
 			default:
 			case 'none':
 				this._labelValue.hide();
-				this._labelValue.data('ibxRow', horiz?'1':'2');
-				this._labelValue.data('ibxCol', horiz?'2':'1');
+				this._labelValue.data('ibxRow', horiz ? 1 : 2);
+				this._labelValue.data('ibxCol', horiz ? 2 : 1);
+
 				break;
 			case 'start':
-				this._labelValue.data('ibxRow', horiz?'1':'2');
-				this._labelValue.data('ibxCol', horiz?'2':'1');
+				this._labelValue.data('ibxRow', horiz ? 1 : 2);
+				this._labelValue.data('ibxCol', horiz ? 2 : 1);
+
 				this._labelValue.show();
 				break;
 			case 'end':
-				this._labelValue.data('ibxRow', horiz?'3':'2');
-				this._labelValue.data('ibxCol', horiz?'2':'3');
+				this._labelValue.data('ibxRow', horiz ? 3 : 2);
+				this._labelValue.data('ibxCol', horiz ? 2 : 3);
+
 				this._labelValue.show();
 				break;
 
 		}
-
-
 
 		this._sliderWrapper.data('ibxRow', horiz ? '2' : (wrapperStart + '/span ' + (wrapperEnd - wrapperStart + 1)));
 		this._sliderWrapper.data('ibxCol', horiz ? (wrapperStart + '/span ' + (wrapperEnd - wrapperStart + 1)) : '2');
@@ -339,7 +364,7 @@ $.widget("ibi.ibxSlider", $.ibi.ibxGrid,
 			this.options.direction = "row";
 			this._sliderWrapper.removeClass('ibx-slider-vertical');
 			this._sliderWrapper.addClass('ibx-slider-horizontal');
-			this._slider.css('left', Math.ceil((info.value - info.min) * (this._sliderWrapper.outerWidth() - (this.options.edge == "center" ? 0 : this._slider.outerWidth())) / (info.max - info.min) - (this.options.edge == "center" ? (this._slider.outerWidth() / 2) : 0)) + 'px');
+			this._slider.css(this.options.flip ? 'right' : 'left', Math.ceil((info.value - info.min) * (this._sliderWrapper.outerWidth() - (this.options.edge == "center" ? 0 : this._slider.outerWidth())) / (info.max - info.min) - (this.options.edge == "center" ? (this._slider.outerWidth() / 2) : 0)) + 'px');
 			this._slider.css('top', Math.ceil((this._sliderWrapper.outerHeight() - this._slider.outerHeight()) / 2) + "px");
 			this.element.removeClass('ibx-slider-vertical');
 			this.element.addClass('ibx-slider-horizontal');
@@ -359,7 +384,7 @@ $.widget("ibi.ibxSlider", $.ibi.ibxGrid,
 			this.options.iconPosition = "bottom";
 			this._sliderWrapper.removeClass('ibx-slider-horizontal');
 			this._sliderWrapper.addClass('ibx-slider-vertical');
-			this._slider.css('top', Math.ceil((info.value - info.min) * (this._sliderWrapper.outerHeight() - (this.options.edge == "center" ? 0 : this._slider.outerHeight())) / (info.max - info.min) - (this.options.edge == "center" ? (this._slider.outerHeight() / 2) : 0)) + 'px');
+			this._slider.css(this.options.flip ? 'top' : 'bottom', Math.ceil((info.value - info.min) * (this._sliderWrapper.outerHeight() - (this.options.edge == "center" ? 0 : this._slider.outerHeight())) / (info.max - info.min) - (this.options.edge == "center" ? (this._slider.outerHeight() / 2) : 0)) + 'px');
 			this._slider.css('left', Math.ceil((this._sliderWrapper.outerWidth() - this._slider.outerWidth()) / 2) + "px");
 			this.element.removeClass('ibx-slider-horizontal');
 			this.element.addClass('ibx-slider-vertical');
@@ -581,7 +606,7 @@ $.widget("ibi.ibxRange", $.ibi.ibxSlider,
 
 		if (this.options.orientation == "horizontal")
 		{
-			this._slider2.css('left', Math.ceil((info.value2 - info.min) * (this._sliderWrapper.outerWidth() - (this.options.edge == "center" ? 0 : this._slider2.outerWidth())) / (info.max - info.min) - (this.options.edge == "center" ? (this._slider2.outerWidth() / 2) : 0)) + 'px');
+			this._slider2.css(this.options.flip ? 'right' : 'left', Math.ceil((info.value2 - info.min) * (this._sliderWrapper.outerWidth() - (this.options.edge == "center" ? 0 : this._slider2.outerWidth())) / (info.max - info.min) - (this.options.edge == "center" ? (this._slider2.outerWidth() / 2) : 0)) + 'px');
 			this._slider2.css('top', Math.ceil((this._sliderWrapper.outerHeight() - this._slider2.outerHeight()) / 2) + "px");
 			this._sliderRangeBody.removeClass('ibx-slider-range-body-vertical');
 			this._sliderRangeBody.addClass('ibx-slider-range-body-horizontal');
@@ -589,7 +614,7 @@ $.widget("ibi.ibxRange", $.ibi.ibxSlider,
 		}
 		else
 		{
-			this._slider2.css('top', Math.ceil((info.value2 - info.min) * (this._sliderWrapper.outerHeight() - (this.options.edge == "center" ? 0 : this._slider2.outerHeight())) / (info.max - info.min) - (this.options.edge == "center" ? (this._slider2.outerHeight() / 2) : 0)) + 'px');
+			this._slider2.css(this.options.flip ? 'top' : 'bottom', Math.ceil((info.value2 - info.min) * (this._sliderWrapper.outerHeight() - (this.options.edge == "center" ? 0 : this._slider2.outerHeight())) / (info.max - info.min) - (this.options.edge == "center" ? (this._slider2.outerHeight() / 2) : 0)) + 'px');
 			this._slider2.css('left', Math.ceil((this._sliderWrapper.outerWidth() - this._slider2.outerWidth()) / 2) + "px");
 			this._sliderRangeBody.removeClass('ibx-slider-range-body-horizontal');
 			this._sliderRangeBody.addClass('ibx-slider-range-body-vertical');
@@ -606,13 +631,13 @@ $.widget("ibi.ibxRange", $.ibi.ibxSlider,
 
 		if (this.options.orientation == "horizontal")
 		{
-			this._sliderRangeBody.css('left', this._slider.css("left"));
-			this._sliderRangeBody.css('width', (parseInt(this._slider2.css("left"), 10) + this._slider2.outerWidth() - parseInt(this._slider.css("left"), 10)) + "px");
+			this._sliderRangeBody.css(this.options.flip ? 'right' : 'left', this._slider.css(this.options.flip ? 'right' : "left"));
+			this._sliderRangeBody.css('width', (parseInt(this._slider2.css(this.options.flip ? 'right' : "left"), 10) + this._slider2.outerWidth() - parseInt(this._slider.css(this.options.flip ? 'right' : "left"), 10)) + "px");
 		}
 		else
 		{
-			this._sliderRangeBody.css('top', this._slider.css("top"));
-			this._sliderRangeBody.css('height', (parseInt(this._slider2.css("top"), 10) + this._slider2.outerHeight() - parseInt(this._slider.css("top"), 10)) + "px");
+			this._sliderRangeBody.css(this.options.flip ? 'top' : 'bottom', this._slider.css(this.options.flip ? 'top' : "bottom"));
+			this._sliderRangeBody.css('height', (parseInt(this._slider2.css(this.options.flip ? 'top' : "bottom"), 10) + this._slider2.outerHeight() - parseInt(this._slider.css(this.options.flip ? 'top' : "bottom"), 10)) + "px");
 		}
 
 	}
