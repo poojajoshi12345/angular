@@ -36,17 +36,12 @@
     outline: none;
     background-color: #ccc;
     border: 1px solid #555;
+    z-index:1;
 }
 
 .ibx-slider-marker.locked,
 .ibx-slider-marker.locked:hover {
     background-color: #F8F8F8;
-}
-
-.ibx-slider-marker-one {
-}
-
-.ibx-slider-marker-two {
 }
 
 .ibx-slider-wrapper {
@@ -111,23 +106,5 @@
 
 .ibx-slider-label-value {
     padding: 0.5em;
-}
-
-.ibx-slider-horizontal.ibx-slider-label-min {
-}
-
-.ibx-slider-horizontal.ibx-slider-label-max {
-}
-
-.ibx-slider-horizontal.ibx-slider-label-value {
-}
-
-.ibx-slider-vertical.ibx-slider-label-min {
-}
-
-.ibx-slider-vertical.ibx-slider-label-max {
-}
-
-.ibx-slider-vertical.ibx-slider-label-value {
 }
 

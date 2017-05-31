@@ -432,30 +432,48 @@ $.widget("ibi.ibxRange", $.ibi.ibxSlider,
 			this._activeSlider = this._slider;
 		else
 		{
-			var offset1 = this._slider.offset();
-			var posX1 = offset1.left - $(window).scrollLeft();
-			var posY1 = offset1.top - $(window).scrollTop();
-
-			var offset2 = this._slider2.offset();
-			var posX2 = offset2.left - $(window).scrollLeft();
-			var posY2 = offset2.top - $(window).scrollTop();
-
-			var mouseX = e.pageX - -$(window).scrollLeft();
-			var mouseY = e.pageY - -$(window).scrollTop();
-
-			if (this.options.orientation == "horizontal")
+			if (e.target == this._slider[0])
 			{
-				if (Math.abs(mouseX - posX1) < Math.abs(mouseX - posX2))
+				if (this.options.value == this.options.value2 && this.options.value == this.options.min)
+					this._activeSlider = this._slider2;
+				else
+					this._activeSlider = this._slider;
+			}
+			else if (e.target == this._slider2[0])
+			{
+				if (this.options.value == this.options.value2 && this.options.value == this.options.max)
 					this._activeSlider = this._slider;
 				else
 					this._activeSlider = this._slider2;
 			}
 			else
 			{
-				if (Math.abs(mouseY - posY1) < Math.abs(mouseY - posY2))
-					this._activeSlider = this._slider;
+
+				var offset1 = this._slider.offset();
+				var posX1 = offset1.left - $(window).scrollLeft();
+				var posY1 = offset1.top - $(window).scrollTop();
+
+				var offset2 = this._slider2.offset();
+				var posX2 = offset2.left - $(window).scrollLeft();
+				var posY2 = offset2.top - $(window).scrollTop();
+
+				var mouseX = e.pageX - -$(window).scrollLeft();
+				var mouseY = e.pageY - -$(window).scrollTop();
+
+				if (this.options.orientation == "horizontal")
+				{
+					if (Math.abs(mouseX - posX1) < Math.abs(mouseX - posX2))
+						this._activeSlider = this._slider;
+					else
+						this._activeSlider = this._slider2;
+				}
 				else
-					this._activeSlider = this._slider2;
+				{
+					if (Math.abs(mouseY - posY1) < Math.abs(mouseY - posY2))
+						this._activeSlider = this._slider;
+					else
+						this._activeSlider = this._slider2;
+				}
 			}
 		}
 
@@ -582,7 +600,7 @@ $.widget("ibi.ibxRange", $.ibi.ibxSlider,
 		if (this.options.lock2)
 			this._slider2.addClass('locked');
 		var markerShape = this.options.markerShape2 ? this.options.markerShape2 : this.options.markerShape;
-		if (this.options.markerShape == 'circle')
+		if (markerShape == 'circle')
 			this._slider2.addClass('ibx-slider-marker-round');
 		this._super();
 
