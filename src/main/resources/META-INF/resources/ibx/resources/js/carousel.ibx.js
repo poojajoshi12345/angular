@@ -112,6 +112,23 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 	},
 	_adjustPageMarkers:function()
 	{
+		this._pageMarkers.empty();
+		var metrics = this._getPageMetrics();
+		var pageInfo = this._getPageInfo(metrics);
+		for(var i = 0; i < pageInfo.pages; ++i)
+		{
+			var pageMarker = $(sformat("<div class='{1} {2}' tabIndex='1'>", this.options.pageMarkerClass, i == pageInfo.curPage ? this.options.pageMarkerSelectedClass : ""));
+			pageMarker.prop("title", "Page - " + (i + 1));
+			pageMarker.data("ibxPageMarkerInfo", {"pageNo":i, "metrics":metrics}).on("click", this._onPageMarkerClick.bind(this));
+			this._pageMarkers.append(pageMarker)
+		}
+
+		this._prevBtn.ibxWidget("option", "disabled", pageInfo.curPage == 0);
+		this._nextBtn.ibxWidget("option", "disabled", pageInfo.curPage == (pageInfo.pages-1));
+		
+	},
+	_getPageMetrics:function()
+	{
 		var overFlow = this._itemsBox.css("overflow");
 		var metrics = 
 		{
@@ -123,16 +140,7 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 			pageHeight:		this._itemsBox.prop("offsetHeight") || 1,
 		};
 		this._itemsBox.css("overflow", overFlow);
-
-		this._pageMarkers.empty();
-		var pageInfo = this._getPageInfo(metrics);
-		for(var i = 0; i < pageInfo.pages; ++i)
-		{
-			var pageMarker = $(sformat("<div class='{1} {2}' tabIndex='1'>", this.options.pageMarkerClass, i == pageInfo.curPage ? this.options.pageMarkerSelectedClass : ""));
-			pageMarker.prop("title", "Page - " + (i + 1));
-			pageMarker.data("ibxPageMarkerInfo", {"pageNo":i, "metrics":metrics}).on("click", this._onPageMarkerClick.bind(this));
-			this._pageMarkers.append(pageMarker)
-		}
+		return metrics;
 	},
 	_getPageInfo:function(metrics)
 	{
@@ -144,8 +152,6 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 		var options = this.options;
 		this._prevBtn.css("display", options.showPrevButton ? "" : "none");
 		this._nextBtn.css("display", options.showNextButton ? "" : "none");
-		this._itemsBox.ibxWidget("option", "align", options.alignChildren);
-
 		this._adjustPageMarkers();
 		this._pageMarkers.css("display", options.showPageMarkers ? "" : "none");
 		(options.pageMarkersPos == "start")
