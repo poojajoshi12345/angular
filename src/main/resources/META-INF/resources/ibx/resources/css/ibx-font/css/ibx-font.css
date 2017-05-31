@@ -3,12 +3,12 @@
 
 @font-face {
   font-family: 'ibx Icons';
-  src:  url('../fonts/ibx-font.eot?c2gfr0');
-  src:  url('../fonts/ibx-font.eot?c2gfr0#iefix') format('embedded-opentype'),
-    url('../fonts/ibx-font.woff2?c2gfr0') format('woff2'),
-    url('../fonts/ibx-font.ttf?c2gfr0') format('truetype'),
-    url('../fonts/ibx-font.woff?c2gfr0') format('woff'),
-    url('../fonts/ibx-font.svg?c2gfr0#ibx-fonts') format('svg');
+  src:  url('../fonts/ibx-font.eot?z4id0a');
+  src:  url('../fonts/ibx-font.eot?z4id0a#iefix') format('embedded-opentype'),
+    url('../fonts/ibx-font.woff2?z4id0a') format('woff2'),
+    url('../fonts/ibx-font.ttf?z4id0a') format('truetype'),
+    url('../fonts/ibx-font.woff?z4id0a') format('woff'),
+    url('../fonts/ibx-font.svg?z4id0a#ibx-fonts') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -493,6 +493,9 @@
 }
 .ibx-glyph-checkbox-checked:before {
   content: "\e998";
+}
+.ibx-glyph-arrow-circle-left:before {
+  content: "\f0a8";
 }
 .ibx-glyph-question:before {
   content: "\e999";
