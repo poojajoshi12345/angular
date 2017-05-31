@@ -83,7 +83,7 @@ $.widget("ibi.ibxGrid", $.ibi.ibxWidget,
 
 				//IE Rows...do before so standard CSS can override in compliant browsers
 				"grid-row":				rowStart,
-				"grid-row-span":		rowEnd.replace("/\s*span\s*/", ""),
+				"grid-row-span":		rowEnd.replace(/\s*span\s*/, ""),
 				"grid-row-align":		cell.data("ibxAlign") || options.align,
 
 				//Standard CSS Columns
