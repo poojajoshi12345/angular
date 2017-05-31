@@ -77,41 +77,46 @@ function ibx()
 				throw("Error loading pre ibx resources: " + scripts);
 			}
 
-			if(window.$)
+			if(window.jQuery)
 			{
-				//jquery is loaded...stop polling and continue bootstrapping ibx...
+				//jQuery is in scope...stop polling...
 				window.clearInterval(ibx._loadTimer);
 
-				ibx._loadPromise = $.Deferred();
-				ibx._loadPromise._autoBind = autoBind;
-				ibx._loadPromise._resPackages = resPackages;
-
-				var url = ibx._path + "./js/resources.ibx.js";
-				$.get(url).then(function()
+				//wait for jQuery to be fully loaded...
+				$(function()
 				{
-					//save the current inline head style blocks so they can be moved after all ibx loaded css files.
-					var inlineStyles = $("head > style").detach();
+					//continue booting ibx...
+					ibx._loadPromise = $.Deferred();
+					ibx._loadPromise._autoBind = autoBind;
+					ibx._loadPromise._resPackages = resPackages;
 
-					ibxResourceMgr.setContextPath(ibx._path);
-					var packages = ibx._loadPromise._resPackages;
-					packages.unshift(ibx._path + "./ibx_resource_bundle.xml");
-					ibxResourceMgr.addBundles(packages).done(function()
+					var url = ibx._path + "./js/resources.ibx.js";
+					$.get(url).then(function()
 					{
-						//bool means just bind everything...string means select these and bind them
-						var autoBind = ibx._loadPromise._autoBind;
-						if(autoBind)
-							ibx.bindElements((typeof(autoBind) === "string") ? autoBind : "");
+						//save the current inline head style blocks so they can be moved after all ibx loaded css files.
+						var inlineStyles = $("head > style").detach();
 
-						$("head").append(inlineStyles);//append the inline style blocks back to end of head.
-						
-						ibx._loaded = true;
-						ibx._isLoading = !ibx._loaded;
-						ibx._loadPromise.then(fn);
-						ibx._loadPromise.then(function()
+						ibxResourceMgr.setContextPath(ibx._path);
+						var packages = ibx._loadPromise._resPackages;
+						packages.unshift(ibx._path + "./ibx_resource_bundle.xml");
+						ibxResourceMgr.addBundles(packages).done(function()
 						{
-							$(".ibx-root").addClass("ibx-loaded");//display all ibx-roots, now that we are loaded.
+							//bool means just bind everything...string means select these and bind them
+							var autoBind = ibx._loadPromise._autoBind;
+							if(autoBind)
+								ibx.bindElements((typeof(autoBind) === "string") ? autoBind : "");
+
+							$("head").append(inlineStyles);//append the inline style blocks back to end of head.
+						
+							ibx._loaded = true;
+							ibx._isLoading = !ibx._loaded;
+							ibx._loadPromise.then(fn);
+							ibx._loadPromise.then(function()
+							{
+								$(".ibx-root").addClass("ibx-loaded");//display all ibx-roots, now that we are loaded.
+							});
+							ibx._loadPromise.resolve(ibx);//let everyone know the system is booted.
 						});
-						ibx._loadPromise.resolve(ibx);//let everyone know the system is booted.
 					});
 				});
 			}
