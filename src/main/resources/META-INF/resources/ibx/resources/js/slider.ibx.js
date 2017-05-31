@@ -35,7 +35,7 @@ $.widget("ibi.ibxSlider", $.ibi.ibxGrid,
 
 		this._sliderBody = $('<div class="ibx-slider-body">');
 		this._sliderWrapper.append(this._sliderBody);
-		this._slider = $('<div class="ibx-default-ctrl-focus ibx-slider-marker" tabIndex="1">');
+		this._slider = $('<div class="ibx-default-ctrl-focus ibx-slider-marker ibx-slider-marker-one" tabIndex="1">');
 		this._slider.hide();
 		this._sliderWrapper.append(this._slider);
 		this.element.append(this._sliderWrapper);
@@ -393,6 +393,7 @@ $.widget("ibi.ibxRange", $.ibi.ibxSlider,
 		{
 			"value2": 0,
 			"lock2": false,
+			"markerShape2": "",
 		},
 	_widgetClass: "ibx-range",
 	_create: function ()
@@ -400,7 +401,7 @@ $.widget("ibi.ibxRange", $.ibi.ibxSlider,
 		this._super();
 		this._sliderRangeBody = $('<div class="ibx-slider-range-body">');
 		this._sliderRangeBody.insertBefore(this._slider);
-		this._slider2 = $('<div class="ibx-default-ctrl-focus ibx-slider-marker" tabIndex="1">');
+		this._slider2 = $('<div class="ibx-default-ctrl-focus ibx-slider-marker ibx-slider-marker-two" tabIndex="1">');
 		this._slider2.hide();
 		this._sliderWrapper.append(this._slider2);
 		this._slider2.on("keydown", this._onSliderKeyDown.bind(this));
@@ -580,6 +581,7 @@ $.widget("ibi.ibxRange", $.ibi.ibxSlider,
 		this._slider2.removeClass('ibx-slider-marker-round locked');
 		if (this.options.lock2)
 			this._slider2.addClass('locked');
+		var markerShape = this.options.markerShape2 ? this.options.markerShape2 : this.options.markerShape;
 		if (this.options.markerShape == 'circle')
 			this._slider2.addClass('ibx-slider-marker-round');
 		this._super();
