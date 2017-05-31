@@ -77,7 +77,7 @@ function ibx()
 				throw("Error loading pre ibx resources: " + scripts);
 			}
 
-			if(window.jQuery && window.jQuery.ui)
+			if(window.jQuery && window.jQuery.widget)
 			{
 				//jQuery/jQueryUI is in scope...stop polling...
 				window.clearInterval(ibx._loadTimer);
