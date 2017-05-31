@@ -10,11 +10,12 @@
 
 .ibx-slider-horizontal {
     min-height:1.2em;
+    width: 100px;
 }
 
 .ibx-slider-vertical {
     min-width:1.2em;
-
+    height: 100px;
 }
 
 .ibx-slider-marker {

@@ -1,7 +1,7 @@
 /*Copyright 1996-2016 Information Builders, Inc. All rights reserved.*/
 // $Revision$:
 
-$.widget("ibi.ibxSlider", $.ibi.ibxLabel,
+$.widget("ibi.ibxSlider", $.ibi.ibxGrid,
 {
 	options:
 		{
@@ -13,20 +13,33 @@ $.widget("ibi.ibxSlider", $.ibi.ibxLabel,
 			"orientation": "horizontal",
 			"edge": "inside",
 			"markerShape": "rectangle",
-			"textPosition": "none",
+			"minTextPos": "none",
+			"minTextPos": "none",
+			"valueTextPos": "none",
+			//"textPosition": "none",
 			"fnFormat": null,
+			"align": "center",
+			"cols": "auto 1fr auto",
+			"rows": "auto 1fr auto",
+			"align": "stretch",
 		},
 	_widgetClass: "ibx-slider",
 	_create: function ()
 	{
 		this._super();
+		this._labelMin = $('<div class="ibx-slider-label-min">').ibxLabel({ 'justify': 'center' });
+		this._labelMax = $('<div class="ibx-slider-label-max">').ibxLabel({ 'justify': 'center' });
+		this._labelValue = $('<div class="ibx-slider-label-value">').ibxLabel({ 'justify': 'center' });
+
 		this._sliderWrapper = $('<div class="ibx-slider-wrapper">');
+
 		this._sliderBody = $('<div class="ibx-slider-body">');
 		this._sliderWrapper.append(this._sliderBody);
 		this._slider = $('<div class="ibx-default-ctrl-focus ibx-slider-marker" tabIndex="1">');
 		this._slider.hide();
 		this._sliderWrapper.append(this._slider);
 		this.element.append(this._sliderWrapper);
+		this.element.append(this._labelValue, this._labelMin, this._sliderWrapper, this._labelMax);
 		this._fnSliderMouseEvent = this._onSliderMouseEvent.bind(this);
 		this.element.on("mousedown", this._fnSliderMouseEvent);
 		this._slider.on("keydown", this._onSliderKeyDown.bind(this));
@@ -45,13 +58,11 @@ $.widget("ibi.ibxSlider", $.ibi.ibxLabel,
 	},
 	_initSlider: function ()
 	{
-		this._setValue("" + this.options.value, this._getInfo());
-		this.refresh();
+		this._setValue("" + this.options.value, this.info());
 		this._slider.show();
 	},
 	_setValue: function (value, data)
 	{
-		this.options.text = this._getFormattedText();
 		this.refresh();
 		this._trigger("change", null, data);
 		this._trigger("set_form_value", null, { "elem": this.element, "value": value });
@@ -61,7 +72,7 @@ $.widget("ibi.ibxSlider", $.ibi.ibxLabel,
 	{
 		this._activeSlider = this._slider;
 		this._slider.addClass('ibx-slider-marker-move');
-		var info = this._getInfo();
+		var info = this.info();
 		this._moveSlider(e);
 		this._slider.focus();
 	},
@@ -69,10 +80,9 @@ $.widget("ibi.ibxSlider", $.ibi.ibxLabel,
 	{
 		if (!this.options.lock)
 		{
-			var info = this._getInfo();
+			var info = this.info();
 			this.options.value = this._posMarker(e, info.value, info.min, info.max);
-			this._setValue("" + this.options.value, this._getInfo());
-			this.refresh();
+			this._setValue("" + this.options.value, this.info());
 		}
 	},
 	_onSliderMouseEvent: function (e)
@@ -83,7 +93,7 @@ $.widget("ibi.ibxSlider", $.ibi.ibxLabel,
 				{
 					this._focusSlider(e);
 					e.preventDefault();
-					if (this._trigger("start", this._getInfo()))
+					if (this._trigger("start", this.info()))
 					{
 						$(document.body).css("pointerEvents", "none");
 						$(document).on("mouseup mousemove", this._fnSliderMouseEvent);
@@ -96,7 +106,7 @@ $.widget("ibi.ibxSlider", $.ibi.ibxLabel,
 					$(document).off("mouseup mousemove", this._fnSliderMouseEvent);
 					this._activeSlider.removeClass('ibx-slider-marker-move');
 					e.preventDefault();
-					this._trigger("end", this._getInfo())
+					this._trigger("end", this.info())
 				}
 				break;
 			case "mousemove":
@@ -113,7 +123,7 @@ $.widget("ibi.ibxSlider", $.ibi.ibxLabel,
 	{
 		if (!this.options.lock)
 		{
-			var info = this._getInfo();
+			var info = this.info();
 			if (bLeft)
 			{
 				info.value -= info.step;
@@ -127,8 +137,7 @@ $.widget("ibi.ibxSlider", $.ibi.ibxLabel,
 					info.value = info.max;
 			}
 			this.options.value = this._adjustStep(info.value, info.min, info.max, info.step);
-			this._setValue("" + this.options.value, this._getInfo());
-			this.refresh();
+			this._setValue("" + this.options.value, this.info());
 		}
 	},
 	_onSliderKeyDown : function (e)
@@ -184,24 +193,33 @@ $.widget("ibi.ibxSlider", $.ibi.ibxLabel,
 	format: function (fnFormat)
 	{
 		if (fnFormat)
-		{
 			this.options.fnFormat = fnFormat.bind(this);
-			this.options.text = this._getFormattedText();
-			this.refresh();
-		}
 		else
-			return this.options.fnFormat;
+			this.options.fnFormat = null;
+
+		this._labelMin.ibxWidget('option', 'text', this._getFormattedText("min"));
+		this._labelMax.ibxWidget('option', 'text', this._getFormattedText("max"));
+		this._labelValue.ibxWidget('option', 'text', this._getFormattedText("value"));
+		this.refresh();
 	},
-	_getFormattedText: function ()
+	_getFormattedText: function (val)
 	{
-		if (this.options.textPosition == "none")
-			return "";
+		if (this.options.fnFormat)
+		{
+			return this.options.fnFormat(val, this.info());
+		}
 		else
 		{
-			return "" + (this.options.fnFormat ? this.options.fnFormat(this._getInfo()) : this.options.value);
+			switch (val)
+			{
+				default:
+				case 'value': return '' + this.options.value;
+				case 'min': return '' + this.options.min;
+				case 'max': return '' + this.options.max;
+			}
 		}
 	},
-	_getInfo: function ()
+	info: function ()
 	{
 		return { elem: this.element, value: parseInt(this.options.value, 10), min: parseInt(this.options.min, 10), max: parseInt(this.options.max, 10), step: parseInt(this.options.step, 10) };
 	},
@@ -221,32 +239,136 @@ $.widget("ibi.ibxSlider", $.ibi.ibxLabel,
 	},
 	refresh: function ()
 	{
-		var info = this._getInfo();
+		this._labelMin.ibxWidget('option', 'text', this._getFormattedText("min"));
+		this._labelMax.ibxWidget('option', 'text', this._getFormattedText("max"));
+		this._labelValue.ibxWidget('option', 'text', this._getFormattedText("value"));
 
-		this.element.removeClass("ibx-slider-text-position-start ibx-slider-text-position-end");
-		if (this.options.textPosition != "none")
-			this.element.addClass("ibx-slider-text-position-" + this.options.textPosition);
-		if (this.options.orientation == "horizontal")
+		var horiz = this.options.orientation == "horizontal";
+		var info = this.info();
+
+		var wrapperStart = 2;
+		switch (this.options.minTextPos)
 		{
-			this._sliderWrapper.removeClass('ibx-slider-wrapper-vertical');
-			this._sliderWrapper.addClass('ibx-slider-wrapper-horizontal');
+			default:
+			case 'none':
+				this._labelMin.hide();
+				this._labelMin.data('ibxRow', horiz?'2':'1');
+				this._labelMin.data('ibxCol', horiz?'1':'2');
+				wrapperStart = 1;
+				break;
+			case 'start':
+				this._labelMin.data('ibxRow', horiz?'1':'1');
+				this._labelMin.data('ibxCol', horiz?'1':'1');
+				this._labelMin.show();
+				wrapperStart = 1;
+				break;
+			case 'center':
+				this._labelMin.data('ibxRow', horiz?'2':'1');
+				this._labelMin.data('ibxCol', horiz?'1':'2');
+				this._labelMin.show();
+				wrapperStart = 2;
+				break;
+			case 'end':
+				this._labelMin.data('ibxRow', horiz?'3':'1');
+				this._labelMin.data('ibxCol', horiz?'1':'3');
+				this._labelMin.show();
+				wrapperStart = 1;
+				break;
+
+		}
+
+		var wrapperEnd = 2;
+		switch (this.options.maxTextPos)
+		{
+			default:
+			case 'none':
+				this._labelMax.hide();
+				this._labelMax.data('ibxRow', horiz?'2':'3');
+				this._labelMax.data('ibxCol', horiz?'3':'2');
+				wrapperEnd = 3;
+				break;
+			case 'start':
+				this._labelMax.data('ibxRow', horiz?'1':'3');
+				this._labelMax.data('ibxCol', horiz?'3':'1');
+				this._labelMax.show();
+				wrapperEnd = 3;
+				break;
+			case 'center':
+				this._labelMax.data('ibxRow', horiz?'2':'3');
+				this._labelMax.data('ibxCol', horiz?'3':'2');
+				this._labelMax.show();
+				wrapperEnd = 2;
+				break;
+			case 'end':
+				this._labelMax.data('ibxRow', horiz?'3':'3');
+				this._labelMax.data('ibxCol', horiz?'3':'3');
+				this._labelMax.show();
+				wrapperEnd = 3;
+				break;
+
+		}
+		switch (this.options.valueTextPos)
+		{
+			default:
+			case 'none':
+				this._labelValue.hide();
+				this._labelValue.data('ibxRow', horiz?'1':'2');
+				this._labelValue.data('ibxCol', horiz?'2':'1');
+				break;
+			case 'start':
+				this._labelValue.data('ibxRow', horiz?'1':'2');
+				this._labelValue.data('ibxCol', horiz?'2':'1');
+				this._labelValue.show();
+				break;
+			case 'end':
+				this._labelValue.data('ibxRow', horiz?'3':'2');
+				this._labelValue.data('ibxCol', horiz?'2':'3');
+				this._labelValue.show();
+				break;
+
+		}
+
+
+
+		this._sliderWrapper.data('ibxRow', horiz ? '2' : (wrapperStart + '/span ' + (wrapperEnd - wrapperStart + 1)));
+		this._sliderWrapper.data('ibxCol', horiz ? (wrapperStart + '/span ' + (wrapperEnd - wrapperStart + 1)) : '2');
+
+
+		if (horiz)
+		{
+			this.options.direction = "row";
+			this._sliderWrapper.removeClass('ibx-slider-vertical');
+			this._sliderWrapper.addClass('ibx-slider-horizontal');
 			this._slider.css('left', Math.ceil((info.value - info.min) * (this._sliderWrapper.outerWidth() - (this.options.edge == "center" ? 0 : this._slider.outerWidth())) / (info.max - info.min) - (this.options.edge == "center" ? (this._slider.outerWidth() / 2) : 0)) + 'px');
 			this._slider.css('top', Math.ceil((this._sliderWrapper.outerHeight() - this._slider.outerHeight()) / 2) + "px");
 			this.element.removeClass('ibx-slider-vertical');
 			this.element.addClass('ibx-slider-horizontal');
+			this._labelMin.removeClass('ibx-slider-vertical');
+			this._labelMin.addClass('ibx-slider-horizontal');
+			this._labelMax.removeClass('ibx-slider-vertical');
+			this._labelMax.addClass('ibx-slider-horizontal');
+			this._labelValue.removeClass('ibx-slider-vertical');
+			this._labelValue.addClass('ibx-slider-horizontal');
 			this._sliderBody.removeClass('ibx-slider-body-vertical');
 			this._sliderBody.addClass('ibx-slider-body-horizontal');
 			this._sliderBody.css('top', Math.ceil((this._sliderWrapper.outerHeight() - this._sliderBody.outerHeight()) / 2) + "px");
 		}
 		else
 		{
+			this.options.direction = "column";
 			this.options.iconPosition = "bottom";
-			this._sliderWrapper.removeClass('ibx-slider-wrapper-horizontal');
-			this._sliderWrapper.addClass('ibx-slider-wrapper-vertical');
+			this._sliderWrapper.removeClass('ibx-slider-horizontal');
+			this._sliderWrapper.addClass('ibx-slider-vertical');
 			this._slider.css('top', Math.ceil((info.value - info.min) * (this._sliderWrapper.outerHeight() - (this.options.edge == "center" ? 0 : this._slider.outerHeight())) / (info.max - info.min) - (this.options.edge == "center" ? (this._slider.outerHeight() / 2) : 0)) + 'px');
 			this._slider.css('left', Math.ceil((this._sliderWrapper.outerWidth() - this._slider.outerWidth()) / 2) + "px");
 			this.element.removeClass('ibx-slider-horizontal');
 			this.element.addClass('ibx-slider-vertical');
+			this._labelMin.removeClass('ibx-slider-horizontal');
+			this._labelMin.addClass('ibx-slider-vertical');
+			this._labelMax.removeClass('ibx-slider-horizontal');
+			this._labelMax.addClass('ibx-slider-vertical');
+			this._labelValue.removeClass('ibx-slider-horizontal');
+			this._labelValue.addClass('ibx-slider-vertical');
 			this._sliderBody.removeClass('ibx-slider-body-horizontal');
 			this._sliderBody.addClass('ibx-slider-body-vertical');
 			this._sliderBody.css('left', Math.ceil((this._sliderWrapper.outerWidth() - this._sliderBody.outerWidth()) / 2) + "px");
@@ -298,8 +420,7 @@ $.widget("ibi.ibxRange", $.ibi.ibxSlider,
 	_initSlider: function ()
 	{
 		this._super();
-		this._setValue("" + this.options.value + "," + this.options.value2, this._getInfo());
-		this.refresh();
+		this._setValue("" + this.options.value + "," + this.options.value2, this.info());
 		this._slider2.show();
 	},
 	_focusSlider: function (e)
@@ -338,7 +459,7 @@ $.widget("ibi.ibxRange", $.ibi.ibxSlider,
 		}
 
 		this._activeSlider.addClass('ibx-slider-marker-move');
-		var info = this._getInfo();
+		var info = this.info();
 		this._moveSlider(e);
 		this._activeSlider.focus();
 	},
@@ -349,7 +470,7 @@ $.widget("ibi.ibxRange", $.ibi.ibxSlider,
 		if (this._activeSlider.is(this._slider2) && this.options.lock2)
 			return;
 
-		var info = this._getInfo();
+		var info = this.info();
 		if (this._activeSlider.is(this._slider2))
 		{
 			this.options.value2 = this._posMarker(e, info.value2, info.min, info.max);
@@ -363,8 +484,7 @@ $.widget("ibi.ibxRange", $.ibi.ibxSlider,
 				this.options.value = this.options.value2;
 			this.options.value = this.options.value;
 		}
-		this._setValue("" + this.options.value + "," + this.options.value2, this._getInfo());
-		this.refresh();
+		this._setValue("" + this.options.value + "," + this.options.value2, this.info());
 	},
 	_stepSlider: function (bLeft)
 	{
@@ -373,7 +493,7 @@ $.widget("ibi.ibxRange", $.ibi.ibxSlider,
 		if (this._activeSlider.is(this._slider2) && this.options.lock2)
 			return;
 
-		var info = this._getInfo();
+		var info = this.info();
 		if (bLeft)
 		{
 			if (this._activeSlider.is(this._slider))
@@ -409,20 +529,26 @@ $.widget("ibi.ibxRange", $.ibi.ibxSlider,
 			}
 		}
 
-		this._setValue("" + this.options.value + "," + this.options.value2, this._getInfo());
-		this.refresh();
-
+		this._setValue("" + this.options.value + "," + this.options.value2, this.info());
 	},
-	_getFormattedText: function ()
+	_getFormattedText: function (val)
 	{
-		if (this.options.textPosition == "none")
-			return "";
+		if (this.options.fnFormat)
+		{
+			return this.options.fnFormat(val, this.info());
+		}
 		else
 		{
-			return "" + (this.options.fnFormat ? this.options.fnFormat(this._getInfo()) : this.options.value + "," + this.options.value2);
+			switch (val)
+			{
+				default:
+				case 'value': return '' + this.options.value + ',' + this.options.value2;
+				case 'min': return '' + this.options.min;
+				case 'max': return '' + this.options.max;
+			}
 		}
 	},
-	_getInfo: function ()
+	info: function ()
 	{
 		return $.extend({}, this._super(), { value: parseInt(this.options.value, 10), value2: parseInt(this.options.value2, 10) });
 	},
@@ -432,7 +558,7 @@ $.widget("ibi.ibxRange", $.ibi.ibxSlider,
 	},
 	refresh: function ()
 	{
-		var info = this._getInfo();
+		var info = this.info();
 
 		if (this.options.orientation == "horizontal")
 		{
@@ -492,7 +618,7 @@ $.widget("ibi.ibxLeftRange", $.ibi.ibxRange,
 	{
 		this._activeSlider = this._slider2;
 		this._activeSlider.addClass('ibx-slider-marker-move');
-		var info = this._getInfo();
+		var info = this.info();
 		this._moveSlider(e);
 		this._activeSlider.focus();
 	},
@@ -514,7 +640,7 @@ $.widget("ibi.ibxRightRange", $.ibi.ibxRange,
 	{
 		this._activeSlider = this._slider;
 		this._activeSlider.addClass('ibx-slider-marker-move');
-		var info = this._getInfo();
+		var info = this.info();
 		this._moveSlider(e);
 		this._activeSlider.focus();
 	},
