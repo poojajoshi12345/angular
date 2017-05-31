@@ -16,6 +16,7 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 		pageMarkerSelectedClass:"ibx-csl-page-selected",
 		showPrevButton:true,
 		showNextButton:true,
+		hideDisabledButtons:false,
 		step:25,
 		stepRate:25,
 		alignChildren:"center"
@@ -123,8 +124,13 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 			this._pageMarkers.append(pageMarker)
 		}
 
-		this._prevBtn.ibxWidget("option", "disabled", metrics.scrollLeft <= 0);
-		this._nextBtn.ibxWidget("option", "disabled", (metrics.scrollLeft + metrics.pageWidth) >= metrics.scrollWidth);
+
+		var options = this.options;
+		var disabled = metrics.scrollLeft <= 0;
+		this._prevBtn.ibxWidget("option", "disabled", disabled).toggleClass("csl-btn-hidden", (disabled && options.hideDisabledButtons));
+
+		disabled = (metrics.scrollLeft + metrics.pageWidth) >= metrics.scrollWidth;
+		this._nextBtn.ibxWidget("option", "disabled", disabled).toggleClass("csl-btn-hidden", (disabled && options.hideDisabledButtons));
 	},
 	_getPageMetrics:function()
 	{

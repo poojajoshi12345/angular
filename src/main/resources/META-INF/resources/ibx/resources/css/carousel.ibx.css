@@ -20,6 +20,11 @@
 	flex:0 0 auto;
 }
 
+.ibx-csl-prev-btn-disabled.csl-btn-hidden, .ibx-csl-next-btn-disabled.csl-btn-hidden
+{
+	visibility:hidden;
+}
+
 .ibx-h-carousel .ibx-csl-prev-btn::before
 {
 	content:"\E314";
