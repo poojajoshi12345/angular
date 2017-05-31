@@ -67,7 +67,7 @@ function ibx()
 		document.write(scripts.join(""));
 		document.close();
 
-		//wait for jquery to be loaded...then boot ibx
+		//wait for jQuery/jQueryUI to be loaded...then boot ibx
 		var dateStart = new Date();
 		ibx._loadTimer = window.setInterval(function()
 		{
@@ -77,9 +77,9 @@ function ibx()
 				throw("Error loading pre ibx resources: " + scripts);
 			}
 
-			if(window.jQuery)
+			if(window.jQuery && window.jQuery.ui)
 			{
-				//jQuery is in scope...stop polling...
+				//jQuery/jQueryUI is in scope...stop polling...
 				window.clearInterval(ibx._loadTimer);
 
 				//wait for jQuery to be fully loaded...
