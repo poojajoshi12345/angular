@@ -123,9 +123,8 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 			this._pageMarkers.append(pageMarker)
 		}
 
-		this._prevBtn.ibxWidget("option", "disabled", pageInfo.curPage == 0);
-		this._nextBtn.ibxWidget("option", "disabled", pageInfo.curPage == (pageInfo.pages-1));
-		
+		this._prevBtn.ibxWidget("option", "disabled", metrics.scrollLeft <= 0);
+		this._nextBtn.ibxWidget("option", "disabled", (metrics.scrollLeft + metrics.pageWidth) >= metrics.scrollWidth);
 	},
 	_getPageMetrics:function()
 	{
@@ -144,7 +143,7 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 	},
 	_getPageInfo:function(metrics)
 	{
-		return {pages: Math.floor(metrics.scrollWidth / metrics.pageWidth) || 1, curPage: Math.floor(metrics.scrollLeft / metrics.pageWidth)};
+		return {"pages": Math.floor(metrics.scrollWidth / metrics.pageWidth) || 1, "curPage": Math.floor(metrics.scrollLeft / metrics.pageWidth), "metrics":metrics};
 	},
 	refresh:function()
 	{
@@ -208,6 +207,13 @@ $.widget("ibi.ibxVCarousel", $.ibi.ibxCarousel,
 		}
 		else
 			window.clearInterval(this._scrollTimer);
+	},
+	_adjustPageMarkers:function()
+	{
+		this._super();
+		var metrics = this._getPageMetrics();
+		this._prevBtn.ibxWidget("option", "disabled", metrics.scrollTop <= 0);
+		this._nextBtn.ibxWidget("option", "disabled", (metrics.scrollTop + metrics.pageHeight) >= metrics.scrollHeight);
 	},
 	_getPageInfo:function(metrics)
 	{

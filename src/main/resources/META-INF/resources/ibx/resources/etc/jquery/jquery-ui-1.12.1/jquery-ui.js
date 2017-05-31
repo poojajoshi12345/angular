@@ -18701,6 +18701,4 @@ if ( $.uiBackCompat !== false ) {
 var effectsEffectTransfer = effect;
 
 
-
-
 }));

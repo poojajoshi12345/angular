@@ -27,8 +27,7 @@
 				});
 				$(".stop-waiting").on("click", function(e)
 				{
-					var waiting = $(".ibx-waiting");
-					waiting.detach();
+					ibx.waiting.detach();
 				});
 				$(".wait-spot").on("click", function(e)
 				{
@@ -50,7 +49,6 @@
 	<body class="ibx-root">
 		<div class="start-waiting" data-ibx-type="ibxButton" data-ibxp-text="Start Waiting..."></div>
 		<div class="stop-waiting" data-ibx-type="ibxButton" data-ibxp-text="Stop Waiting..."></div>
-	
 		<div class="wait-spot">
 		</div>
 	</body>
