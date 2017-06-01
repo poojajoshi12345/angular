@@ -298,8 +298,8 @@ $.widget("ibi.ibxSlider", $.ibi.ibxGrid,
 			default:
 			case 'none':
 				this._labelMin.hide();
-				this._labelMin.data('ibxRow', this._flipLayout(horiz ? 2 : 3));
-				this._labelMin.data('ibxCol', this._flipLayout(horiz ? 1 : 2));
+				this._labelMin.data('ibxRow', horiz ? 2 : this._flipLayout(3));
+				this._labelMin.data('ibxCol', horiz ? this._flipLayout(1) : 2);
 
 				if (horiz)
 					wrapperStart = 1;
@@ -307,8 +307,8 @@ $.widget("ibi.ibxSlider", $.ibi.ibxGrid,
 					wrapperEnd = 3;
 				break;
 			case 'start':
-				this._labelMin.data('ibxRow', this._flipLayout(horiz ? 1 : 3));
-				this._labelMin.data('ibxCol', this._flipLayout(horiz ? 1 : 1));
+				this._labelMin.data('ibxRow', horiz ? 1 : this._flipLayout(3));
+				this._labelMin.data('ibxCol', horiz ? this._flipLayout(1) : 1);
 
 				this._labelMin.show();
 				if (horiz)
@@ -317,8 +317,8 @@ $.widget("ibi.ibxSlider", $.ibi.ibxGrid,
 					wrapperEnd = 3;
 				break;
 			case 'center':
-				this._labelMin.data('ibxRow', this._flipLayout(horiz ? 2 : 3));
-				this._labelMin.data('ibxCol', this._flipLayout(horiz ? 1 : 2));
+				this._labelMin.data('ibxRow', horiz ? 2 : this._flipLayout(3));
+				this._labelMin.data('ibxCol', horiz ? this._flipLayout(1) : 2);
 
 				this._labelMin.show();
 				if (horiz)
@@ -327,8 +327,8 @@ $.widget("ibi.ibxSlider", $.ibi.ibxGrid,
 					wrapperEnd = 2;
 				break;
 			case 'end':
-				this._labelMin.data('ibxRow', this._flipLayout(horiz ? 3 : 3));
-				this._labelMin.data('ibxCol', this._flipLayout(horiz ? 1 : 3));
+				this._labelMin.data('ibxRow', horiz ? 3 : this._flipLayout(3));
+				this._labelMin.data('ibxCol', horiz ? this._flipLayout(1) : 3);
 
 				this._labelMin.show();
 				if (horiz)
@@ -344,16 +344,16 @@ $.widget("ibi.ibxSlider", $.ibi.ibxGrid,
 			default:
 			case 'none':
 				this._labelMax.hide();
-				this._labelMax.data('ibxRow', this._flipLayout(horiz ? 2 : 1));
-				this._labelMax.data('ibxCol', this._flipLayout(horiz ? 3 : 2));
+				this._labelMax.data('ibxRow', horiz ? 2 : this._flipLayout(1));
+				this._labelMax.data('ibxCol', horiz ? this._flipLayout(3) : 2);
 				if (horiz)
 					wrapperEnd = 3;
 				else
 					wrapperStart = 1;
 				break;
 			case 'start':
-				this._labelMax.data('ibxRow', this._flipLayout(horiz ? 1 : 1));
-				this._labelMax.data('ibxCol', this._flipLayout(horiz ? 3 : 1));
+				this._labelMax.data('ibxRow',horiz ? 1 : this._flipLayout(1));
+				this._labelMax.data('ibxCol', horiz ? this._flipLayout(3) : 1);
 
 				this._labelMax.show();
 				if (horiz)
@@ -362,8 +362,8 @@ $.widget("ibi.ibxSlider", $.ibi.ibxGrid,
 					wrapperStart = 1;
 				break;
 			case 'center':
-				this._labelMax.data('ibxRow', this._flipLayout(horiz ? 2 : 1));
-				this._labelMax.data('ibxCol', this._flipLayout(horiz ? 3 : 2));
+				this._labelMax.data('ibxRow', horiz ? 2 : this._flipLayout(1));
+				this._labelMax.data('ibxCol', horiz ? this._flipLayout(3) : 2);
 
 				this._labelMax.show();
 				if (horiz)
@@ -372,8 +372,8 @@ $.widget("ibi.ibxSlider", $.ibi.ibxGrid,
 					wrapperStart = 2;
 				break;
 			case 'end':
-				this._labelMax.data('ibxRow', this._flipLayout(horiz ? 3 : 1));
-				this._labelMax.data('ibxCol', this._flipLayout(horiz ? 3 : 3));
+				this._labelMax.data('ibxRow', horiz ? 3 : this._flipLayout(1));
+				this._labelMax.data('ibxCol', horiz ? this._flipLayout(3) : 3);
 				this._labelMax.show();
 				if (horiz)
 					wrapperEnd = 3;
