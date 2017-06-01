@@ -12,7 +12,7 @@ $.widget("ibi.ibxSlider", $.ibi.ibxGrid,
 			"lock": false,
 			"popupValue": false,
 			"orientation": "horizontal",
-			"flip": false,
+			"flipLayout": false,
 			"edge": "inside",
 			"markerShape": "rectangle",
 			"minTextPos": "none",
@@ -172,25 +172,25 @@ $.widget("ibi.ibxSlider", $.ibi.ibxGrid,
 		var outerWidth = this._sliderWrapper.outerWidth();
 		var outerHeight = this._sliderWrapper.outerHeight();
 		var value = this.options.value;
-		var flip = this.options.flip;
+		var flipLayout = this.options.flipLayout;
 
 		if (this.options.orientation == "horizontal")
 		{
 			if (mouseX <= posX)
-				value = flip ? max : min;
+				value = flipLayout ? max : min;
 			else if (mouseX >= posX + outerWidth)
-				value = flip ? min : max;
+				value = flipLayout ? min : max;
 			else
-				value = Math.round((flip ? (posX + outerWidth - mouseX) : (mouseX - posX)) * (max - min) / outerWidth + min);
+				value = Math.round((flipLayout ? (posX + outerWidth - mouseX) : (mouseX - posX)) * (max - min) / outerWidth + min);
 		}
 		else
 		{
 			if (mouseY <= posY)
-				value = flip ? min : max;
+				value = flipLayout ? min : max;
 			else if (mouseY >= posY + outerHeight)
-				value = flip ? max : min;
+				value = flipLayout ? max : min;
 			else
-				value = Math.round((flip ? (mouseY - posY) : (posY + outerHeight - mouseY)) * (max - min) / outerHeight + min);
+				value = Math.round((flipLayout ? (mouseY - posY) : (posY + outerHeight - mouseY)) * (max - min) / outerHeight + min);
 		}
 
 		return this._adjustStep(value, min, max, this.options.step);
@@ -242,9 +242,9 @@ $.widget("ibi.ibxSlider", $.ibi.ibxGrid,
 	{
 		this._super();
 	},
-	_flip: function (val)
+	_flipLayout: function (val)
 	{
-		if (this.options.flip)
+		if (this.options.flipLayout)
 		{
 			switch (val)
 			{
@@ -289,71 +289,96 @@ $.widget("ibi.ibxSlider", $.ibi.ibxGrid,
 		var horiz = this.options.orientation == "horizontal";
 		var info = this.info();
 
+		var flipLayout = this.options.flipLayout;
 		var wrapperStart = 2;
+		var wrapperEnd = 2;
+
 		switch (this.options.minTextPos)
 		{
 			default:
 			case 'none':
 				this._labelMin.hide();
-				this._labelMin.data('ibxRow', this._flip(horiz ? 2 : 3));
-				this._labelMin.data('ibxCol', this._flip(horiz ? 1 : 2));
+				this._labelMin.data('ibxRow', this._flipLayout(horiz ? 2 : 3));
+				this._labelMin.data('ibxCol', this._flipLayout(horiz ? 1 : 2));
 
-				wrapperStart = 1;
+				if (horiz)
+					wrapperStart = 1;
+				else
+					wrapperEnd = 3;
 				break;
 			case 'start':
-				this._labelMin.data('ibxRow', this._flip(horiz ? 1 : 3));
-				this._labelMin.data('ibxCol', this._flip(horiz ? 1 : 1));
+				this._labelMin.data('ibxRow', this._flipLayout(horiz ? 1 : 3));
+				this._labelMin.data('ibxCol', this._flipLayout(horiz ? 1 : 1));
 
 				this._labelMin.show();
-				wrapperStart = 1;
+				if (horiz)
+					wrapperStart = 1;
+				else
+					wrapperEnd = 3;
 				break;
 			case 'center':
-				this._labelMin.data('ibxRow', this._flip(horiz ? 2 : 3));
-				this._labelMin.data('ibxCol', this._flip(horiz ? 1 : 2));
+				this._labelMin.data('ibxRow', this._flipLayout(horiz ? 2 : 3));
+				this._labelMin.data('ibxCol', this._flipLayout(horiz ? 1 : 2));
 
 				this._labelMin.show();
-				wrapperStart = 2;
+				if (horiz)
+					wrapperStart = 2;
+				else
+					wrapperEnd = 2;
 				break;
 			case 'end':
-				this._labelMin.data('ibxRow', this._flip(horiz ? 3 : 3));
-				this._labelMin.data('ibxCol', this._flip(horiz ? 1 : 3));
+				this._labelMin.data('ibxRow', this._flipLayout(horiz ? 3 : 3));
+				this._labelMin.data('ibxCol', this._flipLayout(horiz ? 1 : 3));
 
 				this._labelMin.show();
-				wrapperStart = 1;
+				if (horiz)
+					wrapperStart = 1;
+				else
+					wrapperEnd = 3;
 				break;
 
 		}
 
-		var wrapperEnd = 2;
 		switch (this.options.maxTextPos)
 		{
 			default:
 			case 'none':
 				this._labelMax.hide();
-				this._labelMax.data('ibxRow', this._flip(horiz ? 2 : 1));
-				this._labelMax.data('ibxCol', this._flip(horiz ? 3 : 2));
-
-				wrapperEnd = 3;
+				this._labelMax.data('ibxRow', this._flipLayout(horiz ? 2 : 1));
+				this._labelMax.data('ibxCol', this._flipLayout(horiz ? 3 : 2));
+				if (horiz)
+					wrapperEnd = 3;
+				else
+					wrapperStart = 1;
 				break;
 			case 'start':
-				this._labelMax.data('ibxRow', this._flip(horiz ? 1 : 1));
-				this._labelMax.data('ibxCol', this._flip(horiz ? 3 : 1));
+				this._labelMax.data('ibxRow', this._flipLayout(horiz ? 1 : 1));
+				this._labelMax.data('ibxCol', this._flipLayout(horiz ? 3 : 1));
 
 				this._labelMax.show();
-				wrapperEnd = 3;
+				if (horiz)
+					wrapperEnd = 3;
+				else
+					wrapperStart = 1;
 				break;
 			case 'center':
-				this._labelMax.data('ibxRow', this._flip(horiz ? 2 : 1));
-				this._labelMax.data('ibxCol', this._flip(horiz ? 3 : 2));
+				this._labelMax.data('ibxRow', this._flipLayout(horiz ? 2 : 1));
+				this._labelMax.data('ibxCol', this._flipLayout(horiz ? 3 : 2));
 
 				this._labelMax.show();
-				wrapperEnd = 2;
+				if (horiz)
+					wrapperEnd = 2;
+				else
+					wrapperStart = 2;
 				break;
 			case 'end':
-				this._labelMax.data('ibxRow', this._flip(horiz ? 3 : 1));
-				this._labelMax.data('ibxCol', this._flip(horiz ? 3 : 3));
+				this._labelMax.data('ibxRow', this._flipLayout(horiz ? 3 : 1));
+				this._labelMax.data('ibxCol', this._flipLayout(horiz ? 3 : 3));
 				this._labelMax.show();
-				wrapperEnd = 3;
+				if (horiz)
+					wrapperEnd = 3;
+				else
+					wrapperStart = 1;
 				break;
 
 		}
@@ -381,16 +406,27 @@ $.widget("ibi.ibxSlider", $.ibi.ibxGrid,
 
 		}
 
+		if (flipLayout)
+		{
+			var save = wrapperStart;
+			wrapperStart = this._flipLayout(wrapperEnd);
+			wrapperEnd = this._flipLayout(save);
+		}
+
 		this._sliderWrapper.data('ibxRow', horiz ? '2' : (wrapperStart + '/span ' + (wrapperEnd - wrapperStart + 1)));
 		this._sliderWrapper.data('ibxCol', horiz ? (wrapperStart + '/span ' + (wrapperEnd - wrapperStart + 1)) : '2');
 
+		this._super();
+
+		this._slider.css('right', '').css('left', '').css('top', '').css('bottom', '');
+		this._sliderBody.css('top', '').css('left', '');
 
 		if (horiz)
 		{
 			this.options.direction = "row";
 			this._sliderWrapper.removeClass('ibx-slider-vertical');
 			this._sliderWrapper.addClass('ibx-slider-horizontal');
-			this._slider.css(this.options.flip ? 'right' : 'left', Math.ceil((info.value - info.min) * (this._sliderWrapper.outerWidth() - (this.options.edge == "center" ? 0 : this._slider.outerWidth())) / (info.max - info.min) - (this.options.edge == "center" ? (this._slider.outerWidth() / 2) : 0)) + 'px');
+			this._slider.css(flipLayout ? 'right' : 'left', Math.ceil((info.value - info.min) * (this._sliderWrapper.outerWidth() - (this.options.edge == "center" ? 0 : this._slider.outerWidth())) / (info.max - info.min) - (this.options.edge == "center" ? (this._slider.outerWidth() / 2) : 0)) + 'px');
 			this._slider.css('top', Math.ceil((this._sliderWrapper.outerHeight() - this._slider.outerHeight()) / 2) + "px");
 			this.element.removeClass('ibx-slider-vertical');
 			this.element.addClass('ibx-slider-horizontal');
@@ -410,7 +446,7 @@ $.widget("ibi.ibxSlider", $.ibi.ibxGrid,
 			this.options.iconPosition = "bottom";
 			this._sliderWrapper.removeClass('ibx-slider-horizontal');
 			this._sliderWrapper.addClass('ibx-slider-vertical');
-			this._slider.css(this.options.flip ? 'top' : 'bottom', Math.ceil((info.value - info.min) * (this._sliderWrapper.outerHeight() - (this.options.edge == "center" ? 0 : this._slider.outerHeight())) / (info.max - info.min) - (this.options.edge == "center" ? (this._slider.outerHeight() / 2) : 0)) + 'px');
+			this._slider.css(flipLayout ? 'top' : 'bottom', Math.ceil((info.value - info.min) * (this._sliderWrapper.outerHeight() - (this.options.edge == "center" ? 0 : this._slider.outerHeight())) / (info.max - info.min) - (this.options.edge == "center" ? (this._slider.outerHeight() / 2) : 0)) + 'px');
 			this._slider.css('left', Math.ceil((this._sliderWrapper.outerWidth() - this._slider.outerWidth()) / 2) + "px");
 			this.element.removeClass('ibx-slider-horizontal');
 			this.element.addClass('ibx-slider-vertical');
@@ -430,7 +466,6 @@ $.widget("ibi.ibxSlider", $.ibi.ibxGrid,
 			this._slider.addClass('locked');
 		if (this.options.markerShape == 'circle')
 			this._slider.addClass('ibx-slider-marker-round');
-		this._super();
 	}
 });
 
@@ -629,11 +664,17 @@ $.widget("ibi.ibxRange", $.ibi.ibxSlider,
 	},
 	refresh: function ()
 	{
+		this._super();
+
 		var info = this.info();
+		var flipLayout = this.options.flipLayout;
+
+		this._slider2.css('left', '').css('right', '').css('top', '').css('bottom', '');
+		this._sliderRangeBody.css('top', '').css('bottom', '').css('left', '').css('right', '').css('width', '').css('height', '');
 
 		if (this.options.orientation == "horizontal")
 		{
-			this._slider2.css(this.options.flip ? 'right' : 'left', Math.ceil((info.value2 - info.min) * (this._sliderWrapper.outerWidth() - (this.options.edge == "center" ? 0 : this._slider2.outerWidth())) / (info.max - info.min) - (this.options.edge == "center" ? (this._slider2.outerWidth() / 2) : 0)) + 'px');
+			this._slider2.css(flipLayout ? 'right' : 'left', Math.ceil((info.value2 - info.min) * (this._sliderWrapper.outerWidth() - (this.options.edge == "center" ? 0 : this._slider2.outerWidth())) / (info.max - info.min) - (this.options.edge == "center" ? (this._slider2.outerWidth() / 2) : 0)) + 'px');
 			this._slider2.css('top', Math.ceil((this._sliderWrapper.outerHeight() - this._slider2.outerHeight()) / 2) + "px");
 			this._sliderRangeBody.removeClass('ibx-slider-range-body-vertical');
 			this._sliderRangeBody.addClass('ibx-slider-range-body-horizontal');
@@ -641,7 +682,7 @@ $.widget("ibi.ibxRange", $.ibi.ibxSlider,
 		}
 		else
 		{
-			this._slider2.css(this.options.flip ? 'top' : 'bottom', Math.ceil((info.value2 - info.min) * (this._sliderWrapper.outerHeight() - (this.options.edge == "center" ? 0 : this._slider2.outerHeight())) / (info.max - info.min) - (this.options.edge == "center" ? (this._slider2.outerHeight() / 2) : 0)) + 'px');
+			this._slider2.css(flipLayout ? 'top' : 'bottom', Math.ceil((info.value2 - info.min) * (this._sliderWrapper.outerHeight() - (this.options.edge == "center" ? 0 : this._slider2.outerHeight())) / (info.max - info.min) - (this.options.edge == "center" ? (this._slider2.outerHeight() / 2) : 0)) + 'px');
 			this._slider2.css('left', Math.ceil((this._sliderWrapper.outerWidth() - this._slider2.outerWidth()) / 2) + "px");
 			this._sliderRangeBody.removeClass('ibx-slider-range-body-horizontal');
 			this._sliderRangeBody.addClass('ibx-slider-range-body-vertical');
@@ -654,17 +695,19 @@ $.widget("ibi.ibxRange", $.ibi.ibxSlider,
 		var markerShape = this.options.markerShape2 ? this.options.markerShape2 : this.options.markerShape;
 		if (markerShape == 'circle')
 			this._slider2.addClass('ibx-slider-marker-round');
-		this._super();
+
+		var s = flipLayout ? this._slider2 : this._slider;
+		var s2 = flipLayout ? this._slider : this._slider2;
 
 		if (this.options.orientation == "horizontal")
 		{
-			this._sliderRangeBody.css(this.options.flip ? 'right' : 'left', this._slider.css(this.options.flip ? 'right' : "left"));
-			this._sliderRangeBody.css('width', (parseInt(this._slider2.css(this.options.flip ? 'right' : "left"), 10) + this._slider2.outerWidth() - parseInt(this._slider.css(this.options.flip ? 'right' : "left"), 10)) + "px");
+			this._sliderRangeBody.css(flipLayout ? 'right' : 'left', this._slider.css(flipLayout ? 'right' : "left"));
+			this._sliderRangeBody.css('width', (parseInt(this._slider2.css(flipLayout ? 'right' : "left"), 10) + this._slider2.outerWidth() - parseInt(this._slider.css(flipLayout ? 'right' : "left"), 10)) + "px");
 		}
 		else
 		{
-			this._sliderRangeBody.css(this.options.flip ? 'top' : 'bottom', this._slider.css(this.options.flip ? 'top' : "bottom"));
-			this._sliderRangeBody.css('height', (parseInt(this._slider2.css(this.options.flip ? 'top' : "bottom"), 10) + this._slider2.outerHeight() - parseInt(this._slider.css(this.options.flip ? 'top' : "bottom"), 10)) + "px");
+			this._sliderRangeBody.css(flipLayout ? 'top' : 'bottom', this._slider.css(flipLayout ? 'top' : "bottom"));
+			this._sliderRangeBody.css('height', (parseInt(this._slider2.css(flipLayout ? 'top' : "bottom"), 10) + this._slider2.outerHeight() - parseInt(this._slider.css(flipLayout ? 'top' : "bottom"), 10)) + "px");
 		}
 
 	}
