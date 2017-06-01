@@ -10,6 +10,7 @@ $.widget("ibi.ibxSlider", $.ibi.ibxGrid,
 			"max": 100,
 			"step": 1,
 			"lock": false,
+			"popupValue": false,
 			"orientation": "horizontal",
 			"flip": false,
 			"edge": "inside",
@@ -84,6 +85,7 @@ $.widget("ibi.ibxSlider", $.ibi.ibxGrid,
 			var info = this.info();
 			this.options.value = this._posMarker(e, info.value, info.min, info.max);
 			this._setValue("" + this.options.value, this.info());
+			this._showPopup();
 		}
 	},
 	_onSliderMouseEvent: function (e)
@@ -103,6 +105,7 @@ $.widget("ibi.ibxSlider", $.ibi.ibxGrid,
 				break;
 			case "mouseup":
 				{
+					this._hidePopup();
 					$(document.body).css("pointerEvents", "");
 					$(document).off("mouseup mousemove", this._fnSliderMouseEvent);
 					this._activeSlider.removeClass('ibx-slider-marker-move');
@@ -253,6 +256,29 @@ $.widget("ibi.ibxSlider", $.ibi.ibxGrid,
 		}
 		else
 			return val;
+	},
+	_showPopup: function ()
+	{
+		if (!this.options.popupValue)
+			return;
+
+		if (!this._popup)
+			this._popup = $('<div class="ibx-slider-popup"></div>').appendTo("body");
+		var my = this.options.orientation == 'horizontal' ? 'center bottom' : 'left center';
+		var at = this.options.orientation == 'horizontal' ? 'center top-10px' : 'right+10px center';
+		this._popup.position({ 'my': my, 'at': at, 'of': this._activeSlider });
+		this._popup.html(((this._activeSlider == this._slider) ? this.options.value : this.options.value2));
+	},
+	_hidePopup: function ()
+	{
+		if (!this.options.popupValue)
+			return;
+
+		if (this._popup)
+		{
+			this._popup.remove();
+			this._popup = null;
+		}
 	},
 	refresh: function ()
 	{
@@ -529,6 +555,7 @@ $.widget("ibi.ibxRange", $.ibi.ibxSlider,
 			this.options.value = this.options.value;
 		}
 		this._setValue("" + this.options.value + "," + this.options.value2, this.info());
+		this._showPopup();
 	},
 	_stepSlider: function (bLeft)
 	{
