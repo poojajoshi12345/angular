@@ -11,6 +11,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 		"defaultFocused":false,
 		"ctxMenu":null,
 		"dragScrolling":false,
+		"wantResize":false,
 
 		//map one option to another...useful for deep option mapping, looks like: visibleOptionName:"myInternalObject.optionName
 		"optionsMap":
@@ -72,6 +73,12 @@ $.widget("ibi.ibxWidget", $.Widget,
 	_destroy:function()
 	{
 		this._super();
+
+		//kill the resize sensor
+		if(this._resizeSensor)
+			this._resizeSensor.detach();
+		delete this._resizeSensor;
+
 		this._setOptionDisabled(false);
 		this.element.removeData("ibxWidget");
 		this.element.removeAttr("data-ibx-type");
@@ -144,6 +151,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 		}
 		return ret || $();
 	},
+	_onResize:$.noop,
 	_onFocusRootEvent:function(e)
 	{
 		if(this.options.focusRoot)
@@ -219,6 +227,18 @@ $.widget("ibi.ibxWidget", $.Widget,
 		this.element.addClass(options.class);
 		options.focusRoot ? this.element.addClass("ibx-focus-root") : this.element.removeClass("ibx-focus-root");
 		options.defaultFocused ? this.element.addClass("ibx-default-focused") : this.element.removeClass("ibx-default-focused");
+	
+		//hookup the resize sensor if interested in resize events.
+		if(!options.wantResize && this._resizeSensor)
+		{
+			this._resizeSensor.detach();
+			delete this._resizeSensor;
+		}
+		else
+		if(options.wantResize && !this._resSensor)
+		{
+			this._resizeSensor = new ResizeSensor(this.element[0], this._onResize.bind(this));
+		}
 	}
 });
 

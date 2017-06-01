@@ -8,6 +8,7 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 {
 	options:
 	{
+		wantResize:true,
 		nameRoot:true,
 		align:"stretch",
 		showPageMarkers:false,
@@ -44,6 +45,7 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 	},
 	_destroy:function()
 	{
+		this._resSensor.detach();
 		this.remove(this.children());
 	},
 	children:function(selector)
@@ -79,6 +81,10 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 		else
 		if(e.keyCode == 39)
 			this._scroll(true, false, true);
+	},
+	_onResize:function()
+	{
+		this._adjustPageMarkers();
 	},
 	_scrollTimer:null,
 	_scroll:function(startScrolling, beginning, incremental)

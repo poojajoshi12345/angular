@@ -90,6 +90,7 @@ $Revision$:-->
 
 	<!--script dependencies-->
 	<scripts>
+		<script-file src="./etc/resizepolyfill/ResizeSensor.js"/>
 		<script-file src="./etc/scrollwidthpolyfill/scrollwidthpolyfill.js"/>
 		<script-file src="./etc/gridstack/underscore.js"/>
 		<script-file src="./etc/gridstack/gridstack.js"/>
