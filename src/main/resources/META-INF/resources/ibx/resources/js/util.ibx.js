@@ -117,6 +117,22 @@ if(jQuery)
 		return parseInt(this.css("zIndex"), 10);
 	};
 
+	//simple plugin to get the first level text node children
+	jQuery.fn.textNodes = function()
+	{
+		var ret = [];
+		this.each(function(ret, idx, el)
+		{
+			var children = $(el.childNodes);
+			for(var i = 0; i < children.length; ++i)
+			{
+				var child = children[i];
+				(child.nodeType == 3) ? ret.push(child) : null;
+			}
+		}.bind(this, ret));
+		return $(ret);
+	};
+
 	//Sorts elements on zIndex (in descending order).
 	function fnSortZIndex(el1, el2)
 	{
