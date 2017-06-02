@@ -50,27 +50,26 @@ $.widget("ibi.ibxLabel", $.ibi.ibxFlexBox,
 		this._text.remove();
 		this.element.removeClass("icon-left icon-top icon-right icon-bottom")
 	},
-	_setOption:function(key, value)
-	{
-		var options = this.options;
-		if(key == "textElClass")
-			this._text.removeClass(options.textElClass); 
-		else
-		if(key == "glyphClasses")
-			this._glyph.removeClass(options.glyphClasses); 
-		else
-		if(key == "iconElClass")
-			this._icon.removeClass(options.iconElClass); 
-		this._super(key, value);
-	},
 	refresh:function()
 	{
 		var options = this.options;
+		var lastOptions = this._lastOptions || {};
 
-		this._text.html(options.text).addClass(options.textElClass).css({"text-align":options.textAlign, "white-space":options.textWrap ? "" : "nowrap"});
-		this._glyph.html(options.glyph).addClass(options.glyphClasses).addClass(options.glyphElClass).css("display", (options.glyph || options.glyphClasses) ? "" : "none");
-		this._icon.prop("src", options.icon).addClass(options.iconElClass).css("display", options.icon ? "" : "none");
+		//only update if changed
+		if(options.text != lastOptions.text)
+			this._text.html(options.text)
+		this._text.removeClass(lastOptions.textElClass).addClass(options.textElClass).css({"text-align":options.textAlign, "white-space":options.textWrap ? "" : "nowrap"});
 		
+		//only update if changed
+		if(options.glyph != lastOptions.glyph)
+			this._glyph.html(options.glyph);	
+		this._glyph.removeClass(lastOptions.glyphClasses).addClass(options.glyphClasses).addClass(options.glyphElClass).css("display", (options.glyph || options.glyphClasses) ? "" : "none");
+		
+		//only update if changed
+		if(options.icon != lastOptions.icon)
+			this._icon.prop("src", options.icon)
+		this._icon.removeClass(lastOptions.iconElClass).addClass(options.iconElClass).css("display", options.icon ? "" : "none");
+
 		//add appropriate spacer classes
 		if(options.icon && (options.text || options.glyph || options.glyphClasses))
 			this._icon.addClass(this.options.iconElSpacerClass);
@@ -87,6 +86,9 @@ $.widget("ibi.ibxLabel", $.ibi.ibxFlexBox,
 		this.options.forId ? this._text.attr("for", this.options.forId) : this._text.removeAttr("for");
 		this.options.forId ? this._glyph.attr("for", this.options.forId) : this._glyph.removeAttr("for");
 		this._super();
+
+		//save the current option values.
+		this._lastOptions = $.extend({}, options);
 	}
 });
 $.ibi.ibxLabel.statics = 
