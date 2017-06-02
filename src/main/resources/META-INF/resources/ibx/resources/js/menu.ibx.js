@@ -117,6 +117,7 @@ $.widget("ibi.ibxMenuItem", $.ibi.ibxHBox,
 		labelClass:"ibx-menu-item-label",
 		labelOptions:
 		{
+			text:"",
 			justify:"start"
 		},
 
@@ -132,9 +133,14 @@ $.widget("ibi.ibxMenuItem", $.ibi.ibxHBox,
 	_create:function()
 	{
 		var options = this.options;
+
+		//alternate to data-ibxp-text...direct text node children can be used to set the text.
+		options.labelOptions.text = options.labelOptions.text + this.element.textNodes().remove().text().replace(/^\s*|\s*$/g, "");
+
 		this._startMarker = $("<div>");
 		this._endMarker = $("<div>");
 		this._label = $("<div>").ibxLabel();
+
 		this.element.append(this._startMarker, this._label, this._endMarker);
 		this.element.prop("tabIndex", 0).on(
 		{

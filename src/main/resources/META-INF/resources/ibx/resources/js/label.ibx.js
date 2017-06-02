@@ -34,7 +34,7 @@ $.widget("ibi.ibxLabel", $.ibi.ibxFlexBox,
 		this._super();
 		var options = this.options;
 
-		//any text in the node will be moved to the _text label...trimmed start/finish
+		//alternate to data-ibxp-text...direct text node children can be used to set the text.
 		options.text = options.text + this.element.textNodes().remove().text().replace(/^\s*|\s*$/g, "");
 
 		this._icon = $("<img>").addClass(options.iconElClass);
