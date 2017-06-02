@@ -139,6 +139,7 @@ ibx._path = "";
 ibx.getPath = function(){return ibx._path;};
 ibx.setPath = function(path){ibx._path = path;};
 
+//attach ibxWidgets to dom elements
 ibx.bindElements = function(elements)
 {
 	//get elements to bind
