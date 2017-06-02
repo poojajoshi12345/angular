@@ -55,6 +55,12 @@ $Revision$:-->
 		<string-file src="./strings/strings.en.ibx.txt"/>
 		<string-bundle>
 		<![CDATA[
+			{
+				"language":"en",
+				"strings":
+				{
+				}
+			}
 		]]>
 		</string-bundle>
 	</strings>

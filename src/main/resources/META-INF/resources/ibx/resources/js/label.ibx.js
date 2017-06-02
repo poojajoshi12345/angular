@@ -47,21 +47,34 @@ $.widget("ibi.ibxLabel", $.ibi.ibxFlexBox,
 		this._text.remove();
 		this.element.removeClass("icon-left icon-top icon-right icon-bottom")
 	},
+	_setOption:function(key, value)
+	{
+		var options = this.options;
+		if(key == "textElClass")
+			this._text.removeClass(options.textElClass); 
+		else
+		if(key == "glyphClasses")
+			this._glyph.removeClass(options.glyphClasses); 
+		else
+		if(key == "iconElClass")
+			this._icon.removeClass(options.iconElClass); 
+		this._super(key, value);
+	},
 	refresh:function()
 	{
 		var options = this.options;
 		var title = this.element.prop("title") || options.text;
 
-		this._text.html(options.text).attr("class", options.textElClass).css({"text-align":options.textAlign, "white-space":options.textWrap ? "" : "nowrap"});
-		this._glyph.html(options.glyph).attr("class", options.glyphClasses).addClass(options.glyphElClass).css("display", (options.glyph || options.glyphClasses) ? "" : "none");
-		this._icon.prop("src", options.icon).attr("class", options.iconElClass).css("display", options.icon ? "" : "none");
+		this._text.html(options.text).addClass(options.textElClass).css({"text-align":options.textAlign, "white-space":options.textWrap ? "" : "nowrap"});
+		this._glyph.html(options.glyph).addClass(options.glyphClasses).addClass(options.glyphElClass).css("display", (options.glyph || options.glyphClasses) ? "" : "none");
+		this._icon.prop("src", options.icon).addClass(options.iconElClass).css("display", options.icon ? "" : "none");
 		
 		//add appropriate spacer classes
 		if(options.icon && (options.text || options.glyph || options.glyphClasses))
 			this._icon.addClass(this.options.iconElSpacerClass);
 		else
 			this._icon.removeClass(this.options.iconElSpacerClass);
-		
+
 		if((options.iconPosition == "left" || options.iconPosition == "right") && (options.glyph || options.glyphClasses) && options.text)
 			this._glyph.addClass(this.options.glyphElSpacerClass);
 		else
