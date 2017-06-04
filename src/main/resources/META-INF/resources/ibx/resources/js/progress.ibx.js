@@ -37,13 +37,20 @@ ibx.waiting = $("<div class='ibx-global-waiting'>").ibxWaiting();
 ibx.waitStart = function(message, el, options)
 {
 	var options = $.extend(true, {"text":message}, options);
+	var parent = $(el || "body");
+	var parentPos = parent.css("position")
+	parent.data("ibxWaitingInfo", parentPos).css("position", "relative");
+
 	ibx.waiting.ibxWidget("option", options);
-	$(el || "body").append(ibx.waiting);
+	parent.append(ibx.waiting);
 	return ibx.waiting;
 };
 ibx.waitStop = function()
 {
+	var parent = ibx.waiting.parent();
+	var parentPos = parent.data("ibxWaitingInfo");
 	ibx.waiting.detach();
+	parent.css("position", parentPos);
 };
 
-//# sourceURL=waiting.ibx.js
+//# sourceURL=progress.ibx.js
