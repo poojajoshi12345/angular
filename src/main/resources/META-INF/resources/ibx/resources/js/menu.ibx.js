@@ -76,31 +76,6 @@ $.ibi.ibxMenu.statics =
 };
 
 /******************************************************************************
-	IbxContextMenu
-	Just a menu that is always a child of the body when open, and puts
-	itself back under it's DOM parent when closed.
-******************************************************************************/
-$.widget("ibi.ibxContextMenu", $.ibi.ibxMenu,
-{
-	_widgetClass: "ibx-context-menu",
-	open:function(openInfo)
-	{
-		this.element.data("ibxMenuParent", $(this.element.parent()));
-		this.element.appendTo("body");
-		this._super(openInfo);
-	},
-	close:function(openInfo)
-	{
-		this.element.appendTo(this.element.data("ibxMenuParent"));
-		this.element.removeData("ibxMenuParent");
-		this._super(openInfo);
-	}
-});
-$.ibi.ibxContextMenu.statics = 
-{
-};
-
-/******************************************************************************
 	IbxMenuItem
 ******************************************************************************/
 $.widget("ibi.ibxMenuItem", $.ibi.ibxHBox,
@@ -158,11 +133,11 @@ $.widget("ibi.ibxMenuItem", $.ibi.ibxHBox,
 		if (e.keyCode == 37 || e.keyCode == 38)//left/up
 			menuItem.prevAll(":ibxFocusable").first().focus();
 		else
-			if (e.keyCode == 39 || e.keyCode == 40)//right/down
-				menuItem.nextAll(":ibxFocusable").first().focus();
-			else
-				if (e.keyCode == 13 || e.keyCode == 32)//enter/space
-					menuItem.trigger("click");
+		if (e.keyCode == 39 || e.keyCode == 40)//right/down
+			menuItem.nextAll(":ibxFocusable").first().focus();
+		else
+		if (e.keyCode == 13 || e.keyCode == 32)//enter/space
+			menuItem.trigger("click");
 
 		if (e.keyCode != 9)
 			e.preventDefault();

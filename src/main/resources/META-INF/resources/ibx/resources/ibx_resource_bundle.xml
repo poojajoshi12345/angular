@@ -26,7 +26,7 @@ $Revision$:-->
 		<style-file src="./css/grid.ibx.css"/>
 		<style-file src="./css/splitter.ibx.css"/>
 		<style-file src="./css/label.ibx.css"/>
-		<style-file src="./css/waiting.ibx.css"/>
+		<style-file src="./css/progress.ibx.css"/>
 		<style-file src="./css/control.ibx.css"/>
 		<style-file src="./css/text.ibx.css"/>
 		<style-file src="./css/textarea.ibx.css"/>
@@ -112,7 +112,7 @@ $Revision$:-->
 		<script-file src="./js/grid.ibx.js"/>
 		<script-file src="./js/splitter.ibx.js"/>
 		<script-file src="./js/label.ibx.js"/>
-		<script-file src="./js/waiting.ibx.js"/>
+		<script-file src="./js/progress.ibx.js"/>
 		<script-file src="./js/control.ibx.js"/>
 		<script-file src="./js/text.ibx.js"/>
 		<script-file src="./js/textarea.ibx.js"/>
