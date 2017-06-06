@@ -36,10 +36,17 @@ $.widget("ibi.ibxWaiting", $.ibi.ibxLabel,
 ibx.waiting = $("<div class='ibx-global-waiting'>").ibxWaiting();
 ibx.waitStart = function(message, el, options)
 {
+	ibx.waitStop();
+
 	var options = $.extend(true, {"text":message}, options);
 	var parent = $(el || "body");
-	var parentPos = parent.css("position")
-	parent.data("ibxWaitingInfo", parentPos).css("position", "relative");
+	var parentPos = parent.css("position");
+	var parentPosInline = parent[0].style.position;
+	if(parentPos == "static")
+	{
+		parent.data("ibxWaitParentPosition", parentPosInline);
+		parent.css("position", "relative");
+	}
 
 	ibx.waiting.ibxWidget("option", options);
 	parent.append(ibx.waiting);
@@ -48,9 +55,11 @@ ibx.waitStart = function(message, el, options)
 ibx.waitStop = function()
 {
 	var parent = ibx.waiting.parent();
-	var parentPos = parent.data("ibxWaitingInfo");
-	ibx.waiting.detach();
-	parent.css("position", parentPos);
+	if(parent)
+	{
+		ibx.waiting.detach();
+		parent.css("position", parent.data("ibxWaitParentPosition"));
+	}
 };
 
 //# sourceURL=progress.ibx.js
