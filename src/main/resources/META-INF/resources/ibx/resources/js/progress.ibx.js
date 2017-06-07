@@ -1,6 +1,54 @@
 /*Copyright 1996-2016 Information Builders, Inc. All rights reserved.*/
 // $Revision$:
 
+/******************************************************************************
+	PROGRESS WIDGET
+******************************************************************************/
+$.widget("ibi.ibxProgressBar", $.ibi.ibxHBox, 
+{
+	options:
+	{
+		color:"#ccc",
+		backColor:"transparent",
+		inline:true,
+		align:"stretch",
+		minVal:0,
+		maxVal:100,
+		curVal:50,
+		showMin:true,
+		showMax:true,
+		showVal:true,
+	},
+	_widgetClass:"ibx-progress-bar",
+	_create:function()
+	{
+		this._super();
+		this._labelStart = $("<div class='lab-start'>").ibxLabel({iconPosition:"top"});
+		this._labelEnd = $("<div class='lab-end'>").ibxLabel({iconPosition:"top"});
+		this._labelInline = $("<div class='lab-inline'>").ibxLabel({iconPosition:"left"});
+		this._progMarker = $("<div class='prog-marker'>");
+		this._progBar = $("<div class='prog-bar'>").ibxHBox({align:"stretch"}).append(this._progMarker, this._labelInline);
+		this.element.append(this._labelStart, this._progBar, this._labelEnd);
+	},
+	_destroy:function()
+	{
+		this._super();
+	},
+	refresh:function()
+	{
+		this._super();
+		var options = this.options;
+		this._labelStart.ibxWidget("option", "text", options.minVal.toString()).css("display", options.showMin ? "" : "none");
+		this._labelEnd.ibxWidget("option", "text", options.maxVal.toString()).css("display", options.showMax ? "" : "none");
+		var flex = (options.curVal/options.maxVal)
+		this._progMarker.css("flex-grow", flex);
+		this._labelInline.text(options.curVal).css("display", options.showVal ? "" : "none");
+	}
+});
+
+/******************************************************************************
+	WAITING WIDGET
+******************************************************************************/
 $.widget("ibi.ibxWaiting", $.ibi.ibxLabel, 
 {
 	options:
