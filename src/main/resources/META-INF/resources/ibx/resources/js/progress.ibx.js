@@ -8,27 +8,24 @@ $.widget("ibi.ibxProgressBar", $.ibi.ibxHBox,
 {
 	options:
 	{
-		color:"#ccc",
-		backColor:"transparent",
-		inline:true,
-		align:"stretch",
+		style:"plain",
+		color:"limegreen",
 		minVal:0,
 		maxVal:100,
 		curVal:50,
-		showMin:true,
-		showMax:true,
 		showVal:true,
+
+		//flexbox options
+		inline:true,
+		align:"stretch",
 	},
 	_widgetClass:"ibx-progress-bar",
 	_create:function()
 	{
 		this._super();
-		this._labelStart = $("<div class='lab-start'>").ibxLabel({iconPosition:"top"});
-		this._labelEnd = $("<div class='lab-end'>").ibxLabel({iconPosition:"top"});
-		this._labelInline = $("<div class='lab-inline'>").ibxLabel({iconPosition:"left"});
-		this._progMarker = $("<div class='prog-marker'>");
-		this._progBar = $("<div class='prog-bar'>").ibxHBox({align:"stretch"}).append(this._progMarker, this._labelInline);
-		this.element.append(this._labelStart, this._progBar, this._labelEnd);
+		this._progLabel = $("<div class='ibx-progress-label'>").ibxHBox({align:"stretch", justify:"end"});
+		this._progMarker = $("<div class='ibx-progress-marker'>").ibxHBox({align:"stretch"}).append(this._progLabel);
+		this.element.append(this._progMarker, this._progLabel);
 	},
 	_destroy:function()
 	{
@@ -38,11 +35,13 @@ $.widget("ibi.ibxProgressBar", $.ibi.ibxHBox,
 	{
 		this._super();
 		var options = this.options;
-		this._labelStart.ibxWidget("option", "text", options.minVal.toString()).css("display", options.showMin ? "" : "none");
-		this._labelEnd.ibxWidget("option", "text", options.maxVal.toString()).css("display", options.showMax ? "" : "none");
+		this._progLabel.text(options.curVal + "%").css("display", options.showVal ? "" : "none");
+
 		var flex = (options.curVal/options.maxVal)
 		this._progMarker.css("flex-grow", flex);
-		this._labelInline.text(options.curVal).css("display", options.showVal ? "" : "none");
+		this._progLabel.css("flex-grow", 1-flex);
+		if(options.style == "plain")
+			this._progMarker.css("backgroundColor", options.color);
 	}
 });
 

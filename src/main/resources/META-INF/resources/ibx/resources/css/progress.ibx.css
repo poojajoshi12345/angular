@@ -5,32 +5,27 @@
 .ibx-progress-bar
 {
 	width:100px;
-	height:50px;
-	border:1px solid #888;
+	padding:1px;
+	border:1px solid #aaa;
+	border-radius:3px;
+	min-height:14px;
+	overflow:hidden;
 }
 
-.ibx-progress-bar > .lab-start, .lab-end
-{
-	flex:0 0 auto;
-	min-width:25px;
-	align-self:center;
-}
-
-.ibx-progress-bar .lab-inline
-{
-	position:relative;
-}
-
-.ibx-progress-bar > .prog-bar
+.ibx-progress-marker
 {
 	flex:1 1 auto;
+	border-radius:3px;
+	background-color:limegreen;
 }
 
-.ibx-progress-bar .prog-marker
+.ibx-progress-label
 {
-	background-color:#aaa;
+	flex:1 1 auto;
+	width:0px;
+	align-self:center;
+	overflow:visible;
 }
-
 
 /*CLASSES FOR WAITING MARKER*/
 .ibx-label.ibx-waiting
