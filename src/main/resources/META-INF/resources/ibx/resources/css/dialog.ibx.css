@@ -44,7 +44,7 @@
 }
 .ibx-dialog.std.plain .ibx-dialog-title-box
 {
-	color:darkgray;
+	color:#888;
 	border-color:darkgray;
 }
 .ibx-dialog.std.error .ibx-dialog-title-box
