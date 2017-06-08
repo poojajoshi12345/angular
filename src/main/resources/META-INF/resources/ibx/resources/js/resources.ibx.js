@@ -128,6 +128,8 @@ _p.loadBundle = function(xDoc, xhr)
 		var name = name || bundle.attr("name");
 		bundle.attr("name", name);
 
+		ibx.loadEvent("rb_loading", name, bundle[0]);
+
 		//load all css files
 		files = bundle.find("style-file");
 		files.each(function(idx, file)
@@ -139,6 +141,7 @@ _p.loadBundle = function(xDoc, xhr)
 				link.attr("href", src);
 				head.append(link);
 				ibxResourceManager.loadedFiles[src] = true;
+				ibx.loadEvent("rb_css", src, link, name, bundle[0]);
 			}
 		}.bind(this));
 
@@ -151,6 +154,7 @@ _p.loadBundle = function(xDoc, xhr)
 			{
 				var styleNode = $("<style type='text/css'>").text(content);
 				head.append(styleNode);
+				ibx.loadEvent("rb_css", name, bundle[0]);
 			}
 		});
 
@@ -161,11 +165,12 @@ _p.loadBundle = function(xDoc, xhr)
 			var src = this.getResPath( $(file).attr("src"));
 			if(!ibxResourceManager.loadedFiles[src])
 			{
-				$.get({async:false, url:src, contentType:"text"}).done(function(content, status, xhr)
+				$.get({async:false, url:src, contentType:"text"}).done(function(src, content, status, xhr)
 				{
 					rootBundle.children("markup").append($(content).find("markup-block"));
 					ibxResourceManager.loadedFiles[src] = true;
-				});
+					ibx.loadEvent("rb_markup", name, bundle[0], src);
+				}.bind(this, src));
 			}
 		}.bind(this));
 
@@ -174,6 +179,7 @@ _p.loadBundle = function(xDoc, xhr)
 		markupBlocks.each(function(idx, markup)
 		{
 			rootBundle.children("markup").append($(markup).clone());
+			ibx.loadEvent("rb_markup", name, bundle[0]);
 		}.bind(this));
 
 		//load all string and script files
@@ -185,19 +191,23 @@ _p.loadBundle = function(xDoc, xhr)
 			if(!ibxResourceManager.loadedFiles[src])
 			{
 				if(file.attr("link") == "true")
+				{
 					$("<script type='text/javascript' src='" + src + "'>").appendTo("head");
+					ibx.loadEvent("rb_script", name, bundle[0], src);
+				}
 				else
 				{
-					$.get({async:false, url:src, dataType:"text"}).done(function(content, status, xhr)
+					$.get({async:false, url:src, dataType:"text"}).done(function(src, content, status, xhr)
 					{
 						if((/\S/g).test(content))
 						{
-							var script = $("<script type='text/javascript'>");
+							var script = $("<script type='text/javascript' data-ibx-src='" + src + "'>");
 							script.text(content);
 							head.append(script);
+							ibx.loadEvent("rb_script", name, bundle[0], src);
 						}
 						ibxResourceManager.loadedFiles[src] = true;
-					});
+					}.bind(this, src));
 				}
 			}
 		}.bind(this));
@@ -212,6 +222,7 @@ _p.loadBundle = function(xDoc, xhr)
 			{
 				var strBundle = JSON.parse(content);
 				ibxResourceMgr.addStringBundle(strBundle);
+				ibx.loadEvent("rb_string", name, bundle[0]);
 			}
 		}.bind(this));
 
@@ -226,6 +237,7 @@ _p.loadBundle = function(xDoc, xhr)
 				var script = $("<script type='text/javascript'>");
 				script.text(content);
 				head.append(script);
+				ibx.loadEvent("rb_script", name, bundle[0]);
 			}
 		}.bind(this));
 
@@ -248,6 +260,8 @@ _p.loadBundle = function(xDoc, xhr)
 	{
 		bundleLoaded.resolve(bundles, this);
 	}, 0);
+
+	ibx.loadEvent("res_bundle_loaded", name, bundle[0]);
 	return bundleLoaded;
 };
 
