@@ -128,14 +128,18 @@ $.widget("ibi.ibxWidget", $.Widget,
 		(value) ? this.element.addClass(wClass + "-disabled") : this.element.removeClass(wClass + "-disabled");
 		if(this.options.class)
 			(value) ? this.element.addClass(this.options.class + "-disabled") : this.element.removeClass(this.options.class + "-disabled");
-		
+
 		this.element.find("[tabIndex]").add(this.element).each(function(disabled, idx, el)
 		{
 			var $el = $(el);
 			if(disabled)
 				$el.data("ibxDisabledTabIndex", $el.prop("tabIndex")).prop("tabIndex", -1);
 			else
-				$el.prop("tabIndex", $el.data("ibxDisabledTabIndex")).data("ibxDisabledTabIndex", null);
+			{
+				var tabIndex = $el.data("ibxDisabledTabIndex");
+				(!tabIndex) ? $el.removeProp("tabIndex") : $el.prop("tabIndex", tabIndex);
+				$el.removeData("ibxDisabledTabIndex");
+			}
 		}.bind(this, value));
 	},
 	member:function(memberName, value)
