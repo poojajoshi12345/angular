@@ -23,8 +23,8 @@ $.widget("ibi.ibxProgressBar", $.ibi.ibxHBox,
 	_create:function()
 	{
 		this._super();
-		this._progLabel = $("<div class='ibx-progress-label'>").ibxHBox({align:"stretch", justify:"end"});
-		this._progMarker = $("<div class='ibx-progress-marker'>").ibxHBox({align:"stretch"}).append(this._progLabel);
+		this.progLabel = $("<div class='ibx-progress-label'>").ibxHBox({align:"stretch", justify:"end"});
+		this.progMarker = $("<div class='ibx-progress-marker'>").ibxHBox({align:"stretch"}).append(this._progLabel);
 		this.element.append(this._progMarker, this._progLabel);
 	},
 	_destroy:function()
@@ -35,11 +35,13 @@ $.widget("ibi.ibxProgressBar", $.ibi.ibxHBox,
 	{
 		this._super();
 		var options = this.options;
-		this._progLabel.text(options.curVal + "%").css("display", options.showVal ? "" : "none");
+		
+		this._trigger("format_value", this.element, options.curVal);
+		this.progLabel.text(options.curVal + "%").css("display", options.showVal ? "" : "none");
 
 		var flex = (options.curVal/options.maxVal)
-		this._progMarker.css("flex-grow", flex);
-		this._progLabel.css("flex-grow", 1-flex);
+		this.progMarker.css("flex-grow", flex);
+		this.progLabel.css("flex-grow", 1-flex);
 		if(options.style == "plain")
 			this._progMarker.css("backgroundColor", options.color);
 	}
