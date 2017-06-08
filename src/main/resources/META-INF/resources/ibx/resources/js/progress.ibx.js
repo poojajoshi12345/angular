@@ -24,8 +24,8 @@ $.widget("ibi.ibxProgressBar", $.ibi.ibxHBox,
 	{
 		this._super();
 		this.progLabel = $("<div class='ibx-progress-label'>").ibxHBox({align:"stretch", justify:"end"});
-		this.progMarker = $("<div class='ibx-progress-marker'>").ibxHBox({align:"stretch"}).append(this._progLabel);
-		this.element.append(this._progMarker, this._progLabel);
+		this.progMarker = $("<div class='ibx-progress-marker'>").ibxHBox({align:"stretch"});
+		this.element.append(this.progMarker, this.progLabel);
 	},
 	_destroy:function()
 	{
@@ -43,7 +43,7 @@ $.widget("ibi.ibxProgressBar", $.ibi.ibxHBox,
 		this.progMarker.css("flex-grow", flex);
 		this.progLabel.css("flex-grow", 1-flex);
 		if(options.style == "plain")
-			this._progMarker.css("backgroundColor", options.color);
+			this.progMarker.css("backgroundColor", options.color);
 	}
 });
 
