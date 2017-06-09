@@ -8,15 +8,21 @@
 	padding:1px;
 	border:1px solid #aaa;
 	border-radius:3px;
-	min-height:14px;
+	min-height:2px;
 	overflow:hidden;
+	background-color:transparent;
 }
 
 .ibx-progress-marker
 {
 	flex:1 1 auto;
 	border-radius:3px;
-	background-color:limegreen;
+	transition:flex-grow .5s;
+	background-image: linear-gradient(to right, lightgreen 80%, transparent 100%);
+}
+
+.ibx-progress-gradient
+{
 }
 
 .ibx-progress-label
@@ -57,7 +63,7 @@
 	padding:.5em;
 }
 
-.ibx-global-waiting
+.ibx-waiting.ibx-global-waiting
 {
 	font-size:18px;
 	font-weight:700;

@@ -8,12 +8,12 @@ $.widget("ibi.ibxProgressBar", $.ibi.ibxHBox,
 {
 	options:
 	{
-		style:"plain",
-		color:"limegreen",
 		minVal:0,
 		maxVal:100,
 		curVal:50,
 		showVal:true,
+		curValClasses:"",
+		markerClasses:"",
 
 		//flexbox options
 		inline:true,
@@ -40,12 +40,14 @@ $.widget("ibi.ibxProgressBar", $.ibi.ibxHBox,
 		this.progLabel.text(options.curVal + "%").css("display", options.showVal ? "" : "none");
 
 		var flex = (options.curVal/options.maxVal)
-		this.progMarker.css("flex-grow", flex);
-		this.progLabel.css("flex-grow", 1-flex);
-		if(options.style == "plain")
-			this.progMarker.css("backgroundColor", options.color);
+		this.progMarker.css("flex-grow", flex).addClass(options.markerClasses);
+		this.progLabel.css("flex-grow", 1-flex).addClass(options.curValClasses);
 	}
 });
+
+$.ibi.ibxProgressBar.statics = 
+{
+};
 
 /******************************************************************************
 	WAITING WIDGET
@@ -82,33 +84,36 @@ $.widget("ibi.ibxWaiting", $.ibi.ibxLabel,
 });
 
 //default, global, waiting/loading placeholder.
-ibx.waiting = $("<div class='ibx-global-waiting'>").ibxWaiting();
 ibx.waitStart = function(message, el, options)
 {
-	ibx.waitStop();
+	ibx.waitStop(el);
 
 	var options = $.extend(true, {"text":message}, options);
-	var parent = $(el || "body");
-	var parentPos = parent.css("position");
-	var parentPosInline = parent[0].style.position;
-	if(parentPos == "static")
+	var parent = $(el || "body").first();
+	var waiting = $("<div class='ibx-global-waiting'>").ibxWaiting(options);
+	var waitInfo = 
 	{
-		parent.data("ibxWaitParentPosition", parentPosInline);
-		parent.css("position", "relative");
+		parentPos:parent.css("position"),
+		parentPosInline:parent[0].style.position,
+		ibxWaiting:waiting,
 	}
 
-	ibx.waiting.ibxWidget("option", options);
-	parent.append(ibx.waiting);
-	return ibx.waiting;
+	if(waitInfo.parentPos == "static")
+		parent.css("position", "relative");
+
+	parent.data("ibxWaitingInfo", waitInfo).append(waiting);
+	return waiting;
 };
-ibx.waitStop = function()
+ibx.waitStop = function(el)
 {
-	var parent = ibx.waiting.parent();
-	if(parent)
+	el = $(el || "body");
+	var waitInfo = el.data("ibxWaitingInfo");
+	if(waitInfo)
 	{
-		ibx.waiting.detach();
-		parent.css("position", parent.data("ibxWaitParentPosition"));
+		waitInfo.ibxWaiting.detach();
+		el.css("position", waitInfo.parentPosInline);
 	}
+	el.removeData("ibxWaitingInfo");
 };
 
 //# sourceURL=progress.ibx.js
