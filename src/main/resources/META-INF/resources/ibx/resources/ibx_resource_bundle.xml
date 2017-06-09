@@ -44,7 +44,8 @@ $Revision$:-->
 		<style-file src="./css/select.ibx.css"/>
 		<style-file src="./css/iframe.ibx.css"/>
 		<style-file src="./css/carousel.ibx.css"/>
-		<style-sheet name="">
+    <style-file src="./css/datepicker.ibx.css"/>
+    <style-sheet name="">
 		<![CDATA[
 		]]>
 		</style-sheet>
@@ -131,7 +132,8 @@ $Revision$:-->
 		<script-file src="./js/select.ibx.js"/>
 		<script-file src="./js/iframe.ibx.js"/>
 		<script-file src="./js/carousel.ibx.js"/>
-		<script-block name="">
+    <script-file src="./js/datepicker.ibx.js"/>
+    <script-block name="">
 		<![CDATA[
 		]]>
 		</script-block>
