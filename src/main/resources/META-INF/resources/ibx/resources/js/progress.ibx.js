@@ -83,7 +83,7 @@ $.widget("ibi.ibxWaiting", $.ibi.ibxLabel,
 	}
 });
 
-//default, global, waiting/progress...
+//default waiting/progress...
 ibx.waitStartTimed = function(duration, el, message)
 {
 	el = $(el || "body");
