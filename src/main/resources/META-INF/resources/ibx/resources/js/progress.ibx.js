@@ -83,37 +83,59 @@ $.widget("ibi.ibxWaiting", $.ibi.ibxLabel,
 	}
 });
 
-//default, global, waiting/loading placeholder.
-ibx.waitStart = function(message, el, options)
+//default, global, waiting/progress...
+ibx.waitStartTimed = function(duration, el, message)
 {
-	ibx.waitStop(el);
-
-	var options = $.extend(true, {"text":message}, options);
-	var parent = $(el || "body").first();
-	var waiting = $("<div class='ibx-global-waiting'>").ibxWaiting(options);
-	var waitInfo = 
+	el = $(el || "body");
+	el.each(function()
 	{
-		parentPos:parent.css("position"),
-		parentPosInline:parent[0].style.position,
-		ibxWaiting:waiting,
-	}
+		var waiting = ibx.waitStart(el, message);
+		window.setTimeout(function(el)
+		{
+			ibx.waitStop(el);
+		}.bind(this, el), duration);
+	}.bind(this), duration);
+	return el;
+};
+ibx.waitStart = function(el, message)
+{
+	$(el || "body").each(function(message, idx, el)
+	{
+		el = $(el);
 
-	if(waitInfo.parentPos == "static")
-		parent.css("position", "relative");
+		//kill any current waiting with this element.
+		ibx.waitStop(el);
 
-	parent.data("ibxWaitingInfo", waitInfo).append(waiting);
-	return waiting;
+		message = (typeof(message) === "string") ? {text:message} : message;//overload message to allow string/object.
+		var waiting = $("<div>").ibxWaiting(message);
+		var waitInfo = 
+		{
+			posOriginal:el.css("position"),
+			posInline:el[0].style.position,
+			ibxWaiting:waiting,
+		}
+
+		if(waitInfo.posOriginal == "static")
+			el.css("position", "relative");
+
+		el.data("ibxWaitingInfo", waitInfo).append(waiting);
+	}.bind(this, message));
+	return el;
 };
 ibx.waitStop = function(el)
 {
-	el = $(el || "body");
-	var waitInfo = el.data("ibxWaitingInfo");
-	if(waitInfo)
+	$(el || "body").each(function(idx, el)
 	{
-		waitInfo.ibxWaiting.detach();
-		el.css("position", waitInfo.parentPosInline);
-	}
-	el.removeData("ibxWaitingInfo");
+		el = $(el);
+		var waitInfo = el.data("ibxWaitingInfo");
+		if(waitInfo)
+		{
+			waitInfo.ibxWaiting.detach();
+			el.css("position", waitInfo.parentPosInline);
+		}
+		el.removeData("ibxWaitingInfo");
+	});
+	return el;
 };
 
 //# sourceURL=progress.ibx.js
