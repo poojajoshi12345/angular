@@ -84,10 +84,10 @@ $.widget("ibi.ibxWaiting", $.ibi.ibxLabel,
 });
 
 //default waiting/progress...
-ibx.waitStartTimed = function(duration, el, message)
+ibx.waitTimeout = function(duration, message, el)
 {
 	el = $(el || "body");
-	ibx.waitStart(el, message).each(function(idx, el)
+	ibx.waitStart(message, el).each(function(idx, el)
 	{
 		window.setTimeout(function(el)
 		{
@@ -96,7 +96,7 @@ ibx.waitStartTimed = function(duration, el, message)
 	});
 	return el;
 };
-ibx.waitStart = function(el, message)
+ibx.waitStart = function(message, el)
 {
 	$(el || "body").each(function(message, idx, el)
 	{
@@ -112,7 +112,7 @@ ibx.waitStart = function(el, message)
 			posOriginal:el.css("position"),
 			posInline:el[0].style.position,
 			ibxWaiting:waiting,
-		}
+		};
 
 		if(waitInfo.posOriginal == "static")
 			el.css("position", "relative");
