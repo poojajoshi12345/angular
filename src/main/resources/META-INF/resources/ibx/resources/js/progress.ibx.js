@@ -62,7 +62,7 @@ $.widget("ibi.ibxWaiting", $.ibi.ibxLabel,
 		iconPosition:"top",
 		icon:sformat("{1}css/images/loader_small.gif", ibx.getPath()),
 		iconElSpacerClass:"ibx-waiting-el-spacer",
-		text:ibxResourceMgr.getString("STR_LOADING"),
+		text:"",
 		textWrap:true,
 		textAlign:"center",
 	},
@@ -87,14 +87,13 @@ $.widget("ibi.ibxWaiting", $.ibi.ibxLabel,
 ibx.waitStartTimed = function(duration, el, message)
 {
 	el = $(el || "body");
-	el.each(function()
+	ibx.waitStart(el, message).each(function(idx, el)
 	{
-		var waiting = ibx.waitStart(el, message);
 		window.setTimeout(function(el)
 		{
 			ibx.waitStop(el);
 		}.bind(this, el), duration);
-	}.bind(this), duration);
+	});
 	return el;
 };
 ibx.waitStart = function(el, message)
