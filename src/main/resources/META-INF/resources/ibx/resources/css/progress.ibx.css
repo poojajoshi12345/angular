@@ -17,7 +17,6 @@
 {
 	flex:1 1 auto;
 	border-radius:3px;
-	transition:flex-grow .5s;
 	background-image: linear-gradient(to right, lightgreen 80%, transparent 100%);
 }
 

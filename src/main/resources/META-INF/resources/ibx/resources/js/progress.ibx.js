@@ -10,7 +10,7 @@ $.widget("ibi.ibxProgressBar", $.ibi.ibxHBox,
 	{
 		minVal:0,
 		maxVal:100,
-		curVal:50,
+		curVal:0,
 		showVal:true,
 		curValClasses:"",
 		markerClasses:"",
