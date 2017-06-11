@@ -41,6 +41,7 @@
 	top:0px;
 	right:0px;
 	bottom:0px;
+	font-size:1.5em;
 	z-index:2147483647;/*basically max 32 bit value*/
 }
 

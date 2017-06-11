@@ -28,6 +28,14 @@
 {
 	margin-left:4px;
 }
+.icon-top .ibx-label-glyph.ibx-glyph-spacer
+{
+	margin-bottom:4px;
+}
+.icon-bottom .ibx-label-glyph.ibx-glyph-spacer
+{
+	margin-top:4px;
+}
 
 .ibx-label-icon
 {
