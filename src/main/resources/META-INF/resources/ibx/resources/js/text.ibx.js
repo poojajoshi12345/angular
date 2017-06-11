@@ -152,6 +152,7 @@ $.widget("ibi.ibxTextField", $.ibi.ibxFlexBox,
 		this._textInput.attr("autocapitalize", this.options.autoCapitalize);
 		this._textInput.attr("spellcheck", this.options.spellCheck != "off" ? "true" : "false");
 
+		this.options.placeholder = this.options.placeholder.toString();//must cooerce to string...'0' would not set value.
 		if (this.options.placeholder)
 			this._textInput.attr("placeholder", this.options.placeholder);
 		else
