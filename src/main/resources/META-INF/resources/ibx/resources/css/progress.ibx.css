@@ -59,11 +59,6 @@
 	max-height:none;
 }
 
-.ibx-waiting-el-spacer
-{
-	padding:.5em;
-}
-
 .ibx-waiting.ibx-global-waiting
 {
 	font-size:18px;
@@ -71,6 +66,3 @@
 	color:#aaa;
 }
 
-.ibx-waiting-bubbles
-{
-}

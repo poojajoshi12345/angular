@@ -20,33 +20,25 @@
 	font-size:inherit; /*because material-icons defines a default font size as 24px.*/
 }
 
-.icon-left .ibx-label-glyph.ibx-glyph-spacer
+.icon-left .ibx-label-glyph.ibx-glyph-spacer, .icon-left .ibx-label-icon.ibx-icon-spacer
 {
 	margin-right:4px;
 }
-.icon-right .ibx-label-glyph.ibx-glyph-spacer
+.icon-right .ibx-label-glyph.ibx-glyph-spacer, .icon-right .ibx-label-icon.ibx-icon-spacer
 {
 	margin-left:4px;
 }
-.icon-top .ibx-label-glyph.ibx-glyph-spacer
+.icon-top .ibx-label-glyph.ibx-glyph-spacer, .icon-top .ibx-label-icon.ibx-icon-spacer
 {
 	margin-bottom:4px;
 }
-.icon-bottom .ibx-label-glyph.ibx-glyph-spacer
+.icon-bottom .ibx-label-glyph.ibx-glyph-spacer, .icon-bottom .ibx-label-icon.ibx-icon-spacer
 {
 	margin-top:4px;
 }
 
 .ibx-label-icon
 {
-}
-.icon-left .ibx-label-icon.ibx-icon-spacer
-{
-	margin-right:4px;
-}
-.icon-right .ibx-label-icon.ibx-icon-spacer
-{
-	margin-left:4px;
 }
 
 .ibx-label.icon-left
