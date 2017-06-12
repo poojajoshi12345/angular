@@ -21,3 +21,14 @@
     border: none;
 }
 
+.ibx-datepicker-date-wrapper td[data-range=true] > a {
+    background-color: #ebf4f8;
+}
+
+.ibx-datepicker-date-wrapper td[data-range-from=true] > a,
+.ibx-datepicker-date-wrapper td[data-range-to=true] > a,
+.ibx-datepicker-date-wrapper .ui-datepicker-current-day > a {
+    background-color: #357ebd;
+    color: white;
+}
+
