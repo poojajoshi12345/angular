@@ -15,11 +15,11 @@ $.widget("ibi.ibxDatePicker", $.ibi.ibxVBox,
 	_create: function ()
 	{
 		this._super();
-		this._input = $('<input class="ibx-default-ctrl-focus ibx-datepicker-input" readonly></input>').on("focus", this._showPopup.bind(this)).on('click', this._showPopup.bind(this));
+		this._input = $('<div class="ibx-default-ctrl-focus ibx-datepicker-input">').ibxLabel({glyphClasses:"fa fa-calendar"}).on("focus", this._showPopup.bind(this)).on('click', this._showPopup.bind(this));
 		this._inputWrapper = $('<div>').ibxHBox().addClass('ibx-datepicker-input-wrapper');
 		this._inputWrapper.append(this._input);
 		this._dateWrapper = $('<div>').ibxFlexBox({ 'wrap': false });
-		this._datePicker = $('<div>').datepicker({ 'altField': this._input[0], 'onSelect': this._onSelect.bind(this), numberOfMonths: 1 });
+		this._datePicker = $('<div>').datepicker({'onSelect': this._onSelect.bind(this), numberOfMonths: 1 });
 		this._dateWrapper.append(this._datePicker).addClass('ibx-datepicker-date-wrapper');
 		this.element.append(this._inputWrapper, this._dateWrapper);
 		this._popup = $('<div>').ibxPopup({'destroyOnClose': false});
@@ -43,8 +43,10 @@ $.widget("ibi.ibxDatePicker", $.ibi.ibxVBox,
 				break;
 		}
 		var value = $.datepicker.formatDate(this.options.dateFormat, this._datePicker.datepicker('getDate'));
+		this.options.date = value;
 		this._trigger("change", null, { 'date': value });
 		this._trigger("set_form_value", null, { "elem": this.element, "value": value });
+		this._input.ibxWidget('option', 'text', this.options.date);
 	},
 	_showPopup: function ()
 	{
@@ -63,6 +65,7 @@ $.widget("ibi.ibxDatePicker", $.ibi.ibxVBox,
 		this.element.removeClass('popup simple inline');
 		this._datePicker.datepicker('option', 'dateFormat', this.options.dateFormat);
 		this._datePicker.datepicker('setDate', this.options.date);
+		this._input.ibxWidget('option', 'text', this.options.date);
 		this._super();
 		this._popup.ibxWidget('close');
 		switch (this.options.type)
@@ -101,11 +104,13 @@ $.widget("ibi.ibxDateRange", $.ibi.ibxDatePicker,
 	_create: function ()
 	{
 		this._super();
-		this._input2 = $('<input class="ibx-default-ctrl-focus ibx-datepicker-input" readonly></input>').on("focus", this._showPopup.bind(this)).on('click', this._showPopup.bind(this));
+		this._input2 = $('<div class="ibx-default-ctrl-focus ibx-datepicker-input">').ibxLabel({ glyphClasses: "fa fa-calendar" }).on("focus", this._showPopup.bind(this)).on('click', this._showPopup.bind(this));
 		this._inputWrapper.append(this._input2);
 		this._datePicker.datepicker('option', 'numberOfMonths', 2);
 		this._datePicker.datepicker('option', 'onChangeMonthYear', this._onChangeMonthYear.bind(this));
-		window.setTimeout(function () { this._input.val(this.options.dateFrom); this._input2.val(this.options.dateTo); this._highlightRange(); }.bind(this), 10);
+		this._input.ibxWidget('option', 'text', this.options.dateFrom);
+		this._input2.ibxWidget('option', 'text', this.options.dateTo);
+		window.setTimeout(function () { this._highlightRange(); }.bind(this), 10);
 	},
 	_onChangeMonthYear: function (year, month, inst)
 	{
@@ -136,7 +141,9 @@ $.widget("ibi.ibxDateRange", $.ibi.ibxDatePicker,
 
 		this._trigger("change", null, { 'dateFrom': this.options.dateFrom, 'dateTo': this.options.dateTo});
 		this._trigger("set_form_value", null, { "elem": this.element, "value": "['" + this.options.dateFrom + "','" + this.options.dateTo + "']" });
-		window.setTimeout(function () { this._input.val(this.options.dateFrom); this._input2.val(this.options.dateTo); this._highlightRange(); }.bind(this), 10);
+		this._input.ibxWidget('option', 'text', this.options.dateFrom);
+		this._input2.ibxWidget('option', 'text', this.options.dateTo);
+		window.setTimeout(function () { this._highlightRange(); }.bind(this), 10);
 	},
 	_highlightRange: function ()
 	{
@@ -169,7 +176,9 @@ $.widget("ibi.ibxDateRange", $.ibi.ibxDatePicker,
 	{
 		this._super();
 		this._datePicker.datepicker('setDate', this.options.dateTo);
-		window.setTimeout(function () { this._input.val(this.options.dateFrom); this._input2.val(this.options.dateTo); this._highlightRange(); }.bind(this), 10);
+		this._input.val(this.options.dateFrom);
+		this._input2.val(this.options.dateTo);
+		window.setTimeout(function () { this._highlightRange(); }.bind(this), 10);
 	}
 });
 

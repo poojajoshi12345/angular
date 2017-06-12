@@ -11,6 +11,7 @@
     border: none;
     border-bottom: 1px solid #c5c5c5;
     margin: 3px;
+    padding: 3px;
 }
 
 .ibx-datepicker.popup .ibx-datepicker-input {
@@ -23,6 +24,10 @@
 
 .ibx-datepicker-date-wrapper td[data-range=true] > a {
     background-color: #ebf4f8;
+}
+
+.ibx-datepicker-date-wrapper .ui-datepicker-today > a {
+    background-color: #ccc;
 }
 
 .ibx-datepicker-date-wrapper td[data-range-from=true] > a,
