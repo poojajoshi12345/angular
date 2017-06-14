@@ -66,3 +66,14 @@
 	color:#aaa;
 }
 
+/*CLASSES FOR WAITINGPROGRESS WIDGET*/
+.ibx-waiting-progress-bar
+{
+}
+
+.ibx-waiting-progress-bar .ibx-progress-bar
+{
+	margin:1em;
+}
+
+

@@ -11,9 +11,9 @@ $.widget("ibi.ibxProgressBar", $.ibi.ibxHBox,
 		minVal:0,
 		maxVal:100,
 		curVal:0,
-		valLabel:"",
 		curValClasses:"",
 		markerClasses:"",
+		progText:"",
 
 		//flexbox options
 		inline:true,
@@ -37,7 +37,7 @@ $.widget("ibi.ibxProgressBar", $.ibi.ibxHBox,
 		var options = this.options;
 
 		this._trigger("format_value", this.element, options.curVal);
-		this.progLabel.text(options.valLabel);//.css("display", options.showVal ? "" : "none");
+		this.progLabel.text(options.progText);
 
 		var flex = (options.curVal - options.minVal)/(options.maxVal - options.minVal);
 		this.progMarker.css("flex-grow", flex).addClass(options.markerClasses);
@@ -151,9 +151,9 @@ $.widget("ibi.ibxWaitingProgressBar", $.ibi.ibxWaiting,
 			minVal:"progressOptions.minVal",
 			maxVal:"progressOptions.maxVal",
 			curVal:"progressOptions.curVal",
-			curValLabel:"progressOptions.curVal",
 			curValClasses:"progressOptions.curValClasses",
 			markerClasses:"progressOptions.markerClasses",
+			progText:"progressOptions.progText",
 		}
 	},
 	_widgetClass:"ibx-waiting-progress-bar",
