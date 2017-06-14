@@ -11,7 +11,6 @@ $.widget("ibi.ibxProgressBar", $.ibi.ibxHBox,
 		minVal:0,
 		maxVal:100,
 		curVal:0,
-		showVal:true,
 		valLabel:"",
 		curValClasses:"",
 		markerClasses:"",
@@ -38,7 +37,7 @@ $.widget("ibi.ibxProgressBar", $.ibi.ibxHBox,
 		var options = this.options;
 
 		this._trigger("format_value", this.element, options.curVal);
-		this.progLabel.text(options.valLabe).css("display", options.showVal ? "" : "none");
+		this.progLabel.text(options.valLabel);//.css("display", options.showVal ? "" : "none");
 
 		var flex = (options.curVal - options.minVal)/(options.maxVal - options.minVal);
 		this.progMarker.css("flex-grow", flex).addClass(options.markerClasses);
@@ -136,5 +135,40 @@ ibx.waitStop = function(el)
 	});
 	return el;
 };
+
+/******************************************************************************
+	COMBINDED WAITING PROGRESS WIDGET
+******************************************************************************/
+$.widget("ibi.ibxWaitingProgressBar", $.ibi.ibxWaiting, 
+{
+	options:
+	{
+		progressOptions:
+		{
+		},
+		optionsMap:
+		{
+			minVal:"progressOptions.minVal",
+			maxVal:"progressOptions.maxVal",
+			curVal:"progressOptions.curVal",
+			curValLabel:"progressOptions.curVal",
+			curValClasses:"progressOptions.curValClasses",
+			markerClasses:"progressOptions.markerClasses",
+		}
+	},
+	_widgetClass:"ibx-waiting-progress-bar",
+	_create:function()
+	{
+		this._super();
+		this.progress = $("<div>").ibxProgressBar();
+		this.element.append(this.progress);
+	},
+	refresh:function()
+	{
+		this._super();
+		var options = this.options;
+		this.progress.ibxWidget("option", options.progressOptions);
+	}
+});
 
 //# sourceURL=progress.ibx.js
