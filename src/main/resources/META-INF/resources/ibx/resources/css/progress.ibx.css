@@ -17,7 +17,8 @@
 {
 	flex:1 1 auto;
 	border-radius:3px;
-	background-image: linear-gradient(to right, lightgreen 80%, transparent 100%);
+	background-image: linear-gradient(to right, lightgreen 90%, transparent 100%);
+	background-color:lightgreen;
 }
 
 .ibx-progress-gradient

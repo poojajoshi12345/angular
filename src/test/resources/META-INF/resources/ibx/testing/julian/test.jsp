@@ -21,46 +21,15 @@
 			<jsp:include page="/WEB-INF/jsp/global/wf_globals.jsp" flush="false" />
 			ibx(function()
 			{
-				$(".start-waiting").on("click", function(e)
-				{
-					$("body").append(ibx.waiting);
-				});
-				$(".stop-waiting").on("click", function(e)
-				{
-					ibx.waiting.detach();
-				});
-				$(".wait-spot").on("click", function(e)
-				{
-					$(this).append(ibx.waiting)
-				});
-
-				$(".child").on("click", function(e)
-				{
-					debugger;
-				});
-
 			}, ["../testing/julian/test_res_bundle.xml"], true);
 		</script>
 		<style type="text/css">
-			.wait-spot
-			{
-				position:relative;
-				display:inline-block;
-				border:1px solid red;
-				width:50px;
-				height:50px;
-			}
-
 		</style>
 	</head>
 	<body class="ibx-root">
-		<div class="start-waiting" data-ibx-type="ibxButton" data-ibxp-text="Start Waiting..."></div>
-		<div class="stop-waiting" data-ibx-type="ibxButton" data-ibxp-text="Stop Waiting..."></div>
-		<div class="wait-spot">
-			<div data-ibx-type="ibxHBox" data-ibxp-align="center" data-ibxp-justify="center">
-				<div class="child">CHILD</div>
-			</div>
-		</div>
+
+		<div style="border:1px solid black;" class="ibx-title-bar-close-button" data-ibxp-glyph-classes="" tabIndex="1" data-ibx-type="ibxButton" data-ibx-name="titleClose"></div>
+
 	</body>
 </html>
 
