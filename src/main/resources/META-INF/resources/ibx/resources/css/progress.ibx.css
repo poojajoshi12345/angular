@@ -45,6 +45,10 @@
 	z-index:2147483647;/*basically max 32 bit value*/
 }
 
+.ibx-waiting .ibx-label-text
+{
+}
+
 .ibx-waiting .ibx-label-icon
 {
 	max-width:50%;

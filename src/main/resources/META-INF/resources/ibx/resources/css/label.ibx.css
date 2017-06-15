@@ -8,7 +8,7 @@
 
 .ibx-label-text
 {
-	flex:0 1 auto;
+	flex:0 0 auto;
 	text-overflow:ellipsis;
 	overflow:hidden;
 	-ms-user-select:none;

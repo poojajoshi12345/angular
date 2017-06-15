@@ -82,21 +82,44 @@ $.widget("ibi.ibxWaiting", $.ibi.ibxLabel,
 	}
 });
 
-//default waiting/progress...
-ibx.waitTimeout = function(duration, message, el)
+/******************************************************************************
+	COMBINDED WAITING PROGRESS WIDGET
+******************************************************************************/
+$.widget("ibi.ibxWaitingProgressBar", $.ibi.ibxWaiting, 
 {
-	el = $(el || "body");
-	ibx.waitStart(message, el).each(function(idx, el)
+	options:
 	{
-		window.setTimeout(function(el)
+		showProgress:true,
+		progressOptions:{},
+		optionsMap:
 		{
-			ibx.waitStop(el);
-		}.bind(this, el), duration);
-	});
-	return el;
-};
+			minVal:"progressOptions.minVal",
+			maxVal:"progressOptions.maxVal",
+			curVal:"progressOptions.curVal",
+			curValClasses:"progressOptions.curValClasses",
+			markerClasses:"progressOptions.markerClasses",
+			progText:"progressOptions.progText",
+		}
+	},
+	_widgetClass:"ibx-waiting-progress-bar",
+	_create:function()
+	{
+		this._super();
+		this.progress = $("<div>").ibxProgressBar();
+		this.element.append(this.progress);
+	},
+	refresh:function()
+	{
+		this._super();
+		var options = this.options;
+		this.progress.css("display", options.showProgress ? "" : "none").ibxWidget("option", options.progressOptions);
+	}
+});
+
+
 ibx.waitStart = function(message, el)
 {
+	var global = !el;
 	$(el || "body").each(function(message, idx, el)
 	{
 		el = $(el);
@@ -105,7 +128,7 @@ ibx.waitStart = function(message, el)
 		ibx.waitStop(el);
 
 		message = (typeof(message) === "string") ? {text:message} : message;//overload message to allow string/object.
-		var waiting = $("<div>").ibxWaiting(message);
+		var waiting = $("<div>").addClass(global ? "ibx-waiting-global" : null).ibxWaitingProgressBar(message);
 		var waitInfo = 
 		{
 			posOriginal:el.css("position"),
@@ -135,40 +158,5 @@ ibx.waitStop = function(el)
 	});
 	return el;
 };
-
-/******************************************************************************
-	COMBINDED WAITING PROGRESS WIDGET
-******************************************************************************/
-$.widget("ibi.ibxWaitingProgressBar", $.ibi.ibxWaiting, 
-{
-	options:
-	{
-		progressOptions:
-		{
-		},
-		optionsMap:
-		{
-			minVal:"progressOptions.minVal",
-			maxVal:"progressOptions.maxVal",
-			curVal:"progressOptions.curVal",
-			curValClasses:"progressOptions.curValClasses",
-			markerClasses:"progressOptions.markerClasses",
-			progText:"progressOptions.progText",
-		}
-	},
-	_widgetClass:"ibx-waiting-progress-bar",
-	_create:function()
-	{
-		this._super();
-		this.progress = $("<div>").ibxProgressBar();
-		this.element.append(this.progress);
-	},
-	refresh:function()
-	{
-		this._super();
-		var options = this.options;
-		this.progress.ibxWidget("option", options.progressOptions);
-	}
-});
 
 //# sourceURL=progress.ibx.js
