@@ -117,7 +117,7 @@ $.widget("ibi.ibxWaitingProgressBar", $.ibi.ibxWaiting,
 });
 
 
-ibx.waitStart = function(message, el)
+ibx.waitStart = function(el, message)
 {
 	var global = !el;
 	$(el || "body").each(function(message, idx, el)
