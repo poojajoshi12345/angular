@@ -44,8 +44,10 @@ $Revision$:-->
 		<style-file src="./css/select.ibx.css"/>
 		<style-file src="./css/iframe.ibx.css"/>
 		<style-file src="./css/carousel.ibx.css"/>
-    <style-file src="./css/datepicker.ibx.css"/>
-    <style-sheet name="">
+		<style-file src="./css/datepicker.ibx.css"/>
+		
+		<!--Inline Styles-->
+		<style-sheet name="">
 		<![CDATA[
 		]]>
 		</style-sheet>
@@ -54,14 +56,16 @@ $Revision$:-->
 	<!--string dependencies-->
 	<strings>
 		<string-file src="./strings/strings.en.ibx.txt"/>
+		
+		<!--Inline Strings-->
 		<string-bundle>
 		<![CDATA[
+		{
+			"language":"en",
+			"strings":
 			{
-				"language":"en",
-				"strings":
-				{
-				}
 			}
+		}
 		]]>
 		</string-bundle>
 	</strings>
@@ -132,8 +136,10 @@ $Revision$:-->
 		<script-file src="./js/select.ibx.js"/>
 		<script-file src="./js/iframe.ibx.js"/>
 		<script-file src="./js/carousel.ibx.js"/>
-    <script-file src="./js/datepicker.ibx.js"/>
-    <script-block name="">
+		<script-file src="./js/datepicker.ibx.js"/>
+		
+		<!--Inline Scripts-->
+		<script-block name="">
 		<![CDATA[
 		]]>
 		</script-block>
