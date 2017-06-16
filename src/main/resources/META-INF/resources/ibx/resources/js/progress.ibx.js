@@ -119,6 +119,7 @@ $.widget("ibi.ibxWaitingProgressBar", $.ibi.ibxWaiting,
 
 ibx.waitStart = function(el, message)
 {
+	var waiting = $();
 	var global = !el;
 	$(el || "body").each(function(message, idx, el)
 	{
@@ -128,7 +129,7 @@ ibx.waitStart = function(el, message)
 		ibx.waitStop(el);
 
 		message = (typeof(message) === "string") ? {text:message} : message;//overload message to allow string/object.
-		var waiting = $("<div>").addClass(global ? "ibx-waiting-global" : null).ibxWaitingProgressBar(message);
+		waiting = $("<div>").addClass(global ? "ibx-waiting-global" : null).ibxWaitingProgressBar(message);
 		var waitInfo = 
 		{
 			posOriginal:el.css("position"),
@@ -141,22 +142,24 @@ ibx.waitStart = function(el, message)
 
 		el.data("ibxWaitingInfo", waitInfo).append(waiting);
 	}.bind(this, message));
-	return el;
+	return waiting;
 };
 ibx.waitStop = function(el)
 {
+	var waiting = $();
 	$(el || "body").each(function(idx, el)
 	{
 		el = $(el);
 		var waitInfo = el.data("ibxWaitingInfo");
 		if(waitInfo)
 		{
-			waitInfo.ibxWaiting.detach();
+			waiting = waitInfo.ibxWaiting;
+			waiting.detach();
 			el.css("position", waitInfo.parentPosInline);
 		}
 		el.removeData("ibxWaitingInfo");
 	});
-	return el;
+	return waiting;
 };
 
 //# sourceURL=progress.ibx.js
