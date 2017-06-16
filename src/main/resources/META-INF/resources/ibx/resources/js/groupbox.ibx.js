@@ -17,6 +17,7 @@ $.widget("ibi.ibxGroupBox", $.ibi.ibxWidget,
 	_create: function ()
 	{
 		this._super();
+		this.options.text = this.element.textNodes().remove().text().replace(/^\s*|\s*$/g, "");
 		this.options.labelOptions.display = "block";
 		this._labelBox = $("<div></div>").ibxHBox();
 		this._label = $("<div></div>").ibxLabel();
