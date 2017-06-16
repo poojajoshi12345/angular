@@ -8,7 +8,7 @@ function ibxResourceManager()
 {
 	this._rootBundle = $($.parseXML("<ibx-root-res-bundle><markup></markup></ibx-root-res-bundle>"));
 	this._bindingDiv = $("<div class='ibx-resource-manager-binding-div' style='display:none'></div>");
-	this._styleSheet = $("<style type='text/css'>").prop("id", "ibxResourceManager_"+this._tmpId).appendTo("head");
+	this._styleSheet = $("<style type='text/css'>").prop("id", "ibxResourceManager_inline_styles").appendTo("head");
 	this.language = "en";
 	this.strings = {"en":{}};
 }

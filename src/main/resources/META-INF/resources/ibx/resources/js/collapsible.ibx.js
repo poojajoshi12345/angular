@@ -112,7 +112,11 @@ $.widget("ibi.ibxCollapsible", $.Widget,
 			nMargin = this._marginInfo["margin-" + options.direction];
 		else
 			nMargin = options.gap + -1 * ((options.direction == "left" || options.direction == "right") ? this.element.outerWidth(true) : this.element.outerHeight(true));
-		this.element.css("margin-" + options.direction, nMargin).css("opacity", isOpen ? 1 : 0);
+		this.element.css("margin-" + options.direction, nMargin)
+		
+		//IE has a problem with opacity and zIndex...it'll put the collapsed widget on top of everything else (at least in the case of a grid).
+		if(!ibxPlatformCheck.isIE)
+			this.element.css("opacity", isOpen ? 1 : 0);
 	}
 });
 //# sourceURL=collapsible.ibx.js
