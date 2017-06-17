@@ -5,7 +5,7 @@
 	response.addHeader("Cache-Control", "no-cache");
 %>
 <!DOCTYPE html>
-<html>
+<html lang="en">
 	<head>
 		<title>ibx test</title>
 		<meta http-equiv="X-UA-Compatible" content="IE=EDGE" >
@@ -24,12 +24,10 @@
 			}, ["../testing/julian/test_res_bundle.xml"], true);
 		</script>
 		<style type="text/css">
-		</style>
-	</head>
+			.not-here{display:none;}
+		</style>	</head>
 	<body class="ibx-root">
-
-		<div style="border:1px solid black;" class="ibx-title-bar-close-button" data-ibxp-glyph-classes="" tabIndex="1" data-ibx-type="ibxButton" data-ibx-name="titleClose"></div>
-
+		<div class="test" data-ibx-type="ibxLabel">I'm an ibxLabel</div>
 	</body>
 </html>
 
