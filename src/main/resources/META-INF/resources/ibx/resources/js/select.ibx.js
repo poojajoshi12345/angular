@@ -122,6 +122,9 @@ $.widget("ibi.ibxSelect", $.ibi.ibxTextField,
 		{
 			if (closeData && $.contains(this.element[0], closeData.target))
 				return false;
+		}.bind(this)).on("ibx_close", function ()
+		{
+			this._resetHighlight();
 		}.bind(this));
 	},
 	_isEditable: function ()
@@ -332,6 +335,15 @@ $.widget("ibi.ibxSelect", $.ibi.ibxTextField,
 			}
 		}
 		e.stopPropagation();
+	},
+	_onBlur: function (event)
+	{
+		var newVal = this._textInput.val();
+		if (newVal != this._focusVal)
+		{
+			if (!$.contains(this._list[0], event.relatedTarget))
+				this._setValue(newVal, true);
+		}
 	},
 	_onTextClick: function (e)
 	{
@@ -553,7 +565,7 @@ $.widget("ibi.ibxSelect", $.ibi.ibxTextField,
 		{
 			if (newText)
 				newText += ", ";
-			newText += $(el).ibxWidget('option', 'text');
+			newText += $(el).ibxWidget('option', 'text') + "";
 
 		}.bind(this));
 		return newText;
@@ -590,7 +602,7 @@ $.widget("ibi.ibxSelect", $.ibi.ibxTextField,
 		{
 			this._list.find(".ibx-select-item").each(function (index, el)
 			{
-				var itemText = $(el).data('ibxWidget').option('text');
+				var itemText = $(el).data('ibxWidget').option('text') + "";
 				if (this._fnMatch ? (this._fnMatch(searchText, itemText)) : (0 == itemText.toLowerCase().indexOf(searchText.toLowerCase())))
 				{
 					if (!bFound)
@@ -703,8 +715,8 @@ $.ibi.ibxSelect.statics =
 {
 	sort: function (a, b)
 	{
-		var texta = $(a).ibxWidget('option', 'text').toLowerCase();
-		var textb = $(b).ibxWidget('option', 'text').toLowerCase();
+		var texta = ($(a).ibxWidget('option', 'text') + "").toLowerCase();
+		var textb = ($(b).ibxWidget('option', 'text') + "").toLowerCase();
 		if (texta < textb)
 			return this._sortType ? -1 : 1;
 		else if (texta > textb)
