@@ -36,7 +36,7 @@ $.widget("ibi.ibxGridStack", $.ibi.ibxWidget,
 		this.element.css('min-height', "initial");
 		var grid = this.element.data('gridstack');
 		var outercell = $("<div class='grid-stack-item'>");
-		var innercell = $("<div class='grid-stack-item-content' style='overflow:hidden;'>");
+		var innercell = $("<div class='grid-stack-item-content'>");
 		outercell.append(innercell);
 		innercell.append(cell);
 		//outercell.attr('data-gs-locked', true);
