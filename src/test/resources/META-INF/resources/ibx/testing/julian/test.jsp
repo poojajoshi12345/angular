@@ -24,10 +24,10 @@
 			}, ["../testing/julian/test_res_bundle.xml"], true);
 		</script>
 		<style type="text/css">
-			.not-here{display:none;}
-		</style>	</head>
+		</style>
+	</head>
 	<body class="ibx-root">
-		<div class="test" data-ibx-type="ibxLabel">I'm an ibxLabel</div>
+		<div data-ibx-type="pdPageRunner" data-ibxp-page-path="IBFS:/WFC/Repository/Public/Portal_Pages/test_page.pdx"></div>
 	</body>
 </html>
 

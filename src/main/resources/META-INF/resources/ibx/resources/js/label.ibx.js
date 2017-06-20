@@ -89,11 +89,11 @@ $.widget("ibi.ibxLabel", $.ibi.ibxFlexBox,
 		this.options.forId ? this._glyph.attr("for", this.options.forId) : this._glyph.removeAttr("for");
 		this._super();
 
-		//don't bloat the DOM...just add what's needed
+		//don't bloat the DOM...just add what's needed...use prepend so that these are the first children.
 		this._icon.detach();
 		this._glyph.detach();
 		this._text.detach();
-		this.element.append(options.icon ? this._icon : null, glyphVisible ? this._glyph : null, options.text ? this._text : null);
+		this.element.prepend(options.icon ? this._icon : null, glyphVisible ? this._glyph : null, options.text ? this._text : null);
 
 		//save the current option values...this is to optimize the next refresh
 		this._lastOptions = $.extend({}, options);
