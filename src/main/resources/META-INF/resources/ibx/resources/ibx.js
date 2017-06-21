@@ -144,9 +144,15 @@ ibx._path = "";
 ibx.getPath = function(){return ibx._path;};
 ibx.setPath = function(path){ibx._path = path;};
 
-ibx.loadEvent = function(type)
+ibx.loadEvent = function(type, data)
 {
-	$(window).trigger("ibxloadevent", arguments);
+	data = data || {}
+	data.type = type;
+
+	var evt = new CustomEvent("ibxloadevent", {"cancelable":true});
+	evt.data = data;
+	window.dispatchEvent(evt)
+	return evt;
 }
 
 //attach ibxWidgets to dom elements

@@ -87,12 +87,22 @@ _p._onBundleFileLoaded = function(xDoc, status, xhr)
 	xDoc._xhr = xhr;
 	this.loadBundle(xDoc, xhr);
 };
-_p._onBundleFileLoadError = function(xhr, status, msg)
-{
-	console.error("ibxResourceManager Bundle Load Error", xhr);
-};
 _p._onBundleFileProgress = function()
 {
+};
+_p._onBundleFileLoadError = function(xhr, status, msg)
+{
+	var e = ibx.loadEvent("rb_load_error", {"resMgr":this, "xhr":xhr, "status":status, "msg":msg});
+	if(!e.defaultPrevented)
+		console.error(xhr.responseText);
+};
+
+//if something bad happens while retrieving a source file in the bundle.
+_p._resFileRetrievalError = function(src, xhr, status, msg)
+{
+	var e = ibx.loadEvent("rb_file_load_error", {"resMgr":this, "src":src, "xhr":xhr, "status":status, "msg":msg});
+	if(!e.defaultPrevented)
+		console.error(xhr.responseText);
 };
 
 _p.getResPath = function(src)
@@ -133,7 +143,7 @@ _p.loadBundle = function(xDoc, xhr)
 		var name = name || bundle.attr("name");
 		bundle.attr("name", name);
 
-		ibx.loadEvent("rb_loading", name, bundle[0]);
+		ibx.loadEvent("rb_loading", {"resMgr":this, "bundle":bundle[0]});
 
 		//load all css files
 		files = bundle.find("style-file");
@@ -146,7 +156,7 @@ _p.loadBundle = function(xDoc, xhr)
 				link.attr("href", src);
 				head.append(link);
 				this.loadedFiles[src] = true;
-				ibx.loadEvent("rb_css", src, link, name, bundle[0]);
+				ibx.loadEvent("rb_css_file_loaded", {"resMgr":this, "src":src});
 			}
 		}.bind(this));
 
@@ -159,7 +169,7 @@ _p.loadBundle = function(xDoc, xhr)
 			{
 				var styleNode = $("<style type='text/css'>").text(content);
 				head.append(styleNode);
-				ibx.loadEvent("rb_css", name, bundle[0]);
+				ibx.loadEvent("rb_css_loaded", {"resMgr":this, "style":styleNode});
 			}
 		});
 
@@ -170,11 +180,11 @@ _p.loadBundle = function(xDoc, xhr)
 			var src = this.getResPath( $(file).attr("src"));
 			if(!this.loadedFiles[src])
 			{
-				$.get({async:false, url:src, contentType:"text"}).done(function(src, content, status, xhr)
+				$.get({async:false, url:src, contentType:"text", error:this._resFileRetrievalError.bind(this, src)}).done(function(src, content, status, xhr)
 				{
 					rootBundle.children("markup").append($(content).find("markup-block"));
 					this.loadedFiles[src] = true;
-					ibx.loadEvent("rb_resBundle", name, bundle[0], src);
+					ibx.loadEvent("rb_markup_file_loaded", {"resMgr":this, "src":src});
 				}.bind(this, src));
 			}
 		}.bind(this));
@@ -183,8 +193,8 @@ _p.loadBundle = function(xDoc, xhr)
 		var markupBlocks = bundle.find("markup-block");
 		markupBlocks.each(function(idx, markup)
 		{
-			rootBundle.children("markup").append($(markup).clone());
-			ibx.loadEvent("rb_resBundle", name, bundle[0]);
+			rootBundle.children("markup").first().append($(markup).clone());
+			ibx.loadEvent("rb_markup_loaded", {"resMgr":this});
 		}.bind(this));
 
 		//load all string and script files
@@ -198,11 +208,11 @@ _p.loadBundle = function(xDoc, xhr)
 				if(file.attr("link") == "true")
 				{
 					$("<script type='text/javascript' src='" + src + "'>").appendTo("head");
-					ibx.loadEvent("rb_script", name, bundle[0], src);
+					ibx.loadEvent("rb_script_file_loaded", {"resMgr":this, "src":src});
 				}
 				else
 				{
-					$.get({async:false, url:src, dataType:"text"}).done(function(src, content, status, xhr)
+					$.get({async:false, url:src, dataType:"text", error:this._resFileRetrievalError.bind(this, src)}).done(function(src, content, status, xhr)
 					{
 						if((/\S/g).test(content))
 						{
@@ -211,7 +221,7 @@ _p.loadBundle = function(xDoc, xhr)
 							script.text(content);
 							head.append(script);
 							delete window.ibxResourceMgr;//clean up the temporary global
-							ibx.loadEvent("rb_script", name, bundle[0], src);
+							ibx.loadEvent("rb_script_loaded", {"resMgr":this, "src":src});
 						}
 						this.loadedFiles[src] = true;
 					}.bind(this, src));
@@ -229,7 +239,7 @@ _p.loadBundle = function(xDoc, xhr)
 			{
 				var strBundle = JSON.parse(content);
 				this.addStringBundle(strBundle);
-				ibx.loadEvent("rb_string", name, bundle[0]);
+				ibx.loadEvent("rb_string_loaded", {"resMgr":this});
 			}
 		}.bind(this));
 
@@ -244,7 +254,7 @@ _p.loadBundle = function(xDoc, xhr)
 				var script = $("<script type='text/javascript'>");
 				script.text(content);
 				head.append(script);
-				ibx.loadEvent("rb_script", name, bundle[0]);
+				ibx.loadEvent("rb_script_loaded", {"resMgr":this});
 			}
 		}.bind(this));
 
@@ -255,6 +265,7 @@ _p.loadBundle = function(xDoc, xhr)
 			file = $(file);
 			var src = this.getContextPath() + file.attr("src");
 			this.addBundle({url:src, async:false});
+			ibx.loadEvent("rb_package_file_loaded", {"resMgr":this, "src":src});
 		});
 
 		//save that this bundles has been loaded.
@@ -268,7 +279,7 @@ _p.loadBundle = function(xDoc, xhr)
 		bundleLoaded.resolve(bundles, this);
 	}, 0);
 
-	ibx.loadEvent("res_resBundle_loaded", name, bundle[0]);
+	ibx.loadEvent("rb_loaded", {"resMgr":this, "bundle":bundle[0]});
 	return bundleLoaded;
 };
 
