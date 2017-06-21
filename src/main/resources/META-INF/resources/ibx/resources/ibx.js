@@ -95,13 +95,14 @@ function ibx()
 					var url = ibx._path + "./js/resources.ibx.js";
 					$.get(url).then(function()
 					{
+						//make the master/default resource manager for ibx.
+						ibx.resourceMgr = new ibxResourceManager();
+
 						//save the current inline head style blocks so they can be moved after all ibx loaded css files.
 						var inlineStyles = $("head > style").detach();
-
-						ibxResourceMgr.setContextPath(ibx._path);
 						var packages = ibx._loadPromise._resPackages;
 						packages.unshift(ibx._path + "./ibx_resource_bundle.xml");
-						ibxResourceMgr.addBundles(packages).done(function()
+						ibx.resourceMgr.addBundles(packages).done(function()
 						{
 							//bool means just bind everything...string means select these and bind them
 							var autoBind = ibx._loadPromise._autoBind;
@@ -138,6 +139,7 @@ ibx.version = "0.1";
 ibx.loadTimeout = 10000;//can't get preloads in running state by this interval, then bail!
 ibx._loaded = false;
 ibx._loadPromise = null;
+ibx.resourceMgr = "julian";
 ibx._path = "";
 ibx.getPath = function(){return ibx._path;};
 ibx.setPath = function(path){ibx._path = path;};

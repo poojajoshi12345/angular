@@ -27,7 +27,7 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 	{
 		this._super();
 		var children = this.element.children();
-		var resBody = ibxResourceMgr.getResource(".res-ibx-carousel-body", false);
+		var resBody = ibx.resourceMgr.getResource(".res-ibx-carousel-body", false);
 		this.element.append(resBody.children());
 		this.element.on("keydown", this._onItemsKeyEvent.bind(this));
 		ibx.bindElements(this.element);

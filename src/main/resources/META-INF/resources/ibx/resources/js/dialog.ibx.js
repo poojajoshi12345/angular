@@ -32,10 +32,10 @@ $.widget("ibi.ibxDialog", $.ibi.ibxPopup,
 		this._super();
 		var options = this.options;
 
-		//not created via dialog-template from ibxResourceMgr.getResrouce
+		//not created via dialog-template from ibx.resourceMgr.getResrouce
 		if(!this.vbMain)
 		{
-			var dlgRes = ibxResourceMgr.getResource(this.options.template, false);
+			var dlgRes = ibx.resourceMgr.getResource(this.options.template, false);
 			this.element.append(dlgRes.children());
 			ibx.bindElements(this.element);
 		}

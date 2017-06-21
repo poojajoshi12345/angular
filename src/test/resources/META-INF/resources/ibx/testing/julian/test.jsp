@@ -21,13 +21,19 @@
 			<jsp:include page="/WEB-INF/jsp/global/wf_globals.jsp" flush="false" />
 			ibx(function()
 			{
-			}, ["../testing/julian/test_res_bundle.xml"], true);
+				$(".load-btn").on("click", function(e)
+				{
+					var res = new ibxResourceManager();
+					res.addBundle("../testing/julian/test_res_bundle.xml");
+					console.dir(res);
+				});
+			}, true);
 		</script>
 		<style type="text/css">
 		</style>
 	</head>
 	<body class="ibx-root">
-		<div data-ibx-type="pdPageRunner" data-ibxp-page-path="IBFS:/WFC/Repository/Public/Portal_Pages/test_page.pdx"></div>
+		<div class="load-btn" data-ibx-type="ibxButton">Load Resources</div>
 	</body>
 </html>
 
