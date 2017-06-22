@@ -161,7 +161,7 @@ _p.loadBundle = function(xDoc, xhr)
 			{
 				var styleNode = $("<style type='text/css'>").text(content);
 				head.append(styleNode);
-				ibx.loadEvent("rb_css_loaded", {"resMgr":this, "bundle":bundle[0], "style":styleNode});
+				ibx.loadEvent("rb_css_inline_loaded", {"resMgr":this, "bundle":bundle[0]});
 			}
 		});
 
@@ -186,7 +186,7 @@ _p.loadBundle = function(xDoc, xhr)
 		markupBlocks.each(function(idx, markup)
 		{
 			rootBundle.children("markup").first().append($(markup).clone());
-			ibx.loadEvent("rb_markup_loaded", {"resMgr":this, "bundle":bundle[0]});
+			ibx.loadEvent("rb_markup_inline_loaded", {"resMgr":this, "bundle":bundle[0]});
 		}.bind(this));
 
 		//load all string and script files
@@ -211,6 +211,7 @@ _p.loadBundle = function(xDoc, xhr)
 						{
 							content = eval("(" + content + ")");//JSON.parse(content);
 							this.addStringBundle(content);
+							ibx.loadEvent("rb_string_file_loaded", {"resMgr":this, "bundle":bundle[0], "src":src});
 						}
 						else
 						if((/\S/g).test(content))
@@ -220,7 +221,7 @@ _p.loadBundle = function(xDoc, xhr)
 							script.text(content);
 							head.append(script);
 							delete window.ibxResourceMgr;//clean up the temporary global
-							ibx.loadEvent("rb_script_loaded", {"resMgr":this, "bundle":bundle[0], "src":src});
+							ibx.loadEvent("rb_script_file_loaded", {"resMgr":this, "bundle":bundle[0], "src":src});
 						}
 						this.loadedFiles[src] = true;
 					}.bind(this, src, isIbxStringFile));
@@ -238,7 +239,7 @@ _p.loadBundle = function(xDoc, xhr)
 			{
 				var strBundle = JSON.parse(content);
 				this.addStringBundle(strBundle);
-				ibx.loadEvent("rb_string_loaded", {"resMgr":this, "bundle":bundle[0]});
+				ibx.loadEvent("rb_string_inline_loaded", {"resMgr":this, "bundle":bundle[0]});
 			}
 		}.bind(this));
 
@@ -253,7 +254,7 @@ _p.loadBundle = function(xDoc, xhr)
 				var script = $("<script type='text/javascript'>");
 				script.text(content);
 				head.append(script);
-				ibx.loadEvent("rb_script_loaded", {"resMgr":this, "bundle":bundle[0]});
+				ibx.loadEvent("rb_script_inline_loaded", {"resMgr":this, "bundle":bundle[0]});
 			}
 		}.bind(this));
 

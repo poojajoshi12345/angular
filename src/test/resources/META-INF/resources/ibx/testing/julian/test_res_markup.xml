@@ -3,6 +3,6 @@
 $Revision$:-->
 <markup>
 	<markup-block>
-		<div class="test-res-label" data-ibx-type="ibxLabel">Test Label</div>
+		<div class="test-res-markup-label" data-ibx-type="ibxLabel">Bundle Markup Label</div>
 	</markup-block>
 </markup>

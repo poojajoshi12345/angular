@@ -28,8 +28,9 @@
 					console.log(res);
 					res.addBundle("../testing/julian/test_res_bundle.xml").done(function(bundle, resMgr)
 					{
-						var label = resMgr.getResource(".test-res-label");
-						$("body").append(label);
+						var bundleLabel = resMgr.getResource(".test-res-inline-label");
+						var markupLabel = resMgr.getResource(".test-res-markup-label");
+						$("body").append(bundleLabel, markupLabel);
 					});
 				});
 			}, true);
