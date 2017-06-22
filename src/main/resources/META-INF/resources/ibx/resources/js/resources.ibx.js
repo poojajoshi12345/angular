@@ -134,7 +134,7 @@ _p.loadBundle = function(xDoc, xhr)
 		var files = $(bundles.get(i)).find("res-bundle");
 		files.each(function(idx, file)
 		{
-			var src = this.getResPath( $(file).attr("src"));
+			var src = this.getResPath($(file).attr("src"));
 			this.addBundle({url:src, async:false});
 		}.bind(this));
 
@@ -149,7 +149,7 @@ _p.loadBundle = function(xDoc, xhr)
 		files = bundle.find("style-file");
 		files.each(function(idx, file)
 		{
-			var src = this.getResPath( $(file).attr("src"));
+			var src = this.getResPath($(file).attr("src"));
 			if(!this.loadedFiles[src])
 			{
 				var link = $("<link rel='stylesheet' type='text/css'>");
@@ -217,7 +217,7 @@ _p.loadBundle = function(xDoc, xhr)
 					{
 						if(isIbxStringFile)
 						{
-							content = JSON.parse(content);
+							content = eval("(" + content + ")");//JSON.parse(content);
 							this.addStringBundle(content);
 						}
 						else
