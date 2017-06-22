@@ -22,6 +22,7 @@
 
 			window.addEventListener("ibxloadevent", function(e)
 			{
+				console.dir(arguments);
 			});
 
 			ibx(function()

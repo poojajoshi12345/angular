@@ -139,7 +139,7 @@ ibx.version = "0.1";
 ibx.loadTimeout = 10000;//can't get preloads in running state by this interval, then bail!
 ibx._loaded = false;
 ibx._loadPromise = null;
-ibx.resourceMgr = "julian";
+ibx.resourceMgr = null;
 ibx._path = "";
 ibx.getPath = function(){return ibx._path;};
 ibx.setPath = function(path){ibx._path = path;};
@@ -148,11 +148,8 @@ ibx.loadEvent = function(type, data)
 {
 	data = data || {}
 	data.type = type;
-
-	var evt = new CustomEvent("ibxloadevent", {"cancelable":true});
-	evt.data = data;
-	window.dispatchEvent(evt)
-	return evt;
+	var e = $(window).trigger("ibxloadevent", data);
+	return e;
 }
 
 //attach ibxWidgets to dom elements
