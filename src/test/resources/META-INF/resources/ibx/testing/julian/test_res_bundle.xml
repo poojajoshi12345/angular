@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ibx-res-bundle>
 	<strings>
-		<string-file src="x../../rb/ibx/com.ibi.intl.ibfssecurity.ibfssecurity"/>
+		<string-file src="../../rb/ibx/com.ibi.intl.ibfssecurity.ibfssecurity"/>
 		<string-bundle>
 		<![CDATA[
 		]]>

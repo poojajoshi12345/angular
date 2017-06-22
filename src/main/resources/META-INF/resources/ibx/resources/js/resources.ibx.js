@@ -94,7 +94,7 @@ _p._onBundleFileLoadError = function(xhr, status, msg)
 {
 	var e = ibx.loadEvent("rb_load_error", {"resMgr":this, "xhr":xhr, "status":status, "msg":msg});
 	if(!e.defaultPrevented)
-		console.error(xhr.responseText);
+		console.error(status, msg, xhr.responseText);
 };
 
 //if something bad happens while retrieving a source file in the bundle.
@@ -102,7 +102,7 @@ _p._resFileRetrievalError = function(src, xhr, status, msg)
 {
 	var e = ibx.loadEvent("rb_file_load_error", {"resMgr":this, "src":src, "xhr":xhr, "status":status, "msg":msg});
 	if(!e.defaultPrevented)
-		console.error(xhr.responseText);
+		console.error(status, msg, xhr.responseText);
 };
 
 _p.getResPath = function(src)
@@ -212,8 +212,15 @@ _p.loadBundle = function(xDoc, xhr)
 				}
 				else
 				{
-					$.get({async:false, url:src, dataType:"text", error:this._resFileRetrievalError.bind(this, src)}).done(function(src, content, status, xhr)
+					var stringFile = (file.prop("tagName") == "string-file");
+					$.get({async:false, url:src, dataType:"text", error:this._resFileRetrievalError.bind(this, src)}).done(function(src, stringFile, content, status, xhr)
 					{
+						if(stringFile)
+						{
+							content = eval("(" + content + ")");
+							this.addStringBundle(content);
+						}
+						else
 						if((/\S/g).test(content))
 						{
 							window.ibxResourceMgr = this;//because the string bundle from server wants to add to 'window.ibxResourceMgr'
@@ -224,7 +231,7 @@ _p.loadBundle = function(xDoc, xhr)
 							ibx.loadEvent("rb_script_loaded", {"resMgr":this, "src":src});
 						}
 						this.loadedFiles[src] = true;
-					}.bind(this, src));
+					}.bind(this, src, stringFile));
 				}
 			}
 		}.bind(this));
@@ -277,7 +284,7 @@ _p.loadBundle = function(xDoc, xhr)
 	window.setTimeout(function()
 	{
 		bundleLoaded.resolve(bundles, this);
-	}, 0);
+	}.bind(this), 0);
 
 	ibx.loadEvent("rb_loaded", {"resMgr":this, "bundle":bundle[0]});
 	return bundleLoaded;

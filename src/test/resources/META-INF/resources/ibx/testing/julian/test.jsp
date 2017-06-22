@@ -22,13 +22,6 @@
 
 			window.addEventListener("ibxloadevent", function(e)
 			{
-				console.dir(e.data.type);
-				if(e.data.type == "rb_file_load_error")
-				{
-					e.preventDefault();
-					alert("failed to find resource file: " + e.data.src);
-				}
-
 			});
 
 			ibx(function()
@@ -36,7 +29,10 @@
 				$(".load-btn").on("click", function(e)
 				{
 					var res = new ibxResourceManager();
-					res.addBundle("../testing/julian/test_res_bundle.xml");
+					res.addBundle("../testing/julian/test_res_bundle.xml").done(function()
+					{
+						console.dir(arguments);
+					});
 				});
 
 			}, true);
