@@ -1,26 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ibx-res-bundle loadContext="ibx">
-		<strings>
-			<string-file src="../../rb/ibx/com.ibi.intl.ibfssecurity.ibfssecurity"/>
-			<string-bundle>
-			<![CDATA[
-			]]>
-			</string-bundle>
-		</strings>
+<ibx-res-bundle name="test_res_bundle.xml" loadContext="ibx">
+	<strings>
+		<string-file src="../../rb/ibx/com.ibi.intl.ibfssecurity.ibfssecurity"/>
+		<string-bundle>
+		<![CDATA[
+			{
+				"language":"en",
+				"strings":
+				{
+					"A_TEST_INLINE_STRING":"test string"
+				}
+			}
+		]]>
+		</string-bundle>
+	</strings>
 
 	<styles>
+		<style-file src="../testing/julian/test_res_styles.css"/>
 		<style-sheet>
 		<![CDATA[
+			.test-res-inline
+			{
+			}
 		]]>
 		</style-sheet>
 	</styles>
 
-	<markup>
+	<markup loadContext="app">
+		<markup-file src="../testing/julian/test_res_markup.xml"/>
 		<markup-block>
 		</markup-block>
 	</markup>
 
 	<scripts>
+		<script-file src="../testing/julian/test_res_script.js"/>
 		<script-block>
 		<![CDATA[
 			//# sourceURL=test_res_bundle.xml

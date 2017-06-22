@@ -25,13 +25,14 @@
 				$(".load-btn").on("click", function(e)
 				{
 					var res = new ibxResourceManager();
-					res.addBundle("../testing/julian/test_res_bundle.xml").done(function()
+					console.log(res);
+					res.addBundle("../testing/julian/test_res_bundle.xml").done(function(bundle, resMgr)
 					{
-						console.dir(arguments);
+						var label = resMgr.getResource(".test-res-label");
+						$("body").append(label);
 					});
 				});
-
-			}, ["../testing/julian/test_res_bundle.xml"], true);
+			}, true);
 		</script>
 		<style type="text/css">
 		</style>
