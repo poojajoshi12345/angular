@@ -212,12 +212,12 @@ _p.loadBundle = function(xDoc, xhr)
 				}
 				else
 				{
-					var stringFile = (file.prop("tagName") == "string-file");
-					$.get({async:false, url:src, dataType:"text", error:this._resFileRetrievalError.bind(this, src)}).done(function(src, stringFile, content, status, xhr)
+					var isIbxStringFile = (file.prop("tagName") == "string-file");
+					$.get({async:false, url:src, dataType:"text", error:this._resFileRetrievalError.bind(this, src)}).done(function(src, isIbxStringFile, content, status, xhr)
 					{
-						if(stringFile)
+						if(isIbxStringFile)
 						{
-							content = eval("(" + content + ")");
+							content = JSON.parse(content);
 							this.addStringBundle(content);
 						}
 						else
@@ -231,7 +231,7 @@ _p.loadBundle = function(xDoc, xhr)
 							ibx.loadEvent("rb_script_loaded", {"resMgr":this, "src":src});
 						}
 						this.loadedFiles[src] = true;
-					}.bind(this, src, stringFile));
+					}.bind(this, src, isIbxStringFile));
 				}
 			}
 		}.bind(this));

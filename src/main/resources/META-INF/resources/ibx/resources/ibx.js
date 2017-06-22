@@ -49,11 +49,12 @@ function ibx()
 
 	if(!ibx._loaded && !ibx._isLoading)
 	{
-		//resolve where ibx is loading from.
+		//resolve various ibx context values based on where we're loading from.
 		var ibxScript = document.querySelector("script[src*='ibx.js']");
 		var ibxPath = ibxScript.getAttribute("src").replace("ibx.js", "");
 		ibx.setPath(ibxPath);
-
+		ibx.setAppPath(window.location.href.substring(0, window.location.href.lastIndexOf("/") + 1));
+		ibx._appName = window.location.href.substring(window.location.href.lastIndexOf("/") + 1)
 		ibx._isLoading = !ibx.loaded;
 
 		//things to preload for ibx.  Everything else is in the root resource bundle
@@ -140,9 +141,15 @@ ibx.loadTimeout = 10000;//can't get preloads in running state by this interval, 
 ibx._loaded = false;
 ibx._loadPromise = null;
 ibx.resourceMgr = null;
+
 ibx._path = "";
 ibx.getPath = function(){return ibx._path;};
 ibx.setPath = function(path){ibx._path = path;};
+this._appPath = "";
+ibx.getAppPath = function(){return ibx._appPath;};
+ibx.setAppPath = function(path){ibx._appPath = path;};
+this._appName = "";
+ibx.getAppName = function(){return this._appName;};
 
 ibx.loadEvent = function(type, data)
 {
