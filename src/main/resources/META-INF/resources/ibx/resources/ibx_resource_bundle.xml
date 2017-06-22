@@ -55,8 +55,10 @@ $Revision$:-->
 
 	<!--string dependencies-->
 	<strings>
+		<!--IBX INTERNAL STRINGS
 		<string-file src="./strings/strings.en.ibx.txt"/>
-		
+		-->
+
 		<!--Inline Strings-->
 		<string-bundle>
 		<![CDATA[
