@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ibx-res-bundle>
-	<strings>
-		<string-file src="../../rb/ibx/com.ibi.intl.ibfssecurity.ibfssecurity"/>
-		<string-bundle>
-		<![CDATA[
-		]]>
-		</string-bundle>
-	</strings>
+<ibx-res-bundle loadContext="ibx">
+		<strings>
+			<string-file src="../../rb/ibx/com.ibi.intl.ibfssecurity.ibfssecurity"/>
+			<string-bundle>
+			<![CDATA[
+			]]>
+			</string-bundle>
+		</strings>
 
 	<styles>
 		<style-sheet>
