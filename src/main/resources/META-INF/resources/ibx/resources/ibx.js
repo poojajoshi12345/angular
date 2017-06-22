@@ -86,7 +86,7 @@ function ibx()
 				//wait for jQuery to be fully loaded...
 				$(function()
 				{
-					ibx.loadEvent("ibx_loading", ibx);
+					ibx.loadEvent("ibx_loading", {"ibx":ibx});
 
 					//continue booting ibx...
 					ibx._loadPromise = $.Deferred();
@@ -120,7 +120,7 @@ function ibx()
 								$(".ibx-root").addClass("ibx-loaded");//display all ibx-roots, now that we are loaded.
 							});
 							ibx._loadPromise.resolve(ibx);//let everyone know the system is booted.
-							ibx.loadEvent("ibx_loaded", ibx);
+							ibx.loadEvent("ibx_loaded", {"ibx":ibx});
 						});
 					});
 				});
@@ -155,6 +155,7 @@ ibx.loadEvent = function(type, data)
 {
 	data = data || {}
 	data.type = type;
+	//console.log(data.type, data.bundle ? data.bundle.getAttribute("name") : "", data.src ? data.src : "");
 	var e = $(window).trigger("ibxloadevent", data);
 	return e;
 }

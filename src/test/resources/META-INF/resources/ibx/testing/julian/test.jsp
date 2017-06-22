@@ -20,11 +20,6 @@
 		<script type="text/javascript">
 			<jsp:include page="/WEB-INF/jsp/global/wf_globals.jsp" flush="false" />
 
-			window.addEventListener("ibxloadevent", function(e)
-			{
-				console.dir(arguments);
-			});
-
 			ibx(function()
 			{
 				$(".load-btn").on("click", function(e)
@@ -36,7 +31,7 @@
 					});
 				});
 
-			}, true);
+			}, ["../testing/julian/test_res_bundle.xml"], true);
 		</script>
 		<style type="text/css">
 		</style>
