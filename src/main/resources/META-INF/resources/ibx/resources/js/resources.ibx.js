@@ -56,27 +56,32 @@ _p.addBundles = function(bundles, allLoaded)
 {
 	var allLoaded = allLoaded || $.Deferred();
 	if(bundles.length)
-		this.addBundle(bundles.shift()).done(this.addBundles.bind(this, bundles, allLoaded));
+	{
+		var bundleInfo = bundles.shift();
+		bundleInfo = (typeof(bundleInfo) == "string") ? {"src":bundleInfo, "loadContext":""} : bundleInfo;
+		this.addBundle(bundleInfo.src, bundleInfo.loadContext).done(this.addBundles.bind(this, bundles, allLoaded));
+	}
 	else
 		allLoaded.resolve();
 	return allLoaded;
 };
 
-_p.addBundle = function(info, data)
+//can pass a string or jQuery.ajax settings object.
+_p.addBundle = function(ajaxSettings, loadContext, data)
 {
 	//resolve bundle's uri
-	info = (typeof(info) === "string") ? {url:info} : info;
-	info.url = this.getResPath(info.url);
+	ajaxSettings = (typeof(ajaxSettings) === "string") ? {url:ajaxSettings} : ajaxSettings;
+	ajaxSettings.url = this.getResPath(ajaxSettings.url, loadContext);
 
 	//is it already loaded?
-	if(this.loadedBundles[info.url])
-		return this.loadedBundles[info.url];
+	if(this.loadedBundles[ajaxSettings.url])
+		return this.loadedBundles[ajaxSettings.url];
 
 	//...no, so let's get loadin'!
 	var resLoaded = $.Deferred();
-	var xhr = $.get(info, data);
-	xhr._resLoaded = resLoaded;
-	xhr.src = info.url;
+	var xhr = $.get(ajaxSettings, data);
+	xhr.resLoaded = resLoaded;
+	xhr.src = ajaxSettings.url;
 	xhr.done(this._onBundleFileLoaded.bind(this));
 	xhr.fail(this._onBundleFileLoadError.bind(this));
 	xhr.progress(this._onBundleFileProgress.bind(this));
@@ -84,8 +89,11 @@ _p.addBundle = function(info, data)
 };
 _p._onBundleFileLoaded = function(xDoc, status, xhr)
 {
-	xDoc.path = xhr.src.substring(0, xhr.src.lastIndexOf("/") + 1);
-	this.loadBundle(xDoc, xhr);
+	//successfully loaded...move needed stuff to the xDoc for loading.
+	xDoc.resLoaded = xhr.resLoaded;
+	xDoc.src = xhr.src;
+	xDoc.path = xDoc.src.substring(0, xDoc.src.lastIndexOf("/") + 1);
+	this.loadBundle(xDoc);
 };
 _p._onBundleFileProgress = function()
 {
@@ -105,59 +113,67 @@ _p._resFileRetrievalError = function(src, xhr, status, msg)
 		console.error(status, msg, xhr.responseText);
 };
 
-_p.getResPath = function(src)
+_p.getResPath = function(src, loadContext)
 {
-	var ctxPath = this.getContextPath();
-	if(src instanceof Element)
-	{
-		var el = $(src);
-		src = el.attr("src");
-		var loadContext = (el.closest("[loadContext]").attr("loadContext") || "").toLowerCase();
-		if(loadContext == "bundle")
-			ctxPath = el.prop("ownerDocument").path;
-		else
-		if(loadContext == "app")
-			ctxPath = ibx.getAppPath();
-		else
-		if(loadContext == "ibx")
-			ctxPath = ibx.getPath();
-	}
+	var loadContext = loadContext || this.getContextPath();
+	if(loadContext == "bundle")
+		loadContext = this._bundlePath;
+	else
+	if(loadContext == "app")
+		loadContext = ibx.getAppPath();
+	else
+	if(loadContext == "ibx")
+		loadContext = ibx.getPath();
 
 	//give interested parties the ability to modify the resource uri
 	var evt = document.createEvent("Event");
 	evt.initEvent("ibx_res_mgr_resolve_uri", true, true);
-	evt.ibxResData = {resourceMgr:this, uriIn:src, uriOut:null};
+	evt.ibxResData = {"resourceMgr":this, "uriIn":src, "uriOut":null, "loadCtx":loadContext};
 	window.dispatchEvent(evt);
+	var src = evt.defaultPrevented ? evt.ibxResData.uriOut : src;
 
-	var src = evt.ibxResData.uriOut || evt.ibxResData.uriIn;
 	if(!(/^[/\\]/).test(src))
-		src = ctxPath + src;
+		src = loadContext + src;
 
 	return src;
 };
 
 //load the actual resource bundle here...can be called directly, or from an xhr load (promise/deferred fullfilled/done)
-_p.loadBundle = function(xDoc, xhr)
+_p.loadBundle = function(xResDoc)
 {
-	var bundleLoaded = (xhr && xhr._resLoaded) ? xhr._resLoaded : $.Deferred();
-	var xDoc = $(xDoc);
+	//switch the path for loading dependent files using this bundles's path.
+	this._bundlePath = xResDoc.path;
+
 	var head = $("head");
 	var rootBundle = this._resBundle.find("ibx-res-bundle");
-	var bundle = xDoc.find("ibx-res-bundle").first();
+	var bundle = $(xResDoc).find("ibx-res-bundle").first();
+	
+	//make sure we have a promise to resolve when loaded
+	xResDoc.resLoaded = xResDoc.resLoaded || $.Deferred();
 
 	//let the loading begin!
 	ibx.loadEvent("rb_loading", {"resMgr":this, "bundle":bundle[0]});
 
 	//First load the dependency Resource Bundles...this will chain to any depth
 	var files = [];
-	bundle.find("res-bundle").each(function(idx, el){files.push($(el).attr("src"));});
-	this.addBundles(files).done(function(xDoc, head, rootBundle, bundle, bundleLoaded)
+	bundle.find("ibx-res-bundle").each(function(idx, el)
 	{
+		el = $(el);
+		files.push({"src":el.attr("src"), "loadContext":el.closest("[loadContext]").attr("loadContext")});
+	});
+
+	this._bundlePath = xResDoc.path;
+	this.addBundles(files).done(function(curBundlePath, xResDoc, head, rootBundle, bundle)
+	{
+		//now that dependent bundles are loaded, set back the correct path to this bundle.
+		this._bundlePath = curBundlePath;
+
 		//load all css files
 		files = bundle.find("style-file");
 		files.each(function(idx, elFile)
 		{
-			var src = this.getResPath(elFile);
+			elFile = $(elFile);
+			var src = this.getResPath(elFile.attr("src"), elFile.closest("[loadContext]").attr("loadContext"));
 			if(!this.loadedFiles[src])
 			{
 				var link = $("<link rel='stylesheet' type='text/css'>");
@@ -185,7 +201,8 @@ _p.loadBundle = function(xDoc, xhr)
 		files = bundle.find("markup-file");
 		files.each(function(idx, elFile)
 		{
-			var src = this.getResPath(elFile);
+			elFile = $(elFile);
+			var src = this.getResPath(elFile.attr("src"), elFile.closest("[loadContext]").attr("loadContext"));
 			if(!this.loadedFiles[src])
 			{
 				$.get({async:false, url:src, contentType:"text", error:this._resFileRetrievalError.bind(this, src)}).done(function(src, content, status, xhr)
@@ -209,7 +226,8 @@ _p.loadBundle = function(xDoc, xhr)
 		files = bundle.find("string-file, script-file");
 		files.each(function(idx, elFile)
 		{
-			var src = this.getResPath(elFile);
+			elFile = $(elFile);
+			var src = this.getResPath(elFile.attr("src"), elFile.closest("[loadContext]").attr("loadContext"));
 			var elFile = $(elFile);
 			if(!this.loadedFiles[src])
 			{
@@ -276,23 +294,23 @@ _p.loadBundle = function(xDoc, xhr)
 
 		//now load all forward reference Resource Bundles (packages) that this bundle wants to load.
 		var files = [];
-		bundle.find("res-bundle").each(function(idx, el){files.push($(el).attr("src"));});
+		bundle.find("ibx-package").each(function(idx, el){files.push($(el).attr("src"));});
 		this.addBundles(files).done(function()
 		{
 			//save that this bundles has been loaded.
-			if(xhr.src)
-				this.loadedBundles[xhr.src] = bundleLoaded;
+			if(xResDoc.src)
+				this.loadedBundles[xResDoc.src] = xResDoc.resLoaded;
 
 			//give the main thread a chance to render what's been loaded before resolving the promise
 			window.setTimeout(function(bundle)
 			{
 				ibx.loadEvent("rb_loaded", {"resMgr":this, "bundle":bundle[0]});
-				bundleLoaded.resolve(bundle, this);
+				xResDoc.resLoaded.resolve(bundle, this);
 			}.bind(this, bundle), 0);
-		}.bind(this, xDoc, head, rootBundle, bundle, bundleLoaded));
+		}.bind(this, xResDoc, head, rootBundle, bundle));
 
-	}.bind(this, xDoc, head, rootBundle, bundle, bundleLoaded));
-	return bundleLoaded;
+	}.bind(this, this._bundlePath, xResDoc, head, rootBundle, bundle));
+	return xResDoc.resLoaded;
 };
 
 _p.getResource = function(selector, ibxBind, forceCreate)
