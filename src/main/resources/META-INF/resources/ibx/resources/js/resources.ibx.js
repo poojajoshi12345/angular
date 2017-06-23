@@ -112,7 +112,7 @@ _p.getResPath = function(src)
 	{
 		var el = $(src);
 		src = el.attr("src");
-		var loadContext = el.closest("[loadContext]").attr("loadContext");
+		var loadContext = (el.closest("[loadContext]").attr("loadContext") || "").toLowerCase();
 		if(loadContext == "bundle")
 			ctxPath = el.prop("ownerDocument").path;
 		else
