@@ -51,7 +51,7 @@ function ibx()
 	{
 		//resolve various ibx context values based on where we're loading from.
 		var ibxScript = document.querySelector("script[src*='ibx.js']");
-		var ibxPath = ibxScript.getAttribute("src").replace("ibx.js", "");
+		var ibxPath = ibxScript.getAttribute("src").replace(/resources\/.*/, "resources/");
 		ibx.setPath(ibxPath);
 		ibx.setAppPath(window.location.href.substring(0, window.location.href.lastIndexOf("/") + 1));
 		ibx._appName = window.location.href.substring(window.location.href.lastIndexOf("/") + 1)
