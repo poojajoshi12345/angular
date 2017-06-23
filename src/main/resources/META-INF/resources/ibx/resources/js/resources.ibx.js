@@ -76,7 +76,7 @@ _p.addBundle = function(info, data)
 	var resLoaded = $.Deferred();
 	var xhr = $.get(info, data);
 	xhr._resLoaded = resLoaded;
-	xhr._src = info.url;
+	xhr.src = info.url;
 	xhr.done(this._onBundleFileLoaded.bind(this));
 	xhr.fail(this._onBundleFileLoadError.bind(this));
 	xhr.progress(this._onBundleFileProgress.bind(this));
@@ -84,7 +84,7 @@ _p.addBundle = function(info, data)
 };
 _p._onBundleFileLoaded = function(xDoc, status, xhr)
 {
-	xDoc._xhr = xhr;
+	xDoc.path = xhr.src.substring(0, xhr.src.lastIndexOf("/") + 1);
 	this.loadBundle(xDoc, xhr);
 };
 _p._onBundleFileProgress = function()
@@ -107,6 +107,22 @@ _p._resFileRetrievalError = function(src, xhr, status, msg)
 
 _p.getResPath = function(src)
 {
+	var ctxPath = this.getContextPath();
+	if(src instanceof Element)
+	{
+		var el = $(src);
+		src = el.attr("src");
+		var loadContext = el.closest("[loadContext]").attr("loadContext");
+		if(loadContext == "bundle")
+			ctxPath = el.prop("ownerDocument").path;
+		else
+		if(loadContext == "app")
+			ctxPath = ibx.getAppPath();
+		else
+		if(loadContext == "ibx")
+			ctxPath = ibx.getPath();
+	}
+
 	//give interested parties the ability to modify the resource uri
 	var evt = document.createEvent("Event");
 	evt.initEvent("ibx_res_mgr_resolve_uri", true, true);
@@ -115,7 +131,7 @@ _p.getResPath = function(src)
 
 	var src = evt.ibxResData.uriOut || evt.ibxResData.uriIn;
 	if(!(/^[/\\]/).test(src))
-		src = this.getContextPath() + src;
+		src = ctxPath + src;
 
 	return src;
 };
@@ -139,9 +155,9 @@ _p.loadBundle = function(xDoc, xhr)
 	{
 		//load all css files
 		files = bundle.find("style-file");
-		files.each(function(idx, file)
+		files.each(function(idx, elFile)
 		{
-			var src = this.getResPath($(file).attr("src"));
+			var src = this.getResPath(elFile);
 			if(!this.loadedFiles[src])
 			{
 				var link = $("<link rel='stylesheet' type='text/css'>");
@@ -167,9 +183,9 @@ _p.loadBundle = function(xDoc, xhr)
 
 		//load all markup files
 		files = bundle.find("markup-file");
-		files.each(function(idx, file)
+		files.each(function(idx, elFile)
 		{
-			var src = this.getResPath( $(file).attr("src"));
+			var src = this.getResPath(elFile);
 			if(!this.loadedFiles[src])
 			{
 				$.get({async:false, url:src, contentType:"text", error:this._resFileRetrievalError.bind(this, src)}).done(function(src, content, status, xhr)
@@ -191,20 +207,20 @@ _p.loadBundle = function(xDoc, xhr)
 
 		//load all string and script files
 		files = bundle.find("string-file, script-file");
-		files.each(function(idx, file)
+		files.each(function(idx, elFile)
 		{
-			var file = $(file);
-			var src = this.getResPath( $(file).attr("src"));
+			var src = this.getResPath(elFile);
+			var elFile = $(elFile);
 			if(!this.loadedFiles[src])
 			{
-				if(file.attr("link") == "true")
+				if(elFile.attr("link") == "true")
 				{
 					$("<script type='text/javascript' src='" + src + "'>").appendTo("head");
 					ibx.loadEvent("rb_script_file_loaded", {"resMgr":this, "bundle":bundle[0], "src":src});
 				}
 				else
 				{
-					var isIbxStringFile = (file.prop("tagName") == "string-file");
+					var isIbxStringFile = (elFile.prop("tagName") == "string-file");
 					$.get({async:false, url:src, dataType:"text", error:this._resFileRetrievalError.bind(this, src)}).done(function(src, isIbxStringFile, content, status, xhr)
 					{
 						if(isIbxStringFile)
@@ -264,8 +280,8 @@ _p.loadBundle = function(xDoc, xhr)
 		this.addBundles(files).done(function()
 		{
 			//save that this bundles has been loaded.
-			if(xhr._src)
-				this.loadedBundles[xhr._src] = bundleLoaded;
+			if(xhr.src)
+				this.loadedBundles[xhr.src] = bundleLoaded;
 
 			//give the main thread a chance to render what's been loaded before resolving the promise
 			window.setTimeout(function(bundle)
