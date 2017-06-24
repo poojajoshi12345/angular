@@ -100,7 +100,7 @@ _p._onBundleFileProgress = function()
 };
 _p._onBundleFileLoadError = function(xhr, status, msg)
 {
-	var e = ibx.loadEvent("rb_load_error", {"resMgr":this, "bundle":null, "xhr":xhr, "status":status, "msg":msg});
+	var e = ibx.loadEvent("rb_load_error", {"loadDepth":this._loadDepth, "resMgr":this, "bundle":null, "xhr":xhr, "status":status, "msg":msg});
 	if(!e.defaultPrevented)
 		console.error(status, msg, xhr.responseText);
 };
@@ -108,7 +108,7 @@ _p._onBundleFileLoadError = function(xhr, status, msg)
 //if something bad happens while retrieving a source file in the bundle.
 _p._resFileRetrievalError = function(src, xhr, status, msg)
 {
-	var e = ibx.loadEvent("rb_file_load_error", {"resMgr":this, "bundle":null, "src":src, "xhr":xhr, "status":status, "msg":msg});
+	var e = ibx.loadEvent("rb_file_load_error", {"loadDepth":this._loadDepth, "resMgr":this, "bundle":null, "src":src, "xhr":xhr, "status":status, "msg":msg});
 	if(!e.defaultPrevented)
 		console.error(status, msg, xhr.responseText);
 };
@@ -139,6 +139,7 @@ _p.getResPath = function(src, loadContext)
 };
 
 //load the actual resource bundle here...can be called directly, or from an xhr load (promise/deferred fullfilled/done)
+_p._loadDepth = 0;
 _p.loadBundle = function(xResDoc)
 {
 	//switch the path for loading dependent files using this bundles's path.
@@ -152,7 +153,7 @@ _p.loadBundle = function(xResDoc)
 	xResDoc.resLoaded = xResDoc.resLoaded || $.Deferred();
 
 	//let the loading begin!
-	ibx.loadEvent("rb_loading", {"resMgr":this, "bundle":bundle[0]});
+	ibx.loadEvent("rb_loading", {"loadDepth":this._loadDepth, "resMgr":this, "bundle":bundle[0], src:xResDoc.path});
 
 	//First load the dependency Resource Bundles...this will chain to any depth
 	var files = [];
@@ -165,6 +166,8 @@ _p.loadBundle = function(xResDoc)
 	this._bundlePath = xResDoc.path;
 	this.addBundles(files).done(function(curBundlePath, xResDoc, head, rootBundle, bundle)
 	{
+		++this._loadDepth;
+
 		//now that dependent bundles are loaded, set back the correct path to this bundle.
 		this._bundlePath = curBundlePath;
 
@@ -180,7 +183,7 @@ _p.loadBundle = function(xResDoc)
 				link.attr("href", src);
 				head.append(link);
 				this.loadedFiles[src] = true;
-				ibx.loadEvent("rb_css_file_loaded", {"resMgr":this, "bundle":bundle[0], "src":src});
+				ibx.loadEvent("rb_css_file_loaded", {"loadDepth":this._loadDepth, "resMgr":this, "bundle":bundle[0], "src":src});
 			}
 		}.bind(this));
 
@@ -193,9 +196,9 @@ _p.loadBundle = function(xResDoc)
 			{
 				var styleNode = $("<style type='text/css'>").text(content);
 				head.append(styleNode);
-				ibx.loadEvent("rb_css_inline_loaded", {"resMgr":this, "bundle":bundle[0]});
+				ibx.loadEvent("rb_css_inline_loaded", {"loadDepth":this._loadDepth, "resMgr":this, "bundle":bundle[0]});
 			}
-		});
+		}.bind(this));
 
 		//load all markup files
 		files = bundle.find("markup-file");
@@ -209,7 +212,7 @@ _p.loadBundle = function(xResDoc)
 				{
 					rootBundle.children("markup").append($(content).find("markup-block"));
 					this.loadedFiles[src] = true;
-					ibx.loadEvent("rb_markup_file_loaded", {"resMgr":this, "bundle":bundle[0], "src":src});
+					ibx.loadEvent("rb_markup_file_loaded", {"loadDepth":this._loadDepth, "resMgr":this, "bundle":bundle[0], "src":src});
 				}.bind(this, src));
 			}
 		}.bind(this));
@@ -219,7 +222,7 @@ _p.loadBundle = function(xResDoc)
 		markupBlocks.each(function(idx, markup)
 		{
 			rootBundle.children("markup").first().append($(markup).clone());
-			ibx.loadEvent("rb_markup_inline_loaded", {"resMgr":this, "bundle":bundle[0]});
+			ibx.loadEvent("rb_markup_inline_loaded", {"loadDepth":this._loadDepth, "resMgr":this, "bundle":bundle[0]});
 		}.bind(this));
 
 		//load all string and script files
@@ -234,7 +237,7 @@ _p.loadBundle = function(xResDoc)
 				if(elFile.attr("link") == "true")
 				{
 					$("<script type='text/javascript' src='" + src + "'>").appendTo("head");
-					ibx.loadEvent("rb_script_file_loaded", {"resMgr":this, "bundle":bundle[0], "src":src});
+					ibx.loadEvent("rb_script_file_loaded", {"loadDepth":this._loadDepth, "resMgr":this, "bundle":bundle[0], "src":src});
 				}
 				else
 				{
@@ -245,7 +248,7 @@ _p.loadBundle = function(xResDoc)
 						{
 							content = eval("(" + content + ")");//JSON.parse(content);
 							this.addStringBundle(content);
-							ibx.loadEvent("rb_string_file_loaded", {"resMgr":this, "bundle":bundle[0], "src":src});
+							ibx.loadEvent("rb_string_file_loaded", {"loadDepth":this._loadDepth, "resMgr":this, "bundle":bundle[0], "src":src});
 						}
 						else
 						if((/\S/g).test(content))
@@ -255,7 +258,7 @@ _p.loadBundle = function(xResDoc)
 							script.text(content);
 							head.append(script);
 							delete window.ibxResourceMgr;//clean up the temporary global
-							ibx.loadEvent("rb_script_file_loaded", {"resMgr":this, "bundle":bundle[0], "src":src});
+							ibx.loadEvent("rb_script_file_loaded", {"loadDepth":this._loadDepth, "resMgr":this, "bundle":bundle[0], "src":src});
 						}
 						this.loadedFiles[src] = true;
 					}.bind(this, src, isIbxStringFile));
@@ -273,7 +276,7 @@ _p.loadBundle = function(xResDoc)
 			{
 				var strBundle = JSON.parse(content);
 				this.addStringBundle(strBundle);
-				ibx.loadEvent("rb_string_inline_loaded", {"resMgr":this, "bundle":bundle[0]});
+				ibx.loadEvent("rb_string_inline_loaded", {"loadDepth":this._loadDepth, "resMgr":this, "bundle":bundle[0]});
 			}
 		}.bind(this));
 
@@ -288,7 +291,7 @@ _p.loadBundle = function(xResDoc)
 				var script = $("<script type='text/javascript'>");
 				script.text(content);
 				head.append(script);
-				ibx.loadEvent("rb_script_inline_loaded", {"resMgr":this, "bundle":bundle[0]});
+				ibx.loadEvent("rb_script_inline_loaded", {"loadDepth":this._loadDepth, "resMgr":this, "bundle":bundle[0]});
 			}
 		}.bind(this));
 
@@ -300,11 +303,14 @@ _p.loadBundle = function(xResDoc)
 			//save that this bundles has been loaded.
 			if(xResDoc.src)
 				this.loadedBundles[xResDoc.src] = xResDoc.resLoaded;
+			
+			--this._loadDepth;
 
 			//give the main thread a chance to render what's been loaded before resolving the promise
 			window.setTimeout(function(bundle)
 			{
-				ibx.loadEvent("rb_loaded", {"resMgr":this, "bundle":bundle[0]});
+				ibx.loadEvent("rb_loaded", {"loadDepth":this._loadDepth, "resMgr":this, "bundle":bundle[0]});
+				--this._loadDepth;
 				xResDoc.resLoaded.resolve(bundle, this);
 			}.bind(this, bundle), 0);
 		}.bind(this, xResDoc, head, rootBundle, bundle));
