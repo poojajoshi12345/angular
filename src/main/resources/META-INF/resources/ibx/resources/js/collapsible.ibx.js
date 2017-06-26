@@ -22,13 +22,18 @@ $.widget("ibi.ibxCollapsible", $.Widget,
 			"margin-bottom":this.element.css("margin-bottom"),
 		}
 		this.widgetEventPrefix = "ibx_";
-		this.element.data("ibxWidget", this);
-		this.element.data("ibiIbxWidget", this);
 		this.element.addClass("ibx-collapsible");
 		this.element.on("transitionend", this._onTransitionEnd.bind(this))
 		this.element.on("click", this._onMouseEvent.bind(this));
 		this._boundWindowMouseEvent = this._onWindowMouseEvent.bind(this);
+
 		this._super();
+
+		if (!this.element.data("ibxWidget"))
+		{
+			this.element.data("ibxWidget", this);
+			this.element.data("ibiIbxWidget", this);
+		}
 	},
 	_destroy:function()
 	{
