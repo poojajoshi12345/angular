@@ -130,7 +130,7 @@ _p.getResPath = function(src, loadContext)
 	evt.initEvent("ibx_res_mgr_resolve_uri", true, true);
 	evt.ibxResData = {"resourceMgr":this, "uriIn":src, "uriOut":null, "loadCtx":loadContext};
 	window.dispatchEvent(evt);
-	var src = evt.defaultPrevented ? evt.ibxResData.uriOut : src;
+	var src = evt.ibxResData.uriOut || src;
 
 	if(!(/^[/\\]/).test(src))
 		src = loadContext + src;
