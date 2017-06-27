@@ -39,13 +39,13 @@ _p.destroy = function()
 	this.destroyed = true;
 };
 
-_p.missingString = "BAD_KEY";
+_p.missingString = "";
 _p.language = null;
 _p.strings = null;
-_p.getString = function(id, language)
+_p.getString = function(id, def, language)
 {
 	language = language || this.language || "en";
-	return this.strings[language][id];
+	return this.strings[language][id] || def || this.missingString;
 };
 _p.addStringBundle = function(bundle)
 {
@@ -361,19 +361,15 @@ _p.processStrings = function(markup, language)
 	language = language || this.language;
 	
 	var strInfo = [];
-	var strings = this.strings;
-	var regEx = new RegExp("(@ibxString:(\{.[^\}]*}))", "gi");
+	var regEx = /@ibxString\((.[^\)]*)\)/gi;
 	while(match = regEx.exec(markup))
-		strInfo.push({"match":match, "info":eval("(" + match[2] + ")")});
+		strInfo.push({"match":match, "string":eval("(this.getString(" + match[1] + "))")});
 
-	$(strInfo).each(function(idx, replace)
+	$(strInfo).each(function(idx, info)
 	{
-		var str = this.strings[language][replace.info.key] || replace.info.default || "";
-
-		markup = markup.replace(replace.match[1], str);
+		markup = markup.replace(info.match[0], info.string);
 	}.bind(this));
 
-	console.log(markup);
 	return markup;
 };
 
