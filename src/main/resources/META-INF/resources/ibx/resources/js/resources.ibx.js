@@ -39,6 +39,7 @@ _p.destroy = function()
 	this.destroyed = true;
 };
 
+_p.missingString = "BAD_KEY";
 _p.language = null;
 _p.strings = null;
 _p.getString = function(id, language)
@@ -335,6 +336,7 @@ _p.getResource = function(selector, ibxBind, forceCreate)
 	resource.each(function(idx, res)
 	{
 		markup += (new XMLSerializer()).serializeToString(res);
+		markup = this.processStrings(markup);
 	}.bind(this));
 	if(!markup.length)
 		throw(sformat("ibx.resourceMgr failed to load resource: {1}", selector));
@@ -353,6 +355,26 @@ _p.getResource = function(selector, ibxBind, forceCreate)
 	return markup;
 };
 
-//window["ibx.resourceMgr"] = new ibxResourceManager();
+_p.processStrings = function(markup, language)
+{
+	markup = markup.replace(/&quot;/g, "\"");
+	language = language || this.language;
+	
+	var strInfo = [];
+	var strings = this.strings;
+	var regEx = new RegExp("(@ibxString:(\{.[^\}]*}))", "gi");
+	while(match = regEx.exec(markup))
+		strInfo.push({"match":match, "info":eval("(" + match[2] + ")")});
+
+	$(strInfo).each(function(idx, replace)
+	{
+		var str = this.strings[language][replace.info.key] || replace.info.default || "";
+
+		markup = markup.replace(replace.match[1], str);
+	}.bind(this));
+
+	console.log(markup);
+	return markup;
+};
 
 //# sourceURL=resources.ibx.js

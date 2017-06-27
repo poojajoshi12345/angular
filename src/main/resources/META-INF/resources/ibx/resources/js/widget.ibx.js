@@ -239,7 +239,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 			delete this._resizeSensor;
 		}
 		else
-		if(options.wantResize && !this._resSensor)
+		if(options.wantResize && !this._resizeSensor)
 		{
 			this._resizeSensor = new ResizeSensor(this.element[0], this._onResize.bind(this));
 		}
