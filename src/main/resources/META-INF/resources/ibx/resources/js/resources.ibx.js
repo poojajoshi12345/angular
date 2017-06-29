@@ -106,6 +106,62 @@ _p._onBundleFileLoadError = function(xhr, status, msg)
 		console.error(status, msg, xhr.responseText);
 };
 
+_p.loadExternalResFile = function(elFile)
+{
+	elFile = $(elFile);
+	elFile.each(function(idx, elFile)
+	{
+		elFile = $(elFile);
+		var src = this.getResPath(elFile.attr("src"), elFile.closest("[loadContext]").attr("loadContext"));
+		if(!this.loadedFiles[src])
+		{
+			var fileType = elFile.prop("tagName");
+			var asInline = !!elFile.attr("inline") && !!eFile.attr("link") || (fileType == "string-file") || (fileType == "markup-file");
+			if(asInline)
+			{
+				$.get({async:false, url:src, dataType:"text", error:this._resFileRetrievalError.bind(this, src)}).done(function(src, fileType, content, status, xhr)
+				{
+					content = this.preProcessResource(content);//precompile the content...string substitutions, etc.
+					if(content)
+					{
+						if(fileType == "string-file")
+						{
+							content = JSON.parse(content);
+							this.addStringBundle(content);
+							eType = "rb_string_file_loaded";
+						}
+						else
+						if(fileType == "markup-file")
+						{
+							this._resBundle.find("ibx-res-bundle > markup").append($(content).find("markup-block").attr("src", src));
+							eType = "rb_markup_file_loaded";
+						}
+						else
+						{
+							var isStyle = (fileType == "style-file");
+							var tag = $( isStyle ? "<style type='text/css'>" : "<script type='text/javascript'>").attr("data-ibx-src", src).text(content);
+							$("head").append(tag);
+							eType = isStyle ? "rb_css_file_inline_loaded" : "rb_script_file_inline_loaded";
+						}
+						this.loadedFiles[src] = true;
+						ibx.loadEvent(eType, {"loadDepth":this._loadDepth, "resMgr":this, "fileNode":elFile[0], "src":src});
+					}
+				}.bind(this, src, fileType));
+			}
+			else
+			{
+				var isStyle = (fileType == "style-file");
+				var tag = $(isStyle ? "<link rel='stylesheet' type='text/css'>" : "<script type='text/javascript'>").attr(isStyle ? "href" : "src", src);
+				$("head").append(tag);
+				this.loadedFiles[src] = true;
+				ibx.loadEvent(isStyle ? "rb_css_file_loaded" : "rb_script_file_loaded", {"loadDepth":this._loadDepth, "resMgr":this, "fileNode":elFile[0], "src":src});
+			}
+		}
+	}.bind(this));
+	return elFile;
+};
+
+
 //if something bad happens while retrieving a source file in the bundle.
 _p._resFileRetrievalError = function(src, xhr, status, msg)
 {
@@ -143,13 +199,12 @@ _p.getResPath = function(src, loadContext)
 _p._loadDepth = 0;
 _p.loadBundle = function(xResDoc)
 {
+	var head = $("head");
+	var bundle = $(xResDoc).find("ibx-res-bundle").first();
+	
 	//switch the path for loading dependent files using this bundles's path.
 	this._bundlePath = xResDoc.path;
 
-	var head = $("head");
-	var rootBundle = this._resBundle.find("ibx-res-bundle");
-	var bundle = $(xResDoc).find("ibx-res-bundle").first();
-	
 	//make sure we have a promise to resolve when loaded
 	xResDoc.resLoaded = xResDoc.resLoaded || $.Deferred();
 
@@ -165,131 +220,64 @@ _p.loadBundle = function(xResDoc)
 	});
 
 	this._bundlePath = xResDoc.path;
-	this.addBundles(files).done(function(curBundlePath, xResDoc, head, rootBundle, bundle)
+	this.addBundles(files).done(function(curBundlePath, xResDoc, head, bundle)
 	{
 		++this._loadDepth;
 
 		//now that dependent bundles are loaded, set back the correct path to this bundle.
 		this._bundlePath = curBundlePath;
 
-		//load all css files
-		files = bundle.find("style-file");
-		files.each(function(idx, elFile)
-		{
-			elFile = $(elFile);
-			var src = this.getResPath(elFile.attr("src"), elFile.closest("[loadContext]").attr("loadContext"));
-			if(!this.loadedFiles[src])
-			{
-				var link = $("<link rel='stylesheet' type='text/css'>");
-				link.attr("href", src);
-				head.append(link);
-				this.loadedFiles[src] = true;
-				ibx.loadEvent("rb_css_file_loaded", {"loadDepth":this._loadDepth, "resMgr":this, "bundle":bundle[0], "src":src});
-			}
-		}.bind(this));
-
-		//load inline css styles
-		styleBlocks = bundle.find("style-sheet").each(function(idx, styleBlock)
-		{
-			styleBlock = $(styleBlock);
-			var content = styleBlock.text();
-			if((/\S/g).test(content))
-			{
-				var styleNode = $("<style type='text/css'>").text(content);
-				head.append(styleNode);
-				ibx.loadEvent("rb_css_inline_loaded", {"loadDepth":this._loadDepth, "resMgr":this, "bundle":bundle[0]});
-			}
-		}.bind(this));
-
-		//load all markup files
-		files = bundle.find("markup-file");
-		files.each(function(idx, elFile)
-		{
-			elFile = $(elFile);
-			var src = this.getResPath(elFile.attr("src"), elFile.closest("[loadContext]").attr("loadContext"));
-			if(!this.loadedFiles[src])
-			{
-				$.get({async:false, url:src, contentType:"text", error:this._resFileRetrievalError.bind(this, src)}).done(function(src, content, status, xhr)
-				{
-					rootBundle.children("markup").append($(content).find("markup-block"));
-					this.loadedFiles[src] = true;
-					ibx.loadEvent("rb_markup_file_loaded", {"loadDepth":this._loadDepth, "resMgr":this, "bundle":bundle[0], "src":src});
-				}.bind(this, src));
-			}
-		}.bind(this));
-
-		//load all inline markup
-		var markupBlocks = bundle.find("markup-block");
-		markupBlocks.each(function(idx, markup)
-		{
-			rootBundle.children("markup").first().append($(markup).clone());
-			ibx.loadEvent("rb_markup_inline_loaded", {"loadDepth":this._loadDepth, "resMgr":this, "bundle":bundle[0]});
-		}.bind(this));
-
-		//load all string and script files
-		files = bundle.find("string-file, script-file");
-		files.each(function(idx, elFile)
-		{
-			elFile = $(elFile);
-			var src = this.getResPath(elFile.attr("src"), elFile.closest("[loadContext]").attr("loadContext"));
-			var elFile = $(elFile);
-			if(!this.loadedFiles[src])
-			{
-				if(elFile.attr("link") == "true")
-				{
-					$("<script type='text/javascript' src='" + src + "'>").appendTo("head");
-					ibx.loadEvent("rb_script_file_loaded", {"loadDepth":this._loadDepth, "resMgr":this, "bundle":bundle[0], "src":src});
-				}
-				else
-				{
-					var isIbxStringFile = (elFile.prop("tagName") == "string-file");
-					$.get({async:false, url:src, dataType:"text", error:this._resFileRetrievalError.bind(this, src)}).done(function(src, isIbxStringFile, content, status, xhr)
-					{
-						if(isIbxStringFile)
-						{
-							content = eval("(" + content + ")");//JSON.parse(content);
-							this.addStringBundle(content);
-							ibx.loadEvent("rb_string_file_loaded", {"loadDepth":this._loadDepth, "resMgr":this, "bundle":bundle[0], "src":src});
-						}
-						else
-						if((/\S/g).test(content))
-						{
-							window.ibxResourceMgr = this;//because the string bundle from server wants to add to 'window.ibxResourceMgr'
-							var script = $("<script type='text/javascript' data-ibx-src='" + src + "'>");
-							script.text(content);
-							head.append(script);
-							delete window.ibxResourceMgr;//clean up the temporary global
-							ibx.loadEvent("rb_script_file_loaded", {"loadDepth":this._loadDepth, "resMgr":this, "bundle":bundle[0], "src":src});
-						}
-						this.loadedFiles[src] = true;
-					}.bind(this, src, isIbxStringFile));
-				}
-			}
-		}.bind(this));
-
-		//load all inline string bundles
+		//load strings
+		this.loadExternalResFile(bundle.find("string-file"));
 		var stringBundles = bundle.find("string-bundle");
 		stringBundles.each(function(idx, stringBundle)
 		{
 			stringBundle = $(stringBundle);
-			var content = stringBundle.text();
-			if((/\S/g).test(content))
+			var content = stringBundle.text().trim();
+			if(content)
 			{
+				content = this.preProcessResource(content);//precompile the content...string substitutions, etc.
 				var strBundle = JSON.parse(content);
 				this.addStringBundle(strBundle);
 				ibx.loadEvent("rb_string_inline_loaded", {"loadDepth":this._loadDepth, "resMgr":this, "bundle":bundle[0]});
 			}
 		}.bind(this));
 
-		//load all inline scripts
+		//load css
+		this.loadExternalResFile(bundle.find("style-file"));
+		styleBlocks = bundle.find("style-sheet").each(function(idx, styleBlock)
+		{
+			styleBlock = $(styleBlock);
+			var content = styleBlock.text().trim();
+			if(content)
+			{
+				content = this.preProcessResource(content);//precompile the content...string substitutions, etc.
+				var styleNode = $("<style type='text/css'>").text(content);
+				head.append(styleNode);
+				ibx.loadEvent("rb_css_inline_loaded", {"loadDepth":this._loadDepth, "resMgr":this, "bundle":bundle[0]});
+			}
+		}.bind(this));
+
+		//load markup
+		this.loadExternalResFile(bundle.find("markup-file"));
+		var markupBlocks = bundle.find("markup-block");
+		markupBlocks.each(function(idx, markup)
+		{
+			this._resBundle.find("ibx-res-bundle > markup").first().append($(markup).clone());
+			ibx.loadEvent("rb_markup_inline_loaded", {"loadDepth":this._loadDepth, "resMgr":this, "bundle":bundle[0]});
+		}.bind(this));
+
+		//load scripts
+		this.loadExternalResFile(bundle.find("script-file"));
 		var scriptBlocks = bundle.find("script-block");
 		scriptBlocks.each(function(idx, scriptBlock)
 		{
 			scriptBlock = $(scriptBlock);
-			var content = scriptBlock.text();
-			if((/\S/g).test(content))
+			var content = scriptBlock.text().trim();
+			if(content)
 			{
 				var script = $("<script type='text/javascript'>");
+				content = this.preProcessResource(content);//precompile the content...string substitutions, etc.
 				script.text(content);
 				head.append(script);
 				ibx.loadEvent("rb_script_inline_loaded", {"loadDepth":this._loadDepth, "resMgr":this, "bundle":bundle[0]});
@@ -314,9 +302,9 @@ _p.loadBundle = function(xResDoc)
 				--this._loadDepth;
 				xResDoc.resLoaded.resolve(bundle, this);
 			}.bind(this, bundle), 0);
-		}.bind(this, xResDoc, head, rootBundle, bundle));
+		}.bind(this, xResDoc, head, bundle));
 
-	}.bind(this, this._bundlePath, xResDoc, head, rootBundle, bundle));
+	}.bind(this, this._bundlePath, xResDoc, head, bundle));
 	return xResDoc.resLoaded;
 };
 
@@ -336,7 +324,7 @@ _p.getResource = function(selector, ibxBind, forceCreate)
 	resource.each(function(idx, res)
 	{
 		markup += (new XMLSerializer()).serializeToString(res);
-		markup = this.processStrings(markup);
+		markup = this.preProcessResource(markup);
 	}.bind(this));
 	if(!markup.length)
 		throw(sformat("ibx.resourceMgr failed to load resource: {1}", selector));
@@ -355,22 +343,21 @@ _p.getResource = function(selector, ibxBind, forceCreate)
 	return markup;
 };
 
-_p.processStrings = function(markup, language)
+_p.preProcessResource = function(resource, language)
 {
-	markup = markup.replace(/&quot;/g, "\"");
 	language = language || this.language;
 	
 	var strInfo = [];
 	var regEx = /@ibxString\((.[^\)]*)\)/gi;
-	while(match = regEx.exec(markup))
+	while(match = regEx.exec(resource))
 		strInfo.push({"match":match, "string":eval("(this.getString(" + match[1] + "))")});
 
 	$(strInfo).each(function(idx, info)
 	{
-		markup = markup.replace(info.match[0], info.string);
+		resource = resource.replace(info.match[0], info.string);
 	}.bind(this));
 
-	return markup;
+	return resource;
 };
 
 //# sourceURL=resources.ibx.js
