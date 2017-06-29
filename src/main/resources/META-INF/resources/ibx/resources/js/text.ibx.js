@@ -47,7 +47,7 @@ $.widget("ibi.ibxTextField", $.ibi.ibxFlexBox,
 	{
 		this.options.text = bFormat && this.options.fnFormat ? this.options.fnFormat(value) : value;
 		this.refresh();
-		this._trigger("change", null, this.element);
+		this._trigger("change", null, [this.element, this.options.text]);
 		this._trigger("set_form_value", null, { "elem": this.element, "value": this.options.text });
 	},
 	selectAll: function ()
@@ -90,12 +90,12 @@ $.widget("ibi.ibxTextField", $.ibi.ibxFlexBox,
 		if (e.which == 13) // enter
 		{
 			this._setValue(this._textInput.val(), true);
-			this._trigger("action", e, this.element);
+			this._trigger("action", e, [this.element, this.options.text]);
 			e.preventDefault();
 		}
 		else
 		{
-			this._trigger("textchanging", e, this.element);
+			this._trigger("textchanging", e, [this.element, this.options.text, e.key]);
 		}
 	},
 	_onInput: function (e)
@@ -104,7 +104,7 @@ $.widget("ibi.ibxTextField", $.ibi.ibxFlexBox,
 		if (this.options.text != value)
 		{
 			this.options.text = value;
-			this._trigger("textchanged", e, this.element);
+			this._trigger("textchanged", e, [this.element, value]);
 		}
 	},
 	format: function (fnFormat)
