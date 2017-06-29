@@ -22,7 +22,7 @@ $.widget("ibi.ibxGridStack", $.ibi.ibxWidget,
 	{
 		this.element.gridstack(this.options);
 		this.element.addClass("grid-stack");
-		this.element.css('min-height', this.options.minHeight + "px");
+		this.element.css('min-height', this._getMinHeight());
 		this._super();
 		// Stop bubbling of jquery ui events "resize", "drag", "drop"
 		this.element.on('resize', function (event) { event.stopPropagation(); });
@@ -61,9 +61,13 @@ $.widget("ibi.ibxGridStack", $.ibi.ibxWidget,
 				var grid = this.element.data('gridstack');
 				grid.removeWidget(el, detachNode);
 				if (this.element.children('.grid-stack-item').length == 0)
-					this.element.css('min-height', this.options.minHeight + "px");
+					this.element.css('min-height', this._getMinHeight());
 			}.bind(this));
 		}
+	},
+	_getMinHeight: function ()
+	{
+		return this.options.minHeight + "px";
 	},
 	_destroy: function ()
 	{
