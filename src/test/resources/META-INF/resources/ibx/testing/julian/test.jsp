@@ -29,166 +29,7 @@
 					txtOut.ibxWidget("option", "text", txt + "\n" + str);
 					txtOut.find("textarea").scrollTop(1000000);
 				};
-
-				$.widget("ibi.ibxDroppable", $.ui.droppable,
-				{
-					options:
-					{
-					},
-					_widgetClass:"ibx-droppable",
-					_create:function()
-					{
-						this._super();
-						this.widgetEventPrefix = "ibx_";
-						if (!this.element.data("ibxWidget"))
-						{
-							this.element.data("ibiIbxWidget", this);
-							this.element.data('ibxWidget', this);
-						}
-					},
-					_destroy:function()
-					{
-						this._super();
-					},
-				});
-
-				var dragItem = $(".drag-jqui");
-				dragItem.ibxDraggable().on(
-				{
-					ibx_start:function(e)
-					{
-						console.log(".drag-jqui: %s", e.type);
-					},
-					ibx_stop:function(e)
-					{
-						console.log(".drag-jqui: %s", e.type);
-					},
-					ibx_drag:function(e)
-					{
-						console.log(".drag-jqui: %s", e.type);
-					},
-				});
-
-				var dropItem = $(".drop-jqui");
-				dropItem.ibxDroppable({accept:".drag-jqui", hoverClass:"drop-jqui-hover"}).on(
-				{
-					ibx_activate:function(e)
-					{
-						console.log(".drop-jqui: %s", e.type);
-					},
-					ibx_deactivate:function(e)
-					{
-						console.log(".drop-jqui: %s", e.type);
-					},
-					ibx_drop:function(e)
-					{
-						console.log(".drop-jqui: %s", e.type);
-					},
-					ibx_out:function(e)
-					{
-						console.log(".drop-jqui: %s", e.type);
-					},
-					ibx_over:function(e, ui)
-					{
-						console.log(".drop-jqui: %s", e.type);
-					}
-				});
-
-				$.widget("ibi.ibxDragSource", $.Widget,
-				{
-					options:
-					{
-					},
-					_widgetClass:"ibx-drag-source",
-					_create:function()
-					{
-						this._super();
-						this.widgetEventPrefix = "ibx_";
-						if (!this.element.data("ibxWidget"))
-						{
-							this.element.data("ibiIbxWidget", this);
-							this.element.data('ibxWidget', this);
-						}
-						this.element.attr("draggable", true).on(
-						{
-							dragstart:this._onDragEvent.bind(this),
-							dragend:this._onDragEvent.bind(this),
-						});
-					},
-					_onDragEvent:function(e)
-					{
-						var e = e.originalEvent;
-						if(e.type == "dragstart")
-						{
-							var dt = e.dataTransfer;
-							dt.effectAllowed = "copy";
-							dt.setDragImage($(".drag-image")[0], 0, 0);
-							dt.setData("drag-native", ".ibx-is-dragging");
-							this.element.addClass("ibx-is-dragging");
-						}
-						log(e.type);
-					},
-					_destroy:function()
-					{
-						this.element.prop("draggable", "");
-						this._super();
-					},
-				});
-
-				$.widget("ibi.ibxDragTarget", $.Widget,
-				{
-					options:
-					{
-					},
-					_widgetClass:"ibx-drag-target",
-					_create:function()
-					{
-						this._super();
-						this.widgetEventPrefix = "ibx_";
-						if (!this.element.data("ibxWidget"))
-						{
-							this.element.data("ibiIbxWidget", this);
-							this.element.data('ibxWidget', this);
-						}
-						this.element.attr("draggable", true).on(
-						{
-							dragenter:this._onDragEvent.bind(this),
-							dragexit:this._onDragEvent.bind(this),
-							dragover:this._onDragEvent.bind(this),
-							dragleave:this._onDragEvent.bind(this),
-							drop:this._onDragEvent.bind(this)
-						});
-					},
-					_onDragEvent:function(e)
-					{
-						var e = e.originalEvent;
-						var dt = e.dataTransfer;
-						if(e.type == "dragover")
-						{
-							dt.dropEffect = "move";
-							e.preventDefault();
-						}
-						else
-						if(e.type == "drop")
-						{
-							var data = dt.getData("drag-native");
-							var elDrag = $(data);
-							this.element.after(elDrag).removeClass("drag-native");
-							e.preventDefault();
-						}
-						log(e.type);
-					},
-					_destroy:function()
-					{
-						this.element.prop("draggable", "");
-						this._super();
-					},
-				});
-
-				$(".drag-native").ibxDragSource();
-				$(".drop-native").ibxDragTarget();
-
-			}, true);
+			}, [{src:"./test_res_bundle.xml", loadContext:"app"}], true);
 		</script>
 		<style type="text/css">
 			html, body, .box-main
@@ -197,49 +38,40 @@
 				height:100%;
 				width:100%;
 			}
-
-			.box-jqui, .box-native
+			.box-native
 			{
 				margin:5px;
 				padding:5px;
 			}
-			.txt-out
-			{
-				margin:5px;
-			}
-
-			.drag-jqui, .drop-jqui, .drag-native, .drop-native
+			.test-drag
 			{
 				width:125px;
 				padding:5px;
 				margin:5px;
-				border:1px solid #ccc;
+				border:1px solid blue;
 			}
-			.drop-jqui-hover
+			.test-drop
 			{
-				padding:4px;
-				border:2px solid black;
-				background-color:pink;
+				width:125px;
+				padding:5px;
+				margin:5px;
+				border:1px solid red;
 			}
 			.txt-out
 			{
 				flex:1 1 auto;
+				margin:5px;
 				border:1px solid black;
 			}
 		</style>
 	</head>
 	<body class="ibx-root">
+		<div draggable="true">FUCK YOU FIREFOX!</div>
+		<img class="drag-image" src="./recycle_16.png"/>
 		<div class="box-main" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
-			<div class="box-jqui" data-ibx-type="ibxHBox">
-				<img class="drag-image" src="./recycle_16.png"/>
-
-				<div class="drag-jqui" data-ibx-type="ibxLabel" data-ibxp-justify="center">JQuery UI Drag</div>
-				<div class="drop-jqui" data-ibx-type="ibxLabel" data-ibxp-justify="center">JQuery UI Drop</div>
-			</div>
-
 			<div class="box-native" data-ibx-type="ibxHBox">
-				<div class="drag-native" data-ibx-type="ibxLabel" data-ibxp-justify="center">Native UI Drag</div>
-				<div class="drop-native" data-ibx-type="ibxLabel" data-ibxp-justify="center">Native UI Drop</div>
+				<div class="test-drag" data-ibx-type="testWidget" data-ibxp-draggable="true" data-ibxp-drag-image=".drag-image">Native UI Drag</div>
+				<div class="test-drop" data-ibx-type="testWidget" data-ibxp-droppable="true">Native UI Drop</div>
 			</div>
 
 			<div class="txt-out" data-ibx-type="ibxTextArea"></div>

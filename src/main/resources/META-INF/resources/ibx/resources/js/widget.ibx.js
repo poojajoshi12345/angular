@@ -246,4 +246,109 @@ $.widget("ibi.ibxWidget", $.Widget,
 	}
 });
 
+
+(function(widgetProto)
+{
+	var draggablePatch = 
+	{
+		options:
+		{
+			draggable:false,
+			dragEffect:"all",
+			dragImage:null,
+			dragImageX:0,
+			dragImageY:0,
+
+			droppable:false,
+			dropEffect:"copy" //copy,move,link
+		},
+		_createOrig:$.ibi.ibxWidget.prototype._create,
+		_create:function()
+		{
+			this._createOrig.apply(this, arguments);
+			this._onNativeDragEventBound = this._onNativeDragEvent.bind(this);
+		},
+		_onNativeDragEvent:function(e)
+		{
+			e = e.originalEvent;
+			var dt = e.dataTransfer;
+			var options = this.options;
+
+			switch(e.type)
+			{
+				case "dragstart":
+					var data = {};
+					dt.setData("text", JSON.stringify(data));
+					dt.effectAllowed = options.dragEffect;
+					var dragImage = $(this.options.dragImage);
+					if(dragImage.length)
+						dt.setDragImage($(options.dragImage)[0], options.dragImageX, options.dragImageY);
+					break;
+				case "dragstop":
+					break;
+				case "dragover":
+					dt.dropEffect = options.dropEffect;
+					e.preventDefault();
+					break;
+				case "dragexit":
+					break;
+				case "dragenter":
+					break;
+				case "dragleave":
+					break;
+				case "drop":
+					var data = e.dataTransfer.getData("text");
+					data = JSON.parse(data);
+					console.log(data);
+					e.preventDefault();
+					break;
+			}
+
+		},
+		_refreshOrig:$.ibi.ibxWidget.prototype.refresh,
+		refresh:function()
+		{
+			this._refreshOrig.apply(this, arguments);
+			var options = this.options;
+
+			var dragEvents = 
+			{
+				"dragstart":	this._onNativeDragEventBound,
+				"dragend":		this._onNativeDragEventBound,
+			}
+			if(this._isDraggable && !options.draggable)
+				this.element.off(dragEvents);
+			else
+			if(!this._isDraggable && options.draggable)
+				this.element.on(dragEvents);
+			this._isDraggable = options.draggable;
+
+			var dropEvents = 
+			{
+				"dragstart":	this._onNativeDragEventBound,
+				"dragend":		this._onNativeDragEventBound,
+				"dragenter":	this._onNativeDragEventBound,
+				"dragexit":		this._onNativeDragEventBound,
+				"dragover":		this._onNativeDragEventBound,
+				"dragleave":	this._onNativeDragEventBound,
+				"drop":			this._onNativeDragEventBound
+			}
+			if(this._isDroppable && !options.droppable)
+				this.element.off(dropEvents);
+			else
+			if(!this._isDroppable && options.droppable)
+				this.element.on(dropEvents);
+			this._isDroppable = options.droppable;
+
+			this.element.attr("draggable", this._isDraggable).toggleClass("ibx-draggable", options.draggable).toggleClass("ibx-droppable", options.droppable);
+		}
+	};
+
+	//patch ibxWidget to support drag/drop
+	$.extend(true, widgetProto, draggablePatch);
+})($.ibi.ibxWidget.prototype)
+
+
+
+
 //# sourceURL=widget.ibx.js
