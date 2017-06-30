@@ -33,122 +33,119 @@ function sformat()
 	});
 })();
 
-if(jQuery)
+//Custom jQuery selectors
+jQuery.expr[":"]["displayNone"] = function(elem)
 {
-	//Custom jQuery selectors
-	jQuery.expr[":"]["displayNone"] = function(elem)
-	{
-		return ($(elem).css("display") == "none")
-	};
-	jQuery.expr[":"]["biComponent"] = function(elem)
-	{
-		return $(elem).prop("_biComponent") ? true : false;
-	};
-	jQuery.expr[":"]["biFocusRoot"] = function(elem)
-	{
-		return elem._biComponent ? elem._biComponent.isFocusRoot() : false;
-	};
-	jQuery.expr[":"]["ibxWidget"] = function(elem)
-	{
-		return $(elem).data("ibxWidget") ? true : false;
-	};
-	jQuery.expr[":"]["ibxNameRoot"] = function(elem)
-	{
-		elem = $(elem);
-		var widget = elem.data("ibxWidget");
-		var nameRoot = widget ? widget.options.nameRoot : elem.attr("data-ibx-name-root");
-		return nameRoot;
-	};
-	jQuery.expr[":"]["ibxRadioGroup"] = function(elem, idx, meta, stack)
-	{
-		elem = $(elem);
-		var name = meta[3]
-		var selector = sformat(".ibx-radio-group-control-{1}", name);
-		return elem.is(selector);
-	};
-	jQuery.expr[":"]["ibxFocusable"] = function(elem)
-	{
-		var el = $(elem);
-		var tabIndex = el.attr("tabIndex")
-		var visible = (el.css("visibility") != "hidden" && el.css("display") != "none");
-		var ret = ((tabIndex >= 0) && visible);
-		return ret;
-	};
-	jQuery.expr[":"]["openPopup"] = function(elem, idx, meta, stack)
-	{
-		elem = $(elem);
-		var zLimits = meta[3] ? meta[3].split(",") : [];
-		var zMin = $.isNumeric(zLimits[0]) ? zLimits[0] : 0;
-		var zMax = $.isNumeric(zLimits[1]) ? zLimits[1] : Infinity;
-		var zIndex = parseInt(elem.css("zIndex"), 10);
-		zIndex = $.isNumeric(zIndex) ? zIndex : 0;
-		return (elem.is(".ibx-popup:not(.pop-closed)") &&  zIndex >= zMin && zIndex <= zMax);
-	};
-	jQuery.expr[":"]["modalPopup"] = function(elem)
-	{
-		return $(elem).is(".ibx-popup.pop-modal");
-	};
-	jQuery.expr[":"]["menuPopup"] = function(elem)
-	{
-		return $(elem).is(".ibx-popup.ibx-menu");
-	};
-	jQuery.expr[":"]["openMenuPopup"] = function(elem)
-	{
-		return $(elem).is(":openPopup:menuPopup");
-	};
-	jQuery.expr[":"]["openModalPopup"] = function(elem)
-	{
-		return $(elem).is(":openPopup:modalPopup");
-	};
-	jQuery.expr[":"]["autoClose"] = function(elem)
-	{
-		elem = $(elem);
-		return elem.ibxWidget("option", "autoClose");
-	};
-	jQuery.expr[":"]["hasSubMenu"] = function(elem)
-	{
-		var subMenu = $(elem).data("ibxSubMenu") || $(elem).children(".ibx-menu").length;
-		return subMenu ? true : false;
-	};
+	return ($(elem).css("display") == "none")
+};
+jQuery.expr[":"]["biComponent"] = function(elem)
+{
+	return $(elem).prop("_biComponent") ? true : false;
+};
+jQuery.expr[":"]["biFocusRoot"] = function(elem)
+{
+	return elem._biComponent ? elem._biComponent.isFocusRoot() : false;
+};
+jQuery.expr[":"]["ibxWidget"] = function(elem)
+{
+	return $(elem).data("ibxWidget") ? true : false;
+};
+jQuery.expr[":"]["ibxNameRoot"] = function(elem)
+{
+	elem = $(elem);
+	var widget = elem.data("ibxWidget");
+	var nameRoot = widget ? widget.options.nameRoot : elem.attr("data-ibx-name-root");
+	return nameRoot;
+};
+jQuery.expr[":"]["ibxRadioGroup"] = function(elem, idx, meta, stack)
+{
+	elem = $(elem);
+	var name = meta[3]
+	var selector = sformat(".ibx-radio-group-control-{1}", name);
+	return elem.is(selector);
+};
+jQuery.expr[":"]["ibxFocusable"] = function(elem)
+{
+	var el = $(elem);
+	var tabIndex = el.attr("tabIndex")
+	var visible = (el.css("visibility") != "hidden" && el.css("display") != "none");
+	var ret = ((tabIndex >= 0) && visible);
+	return ret;
+};
+jQuery.expr[":"]["openPopup"] = function(elem, idx, meta, stack)
+{
+	elem = $(elem);
+	var zLimits = meta[3] ? meta[3].split(",") : [];
+	var zMin = $.isNumeric(zLimits[0]) ? zLimits[0] : 0;
+	var zMax = $.isNumeric(zLimits[1]) ? zLimits[1] : Infinity;
+	var zIndex = parseInt(elem.css("zIndex"), 10);
+	zIndex = $.isNumeric(zIndex) ? zIndex : 0;
+	return (elem.is(".ibx-popup:not(.pop-closed)") &&  zIndex >= zMin && zIndex <= zMax);
+};
+jQuery.expr[":"]["modalPopup"] = function(elem)
+{
+	return $(elem).is(".ibx-popup.pop-modal");
+};
+jQuery.expr[":"]["menuPopup"] = function(elem)
+{
+	return $(elem).is(".ibx-popup.ibx-menu");
+};
+jQuery.expr[":"]["openMenuPopup"] = function(elem)
+{
+	return $(elem).is(":openPopup:menuPopup");
+};
+jQuery.expr[":"]["openModalPopup"] = function(elem)
+{
+	return $(elem).is(":openPopup:modalPopup");
+};
+jQuery.expr[":"]["autoClose"] = function(elem)
+{
+	elem = $(elem);
+	return elem.ibxWidget("option", "autoClose");
+};
+jQuery.expr[":"]["hasSubMenu"] = function(elem)
+{
+	var subMenu = $(elem).data("ibxSubMenu") || $(elem).children(".ibx-menu").length;
+	return subMenu ? true : false;
+};
 
-	//simple plugin to get the zIndex of the 0th element.
-	jQuery.fn["zIndex"] = function()
-	{
-		return parseInt(this.css("zIndex"), 10);
-	};
+//simple plugin to get the zIndex of the 0th element.
+jQuery.fn["zIndex"] = function()
+{
+	return parseInt(this.css("zIndex"), 10);
+};
 
-	//simple plugin to get the first level text node children
-	jQuery.fn.textNodes = function()
+//simple plugin to get the first level text node children
+jQuery.fn.textNodes = function()
+{
+	var ret = [];
+	this.each(function(ret, idx, el)
 	{
-		var ret = [];
-		this.each(function(ret, idx, el)
+		var children = $(el.childNodes);
+		for(var i = 0; i < children.length; ++i)
 		{
-			var children = $(el.childNodes);
-			for(var i = 0; i < children.length; ++i)
-			{
-				var child = children[i];
-				(child.nodeType == 3) ? ret.push(child) : null;
-			}
-		}.bind(this, ret));
-		return $(ret);
-	};
+			var child = children[i];
+			(child.nodeType == 3) ? ret.push(child) : null;
+		}
+	}.bind(this, ret));
+	return $(ret);
+};
 
-	//Sorts elements on zIndex (in descending order).
-	function fnSortZIndex(el1, el2)
-	{
-		el1 = jQuery(el1);
-		el2 = jQuery(el2);
+//Sorts elements on zIndex (in descending order).
+function fnSortZIndex(el1, el2)
+{
+	el1 = jQuery(el1);
+	el2 = jQuery(el2);
 
-		var z1 = parseInt(el1.css("zIndex"), 10);
-		var z2 = parseInt(el2.css("zIndex"), 10);
+	var z1 = parseInt(el1.css("zIndex"), 10);
+	var z2 = parseInt(el2.css("zIndex"), 10);
 
-		if(z1 == z2)
-			return 0;
-		if(z1 > z2)
-			return -1;
-		if(z1 < z2)
-			return 1;
-	}
+	if(z1 == z2)
+		return 0;
+	if(z1 > z2)
+		return -1;
+	if(z1 < z2)
+		return 1;
 }
 
 //search currently loaded stylesheets for defined rules of selector.

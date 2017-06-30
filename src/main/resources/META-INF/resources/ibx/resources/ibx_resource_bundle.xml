@@ -2,15 +2,29 @@
 <!--Copyright 1996-2016 Information Builders, Inc. All rights reserved.
 $Revision$:-->
 <ibx-res-bundle name="ibx_resourece_bundle.xml">
-	<!--dependencies loaded before this resource bundle-->
+	
+	<!--dependent resource bundles this bundle needs-->
 	<res-bundles>
 	</res-bundles>
 
-	<!--resources loaded AFTER this resource bundle-->
-	<packages>
-	</packages>
+	<!--strings-->
+	<strings>
+		<string-file src="./strings/strings.en.ibx.txt"/>
 
-	<!--style dependencies-->
+		<!--inline-->
+		<string-bundle>
+			<![CDATA[
+		{
+			"language":"en",
+			"strings":
+			{
+			}
+		}
+		]]>
+		</string-bundle>
+	</strings>
+
+	<!--styles-->
 	<styles>
 		<style-file src="./etc/jquery/jquery-ui-1.12.1/jquery-ui.css"/>
 		<style-file src="./etc/gridstack/gridstack.css"/>
@@ -46,34 +60,16 @@ $Revision$:-->
 		<style-file src="./css/carousel.ibx.css"/>
 		<style-file src="./css/datepicker.ibx.css"/>
 		
-		<!--Inline Styles-->
+		<!--inline-->
 		<style-sheet name="">
 		<![CDATA[
 		]]>
 		</style-sheet>
 	</styles>
 
-	<!--string dependencies-->
-	<strings>
-		<!--IBX INTERNAL STRINGS
-		<string-file src="./strings/strings.en.ibx.txt"/>
-		-->
-
-		<!--Inline Strings-->
-		<string-bundle>
-		<![CDATA[
-		{
-			"language":"en",
-			"strings":
-			{
-			}
-		}
-		]]>
-		</string-bundle>
-	</strings>
-
-	<!--markup dependencies-->
+	<!--markup-->
 	<markup>
+		<!--inline-->
 		<markup-block>
 			<div class="dialog-template" data-ibx-type="ibxDialog" data-ibx-name-root="true" data-ibxp-default-focused="cancel">
 				<div class="ibx-dialog-main-box" data-ibx-type="ibxVBox" data-ibx-name="vbMain" data-ibxp-align="stretch">
@@ -101,17 +97,21 @@ $Revision$:-->
 		</markup-block>
 	</markup>
 
-	<!--script dependencies-->
+	<!--scripts-->
 	<scripts>
-		<script-file src="./js/ibxPreLoad.ibx.js" NOTE="THIS FILE MUST LOAD FIRST!"/>
+		<!--PRELOADS FIRST-->
+		<script-file src="./js/util.ibx.js"/>
+		<script-file src="./js/ibxPreLoad.ibx.js"/>
 
+		<!--POLYFILL/SHIM AND PLUGINS-->
 		<script-file src="./etc/dragdroptouch-master/DragDropTouch.js" NOTE="Polyfill: https://github.com/Bernardo-Castilho/dragdroptouch"/>
 		<script-file src="./etc/resizepolyfill/ResizeSensor.js"/>
 		<script-file src="./etc/scrollwidthpolyfill/scrollwidthpolyfill.js"/>
 		<script-file src="./etc/gridstack/underscore.js"/>
 		<script-file src="./etc/gridstack/gridstack.js"/>
+
+		<!--IBX CORE-->
 		<script-file src="./js/events.ibx.js"/>
-		<script-file src="./js/util.ibx.js"/>
 		<script-file src="./js/ibfs.ibx.js"/>
 		<script-file src="./js/mutationobserver.ibx.js"/>
 		<script-file src="./js/widget.ibx.js"/>
@@ -142,10 +142,15 @@ $Revision$:-->
 		<script-file src="./js/carousel.ibx.js"/>
 		<script-file src="./js/datepicker.ibx.js"/>
 		
-		<!--Inline Scripts-->
+		<!--scripts-->
 		<script-block name="">
 		<![CDATA[
 		]]>
 		</script-block>
 	</scripts>
+
+	<!--default external bundles to be loaded AFTER this bundles is fully loaded and running-->
+	<packages>
+	</packages>
+
 </ibx-res-bundle>

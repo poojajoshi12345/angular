@@ -8,7 +8,7 @@
 <html lang="en">
 	<head>
 		<title>ibx test</title>
-		<meta http-equiv="X-UA-Compatible" content="IE=EDGE" >
+		<meta http-equiv="X-UA-Compatible" content="IE=11" >
 		<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
 		<meta http-equiv="Pragma" content="no-cache" />
 		<meta http-equiv="Expires" content="0" />
@@ -121,8 +121,8 @@
 						if(e.type == "dragstart")
 						{
 							var dt = e.dataTransfer;
-							dt.setDragImage($(".drag-image")[0], 0, 0);
 							dt.effectAllowed = "copy";
+							dt.setDragImage($(".drag-image")[0], 0, 0);
 							dt.setData("drag-native", ".ibx-is-dragging");
 							this.element.addClass("ibx-is-dragging");
 						}
