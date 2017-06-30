@@ -48,15 +48,15 @@
 				{
 					ibx_start:function(e)
 					{
-						console.log(e.type);
+						console.log(".drag-jqui: %s", e.type);
 					},
 					ibx_stop:function(e)
 					{
-						console.log(e.type);
+						console.log(".drag-jqui: %s", e.type);
 					},
 					ibx_drag:function(e)
 					{
-						console.log(e.type, e);
+						console.log(".drag-jqui: %s", e.type);
 					},
 				});
 
@@ -65,92 +65,155 @@
 				{
 					ibx_activate:function(e)
 					{
-						console.log(e.type);
+						console.log(".drop-jqui: %s", e.type);
 					},
 					ibx_deactivate:function(e)
 					{
-						console.log(e.type);
+						console.log(".drop-jqui: %s", e.type);
 					},
 					ibx_drop:function(e)
 					{
-						console.log(e.type);
+						console.log(".drop-jqui: %s", e.type);
 					},
 					ibx_out:function(e)
 					{
-						console.log(e.type);
+						console.log(".drop-jqui: %s", e.type);
 					},
 					ibx_over:function(e, ui)
 					{
-						ui.draggable.ibxWidget("option", "cursor", "no-drop").ibxWidget("refresh");
-						console.log(e.type);
-					},
-					mousemove:function(e)
-					{
-						console.log(e.type);
+						console.log(".drop-jqui: %s", e.type);
 					}
 				});
 
-
-				function TextSearch(txtField)
+				$.widget("ibi.ibxDragSource", $.Widget,
 				{
-					this._txtField = $(txtField).data("txt-search", this).on("ibx_textchanged", this._onTextChanged.bind(this));
-					this._searchTimer = window.setInterval(this._onSearchTimer.bind(this), 1000);
-				}
-				_p = TextSearch.prototype = new Object();
-				_p._searchText = "";
-				_p._onTextChanged = function(e, txtField, curVal)
-				{
-					this._searchText = curVal;
-				};
-				_p._lastSearchText = "";
-				_p._onSearchTimer = function()
-				{
-					if(this._searchText != this._lastSearchText)
+					options:
 					{
-						this._lastSearchText = this._searchText;
-						console.log("Search %s for: %s", this._txtField.data("name"), this._searchText);
-					}
-				}
-				
-				new TextSearch(".txt-field1");
-				new TextSearch(".txt-field2");
+					},
+					_widgetClass:"ibx-drag-source",
+					_create:function()
+					{
+						this._super();
+						this.widgetEventPrefix = "ibx_";
+						if (!this.element.data("ibxWidget"))
+						{
+							this.element.data("ibiIbxWidget", this);
+							this.element.data('ibxWidget', this);
+						}
+						this.element.attr("draggable", true).on(
+						{
+							dragstart:this._onDragEvent.bind(this),
+							dragend:this._onDragEvent.bind(this),
+						});
+					},
+					_onDragEvent:function(e)
+					{
+						var txtOut = $(".txt-out");
+						var txt = txtOut.ibxTextArea("option", "text");						
+						txtOut.ibxWidget("option", "text", txt + "\n" + e.type);
+						txtOut.find("textarea").scrollTop(1000000);
+					},
+					_destroy:function()
+					{
+						this.element.prop("draggable", "");
+						this._super();
+					},
+				});
+
+				$.widget("ibi.ibxDragTarget", $.Widget,
+				{
+					options:
+					{
+					},
+					_widgetClass:"ibx-drag-target",
+					_create:function()
+					{
+						this._super();
+						this.widgetEventPrefix = "ibx_";
+						if (!this.element.data("ibxWidget"))
+						{
+							this.element.data("ibiIbxWidget", this);
+							this.element.data('ibxWidget', this);
+						}
+						this.element.attr("draggable", true).on(
+						{
+							dragenter:this._onDragEvent.bind(this),
+							dragexit:this._onDragEvent.bind(this),
+							//dragover:this._onDragEvent.bind(this),
+							dragleave:this._onDragEvent.bind(this),
+						});
+					},
+					_onDragEvent:function(e)
+					{
+						var txtOut = $(".txt-out");
+						var txt = txtOut.ibxTextArea("option", "text");						
+						txtOut.ibxWidget("option", "text", txt + "\n" + e.type);
+						txtOut.find("textarea").scrollTop(1000000);
+					},
+					_destroy:function()
+					{
+						this.element.prop("draggable", "");
+						this._super();
+					},
+				});
+
+				$(".drag-native").ibxDragSource();
+				$(".drop-native").ibxDragTarget();
 
 			}, true);
 		</script>
 		<style type="text/css">
-			.drag-jqui
+			html, body, .box-main
 			{
-				display:none;
-				position:absolute;
-				left:10px;
-				top:10px;
-				padding:5px;
-				border:1px solid blue;
+				margin:0px;
+				height:100%;
+				width:100%;
 			}
-			.drop-jqui
+
+			.box-jqui, .box-native
 			{
-				display:none;
-				position:absolute;
-				left:125px;
-				top:10px;
+				margin:5px;
 				padding:5px;
-				border:1px solid red;
+			}
+			.txt-out
+			{
+				margin:5px;
+			}
+
+			.drag-jqui, .drop-jqui, .drag-native, .drop-native
+			{
+				width:125px;
+				padding:5px;
+				margin:5px;
+				border:1px solid #ccc;
 			}
 			.drop-jqui-hover
 			{
+				padding:4px;
 				border:2px solid black;
 				background-color:pink;
-				padding:4px;
+			}
+			.txt-out
+			{
+				flex:1 1 auto;
+				border:1px solid black;
 			}
 		</style>
 	</head>
 	<body class="ibx-root">
-		<!--
-		<div class="drag-jqui" data-ibx-type="ibxLabel">JQuery UI Drag</div>
-		<div class="drop-jqui" data-ibx-type="ibxLabel" data-ibxp-justify="center">JQuery UI Drop</div>
-		-->
-		<div class="txt-field1" data-name="TextField1" data-ibx-type="ibxTextField"></div>
-		<div class="txt-field2" data-name="TextField2" data-ibx-type="ibxTextField"></div>
+		<div class="box-main" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
+			<div class="box-jqui" data-ibx-type="ibxHBox">
+				<div class="drag-jqui" data-ibx-type="ibxLabel" data-ibxp-justify="center">JQuery UI Drag</div>
+				<div class="drop-jqui" data-ibx-type="ibxLabel" data-ibxp-justify="center">JQuery UI Drop</div>
+			</div>
+
+			<div class="box-native" data-ibx-type="ibxHBox">
+				<div class="drag-native" data-ibx-type="ibxLabel" data-ibxp-justify="center">Native UI Drag</div>
+				<div class="drop-native" data-ibx-type="ibxLabel" data-ibxp-justify="center">Native UI Drop</div>
+			</div>
+
+			<div class="txt-out" data-ibx-type="ibxTextArea"></div>
+		</div>
 	</body>
 </html>
 
