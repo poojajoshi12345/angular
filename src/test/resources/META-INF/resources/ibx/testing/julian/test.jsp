@@ -66,11 +66,9 @@
 		</style>
 	</head>
 	<body class="ibx-root">
-		<div draggable="true">FUCK YOU FIREFOX!</div>
-		<img class="drag-image" src="./recycle_16.png"/>
 		<div class="box-main" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
 			<div class="box-native" data-ibx-type="ibxHBox">
-				<div class="test-drag" data-ibx-type="testWidget" data-ibxp-draggable="true" data-ibxp-drag-image=".drag-image">Native UI Drag</div>
+				<div class="test-drag" data-ibx-type="testWidget" data-ibxp-draggable="true">Native UI Drag</div>
 				<div class="test-drop" data-ibx-type="testWidget" data-ibxp-droppable="true">Native UI Drop</div>
 			</div>
 

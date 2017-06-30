@@ -20,6 +20,15 @@
 		<style-file src="./test_res_styles.css"/>
 		<style-sheet>
 		<![CDATA[
+			.test-widget
+			{
+				text-align:center;
+				border-radius:5px;
+			}
+			.test-widget-drag-over
+			{
+				background-color:pink;
+			}
 		]]>
 		</style-sheet>
 	</styles>
@@ -47,6 +56,16 @@
 				_destroy:function()
 				{
 					this._super();
+				},
+				_onNativeDragEvent:function(e)
+				{
+					this._super(e);
+
+					if(e.type == "dragenter")
+						this.element.addClass("test-widget-drag-over");
+					else
+					if(e.type == "dragleave" || e.type == "drop")
+						this.element.removeClass("test-widget-drag-over");
 				},
 				refresh:function()
 				{
