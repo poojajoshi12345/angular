@@ -21,6 +21,15 @@
 			<jsp:include page="/WEB-INF/jsp/global/wf_globals.jsp" flush="false" />
 			ibx(function()
 			{
+				function log()
+				{
+					var str = sformat.apply(this, arguments);
+					var txtOut = $(".txt-out");
+					var txt = txtOut.ibxTextArea("option", "text");						
+					txtOut.ibxWidget("option", "text", txt + "\n" + str);
+					txtOut.find("textarea").scrollTop(1000000);
+				};
+
 				$.widget("ibi.ibxDroppable", $.ui.droppable,
 				{
 					options:
@@ -108,10 +117,16 @@
 					},
 					_onDragEvent:function(e)
 					{
-						var txtOut = $(".txt-out");
-						var txt = txtOut.ibxTextArea("option", "text");						
-						txtOut.ibxWidget("option", "text", txt + "\n" + e.type);
-						txtOut.find("textarea").scrollTop(1000000);
+						var e = e.originalEvent;
+						if(e.type == "dragstart")
+						{
+							var dt = e.dataTransfer;
+							dt.setDragImage($(".drag-image")[0], 0, 0);
+							dt.effectAllowed = "copy";
+							dt.setData("drag-native", ".ibx-is-dragging");
+							this.element.addClass("ibx-is-dragging");
+						}
+						log(e.type);
 					},
 					_destroy:function()
 					{
@@ -139,16 +154,29 @@
 						{
 							dragenter:this._onDragEvent.bind(this),
 							dragexit:this._onDragEvent.bind(this),
-							//dragover:this._onDragEvent.bind(this),
+							dragover:this._onDragEvent.bind(this),
 							dragleave:this._onDragEvent.bind(this),
+							drop:this._onDragEvent.bind(this)
 						});
 					},
 					_onDragEvent:function(e)
 					{
-						var txtOut = $(".txt-out");
-						var txt = txtOut.ibxTextArea("option", "text");						
-						txtOut.ibxWidget("option", "text", txt + "\n" + e.type);
-						txtOut.find("textarea").scrollTop(1000000);
+						var e = e.originalEvent;
+						var dt = e.dataTransfer;
+						if(e.type == "dragover")
+						{
+							dt.dropEffect = "move";
+							e.preventDefault();
+						}
+						else
+						if(e.type == "drop")
+						{
+							var data = dt.getData("drag-native");
+							var elDrag = $(data);
+							this.element.after(elDrag).removeClass("drag-native");
+							e.preventDefault();
+						}
+						log(e.type);
 					},
 					_destroy:function()
 					{
@@ -203,6 +231,8 @@
 	<body class="ibx-root">
 		<div class="box-main" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
 			<div class="box-jqui" data-ibx-type="ibxHBox">
+				<img class="drag-image" src="./recycle_16.png"/>
+
 				<div class="drag-jqui" data-ibx-type="ibxLabel" data-ibxp-justify="center">JQuery UI Drag</div>
 				<div class="drop-jqui" data-ibx-type="ibxLabel" data-ibxp-justify="center">JQuery UI Drop</div>
 			</div>

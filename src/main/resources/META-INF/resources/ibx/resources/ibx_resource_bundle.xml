@@ -103,11 +103,13 @@ $Revision$:-->
 
 	<!--script dependencies-->
 	<scripts>
+		<script-file src="./js/ibxPreLoad.ibx.js" NOTE="THIS FILE MUST LOAD FIRST!"/>
+
+		<script-file src="./etc/dragdroptouch-master/DragDropTouch.js" NOTE="Polyfill: https://github.com/Bernardo-Castilho/dragdroptouch"/>
 		<script-file src="./etc/resizepolyfill/ResizeSensor.js"/>
 		<script-file src="./etc/scrollwidthpolyfill/scrollwidthpolyfill.js"/>
 		<script-file src="./etc/gridstack/underscore.js"/>
 		<script-file src="./etc/gridstack/gridstack.js"/>
-		<script-file src="./js/bi_patches.ibx.js"/>
 		<script-file src="./js/events.ibx.js"/>
 		<script-file src="./js/util.ibx.js"/>
 		<script-file src="./js/ibfs.ibx.js"/>
