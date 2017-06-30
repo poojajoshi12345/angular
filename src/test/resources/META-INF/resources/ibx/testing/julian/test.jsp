@@ -18,17 +18,18 @@
 		<!--include this script...will boot ibx into the running state-->
 		<Script src="<%=request.getContextPath()%>/ibx/resources/ibx.js" type="text/javascript"></script>
 		<script type="text/javascript">
+			function log()
+			{
+				var str = sformat.apply(this, arguments);
+				var txtOut = $(".txt-out");
+				var txt = txtOut.ibxTextArea("option", "text");						
+				txtOut.ibxWidget("option", "text", txt + "\n" + str);
+				txtOut.find("textarea").scrollTop(1000000);
+			};
+
 			<jsp:include page="/WEB-INF/jsp/global/wf_globals.jsp" flush="false" />
 			ibx(function()
 			{
-				function log()
-				{
-					var str = sformat.apply(this, arguments);
-					var txtOut = $(".txt-out");
-					var txt = txtOut.ibxTextArea("option", "text");						
-					txtOut.ibxWidget("option", "text", txt + "\n" + str);
-					txtOut.find("textarea").scrollTop(1000000);
-				};
 			}, [{src:"./test_res_bundle.xml", loadContext:"app"}], true);
 		</script>
 		<style type="text/css">

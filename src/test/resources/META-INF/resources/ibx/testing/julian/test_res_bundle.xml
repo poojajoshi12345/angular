@@ -60,7 +60,9 @@
 				_onNativeDragEvent:function(e)
 				{
 					this._super(e);
-
+					if(e.type == "dragstart")
+						;
+					else
 					if(e.type == "dragenter")
 						this.element.addClass("test-widget-drag-over");
 					else

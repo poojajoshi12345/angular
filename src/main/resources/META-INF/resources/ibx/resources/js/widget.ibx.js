@@ -258,6 +258,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 			dragImage:null,
 			dragImageX:0,
 			dragImageY:0,
+			dragData:"",
 
 			droppable:false,
 			dropEffect:"copy" //copy,move,link
@@ -277,8 +278,8 @@ $.widget("ibi.ibxWidget", $.Widget,
 			switch(e.type)
 			{
 				case "dragstart":
-					var data = {};
-					dt.setData("text", JSON.stringify(data));
+					var data = options.dragData;
+					dt.setData("text", data);
 					dt.effectAllowed = options.dragEffect;
 					var dragImage = $(this.options.dragImage);
 					if(dragImage.length)
@@ -298,8 +299,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 					break;
 				case "drop":
 					var data = e.dataTransfer.getData("text");
-					data = JSON.parse(data);
-					console.log(data);
+					log(data);
 					e.preventDefault();
 					break;
 			}
