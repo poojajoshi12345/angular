@@ -36,6 +36,7 @@
 	<markup>
 		<markup-file src="./test_res_markup.xml"/>
 		<markup-block>
+			<img class="test-drag-image" src="./rensmall.jpg"/>
 		</markup-block>
 	</markup>
 
@@ -47,27 +48,23 @@
 			{
 				options:
 				{
+					dragImage:".drag-image",
+					dragImageX:25,
+					dragImageY:25,
 				},
 				_widgetClass:"test-widget",
 				_create:function()
 				{
 					this._super();
+					this.options.dragImage = ibx.resourceMgr.getResource(".test-drag-image");
 				},
 				_destroy:function()
 				{
 					this._super();
 				},
-				_onNativeDragEvent:function(e)
+				_dragOver:function(e)
 				{
-					this._super(e);
-					if(e.type == "dragstart")
-						;
-					else
-					if(e.type == "dragenter")
-						this.element.addClass("test-widget-drag-over");
-					else
-					if(e.type == "dragleave" || e.type == "drop")
-						this.element.removeClass("test-widget-drag-over");
+					return true;
 				},
 				refresh:function()
 				{

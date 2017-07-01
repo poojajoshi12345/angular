@@ -257,7 +257,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 			dragEffect:"all",
 			dragImage:null,
 			dragImageX:0,
-			dragImageY:0,
+			dragImageY:16,
 			dragData:"",
 
 			droppable:false,
@@ -272,39 +272,42 @@ $.widget("ibi.ibxWidget", $.Widget,
 		_onNativeDragEvent:function(e)
 		{
 			e = e.originalEvent;
-			var dt = e.dataTransfer;
 			var options = this.options;
+			var dt = e.dataTransfer;
+			var data = dt.getData("text");
 
 			switch(e.type)
 			{
 				case "dragstart":
-					var data = options.dragData;
-					dt.setData("text", data);
 					dt.effectAllowed = options.dragEffect;
 					var dragImage = $(this.options.dragImage);
 					if(dragImage.length)
 						dt.setDragImage($(options.dragImage)[0], options.dragImageX, options.dragImageY);
-					break;
-				case "dragstop":
+					if(!this._dragStart(e))
+						e.preventDefault();
 					break;
 				case "dragover":
 					dt.dropEffect = options.dropEffect;
-					e.preventDefault();
-					break;
-				case "dragexit":
-					break;
-				case "dragenter":
-					break;
-				case "dragleave":
+					if(this._dragOver(e))
+						e.preventDefault();
 					break;
 				case "drop":
 					var data = e.dataTransfer.getData("text");
-					log(data);
-					e.preventDefault();
+					if(this._dragDrop(e, data))
+						e.preventDefault();
+					break;
+				case "dragstop":
+				case "dragexit":
+				case "dragenter":
+				case "dragleave":
+				default:
 					break;
 			}
 
 		},
+		_dragStart:function(e){return true;},
+		_dragOver:function(){return true;},
+		_dragDrop:function(e){return true;},
 		_refreshOrig:$.ibi.ibxWidget.prototype.refresh,
 		refresh:function()
 		{
