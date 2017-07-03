@@ -24,9 +24,9 @@ $.widget("ibi.ibxSplitter", $.ibi.ibxWidget,
 			if(!this._initialized)
 			{
 				//save initial sizes for dblclick reset.
-				var e1 = this.element.prev();
+				var e1 = this.element.prevAll(":visible");
 				this._e1Info = {el:e1, width:e1.outerWidth(), height:e1.outerHeight()};
-				var e2 = this.element.next();
+				var e2 = this.element.nextAll(":visible");
 				this._e2Info =  {el:e2, width:e2.outerWidth(), height:e2.outerHeight()};
 				this._initialized = true;
 			}
@@ -49,8 +49,8 @@ $.widget("ibi.ibxSplitter", $.ibi.ibxWidget,
 		{
 			var options = this.options
 			var oe = e.originalEvent;
-			var el1 = this.element.prev();
-			var el2= this.element.next();
+			var el1 = this.element.prevAll(":visible");
+			var el2= this.element.nextAll(":visible");
 			var s1= bVertical ? el1.width() : el1.height();
 			var s2 = bVertical ? el2.width() : el2.height();
 			var m1 = parseInt(el1.css(bVertical ? "min-width" : "min-height"), 10);
