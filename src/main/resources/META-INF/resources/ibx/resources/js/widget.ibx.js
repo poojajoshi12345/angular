@@ -283,23 +283,27 @@ $.widget("ibi.ibxWidget", $.Widget,
 					var dragImage = $(this.options.dragImage);
 					if(dragImage.length)
 						dt.setDragImage($(options.dragImage)[0], options.dragImageX, options.dragImageY);
-					if(!this._dragStart(e))
+					if(!this._dragStart(e, dt))
 						e.preventDefault();
 					break;
 				case "dragover":
 					dt.dropEffect = options.dropEffect;
-					if(this._dragOver(e))
+					if(this._dragOver(e, dt))
 						e.preventDefault();
 					break;
 				case "drop":
 					var data = e.dataTransfer.getData("text");
-					if(this._dragDrop(e, data))
+					if(this._dragDrop(e, dt, data))
 						e.preventDefault();
 					break;
 				case "dragstop":
 				case "dragexit":
+					this._dragExit(e, dt);
+					break;
 				case "dragenter":
 				case "dragleave":
+					this._dragLeave(e, dt);
+					break;
 				default:
 					break;
 			}
@@ -328,8 +332,6 @@ $.widget("ibi.ibxWidget", $.Widget,
 
 			var dropEvents = 
 			{
-				"dragstart":	this._onNativeDragEventBound,
-				"dragend":		this._onNativeDragEventBound,
 				"dragenter":	this._onNativeDragEventBound,
 				"dragexit":		this._onNativeDragEventBound,
 				"dragover":		this._onNativeDragEventBound,
