@@ -40,7 +40,7 @@ $.widget("ibi.ibxPopup", $.ibi.ibxWidget,
 	_create:function()
 	{
 		var options = this.options;
-		this.element.addClass("pop-closed").css("position", "absolute").on("keydown", this._onPopupCloseKeyEvent.bind(this));
+		this.element.addClass("pop-closed").prop("tabIndex", -1).css("position", "absolute").on("keydown", this._onPopupCloseKeyEvent.bind(this));
 		$(window).resize(this._onPopupWindowResize.bind(this));
 		this._super();
 	},
@@ -77,6 +77,8 @@ $.widget("ibi.ibxPopup", $.ibi.ibxWidget,
 				if(e.originalEvent.propertyName == "visibility" && this.isOpen())
 				{
 					this.element.off("transitionend");
+					this.element.focus();
+
 					if(this.options.autoFocus)
 					{
 						//only do focusing if allowed.

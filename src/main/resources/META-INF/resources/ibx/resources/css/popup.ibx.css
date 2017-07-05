@@ -31,6 +31,12 @@
 	transition:visibility .001s; /*needed so transitionend event always fires during open/close of popup*/
 }
 
+.ibx-popup:focus
+{
+	outline:none;
+	box-shadow:0 0 10px 0 #5e5e5e;
+}
+
 /*topmost popup*/
 .pop-top
 {

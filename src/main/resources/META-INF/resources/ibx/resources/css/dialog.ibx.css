@@ -71,6 +71,7 @@
 .ibx-title-bar-caption
 {
 	flex:1 1 auto;
+	margin-right:10px;
 }
 .ibx-dialog.std .ibx-title-bar-caption::before
 {
