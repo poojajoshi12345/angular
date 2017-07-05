@@ -254,7 +254,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 		options:
 		{
 			draggable:false,
-			dragEffect:"all",
+			dragEffect:"none",
 			dragImage:null,
 			dragImageX:0,
 			dragImageY:16,
@@ -279,31 +279,28 @@ $.widget("ibi.ibxWidget", $.Widget,
 			switch(e.type)
 			{
 				case "dragstart":
-					dt.effectAllowed = options.dragEffect;
 					var dragImage = $(this.options.dragImage);
 					if(dragImage.length)
 						dt.setDragImage($(options.dragImage)[0], options.dragImageX, options.dragImageY);
-					if(!this._dragStart(e, dt))
+
+					dt.effectAllowed = this._dragStart(e) || options.dragEffect;
+					if(dt.effectAllowed == "none")
 						e.preventDefault();
 					break;
 				case "dragover":
-					dt.dropEffect = options.dropEffect;
-					if(this._dragOver(e, dt))
+					dt.dropEffect = this._dragOver(e) || options.dropEffect;
+					if(dt.dropEffect == "none")
 						e.preventDefault();
 					break;
 				case "drop":
 					var data = e.dataTransfer.getData("text");
-					if(this._dragDrop(e, dt, data))
+					if(this._dragDrop(e, data))
 						e.preventDefault();
 					break;
 				case "dragstop":
 				case "dragexit":
-					this._dragExit(e, dt);
-					break;
 				case "dragenter":
 				case "dragleave":
-					this._dragLeave(e, dt);
-					break;
 				default:
 					break;
 			}
@@ -332,6 +329,8 @@ $.widget("ibi.ibxWidget", $.Widget,
 
 			var dropEvents = 
 			{
+				"dragstart":	this._onNativeDragEventBound,
+				"dragend":		this._onNativeDragEventBound,
 				"dragenter":	this._onNativeDragEventBound,
 				"dragexit":		this._onNativeDragEventBound,
 				"dragover":		this._onNativeDragEventBound,
