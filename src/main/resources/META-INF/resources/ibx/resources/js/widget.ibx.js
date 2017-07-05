@@ -182,7 +182,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 	},
 	_onWidgetContextMenu:function(e)
 	{
-		var ctxEvent = $.Event(e);
+		var ctxEvent = $.Event(e.originalEvent);
 		ctxEvent.type = "ibx_ctxmenu";
 
 		var ret = this.element.trigger(ctxEvent);
@@ -254,14 +254,14 @@ $.widget("ibi.ibxWidget", $.Widget,
 		options:
 		{
 			draggable:false,
-			dragEffect:"none",
+			dragEffect:"all",
 			dragImage:null,
 			dragImageX:0,
 			dragImageY:16,
 			dragData:"",
 
 			droppable:false,
-			dropEffect:"copy" //copy,move,link
+			dropEffect:"move" //copy,move,link
 		},
 		_createOrig:$.ibi.ibxWidget.prototype._create,
 		_create:function()
@@ -276,37 +276,49 @@ $.widget("ibi.ibxWidget", $.Widget,
 			var dt = e.dataTransfer;
 			var data = dt.getData("text");
 
+			/***** IE ONLY SUPPORTS THE DATA TYPE OF => text/plain <= SO USE THAT ALWAYS! *****/
 			switch(e.type)
 			{
+				/****DRAG SOURCE EVENTS****/
 				case "dragstart":
+					if(!this._dragStart(e))//prevent default will stop drag
+						e.preventDefault();
+					else
+						this.element.addClass("ibx-dragging");
+
 					var dragImage = $(this.options.dragImage);
 					if(dragImage.length)
 						dt.setDragImage($(options.dragImage)[0], options.dragImageX, options.dragImageY);
-
-					dt.effectAllowed = this._dragStart(e) || options.dragEffect;
-					if(dt.effectAllowed == "none")
-						e.preventDefault();
 					break;
+				case "dragend":
+					this.element.removeClass("ibx-dragging");
+					break;
+
+				/****DROP TARGET EVENTS****/
+				case "dragenter":
 				case "dragover":
-					dt.dropEffect = this._dragOver(e) || options.dropEffect;
-					if(dt.dropEffect == "none")
+					if(this._dragOver(e, e.dataTransfer.getData("text")))//prevent default will allow drop
+					{
 						e.preventDefault();
+						dt.dropEffect = options.dropEffect;
+						this.element.addClass("ibx-drag-target");
+					}
+					break;
+				case "dragexit":
+				case "dragleave":
+					this.element.removeClass("ibx-drag-target");
 					break;
 				case "drop":
-					var data = e.dataTransfer.getData("text");
-					if(this._dragDrop(e, data))
+					if(this._dragDrop(e, e.dataTransfer.getData("text")))//prevent default will stop default behavior (open as link for some elments)
 						e.preventDefault();
+					this.element.removeClass("ibx-dragging ibx-drag-target");
 					break;
-				case "dragstop":
-				case "dragexit":
-				case "dragenter":
-				case "dragleave":
 				default:
 					break;
 			}
 
 		},
-		_dragStart:function(e){return true;},
+		_dragStart:function(e){return true},
 		_dragOver:function(){return true;},
 		_dragDrop:function(e){return true;},
 		_refreshOrig:$.ibi.ibxWidget.prototype.refresh,
