@@ -126,7 +126,7 @@ _p.loadExternalResFile = function(elFile)
 					{
 						if(fileType == "string-file")
 						{
-							content = content.replace(/^[\s|\S][^{]*/, "");//strip off any possible header (copyright, etc.)
+							content = content.replace(/^[^{][\s|\S][^{]*/, "");//strip off any possible header (copyright, etc.)
 							content = JSON.parse(content);
 							this.addStringBundle(content);
 							eType = "rb_string_file_loaded";
