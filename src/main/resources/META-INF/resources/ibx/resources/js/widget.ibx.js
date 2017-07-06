@@ -253,6 +253,8 @@ $.widget("ibi.ibxWidget", $.Widget,
 		{
 			draggable:false,
 			dragEffect:"move",
+			dragStartDistanceX:5,
+			dragStartDistanceY:5,
 			dragImage:null,
 			dragImageX:0,
 			dragImageY:16,
@@ -265,104 +267,74 @@ $.widget("ibi.ibxWidget", $.Widget,
 		_create:function()
 		{
 			this._createOrig.apply(this, arguments);
-			this._onNativeDragEventBound = this._onNativeDragEvent.bind(this);
+			this._onDragMouseEventBound = this._onDragMouseEvent.bind(this);
 		},
-		_onNativeDragEvent:function(e)
+		_onDragMouseEvent:function(e)
 		{
-			e = e.originalEvent;
-			var options = this.options;
-			var dt = e.dataTransfer;
-
-			/***** IE ONLY SUPPORTS THE DATA TYPE OF => text/plain <= SO USE THAT ALWAYS! *****/
-			switch(e.type)
+			var eType = e.type;
+			switch(eType)
 			{
-				/****DRAG SOURCE EVENTS****/
-				case "dragstart":
-
-					//need to set some type of data or Firefox won't initiate the drag...but, IE only accepts "text" as data
-					//type...so...yeah...lame! :(
-					e.dataTransfer.setData("text", "");
-
-					//return false to cancel drag
-					if(!this._dragStart(e))
-						e.preventDefault();
-					else
-						this.element.addClass("ibx-drag-item");
-
-					//set drag image/effect
-					var dragImage = $(this.options.dragImage);
-					if(dragImage.length)
-						dt.setDragImage($(options.dragImage)[0], options.dragImageX, options.dragImageY);
-					dt.effectAllowed = options.dragEffect;
+				case "mousedown":
+					this._mDownLoc = {"x":e.clientX, "y":e.clientY};
+					this._curTarget = $();
+					$("body").css("pointerEvents", "none");
+					$("html").on("mouseup mousemove", this._onDragMouseEventBound);
 					break;
-				case "dragend":
-					this.element.removeClass("ibx-drag-item");
-					break;
-
-				/****DROP TARGET EVENTS****/
-				case "dragenter":
-				case "dragover":
-					var el = $(".ibx-drag-item");
-					if(this._dragOver(e, el))//prevent default will allow drop
+				case "mouseup":
+					if(this._dragging && this._curTarget)
 					{
-						this.element.addClass("ibx-drag-target");
-						dt.dropEffect = options.dropEffect; //becuase IE sucks, this has to match the dragEffect from the source.
-						e.preventDefault();
+						e.type = "ibx_drop";
+						this._curTarget.trigger(e);
+						delete this._curTarget;
+
+						e.type = "ibx_dragend";
+						this.element.trigger(e);
+					}
+
+					delete this._mDownLoc;
+					this._dragging = false;
+					$("body").css("pointerEvents", "");
+					$("html").off("mouseup mousemove", this._onDragMouseEventBound).css("cursor", "");
+					break;
+				case "mousemove":
+					var dx = Math.abs(e.clientX - this._mDownLoc.x);
+					var dy = Math.abs(e.clientY - this._mDownLoc.y);
+					if(!this._dragging && (dx >= this.options.dragStartDistanceX || dy >= this.options.dragStartDistanceY))
+					{
+						e.type = "ibx_dragstart";
+						this.element.trigger(e);
+						this._dragging = !e.isDefaultPrevented();
+					}
+
+					if(this._dragging)
+					{
+						$("body").css("pointerEvents", "");
+						var elTarget = $(document.elementFromPoint(e.clientX, e.clientY)).closest(".ibx-droppable");
+						$("body").css("pointerEvents", "none");
+						$("html").css("cursor", "copy");
+
+						if(!this._curTarget.is(elTarget))
+						{
+							e.type = "ibx_dragout";
+							this._curTarget.trigger(e);
+							this._curTarget = elTarget;
+							e.type = "ibx_dragover";
+							this._curTarget.trigger(e);
+						}
+						e.type = "ibx_dragmove";
+						this._curTarget.trigger(e);
 					}
 					break;
-				case "dragexit":
-				case "dragleave":
-					this.element.removeClass("ibx-drag-target");
-					break;
-				case "drop":
-					if(this._dragDrop(e, $(".ibx-drag-item"), dt.getData("text")))//prevent default will stop default behavior (open as link for some elments)
-						e.preventDefault();
-					this.element.removeClass("ibx-drag-target");
-					break;
-				default:
-					break;
 			}
-			e.stopPropagation();
 		},
-		_dragStart:function(e){return true},
-		_dragOver:function(e, el){return true;},
-		_dragDrop:function(e, el, data){return true;},
 		_refreshOrig:$.ibi.ibxWidget.prototype.refresh,
 		refresh:function()
 		{
 			this._refreshOrig.apply(this, arguments);
 			var options = this.options;
-
-			var dragEvents = 
-			{
-				"dragstart":	this._onNativeDragEventBound,
-				"dragend":		this._onNativeDragEventBound,
-			}
-			if(this._isDraggable && !options.draggable)
-				this.element.off(dragEvents);
-			else
-			if(!this._isDraggable && options.draggable)
-				this.element.on(dragEvents);
-			this._isDraggable = options.draggable;
-
-			var dropEvents = 
-			{
-				"dragstart":	this._onNativeDragEventBound,
-				"dragend":		this._onNativeDragEventBound,
-				"dragenter":	this._onNativeDragEventBound,
-				"dragexit":		this._onNativeDragEventBound,
-				"dragover":		this._onNativeDragEventBound,
-				"dragleave":	this._onNativeDragEventBound,
-				"drop":			this._onNativeDragEventBound
-			}
-			if(this._isDroppable && !options.droppable)
-				this.element.off(dropEvents);
-			else
-			if(!this._isDroppable && options.droppable)
-				this.element.on(dropEvents);
-			this._isDroppable = options.droppable;
-
-			this.element.attr("draggable", this._isDraggable).toggleClass("ibx-draggable", options.draggable).toggleClass("ibx-droppable", options.droppable);
+			(options.draggable) ? this.element.on("mousedown", this._onDragMouseEventBound) : this.element.off("mousedown", this._onDragMouseEventBound);
+			this.element.toggleClass("ibx-draggable", options.draggable);
+			this.element.toggleClass("ibx-droppable", options.droppable);
 		}
 	};
 
