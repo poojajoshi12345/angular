@@ -11,7 +11,7 @@ $.widget("ibi.ibxDialog", $.ibi.ibxPopup,
 		"autoSize":true,
 		"modal":true,
 		"autoClose":false,
-		"draggable":true,
+		"moveable":true,
 		"resizable":false,
 		"buttons":"okcancel",
 		"closeButton":true,
@@ -40,7 +40,7 @@ $.widget("ibi.ibxDialog", $.ibi.ibxPopup,
 			ibx.bindElements(this.element);
 		}
 
-		options.dragHandle = this.titleBox;
+		options.moveHandle = this.titleBox;
 		this.titleClose.on("click", this.close.bind(this));
 		this.btnApply.on("click", this.apply.bind(this));
 		this.btnCancel.on("click", this.close.bind(this, "cancel"));

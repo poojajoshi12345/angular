@@ -30,43 +30,19 @@
 				height:100%;
 				width:100%;
 			}
-			.left-pane
+			.drag-item
 			{
-				flex:.1 1 auto;
-				border:1px solid black;
+				border:2px solid red;
 			}
-			.ibfs-tree
+			.drop-item
 			{
-				flex:1 1 auto;
-				border:1px solid red;
-			}
-			.button-box
-			{
-				margin-left:3px;
-			}
-			.dlg-area
-			{
-				display:none;
-			}
-			.right-pane
-			{
-				flex:1 1 auto;
-				border:1px solid black;
+				border:2px solid green;
 			}
 		</style>
 	</head>
 	<body class="ibx-root">
-		<div class="box-main" data-ibx-type="ibxHBox" data-ibxp-align="stretch">
-			<div class="left-pane" data-ibx-type="ibxHBox" data-ibxp-align="center">
-				<div class="ibfs-tree"> I'm the left pane</div>
-				<div class="button-box" data-ibx-type="ibxLabel" data-ibxp-icon-position="top" data-ibxp-glyph-classes="fa fa-arrow-left"></div>
-			</div>
-			<div data-ibx-type="ibxSplitter"></div>
-			<div class="dlg-area" data-ibx-type="ibxWidget"></div>
-			<div class="right-pane" data-ibx-type="ibxHBox" data-ibxp-align="center" data-ibxp-justify="center">
-				<div>I'm the right pane</div>
-			</div>
-		</div>
+		<div class="drag-item" data-ibx-type="ibxWidget" data-ibxp-draggable="true">Drag me</div>
+		<div class="drop-item" data-ibx-type="ibxWidget" data-ibxp-droppable="true">Drop here</div>
 	</body>
 </html>
 

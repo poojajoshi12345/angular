@@ -54,7 +54,6 @@ $.widget("ibi.ibxWidget", $.Widget,
 		this.element.on("contextmenu", this._onWidgetContextMenu.bind(this));
 		this._adjustWidgetClasses(true);
 
-
 		//Ritalin, if ya know what I mean!
 		this.element.children("[tabindex]").first().focus();
 		
@@ -246,7 +245,6 @@ $.widget("ibi.ibxWidget", $.Widget,
 	}
 });
 
-
 (function(widgetProto)
 {
 	var draggablePatch = 
@@ -254,14 +252,14 @@ $.widget("ibi.ibxWidget", $.Widget,
 		options:
 		{
 			draggable:false,
-			dragEffect:"all",
+			dragEffect:"move",
 			dragImage:null,
 			dragImageX:0,
 			dragImageY:16,
 			dragData:"",
 
 			droppable:false,
-			dropEffect:"move" //copy,move,link
+			dropEffect:"move" //copy,move
 		},
 		_createOrig:$.ibi.ibxWidget.prototype._create,
 		_create:function()
@@ -289,6 +287,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 					var dragImage = $(this.options.dragImage);
 					if(dragImage.length)
 						dt.setDragImage($(options.dragImage)[0], options.dragImageX, options.dragImageY);
+					dt.effectAllowed = options.dragEffect;
 					break;
 				case "dragend":
 					this.element.removeClass("ibx-dragging");
@@ -297,11 +296,11 @@ $.widget("ibi.ibxWidget", $.Widget,
 				/****DROP TARGET EVENTS****/
 				case "dragenter":
 				case "dragover":
-					if(this._dragOver(e, e.dataTransfer.getData("text")))//prevent default will allow drop
+					if(this._dragOver(e, data))//prevent default will allow drop
 					{
-						e.preventDefault();
-						dt.dropEffect = options.dropEffect;
 						this.element.addClass("ibx-drag-target");
+						dt.dropEffect = options.dropEffect; //becuase IE sucks, this has to match the dragEffect from the source.
+						e.preventDefault();
 					}
 					break;
 				case "dragexit":
@@ -309,14 +308,14 @@ $.widget("ibi.ibxWidget", $.Widget,
 					this.element.removeClass("ibx-drag-target");
 					break;
 				case "drop":
-					if(this._dragDrop(e, e.dataTransfer.getData("text")))//prevent default will stop default behavior (open as link for some elments)
+					if(this._dragDrop(e, data))//prevent default will stop default behavior (open as link for some elments)
 						e.preventDefault();
-					this.element.removeClass("ibx-dragging ibx-drag-target");
+					this.element.removeClass("ibx-drag-target");
 					break;
 				default:
 					break;
 			}
-
+			e.stopPropagation();
 		},
 		_dragStart:function(e){return true},
 		_dragOver:function(){return true;},
@@ -363,8 +362,6 @@ $.widget("ibi.ibxWidget", $.Widget,
 	//patch ibxWidget to support drag/drop
 	$.extend(true, widgetProto, draggablePatch);
 })($.ibi.ibxWidget.prototype)
-
-
 
 
 //# sourceURL=widget.ibx.js
