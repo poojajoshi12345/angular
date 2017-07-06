@@ -122,7 +122,7 @@ $.widget("ibi.ibxAccordionPage", $.ibi.ibxFlexBox,
 			glyphClasses:"btnOptions.glyphClasses",
 
 			textOpen:"btnOptionsOpen.text",
-			IconPositionOpen:"btnOptionsOpen.iconPosition",
+			iconPositionOpen:"btnOptionsOpen.iconPosition",
 			glyphOPen:"btnOptionsOpen.glyph",
 			glyphClassesOpen:"btnOptionsOpen.glyphClasses",
 		}
