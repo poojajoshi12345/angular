@@ -165,7 +165,7 @@
     height: 1em;
 }
 
-.ibx-switch-ctrl > .ibx-slider {
+.ibx-switch-ctrl > .ibx-switch-slider {
     position: absolute;
     cursor: pointer;
     top: 0;
@@ -176,7 +176,7 @@
     transition: .4s;
 }
 
-.ibx-switch-ctrl > .ibx-slider:before {
+.ibx-switch-ctrl > .ibx-switch-slider:before {
     position: absolute;
     content: "";
     height: 0.86em;
@@ -190,32 +190,32 @@
     transition: .4s;
 }
 
-.ibx-switch.checked .ibx-slider:before {
+.ibx-switch.checked .ibx-switch-slider:before {
     -webkit-transform: translateX(1em);
     -ms-transform: translateX(1em);
     transform: translateX(1em);
 }
 
-.ibx-switch .ibx-slider {
+.ibx-switch .ibx-switch-slider {
     background-color: #bbb;
 }
 
-.ibx-switch.checked .ibx-slider {
+.ibx-switch.checked .ibx-switch-slider {
     background-color: #555;
 }
 
 /* Disabled switch styling */
-.ibx-switch[data-enabled='false'] .ibx-slider,
-.ibx-switch[data-enabled='false']:hover .ibx-slider {
+.ibx-switch[data-enabled='false'] .ibx-switch-slider,
+.ibx-switch[data-enabled='false']:hover .ibx-switch-slider {
     background-color: #eee;
 }
 
 /* Make the switch round */
-.ibx-switch-ctrl > .ibx-slider.round {
+.ibx-switch-ctrl > .ibx-switch-slider.round {
     border-radius: 0.9em;
 }
 
-.ibx-switch-ctrl > .ibx-slider.round:before {
+.ibx-switch-ctrl > .ibx-switch-slider.round:before {
     border-radius: 50%;
 }
 

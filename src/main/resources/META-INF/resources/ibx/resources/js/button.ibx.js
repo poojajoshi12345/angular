@@ -302,7 +302,7 @@ $.widget("ibi.ibxSwitch", $.ibi.ibxCheckBox,
 	_create: function ()
 	{
 		this._spacer = $('<div>').addClass(this.options.spacerElClass);
-		this._switch = $('<div><div class="ibx-slider round"></div></div>').addClass(this.options.switchElClass);
+		this._switch = $('<div><div class="ibx-switch-slider round"></div></div>').addClass(this.options.switchElClass);
 		this._super();
 		this.add(this._spacer, this.children()[0], true);
 		this.add(this._switch, this.children()[0], true);
