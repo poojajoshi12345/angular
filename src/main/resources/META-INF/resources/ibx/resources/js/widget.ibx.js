@@ -272,31 +272,38 @@ $.widget("ibi.ibxWidget", $.Widget,
 			e = e.originalEvent;
 			var options = this.options;
 			var dt = e.dataTransfer;
-			var data = dt.getData("text");
 
 			/***** IE ONLY SUPPORTS THE DATA TYPE OF => text/plain <= SO USE THAT ALWAYS! *****/
 			switch(e.type)
 			{
 				/****DRAG SOURCE EVENTS****/
 				case "dragstart":
-					if(!this._dragStart(e))//prevent default will stop drag
+
+					//need to set some type of data or Firefox won't initiate the drag...but, IE only accepts "text" as data
+					//type...so...yeah...lame! :(
+					e.dataTransfer.setData("text", "");
+
+					//return false to cancel drag
+					if(!this._dragStart(e))
 						e.preventDefault();
 					else
-						this.element.addClass("ibx-dragging");
+						this.element.addClass("ibx-drag-item");
 
+					//set drag image/effect
 					var dragImage = $(this.options.dragImage);
 					if(dragImage.length)
 						dt.setDragImage($(options.dragImage)[0], options.dragImageX, options.dragImageY);
 					dt.effectAllowed = options.dragEffect;
 					break;
 				case "dragend":
-					this.element.removeClass("ibx-dragging");
+					this.element.removeClass("ibx-drag-item");
 					break;
 
 				/****DROP TARGET EVENTS****/
 				case "dragenter":
 				case "dragover":
-					if(this._dragOver(e, data))//prevent default will allow drop
+					var el = $(".ibx-drag-item");
+					if(this._dragOver(e, el))//prevent default will allow drop
 					{
 						this.element.addClass("ibx-drag-target");
 						dt.dropEffect = options.dropEffect; //becuase IE sucks, this has to match the dragEffect from the source.
@@ -308,7 +315,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 					this.element.removeClass("ibx-drag-target");
 					break;
 				case "drop":
-					if(this._dragDrop(e, data))//prevent default will stop default behavior (open as link for some elments)
+					if(this._dragDrop(e, $(".ibx-drag-item"), dt.getData("text")))//prevent default will stop default behavior (open as link for some elments)
 						e.preventDefault();
 					this.element.removeClass("ibx-drag-target");
 					break;
@@ -318,8 +325,8 @@ $.widget("ibi.ibxWidget", $.Widget,
 			e.stopPropagation();
 		},
 		_dragStart:function(e){return true},
-		_dragOver:function(){return true;},
-		_dragDrop:function(e){return true;},
+		_dragOver:function(e, el){return true;},
+		_dragDrop:function(e, el, data){return true;},
 		_refreshOrig:$.ibi.ibxWidget.prototype.refresh,
 		refresh:function()
 		{

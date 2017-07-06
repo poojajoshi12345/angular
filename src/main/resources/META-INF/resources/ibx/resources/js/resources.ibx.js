@@ -116,7 +116,7 @@ _p.loadExternalResFile = function(elFile)
 		if(!this.loadedFiles[src])
 		{
 			var fileType = elFile.prop("tagName");
-			var asInline = !!elFile.attr("inline") && !!eFile.attr("link") || (fileType == "string-file") || (fileType == "markup-file");
+			var asInline = (!!elFile.attr("inline") && !!eFile.attr("link")) || (fileType == "string-file") || (fileType == "markup-file");
 			if(asInline)
 			{
 				$.get({async:false, url:src, dataType:"text", error:this._resFileRetrievalError.bind(this, src)}).done(function(src, fileType, content, status, xhr)
