@@ -245,6 +245,9 @@ $.widget("ibi.ibxWidget", $.Widget,
 	}
 });
 
+/****
+ 	Drag/Drop mix in
+****/
 (function(widgetProto)
 {
 	function ibxDataTransfer()
@@ -259,13 +262,13 @@ $.widget("ibi.ibxWidget", $.Widget,
 	_p.setData = function(type, data){this.items[type] = data;};
 	_p.clearData = function(type){delete this.items[type];};
 	_p._dragImage = null;
-	_p._dragXOffset = 0;
-	_p._dragYOffest = 0;
+	_p._dragXOffset = 5;
+	_p._dragYOffest = 5;
 	_p.setDragImage = function(img, xOffset, yOffset)
 	{
 		this._dragImage = img;
-		this._dragXOffset = xOffset || 0;
-		this._dragYOffset = yOffset || 0;
+		this._dragXOffset = xOffset || this._dragXOffset;
+		this._dragYOffset = yOffset || this._dragYOffset;
 	};
 
 	var draggablePatch = 
@@ -276,6 +279,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 			draggable:false,
 			dragStartDistanceX:5,
 			dragStartDistanceY:5,
+			dragImageClass:"ibx-default-drag-image"
 		},
 		_createOrig:$.ibi.ibxWidget.prototype._create,
 		_create:function()
@@ -290,7 +294,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 			{
 				onrendered:function(def, canvas)
 				{
-					$(canvas).addClass("ibx-default-drag-image");
+					$(canvas).addClass(this.options.dragImageClass);
 					def.resolve(canvas);	
 				}.bind(this, def)
 			});
@@ -386,14 +390,16 @@ $.widget("ibi.ibxWidget", $.Widget,
 							cursor = this._dataTransfer.dropEffect;
 						$("html").css("cursor", cursor);
 
-						if(this._dataTransfer._dragImage)	
+						//manage the drag cursor
+						if(this._dataTransfer._dragImage)
+						{	
 							$(this._dataTransfer._dragImage).css(
 							{
 								"position":"absolute",
-								"opacity":.4,
 								"left":e.clientX + this._dataTransfer._dragXOffset + "px",
-								"top":e.clientY + this._dataTransfer._dragYOffest + "px"
+								"top":e.clientY + this._dataTransfer._dragYOffest + "px",
 							}).appendTo("body");
+						}
 					}
 					break;
 			}

@@ -21,13 +21,14 @@
 			<jsp:include page="/WEB-INF/jsp/global/wf_globals.jsp" flush="false" />
 			ibx(function()
 			{
-				$(".drag-source").on("ibx_dragstart ibx_dragover", function(e)
+				$(".drag-source-custom, .drag-source-default").on("ibx_dragstart ibx_dragover", function(e)
 				{
 					if(e.type == "ibx_dragstart")
 					{
 						var dt = e.dataTransfer;
 						dt.setData("test", e.currentTarget);
-						dt.setDragImage($("<img src='./rensmall.jpg'/>"));
+						if($(e.currentTarget).hasClass("drag-source-custom"))
+							dt.setDragImage($("<img class='ren-drag-img' src='./rensmall.jpg'/>"));
 					}
 					else
 					if(e.type == "ibx_dragover")
@@ -75,28 +76,36 @@
 				bottom:0px;
 			}
 
-			.drag-source
+			.drag-source-custom, .drag-source-default
 			{
-				flex:0 0 100px;
+				flex:0 0 auto;
 				height:50px;
 				margin:20px;
+				padding:5px;
 				background-color:white;
 				border:2px solid red;
 			}
 			.drop-target
 			{
-				flex:0 0 100px;
+				flex:0 0 auto;
 				height:50px;
 				margin:20px;
+				padding:5px;
 				background-color:white;
 				border:2px solid green;
+			}
+
+			.ren-drag-img
+			{
+				opacity:.5;
 			}
 		</style>
 	</head>
 	<body class="ibx-root">
-		<div class="main-box" data-ibx-type="ibxHBox" data-ibxp-align="center" data-ibxp-justify="center" data-ibxp-droppable="false">
-			<div class="drag-source" data-ibx-type="ibxLabel" data-ibxp-justify="center" data-ibxp-draggable="true">Drag me</div>
-			<div class="drop-target" data-ibx-type="ibxLabel" data-ibxp-justify="center" data-ibxp-droppable="true">Drop here</div>
+		<div class="main-box" data-ibx-type="ibxHBox" data-ibxp-align="center" data-ibxp-justify="center" data-ibxp-droppable="true">
+			<div class="drag-source-custom" data-ibx-type="ibxLabel" data-ibxp-justify="center" data-ibxp-draggable="true">Drag me (Custom image)</div>
+			<div class="drag-source-default" data-ibx-type="ibxLabel" data-ibxp-justify="center" data-ibxp-draggable="true">Drag me (Default image)</div>
+			<div class="drop-target" data-ibx-type="ibxLabel" data-ibxp-justify="center" data-ibxp-droppable="true">Drop things here</div>
 		</div>
 	</body>
 </html>

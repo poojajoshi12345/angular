@@ -31,3 +31,8 @@
 .ibx-default-focused
 {
 }
+
+.ibx-default-drag-image
+{
+	opacity:.4;
+}
