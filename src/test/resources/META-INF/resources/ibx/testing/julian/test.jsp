@@ -23,25 +23,36 @@
 			{
 				$(".drag-source").on("ibx_dragstart ibx_dragend", function(e)
 				{
+					var dt = e.dataTransfer;
+					dt.setData("test", e.currentTarget);
 					console.dir(e.type);
 				});
 
-				$(".drop-target").on("ibx_dragover ibx_dragout ibx_dragmove ibx_drop", function(e)
+				$(".drop-target, .main-box").on("ibx_dragover ibx_dragout ibx_dragmove ibx_dragdrop", function(e)
 				{
-					console.dir(e.type);
+					var dt = e.dataTransfer;
+					if(e.type == "ibx_dragover")
+					{
+						if(dt.getData("test"))
+							dt.dropEffect = "copy";
+					}
+					else
+					if(e.type == "ibx_dragdrop")
+					{
+						var data = dt.getData("test");
+						$(e.currentTarget).append(data);
+					}
+					e.stopPropagation();
 				});
 			}, [{src:"./test_res_bundle.xml", loadContext:"app"}], true);
 		</script>
 		<style type="text/css">
-			html, body, .box-main
+			html, body
 			{
 				margin:0px;
 				height:100%;
 				width:100%;
 				position:fixed;
-			}
-			body
-			{
 			}
 
 			.main-box
@@ -55,14 +66,14 @@
 
 			.drag-source
 			{
-				flex:0 1 100px;
+				flex:0 0 100px;
 				height:50px;
 				margin:20px;
 				border:2px solid red;
 			}
 			.drop-target
 			{
-				flex:0 1 100px;
+				flex:0 0 100px;
 				height:50px;
 				margin:20px;
 				border:2px solid green;
@@ -70,7 +81,7 @@
 		</style>
 	</head>
 	<body class="ibx-root">
-		<div class="main-box" data-ibx-type="ibxHBox" data-ibxp-align="center" data-ibxp-justify="center">
+		<div class="main-box" data-ibx-type="ibxHBox" data-ibxp-align="center" data-ibxp-justify="center" data-ibxp-droppable="true">
 			<div class="drag-source" data-ibx-type="ibxLabel" data-ibxp-justify="center" data-ibxp-draggable="true">Drag me</div>
 			<div class="drop-target" data-ibx-type="ibxLabel" data-ibxp-justify="center" data-ibxp-droppable="true">Drop here</div>
 		</div>

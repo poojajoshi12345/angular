@@ -247,21 +247,28 @@ $.widget("ibi.ibxWidget", $.Widget,
 
 (function(widgetProto)
 {
+	function ibxDataTransfer()
+	{
+		this._items = {};
+	}
+	_p = ibxDataTransfer.prototype = new Object();
+	_p.effectAllowed = "all"; //none/all/copy/move/link
+	_p.dropEffect = "not-allowed";
+	_p.getData = function(type){return this._items[type]};
+	_p.setData = function(type, data){this._items[type] = data;};
+	_p.clearData = function(type){delete this._items[type];};
+	_p.setDragImage = function(img)
+	{
+	};
+
 	var draggablePatch = 
 	{
 		options:
 		{
+			droppable:false,
 			draggable:false,
-			dragEffect:"move",
 			dragStartDistanceX:5,
 			dragStartDistanceY:5,
-			dragImage:null,
-			dragImageX:0,
-			dragImageY:16,
-			dragData:"",
-
-			droppable:false,
-			dropEffect:"move" //copy,move
 		},
 		_createOrig:$.ibi.ibxWidget.prototype._create,
 		_create:function()
@@ -271,6 +278,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 		},
 		_onDragMouseEvent:function(e)
 		{
+			var dEvent = null;
 			var eType = e.type;
 			switch(eType)
 			{
@@ -279,50 +287,74 @@ $.widget("ibi.ibxWidget", $.Widget,
 					this._curTarget = $();
 					$("body").css("pointerEvents", "none");
 					$("html").on("mouseup mousemove", this._onDragMouseEventBound);
+					e.stopPropagation();
 					break;
 				case "mouseup":
 					if(this._dragging && this._curTarget)
 					{
-						e.type = "ibx_drop";
-						this._curTarget.trigger(e);
+						dEvent = $.Event(e);
+						dEvent.type = "ibx_dragdrop";
+						dEvent.dataTransfer = this._dataTransfer;
+						this._curTarget.trigger(dEvent);
 						delete this._curTarget;
 
-						e.type = "ibx_dragend";
-						this.element.trigger(e);
+						dEvent = $.Event(e);
+						dEvent.type = "ibx_dragend";
+						dEvent.dataTransfer = this._dataTransfer;
+						this.element.trigger(dEvent);
+						delete this._dataTransfer;
 					}
+
+					$("body").css("pointerEvents", "");
+					$("html").off("mouseup mousemove", this._onDragMouseEventBound).css("cursor", "");
 
 					delete this._mDownLoc;
 					this._dragging = false;
-					$("body").css("pointerEvents", "");
-					$("html").off("mouseup mousemove", this._onDragMouseEventBound).css("cursor", "");
 					break;
 				case "mousemove":
 					var dx = Math.abs(e.clientX - this._mDownLoc.x);
 					var dy = Math.abs(e.clientY - this._mDownLoc.y);
 					if(!this._dragging && (dx >= this.options.dragStartDistanceX || dy >= this.options.dragStartDistanceY))
 					{
-						e.type = "ibx_dragstart";
-						this.element.trigger(e);
-						this._dragging = !e.isDefaultPrevented();
+						dEvent = $.Event(e);
+						dEvent.type = "ibx_dragstart";
+						dEvent.dataTransfer = this._dataTransfer = new ibxDataTransfer();
+						this.element.trigger(dEvent);
+						this._dragging = !dEvent.isDefaultPrevented();
 					}
 
 					if(this._dragging)
 					{
+						//what's the current droppable target...have to do this weird thing with the pointerEvents
+						//because the browsers (Chrome) won't find a no pointer event node in elementFromPoint
 						$("body").css("pointerEvents", "");
 						var elTarget = $(document.elementFromPoint(e.clientX, e.clientY)).closest(".ibx-droppable");
 						$("body").css("pointerEvents", "none");
-						$("html").css("cursor", "copy");
-
+						
 						if(!this._curTarget.is(elTarget))
 						{
-							e.type = "ibx_dragout";
-							this._curTarget.trigger(e);
+							dEvent = $.Event(e)
+							dEvent.type = "ibx_dragout";
+							dEvent.dataTransfer = this._dataTransfer;
+							this._curTarget.trigger(dEvent);
+
 							this._curTarget = elTarget;
-							e.type = "ibx_dragover";
-							this._curTarget.trigger(e);
+							dEvent = $.Event(e);
+							dEvent.type = "ibx_dragover";
+							dEvent.dataTransfer = this._dataTransfer;
+							this._curTarget.trigger(dEvent);
 						}
-						e.type = "ibx_dragmove";
-						this._curTarget.trigger(e);
+
+						dEvent = $.Event(e);
+						dEvent.type = "ibx_dragmove";
+						dEvent.dataTransfer = this._dataTransfer;
+						this._curTarget.trigger(dEvent);
+
+						//figure out the cursor
+						var cursor = !this._curTarget.length ? "not-allowed" : this._dataTransfer.dropEffect;
+						$("html").css("cursor", cursor);
+
+
 					}
 					break;
 			}
