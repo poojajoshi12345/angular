@@ -38,7 +38,7 @@
 				$(".ibx-droppable").on("ibx_dragover ibx_dragout ibx_dragmove ibx_dragdrop", function(e)
 				{
 					var dt = e.dataTransfer;
-					if(e.type == "ibx_dragover")
+					if(e.type == "ibx_dragmove")
 					{
 						if(dt.getData("test"))
 							dt.dropEffect = "copy";

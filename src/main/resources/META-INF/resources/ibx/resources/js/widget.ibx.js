@@ -276,9 +276,20 @@ $.widget("ibi.ibxWidget", $.Widget,
 			this._createOrig.apply(this, arguments);
 			this._onDragMouseEventBound = this._onDragMouseEvent.bind(this);
 		},
+		_dispatchDragEvent:function(e, type, target, relatedTarget)
+		{
+				this._dataTransfer.dropEffect = "not-allowed";
+
+				var dEvent = $.Event(e);
+				dEvent.type = type;
+				dEvent.target = (target instanceof jQuery) ? target[0] : target;
+				dEvent.relatedTarget =(relatedTarget instanceof jQuery) ?  relatedTarget[0] : relatedTarget;
+				dEvent.dataTransfer = this._dataTransfer;
+				$(target).trigger(dEvent);
+				return dEvent;
+		},
 		_onDragMouseEvent:function(e)
 		{
-			var dEvent = null;
 			var eType = e.type;
 			switch(eType)
 			{
@@ -294,19 +305,11 @@ $.widget("ibi.ibxWidget", $.Widget,
 					{
 						//if allowed let target know it was dropped on
 						if(!this._curTarget._dragPrevented)
-						{
-							dEvent = $.Event(e);
-							dEvent.type = "ibx_dragdrop";
-							dEvent.dataTransfer = this._dataTransfer;
-							this._curTarget.trigger(dEvent);
-						}
+							this._dispatchDragEvent(e, "ibx_dragdrop", this._curTarget);
 						delete this._curTarget;
 
 						//end the drag operation
-						dEvent = $.Event(e);
-						dEvent.type = "ibx_dragend";
-						dEvent.dataTransfer = this._dataTransfer;
-						this.element.trigger(dEvent);
+						this._dispatchDragEvent(e, "ibx_dragend", this.element);
 						delete this._dataTransfer;
 					}
 
@@ -317,14 +320,13 @@ $.widget("ibi.ibxWidget", $.Widget,
 					this._dragging = false;
 					break;
 				case "mousemove":
+					var dEvent = null;
 					var dx = Math.abs(e.clientX - this._mDownLoc.x);
 					var dy = Math.abs(e.clientY - this._mDownLoc.y);
 					if(!this._dragging && (dx >= this.options.dragStartDistanceX || dy >= this.options.dragStartDistanceY))
 					{
-						dEvent = $.Event(e);
-						dEvent.type = "ibx_dragstart";
-						dEvent.dataTransfer = this._dataTransfer = new ibxDataTransfer();
-						this.element.trigger(dEvent);
+						this._dataTransfer = new ibxDataTransfer();
+						dEvent = this._dispatchDragEvent(e, "ibx_dragstart", this.element);
 						this._dragging = !dEvent.isDefaultPrevented();
 					}
 
@@ -339,30 +341,15 @@ $.widget("ibi.ibxWidget", $.Widget,
 						//manage the current target
 						if(!this._curTarget.is(elTarget))
 						{
-							dEvent = $.Event(e)
-							dEvent.type = "ibx_dragout";
-							dEvent.relatedTarget = elTarget[0];
-							dEvent.dataTransfer = this._dataTransfer;
-							this._curTarget.trigger(dEvent);
-
-							dEvent = $.Event(e);
-							dEvent.type = "ibx_dragover";
-							dEvent.relatedTarget = this._curTarget[0];
-							dEvent.dataTransfer = this._dataTransfer;
-							dEvent.dataTransfer.dropEffect = "not-allowed";
-							elTarget.trigger(dEvent);
+							dEvent = this._dispatchDragEvent(e, "ibx_dragout", this._curTarget, elTarget);
+							dEvent = this._dispatchDragEvent(e, "ibx_dragover", elTarget, this._curTarget);
 							this._curTarget = elTarget;
 							this._curTarget._dragPrevented = dEvent.isDefaultPrevented();
 						}
 
 						//send move messages if 'ibx_dragover' was not prevented
 						if(!this._curTarget._dragPrevented)
-						{
-							dEvent = $.Event(e);
-							dEvent.type = "ibx_dragmove";
-							dEvent.dataTransfer = this._dataTransfer;
-							this._curTarget.trigger(dEvent);
-						}
+							dEvent = this._dispatchDragEvent(e, "ibx_dragmove", this._curTarget);
 
 						//figure out the cursor
 						var cursor = "not-allowed";
