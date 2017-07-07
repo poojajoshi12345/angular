@@ -249,16 +249,23 @@ $.widget("ibi.ibxWidget", $.Widget,
 {
 	function ibxDataTransfer()
 	{
-		this._items = {};
+		this.items = {};
+		this.effectAllowed = "all";
+		this.dropEffect = "not-allowed";
 	}
 	_p = ibxDataTransfer.prototype = new Object();
-	_p.effectAllowed = "all";//all, lets the target decide, or specific, and they must match.
-	_p.dropEffect = "not-allowed";
-	_p.getData = function(type){return this._items[type]};
-	_p.setData = function(type, data){this._items[type] = data;};
-	_p.clearData = function(type){delete this._items[type];};
-	_p.setDragImage = function(img)
+	_p.items = null;
+	_p.getData = function(type){return this.items[type]};
+	_p.setData = function(type, data){this.items[type] = data;};
+	_p.clearData = function(type){delete this.items[type];};
+	_p._dragImage = null;
+	_p._dragXOffset = 0;
+	_p._dragYOffest = 0;
+	_p.setDragImage = function(img, xOffset, yOffset)
 	{
+		this._dragImage = img;
+		this._dragXOffset = xOffset || 0;
+		this._dragYOffset = yOffset || 0;
 	};
 
 	var draggablePatch = 
@@ -276,20 +283,34 @@ $.widget("ibi.ibxWidget", $.Widget,
 			this._createOrig.apply(this, arguments);
 			this._onDragMouseEventBound = this._onDragMouseEvent.bind(this);
 		},
+		getDefaultDragImage:function(el)
+		{
+			var def = $.Deferred();
+			var hc = html2canvas(el,
+			{
+				onrendered:function(def, canvas)
+				{
+					$(canvas).addClass("ibx-default-drag-image");
+					def.resolve(canvas);	
+				}.bind(this, def)
+			});
+			return def;
+		},
 		_dispatchDragEvent:function(e, type, target, relatedTarget)
 		{
-				this._dataTransfer.dropEffect = "not-allowed";
+			this._dataTransfer.dropEffect = "not-allowed";
 
-				var dEvent = $.Event(e);
-				dEvent.type = type;
-				dEvent.target = (target instanceof jQuery) ? target[0] : target;
-				dEvent.relatedTarget =(relatedTarget instanceof jQuery) ?  relatedTarget[0] : relatedTarget;
-				dEvent.dataTransfer = this._dataTransfer;
-				$(target).trigger(dEvent);
-				return dEvent;
+			var dEvent = $.Event(e);
+			dEvent.type = type;
+			dEvent.target = (target instanceof jQuery) ? target[0] : target;
+			dEvent.relatedTarget =(relatedTarget instanceof jQuery) ?  relatedTarget[0] : relatedTarget;
+			dEvent.dataTransfer = this._dataTransfer;
+			$(target).trigger(dEvent);
+			return dEvent;
 		},
 		_onDragMouseEvent:function(e)
 		{
+			var options = this.options;
 			var eType = e.type;
 			switch(eType)
 			{
@@ -310,6 +331,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 
 						//end the drag operation
 						this._dispatchDragEvent(e, "ibx_dragend", this.element);
+						$(this._dataTransfer._dragImage).remove();
 						delete this._dataTransfer;
 					}
 
@@ -328,6 +350,10 @@ $.widget("ibi.ibxWidget", $.Widget,
 						this._dataTransfer = new ibxDataTransfer();
 						dEvent = this._dispatchDragEvent(e, "ibx_dragstart", this.element);
 						this._dragging = !dEvent.isDefaultPrevented();
+						this._dataTransfer.dragImage = this.getDefaultDragImage(this.element).done(function(img)
+						{
+							this._dataTransfer._dragImage = this._dataTransfer._dragImage || img;
+						}.bind(this));
 					}
 
 					if(this._dragging)
@@ -359,6 +385,15 @@ $.widget("ibi.ibxWidget", $.Widget,
 						if(this._dataTransfer.effectAllowed == this._dataTransfer.dropEffect)
 							cursor = this._dataTransfer.dropEffect;
 						$("html").css("cursor", cursor);
+
+						if(this._dataTransfer._dragImage)	
+							$(this._dataTransfer._dragImage).css(
+							{
+								"position":"absolute",
+								"opacity":.4,
+								"left":e.clientX + this._dataTransfer._dragXOffset + "px",
+								"top":e.clientY + this._dataTransfer._dragYOffest + "px"
+							}).appendTo("body");
 					}
 					break;
 			}

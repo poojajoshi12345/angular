@@ -27,6 +27,7 @@
 					{
 						var dt = e.dataTransfer;
 						dt.setData("test", e.currentTarget);
+						dt.setDragImage($("<img src='./rensmall.jpg'/>"));
 					}
 					else
 					if(e.type == "ibx_dragover")
