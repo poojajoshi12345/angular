@@ -21,22 +21,32 @@
 			<jsp:include page="/WEB-INF/jsp/global/wf_globals.jsp" flush="false" />
 			ibx(function()
 			{
-				$(".drag-source").on("ibx_dragstart ibx_dragend ibx_dragover", function(e)
+				$(".drag-source").on("ibx_dragstart ibx_dragover", function(e)
 				{
-					var dt = e.dataTransfer;
-					dt.setData("test", e.currentTarget);
+					if(e.type == "ibx_dragstart")
+					{
+						var dt = e.dataTransfer;
+						dt.setData("test", e.currentTarget);
+					}
+					else
+					if(e.type == "ibx_dragover")
+						e.preventDefault();
 					e.stopPropagation();
-					console.dir(e.type);
+					console.log(e.type);
 				});
 
-				$(".drop-target, .main-box").on("ibx_dragover ibx_dragout xibx_dragmove ibx_dragdrop", function(e)
+				$(".ibx-droppable").on("ibx_dragover ibx_dragout ibx_dragmove ibx_dragdrop", function(e)
 				{
 					var dt = e.dataTransfer;
 					if(e.type == "ibx_dragover")
 					{
 						if(dt.getData("test"))
 							dt.dropEffect = "copy";
+						$(e.currentTarget).css("backgroundColor", "#ccc");
 					}
+					else
+					if(e.type == "ibx_dragout")
+						$(e.currentTarget).css("backgroundColor", "");
 					else
 					if(e.type == "ibx_dragdrop")
 					{
@@ -44,7 +54,6 @@
 						$(e.currentTarget).append(data);
 					}
 					e.stopPropagation();
-					console.log(e.type, e.currentTarget);
 				});
 			}, [{src:"./test_res_bundle.xml", loadContext:"app"}], true);
 		</script>
@@ -71,6 +80,7 @@
 				flex:0 0 100px;
 				height:50px;
 				margin:20px;
+				background-color:white;
 				border:2px solid red;
 			}
 			.drop-target
@@ -78,12 +88,13 @@
 				flex:0 0 100px;
 				height:50px;
 				margin:20px;
+				background-color:white;
 				border:2px solid green;
 			}
 		</style>
 	</head>
 	<body class="ibx-root">
-		<div class="main-box" data-ibx-type="ibxHBox" data-ibxp-align="center" data-ibxp-justify="center" data-ibxp-droppable="true">
+		<div class="main-box" data-ibx-type="ibxHBox" data-ibxp-align="center" data-ibxp-justify="center" data-ibxp-droppable="false">
 			<div class="drag-source" data-ibx-type="ibxLabel" data-ibxp-justify="center" data-ibxp-draggable="true">Drag me</div>
 			<div class="drop-target" data-ibx-type="ibxLabel" data-ibxp-justify="center" data-ibxp-droppable="true">Drop here</div>
 		</div>

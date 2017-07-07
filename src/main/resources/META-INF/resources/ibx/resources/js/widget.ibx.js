@@ -290,14 +290,19 @@ $.widget("ibi.ibxWidget", $.Widget,
 					e.stopPropagation();
 					break;
 				case "mouseup":
-					if(this._dragging && this._curTarget)
+					if(this._dragging)
 					{
-						dEvent = $.Event(e);
-						dEvent.type = "ibx_dragdrop";
-						dEvent.dataTransfer = this._dataTransfer;
-						this._curTarget.trigger(dEvent);
+						//if allowed let target know it was dropped on
+						if(!this._curTarget._dragPrevented)
+						{
+							dEvent = $.Event(e);
+							dEvent.type = "ibx_dragdrop";
+							dEvent.dataTransfer = this._dataTransfer;
+							this._curTarget.trigger(dEvent);
+						}
 						delete this._curTarget;
 
+						//end the drag operation
 						dEvent = $.Event(e);
 						dEvent.type = "ibx_dragend";
 						dEvent.dataTransfer = this._dataTransfer;
@@ -331,32 +336,41 @@ $.widget("ibi.ibxWidget", $.Widget,
 						var elTarget = $(document.elementFromPoint(e.clientX, e.clientY));
 						$("body").css("pointerEvents", "none");
 						
+						//manage the current target
 						if(!this._curTarget.is(elTarget))
 						{
 							dEvent = $.Event(e)
 							dEvent.type = "ibx_dragout";
+							dEvent.relatedTarget = elTarget[0];
 							dEvent.dataTransfer = this._dataTransfer;
 							this._curTarget.trigger(dEvent);
 
-							this._curTarget = elTarget;
 							dEvent = $.Event(e);
 							dEvent.type = "ibx_dragover";
+							dEvent.relatedTarget = this._curTarget[0];
+							dEvent.dataTransfer = this._dataTransfer;
+							dEvent.dataTransfer.dropEffect = "not-allowed";
+							elTarget.trigger(dEvent);
+							this._curTarget = elTarget;
+							this._curTarget._dragPrevented = dEvent.isDefaultPrevented();
+						}
+
+						//send move messages if 'ibx_dragover' was not prevented
+						if(!this._curTarget._dragPrevented)
+						{
+							dEvent = $.Event(e);
+							dEvent.type = "ibx_dragmove";
 							dEvent.dataTransfer = this._dataTransfer;
 							this._curTarget.trigger(dEvent);
 						}
 
-						dEvent = $.Event(e);
-						dEvent.type = "ibx_dragmove";
-						dEvent.dataTransfer = this._dataTransfer;
-						this._curTarget.trigger(dEvent);
-
 						//figure out the cursor
 						var cursor = "not-allowed";
-						if(dEvent.dataTransfer.effectAllowed == "all")
-							cursor = dEvent.dataTransfer.dropEffect;
+						if(this._dataTransfer.effectAllowed == "all")
+							cursor = this._dataTransfer.dropEffect;
 						else
-						if(dEvent.dataTransfer.effectAllowed == dEvent.dataTransfer.dropEffect)
-							cursor = dEvent.dataTransfer.dropEffect;
+						if(this._dataTransfer.effectAllowed == this._dataTransfer.dropEffect)
+							cursor = this._dataTransfer.dropEffect;
 						$("html").css("cursor", cursor);
 					}
 					break;
