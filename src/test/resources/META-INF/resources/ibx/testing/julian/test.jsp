@@ -21,14 +21,15 @@
 			<jsp:include page="/WEB-INF/jsp/global/wf_globals.jsp" flush="false" />
 			ibx(function()
 			{
-				$(".drag-source").on("ibx_dragstart ibx_dragend", function(e)
+				$(".drag-source").on("ibx_dragstart ibx_dragend ibx_dragover", function(e)
 				{
 					var dt = e.dataTransfer;
 					dt.setData("test", e.currentTarget);
+					e.stopPropagation();
 					console.dir(e.type);
 				});
 
-				$(".drop-target, .main-box").on("ibx_dragover ibx_dragout ibx_dragmove ibx_dragdrop", function(e)
+				$(".drop-target, .main-box").on("ibx_dragover ibx_dragout xibx_dragmove ibx_dragdrop", function(e)
 				{
 					var dt = e.dataTransfer;
 					if(e.type == "ibx_dragover")
@@ -43,6 +44,7 @@
 						$(e.currentTarget).append(data);
 					}
 					e.stopPropagation();
+					console.log(e.type, e.currentTarget);
 				});
 			}, [{src:"./test_res_bundle.xml", loadContext:"app"}], true);
 		</script>

@@ -252,7 +252,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 		this._items = {};
 	}
 	_p = ibxDataTransfer.prototype = new Object();
-	_p.effectAllowed = "all"; //none/all/copy/move/link
+	_p.effectAllowed = "all";//all, lets the target decide, or specific, and they must match.
 	_p.dropEffect = "not-allowed";
 	_p.getData = function(type){return this._items[type]};
 	_p.setData = function(type, data){this._items[type] = data;};
@@ -328,7 +328,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 						//what's the current droppable target...have to do this weird thing with the pointerEvents
 						//because the browsers (Chrome) won't find a no pointer event node in elementFromPoint
 						$("body").css("pointerEvents", "");
-						var elTarget = $(document.elementFromPoint(e.clientX, e.clientY)).closest(".ibx-droppable");
+						var elTarget = $(document.elementFromPoint(e.clientX, e.clientY));
 						$("body").css("pointerEvents", "none");
 						
 						if(!this._curTarget.is(elTarget))
@@ -351,10 +351,13 @@ $.widget("ibi.ibxWidget", $.Widget,
 						this._curTarget.trigger(dEvent);
 
 						//figure out the cursor
-						var cursor = !this._curTarget.length ? "not-allowed" : this._dataTransfer.dropEffect;
+						var cursor = "not-allowed";
+						if(dEvent.dataTransfer.effectAllowed == "all")
+							cursor = dEvent.dataTransfer.dropEffect;
+						else
+						if(dEvent.dataTransfer.effectAllowed == dEvent.dataTransfer.dropEffect)
+							cursor = dEvent.dataTransfer.dropEffect;
 						$("html").css("cursor", cursor);
-
-
 					}
 					break;
 			}
