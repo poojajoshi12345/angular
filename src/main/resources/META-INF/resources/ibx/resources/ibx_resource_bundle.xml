@@ -104,7 +104,6 @@ $Revision$:-->
 		<script-file src="./js/ibxPreLoad.ibx.js"/>
 
 		<!--POLYFILL/SHIM AND PLUGINS-->
-		<script-file src="./etc/dragdroptouch-master/DragDropTouch.js" NOTE="Polyfill: https://github.com/Bernardo-Castilho/dragdroptouch"/>
 		<script-file src="./etc/resizepolyfill/ResizeSensor.js"/>
 		<script-file src="./etc/scrollwidthpolyfill/scrollwidthpolyfill.js"/>
 		<script-file src="./etc/gridstack/underscore.js"/>

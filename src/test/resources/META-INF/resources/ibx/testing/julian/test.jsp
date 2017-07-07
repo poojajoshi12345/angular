@@ -32,7 +32,6 @@
 					if(e.type == "ibx_dragover")
 						e.preventDefault();
 					e.stopPropagation();
-					console.log(e.type);
 				});
 
 				$(".ibx-droppable").on("ibx_dragover ibx_dragout ibx_dragmove ibx_dragdrop", function(e)
