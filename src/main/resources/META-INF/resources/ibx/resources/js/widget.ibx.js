@@ -266,7 +266,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 	_p._dragYOffest = 5;
 	_p.setDragImage = function(img, xOffset, yOffset)
 	{
-		this._dragImage = img;
+		this._dragImage = $(img);
 		this._dragXOffset = xOffset || this._dragXOffset;
 		this._dragYOffset = yOffset || this._dragYOffset;
 	};
@@ -277,6 +277,8 @@ $.widget("ibi.ibxWidget", $.Widget,
 		{
 			droppable:false,
 			draggable:false,
+			dragClass:"ibx-drag-source",
+			dropTargetClass:"ibx-drop-target",
 			dragStartDistanceX:5,
 			dragStartDistanceY:5,
 			dragImageClass:"ibx-default-drag-image"
@@ -300,6 +302,8 @@ $.widget("ibi.ibxWidget", $.Widget,
 			});
 			return def;
 		},
+		isDragging:function(){return this.element.hasClass(this.options.dragClass);},
+		isDropTarget:function(){return this.element.hasClass(this.options.dropTargetClass);},
 		_dispatchDragEvent:function(e, type, target, relatedTarget)
 		{
 			this._dataTransfer.dropEffect = "not-allowed";
@@ -326,41 +330,47 @@ $.widget("ibi.ibxWidget", $.Widget,
 					e.stopPropagation();
 					break;
 				case "mouseup":
-					if(this._dragging)
+					if(this.isDragging())
 					{
 						//if allowed let target know it was dropped on
 						if(!this._curTarget._dragPrevented)
 							this._dispatchDragEvent(e, "ibx_dragdrop", this._curTarget);
-						delete this._curTarget;
 
 						//end the drag operation
 						this._dispatchDragEvent(e, "ibx_dragend", this.element);
 						$(this._dataTransfer._dragImage).remove();
+						this.element.removeClass(options.dragClass);
+						this._curTarget.removeClass(options.dropTargetClass);
 						delete this._dataTransfer;
+						delete this._curTarget;
 					}
 
 					$("body").css("pointerEvents", "");
 					$("html").off("mouseup mousemove", this._onDragMouseEventBound).css("cursor", "");
 
 					delete this._mDownLoc;
-					this._dragging = false;
+					this.element.removeClass(this.options.dragClass);
 					break;
 				case "mousemove":
 					var dEvent = null;
 					var dx = Math.abs(e.clientX - this._mDownLoc.x);
 					var dy = Math.abs(e.clientY - this._mDownLoc.y);
-					if(!this._dragging && (dx >= this.options.dragStartDistanceX || dy >= this.options.dragStartDistanceY))
+					var isDragging = this.isDragging();
+					if(!isDragging && (dx >= this.options.dragStartDistanceX || dy >= this.options.dragStartDistanceY))
 					{
 						this._dataTransfer = new ibxDataTransfer();
 						dEvent = this._dispatchDragEvent(e, "ibx_dragstart", this.element);
-						this._dragging = !dEvent.isDefaultPrevented();
-						this._dataTransfer.dragImage = this.getDefaultDragImage(this.element).done(function(img)
+						if(!dEvent.isDefaultPrevented())
 						{
-							this._dataTransfer._dragImage = this._dataTransfer._dragImage || img;
-						}.bind(this));
+							this.element.addClass(this.options.dragClass);
+							this._dataTransfer.dragImage = this.getDefaultDragImage(this.element).done(function(img)
+							{
+								this._dataTransfer._dragImage = this._dataTransfer._dragImage || img;
+							}.bind(this));
+						}
 					}
 
-					if(this._dragging)
+					if(isDragging)
 					{
 						//what's the current droppable target...have to do this weird thing with the pointerEvents
 						//because the browsers (Chrome) won't find a no pointer event node in elementFromPoint
@@ -371,9 +381,10 @@ $.widget("ibi.ibxWidget", $.Widget,
 						//manage the current target
 						if(!this._curTarget.is(elTarget))
 						{
+							this._curTarget.removeClass(this.options.dropTargetClass);
 							dEvent = this._dispatchDragEvent(e, "ibx_dragout", this._curTarget, elTarget);
 							dEvent = this._dispatchDragEvent(e, "ibx_dragover", elTarget, this._curTarget);
-							this._curTarget = elTarget;
+							this._curTarget = elTarget.addClass(options.dropTargetClass);
 							this._curTarget._dragPrevented = dEvent.isDefaultPrevented();
 						}
 
