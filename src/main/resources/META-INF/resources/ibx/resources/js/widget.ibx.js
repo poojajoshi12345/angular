@@ -262,8 +262,8 @@ $.widget("ibi.ibxWidget", $.Widget,
 	_p.setData = function(type, data){this.items[type] = data;};
 	_p.clearData = function(type){delete this.items[type];};
 	_p._dragImage = null;
-	_p._dragXOffset = 5;
-	_p._dragYOffest = 5;
+	_p._dragXOffset = 0;
+	_p._dragYOffset = 0;
 	_p.setDragImage = function(img, xOffset, yOffset)
 	{
 		this._dragImage = $(img);
@@ -381,17 +381,12 @@ $.widget("ibi.ibxWidget", $.Widget,
 						//manage the current target
 						if(!this._curTarget.is(elTarget))
 						{
-							if(!this._curTarget.is(elTarget) || !this._curTarget.has(elTarget).length)
-								dEvent = this._dispatchDragEvent(e, "ibx_dragexit", this._curTarget, elTarget);
-							
-							if(!this._curTarget.is(elTarget))
-								dEvent = this._dispatchDragEvent(e, "ibx_dragleave", this._curTarget, elTarget);
+							dEvent = this._dispatchDragEvent(e, "ibx_dragleave", this.element, elTarget);
+							dEvent = this._dispatchDragEvent(e, "ibx_dragexit", this._curTarget, elTarget);
 
-							if(!this._curTarget.is(elTarget) || !this._curTarget.has(elTarget).length)
-								dEvent = this._dispatchDragEvent(e, "ibx_dragenter", elTarget, this._curTarget);
-							
-							if(!this._curTarget.is(elTarget))
-								dEvent = this._dispatchDragEvent(e, "ibx_dragover", elTarget, this._curTarget);
+							dEvent = this._dispatchDragEvent(e, "ibx_dragenter", this.element, this._curTarget);
+							dEvent = this._dispatchDragEvent(e, "ibx_dragover", elTarget, this._curTarget);
+							console.log(elTarget);
 
 							this._curTarget.removeClass(this.options.dropTargetClass);
 							this._curTarget = elTarget.addClass(options.dropTargetClass);
@@ -416,9 +411,10 @@ $.widget("ibi.ibxWidget", $.Widget,
 						{	
 							$(this._dataTransfer._dragImage).css(
 							{
+								"pointerEvents":"none",
 								"position":"absolute",
 								"left":e.clientX + this._dataTransfer._dragXOffset + "px",
-								"top":e.clientY + this._dataTransfer._dragYOffest + "px",
+								"top":e.clientY + this._dataTransfer._dragYOffset + "px",
 							}).appendTo("body");
 						}
 					}
