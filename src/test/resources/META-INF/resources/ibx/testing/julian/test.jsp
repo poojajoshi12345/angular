@@ -56,6 +56,11 @@
 					}
 					e.stopPropagation();
 				});
+
+				$(".disable-test").on("click", function(e)
+				{
+					alert("foo");
+				});
 			}, [{src:"./test_res_bundle.xml", loadContext:"app"}], true);
 		</script>
 		<style type="text/css">
@@ -103,6 +108,7 @@
 	</head>
 	<body class="ibx-root">
 		<div class="main-box" data-ibx-type="ibxHBox" data-ibxp-align="center" data-ibxp-justify="center" data-ibxp-droppable="true">
+			<div class="disable-test" data-ibx-type="ibxButton" data-ibxp-icon="./rensmall.jpg" data-ibxp-disabled="true" data-ibx-draggable="true"></div>
 			<div class="drag-source-custom" data-ibx-type="ibxLabel" data-ibxp-justify="center" data-ibxp-draggable="true">Drag me (Custom image)</div>
 			<div class="drag-source-default" data-ibx-type="ibxLabel" data-ibxp-justify="center" data-ibxp-draggable="true">Drag me (Default image)</div>
 			<div class="drop-target" data-ibx-type="ibxLabel" data-ibxp-justify="center" data-ibxp-droppable="true">Drop things here</div>
