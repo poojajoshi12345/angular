@@ -381,9 +381,19 @@ $.widget("ibi.ibxWidget", $.Widget,
 						//manage the current target
 						if(!this._curTarget.is(elTarget))
 						{
+							if(!this._curTarget.is(elTarget) || !this._curTarget.has(elTarget).length)
+								dEvent = this._dispatchDragEvent(e, "ibx_dragexit", this._curTarget, elTarget);
+							
+							if(!this._curTarget.is(elTarget))
+								dEvent = this._dispatchDragEvent(e, "ibx_dragleave", this._curTarget, elTarget);
+
+							if(!this._curTarget.is(elTarget) || !this._curTarget.has(elTarget).length)
+								dEvent = this._dispatchDragEvent(e, "ibx_dragenter", elTarget, this._curTarget);
+							
+							if(!this._curTarget.is(elTarget))
+								dEvent = this._dispatchDragEvent(e, "ibx_dragover", elTarget, this._curTarget);
+
 							this._curTarget.removeClass(this.options.dropTargetClass);
-							dEvent = this._dispatchDragEvent(e, "ibx_dragout", this._curTarget, elTarget);
-							dEvent = this._dispatchDragEvent(e, "ibx_dragover", elTarget, this._curTarget);
 							this._curTarget = elTarget.addClass(options.dropTargetClass);
 							this._curTarget._dragPrevented = dEvent.isDefaultPrevented();
 						}
