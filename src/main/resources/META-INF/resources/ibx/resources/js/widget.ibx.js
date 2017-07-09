@@ -306,8 +306,6 @@ $.widget("ibi.ibxWidget", $.Widget,
 		isDropTarget:function(){return this.element.hasClass(this.options.dropTargetClass);},
 		_dispatchDragEvent:function(e, type, target, relatedTarget)
 		{
-			this._dataTransfer.dropEffect = "not-allowed";
-
 			var dEvent = $.Event(e);
 			dEvent.type = type;
 			dEvent.target = (target instanceof jQuery) ? target[0] : target;
@@ -377,17 +375,21 @@ $.widget("ibi.ibxWidget", $.Widget,
 						$("body").css("pointerEvents", "");
 						var elTarget = $(document.elementFromPoint(e.clientX, e.clientY));
 						$("body").css("pointerEvents", "none");
-						
+
 						//manage the current target
 						if(!this._curTarget.is(elTarget))
 						{
+							//new drop target so reset the effect.
+							this._dataTransfer.dropEffect = "not-allowed";
+
+							//spit out events for source/target
 							dEvent = this._dispatchDragEvent(e, "ibx_dragleave", this.element, elTarget);
 							dEvent = this._dispatchDragEvent(e, "ibx_dragexit", this._curTarget, elTarget);
 
 							dEvent = this._dispatchDragEvent(e, "ibx_dragenter", this.element, this._curTarget);
 							dEvent = this._dispatchDragEvent(e, "ibx_dragover", elTarget, this._curTarget);
-							console.log(elTarget);
 
+							//cleanup
 							this._curTarget.removeClass(this.options.dropTargetClass);
 							this._curTarget = elTarget.addClass(options.dropTargetClass);
 							this._curTarget._dragPrevented = dEvent.isDefaultPrevented();
