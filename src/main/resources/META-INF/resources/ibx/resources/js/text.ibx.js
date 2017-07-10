@@ -133,11 +133,7 @@ $.widget("ibi.ibxTextField", $.ibi.ibxFlexBox,
 			this._textInput.removeAttr("id");
 
 		this._textInput.val(this.options.text);
-
-		if (this.options.readonly)
-			this._textInput.attr("readonly");
-		else
-			this._textInput.removeAttr("readonly");
+		this._textInput.prop("readonly", this.options.readonly ? 'true' : '');
 		if (this.options.size != 0)
 			this._textInput.attr("size", this.options.size);
 		else

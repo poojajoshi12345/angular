@@ -98,10 +98,7 @@ $.widget("ibi.ibxTextArea", $.ibi.ibxFlexBox,
 		else
 			this._textInput.removeAttr("id");
 		this._textInput.val(this.options.text);
-		if (this.options.readonly)
-			this._textInput.attr("readonly");
-		else
-			this._textInput.removeAttr("readonly");
+		this._textInput.prop("readonly", this.options.readonly ? 'true' : '');
 		if (this.options.maxLength)
 			this._textInput.attr("maxlength", this.options.maxLength);
 		else
