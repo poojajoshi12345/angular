@@ -8,17 +8,12 @@
 .ibx-button:hover[disabled]
 {
     padding: 0.3em 0.6em;
-    cursor: pointer;
     border-radius: 0.2em;
 
     color: #373a3c;
     background-color: transparent;
     border: 1px solid #ccc;
 
-}
-/* Chrome user agent sets the cursor for a label to default */
-.ibx-button label {
-    cursor: pointer;
 }
 
 .ibx-button:hover {
