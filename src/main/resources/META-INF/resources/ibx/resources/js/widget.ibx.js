@@ -397,7 +397,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 
 						//send move messages if 'ibx_dragover' was not prevented
 						if(!this._curTarget._dragPrevented)
-							dEvent = this._dispatchDragEvent(e, "ibx_dragmove", this._curTarget);
+							dEvent = this._dispatchDragEvent(e, "ibx_drag", this._curTarget);
 
 						//figure out the cursor
 						var cursor = "not-allowed";
