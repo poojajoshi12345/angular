@@ -322,10 +322,8 @@ $.widget("ibi.ibxWidget", $.Widget,
 			{
 				case "mousedown":
 					this._mDownLoc = {"x":e.clientX, "y":e.clientY};
-					this._curTarget = $();
-					$("body").css("pointerEvents", "none");
 					$("html").on("mouseup mousemove", this._onDragMouseEventBound);
-					e.stopPropagation();
+					this._curTarget = $();
 					break;
 				case "mouseup":
 					if(this.isDragging())
@@ -356,6 +354,9 @@ $.widget("ibi.ibxWidget", $.Widget,
 					var isDragging = this.isDragging();
 					if(!isDragging && (dx >= this.options.dragStartDistanceX || dy >= this.options.dragStartDistanceY))
 					{
+						$("body").css("pointerEvents", "none");
+						e.stopPropagation();
+
 						this._dataTransfer = new ibxDataTransfer();
 						dEvent = this._dispatchDragEvent(e, "ibx_dragstart", this.element);
 						if(!dEvent.isDefaultPrevented())
