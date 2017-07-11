@@ -394,7 +394,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 						}
 
 						//send drag messages if 'ibx_dragover' was not prevented
-						dEvent = this._dispathDragEvent(e, "ibx_drag", this.element, this._curTarget);
+						dEvent = this._dispatchDragEvent(e, "ibx_drag", this.element, this._curTarget);
 						dEvent = this._dispatchDragEvent(e, "ibx_dragover", this._curTarget, this.element);
 
 						//figure out the cursor
