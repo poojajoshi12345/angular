@@ -332,7 +332,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 					{
 						//if allowed let target know it was dropped on
 						if(!this._curTarget._dragPrevented)
-							this._dispatchDragEvent(e, "ibx_dragdrop", this._curTarget);
+							this._dispatchDragEvent(e, "ibx_drop", this._curTarget);
 
 						//end the drag operation
 						this._dispatchDragEvent(e, "ibx_dragend", this.element);
@@ -385,9 +385,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 							//spit out events for source/target
 							dEvent = this._dispatchDragEvent(e, "ibx_dragleave", this.element, elTarget);
 							dEvent = this._dispatchDragEvent(e, "ibx_dragexit", this._curTarget, elTarget);
-
 							dEvent = this._dispatchDragEvent(e, "ibx_dragenter", this.element, this._curTarget);
-							dEvent = this._dispatchDragEvent(e, "ibx_dragover", elTarget, this._curTarget);
 
 							//cleanup
 							this._curTarget.removeClass(this.options.dropTargetClass);
@@ -395,9 +393,9 @@ $.widget("ibi.ibxWidget", $.Widget,
 							this._curTarget._dragPrevented = dEvent.isDefaultPrevented();
 						}
 
-						//send move messages if 'ibx_dragover' was not prevented
-						if(!this._curTarget._dragPrevented)
-							dEvent = this._dispatchDragEvent(e, "ibx_drag", this._curTarget);
+						//send drag messages if 'ibx_dragover' was not prevented
+						dEvent = this._dispathDragEvent(e, "ibx_drag", this.element, this._curTarget);
+						dEvent = this._dispatchDragEvent(e, "ibx_dragover", this._curTarget, this.element);
 
 						//figure out the cursor
 						var cursor = "not-allowed";
