@@ -296,7 +296,8 @@ $.widget("ibi.ibxWidget", $.Widget,
 			{
 				onrendered:function(def, canvas)
 				{
-					$(canvas).addClass(this.options.dragImageClass);
+					$(canvas).css("pointer-events", "none").addClass(this.options.dragImageClass);
+
 					def.resolve(canvas);	
 				}.bind(this, def)
 			});
