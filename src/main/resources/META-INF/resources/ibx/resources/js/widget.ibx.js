@@ -262,13 +262,13 @@ $.widget("ibi.ibxWidget", $.Widget,
 	_p.setData = function(type, data){this.items[type] = data;};
 	_p.clearData = function(type){delete this.items[type];};
 	_p._dragImage = null;
-	_p._dragXOffset = 0;
-	_p._dragYOffset = 0;
+	_p.dragXOffset = 0;
+	_p.dragYOffset = 0;
 	_p.setDragImage = function(img, xOffset, yOffset)
 	{
 		this._dragImage = $(img);
-		this._dragXOffset = xOffset || this._dragXOffset;
-		this._dragYOffset = yOffset || this._dragYOffset;
+		this._dragXOffset = xOffset || this.dragXOffset;
+		this._dragYOffset = yOffset || this.dragYOffset;
 	};
 
 	var draggablePatch = 
@@ -414,8 +414,8 @@ $.widget("ibi.ibxWidget", $.Widget,
 							{
 								"pointerEvents":"none",
 								"position":"absolute",
-								"left":e.clientX + this._dataTransfer._dragXOffset + "px",
-								"top":e.clientY + this._dataTransfer._dragYOffset + "px",
+								"left":e.clientX + this._dataTransfer.dragXOffset + "px",
+								"top":e.clientY + this._dataTransfer.dragYOffset + "px",
 							}).appendTo("body");
 						}
 					}
