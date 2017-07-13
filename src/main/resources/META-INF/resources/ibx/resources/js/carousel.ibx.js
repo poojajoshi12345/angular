@@ -61,20 +61,19 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 	},
 	_onPrev:function(e)
 	{
-		this._scroll(e.type == "mousedown", false) 
+		this._scroll(e.type == "mousedown", true) 
 	},
 	_onNext:function(e)
 	{
-		this._scroll(e.type == "mousedown", true) 
+		this._scroll(e.type == "mousedown", false) 
 	},
 	_onItemsKeyEvent:function(e)
 	{
-		var nScroll = this._itemsBox.prop("scrollLeft");
 		if(e.keyCode == 37)
-			this._scroll(true, true, true);
+			this._scroll(true, false, true);
 		else
 		if(e.keyCode == 39)
-			this._scroll(true, false, true);
+			this._scroll(true, true, true);
 	},
 	_onResize:function()
 	{
@@ -89,9 +88,9 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 			if(incremental)
 			{
 				var nScroll = itemsBox.element.prop("scrollLeft");
-				var delta = nScroll + (beginning ? -this.options.step : this.options.step);
+				var delta = nScroll + (beginning ? this.options.step : -this.options.step);
 				itemsBox.element.prop("scrollLeft", delta);
-				itemsBox._trigger("scroll", null, this);
+				itemsBox._trigger("scroll");
 				this.refresh();
 			}
 			else
@@ -99,14 +98,20 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 				this._scrollTimer = window.setInterval(function(itemsBox, beginning)
 				{
 					var sl = itemsBox.element.prop("scrollLeft");
-					itemsBox.element.prop("scrollLeft", sl + (beginning ? this.options.step : -this.options.step));
-					itemsBox._trigger("scroll", null, this);
+					itemsBox.element.prop("scrollLeft", sl + (beginning ? -this.options.step : this.options.step));
+					itemsBox._trigger("scroll");
 					this.refresh();
 				}.bind(this, itemsBox, beginning), this.options.stepRate); 
 			}
+			this._scrolling = true;
 		}
 		else
+		if(this._scrolling)
+		{
+			this._scrolling = false;
 			window.clearInterval(this._scrollTimer);
+			itemsBox._trigger("endscroll");
+		}
 	},
 	_onPageMarkerClick:function(e)
 	{

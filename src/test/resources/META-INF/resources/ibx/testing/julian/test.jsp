@@ -24,15 +24,58 @@
 				var csl = $(".test-carousel");
 				for(i = 0; i < 20; ++i)
 				{
-					var label = $("<div>").ibxLabel({text:"Label " + i, justify:"center"}).addClass("test-label test-label-"+i);
+					var label = $("<div tabIndex='0'>").ibxLabel({text:"Label " + i, justify:"center"}).addClass("test-label test-label-"+i);
 					csl.ibxWidget("add", label);
 				}
 
-				csl.on("ibx_beforescroll ibx_scroll", function(e)
+				csl.on("ibx_beforescroll ibx_scroll ibx_endscroll", function(csl, e)
 				{
-					var info = $(e.currentTarget).data("ibxWidget").getPageMetrics();
-					console.log(info);
-				});
+					if(e.type == "ibx_endscroll")
+					{
+						var info = csl.data("ibxWidget").getPageMetrics();
+						var children = csl.ibxWidget("children");
+						children.each(function(idx, el)
+						{
+							var vis = isVisible(el);
+							if(!(vis & (VIS_LEFT | VIS_RIGHT)))
+								console.log("NONE", el);
+							if(!(vis & VIS_LEFT) && (vis & VIS_RIGHT))
+								console.log("PREVIOUS", el);
+							if((vis & VIS_LEFT) && !(vis & VIS_RIGHT))
+								console.log("NEXT", el);
+							if(vis == VIS_ALL)
+								console.log("ALL", el);
+						});
+					}
+				}.bind(null, csl));
+
+				var VIS_NONE	= 0x00000000;
+				var VIS_LEFT	= 0x00000001;
+				var VIS_TOP		= 0x00000002;
+				var VIS_RIGHT	= 0x00000004;
+				var VIS_BOTTOM	= 0x00000008;
+				var VIS_ALL		= VIS_LEFT | VIS_TOP | VIS_RIGHT | VIS_BOTTOM;
+
+				function isVisible(el)
+				{
+					el = $(el);
+					var elBounds = el.position();
+					elBounds.right = elBounds.left + el.outerWidth(true);
+					elBounds.bottom = elBounds.top + el.outerHeight(true);
+
+					var p = $(el.prop("offsetParent"));
+					var pWidth = p.width();
+					var pHeight = p.height();
+
+					var visFlags = 0;
+					visFlags |= (elBounds.left >= 0 && elBounds.left <= pWidth) ? VIS_LEFT : 0;
+					visFlags |= (elBounds.top >= 0 && elBounds.top <= pHeight) ? VIS_TOP : 0;
+					visFlags |= (elBounds.right >= 0 && elBounds.right <= pWidth) ? VIS_RIGHT : 0;
+					visFlags |= (elBounds.bottom >= 0 && elBounds.bottom <= pHeight) ? VIS_BOTTOM: 0;
+					visFlags = (!(visFlags & (VIS_LEFT | VIS_RIGHT)) || !(visFlags & (VIS_TOP | VIS_BOTTOM))) ? VIS_NONE : visFlags;
+					return visFlags;
+				}
+
 			}, [], true);
 		</script>
 		<style type="text/css">
@@ -56,15 +99,15 @@
 			.test-carousel
 			{
 				flex:1 1 auto;
-				margin:50px;
+				margin:200px;
 				overflow:hidden;
 				border:1px solid #ccc;
 			}
 
 			.test-label
 			{
-				width:100px;
-				height:50px;
+				width:150px;
+				height:100px;
 				margin:5px;
 				padding:5px;
 				border:1px solid black;
