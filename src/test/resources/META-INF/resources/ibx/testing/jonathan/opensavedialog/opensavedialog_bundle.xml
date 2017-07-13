@@ -1,0 +1,322 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ibx-res-bundle>
+	<strings>
+		<string-bundle>
+		<![CDATA[
+		]]>
+		</string-bundle>
+	</strings>
+
+	<styles>
+		<style-sheet>
+		<![CDATA[
+			.save-dialog-ibx
+			{
+				
+			}
+
+			.ibx-dialog-main-box .save-dialog-ibx
+			{
+				position:absolute;
+				left:0px;
+				top:0px;
+				right:0px;
+				bottom:0px;
+			}
+			.save-dialog-resources
+			{
+				xflex: 0 0 auto;
+				width:800px;
+				height:600px;
+				min-height: 500px;
+				min-width: 600px;
+			}
+			.sd-title-bar
+			{
+				flex:0 0 auto;
+				height:4em;
+				background-color:#337ab7;
+			}
+			.sd-title-label
+			{
+				xmargin-left:2em;
+				color:white;
+				font-size:1.8em;
+			}
+			.sd-toolbar
+			{
+				color:rgb(102,102,102);
+				flex:0 0 auto;
+				padding:5px;				
+				border-bottom:1px solid #ccc;
+				height: 40px;
+				border-top: 1px solid #ccc;
+				background-color: rgb(250,250,250);
+			}
+			.sd-crumb-box
+			{
+				font-size: 14px;
+				width: 50%;				
+				
+			}
+			.sd-crumb-button
+			{
+				text-overflow: ellipsis;
+			}
+			.sd-toolbar-spacer
+			{
+				flex:1 1 auto;
+			}
+			.sd-txt-search
+			{
+				margin-right: 4px;
+				font-size: 14px;
+				width: 90%;			
+			}
+			.sd-btn-advanced-search, .sd-btn-clear-search
+			{
+				margin-right:4px;
+			}
+			
+			.sd-div-search
+			{
+				margin-right: 16px;
+			}
+			.sd-div-search:hover
+			{
+				background-color: rgba(211,211,211,.5);				
+			}
+			.sd-toolbar-button-div
+			{
+				margin-right: 4px;
+				margin-left:  4px;
+				margin-top: 0px;
+				margin-bottom: 0px;
+				padding: 8px;
+			}
+			.sd-div-search-phone
+			{
+				height: 40px;
+				width: 95%;
+				margin-left: 8px;
+				margin-right: 8px;				
+				
+			}			
+			
+			.sd-toolbar-button-div:hover
+			{
+				background-color: rgba(211,211,211,.5);	
+			}
+			
+			.sd-btn-refresh, .sd-btn-how-view, .sd-btn-how-view-grid
+			{
+				color:rgb(102,102,102);
+				font-size: 16px;
+			}
+			.sd-btn-search
+			{
+				color:rgb(102,102,102);
+				font-size:1.5em;
+				margin-right:5px;
+			}
+			.sd-explore-box
+			{
+				//flex: 1 1 90%;
+				//height: 90%;			
+			}	
+			.sd-content-box			
+			{
+				flex:1 1 auto;
+			}
+			.sd-files-box
+			{
+				flex:1 1 auto;
+				xbackground-color:#e4f1f9;
+				border-top:1px solid #ccc;
+				overflow:auto;
+				background-color: rgb(244,244,244);
+
+			}
+			.sd-files-box-files
+			{
+				padding:4px;
+				overflow:auto;
+				xbackground-color:#e4f1f9;
+				background-color: rgb(244,244,244);
+				flex: 1 1 400px;
+				xwidth: 800px;
+				border-top:1px solid #ccc;
+    			border-bottom:1px solid #ccc;
+			}
+			.sd-folders-box-folders
+			{
+				padding:4px;
+				overflow:auto;
+				background-color:#e4f1f9;
+			}		
+			.sd-files-listing
+			{
+				
+				overflow: auto;				
+				background-color: white;
+				flex: 1 1 400px;
+			}
+			.sd-files-box-files-folder-icon .ibx-label-glyph
+			{
+				color: rgb(250, 215, 50);
+			}	
+			.sd-files-box-files-area
+			{
+				overflow: auto;				
+				background-color: white;				
+			}	
+			.sd-form-field-title
+			{
+				font-size: 14px;
+				font-weight: bold;
+				margin-top:5px;
+				margin-bottom:5px;
+				height: 30px;			
+			}
+
+
+			.sd-form-field-text-title, .sd-form-field-text-name
+			{
+				font-size:14px;				
+				margin-top:5px;
+				margin-bottom:5px;
+				padding: 4px;
+				width: 80%;								
+			}
+			.sd-text-input
+			{
+				xflex: 1 1 auto;
+				background-color: rgb(238,238,238);
+				color: rgb(102,102,102);
+				border-top:1px solid #ccc;
+				border-bottom:1px solid #ccc;
+			}
+			.sd-content-title-spacer
+			{
+				flex:1 1 auto;
+			}
+			.sd-input-div
+			{
+				xflex: 1 1 auto;
+				
+			}
+			.test
+			{
+				 flex:1 1 1px;
+			}
+			.ibx-dialog-title-box
+			{
+				border: none !important;				
+				background-color: white;
+				font-size: 18px;
+				color: rgb(51,51,51);
+			}
+			.ibx-dialog.std .ibx-title-bar-caption::before
+			{
+				content: none !important;
+			}
+			
+		
+		]]>
+		
+		</style-sheet>		
+		<style-file src="./home.css" loadContext="bundle"/>
+	</styles>
+
+	<markup>
+		<markup-block>	
+			<div class="save-dialog-resources" data-ibx-name-root="true" data-ibx-type="opensavedialog" data-ibxp-auto-size="false">
+				
+				<div class="sd-toolbar" data-ibx-type="ibxHBox" data-ibxp-align="stretch" data-ibxp-wrap="false">
+						<div class="sd-crumb-box" data-ibx-name="_breadCrumbTrail" data-ibx-type="breadCrumbTrail" data-ibxp-align="center">				
+											
+						</div>
+						<div class="sd-toolbar-spacer"></div> 
+						<div class="sd-div-search" data-ibx-type="ibxHBox" data-ibxp-align="stretch">
+							<div class="sd-btn-search" data-ibx-type="ibxLabel" data-ibxp-glyph="search" data-ibxp-glyph-classes="material-icons"></div>
+							<div class="sd-txt-search" data-ibx-type="ibxTextField" data-ibxp-placeholder="Search..."></div>
+							<div class="sd-btn-clear-search" data-ibx-type="ibxButtonSimple" data-ibxp-glyph-classes="fa fa-remove" title="Clear Search"></div>							
+						</div>
+						
+						<div class="sd-toolbar-button-divset" data-ibx-type="ibxHBox" data-ibxp-align="stretch">
+							<div class="sd-toolbar-button-div" data-ibx-type="ibxHBox" data-ibxp-align="stretch">
+								<div class="sd-btn-how-view-grid" data-ibx-name="sdViewList" data-ibx-type="ibxButtonSimple"  title="List View" data-ibxp-glyph-classes="fa fa-list"></div>
+								<div class="sd-btn-how-view" data-ibx-name="sdViewTiles" data-ibx-type="ibxButtonSimple"  title="Tile View" data-ibxp-glyph-classes="fa fa-th"></div>
+							</div>	
+							<div class="sd-toolbar-button-div" data-ibx-type="ibxHBox" data-ibxp-align="stretch">
+								<div class="sd-btn-refresh" data-ibx-type="ibxButtonSimple" title="Refresh" data-ibxp-glyph="autorenew" data-ibxp-glyph-classes="material-icons"></div>
+							</div>
+						</div>				
+				</div>
+				
+				
+						
+			
+				<div class="sd-files-box-files"  data-ibx-type="ibxHBox" data-ibx-name="tilesBox" data-ibxp-wrap="true" ></div>
+				<div class="sd-files-listing" data-ibx-type="ibxVBox" data-ibx-name="listBox" data-ibxp-align="stretch" ></div>
+			
+		
+
+
+				<div class="sd-text-input" data-ibx-type="ibxVBox" data-ibxp-align="stretch" >
+					<div class="sd-input-div" data-ibx-type="ibxHBox" >
+						<div data-ibx-type="ibxLabel" class="sd-form-field-title" data-ibxp-align="center" data-ibxp-text-align="right" data-ibxp-justify="center" data-ibxp-text="Title"></div>
+						<div class="sd-content-title-spacer"></div>
+						<div data-ibx-type="ibxTextField" data-ibx-name="sdtxtFileTitle"  class="sd-form-field-text-title"  data-ibxp-align="center" data-ibxp-placeholder="Enter Title Here" ></div>
+					</div>
+					<div class="sd-input-div" data-ibx-type="ibxHBox" >
+						<div data-ibx-type="ibxLabel" class="sd-form-field-title" data-ibxp-text-align="center" data-ibxp-align="center" data-ibxp-justify="center"  data-ibxp-text="Name"></div>
+						<div class="sd-content-title-spacer"></div>
+						<div data-ibx-type="ibxTextField" data-ibx-name="sdtxtFileName" class="sd-form-field-text-name"  data-ibxp-align="center" data-ibxp-placeholder="Enter Name Here" ></div>
+					</div>
+				</div>					
+				
+					
+			</div>	
+		</markup-block>
+		<markup-block>
+			<div class="content-title-label-files" data-ibx-type="ibxHBox" data-ibxp-align="center">
+				<div class="content-title-label" data-ibx-type="ibxLabel" data-ibxp-text="Files"></div>
+				<div class="content-title-spacer"></div>
+				<div class="content-title-buttons" data-ibx-type="ibxHBox" data-ibxp-align="right">
+			 	<div class="content-title-btn-name" data-ibx-type="ibxButton" data-ibxp-text="Title" data-ibxp-icon-position="right"></div>
+			 	<div class="content-title-btn-arrow" data-ibx-type="ibxButton" title="str_reverse_sort_order" data-ibxp-icon-position="right" data-ibxp-glyph="arrow_upward" data-ibxp-glyph-classes="material-icons"></div>
+				</div>
+			</div>
+			<div class="content-title-label-folders" data-ibx-type="ibxHBox" data-ibxp-align="center">
+				<div class="content-title-label" data-ibx-type="ibxLabel" data-ibxp-text="Folders"></div>
+				<div class="content-title-spacer"></div>
+				<div class="content-title-buttons" data-ibx-type="ibxHBox" data-ibxp-align="right">
+			 	<div class="content-title-btn-name" data-ibx-type="ibxButton" data-ibxp-text="Title" ></div>
+			 	<div class="content-title-btn-arrow" data-ibx-type="ibxButton"  title="str_reverse_sort_order" data-ibxp-icon-position="right" data-ibxp-glyph="arrow_upward" data-ibxp-glyph-classes="material-icons"></div>
+				</div>
+			</div>
+		</markup-block>
+		<markup-block>
+		<div class="right-carat" data-ibx-type="ibxButtonSimple" data-ibxp-glyph-classes="fa fa-chevron-right"></div>
+		</markup-block>
+	</markup>
+
+	<scripts>
+		<script-file src="./opensavedialog.js" loadContext="bundle"/>
+		<script-file src="./opensavedialog_items.js" loadContext="bundle"/>
+		<script-file src="./opensavedialog_views.js" loadContext="bundle"/>
+		<script-file src="./itemboxes_control_home.js" loadContext="bundle"/>
+		<script-file src="./grid_home.js" loadContext="bundle"/>
+		<script-file src="./breadcrumbtrail.js" loadContext="bundle"/>
+		<script-block>
+		<![CDATA[
+			
+			
+			
+			
+			
+		]]>
+		</script-block>
+	</scripts>
+</ibx-res-bundle>
