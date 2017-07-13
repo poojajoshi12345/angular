@@ -11,6 +11,7 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 		wantResize:true,
 		nameRoot:true,
 		align:"stretch",
+		allowDragScrolling:true,
 		showPageMarkers:false,
 		pageMarkersPos:"end",
 		pageMarkerClass:"ibx-csl-page-marker",
@@ -35,13 +36,6 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 		this._nextBtn.on("mousedown mouseup mouseleave", this._onNext.bind(this));
 		this._itemsBox.ibxDragScrolling({overflowY:"hidden"});
 		this.add(children);
-
-		//propagate the dragscroll event to this object.
-		this._itemsBox.on("scroll", function(e)
-		{
-			this._adjustPageMarkers();
-			this._trigger("scroll", e, this);
-		}.bind(this));
 	},
 	_destroy:function()
 	{
@@ -89,23 +83,26 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 	_scrollTimer:null,
 	_scroll:function(startScrolling, beginning, incremental)
 	{
-		if(startScrolling)
+		var itemsBox = this._itemsBox.data("ibxWidget");
+		if(startScrolling && itemsBox._trigger("beforescroll"))
 		{
 			if(incremental)
 			{
-				var nScroll = this._itemsBox.prop("scrollLeft");
+				var nScroll = itemsBox.element.prop("scrollLeft");
 				var delta = nScroll + (beginning ? -this.options.step : this.options.step);
-				this._itemsBox.prop("scrollLeft", delta);
+				itemsBox.element.prop("scrollLeft", delta);
+				itemsBox._trigger("scroll", null, this);
+				this.refresh();
 			}
 			else
 			{
 				this._scrollTimer = window.setInterval(function(itemsBox, beginning)
 				{
-					var sl = itemsBox.prop("scrollLeft");
-					itemsBox.prop("scrollLeft", sl + (beginning ? this.options.step : -this.options.step));
-					this._trigger("scroll", null, this);
+					var sl = itemsBox.element.prop("scrollLeft");
+					itemsBox.element.prop("scrollLeft", sl + (beginning ? this.options.step : -this.options.step));
+					itemsBox._trigger("scroll", null, this);
 					this.refresh();
-				}.bind(this, this._itemsBox, beginning), this.options.stepRate); 
+				}.bind(this, itemsBox, beginning), this.options.stepRate); 
 			}
 		}
 		else
@@ -120,8 +117,8 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 	_adjustPageMarkers:function()
 	{
 		this._pageMarkers.empty();
-		var metrics = this._getPageMetrics();
-		var pageInfo = this._getPageInfo(metrics);
+		var metrics = this.getPageMetrics();
+		var pageInfo = this.getPageInfo(metrics);
 		for(var i = 0; i < pageInfo.pages; ++i)
 		{
 			var pageMarker = $(sformat("<div class='{1} {2}' tabIndex='1'>", this.options.pageMarkerClass, i == pageInfo.curPage ? this.options.pageMarkerSelectedClass : ""));
@@ -138,7 +135,7 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 		disabled = (metrics.scrollLeft + metrics.pageWidth) >= metrics.scrollWidth;
 		this._nextBtn.ibxWidget("option", "disabled", disabled).toggleClass("csl-btn-hidden", (disabled && options.hideDisabledButtons));
 	},
-	_getPageMetrics:function()
+	getPageMetrics:function()
 	{
 		var overFlow = this._itemsBox.css("overflow");
 		var metrics = 
@@ -153,14 +150,16 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 		this._itemsBox.css("overflow", overFlow);
 		return metrics;
 	},
-	_getPageInfo:function(metrics)
+	getPageInfo:function(metrics)
 	{
+		metrics = metrics || this.getPageMetrics();
 		return {"pages": Math.floor(metrics.scrollWidth / metrics.pageWidth) || 1, "curPage": Math.floor(metrics.scrollLeft / metrics.pageWidth), "metrics":metrics};
 	},
 	refresh:function()
 	{
 		this._super();
 		var options = this.options;
+		this._itemsBox.ibxDragScrolling("option", "disabled", !options.allowDragScrolling);
 		this._prevBtn.css("display", options.showPrevButton ? "" : "none");
 		this._nextBtn.css("display", options.showNextButton ? "" : "none");
 		this._adjustPageMarkers();
@@ -223,11 +222,11 @@ $.widget("ibi.ibxVCarousel", $.ibi.ibxCarousel,
 	_adjustPageMarkers:function()
 	{
 		this._super();
-		var metrics = this._getPageMetrics();
+		var metrics = this.getPageMetrics();
 		this._prevBtn.ibxWidget("option", "disabled", metrics.scrollTop <= 0);
 		this._nextBtn.ibxWidget("option", "disabled", (metrics.scrollTop + metrics.pageHeight) >= metrics.scrollHeight);
 	},
-	_getPageInfo:function(metrics)
+	getPageInfo:function(metrics)
 	{
 		return {pages: Math.floor(metrics.scrollHeight / metrics.pageHeight) || 1, curPage: Math.floor(metrics.scrollTop / metrics.pageHeight)};
 	},
