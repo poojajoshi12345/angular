@@ -7,7 +7,6 @@
 function ibxResourceManager()
 {
 	this._resBundle = $($.parseXML("<ibx-res-bundle><markup></markup></ibx-res-bundle>"));
-	this._bindingDiv = $("<div class='ibx-resource-manager-binding-div' style='display:none'></div>");
 	this._styleSheet = $("<style type='text/css'>").prop("id", "ibxResourceManager_inline_styles").appendTo("head");
 	
 	this.loadedBundles = {};
@@ -335,12 +334,11 @@ _p.getResource = function(selector, ibxBind, forceCreate)
 	ibxBind = ((markup.is("[data-ibx-type]") || markup.find("[data-ibx-type]").length) && (typeof(ibxBind) === "undefined")) ? true : ibxBind;
 	if(ibxBind)
 	{
-		this._bindingDiv.empty().append(markup).appendTo("body");
+		var bindingDiv =  $("<div class='ibx-resource-manager-binding-div' style='display:none'></div>").append(markup).appendTo("body");
 		ibx.bindElements(markup);
 		markup.detach();
-		this._bindingDiv.detach();
+		bindingDiv.detach();
 	}
-
 	return markup;
 };
 
