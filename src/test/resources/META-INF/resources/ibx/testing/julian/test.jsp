@@ -21,11 +21,19 @@
 			<jsp:include page="/WEB-INF/jsp/global/wf_globals.jsp" flush="false" />
 			ibx(function()
 			{
-				$(".test-button").on("click", function(e)
+				var csl = $(".test-carousel");
+				for(i = 0; i < 20; ++i)
 				{
-					alert('foo');
+					var label = $("<div>").ibxLabel({text:"Label " + i, justify:"center"}).addClass("test-label test-label-"+i);
+					csl.ibxWidget("add", label);
+				}
+
+				csl.on("ibx_beforescroll ibx_scroll", function(e)
+				{
+					var info = $(e.currentTarget).data("ibxWidget").getPageMetrics();
+					console.log(info);
 				});
-			}, [{src:"./test_res_bundle.xml", loadContext:"app"}], true);
+			}, [], true);
 		</script>
 		<style type="text/css">
 			html, body
@@ -35,20 +43,39 @@
 				width:100%;
 				position:fixed;
 			}
-			
-			.xtest-button
+
+			.main-box
 			{
-				cursor:move;
+				position:absolute;
+				left:0px;
+				top:0px;
+				right:0px;
+				bottom:0px;
 			}
 
-			.xtest-button img
+			.test-carousel
 			{
-				border:1px solid red;
-				cursor: inherit;
+				flex:1 1 auto;
+				margin:50px;
+				overflow:hidden;
+				border:1px solid #ccc;
+			}
+
+			.test-label
+			{
+				width:100px;
+				height:50px;
+				margin:5px;
+				padding:5px;
+				border:1px solid black;
 			}
 		</style>
 	</head>
 	<body class="ibx-root">
-		<div class="test-button" data-ibx-type="ibxButton" data-ibxp-disabled="true" data-ibxp-icon="rensmall.jpg">Button</div>
+		<div class="main-box" data-ibx-type="ibxHBox" data-ibxp-align="center">
+			<div class="test-carousel" data-ibx-type="ibxHCarousel" data-ibxp-allow-drag-scrolling="true" data-ibxp-show-page-markers="false">
+			</div>
+		</div>
 	</body>
 </html>
+
