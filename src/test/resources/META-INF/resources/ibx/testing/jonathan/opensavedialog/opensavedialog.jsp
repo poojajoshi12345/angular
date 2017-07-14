@@ -35,6 +35,8 @@
 					}).on("ibx_close", function (e, closeData)
 					{
 						debugger;
+						var fileName = saveDlg.ibxWidget('fileName');			
+						var description = saveDlg.ibxWidget('fileTitle');
 					});
 					
 					

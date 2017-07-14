@@ -30,26 +30,40 @@ $.widget("ibi.opensavedialog", $.ibi.ibxDialog,
     {
         this._super();
         this.option("caption", this.options.title);
+        this.btnOK.ibxWidget("option", "text", this.options.title);
         this.element.resizable();
         this.sdViewTiles.hide();
         this.sdViewList.show();
         this.sdViewList.on('click', this._onViewAsList.bind(this));
         this.sdViewTiles.on('click', this._onViewAsTiles.bind(this));
-        this.sdtxtFileTitle.on('ibx_textchanged', function (){
-             this._fileTitle = ''; 
+        this.sdtxtFileTitle.on('ibx_textchanged', function (e){
+        	debugger;
+        	this._fileTitle = this.sdtxtFileTitle.ibxWidget("option", "text");  
+        	this._fileName = this._fileTitle.replace(/ /g,"_").toLowerCase();
+        	this.sdtxtFileName.ibxWidget("option", "text", this._fileName);
+        	this.btnOK.ibxWidget('option','disabled', this._fileName.length == 0);        	
         }.bind(this));
-        this.sdtxtFileName.on('ibx_textchanged', function (){
-            this._fileName = ''; 
-       }.bind(this)); 
-      
+        this.sdtxtFileName.on('ibx_textchanged', function (e){
+        	debugger;
+        	this._fileName = this.sdtxtFileName.ibxWidget("option", "text");
+        	this.btnOK.ibxWidget('option','disabled', this._fileName.length == 0);        	
+        }.bind(this));
+        
         
         this.listBox.hide();
+        this.btnOK.ibxWidget('option', 'disabled', true);  
+        
         this._items=new Items();        
         this._items.setMultiSelectAllowed(this.options.multiSelect);
     	this._ses_auth_parm = WFGlobals.getSesAuthParm(); 
 		this._ses_auth_val =WFGlobals.getSesAuthVal();
-		//this.listBox.hide();
+		
 		this._applicationContext=applicationContext;
+		
+		
+        
+      
+		
     },
     _init:function()
     {
@@ -101,27 +115,27 @@ $.widget("ibi.opensavedialog", $.ibi.ibxDialog,
         if(ibfsItem.container)
             this.option("ctxPath", ibfsItem.fullPath);
     },
-    description: function (value)
-    {
+    fileTitle: function (value)
+    {    	
         if (typeof (value) == "undefined")        
-            return this.txtFilename.ibxWidget("option", "text");
+        	return this._fileTitle;
         else
-        {
-            this.txtFilename.ibxWidget("option", "text", value);
+        {        	
+        	this._fileTitle = value;
+            this.stdtxtFileTitle.ibxWidget("option", "text", value);
             return this;
         }
     },
     fileName: function (value)
-    {
+    {    
         if (typeof (value) == "undefined")
         {
-            if (!this._fileName)        
-                this._fileName = this.txtFilename.ibxWidget('option', 'text').replace(/ /g,"_").toLowerCase();
-            return this._fileName;
+        	return this._fileName;            
         }
         else
         {
             this._fileName = value.replace(/ /g,"_").toLowerCase();
+            this.stdtxtFileName.ibxWidget("option", "text", this._fileName);
             return this;
         }
     },
@@ -223,8 +237,10 @@ $.widget("ibi.opensavedialog", $.ibi.ibxDialog,
     	
         this._fileName = item.name;
         this._fileTitle = item.description;
+        
+        this.btnOK.ibxWidget('option','disabled', this._fileName.length == 0);
     	
-    },
+    },    
     fileSingleClick: function(item)
     {debugger;
     	this.selectItem(item);
