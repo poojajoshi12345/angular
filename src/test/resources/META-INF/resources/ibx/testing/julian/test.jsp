@@ -42,15 +42,15 @@
 								curChildren.push(elInfo)
 						}.bind(this, curChildren));
 
-						var scrollChild = $(scrollInfo.toStart ? curChildren.shift().el.prev() : curChildren.pop().el.next());
+						var scrollChild = $(scrollInfo.toStart ? curChildren[0].el.prev() : curChildren[curChildren.length - 1].el.next());
+						var childInfo = getElementMetrics(scrollChild);
 						var itemsBox = $(e.target);
-						var scrollLeft = itemsBox.prop("scrollLeft");
 						if(scrollInfo.toStart)
-							;
+							scroll = childInfo.left + itemsBox.prop("scrollLeft");
 						else
-							itemsBox.prop("scrollLeft", scrollChild.prop("offsetLeft") + scrollChild.outerWidth());
-						
+							scroll = childInfo.right - itemsBox.width() + itemsBox.prop("scrollLeft");
 
+						itemsBox.prop("scrollLeft", scroll);
 						e.preventDefault();
 					}
 				}.bind(this, csl, curChildren));
@@ -62,15 +62,23 @@
 				var VIS_BOTTOM	= 0x00000008;
 				var VIS_ALL		= VIS_LEFT | VIS_TOP | VIS_RIGHT | VIS_BOTTOM;
 
-				function isVisible(el)
+				function getElementMetrics(el)
 				{
 					el = $(el);
-					var elInfo = el.position();
+					var elInfo = el.position() || {};
+					elInfo.width = el.outerWidth(true);
+					elInfo.height = el.outerHeight(true);
+					elInfo.right = elInfo.left + elInfo.width;
+					elInfo.bottom = elInfo.top + elInfo.height;
 					elInfo.el = el;
-					elInfo.right = elInfo.left + el.outerWidth(true);
-					elInfo.bottom = elInfo.top + el.outerHeight(true);
+					return elInfo;
+				}
 
-					var p = $(el.prop("offsetParent"));
+				function isVisible(el)
+				{
+					var elInfo = getElementMetrics(el);
+
+					var p = $(el.offsetParent);
 					var pWidth = p.width();
 					var pHeight = p.height();
 
@@ -112,18 +120,24 @@
 				border:1px solid #ccc;
 			}
 
+			.test-carousel .ibx-csl-items-box
+			{
+				background-color:pink;
+			}
+
 			.test-label
 			{
 				width:150px;
 				height:100px;
 				margin:5px;
 				padding:5px;
-				border:1px solid black;
+				background-color:tomato;
+				xborder:1px solid black;
 			}
 		</style>
 	</head>
 	<body class="ibx-root">
-		<div class="main-box" data-ibx-type="ibxHBox" data-ibxp-align="center">
+		<div class="main-box" data-ibx-type="ibxHBox" data-ibxp-align="center" data-ibxp-justify="center">
 			<div class="test-carousel" data-ibx-type="ibxHCarousel" data-ibxp-allow-drag-scrolling="true" data-ibxp-show-page-markers="false">
 			</div>
 		</div>
