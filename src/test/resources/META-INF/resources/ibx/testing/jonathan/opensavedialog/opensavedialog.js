@@ -9,7 +9,9 @@ $.widget("ibi.opensavedialog", $.ibi.ibxDialog,
         rootPath:"IBFS:/WFC/Repository",
         ctxPath:"",
         viewAs:"tiles",
-        'dlgType': 'Save',
+        'dlgType': "save",
+        title: "Save",
+        multiselect: false,
         ses_auth_parm: null, 
 		ses_auth_val: null
     },
@@ -22,10 +24,12 @@ $.widget("ibi.opensavedialog", $.ibi.ibxDialog,
     _ses_auth_val: "",
     _applicationContext: "",
     _loaded:null,
+    _ses_auth_parm: null, 
+	_ses_auth_val: null,
     _create:function()    
     {
         this._super();
-        this.option("caption", this.options.dlgType);
+        this.option("caption", this.options.title);
         this.element.resizable();
         this.sdViewTiles.hide();
         this.sdViewList.show();
@@ -39,24 +43,13 @@ $.widget("ibi.opensavedialog", $.ibi.ibxDialog,
        }.bind(this)); 
       
         
-        this._items=new Items();
-    	var ses_auth_parm = WFGlobals.getSesAuthParm(); 
-		var ses_auth_val =WFGlobals.getSesAuthVal();
-		
-		this.listBox.hide();
-    	
-		this._ses_auth_parm=ses_auth_parm;
-		this._ses_auth_val=ses_auth_val;
+        this.listBox.hide();
+        this._items=new Items();        
+        this._items.setMultiSelectAllowed(this.options.multiSelect);
+    	this._ses_auth_parm = WFGlobals.getSesAuthParm(); 
+		this._ses_auth_val =WFGlobals.getSesAuthVal();
+		//this.listBox.hide();
 		this._applicationContext=applicationContext;
-		/*
-    	var loaded=Ibfs.load(applicationContext, ses_auth_parm, ses_auth_val);
-    	loaded.done(function(ibfs)
-		{
-		        this._ibfs=ibfs;
-		        //this.refreshit();
-		}.bind(this));
-		*/
-		
     },
     _init:function()
     {
@@ -168,7 +161,7 @@ $.widget("ibi.opensavedialog", $.ibi.ibxDialog,
     					
     },  
     refresh:function()
-    {debugger;
+    {
     	this._super(); 
     	if(this.options.ctxPath.length > 0)
     	{	
@@ -191,7 +184,7 @@ $.widget("ibi.opensavedialog", $.ibi.ibxDialog,
     },
     updateViews:function()
     {
-    	debugger;
+    	
 	    var bSearch = false;
 		var filter = "";
 		var columns = [
@@ -215,7 +208,7 @@ $.widget("ibi.opensavedialog", $.ibi.ibxDialog,
 				columns,
 				this._items.getSortedOrder(), this._items.getSortedValue(), this._items.getSortedValueType(),
 				this._items.sortItems, this._items.toggleSelected, this._items.setCallBack, bSearch, this.openFolder, 
-				this.selectItem, false, false, this.foldermenu, this.filemenu, this);
+				this.fileDoubleClick, false, false, this.foldermenu, this.filemenu, this, this.fileSingleClick);
 			
 	
     },
@@ -232,6 +225,15 @@ $.widget("ibi.opensavedialog", $.ibi.ibxDialog,
         this._fileTitle = item.description;
     	
     },
+    fileSingleClick: function(item)
+    {debugger;
+    	this.selectItem(item);
+    },
+    fileDoubleClick: function(item)
+    {debugger;
+    	this.selectItem(item);
+    	this.close({ibfsItem:item});
+    },    
     foldermenu:function()
     {
     	
@@ -251,8 +253,8 @@ $.widget("ibi.opensavedialog", $.ibi.ibxDialog,
     	 this.options.ctxPath="";
     },
     refreshit:function(path)
-    {debugger;
-        //this._super();
+    {
+    	//this._super();
      if(this._ibfs)
      {	 
         var bSearch = this._bSearch;
@@ -309,4 +311,4 @@ $.widget("ibi.opensavedialog", $.ibi.ibxDialog,
      }	
     }
 });
-//# sourceURL=savedialog_ibx.js
+//# sourceURL=opensavedialog.js

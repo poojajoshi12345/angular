@@ -5,8 +5,8 @@ function filegrid()
 	var _this=this;
 	
 	filegrid.prototype.init = function (parentarea, columns, sortCallBack, selectedCallBack, setCallBack, showColumns, 
-			openFolderCallBack, runCallBack, isMobile, thisContext)
-	{			
+			openFolderCallBack, runCallBack, isMobile, thisContext, fileSingleClick)
+	{	debugger;		
 			this.parentarea = parentarea;		
 			this.initialized = true;		
 			//this.gridarea=".grid-main";
@@ -17,7 +17,7 @@ function filegrid()
 			_this._isMobile = isMobile;
 			_this.runCallBack = runCallBack;
 			_this.thisContext = thisContext;
-			
+			_this.fileSingleClick = fileSingleClick;
 			
 			$(parentarea).empty();
 			//this.gridmain = ".files-listing";
@@ -197,7 +197,7 @@ function filegrid()
 				{	
 					if(!folder)
 					{
-						$(jcell)("dblclick", _this.runCallBack.bind(_this.thisContext,item));
+						$(jcell).on("dblclick", _this.runCallBack.bind(_this.thisContext,ibfsitem));
 						//$(jcell).dblclick(function(){_this.runCallBack(ibfsitem);}).bind(_this.thisContext);	
 						$(jcell).contextmenu(function(){							
 							_this.selectedCallBack(ibfsitem,3);
@@ -206,7 +206,7 @@ function filegrid()
 					}
 					else
 					{
-						$(jcell)("dblclick", _this.openFolderCallBack.bind(_this.thisContext,item));
+						$(jcell).on("dblclick", _this.openFolderCallBack.bind(_this.thisContext,ibfsitem));
 						//$(jcell).dblclick(function(){_this.openFolderCallBack(ibfsitem);}).bind(_this.thisContext);					
 						$(jcell).contextmenu(function(){
 							_this.selectedCallBack(ibfsitem,3);
@@ -253,6 +253,8 @@ function filegrid()
 				var isSelected = _this.selectedCallBack(item,key);
 									
 		});
+		if(_this.fileSingleClick)$(jrowbox).on("click", _this.fileSingleClick.bind(_this.thisContext,ibfsitem));	
+					
 		
 		$(jrowbox).data("ibfsitem", ibfsitem);
 		

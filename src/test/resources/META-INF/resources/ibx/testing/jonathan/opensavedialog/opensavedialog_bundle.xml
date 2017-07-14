@@ -307,7 +307,7 @@
 		<script-file src="./opensavedialog_items.js" loadContext="bundle"/>
 		<script-file src="./opensavedialog_views.js" loadContext="bundle"/>
 		<script-file src="./itemboxes_control_home.js" loadContext="bundle"/>
-		<script-file src="./grid_home.js" loadContext="bundle"/>
+		<script-file src="./filegrid.js" loadContext="bundle"/>
 		<script-file src="./breadcrumbtrail.js" loadContext="bundle"/>
 		<script-block>
 		<![CDATA[

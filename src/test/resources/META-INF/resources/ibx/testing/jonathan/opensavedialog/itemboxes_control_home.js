@@ -10,6 +10,7 @@ $.widget( "ibi.itembox",
 		doubleclick: null,
 		toggleSelected: null,
 		setCallBack: null,
+		fileSingleClick: null,
 		bSearch: null,
 		thisContext: null
 	},	
@@ -163,14 +164,18 @@ $.widget( "ibi.itembox",
 			    $(this).find(".file-item-text-box").hide();	
 			});
 		}
-		this.element.click(function(event)				
+		
+		
+		
+		
+		this.element.on("click", function(event)				
 		{
 			var key=0;
 			if (event.ctrlKey || event.metaKey)key=1;
-			if (event.shiftKey)key=2;
-			var isSelected = options.toggleSelected(item,key);
-						
+			if (event.shiftKey)key=2;		
+			options.toggleSelected(item,key);
 		});
+		if(options.fileSingleClick)this.element.on("click", options.fileSingleClick.bind(this.options.thisContext,item));		
 		this.element.contextmenu(function() {
 			options.toggleSelected(item, 3);
 			options.context(this, item);

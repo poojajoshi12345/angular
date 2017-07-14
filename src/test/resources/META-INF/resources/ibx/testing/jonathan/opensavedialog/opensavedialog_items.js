@@ -9,7 +9,8 @@ function Items()
 	this.allFolders = [];
 	this.sortedValue =	"description";
 	this.sortedValueType = "alpha";
-	this.sortedOrder = "up";	
+	this.sortedOrder = "up";
+	this.multiSelectAllowed = true;
 	var _this = this;
 	
 	protoItems.clearItems = function()
@@ -98,7 +99,7 @@ function Items()
 		
 		// ctrl key?	
 		if(key == 1)return foundItem.selected;
-		if(key == 2)
+		if(key == 2 && this._multiSelectAllowed)
 		{
 			// shift key
 			protoItems.multiSelect(foundItem);
@@ -340,6 +341,10 @@ function Items()
 		var i = _this.allFolders.indexOf(item);		
 		if(i > -1)
 			_this.allFolders.splice(i,1);			
+	};
+	protoItems.setMultiSelectAllowed = function(multiSelectAllowed)
+	{
+		_this.multiSelectAllowed = multiSelectAllowed;
 	};
 	protoItems.findallFoldersByPath = function(fullPath)
 	{	

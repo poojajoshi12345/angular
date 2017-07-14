@@ -4,7 +4,7 @@
 
 function buildviews(item_container, grid_container, folderlist, itemlist, columns, sortedorder, sortedvalue, sortedvaluetype,
 			sortCallBack, selectedCallBack, setCallBack, bSearch,
-			openFolderCallBack, runCallBack, isMobile, isPhone, foldermenu, filemenu, thisContext)
+			openFolderCallBack, runCallBack, isMobile, isPhone, foldermenu, filemenu, thisContext, fileSingleClick)
 {
 	var divitem;	
 	$(item_container).empty();
@@ -68,6 +68,7 @@ function buildviews(item_container, grid_container, folderlist, itemlist, column
 							doubleclick: runCallBack,
 							toggleSelected: selectedCallBack, 
 							setCallBack: setCallBack,
+							fileSingleClick: fileSingleClick,
 							bSearch: bSearch,
 							thisContext: thisContext
 							
@@ -95,7 +96,8 @@ function buildviews(item_container, grid_container, folderlist, itemlist, column
 	// initialize the grid and add titles.
 	var grid=new filegrid();
 
-	grid.init(grid_container, columns, sortCallBack, selectedCallBack, setCallBack, showColumns, openFolderCallBack, runCallBack, isMobile, thisContext );
+	grid.init(grid_container, columns, sortCallBack, selectedCallBack, setCallBack, 
+			showColumns, openFolderCallBack, runCallBack, isMobile, thisContext, fileSingleClick );
 	
 	
 	// add the folders
