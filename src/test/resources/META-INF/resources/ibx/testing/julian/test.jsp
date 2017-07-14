@@ -28,26 +28,32 @@
 					csl.ibxWidget("add", label);
 				}
 
-				csl.on("ibx_beforescroll ibx_scroll ibx_endscroll", function(csl, e)
+				curChildren = [];
+				csl.on("ibx_beforescroll ibx_scroll ibx_endscroll", function(csl, curChildren, e, scrollInfo)
 				{
-					if(e.type == "ibx_endscroll")
+					if(e.type == "ibx_beforescroll")
 					{
-						var info = csl.data("ibxWidget").getPageMetrics();
+						var curChildren = [];
 						var children = csl.ibxWidget("children");
-						children.each(function(idx, el)
+						children.each(function(curChildren, idx, el)
 						{
-							var vis = isVisible(el);
-							if(!(vis & (VIS_LEFT | VIS_RIGHT)))
-								console.log("NONE", el);
-							if(!(vis & VIS_LEFT) && (vis & VIS_RIGHT))
-								console.log("PREVIOUS", el);
-							if((vis & VIS_LEFT) && !(vis & VIS_RIGHT))
-								console.log("NEXT", el);
-							if(vis == VIS_ALL)
-								console.log("ALL", el);
-						});
+							var elInfo = isVisible(el);
+							if(elInfo.visFlags == VIS_ALL)
+								curChildren.push(elInfo)
+						}.bind(this, curChildren));
+
+						var scrollChild = $(scrollInfo.toStart ? curChildren.shift().el.prev() : curChildren.pop().el.next());
+						var itemsBox = $(e.target);
+						var scrollLeft = itemsBox.prop("scrollLeft");
+						if(scrollInfo.toStart)
+							;
+						else
+							itemsBox.prop("scrollLeft", scrollChild.prop("offsetLeft") + scrollChild.outerWidth());
+						
+
+						e.preventDefault();
 					}
-				}.bind(null, csl));
+				}.bind(this, csl, curChildren));
 
 				var VIS_NONE	= 0x00000000;
 				var VIS_LEFT	= 0x00000001;
@@ -59,21 +65,23 @@
 				function isVisible(el)
 				{
 					el = $(el);
-					var elBounds = el.position();
-					elBounds.right = elBounds.left + el.outerWidth(true);
-					elBounds.bottom = elBounds.top + el.outerHeight(true);
+					var elInfo = el.position();
+					elInfo.el = el;
+					elInfo.right = elInfo.left + el.outerWidth(true);
+					elInfo.bottom = elInfo.top + el.outerHeight(true);
 
 					var p = $(el.prop("offsetParent"));
 					var pWidth = p.width();
 					var pHeight = p.height();
 
 					var visFlags = 0;
-					visFlags |= (elBounds.left >= 0 && elBounds.left <= pWidth) ? VIS_LEFT : 0;
-					visFlags |= (elBounds.top >= 0 && elBounds.top <= pHeight) ? VIS_TOP : 0;
-					visFlags |= (elBounds.right >= 0 && elBounds.right <= pWidth) ? VIS_RIGHT : 0;
-					visFlags |= (elBounds.bottom >= 0 && elBounds.bottom <= pHeight) ? VIS_BOTTOM: 0;
+					visFlags |= (elInfo.left >= 0 && elInfo.left <= pWidth) ? VIS_LEFT : 0;
+					visFlags |= (elInfo.top >= 0 && elInfo.top <= pHeight) ? VIS_TOP : 0;
+					visFlags |= (elInfo.right >= 0 && elInfo.right <= pWidth) ? VIS_RIGHT : 0;
+					visFlags |= (elInfo.bottom >= 0 && elInfo.bottom <= pHeight) ? VIS_BOTTOM: 0;
 					visFlags = (!(visFlags & (VIS_LEFT | VIS_RIGHT)) || !(visFlags & (VIS_TOP | VIS_BOTTOM))) ? VIS_NONE : visFlags;
-					return visFlags;
+					elInfo.visFlags = visFlags;
+					return elInfo;
 				}
 
 			}, [], true);

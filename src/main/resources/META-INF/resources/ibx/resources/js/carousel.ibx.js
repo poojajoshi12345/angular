@@ -82,15 +82,16 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 	_scrollTimer:null,
 	_scroll:function(startScrolling, beginning, incremental)
 	{
+		var scrollInfo = {toStart:beginning};
 		var itemsBox = this._itemsBox.data("ibxWidget");
-		if(startScrolling && itemsBox._trigger("beforescroll"))
+		if(startScrolling && itemsBox._trigger("beforescroll", null, scrollInfo))
 		{
 			if(incremental)
 			{
 				var nScroll = itemsBox.element.prop("scrollLeft");
 				var delta = nScroll + (beginning ? this.options.step : -this.options.step);
 				itemsBox.element.prop("scrollLeft", delta);
-				itemsBox._trigger("scroll");
+				itemsBox._trigger("scroll", null, scrollInfo);
 				this.refresh();
 			}
 			else
@@ -99,7 +100,7 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 				{
 					var sl = itemsBox.element.prop("scrollLeft");
 					itemsBox.element.prop("scrollLeft", sl + (beginning ? -this.options.step : this.options.step));
-					itemsBox._trigger("scroll");
+					itemsBox._trigger("scroll", null, scrollInfo);
 					this.refresh();
 				}.bind(this, itemsBox, beginning), this.options.stepRate); 
 			}
@@ -110,7 +111,7 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 		{
 			this._scrolling = false;
 			window.clearInterval(this._scrollTimer);
-			itemsBox._trigger("endscroll");
+			itemsBox._trigger("endscroll", null, scrollInfo);
 		}
 	},
 	_onPageMarkerClick:function(e)
