@@ -31,7 +31,7 @@
 				curChildren = [];
 				csl.on("ibx_beforescroll ibx_scroll ibx_endscroll", function(csl, curChildren, e, scrollInfo)
 				{
-					if(e.type == "ibx_beforescroll")
+					if(e.type == "ibx_beforescroll" && scrollInfo)
 					{
 						var curChildren = [];
 						var children = csl.ibxWidget("children");
@@ -45,10 +45,10 @@
 						var scrollChild = $(scrollInfo.toStart ? curChildren[0].el.prev() : curChildren[curChildren.length - 1].el.next());
 						var childInfo = getElementMetrics(scrollChild);
 						var itemsBox = $(e.target);
-						if(scrollInfo.toStart)
-							scroll = childInfo.left + itemsBox.prop("scrollLeft");
+						if(scrollInfo.forward)
+							scroll = childInfo.right - Math.round(itemsBox.width()) + itemsBox.prop("scrollLeft");
 						else
-							scroll = childInfo.right - itemsBox.width() + itemsBox.prop("scrollLeft");
+							scroll = childInfo.left + itemsBox.prop("scrollLeft");
 
 						itemsBox.prop("scrollLeft", scroll);
 						e.preventDefault();
@@ -92,6 +92,24 @@
 					return elInfo;
 				}
 
+				$(".test-button").on("click", function(e)
+				{
+					var select = $(".test-select");
+					select.ibxWidget("remove", ".ibx-select-item");
+					var date = new Date();
+					
+					var items = $();
+					for(var i = 0; i < 250; ++i)
+					{
+						var selItem = $("<div>").ibxSelectItem({"text":"Item" + i, glyph:"face", glyphClasses:"material-icons"});
+						select.ibxWidget("add", selItem, null, null, false);
+						items.add(selItem);
+					}
+					select.ibxWidget("refresh");
+					//select.ibxWidget("add", items, null, null, false).ibxWidget("refresh");
+					console.log(new Date() - date);
+				});
+
 			}, [], true);
 		</script>
 		<style type="text/css">
@@ -134,10 +152,17 @@
 				background-color:tomato;
 				xborder:1px solid black;
 			}
+
+			.test-select
+			{
+				flex:1 1 auto;
+			}
 		</style>
 	</head>
 	<body class="ibx-root">
-		<div class="main-box" data-ibx-type="ibxHBox" data-ibxp-align="center" data-ibxp-justify="center">
+		<div class="main-box" data-ibx-type="ibxHBox" data-ibxp-align="start" data-ibxp-justify="center">
+			<div class="test-button" data-ibx-type="ibxButton">Fill Select</div>
+			<div class="test-select" data-ibx-type="ibxSelect">	</div>
 			<div class="test-carousel" data-ibx-type="ibxHCarousel" data-ibxp-allow-drag-scrolling="true" data-ibxp-show-page-markers="false">
 			</div>
 		</div>
