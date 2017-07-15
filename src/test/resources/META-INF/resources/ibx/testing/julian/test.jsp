@@ -21,7 +21,7 @@
 			<jsp:include page="/WEB-INF/jsp/global/wf_globals.jsp" flush="false" />
 			ibx(function()
 			{
-				var csl = $(".test-carousel");
+				var csl = $(".test-csl");
 				for(i = 0; i < 20; ++i)
 				{
 					var label = $("<div tabIndex='0'>").ibxLabel({text:"Label " + i, justify:"center"}).addClass("test-label test-label-"+i);
@@ -130,7 +130,7 @@
 				bottom:0px;
 			}
 
-			.test-carousel
+			.test-csl
 			{
 				flex:1 1 auto;
 				margin:200px;
@@ -138,8 +138,9 @@
 				border:1px solid #ccc;
 			}
 
-			.test-carousel .ibx-csl-items-box
+			.test-csl .ibx-csl-items-box
 			{
+				height:140px;
 				background-color:pink;
 			}
 
@@ -160,10 +161,8 @@
 		</style>
 	</head>
 	<body class="ibx-root">
-		<div class="main-box" data-ibx-type="ibxHBox" data-ibxp-align="start" data-ibxp-justify="center">
-			<div class="test-button" data-ibx-type="ibxButton">Fill Select</div>
-			<div class="test-select" data-ibx-type="ibxSelect">	</div>
-			<div class="test-carousel" data-ibx-type="ibxHCarousel" data-ibxp-allow-drag-scrolling="true" data-ibxp-show-page-markers="false">
+		<div class="main-box" data-ibx-type="ibxHBox" data-ibxp-align="center" data-ibxp-justify="center">
+			<div class="test-csl" data-ibx-type="ibxHCarousel" data-ibxp-allow-drag-scrolling="true" data-ibxp-show-page-markers="false">
 			</div>
 		</div>
 	</body>

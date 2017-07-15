@@ -177,26 +177,28 @@ ibx.bindElements = function(elements)
 		var childBound = ibx.bindElements(childWidgets);
 		elBound = elBound.add(childBound);
 
-		//hook up member variables to the closest nameRoot
-		var memberName = element.attr("data-ibx-name");
-		if(memberName)
-		{
-			var nameRoot = element.closest(":ibxNameRoot");
-			var nameRootWidget = nameRoot.data("ibxWidget");
-			if(nameRootWidget)
-				nameRootWidget.member(memberName, element);//nameRoot created, set directly
-			else
-			{
-				//nameRoot not created, so store member variable to be set in widget._create
-				var memberData = nameRoot.data("_ibxPrecreateMemberVariables") || {};
-				memberData[memberName] = element;
-				nameRoot.data("_ibxPrecreateMemberVariables", memberData);
-			}
-		}
-
 		//then construct the parent element, if not already constructed.
 		if(element.is("[data-ibx-type]") && !element.is(":ibxWidget"))
 		{
+			//hook up member variables to the closest nameRoot
+			var memberName = element.attr("data-ibx-name");
+			if(memberName)
+			{
+				var nameRoot = element.closest(":ibxNameRoot");
+				var nameRootWidget = nameRoot.data("ibxWidget");
+
+				if(nameRootWidget)
+					nameRootWidget.member(memberName, element);//nameRoot created, set directly
+				else
+				{
+					//nameRoot not created, so store member variable to be set in widget._create
+					var memberData = nameRoot.data("_ibxPrecreateMemberVariables") || {};
+					memberData[memberName] = element;
+					nameRoot.data("_ibxPrecreateMemberVariables", memberData);
+				}
+			}
+
+			//construct the widget...problem is that there is a dependency on ibi widget's here...fix this!
 			var widgetType = element.attr("data-ibx-type");
 			if($.ibi[widgetType])
 			{

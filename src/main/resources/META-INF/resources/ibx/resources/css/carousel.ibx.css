@@ -73,3 +73,8 @@
 {
 	flex:0 0 auto;
 }
+
+.csl-buffer
+{
+	transition:width 2s;
+}

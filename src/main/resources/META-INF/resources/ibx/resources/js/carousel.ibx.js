@@ -33,7 +33,7 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 		var resBody = ibx.resourceMgr.getResource(".res-ibx-carousel-body", false);
 		this.element.append(resBody.children());
 		this.element.on("keydown", this._onItemsKeyEvent.bind(this));
-		ibx.bindElements(this.element);
+		ibx.bindElements(this.element.children());
 		this._prevBtn.on("mousedown mouseup mouseleave", this._onPrev.bind(this));
 		this._nextBtn.on("mousedown mouseup mouseleave", this._onNext.bind(this));
 		this._itemsBox.ibxDragScrolling({overflowY:"hidden"});
@@ -47,7 +47,7 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 	children:function(selector)
 	{
 		selector = selector || ".ibx-csl-item";
-		return this._itemsBox.children(selector);
+		return this._itemsBox.children(selector).not(".csl-buffer");
 	},
 	add:function(el, sibling, before, refresh)
 	{
@@ -154,12 +154,15 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 		};
 
 		var curChildren = [];
-		var children = this.children(el)
+		var children = this.children(el).not(".csl-buffer");
 		children.each(function(curChildren, idx, el)
 		{
 			var elInfo = this.getChildVisibility(el);
 			var visFlags = elInfo.visFlags;
 			
+			if(childInfo.endPartial && (visFlags == $.ibi.ibxCarousel.VIS_FLAGS.NONE))
+				childInfo.endHidden.push(elInfo);
+			else
 			if(!childInfo.startPartial && (visFlags == $.ibi.ibxCarousel.VIS_FLAGS.NONE))
 				childInfo.startHidden.push(elInfo);
 			else
@@ -167,25 +170,14 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 				childInfo.startPartial = elInfo
 			else
 			if(elInfo.visFlags == $.ibi.ibxCarousel.VIS_FLAGS.ALL)
-				curChildren.push(elInfo)
+				childInfo.visible.push(elInfo)
 			else
 			if(!(visFlags & $.ibi.ibxCarousel.VIS_FLAGS.RIGHT) && (visFlags & $.ibi.ibxCarousel.VIS_FLAGS.LEFT))
-				childInfo.startPartial = elInfo
-
+				childInfo.endPartial = elInfo
 		}.bind(this, curChildren));
-
-		var scrollChild = $(scrollInfo.toStart ? curChildren[0].el.prev() : curChildren[curChildren.length - 1].el.next());
-		var childInfo = getElementMetrics(scrollChild);
-		var itemsBox = $(e.target);
-		if(scrollInfo.forward)
-			scroll = childInfo.right - Math.round(itemsBox.width()) + itemsBox.prop("scrollLeft");
-		else
-			scroll = childInfo.left + itemsBox.prop("scrollLeft");
-
-		itemsBox.prop("scrollLeft", scroll);
-		e.preventDefault();
+		return childInfo;
 	},
-	getChildVisibility:function(child)
+	getChildVisibility:function(el)
 	{
 		var elInfo = this.getElementMetrics(el);
 		var p = $(el.offsetParent);
