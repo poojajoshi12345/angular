@@ -3,6 +3,14 @@
 	<strings>
 		<string-bundle>
 		<![CDATA[
+		{
+			"language":"en",
+			"strings":
+			{
+				"ITEM_TOOLTIP1":"title ='Title=\t\t {1}\nPath=\t\t {2}\nLast Modified=\t {3}'", 
+				"ITEM_TOOLTIP2":"title ='Title=\t\t {1}\nLast Modified=\t {2}'"
+			}
+		}		
 		]]>
 		</string-bundle>
 	</strings>

@@ -6,6 +6,7 @@ function buildviews(item_container, grid_container, folderlist, itemlist, column
 			sortCallBack, selectedCallBack, setCallBack, bSearch,
 			openFolderCallBack, runCallBack, isMobile, isPhone, foldermenu, filemenu, thisContext, fileSingleClick)
 {
+	
 	var divitem;	
 	$(item_container).empty();
 	$(grid_container).empty();

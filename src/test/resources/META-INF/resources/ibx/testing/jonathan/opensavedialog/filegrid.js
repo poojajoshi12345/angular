@@ -6,7 +6,7 @@ function filegrid()
 	
 	filegrid.prototype.init = function (parentarea, columns, sortCallBack, selectedCallBack, setCallBack, showColumns, 
 			openFolderCallBack, runCallBack, isMobile, thisContext, fileSingleClick)
-	{	debugger;		
+	{			
 			this.parentarea = parentarea;		
 			this.initialized = true;		
 			//this.gridarea=".grid-main";
@@ -80,9 +80,13 @@ function filegrid()
 						jcell=$(cell);
 						jcell.data("name", columns[i][2]);
 						jcell.data("type", columns[i][1]);
-						jcell.click(function(){
-							sortCallBack($(this).data("name"), $(this).data("type"));					    
-						});					
+						
+						
+						$(jcell).on("click", sortCallBack.bind(_this.thisContext, columns[i][2], columns[i][1], true));						
+						
+						//jcell.click(function(){
+						//	sortCallBack($(this).data("name"), $(this).data("type"));					    
+						//});					
 						if(icon == true)
 						{						
 							//$(jcell).css("padding-left", "30px");

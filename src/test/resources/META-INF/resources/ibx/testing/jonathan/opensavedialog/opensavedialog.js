@@ -11,9 +11,9 @@ $.widget("ibi.opensavedialog", $.ibi.ibxDialog,
         viewAs:"tiles",
         'dlgType': "save",
         title: "Save",
-        multiselect: false,
-        ses_auth_parm: null, 
-		ses_auth_val: null
+        fileTypes: "",
+        multiselect: false
+
     },
     _ibfs:null,
     _fileName: '',
@@ -26,6 +26,7 @@ $.widget("ibi.opensavedialog", $.ibi.ibxDialog,
     _loaded:null,
     _ses_auth_parm: null, 
 	_ses_auth_val: null,
+	_fileTypesList: [],
     _create:function()    
     {
         this._super();
@@ -37,18 +38,20 @@ $.widget("ibi.opensavedialog", $.ibi.ibxDialog,
         this.sdViewList.on('click', this._onViewAsList.bind(this));
         this.sdViewTiles.on('click', this._onViewAsTiles.bind(this));
         this.sdtxtFileTitle.on('ibx_textchanged', function (e){
-        	debugger;
+        	
         	this._fileTitle = this.sdtxtFileTitle.ibxWidget("option", "text");  
         	this._fileName = this._fileTitle.replace(/ /g,"_").toLowerCase();
         	this.sdtxtFileName.ibxWidget("option", "text", this._fileName);
         	this.btnOK.ibxWidget('option','disabled', this._fileName.length == 0);        	
         }.bind(this));
         this.sdtxtFileName.on('ibx_textchanged', function (e){
-        	debugger;
+        	
         	this._fileName = this.sdtxtFileName.ibxWidget("option", "text");
         	this.btnOK.ibxWidget('option','disabled', this._fileName.length == 0);        	
         }.bind(this));
-        
+        this.btnOK.on("click", function(e){
+        	debugger;
+        }.bind(this));
         
         this.listBox.hide();
         this.btnOK.ibxWidget('option', 'disabled', true);  
@@ -60,9 +63,8 @@ $.widget("ibi.opensavedialog", $.ibi.ibxDialog,
 		
 		this._applicationContext=applicationContext;
 		
-		
-        
-      
+		fileTypesList=this.options.fileTypes.split(";");
+		this._items.setFileTypesList(fileTypesList);
 		
     },
     _init:function()
@@ -130,7 +132,8 @@ $.widget("ibi.opensavedialog", $.ibi.ibxDialog,
     {    
         if (typeof (value) == "undefined")
         {
-        	return this._fileName;            
+        	var fullPath = this.options.ctxPath + "/" + this._fileName;
+        	return fullPath;           
         }
         else
         {
@@ -138,6 +141,19 @@ $.widget("ibi.opensavedialog", $.ibi.ibxDialog,
             this.stdtxtFileName.ibxWidget("option", "text", this._fileName);
             return this;
         }
+    },
+    ibfsItems: function ()
+    {
+    	
+    	var items = this._items.getAllSelectedItems();
+    	if(items.length == 0)
+    	{ 
+    		var fullPath = this.fileName();
+    		var item = this._items.findItemByPath(fullPath);
+    		if(item)items.push(item);
+    		if(fullPath)items[0]=this._items.findItemByPath(fullPath);
+    	}	
+    	return items;
     },
     path: function (value)
     {
@@ -178,7 +194,9 @@ $.widget("ibi.opensavedialog", $.ibi.ibxDialog,
     {
     	this._super(); 
     	if(this.options.ctxPath.length > 0)
-    	{	
+    	{
+    		this._fileTypesList=this.options.fileTypes.split(";");
+    		this._items.setFileTypesList(this._fileTypesList);
 	    	if(this._ibfs)
 	    		this.refreshit();
 	    	else
@@ -221,17 +239,22 @@ $.widget("ibi.opensavedialog", $.ibi.ibxDialog,
 		buildviews(this.tilesBox, this.listBox, this._items.getFolderList(), this._items.getItemList(), 
 				columns,
 				this._items.getSortedOrder(), this._items.getSortedValue(), this._items.getSortedValueType(),
-				this._items.sortItems, this._items.toggleSelected, this._items.setCallBack, bSearch, this.openFolder, 
+				this.sortItems, this._items.toggleSelected, this._items.setCallBack, bSearch, this.openFolder, 
 				this.fileDoubleClick, false, false, this.foldermenu, this.filemenu, this, this.fileSingleClick);
 			
 	
+    },
+    sortItems:function(key, type, toggle)
+    {
+    		this._items.sortItems(key, type, toggle);
+    		this.updateViews();    		
     },
     openFolder:function(item)
     {
     	this.refreshit(item.fullPath);    	
     },
     selectItem:function(item)
-    {debugger;
+    {
     	this.sdtxtFileTitle.ibxWidget("option", "text", item.description);
     	this.sdtxtFileName.ibxWidget("option", "text", item.name);
     	
@@ -242,11 +265,11 @@ $.widget("ibi.opensavedialog", $.ibi.ibxDialog,
     	
     },    
     fileSingleClick: function(item)
-    {debugger;
+    {
     	this.selectItem(item);
     },
     fileDoubleClick: function(item)
-    {debugger;
+    {
     	this.selectItem(item);
     	this.close({ibfsItem:item});
     },    

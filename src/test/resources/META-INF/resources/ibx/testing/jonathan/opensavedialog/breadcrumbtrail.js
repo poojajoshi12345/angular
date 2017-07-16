@@ -122,15 +122,10 @@ $.widget("ibi.breadCrumbTrail", $.ibi.ibxHBox,
 					// is this item on the currentPath?
 					var ii = xoptions.currentPath.indexOf(ichildren[i].fullPath);
 					if(ii >= 0)cmenuitem.css("font-weight","bold");	
-					cmenuitem.data("ibfsPath",ichildren[i].fullPath);
-					cmenuitem.data("options", xoptions);	
-					var path = ichildren[i].fullPath;
-					cmenuitem.on("ibx_menu_item_click",function(e)
-					{
-						var path = $(e.target).data("ibfsPath");
-						var options = $(e.target).data("options");	
-						this.refreshit(path);
-					}.bind(xoptions.thisContext));									
+					//cmenuitem.data("ibfsPath",ichildren[i].fullPath);
+					//cmenuitem.data("options", xoptions);	
+					var path = ichildren[i].fullPath;					
+					cmenuitem.on("ibx_menu_item_click", xoptions.refreshFolder.bind(xoptions.thisContext,path));
 					cmenu.append(cmenuitem);							
 				}			
 				cmenu.ibxMenu("open").position(options);	

@@ -25,7 +25,8 @@
 				
 				$(".btn-show-save-dialog").on("click", function()
 				{		
-					var saveDlg = ibx.resourceMgr.getResource('.save-dialog-resources', true);					
+					var saveDlg = ibx.resourceMgr.getResource('.save-dialog-resources', true);
+					saveDlg.ibxWidget('option', 'fileTypes', "fex;pgx");										
 					saveDlg.ibxWidget('option', 'ctxPath', "IBFS:/WFC/Repository/Public");
 					saveDlg.ibxWidget('open');
 					saveDlg.on("ibx_beforeclose", function(e, closeData)
@@ -33,10 +34,14 @@
 						debugger;
 						//return false;
 					}).on("ibx_close", function (e, closeData)
-					{
+					{						
 						debugger;
-						var fileName = saveDlg.ibxWidget('fileName');			
-						var description = saveDlg.ibxWidget('fileTitle');
+						if(closeData != "cancel")
+						{
+							var fileName = saveDlg.ibxWidget('fileName');			
+							var description = saveDlg.ibxWidget('fileTitle');
+							var ibfsItems = saveDlg.ibxWidget('ibfsItems');
+						}	
 					});
 					
 					

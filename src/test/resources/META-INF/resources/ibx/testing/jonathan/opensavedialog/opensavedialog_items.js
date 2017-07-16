@@ -11,11 +11,12 @@ function Items()
 	this.sortedValueType = "alpha";
 	this.sortedOrder = "up";
 	this.multiSelectAllowed = true;
+	this.fileTypesList = [];
 	var _this = this;
 	
 	protoItems.clearItems = function()
 	{
-		_this.itemList.length=0;
+		_this.itemList.length=0;		
 		_this.folderList.length=0;			
 	};
 	protoItems.getItemList = function()
@@ -26,11 +27,26 @@ function Items()
 	{
 		return _this.folderList;
 	};
+	protoItems.setFileTypesList = function(fileTypes)
+	{
+		_this.fileTypesList = fileTypes;
+	};	
 	protoItems.addItem = function(item)
 	{
-		item.selected = false;		
-		item.jqObject = null;
-		_this.itemList.push(item);
+		addFlag = true;
+		if(_this.fileTypesList.length > 0)
+		{
+			var extension = item.extension;
+			if(!extension && item.typeDescription == "Page Bundle")extension = "pgx";
+			var i = _this.fileTypesList.indexOf(extension);
+			if(i == -1)addFlag = false				
+		}	
+		if(addFlag)
+		{	
+			item.selected = false;		
+			item.jqObject = null;
+			_this.itemList.push(item);
+		}	
 	};
 	protoItems.addFolderItem = function(item)
 	{
@@ -427,8 +443,7 @@ function Items()
 				_this.folderList = _this._sortit(key, type, _this.folderList, _this.sortedOrder);	
 			
 		  	_this.sortedValue=key;
-		  	_this.sortedValueType=type;
-		  	home_globals.homePage.updateViews();	  	
+		  	_this.sortedValueType=type;		  	  	
 		}
 	};
 	
