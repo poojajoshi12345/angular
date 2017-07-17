@@ -290,7 +290,7 @@ $.widget("ibi.opensavedialog", $.ibi.ibxDialog,
     	 this.options.ctxPath="";
     },    
     sortFieldMenu:function(contextitem)
-    {	debugger;
+    {	
     	var options = 
     	{
     		my: "right top",
