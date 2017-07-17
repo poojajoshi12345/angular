@@ -317,6 +317,7 @@
 		<script-file src="./itemboxes_control_home.js" loadContext="bundle"/>
 		<script-file src="./filegrid.js" loadContext="bundle"/>
 		<script-file src="./breadcrumbtrail.js" loadContext="bundle"/>
+		<script-file src="./search_home.js" loadContext="bundle"/>
 		<script-block>
 		<![CDATA[
 			

@@ -29,6 +29,7 @@ $.widget("ibi.opensavedialog", $.ibi.ibxDialog,
 	_psortFieldsMenu: null,
 	_fileTypesList: [],
 	_noCheck : false,
+	_textSearch: null,
 	_columns : [
 	       			["", "icon", "", true, ""],
 	       			["Default Sort","default","default",false,""],
@@ -77,6 +78,7 @@ $.widget("ibi.opensavedialog", $.ibi.ibxDialog,
 		
 		fileTypesList=this.options.fileTypes.split(";");
 		this._items.setFileTypesList(fileTypesList);
+		this._textSearch = new TextSearch(".sd-txt-search",".sd-btn-clear-search", this.clearsearch, this.searchfolder, this);
 		
     },
     _init:function()
@@ -92,11 +94,11 @@ $.widget("ibi.opensavedialog", $.ibi.ibxDialog,
     		var items = this.ibfsItems();
     		if(items.length > 0)
     		{    			
-	    		var text = sformat("File {1} already exists.  Overwrite?",items[0].fullPath);    			
+	    		var text = sformat("File {1} already exists.  Replace it?",items[0].fullPath);    			
 				var options = 
 				{
 					type:"std warning",
-					caption:"Overwrite?",
+					caption:"Confirm Save",
 					buttons:"okcancel",		
 					messageOptions:{text:text}
 				};
@@ -120,9 +122,7 @@ $.widget("ibi.opensavedialog", $.ibi.ibxDialog,
 	},	
     _onViewAsList:function(e)
     {
-        var rg = $(e.target);
-        //this.option("viewAs", rg.ibxWidget("userValue"));
-        //this.option("viewAs", "list");
+        var rg = $(e.target);        
         this.sdViewList.toggle();
         this.sdViewTiles.toggle();  
         this.listBox.show();
@@ -130,9 +130,7 @@ $.widget("ibi.opensavedialog", $.ibi.ibxDialog,
     },
     _onViewAsTiles:function(e)
     {
-        var rg = $(e.target);
-        //this.option("viewAs", rg.ibxWidget("userValue"));
-        //this.option("viewAs", "tiles");
+        var rg = $(e.target);        
         this.sdViewList.toggle();
         this.sdViewTiles.toggle(); 
         this.tilesBox.show();
@@ -264,7 +262,7 @@ $.widget("ibi.opensavedialog", $.ibi.ibxDialog,
     updateViews:function()
     {
     	
-	    var bSearch = false;
+	    var bSearch = this._bSearch;
 		var filter = "";
 			
 		
@@ -360,7 +358,18 @@ $.widget("ibi.opensavedialog", $.ibi.ibxDialog,
     		this._psortFieldsMenu = cmenu;
     	}
     	$(this._psortFieldsMenu).ibxMenu("open").position(options);    	
-    },       	
+    },  
+    searchfolder:function(filter)
+	{						
+		var searchString = getSearchString(this.options.ctxPath, "description" , filter, true);
+		this._bSearch = true;
+		this.refreshit(searchString);
+	},
+	clearsearch:function()
+	{
+		this._bSearch = false;
+		this.refreshit(this.options.ctxPath);
+	},
     refreshit:function(path)
     {
     	//this._super();
@@ -370,14 +379,16 @@ $.widget("ibi.opensavedialog", $.ibi.ibxDialog,
 		var depth = null;
 		var flatten = null;
 		
-		if(path)this.options.ctxPath = path;
-		
 		if(bSearch)
 		{
 			depth = 10;
 			flatten = true;
 		}	
-		
+		else 
+		{	
+			if(path)this.options.ctxPath = path;
+		}
+		if(!path)path = this.options.ctxPath;
 		this._items.clearItems();
 		
 		this._breadCrumbTrail.ibxWidget(
@@ -389,7 +400,8 @@ $.widget("ibi.opensavedialog", $.ibi.ibxDialog,
 	        thisContext: this
 	    }
 		);
-		this._ibfs.listItems(this.options.ctxPath, depth, flatten, { asJSON: true, clientSort: false , eError: 'fatal_error'}).done(function (exInfo)		
+		
+		this._ibfs.listItems(path, depth, flatten, { asJSON: true, clientSort: false , eError: 'fatal_error'}).done(function (exInfo)		
 		{
 			
 			if(exInfo.result.length == 0)
