@@ -26,7 +26,19 @@ $.widget("ibi.opensavedialog", $.ibi.ibxDialog,
     _loaded:null,
     _ses_auth_parm: null, 
 	_ses_auth_val: null,
+	_psortFieldsMenu: null,
 	_fileTypesList: [],
+	_columns : [
+	       			["", "icon", "", true, ""],
+	       			["Title","alpha", "description", true, ""],
+	       			["Filename", "alpha", "name", false, ""],	       		
+	       			["Summary","alpha", "summary",true, ""],
+	       			["Last Modified","date", "lastModified",true, ""],	       			
+	       			["Created On","date","createdOn", false, ""],
+	       			["File Size","number", "length", true, ""],
+	       			["Owner", "alpha", "createdBy", false, ""],	       			
+	       			["", "menu", "", true, ""]	       		
+	       		],
     _create:function()    
     {
         this._super();
@@ -219,28 +231,14 @@ $.widget("ibi.opensavedialog", $.ibi.ibxDialog,
     	
 	    var bSearch = false;
 		var filter = "";
-		var columns = [
-	       			["", "icon", "", true, ""],
-	       			["Title","alpha", "description", true, ""],
-	       			["Filename", "alpha", "name", false, ""],	       		
-	       			["Summary","alpha", "summary",true, ""],
-	       			["Last Modified","date", "lastModified",true, ""],	       			
-	       			["Created On","date","createdOn", false, ""],
-	       			["File Size","number", "length", true, ""],
-	       			["Owner", "alpha", "createdBy", false, ""],	       			
-	       			["", "menu", "", true, ""]	       		
-	       		];
-		//if(home_globals.textSearch)
-		//   filter = home_globals.textSearch.getSearchText();
-		//if(filter && filter.length > 0)bSearch = true;
-		
-		
+			
 		
 		buildviews(this.tilesBox, this.listBox, this._items.getFolderList(), this._items.getItemList(), 
-				columns,
+				this._columns,
 				this._items.getSortedOrder(), this._items.getSortedValue(), this._items.getSortedValueType(),
 				this.sortItems, this._items.toggleSelected, this._items.setCallBack, bSearch, this.openFolder, 
-				this.fileDoubleClick, false, false, this.foldermenu, this.filemenu, this, this.fileSingleClick);
+				this.fileDoubleClick, false, false, this.foldermenu, this.filemenu, this, this.fileSingleClick,
+				this.sortFieldMenu);
 			
 	
     },
@@ -290,7 +288,44 @@ $.widget("ibi.opensavedialog", $.ibi.ibxDialog,
     	 this._bSearch=false;    	 
     	 this._loaded=null;
     	 this.options.ctxPath="";
-    },
+    },    
+    sortFieldMenu:function(contextitem)
+    {	debugger;
+    	var options = 
+    	{
+    		my: "right top",
+    		at: "left bottom",
+    		collision: "fit",
+    		of:contextitem
+    	};
+    	if(!this._psortFieldsMenu)
+    	{	
+    		// create the menu....	
+    		var columns = this._columns;
+    		var cmenu = $("<div>").ibxMenu();
+    		for (i=0; i < columns.length; i++)
+    		{
+    			var type=columns[i][1];
+    			if(type != "icon" && type != "menu")
+    			{
+    					var cmenuitem = $("<div>").ibxMenuItem();
+    					cmenuitem.ibxMenuItem("option", "text", columns[i][0]);				
+    					cmenuitem.data("row",i);
+    					cmenuitem.on("ibx_menu_item_click",function(e)
+    					{
+    						var row = $(e.target).data("row");
+    						this._items.setSortedValue(columns[row][2]);
+    						this._items.setSortedValueType(columns[row][1]);
+    						this._items.sortItems(columns[row][2], columns[row][1], false);
+    						this.updateViews();
+    					}.bind(this));									
+    					cmenu.append(cmenuitem);
+    			}			
+    		}
+    		this._psortFieldsMenu = cmenu;
+    	}
+    	$(this._psortFieldsMenu).ibxMenu("open").position(options);    	
+    },       	
     refreshit:function(path)
     {
     	//this._super();
@@ -319,34 +354,30 @@ $.widget("ibi.opensavedialog", $.ibi.ibxDialog,
 	        thisContext: this
 	    }
 		);
-		//this._breadCrumbTrail.ibxWidget("option", "currentPath", this.options.ctxPath);			
-		
-		
-		
-			this._ibfs.listItems(this.options.ctxPath, depth, flatten, { asJSON: true, clientSort: false , eError: 'fatal_error'}).done(function (exInfo)		
+		this._ibfs.listItems(this.options.ctxPath, depth, flatten, { asJSON: true, clientSort: false , eError: 'fatal_error'}).done(function (exInfo)		
+		{
+			
+			if(exInfo.result.length == 0)
 			{
-				
-				if(exInfo.result.length == 0)
+				this.checkForError(exInfo);				
+			}
+			$.each(exInfo.result, function (idx, item)
+			{					
+				if(item.container && item.type != "PGXBundle")
 				{
-					this.checkForError(exInfo);				
-				}
-				$.each(exInfo.result, function (idx, item)
-				{					
-					if(item.container && item.type != "PGXBundle")
-					{
-						this._items.addFolderItem(item);
-						
-					}	
-					else
-					{
-						this._items.addItem(item);
+					this._items.addFolderItem(item);
 					
-					}	
-				}.bind(this));				
-				//cb_function("doneadding", null);
+				}	
+				else
+				{
+					this._items.addItem(item);
 				
-				this.updateViews();
-			}.bind(this));
+				}	
+			}.bind(this));				
+			//cb_function("doneadding", null);
+			
+			this.updateViews();
+		}.bind(this));
      }	
     }
 });

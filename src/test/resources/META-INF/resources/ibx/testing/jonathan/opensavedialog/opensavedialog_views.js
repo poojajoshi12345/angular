@@ -4,7 +4,7 @@
 
 function buildviews(item_container, grid_container, folderlist, itemlist, columns, sortedorder, sortedvalue, sortedvaluetype,
 			sortCallBack, selectedCallBack, setCallBack, bSearch,
-			openFolderCallBack, runCallBack, isMobile, isPhone, foldermenu, filemenu, thisContext, fileSingleClick)
+			openFolderCallBack, runCallBack, isMobile, isPhone, foldermenu, filemenu, thisContext, fileSingleClick, sortFieldMenu)
 {
 	
 	var divitem;	
@@ -29,7 +29,7 @@ function buildviews(item_container, grid_container, folderlist, itemlist, column
 				doubleclick: openFolderCallBack,
 				toggleSelected: selectedCallBack,
 				setCallBack: setCallBack,
-				thisContext: thisContext
+				thisContext: thisContext				
 			});		
 			$(item_container).append(divitem);			
 		}
@@ -78,7 +78,7 @@ function buildviews(item_container, grid_container, folderlist, itemlist, column
 			$(item_container).append(divitem);			
 		}
 	}						
-	updateTitleButtons(item_container, sortedorder, sortedvalue, sortedvaluetype, columns);						
+	updateTitleButtons(item_container, sortedorder, sortedvalue, sortedvaluetype, columns, thisContext, sortFieldMenu);						
 	ibx.bindElements(item_container);	
 	
 	var showColumns = [];
@@ -159,7 +159,7 @@ function addgriditem(grid, ibfsitem, glyph, folder, row)
 		];
 	grid.addrow(data, ibfsitem, folder, row);	
 };
-function updateTitleButtons(item_container, sortedorder, sortedvalue, sortedvaluetype, columns)
+function updateTitleButtons(item_container, sortedorder, sortedvalue, sortedvaluetype, columns, thisContext, sortFieldMenu)
 {
 	var sortedvalueText = "";
 	
@@ -179,12 +179,12 @@ function updateTitleButtons(item_container, sortedorder, sortedvalue, sortedvalu
 	$(".content-title-label-files").find(".content-title-btn-name").click(function() {
 		sortfieldMenu(this);
 	});
-	$(".content-title-label-folders").find(".content-title-btn-name").click(function() {
-		sortfieldMenu(this);
-	});
-	$(".content-title-label-files").find(".content-title-btn-name").click(function() {
-		sortfieldMenu(this);
-	});
+	var theButton = $(".content-title-label-folders").find(".content-title-btn-name");
+	$(theButton).on("click", sortFieldMenu.bind(thisContext,theButton));
+	
+	theButton = $(".content-title-label-files").find(".content-title-btn-name");
+	$(theButton).on("click", sortFieldMenu.bind(thisContext,theButton));
+	
 	$(".content-title-label-files").find(".content-title-btn-arrow").click(function() {
 		home_globals.Items.sortItems(sortedvalue, sortedvaluetype, true);
 	});
