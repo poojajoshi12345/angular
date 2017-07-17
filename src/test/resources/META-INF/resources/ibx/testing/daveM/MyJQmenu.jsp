@@ -7,7 +7,7 @@
 %><%@ page import="com.ibi.common.WfDetectBrowserBean"
 %><%@ taglib uri="localizedstring" prefix="localizedstring"
 %><%@ taglib prefix="spring" uri="http://www.springframework.org/tags"
-%><jsp:useBean id="browser" class="com.ibi.common.WfDetectBrowserBean" scope="request"
+%><jsp:useBean id="browser" class="com.ibi.web.bean.WFDetectBrowserBean" scope="request"
 ></jsp:useBean><%=browser.getDocType()%>
 <jsp:useBean id="WEBFOCUS_SECURITY_SETTING" class="com.ibi.webapp.security.config.WFSecuritySetting" scope="request"></jsp:useBean>
 <jsp:useBean id="wfLanguage" class="com.ibi.common.WfLanguageBean" scope="request">
