@@ -28,6 +28,7 @@ $.widget("ibi.opensavedialog", $.ibi.ibxDialog,
 	_ses_auth_val: null,
 	_psortFieldsMenu: null,
 	_fileTypesList: [],
+	_noCheck : false,
 	_columns : [
 	       			["", "icon", "", true, ""],
 	       			["Default Sort","default","default",false,""],
@@ -62,9 +63,7 @@ $.widget("ibi.opensavedialog", $.ibi.ibxDialog,
         	this._fileName = this.sdtxtFileName.ibxWidget("option", "text");
         	this.btnOK.ibxWidget('option','disabled', this._fileName.length == 0);        	
         }.bind(this));
-        this.btnOK.on("click", function(e){
-        	debugger;
-        }.bind(this));
+        
         
         this.listBox.hide();
         this.btnOK.ibxWidget('option', 'disabled', true);  
@@ -84,6 +83,41 @@ $.widget("ibi.opensavedialog", $.ibi.ibxDialog,
     {
     	this._super();
     },
+    close:function(closeInfo)
+	{    	
+    	  	
+    	if(!this._noCheck && this.options.dlgType == "save" && closeInfo != "cancel")
+    	{	
+    		var doSuper = true;
+    		var items = this.ibfsItems();
+    		if(items.length > 0)
+    		{    			
+	    		var text = sformat("File {1} already exists.  Overwrite?",items[0].fullPath);    			
+				var options = 
+				{
+					type:"std warning",
+					caption:"Overwrite?",
+					buttons:"okcancel",		
+					messageOptions:{text:text}
+				};
+				var dlg = $.ibi.ibxDialog.createMessageDialog(options);			
+				dlg.ibxDialog("open").on("ibx_close", function(e, btn)
+				{
+						if(btn=="ok")
+						{
+							this._noCheck = true;
+							this.close("ok");							
+						}	
+						
+				}.bind(this));
+		    	
+    		}
+    		else
+    			this._super(closeInfo);
+		}
+    	else
+    		this._super(closeInfo);
+	},	
     _onViewAsList:function(e)
     {
         var rg = $(e.target);
@@ -164,7 +198,7 @@ $.widget("ibi.opensavedialog", $.ibi.ibxDialog,
     		var fullPath = this.fileName();
     		var item = this._items.findItemByPath(fullPath);
     		if(item)items.push(item);
-    		if(fullPath)items[0]=this._items.findItemByPath(fullPath);
+    		//if(fullPath)items[0]=this._items.findItemByPath(fullPath);
     	}	
     	return items;
     },
@@ -270,7 +304,7 @@ $.widget("ibi.opensavedialog", $.ibi.ibxDialog,
     fileDoubleClick: function(item)
     {
     	this.selectItem(item);
-    	this.close({ibfsItem:item});
+    	this.close("dblclick");
     },    
     foldermenu:function()
     {
