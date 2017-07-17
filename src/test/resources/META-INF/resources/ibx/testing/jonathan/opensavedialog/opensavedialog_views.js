@@ -176,9 +176,7 @@ function updateTitleButtons(item_container, sortedorder, sortedvalue, sortedvalu
 	$(".content-title-label-folders").find(".content-title-btn-arrow").ibxWidget("option", "glyph", sorticon);	
 	$(".content-title-label-files").find(".content-title-btn-name").ibxWidget("option", "text", sortedvalueText);
 	$(".content-title-label-files").find(".content-title-btn-arrow").ibxWidget("option", "glyph", sorticon);
-	//$(".content-title-label-files").find(".content-title-btn-name").click(function() {
-	//	sortfieldMenu(this);
-	//});
+	
 	var theButton = $(".content-title-label-folders").find(".content-title-btn-name");
 	$(theButton).on("click", sortFieldMenu.bind(thisContext,theButton));
 	
@@ -187,14 +185,10 @@ function updateTitleButtons(item_container, sortedorder, sortedvalue, sortedvalu
 	
 	theButton = $(".content-title-label-folders").find(".content-title-btn-arrow");
 	$(theButton).on("click", sortItems.bind(thisContext, sortedvalue, sortedvaluetype, true));
-	//$(".content-title-label-files").find(".content-title-btn-arrow").click(function() {
-	//	home_globals.Items.sortItems(sortedvalue, sortedvaluetype, true);
-	//});
+	
 	theButton = $(".content-title-label-files").find(".content-title-btn-arrow");
 	$(theButton).on("click", sortItems.bind(thisContext, sortedvalue, sortedvaluetype, true));
-	//$(".content-title-label-folders").find(".content-title-btn-arrow").click(function() {
-	//	home_globals.Items.sortItems(sortedvalue, sortedvaluetype, true);
-	//});
+	
 	
 };
 					
