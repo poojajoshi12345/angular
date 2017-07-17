@@ -4,7 +4,7 @@
 %><%@ page import="org.apache.commons.lang.StringEscapeUtils"
 %><%@ page import="com.ibi.ibt.WFLicense"
 %><%@ page import="com.ibi.ibfs.languages.IBFSLanguageObject"
-%><%@ page import="com.ibi.common.WfDetectBrowserBean"
+%><%@ page import="com.ibi.web.bean.WFDetectBrowserBean"
 %><%@ taglib uri="localizedstring" prefix="localizedstring"
 %><%@ taglib prefix="spring" uri="http://www.springframework.org/tags"
 %><jsp:useBean id="browser" class="com.ibi.web.bean.WFDetectBrowserBean" scope="request"
