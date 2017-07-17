@@ -30,6 +30,7 @@ $.widget("ibi.opensavedialog", $.ibi.ibxDialog,
 	_fileTypesList: [],
 	_columns : [
 	       			["", "icon", "", true, ""],
+	       			["Default Sort","default","default",false,""],
 	       			["Title","alpha", "description", true, ""],
 	       			["Filename", "alpha", "name", false, ""],	       		
 	       			["Summary","alpha", "summary",true, ""],
@@ -306,7 +307,7 @@ $.widget("ibi.opensavedialog", $.ibi.ibxDialog,
     		for (i=0; i < columns.length; i++)
     		{
     			var type=columns[i][1];
-    			if(type != "icon" && type != "menu")
+    			 if(type != "icon" && type != "menu" && columns[i][2] != "default")
     			{
     					var cmenuitem = $("<div>").ibxMenuItem();
     					cmenuitem.ibxMenuItem("option", "text", columns[i][0]);				

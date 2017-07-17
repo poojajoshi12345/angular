@@ -171,7 +171,9 @@ function updateTitleButtons(item_container, sortedorder, sortedvalue, sortedvalu
 	if(sortedorder == "up")sorticon="arrow_upward";
 	else if(sortedorder == "down")sorticon="arrow_downward";
 	
-		
+	$(".content-title-label-folders").find(".content-title-btn-arrow").ibxWidget("option", "disabled", sortedvalue == "default");
+	$(".content-title-label-files").find(".content-title-btn-arrow").ibxWidget("option", "disabled", sortedvalue == "default");	
+	
 	$(".content-title-label-folders").find(".content-title-btn-name").ibxWidget("option", "text", sortedvalueText);
 	$(".content-title-label-folders").find(".content-title-btn-arrow").ibxWidget("option", "glyph", sorticon);	
 	$(".content-title-label-files").find(".content-title-btn-name").ibxWidget("option", "text", sortedvalueText);

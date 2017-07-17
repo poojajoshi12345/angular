@@ -6,8 +6,10 @@ function Items()
 	var protoItems = Items.prototype;	
 	this.itemList = [];
 	this.folderList = [];
+	this.itemListDefault = [];
+	this.folderListDefault = [];
 	this.allFolders = [];
-	this.sortedValue =	"description";
+	this.sortedValue =	"default";
 	this.sortedValueType = "alpha";
 	this.sortedOrder = "up";
 	this.multiSelectAllowed = true;
@@ -17,7 +19,9 @@ function Items()
 	protoItems.clearItems = function()
 	{
 		_this.itemList.length=0;		
-		_this.folderList.length=0;			
+		_this.folderList.length=0;
+		_this.itemListDefault.length=0;		
+		_this.folderListDefault.length=0;		
 	};
 	protoItems.getItemList = function()
 	{
@@ -46,6 +50,7 @@ function Items()
 			item.selected = false;		
 			item.jqObject = null;
 			_this.itemList.push(item);
+			_this.itemListDefault.push(item);
 		}	
 	};
 	protoItems.addFolderItem = function(item)
@@ -54,6 +59,7 @@ function Items()
 		item.jqObject = null;
 		_this.folderList.push(item);
 		_this.allFoldersAdd(item);
+		_this.folderListDefault.push(item);
 	};
 	protoItems.getFolderCount = function()
 	{
@@ -89,7 +95,7 @@ function Items()
 	};
 	protoItems.setSortedDefaults = function()
 	{
-		_this.sortedValue = "description";
+		_this.sortedValue = "default";
 		_this.sortedOrder = "up";
 	};
 	
@@ -428,6 +434,33 @@ function Items()
 	protoItems.sortItems = function(key, type, toggle)
 	{	
 		_this.removeAllSelections(null);
+		if(key == "default")
+		{
+			var ilen = _this.folderListDefault.length;
+			_this.folderList.length = 0;
+			if(ilen > 0)
+			{
+				for (i=0; i < ilen; i++)
+				{	
+					var item = _this.folderListDefault[i];
+					_this.folderList.push(item);
+				}							
+			}			
+			ilen=_this.itemListDefault.length;	
+			_this.itemList.length = 0;
+			if(ilen > 0)
+			{
+				for (i=0; i < ilen; i++)
+				{
+					var item=_this.itemListDefault[i];
+					_this.itemList.push(item);						
+				}							
+			}
+			_this.sortedValue=key;
+			_this.sortedOrder = "up";			
+			return;
+		}	
+			
 		if(toggle == null || toggle == true)
 		{	
 			if(_this.sortedOrder=="up")

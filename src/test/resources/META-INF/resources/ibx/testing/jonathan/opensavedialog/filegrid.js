@@ -77,19 +77,18 @@ function filegrid()
 							
 						cell="<div class='grid-cell-title' data-ibx-type='ibxButtonSimple' data-ibxp-icon-position='right' data-ibxp-glyph-classes='material-icons'";
 						cell+=sformat(" data-ibxp-glyph='{1}' data-ibxp-text='{2}' </div>", sorticon, columns[i][0]);
-						jcell=$(cell);
-						jcell.data("name", columns[i][2]);
-						jcell.data("type", columns[i][1]);
+						jcell=$(cell);											
 						
-						
-						$(jcell).on("click", sortCallBack.bind(_this.thisContext, columns[i][2], columns[i][1], true));						
-						
-						//jcell.click(function(){
-						//	sortCallBack($(this).data("name"), $(this).data("type"));					    
-						//});					
+						if(columns[i][2] == "description" && columns[i][4] == "up")
+						{
+							jcell.on("click", sortCallBack.bind(_this.thisContext, "default", "", true));							
+						}
+						else
+						{
+							jcell.on("click", sortCallBack.bind(_this.thisContext, columns[i][2], columns[i][1], true));							
+						}				
 						if(icon == true)
-						{						
-							//$(jcell).css("padding-left", "30px");
+						{							
 							icon = false;
 						}
 						
