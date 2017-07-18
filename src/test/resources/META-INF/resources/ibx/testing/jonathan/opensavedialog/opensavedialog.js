@@ -156,7 +156,24 @@ $.widget("ibi.opensavedialog", $.ibi.ibxDialog,
         this.sdViewTiles.toggle(); 
         this.tilesBox.show();
         this.listBox.hide();
+        if(this.isMicrosoft())
+		{
+			this.MicrosoftRefresh(100);			
+		}
     },
+    isMicrosoft:function()
+	{
+		if (document.documentMode)return true;
+		else return false;		
+	},
+	MicrosoftRefresh:function(n)
+	{
+		$(".sd-files-box-files").css("border", "solid 1px transparent");		
+		setTimeout(function()
+	    {
+	        $(".sd-files-box-files").css("border", "solid 0px transparent");	        
+	    }, n);
+	},
     
     _onFolderClick:function(e)
     {
@@ -297,6 +314,11 @@ $.widget("ibi.opensavedialog", $.ibi.ibxDialog,
 				this.sortItems, this._items.toggleSelected, this._items.setCallBack, bSearch, this.openFolder, 
 				this.fileDoubleClick, false, false, this.foldermenu, this.filemenu, this, this.fileSingleClick,
 				this.sortFieldMenu, this.columnmenu);
+		
+		if(this.isMicrosoft())
+		{
+			this.MicrosoftRefresh(100);			
+		}
 			
 	
     },
