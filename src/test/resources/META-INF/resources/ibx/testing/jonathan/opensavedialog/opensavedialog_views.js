@@ -148,6 +148,7 @@ function addgriditem(grid, ibfsitem, glyph, folder, row)
 	var data=
 		[
 		 glyph,
+		 "",
 		 ibfsitem.description,
 		 ibfsitem.name,
 		 summary,
