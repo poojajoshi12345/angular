@@ -1,6 +1,8 @@
 /*Copyright 1996-2017 Information Builders, Inc. All rights reserved.*/
 // $Revision$:
 
+String.prototype.endsWith = function(str) 
+{return (this.match(str+"$")==str);};
 function Items()
 {
 	var protoItems = Items.prototype;	

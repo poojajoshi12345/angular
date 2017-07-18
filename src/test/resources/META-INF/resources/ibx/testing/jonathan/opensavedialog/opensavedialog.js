@@ -259,6 +259,7 @@ $.widget("ibi.opensavedialog", $.ibi.ibxDialog,
     	}
     	
     },
+    
     updateViews:function()
     {
     	
@@ -312,6 +313,7 @@ $.widget("ibi.opensavedialog", $.ibi.ibxDialog,
     {
     	
     },
+   
     destroy:function()
     {
     	 this_ibfs=null;
@@ -365,12 +367,13 @@ $.widget("ibi.opensavedialog", $.ibi.ibxDialog,
 		this._bSearch = true;
 		this.refreshit(searchString);
 	},
+
 	clearsearch:function()
 	{
 		this._bSearch = false;
 		this.refreshit(this.options.ctxPath);
 	},
-	refreshclear(path)
+	refreshclear: function(path)
 	{
 		if(this._bSearch)
 		{
@@ -379,6 +382,7 @@ $.widget("ibi.opensavedialog", $.ibi.ibxDialog,
 		}	
 		this.refreshit(path);
 	},
+	
     refreshit:function(path)
     {
     	//this._super();
@@ -450,5 +454,6 @@ $.widget("ibi.opensavedialog", $.ibi.ibxDialog,
 		}.bind(this));
      }	
     }
+   
 });
 //# sourceURL=opensavedialog.js
