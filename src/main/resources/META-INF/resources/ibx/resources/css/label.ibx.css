@@ -18,6 +18,12 @@
 	cursor:inherit;
 }
 
+.ibx-label-text.ibx-label-text-wrap
+{
+	flex:0 1 auto;
+}
+
+
 .ibx-label-glyph
 {
 	font-size:inherit; /*because material-icons defines a default font size as 24px.*/

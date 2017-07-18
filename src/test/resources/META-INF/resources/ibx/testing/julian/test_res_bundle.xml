@@ -37,6 +37,10 @@
 		<markup-file src="./test_res_markup.xml"/>
 		<markup-block>
 			<img class="test-drag-image" src="./rensmall.jpg"/>
+
+			<div class="test-widget-template" data-ibx-name-root="true" data-ibx-type="testWidget" data-ibxp-align="center" data-ibxp-justify="center">
+				<div data-ibx-type="ibxLabel" data-ibx-name="_label" data-ibxp-glyph="face" data-ibxp-glyph-classes="material-icons">Test Label</div>
+			</div>
 		</markup-block>
 	</markup>
 
@@ -44,30 +48,23 @@
 		<script-file src="./test_res_script.js"/>
 		<script-block>
 		<![CDATA[
-			$.widget("ibi.testWidget", $.ibi.ibxWidget, 
+			$.widget("ibi.testWidget", $.ibi.ibxVBox, 
 			{
 				options:
 				{
-					dragImage:".drag-image",
-					dragImageX:25,
-					dragImageY:25,
 				},
 				_widgetClass:"test-widget",
 				_create:function()
 				{
 					this._super();
-					this.options.dragImage = ibx.resourceMgr.getResource(".test-drag-image");
 				},
 				_destroy:function()
 				{
 					this._super();
 				},
-				_dragOver:function(e)
-				{
-					return true;
-				},
 				refresh:function()
 				{
+					this._label.css("border", "1px solid red");
 					this._super();
 				}
 			});
