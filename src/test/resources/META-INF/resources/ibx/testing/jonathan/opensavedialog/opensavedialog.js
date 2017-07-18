@@ -9,8 +9,8 @@ $.widget("ibi.opensavedialog", $.ibi.ibxDialog,
         rootPath:"IBFS:/WFC/Repository",
         ctxPath:"",
         viewAs:"tiles",
-        'dlgType': "save",
-        title: "Save",
+        'dlgType': "",
+        title: "",
         fileTypes: "",
         multiselect: false
 
@@ -30,6 +30,7 @@ $.widget("ibi.opensavedialog", $.ibi.ibxDialog,
 	_fileTypesList: [],
 	_noCheck : false,
 	_textSearch: null,
+	_titleSet: false,
 	_columns : [
 	       			["", "icon", "", true, ""],
 	       			["Default Sort","default","default",false,""],
@@ -45,8 +46,8 @@ $.widget("ibi.opensavedialog", $.ibi.ibxDialog,
     _create:function()    
     {
         this._super();
-        this.option("caption", this.options.title);
-        this.btnOK.ibxWidget("option", "text", this.options.title);
+        //this.option("caption", this.options.title);
+        //this.btnOK.ibxWidget("option", "text", this.options.title);
         this.element.resizable();
         this.sdViewTiles.hide();
         this.sdViewList.show();
@@ -89,8 +90,7 @@ $.widget("ibi.opensavedialog", $.ibi.ibxDialog,
 	{    	
     	  	
     	if(!this._noCheck && this.options.dlgType == "save" && closeInfo != "cancel")
-    	{	
-    		var doSuper = true;
+    	{    		
     		var items = this.ibfsItems();
     		if(items.length > 0)
     		{    			
@@ -114,7 +114,28 @@ $.widget("ibi.opensavedialog", $.ibi.ibxDialog,
 				}.bind(this));
 		    	
     		}
-    		else
+    		else if(!this._noCheck && this.options.dlgType == "open" && closeInfo != "cancel")
+    		{
+    			var items = this.ibfsItems();
+    			{
+	    				if(items.length == 0)
+	    				var text = sformat("File not found: {1}",items[0].fullPath);    			
+					var options = 
+					{
+						type:"std warning",
+						caption:"Error",
+						buttons:"ok",		
+						messageOptions:{text:text}
+					};
+					var dlg = $.ibi.ibxDialog.createMessageDialog(options);			
+					dlg.ibxDialog("open").on("ibx_close", function(e, btn)
+					{			
+								
+							
+					}.bind(this));
+    			}	
+    		}	
+    		else	
     			this._super(closeInfo);
 		}
     	else
@@ -238,24 +259,27 @@ $.widget("ibi.opensavedialog", $.ibi.ibxDialog,
     refresh:function()
     {
     	this._super(); 
-    	if(this.options.ctxPath.length > 0)
+    	if(!this._titleSet && this.options.title.length > 0)
     	{
-    		this._fileTypesList=this.options.fileTypes.split(";");
+    		this._titleSet = true;    		
+    	    this.btnOK.ibxWidget("option", "text", this.options.title);      	    
+    	    this._fileTypesList=this.options.fileTypes.split(";");
     		this._items.setFileTypesList(this._fileTypesList);
-	    	if(this._ibfs)
-	    		this.refreshit();
-	    	else
-	    	{	
-	    		if(!this._loaded)
-	    		{	
-			    	this._loaded=Ibfs.load(this._applicationContext, this._ses_auth_parm, this._ses_auth_val);
-			    	this._loaded.done(function(ibfs)
-					{
-					        this._ibfs=ibfs;
-					        this.refreshit();
-					}.bind(this));
-	    		}
-	    	}
+    		this.option("caption", this.options.title);  
+    	}    	
+    	if(this.options.ctxPath.length > 0)
+    	{    		
+	    	
+    		if(!this._loaded)
+    		{	
+		    	this._loaded=Ibfs.load(this._applicationContext, this._ses_auth_parm, this._ses_auth_val);
+		    	this._loaded.done(function(ibfs)
+				{
+				        this._ibfs=ibfs;
+				        this.refreshit();
+				}.bind(this));
+    		}
+	    	
     	}
     	
     },
@@ -272,7 +296,7 @@ $.widget("ibi.opensavedialog", $.ibi.ibxDialog,
 				this._items.getSortedOrder(), this._items.getSortedValue(), this._items.getSortedValueType(),
 				this.sortItems, this._items.toggleSelected, this._items.setCallBack, bSearch, this.openFolder, 
 				this.fileDoubleClick, false, false, this.foldermenu, this.filemenu, this, this.fileSingleClick,
-				this.sortFieldMenu);
+				this.sortFieldMenu, this.columnmenu);
 			
 	
     },
@@ -322,8 +346,45 @@ $.widget("ibi.opensavedialog", $.ibi.ibxDialog,
     	 this._items=null;
     	 this._bSearch=false;    	 
     	 this._loaded=null;
-    	 this.options.ctxPath="";
-    },    
+    	 //this.options.dlgType="";
+    	 //this.options.title="";
+    	 //this.options.ctxPath="";
+    	 this._titleSet = false;
+    },  
+    columnmenu: function(contextitem)
+    {
+    	
+    	var options = 
+    	{
+    		my: "right top",
+    		at: "left bottom",
+    		collision: "fit",
+    		of:contextitem
+    	};
+    	// create the menu....
+    	var columns = this._columns;
+    	var cmenu = $("<div>").ibxMenu();
+    	for (i=0; i < columns.length; i++)
+    	{
+    		var type=columns[i][1];
+    		if(type != "icon" && type != "menu" && columns[i][2] != "default")
+    		{
+    				var cmenuitem = $("<div>").ibxCheckMenuItem();
+    				cmenuitem.ibxCheckMenuItem("option", "text", columns[i][0]);
+    				cmenuitem.ibxCheckMenuItem("option", "checked", columns[i][3]);
+    				cmenuitem.data("row",i);
+    				cmenuitem.on("ibx_menu_item_click",function(e)
+    				{
+    					var row = $(e.target).data("row");
+    					this._columns[row][3]=!this._columns[row][3];	
+    					this.refreshit();	
+    				}.bind(this));									
+    				cmenu.append(cmenuitem);
+    		}			
+    	}
+    	$(cmenu).ibxMenu("open").position(options);
+    	
+    },
     sortFieldMenu:function(contextitem)
     {	
     	var options = 

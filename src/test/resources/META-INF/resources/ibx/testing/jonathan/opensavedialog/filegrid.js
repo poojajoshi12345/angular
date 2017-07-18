@@ -5,7 +5,7 @@ function filegrid()
 	var _this=this;
 	
 	filegrid.prototype.init = function (parentarea, columns, sortCallBack, selectedCallBack, setCallBack, showColumns, 
-			openFolderCallBack, runCallBack, isMobile, thisContext, fileSingleClick)
+			openFolderCallBack, runCallBack, isMobile, thisContext, fileSingleClick, columnmenu)
 	{			
 			this.parentarea = parentarea;		
 			this.initialized = true;		
@@ -103,7 +103,8 @@ function filegrid()
 			// we now add an options menu at the end
 			var cell="<div class='grid-cell-title grid-cell-title-cog' data-ibxp-glyph-classes='fa fa-cog' data-ibx-type='ibxButton' ></div>";
 			var jcell=$(cell);		
-			$(jcell).attr('onClick', 'columnmenu(this)');	
+			//$(jcell).attr('onClick', 'columnmenu(this)');
+			jcell.on("click", columnmenu.bind(_this.thisContext, jcell));
 			$(jtitlebox).append(jcell);
 			
 			$(this.gridmain).append(jtitlebox);

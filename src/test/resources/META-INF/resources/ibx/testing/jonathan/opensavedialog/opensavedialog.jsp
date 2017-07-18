@@ -25,8 +25,7 @@
 				$(".btn-show-save-dialog").on("click", function()
 				{		
 					var saveDlg = ibx.resourceMgr.getResource('.save-dialog-resources', true);
-					saveDlg.ibxWidget('option', 'fileTypes', "fex;pgx");										
-					saveDlg.ibxWidget('option', 'ctxPath', "IBFS:/WFC/Repository/Public");
+					saveDlg.ibxWidget({fileTypes:"fex;pgx", dlgType:"save", title: "Save", ctxPath: "IBFS:/WFC/Repository/Public"});
 					saveDlg.ibxWidget('open');
 					saveDlg.on("ibx_beforeclose", function(e, closeData)
 					{
@@ -42,8 +41,29 @@
 							var ibfsItems = saveDlg.ibxWidget('ibfsItems');
 						}	
 					});
-					
-					
+				});	
+					$(".btn-show-open-dialog").on("click", function()
+					{		debugger;
+					var saveDlg = ibx.resourceMgr.getResource('.save-dialog-resources', true);
+					saveDlg.ibxWidget({fileTypes:"fex;pgx", dlgType:"open", title: "Open", ctxPath: "IBFS:/WFC/Repository/Public"});										
+					//saveDlg.ibxWidget('option', 'dlgType', "open");
+					//saveDlg.ibxWidget('option', 'title', "Open");
+					//saveDlg.ibxWidget('option', 'ctxPath', "IBFS:/WFC/Repository/Public");
+					saveDlg.ibxWidget('open');
+					saveDlg.on("ibx_beforeclose", function(e, closeData)
+					{
+						debugger;
+						//return false;
+					}).on("ibx_close", function (e, closeData)
+					{						
+						debugger;
+						if(closeData != "cancel")
+						{
+							var fileName = saveDlg.ibxWidget('fileName');			
+							var description = saveDlg.ibxWidget('fileTitle');
+							var ibfsItems = saveDlg.ibxWidget('ibfsItems');
+						}	
+					});
 					
 					
 				});
@@ -65,6 +85,7 @@
 	<body class="ibx-root">
 		<div class="main-box" data-ibx-type="ibxVBox" data-ibxp-justify="center" data-ibxp-align="center">
 			<div class="btn-show-save-dialog" data-ibx-type="ibxButton" data-ibxp-text="Show the Save Dialog..."></div>
+			<div class="btn-show-open-dialog" data-ibx-type="ibxButton" data-ibxp-text="Show the Open Dialog..."></div>				
 		</div>	
 			
 		
