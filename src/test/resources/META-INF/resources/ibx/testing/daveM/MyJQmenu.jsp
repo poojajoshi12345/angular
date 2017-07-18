@@ -13,7 +13,7 @@
 <jsp:useBean id="wfLanguage" class="com.ibi.web.bean.WFLanguageBean" scope="request">
  <jsp:setProperty name="wfLanguage" property="inLang" value="<%= StringEscapeUtils.escapeJavaScript(browser.getSelLanguage())%>"/>
 </jsp:useBean>
-<jsp:useBean id="wflicense" class="com.ibi.common.WfLicenseRedirectBean" scope="request"></jsp:useBean>
+<jsp:useBean id="wflicense" class="com.ibi.web.bean.WFLicenseRedirectBean" scope="request"></jsp:useBean>
 <jsp:useBean id="bindowsBundle" class="com.ibi.resourceutil.BindowsResourceBundleBean" scope="request">
  <jsp:setProperty name="bindowsBundle" property="request" value="<%= request %>"/>
 </jsp:useBean>
