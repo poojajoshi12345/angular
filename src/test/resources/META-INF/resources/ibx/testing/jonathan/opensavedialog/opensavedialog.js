@@ -370,6 +370,15 @@ $.widget("ibi.opensavedialog", $.ibi.ibxDialog,
 		this._bSearch = false;
 		this.refreshit(this.options.ctxPath);
 	},
+	refreshclear(path)
+	{
+		if(this._bSearch)
+		{
+			this._textSearch._clearSearch();
+			this._bSearch = false;
+		}	
+		this.refreshit(path);
+	},
     refreshit:function(path)
     {
     	//this._super();
@@ -396,10 +405,24 @@ $.widget("ibi.opensavedialog", $.ibi.ibxDialog,
 	    	currentPath: this.options.ctxPath,    
 	        isPhone: false,
 	        items: this._items,
-	        refreshFolder: this.refreshit,
+	        refreshFolder: this.refreshclear,
 	        thisContext: this
 	    }
 		);
+		// set the search place holder string
+		if(this.options.ctxPath.charAt(this.options.ctxPath.length-1)=="/")
+			this.options.ctxPath = this.options.ctxPath.substring(0, this.options.ctxPath.length-1);
+		var searchString = ibx.resourceMgr.getString("markup.search");
+		var item = this._items.findallFoldersByPath(this.options.ctxPath);
+		var text = "";
+		if(item)text = sformat(searchString, item.description);			
+		else
+		{		
+			var folders = this.options.ctxPath.split("/");
+			var currentFolder = folders[folders.length-1];
+			text = sformat(searchString,currentFolder);
+		}	
+		this._textSearch.setSearchPlacholder(text);	
 		
 		this._ibfs.listItems(path, depth, flatten, { asJSON: true, clientSort: false , eError: 'fatal_error'}).done(function (exInfo)		
 		{
