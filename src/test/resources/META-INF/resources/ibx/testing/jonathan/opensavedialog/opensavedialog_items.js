@@ -1,8 +1,6 @@
 /*Copyright 1996-2017 Information Builders, Inc. All rights reserved.*/
 // $Revision$:
 
-String.prototype.endsWith = function(str) 
-{return (this.match(str+"$")==str);};
 function Items()
 {
 	var protoItems = Items.prototype;	
@@ -29,6 +27,10 @@ function Items()
 	{
 		return _this.itemList;
 	};
+	protoItems.endsWithx = function(input, str) 
+	{
+		return (input.match(str+"$")==str);
+	};	
 	protoItems.getFolderList = function()
 	{
 		return _this.folderList;
@@ -389,7 +391,7 @@ function Items()
 	};
 	protoItems.findAllChildFoldersByPath = function(fullPath)
 	{
-		if(!fullPath.endsWith("/"))
+		if(!_this.endsWithx(fullPath,"/"))		
 			fullPath += "/";
 		var ilen=_this.allFolders.length;		
 		var i;
@@ -410,7 +412,7 @@ function Items()
 	};
 	protoItems.deleteAllChildFoldersByPath = function(fullPath)
 	{
-		if(!fullPath.endsWith("/"))
+		if(!_this.endsWithx(fullPath,"/"))
 			fullPath += "/";
 		var ilen=_this.allFolders.length;		
 		var i;
