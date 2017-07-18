@@ -10,7 +10,7 @@
 %><jsp:useBean id="browser" class="com.ibi.web.bean.WFDetectBrowserBean" scope="request"
 ></jsp:useBean><%=browser.getDocType()%>
 <jsp:useBean id="WEBFOCUS_SECURITY_SETTING" class="com.ibi.webapp.security.config.WFSecuritySetting" scope="request"></jsp:useBean>
-<jsp:useBean id="wfLanguage" class="com.ibi.common.WfLanguageBean" scope="request">
+<jsp:useBean id="wfLanguage" class="com.ibi.web.bean.WFLanguageBean" scope="request">
  <jsp:setProperty name="wfLanguage" property="inLang" value="<%= StringEscapeUtils.escapeJavaScript(browser.getSelLanguage())%>"/>
 </jsp:useBean>
 <jsp:useBean id="wflicense" class="com.ibi.common.WfLicenseRedirectBean" scope="request"></jsp:useBean>
