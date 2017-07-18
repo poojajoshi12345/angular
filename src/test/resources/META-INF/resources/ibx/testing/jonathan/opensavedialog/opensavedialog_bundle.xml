@@ -20,7 +20,7 @@
 		<style-sheet>
 		</style-sheet>		
 		<style-file src="./itemelements.css" loadContext="bundle"/>
-		<style-file src="./opensavedialog.css" loadContext="bundle"/>		
+		<style-file src="./opensavedialog.css" loadContext="bundle"/>				
 	</styles>
 
 	<markup>
