@@ -32,8 +32,8 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 		var children = this.element.children();
 		var resBody = ibx.resourceMgr.getResource(".res-ibx-carousel-body", false);
 		this.element.append(resBody.children());
-		this.element.on("keydown", this._onItemsKeyEvent.bind(this));
 		ibx.bindElements(this.element.children());
+		this.element.on("keydown", this._onItemsKeyEvent.bind(this));
 		this._prevBtn.on("mousedown mouseup mouseleave", this._onPrev.bind(this));
 		this._nextBtn.on("mousedown mouseup mouseleave", this._onNext.bind(this));
 		this._itemsBox.ibxDragScrolling({overflowY:"hidden"});

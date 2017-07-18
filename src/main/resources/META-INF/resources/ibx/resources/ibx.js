@@ -177,8 +177,8 @@ ibx.bindElements = function(elements)
 		var childBound = ibx.bindElements(childWidgets);
 		elBound = elBound.add(childBound);
 
-		//then construct the parent element, if not already constructed.
-		if(element.is("[data-ibx-type]") && !element.is(":ibxWidget"))
+		//only for elements that haven't been bound before.
+		if(!element.data("ibxIsBound"))
 		{
 			//hook up member variables to the closest nameRoot
 			var memberName = element.attr("data-ibx-name");
@@ -198,19 +198,26 @@ ibx.bindElements = function(elements)
 				}
 			}
 
-			//construct the widget...problem is that there is a dependency on ibi widget's here...fix this!
-			var widgetType = element.attr("data-ibx-type");
-			if($.ibi[widgetType])
+			//then construct the parent element, if not already constructed.
+			if(element.is("[data-ibx-type]") && !element.is(":ibxWidget"))
 			{
-				var widget = $.ibi[widgetType].call($.ibi, {}, element);
-				elBound = elBound.add(widget.element);
-			}
-			else
-			{
-				console.error("Unknown ibxWidget type:", widgetType, element[0]);
-				debugger;
+				//construct the widget...problem is that there is a dependency on ibi widget's here...fix this!
+				var widgetType = element.attr("data-ibx-type");
+				if($.ibi[widgetType])
+				{
+					var widget = $.ibi[widgetType].call($.ibi, {}, element);
+					elBound = elBound.add(widget.element);
+				}
+				else
+				{
+					console.error("Unknown ibxWidget type:", widgetType, element[0]);
+					debugger;
+				}
 			}
 		}
+
+		//mark this element as having been bound.
+		element.data("ibxIsBound", true);
 	}.bind(this));
 	return elBound;
 };
