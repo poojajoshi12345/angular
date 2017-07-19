@@ -424,7 +424,7 @@ $.widget("ibi.opensavedialog", $.ibi.ibxDialog,
     		for (i=0; i < columns.length; i++)
     		{
     			var type=columns[i][1];
-    			 if(type != "icon" && type != "menu" && columns[i][2] != "default")
+    			 if(type != "icon" && type != "menu" )
     			{
     					var cmenuitem = $("<div>").ibxMenuItem();
     					cmenuitem.ibxMenuItem("option", "text", columns[i][0]);				
