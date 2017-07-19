@@ -134,16 +134,16 @@ $.widget("ibi.ibxAccordionPage", $.ibi.ibxFlexBox,
 
 		this.element.on("keydown", this._onPageKeyEvent.bind(this));
 		this.element.on("focus", this._onPageFocus.bind(this));
-		var content = this._content = $("<div class='ibx-accordion-page-content'>").ibxWidget(this.options.contentOptions).css('max-height', '0px');
+		var content = this._content = $("<div class='ibx-accordion-page-content'>").ibxWidget(this.options.contentOptions);
 		var btn = this._button = $("<div tabIndex='0' class='ibx-accordion-page-button'>").on("click", this._onBtnChange.bind(this));
 		btn.data("accPage", this.element).ibxButton(this.options.btnOptions).addClass("ibx-accordion-button");
 		this.element.append(btn, content)
+		this.element.addClass("accordion-page-no-animate");
 		this.element.on("transitionend", this._onTransitionEnd.bind(this))
 		this.add(this.element.children());
-		
-		//much as I hate timers, this refresh is needed so the accordion page will have the correct content when created
-		//and so that the animations for open/close will work correctly.
-		window.setTimeout(function(){this.refresh();}.bind(this), 0);
+
+		//need this on timer so we can stop the initial animation for selected pages.
+		window.setTimeout(function(){this.element.removeClass("accordion-page-no-animate");}.bind(this), 0);
 	},
 	_destroy:function()
 	{
@@ -160,7 +160,7 @@ $.widget("ibi.ibxAccordionPage", $.ibi.ibxFlexBox,
 	},
 	add:function(el, sibling, before, refresh)
 	{
-		this._content.ibxWidget("add", $(el).not(".ibx-accordion-page-button, .ibx-accordion-page-content"), sibling, before, refresh);
+		this._content.ibxWidget("add",  $(el).not(".ibx-accordion-page-button, .ibx-accordion-page-content"), sibling, before, refresh);
 	},
 	remove:function(el, refresh)
 	{
@@ -239,16 +239,15 @@ $.widget("ibi.ibxAccordionPage", $.ibi.ibxFlexBox,
 		this._button.ibxButton("option", opts).css("order", (options.btnPosition == "end") ? 1 : -1);
 		options.btnShow ? this._button.removeClass("acc-btn-hide") : this._button.addClass("acc-btn-hide");
 
-
 		/****
 			Figure out the desired height of the content so we can apply the max-height property which triggers the transition animation.
 			WE ONLY DO THIS WHEN HEIGHT IS NOT 0 AS 0 WILL NOT CAUSE THE ANIMATION TO BE TRIGGERED AND THE MAX-HEIGHT WILL NOT BE REMOVED.
 			In create we set max-height to 0 to force the initial transition.
 		****/
 		var nHeight = this._content.prop("scrollHeight");
-		if(nHeight != 0)
+		if(nHeight != 0 && !this.element.hasClass("accordion-page-no-animate"))
 		{
-			this._content.css("max-height", nHeight + "px"); 
+			this._content.css("max-height", nHeight + "px");
 			this.element[0].offsetHeight;//this causes the document to reflow and trigger the max-height animation
 		}
 
