@@ -19,7 +19,7 @@
 	<styles>
 		<style-sheet>
 		</style-sheet>		
-		<style-file src="./itemelements.css" loadContext="bundle"/>
+		<style-file src="../../../../homepage/resources/css/itemelements.css" loadContext="bundle"/>
 		<style-file src="./opensavedialog.css" loadContext="bundle"/>				
 	</styles>
 
@@ -98,12 +98,12 @@
 
 	<scripts>
 		<script-file src="./opensavedialog.js" loadContext="bundle"/>
-		<script-file src="./opensavedialog_items.js" loadContext="bundle"/>
-		<script-file src="./opensavedialog_views.js" loadContext="bundle"/>
-		<script-file src="./itemboxes_control_home.js" loadContext="bundle"/>
-		<script-file src="./filegrid.js" loadContext="bundle"/>
-		<script-file src="./breadcrumbtrail.js" loadContext="bundle"/>
-		<script-file src="./search_home.js" loadContext="bundle"/>
+		<script-file src="../../../../homepage/resources/js/items_home.js" loadContext="bundle"/>
+		<script-file src="../../../../homepage/resources/js/views_home.js" loadContext="bundle"/>
+		<script-file src="../../../../homepage/resources/js/itemboxes_control_home.js" loadContext="bundle"/>
+		<script-file src="../../../../homepage/resources/js/filegrid.js" loadContext="bundle"/>
+		<script-file src="../../../../homepage/resources/js/breadcrumbtrail.js" loadContext="bundle"/>
+		<script-file src="../../../../homepage/resources/js/search_home.js" loadContext="bundle"/>
 		<script-block>
 		<![CDATA[
 			
