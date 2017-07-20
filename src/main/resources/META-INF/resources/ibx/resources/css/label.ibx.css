@@ -10,19 +10,13 @@
 
 .ibx-label-text
 {
-	flex:0 0 auto;
+	flex:0 1 auto;
 	text-overflow:ellipsis;
 	overflow:hidden;
 	-ms-user-select:none;
 	user-select:none;
 	cursor:inherit;
 }
-
-.ibx-label-text.ibx-label-text-wrap
-{
-	flex:0 1 auto;
-}
-
 
 .ibx-label-glyph
 {

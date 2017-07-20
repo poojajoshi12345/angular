@@ -70,7 +70,6 @@ $.widget("ibi.ibxLabel", $.ibi.ibxFlexBox,
 		if(options.text != lastOptions.text)
 			this._text.html(options.text)
 		this._text.removeClass(lastOptions.textElClass).addClass(options.textElClass).css({"text-align":options.textAlign, "white-space":options.textWrap ? "" : "nowrap"});
-		options.textWrap ? this._text.addClass("ibx-label-text-wrap") : this._text.removeClass("ibx-label-text-wrap");
 
 		//add appropriate spacer classes
 		if(options.icon && (options.text || options.glyph || options.glyphClasses))
