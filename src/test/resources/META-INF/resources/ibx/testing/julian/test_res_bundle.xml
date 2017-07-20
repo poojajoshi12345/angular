@@ -27,6 +27,11 @@
 			{
 				background-color:pink;
 			}
+
+			.test-widget-label
+			{
+				width: 100px;
+			}
 		]]>
 		</style-sheet>
 	</styles>
@@ -34,10 +39,8 @@
 	<markup>
 		<markup-file src="./test_res_markup.xml"/>
 		<markup-block>
-			<img class="test-drag-image" src="./rensmall.jpg"/>
-
 			<div class="test-widget-template" data-ibx-name-root="true" data-ibx-type="testWidget" data-ibxp-align="center" data-ibxp-justify="center">
-				<div data-ibx-type="ibxLabel" data-ibx-name="_label" data-ibxp-glyph="face" data-ibxp-glyph-classes="material-icons">Test Label</div>
+				<div class="test-widget-label" data-ibx-type="ibxLabel" data-ibx-name="_label" data-ibxp-glyph="face" data-ibxp-glyph-classes="material-icons">This is a Test Label</div>
 			</div>
 		</markup-block>
 	</markup>
@@ -54,7 +57,6 @@
 				_widgetClass:"test-widget",
 				_create:function()
 				{
-				
 					this._super();
 				},
 				_destroy:function()

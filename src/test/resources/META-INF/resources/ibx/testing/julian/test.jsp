@@ -21,8 +21,11 @@
 			<jsp:include page="/WEB-INF/jsp/global/wf_globals.jsp" flush="false" />
 			ibx(function()
 			{
-				var widget = ibx.resourceMgr.getResource(".test-widget-template");
-				$("body").append(widget);
+				$(".julian").on("click", function(e)
+				{
+					var pop = $("<div>This is a test popup</div>").ibxPopup();
+					pop.ibxWidget("open");
+				});
 
 			}, [{"src":"./test_res_bundle.xml", "loadContext":"app"}], true);
 		</script>
@@ -33,6 +36,24 @@
 				height:100%;
 				width:100%;
 				position:fixed;
+			}
+			.main-box
+			{
+				position:absolute;
+				left:0px;
+				top:0px;
+				right:0px;
+				bottom:0px;
+				border:2px solid red;
+				padding:5px;
+			}
+			.menu-bar
+			{
+			}
+			.iframe-content
+			{
+				flex:1 1 auto;
+				border:1px solid #ccc;
 			}
 
 			.test-widget
@@ -46,6 +67,25 @@
 		</style>
 	</head>
 	<body class="ibx-root">
+		<div class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
+			<div class="menu-bar" data-ibx-type="ibxHMenuBar" data-ibxp-align="center">
+				<div data-ibx-type="ibxMenuButton">Menu
+					<div data-ibx-type="ibxMenu">
+						<div class="julian" data-ibx-type="ibxMenuItem">Julian</div>
+						<div data-ibx-type="ibxMenuItem">James</div>
+						<div data-ibx-type="ibxMenuItem">Charles</div>
+						<div data-ibx-type="ibxMenuItem">
+							<div data-ibx-type="ibxMenu">
+								<div data-ibx-type="ibxMenuItem">Telu</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="iframe-content" data-ibx-type="ibxIFrame"></div>
+			<div class="iframe-content" data-ibx-type="ibxIFrame"></div>
+			<div class="iframe-content" data-ibx-type="ibxIFrame"></div>
+		</div>
 	</body>
 </html>
 
