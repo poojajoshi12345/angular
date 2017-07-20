@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ibx-res-bundle name="test_res_bundle.xml" loadContext="bundle">
 	<strings>
-		<!--
-		<string-file src="../../rb/ibx/com.ibi.intl.ibfssecurity.ibfssecurity" loadContext="ibx"/>
-		-->
+		<string-file src="./test_res_strings.txt" default="true"/>
 		<string-bundle>
 		<![CDATA[
 			{

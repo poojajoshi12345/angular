@@ -23,6 +23,7 @@
 			{
 				var widget = ibx.resourceMgr.getResource(".test-widget-template");
 				$("body").append(widget);
+
 			}, [{"src":"./test_res_bundle.xml", "loadContext":"app"}], true);
 		</script>
 		<style type="text/css">

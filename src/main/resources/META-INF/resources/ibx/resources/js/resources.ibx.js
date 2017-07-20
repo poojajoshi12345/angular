@@ -46,9 +46,11 @@ _p.getString = function(id, def, language)
 	language = language || this.language || "en";
 	return this.strings[language][id] || def || this.missingString;
 };
-_p.addStringBundle = function(bundle)
+_p.addStringBundle = function(bundle, defLang)
 {
 	this.strings[bundle.language] = $.extend(this.strings[bundle.language], bundle.strings);
+	if(defLang)
+		this.language = bundle.language;
 };
 
 //daisy chain the loading of the bundles so their dependencies are honored.
@@ -118,7 +120,7 @@ _p.loadExternalResFile = function(elFile)
 			var asInline = (!!elFile.attr("inline") && !!eFile.attr("link")) || (fileType == "string-file") || (fileType == "markup-file");
 			if(asInline)
 			{
-				$.get({async:false, url:src, dataType:"text", error:this._resFileRetrievalError.bind(this, src)}).done(function(src, fileType, content, status, xhr)
+				$.get({async:false, url:src, dataType:"text", error:this._resFileRetrievalError.bind(this, src)}).done(function(elFIle, src, fileType, content, status, xhr)
 				{
 					content = this.preProcessResource(content);//precompile the content...string substitutions, etc.
 					if(content)
@@ -127,7 +129,7 @@ _p.loadExternalResFile = function(elFile)
 						{
 							content = content.replace(/^[^{][\s|\S][^{]*/, "");//strip off any possible header (copyright, etc.)
 							content = JSON.parse(content);
-							this.addStringBundle(content);
+							this.addStringBundle(content, elFile.attr("default") == "true");
 							eType = "rb_string_file_loaded";
 						}
 						else
@@ -146,7 +148,7 @@ _p.loadExternalResFile = function(elFile)
 						this.loadedFiles[src] = true;
 						ibx.loadEvent(eType, {"loadDepth":this._loadDepth, "resMgr":this, "fileNode":elFile[0], "src":src});
 					}
-				}.bind(this, src, fileType));
+				}.bind(this, elFile, src, fileType));
 			}
 			else
 			{
