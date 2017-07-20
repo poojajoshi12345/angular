@@ -31,19 +31,19 @@
 
 .icon-left .ibx-label-glyph.ibx-glyph-spacer, .icon-left .ibx-label-icon.ibx-icon-spacer
 {
-	margin-right:4px;
+	margin-right:.25em;
 }
 .icon-right .ibx-label-glyph.ibx-glyph-spacer, .icon-right .ibx-label-icon.ibx-icon-spacer
 {
-	margin-left:4px;
+	margin-left:.25em;
 }
 .icon-top .ibx-label-glyph.ibx-glyph-spacer, .icon-top .ibx-label-icon.ibx-icon-spacer
 {
-	margin-bottom:4px;
+	margin-bottom:.25em;
 }
 .icon-bottom .ibx-label-glyph.ibx-glyph-spacer, .icon-bottom .ibx-label-icon.ibx-icon-spacer
 {
-	margin-top:4px;
+	margin-top:.25em;
 }
 
 .ibx-label-icon

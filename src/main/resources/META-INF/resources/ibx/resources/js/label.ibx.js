@@ -58,13 +58,13 @@ $.widget("ibi.ibxLabel", $.ibi.ibxFlexBox,
 		//only update if changed
 		if(options.icon != lastOptions.icon)
 			this._icon.prop("src", options.icon)
-		this._icon.removeClass(lastOptions.iconElClass).addClass(options.iconElClass).css("display", options.icon ? "" : "none");
+		this._icon.removeClass(lastOptions.iconElClass).addClass(options.iconElClass);
 
 		//only update if changed
 		var glyphVisible = options.glyph || options.glyphClasses;
 		if(options.glyph != lastOptions.glyph || options.glyphClasses != lastOptions.glyphClasses)
 			this._glyph.html(options.glyph);	
-		this._glyph.removeClass(lastOptions.glyphClasses).addClass(options.glyphClasses).addClass(options.glyphElClass).css("display", (options.glyph || options.glyphClasses) ? "" : "none");
+		this._glyph.removeClass(lastOptions.glyphClasses).addClass(options.glyphClasses).addClass(options.glyphElClass);
 		
 		//only update if changed
 		if(options.text != lastOptions.text)

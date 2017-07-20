@@ -62,18 +62,32 @@
 {
 	flex:1 0 auto;
 }
+.ibx-menu-item .ibx-label-glyph
+{
+	width:1em;
+}
 
 .ibx-menu-item-marker
 {
 	font-family:"Material Icons";
 	font-size:1em;
 	color:#888;
-	width:1.5em;
+	width:1em;
 }
 
-.ibx-menu-item-marker::before
+.ibx-start-marker
 {
-	margin-left:.25em;
+	display:none;
+	margin-right:.25em;
+	width:auto;
+}
+
+.ibx-start-marker.ibx-marker-uncheck,
+.ibx-start-marker.ibx-marker-check,
+.ibx-start-marker.ibx-marker-radio-uncheck,
+.ibx-start-marker.ibx-marker-radio-check
+{
+	display:inline-block;
 }
 
 .ibx-marker-uncheck::before
