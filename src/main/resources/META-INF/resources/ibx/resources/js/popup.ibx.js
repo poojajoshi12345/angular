@@ -1,6 +1,7 @@
 /*Copyright 1996-2016 Information Builders, Inc. All rights reserved.*/
 // $Revision$:
 
+
 $.widget("ibi.ibxPopup", $.ibi.ibxWidget, 
 {
 	options:
@@ -15,6 +16,7 @@ $.widget("ibi.ibxPopup", $.ibi.ibxWidget,
 		"autoFocus":true,
 		"effect":"none",
 		"closeOnTimer":-1,
+		"disableIFrames":true,
 		"position":
 		{
 			/* for my/at position values see: http://api.jqueryui.com/position/ */
@@ -46,6 +48,7 @@ $.widget("ibi.ibxPopup", $.ibi.ibxWidget,
 	},
 	_destroy:function()
 	{
+
 		this._super();
 		this.element.removeClass("pop-closed").off("mousedown");
 	},
@@ -87,6 +90,10 @@ $.widget("ibi.ibxPopup", $.ibi.ibxWidget,
 					}
 					this._trigger("open");
 
+					//turn off pointer events for iframes when popup is open.
+					if(this.options.disableIFrames)
+						$("iframe").toggleClass("ibx-popup-disabled-iframe", true)
+
 					//auto close the dialog after the specified time.
 					if(this.options.closeOnTimer >= 0)
 					{
@@ -113,9 +120,14 @@ $.widget("ibi.ibxPopup", $.ibi.ibxWidget,
 			{
 				if(e.originalEvent.propertyName == "visibility" && !this.isOpen())
 				{
-
 					this.element.off("transitionend");//.css({top:"", left:""});//remove event handler, and jQueryUI position info.
 					this._trigger("close", null, closeInfo);
+
+					//on close if we are the last popup, then re-enable pointer events on the iframes.
+					if(this.options.disableIFrames && !ibxPopupManager.getOpenPopups().not(this.element).length)
+						$("iframe").toggleClass("ibx-popup-disabled-iframe", false);
+
+					//destroy on close, if desired
 					if(!this._destroyed && this.options.destroyOnClose)
 					{
 						this.destroy();
