@@ -44,6 +44,8 @@ _p.strings = null;
 _p.getString = function(id, def, language)
 {
 	language = language || this.language || "en";
+	if(!this.strings[language][id])
+		console.warn("ibx string not found, id:", id);
 	return this.strings[language][id] || def || this.missingString;
 };
 _p.addStringBundle = function(bundle, defLang)

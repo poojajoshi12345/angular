@@ -54,6 +54,7 @@
 				_widgetClass:"test-widget",
 				_create:function()
 				{
+				
 					this._super();
 				},
 				_destroy:function()
