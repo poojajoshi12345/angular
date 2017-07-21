@@ -5,12 +5,12 @@ $.widget("ibi.ibxForm", $.ibi.ibxWidget,
 {
 	options:
 	{
-		name:"",
+		name:"myForm",
 		action:"",
 		target:"_self",
 		method:"post",
 		encType:"application/x-www-form-urlencoded; charset=utf-8",
-		fields:[]		
+		fields:{}		
 	},
 	_widgetClass: "ibx-form",
 	_create: function ()
@@ -26,7 +26,7 @@ $.widget("ibi.ibxForm", $.ibi.ibxWidget,
 		var parent = this.element.parent();
 		if(!parent.length)
 			this.element.appendTo("body");
-		this.element[0].submit();
+		var x = this.element[0].submit();
 		if(!parent.length)
 			parent.detach();
 	},
@@ -40,13 +40,13 @@ $.widget("ibi.ibxForm", $.ibi.ibxWidget,
 		this.element.attr("method", options.method);
 		this.element.attr("enctype", options.encType);
 		this.element.empty();
-		$.each(options.fields, function(idx, fld)
+		$.each(options.fields, function(name, value)
 		{
 			var input = $("<input>").prop(
 			{
-				type:	"hidden",
-				name:	fld.name,
-				value:	encodeURIComponent(fld.value)
+				"type": "hidden",
+				"name": name,
+				"value": encodeURIComponent(value)
 			});
 			this.element.append(input);
 		}.bind(this));

@@ -23,16 +23,21 @@
 			{
 				$(".julian").on("click", function(e)
 				{
-					var form = $("<form>").ibxForm({action:"form_submit.jsp"});
+					var form = $("<form>").ibxForm({action:"http://localhost:8080/ibi_apps/ibx/testing/julian/test.jsp"});
 					form.ibxWidget("option", "fields",
-					[
-						{name:"fname", value:"Julian one"},
-						{name:"mname", value:"Alexander &two&"},
-						{name:"lname", value:"Hyman #three#"},
-					]).ibxWidget("submit");
+					{
+						"fname":"Julian one",
+						"mname":"Alexander &two&",
+						"lname":"Hyman #three#"
+					});
+
+					var wnd = window.open();
+					var body = $(wnd.document.body);
+					form.appendTo(body).submit();
 				});
 
 			}, [{"src":"./test_res_bundle.xml", "loadContext":"app"}], true);
+
 		</script>
 		<style type="text/css">
 			html, body
@@ -72,8 +77,10 @@
 		</style>
 	</head>
 	<body class="ibx-root">
+		<!--
+		<form data-ibx-type="ibxForm" data-ibxp-action="./submit_form.html"></form>
+		-->
 		<div class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
-			<form data-ibx-type="ibxForm" data-ibxp-action="./submit_form.html"></form>
 			<div class="menu-bar" data-ibx-type="ibxHMenuBar" data-ibxp-align="center">
 				<div data-ibx-type="ibxMenuButton">Menu
 					<div data-ibx-type="ibxMenu">
