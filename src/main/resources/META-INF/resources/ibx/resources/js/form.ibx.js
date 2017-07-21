@@ -44,9 +44,9 @@ $.widget("ibi.ibxForm", $.ibi.ibxWidget,
 		{
 			var input = $("<input>").prop(
 			{
-				type:"hidden",
-				name:fld.name,
-				value:fld.value
+				type:	"hidden",
+				name:	fld.name,
+				value:	encodeURIComponent(fld.value)
 			});
 			this.element.append(input);
 		}.bind(this));

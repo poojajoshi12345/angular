@@ -26,9 +26,9 @@
 					var form = $("<form>").ibxForm({action:"form_submit.jsp"});
 					form.ibxWidget("option", "fields",
 					[
-						{name:"fname", value:"Julian"},
-						{name:"mname", value:"Alexander"},
-						{name:"lname", value:"Hyman"},
+						{name:"fname", value:"Julian one"},
+						{name:"mname", value:"Alexander &two&"},
+						{name:"lname", value:"Hyman #three#"},
 					]).ibxWidget("submit");
 				});
 
