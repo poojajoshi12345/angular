@@ -23,8 +23,13 @@
 			{
 				$(".julian").on("click", function(e)
 				{
-					var pop = $("<div>This is a test popup</div>").ibxPopup();
-					pop.ibxWidget("open");
+					var form = $("<form>").ibxForm({action:"form_submit.jsp"});
+					form.ibxWidget("option", "fields",
+					[
+						{name:"fname", value:"Julian"},
+						{name:"mname", value:"Alexander"},
+						{name:"lname", value:"Hyman"},
+					]).ibxWidget("submit");
 				});
 
 			}, [{"src":"./test_res_bundle.xml", "loadContext":"app"}], true);
@@ -68,6 +73,7 @@
 	</head>
 	<body class="ibx-root">
 		<div class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
+			<form data-ibx-type="ibxForm" data-ibxp-action="./submit_form.html"></form>
 			<div class="menu-bar" data-ibx-type="ibxHMenuBar" data-ibxp-align="center">
 				<div data-ibx-type="ibxMenuButton">Menu
 					<div data-ibx-type="ibxMenu">
