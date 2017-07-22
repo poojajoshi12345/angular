@@ -23,21 +23,20 @@
 			{
 				$(".julian").on("click", function(e)
 				{
-					var form = $("<form>").ibxForm({action:"http://localhost:8080/ibi_apps/ibx/testing/julian/test.jsp"});
-					form.ibxWidget("option", "fields",
+					var options =
 					{
-						"fname":"Julian one",
-						"mname":"Alexander &two&",
-						"lname":"Hyman #three#"
-					});
-
-					var wnd = window.open();
-					var body = $(wnd.document.body);
-					form.appendTo(body).submit();
+						"action":"http://localhost:8000/nyxword/nyxword.htm",
+						"fields":
+						{
+							"fname":"Julian",
+							"mname":"Alexander",
+							"lname":"Hyman"
+						}
+					}
+					var form = $("<form>").ibxForm(options);
+					form.ibxForm("submit", window.open().document);
 				});
-
 			}, [{"src":"./test_res_bundle.xml", "loadContext":"app"}], true);
-
 		</script>
 		<style type="text/css">
 			html, body
@@ -77,9 +76,6 @@
 		</style>
 	</head>
 	<body class="ibx-root">
-		<!--
-		<form data-ibx-type="ibxForm" data-ibxp-action="./submit_form.html"></form>
-		-->
 		<div class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
 			<div class="menu-bar" data-ibx-type="ibxHMenuBar" data-ibxp-align="center">
 				<div data-ibx-type="ibxMenuButton">Menu

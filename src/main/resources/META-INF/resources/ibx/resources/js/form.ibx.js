@@ -21,14 +21,19 @@ $.widget("ibi.ibxForm", $.ibi.ibxWidget,
 	{
 		this._super();
 	},
-	submit:function()
+	submit:function(doc)
 	{
-		var parent = this.element.parent();
-		if(!parent.length)
-			this.element.appendTo("body");
-		var x = this.element[0].submit();
-		if(!parent.length)
-			parent.detach();
+		if(this.element.parent().length)
+			this.element.submit();
+		else
+		{
+			this.element.uniqueId();
+			var id = this.element.prop("id");
+			var doc = $(doc.documentElement || document.documentElement);
+			doc.append(this.element.prop("outerHTML")).find("#"+id).submit();//.remove();
+			this.element.removeUniqueId();
+		}
+		return;
 	},
 	refresh: function ()
 	{
