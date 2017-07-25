@@ -60,7 +60,7 @@ $.widget("ibi.ibxWaiting", $.ibi.ibxLabel,
 		align:"center",
 		justify:"center",
 		iconPosition:"top",
-		icon:sformat("{1}css/images/loader_small.gif", ibx.getPath()),
+		glyphClasses:"fa fa-spin fa-spinner",
 		text:"",
 		textWrap:true,
 		textAlign:"center",
@@ -129,13 +129,14 @@ ibx.waitStart = function(el, message)
 		ibx.waitStop(el);
 
 		message = (typeof(message) === "string") ? {text:message} : message;//overload message to allow string/object.
-		waiting = $("<div>").addClass(global ? "ibx-waiting-global" : null).ibxWaiting(message);
-		var waitInfo = {posInline:el[0].style.position,	ibxWaiting:waiting,};
+		var waitTemp = $("<div>").addClass(global ? "ibx-waiting-global" : null).ibxWaiting(message);
+		var waitInfo = {posInline:el[0].style.position,	ibxWaiting:waitTemp};
 
 		if(!el.is("body") && el.css("position") == "static")
 			el.css("position", "relative");
 
-		el.data("ibxWaitingInfo", waitInfo).append(waiting);
+		el.data("ibxWaitingInfo", waitInfo).append(waitTemp);
+		waiting = waiting.add(waitTemp);
 	}.bind(this, message));
 	return waiting;
 };

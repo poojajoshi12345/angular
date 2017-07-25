@@ -26,6 +26,7 @@
 					if(e.type == "dragover" || e.type == "drop")
 					{
 						console.log(e.type);
+						e.originalEvent.dataTransfer.dropEffect = "copy";
 						e.preventDefault();
 					}
 				});

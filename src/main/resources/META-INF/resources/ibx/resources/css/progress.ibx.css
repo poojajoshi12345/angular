@@ -18,7 +18,6 @@
 	flex:1 1 auto;
 	border-radius:3px;
 	background-image: linear-gradient(to right, lightgreen 90%, transparent 100%);
-	xbackground-color:lightgreen;
 }
 
 .ibx-progress-gradient
@@ -41,7 +40,6 @@
 	top:0px;
 	right:0px;
 	bottom:0px;
-	font-size:1.5em;
 	z-index:2147483647;/*basically max 32 bit value*/
 }
 
@@ -53,6 +51,11 @@
 {
 	max-width:50%;
 	max-height:50%;
+}
+
+.ibx-waiting .ibx-label-glyph
+{
+	color:#aaa;
 }
 
 .ibx-label-icon.wait-stretch
