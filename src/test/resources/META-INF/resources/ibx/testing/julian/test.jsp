@@ -21,11 +21,15 @@
 			<jsp:include page="/WEB-INF/jsp/global/wf_globals.jsp" flush="false" />
 			ibx(function()
 			{
-				$(".julian").on("click", function(e)
+				$(".drop-target").on("dragover ibx_dragover ibx_drop", function(e)
 				{
-					var foo = $("<div class='foo-bar'>").ibxSelectItem();
-					debugger;
+					if(e.type == "dragover" || e.type == "drop")
+					{
+						console.log(e.type);
+						e.preventDefault();
+					}
 				});
+
 			}, [{"src":"./test_res_bundle.xml", "loadContext":"app"}], true);
 		</script>
 		<style type="text/css">
@@ -46,44 +50,16 @@
 				border:2px solid red;
 				padding:5px;
 			}
-			.menu-bar
-			{
-			}
-			.iframe-content
-			{
-				flex:1 1 auto;
-				border:1px solid #ccc;
-			}
 
-			.test-widget
+			.drop-target
 			{
-				position:absolute;
-				left:0px;
-				top:0px;
-				right:0px;
-				bottom:0px;
 			}
 		</style>
 	</head>
 	<body class="ibx-root">
 		<div class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
-			<div class="menu-bar" data-ibx-type="ibxHMenuBar" data-ibxp-align="center">
-				<div data-ibx-type="ibxMenuButton">Menu
-					<div data-ibx-type="ibxMenu">
-						<div class="julian" data-ibx-type="ibxMenuItem">Julian</div>
-						<div data-ibx-type="ibxMenuItem">James</div>
-						<div data-ibx-type="ibxMenuItem">Charles</div>
-						<div data-ibx-type="ibxMenuItem">
-							<div data-ibx-type="ibxMenu">
-								<div data-ibx-type="ibxMenuItem">Telu</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="iframe-content" data-ibx-type="ibxIFrame"></div>
-			<div class="iframe-content" data-ibx-type="ibxIFrame"></div>
-			<div class="iframe-content" data-ibx-type="ibxIFrame"></div>
+			<div class="drag-source" data-ibx-type="ibxLabel" data-ibxp-draggable="true">Drag Here!</div>
+			<div class="drop-target" data-ibx-type="ibxLabel" data-ibxp-droppable="true">Drop Here!</div>
 		</div>
 	</body>
 </html>

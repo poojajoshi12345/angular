@@ -33,7 +33,6 @@ $Revision$:-->
 
 		<style-file src="./css/ibx-font/css/ibx-font.css"/>
 
-		<style-file src="./css/base.ibx.css"/>
 		<style-file src="./css/widget.ibx.css"/>
 		<style-file src="./css/collapsible.ibx.css"/>
 		<style-file src="./css/flexbox.ibx.css"/>
