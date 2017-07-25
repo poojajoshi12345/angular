@@ -31,6 +31,16 @@
 					}
 				});
 
+				var menuItems = $();
+				for(var i = 0; i < 10; ++i)
+				{
+					var mi = $("<div>").ibxMenuItem({"text":"MenuItem " + i});
+					menuItems = menuItems.add(mi);
+				}
+				var menu = $("<div>").ibxMenu({"text":"Menu"});
+				menu.ibxWidget("add", menuItems);
+
+				$(".main-box").append(menu);
 			}, [{"src":"./test_res_bundle.xml", "loadContext":"app"}], true);
 		</script>
 		<style type="text/css">
