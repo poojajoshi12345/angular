@@ -23,18 +23,8 @@
 			{
 				$(".julian").on("click", function(e)
 				{
-					var options =
-					{
-						"action":"http://localhost:8000/nyxword/nyxword.htm",
-						"fields":
-						{
-							"fname":"Julian",
-							"mname":"Alexander",
-							"lname":"Hyman"
-						}
-					}
-					var form = $("<form>").ibxForm(options);
-					form.ibxForm("submit", window.open().document);
+					var foo = $("<div class='foo-bar'>").ibxSelectItem();
+					debugger;
 				});
 			}, [{"src":"./test_res_bundle.xml", "loadContext":"app"}], true);
 		</script>
@@ -44,7 +34,7 @@
 				margin:0px;
 				height:100%;
 				width:100%;
-				position:fixed;
+				position:relative;
 			}
 			.main-box
 			{

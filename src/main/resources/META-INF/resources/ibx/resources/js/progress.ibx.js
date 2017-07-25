@@ -129,15 +129,10 @@ ibx.waitStart = function(el, message)
 		ibx.waitStop(el);
 
 		message = (typeof(message) === "string") ? {text:message} : message;//overload message to allow string/object.
-		waiting = $("<div>").addClass(global ? "ibx-waiting-global" : null).ibxWaitingProgressBar(message);
-		var waitInfo = 
-		{
-			posOriginal:el.css("position"),
-			posInline:el[0].style.position,
-			ibxWaiting:waiting,
-		};
+		waiting = $("<div>").addClass(global ? "ibx-waiting-global" : null).ibxWaiting(message);
+		var waitInfo = {posInline:el[0].style.position,	ibxWaiting:waiting,};
 
-		if(waitInfo.posOriginal == "static")
+		if(!el.is("body") && el.css("position") == "static")
 			el.css("position", "relative");
 
 		el.data("ibxWaitingInfo", waitInfo).append(waiting);
@@ -147,16 +142,12 @@ ibx.waitStart = function(el, message)
 ibx.waitStop = function(el)
 {
 	var waiting = $();
-	$(el || "body").each(function(idx, el)
+	$(el || "body").filter(":data('ibxWaitingInfo')").each(function(idx, el)
 	{
 		el = $(el);
 		var waitInfo = el.data("ibxWaitingInfo");
-		if(waitInfo)
-		{
-			waiting = waitInfo.ibxWaiting;
-			waiting.detach();
-			el.css("position", waitInfo.parentPosInline);
-		}
+		waitInfo.ibxWaiting.detach();
+		el.css("position", waitInfo.posInline);
 		el.removeData("ibxWaitingInfo");
 	});
 	return waiting;
