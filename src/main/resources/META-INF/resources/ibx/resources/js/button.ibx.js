@@ -224,7 +224,8 @@ $.widget("ibi.ibxCheckBoxSimple", $.ibi.ibxCheckBox,
 		else
 			this._marker.hide();
 
-		this.element.removeClass("checked ibx-check-box");
+		this.element.removeClass("ibx-check-box");
+		this.element.toggleClass("checked", this.options.checked);
 
 		this._marker.removeClass(sformat("{1} {2}-check {3}-uncheck", this.options.markerClass, this.options.markerClass, this.options.markerClass));
 		this._marker.addClass(sformat((this.options.checked ? "{1} {2}-check" : "{1} {2}-uncheck"), this.options.markerClass, this.options.markerClass));
@@ -282,7 +283,8 @@ $.widget("ibi.ibxRadioButtonSimple", $.ibi.ibxRadioButton,
 		else
 			this._marker.hide();
 
-		this.element.removeClass("checked ibx-check-box ibx-radio-button");
+		this.element.removeClass("ibx-check-box ibx-radio-button");
+		this.element.toggleClass("checked", this.options.checked);
 
 		this._marker.removeClass(sformat("{1} {2}-check {3}-uncheck", this.options.markerClass, this.options.markerClass, this.options.markerClass));
 		this._marker.addClass(sformat((this.options.checked ? "{1} {2}-check" : "{1} {2}-uncheck"), this.options.markerClass, this.options.markerClass));
