@@ -79,7 +79,12 @@
 {
 	display:none;
 	margin-right:.25em;
-	width:auto;
+	width:1em;
+}
+.ibx-end-marker
+{
+	margin-left:.25em;
+	width:1em;
 }
 
 .ibx-start-marker.ibx-marker-uncheck,

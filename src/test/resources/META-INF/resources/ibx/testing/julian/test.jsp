@@ -40,7 +40,7 @@
 				var menu = $("<div>").ibxMenu({"text":"Menu"});
 				menu.ibxWidget("add", menuItems);
 
-				$(".main-box").append(menu);
+				$(".menu-button").ibxWidget("option", "ctxMenu", menu);
 			}, [{"src":"./test_res_bundle.xml", "loadContext":"app"}], true);
 		</script>
 		<style type="text/css">
@@ -69,6 +69,7 @@
 	</head>
 	<body class="ibx-root">
 		<div class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
+			<div class="menu-button" data-ibx-type="ibxLabel">Menu</div>
 			<div class="drag-source" data-ibx-type="ibxLabel" data-ibxp-draggable="true">Drag Here!</div>
 			<div class="drop-target" data-ibx-type="ibxLabel" data-ibxp-droppable="true">Drop Here!</div>
 		</div>

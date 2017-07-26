@@ -57,6 +57,11 @@ $.widget("ibi.ibxMenu", $.ibi.ibxPopup,
 				parentMenu.trigger(e, menuItem);
 		}
 	},
+	open:function(openInfo)
+	{
+		this._super(openInfo)
+		this.refresh();
+	},
 	close:function(closeData)
 	{
 		this.closeSubMenus(null, closeData);
@@ -69,6 +74,7 @@ $.widget("ibi.ibxMenu", $.ibi.ibxPopup,
 	refresh: function ()
 	{
 		this._super();
+		this.children().ibxWidget("refresh");
 	}
 });
 $.ibi.ibxMenu.statics = 
@@ -218,9 +224,7 @@ $.widget("ibi.ibxMenuItem", $.ibi.ibxHBox,
 		this._super();
 		var options = this.options;
 
-		this._endMarker.removeClass("ibx-marker-sub");
-		if(this.subMenu())
-			this._endMarker.addClass("ibx-marker-sub");
+		this._endMarker.toggleClass("ibx-marker-sub", !!this.subMenu());
 
 		this._startMarker.addClass(sformat("{1} {2}", options.markerClass, options.startMarkerClass));
 		this._label.addClass(options.labelClass);
@@ -230,7 +234,7 @@ $.widget("ibi.ibxMenuItem", $.ibi.ibxHBox,
 		var labelOptions = $.extend({}, options.labelOptions);
 		labelOptions.text = options.text || labelOptions.text;
 		if(this._startMarker.css("display") == "none" && !labelOptions.glyph && !labelOptions.glyphClasses)
-			labelOptions.glyph = " "
+			labelOptions.glyph = " ";
 		this._label.ibxLabel("option", labelOptions);
 	}
 });
