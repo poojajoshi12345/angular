@@ -21,26 +21,29 @@
 			<jsp:include page="/WEB-INF/jsp/global/wf_globals.jsp" flush="false" />
 			ibx(function()
 			{
-				$(".drop-target").on("dragover ibx_dragover ibx_drop", function(e)
+				$(".drop-target").on("ibx_dragover ibx_dragleave ibx_drop", function(e)
 				{
-					if(e.type == "dragover" || e.type == "drop")
+					var dt = e.dataTransfer;
+					dt.dropEffect = dt.files ? "copy" : "not-allowed";
+					e.preventDefault();
+
+					var formData = new FormData();
+					if(e.type == "ibx_drop")
 					{
-						console.log(e.type);
-						e.originalEvent.dataTransfer.dropEffect = "copy";
-						e.preventDefault();
+						$.each(dt.files, function(idx, file)
+						{
+							formData.append(file.name, file);
+						});
+						$.ajax(
+						{
+							"url":"xxx.jsp",
+							"method":"POST",
+							"data":formData,
+							"contentType":false,
+							"processData":false
+						});
 					}
 				});
-
-				var menuItems = $();
-				for(var i = 0; i < 10; ++i)
-				{
-					var mi = $("<div>").ibxMenuItem({"text":"MenuItem " + i});
-					menuItems = menuItems.add(mi);
-				}
-				var menu = $("<div>").ibxMenu({"text":"Menu"});
-				menu.ibxWidget("add", menuItems);
-
-				$(".menu-button").ibxWidget("option", "ctxMenu", menu);
 			}, [{"src":"./test_res_bundle.xml", "loadContext":"app"}], true);
 		</script>
 		<style type="text/css">
@@ -69,7 +72,6 @@
 	</head>
 	<body class="ibx-root">
 		<div class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
-			<div class="menu-button" data-ibx-type="ibxLabel">Menu</div>
 			<div class="drag-source" data-ibx-type="ibxLabel" data-ibxp-draggable="true">Drag Here!</div>
 			<div class="drop-target" data-ibx-type="ibxLabel" data-ibxp-droppable="true">Drop Here!</div>
 		</div>

@@ -311,13 +311,14 @@ $.widget("ibi.ibxWidget", $.Widget,
 			dEvent.type = type;
 			dEvent.target = (target instanceof jQuery) ? target[0] : target;
 			dEvent.relatedTarget =(relatedTarget instanceof jQuery) ?  relatedTarget[0] : relatedTarget;
-			dEvent.dataTransfer = this._dataTransfer;
+			dEvent.dataTransfer = this._dataTransfer || e.dataTransfer;
 			$(target).trigger(dEvent);
 			return dEvent;
 		},
 		_onDragMouseEvent:function(e)
 		{
 			var options = this.options;
+			var e = e.originalEvent;
 			var eType = e.type;
 			switch(eType)
 			{
@@ -421,6 +422,12 @@ $.widget("ibi.ibxWidget", $.Widget,
 						}
 					}
 					break;
+				/*Native drag/drop event handling*/
+				case "dragover":
+				case "dragleave":
+				case "drop":
+					dEvent = this._dispatchDragEvent(e, "ibx_" + eType, this.element, e.relatedTarget);
+					break;
 			}
 		},
 		_refreshOrig:$.ibi.ibxWidget.prototype.refresh,
@@ -429,6 +436,8 @@ $.widget("ibi.ibxWidget", $.Widget,
 			this._refreshOrig.apply(this, arguments);
 			var options = this.options;
 			(options.draggable) ? this.element.on("mousedown", this._onDragMouseEventBound) : this.element.off("mousedown", this._onDragMouseEventBound);
+			(options.droppable) ? this.element.on("dragover dragleave drop", this._onDragMouseEventBound) : this.element.off("dragover dragleave drop", this._onDragMouseEventBound);
+
 			this.element.toggleClass("ibx-draggable", options.draggable);
 			this.element.toggleClass("ibx-droppable", options.droppable);
 		}
