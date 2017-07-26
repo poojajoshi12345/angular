@@ -95,18 +95,18 @@ function ibx()
 
 					//this is needed because the relese version of ibx prepends the ibxResourceManager to this file which means
 					//it's already defined...if in debug, we load it normally via AJAX...so this allows both.
-					$.Deferred(function(promise)
+					$.Deferred(function(dfd)
 					{
 						if(typeof(ibxResourceManager) == "undefined")
 						{
 							var url = ibx._path + "./js/resources.ibx.js";
-							$.get(url).done(function(resMgrPromise, text, status, xhr)
+							$.get(url).done(function(dfd, text, status, xhr)
 							{
-								promise.resolve();
-							}.bind(this, promise));
+								dfd.resolve();
+							}.bind(this, dfd));
 						}
 						else
-							promise.resolve();
+							dfd.resolve();
 					}).done(function()
 					{
 						//make the master/default resource manager for ibx.
