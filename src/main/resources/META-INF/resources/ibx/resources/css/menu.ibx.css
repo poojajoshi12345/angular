@@ -90,7 +90,8 @@
 .ibx-start-marker.ibx-marker-uncheck,
 .ibx-start-marker.ibx-marker-check,
 .ibx-start-marker.ibx-marker-radio-uncheck,
-.ibx-start-marker.ibx-marker-radio-check
+.ibx-start-marker.ibx-marker-radio-check,
+.ibx-end-marker.ibx-marker-sub
 {
 	display:inline-block;
 }
@@ -113,6 +114,7 @@
 	content:"\e837";
 }
 
+/*marker for when there is a submenu*/
 .ibx-marker-sub::before
 {
 	/*content:"\e5cc"; chevron right*/

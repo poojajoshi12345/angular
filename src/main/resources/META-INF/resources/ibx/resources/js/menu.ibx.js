@@ -224,11 +224,10 @@ $.widget("ibi.ibxMenuItem", $.ibi.ibxHBox,
 		this._super();
 		var options = this.options;
 
-		this._endMarker.toggleClass("ibx-marker-sub", !!this.subMenu());
-
 		this._startMarker.addClass(sformat("{1} {2}", options.markerClass, options.startMarkerClass));
 		this._label.addClass(options.labelClass);
 		this._endMarker.addClass(sformat("{1} {2}", options.markerClass, options.endMarkerClass));
+		this._endMarker.toggleClass("ibx-marker-sub", !!this.subMenu());
 
 		//set the label's options...if there's no start marker (not check or radio) and no glyph...add space for glyph.
 		var labelOptions = $.extend({}, options.labelOptions);
