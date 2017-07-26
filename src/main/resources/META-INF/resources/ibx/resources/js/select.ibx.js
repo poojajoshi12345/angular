@@ -444,7 +444,7 @@ $.widget("ibi.ibxSelect", $.ibi.ibxTextField,
 	},
 	_removeSelection: function (menuItem, bKeepAnchor, bNoUpdate, bNoChange)
 	{
-		if (!this._trigger('before_change', null, this.element))
+		if (!this._trigger('beforechange', null, this.element))
 			return;
 
 		var menuItem = $(menuItem);
@@ -510,7 +510,7 @@ $.widget("ibi.ibxSelect", $.ibi.ibxTextField,
 	},
 	_setSelection: function (menuItem, bKeep, bKeepAnchor, bNoUpdate, bNoChange)
 	{
-		if (!this._trigger('before_change', null, this.element))
+		if (!this._trigger('beforechange', null, this.element))
 			return;
 		
 		var menuItem = $(menuItem);

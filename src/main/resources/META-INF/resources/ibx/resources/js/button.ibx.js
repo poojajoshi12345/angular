@@ -124,7 +124,7 @@ $.widget("ibi.ibxCheckBox", $.ibi.ibxLabel,
 	{
 		if (this.options.disabled || this.options.group && this.options.checked)
 			return;
-		if (!this._trigger('before_change', null, this.element))
+		if (!this._trigger('beforechange', null, this.element))
 			return;
 		if (this.options.group)
 			this.options.checked = true;

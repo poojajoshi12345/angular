@@ -30,7 +30,7 @@ $.widget("ibi.ibxRadioGroup", $.ibi.ibxWidget,
 	{
 		if (!$(e.currentTarget).ibxWidget('checked'))
 		{
-			if (!this._trigger('before_change', null, el))
+			if (!this._trigger('beforechange', null, el))
 				e.preventDefault();
 		}
 	},
@@ -73,7 +73,7 @@ $.widget("ibi.ibxRadioGroup", $.ibi.ibxWidget,
 	{
 		var el = $(element);
 		el.addClass("ibx-radio-group-" + this.options.name);
-		el.on("ibx_change", null, null, this._onChangeBind).on('ibx_before_change', null, null, this._onBeforeChangeBind);
+		el.on("ibx_change", null, null, this._onChangeBind).on('ibx_beforechange', null, null, this._onBeforeChangeBind);
 		el.each(function (index, el)
 		{
 			var _el = $(el);
@@ -89,7 +89,7 @@ $.widget("ibi.ibxRadioGroup", $.ibi.ibxWidget,
 	removeControl: function (element)
 	{
 		$(element).removeClass("radio-group-checked ibx-radio-group-" + this.options.name);
-		$(element).off("ibx_change", null, this._onChangeBind).off('ibx_before_change', null, this._onBeforeChange);
+		$(element).off("ibx_change", null, this._onChangeBind).off('ibx_beforechange', null, this._onBeforeChange);
 	},
 	selectNext: function ()
 	{
