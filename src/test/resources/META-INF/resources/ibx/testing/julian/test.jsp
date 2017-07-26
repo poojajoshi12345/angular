@@ -38,9 +38,9 @@
 						{
 							"url":"xxx.jsp",
 							"method":"POST",
-							"data":formData,
 							"contentType":false,
-							"processData":false
+							"processData":false,
+							"data":formData
 						});
 					}
 				});
