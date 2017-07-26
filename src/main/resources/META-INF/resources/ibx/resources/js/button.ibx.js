@@ -122,17 +122,12 @@ $.widget("ibi.ibxCheckBox", $.ibi.ibxLabel,
 	},
 	_onClick: function (e)
 	{
-		if (this.options.disabled)
+		if (this.options.disabled || this.options.group && this.options.checked)
+			return;
+		if (!this._trigger('before_change', null, this.element))
 			return;
 		if (this.options.group)
-		{
-			if (this.options.checked)
-			{
-				this.element.focus();
-				return;
-			}
 			this.options.checked = true;
-		}
 		else
 			this.options.checked = !this.options.checked;
 		this._trigger("set_form_value", null, { "elem": this.element, "value": this.options.checked ? this.options.userValue : "" });
@@ -154,13 +149,13 @@ $.widget("ibi.ibxCheckBox", $.ibi.ibxLabel,
 		if (typeof (value) == "undefined")
 			return this.options.checked;
 		else
-		if(this.options.checked != value)
-		{
-			this.options.checked = value;
-			this._trigger("set_form_value", null, { "elem": this.element, "value": this.options.userValue });
-			this._trigger("change", null, this.element);
-			this.refresh();
-		}
+			if(this.options.checked != value)
+			{
+				this.options.checked = value;
+				this._trigger("set_form_value", null, { "elem": this.element, "value": this.options.userValue });
+				this._trigger("change", null, this.element);
+				this.refresh();
+			}
 		return this;
 	},
 	refresh: function ()

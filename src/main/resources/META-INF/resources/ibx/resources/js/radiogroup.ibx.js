@@ -11,9 +11,11 @@ $.widget("ibi.ibxRadioGroup", $.ibi.ibxWidget,
 		},
 	_widgetClass: "ibx-radio-group",
 	_onChangeBind: null,
+	_onBeforeChangeBind: null,
 	_create: function ()
 	{
 		this._onChangeBind = this._onChange.bind(this);
+		this._onBeforeChangeBind = this._onBeforeChange.bind(this);
 		this._super();
 		this.element.hide();
 		this._formControl = $("<div>").ibxFormControl({name: this.options.name, form: this.options.form});
@@ -23,6 +25,14 @@ $.widget("ibi.ibxRadioGroup", $.ibi.ibxWidget,
 	_destroy: function ()
 	{
 		this._super();
+	},
+	_onBeforeChange: function (e, el)
+	{
+		if (!$(e.currentTarget).ibxWidget('checked'))
+		{
+			if (!this._trigger('before_change', null, el))
+				e.preventDefault();
+		}
 	},
 	_onChange: function (e)
 	{
@@ -63,7 +73,7 @@ $.widget("ibi.ibxRadioGroup", $.ibi.ibxWidget,
 	{
 		var el = $(element);
 		el.addClass("ibx-radio-group-" + this.options.name);
-		el.on("ibx_change", null, null, this._onChangeBind);
+		el.on("ibx_change", null, null, this._onChangeBind).on('ibx_before_change', null, null, this._onBeforeChangeBind);
 		el.each(function (index, el)
 		{
 			var _el = $(el);
@@ -79,7 +89,7 @@ $.widget("ibi.ibxRadioGroup", $.ibi.ibxWidget,
 	removeControl: function (element)
 	{
 		$(element).removeClass("radio-group-checked ibx-radio-group-" + this.options.name);
-		$(element).off("ibx_change", null, this._onChangeBind);
+		$(element).off("ibx_change", null, this._onChangeBind).off('ibx_before_change', null, this._onBeforeChange);
 	},
 	selectNext: function ()
 	{
