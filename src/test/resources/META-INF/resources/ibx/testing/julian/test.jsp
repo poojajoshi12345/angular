@@ -23,26 +23,11 @@
 			{
 				$(".drop-target").on("ibx_dragover ibx_dragleave ibx_drop", function(e)
 				{
-					var dt = e.dataTransfer;
-					dt.dropEffect = dt.files ? "copy" : "not-allowed";
-					e.preventDefault();
-
-					var formData = new FormData();
 					if(e.type == "ibx_drop")
 					{
-						$.each(dt.files, function(idx, file)
-						{
-							formData.append(file.name, file);
-						});
-						$.ajax(
-						{
-							"url":"xxx.jsp",
-							"method":"POST",
-							"contentType":false,
-							"processData":false,
-							"data":formData
-						});
 					}
+					else
+						e.preventDefault();
 				});
 			}, [{"src":"./test_res_bundle.xml", "loadContext":"app"}], true);
 		</script>
@@ -72,7 +57,7 @@
 	</head>
 	<body class="ibx-root">
 		<div class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
-			<div class="drag-source" data-ibx-type="ibxLabel" data-ibxp-draggable="true">Drag Here!</div>
+			<div class="drag-source" data-ibx-type="ibxLabel" data-ibxp-draggable="true" data-ibxp-file-upload-ajax-info.url="xxx.jsp">Drag Here!</div>
 			<div class="drop-target" data-ibx-type="ibxLabel" data-ibxp-droppable="true">Drop Here!</div>
 		</div>
 	</body>

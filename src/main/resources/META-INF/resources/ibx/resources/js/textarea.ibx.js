@@ -13,9 +13,9 @@ $.widget("ibi.ibxTextArea", $.ibi.ibxFlexBox,
 			"spellCheck": "off",
 			"placeholder": "",
 			"required": "",
-			"wrap": "",
 			"forId": "",
 			"fnFormat": null,
+			"textWrap": "",
 			"textAlign": "",
 
 			/*ibxFlexBox default options*/
@@ -111,8 +111,8 @@ $.widget("ibi.ibxTextArea", $.ibi.ibxFlexBox,
 			this._textInput.attr("required");
 		else
 			this._textInput.removeAttr("required");
-		if (this.options.wrap)
-			this._textInput.attr("wrap", this.options.wrap);
+		if (this.options.textWrap)
+			this._textInput.attr("wrap", this.options.textWrap);
 		else
 			this._textInput.removeAttr("wrap");
 		if (this.options.textAlign)

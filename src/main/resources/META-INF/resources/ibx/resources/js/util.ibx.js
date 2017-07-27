@@ -318,12 +318,14 @@ WebApi.statics =
 		ppCtx:null,
 		ppFun:null,
 		result:null,
+		error:null,
+		errorHandling:true,
 		jqNamespace:false,
 		eNamespace:"webapi",
 		ePreCall:"pre_call",
 		ePostCall:"post_call",
 		eSuccess:"success",
-		eFail:"fail",
+		eError:"error",
 		tStart:null,
 		tReturn:null,
 		tComplete:null,
@@ -406,9 +408,29 @@ _p._onBeforeSend = function(exInfo, xhr, settings)
 _p._onSuccess = function(exInfo, res, status, xhr)
 {
 	exInfo.tReturn = new Date();
+
+	var err = (exInfo.dataType == "text") ? false : $(res).find("[errorName]");
+	if(err.length)
+	{
+		var name = sformat("{1} ({2})", err.attr("errorName"), err.attr("returncode"));
+		var message = ibx.resourceMgr.getString("IDS_IBFS_ERROR_DETAILS_EXINFO") + err.attr("localizeddesc");
+		var error = exInfo.error = new Error("errorName", message);
+		error.name = name;
+		error.message = message;
+		this.handleError(error, exInfo);
+	}
+
 	exInfo.result = (exInfo.ppFun) ? exInfo.ppFun.call(exInfo.ppCtx, res, exInfo) : res;
 	if(exInfo.public || exInfo.async)
 		$(window).trigger(WebApi.genEventType(exInfo.eSuccess, exInfo), exInfo);
+};
+_p._onError = function(exInfo, xhr, error, errorType)
+{
+	var er = exInfo.error = new Error(error, errorType);
+	er.name = error;
+	er.message = errorType;
+	exInfo.tReturn = new Date();
+	this.handleError(er, exInfo);
 };
 _p._onComplete = function(exInfo, xhr, status)
 {
@@ -417,11 +439,37 @@ _p._onComplete = function(exInfo, xhr, status)
 	$(window).trigger(WebApi.genEventType(exInfo.ePostCall, exInfo), exInfo);
 	(status == "success") ? exInfo.deferred.resolve(exInfo) : exInfo.deferred.reject(exInfo);
 };
-_p._onError = function(exInfo, xhr, error, errorType)
+_p.handleError = function(error, exInfo)
 {
-	exInfo.tReturn = new Date();
-	$(window).trigger(WebApi.genEventType(exInfo.eError, exInfo), exInfo);
-};
+	if($(window).trigger(WebApi.genEventType(exInfo.eError, exInfo), exInfo) && exInfo.errorHandling)
+	{
+		var options = 
+		{
+			"resizable":true,
+			"type":"std error",
+			"caption":"Ibfs Error",
+			"messageOptions":{text:"Error: " + error.name},
+			"buttons":"ok"
+		};
+		var info = ibx.resourceMgr.getResource(".ibfs-dlg-error", false);
+		var dlg = $.ibi.ibxDialog.createMessageDialog(options).addClass("ibfs-error-dialog");
+		dlg.ibxWidget("add", info.children()).resizable();
+		ibx.bindElements(dlg[0])
+		widget = dlg.data("ibxWidget");
+		widget._errDetails.ibxWidget("option", "text", this.getErrorDetails(error, exInfo));
+		dlg.ibxWidget("open");
+	}
+}
+_p.getErrorDetails = function(error, exInfo)
+{
+	var strMsg = error.message + "\n";
+	var strParms = ibx.resourceMgr.getString("IDS_IBFS_ERROR_DETAILS_PARMS") + "\n";
+	for(var parm in exInfo.parms)
+		strParms = sformat("{1}  {2}: {3}\n", strParms, parm, exInfo.parms[parm]);
+	var strDoc = ibx.resourceMgr.getString("IDS_IBFS_ERROR_DETAILS_RET_DOC") + "\n" + exInfo.xhr.responseText;
+	var strErr = sformat("{1}\n{2}\n{3}", strMsg, strParms, strDoc);
+	return strErr;
+}
 
 
 //# sourceURL=util.ibx.js

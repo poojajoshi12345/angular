@@ -8,6 +8,11 @@
 		"STR_LOADING":"Waiting...",
 		"STR_OK":"OK",
 		"STR_CANCEL":"Cancel",
-		"STR_APPLY":"Apply"
+		"STR_APPLY":"Apply",
+		"IDS_IBFS_ERROR_UNKNOWN":"Unknown webFOCUS communications error.",
+		"IDS_IBFS_ERROR_DETAILS_LABEL":"Details:",
+		"IDS_IBFS_ERROR_DETAILS_PARMS":"Parameters:",
+		"IDS_IBFS_ERROR_DETAILS_EXINFO":"Error: ",
+		"IDS_IBFS_ERROR_DETAILS_RET_DOC":"Return Payload:"
 	}
 }

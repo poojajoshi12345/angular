@@ -136,7 +136,7 @@
 {
 	font-family:"Material Icons";
 	font-size:2em;
-	margin-right:5px;
+	margin-right:.5em;
 }
 
 .ibx-dialog.information .ibx-dialog-message::before

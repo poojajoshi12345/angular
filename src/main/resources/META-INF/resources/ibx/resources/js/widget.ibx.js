@@ -281,7 +281,15 @@ $.widget("ibi.ibxWidget", $.Widget,
 			dropTargetClass:"ibx-drop-target",
 			dragStartDistanceX:5,
 			dragStartDistanceY:5,
-			dragImageClass:"ibx-default-drag-image"
+			dragImageClass:"ibx-default-drag-image",
+			fileUploadAjaxInfo:
+			{
+				"url":"",
+				"method":"POST",
+				"contentType":false,
+				"processData":false,
+				"data":null
+			}
 		},
 		_createOrig:$.ibi.ibxWidget.prototype._create,
 		_create:function()
@@ -427,6 +435,25 @@ $.widget("ibi.ibxWidget", $.Widget,
 				case "dragleave":
 				case "drop":
 					dEvent = this._dispatchDragEvent(e, "ibx_" + eType, this.element, e.relatedTarget);
+					var dt = e.dataTransfer;
+					if(eType == "drop" && !dEvent.defaultPrevented && dt.files.length)
+					{
+						e.preventDefault();
+						var formData = new FormData();
+						$.each(dt.files, function(idx, file)
+						{
+							formData.append(file.name, file);
+						});
+						var ajaxOptions = $.extend(true,
+						{
+							"url":"xxx.jsp",
+							"method":"POST",
+							"contentType":false,
+							"processData":false,
+							"data":formData
+						}, options.fileUploadAjaxInfo);
+						$.ajax(ajaxOptions);
+					}
 					break;
 			}
 		},
