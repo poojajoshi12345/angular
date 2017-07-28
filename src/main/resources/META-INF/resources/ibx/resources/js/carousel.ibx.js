@@ -21,7 +21,7 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 		alignChildren:"center",
 
 		scrollType:"integral", //integral(child)/fractional(pixel)
-		scrollStep:1,//n children per scroll...if fractional then this is a pixel based increment per scroll
+		scrollStep:25,//n children per scroll...if fractional then this is a pixel based increment per scroll
 		scrollStepRate:25,//time in ms
 		allowDragScrolling:true
 	},
@@ -98,13 +98,13 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 			}
 			else
 			{
-				this._scrollTimer = window.setInterval(function(itemsBox, beginning)
+				this._scrollTimer = window.setInterval(function(itemsBox, forward)
 				{
 					var sl = itemsBox.element.prop("scrollLeft");
-					itemsBox.element.prop("scrollLeft", sl + (toEnd ? this.options.scrollStep : -this.options.scrollStep));
+					itemsBox.element.prop("scrollLeft", sl + (forward ? this.options.scrollStep : -this.options.scrollStep));
 					itemsBox._trigger("scroll", null, scrollInfo);
 					this.refresh();
-				}.bind(this, itemsBox, beginning), this.options.scrollStepRate); 
+				}.bind(this, itemsBox, forward), this.options.scrollStepRate); 
 			}
 			this._scrolling = true;
 		}
