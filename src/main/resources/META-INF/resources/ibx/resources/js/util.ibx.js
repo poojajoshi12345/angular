@@ -407,39 +407,46 @@ _p._onBeforeSend = function(exInfo, xhr, settings)
 };
 _p._onSuccess = function(exInfo, res, status, xhr)
 {
-	exInfo.tReturn = new Date();
-
-	var err = (exInfo.dataType == "text") ? false : $(res).find("[errorName]");
-	if(err.length)
-	{
-		var name = sformat("{1} ({2})", err.attr("errorName"), err.attr("returncode"));
-		var message = ibx.resourceMgr.getString("IDS_IBFS_ERROR_DETAILS_EXINFO") + err.attr("localizeddesc");
-		var error = exInfo.error = new Error("errorName", message);
-		error.name = name;
-		error.message = message;
-		this.handleError(error, exInfo);
-	}
-
-	exInfo.result = (exInfo.ppFun) ? exInfo.ppFun.call(exInfo.ppCtx, res, exInfo) : res;
-	if(exInfo.public || exInfo.async)
-		$(window).trigger(WebApi.genEventType(exInfo.eSuccess, exInfo), exInfo);
+	/*default does nothing*/
 };
 _p._onError = function(exInfo, xhr, error, errorType)
 {
-	var er = exInfo.error = new Error(error, errorType);
-	er.name = error;
-	er.message = errorType;
-	exInfo.tReturn = new Date();
-	this.handleError(er, exInfo);
+	/*default does nothing*/
 };
 _p._onComplete = function(exInfo, xhr, status)
 {
 	exInfo.tComplete = new Date();
 	xhr.exInfo = exInfo;
+
+	var res = xhr.responseXML || xhr.responseJSON || xhr.responseText;
+	var error = this._errorCheck(xhr, res, exInfo)
+	if(!error)
+	{
+		exInfo.result = (exInfo.ppFun) ? exInfo.ppFun.call(exInfo.ppCtx, res, exInfo) : res;
+		if(exInfo.public || exInfo.async)
+			$(window).trigger(WebApi.genEventType(exInfo.eSuccess, exInfo), exInfo);
+		exInfo.deferred.resolve(exInfo);
+	}
+	else
+	{
+		exInfo.deferred.reject(exInfo);
+		this._handleError(error, res, exInfo);
+	}
 	$(window).trigger(WebApi.genEventType(exInfo.ePostCall, exInfo), exInfo);
-	(status == "success") ? exInfo.deferred.resolve(exInfo) : exInfo.deferred.reject(exInfo);
 };
-_p.handleError = function(error, exInfo)
+_p._errorCheck = function(xhr, res, exInfo)
+{
+	var error = null;
+	if(xhr.status != 200)
+	{
+		
+		error = exInfo.error = new Error(sformat("{1} ({2})", xhr.statusText, xhr.status));
+		error.name = xhr.statusText;
+		error.code = xhr.status;
+	}
+	return error;
+};
+_p._handleError = function(error, res, exInfo)
 {
 	if($(window).trigger(WebApi.genEventType(exInfo.eError, exInfo), exInfo) && exInfo.errorHandling)
 	{
@@ -456,13 +463,13 @@ _p.handleError = function(error, exInfo)
 		dlg.ibxWidget("add", info.children()).resizable();
 		ibx.bindElements(dlg[0])
 		widget = dlg.data("ibxWidget");
-		widget._errDetails.ibxWidget("option", "text", this.getErrorDetails(error, exInfo));
+		widget._errDetails.ibxWidget("option", "text", this._getErrorDetails(error, exInfo));
 		dlg.ibxWidget("open");
 	}
 }
-_p.getErrorDetails = function(error, exInfo)
+_p._getErrorDetails = function(error, exInfo)
 {
-	var strMsg = error.message + "\n";
+	var strMsg = error.message + ":\n  " + exInfo.ajax.url + "\n";
 	var strParms = ibx.resourceMgr.getString("IDS_IBFS_ERROR_DETAILS_PARMS") + "\n";
 	for(var parm in exInfo.parms)
 		strParms = sformat("{1}  {2}: {3}\n", strParms, parm, exInfo.parms[parm]);
