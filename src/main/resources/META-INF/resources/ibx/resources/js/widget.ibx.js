@@ -91,6 +91,10 @@ $.widget("ibi.ibxWidget", $.Widget,
 	{
 		//_setOptions will respect the options map.
 		this.option($.extend(true, {}, this.options, ibx.getIbxMarkupOptions(this.element)));
+		$.each(ibx.getIbxMarkupOptions(this.element), function(key, value)
+		{
+			this.option(key, value);
+		}.bind(this));
 		this.refresh();
 	},
 	option:function(key, value)
@@ -106,6 +110,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 		//map option to option.option.xxx. Used mostly for Bindows markup property setting.
 		if(this.options.optionsMap[key])
 		{
+			//console.warn("ibx optionsMap is deprecated => Use compound options syntax: data-ibxp-option.subOption, setting option:", key);
 			this.option(this.options.optionsMap[key], value);
 			delete this.options[key];//mapped option keys should be removed from main options object so things don't get set twice (like text on a label).
 		}
@@ -284,11 +289,6 @@ $.widget("ibi.ibxWidget", $.Widget,
 			dragImageClass:"ibx-default-drag-image",
 			fileUploadAjaxInfo:
 			{
-				"url":"",
-				"method":"POST",
-				"contentType":false,
-				"processData":false,
-				"data":null
 			}
 		},
 		_createOrig:$.ibi.ibxWidget.prototype._create,
@@ -446,11 +446,10 @@ $.widget("ibi.ibxWidget", $.Widget,
 						});
 						var ajaxOptions = $.extend(true,
 						{
-							"url":"xxx.jsp",
 							"method":"POST",
 							"contentType":false,
 							"processData":false,
-							"data":formData
+							"data":formData,
 						}, options.fileUploadAjaxInfo);
 						$.ajax(ajaxOptions);
 					}

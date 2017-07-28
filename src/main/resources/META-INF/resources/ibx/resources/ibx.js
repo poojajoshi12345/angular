@@ -252,7 +252,9 @@ ibx.getIbxMarkupOptions = function(el)
 		if(name.search("data-ibxp-") == 0)
 		{
 			var prop = name.replace("data-ibxp-", "");
-			prop = $.camelCase(prop);
+			var props = prop.split(".");
+			prop = $.camelCase(props.shift());
+			prop += props.length ? sformat(".{1}", props.join(".")) : "";
 			var option = attr.value[0] == "{" ? this.parseIbxOptions(attr.value) : null; //check for '{' to see if we parse as object.
 			options[prop] = option ? $.extend(true, options[prop], option) : attr.value;
 		}

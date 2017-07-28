@@ -25,10 +25,15 @@
 				{
 					if(e.type == "ibx_drop")
 					{
+						$(this).ibxWidget("option", "fileUploadAjaxInfo", {"complete":function(xhr, status)
+						{
+							console.log(xhr.responseText);
+						}});
 					}
 					else
 						e.preventDefault();
 				});
+
 			}, [{"src":"./test_res_bundle.xml", "loadContext":"app"}], true);
 		</script>
 		<style type="text/css">
@@ -57,8 +62,8 @@
 	</head>
 	<body class="ibx-root">
 		<div class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
-			<div class="drag-source" data-ibx-type="ibxLabel" data-ibxp-draggable="true" data-ibxp-file-upload-ajax-info.url="xxx.jsp">Drag Here!</div>
-			<div class="drop-target" data-ibx-type="ibxLabel" data-ibxp-droppable="true">Drop Here!</div>
+			<div class="drag-source" data-ibx-type="ibxLabel" data-ibxp-draggable="true">Drag Here!</div>
+			<div class="drop-target" data-ibx-type="ibxLabel" data-ibxp-droppable="true" data-ibxp-file-upload-ajax-info.async="false" data-ibxp-file-upload-ajax-info.url="xxx.jsp">Drop Here!</div>
 		</div>
 	</body>
 </html>
