@@ -290,7 +290,7 @@ _p.loadBundle = function(xResDoc)
 
 		//now load all forward reference Resource Bundles (packages) that this bundle wants to load.
 		var files = [];
-		bundle.find("ibx-package").each(function(idx, el){files.push($(el).attr("src"));});
+		bundle.find("ibx-package").each(function(idx, el){el = $(el);files.push({"src":$(el).attr("src"), "loadContext":el.closest("[loadContext]").attr("loadContext")});});
 		this.addBundles(files).done(function()
 		{
 			//save that this bundles has been loaded.
