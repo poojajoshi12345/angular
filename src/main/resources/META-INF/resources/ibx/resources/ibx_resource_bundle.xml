@@ -104,9 +104,9 @@ $Revision$:-->
 					</div>
 					<div class="ibx-dialog-content" data-ibx-type="ibxVBox" data-ibx-name="contentBox" data-ibxp-align="stretch"></div>
 					<div class='ibx-dialog-button-box' data-ibx-type='ibxHBox' data-ibx-name='btnBox' data-ibxp-justify='end' data-ibxp-align='center'>
+						<div class='ibx-dialog-ok-button' data-ibx-type='ibxButton' data-ibx-name='btnOK' data-ibxp-text="OK" data-ibxp-icon-position='top' tabIndex='1'></div>
 						<div class='ibx-dialog-apply-button' data-ibx-type='ibxButton' data-ibx-name='btnApply' data-ibxp-text="Apply" data-ibxp-icon-position='top' tabIndex='1'></div>
 						<div class='ibx-dialog-cancel-button' data-ibx-type='ibxButton' data-ibx-name='btnCancel' data-ibxp-text="Cancel" data-ibxp-icon-position='top' tabIndex='1'></div>
-						<div class='ibx-dialog-ok-button' data-ibx-type='ibxButton' data-ibx-name='btnOK' data-ibxp-text="OK" data-ibxp-icon-position='top' tabIndex='1'></div>
 					</div>
 				</div>
 			</div>
