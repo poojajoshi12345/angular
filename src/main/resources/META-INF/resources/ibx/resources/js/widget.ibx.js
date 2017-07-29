@@ -89,10 +89,9 @@ $.widget("ibi.ibxWidget", $.Widget,
 	},
 	_init:function()
 	{
-		//_setOptions will respect the options map.
-		this.option($.extend(true, {}, this.options, ibx.getIbxMarkupOptions(this.element)));
 		$.each(ibx.getIbxMarkupOptions(this.element), function(key, value)
 		{
+			//option will respect the options map.
 			this.option(key, value);
 		}.bind(this));
 		this.refresh();

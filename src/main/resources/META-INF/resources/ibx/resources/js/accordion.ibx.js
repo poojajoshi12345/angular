@@ -99,7 +99,7 @@ $.widget("ibi.ibxAccordionPage", $.ibi.ibxFlexBox,
 		btnPosition:"start",
 		btnOptions:
 		{
-			text:"Accordion Page",
+			text:"",
 			textElClass:"ibx-label-text ibx-accordion-button-text",
 			justify:"start",
 			iconPosition:"right",
@@ -131,6 +131,7 @@ $.widget("ibi.ibxAccordionPage", $.ibi.ibxFlexBox,
 	_create:function()
 	{
 		this._super();
+		var options = this.options;
 
 		this.element.on("keydown", this._onPageKeyEvent.bind(this));
 		this.element.on("focus", this._onPageFocus.bind(this));
@@ -141,6 +142,9 @@ $.widget("ibi.ibxAccordionPage", $.ibi.ibxFlexBox,
 		this.element.addClass("accordion-page-no-animate");
 		this.element.on("transitionend", this._onTransitionEnd.bind(this))
 		this.add(this.element.children());
+
+		//alternate to data-ibxp-text...direct text node children can be used to set the text.
+		options.btnOptions.text = options.btnOptions.text || this.element.textNodes().remove().text().replace(/^\s*|\s*$/g, "");
 
 		//need this on timer so we can stop the initial animation for selected pages.
 		window.setTimeout(function(){this.element.removeClass("accordion-page-no-animate");}.bind(this), 0);

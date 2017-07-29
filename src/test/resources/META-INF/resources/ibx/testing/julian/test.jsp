@@ -33,7 +33,6 @@
 					else
 						e.preventDefault();
 				});
-
 			}, [{"src":"./test_res_bundle.xml", "loadContext":"app"}], true);
 		</script>
 		<style type="text/css">
@@ -62,6 +61,11 @@
 	</head>
 	<body class="ibx-root">
 		<div class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
+			<div data-ibx-type="ibxTabPane">
+				<div data-ibx-type="ibxTabPage">Julian</div>
+				<div data-ibx-type="ibxTabPage">James</div>
+				<div data-ibx-type="ibxTabPage">Charles</div>
+			</div>
 			<div class="drag-source" data-ibx-type="ibxLabel" data-ibxp-draggable="true">Drag Here!</div>
 			<div class="drop-target" data-ibx-type="ibxLabel" data-ibxp-droppable="true" data-ibxp-file-upload-ajax-info.async="false" data-ibxp-file-upload-ajax-info.url="xxx.jsp">Drop Here!</div>
 		</div>

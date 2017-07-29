@@ -186,10 +186,15 @@ $.widget("ibi.ibxTabPage", $.ibi.ibxWidget,
 	{
 		this._super();
 		var options = this.options;
+
+		//alternate to data-ibxp-text...direct text node children can be used to set the text.
+		options.tabOptions.text = options.tabOptions.text || this.element.textNodes().remove().text().replace(/^\s*|\s*$/g, "");
+
 		this._tabButton = $("<div>").prop("tabIndex", 0).ibxTabButton();
 		this._tabButton.ibxTabButton("option", "tabPage", this.element);
 		this.element.on("focus", this._onPageFocus.bind(this));
 		this.element.append(this._tabButton);
+
 	},
 	_destroy:function()
 	{

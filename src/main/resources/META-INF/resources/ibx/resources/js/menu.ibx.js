@@ -116,7 +116,7 @@ $.widget("ibi.ibxMenuItem", $.ibi.ibxHBox,
 		var options = this.options;
 
 		//alternate to data-ibxp-text...direct text node children can be used to set the text.
-		options.labelOptions.text = options.labelOptions.text + this.element.textNodes().remove().text().replace(/^\s*|\s*$/g, "");
+		options.labelOptions.text = options.labelOptions.text || this.element.textNodes().remove().text().replace(/^\s*|\s*$/g, "");
 
 		this._startMarker = $("<div>");
 		this._endMarker = $("<div>");
