@@ -1,4 +1,4 @@
-/*Copyright 1996-2016 Information Builders, Inc. All rights reserved.*/
+﻿/*Copyright 1996-2016 Information Builders, Inc. All rights reserved.*/
 /* $Revision$: */
 
 @font-face {
@@ -38,75 +38,6 @@
 	font-feature-settings: 'liga';
 }
 
-.ibx-glyph-folder {
-    color: #fcce58;
-}
-.ibx-glyph-fex {
-    color: #4fa03d;
-}
-.ibx-glyph-fex-chart {
-    color: #2A5699;
-}
-.ibx-glyph-fex-visualization {
-    color: #e1542b;
-}
-.ibx-glyph-fex-alert {
-    color: #fcce58;
-}
-.ibx-glyph-file-pdf {
-    color: #E01E00;
-}
-.ibx-glyph-file-excel {
-    color: #1F7246;
-}
-.ibx-glyph-file-powerpoint {
-    color: #D04626;
-}
-.ibx-glyph-file-word {
-    color: #2A5699;
-}
-.ibx-glyph-html5 {
-    color: #19a9d5;
-}
-.ibx-glyph-file-html {
-    color: #5388be;
-}
-.ibx-glyph-file-css {
-    color: #fcce58;
-}
-.ibx-glyph-file-sty {
-    color: #e1542b;
-}
-.ibx-glyph-file-visdis {
-    color: #e1542b;
-}
-.ibx-glyph-file-json {
-    color: #4fa03d;
-}
-.ibx-glyph-url {
-    color: #5388be;
-}
-.ibx-glyph-shortcut {
-    color: #5388be;
-}
-.ibx-glyph-reporting-object {
-    color: #5388be;
-}
-.ibx-glyph-schedule {
-    color: #4fa03d;
-}
-.ibx-glyph-library {
-    color: #e1542b;
-}
-.ibx-glyph-deferred-ticket {
-    color: #fcce58;
-}
-.ibx-glyph-blog {
-    color: #5388be;
-}
-.ibx-glyph-portal {
-    color: #5388be;
-}
 .ibx-glyph-key:before {
   content: "\e98f";
 }
@@ -275,6 +206,9 @@
 .ibx-glyph-filter:before {
   content: "\e98a";
 }
+.ibx-glyph-quick-filter:before {
+  content: "\e99e";
+}
 .ibx-glyph-floppy:before {
   content: "\e92d";
 }
@@ -286,6 +220,7 @@
 }
 .ibx-glyph-new-database:before {
   content: "\e91e";
+  color: #000;
 }
 .ibx-glyph-new-page:before {
   content: "\e91f";
@@ -295,12 +230,14 @@
 }
 .ibx-glyph-new-visualization:before {
   content: "\e921";
+  color: #000;
 }
 .ibx-glyph-new-table:before {
   content: "\e926";
 }
 .ibx-glyph-clear-canvas:before {
   content: "\e944";
+  color: #000;
 }
 .ibx-glyph-preview:before {
   content: "\e927";
@@ -319,15 +256,19 @@
 }
 .ibx-glyph-label-top:before {
   content: "\e92b";
+  color: #3c3c3c;
 }
 .ibx-glyph-label-right:before {
   content: "\e92c";
+  color: #3c3c3c;
 }
 .ibx-glyph-label-left:before {
   content: "\e92f";
+  color: #3c3c3c;
 }
 .ibx-glyph-label-none:before {
   content: "\e930";
+  color: #3c3c3c;
 }
 .ibx-glyph-label-bold:before {
   content: "\e945";
@@ -349,15 +290,19 @@
 }
 .ibx-glyph-cell-merge:before {
   content: "\e931";
+  color: #000;
 }
 .ibx-glyph-cell-split:before {
   content: "\e932";
+  color: #000;
 }
 .ibx-glyph-insert-after:before {
   content: "\e933";
+  color: #000;
 }
 .ibx-glyph-insert-before:before {
   content: "\e934";
+  color: #000;
 }
 .ibx-glyph-drop-target:before {
   content: "\e957";
