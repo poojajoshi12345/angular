@@ -172,7 +172,7 @@ $.widget("ibi.ibxTabPage", $.ibi.ibxWidget,
 		selected: false,
 		tabOptions:
 		{
-			text:"Tab Button"
+			text:""
 		},
 
 		optionsMap:
