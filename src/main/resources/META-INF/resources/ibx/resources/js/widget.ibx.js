@@ -96,55 +96,6 @@ $.widget("ibi.ibxWidget", $.Widget,
 		}.bind(this));
 		this.refresh();
 	},
-	option:function(key, value)
-	{
-		//retrieve mapped options.
-		if(typeof key === "string" && this.options.optionsMap[key] && !value)
-			return this._super(this.options.optionsMap[key]);
-		else
-			return this._superApply(arguments);
-	},
-	_setOption:function(key, value)
-	{
-		//map option to option.option.xxx. Used mostly for Bindows markup property setting.
-		if(this.options.optionsMap[key])
-		{
-			//console.warn("ibx optionsMap is deprecated => Use compound options syntax: data-ibxp-option.subOption, setting option:", key);
-			this.option(this.options.optionsMap[key], value);
-			delete this.options[key];//mapped option keys should be removed from main options object so things don't get set twice (like text on a label).
-		}
-		else
-			this._super(key, value);
-
-		if(this._created)
-		{
-			this.element.removeClass(this.options.class);
-			this.refresh();
-		}
-		return this;
-	},
-	_setOptionDisabled:function(value)
-	{
-		this._super(value);
-		var wClass = this._widgetClass;
-		(value) ? this.element.addClass("ibx-widget-disabled") : this.element.removeClass("ibx-widget-disabled");
-		(value) ? this.element.addClass(wClass + "-disabled") : this.element.removeClass(wClass + "-disabled");
-		if(this.options.class)
-			(value) ? this.element.addClass(this.options.class + "-disabled") : this.element.removeClass(this.options.class + "-disabled");
-
-		this.element.find("[tabIndex]").add(this.element).each(function(disabled, idx, el)
-		{
-			var $el = $(el);
-			if(disabled)
-				$el.data("ibxDisabledTabIndex", $el.prop("tabIndex")).prop("tabIndex", -1);
-			else
-			{
-				var tabIndex = $el.data("ibxDisabledTabIndex");
-				(!tabIndex) ? $el.removeProp("tabIndex") : $el.prop("tabIndex", tabIndex);
-				$el.removeData("ibxDisabledTabIndex");
-			}
-		}.bind(this, value));
-	},
 	member:function(memberName, value)
 	{
 		var ret = null;
@@ -224,12 +175,63 @@ $.widget("ibi.ibxWidget", $.Widget,
 		if(refresh)
 			this.refresh();
 	},
-	refreshEx: function (childRefresh)
+	option:function(key, value)
 	{
-		this.element.find(':ibxWidget').filter(childRefresh || '*').ibxWidget('refresh');
+		//retrieve mapped options.
+		if(typeof key === "string" && this.options.optionsMap[key] && !value)
+			return this._super(this.options.optionsMap[key]);
+		else
+			return this._superApply(arguments);
+	},
+	_setOption:function(key, value)
+	{
+		if(this.options[key] == value)
+			return this;
+
+		//map option to option.option.xxx
+		if(this.options.optionsMap[key])
+		{
+			this.option(this.options.optionsMap[key], value);
+			delete this.options[key];//mapped option keys should be removed from main options object so things don't get set twice (like text on a label).
+		}
+		else
+			this._super(key, value);
+
+		if(this._created)
+		{
+			this.element.removeClass(this.options.class);
+			this.refresh();
+		}
+		return this;
+	},
+	_setOptionDisabled:function(value)
+	{
+		this._super(value);
+		var wClass = this._widgetClass;
+		(value) ? this.element.addClass("ibx-widget-disabled") : this.element.removeClass("ibx-widget-disabled");
+		(value) ? this.element.addClass(wClass + "-disabled") : this.element.removeClass(wClass + "-disabled");
+		if(this.options.class)
+			(value) ? this.element.addClass(this.options.class + "-disabled") : this.element.removeClass(this.options.class + "-disabled");
+
+		this.element.find("[tabIndex]").add(this.element).each(function(disabled, idx, el)
+		{
+			var $el = $(el);
+			if(disabled)
+				$el.data("ibxDisabledTabIndex", $el.prop("tabIndex")).prop("tabIndex", -1);
+			else
+			{
+				var tabIndex = $el.data("ibxDisabledTabIndex");
+				(!tabIndex) ? $el.removeProp("tabIndex") : $el.prop("tabIndex", tabIndex);
+				$el.removeData("ibxDisabledTabIndex");
+			}
+		}.bind(this, value));
 	},
 	refresh:function()
 	{
+		//refresh turned off for all widgets
+		if($.ibi.ibxWidget.noRefresh)
+			return;
+
 		var options = this.options;
 		this.element.addClass(options.class);
 		options.focusRoot ? this.element.addClass("ibx-focus-root") : this.element.removeClass("ibx-focus-root");

@@ -195,12 +195,15 @@ $.widget("ibi.ibxMenuItem", $.ibi.ibxHBox,
 	},
 	removeSubMenu:function()
 	{
-		this.closeSubMenu();
 		var subMenu = this.subMenu();
 		if(subMenu)
-			subMenu.detach().off("ibx_close").removeData("ibxParentMenu");
-		this.element.removeData("ibxSubMenu");
-		this.refresh();
+		{
+			this.closeSubMenu();
+			if(subMenu)
+				subMenu.detach().off("ibx_close").removeData("ibxParentMenu");
+			this.element.removeData("ibxSubMenu");
+			this.refresh();
+		}
 	},
 	closeSubMenu:function(closeData)
 	{
@@ -213,7 +216,6 @@ $.widget("ibi.ibxMenuItem", $.ibi.ibxHBox,
 		//on close put it back under this menuitem so it's a submenu again.
 		var subMenu = this.subMenu();
 		this.element.append(subMenu);
-		this.refresh();
 	},
 	userValue:function()
 	{
