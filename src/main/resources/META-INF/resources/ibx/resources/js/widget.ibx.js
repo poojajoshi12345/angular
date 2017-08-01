@@ -67,6 +67,15 @@ $.widget("ibi.ibxWidget", $.Widget,
 
 		this._super();
 	},
+	_init:function()
+	{
+		$.each(ibx.getIbxMarkupOptions(this.element), function(key, value)
+		{
+			//option will respect the options map.
+			this.option(key, value);
+		}.bind(this));
+		this.refresh();
+	},
 	destroyed:function(){return this._destroyed;},
 	_destroyed:false,
 	_destroy:function()
@@ -87,15 +96,6 @@ $.widget("ibi.ibxWidget", $.Widget,
 		this._destroyed = true;
 		this._trigger("destroy");
 	},
-	_init:function()
-	{
-		$.each(ibx.getIbxMarkupOptions(this.element), function(key, value)
-		{
-			//option will respect the options map.
-			this.option(key, value);
-		}.bind(this));
-		this.refresh();
-	},
 	option:function(key, value)
 	{
 		//retrieve mapped options.
@@ -106,17 +106,29 @@ $.widget("ibi.ibxWidget", $.Widget,
 	},
 	_setOption:function(key, value)
 	{
-		//map option to option.option.xxx. Used mostly for Bindows markup property setting.
+		var valChanged = false;
+
+		//map option to option.option.xxx this makes markup clearer to read
 		if(this.options.optionsMap[key])
 		{
-			//console.warn("ibx optionsMap is deprecated => Use compound options syntax: data-ibxp-option.subOption, setting option:", key);
-			this.option(this.options.optionsMap[key], value);
-			delete this.options[key];//mapped option keys should be removed from main options object so things don't get set twice (like text on a label).
+			curValue = this.option(this.options.optionsMap[key]);
+			if(curValue != value)
+			{
+				this.option(this.options.optionsMap[key], value);
+				valChanged = true;
+			}
+
+			//mapped option keys can show up on the main options when set from markup...it's complicated...just delete them here as they aren't needed.
+			delete this.options[key];
 		}
 		else
+		if(this.options[key] != key)
+		{
 			this._super(key, value);
+			valChanged = true;
+		}
 
-		if(this._created)
+		if(valChanged && this._created)
 		{
 			this.element.removeClass(this.options.class);
 			this.refresh();
