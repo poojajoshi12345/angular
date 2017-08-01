@@ -60,7 +60,6 @@ $.widget("ibi.ibxMenu", $.ibi.ibxPopup,
 	open:function(openInfo)
 	{
 		this._super(openInfo)
-		this.refresh();
 	},
 	close:function(closeData)
 	{
@@ -74,7 +73,6 @@ $.widget("ibi.ibxMenu", $.ibi.ibxPopup,
 	refresh: function ()
 	{
 		this._super();
-		this.children().ibxWidget("refresh");
 	}
 });
 $.ibi.ibxMenu.statics = 
@@ -198,9 +196,11 @@ $.widget("ibi.ibxMenuItem", $.ibi.ibxHBox,
 		this.closeSubMenu();
 		var subMenu = this.subMenu();
 		if(subMenu)
+		{
+			this.element.removeData("ibxSubMenu");
 			subMenu.detach().off("ibx_close").removeData("ibxParentMenu");
-		this.element.removeData("ibxSubMenu");
-		this.refresh();
+			this.refresh();
+		}
 	},
 	closeSubMenu:function(closeData)
 	{
@@ -213,7 +213,6 @@ $.widget("ibi.ibxMenuItem", $.ibi.ibxHBox,
 		//on close put it back under this menuitem so it's a submenu again.
 		var subMenu = this.subMenu();
 		this.element.append(subMenu);
-		this.refresh();
 	},
 	userValue:function()
 	{
@@ -308,7 +307,6 @@ $.widget("ibi.ibxRadioMenuItem", $.ibi.ibxCheckMenuItem,
 	refresh:function()
 	{
 		var options = this.options;
-
 		this._startMarker.removeClass("ibx-marker-radio-uncheck ibx-marker-radio-check");
 		this._startMarker.addClass(options.checked ? "ibx-marker-radio-check" : "ibx-marker-radio-uncheck");
 		this._super();
