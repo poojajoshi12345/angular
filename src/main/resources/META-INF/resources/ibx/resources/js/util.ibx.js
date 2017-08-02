@@ -114,6 +114,53 @@ jQuery.expr[":"]["hasSubMenu"] = function(elem)
 	return subMenu ? true : false;
 };
 
+// trigger/on/off using native dom events
+// helpful is you don't want the events to bubble
+// but still want to pass a data object to the handler
+jQuery.fn.extend({
+	// Add an event handler for a custom event created with triggerNative.
+	// See comments below on how to retrieve the data object attached to the event.
+	onNative: function (type, fn)
+	{
+		this.each(function (index, el)
+		{
+			el.addEventListener(type, $.fn._nativeHandler.bind(null, fn));
+		});
+	},
+	// Remove event handler added with onNative.
+	offNative: function (type, fn)
+	{
+		this.each(function (index, el)
+		{
+			el.removeEventListener(type);
+		});
+	},
+	// Create a dom custom event of the given type.
+	// By default it will not bubble.
+	// Use 'data' to pass an object to the handler.
+	// 1. Use jquery 'on' to add an event handler like this:
+	//		$('.myobject').on("myevent", function (event){ console.log(event.originalEvent.data);});
+	// 2. Use jquery 'onNative' to add an event handler like this:
+	//		$('.myobject').onNative("myevent", function (event, data){ console.log(data);});
+	// 3. Use native addEventListener to add an event handler like this:
+	//		myelement.addEventListener("myevent", function (event){ console.log(event.data);});
+	triggerNative: function (type, data, bubble)
+	{
+		var event = document.createEvent("CustomEvent");
+		event.initEvent(type, bubble, true);
+		event.data = data;
+		this.each(function (index, el)
+		{
+			el.dispatchEvent(event);
+		})
+	},
+	// Support function.
+	_nativeHandler: function (fn, event)
+	{
+		return fn(event, event.data);
+	},
+});
+
 //simple plugin to get the zIndex of the 0th element.
 jQuery.fn["zIndex"] = function()
 {
