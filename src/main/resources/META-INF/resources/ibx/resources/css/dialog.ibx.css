@@ -100,10 +100,7 @@
 .ibx-dialog-ok-button, .ibx-dialog-cancel-button, .ibx-dialog-apply-button
 {
 	flex: 0 1 7em;
-}
-.ibx-dialog-cancel-button, .ibx-dialog-apply-button
-{
-	margin-right:.25em;
+	margin:0 3px 0 3px;
 }
 
 .ibx-dialog-confirm-message
