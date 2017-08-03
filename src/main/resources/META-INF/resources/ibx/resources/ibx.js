@@ -244,7 +244,7 @@ ibx.getIbxMarkupOptions = function(el)
 	var options = this.parseIbxOptions(ibxOptions);
 
 	//then overlay any specific options on top.
-	var attrs = $(el).prop("attributes");
+	var attrs = el.prop("attributes");
 	for(var i = 0; i < attrs.length; ++i)
 	{
 		var attr = attrs[i];
