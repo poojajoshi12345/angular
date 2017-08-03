@@ -72,14 +72,30 @@
 					var select = $(".test-select").data("ibxWidget");
 					select.children().detach();
 					var date = new Date();
-					for(var i = 0; i < 500; ++i)
+					for(var i = 0; i < 1; ++i)
 					{
 						var item = $("<div>").prop("id", "selectItem "+i).ibxSelectItem({text:"Item" + i, glyph:"face", "glyphClasses":"material-icons"});
 						select.add(item);
 					}
 					$.ibi.ibxWidget.noRefresh = false;
 					select.children().ibxWidget("refresh");
-					console.log(new Date() - date);
+					console.log("NO GROUPS", new Date() - date);
+
+
+					$.ibi.ibxWidget.noRefresh = true;
+					var select = $(".test-select-groups").data("ibxWidget");
+					var group = select._group1.data("ibxWidget");
+					group.remove();
+					var date = new Date();
+					for(var i = 0; i < 500; ++i)
+					{
+						var item = $("<div>").prop("id", "selectItem "+i).ibxSelectItem({text:"Item" + i, glyph:"face", "glyphClasses":"material-icons"});
+						group.add(item);
+					}
+					$.ibi.ibxWidget.noRefresh = false;
+					group.children().ibxWidget("refresh");
+					console.log("GROUPS", new Date() - date);
+
 				});
 			}, [{"src":"./test_res_bundle.xml", "loadContext":"app"}], true);
 		</script>
@@ -111,9 +127,13 @@
 		<div class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
 			<div class="menu-item" data-ibx-type="ibxMenuItem">I"m a menu Item</div>
 			<div class="btn-test" data-ibx-type="ibxButton">Test</div>
-			<div class="test-select" data-ibx-type="ibxSelect">
-				<div class="test-select-item" data-ibx-type="ibxSelectItem" data-ibxp-text="FOOBAR"></div>
+			
+			<div class="test-select" data-ibx-type="ibxSelect"></div>
+			
+			<div class="test-select-groups" data-ibx-type="ibxSelect" data-ibx-name-root="true">
+				<div class="group-1" data-ibx-name="_group1" data-ibx-type="ibxSelectGroup">Group 1</div>
 			</div>
+			
 			<div class="drag-source" data-ibx-type="ibxLabel" data-ibxp-draggable="true">Drag Here!</div>
 			<div class="drop-target" data-ibx-type="ibxLabel" data-ibxp-droppable="true" data-ibxp-file-upload-ajax-info.async="false" data-ibxp-file-upload-ajax-info.url="xxx.jsp">Drop Here!</div>
 			<!--

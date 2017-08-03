@@ -925,19 +925,29 @@ $.widget("ibi.ibxSelectGroup", $.ibi.ibxLabel,
 			this.element.uniqueId();
 		this._super();
 	},
+	children:function(selector)
+	{
+		return this.element.parent().children('.ibx-radio-group-' + $(this.element).attr("id"));
+	},
 	add:function(el, sibling, before)
 	{
 		el = $(el);
 		el.each(function (idx, el)
 		{
 			el = $(el);
-			var children = this.element.parent().children('.ibx-radio-group-' + $(this.element).attr("id"));
+			var children = this.children();
 			var after = (children.length == 0) ? this.element : after = children[children.length - 1];
 			el.prepend($("<div>").addClass("ibx-menu-item-marker")).addClass('ibx-select-group-item ibx-radio-group-' + $(this.element).attr("id"));
 			el.insertAfter(after);
 			if (el.ibxWidget('option', 'selected'))
 				this.options.selectCtrl.ibxWidget('selectItem', el);
 		}.bind(this));
+	},
+	remove:function(el, refresh)
+	{
+		this.children(el).detach();
+		if(refresh)
+			this.refresh();
 	},
 	_refresh: function ()
 	{
