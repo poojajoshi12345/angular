@@ -171,7 +171,7 @@ $.widget("ibi.ibxRadioGroup", $.ibi.ibxWidget,
 		var disabled = !!value;
 		$(".ibx-radio-group-" + this.options.name).ibxWidget('option', 'disabled', disabled);
 	},
-	refresh: function ()
+	_refresh: function ()
 	{
 		this.element.addClass('ibx-radio-group-control-' + this.options.name);
 		this._super();

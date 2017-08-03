@@ -33,7 +33,7 @@ $.widget("ibi.ibxGroupBox", $.ibi.ibxWidget,
 		this._label.remove();
 		this._super();
 	},
-	refresh: function ()
+	_refresh: function ()
 	{
 		this.options.labelOptions.text = this.options.text;
 		this.options.labelOptions.glyph = this.options.glyph;

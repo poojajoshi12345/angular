@@ -67,15 +67,6 @@ $.widget("ibi.ibxWidget", $.Widget,
 
 		this._super();
 	},
-	_init:function()
-	{
-		$.each(ibx.getIbxMarkupOptions(this.element), function(key, value)
-		{
-			//option will respect the options map.
-			this.option(key, value);
-		}.bind(this));
-		this.refresh();
-	},
 	destroyed:function(){return this._destroyed;},
 	_destroyed:false,
 	_destroy:function()
@@ -96,66 +87,10 @@ $.widget("ibi.ibxWidget", $.Widget,
 		this._destroyed = true;
 		this._trigger("destroy");
 	},
-	option:function(key, value)
+	_init:function()
 	{
-		//retrieve mapped options.
-		if(typeof key === "string" && this.options.optionsMap[key] && !value)
-			return this._super(this.options.optionsMap[key]);
-		else
-			return this._superApply(arguments);
-	},
-	_setOption:function(key, value)
-	{
-		var valChanged = false;
-
-		//map option to option.option.xxx this makes markup clearer to read
-		if(this.options.optionsMap[key])
-		{
-			curValue = this.option(this.options.optionsMap[key]);
-			if(curValue != value)
-			{
-				this.option(this.options.optionsMap[key], value);
-				valChanged = true;
-			}
-
-			//mapped option keys can show up on the main options when set from markup...it's complicated...just delete them here as they aren't needed.
-			delete this.options[key];
-		}
-		else
-		if(this.options[key] != key)
-		{
-			this._super(key, value);
-			valChanged = true;
-		}
-
-		if(valChanged && this._created)
-		{
-			this.element.removeClass(this.options.class);
-			this.refresh();
-		}
-		return this;
-	},
-	_setOptionDisabled:function(value)
-	{
-		this._super(value);
-		var wClass = this._widgetClass;
-		(value) ? this.element.addClass("ibx-widget-disabled") : this.element.removeClass("ibx-widget-disabled");
-		(value) ? this.element.addClass(wClass + "-disabled") : this.element.removeClass(wClass + "-disabled");
-		if(this.options.class)
-			(value) ? this.element.addClass(this.options.class + "-disabled") : this.element.removeClass(this.options.class + "-disabled");
-
-		this.element.find("[tabIndex]").add(this.element).each(function(disabled, idx, el)
-		{
-			var $el = $(el);
-			if(disabled)
-				$el.data("ibxDisabledTabIndex", $el.prop("tabIndex")).prop("tabIndex", -1);
-			else
-			{
-				var tabIndex = $el.data("ibxDisabledTabIndex");
-				(!tabIndex) ? $el.removeProp("tabIndex") : $el.prop("tabIndex", tabIndex);
-				$el.removeData("ibxDisabledTabIndex");
-			}
-		}.bind(this, value));
+		var options = $.extend({}, this.options, ibx.getIbxMarkupOptions(this.element))
+		this.option(options);
 	},
 	member:function(memberName, value)
 	{
@@ -236,11 +171,74 @@ $.widget("ibi.ibxWidget", $.Widget,
 		if(refresh)
 			this.refresh();
 	},
-	refreshEx: function (childRefresh)
+	option:function(key, value)
 	{
-		this.element.find(':ibxWidget').filter(childRefresh || '*').ibxWidget('refresh');
+		//console.warn("The problem with the data-ibxp-label-options.text is that when 'option' is called with object, it doesn't decode the '.' values into sub options.");
+		var ret = null;
+		var key = this.options.optionsMap[key] || key;
+		if(value !== undefined)
+			ret = this._super(key, value);
+		else
+			ret = this._super(key);
+
+		this.refresh();
+		return ret;
+	},
+	_setOption:function(key, value)
+	{
+		if(value instanceof Object)
+			this._super(key, value);
+		else
+		if(this.options.optionsMap[key])
+		{
+			//map option to option.option.xxx this makes markup clearer to read
+			curValue = this.option(this.options.optionsMap[key]);
+			if(curValue != value)
+			{
+				this.option(this.options.optionsMap[key], value);
+				this._needsRefresh = true;
+			}
+
+			//mapped option keys can show up on the main options when set from markup...it's complicated...just delete them here as they aren't needed.
+			delete this.options[key];
+		}
+		else
+		if(this.options[key] != value)
+			this._super(key, value);
+		return this;
+	},
+	_setOptionDisabled:function(value)
+	{
+		this._super(value);
+		var wClass = this._widgetClass;
+		(value) ? this.element.addClass("ibx-widget-disabled") : this.element.removeClass("ibx-widget-disabled");
+		(value) ? this.element.addClass(wClass + "-disabled") : this.element.removeClass(wClass + "-disabled");
+		if(this.options.class)
+			(value) ? this.element.addClass(this.options.class + "-disabled") : this.element.removeClass(this.options.class + "-disabled");
+
+		this.element.find("[tabIndex]").add(this.element).each(function(disabled, idx, el)
+		{
+			var $el = $(el);
+			if(disabled)
+				$el.data("ibxDisabledTabIndex", $el.prop("tabIndex")).prop("tabIndex", -1);
+			else
+			{
+				var tabIndex = $el.data("ibxDisabledTabIndex");
+				(!tabIndex) ? $el.removeProp("tabIndex") : $el.prop("tabIndex", tabIndex);
+				$el.removeData("ibxDisabledTabIndex");
+			}
+		}.bind(this, value));
+	},
+	refreshEx:function (childRefresh)
+	{
+		this.element.find(':ibxWidget').filter(childRefresh || '*').add(this.element).ibxWidget('refresh');
 	},
 	refresh:function()
+	{
+		if(!$.ibi.ibxWidget.noRefresh)
+			this._refresh();
+	},
+	_refresh:function()
 	{
 		var options = this.options;
 		this.element.addClass(options.class);
@@ -255,9 +253,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 		}
 		else
 		if(options.wantResize && !this._resizeSensor)
-		{
 			this._resizeSensor = new ResizeSensor(this.element[0], this._onResize.bind(this));
-		}
 	}
 });
 
@@ -467,8 +463,8 @@ $.widget("ibi.ibxWidget", $.Widget,
 					break;
 			}
 		},
-		_refreshOrig:$.ibi.ibxWidget.prototype.refresh,
-		refresh:function()
+		_refreshOrig:$.ibi.ibxWidget.prototype._refresh,
+		_refresh:function()
 		{
 			this._refreshOrig.apply(this, arguments);
 			var options = this.options;

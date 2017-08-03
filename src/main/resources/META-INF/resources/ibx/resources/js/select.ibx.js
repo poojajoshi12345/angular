@@ -526,7 +526,7 @@ $.widget("ibi.ibxSelect", $.ibi.ibxTextField,
 			}
 			bKeep = true;
 		}
-		this._list.find('.ibx-select-radio-item,.ibx-select-check-item').each(function (index, el) { $(el).data('ibxWidget')._setOption('checked', false); })
+		this._list.find('.ibx-select-radio-item,.ibx-select-check-item').each(function (index, el) { $(el).data('ibxWidget').option('checked', false); })
 		if (!this.options.multiSelect || !bKeep)
 		{
 			this._list.find('.sel-selected').removeClass('sel-selected');
@@ -537,10 +537,10 @@ $.widget("ibi.ibxSelect", $.ibi.ibxTextField,
 			if (menuItem.length > 0)
 			{
 				menuItem.addClass('sel-selected sel-anchor');
-				menuItem.data('ibxWidget')._setOption('checked', true);
+				menuItem.data('ibxWidget').option('checked', true);
 			}
 		}
-		this._list.find('.sel-selected.ibx-select-check-item').each(function (index, el) { $(el).data('ibxWidget')._setOption('checked', true); })
+		this._list.find('.sel-selected.ibx-select-check-item').each(function (index, el) { $(el).data('ibxWidget').option('checked', true); })
 		if (!bNoUpdate)
 			this._updateText();
 		if (!bNoChange)
@@ -572,7 +572,6 @@ $.widget("ibi.ibxSelect", $.ibi.ibxTextField,
 			if (newText)
 				newText += ", ";
 			newText += $(el).ibxWidget('option', 'text') + "";
-
 		}.bind(this));
 		return newText;
 	},
@@ -581,7 +580,7 @@ $.widget("ibi.ibxSelect", $.ibi.ibxTextField,
 		var selection = this._list.find('.sel-selected');
 		if (bNotEmpty && selection.length == 0)
 			return;
-		this._setOption("text", this._getText());
+		this.option("text", this._getText());
 	},
 	_applyFilter: function ()
 	{
@@ -600,7 +599,7 @@ $.widget("ibi.ibxSelect", $.ibi.ibxTextField,
 	},
 	_setHighlight: function ()
 	{
-		this._list.find('.ibx-select-radio-item,.ibx-select-check-item').each(function (index, el) { $(el).data('ibxWidget')._setOption('checked', false); })
+		this._list.find('.ibx-select-radio-item,.ibx-select-check-item').each(function (index, el) { $(el).data('ibxWidget').option('checked', false); })
 		this._list.find('.sel-selected').removeClass('sel-selected');
 		var bFound = false;
 		var searchText = this._textInput.val();
@@ -682,7 +681,7 @@ $.widget("ibi.ibxSelect", $.ibi.ibxTextField,
 			this._dropButton.remove();
 		this._list.remove();
 	},
-	refresh: function ()
+	_refresh: function ()
 	{
 		this._super();
 		switch (this.options.type)
@@ -756,11 +755,13 @@ $.widget("ibi.ibxSelectItem", $.ibi.ibxMenuItem,
 	{
 		$.ibi.ibxSelectItem.statics.onMenuItemKeyEvent.call(this, e);
 	},
-	_setOption: function (key, value)
+	option:function(key, value)
 	{
-		$.ibi.ibxSelectItem.statics.setOption.call(this, key, value);
+		var ret = this._superApply(arguments);
+		if (key == "selected" && value && this._list)
+			this.element.trigger("click");
+		return ret;
 	},
-
 });
 
 $.widget("ibi.ibxSelectCheckItem", $.ibi.ibxCheckMenuItem,
@@ -788,11 +789,7 @@ $.widget("ibi.ibxSelectCheckItem", $.ibi.ibxCheckMenuItem,
 	{
 		$.ibi.ibxSelectItem.statics.onMenuItemKeyEvent.call(this, e);
 	},
-	_setOption: function (key, value)
-	{
-		$.ibi.ibxSelectItem.statics.setOption.call(this, key, value);
-	},
-	refresh: function ()
+	_refresh: function ()
 	{
 		this._super();
 	},
@@ -823,11 +820,6 @@ $.widget("ibi.ibxSelectRadioItem", $.ibi.ibxRadioMenuItem,
 	{
 		$.ibi.ibxSelectItem.statics.onMenuItemKeyEvent.call(this, e);
 	},
-	_setOption: function (key, value)
-	{
-		$.ibi.ibxSelectItem.statics.setOption.call(this, key, value);
-	},
-
 });
 
 
@@ -909,14 +901,6 @@ $.ibi.ibxSelectItem.statics =
 		}
 
 	},
-	setOption: function (key, value)
-	{
-		this._super(key, value);
-		if (key == "selected" && value && this._list)
-		{
-			this.element.trigger("click");
-		}
-	},
 	isDropDown: function ()
 	{
 		return this.element.closest('.ibx-select-list').hasClass('ibx-menu');
@@ -955,7 +939,7 @@ $.widget("ibi.ibxSelectGroup", $.ibi.ibxLabel,
 				this.options.selectCtrl.ibxWidget('selectItem', el);
 		}.bind(this));
 	},
-	refresh: function ()
+	_refresh: function ()
 	{
 		this._super();
 	}

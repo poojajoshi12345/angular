@@ -72,7 +72,7 @@ $.widget("ibi.ibxTabPane", $.ibi.ibxFlexBox,
 		}.bind(this));
 		this._super(el);
 	},
-	_setOption: function (key, value)
+	option:function (key, value)
 	{
 		if (key == "position")
 		{
@@ -94,7 +94,7 @@ $.widget("ibi.ibxTabPane", $.ibi.ibxFlexBox,
 					this._super("direction", "rowReverse"); break;
 			}
 		}
-		this._super(key, value);
+		return this._superApply(arguments);
 	},
 	_createTabBar: function ()
 	{
@@ -102,22 +102,22 @@ $.widget("ibi.ibxTabPane", $.ibi.ibxFlexBox,
 		{
 			default:
 			case "top":
-				this._setOption("direction", "column");
+				this.option("direction", "column");
 				this._tabBar = $("<div>").ibxTabGroup({ name: "" + this.widgetName + this.uuid, direction: "row", position: "top"}, this.options.tabBarOptions).css("flex", "0 0 auto");
 				break;
 
 			case "bottom":
-				this._setOption("direction", "columnReverse");
+				this.option("direction", "columnReverse");
 				this._tabBar = $("<div>").ibxTabGroup({ name: "" + this.widgetName + this.uuid, direction: "row", position: "bottom" }, this.options.tabBarOptions).css("flex", "0 0 auto");
 				break;
 
 			case "left":
-				this._setOption("direction", "row");
+				this.option("direction", "row");
 				this._tabBar = $("<div>").ibxTabGroup({ name: "" + this.widgetName + this.uuid, direction: "column", position: "left" }, this.options.tabBarOptions).css("flex", "0 0 auto");
 				break;
 
 			case "right":
-				this._setOption("direction", "rowReverse");
+				this.option("direction", "rowReverse");
 				this._tabBar = $("<div>").ibxTabGroup({ name: "" + this.widgetName + this.uuid, direction: "column", position: "right" }, this.options.tabBarOptions).css("flex", "0 0 auto");
 				break;
 
@@ -150,7 +150,7 @@ $.widget("ibi.ibxTabPane", $.ibi.ibxFlexBox,
 	{
 		this._tabBar.ibxTabGroup("selectPrevious");
 	},
-	refresh: function ()
+	_refresh: function ()
 	{
 		this._super();
 		if (this._tabBar)
@@ -227,7 +227,7 @@ $.widget("ibi.ibxTabPage", $.ibi.ibxWidget,
 				this._tabButton.data('ibxWidget')._trigger("change");
 			}
 	},
-	refresh: function ()
+	_refresh: function ()
 	{
 		this._super();
 		this.options.tabOptions.checked = this.options.selected;
@@ -254,7 +254,7 @@ $.widget("ibi.ibxTabButton", $.ibi.ibxRadioButton,
 			this.element.attr('tabindex', 1);
 		this._super();
 	},
-	refresh: function ()
+	_refresh: function ()
 	{
 		this._super();
 		this.element.removeClass("ibx-button-group-member");
@@ -289,7 +289,7 @@ $.widget("ibi.ibxTabGroup", $.ibi.ibxButtonGroup,
 	{
 		// override base
 	},
-	refresh: function ()
+	_refresh: function ()
 	{
 		this._super();
 		this.element.removeClass("ibx-button-group-horizontal ibx-button-group-vertical ibx-tab-group-horizontal ibx-tab-group-vertical ibx-tab-position-top ibx-tab-position-bottom ibx-tab-position-left ibx-tab-position-right");

@@ -33,7 +33,7 @@ $.widget("ibi.ibxButton", $.ibi.ibxLabel,
 			e.stopPropagation();
 		}
 	},
-	refresh: function ()
+	_refresh: function ()
 	{
 		this._super();
 	}
@@ -158,7 +158,7 @@ $.widget("ibi.ibxCheckBox", $.ibi.ibxLabel,
 			}
 		return this;
 	},
-	refresh: function ()
+	_refresh: function ()
 	{
 		this._super();
 		if (this.options.hideCheck)
@@ -210,7 +210,7 @@ $.widget("ibi.ibxCheckBoxSimple", $.ibi.ibxCheckBox,
 		}
 		return this._super(key, value);
 	},
-	refresh: function ()
+	_refresh: function ()
 	{
 		this._super();
 
@@ -239,7 +239,7 @@ $.widget("ibi.ibxRadioButton", $.ibi.ibxCheckBox,
 		this._super();
 		this._check.attr('type', 'radio');
 	},
-	refresh: function ()
+	_refresh: function ()
 	{
 		this._super();
 	}
@@ -269,7 +269,7 @@ $.widget("ibi.ibxRadioButtonSimple", $.ibi.ibxRadioButton,
 		}
 		return this._super(key, value);
 	},
-	refresh: function ()
+	_refresh: function ()
 	{
 		this._super();
 
@@ -310,7 +310,7 @@ $.widget("ibi.ibxSwitch", $.ibi.ibxCheckBox,
 		this._spacer.remove();
 		this._switch.remove();
 	},
-	refresh: function ()
+	_refresh: function ()
 	{
 		this._super();
 		this.element.removeClass("ibx-check-box");
@@ -493,7 +493,7 @@ $.widget("ibi.ibxButtonGroup", $.ibi.ibxFlexBox,
 		all.first().addClass("ibx-button-group-first");
 		all.last().addClass("ibx-button-group-last");
 	},
-	refresh: function ()
+	_refresh: function ()
 	{
 		this._super();
 		this.options.groupSelection ? this._createGroupSelection() : this._removeGroupSelection();

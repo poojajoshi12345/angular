@@ -35,7 +35,7 @@ $.widget("ibi.ibxForm", $.ibi.ibxWidget,
 		}
 		return;
 	},
-	refresh: function ()
+	_refresh: function ()
 	{
 		var options = this.options;
 		this._super();

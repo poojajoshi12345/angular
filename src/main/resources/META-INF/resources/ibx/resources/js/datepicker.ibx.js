@@ -60,7 +60,7 @@ $.widget("ibi.ibxDatePicker", $.ibi.ibxVBox,
 				break;
 		}
 	},
-	refresh: function ()
+	_refresh: function ()
 	{
 		this.element.removeClass('popup simple inline');
 		this._datePicker.datepicker('option', 'dateFormat', this.options.dateFormat);
@@ -172,7 +172,7 @@ $.widget("ibi.ibxDateRange", $.ibi.ibxDatePicker,
 				el.attr('data-range-to', '');
 		});
 	},
-	refresh: function ()
+	_refresh: function ()
 	{
 		this._super();
 		this._datePicker.datepicker('setDate', this.options.dateTo);

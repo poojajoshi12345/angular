@@ -123,7 +123,7 @@ $.widget("ibi.ibxTextField", $.ibi.ibxFlexBox,
 		this._super();
 		this._textInput.remove();
 	},
-	refresh: function ()
+	_refresh: function ()
 	{
 		this._super();
 		this._textInput.attr("type", this.options.ctrlType);

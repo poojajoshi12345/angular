@@ -90,7 +90,7 @@ $.widget("ibi.ibxTextArea", $.ibi.ibxFlexBox,
 		this._super();
 		this._textInput.remove();
 	},
-	refresh: function ()
+	_refresh: function ()
 	{
 		this._super();
 		if (this.options.forId)

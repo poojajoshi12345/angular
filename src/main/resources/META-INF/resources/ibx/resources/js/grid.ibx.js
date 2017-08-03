@@ -36,7 +36,7 @@ $.widget("ibi.ibxGrid", $.ibi.ibxWidget,
 	{
 		this._super();
 	},
-	refresh: function ()
+	_refresh: function ()
 	{
 		this._super();
 		var options = this.options;
@@ -145,7 +145,7 @@ $.widget("ibi.ibxFlexGrid", $.ibi.ibxHBox,
 	{
 		return this._colSize;
 	},
-	refresh:function()
+	_refresh:function()
 	{
 		this._super();
 		var options = this.options;

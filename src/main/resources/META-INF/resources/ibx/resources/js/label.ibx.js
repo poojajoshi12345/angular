@@ -50,7 +50,7 @@ $.widget("ibi.ibxLabel", $.ibi.ibxFlexBox,
 		this._text.remove();
 		this.element.removeClass("icon-left icon-top icon-right icon-bottom")
 	},
-	refresh:function()
+	_refresh:function()
 	{
 		var options = this.options;
 		var lastOptions = this._lastOptions || {};

@@ -70,7 +70,7 @@ $.widget("ibi.ibxMenu", $.ibi.ibxPopup,
 	{
 		this._box.children(".ibx-menu-item:hasSubMenu").ibxWidget("closeSubMenu", closeData);
 	},
-	refresh: function ()
+	_refresh: function ()
 	{
 		this._super();
 	}
@@ -218,7 +218,7 @@ $.widget("ibi.ibxMenuItem", $.ibi.ibxHBox,
 	{
 		return this.options.userValue;
 	},
-	refresh:function()
+	_refresh:function()
 	{
 		this._super();
 		var options = this.options;
@@ -229,9 +229,8 @@ $.widget("ibi.ibxMenuItem", $.ibi.ibxHBox,
 		this._endMarker.toggleClass("ibx-marker-sub", !!this.subMenu());
 
 		//set the label's options...if there's no start marker (not check or radio) and no glyph...add space for glyph.
-		var labelOptions = $.extend({}, options.labelOptions);
-		labelOptions.text = options.text || labelOptions.text;
-		if(this._startMarker.css("display") == "none" && !labelOptions.glyph && !labelOptions.glyphClasses)
+		var labelOptions = options.labelOptions;
+		if(!labelOptions.glyph && !labelOptions.glyphClasses)
 			labelOptions.glyph = " ";
 		this._label.ibxLabel("option", labelOptions);
 	}
@@ -258,7 +257,7 @@ $.widget("ibi.ibxCheckMenuItem", $.ibi.ibxMenuItem,
 		this._super(e);
 		this._trigger("change", e, this.element);
 	},
-	refresh:function()
+	_refresh:function()
 	{
 		var options = this.options;
 		this._startMarker.removeClass("ibx-marker-uncheck ibx-marker-check");
@@ -304,7 +303,7 @@ $.widget("ibi.ibxRadioMenuItem", $.ibi.ibxCheckMenuItem,
 			return this;
 		}
 	},
-	refresh:function()
+	_refresh:function()
 	{
 		var options = this.options;
 		this._startMarker.removeClass("ibx-marker-radio-uncheck ibx-marker-radio-check");
@@ -373,7 +372,7 @@ $.widget("ibi.ibxMenuButton", $.ibi.ibxButtonSimple,
 		var options = this.options;
 		$(options.menu).ibxWidget("option", {destroOnClose:false,position:options.position}).ibxWidget("open");
 	},
-	refresh:function()
+	_refresh:function()
 	{
 		this._super();
 	}

@@ -33,7 +33,7 @@ $.widget("ibi.ibxFlexBox", $.ibi.ibxWidget,
 			this.element.removeClass(fc[key][options[key]]);
 		this._super(key, value);
 	},
-	refresh:function()
+	_refresh:function()
 	{
 		var options = this.options;
 		var fc = $.ibi.ibxFlexBox.statics.flexClasses;;

@@ -69,7 +69,7 @@ $.widget("ibi.ibxDialog", $.ibi.ibxPopup,
 	{
 		this._trigger("apply");
 	},
-	refresh:function()
+	_refresh:function()
 	{
 		this._super();
 		var options = this.options;

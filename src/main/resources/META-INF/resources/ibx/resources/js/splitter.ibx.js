@@ -96,7 +96,7 @@ $.widget("ibi.ibxSplitter", $.ibi.ibxWidget,
 		this.element.prev().css(this._e1Info);
 		this.element.next().css(this._e2Info);
 	},
-	refresh:function()
+	_refresh:function()
 	{
 		this._super();
 		var options = this.options;

@@ -281,7 +281,7 @@ $.widget("ibi.ibxSlider", $.ibi.ibxGrid,
 			this._popup = null;
 		}
 	},
-	refresh: function ()
+	_refresh: function ()
 	{
 		this._labelMin.ibxWidget('option', 'text', this._getFormattedText("min"));
 		this._labelMax.ibxWidget('option', 'text', this._getFormattedText("max"));
@@ -663,7 +663,7 @@ $.widget("ibi.ibxRange", $.ibi.ibxSlider,
 	{
 		this._super();
 	},
-	refresh: function ()
+	_refresh: function ()
 	{
 		this._super();
 

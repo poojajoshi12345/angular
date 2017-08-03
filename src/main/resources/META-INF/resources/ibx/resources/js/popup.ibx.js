@@ -128,7 +128,7 @@ $.widget("ibi.ibxPopup", $.ibi.ibxWidget,
 			this._trigger("popup_mgr_close", null, this.element);
 		}
 	},
-	refresh:function()
+	_refresh:function()
 	{
 		this._super();
 		var options = this.options;

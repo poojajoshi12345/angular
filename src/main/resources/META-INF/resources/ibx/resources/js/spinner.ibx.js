@@ -164,7 +164,7 @@ $.widget("ibi.ibxSpinner", $.ibi.ibxTextField,
 	{
 		return { elem: this.element, value: parseInt(this.options.value, 10), min: parseInt(this.options.min, 10), max: parseInt(this.options.max, 10), step: parseInt(this.options.step, 10) };
 	},
-	refresh: function ()
+	_refresh: function ()
 	{
 		this._super();
 		if (this._btnBox)

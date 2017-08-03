@@ -65,7 +65,7 @@ $.widget("ibi.ibxAccordionPane", $.ibi.ibxFlexBox,
 		this.options.selected = page;
 		this._trigger("change");
 	},
-	refresh:function()
+	_refresh:function()
 	{
 		this._super();
 		if(this.options.pageStretch)
@@ -229,7 +229,7 @@ $.widget("ibi.ibxAccordionPage", $.ibi.ibxFlexBox,
 			this._content.css("max-height", "");
 		}
 	},
-	refresh:function()
+	_refresh:function()
 	{
 		this._super();
 		var options = this.options;

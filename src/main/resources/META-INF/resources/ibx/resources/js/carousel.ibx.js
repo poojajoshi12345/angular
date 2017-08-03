@@ -225,7 +225,7 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 		metrics = metrics || this.getPageMetrics();
 		return {"pages": Math.floor(metrics.scrollWidth / metrics.pageWidth) || 1, "curPage": Math.floor(metrics.scrollLeft / metrics.pageWidth), "metrics":metrics};
 	},
-	refresh:function()
+	_refresh:function()
 	{
 		this._super();
 		var options = this.options;

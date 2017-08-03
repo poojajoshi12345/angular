@@ -63,7 +63,7 @@
 				{
 					this._super();
 				},
-				refresh:function()
+				_refresh:function()
 				{
 					this._label.css("border", "1px solid red");
 					this._super();

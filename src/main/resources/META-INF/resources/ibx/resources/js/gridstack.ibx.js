@@ -73,7 +73,7 @@ $.widget("ibi.ibxGridStack", $.ibi.ibxWidget,
 	{
 		this._super();
 	},
-	refresh: function ()
+	_refresh: function ()
 	{
 		this._super();
 	}

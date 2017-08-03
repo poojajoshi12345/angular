@@ -39,7 +39,7 @@ $.widget("ibi.ibxIFrame", $.ibi.ibxWidget,
 	{
 		return this._iFrame.prop("contentWindow");
 	},
-	refresh:function()
+	_refresh:function()
 	{
 		this._super();
 		var options = this.options;

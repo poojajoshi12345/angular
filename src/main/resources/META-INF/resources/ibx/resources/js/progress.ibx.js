@@ -31,7 +31,7 @@ $.widget("ibi.ibxProgressBar", $.ibi.ibxHBox,
 	{
 		this._super();
 	},
-	refresh:function()
+	_refresh:function()
 	{
 		this._super();
 		var options = this.options;
@@ -74,7 +74,7 @@ $.widget("ibi.ibxWaiting", $.ibi.ibxLabel,
 	{
 		this._super();
 	},
-	refresh:function()
+	_refresh:function()
 	{
 		var options = this.options;
 		this._icon.toggleClass("wait-stretch", options.stretch)
@@ -108,7 +108,7 @@ $.widget("ibi.ibxWaitingProgressBar", $.ibi.ibxWaiting,
 		this.progress = $("<div>").ibxProgressBar();
 		this.element.append(this.progress);
 	},
-	refresh:function()
+	_refresh:function()
 	{
 		this._super();
 		var options = this.options;

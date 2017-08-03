@@ -72,7 +72,7 @@ $.widget("ibi.ibxMutationObserver", $.Widget,
 	{
 		return this.options.mutationObserver.takeRecords();
 	},
-	refresh:function()
+	_refresh:function()
 	{
 		var options = this.options;
 		if(options.listen)
