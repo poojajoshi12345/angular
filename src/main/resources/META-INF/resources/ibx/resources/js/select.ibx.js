@@ -571,7 +571,7 @@ $.widget("ibi.ibxSelect", $.ibi.ibxTextField,
 		{
 			if (newText)
 				newText += ", ";
-			newText += $(el).ibxWidget('option', 'text') + "";
+			newText += $(el).ibxWidget('option', 'labelOptions.text') + "";
 		}.bind(this));
 		return newText;
 	},
