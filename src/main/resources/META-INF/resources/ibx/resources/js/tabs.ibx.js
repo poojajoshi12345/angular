@@ -74,27 +74,38 @@ $.widget("ibi.ibxTabPane", $.ibi.ibxFlexBox,
 	},
 	option:function (key, value)
 	{
-		if (key == "position")
+		var posValue = null;
+		if (key == 'position')
+			posValue = value;
+		else if (typeof key == 'object' && key['position'])
+			posValue = key['position'];
+		if (posValue)
 		{
 			if (this._tabBar)
 			{
-				this._tabBar.ibxTabGroup("option", "direction", (value == "left" || value == "right") ? "column" : "row");
-				this._tabBar.ibxTabGroup("option", "position", value);
+				this._tabBar.ibxTabGroup("option", "direction", (posValue == "left" || posValue == "right") ? "column" : "row");
+				this._tabBar.ibxTabGroup("option", "position", posValue);
 			}
-			switch (value)
+		}
+		var ret = this._superApply(arguments);
+
+		if (posValue)
+		{
+			switch (posValue)
 			{
 				default:
 				case "top":
-					this._super("direction", "column"); break;
+					this.options.direction = "column"; break;
 				case "bottom":
-					this._super("direction", "columnReverse"); break;
+					this.options.direction = "columnReverse"; break;
 				case "left":
-					this._super("direction", "row"); break;
+					this.options.direction = "row"; break;
 				case "right":
-					this._super("direction", "rowReverse"); break;
+					this.options.direction = "rowReverse"; break;
 			}
 		}
-		return this._superApply(arguments);
+
+		return ret;
 	},
 	_createTabBar: function ()
 	{
