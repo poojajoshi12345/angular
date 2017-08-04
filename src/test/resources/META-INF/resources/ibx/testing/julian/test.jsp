@@ -125,6 +125,8 @@
 	</head>
 	<body class="ibx-root">
 		<div class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
+			<div data-ibx-type="ibxRadioMenuItem" data-ibxp-group="series-group" data-ibxp-user-value="stacked" data-ibxp-label-options='{"text":"SOME RADIO BUTTON"}'></div>
+			<div data-ibx-type="ibxCheckMenuItem" data-ibxp-user-value="stacked" data-ibxp-label-options='{"text":"SOME CHECK BUTTON"}'></div>
 			<div class="menu-item" data-ibx-type="ibxMenuItem" data-ibxp-label-options.glyph-classes="fa fa-folder">I'm a menu Item</div>
 			<div class="btn-test" data-ibx-type="ibxButton">Test</div>
 			

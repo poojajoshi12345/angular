@@ -113,19 +113,6 @@ $.widget("ibi.ibxAccordionPage", $.ibi.ibxFlexBox,
 		contentOptions:
 		{
 		},
-
-		optionsMap:
-		{
-			text:"btnOptions.text",
-			iconPosition:"btnOptions.iconPosition",
-			glyph:"btnOptions.glyph",
-			glyphClasses:"btnOptions.glyphClasses",
-
-			textOpen:"btnOptionsOpen.text",
-			iconPositionOpen:"btnOptionsOpen.iconPosition",
-			glyphOPen:"btnOptionsOpen.glyph",
-			glyphClassesOpen:"btnOptionsOpen.glyphClasses",
-		}
 	},
 	_widgetClass:"ibx-accordion-page",
 	_create:function()

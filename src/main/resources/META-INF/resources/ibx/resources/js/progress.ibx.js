@@ -90,16 +90,7 @@ $.widget("ibi.ibxWaitingProgressBar", $.ibi.ibxWaiting,
 	options:
 	{
 		showProgress:true,
-		progressOptions:{},
-		optionsMap:
-		{
-			minVal:"progressOptions.minVal",
-			maxVal:"progressOptions.maxVal",
-			curVal:"progressOptions.curVal",
-			curValClasses:"progressOptions.curValClasses",
-			markerClasses:"progressOptions.markerClasses",
-			progText:"progressOptions.progText",
-		}
+		progOptions:{},
 	},
 	_widgetClass:"ibx-waiting-progress-bar",
 	_create:function()
@@ -112,7 +103,7 @@ $.widget("ibi.ibxWaitingProgressBar", $.ibi.ibxWaiting,
 	{
 		this._super();
 		var options = this.options;
-		this.progress.css("display", options.showProgress ? "" : "none").ibxWidget("option", options.progressOptions);
+		this.progress.css("display", options.showProgress ? "" : "none").ibxWidget("option", options.progOptions);
 	}
 });
 

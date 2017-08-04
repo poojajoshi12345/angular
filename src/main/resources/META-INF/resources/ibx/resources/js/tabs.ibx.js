@@ -181,15 +181,7 @@ $.widget("ibi.ibxTabPage", $.ibi.ibxWidget,
 	{
 		focusRoot:false,
 		selected: false,
-		tabOptions:
-		{
-			text:""
-		},
-
-		optionsMap:
-		{
-			text:"tabOptions.text"
-		}
+		tabOptions:{},
 	},
 	_widgetClass:"ibx-tab-page",
 	getValue: $.noop,

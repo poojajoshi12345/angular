@@ -16,14 +16,7 @@ $.widget("ibi.ibxDialog", $.ibi.ibxPopup,
 		"closeButton":true,
 		"closeButtonClasses":"",
 		"effect":"fade",
-		"captionLabelOptions":
-		{
-		},
-
-		"optionsMap":
-		{
-			"caption":"captionLabelOptions.text"
-		}
+		"captionOptions":{},
 	},
 	_widgetClass:"ibx-dialog",
 	_create:function()
@@ -73,7 +66,7 @@ $.widget("ibi.ibxDialog", $.ibi.ibxPopup,
 	{
 		this._super();
 		var options = this.options;
-		this.caption.ibxLabel(options.captionLabelOptions);
+		this.caption.ibxLabel(options.captionOptions);
 		this.titleClose.css("display", options.closeButton ? "" : "none");
 		this.btnOK.css("display", options.buttons.search("ok") != -1 ? "" : "none");
 		this.btnCancel.css("display", options.buttons.search("cancel") != -1 ? "" : "none");
@@ -84,6 +77,7 @@ $.widget("ibi.ibxDialog", $.ibi.ibxPopup,
 });
 $.ibi.ibxDialog.createMessageDialog = function(options)
 {
+	options.captionOptions = {text:options.caption};//map caption to proper option.
 	options = $.extend(true, {}, {type:"std", messageOptions:{justify:"start"}}, options);
 	var msg = $("<div data-ibx-name='message'>").ibxLabel(options.messageOptions).addClass("ibx-dialog-message");
 	var dlg = $("<div>").ibxDialog().ibxDialog("option", options);

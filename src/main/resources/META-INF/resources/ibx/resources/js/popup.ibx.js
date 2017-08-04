@@ -26,16 +26,6 @@ $.widget("ibi.ibxPopup", $.ibi.ibxWidget,
 			"using":null,
 			"within":null,
 		},
-
-		"optionsMap":
-		{
-			"posMy":"position.my",
-			"posAt":"position.at",
-			"posOf":"position.of",
-			"posCollision":"position.collision",
-			"posUsing":"position.using",
-			"posWithin":"position.within"
-		}
 	},
 	_widgetClass:"ibx-popup",
 	_create:function()

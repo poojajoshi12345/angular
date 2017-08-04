@@ -12,11 +12,6 @@ $.widget("ibi.ibxWidget", $.Widget,
 		"ctxMenu":null,
 		"dragScrolling":false,
 		"wantResize":false,
-
-		//map one option to another...useful for deep option mapping, looks like: visibleOptionName:"myInternalObject.optionName
-		"optionsMap":
-		{
-		}
 	},
 	_widgetClass:"ibx-widget",
 	_adjustWidgetClasses:function(bAdd)
@@ -89,7 +84,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 	},
 	_init:function()
 	{
-		var options = $.extend({}, this.options, ibx.getIbxMarkupOptions(this.element))
+		var options = $.extend(true, {}, this.options, ibx.getIbxMarkupOptions(this.element))
 		this.option(options);
 	},
 	member:function(memberName, value)
@@ -175,7 +170,6 @@ $.widget("ibi.ibxWidget", $.Widget,
 	{
 		//console.warn("The problem with the data-ibxp-label-options.text is that when 'option' is called with object, it doesn't decode the '.' values into sub options.");
 		var ret = null;
-		var key = this.options.optionsMap[key] || key;
 		if(value !== undefined)
 			ret = this._super(key, value);
 		else
@@ -183,29 +177,6 @@ $.widget("ibi.ibxWidget", $.Widget,
 
 		this.refresh();
 		return ret;
-	},
-	_setOption:function(key, value)
-	{
-		if(value instanceof Object)
-			this._super(key, value);
-		else
-		if(this.options.optionsMap[key])
-		{
-			//map option to option.option.xxx this makes markup clearer to read
-			curValue = this.option(this.options.optionsMap[key]);
-			if(curValue != value)
-			{
-				this.option(this.options.optionsMap[key], value);
-				this._needsRefresh = true;
-			}
-
-			//mapped option keys can show up on the main options when set from markup...it's complicated...just delete them here as they aren't needed.
-			delete this.options[key];
-		}
-		else
-		if(this.options[key] != value)
-			this._super(key, value);
-		return this;
 	},
 	_setOptionDisabled:function(value)
 	{

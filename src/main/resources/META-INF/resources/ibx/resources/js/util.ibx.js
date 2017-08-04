@@ -410,9 +410,9 @@ WebApi.genEventType = function(eventType, exInfo)
 WebApi.genExecOptions = function(parms, data, ajax, options)
 {
 	options = $.extend(true, {parms:{}, data:{}, ajax:{data:{}}}, options);
-	$.extend(true, options.parms, parms);
-	$.extend(true, options.data, data);
-	$.extend(true, options.ajax, ajax);
+	options.parms = $.extend(true, parms, options.parms);
+	options.data = $.extend(true, data, options.data);
+	options.ajax = $.extend(true, ajax, options.ajax);
 	return options;
 };
 

@@ -94,19 +94,7 @@ $.widget("ibi.ibxMenuItem", $.ibi.ibxHBox,
 		startMarkerClass:"ibx-start-marker",
 		endMarkerClass:"ibx-end-marker",
 		labelClass:"ibx-menu-item-label",
-		labelOptions:
-		{
-			text:"",
-			justify:"start"
-		},
-
-		optionsMap:
-		{
-			text:"labelOptions.text",
-			icon:"labelOptions.icon",
-			glyph:"labelOptions.glyph",
-			glyphClasses:"labelOptions.glyphClasses",
-		},
+		labelOptions:{},
 	},
 	_widgetClass: "ibx-menu-item",
 	_create:function()
@@ -230,7 +218,7 @@ $.widget("ibi.ibxMenuItem", $.ibi.ibxHBox,
 
 		//set the label's options...if there's no start marker (not check or radio) and no glyph...add space for glyph.
 		var labelOptions = options.labelOptions;
-		if(!labelOptions.glyph && !labelOptions.glyphClasses)
+		if(this._startMarker.css("display") == "none" && !labelOptions.glyph && !labelOptions.glyphClasses)
 			labelOptions.glyph = " ";
 		this._label.ibxLabel("option", labelOptions);
 	}
@@ -348,16 +336,6 @@ $.widget("ibi.ibxMenuButton", $.ibi.ibxButtonSimple,
 			"using":null,
 			"within":null,
 		},
-
-		"optionsMap":
-		{
-			"posMy":"position.my",
-			"posAt":"position.at",
-			"posOf":"position.of",
-			"posCollision":"position.collision",
-			"posUsing":"position.using",
-			"posWithin":"position.within"
-		}		
 	},
 	_widgetClass: "ibx-menu-button",
 	_create:function()
