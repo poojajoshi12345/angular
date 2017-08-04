@@ -125,7 +125,7 @@
 	</head>
 	<body class="ibx-root">
 		<div class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
-			<div class="menu-item" data-ibx-type="ibxMenuItem">I"m a menu Item</div>
+			<div class="menu-item" data-ibx-type="ibxMenuItem" data-ibxp-label-options.glyph-classes="fa fa-folder">I'm a menu Item</div>
 			<div class="btn-test" data-ibx-type="ibxButton">Test</div>
 			
 			<div class="test-select" data-ibx-type="ibxSelect"></div>
