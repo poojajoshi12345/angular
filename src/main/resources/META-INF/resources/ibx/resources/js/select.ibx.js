@@ -28,7 +28,7 @@ $.widget("ibi.ibxSelect", $.ibi.ibxTextField,
 		if (this._isDropDown())
 		{
 			this.options.wrap = false;
-			this._dropButton = $("<div>").ibxButton({ "glyph": "keyboard_arrow_down", "glyphClasses": "material-icons" });
+			this._dropButton = $("<div class='ibx-select-open-btn'>").ibxButton();
 			this.element.append(this._dropButton);
 			this._dropButton.on("mousedown", this._onButtonMouseDown.bind(this)).on('click', this._onButtonClick.bind(this));
 		}
