@@ -34,7 +34,7 @@ $.widget("ibi.ibxAccordionPane", $.ibi.ibxFlexBox,
 		{
 			el = $(el);
 			var groupName = this._group.ibxWidget("option", "name");
-			el.ibxAccordionPage("option", "groupName", groupName);
+			el.ibxWidget("option", "groupName", groupName);
 			this._group.ibxRadioGroup("addControl", el);
 		}.bind(this));
 
@@ -46,7 +46,7 @@ $.widget("ibi.ibxAccordionPane", $.ibi.ibxFlexBox,
 		el.filter(".ibx-accordion-page").each(function(idx, el)
 		{
 			el = $(el);
-			el.ibxAccordionPage("option", "groupName", "");
+			el.ibxWidget("option", "groupName", "");
 			this._group.ibxRadioGroup("removeControl", el);
 		}.bind(this));
 		this._super(el, refresh);
