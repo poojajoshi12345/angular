@@ -6,7 +6,7 @@ function ibxEventManager()
 	window.addEventListener("touchstart", ibxEventManager._onTouchEvent.bind(this), true)
 	window.addEventListener("touchend", ibxEventManager._onTouchEvent, true)
 	window.addEventListener("touchmove", ibxEventManager._onTouchEvent, true)
-	window.addEventListener("contextmenu", ibxEventManager._onContextMenu, true)
+	window.addEventListener("contextmenu", ibxEventManager._onContextMenu)
 }
 ibxEventManager.noBrowserCtxMenu = false;
 ibxEventManager.msDblClick = 300;
