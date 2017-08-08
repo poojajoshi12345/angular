@@ -66,22 +66,22 @@
 						e.preventDefault();
 				});
 
-				$(".btn-test").on("click", function(e)
+				$(".test-btn").on("click", function(e)
 				{
 					$.ibi.ibxWidget.noRefresh = true;
-					var select = $(".test-select").data("ibxWidget");
-					select.children().detach();
+					var widget = $(".test-widget").data("ibxWidget");
+					widget.children().detach();
 					var date = new Date();
 					for(var i = 0; i < 1; ++i)
 					{
-						var item = $("<div>").prop("id", "selectItem "+i).ibxSelectItem({text:"Item" + i, glyph:"face", "glyphClasses":"material-icons"});
-						select.add(item);
+						var item = $("<div>").prop("id", "item_"+i).ibxMenuItem({"labelOptions":{text:"Item" + i, glyph:"face", "glyphClasses":"material-icons"}});
+						widget.add(item);
 					}
 					$.ibi.ibxWidget.noRefresh = false;
-					select.children().ibxWidget("refresh");
-					console.log("NO GROUPS", new Date() - date);
+					widget.children().ibxWidget("refresh");
+					console.log("TEST WIDGET", new Date() - date);
 
-
+					/*
 					$.ibi.ibxWidget.noRefresh = true;
 					var select = $(".test-select-groups").data("ibxWidget");
 					var group = select._group1.data("ibxWidget");
@@ -95,7 +95,7 @@
 					$.ibi.ibxWidget.noRefresh = false;
 					group.children().ibxWidget("refresh");
 					console.log("GROUPS", new Date() - date);
-
+					*/
 				});
 			}, [{"src":"./test_res_bundle.xml", "loadContext":"app"}], true);
 		</script>
@@ -117,29 +117,22 @@
 				border:2px solid red;
 				padding:5px;
 			}
-
-			.drop-target
+			.test-btn, .test-select
 			{
+				flex:0 0 auto;
+			}
+			.test-widget
+			{
+				flex: 1 1 auto;
+				border:2px solid lime;
 			}
 		</style>
 	</head>
 	<body class="ibx-root">
 		<div class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
-			<div data-ibx-type="ibxRadioMenuItem" data-ibxp-group="series-group" data-ibxp-user-value="stacked" data-ibxp-label-options='{"text":"SOME RADIO BUTTON"}'></div>
-			<div data-ibx-type="ibxCheckMenuItem" data-ibxp-user-value="stacked" data-ibxp-label-options='{"text":"SOME CHECK BUTTON"}'></div>
-			<div class="menu-item" data-ibx-type="ibxMenuItem" data-ibxp-label-options.glyph-classes="fa fa-folder">I'm a menu Item</div>
-			<div class="btn-test" data-ibx-type="ibxButton">Test</div>
-			
+			<div class="test-btn" data-ibx-type="ibxButton">Test</div>
 			<div class="test-select" data-ibx-type="ibxSelect"></div>
-			
-			<div class="test-select-groups" data-ibx-type="ibxSelect" data-ibx-name-root="true">
-				<div class="group-1" data-ibx-name="_group1" data-ibx-type="ibxSelectGroup">Group 1</div>
-			</div>
-			
-			<div class="drag-source" data-ibx-type="ibxLabel" data-ibxp-draggable="true">Drag Here!</div>
-			<div class="drop-target" data-ibx-type="ibxLabel" data-ibxp-droppable="true" data-ibxp-file-upload-ajax-info.async="false" data-ibxp-file-upload-ajax-info.url="xxx.jsp">Drop Here!</div>
-			<!--
-			-->
+			<div class="test-widget" data-ibx-type="ibxWidget"></div>			
 		</div>
 	</body>
 </html>
