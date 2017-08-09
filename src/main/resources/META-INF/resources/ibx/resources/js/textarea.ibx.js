@@ -63,7 +63,13 @@ $.widget("ibi.ibxTextArea", $.ibi.ibxFlexBox,
 	},
 	_onKeyDown: function (e)
 	{
-		this._trigger("textchanging", e, [this.element, this.options.text, e.key]);
+		if (e.which == 37 || e.which == 38 || e.which == 39 || e.which == 40)
+		{
+			// stop arrow keys from bubbling
+			e.stopPropagation();
+		}
+		else
+			this._trigger("textchanging", e, [this.element, this.options.text, e.key]);
 	},
 	_onInput: function (e)
 	{

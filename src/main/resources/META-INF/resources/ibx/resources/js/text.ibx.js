@@ -93,6 +93,11 @@ $.widget("ibi.ibxTextField", $.ibi.ibxFlexBox,
 			this._trigger("action", e, [this.element, this.options.text]);
 			e.preventDefault();
 		}
+		else if (e.which == 37 || e.which == 38 || e.which == 39 || e.which == 40)
+		{
+			// stop arrow keys from bubbling
+			e.stopPropagation();
+		}
 		else
 		{
 			this._trigger("textchanging", e, [this.element, this.options.text, e.key]);
