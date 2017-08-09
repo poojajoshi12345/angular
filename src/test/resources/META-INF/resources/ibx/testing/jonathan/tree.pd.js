@@ -98,8 +98,9 @@ _p.expand = function (expand)
 				this._label.data('ibiIbxLabel')._setOption('glyphClasses', this._glyphClassesSel);
 			this._label.addClass('fld-open');
 			glyph = "folder_open";
-			this._ibfs.listItems(this._item.fullPath, null, null, { asJSON: true, clientSort: false }).done(function (exInfo)
+			this._ibfs.listItems(this._item.fullPath, null, null, { asJSON: true, clientSort: true }).done(function (exInfo)
 			{
+				console.log(exInfo)
 				$.each(exInfo.result, function (idx, item)
 				{
 					var ibfsItem = new IbfsItem(item, this._ibfs, this._padding + (item.container ? IbfsItem.folderPadding : IbfsItem.filePadding));

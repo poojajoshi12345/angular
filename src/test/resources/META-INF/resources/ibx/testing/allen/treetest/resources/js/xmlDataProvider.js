@@ -5,10 +5,11 @@
  * based on the type of file that is returned.
  * @constructor
  */
+
 function XmlDataProvider() {
    document.getElementById('file-input')
        .addEventListener('change', this.parseFileData.bind(this), false);
-
+console.log("I'm created")
    var reader = new FileReader();
    this.getReader = function () {
       return reader
@@ -32,8 +33,8 @@ XmlDataProvider.prototype = {
    },
    getRoot: function () {
       return this.rootNode;
-   },
-   getNode: function (nodeName) {
+   }
+   , getNode: function (nodeName) {
       // find the node name in the internal tree
       // return the matching node if we need
       return this.elemNodes.find(nodeName);
@@ -52,10 +53,9 @@ XmlDataProvider.prototype = {
  * @returns {*}
  * @constructor
  */
-function DataProviderNode(elem, isRoot=false, indentLevel) {
+function DataProviderNode(elem, isRoot, indentLevel) {
    var isRootNode = isRoot; // private so that it cannot be changed
    this.indentLevel = indentLevel;
-
    // private function providing access to ref in dataProvider document
    var _elem = $(elem); // private ref to internal document
    function getElem() {
@@ -136,5 +136,8 @@ function DataProviderNode(elem, isRoot=false, indentLevel) {
    this.isRoot = function () {
       return isRootNode;
    }
+
+   this.filterElementsByName = function (name) {
+   };
 
 }

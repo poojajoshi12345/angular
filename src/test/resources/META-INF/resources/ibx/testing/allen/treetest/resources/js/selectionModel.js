@@ -1,7 +1,6 @@
 /**
  * Created by aw14286 on 8/4/2017.
  */
-
 function selectionModel() {
    this.selections = []; // selections should refer to elements in the tree widget
    // TODO: should anchors allow for multiple anchors?
@@ -25,7 +24,6 @@ selectionModel.prototype = {
       }
    },
    selectItemRange: function (widgetInstance) {
-      console.log("")
       var siblings = widgetInstance.getSiblings();
       var startingIndex = siblings.indexOf(this.anchor);
       var currIndex = siblings.indexOf(widgetInstance);

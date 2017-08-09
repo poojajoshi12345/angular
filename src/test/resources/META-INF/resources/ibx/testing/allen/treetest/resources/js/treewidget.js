@@ -1,10 +1,4 @@
 /*Copyright 1996-2016 Information Builders, Inc. All rights reserved.*/
-/*
- NOTE: the values for padding are IbfsItem.folderPadding = 10; IbfsItem.filePadding = 30; defaulting to folderPadding for now
-
- */
-
-
 
 /**************************************************************************************/
 // ibx tree label - for those elements that aren't folders et( just files)
