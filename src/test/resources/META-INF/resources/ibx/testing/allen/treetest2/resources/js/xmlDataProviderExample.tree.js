@@ -1,14 +1,11 @@
 /**
  * example function demonstrating how to build concrete implementation on top of abstract data provider
- * @param targetId
- * @returns {XmlDataProvider}
+ * @constructor
  */
-function buildTreeDataProvider(targetId) {
-   // overwrite the constructor
-   var XmlDataProvider = function () {
+function XmlDataProvider() {
       IbxDataProvider.apply(this, arguments);
 
-      document.getElementById(targetId)
+      document.getElementById(arguments[0])
           .addEventListener('change', this.parseFileData.bind(this), false);
       var reader = new FileReader();
       this.getReader = function () {
@@ -37,9 +34,12 @@ function buildTreeDataProvider(targetId) {
          return this.rootNode;
       },
       getChildren: function () {
-         this.rootNode.getChildren();
-      }//,
-      //insertNode: function(){}
+        return  this.rootNode.getChildren();
+      },
+      getChildren(node){
+         var jqData = $(node.data);
+         var nodeelem = $(this.elem).find(jqData);
+      }
+      // ,insertNode: function(){}
    };
-   return new XmlDataProvider(targetId);
-}
+

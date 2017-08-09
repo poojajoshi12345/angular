@@ -67,7 +67,8 @@ IbxDataProvider.prototype = {
 function IbxDataNode() {
    this.data = arguments[0];
    this.parent = arguments[1];
-   this.hasChildren = arguments[2]; // default
+   // this.hasChildren should be a function that's defined in the dataProvider passed in
+   this.hasChildren = arguments[2];
    this.children = arguments[3];
 }
 
@@ -79,7 +80,10 @@ IbxDataNode.prototype = {
       return this.data;
    },
    getChildren: function(){
-      return this.children;
+      return this.children.map(function(val){
+         var anyKids =  $(val).children().length > 0  ;
+         return new IbxDataNode(val, this, anyKids, $($(val).children()) );
+      }.bind(this));
    },
    /**
     * return the named property on selected element

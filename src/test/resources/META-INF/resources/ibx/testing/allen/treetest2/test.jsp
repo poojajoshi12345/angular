@@ -44,12 +44,12 @@
 					};
 
 					// added to the window in order to simplify development
-					//window.xmlProvider = new XmlDataProvider();
-					window.xmlProvider = buildTreeDataProvider("file-input");
+					window.xmlProvider = new XmlDataProvider("file-input");
+
 					window.selectionModel = new selectionModel();
 					document.getElementById('file-input').addEventListener('change', function(e){
 					setTimeout(function(){
-					$(".main-box").ibxTree({provider: window.xmlProvider.getRoot()});
+					$(".main-box").ibxTree({provider: window.xmlProvider.getRootNode()});
 					}.bind(this),3000);
 					}.bind(this));
 					});
