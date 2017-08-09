@@ -64,24 +64,22 @@ IbxDataProvider.prototype = {
 };
 
 /*****************************************************************************************/
-function Node(data) {
-   this.data = data;
-   this.parent = null;
-   this.hasChildren = false; // default
-   this.children = [];
+function IbxDataNode() {
+   this.data = arguments[0];
+   this.parent = arguments[1];
+   this.hasChildren = arguments[2]; // default
+   this.children = arguments[3];
 }
 
-Node.prototype = {
-   /**
-    * @return {boolean} - whether or not this func has
-    */
-   hasChildren: function () {
-   },
+IbxDataNode.prototype = {
    /**
     * return data for this node
     */
    getData: function () {
       return this.data;
+   },
+   getChildren: function(){
+      return this.children;
    },
    /**
     * return the named property on selected element

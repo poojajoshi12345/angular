@@ -29,6 +29,7 @@
   <scripts>
     <script-file src="./js/treeWidget.tree.js"/>
     <script-file src="./js/xmlDataProviderExample.tree.js"/>
+    <script-file src="./js/dataProvider.tree.js"/>
     <script-file src="./js/selectionModel.tree.js"/>
       <![CDATA[
 			]]>

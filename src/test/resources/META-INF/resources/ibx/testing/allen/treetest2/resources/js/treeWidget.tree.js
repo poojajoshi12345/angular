@@ -41,8 +41,8 @@ $.widget("ibi.ibxTreeItem", $.ibi.ibxWidget, {
    _onMouseDown: function (e) {
       e.stopPropagation();
       window.selectingTree = false;
-      console.log(window.selectingTree)
-      window.selectionModel.selectItem(this);
+
+         window.selectionModel.selectItem(this);
    },
    _onMouseMove: function (e) {
       e.stopPropagation();
@@ -53,21 +53,28 @@ $.widget("ibi.ibxTreeItem", $.ibi.ibxWidget, {
       e.stopPropagation();
       console.log(window.selectingTree)
       if (typeof window.selectingTree != 'undefined' && window.selectingTree) {
+         if (e.shiftKey) {
+            window.selectionModel.selectItemRange(this);
+            window.selectionModel.selectItem(this);
+         } else {
          window.selectionModel.selectItemRange(this);
+         }
+
       }
+
    },
    _setOption: function (key, value) {
       //map option to option.option.xxx. Used mostly for Bindows markup property setting.
-      if(typeof this.options.optionsMap != 'undefined'){
+      if (typeof this.options.optionsMap != 'undefined') {
          if (this.options.optionsMap[key]) {
             this.option(this.options.optionsMap[key], value);
-            delete this.options[key]; //mapped option keys should be removed from main options object so things don't get
-                                      // set twice (like text on a label).
+            delete this.options[key]; //mapped option keys should be removed from main options object so things don't
+                                      // get set twice (like text on a label).
          } else {
             this._super(key, value);
 
          }
-      }  else {
+      } else {
          this._super(key, value);
 
       }
@@ -144,16 +151,16 @@ $.widget("ibi.ibxTreeFolder", $.ibi.ibxWidget, {
    },
    _setOption: function (key, value) {
       //map option to option.option.xxx. Used mostly for Bindows markup property setting.
-      if(typeof this.options.optionsMap != 'undefined'){
+      if (typeof this.options.optionsMap != 'undefined') {
          if (this.options.optionsMap[key]) {
             this.option(this.options.optionsMap[key], value);
-            delete this.options[key]; //mapped option keys should be removed from main options object so things don't get
-                                      // set twice (like text on a label).
+            delete this.options[key]; //mapped option keys should be removed from main options object so things don't
+                                      // get set twice (like text on a label).
          } else {
             this._super(key, value);
 
          }
-      }  else {
+      } else {
          this._super(key, value);
 
       }
@@ -276,16 +283,16 @@ $.widget("ibi.ibxTree", $.ibi.ibxWidget, {
    },
    _setOption: function (key, value) {
       //map option to option.option.xxx. Used mostly for Bindows markup property setting.
-      if(typeof this.options.optionsMap != 'undefined'){
+      if (typeof this.options.optionsMap != 'undefined') {
          if (this.options.optionsMap[key]) {
             this.option(this.options.optionsMap[key], value);
-            delete this.options[key]; //mapped option keys should be removed from main options object so things don't get
-                                      // set twice (like text on a label).
+            delete this.options[key]; //mapped option keys should be removed from main options object so things don't
+                                      // get set twice (like text on a label).
          } else {
             this._super(key, value);
 
          }
-      }  else {
+      } else {
          this._super(key, value);
 
       }

@@ -24,6 +24,7 @@ selectionModel.prototype = {
       }
    },
    selectItemRange: function (widgetInstance) {
+      console.log(this.anchor)
       var siblings = widgetInstance.getSiblings();
       var startingIndex = siblings.indexOf(this.anchor);
       var currIndex = siblings.indexOf(widgetInstance);

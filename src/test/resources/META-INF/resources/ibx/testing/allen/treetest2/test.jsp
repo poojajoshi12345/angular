@@ -44,7 +44,8 @@
 					};
 
 					// added to the window in order to simplify development
-					window.xmlProvider = new XmlDataProvider();
+					//window.xmlProvider = new XmlDataProvider();
+					window.xmlProvider = buildTreeDataProvider("file-input");
 					window.selectionModel = new selectionModel();
 					document.getElementById('file-input').addEventListener('change', function(e){
 					setTimeout(function(){
