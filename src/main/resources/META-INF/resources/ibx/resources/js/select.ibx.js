@@ -607,7 +607,7 @@ $.widget("ibi.ibxSelect", $.ibi.ibxTextField,
 		{
 			this._list.find(".ibx-select-item").each(function (index, el)
 			{
-				var itemText = $(el).data('ibxWidget').option('text') + "";
+				var itemText = $(el).data('ibxWidget').option('labelOptions.text') + "";
 				if (this._fnMatch ? (this._fnMatch(searchText, itemText)) : (0 == itemText.toLowerCase().indexOf(searchText.toLowerCase())))
 				{
 					if (!bFound)
