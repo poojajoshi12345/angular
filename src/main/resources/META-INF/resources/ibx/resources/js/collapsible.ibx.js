@@ -28,12 +28,6 @@ $.widget("ibi.ibxCollapsible", $.Widget,
 		this._boundWindowMouseEvent = this._onWindowMouseEvent.bind(this);
 
 		this._super();
-
-		if (!this.element.data("ibxWidget"))
-		{
-			this.element.data("ibxWidget", this);
-			this.element.data("ibiIbxWidget", this);
-		}
 	},
 	_destroy:function()
 	{
