@@ -15,13 +15,13 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 		pageMarkersPos:"end",
 		pageMarkerClass:"ibx-csl-page-marker",
 		pageMarkerSelectedClass:"ibx-csl-page-selected",
-		prevNextButtonPos:"ends",
+		prevNextButtonPos:"ends", //ends/start/end
 		showPrevButton:true,
 		showNextButton:true,
 		hideDisabledButtons:false,
 		alignChildren:"center",
 
-		scrollType:"integral", //integral(child)/fractional(pixel)
+		scrollType:"fractional", //integral(child)/fractional(pixel)
 		scrollStep:25,//n children per scroll...if fractional then this is a pixel based increment per scroll
 		scrollStepRate:25,//time in ms
 		allowDragScrolling:true
