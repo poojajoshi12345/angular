@@ -124,7 +124,7 @@
 			.test-widget
 			{
 				flex: 1 1 auto;
-				border:2px solid lime;
+				xborder:2px solid lime;
 			}
 		</style>
 	</head>
@@ -132,7 +132,7 @@
 		<div class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
 			<div class="test-btn" data-ibx-type="ibxButton">Test</div>
 			<div class="test-select" data-ibx-type="ibxSelect"></div>
-			<div class="test-widget" data-ibx-type="ibxWidget"></div>			
+			<div class="test-widget" data-ibx-type="ibxWidget" tabIndex="0">This is a test</div>			
 		</div>
 	</body>
 </html>

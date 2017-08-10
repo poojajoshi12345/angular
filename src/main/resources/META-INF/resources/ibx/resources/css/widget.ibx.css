@@ -14,8 +14,6 @@
 
 .ibx-widget:focus
 {
-	outline:none;
-	box-shadow:0 0 .2em 0em black;
 }
 
 .ibx-widget-disabled
