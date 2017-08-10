@@ -168,7 +168,6 @@ $.widget("ibi.ibxWidget", $.Widget,
 	},
 	option:function(key, value)
 	{
-		//console.warn("The problem with the data-ibxp-label-options.text is that when 'option' is called with object, it doesn't decode the '.' values into sub options.");
 		var ret = null;
 		if(value !== undefined)
 			ret = this._super(key, value);
@@ -189,15 +188,14 @@ $.widget("ibi.ibxWidget", $.Widget,
 
 		this.element.find("[tabIndex]").add(this.element).each(function(disabled, idx, el)
 		{
-			var $el = $(el);
-			if(disabled)
-				$el.data("ibxDisabledTabIndex", $el.prop("tabIndex")).prop("tabIndex", -1);
+			el = $(el);
+			var tabIndex = el.data("ibxDisabledTabIndex");
+			var tabIndexSet = tabIndex !== undefined;
+			if(!disabled && tabIndexSet)
+				el.prop("tabIndex", tabIndex).removeData("ibxDisabledTabIndex");
 			else
-			{
-				var tabIndex = $el.data("ibxDisabledTabIndex");
-				(!tabIndex) ? $el.removeProp("tabIndex") : $el.prop("tabIndex", tabIndex);
-				$el.removeData("ibxDisabledTabIndex");
-			}
+			if(disabled && !tabIndexSet)
+				el.data("ibxDisabledTabIndex", el.prop("tabIndex")).prop("tabIndex", -1);
 		}.bind(this, value));
 	},
 	refreshEx:function (childRefresh)
@@ -211,6 +209,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 	},
 	_refresh:function()
 	{
+		//console.log("_refresh", this.element.prop("id"), this._widgetClass)
 		var options = this.options;
 		this.element.addClass(options.class);
 		options.focusRoot ? this.element.addClass("ibx-focus-root") : this.element.removeClass("ibx-focus-root");

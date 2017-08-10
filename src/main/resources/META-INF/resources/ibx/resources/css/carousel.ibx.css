@@ -49,10 +49,12 @@
 .ibx-csl-page-markers
 {
 	flex:0 0 auto;
+	overflow:hidden;
 }
 
 .ibx-csl-page-marker
 {
+	flex:0 0 auto;
 	width:6px;
 	height:6px;
 	margin:2px;
