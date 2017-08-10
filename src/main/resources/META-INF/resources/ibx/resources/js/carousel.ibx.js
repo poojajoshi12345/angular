@@ -23,7 +23,7 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 
 		scrollType:"fractional", //integral(child)/fractional(pixel)
 		scrollStep:25,//n children per scroll...if fractional then this is a pixel based increment per scroll
-		scrollStepRate:25,//time in ms
+		scrollStepRate:{fractional:25, integral:1000},//time in ms 
 		allowDragScrolling:true
 	},
 	_widgetClass:"ibx-carousel",
@@ -89,13 +89,14 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 	_scrollTimer:null,
 	_scroll:function(startScrolling, forward, incremental)
 	{
+		var options = this.options;
 		var scrollInfo = {"forward":forward};
 		if(startScrolling)
 		{
 			if(incremental)
 			{
 				var nScroll = this._itemsBox.prop("scrollLeft");
-				var delta = nScroll + (forward ? this.options.scrollStep : -this.options.scrollStep);
+				var delta = nScroll + (forward ? options.scrollStep : -options.scrollStep);
 				this._itemsBox.prop("scrollLeft", delta);
 				this._adjustPageMarkers();
 			}
@@ -104,10 +105,10 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 				this._scrollTimer = window.setInterval(function(forward)
 				{
 					var nScroll = this._itemsBox.prop("scrollLeft");
-					var delta = nScroll + (forward ? this.options.scrollStep : -this.options.scrollStep);
+					var delta = nScroll + (forward ? options.scrollStep : -options.scrollStep);
 					this._itemsBox.prop("scrollLeft", delta);
 					this._adjustPageMarkers();
-				}.bind(this, forward), this.options.scrollStepRate); 
+				}.bind(this, forward), (options.scrollType == "fractional") ? options.scrollStepRate.fractional : options.scrollStepRate.integral); 
 			}
 			this._scrolling = true;
 		}
