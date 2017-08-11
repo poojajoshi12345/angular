@@ -10,6 +10,7 @@ $.widget("ibi.ibxMenu", $.ibi.ibxPopup,
 	{
 		modal:false,
 		destroyOnClose:false,
+		multiSelect:false, //user can select multiple items without closing menu (checkboxes, etc.)
 		effect:"fade"
 	},
 	_widgetClass: "ibx-menu",
@@ -48,7 +49,7 @@ $.widget("ibi.ibxMenu", $.ibi.ibxPopup,
 		if(this._trigger("select", e, menuItem))
 		{
 			//close if desired.
-			if(this.options.autoClose)
+			if(this.options.autoClose && !this.options.multiSelect)
 				this.close();
 		
 			//bubble event up owner chain.
@@ -348,7 +349,7 @@ $.widget("ibi.ibxMenuButton", $.ibi.ibxButtonSimple,
 		this._super();
 		this.options.position.of = this.element[0];
 		this.element.prop("tabIndex", 0).on("click", this._onClick.bind(this));
-		this.options.menu = this.element.children(".ibx-menu");
+		this.options.menu = this.element.children(".ibx-menu").appendTo("body");
 	},
 	_onClick:function(e)
 	{
