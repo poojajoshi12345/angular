@@ -97,6 +97,12 @@
 					console.log("GROUPS", new Date() - date);
 					*/
 				});
+
+				$(".dlg-btn").on("click", function(e)
+				{
+					var dlg = $(".test-dlg");
+					dlg.ibxWidget("open");
+				});
 			}, [{"src":"./test_res_bundle.xml", "loadContext":"app"}], true);
 		</script>
 		<style type="text/css">
@@ -130,10 +136,26 @@
 	</head>
 	<body class="ibx-root">
 		<div class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
+			<div class="dlg-btn" data-ibx-type="ibxButton">Dialog</div>
 			<div class="test-btn" data-ibx-type="ibxButton">Test</div>
 			<div class="test-select" data-ibx-type="ibxSelect"></div>
 			<div class="test-widget" data-ibx-type="ibxWidget" tabIndex="0">This is a test</div>			
 		</div>
+
+		<div class="test-dlg" data-ibx-type="ibxDialog" data-ibxp-caption-options="{text:'Test Dialog'}">
+			<div style="width:300px;height:50px" data-ibx-type="ibxVBox" data-ibxp-align="center" data-ibxp-justify="center">
+				<div data-ibx-type="ibxMenuButton">
+					Menu
+					<div data-ibx-type="ibxMenu" data-ibxp-multi-select="true">
+						<div data-ibx-type="ibxMenuItem">Menu Item</div>
+						<div data-ibx-type="ibxMenuItem">Menu Item</div>
+						<div data-ibx-type="ibxMenuItem">Menu Item</div>
+						<div data-ibx-type="ibxMenuItem">Menu Item</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
 	</body>
 </html>
 
