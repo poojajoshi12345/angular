@@ -3,25 +3,28 @@
 $.widget("ibi.ibxTextArea", $.ibi.ibxFlexBox,
 {
 	options:
-		{
-			"text": "",
-			"readonly": "",
-			"maxLength": "",
-			"autoComplete": "off",
-			"autoCorrect": "off",
-			"autoCapitalize": "off",
-			"spellCheck": "off",
-			"placeholder": "",
-			"required": "",
-			"forId": "",
-			"fnFormat": null,
-			"textWrap": "",
-			"textAlign": "",
+	{
+		"cols": "",
+		"rows": "",
+		"maxlength": "",
+		"text": "",
+		"readonly": "",
+		"maxLength": "",
+		"autoComplete": "off",
+		"autoCorrect": "off",
+		"autoCapitalize": "off",
+		"spellCheck": "off",
+		"placeholder": "",
+		"required": "",
+		"forId": "",
+		"fnFormat": null,
+		"textWrap": "",
+		"textAlign": "",
 
-			/*ibxFlexBox default options*/
-			"inline": true,
-			"wrap": false,
-			"align": "stretch",
+		/*ibxFlexBox default options*/
+		"inline": true,
+		"wrap": false,
+		"align": "stretch",
 		},
 	_widgetClass: "ibx-text-area",
 	_valueOnFocus: null,
@@ -99,6 +102,18 @@ $.widget("ibi.ibxTextArea", $.ibi.ibxFlexBox,
 	_refresh: function ()
 	{
 		this._super();
+		if (this.options.cols)
+			this._textInput.attr("cols", this.options.cols);
+		else
+			this._textInput.removeAttr("cols");
+		if (this.options.rows)
+			this._textInput.attr("rows", this.options.rows);
+		else
+			this._textInput.removeAttr("rows");
+		if (this.options.maxlength)
+			this._textInput.attr("maxlength", this.options.maxlength);
+		else
+			this._textInput.removeAttr("maxlength");
 		if (this.options.forId)
 			this._textInput.attr("id", this.options.forId);
 		else
