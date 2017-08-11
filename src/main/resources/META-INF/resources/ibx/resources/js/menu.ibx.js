@@ -108,7 +108,7 @@ $.widget("ibi.ibxMenuItem", $.ibi.ibxHBox,
 		this._endMarker = $("<div>");
 		this._label = $("<div>").ibxLabel();
 
-		this.element.append(this._startMarker, this._label, this._endMarker);
+		this.element.append(this._label, this._endMarker);
 		this.element.prop("tabIndex", 0).on(
 		{
 			"click":this._onMenuItemClick.bind(this),
@@ -218,7 +218,7 @@ $.widget("ibi.ibxMenuItem", $.ibi.ibxHBox,
 
 		//set the label's options...if there's no start marker (not check or radio) and no glyph...add space for glyph.
 		var labelOptions = options.labelOptions;
-		if(this._startMarker.css("display") == "none" && !labelOptions.glyph && !labelOptions.glyphClasses)
+		if(!this._startMarker.prop("parentNode") && !labelOptions.glyph && !labelOptions.glyphClasses)
 			labelOptions.glyph = " ";
 		this._label.ibxLabel("option", labelOptions);
 	}
@@ -238,6 +238,11 @@ $.widget("ibi.ibxCheckMenuItem", $.ibi.ibxMenuItem,
 		checked:false,
 	},
 	_widgetClass: "ibx-menu-item-check",
+	_create:function()
+	{
+		this._super();
+		this.element.prepend(this._startMarker);
+	},
 	_onMenuItemClick:function(e)
 	{
 		var options = this.options;
