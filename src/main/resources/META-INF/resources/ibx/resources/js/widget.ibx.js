@@ -168,13 +168,15 @@ $.widget("ibi.ibxWidget", $.Widget,
 	},
 	option:function(key, value)
 	{
+		var bRefresh = (typeof(key) == "object") || (this.options[key] != value);
 		var ret = null;
 		if(value !== undefined)
 			ret = this._super(key, value);
 		else
 			ret = this._super(key);
 
-		this.refresh();
+		if(bRefresh)
+			this.refresh();
 		return ret;
 	},
 	_setOptionDisabled:function(value)
@@ -209,7 +211,6 @@ $.widget("ibi.ibxWidget", $.Widget,
 	},
 	_refresh:function()
 	{
-		//console.log("_refresh", this.element.prop("id"), this._widgetClass)
 		var options = this.options;
 		this.element.addClass(options.class);
 		options.focusRoot ? this.element.addClass("ibx-focus-root") : this.element.removeClass("ibx-focus-root");
