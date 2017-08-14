@@ -385,7 +385,7 @@ WebApi.statics =
 		ajax:
 		{
 			cache:false,
-			contentType:"application/x-www-form-urlencoded",
+			contentType:"application/x-www-form-urlencoded;charset=utf-8",
 			context:null,
 			data:{},
 			method:"POST",
