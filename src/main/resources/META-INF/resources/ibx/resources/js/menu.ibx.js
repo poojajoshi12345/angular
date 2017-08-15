@@ -219,8 +219,6 @@ $.widget("ibi.ibxMenuItem", $.ibi.ibxHBox,
 
 		//set the label's options...if there's no start marker (not check or radio) and no glyph...add space for glyph.
 		var labelOptions = options.labelOptions;
-		if(!this._startMarker.prop("parentNode") && !labelOptions.glyph && !labelOptions.glyphClasses)
-			labelOptions.glyph = " ";
 		this._label.ibxLabel("option", labelOptions);
 	}
 });

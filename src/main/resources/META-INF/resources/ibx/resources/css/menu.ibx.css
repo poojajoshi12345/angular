@@ -39,6 +39,12 @@
 	padding:.15em;
 }
 
+.ibx-menu-item .ibx-label-no-image .ibx-label-text::before
+{
+	content:"\00a0";
+	padding-left:1em;
+}
+
 .ibx-menu-item:hover
 {
 	background-color:#ddd;
