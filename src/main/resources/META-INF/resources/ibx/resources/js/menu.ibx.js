@@ -74,11 +74,6 @@ $.widget("ibi.ibxMenu", $.ibi.ibxPopup,
 	_refresh: function ()
 	{
 		this._super();
-		//does this menu have a mix of children with/without icons/glyphs?...also
-		//don't use jQuery 'children()' function as this seems to have a bug in the selector code.
-		var noIcons = !!this._box[0].querySelectorAll(".ibx-menu-item .ibx-label-no-icon").length;
-		var icons = !!this._box[0].querySelectorAll(".ibx-menu-item .ibx-label:not(.ibx-label-no-icon)").length;
-		this.element.toggleClass("ibx-menu-no-icons",  (noIcons && !icons));
 	}
 });
 $.ibi.ibxMenu.statics = 
