@@ -130,16 +130,23 @@
 			.test-widget
 			{
 				flex: 1 1 auto;
-				xborder:2px solid lime;
+				border:1px solid lime;
 			}
 		</style>
 	</head>
 	<body class="ibx-root">
-		<div class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
+		<div class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="center">
+			<div class="split-button" data-ibx-type="ibxSplitMenuButton" data-ibxp-btn-options="{glyphClasses:'fa fa-18 fa-cog'}">Default Action
+				<div data-ibx-type="ibxMenu">
+					<div data-ibx-type="ibxMenuItem">Menu Item</div>
+					<div data-ibx-type="ibxMenuItem">Menu Item</div>
+					<div data-ibx-type="ibxMenuItem">Menu Item</div>
+				</div>
+			</div>
 			<div class="dlg-btn" data-ibx-type="ibxButton">Dialog</div>
 			<div class="test-btn" data-ibx-type="ibxButton">Test</div>
 			<div class="test-select" data-ibx-type="ibxSelect"></div>
-			<div class="test-widget" data-ibx-type="ibxWidget" tabIndex="0">This is a test</div>			
+			<div class="test-widget" data-ibx-type="ibxWidget">This is a test</div>		
 		</div>
 
 		<div class="test-dlg" data-ibx-type="ibxDialog" data-ibxp-caption-options="{text:'Test Dialog'}">

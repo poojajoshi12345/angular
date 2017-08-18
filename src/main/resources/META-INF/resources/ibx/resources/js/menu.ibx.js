@@ -346,7 +346,7 @@ $.widget("ibi.ibxMenuButton", $.ibi.ibxButtonSimple,
 	{
 		this._super();
 		this.options.position.of = this.element[0];
-		this.element.prop("tabIndex", 0).on("click", this._onClick.bind(this));
+		this.element.on("click", this._onClick.bind(this));
 		this.options.menu = this.element.children(".ibx-menu").appendTo("body");
 	},
 	_onClick:function(e)
@@ -364,8 +364,70 @@ $.widget("ibi.ibxMenuButton", $.ibi.ibxButtonSimple,
 $.widget("ibi.ibxHMenuButton", $.ibi.ibxMenuButton,{options:{},_widgetClass: "ibx-hmenu-button"});
 $.widget("ibi.ibxVMenuButton", $.ibi.ibxMenuButton,{options:{position:{at:"right top"}},_widgetClass: "ibx-vmenu-button"});
 
+
+$.widget("ibi.ibxSplitMenuButton", $.ibi.ibxHBox,
+{
+	options:
+	{
+		"align":"stretch",
+		"btnOptions":
+		{
+			class:"split-button"
+		},
+		"menuOptions":
+		{
+			"class":"split-menu",
+			"defaultItem":null,
+			"position":
+			{
+				"my":"left top",
+				"at":"left bottom",
+			}
+		}
+	},
+	_widgetClass:"ibx-split-menu-button",
+	_create:function()
+	{
+		this._super();
+		var options = this.options;
+
+		//alternate to data-ibxp-text...direct text node children can be used to set the text.
+		options.btnOptions.text = options.btnOptions.text || this.element.textNodes().remove().text().replace(/^\s*|\s*$/g, "");
+		var btn = this._btn = $("<div>").ibxButtonSimple().on("click", this._onBtnClick.bind(this));
+
+		options.menuOptions.menu = this.element.children(".ibx-menu");
+		options.menuOptions.position.of = this.element;
+		var menu = this._menuBtn = $("<div>").ibxMenuButton().on("click", this._onMenuBtnClick.bind(this));
+
+		var separator = this._separator = $("<div class='split-separator'>");
+
+		this.element.append(btn, separator, menu);
+	},
+	_onBtnClick:function(e)
+	{
+		var event = $.Event(e);
+		event.stopPropagation();
+		this.element.trigger(event);
+	},
+	_onMenuBtnClick:function(e)
+	{
+		var menu = this._menuBtn.ibxWidget("option", "menu");
+		menu.css("minWidth", this.element.css("width"));
+		e.stopPropagation();
+	},
+	_refresh:function()
+	{
+		this._super();
+		var options = this.options;
+		this._btn.ibxWidget("option", options.btnOptions);
+		this._menuBtn.ibxWidget("option", options.menuOptions);
+	}
+});
+
+
 //separator between menu buttons
 $.widget("ibi.ibxMenuButtonSeparator", $.ibi.ibxWidget,{options:{},_widgetClass: "ibx-menu-button-separator",});
+
 
 //# sourceURL=menu.ibx.js
 

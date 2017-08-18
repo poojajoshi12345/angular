@@ -126,7 +126,31 @@
 	content:"\e037";/*play arrow*/
 }
 
-/***********************************MENU BAR/BUTTON CLASSES***********************************/
+/***********************************SPLIT MENU BUTTON CLASSES***********************************/
+.ibx-split-menu-button
+{
+	border:1px solid #aaa;
+	padding:2px;
+}
+.ibx-split-menu-button > .split-button
+{
+	padding:0px .25em 0px .25em;
+}
+
+.ibx-split-menu-button > .split-menu::before
+{
+	padding:0px .25em 0px .25em;
+	font-family:"FontAwesome";
+	content:"\F0D7";
+}
+
+.ibx-split-menu-button > .split-separator
+{
+	margin:0px 2px 0px 2px;
+	border-left:1px solid #ccc;
+}
+
+/***********************************MENU BAR CLASSES***********************************/
 .ibx-hmenu-bar, .ibx-vmenu-bar
 {
 }
