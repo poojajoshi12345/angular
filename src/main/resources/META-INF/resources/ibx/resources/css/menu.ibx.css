@@ -129,25 +129,30 @@
 /***********************************SPLIT MENU BUTTON CLASSES***********************************/
 .ibx-split-menu-button
 {
+	padding:.25em;
 	border:1px solid #aaa;
-	padding:2px;
 }
 .ibx-split-menu-button > .split-button
 {
-	padding:0px .25em 0px .25em;
 }
 
 .ibx-split-menu-button > .split-menu::before
 {
-	padding:0px .25em 0px .25em;
+	width:1em;
 	font-family:"FontAwesome";
 	content:"\F0D7";
+	text-align:center;
+}
+
+.ibx-vsplit-menu-button > .split-menu::before
+{
+	content:"\f0da";
 }
 
 .ibx-split-menu-button > .split-separator
 {
-	margin:0px 2px 0px 2px;
-	border-left:1px solid #ccc;
+	margin:0px .25em 0px .25em;
+	border-left:1px solid #aaa;
 }
 
 /***********************************MENU BAR CLASSES***********************************/

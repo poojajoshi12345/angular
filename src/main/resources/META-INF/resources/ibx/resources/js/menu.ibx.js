@@ -359,7 +359,6 @@ $.widget("ibi.ibxMenuButton", $.ibi.ibxButtonSimple,
 		this._super();
 	}
 });
-
 //defined types mostly for markup readability
 $.widget("ibi.ibxHMenuButton", $.ibi.ibxMenuButton,{options:{},_widgetClass: "ibx-hmenu-button"});
 $.widget("ibi.ibxVMenuButton", $.ibi.ibxMenuButton,{options:{position:{at:"right top"}},_widgetClass: "ibx-vmenu-button"});
@@ -423,7 +422,9 @@ $.widget("ibi.ibxSplitMenuButton", $.ibi.ibxHBox,
 		this._menuBtn.ibxWidget("option", options.menuOptions);
 	}
 });
-
+//defined types mostly for markup readability
+$.widget("ibi.ibxHSplitMenuButton", $.ibi.ibxSplitMenuButton,{options:{},_widgetClass: "ibx-hsplit-menu-button"});
+$.widget("ibi.ibxVSplitMenuButton", $.ibi.ibxSplitMenuButton,{options:{menuOptions:{position:{my:"left top", at:"right top"}}},_widgetClass: "ibx-vsplit-menu-button"});
 
 //separator between menu buttons
 $.widget("ibi.ibxMenuButtonSeparator", $.ibi.ibxWidget,{options:{},_widgetClass: "ibx-menu-button-separator",});

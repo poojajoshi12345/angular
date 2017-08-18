@@ -123,6 +123,10 @@
 				border:2px solid red;
 				padding:5px;
 			}
+			.main-box *
+			{
+				flex:0 0 auto;
+			}
 			.test-btn, .test-select
 			{
 				flex:0 0 auto;
@@ -136,7 +140,14 @@
 	</head>
 	<body class="ibx-root">
 		<div class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="center">
-			<div class="split-button" data-ibx-type="ibxSplitMenuButton" data-ibxp-btn-options="{glyphClasses:'fa fa-18 fa-cog'}">Default Action
+			<div class="split-button" data-ibx-type="ibxHSplitMenuButton" data-ibxp-btn-options="{glyphClasses:'fa fa-18 fa-cog'}">
+				<div data-ibx-type="ibxMenu">
+					<div data-ibx-type="ibxMenuItem">Menu Item</div>
+					<div data-ibx-type="ibxMenuItem">Menu Item</div>
+					<div data-ibx-type="ibxMenuItem">Menu Item</div>
+				</div>
+			</div>
+			<div class="split-button" data-ibx-type="ibxVSplitMenuButton" data-ibxp-btn-options="{glyphClasses:'fa fa-18 fa-cog'}">
 				<div data-ibx-type="ibxMenu">
 					<div data-ibx-type="ibxMenuItem">Menu Item</div>
 					<div data-ibx-type="ibxMenuItem">Menu Item</div>
