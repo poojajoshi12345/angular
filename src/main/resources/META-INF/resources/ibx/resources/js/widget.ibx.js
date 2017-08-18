@@ -318,7 +318,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 					{
 						//if allowed let target know it was dropped on
 						if(!this._curTarget._dragPrevented)
-							this._dispatchDragEvent(e, "ibx_drop", this._curTarget);
+							this._dispatchDragEvent(e, "ibx_drop", this.element, this._curTarget);
 
 						//end the drag operation
 						this._dispatchDragEvent(e, "ibx_dragend", this.element);
