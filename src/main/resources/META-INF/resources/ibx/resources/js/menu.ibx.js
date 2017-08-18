@@ -11,7 +11,7 @@ $.widget("ibi.ibxMenu", $.ibi.ibxPopup,
 		modal:false,
 		destroyOnClose:false,
 		multiSelect:false, //user can select multiple items without closing menu (checkboxes, etc.)
-		effect:"fade"
+		effect:"fade",
 	},
 	_widgetClass: "ibx-menu",
 	_create: function ()
@@ -368,15 +368,16 @@ $.widget("ibi.ibxSplitMenuButton", $.ibi.ibxHBox,
 {
 	options:
 	{
+		"defaultMenuItem":null,
 		"align":"stretch",
 		"btnOptions":
 		{
-			class:"split-button"
+			"class":"split-button",
+			"defaultItem":null,
 		},
 		"menuOptions":
 		{
 			"class":"split-menu",
-			"defaultItem":null,
 			"position":
 			{
 				"my":"left top",
@@ -404,9 +405,9 @@ $.widget("ibi.ibxSplitMenuButton", $.ibi.ibxHBox,
 	},
 	_onBtnClick:function(e)
 	{
-		var event = $.Event(e);
-		event.stopPropagation();
-		this.element.trigger(event);
+		var menu = this._menuBtn.ibxWidget("option", "menu");
+		var defItem = menu.ibxWidget("children", ".ibx-split-button-default-item");
+		defItem.trigger("click");
 	},
 	_onMenuBtnClick:function(e)
 	{
@@ -420,6 +421,12 @@ $.widget("ibi.ibxSplitMenuButton", $.ibi.ibxHBox,
 		var options = this.options;
 		this._btn.ibxWidget("option", options.btnOptions);
 		this._menuBtn.ibxWidget("option", options.menuOptions);
+
+		var menu = this._menuBtn.ibxWidget("option", "menu");
+		menu.css("minWidth", this.element.css("width"));
+
+		var menuItems = menu.ibxWidget("children");
+		menuItems.removeClass("ibx-split-button-default-item").filter(options.defaultMenuItem).addClass("ibx-split-button-default-item");
 	}
 });
 //defined types mostly for markup readability

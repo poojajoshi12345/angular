@@ -155,6 +155,11 @@
 	border-left:1px solid #aaa;
 }
 
+.ibx-menu-item.ibx-split-button-default-item
+{
+	font-weight:900;
+}
+
 /***********************************MENU BAR CLASSES***********************************/
 .ibx-hmenu-bar, .ibx-vmenu-bar
 {
