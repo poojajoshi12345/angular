@@ -21,9 +21,9 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 		hideDisabledButtons:false,
 		alignChildren:"center",
 
-		scrollType:"fractional", //integral(child)/fractional(pixel)
+		scrollType:"fractional", //page/integral(child)/fractional(pixel)
+		scrollStepRate:{"page":250, "integral":250, "fractional":25},//time in ms 
 		scrollStep:25,//n children per scroll...if fractional then this is a pixel based increment per scroll
-		scrollStepRate:{fractional:25, integral:1000},//time in ms 
 		allowDragScrolling:true
 	},
 	_widgetClass:"ibx-carousel",
@@ -48,7 +48,7 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 	children:function(selector)
 	{
 		selector = selector || ".ibx-csl-item";
-		return this._itemsBox.children(selector).not(".csl-buffer");
+		return this._itemsBox.children(selector);
 	},
 	add:function(el, sibling, before, refresh)
 	{
@@ -158,7 +158,7 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 		};
 
 		var curChildren = [];
-		var children = this.children(el).not(".csl-buffer");
+		var children = this.children(el);
 		children.each(function(curChildren, idx, el)
 		{
 			var elInfo = this.getChildVisibility(el);
