@@ -157,9 +157,9 @@
 					<div data-ibx-type="ibxMenuItem">Menu Item</div>
 				</div>
 			</div>
-			<div class="split-button" data-ibx-type="ibxVSplitMenuButton" data-ibxp-btn-options="{glyphClasses:'fa fa-18 fa-cog'}">
+			<div class="split-button" data-ibx-type="ibxVSplitMenuButton" data-ibxp-default-menu-item=".def-item" data-ibxp-btn-options="{glyphClasses:'fa fa-18 fa-cog'}">
 				<div data-ibx-type="ibxMenu">
-					<div data-ibx-type="ibxMenuItem">Menu Item</div>
+					<div class="def-item" data-ibx-type="ibxMenuItem">Menu Item</div>
 					<div data-ibx-type="ibxMenuItem">Menu Item</div>
 					<div data-ibx-type="ibxMenuItem">Menu Item</div>
 				</div>
