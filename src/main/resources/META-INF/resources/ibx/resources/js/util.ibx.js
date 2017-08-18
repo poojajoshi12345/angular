@@ -144,10 +144,10 @@ jQuery.fn.extend({
 	//		$('.myobject').onNative("myevent", function (event, data){ console.log(data);});
 	// 3. Use native addEventListener to add an event handler like this:
 	//		myelement.addEventListener("myevent", function (event){ console.log(event.data);});
-	triggerNative: function (type, data, bubble)
+	triggerNative: function (type, data, bubble, cancelable)
 	{
 		var event = document.createEvent("CustomEvent");
-		event.initEvent(type, bubble, true);
+		event.initEvent(type, bubble, cancelable);
 		event.data = data;
 		this.each(function (index, el)
 		{
