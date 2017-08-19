@@ -132,8 +132,9 @@
 	padding:.25em;
 	border:1px solid #aaa;
 }
-.ibx-split-menu-button > .split-button
+.ibx-split-menu-button > .split-button, .ibx-split-menu-button > .split-menu
 {
+	flex:1 1 auto;
 }
 
 .ibx-split-menu-button > .split-menu::before

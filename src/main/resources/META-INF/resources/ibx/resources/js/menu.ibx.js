@@ -378,6 +378,7 @@ $.widget("ibi.ibxSplitMenuButton", $.ibi.ibxHBox,
 		"menuOptions":
 		{
 			"class":"split-menu",
+			"justify":"center",
 			"position":
 			{
 				"my":"left top",
