@@ -352,7 +352,7 @@ $.widget("ibi.ibxMenuButton", $.ibi.ibxButtonSimple,
 	_onClick:function(e)
 	{
 		var options = this.options;
-		$(options.menu).ibxWidget("option", {destroOnClose:false,position:options.position}).ibxWidget("open");
+		$(options.menu).ibxWidget("option", {destroyOnClose:false,position:options.position}).ibxWidget("open");
 	},
 	_refresh:function()
 	{
