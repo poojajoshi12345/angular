@@ -403,6 +403,7 @@ $.widget("ibi.ibxSplitMenuButton", $.ibi.ibxHBox,
 		var separator = this._separator = $("<div class='split-separator'>");
 
 		this.element.append(btn, separator, menu);
+		options.menuOptions.menu.appendTo("body");
 	},
 	_onBtnClick:function(e)
 	{
