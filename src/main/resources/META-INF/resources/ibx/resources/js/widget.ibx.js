@@ -137,8 +137,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 		ctxMenu = ctxEvent.result || $(this.options.ctxMenu);
 		if(ctxMenu.length)
 		{
-			ctxMenu.ibxWidget("option", "position", {my:"", at:""});
-			ctxMenu.offset({top:e.clientY, left:e.clientX});
+			ctxMenu.ibxWidget("option", "position", {my:"left top", at:"", collision:"fit", of:e});
 			ctxMenu.ibxWidget("open");
 			e.stopPropagation();
 			e.preventDefault();
