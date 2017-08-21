@@ -12,7 +12,6 @@
  };
 
  concreteDataProvider.prototype = Object.create(ibxDataProvider.prototype, {'constructor': concreteDataProvider});
-
  // ... define all prototype methods here //
  */
 
@@ -80,10 +79,13 @@ IbxDataNode.prototype = {
       return this.data;
    },
    getChildren: function(){
-      return this.children.map(function(val){
+      var tmp = this.children.map(function(index,val){
+         console.log($(val))
          var anyKids =  $(val).children().length > 0  ;
-         return new IbxDataNode(val, this, anyKids, $($(val).children()) );
+         var kid = new IbxDataNode(val, this, anyKids, $($(val).children()) );
+         return kid;
       }.bind(this));
+      return tmp;
    },
    /**
     * return the named property on selected element
@@ -95,5 +97,8 @@ IbxDataNode.prototype = {
       // return this.data[propName]
       // if this function is not defined by the Developer, throw an error
       throw new Error("you must define all methods for the dataProvider")
+   },
+   getPadding: function(){
+      return (this.hasChildren? 30 : 10);
    }
 };

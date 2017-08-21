@@ -1,6 +1,6 @@
 /**
- * Created by aw14286 on 8/4/2017.
- */
+    * Created by aw14286 on 8/4/2017.
+*/
 function selectionModel() {
    this.selections = []; // selections should refer to elements in the tree widget
    // TODO: should anchors allow for multiple anchors?
@@ -8,7 +8,11 @@ function selectionModel() {
 }
 
 selectionModel.prototype = {
-   setAnchor: function () {
+   getAnchor: function () {
+      return this.anchor;
+   },
+   setAnchor: function(newAnchor){
+     this.anchor = newAnchor;
    },
    getSelectedItems: function () {
       console.log(this.selections);
@@ -59,3 +63,5 @@ selectionModel.prototype = {
       this.getSelectedItems();
    }
 }
+
+//# sourceUrl=selectionModel.tree.js

@@ -13,55 +13,38 @@ $.widget("ibi.ibxTreeItem", $.ibi.ibxWidget, {
    _create: function () {
       this._super();
       // add glyph classes
-      this._glyphClasses = this.options.provider.getGlyphClasses();
       // add a label to the container
-      var label = this._label = $("<div class='ibfs-label' style='padding-left:" + (this.options.padding + this.options.provider.getPadding()) + "px;'>").ibxLabel({
+      var label = this._label = $("<div class='ibfs-label'  style='padding-left:" + (this.options.padding + this.options.provider.getPadding()) + "px;'>").ibxLabel({
          glyph: this._glyph,
          glyphClasses: this._glyphClasses,
          wrap: false,
          justify: "start",
-         text: this.options.provider.getDescription(),
+         text: this.options.provider.data.nodeName,
          width: this.options.width
       }).addClass("ibfs-item").addClass("ibfs_file");
 
       // append everything to the dom
       this.element.append(label);
-      this._on(this.element, {"click": "_onClick"});
-      this._on(this.element, {"mousedown": "_onMouseDown"})
-      this._on(this.element, {"mousemove": "_onMouseMove"})
-      this._on(this.element, {"mouseup": "_onMouseUp"})
-   },
-   _onClick: function (e) {
-      e.stopPropagation();
-      if (e.shiftKey) {
-         window.selectionModel.selectItemRange(this);
-      }
-
+      this._on(this.element, {"mousedown": "_onMouseDown"});
+      this._on(this.element, {"mouseup": "_onMouseUp"});
    },
    _onMouseDown: function (e) {
       e.stopPropagation();
-      window.selectingTree = false;
 
-         window.selectionModel.selectItem(this);
+      if (e.shiftKey) {
+         window.selectionModel.selectItemRange(this);
+      } else {
+         window.selectingTree.setAnchor(this);
+      }
    },
-   _onMouseMove: function (e) {
-      e.stopPropagation();
-      console.log("mouse moving")
-      window.selectingTree = true;
-   },
+
    _onMouseUp: function (e) {
       e.stopPropagation();
-      console.log(window.selectingTree)
-      if (typeof window.selectingTree != 'undefined' && window.selectingTree) {
-         if (e.shiftKey) {
-            window.selectionModel.selectItemRange(this);
-            window.selectionModel.selectItem(this);
-         } else {
+      if (window.selectionModel.getAnchor().is(this)) {
+         window.selectionModel.selectItem(this);
+      } else {
          window.selectionModel.selectItemRange(this);
-         }
-
       }
-
    },
    _setOption: function (key, value) {
       //map option to option.option.xxx. Used mostly for Bindows markup property setting.
@@ -118,24 +101,27 @@ $.widget("ibi.ibxTreeFolder", $.ibi.ibxWidget, {
    widgetClass: "ibx-tree",
    _create: function () {
       this._super();
+         this._glyphClasses = "ibx-icons ibx-glyph-plus-small";
+      this._glyphClassesSel = "ibx-icons ibx-glyph-minus-small";
 
       this._folderPadding = 30;
       this._filePadding = 10;
       this._expanded = false;
+      //
+      //this._glyph = this.options.provider.getGlyph();
+      //this._glyphClasses = this.options.provider.getGlyphClasses();
+      //this._glyphClassesSel = this.options.provider.getGlyphClassesSel();
 
-      this._glyph = this.options.provider.getGlyph();
-      this._glyphClasses = this.options.provider.getGlyphClasses();
-      this._glyphClassesSel = this.options.provider.getGlyphClassesSel();
 
-      // add a label to the container
       var label = this._label = $("<div class='ibfs-label'  style='padding-left:" + (this.options.padding + this.options.provider.getPadding()) + "px;'>").ibxLabel({
-         glyph: this._glyph,
+            glyph: this._glyph,
          glyphClasses: this._glyphClasses,
          wrap: false,
          justify: "start",
-         text: this.options.provider.getDescription()
+         text: this.options.provider.data.nodeName
       }).addClass("ibfs-item");
 
+      //debugger;
       // append everything to the dom
       this.element.append(label);
 
@@ -174,6 +160,8 @@ $.widget("ibi.ibxTreeFolder", $.ibi.ibxWidget, {
    },
    _onClick: function (e) {
       e.stopPropagation();
+      console.log(e.target)
+      debugger; 
       this._expand(!this._expanded)
    },
    _onDblClick: function (e) {
@@ -187,9 +175,10 @@ $.widget("ibi.ibxTreeFolder", $.ibi.ibxWidget, {
          this._label.data('ibiIbxLabel')._setOption('glyphClasses', this._glyphClassesSel);
          this._label.addClass('fld-open');
          var self = this; // done because binding 'this' seems to really f*ck up the scoping of the ibx tree lo
-         this.options.provider.getChildren().forEach(function (p) {
-            var nextPadding = self.options.padding + self.options.provider.getPadding()
-            if (p.hasChildren()) {
+         var thoseKids = this.options.provider.getChildren().toArray();
+         thoseKids.forEach(function (p) {
+            var nextPadding = self.options.padding + p.getPadding();
+            if (p.hasChildren) {
                var childNode = $('<div>').ibxTreeFolder({
                   provider: p,
                   padding: nextPadding,
@@ -262,21 +251,22 @@ $.widget("ibi.ibxTree", $.ibi.ibxWidget, {
    widgetClass: "ibx-tree",
    _create: function () {
       this._super();
+      console.log(this.options.provider.getRootNode())
       // TODO: refactor (should never need to check because the root elem should always have children)
-      var thisEl = (this.options.provider.hasChildren() ? $('<div>').ibxTreeFolder({
-         provider: this.options.provider,
+      var thisEl = (this.options.provider.getRootNode().hasChildren ? $('<div>').ibxTreeFolder({
+         provider: this.options.provider.getRootNode(),
          padding: this.options.padding
       }) : $('<div>').ibxTreeItem({
-         provider: this.options.provider,
+         provider: this.options.provider.getRootNode(),
          padding: this.options.padding
-      }))
+      }));
+      // TODO: if you're going to have the different files workign, then you're going to need to work through and
+      // ensure that you're looping through
 
       // TODO: refactor (we should never need this because the tree widget constructor will only be called once)
-      if (this.options.provider.isRoot()) {
          thisEl.addClass("ibx-tree-root");
-      }
-      this.element.append(thisEl);
 
+      this.element.append(thisEl);
    },
    _init: function () {
       this.refresh();

@@ -49,7 +49,7 @@
 					window.selectionModel = new selectionModel();
 					document.getElementById('file-input').addEventListener('change', function(e){
 					setTimeout(function(){
-					$(".main-box").ibxTree({provider: window.xmlProvider.getRootNode()});
+					$(".main-box").ibxTree({provider: window.xmlProvider});
 					}.bind(this),3000);
 					}.bind(this));
 					});
