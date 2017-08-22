@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ibx-res-bundle name="test_res_bundle.xml" loadContext="bundle">
 	<strings>
-		<string-file src="./test_res_strings.txt" default="true"/>
+		<string-file src="./test_res_strings.txt" default="false"/>
 		<string-bundle>
 		<![CDATA[
 			{
 				"language":"en",
 				"strings":
 				{
+					"TEST":"\\{1\\} A"
 				}
 			}
 		]]>
@@ -42,6 +43,7 @@
 			<div class="test-widget-template" data-ibx-name-root="true" data-ibx-type="testWidget" data-ibxp-align="center" data-ibxp-justify="center">
 				<div class="test-widget-label" data-ibx-type="ibxLabel" data-ibx-name="_label" data-ibxp-glyph="face" data-ibxp-glyph-classes="material-icons">This is a Test Label</div>
 			</div>
+			<div class="test-label" data-ibx-type="ibxLabel" data-ibxp-text="@ibxString('TEST')"></div>
 		</markup-block>
 	</markup>
 

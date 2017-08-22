@@ -22,7 +22,7 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 		alignChildren:"center",
 
 		scrollType:"fractional", //page/integral(child)/fractional(pixel)
-		scrollStepRate:{"page":250, "integral":250, "fractional":25},//time in ms 
+		scrollStepRate:{"page":200, "integral":200, "fractional":25},//time in ms 
 		scrollStep:25,//n children per scroll...if fractional then this is a pixel based increment per scroll
 		allowDragScrolling:true
 	},
@@ -64,19 +64,19 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 	},
 	_onPrev:function(e)
 	{
-		this._scroll(e.type == "mousedown", false) 
+		this._scroll(e.type == "mousedown", false, true) 
 	},
 	_onNext:function(e)
 	{
-		this._scroll(e.type == "mousedown", true) 
+		this._scroll(e.type == "mousedown", true, true) 
 	},
 	_onItemsKeyEvent:function(e)
 	{
 		if(e.keyCode == 37)
-			this._scroll(true, false, true);
+			this._scroll(true, false);
 		else
 		if(e.keyCode == 39)
-			this._scroll(true, true, true);
+			this._scroll(true, true);
 	},
 	_onResize:function()
 	{
@@ -87,28 +87,33 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 		this._adjustPageMarkers();
 	},
 	_scrollTimer:null,
-	_scroll:function(startScrolling, forward, incremental)
+	_scroll:function(startScrolling, forward, continual)
 	{
 		var options = this.options;
 		var scrollInfo = {"forward":forward};
 		if(startScrolling)
 		{
-			if(incremental)
-			{
-				var nScroll = this._itemsBox.prop("scrollLeft");
-				var delta = nScroll + (forward ? options.scrollStep : -options.scrollStep);
-				this._itemsBox.prop("scrollLeft", delta);
-				this._adjustPageMarkers();
-			}
+			var childInfo = this.getChildInfo();
+			var metrics = this.getPageMetrics();
+			var delta = 0;
+			if(options.scrollType == "fractional")
+				delta = options.scrollStep;
 			else
+			if(options.scrollType == "integral")
+				;
+			else
+			if(options.scrollType == "page")
+				delta = this._itemsBox.prop("offsetWidth");
+			delta = forward ? delta : -delta;
+
+			this._doScroll("scrollLeft", delta);
+
+			if(continual)
 			{
-				this._scrollTimer = window.setInterval(function(forward)
+				this._scrollTimer = window.setInterval(function(forward, delta)
 				{
-					var nScroll = this._itemsBox.prop("scrollLeft");
-					var delta = nScroll + (forward ? options.scrollStep : -options.scrollStep);
-					this._itemsBox.prop("scrollLeft", delta);
-					this._adjustPageMarkers();
-				}.bind(this, forward), (options.scrollType == "fractional") ? options.scrollStepRate.fractional : options.scrollStepRate.integral); 
+					this._doScroll("scrollLeft", delta);
+				}.bind(this, forward, delta), options.scrollStepRate[options.scrollType]); 
 			}
 			this._scrolling = true;
 		}
@@ -118,6 +123,13 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 			this._scrolling = false;
 			window.clearInterval(this._scrollTimer);
 		}
+	},
+	_doScroll:function(scrollType, delta)
+	{
+		var curScroll = this._itemsBox.prop(scrollType);
+		this._itemsBox.prop(scrollType, curScroll + delta);
+		this._adjustPageMarkers();
+		this._trigger("scroll", null, this.getPageInfo());
 	},
 	_onPageMarkerClick:function(e)
 	{
@@ -229,6 +241,24 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 		metrics = metrics || this.getPageMetrics();
 		return {"pages": Math.floor(metrics.scrollWidth / metrics.pageWidth) || 1, "curPage": Math.floor(metrics.scrollLeft / metrics.pageWidth), "metrics":metrics};
 	},
+	page:function(pageNo)
+	{
+		var info = this.getPageInfo();
+		if(pageNo === undefined)
+			return info.curPage;
+
+		var pageNo = (pageNo == -1) ? info.curPage : pageNo;
+		if(pageNo <= info.pages-1)
+		{
+			this._itemsBox.prop("scrollLeft", info.metrics.pageWidth * pageNo);
+			this._adjustPageMarkers();
+		}
+	},
+	_setOption:function(key, value)
+	{
+		this._needsLayout = (key == "prevNextButtonPos" && value != this.options[key]);
+		this._super(key, value);
+	},
 	_refresh:function()
 	{
 		this._super();
@@ -237,17 +267,17 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 		this._prevBtn.css("display", options.showPrevButton ? "" : "none");
 		this._nextBtn.css("display", options.showNextButton ? "" : "none");
 
-		var lScroll = this._itemsBox.prop("scrollLeft");
-		var tScroll = this._itemsBox.prop("scrollTop");
-		if(options.prevNextButtonPos == "ends")
-			this._itemsContainer.append(this._prevBtn, this._itemsBox, this._nextBtn);
-		else
-		if(options.prevNextButtonPos == "start")
-			this._itemsContainer.append(this._prevBtn, this._nextBtn, this._itemsBox);
-		else
-		if(options.prevNextButtonPos == "end")
-			this._itemsContainer.append(this._itemsBox, this._prevBtn, this._nextBtn);
-		this._itemsBox.prop({"scrollLeft":lScroll, "scrollTop":tScroll});
+		if(this._needsLayout)
+		{
+			if(options.prevNextButtonPos == "ends")
+				this._itemsContainer.append(this._prevBtn, this._itemsBox, this._nextBtn);
+			else
+			if(options.prevNextButtonPos == "start")
+				this._itemsContainer.append(this._prevBtn, this._nextBtn, this._itemsBox);
+			else
+			if(options.prevNextButtonPos == "end")
+				this._itemsContainer.append(this._itemsBox, this._prevBtn, this._nextBtn);
+		}
 
 		this._adjustPageMarkers();
 		this._pageMarkers.css("display", options.showPageMarkers ? "" : "none");
@@ -288,32 +318,38 @@ $.widget("ibi.ibxVCarousel", $.ibi.ibxCarousel,
 	_onItemsKeyEvent:function(e)
 	{
 		if(e.keyCode == 38)
-			this._scroll(true, false, true);
+			this._scroll(true, false, false);
 		else
 		if(e.keyCode == 40)
-			this._scroll(true, true, true);
+			this._scroll(true, true, false);
 	},
-	_scroll:function(startScrolling, forward, incremental)
+	_scroll:function(startScrolling, forward, continual)
 	{
+		var options = this.options;
 		var scrollInfo = {"forward":forward};
 		if(startScrolling)
 		{
-			if(incremental)
-			{
-				var nScroll = this._itemsBox.prop("scrollTop");
-				var delta = nScroll + (forward ? this.options.scrollStep : -this.options.scrollStep);
-				this._itemsBox.prop("scrollTop", delta);
-				this._adjustPageMarkers();
-			}
+			var childInfo = this.getChildInfo();
+			var metrics = this.getPageMetrics();
+			var delta = 0;
+			if(options.scrollType == "fractional")
+				delta = options.scrollStep;
 			else
+			if(options.scrollType == "integral")
+				;
+			else
+			if(options.scrollType == "page")
+				delta = this._itemsBox.prop("offsetHeight");
+			delta = forward ? delta : -delta;
+
+			this._doScroll("scrollTop", delta);
+
+			if(continual)
 			{
-				this._scrollTimer = window.setInterval(function(forward)
+				this._scrollTimer = window.setInterval(function(forward, delta)
 				{
-					var nScroll = this._itemsBox.prop("scrollTop");
-					var delta = nScroll + (forward ? this.options.scrollStep : -this.options.scrollStep);
-					this._itemsBox.prop("scrollTop", delta);
-					this._adjustPageMarkers();
-				}.bind(this, forward), this.options.scrollStepRate); 
+					this._doScroll("scrollTop", delta);
+				}.bind(this, forward, delta), options.scrollStepRate[options.scrollType]); 
 			}
 			this._scrolling = true;
 		}
@@ -340,6 +376,7 @@ $.widget("ibi.ibxVCarousel", $.ibi.ibxCarousel,
 	},
 	getPageInfo:function(metrics)
 	{
+		metrics = metrics || this.getPageMetrics();
 		return {pages: Math.floor(metrics.scrollHeight / metrics.pageHeight) || 1, curPage: Math.floor(metrics.scrollTop / metrics.pageHeight)};
 	},
 });
