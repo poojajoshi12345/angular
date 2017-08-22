@@ -267,7 +267,7 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 		this._prevBtn.css("display", options.showPrevButton ? "" : "none");
 		this._nextBtn.css("display", options.showNextButton ? "" : "none");
 
-		if(this._needsLayout)
+		if(!this._created || this._needsLayout)
 		{
 			if(options.prevNextButtonPos == "ends")
 				this._itemsContainer.append(this._prevBtn, this._itemsBox, this._nextBtn);
