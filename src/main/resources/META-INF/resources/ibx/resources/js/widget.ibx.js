@@ -100,7 +100,10 @@ $.widget("ibi.ibxWidget", $.Widget,
 		}
 		return ret || $();
 	},
-	_onResize:$.noop,
+	_resizeCallback:function()
+	{
+		this._trigger("resize");
+	},
 	_onFocusRootEvent:function(e)
 	{
 		if(this.options.focusRoot)
@@ -223,7 +226,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 		}
 		else
 		if(options.wantResize && !this._resizeSensor)
-			this._resizeSensor = new ResizeSensor(this.element[0], this._onResize.bind(this));
+			this._resizeSensor = new ResizeSensor(this.element[0], this._resizeCallback.bind(this));
 	}
 });
 
