@@ -352,7 +352,11 @@ $.widget("ibi.ibxMenuButton", $.ibi.ibxButtonSimple,
 	_onClick:function(e)
 	{
 		var options = this.options;
-		$(options.menu).ibxWidget("option", {destroyOnClose:false,position:options.position}).ibxWidget("open");
+		var event = $.Event(e.origionalEvent);
+		event.type = "ibx_click";
+		this.element.trigger(event);
+		var menu = event.menu || options.menu;
+		$(menu).ibxWidget("option", {position:options.position}).ibxWidget("open");
 	},
 	_refresh:function()
 	{
@@ -407,7 +411,11 @@ $.widget("ibi.ibxSplitMenuButton", $.ibi.ibxHBox,
 	},
 	_onBtnClick:function(e)
 	{
-		var menu = this._menuBtn.ibxWidget("option", "menu");
+		var event = $.Event(e.origionalEvent);
+		event.type = "ibx_click";
+		this.element.trigger(event);
+
+		var menu = event.menu || this._menuBtn.ibxWidget("option", "menu");
 		var defItem = menu.ibxWidget("children", ".ibx-split-button-default-item");
 		defItem.trigger("click");
 	},
