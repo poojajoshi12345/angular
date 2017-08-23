@@ -228,3 +228,4 @@
     return ResizeSensor;
 
 }));
+//# sourceURL=ResizeSensor.js
