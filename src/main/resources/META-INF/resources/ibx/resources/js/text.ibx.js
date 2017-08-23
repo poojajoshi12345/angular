@@ -89,7 +89,9 @@ $.widget("ibi.ibxTextField", $.ibi.ibxFlexBox,
 	{
 		if (e.which == 13) // enter
 		{
-			this._setValue(this._textInput.val(), true);
+			var newVal = this._textInput.val();
+			this._focusVal = newVal;
+			this._setValue(newVal, true);
 			this._trigger("action", e, [this.element, this.options.text]);
 			e.preventDefault();
 		}
