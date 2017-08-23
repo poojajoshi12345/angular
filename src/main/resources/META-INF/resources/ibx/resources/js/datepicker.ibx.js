@@ -15,7 +15,7 @@ $.widget("ibi.ibxDatePicker", $.ibi.ibxVBox,
 	_create: function ()
 	{
 		this._super();
-		this._input = $('<div class="ibx-default-ctrl-focus ibx-datepicker-input">').ibxLabel({glyphClasses:"fa fa-calendar"}).on("focus", this._showPopup.bind(this)).on('click', this._showPopup.bind(this));
+		this._input = $('<div class="ibx-default-ctrl-focus ibx-datepicker-input">').ibxLabel({glyphClasses:"fa fa-calendar", 'align': 'stretch'}).on("focus", this._showPopup.bind(this)).on('click', this._showPopup.bind(this));
 		this._inputWrapper = $('<div>').ibxHBox().addClass('ibx-datepicker-input-wrapper');
 		this._inputWrapper.append(this._input);
 		this._dateWrapper = $('<div>').ibxFlexBox({ 'wrap': false });
