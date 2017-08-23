@@ -121,8 +121,20 @@ $.widget("ibi.ibxDateRange", $.ibi.ibxDatePicker,
 		//var value = $.datepicker.formatDate(this.options.dateFormat, this._datePicker.datepicker('getDate'));
 		var value = this._datePicker.datepicker('getDate');
 		var v = value.getTime();
-		var from = $.datepicker.parseDate(this.options.dateFormat, this.options.dateFrom).getTime();
-		var to = $.datepicker.parseDate(this.options.dateFormat, this.options.dateTo).getTime();
+		var to;
+		var from;
+		var parseFrom = $.datepicker.parseDate(this.options.dateFormat, this.options.dateFrom);
+		if (!parseFrom)
+			from = (new Date()).getTime();
+		else
+			from = parseFrom.getTime();
+
+		var parseTo = $.datepicker.parseDate(this.options.dateFormat, this.options.dateTo);
+		if (!parseTo)
+			to = (new Date()).getTime();
+		else
+			to = parseTo.getTime();
+
 		if (v < from)
 		{
 			// extend from
@@ -147,8 +159,13 @@ $.widget("ibi.ibxDateRange", $.ibi.ibxDatePicker,
 	},
 	_highlightRange: function ()
 	{
-		var dateFrom = $.datepicker.parseDate(this.options.dateFormat, this.options.dateFrom).getTime();
-		var dateTo = $.datepicker.parseDate(this.options.dateFormat, this.options.dateTo).getTime();
+		var parseFrom = $.datepicker.parseDate(this.options.dateFormat, this.options.dateFrom);
+		var parseTo = $.datepicker.parseDate(this.options.dateFormat, this.options.dateTo);
+		if (!parseFrom || !parseTo)
+			return;
+
+		var dateFrom = parseFrom.getTime();
+		var dateTo = parseTo.getTime();
 
 		this._datePicker.find('td[data-handler="selectDay"]').each(function (index, el)
 		{
