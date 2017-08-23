@@ -383,6 +383,17 @@ $.widget("ibi.ibxSlider", $.ibi.ibxGrid,
 				break;
 
 		}
+
+		valueStart = 1;
+		valueEnd = 3;
+		if (flipLayout)
+		{
+			var save = valueStart;
+			valueStart = this._flipLayout(valueEnd);
+			valueEnd = this._flipLayout(save);
+		}
+
+
 		switch (this.options.valueTextPos)
 		{
 			default:
@@ -393,14 +404,14 @@ $.widget("ibi.ibxSlider", $.ibi.ibxGrid,
 
 				break;
 			case 'start':
-				this._labelValue.data('ibxRow', horiz ? 1 : 2);
-				this._labelValue.data('ibxCol', horiz ? 2 : 1);
+				this._labelValue.data('ibxRow', horiz ? 1 : (valueStart + '/span ' + (valueEnd - valueStart + 1)));
+				this._labelValue.data('ibxCol', horiz ? (valueStart + '/span ' + (valueEnd - valueStart + 1)) : 1);
 
 				this._labelValue.show();
 				break;
 			case 'end':
-				this._labelValue.data('ibxRow', horiz ? 3 : 2);
-				this._labelValue.data('ibxCol', horiz ? 2 : 3);
+				this._labelValue.data('ibxRow', horiz ? 3 : (valueStart + '/span ' + (valueEnd - valueStart + 1)));
+				this._labelValue.data('ibxCol', horiz ? (valueStart + '/span ' + (valueEnd - valueStart + 1)) : 3);
 
 				this._labelValue.show();
 				break;
