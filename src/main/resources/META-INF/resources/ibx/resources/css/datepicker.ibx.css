@@ -6,6 +6,11 @@
     border-radius: 3px;
 }
 
+.ibx-datepicker-popup.ibx-popup
+{
+    padding: 0px;
+}
+
 .ibx-datepicker-input {
     flex: 1 1 auto;
     border: none;
