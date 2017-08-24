@@ -129,23 +129,33 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 	_animationFrameId:null,
 	_doScroll:function(scrollType, forward, delta)
 	{
-		//kill any current scrolling
-		window.cancelAnimationFrame(this._animationFrameId);
-		this._animationFrameId = null;
+		delta = 202;
+
+		//if(this._animationFrameId)
+		//	return;
 
 		var options = this.options;
 		var nFrames = (options.scrollStepRate[options.scrollType]/1000) * 60;
+		var stepSize = Math.ceil(delta/nFrames);
 		var curFrame = 0;
-		var stepSize = delta/nFrames;
 		var fnFrame = function(nFrames, stepSize, delta, timeStamp)
 		{
+			var done = false;
+			if((stepSize * curFrame) >= delta)
+			{
+				stepSize = -((stepSize * curFrame) - delta);
+				done = true;
+			}
+
+			curFrame++;
 			var newScroll = this._itemsBox.prop(scrollType) + (forward ? stepSize : -stepSize);
 			this._itemsBox.prop(scrollType, newScroll);
 			this._trigger("scrollframe", null, this._itemsBox, nFrames, curFrame, stepSize, delta, timeStamp);
 			this._adjustPageMarkers();
-
 			this._animationFrameId = window.requestAnimationFrame(fnFrame);
-			if(++curFrame >= nFrames)
+
+			console.log(curFrame, stepSize, stepSize * curFrame, delta);
+			if(done)
 			{
 				window.cancelAnimationFrame(this._animationFrameId);
 				this._animationFrameId = null;
