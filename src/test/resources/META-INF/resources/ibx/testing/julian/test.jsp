@@ -137,6 +137,11 @@
 				}.bind(this, frameLength, date);
 				window.requestAnimationFrame(frame);
 
+				$(".julian").on("click dblclick", function(e)
+				{
+					console.log(e.type);
+				});
+
 			}, [{"src":"./test_res_bundle.xml", "loadContext":"app"}], true);
 		</script>
 		<style type="text/css">
@@ -188,6 +193,7 @@
 	</head>
 	<body class="ibx-root">
 		<div class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="center">
+			<div class="julian" data-ibx-type="ibxLabel">Julian</div>
 			<div class="split-button" data-ibx-type="ibxHSplitMenuButton" data-ibxp-default-menu-item=".def-item" data-ibxp-btn-options="{glyphClasses:'fa fa-18 fa-cog'}">
 				<div data-ibx-type="ibxMenu">
 					<div data-ibx-type="ibxMenuItem">Menu Item</div>
