@@ -21,8 +21,9 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 		hideDisabledButtons:false,
 		alignChildren:"center",
 
-		scrollType:"fractional", //page/integral(child)/fractional(pixel)
-		scrollStepRate:{"page":200, "integral":200, "fractional":25},//time in ms 
+		scrollProps:{"axis":"scrollLeft", "size":"offsetWidth"},
+		scrollType:"fractional", //page(width)/integral(child)/fractional(pixel)
+		scrollStepRate:{"page":400, "integral":350, "fractional":25},//time in ms per scroll
 		scrollStep:25,//n children per scroll...if fractional then this is a pixel based increment per scroll
 		allowDragScrolling:true
 	},
@@ -103,16 +104,17 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 				;
 			else
 			if(options.scrollType == "page")
-				delta = this._itemsBox.prop("offsetWidth");
-			delta = forward ? delta : -delta;
+				delta = this._itemsBox.prop(options.scrollProps.size);
 
-			this._doScroll("scrollLeft", delta);
+			delta = delta * options.scrollStep;
+
+			this._doScroll(options.scrollProps.axis, forward, delta);
 
 			if(continual)
 			{
 				this._scrollTimer = window.setInterval(function(forward, delta)
 				{
-					this._doScroll("scrollLeft", delta);
+				this._doScroll(options.scrollProps.axis, forward, delta);
 				}.bind(this, forward, delta), options.scrollStepRate[options.scrollType]); 
 			}
 			this._scrolling = true;
@@ -124,12 +126,33 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 			window.clearInterval(this._scrollTimer);
 		}
 	},
-	_doScroll:function(scrollType, delta)
+	_animationFrameId:null,
+	_doScroll:function(scrollType, forward, delta)
 	{
-		var curScroll = this._itemsBox.prop(scrollType);
-		this._itemsBox.prop(scrollType, curScroll + delta);
-		this._adjustPageMarkers();
-		this._trigger("scroll", null, this.getPageInfo());
+		//kill any current scrolling
+		window.cancelAnimationFrame(this._animationFrameId);
+		this._animationFrameId = null;
+
+		var options = this.options;
+		var nFrames = (options.scrollStepRate[options.scrollType]/1000) * 60;
+		var curFrame = 0;
+		var nStep = delta/nFrames;
+		var fnFrame = function(nFrames, nStep, delta, timeStamp)
+		{
+			var newScroll = this._itemsBox.prop(scrollType) + (forward ? nStep : -nStep);
+			this._itemsBox.prop(scrollType, newScroll);
+			this._adjustPageMarkers();
+			this._trigger("scroll", null, this.getPageInfo());
+
+			this._animationFrameId = window.requestAnimationFrame(fnFrame);
+			if(++curFrame >= nFrames)
+			{
+				window.cancelAnimationFrame(this._animationFrameId);
+				this._animationFrameId = null;
+			}
+
+		}.bind(this, nFrames, nStep, delta);
+		window.requestAnimationFrame(fnFrame);
 	},
 	_onPageMarkerClick:function(e)
 	{
@@ -303,6 +326,7 @@ $.widget("ibi.ibxVCarousel", $.ibi.ibxCarousel,
 	options:
 	{
 		direction:"row",
+		scrollProps:{"axis":"scrollTop", "size":"offsetHeight"}
 	},
 	_widgetClass:"ibx-v-carousel",
 	_create:function()
@@ -322,43 +346,6 @@ $.widget("ibi.ibxVCarousel", $.ibi.ibxCarousel,
 		else
 		if(e.keyCode == 40)
 			this._scroll(true, true, false);
-	},
-	_scroll:function(startScrolling, forward, continual)
-	{
-		var options = this.options;
-		var scrollInfo = {"forward":forward};
-		if(startScrolling)
-		{
-			var childInfo = this.getChildInfo();
-			var metrics = this.getPageMetrics();
-			var delta = 0;
-			if(options.scrollType == "fractional")
-				delta = options.scrollStep;
-			else
-			if(options.scrollType == "integral")
-				;
-			else
-			if(options.scrollType == "page")
-				delta = this._itemsBox.prop("offsetHeight");
-			delta = forward ? delta : -delta;
-
-			this._doScroll("scrollTop", delta);
-
-			if(continual)
-			{
-				this._scrollTimer = window.setInterval(function(forward, delta)
-				{
-					this._doScroll("scrollTop", delta);
-				}.bind(this, forward, delta), options.scrollStepRate[options.scrollType]); 
-			}
-			this._scrolling = true;
-		}
-		else
-		if(this._scrolling)
-		{
-			this._scrolling = false;
-			window.clearInterval(this._scrollTimer);
-		}
 	},
 	_onPageMarkerClick:function(e)
 	{

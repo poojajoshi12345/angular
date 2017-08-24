@@ -113,9 +113,39 @@
 					var dlg = $(".test-dlg");
 					dlg.ibxWidget("open");
 				});
+
+
+				var label = $("<div class='label'>").text("Test Label").ibxLabel();
+				var resSensor = new ResizeSensor(label[0], function()
+				{
+					console.log("resize");
+				});
+				$("body").prepend(label);
+
+				var counter = 0;
+				var date = new Date();
+
+				var frameLength = (250/1000) * 60;
+				var frame = function(frameLength, date, timeStamp)
+				{
+					var t = new Date() - date;
+					console.log("frame", t, ++counter, timeStamp);
+					var fid = window.requestAnimationFrame(frame);
+					if(counter >= frameLength)
+						window.cancelAnimationFrame(fid);
+
+				}.bind(this, frameLength, date);
+				window.requestAnimationFrame(frame);
+
 			}, [{"src":"./test_res_bundle.xml", "loadContext":"app"}], true);
 		</script>
 		<style type="text/css">
+			.label
+			{
+				width:50%;
+				border:1px solid purple;
+			}
+
 			html, body
 			{
 				margin:0px;
@@ -133,10 +163,6 @@
 				border:2px solid red;
 				padding:5px;
 			}
-			.main-box *
-			{
-				flex:0 0 auto;
-			}
 			.test-btn, .test-select
 			{
 				flex:0 0 auto;
@@ -145,6 +171,18 @@
 			{
 				flex: 1 1 auto;
 				border:1px solid lime;
+			}
+			.car
+			{
+				width:50%;
+				height:150px;
+				border:1px solid red;
+			}
+			.test-item
+			{
+				width:100px;
+				height:100px;
+				border:1px solid blue;
 			}
 		</style>
 	</head>
