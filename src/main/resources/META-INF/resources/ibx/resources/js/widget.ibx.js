@@ -170,7 +170,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 	},
 	option:function(key, value)
 	{
-		var bRefresh = (typeof(key) == "object") || (this.options[key] != value);
+		var bRefresh = (typeof(key) == "object") || (value !== undefined && (this.options[key] != value));
 		var ret = null;
 		if(value !== undefined)
 			ret = this._super(key, value);
