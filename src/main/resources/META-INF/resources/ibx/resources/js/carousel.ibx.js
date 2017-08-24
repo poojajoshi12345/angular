@@ -136,22 +136,23 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 		var options = this.options;
 		var nFrames = (options.scrollStepRate[options.scrollType]/1000) * 60;
 		var curFrame = 0;
-		var nStep = delta/nFrames;
-		var fnFrame = function(nFrames, nStep, delta, timeStamp)
+		var stepSize = delta/nFrames;
+		var fnFrame = function(nFrames, stepSize, delta, timeStamp)
 		{
-			var newScroll = this._itemsBox.prop(scrollType) + (forward ? nStep : -nStep);
+			var newScroll = this._itemsBox.prop(scrollType) + (forward ? stepSize : -stepSize);
 			this._itemsBox.prop(scrollType, newScroll);
+			this._trigger("scrollframe", null, this._itemsBox, nFrames, curFrame, stepSize, delta, timeStamp);
 			this._adjustPageMarkers();
-			this._trigger("scroll", null, this.getPageInfo());
 
 			this._animationFrameId = window.requestAnimationFrame(fnFrame);
 			if(++curFrame >= nFrames)
 			{
 				window.cancelAnimationFrame(this._animationFrameId);
 				this._animationFrameId = null;
+				this._trigger("scroll", null, this.getPageInfo());
 			}
 
-		}.bind(this, nFrames, nStep, delta);
+		}.bind(this, nFrames, stepSize, delta);
 		window.requestAnimationFrame(fnFrame);
 	},
 	_onPageMarkerClick:function(e)
