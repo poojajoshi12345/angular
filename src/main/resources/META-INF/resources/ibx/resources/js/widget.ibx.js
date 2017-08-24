@@ -137,7 +137,9 @@ $.widget("ibi.ibxWidget", $.Widget,
 		if(ctxEvent.isDefaultPrevented() || !this.element.is(e.currentTarget))
 			return;
 
-		ctxMenu = ctxEvent.result || $(this.options.ctxMenu);
+		if(ctxEvent.result)
+			console.warn("[Deprecation] Event ibx_ctxmenu - event.result is depricated.  Use event.menu instead.");
+		ctxMenu = ctxEvent.result || ctxEvent.menu || $(this.options.ctxMenu);
 		if(ctxMenu.length)
 		{
 			ctxMenu.ibxWidget("option", "position", {my:"left top", at:"", collision:"flipfit", of:e});
