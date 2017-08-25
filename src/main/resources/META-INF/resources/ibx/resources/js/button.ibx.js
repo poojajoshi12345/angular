@@ -89,7 +89,7 @@ $.widget("ibi.ibxCheckBox", $.ibi.ibxLabel,
 			return this;
 		}
 	},
-	option: function (key, value)
+	_setOption: function (key, value)
 	{
 		if (key == "group")
 		{
@@ -109,7 +109,7 @@ $.widget("ibi.ibxCheckBox", $.ibi.ibxLabel,
 					group.data("ibiIbxWidget").addControl(this.element);
 			}
 		}
-		return this._superApply(arguments);
+		this._super(key, value);
 	},
 	_onKeyDown: function (e)
 	{
@@ -200,7 +200,7 @@ $.widget("ibi.ibxCheckBoxSimple", $.ibi.ibxCheckBox,
 		this._super();
 		this.add(this._marker, this.children()[0], true);
 	},
-	option: function (key, value)
+	_setOption: function (key, value)
 	{
 		if (key === "markerClass")
 		{
@@ -208,7 +208,7 @@ $.widget("ibi.ibxCheckBoxSimple", $.ibi.ibxCheckBox,
 			if (!value)
 				value = "ibx-check-box-simple-marker";
 		}
-		return this._superApply(arguments);
+		return this._super(key, value);
 	},
 	_refresh: function ()
 	{
@@ -259,7 +259,7 @@ $.widget("ibi.ibxRadioButtonSimple", $.ibi.ibxRadioButton,
 		this._super();
 		this.add(this._marker, this.children()[0], true);
 	},
-	option: function (key, value)
+	_setOption: function (key, value)
 	{
 		if (key === "markerClass")
 		{
@@ -267,7 +267,7 @@ $.widget("ibi.ibxRadioButtonSimple", $.ibi.ibxRadioButton,
 			if (!value)
 				value = "ibx-radio-button-simple-marker";
 		}
-		return this._superApply(arguments);
+		return this._super(key, value);
 	},
 	_refresh: function ()
 	{
