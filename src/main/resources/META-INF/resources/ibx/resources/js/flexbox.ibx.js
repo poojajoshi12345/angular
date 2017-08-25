@@ -25,13 +25,13 @@ $.widget("ibi.ibxFlexBox", $.ibi.ibxWidget,
 		this._super();
 		this.element.removeClass(this._curClasses);
 	},
-	_setOption:function(key, value)
+	option:function(key, value)
 	{
 		var fc = $.ibi.ibxFlexBox.statics.flexClasses;
 		var options = this.options;
 		if(fc[key])
 			this.element.removeClass(fc[key][options[key]]);
-		this._super(key, value);
+		return this._superApply(arguments);
 	},
 	_refresh:function()
 	{
