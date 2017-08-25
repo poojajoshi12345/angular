@@ -21,10 +21,10 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 		hideDisabledButtons:false,
 		alignChildren:"center",
 
-		scrollProps:{"axis":"scrollLeft", "size":"offsetWidth"},
 		scrollType:"fractional", //page(width)/integral(child)/fractional(pixel)
-		scrollStepRate:{"page":400, "integral":350, "fractional":25},//time in ms per scroll
 		scrollStep:25,//n children per scroll...if fractional then this is a pixel based increment per scroll
+		scrollStepRate:{"page":500, "integral":350, "fractional":25},//time in ms per scrollStep
+		scrollProps:{"axis":"scrollLeft", "size":"offsetWidth"},//html props to use for calculating scroll position/delta
 		allowDragScrolling:true
 	},
 	_widgetClass:"ibx-carousel",
@@ -35,10 +35,10 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 		var resBody = ibx.resourceMgr.getResource(".res-ibx-carousel-body", false);
 		this.element.append(resBody.children());
 		ibx.bindElements(this.element.children());
-		this.element.on("keydown", this._onItemsKeyEvent.bind(this)).on("ibx_resize", this._onResize.bind(this));
+		this.element.on("keydown keyup", this._onItemsKeyEvent.bind(this)).on("ibx_resize", this._onResize.bind(this));
 		this._prevBtn.on("mousedown mouseup mouseleave", this._onPrev.bind(this));
 		this._nextBtn.on("mousedown mouseup mouseleave", this._onNext.bind(this));
-		this._itemsBox.ibxDragScrolling({overflowY:"hidden"}).on("ibx_scroll", this._onItemsBoxScroll.bind(this));
+		this._itemsBox.ibxDragScrolling({overflowY:"hidden"}).on("ibxscroll", this._onItemsBoxScroll.bind(this));
 		this.add(children);
 	},
 	_destroy:function()
@@ -65,19 +65,24 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 	},
 	_onPrev:function(e)
 	{
-		this._scroll(e.type == "mousedown", false, true) 
+		e.type == "mousedown" ? this.scroll($.ibi.ibxCarousel.BACKWARD) : this.stop();
 	},
 	_onNext:function(e)
 	{
-		this._scroll(e.type == "mousedown", true, true) 
+		e.type == "mousedown" ? this.scroll($.ibi.ibxCarousel.FORWARD) : this.stop();
 	},
 	_onItemsKeyEvent:function(e)
 	{
-		if(e.keyCode == 37)
-			this._scroll(true, false);
+		if(e.type == "keydown")
+		{
+			if(e.keyCode == 37)
+				this.scroll($.ibi.ibxCarousel.BACKWARD);
+			else
+			if(e.keyCode == 39)
+				this.scroll($.ibi.ibxCarousel.FORWARD);
+		}
 		else
-		if(e.keyCode == 39)
-			this._scroll(true, true);
+			this.stop();
 	},
 	_onResize:function()
 	{
@@ -87,84 +92,92 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 	{
 		this._adjustPageMarkers();
 	},
-	_scrollTimer:null,
-	_scroll:function(startScrolling, forward, continual)
+	_scrollInfo:null,
+	stop:function()
 	{
-		var options = this.options;
-		var scrollInfo = {"forward":forward};
-		if(startScrolling)
+		if(this._scrollInfo)
 		{
-			var childInfo = this.getChildInfo();
-			var metrics = this.getPageMetrics();
-			var delta = 0;
-			if(options.scrollType == "fractional")
-				delta = options.scrollStep;
-			else
-			if(options.scrollType == "integral")
-				;
-			else
-			if(options.scrollType == "page")
-				delta = this._itemsBox.prop(options.scrollProps.size);
-
-			delta = delta * options.scrollStep;
-
-			this._doScroll(options.scrollProps.axis, forward, delta);
-
-			if(continual)
-			{
-				this._scrollTimer = window.setInterval(function(forward, delta)
-				{
-				this._doScroll(options.scrollProps.axis, forward, delta);
-				}.bind(this, forward, delta), options.scrollStepRate[options.scrollType]); 
-			}
-			this._scrolling = true;
-		}
-		else
-		if(this._scrolling)
-		{
-			this._scrolling = false;
-			window.clearInterval(this._scrollTimer);
+			this._scrollInfo.stop = true;
+			this._scrollInfo = null;
+			this._trigger("scroll", null, this.getPageInfo());
 		}
 	},
-	_animationFrameId:null,
-	_doScroll:function(scrollType, forward, delta)
+	scroll:function(how)
 	{
+		var options = this.options;
+		var delta = 0;
+		if(options.scrollType == "fractional")
+			delta = options.scrollStep;
+		else
+		if(options.scrollType == "integral")
+			/*Working on it*/;
+		else
+		if(options.scrollType == "page")
+			delta = this._itemsBox.prop(options.scrollProps.size) * options.scrollStep;
+
+		this._scrollInfo = scrollInfo = 
+		{
+			"nFrames": (options.scrollStepRate[options.scrollType]/1000) * 60,
+			"curFrame": 0,
+			"scrollAxis": options.scrollProps.axis,
+			"how": how,
+			"delta": delta,
+			"animationFrameId": null
+		};
+		scrollInfo.stepSize = Math.ceil(scrollInfo.delta/scrollInfo.nFrames);
+
+		var fnFrame = function(info, timeStamp)
+		{
+			var newScroll = this._itemsBox.prop(info.scrollAxis) + (info.how ? info.stepSize : -info.stepSize);
+			this._itemsBox.prop(info.scrollAxis, newScroll);
+			this._trigger("scrollframe", null, this._itemsBox, info);
+			this._adjustPageMarkers();
+
+			info.animationFrameId = window.requestAnimationFrame(fnFrame.bind(this, info));
+			if(info.curFrame++ >= info.nFrames)
+				info.stop ? window.cancelAnimationFrame(info.animationFrameId) : info.curFrame = 0;
+		};
+		scrollInfo.animationFrameId = window.requestAnimationFrame(fnFrame.bind(this, scrollInfo));
+	},
+	/*
+	doScroll:function(scrollAxis, forward, delta)
+	{
+		if(this.scrollInfo)
+			return;
+		
 		delta = 202;
 
-		//if(this._animationFrameId)
-		//	return;
-
 		var options = this.options;
-		var nFrames = (options.scrollStepRate[options.scrollType]/1000) * 60;
-		var stepSize = Math.ceil(delta/nFrames);
-		var curFrame = 0;
-		var fnFrame = function(nFrames, stepSize, delta, timeStamp)
+		var scrollInfo = 
 		{
-			var done = false;
-			if((stepSize * curFrame) >= delta)
-			{
-				stepSize = -((stepSize * curFrame) - delta);
-				done = true;
-			}
+			"nFrames": (options.scrollType == "fractional") ? 1 : (options.scrollStepRate[options.scrollType]/1000) * 60,
+			"curFrame": 0,
+			"scrollAxis":scrollAxis,
+			"forward": forward,
+			"delta":delta,
+			"animationFramId":null
+		};
+		scrollInfo.stepSize = Math.ceil(scrollInfo.delta/scrollInfo.nFrames);
 
-			curFrame++;
-			var newScroll = this._itemsBox.prop(scrollType) + (forward ? stepSize : -stepSize);
-			this._itemsBox.prop(scrollType, newScroll);
-			this._trigger("scrollframe", null, this._itemsBox, nFrames, curFrame, stepSize, delta, timeStamp);
-			this._adjustPageMarkers();
-			this._animationFrameId = window.requestAnimationFrame(fnFrame);
-
-			console.log(curFrame, stepSize, stepSize * curFrame, delta);
-			if(done)
+		var fnFrame = function(info, timeStamp)
+		{
+			info.curFrame++;
+			if(curFrame >= info.nFrames)
 			{
-				window.cancelAnimationFrame(this._animationFrameId);
-				this._animationFrameId = null;
+				window.cancelAnimationFrame(info.animationFrameId);
 				this._trigger("scroll", null, this.getPageInfo());
 			}
 
-		}.bind(this, nFrames, stepSize, delta);
-		window.requestAnimationFrame(fnFrame);
+			var newScroll = this._itemsBox.prop(info.scrollAxis) + (info.forward ? info.stepSize : -info.stepSize);
+			this._itemsBox.prop(info.scrollAxis, newScroll);
+			this._trigger("scrollframe", null, this._itemsBox, info);
+			this._adjustPageMarkers();
+			info.animationFrameId = window.requestAnimationFrame(fnFrame.bind(this, info));
+		};
+		scrollInfo.animationFrameId = window.requestAnimationFrame(fnFrame.bind(this, scrollInfo));
+		return scrollInfo;
 	},
+	*/
 	_onPageMarkerClick:function(e)
 	{
 		var pageMarker = $(e.currentTarget);
@@ -320,6 +333,9 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 			: this._pageMarkers.insertAfter(this._itemsContainer);
 	}
 });
+$.ibi.ibxCarousel.FORWARD = true;
+$.ibi.ibxCarousel.BACKWARD = false;
+$.ibi.ibxCarousel.STOP = -1;
 $.ibi.ibxCarousel.VIS_FLAGS = 
 {
 	NONE:	0x00000000,
@@ -352,11 +368,16 @@ $.widget("ibi.ibxVCarousel", $.ibi.ibxCarousel,
 	},
 	_onItemsKeyEvent:function(e)
 	{
-		if(e.keyCode == 38)
-			this._scroll(true, false, false);
+		if(e.type == "keydown")
+		{
+			if(e.keyCode == 38)
+				this.scroll($.ibi.ibxCarousel.BACKWARD);
+			else
+			if(e.keyCode == 40)
+				this.scroll($.ibi.ibxCarousel.FORWARD);
+		}
 		else
-		if(e.keyCode == 40)
-			this._scroll(true, true, false);
+			this._super(e);
 	},
 	_onPageMarkerClick:function(e)
 	{
