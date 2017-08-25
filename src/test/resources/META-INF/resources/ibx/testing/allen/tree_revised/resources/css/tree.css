@@ -1,0 +1,29 @@
+
+.ibx-tree-root {
+    border: 1px solid black;
+    border-radius: 4px;
+    min-width: 200px;
+}
+
+.ibx-tree-selected, .ibx-tree-selected:hover {
+    background-color: orangered !important;
+}
+
+/*styling for labels in the tree*/
+.ibx-tree-root [data-ibx-type="ibxLabel"] {
+    border-radius: 2px;
+    /* the child elements werent taking full width because they need to have the display flex property set*/
+    display: flex !important;
+    padding: 6px 6px 6px 20px;
+    align-content: center;
+    line-height: 16px;
+    overflow: hidden;
+}
+
+.ibx-tree-root [data-ibx-type="ibxLabel"]:hover {
+    background-color: #eee;
+}
+
+.ibfs-label {
+    border-bottom: 1px solid black;
+}
