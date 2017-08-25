@@ -25,17 +25,15 @@ $.widget("ibi.ibxFlexBox", $.ibi.ibxWidget,
 		this._super();
 		this.element.removeClass(this._curClasses);
 	},
-	_setOption:function(key, value)
-	{
-		var fc = $.ibi.ibxFlexBox.statics.flexClasses;
-		var options = this.options;
-		if(fc[key])
-			this.element.removeClass(fc[key][options[key]]);
-		return this._super(key, value);
-	},
 	_refresh:function()
 	{
 		var options = this.options;
+
+		//remove all flexbox (fbx-xxx) classes.
+		var curClasses = this.element.prop("class").replace(/fbx-[^ ]* */g,""); 
+		this.element.prop("class", curClasses);
+
+		//reapply flexbox classes based on current options.
 		var fc = $.ibi.ibxFlexBox.statics.flexClasses;;
 		var classes = "";
 		classes += fc["display"][options.inline ? "inline" : "block"] + " ";
