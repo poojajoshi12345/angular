@@ -93,7 +93,7 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 		this._adjustPageMarkers();
 	},
 	_scrollInfo:null,
-	scroll:function(how)
+	scroll:function(direction)
 	{
 		if(this._scrollInfo)
 			return;
@@ -115,24 +115,25 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 			"nFrames": (options.scrollStepRate/1000) * 60,
 			"curFrame": 0,
 			"scrollAxis": options.scrollProps.axis,
-			"how": how,
-			"delta": delta,
+			"direction": direction,
+			"delta": (direction == $.ibi.ibxCarousel.FORWARD) ? delta : -delta,
 			"animationFrameId": null
 		};
-		scrollInfo.scrollEnd = this._itemsBox.prop(scrollInfo.scrollAxis) + (scrollInfo.how ? delta : -delta);
-		scrollInfo.stepSize = (scrollInfo.delta/scrollInfo.nFrames);
+		scrollInfo.scrollEnd = this._itemsBox.prop(scrollInfo.scrollAxis) + scrollInfo.delta;
+		scrollInfo.stepSize = Math.ceil(scrollInfo.delta/scrollInfo.nFrames);
 
 		var fnFrame = function(info, timeStamp)
 		{
-			var newScroll = this._itemsBox.prop(info.scrollAxis) + (info.how ? info.stepSize : -info.stepSize);
-			if(newScroll >= info.scrollEnd)
-				newScroll = newScroll - info.scrollEnd;
+			var curScroll = this._itemsBox.prop(info.scrollAxis);
+			var newScroll = curScroll + info.stepSize;
+			if((info.direction == $.ibi.ibxCarousel.FORWARD && newScroll >= info.scrollEnd) || (info.direction == $.ibi.ibxCarousel.BACKWARD && newScroll <= info.scrollEnd))
+				newScroll = info.scrollEnd;
 
 			this._itemsBox.prop(info.scrollAxis, newScroll);
 			this._trigger("scrollframe", null, this._itemsBox, info);
 			this._adjustPageMarkers();
 
-			console.log(info.scrollEnd, this._itemsBox.prop(info.scrollAxis), info);
+			console.log(info.scrollEnd, this._itemsBox.prop(info.scrollAxis), this._itemsBox.prop(info.scrollAxis), info);
 			info.animationFrameId = window.requestAnimationFrame(fnFrame.bind(this, info));
 			if(info.curFrame++ >= info.nFrames)
 			{
@@ -146,7 +147,7 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 				else
 				{
 					info.curFrame = 0;
-					info.scrollEnd += delta;
+					info.scrollEnd += info.delta;
 				}
 			}
 		};
