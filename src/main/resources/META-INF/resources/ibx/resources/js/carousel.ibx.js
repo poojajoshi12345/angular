@@ -129,8 +129,8 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 			if((info.direction == $.ibi.ibxCarousel.FORWARD && newScroll >= info.scrollEnd) || (info.direction == $.ibi.ibxCarousel.BACKWARD && newScroll <= info.scrollEnd))
 				newScroll = info.scrollEnd;
 
+			this._trigger("beforescroll", null, this._itemsBox, info);
 			this._itemsBox.prop(info.scrollAxis, newScroll);
-			this._trigger("scrollframe", null, this._itemsBox, info);
 			this._adjustPageMarkers();
 
 			console.log(info.scrollEnd, this._itemsBox.prop(info.scrollAxis), this._itemsBox.prop(info.scrollAxis), info);
