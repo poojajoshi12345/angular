@@ -110,7 +110,9 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 			var childInfo = this.getChildInfo();
 			child = (direction == $.ibi.ibxCarousel.FORWARD) ? childInfo.endPartial : childInfo.startPartial;
 			child = child ? child : (direction == $.ibi.ibxCarousel.FORWARD) ? childInfo.endHidden[0] : childInfo.startHidden[0];
-			delta = child.right - (pageInfo.metrics.scrollLeft + pageInfo.metrics.pageWidth);
+			delta = (direction == $.ibi.ibxCarousel.FORWARD)
+						? child.right - (pageInfo.metrics.scrollLeft + pageInfo.metrics.pageWidth)
+						: child.left;
 		}
 		else
 		if(options.scrollType == "page")
@@ -152,6 +154,9 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 				else
 				{
 					info.curFrame = 0;
+					if(this.options.scrollType == "integral")
+					{
+					}
 					info.scrollEnd += info.delta;
 				}
 			}
@@ -233,7 +238,7 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 
 		var visFlags = 0;
 		visFlags |= (elInfo.left >= pageInfo.metrics.scrollLeft && elInfo.left <= pageInfo.metrics.scrollRight) ? flags.LEFT : 0;
-		visFlags |= (elInfo.right >= pageInfo.metrics.scrollRight && elInfo.right <= pageInfo.metrics.scrollRight) ? flags.RIGHT : 0;
+		visFlags |= (elInfo.right >= pageInfo.metrics.scrollLeft && elInfo.right <= pageInfo.metrics.scrollRight) ? flags.RIGHT : 0;
 		visFlags |= (elInfo.top >= pageInfo.metrics.scrollTop && elInfo.top <= pageInfo.metrics.scrollBottom) ? flags.TOP : 0;
 		visFlags |= (elInfo.bottom >= pageInfo.metrics.scrollTop && elInfo.top <= pageInfo.metrics.scrollBottom) ? flags.BOTTOM : 0;
 		elInfo.visFlags = visFlags;
@@ -384,7 +389,7 @@ $.widget("ibi.ibxVCarousel", $.ibi.ibxCarousel,
 	getPageInfo:function(metrics)
 	{
 		metrics = metrics || this.getPageMetrics();
-		return {pages: Math.floor(metrics.scrollHeight / metrics.pageHeight) || 1, curPage: Math.floor(metrics.scrollTop / metrics.pageHeight)};
+		return {"pages": Math.floor(metrics.scrollHeight / metrics.pageHeight) || 1, "curPage": Math.floor(metrics.scrollTop / metrics.pageHeight), "metrics":metrics};
 	},
 });
 
