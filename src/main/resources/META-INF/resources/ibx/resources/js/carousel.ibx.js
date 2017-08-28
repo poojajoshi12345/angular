@@ -105,7 +105,13 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 			delta = options.scrollStep;
 		else
 		if(options.scrollType == "integral")
-			delta = options.scrollStep * 202;/*Working on it*/
+		{
+			var pageInfo = this.getPageInfo();
+			var childInfo = this.getChildInfo();
+			child = (direction == $.ibi.ibxCarousel.FORWARD) ? childInfo.endPartial : childInfo.startPartial;
+			child = child ? child : (direction == $.ibi.ibxCarousel.FORWARD) ? childInfo.endHidden[0] : childInfo.startHidden[0];
+			delta = child.right - (pageInfo.metrics.scrollLeft + pageInfo.metrics.pageWidth);
+		}
 		else
 		if(options.scrollType == "page")
 			delta =  options.scrollStep *  this._itemsBox.prop(options.scrollProps.size);
@@ -133,7 +139,6 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 			this._itemsBox.prop(info.scrollAxis, newScroll);
 			this._adjustPageMarkers();
 
-			console.log(info.scrollEnd, this._itemsBox.prop(info.scrollAxis), this._itemsBox.prop(info.scrollAxis), info);
 			info.animationFrameId = window.requestAnimationFrame(fnFrame.bind(this, info));
 			if(info.curFrame++ >= info.nFrames)
 			{
@@ -223,17 +228,14 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 	getChildVisibility:function(el)
 	{
 		var elInfo = this.getElementMetrics(el);
-		var p = $(el.offsetParent);
-		var pWidth = p.width();
-		var pHeight = p.height();
-
+		var pageInfo = this.getPageInfo();
 		var flags = $.ibi.ibxCarousel.VIS_FLAGS;
+
 		var visFlags = 0;
-		visFlags |= (elInfo.left >= 0 && elInfo.left <= pWidth) ? flags.LEFT : 0;
-		visFlags |= (elInfo.top >= 0 && elInfo.top <= pHeight) ? flags.TOP : 0;
-		visFlags |= (elInfo.right >= 0 && elInfo.right <= pWidth) ? flags.RIGHT : 0;
-		visFlags |= (elInfo.bottom >= 0 && elInfo.bottom <= pHeight) ? flags.BOTTOM: 0;
-		visFlags = (!(visFlags & (flags.LEFT | flags.RIGHT)) || !(visFlags & (flags.TOP | flags.BOTTOM))) ? flags.NONE : visFlags;
+		visFlags |= (elInfo.left >= pageInfo.metrics.scrollLeft && elInfo.left <= pageInfo.metrics.scrollRight) ? flags.LEFT : 0;
+		visFlags |= (elInfo.right >= pageInfo.metrics.scrollRight && elInfo.right <= pageInfo.metrics.scrollRight) ? flags.RIGHT : 0;
+		visFlags |= (elInfo.top >= pageInfo.metrics.scrollTop && elInfo.top <= pageInfo.metrics.scrollBottom) ? flags.TOP : 0;
+		visFlags |= (elInfo.bottom >= pageInfo.metrics.scrollTop && elInfo.top <= pageInfo.metrics.scrollBottom) ? flags.BOTTOM : 0;
 		elInfo.visFlags = visFlags;
 		return elInfo;
 	},
@@ -241,6 +243,8 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 	{
 		el = $(el);
 		var elInfo = el.position() || {};
+		elInfo.left = el.prop("offsetLeft");
+		elInfo.top = el.prop("offsetTop");
 		elInfo.width = el.outerWidth(true);
 		elInfo.height = el.outerHeight(true);
 		elInfo.right = elInfo.left + elInfo.width;
@@ -255,12 +259,13 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 		{
 			scrollWidth:	this._itemsBox.css("overflow", "auto").prop("scrollWidth"),
 			scrollHeight:	this._itemsBox.prop("scrollHeight"),
-			scrollLeft:		this._itemsBox.prop("scrollLeft"),
+			scrollLeft:		this._itemsBox.css("overflow", overFlow).prop("scrollLeft"),
 			scrollTop:		this._itemsBox.prop("scrollTop"),
 			pageWidth:		this._itemsBox.prop("offsetWidth") || 1,
 			pageHeight:		this._itemsBox.prop("offsetHeight") || 1,
 		};
-		this._itemsBox.css("overflow", overFlow);
+		metrics.scrollRight = metrics.scrollLeft + metrics.pageWidth;
+		metrics.scrollBottom = metrics.scrollTop + metrics.pageHeight;
 		return metrics;
 	},
 	getPageInfo:function(metrics)
