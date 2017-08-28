@@ -21,20 +21,15 @@ xmlDataNode.prototype.getChildren = function() {
       .children,
       function(val, index) {
         return val.id != "" ? val.id : val.innerHtml;
-      })
-    console.log(tmp)
-    console.log("now i'm gonna check")
+      });
     $dfd.resolve(tmp);
 
   } else {
 
-    console.log("now i'm gonna check - sike!!!")
     $dfd.resolve(this._children);
   }
   return $dfd.promise().done(function(val) {
-    console.log("will I ever get here?");
-    console.log(val);
-    return val
+    return val;
   });
 };
 xmlDataNode.prototype.hasChildren = function() {
@@ -96,14 +91,10 @@ xmlDataProvider.prototype.parseFileData = function(e) {
     $.each(this.rootElem.children(), function(index, val) {
       this.addDataNode(val, null);
     }.bind(this));
-    //debugger;
 
     $.each(this.cachedData, function(index, val) {
       this._visibleList.push(val.index);
     }.bind(this))
-
-    // initialize the root node
-    console.log(this._visibleList.length)
   }.bind(this);
   this.getReader()
     .readAsText(file);
@@ -120,3 +111,5 @@ xmlDataProvider.prototype.isCorrectType = function(toTest){
 xmlDataProvider.prototype.getDataFromDoc = function(str){
  return this.rootElem.children().find("*[id="+str+"]")[0]
 }
+
+//# sourceUrl=implementXML.js

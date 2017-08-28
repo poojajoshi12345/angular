@@ -14,8 +14,6 @@ function ibxDataNode(data, parentIndex, indentLevel /*defaults to 0*/ ) {
   this.index = this._setIndexFromData(data);
   this.parent = parentIndex;
   this.indent = (typeof indentLevel != 'undefined' && indentLevel != null) ? indentLevel + 1 : 1;
-  console.log(this.indent)
-  console.trace(indentLevel)
   this._children = null;
 }
 
@@ -37,8 +35,8 @@ ibxDataNode.prototype = {
    */
   getChildren: function() {
  var d = $.Deferred();
- d.resolve([]); 
- return d.promise(); 
+ d.resolve([]);
+ return d.promise();
   },
   /**
    * implementations should return true / false based on whether or not node has children
@@ -76,3 +74,5 @@ ibxDataNode.prototype = {
   },
 
 };
+
+//# sourceUrl=dataNode.tree.js

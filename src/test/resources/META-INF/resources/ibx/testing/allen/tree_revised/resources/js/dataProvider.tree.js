@@ -85,17 +85,17 @@ ibxDataProvider.prototype = {
 
 
     } catch (e) {
-      console.log(e.stack);
     }
     //
   },
   hideNodes: function(nodesToRemove) {
     // get a list of the indices
 
-    // 
+    //
     this._visibleList = this._visibleList.filter(function(val) {
       return nodesToRemove.indexOf(val) == -1;
     })
+
   },
   expand: function(nodeDataIndex) { // NOTE: assume that we've already checked to ensure that this has children
     /*find or retrieve the data for this node's children,
@@ -137,7 +137,9 @@ ibxDataProvider.prototype = {
         }.bind(this));
     } else { // if the node was expanded, then close it
       var n = this.getNode(nodeDataIndex);
-      this._expandedNodes = this._expandedNodes.splice(this._expandedNodes.indexOf(nodeDataIndex), 1);
+      this._expandedNodes = this._expandedNodes.filter(function(val){
+        return val != nodeDataIndex;
+      })
       n.getChildren()
         .done(function(childData) {
           var oldLen = (typeof this._visibleList == 'undefined') ? 0 : this._visibleList.length;
@@ -152,4 +154,9 @@ ibxDataProvider.prototype = {
   totalRows: function() {
     return this._visibleList.length;
   },
+  isExpanded: function(dataIndex){
+    return (this._expandedNodes.indexOf(dataIndex) > -1);
+  }
 };
+
+//# sourceUrl=dataProvider.tree.js
