@@ -37,6 +37,7 @@ $.widget("ibi.ibxTextField", $.ibi.ibxFlexBox,
 		this.element.append(this._textInput);
 		this._textInput.on("blur", this._onBlur.bind(this)).on("focus", this._onFocus.bind(this)).on("input", this._onInput.bind(this)).on("keydown", this._onKeyDown.bind(this));
 		this._setValue(this.options.text, true);
+		this.element.on("focus", this._onControlFocus.bind(this));
 		this.element.on("ibx_change", function (e)
 		{
 			if (this.options.autoSize)
@@ -75,7 +76,11 @@ $.widget("ibi.ibxTextField", $.ibi.ibxFlexBox,
 			scrollWidth = this._textInput[0].scrollWidth + "px";
 		this._textInput.css('min-width', scrollWidth);
 	},
-	_onFocus: function ()
+	_onControlFocus: function (event)
+	{
+		this.element.find(".ibx-default-ctrl-focus").focus();
+	},
+	_onFocus: function (event)
 	{
 		this._focusVal = this.options.text;
 	},
