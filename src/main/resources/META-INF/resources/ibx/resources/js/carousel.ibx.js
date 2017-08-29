@@ -120,6 +120,7 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 
 		this._scrollInfo = scrollInfo = 
 		{
+			"scrollType":options.scrollType,
 			"nFrames": (options.scrollStepRate/1000) * 60,
 			"curFrame": 0,
 			"scrollAxis": options.scrollProps.axis,
@@ -154,7 +155,7 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 				else
 				{
 					info.curFrame = 0;
-					if(this.options.scrollType == "integral")
+					if(info.scrollType == "integral")
 					{
 					}
 					info.scrollEnd += info.delta;
