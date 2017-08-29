@@ -34,10 +34,9 @@ $.widget("ibi.ibxTextField", $.ibi.ibxFlexBox,
 		this._super();
 		this.options.text = this.options.text || this.element.textNodes().remove().text().replace(/^\s*|\s*$/g, "");
 		this._textInput = $('<input class="ibx-default-ctrl-focus" type="' + this.options.ctrlType + '"></input>');
-		this.element.append(this._textInput);
-		this._textInput.on("blur", this._onBlur.bind(this)).on("focus", this._onFocus.bind(this)).on("input", this._onInput.bind(this)).on("keydown", this._onKeyDown.bind(this));
+		this._textInput.on("blur", this._onBlur.bind(this)).on("focus", this._onFocus.bind(this))
 		this._setValue(this.options.text, true);
-		this.element.on("focus", this._onControlFocus.bind(this));
+		this.element.append(this._textInput).on("focus", this._onControlFocus.bind(this)).on("input", this._onInput.bind(this)).on("keydown", this._onKeyDown.bind(this));
 		this.element.on("ibx_change", function (e)
 		{
 			if (this.options.autoSize)

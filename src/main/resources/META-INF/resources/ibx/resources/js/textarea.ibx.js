@@ -33,9 +33,8 @@ $.widget("ibi.ibxTextArea", $.ibi.ibxFlexBox,
 		this._super();
 		this.options.text = this.options.text || this.element.textNodes().remove().text().replace(/^\s*|\s*$/g, "");
 		this._textInput = $('<textarea class="ibx-text-area-ctrl ibx-default-ctrl-focus"></textarea>').css("flex", "1 1 auto");
-		this.element.append(this._textInput);
-		this._textInput.on("blur", this._onBlur.bind(this)).on("focus", this._onFocus.bind(this)).on("input", this._onInput.bind(this)).on("keydown", this._onKeyDown.bind(this));
-		this.element.on("focus", this._onControlFocus.bind(this));
+		this._textInput.on("blur", this._onBlur.bind(this)).on("focus", this._onFocus.bind(this));
+		this.element.append(this._textInput).on("focus", this._onControlFocus.bind(this)).on("input", this._onInput.bind(this)).on("keydown", this._onKeyDown.bind(this));
 		this._setValue(this.options.text, true);
 	},
 	_setOption: function (key, value)
