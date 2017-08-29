@@ -132,12 +132,12 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 			if(!this._trigger("beforescroll", null, this._itemsBox, info))
 				return;
 			this._itemsBox.prop(info.scrollAxis, newScroll);
-			this._adjustPageMarkers();
 			this._trigger("scroll", null, this.getPageInfo());
 
 			info.animationFrameId = window.requestAnimationFrame(fnFrame.bind(this, info));
 			if(info.curFrame++ >= info.nFrames)
 			{
+				this._adjustPageMarkers();
 				if(info.stop)
 				{
 					window.cancelAnimationFrame(info.animationFrameId)
