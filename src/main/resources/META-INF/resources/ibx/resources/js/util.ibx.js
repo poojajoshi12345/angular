@@ -200,6 +200,29 @@ function fnSortZIndex(el1, el2)
 		return 1;
 }
 
+//generate a pseudo random number between limits.
+function GetRandomInt(min, max)
+{
+	min = Math.ceil(min);
+	max = Math.floor(max);
+	return Math.floor(Math.random() * (max - min)) + min; //The maximum is exclusive and the minimum is inclusive
+}
+
+//just returns metrics/info for an element.
+function GetElementInfo(el)
+{
+	el = $(el);
+	var elInfo = el.position() || {};
+	elInfo.left = el.prop("offsetLeft");
+	elInfo.top = el.prop("offsetTop");
+	elInfo.width = el.outerWidth(true);
+	elInfo.height = el.outerHeight(true);
+	elInfo.right = elInfo.left + elInfo.width;
+	elInfo.bottom = elInfo.top + elInfo.height;
+	elInfo.el = el;
+	return elInfo;
+}
+
 //search currently loaded stylesheets for defined rules of selector.
 function FindStyleRules(selector)
 {
