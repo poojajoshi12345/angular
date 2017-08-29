@@ -24,7 +24,13 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 		scrollType:"fractional",	//page/integral/fractional
 		scrollStep:25,				//page:1, integral:1, fractional:25px
 		scrollStepRate:25,			//page:500, integral:250, fractional:25ms
-		scrollProps:{"axis":"scrollLeft", "size":"offsetWidth"},//html props to use for calculating scroll position/delta
+		scrollProps:
+		{
+			"axis":"scrollLeft",
+			"size":"offsetWidth",
+			"forward":{"child":"right", "page":"scrollRight"},
+			"backward":{"child":"left", "page":"scrollLeft"},
+		},//html props to use for calculating scroll position/delta
 		allowDragScrolling:true
 	},
 	_widgetClass:"ibx-carousel",
@@ -98,35 +104,19 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 		if(this._scrollInfo)
 			return;
 
-		//how far is the first step
 		var options = this.options;
-		var delta = 0;
-		if(options.scrollType == "fractional")
-			delta = options.scrollStep;
-		else
-		if(options.scrollType == "integral")
-		{
-			var pageInfo = this.getPageInfo();
-			var scrollChild = this._getScrollChild(direction);
-			if(scrollChild)
-				delta = (direction == $.ibi.ibxCarousel.FORWARD) ? scrollChild.right - pageInfo.scrollRight : Math.abs(scrollChild.left - pageInfo.scrollLeft);
-		}
-		else
-		if(options.scrollType == "page")
-			delta =  options.scrollStep *  this._itemsBox.prop(options.scrollProps.size);
-
+		var delta = this._calcScrollDelta(direction);
 		this._scrollInfo = info = 
 		{
-			"scrollType":options.scrollType,
 			"nFrames": (options.scrollStepRate/1000) * 60,
 			"curFrame": 0,
 			"scrollAxis": options.scrollProps.axis,
 			"startScroll": this._itemsBox.prop(options.scrollProps.axis),
 			"direction": direction,
-			"delta": (direction == $.ibi.ibxCarousel.FORWARD) ? delta : -delta,
+			"delta": delta,
 			"animationFrameId": null
 		};
-		info.stepSize = info.delta/info.nFrames;
+		info.stepSize = (direction == $.ibi.ibxCarousel.FORWARD) ? Math.ceil(info.delta/info.nFrames) : Math.floor(info.delta/info.nFrames);
 
 		var fnFrame = function(info, timeStamp)
 		{
@@ -134,7 +124,10 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 			var newScroll = curScroll + info.stepSize;
 			var scrollEnd = info.startScroll + info.delta;
 			if((direction == $.ibi.ibxCarousel.FORWARD && newScroll > scrollEnd) || (direction == $.ibi.ibxCarousel.BACKWARD && newScroll < scrollEnd))
+			{
 				newScroll = scrollEnd;
+				info.curFrame = info.nFrames;
+			}
 
 			if(!this._trigger("beforescroll", null, this._itemsBox, info))
 				return;
@@ -152,41 +145,14 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 				}
 				else
 				{
-					if(info.scrollType == "integral")
-					{
-						var pageInfo = this.getPageInfo();
-						var scrollChild = this._getScrollChild(direction);
-						if(scrollChild)
-						{
-							info.delta = (direction == $.ibi.ibxCarousel.FORWARD) ? (scrollChild.right - pageInfo.scrollRight) : -(scrollChild.left - pageInfo.scrollLeft);
-							info.stepSize = Math.ceil(info.delta/info.nFrames);
-							info.startScroll = this._itemsBox.prop(info.scrollAxis);
-						}
-					}
+					info.delta = this._calcScrollDelta(info.direction);
+					info.stepSize = (direction == $.ibi.ibxCarousel.FORWARD) ? Math.ceil(info.delta/info.nFrames) : Math.floor(info.delta/info.nFrames);
+					info.startScroll = this._itemsBox.prop(info.scrollAxis);
 					info.curFrame = 0;
 				}
 			}
 		};
 		info.animationFrameId = window.requestAnimationFrame(fnFrame.bind(this, info));
-	},
-	_getScrollChild:function(direction)
-	{
-		var childInfo = null;
-		var pageInfo = this.getPageInfo();
-		var children = this.children();
-		for(var i = 0; i < children.length; ++i)
-		{
-			var child = children[i];
-			var info = GetElementInfo(child);
-			if(direction == $.ibi.ibxCarousel.FORWARD && (info.right > pageInfo.scrollRight))
-				childInfo = info;
-			else
-			if(direction == $.ibi.ibxCarousel.BACKWARD && info.left < pageInfo.scrollLeft && info.right >= pageInfo.scrollLeft)
-				childInfo = info;
-			if(childInfo)
-				break;
-		}
-		return childInfo;
 	},
 	stop:function()
 	{
@@ -218,6 +184,47 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 
 		disabled = (pageInfo.scrollLeft + pageInfo.pageWidth) >= pageInfo.scrollWidth;
 		this._nextBtn.ibxWidget("option", "disabled", disabled).toggleClass("csl-btn-hidden", (disabled && options.hideDisabledButtons));
+	},
+	_calcScrollDelta:function(direction)
+	{
+		var options = this.options;
+		var delta = 0;
+		if(options.scrollType == "fractional")
+			delta = options.scrollStep;
+		else
+		if(options.scrollType == "page")
+			delta =  options.scrollStep *  this._itemsBox.prop(options.scrollProps.size);
+		else
+		if(options.scrollType == "integral")
+		{
+			var pageInfo = this.getPageInfo();
+			var scrollChild = this._getScrollChild(direction);
+			if(scrollChild)
+			{
+				props = options.scrollProps[(direction == $.ibi.ibxCarousel.FORWARD) ? "forward" : "backward"];
+				delta = Math.abs(scrollChild[props.child] - pageInfo[props.page]);
+			}
+		}
+		return (direction == $.ibi.ibxCarousel.FORWARD) ? delta : -delta;
+	},
+	_getScrollChild:function(direction)
+	{
+		var childInfo = null;
+		var pageInfo = this.getPageInfo();
+		var children = this.children();
+		for(var i = 0; i < children.length; ++i)
+		{
+			var child = children[i];
+			var info = GetElementInfo(child);
+			if(direction == $.ibi.ibxCarousel.FORWARD && (info.right > pageInfo.scrollRight))
+				childInfo = info;
+			else
+			if(direction == $.ibi.ibxCarousel.BACKWARD && (info.left < pageInfo.scrollLeft && info.right >= pageInfo.scrollLeft))
+				childInfo = info;
+			if(childInfo)
+				break;
+		}
+		return childInfo;
 	},
 	getPageInfo:function(metrics)
 	{
@@ -305,7 +312,13 @@ $.widget("ibi.ibxVCarousel", $.ibi.ibxCarousel,
 	options:
 	{
 		direction:"row",
-		scrollProps:{"axis":"scrollTop", "size":"offsetHeight"}
+		scrollProps://html props to use for calculating scroll position/delta
+		{
+			"axis":"scrollTop",
+			"size":"offsetHeight",
+			"forward":{"child":"bottom", "page":"scrollBottom"},
+			"backward":{"child":"top", "page":"scrollTop"},
+		},
 	},
 	_widgetClass:"ibx-v-carousel",
 	_create:function()
@@ -344,6 +357,25 @@ $.widget("ibi.ibxVCarousel", $.ibi.ibxCarousel,
 		var pageInfo = this.getPageInfo();
 		this._prevBtn.ibxWidget("option", "disabled", pageInfo.scrollTop <= 0);
 		this._nextBtn.ibxWidget("option", "disabled", (pageInfo.scrollTop + pageInfo.pageHeight) >= pageInfo.scrollHeight);
+	},
+	_getScrollChild:function(direction)
+	{
+		var childInfo = null;
+		var pageInfo = this.getPageInfo();
+		var children = this.children();
+		for(var i = 0; i < children.length; ++i)
+		{
+			var child = children[i];
+			var info = GetElementInfo(child);
+			if(direction == $.ibi.ibxCarousel.FORWARD && (info.bottom > pageInfo.scrollBottom))
+				childInfo = info;
+			else
+			if(direction == $.ibi.ibxCarousel.BACKWARD && (info.top < pageInfo.scrollTop && info.bottom >= pageInfo.scrollTop))
+				childInfo = info;
+			if(childInfo)
+				break;
+		}
+		return childInfo;
 	},
 	getPageInfo:function(metrics)
 	{
