@@ -260,7 +260,6 @@ $.widget("ibi.ibxWidget", $.Widget,
 			droppable:false,
 			draggable:false,
 			dragClass:"ibx-drag-source",
-			dropTargetClass:"ibx-drop-target",
 			dragImageClass:"ibx-default-drag-image",
 			dragStartDistanceX:5,
 			dragStartDistanceY:5,
@@ -276,11 +275,14 @@ $.widget("ibi.ibxWidget", $.Widget,
 		},
 		getDefaultDragImage:function(el)
 		{
-			var clone = el.clone(true);
+			//clone the node and make sure the width/height are preserved so it lays out correctly.
+			el = $(el);
+			var width = el.outerWidth();
+			var height = el.outerHeight();
+			var clone = el.clone().css({"width":width + "px", "height":height + "px"});
 			return clone;
 		},
 		isDragging:function(){return this.element.hasClass(this.options.dragClass);},
-		isDropTarget:function(){return this.element.hasClass(this.options.dropTargetClass);},
 		_dispatchDragEvent:function(e, type, target, relatedTarget)
 		{
 			var dEvent = $.Event(e);
@@ -314,7 +316,6 @@ $.widget("ibi.ibxWidget", $.Widget,
 						this._dispatchDragEvent(e, "ibx_dragend", this.element);
 						$(this._dataTransfer._dragImage).remove();
 						this.element.removeClass(options.dragClass);
-						this._curTarget.removeClass(options.dropTargetClass);
 						delete this._dataTransfer;
 						delete this._curTarget;
 					}
@@ -364,9 +365,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 							dEvent = this._dispatchDragEvent(e, "ibx_dragexit", this._curTarget, elTarget);
 							dEvent = this._dispatchDragEvent(e, "ibx_dragenter", this.element, this._curTarget);
 
-							//cleanup
-							this._curTarget.removeClass(this.options.dropTargetClass);
-							this._curTarget = elTarget.addClass(options.dropTargetClass);
+							//if mouse up happens next, then are we allowed to drop?
 							this._curTarget._dragPrevented = dEvent.isDefaultPrevented();
 						}
 
