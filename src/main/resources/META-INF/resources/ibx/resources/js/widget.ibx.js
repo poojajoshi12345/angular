@@ -366,6 +366,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 							dEvent = this._dispatchDragEvent(e, "ibx_dragenter", this.element, this._curTarget);
 
 							//if mouse up happens next, then are we allowed to drop?
+							this._curTarget = elTarget;
 							this._curTarget._dragPrevented = dEvent.isDefaultPrevented();
 						}
 
