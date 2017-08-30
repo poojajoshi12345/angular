@@ -388,8 +388,6 @@ $.widget("ibi.ibxWidget", $.Widget,
 						{	
 							$(this._dataTransfer._dragImage).css(
 							{
-								"pointerEvents":"none",
-								"position":"absolute",
 								"left":e.clientX + this._dataTransfer.dragXOffset + "px",
 								"top":e.clientY + this._dataTransfer.dragYOffset + "px",
 							}).appendTo("body");

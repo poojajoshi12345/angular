@@ -99,13 +99,13 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 		this._adjustPageMarkers();
 	},
 	_scrollInfo:null,
-	scroll:function(direction)
+	scroll:function(direction, how, increment)
 	{
 		if(this._scrollInfo)
 			return;
 
 		var options = this.options;
-		var delta = this._calcScrollDelta(direction);
+		var delta = this._calcScrollDelta(direction, how, increment);
 		this._scrollInfo = info = 
 		{
 			"nFrames": (options.scrollStepRate/1000) * 60,
@@ -188,17 +188,19 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 		disabled = (pageInfo.scrollLeft + pageInfo.pageWidth) >= pageInfo.scrollWidth;
 		this._nextBtn.ibxWidget("option", "disabled", disabled).toggleClass("csl-btn-hidden", (disabled && options.hideDisabledButtons));
 	},
-	_calcScrollDelta:function(direction)
+	_calcScrollDelta:function(direction, how, step)
 	{
 		var options = this.options;
+		how = how || options.scrollType;
+		step = (step === undefined) ? options.scrollStep : step;
 		var delta = 0;
-		if(options.scrollType == "fractional")
-			delta = options.scrollStep;
+		if(how == "fractional")
+			delta = step;
 		else
-		if(options.scrollType == "page")
-			delta =  options.scrollStep *  this._itemsBox.prop(options.scrollProps.size);
+		if(how == "page")
+			delta =  step *  this._itemsBox.prop(options.scrollProps.size);
 		else
-		if(options.scrollType == "integral")
+		if(how == "integral")
 		{
 			var pageInfo = this.getPageInfo();
 			var scrollChild = this._getScrollChild(direction);

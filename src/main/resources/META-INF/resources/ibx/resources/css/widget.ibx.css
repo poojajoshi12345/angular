@@ -32,6 +32,8 @@
 
 .ibx-default-drag-image
 {
+	position:absolute;
 	pointer-events:none;
 	opacity:.5;
+	z-index:2147483647;/*max z-index*/
 }
