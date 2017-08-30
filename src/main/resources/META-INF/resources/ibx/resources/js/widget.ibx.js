@@ -261,9 +261,9 @@ $.widget("ibi.ibxWidget", $.Widget,
 			draggable:false,
 			dragClass:"ibx-drag-source",
 			dropTargetClass:"ibx-drop-target",
+			dragImageClass:"ibx-default-drag-image",
 			dragStartDistanceX:5,
 			dragStartDistanceY:5,
-			dragImageClass:"ibx-default-drag-image",
 			fileUploadAjaxInfo:
 			{
 			}
@@ -276,17 +276,8 @@ $.widget("ibi.ibxWidget", $.Widget,
 		},
 		getDefaultDragImage:function(el)
 		{
-			var def = $.Deferred();
-			var hc = html2canvas(el,
-			{
-				onrendered:function(def, canvas)
-				{
-					$(canvas).css("pointer-events", "none").addClass(this.options.dragImageClass);
-
-					def.resolve(canvas);	
-				}.bind(this, def)
-			});
-			return def;
+			var clone = el.clone(true);
+			return clone;
 		},
 		isDragging:function(){return this.element.hasClass(this.options.dragClass);},
 		isDropTarget:function(){return this.element.hasClass(this.options.dropTargetClass);},
@@ -317,7 +308,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 					{
 						//if allowed let target know it was dropped on
 						if(!this._curTarget._dragPrevented)
-							this._dispatchDragEvent(e, "ibx_drop", this.element, this._curTarget);
+							this._dispatchDragEvent(e, "ibx_drop", this._curTarget, this.element);
 
 						//end the drag operation
 						this._dispatchDragEvent(e, "ibx_dragend", this.element);
@@ -349,10 +340,8 @@ $.widget("ibi.ibxWidget", $.Widget,
 						if(!dEvent.isDefaultPrevented())
 						{
 							this.element.addClass(this.options.dragClass);
-							this._dataTransfer.dragImage = this.getDefaultDragImage(this.element).done(function(img)
-							{
-								this._dataTransfer._dragImage = this._dataTransfer._dragImage || img;
-							}.bind(this));
+							var img = this.getDefaultDragImage(this.element).addClass(options.dragImageClass);
+							this._dataTransfer.setDragImage(img);
 						}
 					}
 

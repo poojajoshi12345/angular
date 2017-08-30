@@ -32,5 +32,6 @@
 
 .ibx-default-drag-image
 {
-	opacity:.4;
+	pointer-events:none;
+	opacity:.5;
 }
