@@ -129,10 +129,11 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 				info.curFrame = info.nFrames;
 			}
 
-			if(!this._trigger("beforescroll", null, this._itemsBox, info))
+			var pageInfo = this.getPageInfo();
+			if(!this._trigger("beforescroll", null, this._itemsBox, info, pageInfo))
 				return;
 			this._itemsBox.prop(info.scrollAxis, newScroll);
-			this._trigger("scroll", null, this.getPageInfo());
+			this._trigger("scroll", null, this._itemsBox, info, pageInfo);
 
 			info.animationFrameId = window.requestAnimationFrame(fnFrame.bind(this, info));
 			if(info.curFrame++ >= info.nFrames)
@@ -142,6 +143,7 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 				{
 					window.cancelAnimationFrame(info.animationFrameId)
 					this._scrollInfo = null;
+					this._trigger("scrollend", null, info, this.getPageInfo());
 				}
 				else
 				{
