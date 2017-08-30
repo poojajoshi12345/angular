@@ -249,8 +249,8 @@ $.widget("ibi.ibxWidget", $.Widget,
 	_p.setDragImage = function(img, xOffset, yOffset)
 	{
 		this._dragImage = $(img);
-		this._dragXOffset = xOffset || this.dragXOffset;
-		this._dragYOffset = yOffset || this.dragYOffset;
+		this.dragXOffset = xOffset || this.dragXOffset;
+		this.dragYOffset = yOffset || this.dragYOffset;
 	};
 
 	var draggablePatch = 
