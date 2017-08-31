@@ -138,26 +138,44 @@ $.widget("ibi.ibxFlexGrid", $.ibi.ibxHBox,
 	},
 	_destroy:function()
 	{
-		this._super();
+		this.children().removeAttr("data-grid-row data-grid-col data-grid-span").removeClass("ibx-flex-grid-cell");
+		//this._super();
 	},
 	_colSize:-1,
 	colSize:function()
 	{
 		return this._colSize;
 	},
+	row:function(row)
+	{
+		return this.children(sformat("[data-grid-row='{1}']", row));
+	},
+	column:function(col)
+	{
+		return this.children(sformat("[data-grid-col='{1}']", col));
+	},
 	_refresh:function()
 	{
 		this._super();
 		var options = this.options;
 		var colSize = this._colSize = (100/options.columnCount);
-		this.element.children().each(function(colSize, idx, cell)
+		var curRow = 0;
+		var spanCount = 0;
+		this.element.children().each(function(idx, cell)
 		{
 			cell = $(cell);
-			var colSpan = cell.data("ibxColSpan") || 1;
+			if(spanCount >= options.columnCount)
+			{
+				curRow++;
+				spanCount = 0;
+			}
+			colSpan = cell.data("ibxColSpan") || 1;
 			var cellClasses = sformat("ibx-flex-grid-cell ibx-flex-grid-span-{1}", colSpan);
 			var width = (colSpan * colSize);
-			cell.addClass(cellClasses).css("width", sformat("{1}%", width));
-		}.bind(this, colSize));
+			cell.addClass(cellClasses).css("width", sformat("{1}%", width))
+			cell.attr({"data-grid-row": curRow, "data-grid-col": spanCount, "data-grid-span": colSpan});
+			spanCount += colSpan;
+		}.bind(this));
 	}
 });
 $.ibi.ibxFlexGrid.statics = 
