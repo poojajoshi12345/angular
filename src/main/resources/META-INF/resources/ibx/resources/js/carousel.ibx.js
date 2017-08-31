@@ -61,13 +61,15 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 	{
 		$(el).addClass("ibx-csl-item");
 		this._itemsBox.ibxWidget("add", el, sibling, before, refresh);
-		this.refresh();
+		if(refresh)
+			this.refresh();
 	},
 	remove:function(el, refresh)
 	{
 		this._itemsBox.ibxWidget("remove", el, refresh);
 		$(el).removeClass("ibx-csl-item");
-		this.refresh();
+		if(refresh)
+			this.refresh();
 	},
 	_onPrev:function(e)
 	{
