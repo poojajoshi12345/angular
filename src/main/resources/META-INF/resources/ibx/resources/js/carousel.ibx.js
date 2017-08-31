@@ -99,30 +99,34 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 		this._adjustPageMarkers();
 	},
 	_scrollInfo:null,
-	scroll:function(direction, how, increment)
+	scroll:function(direction, scrollType, steps, stepSize, stepRate)
 	{
 		if(this._scrollInfo)
 			return;
 
 		var options = this.options;
-		var delta = this._calcScrollDelta(direction, how, increment);
+		scrollType = scrollType || options.scrollType;
+		stepRate = stepRate || options.scrollStepRate;
+		var stepSize = stepSize || this._calcScrollstepSize(direction, scrollType);
 		this._scrollInfo = info = 
 		{
-			"nFrames": (options.scrollStepRate/1000) * 60,
+			"steps": steps || -1,
+			"scrollType": scrollType,
+			"nFrames": (stepRate/1000) * 60,
 			"curFrame": 0,
 			"scrollAxis": options.scrollProps.axis,
 			"startScroll": this._itemsBox.prop(options.scrollProps.axis),
 			"direction": direction,
-			"delta": delta,
+			"stepSize": stepSize,
 			"animationFrameId": null
 		};
-		info.stepSize = (direction == $.ibi.ibxCarousel.FORWARD) ? Math.ceil(info.delta/info.nFrames) : Math.floor(info.delta/info.nFrames);
+		info.stepFrame = (direction == $.ibi.ibxCarousel.FORWARD) ? Math.ceil(info.stepSize/info.nFrames) : Math.floor(info.stepSize/info.nFrames);
 
 		var fnFrame = function(info, timeStamp)
 		{
 			var curScroll = this._itemsBox.prop(info.scrollAxis);
-			var newScroll = curScroll + info.stepSize;
-			var scrollEnd = info.startScroll + info.delta;
+			var newScroll = curScroll + info.stepFrame;
+			var scrollEnd = info.startScroll + info.stepSize;
 			if((direction == $.ibi.ibxCarousel.FORWARD && newScroll > scrollEnd) || (direction == $.ibi.ibxCarousel.BACKWARD && newScroll < scrollEnd))
 			{
 				newScroll = scrollEnd;
@@ -134,10 +138,10 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 				return;
 
 			info.animationFrameId = window.requestAnimationFrame(fnFrame.bind(this, info));
-			if(info.curFrame++ >= info.nFrames)
+			if(++info.curFrame >= info.nFrames)
 			{
 				this._adjustPageMarkers();
-				if(info.stop)
+				if(info.stop || --info.steps == 0)
 				{
 					window.cancelAnimationFrame(info.animationFrameId)
 					this._scrollInfo = null;
@@ -145,8 +149,8 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 				}
 				else
 				{
-					info.delta = this._calcScrollDelta(info.direction);
-					info.stepSize = (direction == $.ibi.ibxCarousel.FORWARD) ? Math.ceil(info.delta/info.nFrames) : Math.floor(info.delta/info.nFrames);
+					info.stepSize = this._calcScrollstepSize(info.direction, info.scrollType);
+					info.stepFrame = (direction == $.ibi.ibxCarousel.FORWARD) ? Math.ceil(info.stepSize/info.nFrames) : Math.floor(info.stepSize/info.nFrames);
 					info.startScroll = this._itemsBox.prop(info.scrollAxis);
 					info.curFrame = 0;
 				}
@@ -188,19 +192,17 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 		disabled = (pageInfo.scrollLeft + pageInfo.pageWidth) >= pageInfo.scrollWidth;
 		this._nextBtn.ibxWidget("option", "disabled", disabled).toggleClass("csl-btn-hidden", (disabled && options.hideDisabledButtons));
 	},
-	_calcScrollDelta:function(direction, how, step)
+	_calcScrollstepSize:function(direction, scrollType)
 	{
 		var options = this.options;
-		how = how || options.scrollType;
-		step = (step === undefined) ? options.scrollStep : step;
 		var delta = 0;
-		if(how == "fractional")
-			delta = step;
+		if(scrollType == "fractional")
+			delta = options.scrollStep;
 		else
-		if(how == "page")
-			delta =  step *  this._itemsBox.prop(options.scrollProps.size);
+		if(scrollType == "page")
+			delta =  this._itemsBox.prop(options.scrollProps.size);
 		else
-		if(how == "integral")
+		if(scrollType == "integral")
 		{
 			var pageInfo = this.getPageInfo();
 			var scrollChild = this._getScrollChild(direction);
