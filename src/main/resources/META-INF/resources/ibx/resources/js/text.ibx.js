@@ -58,7 +58,8 @@ $.widget("ibi.ibxTextField", $.ibi.ibxFlexBox,
 	{
 		var val = this._textInput.val();
 		var scrollWidth;
-		this._textInput.css('min-width', '0px');
+		var curMax = this._textInput.css("max-width");
+		this._textInput.css('max-width', '0px');
 		if (val.length == 0)
 		{
 			var placeholder = this._textInput.prop('placeholder');
@@ -73,7 +74,7 @@ $.widget("ibi.ibxTextField", $.ibi.ibxFlexBox,
 		}
 		else
 			scrollWidth = this._textInput[0].scrollWidth + "px";
-		this._textInput.css('min-width', scrollWidth);
+		this._textInput.css('min-width', scrollWidth).css("max-width", curMax);
 	},
 	_onControlFocus: function (event)
 	{
