@@ -266,12 +266,13 @@ $.widget("ibi.ibxWidget", $.Widget,
 	{
 		options:
 		{
-			droppable:false,
-			draggable:false,
+			draggable:false, // !!!!IBX DRAGGABLE!!!! ...NOTHING TO DO WITH NATIVE DRAG/DROP
 			dragClass:"ibx-drag-source",
 			dragImageClass:"ibx-default-drag-image",
 			dragStartDistanceX:5,
 			dragStartDistanceY:5,
+
+			fileDropTarget:false, //turn on native file drag/drop
 			fileUploadAjaxInfo:
 			{
 			}
@@ -357,7 +358,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 
 					if(isDragging)
 					{
-						//what's the current droppable target...have to do this weird thing with the pointerEvents
+						//what's the current ibx droppable target...have to do this weird thing with the pointerEvents
 						//because the browsers (Chrome) won't find a no pointer event node in elementFromPoint
 						$("body").css("pointerEvents", "");
 						var elTarget = $(document.elementFromPoint(e.clientX, e.clientY));
@@ -403,7 +404,8 @@ $.widget("ibi.ibxWidget", $.Widget,
 						}
 					}
 					break;
-				/*Native drag/drop event handling*/
+
+				/*file drop target native drag/drop event handling*/
 				case "dragover":
 				case "dragleave":
 				case "drop":
@@ -411,7 +413,6 @@ $.widget("ibi.ibxWidget", $.Widget,
 					var dt = e.dataTransfer;
 					if(eType == "drop" && !dEvent.defaultPrevented && dt.files.length)
 					{
-						e.preventDefault();
 						var formData = new FormData();
 						$.each(dt.files, function(idx, file)
 						{
@@ -423,9 +424,11 @@ $.widget("ibi.ibxWidget", $.Widget,
 							"contentType":false,
 							"processData":false,
 							"data":formData,
+							"url":""
 						}, options.fileUploadAjaxInfo);
 						$.ajax(ajaxOptions);
 					}
+					e.preventDefault();
 					break;
 			}
 		},
@@ -435,7 +438,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 			this._refreshOrig.apply(this, arguments);
 			var options = this.options;
 			(options.draggable) ? this.element.on("mousedown", this._onDragMouseEventBound) : this.element.off("mousedown", this._onDragMouseEventBound);
-			(options.droppable) ? this.element.on("dragover dragleave drop", this._onDragMouseEventBound) : this.element.off("dragover dragleave drop", this._onDragMouseEventBound);
+			(options.fileDropTarget) ? this.element.on("dragover dragleave drop", this._onDragMouseEventBound) : this.element.off("dragover dragleave drop", this._onDragMouseEventBound);
 
 			this.element.toggleClass("ibx-draggable", options.draggable);
 			this.element.toggleClass("ibx-droppable", options.droppable);
