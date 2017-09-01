@@ -130,6 +130,7 @@ $.widget("ibi.ibxFlexGrid", $.ibi.ibxHBox,
 	{
 		"columnCount":12,
 		"wrap":true,
+		"childSizing":"border"
 	},
 	_widgetClass:"ibx-flex-grid",
 	_create:function()

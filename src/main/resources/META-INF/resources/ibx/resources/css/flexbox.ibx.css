@@ -285,3 +285,17 @@
 	align-content:space-around;
 }
 */
+
+/*Child sizing model - box/content*/
+.fbx-child-sizing-content-box > *
+{
+	box-sizing:content-box;
+}
+.fbx-child-sizing-border-box > *
+{
+	box-sizing:border-box;
+}
+
+
+
+

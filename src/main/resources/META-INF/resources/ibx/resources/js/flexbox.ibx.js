@@ -13,7 +13,8 @@ $.widget("ibi.ibxFlexBox", $.ibi.ibxWidget,
 		"justifyContent":"start",
 		"align":"start",
 		"alignItems":"start",
-		"alignContent":"start"
+		"alignContent":"start",
+		"childSizing":"content",
 	},
 	_widgetClass:"ibx-flexbox",
 	_create:function()
@@ -43,6 +44,7 @@ $.widget("ibi.ibxFlexBox", $.ibi.ibxWidget,
 		classes += fc["align"][options.align] + " ";
 		//classes += fc["alignItems"][options.alignContent];
 		//classes += fc["alignContent"][options.alignContent];
+		classes += fc["childSizing"][options.childSizing] + " ";
 		this._curClasses = classes;
 		this.element.addClass(classes);
 		this._super();
@@ -121,7 +123,12 @@ $.ibi.ibxFlexBox.statics =
 			"stretch":"fbx-align-content-stretch",
 			"spaceBetween":"fbx-align-items-baseline",
 			"spaceAround":"fbx-align-content-space-around"
-		}
+		},
+		"childSizing":
+		{
+			"content":"fbx-child-sizing-content-box",
+			"border":"fbx-child-sizing-border-box",
+		},
 	}
 };
 
