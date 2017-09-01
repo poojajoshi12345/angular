@@ -138,8 +138,14 @@ $.widget("ibi.ibxFlexGrid", $.ibi.ibxHBox,
 	},
 	_destroy:function()
 	{
+		this.remove(".ibx-flex-grid-cell");
+		//this.children().removeAttr("data-grid-row data-grid-col data-grid-span").removeClass("ibx-flex-grid-cell");
+		this._super();
+	},
+	remove:function(el, refresh)
+	{
 		this.children().removeAttr("data-grid-row data-grid-col data-grid-span").removeClass("ibx-flex-grid-cell");
-		//this._super();
+		this._super(el, refresh);
 	},
 	_colSize:-1,
 	colSize:function()
