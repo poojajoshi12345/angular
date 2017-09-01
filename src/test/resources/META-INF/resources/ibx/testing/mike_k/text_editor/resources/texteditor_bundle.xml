@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--Copyright 1996-2017 Information Builders, Inc. All rights reserved. $Revision$:-->
 <ibx-res-bundle name="texteditor_bundle.xml">
+	<ibx-package src="{context}/ibxtools/explore/explore_open_dialog.xml"/> <!-- Open/Save Dialog -->	
 	<strings>
 		<string-file src="{res}/com.ibi.intl.bip_editor.bip_editor"  default="true"/>	
 		<string-bundle>
@@ -14,8 +15,8 @@
 		<![CDATA[
 			.text-editor
 			{
-				width:600px;
-				height:350px;
+				width:900px;
+				height:600px;
 			}
 
 			.text-editor .ibx-dialog-main-box
@@ -53,79 +54,152 @@
 			.te-txt-area
 			{
 				flex:1 1 auto;
-				font-family:consolas, menlo, courier new;
-				font-size:10pt;
-				margin-bottom:4px;
+				font-family:Courier New, Courier, monospace;
+				font-size:12px;
+				margin-top:10px;
 			}
-
+			
+			
+			.te-search-go-to-line
+			{
+				margin-top:10px;
+			}
+			.txtGoToLine
+			{
+				margin-right:10px;
+			}
+			.btnGoToLine
+			{			
+				width:100px;
+			}
+			.btnCloseGoToLine
+			{				
+				width:100px;
+			}
+			
+			
+			.te-search-find-replace
+			{
+				margin-top:10px;
+			}			
+			.te-search-find-replace-1
+			{
+			}
+			.findLbl
+			{
+				width:120px;			
+			}
+			.findText
+			{
+				width:250px;
+				margin-left:20px;
+			}
+			.btnFindPrevious
+			{
+				margin-left:20px;
+				width:100px;
+			}
+			.btnFind
+			{
+				margin-left:5px;
+				width:100px;
+			}
+			.btnReplace
+			{
+				margin-left:5px;
+				width:100px;
+			}
+			.te-search-find-replace-2
+			{
+				margin-top:5px;
+			}
+			.replaceLbl
+			{
+				width:120px;
+			}
+			.replaceText
+			{
+				width:250px;
+				margin-left:20px;
+			}
+			.btnReplaceAll
+			{
+				margin-left:20px;
+				width:100px;
+			}
+			.btnUndo
+			{
+				margin-left:5px;
+				width:100px;
+			}
+			.btnFindClose
+			{
+				margin-left:5px;
+				width:100px;
+			}
+			.te-search-find-replace-3
+			{
+				margin-top:5px;
+			}
+			.cbMatchCase
+			{
+				margin-left:400px;
+			}
+						
+			
+			.te-status-bar
+			{
+				margin-top:10px;
+			}
 			.te-sb-line-marker-label
 			{
 				margin-right:0px;
-			}
-			
+			}			
 			.te-sb-line-marker-value
 			{
 				margin-right:50px;
-			}
-			
+			}			
 			.te-sb-column-marker-label
 			{
 				margin-right:0px;
-			}
-			
+			}			
 			.te-sb-column-marker-value
 			{
 				margin-right:50px;
 			}
+
 			
-			.te-search-go-to-line-collapsed
-			{
-				height:0px;
-			}
-			
-			.te-search-find-replace-collapsed
-			{
-				height:0px;
-			}
-			.te-search-go-to-line-expanded
-			{
-				height:0px;
-			}
-			
-			.te-search-find-replace-expanded
-			{
-				height:0px;
-			}
+			 
 		]]>
 		</style-sheet>
 	</styles>
 	
-		<scripts>
-	<script-file src="./js/text_editor.js" loadContext="bundle"/>	
+	<scripts>
+		<script-file src="./js/text_editor.js" loadContext="bundle"/>	
 	</scripts>
 
 	<markup>
 		<markup-block>
 			<div class="text-editor-resources">
 				<div class="te-tool-bar" data-ibx-type="ibxHBox" data-ibxp-justify="start" data-ibxp-align="center">
-					<div class="te-tb-new te-tb-btn" data-ibx-type="ibxButtonSimple" data-ibx-name="tbNew" data-menu-cmd="onNew" title="@ibxString('bid_menu_file_new')" data-ibxp-glyph="insert_drive_file" data-ibxp-glyph-classes="material-icons md-18"></div>
-					<div class="te-tb-open te-tb-btn" data-ibx-type="ibxButtonSimple" data-ibx-name="tbOpen" data-menu-cmd="onOpen" title="@ibxString('bid_menu_file_open')" data-ibxp-glyph="folder_open" data-ibxp-glyph-classes="material-icons md-18"></div>
-					<div class="te-tb-save te-tb-btn" data-ibx-type="ibxButtonSimple" data-ibx-name="tbSave" data-menu-cmd="onSave" title="@ibxString('bid_menu_file_save')" data-ibxp-glyph="save" data-ibxp-glyph-classes="material-icons md-18"></div>
-					<div class="te-tb-run te-tb-btn" data-ibx-type="ibxButtonSimple" data-ibx-name="tbRun" data-menu-cmd="onRun" title="@ibxString('bid_run')" data-ibxp-glyph="directions_run" data-ibxp-glyph-classes="material-icons md-18"></div>
+					<div class="te-tb-new te-tb-btn" data-ibx-type="ibxButtonSimple" data-ibx-name="tbNew" tabindex="1" data-menu-cmd="onNew" title="@ibxString('bid_menu_file_new')" data-ibxp-glyph="insert_drive_file" data-ibxp-glyph-classes="material-icons md-18"></div>
+					<div class="te-tb-open te-tb-btn" data-ibx-type="ibxButtonSimple" data-ibx-name="tbOpen" tabindex="2" data-menu-cmd="onOpen" title="@ibxString('bid_menu_file_open')" data-ibxp-glyph="folder_open" data-ibxp-glyph-classes="material-icons md-18"></div>
+					<div class="te-tb-save te-tb-btn" data-ibx-type="ibxButtonSimple" data-ibx-name="tbSave" tabindex="3" data-menu-cmd="onSave" title="@ibxString('bid_menu_file_save')" data-ibxp-glyph="save" data-ibxp-glyph-classes="material-icons md-18"></div>
+					<div class="te-tb-run te-tb-btn" data-ibx-type="ibxButtonSimple" data-ibx-name="tbRun" tabindex="4" data-menu-cmd="onRun" title="@ibxString('bid_run')" data-ibxp-glyph="play_arrow" data-ibxp-glyph-classes="material-icons md-18"></div>
 				</div>
 				<div class="te-menu-bar" data-ibx-type="ibxMenuBar">
-					<div data-ibx-type="ibxMenuButton" data-ibx-name="menuFile">@ibxString('bid_menu_file')
-						<div class="te-file-menu te-menu" data-ibx-type="ibxMenu">
+					<div data-ibx-type="ibxMenuButton" data-ibx-name="menuFile" tabindex="5">@ibxString('bid_menu_file')
+						<div class="te-file-menu ibx-menu-no-icons te-menu" data-ibx-type="ibxMenu">
 							<div data-ibx-type="ibxMenuItem" data-menu-cmd="fileNew">@ibxString('bid_menu_file_new')</div>
 							<div data-ibx-type="ibxMenuItem" data-menu-cmd="fileOpen">@ibxString('bid_menu_file_open')</div>
 							<div data-ibx-type="ibxMenuItem" data-menu-cmd="fileSave">@ibxString('bid_menu_file_save')</div>
-							<div data-ibx-type="ibxMenuItem" data-menu-cmd="fileSaveAS">@ibxString('bid_menu_file_saveas')</div>
+							<div data-ibx-type="ibxMenuItem" data-menu-cmd="fileSaveAs">@ibxString('bid_menu_file_saveas')</div>
 							<div data-ibx-type="ibxMenuItem" data-menu-cmd="fileClose">@ibxString('bid_menu_file_close')</div>
 							<div data-ibx-type="ibxMenuItem" data-menu-cmd="fileExit">@ibxString('bid_menu_file_exit')</div>
 						</div>
 					</div>
-					<div data-ibx-type="ibxMenuButton" data-ibx-name="menuEdit">@ibxString('bid_menu_edit')
-						<div class="te-edit-menu te-menu" data-ibx-type="ibxMenu">
+					<div data-ibx-type="ibxMenuButton" data-ibx-name="menuEdit" tabindex="6">@ibxString('bid_menu_edit')
+						<div class="te-edit-menu ibx-menu-no-icons te-menu" data-ibx-type="ibxMenu">
 							<div data-ibx-type="ibxMenuItem" data-menu-cmd="editDelete">@ibxString('bid_menu_edit_delete')</div>
 							<div data-ibx-type="ibxMenuItem" data-menu-cmd="editSelectAll">@ibxString('bid_menu_edit_selectall')</div>
 							<div data-ibx-type="ibxMenuItem" data-menu-cmd="editUpperCase">@ibxString('bid_menu_edit_uppercase')</div>
@@ -133,29 +207,90 @@
 						</div>
 					</div>
 					<div data-ibx-type="ibxMenuButton" data-ibx-name="menuSearch">@ibxString('bid_menu_search')
-						<div class="te-search-menu te-menu" data-ibx-type="ibxMenu">
+						<div class="te-search-menu ibx-menu-no-icons te-menu" data-ibx-type="ibxMenu">
 							<div data-ibx-type="ibxMenuItem" data-menu-cmd="searchFind">@ibxString('bid_menu_search_find')</div>
 							<div data-ibx-type="ibxMenuItem" data-menu-cmd="searchGoTo">@ibxString('bid_menu_search_goto')</div>
 						</div>
 					</div>
-					<div class="te-menu-button" data-ibx-type="ibxMenuButton" data-ibx-name="menuOptions" data-menu-cmd="options">@ibxString('bid_menu_options')</div>
-					<div class="te-menu-button" data-ibx-type="ibxMenuButton" data-ibx-name="menuHelp" data-menu-cmd="help">@ibxString('bid_menu_help')</div>
+					<div class="te-menu-button" data-ibx-type="ibxMenuButton" data-ibx-name="menuOptions" data-menu-cmd="menuOptions">@ibxString('bid_menu_options')</div>
+					<div class="te-menu-button" data-ibx-type="ibxMenuButton" data-ibx-name="menuHelp" data-menu-cmd="menuHelp">@ibxString('bid_menu_help')</div>
 				</div>
 				
-				<!-- Go To Line -->
-				<div class="te-search-go-to-line-collapsed" data-ibx-name="goToLine"></div>
+				<!-- Go To Line -->				
+				<div class="te-search-go-to-line goToLine" data-ibx-type="ibxHBox" data-ibxp-justify="start" data-ibxp-align="center">
+					<div class="txtGoToLine" data-ibx-type="ibxTextField" tabindex="1"></div>
+					<div class="ibx-primary btnGoToLine" data-ibx-type="ibxButton" data-ibxp-justify="center">@ibxString('bid_OK')</div>
+					<div class="ibx-default btnCloseGoToLine" data-ibx-type="ibxButton" data-ibxp-justify="center">@ibxString('bid_close')</div>
+				</div>
+				
+<!--				
+			<BiHBox id="goToLine" preferredHeight="10" memberName="goToLine" memberOf="bipEditor" visible="false" margin="2" pack="start">
+				<BiTextField memberName="txtGoToLine" id="txtGoToLine" memberOf="goToLine" preferredWidth="50"/>
+				<BiButton memberName="btnGoToLine" id="btnGoToLine" memberOf="goToLine" text="<%=res.getStringXml("bid_OK")%>" preferredWidth="5" width="5" marginLeft="2" marginRight="1"/>
+				<BiButton memberName="btnCloseGoToLine" id="btnCloseGoToLine" memberOf="goToLine" text="<%=res.getStringXml("bid_close")%>" preferredWidth="5" width="5" marginRight="1"/>
+			</BiHBox>
+ -->				
 			
 			
 				<div class="te-txt-area" data-ibx-type="ibxTextArea" data-ibx-name="txtArea"></div>
 				
 				<!-- Find/ Replace -->
-				<div class="te-search-find-replace-collapsed" data-ibx-name="findReplace"></div>
-			
+				<div class="te-search-find-replace findReplace" data-ibx-type="ibxVBox" data-ibxp-justify="start" data-ibxp-align="left">
+					
+					<div class="te-search-find-replace-1" data-ibx-type="ibxHBox" data-ibxp-align="center">
+						<div class="findLbl" data-ibx-type="ibxLabel">@ibxString('bid_findTextLbl')</div>
+						<div class="findText" data-ibx-type="ibxTextField" tabindex="1"></div>
+						<div class="ibx-default btnFindPrevious" data-ibx-type="ibxButton" data-ibxp-justify="center">@ibxString('bid_findPrevBtnLbl')</div>
+						<div class="ibx-default btnFind" data-ibx-type="ibxButton" data-ibxp-justify="center">@ibxString('bid_findBtnLbl')</div>
+						<div class="ibx-default btnReplace" data-ibx-type="ibxButton" data-ibxp-justify="center">@ibxString('bid_replaceBtnLbl')</div>						
+					</div>
+					
+					<div class="te-search-find-replace-2" data-ibx-type="ibxHBox" data-ibxp-align="center">
+						<div class="replaceLbl" data-ibx-type="ibxLabel">@ibxString('bid_replaceTextLbl')</div>
+						<div class="replaceText" data-ibx-type="ibxTextField" tabindex="1"></div>
+						<div class="ibx-default btnReplaceAll" data-ibx-type="ibxButton" data-ibxp-justify="center">@ibxString('bid_replaceAllBtnLbl')</div>
+						<div class="ibx-default btnUndo" data-ibx-type="ibxButton" data-ibxp-justify="center">@ibxString('bid_unDoBtnLbl')</div>
+						<div class="ibx-default btnFindClose" data-ibx-type="ibxButton" data-ibxp-justify="center">@ibxString('bid_close')</div>						
+					</div>
+					
+					<div class="te-search-find-replace-3" data-ibx-type="ibxHBox" data-ibxp-align="center">
+					<!--
+						<div class="emptyLbl1" data-ibx-type="ibxLabel"></div>
+						<div class="emptyLbl2" data-ibx-type="ibxLabel"></div>
+					-->
+			            <div class="cbMatchCase" data-ibx-type="ibxCheckBoxSimple" tabIndex="1">@ibxString('bid_matchCase')</div>
+					</div>
+				</div>
+								
+<!--	
+			<BiVBox id="findReplace" preferredHeight="80" memberName="fp" memberOf="bipEditor" visible="false" margin="5" pack="start">
+				<BiHBox align="center" marginTop="10" margin="5">
+					<BiLabel memberName="findLbl" memberOf="findReplace" text="<%=res.getStringXml("bid_findTextLbl")%>" preferredWidth="120" width="120" paddingRight="10"/>
+					<BiTextField id="findText" memberName="findText" memberOf="findReplace" preferredWidth="250"/>		
+					<BiButton id="btnFindPrevious" memberName="btnFindPrevious" memberOf="findReplace" text="<%=res.getStringXml("bid_findPrevBtnLbl")%>" width="80" enabled="false" marginLeft="25" marginRight="5"/>									
+					<BiButton id="btnFind" memberName="btnFind" memberOf="findReplace" text="<%=res.getStringXml("bid_findBtnLbl")%>" width="80" enabled="false" marginRight="5"/>
+					<BiButton id="btnReplace" memberName="btnReplace" memberOf="findReplace" text="<%=res.getStringXml("bid_replaceBtnLbl")%>" width="80" enabled="false" marginRight="5"/>
+				</BiHBox>
+				<BiHBox align="center" margin="5">
+					<BiLabel memberName="replaceLbl" memberOf="findReplace" text="<%=res.getStringXml("bid_replaceTextLbl")%>" preferredWidth="120" width="120" paddingRight="10"/>
+					<BiTextField id="replaceText" memberName="replaceText" memberOf="findReplace" preferredWidth="250"/>
+					<BiButton id="btnReplaceAll" memberName="btnReplaceAll" memberOf="findReplace" text="<%=res.getStringXml("bid_replaceAllBtnLbl")%>" width="80" enabled="false" marginLeft="25" marginRight="5"/>
+					<BiButton id="btnUndo" memberName="btnUndo" memberOf="findReplace" text="<%=res.getStringXml("bid_unDoBtnLbl")%>" width="80" enabled="false" marginRight="5"/>
+					<BiButton id="btnFindClose" memberName="btnFindClose" memberOf="findReplace" text="<%=res.getStringXml("bid_close")%>"/>
+				</BiHBox>
+				<BiHBox align="center" marginTop="10" margin="5" preferredHeight="26" height="26">
+					<BiLabel memberName="emptyLbl1" memberOf="findReplace" text="" preferredWidth="120" width="120" paddingRight="10"/>
+					<BiLabel memberName="emptyLbl2" memberOf="findReplace" text="" preferredWidth="250" width="250" paddingRight="10"/>
+					<BiCheckBox id="cbMatchCase" memberName="cbMatchCase" memberOf="findReplace" text="<%=res.getStringXml("bid_matchCase")%>" marginLeft="25" marginRight="5"/>
+				</BiHBox>
+				<BiComponent BiBox.Flex="1"/>
+			</BiVBox>				
+ -->			
 				<div class="te-status-bar" data-ibx-type="ibxHBox" data-ibxp-justify="start" data-ibxp-align="center">
 					<div class="te-sb-line-marker-label" data-ibx-type="ibxLabel">@ibxString('bid_line')</div>
-					<div class="te-sb-line-marker-value" data-ibx-name="linePosLbl" data-ibx-type="ibxLabel">x</div>
+					<div class="te-sb-line-marker-value te-linePosLbl" data-ibx-type="ibxLabel"></div>
 					<div class="te-sb-column-marker-label" data-ibx-type="ibxLabel">@ibxString('bid_column')</div>
-					<div class="te-sb-column-marker-value" data-ibx-name="columnPosLbl" data-ibx-type="ibxLabel">x</div>
+					<div class="te-sb-column-marker-value te-columnPosLbl" data-ibx-type="ibxLabel"></div>
 				</div>
 			</div>
 			
