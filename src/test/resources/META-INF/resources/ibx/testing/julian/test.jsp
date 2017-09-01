@@ -21,9 +21,8 @@
 			<jsp:include page="/WEB-INF/jsp/global/wf_globals.jsp" flush="false" />
 			ibx(function()
 			{
-				$(".test-drop").on("ibx_dragover ibx_dragleave ibx_drop", function(e)
+				$(".test-drop").on("ibx_dragover ibx_dragleave ibx_drop", function(e, deferred)
 				{
-					console.log(e.type, e);
 				});
 			}, [{"src":"./test_res_bundle.xml", "loadContext":"app"}], true);
 		</script>

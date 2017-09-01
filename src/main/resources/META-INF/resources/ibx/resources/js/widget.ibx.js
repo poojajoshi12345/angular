@@ -175,7 +175,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 	},
 	remove:function(el, refresh)
 	{
-		this.element.children().filter(el).detach();
+		var ret = this.element.children().filter(el).detach();
 		if(refresh)
 			this.refresh();
 	},
@@ -272,8 +272,8 @@ $.widget("ibi.ibxWidget", $.Widget,
 			dragStartDistanceX:5,
 			dragStartDistanceY:5,
 
-			fileDropTarget:false, //turn on native file drag/drop
-			fileUploadAjaxInfo:
+			nativeDropTarget:false, //turn on native drop target handlers
+			fileUploadAjaxOptions:
 			{
 			}
 		},
@@ -293,14 +293,14 @@ $.widget("ibi.ibxWidget", $.Widget,
 			return clone;
 		},
 		isDragging:function(){return this.element.hasClass(this.options.dragClass);},
-		_dispatchDragEvent:function(e, type, target, relatedTarget)
+		_dispatchDragEvent:function(e, type, target, relatedTarget, data)
 		{
 			var dEvent = $.Event(e);
 			dEvent.type = type;
 			dEvent.target = (target instanceof jQuery) ? target[0] : target;
 			dEvent.relatedTarget =(relatedTarget instanceof jQuery) ?  relatedTarget[0] : relatedTarget;
 			dEvent.dataTransfer = this._dataTransfer || e.dataTransfer;
-			$(target).trigger(dEvent);
+			$(target).trigger(dEvent, data);
 			return dEvent;
 		},
 		_onDragMouseEvent:function(e)
@@ -424,9 +424,11 @@ $.widget("ibi.ibxWidget", $.Widget,
 							"contentType":false,
 							"processData":false,
 							"data":formData,
-							"url":""
-						}, options.fileUploadAjaxInfo);
-						$.ajax(ajaxOptions);
+							"url":"",
+
+						}, options.fileUploadAjaxOptions);
+						var deferred = $.ajax(ajaxOptions);
+						this._dispatchDragEvent(e, "ibx_" + "filesdropped", this.element, e.relatedTarget, deferred);
 					}
 					e.preventDefault();
 					break;
@@ -438,7 +440,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 			this._refreshOrig.apply(this, arguments);
 			var options = this.options;
 			(options.draggable) ? this.element.on("mousedown", this._onDragMouseEventBound) : this.element.off("mousedown", this._onDragMouseEventBound);
-			(options.fileDropTarget) ? this.element.on("dragover dragleave drop", this._onDragMouseEventBound) : this.element.off("dragover dragleave drop", this._onDragMouseEventBound);
+			(options.nativeDropTarget) ? this.element.on("dragover dragleave drop", this._onDragMouseEventBound) : this.element.off("dragover dragleave drop", this._onDragMouseEventBound);
 
 			this.element.toggleClass("ibx-draggable", options.draggable);
 			this.element.toggleClass("ibx-droppable", options.droppable);
