@@ -427,8 +427,12 @@ $.widget("ibi.ibxWidget", $.Widget,
 							"url":"",
 
 						}, options.fileUploadAjaxOptions);
+
+						if(this._dispatchDragEvent(e, "ibx_beforefilesupload", this.element, e.relatedTarget, deferred).isDefaultPrevented())
+							return;
+
 						var deferred = $.ajax(ajaxOptions);
-						this._dispatchDragEvent(e, "ibx_" + "filesdropped", this.element, e.relatedTarget, deferred);
+						this._dispatchDragEvent(e, "ibx_filesuploading", this.element, e.relatedTarget, deferred);
 					}
 					e.preventDefault();
 					break;
