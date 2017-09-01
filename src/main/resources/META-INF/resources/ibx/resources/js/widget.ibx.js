@@ -74,7 +74,16 @@ $.widget("ibi.ibxWidget", $.Widget,
 		delete this._resizeSensor;
 
 		this._setOptionDisabled(false);
-		this.element.removeData("ibxWidget");
+		
+		//remove all ibxWidget, and derived data
+		var data = this.element.data();
+		$.each(data, function(key, value)
+		{
+			if(key.search("ibiIbx") == 0 || key.search("ibx") == 0)
+				this.element.removeData(key);
+			console.log();
+		}.bind(this));
+		
 		this.element.removeAttr("data-ibx-type");
 		this.element.removeClass(this.options.class);
 		this._adjustWidgetClasses(false);
