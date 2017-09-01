@@ -425,10 +425,10 @@ $.widget("ibi.ibxWidget", $.Widget,
 							"processData":false,
 							"data":formData,
 							"url":"",
-
+							"dataTransfer":dt
 						}, options.fileUploadAjaxOptions);
 
-						if(this._dispatchDragEvent(e, "ibx_beforefilesupload", this.element, e.relatedTarget, deferred).isDefaultPrevented())
+						if(this._dispatchDragEvent(e, "ibx_beforefilesupload", this.element, e.relatedTarget, ajaxOptions).isDefaultPrevented())
 							return;
 
 						var deferred = $.ajax(ajaxOptions);
