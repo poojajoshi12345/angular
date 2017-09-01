@@ -1,20 +1,17 @@
 <%-- Copyright 1996-2017 Information Builders, Inc. All rights reserved. 
  $Revision$:
 --%><!DOCTYPE html>
-<jsp:useBean id="WEBFOCUS_SECURITY_SETTING" class="com.ibi.webapp.security.config.WFSecuritySetting" scope="request"></jsp:useBean>
-<jsp:useBean id="wflicense" class="com.ibi.web.bean.WFLicenseRedirectBean" scope="request"></jsp:useBean>
-<jsp:useBean id="browser" class="com.ibi.web.bean.WFDetectBrowserBean" scope="request">
-<jsp:setProperty name="browser" property="request" value="<%= request %>" />
-<jsp:setProperty name="browser" property="response" value="<%= response %>" />
-<jsp:setProperty name="browser" property="wflicense" value="<%= wflicense %>" />
-</jsp:useBean>
-<jsp:useBean id="resourceBean" class="com.ibi.web.res.ResourceBundleBean" scope="request">
-<jsp:setProperty name="resourceBean" property="request" value="<%= request %>" />
-</jsp:useBean>              
-<jsp:useBean id="wfLanguage" class="com.ibi.web.bean.WFLanguageBean" scope="request">
-<jsp:setProperty name="wfLanguage" property="inLang" value="<%=browser.getSelLanguage()%>"/>
-</jsp:useBean>
-<%@ page import="org.owasp.esapi.*" 
+<jsp:useBean id="WEBFOCUS_SECURITY_SETTING" class="com.ibi.webapp.security.config.WFSecuritySetting" scope="request"></jsp:useBean><jsp:useBean 
+id="wflicense" class="com.ibi.web.bean.WFLicenseRedirectBean" scope="request"></jsp:useBean><jsp:useBean 
+id="browser" class="com.ibi.web.bean.WFDetectBrowserBean" scope="request"><jsp:setProperty 
+name="browser" property="request" value="<%= request %>" /><jsp:setProperty 
+name="browser" property="response" value="<%= response %>" /><jsp:setProperty 
+name="browser" property="wflicense" value="<%= wflicense %>" /></jsp:useBean><jsp:useBean 
+id="resourceBean" class="com.ibi.web.res.ResourceBundleBean" scope="request"><jsp:setProperty 
+name="resourceBean" property="request" value="<%= request %>" /></jsp:useBean><jsp:useBean 
+id="wfLanguage" class="com.ibi.web.bean.WFLanguageBean" scope="request"><jsp:setProperty 
+name="wfLanguage" property="inLang" value="<%=browser.getSelLanguage()%>"/></jsp:useBean><%@ 
+page import="org.owasp.esapi.*" 
 %><%@ page import="org.apache.commons.lang.StringEscapeUtils"
 %><%@ page import="com.ibi.webapp.security.util.WFSecurityUtils"
 %><%
@@ -27,7 +24,6 @@
 	com.ibi.resourceutil.IbiResourceBundle res =  com.ibi.resourceutil.BindowsResourceBundleBean.GetResourceBundle(application,request,"com.ibi.intl.bip_editor.bip_editor");
 	String context = request.getContextPath();
 %>
-
 <html>
 	<head>
 		<title>ibx text editor sample</title>
@@ -40,7 +36,6 @@
 
 		<!--include this script...will boot ibx into the running state-->
 		<Script src="<%=context%>/ibx/resources/ibx.js" type="text/javascript"></script>
-		<Script src="<%=context%>/ibx/testing/mike_k/text_editor/resources/js/text_editor.js")" type="text/javascript"></script>
 		<script type="text/javascript">
 			<jsp:include page="/WEB-INF/jsp/global/wf_globals.jsp" flush="false" />
 			<jsp:include page="/WEB-INF/jsp/ibx/ibxInit.jsp" flush="false" />
@@ -49,7 +44,7 @@
 			{
 				$(".btn-show-text-editor").on("click", function()
 				{
-					$(".text-editor").ibxWidget("setEditorPath", "IBFS:/WFC/Repository/Public", "1", "fex");
+					$(".text-editor").ibxWidget("setEditorPath", "IBFS:/WFC/Repository/", "", "");
 					
 					$(".text-editor").ibxWidget("open");
 				});
