@@ -324,7 +324,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 		},
 		_onDragKeyEvent:function(e)
 		{
-			if(this.isDragging() && e.keyCode == 27)
+			if(e.keyCode == 27)
 				this.endDrag("ibx_dragcancel", e);
 		},
 		_onDragMouseEvent:function(e)
