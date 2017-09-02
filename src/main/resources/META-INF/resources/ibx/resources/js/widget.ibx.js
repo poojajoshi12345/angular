@@ -306,13 +306,21 @@ $.widget("ibi.ibxWidget", $.Widget,
 		},
 		endDrag:function(eType, e)
 		{
-			if(eType)
-				this._dispatchDragEvent(e, eType, this.element);
-			$(this._dataTransfer._dragImage).remove();
-			this.element.removeClass(this.options.dragClass);
-			delete this._dataTransfer;
-			delete this._curTarget;
-			//console.log(eType);
+			if(this.isDragging())
+			{
+				if(eType)
+					this._dispatchDragEvent(e, eType, this.element);
+				$(this._dataTransfer._dragImage).remove();
+				this.element.removeClass(this.options.dragClass);
+				delete this._dataTransfer;
+				delete this._curTarget;
+
+				$("body").css("pointerEvents", "");
+				$("html").off("mouseup mousemove", this._onDragMouseEventBound).css("cursor", "");
+
+				delete this._mDownLoc;
+				this.element.removeClass(this.options.dragClass);
+			}
 		},
 		_onDragKeyEvent:function(e)
 		{
@@ -337,16 +345,10 @@ $.widget("ibi.ibxWidget", $.Widget,
 						//if allowed let target know it was dropped on
 						if(!this._curTarget._dragPrevented)
 							this._dispatchDragEvent(e, "ibx_drop", this._curTarget, this.element);
-
-						//end the drag operation
-						this.endDrag("ibx_dragend", e);
 					}
 
-					$("body").css("pointerEvents", "");
-					$("html").off("mouseup mousemove", this._onDragMouseEventBound).css("cursor", "");
-
-					delete this._mDownLoc;
-					this.element.removeClass(this.options.dragClass);
+					//end the drag operation
+					this.endDrag("ibx_dragend", e);
 					break;
 				case "mousemove":
 					var dEvent = null;
