@@ -40,10 +40,6 @@
 	<markup>
 		<markup-file src="./test_res_markup.xml"/>
 		<markup-block>
-			<div class="test-widget-template" data-ibx-name-root="true" data-ibx-type="testWidget" data-ibxp-align="center" data-ibxp-justify="center">
-				<div class="test-widget-label" data-ibx-type="ibxLabel" data-ibx-name="_label" data-ibxp-glyph="face" data-ibxp-glyph-classes="material-icons">This is a Test Label</div>
-			</div>
-			<div class="test-label" data-ibx-type="ibxLabel" data-ibxp-text="@ibxString('TEST')"></div>
 		</markup-block>
 	</markup>
 
@@ -67,7 +63,6 @@
 				},
 				_refresh:function()
 				{
-					this._label.css("border", "1px solid red");
 					this._super();
 				}
 			});
