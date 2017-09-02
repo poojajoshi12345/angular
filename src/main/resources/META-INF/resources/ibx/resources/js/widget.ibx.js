@@ -266,13 +266,13 @@ $.widget("ibi.ibxWidget", $.Widget,
 	{
 		options:
 		{
-			draggable:false, // !!!!IBX DRAGGABLE!!!! ...NOTHING TO DO WITH NATIVE DRAG/DROP
+			draggable:false,			//!!!!IBX DRAGGABLE!!!! ...NOTHING TO DO WITH NATIVE DRAG/DROP
 			dragClass:"ibx-drag-source",
 			dragImageClass:"ibx-default-drag-image",
 			dragStartDistanceX:5,
 			dragStartDistanceY:5,
 
-			nativeDropTarget:false, //turn on native drop target handlers
+			nativeDropTarget:false,		//!!!!NATIVE DROP!!!!
 			fileUploadAjaxOptions:
 			{
 			}
@@ -282,6 +282,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 		{
 			this._createOrig.apply(this, arguments);
 			this._onDragMouseEventBound = this._onDragMouseEvent.bind(this);
+			this._onDragKeyEventBound = this._onDragKeyEvent.bind(this);
 		},
 		getDefaultDragImage:function(el)
 		{
@@ -303,6 +304,21 @@ $.widget("ibi.ibxWidget", $.Widget,
 			$(target).trigger(dEvent, data);
 			return dEvent;
 		},
+		endDrag:function(eType, e)
+		{
+			if(eType)
+				this._dispatchDragEvent(e, eType, this.element);
+			$(this._dataTransfer._dragImage).remove();
+			this.element.removeClass(this.options.dragClass);
+			delete this._dataTransfer;
+			delete this._curTarget;
+			//console.log(eType);
+		},
+		_onDragKeyEvent:function(e)
+		{
+			if(this.isDragging() && e.keyCode == 27)
+				this.endDrag("ibx_dragcancel", e);
+		},
 		_onDragMouseEvent:function(e)
 		{
 			var options = this.options;
@@ -323,11 +339,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 							this._dispatchDragEvent(e, "ibx_drop", this._curTarget, this.element);
 
 						//end the drag operation
-						this._dispatchDragEvent(e, "ibx_dragend", this.element);
-						$(this._dataTransfer._dragImage).remove();
-						this.element.removeClass(options.dragClass);
-						delete this._dataTransfer;
-						delete this._curTarget;
+						this.endDrag("ibx_dragend", e);
 					}
 
 					$("body").css("pointerEvents", "");
@@ -341,7 +353,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 					var dx = Math.abs(e.clientX - this._mDownLoc.x);
 					var dy = Math.abs(e.clientY - this._mDownLoc.y);
 					var isDragging = this.isDragging();
-					if(!isDragging && (dx >= this.options.dragStartDistanceX || dy >= this.options.dragStartDistanceY))
+					if(!isDragging && (dx >= options.dragStartDistanceX || dy >= this.options.dragStartDistanceY))
 					{
 						$("body").css("pointerEvents", "none");
 						e.stopPropagation();
@@ -350,7 +362,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 						dEvent = this._dispatchDragEvent(e, "ibx_dragstart", this.element);
 						if(!dEvent.isDefaultPrevented())
 						{
-							this.element.addClass(this.options.dragClass);
+							this.element.addClass(options.dragClass);
 							var img = this.getDefaultDragImage(this.element).addClass(options.dragImageClass);
 							this._dataTransfer.setDragImage(img);
 						}
@@ -444,6 +456,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 			this._refreshOrig.apply(this, arguments);
 			var options = this.options;
 			(options.draggable) ? this.element.on("mousedown", this._onDragMouseEventBound) : this.element.off("mousedown", this._onDragMouseEventBound);
+			(options.draggable) ? this.element.on("keydown", this._onDragKeyEventBound) : this.element.off("keydown", this._onDragKeyEventBound);
 			(options.nativeDropTarget) ? this.element.on("dragover dragleave drop", this._onDragMouseEventBound) : this.element.off("dragover dragleave drop", this._onDragMouseEventBound);
 
 			this.element.toggleClass("ibx-draggable", options.draggable);
