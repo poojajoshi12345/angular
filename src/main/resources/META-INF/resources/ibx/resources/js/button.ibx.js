@@ -347,12 +347,12 @@ $.widget("ibi.ibxButtonGroup", $.ibi.ibxFlexBox,
 			this.options.name = this.element.attr("id");
 		}
 		this.element.on("keydown", this._onKeyDown.bind(this));
-		this.add(this.element.children(".ibx-button, .ibx-check-box"));
+		this.add(this.element.children(".ibx-button, .ibx-check-box, .ibx-check-box-simple, .ibx-radio-button-simple"));
 		this._super();
 	},
 	children:function(selector)
 	{
-		return this._super(selector || ".ibx-button, .ibx-check-box");
+		return this._super(selector || ".ibx-button, .ibx-check-box, .ibx-check-box-simple, .ibx-radio-button-simple");
 	},
 	add:function(el, sibling, before, refresh)
 	{
@@ -360,7 +360,7 @@ $.widget("ibi.ibxButtonGroup", $.ibi.ibxFlexBox,
 
 		if(this._group)
 		{
-			el = $(el).filter(".ibx-button, .ibx-check-box");
+			el = $(el).filter(".ibx-button, .ibx-check-box, .ibx-check-box-simple, .ibx-radio-button-simple");
 			el.each(function(idx, el)
 			{
 				el = $(el);
@@ -375,7 +375,7 @@ $.widget("ibi.ibxButtonGroup", $.ibi.ibxFlexBox,
 	{
 		if(this._group)
 		{
-			el = $(el).filter(".ibx-button, .ibx-check-box");
+			el = $(el).filter(".ibx-button, .ibx-check-box, .ibx-check-box-simple, .ibx-radio-button-simple");
 			el.each(function(idx, el)
 			{
 				el = $(el);
