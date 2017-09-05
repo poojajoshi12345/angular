@@ -306,21 +306,20 @@ $.widget("ibi.ibxWidget", $.Widget,
 		},
 		endDrag:function(eType, e)
 		{
-			if(this.isDragging())
-			{
-				if(eType)
-					this._dispatchDragEvent(e, eType, this.element);
+			if(eType)
+				this._dispatchDragEvent(e, eType, this.element);
+			
+			if(this._dataTransfer)
 				$(this._dataTransfer._dragImage).remove();
-				this.element.removeClass(this.options.dragClass);
-				delete this._dataTransfer;
-				delete this._curTarget;
+			
+			delete this._dataTransfer;
+			delete this._curTarget;
+			delete this._mDownLoc;
 
-				$("body").css("pointerEvents", "");
-				$("html").off("mouseup mousemove", this._onDragMouseEventBound).css("cursor", "");
+			$("body").css("pointerEvents", "");
+			$("html").off("mouseup mousemove", this._onDragMouseEventBound).css("cursor", "");
 
-				delete this._mDownLoc;
-				this.element.removeClass(this.options.dragClass);
-			}
+			this.element.removeClass(this.options.dragClass);
 		},
 		_onDragKeyEvent:function(e)
 		{
