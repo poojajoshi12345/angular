@@ -19,7 +19,7 @@ $.widget("ibi.ibxIFrame", $.ibi.ibxWidget,
 	{
 		this._super();
 		var frame = this._iFrame = $("<iframe>").addClass("ibx-iframe-frame");
-
+		frame.on("DOMContentLoaded readystatechange load beforeunload unload", this._onIFrameEvent.bind(this));
 		this.element.append(frame);
 
 	},
@@ -30,6 +30,10 @@ $.widget("ibi.ibxIFrame", $.ibi.ibxWidget,
 	frame:function()
 	{
 		return this._iFrame;
+	},
+	_onIFrameEvent:function(e)
+	{
+		this.element.trigger(e);
 	},
 	contentDocument:function()
 	{
