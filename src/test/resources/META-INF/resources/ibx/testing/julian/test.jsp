@@ -21,6 +21,10 @@
 			<jsp:include page="/WEB-INF/jsp/global/wf_globals.jsp" flush="false" />
 			ibx(function()
 			{
+				$(".btn-browse").on("ibx_change", function(e)
+				{
+					debugger;
+				});
 			}, [{"src":"./test_res_bundle.xml", "loadContext":"app"}], true);
 		</script>
 		<style type="text/css">
@@ -45,6 +49,7 @@
 	</head>
 	<body class="ibx-root">
 		<div class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="center">
+			<div class="btn-browse" data-ibx-type="ibxButtonBrowse" data-ibxp-multiple="true" data-ibxp-accept="">Browse...</div>
 			<div data-ibx-type="ibxHBox">
 				<div data-ibx-type="ibxMenuButton">Menu
 					<div data-ibx-type="ibxMenu">

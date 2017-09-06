@@ -306,7 +306,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 		},
 		endDrag:function(eType, e)
 		{
-			if(eType)
+			if(eType && this.isDragging())//[IA-7558] Only spit out event if dragging.
 				this._dispatchDragEvent(e, eType, this.element);
 			
 			if(this._dataTransfer)
