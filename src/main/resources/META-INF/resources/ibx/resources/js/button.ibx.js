@@ -54,17 +54,26 @@ $.widget("ibi.ibxButtonSimple", $.ibi.ibxButton,
 //just a simple button for invoking the standard file browser dialog.
 $.widget("ibi.ibxButtonBrowse", $.ibi.ibxButton,
 {
-	options:{},
+	options:
+	{
+		"multiple":false,
+		"accept":""
+	},
 	_widgetClass:"ibx-button-browse",
 	_create:function()
 	{
 		this._super();
-		this._btnBrowse = $("<input type='file'/>");
+		this._btnBrowse = $("<input type='file'/>").on("change", this._onBrowseBtnChange.bind(this));
 		this.element.on("click", this._onBrowseBtnClick.bind(this));
 	},
 	_onBrowseBtnClick:function(e)
 	{
 		this._btnBrowse.click();
+	},
+	_onBrowseBtnChange:function(e)
+	{
+		e.files = this.files();
+		this._trigger("change", e);
 	},
 	files:function()
 	{
@@ -74,6 +83,7 @@ $.widget("ibi.ibxButtonBrowse", $.ibi.ibxButton,
 	_refresh:function()
 	{
 		this._super();
+		this._btnBrowse.prop("accept", this.options.accept);
 		this.options.multiple ? this._btnBrowse.attr("multiple", "true") : this._btnBrowse.removeAttr("multiple");
 	}
 });
