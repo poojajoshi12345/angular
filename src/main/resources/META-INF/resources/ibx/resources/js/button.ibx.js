@@ -51,6 +51,33 @@ $.widget("ibi.ibxButtonSimple", $.ibi.ibxButton,
 	}
 });
 
+//just a simple button for invoking the standard file browser dialog.
+$.widget("ibi.ibxButtonBrowse", $.ibi.ibxButton,
+{
+	options:{},
+	_widgetClass:"ibx-button-browse",
+	_create:function()
+	{
+		this._super();
+		this._btnBrowse = $("<input type='file'/>");
+		this.element.on("click", this._onBrowseBtnClick.bind(this));
+	},
+	_onBrowseBtnClick:function(e)
+	{
+		this._btnBrowse.click();
+	},
+	files:function()
+	{
+		var files = this._btnBrowse.prop("files");
+		return this.options.multiple ?  files : files[0];
+	},
+	_refresh:function()
+	{
+		this._super();
+		this.options.multiple ? this._btnBrowse.attr("multiple", "true") : this._btnBrowse.removeAttr("multiple");
+	}
+});
+
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 $.widget("ibi.ibxCheckBox", $.ibi.ibxLabel,
