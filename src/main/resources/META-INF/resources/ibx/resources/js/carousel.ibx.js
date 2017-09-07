@@ -67,7 +67,7 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 	remove:function(el, refresh)
 	{
 		this._itemsBox.ibxWidget("remove", el, refresh);
-		this.children().removeClass("ibx-csl-item");
+		$(el).removeClass("ibx-csl-item");
 		if(refresh)
 			this.refresh();
 	},
