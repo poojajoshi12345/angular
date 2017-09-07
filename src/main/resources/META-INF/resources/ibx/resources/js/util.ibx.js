@@ -548,5 +548,22 @@ _p._getErrorDetails = function(error, exInfo)
 	return strErr;
 }
 
+/*********************************************************************************************************
+		HELPER FUNCTIONS FOR BASE64 ENCODING/DECODING
+		See: https://developer.mozilla.org/en-US/docs/Web/API/WindowBase64/Base64_encoding_and_decoding
+**********************************************************************************************************/
 
+function base64EncodingUTF8(str) 
+{
+    var encoded = new TextEncoderLite().encode(str);        
+    var b64Encoded = new Base64().fromByteArray(encoded);
+    return b64Encoded;
+}
+
+function base64DecodingUTF8(str)
+{
+	var b64Decoded = new Base64().toByteArray(str);
+	var decoded = new TextDecoderLite().decode(b64Decoded);
+	return decoded;
+}
 //# sourceURL=util.ibx.js

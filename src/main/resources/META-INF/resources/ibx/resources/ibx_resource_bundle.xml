@@ -144,6 +144,8 @@ $Revision$:-->
 		<script-file src="./etc/scrollwidthpolyfill/scrollwidthpolyfill.js"/>
 		<script-file src="./etc/gridstack/underscore.js"/>
 		<script-file src="./etc/gridstack/gridstack.js"/>
+		<script-file src="./etc/base64/base64.js"/>
+		<script-file src="./etc/base64/textencoderlite.js"/>
 
 		<!--IBX CORE-->
 		<script-file src="./js/events.ibx.js"/>
