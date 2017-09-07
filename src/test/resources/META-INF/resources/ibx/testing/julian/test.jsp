@@ -55,8 +55,8 @@
 	</head>
 	<body class="ibx-root">
 		<div class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="center">
-			<div class="test-label" data-ibx-type="ibxLabel" data-ibxp-glyph="face" data-ibxp-glyph-classes="material-icons" data-ibxp-icon-position="top">Overlay Test
-				<div class="ibx-label-overlay" data-ibx-type="ibxLabel" data-ibxp-glyph-classes="fa fa-share" icon="./rensmall.jpg"></div>
+			<div class="test-label" data-ibx-type="ibxLabel" data-ibxp-icon="./ren1.png" data-ibxp-glyph="face" data-ibxp-glyph-classes="material-icons" data-ibxp-icon-position="top">Overlay Test
+				<div class="ibx-label-overlay" data-ibx-type="ibxLabel" data-ibxp-glyph-classes="fa fa-share"></div>
 			</div>
 		</div>
 	</body>
