@@ -21,10 +21,6 @@
 			<jsp:include page="/WEB-INF/jsp/global/wf_globals.jsp" flush="false" />
 			ibx(function()
 			{
-				$(".btn-browse").on("ibx_change", function(e)
-				{
-					debugger;
-				});
 			}, [{"src":"./test_res_bundle.xml", "loadContext":"app"}], true);
 		</script>
 		<style type="text/css">
@@ -45,33 +41,22 @@
 				border:2px solid red;
 				padding:5px;
 			}
+
+			.test-label
+			{
+				font-size:36pt;
+			}
+			.ibx-label-overlay
+			{
+				color:red;
+				font-size:.33em;
+			}
 		</style>
 	</head>
 	<body class="ibx-root">
 		<div class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="center">
-			<div class="btn-browse" data-ibx-type="ibxButtonBrowse" data-ibxp-multiple="true" data-ibxp-accept="">Browse...</div>
-			<div data-ibx-type="ibxHBox">
-				<div data-ibx-type="ibxMenuButton">Menu
-					<div data-ibx-type="ibxMenu">
-						<div data-ibx-type="ibxMenuItem">Item</div>
-						<div data-ibx-type="ibxMenuItem">Item</div>
-						<div data-ibx-type="ibxMenuItem">Item</div>
-					</div>
-				</div>
-				<div data-ibx-type="ibxMenuButton">Menu
-					<div data-ibx-type="ibxMenu">
-						<div data-ibx-type="ibxMenuItem">Item</div>
-						<div data-ibx-type="ibxMenuItem">Item</div>
-						<div data-ibx-type="ibxMenuItem">Item</div>
-					</div>
-				</div>
-				<div data-ibx-type="ibxMenuButton">Menu
-					<div data-ibx-type="ibxMenu">
-						<div data-ibx-type="ibxMenuItem">Item</div>
-						<div data-ibx-type="ibxMenuItem">Item</div>
-						<div data-ibx-type="ibxMenuItem">Item</div>
-					</div>
-				</div>
+			<div class="test-label" data-ibx-type="ibxLabel" data-ibxp-glyph="face" data-ibxp-glyph-classes="material-icons" data-ibxp-icon-position="top">Overlay Test
+				<div class="ibx-label-overlay" data-ibx-type="ibxLabel" data-ibxp-glyph-classes="fa fa-share" icon="./rensmall.jpg"></div>
 			</div>
 		</div>
 	</body>
