@@ -43,7 +43,7 @@ $.widget("ibi.ibxPopup", $.ibi.ibxWidget,
 	_onPopupCloseKeyEvent:function(e)
 	{
 		if(this.options.escapeToClose && e.keyCode == 27)
-			this.close();
+			this.close("cancel");
 	},
 	_onPopupWindowResize:function(e)
 	{
@@ -73,7 +73,6 @@ $.widget("ibi.ibxPopup", $.ibi.ibxWidget,
 					if(this.options.autoFocus)
 					{
 						//only do focusing if allowed.
-						this.element.find("[tabindex]:not([tabindex=-1])").first().focus();//then the first focusable item
 						this.element.find(".ibx-default-focused").first().focus();//then the first default focused item specified
 					}
 					this._trigger("open");

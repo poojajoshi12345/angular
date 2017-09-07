@@ -101,11 +101,11 @@ $Revision$:-->
 	<markup>
 		<!--inline-->
 		<markup-block>
-			<div class="dialog-template" data-ibx-type="ibxDialog" data-ibx-name-root="true" data-ibxp-default-focused="cancel">
+			<div class="dialog-template" data-ibx-type="ibxDialog" data-ibx-name-root="true" data-ibxp-default-action=".ibx-dialog-ok-button, cancel">
 				<div class="ibx-dialog-main-box" data-ibx-type="ibxVBox" data-ibx-name="vbMain" data-ibxp-align="stretch">
 					<div class="ibx-dialog-title-box" data-ibx-type="ibxHBox" data-ibx-name="titleBox" data-ibxp-align="center">
 						<div class="ibx-title-bar-caption" data-ibx-type="ibxLabel" data-ibx-name="caption" data-ibxp-justify="start"></div>
-						<div class="ibx-title-bar-close-button" tabIndex="1" data-ibx-type="ibxButton" data-ibx-name="titleClose"></div>
+						<div class="ibx-title-bar-close-button" data-ibx-type="ibxButton" data-ibx-name="titleClose"></div>
 					</div>
 					<div class="ibx-dialog-content" data-ibx-type="ibxVBox" data-ibx-name="contentBox" data-ibxp-align="stretch"></div>
 					<div class='ibx-dialog-button-box' data-ibx-type='ibxHBox' data-ibx-name='btnBox' data-ibxp-justify='end' data-ibxp-align='center'>

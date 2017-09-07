@@ -37,6 +37,11 @@
 	margin-top:.25em;
 }
 
+.ibx-dlg-default-action
+{
+	font-weight:900;
+}
+
 .ibx-dialog.std .ibx-dialog-title-box
 {
 	border-radius:.3em;
@@ -159,4 +164,5 @@
 	content:"\E925";
 	color:crimson;
 }
+
 
