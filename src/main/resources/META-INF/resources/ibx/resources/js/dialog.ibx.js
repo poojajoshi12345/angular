@@ -35,7 +35,7 @@ $.widget("ibi.ibxDialog", $.ibi.ibxPopup,
 
 		options.moveHandle = this.titleBox;
 		this.element.on("keydown", this.__onDialogKeyDown.bind(this));
-		this.titleClose.on("click", this.close.bind(this));
+		this.titleClose.on("click", this.close.bind(this, "cancel"));
 		this.btnApply.on("click", this.apply.bind(this));
 		this.btnCancel.on("click", this.close.bind(this, "cancel"));
 		this.btnOK.on("click", this.close.bind(this, "ok"));
