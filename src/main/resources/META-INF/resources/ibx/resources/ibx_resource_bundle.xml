@@ -108,7 +108,8 @@ $Revision$:-->
 						<div class="ibx-title-bar-close-button" data-ibx-type="ibxButton" data-ibx-name="titleClose"></div>
 					</div>
 					<div class="ibx-dialog-content" data-ibx-type="ibxVBox" data-ibx-name="contentBox" data-ibxp-align="stretch"></div>
-					<div class='ibx-dialog-button-box' data-ibx-type='ibxHBox' data-ibx-name='btnBox' data-ibxp-justify='end' data-ibxp-align='stretch'>
+					<div class='ibx-dialog-button-box' data-ibx-type='ibxHBox' data-ibx-name='btnBox' data-ibxp-align='stretch'>
+						<div class="ibx-dialog-button-padding" data-ibx-name="btnPadding"></div>
 						<div class='ibx-dialog-ok-button' data-ibx-type='ibxButton' data-ibx-name='btnOK' data-ibxp-text="OK" tabIndex='0'></div>
 						<div class='ibx-dialog-apply-button' data-ibx-type='ibxButton' data-ibx-name='btnApply' data-ibxp-text="Apply" tabIndex='0'></div>
 						<div class='ibx-dialog-cancel-button' data-ibx-type='ibxButton' data-ibx-name='btnCancel' data-ibxp-text="Cancel" tabIndex='0'></div>
