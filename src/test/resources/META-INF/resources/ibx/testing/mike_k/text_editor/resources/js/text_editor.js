@@ -97,6 +97,7 @@ $.widget("ibi.textEditor", $.ibi.ibxDialog,
 		$(".btnReplaceAll").ibxWidget("option", "disabled", true);
 		$(".btnUndo").ibxWidget("option", "disabled", true);
 		
+		this.element.on("ibx_open", this._onIbxOpen.bind(this)); // On open of the Editor.
 		
 		$(".goToLine").hide();
 		$(".findReplace").hide();
@@ -104,6 +105,11 @@ $.widget("ibi.textEditor", $.ibi.ibxDialog,
 		this.element.resizable();
 		
 		this.btnBox.css("display", "none"); // Editor Dialog OK / Cancel buttons
+	},
+	
+	_onIbxOpen()
+	{
+		//alert("_onIbxOpen");
 	},
 	
 	setEditorPath:function(rootPath, folderPath, fileName) // Public method to setup Editor.
@@ -1266,6 +1272,7 @@ $.widget("ibi.textEditor", $.ibi.ibxDialog,
 
 	_onExit:function(e)
 	{
+		this._clearEditorEnvironment(e);
 		this.close();
 	},
 	
