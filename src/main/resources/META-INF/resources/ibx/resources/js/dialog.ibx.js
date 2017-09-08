@@ -88,7 +88,7 @@ $.widget("ibi.ibxDialog", $.ibi.ibxPopup,
 $.ibi.ibxDialog.createMessageDialog = function(options)
 {
 	options.captionOptions = {text:options.caption};//map caption to proper option.
-	options = $.extend(true, {}, {type:"std", messageOptions:{justify:"start"}}, options);
+	options = $.extend(true, {}, {type:"std", messageOptions:{textWrap:true, justify:"start"}}, options);
 	var msg = $("<div data-ibx-name='message'>").ibxLabel(options.messageOptions).addClass("ibx-dialog-message");
 	var dlg = $("<div>").ibxDialog().ibxDialog("option", options);
 	dlg.ibxWidget("add", msg);

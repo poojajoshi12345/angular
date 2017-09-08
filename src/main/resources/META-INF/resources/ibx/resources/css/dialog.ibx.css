@@ -102,6 +102,11 @@
 	content:"\E14C";
 }
 
+.ibx-dialog-button-padding
+{
+	flex:1 1 auto;
+}
+
 .ibx-dialog-ok-button, .ibx-dialog-cancel-button, .ibx-dialog-apply-button
 {
 	margin:0 3px 0 3px;
