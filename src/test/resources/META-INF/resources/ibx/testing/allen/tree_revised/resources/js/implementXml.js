@@ -51,7 +51,7 @@ xmlDataNode.prototype._setIndexFromData = function(data) {
 };
 
 xmlDataNode.prototype.getDescription = function() {
-  return this.index;
+  return this._data.nodeName + " : " +this.index;
 }
 
 /**
