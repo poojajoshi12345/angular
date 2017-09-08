@@ -67,9 +67,9 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 	},
 	remove:function(el, refresh)
 	{
-		var children = this.children(el)
-		this._itemsBox.ibxWidget("remove", children, refresh);
+		var children = typeof(el) === "string" ? this.children(el) : $(el);
 		children.removeClass("ibx-csl-item");
+		this._itemsBox.ibxWidget("remove", el, refresh);
 		if(refresh)
 			this.refresh();
 	},
@@ -114,7 +114,7 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 			"forward": (steps >= 0),
 			"scrollType": scrollType || options.scrollType,
 			"steps": Math.abs(steps),
-			"nFrames": ((stepRate || options.scrollStepRate)/1000) * 60,
+			"nFrames": ((stepRate !== undefined ? stepRate : options.scrollStepRate)/1000) * 60,
 			"curFrame": 0,
 			"scrollAxis": options.scrollProps.axis,
 			"animationFrameId": null
