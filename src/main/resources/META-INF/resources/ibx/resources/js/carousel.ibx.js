@@ -67,8 +67,9 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 	},
 	remove:function(el, refresh)
 	{
-		this._itemsBox.ibxWidget("remove", el, refresh);
-		$(el).removeClass("ibx-csl-item");
+		var children = this.children(el)
+		this._itemsBox.ibxWidget("remove", children, refresh);
+		children.removeClass("ibx-csl-item");
 		if(refresh)
 			this.refresh();
 	},
@@ -108,28 +109,26 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 			return;
 
 		var options = this.options;
-		scrollType = scrollType || options.scrollType;
-		stepRate = stepRate || options.scrollStepRate;
-		var stepSize = stepSize || this._calcScrollstepSize(forward, scrollType);
 		this._scrollInfo = info = 
 		{
+			"forward": forward,
+			"scrollType": scrollType || options.scrollType,
 			"steps": steps || -1,
-			"scrollType": scrollType,
-			"nFrames": (stepRate/1000) * 60,
+			"stepSize": stepSize,
+			"nFrames": ((stepRate || options.scrollStepRate)/1000) * 60,
 			"curFrame": 0,
 			"scrollAxis": options.scrollProps.axis,
-			"startScroll": this._itemsBox.prop(options.scrollProps.axis),
-			"forward": forward,
-			"stepSize": stepSize,
+			"startScrollPos": this._itemsBox.prop(options.scrollProps.axis),
 			"animationFrameId": null
 		};
+		info.stepSize = stepSize || this._calcScrollstepSize(forward, options.scrollType);
 		info.stepFrame = (forward) ? Math.ceil(info.stepSize/info.nFrames) : Math.floor(info.stepSize/info.nFrames);
 
 		var fnFrame = function(info, timeStamp)
 		{
 			var curScroll = this._itemsBox.prop(info.scrollAxis);
 			var newScroll = curScroll + info.stepFrame;
-			var scrollEnd = info.startScroll + info.stepSize;
+			var scrollEnd = info.startScrollPos + info.stepSize;
 			if((forward && newScroll > scrollEnd) || (!forward && newScroll < scrollEnd))
 			{
 				newScroll = scrollEnd;
@@ -154,7 +153,7 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 				{
 					info.stepSize = this._calcScrollstepSize(info.forward, info.scrollType);
 					info.stepFrame = (forward) ? Math.ceil(info.stepSize/info.nFrames) : Math.floor(info.stepSize/info.nFrames);
-					info.startScroll = this._itemsBox.prop(info.scrollAxis);
+					info.startScrollPos = this._itemsBox.prop(info.scrollAxis);
 					info.curFrame = 0;
 				}
 			}
