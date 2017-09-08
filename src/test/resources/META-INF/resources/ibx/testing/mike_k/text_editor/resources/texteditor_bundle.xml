@@ -3,7 +3,8 @@
 <ibx-res-bundle name="texteditor_bundle.xml">
 	<ibx-package src="{context}/ibxtools/explore/explore_open_dialog.xml"/> <!-- Open/Save Dialog -->	
 	<strings>
-		<string-file src="{res}/com.ibi.intl.bip_editor.bip_editor"  default="true"/>	
+		<string-file src="{res}/com.ibi.intl.bip_editor.bip_editor"  default="true"/>
+		<string-file src="{res}/com.ibi.intl.bip_editor.bip_RTeditor"  default="true"/>	
 		<string-bundle>
 		<![CDATA[
 		]]>
@@ -294,6 +295,58 @@
 				</div>
 			</div>
 			
+			<div class="text-editor-options">
+			
+			</div>
+<!-- 
+	<BiDialog id="editorOptionsDlg" resizable="false" showIcon="false" caption="<%=res.getStringXml("bid_editor_options")%>" showClose="true" showMaximize="false" height="400" minimumHeight="400" width="400" minimumWidth="400" opaque="true">
+		<BiVBox left="0" top="0" right="0" bottom="0" pack="start">
+			<BiCheckBox id="srvChk" memberName="srvChk" memberOf="editorOptionsDlg" text="<%=res.getStringXml("bid_assign_server")%>" margin="7"/>
+			<BiComboBox enabled="false" id="srvList" 
+					memberName="srvList" memberOf="editorOptionsDlg" 
+					margin="7" marginTop="5" preferredWidth="100"/>
+			<BiCheckBox margin="7" id="appChk" memberName="appChk" memberOf="editorOptionsDlg" text="<%=res.getStringXml("bid_assign_app")%>"/>
+			<BiHBox BiBox.flex=".3" align="center">
+				<BiButton id="appBtn" memberName="appBtn" memberOf="editorOptionsDlg" 
+							text="<%=res.getStringXml("bid_load_app_paths")%>" margin="5"/>
+  				<BiComponent BiBox.flex="1"/> 
+			</BiHBox>
+			<BiHBox margin="7" left="7" top="7" right="7" bottom="7">
+				<BiVBox BiBox.flex=".5">
+					<BiLabel text="<%=res.getStringXml("bid_available")%>"/>
+					<BiList tabIndex="6"  id="avlAppList" preferredHeight="125" 
+							memberName="avlAppList" memberOf="editorOptionsDlg" 
+							marginTop="3" multipleSelection="true"/>
+				</BiVBox>
+				<BiVBox pack="center" preferredWidth="18" marginLeft="7" marginRight="7">
+					<BiImage id="selAppBtn" memberName="selAppBtn" tabIndex="7" memberOf="editorOptionsDlg" uri="<%=request.getContextPath()%>/dhtml/images/qb/add_16.png" toolTipText="<%=res.getStringXml("bid_select_app")%>" alt="<%=res.getStringXml("bid_select_app")%>"/>					
+					<BiImage id="delAppBtn" memberName="delAppBtn" tabIndex="8" memberOf="editorOptionsDlg" marginTop="5" uri="<%=request.getContextPath()%>/dhtml/images/qb/remove_16.png" toolTipText="<%=res.getStringXml("bid_do_not_select_app")%>" alt="<%=res.getStringXml("bid_do_not_select_app")%>"/>					
+				</BiVBox>
+				<BiVBox BiBox.flex=".5">
+					<BiHBox>
+						<BiLabel text="<%=res.getStringXml("bid_selected")%>"/>
+						<BiComponent BiBox.Flex="1"/>
+						<BiImage id="appUp" memberName="appUp" memberOf="editorOptionsDlg" uri="<%=request.getContextPath()%>/dhtml/images/qb/move_up_16.png" toolTipText="<%=res.getStringXml("bid_appUp")%>" alt="<%=res.getStringXml("bid_appUp")%>"/>					
+						<BiImage id="appDown" memberName="appDown" memberOf="editorOptionsDlg" marginLeft="7" uri="<%=request.getContextPath()%>/dhtml/images/qb/move_down_16.png" toolTipText="<%=res.getStringXml("bid_appDown")%>" alt="<%=res.getStringXml("bid_appDown")%>"/>
+					</BiHBox>					
+					<BiList tabIndex="9" id="selAppList" preferredHeight="125" 
+							memberName="selAppList" memberOf="editorOptionsDlg" 
+							marginTop="3" multipleSelection="true"/>
+				</BiVBox>
+			</BiHBox>
+			<BiVBox id="runtimeFlags" memberName="runtimeFlags" memberOf="editorOptionsDlg" margin="7">
+				<BiCheckBox tabIndex="10" paddingBottom="5" id="paramPrompt" memberName="paramPrompt" memberOf="editorOptionsDlg" text="<%=res.getStringXml("bid_promptParm")%>"/>
+			</BiVBox>
+			<BiVBox pack="end" margin="7" BiBox.flex="1">
+				<BiHBox pack="end" marginBottom="7">
+					<BiButton tabIndex="11"  text="<%=res.getStringXml("bid_OK")%>" id="btnOK" memberName="btnOK" memberOf="editorOptionsDlg" marginRight="5" marginBottom="5" preferredHeight="20"/>
+					<BiButton tabIndex="12"  text="<%=res.getStringXml("bid_reset")%>" id="btnReset" memberName="btnReset" memberOf="editorOptionsDlg" marginRight="5" marginBottom="5" preferredHeight="20"/>
+					<BiButton tabIndex="13"  text="<%=res.getStringXml("bid_cancel")%>" id="btnCancel" memberName="btnCancel" marginBottom="5" memberOf="editorOptionsDlg" />
+				</BiHBox>
+			</BiVBox>
+		</BiVBox>
+	</BiDialog>
+-->			
 
 		</markup-block>
 	</markup>
