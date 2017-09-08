@@ -28,6 +28,7 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 		{
 			"axis":"scrollLeft",
 			"size":"offsetWidth",
+			"pageSize":"pageWidth",
 			"forward":{"child":"right", "page":"scrollRight"},
 			"backward":{"child":"left", "page":"scrollLeft"},
 		},//html props to use for calculating scroll position/delta
@@ -170,10 +171,8 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 	},
 	_onPageMarkerClick:function(e)
 	{
-		var pageMarker = $(e.currentTarget);
-		var markerInfo = pageMarker.data("ibxPageMarkerInfo");
-		this._itemsBox.prop("scrollLeft", markerInfo.pageInfo.pageWidth * markerInfo.pageNo);
-		this._adjustPageMarkers();
+		var markerInfo = $(e.currentTarget).data("ibxPageMarkerInfo");
+		this.page(markerInfo.pageNo);
 	},
 	_adjustPageMarkers:function()
 	{
@@ -261,7 +260,7 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 		var pageNo = (pageNo == -1) ? info.curPage : pageNo;
 		if(pageNo <= info.pages-1)
 		{
-			this._itemsBox.prop("scrollLeft", info.pageWidth * pageNo);
+			this._itemsBox.prop(this.options.scrollProps.axis, info[this.options.scrollProps.pageSize] * pageNo);
 			this._adjustPageMarkers();
 		}
 		return this;
@@ -298,8 +297,8 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 			: this._pageMarkers.insertAfter(this._itemsContainer);
 	}
 });
-
 $.widget("ibi.ibxHCarousel", $.ibi.ibxCarousel,{_widgetClass:"ibx-h-carousel"});
+
 $.widget("ibi.ibxVCarousel", $.ibi.ibxCarousel,
 {
 	options:
@@ -309,6 +308,7 @@ $.widget("ibi.ibxVCarousel", $.ibi.ibxCarousel,
 		{
 			"axis":"scrollTop",
 			"size":"offsetHeight",
+			"pageSize":"pageHeight",
 			"forward":{"child":"bottom", "page":"scrollBottom"},
 			"backward":{"child":"top", "page":"scrollTop"},
 		},
@@ -339,10 +339,8 @@ $.widget("ibi.ibxVCarousel", $.ibi.ibxCarousel,
 	},
 	_onPageMarkerClick:function(e)
 	{
-		var pageMarker = $(e.currentTarget);
-		var markerInfo = pageMarker.data("ibxPageMarkerInfo");
-		this._itemsBox.prop("scrollTop", markerInfo.pageHeight * markerInfo.pageNo);
-		this._adjustPageMarkers();
+		var markerInfo = $(e.currentTarget).data("ibxPageMarkerInfo");
+		this.page(markerInfo.pageNo);
 	},
 	_adjustPageMarkers:function()
 	{
