@@ -44,7 +44,7 @@ page import="org.owasp.esapi.*"
 			{
 				$(".btn-show-text-editor").on("click", function()
 				{
-					$(".text-editor").ibxWidget("setEditorPath", "IBFS:/WFC/Repository/", "", "");
+					$(".text-editor").ibxWidget("setEditorPath", "IBFS:/WFC/Repository", "IBFS:/WFC/Repository/Public", "");
 					
 					$(".text-editor").ibxWidget("open");
 				});
