@@ -105,10 +105,8 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 	_scrollInfo:null,
 	scroll:function(steps, scrollType, stepRate)
 	{
-		if(this._scrollInfo)
+		if(this._scrollInfo || !steps)
 			return;
-
-		this.stop();
 
 		var options = this.options;
 		this._scrollInfo = info = 
@@ -142,7 +140,7 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 			if(++info.curFrame >= info.nFrames)
 			{
 				this._adjustPageMarkers();
-				if(info.stop || --info.steps == 0)
+				if(info.stop || --info.steps <= 0)
 				{
 					window.cancelAnimationFrame(info.animationFrameId)
 					this._scrollInfo = null;
@@ -255,13 +253,17 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 		if(pageNo === undefined)
 			return info.curPage;
 
+		var newPage = pageNo - info.curPage
+		this.scroll(newPage, "page");
+
+/*
 		var pageNo = (pageNo == -1) ? info.curPage : pageNo;
 		if(pageNo <= info.pages-1)
 		{
 			this._itemsBox.prop(this.options.scrollProps.axis, info[this.options.scrollProps.pageSize] * pageNo);
 			this._adjustPageMarkers();
 		}
-		return this;
+*/
 	},
 	option:function(key, value)
 	{
