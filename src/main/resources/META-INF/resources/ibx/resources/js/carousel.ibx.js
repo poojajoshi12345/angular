@@ -56,7 +56,7 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 	children:function(selector)
 	{
 		selector = selector || ".ibx-csl-item";
-		return this._itemsBox.children(selector);
+		return this._itemsBox.ibxWidget("children", selector);
 	},
 	add:function(el, sibling, before, refresh)
 	{
@@ -67,9 +67,9 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 	},
 	remove:function(el, refresh)
 	{
-		var children = typeof(el) === "string" ? this.children(el) : $(el);
+		var children = (!el || typeof(el) === "string") ? this.children(el) : $(el);
 		children.removeClass("ibx-csl-item");
-		this._itemsBox.ibxWidget("remove", el, refresh);
+		this._itemsBox.ibxWidget("remove", children, refresh);
 		if(refresh)
 			this.refresh();
 	},
