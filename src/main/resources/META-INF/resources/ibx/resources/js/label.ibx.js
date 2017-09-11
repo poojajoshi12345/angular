@@ -82,7 +82,7 @@ $.widget("ibi.ibxLabel", $.ibi.ibxFlexBox,
 		this._glyph.detach();
 		this._text.detach();
 		this.element.prepend(glyphVisible ? this._glyph : null, options.text ? this._text : null);
-		this.element.toggleClass("ibx-label-no-icon", (!options.icon && !glyphVisible));
+		this.element.toggleClass("ibx-label-no-icon", !glyphVisible).toggleClass("ibx-icon-only", !options.text);
 
 		//save the current option values...this is to optimize the next refresh
 		this._lastOptions = $.extend({}, options);

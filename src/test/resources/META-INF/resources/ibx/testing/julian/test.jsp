@@ -25,8 +25,6 @@
 				{
 					var label = $(this);
 					var options = label.ibxWidget("option");
-					options.icon = options.icon ? "" : "./ren1.png";
-					label.ibxWidget("option", options);
 				});
 			}, [{"src":"./test_res_bundle.xml", "loadContext":"app"}], true);
 		</script>
@@ -51,7 +49,9 @@
 
 			.test-label
 			{
-				font-size:24pt;
+				xfont-size:6em;
+				width:80px;
+				height:80px;
 			}
 			.ibx-label-overlay
 			{
@@ -62,10 +62,10 @@
 	</head>
 	<body class="ibx-root">
 		<div class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="center" data-ibxp-justify="center">
-			<div class="test-label" data-ibx-type="ibxLabel" data-ibxp-icon="./ren1.png" >Overlay Test
-				<div class="ibx-label-overlay" data-ibx-type="ibxLabel" data-ibxp-glyph-classes="fa fa-share"></div>
+			<div class="test-label" data-ibx-type="ibxLabel" data-ibxp-icon="./ren1.png" data-ibxp-align="stretch">
 			</div>
 		</div>
+				<div class="ibx-label-overlay" data-ibx-type="ibxLabel" data-ibxp-glyph-classes="fa fa-share"></div>
 	</body>
 </html>
 
