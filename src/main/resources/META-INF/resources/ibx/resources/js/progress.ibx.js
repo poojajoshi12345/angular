@@ -77,7 +77,7 @@ $.widget("ibi.ibxWaiting", $.ibi.ibxLabel,
 	_refresh:function()
 	{
 		var options = this.options;
-		this._icon.toggleClass("wait-stretch", options.stretch)
+		this._glyph.toggleClass("wait-stretch", options.stretch)
 		this._super();
 	}
 });
