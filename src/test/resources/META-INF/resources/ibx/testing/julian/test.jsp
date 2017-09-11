@@ -21,6 +21,13 @@
 			<jsp:include page="/WEB-INF/jsp/global/wf_globals.jsp" flush="false" />
 			ibx(function()
 			{
+				$(".test-label").on("click", function(e)
+				{
+					var label = $(this);
+					var options = label.ibxWidget("option");
+					options.icon = options.icon ? "" : "./ren1.png";
+					label.ibxWidget("option", options);
+				});
 			}, [{"src":"./test_res_bundle.xml", "loadContext":"app"}], true);
 		</script>
 		<style type="text/css">
@@ -44,7 +51,7 @@
 
 			.test-label
 			{
-				font-size:36pt;
+				font-size:24pt;
 			}
 			.ibx-label-overlay
 			{
@@ -55,7 +62,7 @@
 	</head>
 	<body class="ibx-root">
 		<div class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="center" data-ibxp-justify="center">
-			<div class="test-label" data-ibx-type="ibxLabel" data-ibxp-icon="./ren1.png" data-ibxp-glyph="face" data-ibxp-glyph-classes="material-icons">Overlay Test
+			<div class="test-label" data-ibx-type="ibxLabel" data-ibxp-icon="./ren1.png" >Overlay Test
 				<div class="ibx-label-overlay" data-ibx-type="ibxLabel" data-ibxp-glyph-classes="fa fa-share"></div>
 			</div>
 		</div>

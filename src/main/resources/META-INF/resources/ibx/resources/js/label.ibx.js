@@ -8,13 +8,12 @@ $.widget("ibi.ibxLabel", $.ibi.ibxFlexBox,
 		"text":"",
 		"textWrap":false,
 		"textAlign":"",
-		"icon":"",
 		"iconPosition":"left",
+		"icon":"",
+		"iconClasses":"ibx-label-icon",
 		"glyph":"",
 		"glyphClasses":"",
 		"textElClass":"ibx-label-text",
-		"iconElClass":"ibx-label-icon",
-		"iconElSpacerClass":"ibx-icon-spacer",
 		"glyphElClass":"ibx-label-glyph",
 		"glyphElSpacerClass":"ibx-glyph-spacer",
 		"forId":"",
@@ -38,14 +37,12 @@ $.widget("ibi.ibxLabel", $.ibi.ibxFlexBox,
 		options.text = options.text || this.element.textNodes().remove().text().replace(/^\s*|\s*$/g, "");
 
 		//add the sub-elements
-		this._icon = $("<img>").addClass(options.iconElClass);
 		this._glyph = $("<label>").addClass(options.glyphElClass);
 		this._text = $("<label>").addClass(options.textElClass);
 	},
 	_destroy:function()
 	{
 		this._super();
-		this._icon.remove();
 		this._glyph.remove();
 		this._text.remove();
 		this.element.removeClass("icon-left icon-top icon-right icon-bottom")
@@ -55,13 +52,13 @@ $.widget("ibi.ibxLabel", $.ibi.ibxFlexBox,
 		var options = this.options;
 		var lastOptions = this._lastOptions || {};
 
-		//only update if changed
-		if(options.icon != lastOptions.icon)
-			this._icon.prop("src", options.icon)
-		this._icon.removeClass(lastOptions.iconElClass).addClass(options.iconElClass);
+		var glyphVisible = options.icon || options.glyph || options.glyphClasses;
 
 		//only update if changed
-		var glyphVisible = options.glyph || options.glyphClasses;
+		if(options.icon != lastOptions.icon)
+			this._glyph.removeClass(lastOptions.iconClasses).addClass(options.iconClasses).css("backgroundImage", sformat("url('{1}')", options.icon));
+
+		//only update if changed
 		if(options.glyph != lastOptions.glyph || options.glyphClasses != lastOptions.glyphClasses)
 			this._glyph.html(options.glyph);	
 		this._glyph.removeClass(lastOptions.glyphClasses).addClass(options.glyphClasses).addClass(options.glyphElClass);
@@ -72,15 +69,7 @@ $.widget("ibi.ibxLabel", $.ibi.ibxFlexBox,
 		this._text.removeClass(lastOptions.textElClass).addClass(options.textElClass).css({"text-align":options.textAlign, "white-space":options.textWrap ? "" : "nowrap"});
 
 		//add appropriate spacer classes
-		if(options.icon && (options.text || options.glyph || options.glyphClasses))
-			this._icon.addClass(this.options.iconElSpacerClass);
-		else
-			this._icon.removeClass(this.options.iconElSpacerClass);
-
-		if((options.glyph || options.glyphClasses) && options.text)
-			this._glyph.addClass(this.options.glyphElSpacerClass);
-		else
-			this._glyph.removeClass(this.options.glyphElSpacerClass);
+		this._glyph.toggleClass(this.options.glyphElSpacerClass, !!((options.icon || options.glyph || options.glyphClasses) && options.text));
 
 		//general options maintenance
 		this.element.removeClass("icon-left icon-top icon-right icon-bottom")
@@ -90,10 +79,9 @@ $.widget("ibi.ibxLabel", $.ibi.ibxFlexBox,
 		this._super();
 
 		//don't bloat the DOM...just add what's needed...use prepend so that these are the first children.
-		this._icon.detach();
 		this._glyph.detach();
 		this._text.detach();
-		this.element.prepend(options.icon ? this._icon : null, glyphVisible ? this._glyph : null, options.text ? this._text : null);
+		this.element.prepend(glyphVisible ? this._glyph : null, options.text ? this._text : null);
 		this.element.toggleClass("ibx-label-no-icon", (!options.icon && !glyphVisible));
 
 		//save the current option values...this is to optimize the next refresh

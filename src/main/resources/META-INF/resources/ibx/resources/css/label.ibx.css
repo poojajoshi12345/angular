@@ -22,22 +22,30 @@
 {
 	font-size:inherit; /*because material-icons defines a default font size as 24px.*/
 }
+.ibx-label-icon
+{
+	background-size:contain;
+	background-repeat:no-repeat;
+	background-position:center;
+	min-width:1em;
+	min-height:1em;
+}
 
 .icon-left .ibx-label-glyph.ibx-glyph-spacer, .icon-left .ibx-label-icon.ibx-icon-spacer
 {
-	margin-right:.25em;
+	margin-right:.15em;
 }
 .icon-right .ibx-label-glyph.ibx-glyph-spacer, .icon-right .ibx-label-icon.ibx-icon-spacer
 {
-	margin-left:.25em;
+	margin-left:.15em;
 }
 .icon-top .ibx-label-glyph.ibx-glyph-spacer, .icon-top .ibx-label-icon.ibx-icon-spacer
 {
-	margin-bottom:.25em;
+	margin-bottom:.15em;
 }
 .icon-bottom .ibx-label-glyph.ibx-glyph-spacer, .icon-bottom .ibx-label-icon.ibx-icon-spacer
 {
-	margin-top:.25em;
+	margin-top:.15em;
 }
 
 .ibx-label-icon
