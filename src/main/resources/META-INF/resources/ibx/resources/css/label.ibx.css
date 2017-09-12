@@ -89,7 +89,7 @@
 
 
 /****OVERLAY SUPPORT****/
-.ibx-label-overlay
+.ibx-label-overlay-frame
 {
 	display:flex;
 	position:absolute;
@@ -97,17 +97,23 @@
 	top:0px;
 	right:0px;
 	bottom:0px;
-	font-size:.33em;
+}
+
+.ibx-label-overlay
+{
+	font-size:.25em;
 }
 
 /*top-center*/
 .tc
 {
+	align-items:flex-start;
 	justify-content:center;
 }
 /*top-right*/
 .tr
 {
+	align-items:flex-start;
 	justify-content:flex-end;
 }
 /*right-center*/
@@ -137,6 +143,11 @@
 .lc
 {
 	align-items:center;
+}
+/*left-center*/
+.lt
+{
+	align-items:flex-start;
 }
 /*center-center*/
 .cc

@@ -68,41 +68,37 @@
 				font-size:6em;
 			}
 
-			.x
+			.test-label .ibx-label-overlay
 			{
-				width:300px;
-				height:300px;
-				border:1px solid lime;
+				padding:2px;
+				border:1px solid black;
+				background-color:white;
 			}
 		</style>
 	</head>
 	<body class="ibx-root">
 		<div class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="center" data-ibxp-justify="center">
-			<div class="test-label" data-ibx-type="ibxLabel"
-				data-ibxp-overlays=
-				'[
-					{"position":"bl", "glyph":"" ,"glyphClasses":"fa fa-share"},
-				]'
-				data-ibxp-icon="./xren1.png" data-ibxp-glyph="" data-ibxp-glyph-classes="fa fa-gear">Julian
+			<div class="test-label" data-ibx-type="ibxLabel" data-ibxp-glyph-classes="fa fa-cogs" data-ibxp-overlays="[{'position':'bl', 'glyphClasses':'fa fa-share'}]">Test Label
 			</div>
 		</div>
 	</body>
 </html>
 
 
-
-			<div style="display:none;" class="test-label" data-ibx-type="ibxLabel"
-				data-ibxp-overlays=
-				'[
-					{"position":"tc", "glyph":"face" ,"glyphClasses":"material-icons"},
-					{"position":"tr", "glyph":"face" ,"glyphClasses":"material-icons"},
-					{"position":"rc", "glyph":"face" ,"glyphClasses":"material-icons"},
-					{"position":"lb", "glyph":"" ,"glyphClasses":"fa fa-share"},
-					{"position":"bc", "glyph":"face" ,"glyphClasses":"material-icons"},
-					{"position":"bl", "glyph":"face" ,"glyphClasses":"material-icons"},
-					{"position":"lc", "glyph":"face" ,"glyphClasses":"material-icons"},
-					{"position":"lt", "glyph":"face" ,"glyphClasses":"material-icons"},
-					{"position":"cc", "glyph":"face" ,"glyphClasses":"material-icons"},
-				]'
-				data-ibxp-icon="./ren1.png" data-ibxp-glyph="face" data-ibxp-glyph-classes="material-icons">Julian
-			</div>
+<!--
+<div style="display:none;" class="test-label" data-ibx-type="ibxLabel"
+	data-ibxp-overlays=
+	'[
+		{"position":"tc", "glyph":"face" ,"glyphClasses":"material-icons"},
+		{"position":"tr", "glyph":"face" ,"glyphClasses":"material-icons"},
+		{"position":"rc", "glyph":"face" ,"glyphClasses":"material-icons"},
+		{"position":"rb", "glyph":"face" ,"glyphClasses":"material-icons xfa xfa-share"},
+		{"position":"bc", "glyph":"face" ,"glyphClasses":"material-icons"},
+		{"position":"bl", "glyph":"face" ,"glyphClasses":"material-icons"},
+		{"position":"lc", "glyph":"face" ,"glyphClasses":"material-icons"},
+		{"position":"lt", "glyph":"face" ,"glyphClasses":"material-icons"},
+		{"position":"cc", "glyph":"face" ,"glyphClasses":"material-icons"},
+	]'
+	data-ibxp-icon="./ren1.png" data-ibxp-glyph="face" data-ibxp-glyph-classes="material-icons">Julian
+</div>
+-->

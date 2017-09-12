@@ -93,10 +93,11 @@ $.widget("ibi.ibxLabel", $.ibi.ibxFlexBox,
 		for(var i = 0; i < options.overlays.length; ++i)
 		{
 			var overlay = options.overlays[i];
-			var el = $("<label class='ibx-label-overlay'>").addClass(overlay.position).addClass(overlay.glyphClasses);
-			el.css("backgroundImage", sformat("url('{1}')", overlay.icon)).addClass("ibx-label-overlay-icon");
-			el.text(overlay.glyph);
-			this._glyph.append(el);
+			var elFrame = $("<label class='ibx-label-overlay-frame'>").addClass(overlay.position)
+			this._glyph.append(elFrame);
+			
+			var elOverlay = $("<span class='ibx-label-overlay'>").addClass(overlay.glyphClasses).text(overlay.glyph);
+			elFrame.append(elOverlay);
 		}
 
 
