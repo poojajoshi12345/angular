@@ -86,3 +86,53 @@
 {
 	order: -1;
 }
+
+
+/****OVERLAY SUPPORT****/
+.ibx-label-overlay
+{
+	display:flex;
+	position:absolute;
+	left:0px;
+	top:0px;
+	right:0px;
+	bottom:0px;
+	font-size:.25em;
+}
+
+.tc
+{
+	justify-content:center;
+}
+.tr
+{
+	justify-content:flex-end;
+}
+.rc
+{
+	align-items:center;
+	justify-content:flex-end;
+}
+.rb
+{
+	align-items:flex-end;
+	justify-content:flex-end;
+}
+.bc
+{
+	align-items:flex-end;
+	justify-content:center;
+}
+.bl
+{
+	align-items:flex-end;
+}
+.lc
+{
+	align-items:center;
+}
+.cc
+{
+	align-items:center;
+	justify-content:center;
+}

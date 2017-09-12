@@ -18,6 +18,10 @@ $.widget("ibi.ibxLabel", $.ibi.ibxFlexBox,
 		"glyphElSpacerClass":"ibx-glyph-spacer",
 		"forId":"",
 
+		"overlays":
+		[
+		],
+
 		/*ibxFlexBox default options*/
 		"inline":true,
 		"wrap":"false",
@@ -83,6 +87,18 @@ $.widget("ibi.ibxLabel", $.ibi.ibxFlexBox,
 		this._text.detach();
 		this.element.prepend((options.icon || glyphVisible) ? this._glyph : null, options.text ? this._text : null);
 		this.element.toggleClass("ibx-label-no-icon", !glyphVisible).toggleClass("ibx-icon-only", !glyphVisible && !options.text);
+
+		//handle overlays
+		this._glyph.remove(".ibx-label-overlay");
+		for(var i = 0; i < options.overlays.length; ++i)
+		{
+			var overlay = options.overlays[i];
+			var el = $("<label class='ibx-label-overlay'>").addClass(overlay.position).addClass(overlay.glyphClasses);
+			el.css("backgroundImage", sformat("url('{1}')", overlay.icon)).addClass("ibx-label-overlay-icon");
+			el.text(overlay.glyph);
+			this._glyph.append(el);
+		}
+
 
 		//save the current option values...this is to optimize the next refresh
 		this._lastOptions = $.extend({}, options);

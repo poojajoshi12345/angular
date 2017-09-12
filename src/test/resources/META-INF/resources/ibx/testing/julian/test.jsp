@@ -21,12 +21,28 @@
 			<jsp:include page="/WEB-INF/jsp/global/wf_globals.jsp" flush="false" />
 			ibx(function()
 			{
-				$(".test-label").on("click", function(e)
+				$.widget("ibi.ibxIconOverlay", $.ibi.ibxWidget, 
 				{
-					var label = $(this);
-					var options = label.ibxWidget("option");
+					options:
+					{
+					},
+					_widgetClass:"ibx-icon-overlay",
+					_create:function()
+					{
+						this._super();
+						var label = this._label = $("<label>");
+					},
+					_destroy:function()
+					{
+						this._super();
+					},
+					_refresh:function()
+					{
+						this._super();
+					}
 				});
-			}, [{"src":"./test_res_bundle.xml", "loadContext":"app"}], true);
+				ibx.bindElements();
+			}, [{"src":"./test_res_bundle.xml", "loadContext":"app"}], false);
 		</script>
 		<style type="text/css">
 			html, body
@@ -49,23 +65,44 @@
 
 			.test-label
 			{
-				xfont-size:6em;
-				width:80px;
-				height:80px;
+				font-size:6em;
 			}
-			.ibx-label-overlay
+
+			.x
 			{
-				color:red;
-				font-size:.33em;
+				width:300px;
+				height:300px;
+				border:1px solid lime;
 			}
 		</style>
 	</head>
 	<body class="ibx-root">
 		<div class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="center" data-ibxp-justify="center">
-			<div class="test-label" data-ibx-type="ibxLabel" data-ibxp-icon="./ren1.png" data-ibxp-align="stretch">
+			<div class="test-label" data-ibx-type="ibxLabel"
+				data-ibxp-overlays=
+				'[
+					{"position":"rb", "glyph":"" ,"glyphClasses":"fa fa-share"},
+				]'
+				data-ibxp-glyph="face" data-ibxp-glyph-classes="material-icons">Julian
 			</div>
 		</div>
-				<div class="ibx-label-overlay" data-ibx-type="ibxLabel" data-ibxp-glyph-classes="fa fa-share"></div>
 	</body>
 </html>
 
+
+
+			<div class="test-label" data-ibx-type="ibxLabel"
+				data-ibxp-overlays=
+				'[
+					{"position":"tc", "glyph":"face" ,"glyphClasses":"material-icons"},
+					{"position":"tr", "glyph":"face" ,"glyphClasses":"material-icons"},
+					{"position":"rc", "glyph":"face" ,"glyphClasses":"material-icons"},
+					{"position":"rb", "glyph":"" ,"glyphClasses":"fa fa-share"},
+					{"position":"bc", "glyph":"face" ,"glyphClasses":"material-icons"},
+					{"position":"bl", "glyph":"face" ,"glyphClasses":"material-icons"},
+					{"position":"lc", "glyph":"face" ,"glyphClasses":"material-icons"},
+					{"position":"lt", "glyph":"face" ,"glyphClasses":"material-icons"},
+					{"position":"cc", "glyph":"face" ,"glyphClasses":"material-icons"},
+				]'
+				data-ibxp-icon="./ren1.png" data-ibxp-glyph="face" data-ibxp-glyph-classes="material-icons">Julian
+			</div>

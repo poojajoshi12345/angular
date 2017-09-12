@@ -255,8 +255,14 @@ ibx.getIbxMarkupOptions = function(el)
 			var props = prop.split(".");
 			prop = $.camelCase(props.shift());
 			prop += props.length ? sformat(".{1}", props.join(".")) : "";
-			var option = attr.value[0] == "{" ? this.parseIbxOptions(attr.value) : null; //check for '{' to see if we parse as object.
-			options[prop] = option ? $.extend(true, options[prop], option) : attr.value;
+			var option = (attr.value[0] == "{" || attr.value[0] == "[") ? this.parseIbxOptions(attr.value) : null; //check for '{' to see if we parse as object.
+			if(option instanceof Array)
+				options[prop] = option;
+			else
+			if(option instanceof Object)
+				options[prop] = $.extend(true, options[prop], option)
+			else
+				options[prop] = attr.value;
 		}
 	}
 
