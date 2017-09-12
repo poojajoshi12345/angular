@@ -81,9 +81,9 @@
 			<div class="test-label" data-ibx-type="ibxLabel"
 				data-ibxp-overlays=
 				'[
-					{"position":"rb", "glyph":"" ,"glyphClasses":"fa fa-share"},
+					{"position":"bl", "glyph":"" ,"glyphClasses":"fa fa-share"},
 				]'
-				data-ibxp-glyph="face" data-ibxp-glyph-classes="material-icons">Julian
+				data-ibxp-icon="./xren1.png" data-ibxp-glyph="" data-ibxp-glyph-classes="fa fa-gear">Julian
 			</div>
 		</div>
 	</body>
@@ -91,13 +91,13 @@
 
 
 
-			<div class="test-label" data-ibx-type="ibxLabel"
+			<div style="display:none;" class="test-label" data-ibx-type="ibxLabel"
 				data-ibxp-overlays=
 				'[
 					{"position":"tc", "glyph":"face" ,"glyphClasses":"material-icons"},
 					{"position":"tr", "glyph":"face" ,"glyphClasses":"material-icons"},
 					{"position":"rc", "glyph":"face" ,"glyphClasses":"material-icons"},
-					{"position":"rb", "glyph":"" ,"glyphClasses":"fa fa-share"},
+					{"position":"lb", "glyph":"" ,"glyphClasses":"fa fa-share"},
 					{"position":"bc", "glyph":"face" ,"glyphClasses":"material-icons"},
 					{"position":"bl", "glyph":"face" ,"glyphClasses":"material-icons"},
 					{"position":"lc", "glyph":"face" ,"glyphClasses":"material-icons"},
