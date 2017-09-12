@@ -21,7 +21,9 @@
 .ibx-label-glyph
 {
 	font-size:inherit; /*because material-icons defines a default font size as 24px.*/
+	position:relative;
 }
+
 .ibx-label-icon
 {
 	background-size:contain;
@@ -33,6 +35,7 @@
 
 .ibx-icon-only .ibx-label-icon
 {
+	align-self:stretch;
 	flex:1 1 auto;
 }
 

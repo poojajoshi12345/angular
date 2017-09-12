@@ -52,7 +52,7 @@ $.widget("ibi.ibxLabel", $.ibi.ibxFlexBox,
 		var options = this.options;
 		var lastOptions = this._lastOptions || {};
 
-		var glyphVisible = options.icon || options.glyph || options.glyphClasses;
+		var glyphVisible = options.glyph || options.glyphClasses;
 
 		//only update if changed
 		if(options.icon != lastOptions.icon)
@@ -81,8 +81,8 @@ $.widget("ibi.ibxLabel", $.ibi.ibxFlexBox,
 		//don't bloat the DOM...just add what's needed...use prepend so that these are the first children.
 		this._glyph.detach();
 		this._text.detach();
-		this.element.prepend(glyphVisible ? this._glyph : null, options.text ? this._text : null);
-		this.element.toggleClass("ibx-label-no-icon", !glyphVisible).toggleClass("ibx-icon-only", !options.text);
+		this.element.prepend((options.icon || glyphVisible) ? this._glyph : null, options.text ? this._text : null);
+		this.element.toggleClass("ibx-label-no-icon", !glyphVisible).toggleClass("ibx-icon-only", !glyphVisible && !options.text);
 
 		//save the current option values...this is to optimize the next refresh
 		this._lastOptions = $.extend({}, options);
