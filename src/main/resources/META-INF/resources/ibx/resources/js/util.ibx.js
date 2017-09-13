@@ -20,7 +20,7 @@ function sformat()
 		"isEdge": ((ua.match(".*Windows NT 10.0.*") != null) && (ua.match(".*Edge*.") != null)),
 		"isIE": (ua.match(".*Trident.*") != null),
 		"isFirefox": (ua.match(".*Firefox.*") != null),
-		"isAndroid": (ua.match(".*Andoid.*") != null),
+		"isAndroid": (ua.match(".*Android.*") != null),
 		"isChrome": (ua.match(".*Chrome.*") != null),
 		"isiPad": (ua.match(".*iPad.*") != null),
 		"isiPhone": (ua.match(".*iPhone.*") != null)
