@@ -89,7 +89,7 @@ $.widget("ibi.ibxLabel", $.ibi.ibxFlexBox,
 		this.element.toggleClass("ibx-label-no-icon", !glyphVisible).toggleClass("ibx-icon-only", !glyphVisible && !options.text);
 
 		//handle overlays
-		this._glyph.remove(".ibx-label-overlay");
+		this._glyph.children(".ibx-label-overlay-frame").remove();
 		for(var i = 0; i < options.overlays.length; ++i)
 		{
 			var overlay = options.overlays[i];
