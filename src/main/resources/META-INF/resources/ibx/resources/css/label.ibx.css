@@ -104,6 +104,11 @@
 	font-size:.25em;
 }
 
+/*top-left*/
+.tl
+{
+	align-items:flex-start;
+}
 /*top-center*/
 .tc
 {
@@ -116,17 +121,10 @@
 	align-items:flex-start;
 	justify-content:flex-end;
 }
-/*right-center*/
-.rc
-{
-	align-items:center;
-	justify-content:flex-end;
-}
-/*right-bottom*/
-.rb
+/*bottom-left*/
+.bl
 {
 	align-items:flex-end;
-	justify-content:flex-end;
 }
 /*bottom-center*/
 .bc
@@ -134,20 +132,22 @@
 	align-items:flex-end;
 	justify-content:center;
 }
-/*bottom-left*/
-.bl
+/*bottom-right*/
+.br
 {
 	align-items:flex-end;
+	justify-content:flex-end;
 }
 /*left-center*/
 .lc
 {
 	align-items:center;
 }
-/*left-center*/
-.lt
+/*right-center*/
+.rc
 {
-	align-items:flex-start;
+	align-items:center;
+	justify-content:flex-end;
 }
 /*center-center*/
 .cc

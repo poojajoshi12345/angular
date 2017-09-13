@@ -60,7 +60,7 @@ $.widget("ibi.ibxLabel", $.ibi.ibxFlexBox,
 
 		//only update if changed
 		if(options.icon != lastOptions.icon)
-			this._glyph.removeClass(lastOptions.iconClasses).addClass(options.iconClasses).css("backgroundImage", sformat("url('{1}')", options.icon));
+			this._glyph.removeClass(lastOptions.iconClasses).addClass(options.iconClasses).css("backgroundImage", options.icon ? sformat("url('{1}')", options.icon) : "");
 
 		//only update if changed
 		if(options.glyph != lastOptions.glyph || options.glyphClasses != lastOptions.glyphClasses)
