@@ -8,19 +8,18 @@ $.widget("ibi.ibxLabel", $.ibi.ibxFlexBox,
 		"text":"",
 		"textWrap":false,
 		"textAlign":"",
+		"textElClass":"ibx-label-text",
 		"iconPosition":"left",
 		"icon":"",
 		"iconClasses":"ibx-label-icon",
 		"glyph":"",
 		"glyphClasses":"",
-		"textElClass":"ibx-label-text",
 		"glyphElClass":"ibx-label-glyph",
 		"glyphElSpacerClass":"ibx-glyph-spacer",
 		"forId":"",
 
-		"overlays":
-		[
-		],
+		/*label overlays...array of objects: {"position":"xx", "glyph":"xx", "glyphClasses":"xx", "icon":"xx"}*/
+		"overlays":[],
 
 		/*ibxFlexBox default options*/
 		"inline":true,
