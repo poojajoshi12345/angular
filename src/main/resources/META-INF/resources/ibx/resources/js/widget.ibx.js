@@ -448,6 +448,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 						this._dispatchDragEvent(e, "ibx_filesuploading", this.element, e.relatedTarget, deferred);
 					}
 					e.preventDefault();
+					e.stopPropagation();
 					break;
 			}
 		},

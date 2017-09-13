@@ -21,28 +21,15 @@
 			<jsp:include page="/WEB-INF/jsp/global/wf_globals.jsp" flush="false" />
 			ibx(function()
 			{
-				$.widget("ibi.ibxIconOverlay", $.ibi.ibxWidget, 
+				$("body").on("dragenter dragleave", function(e)
 				{
-					options:
-					{
-					},
-					_widgetClass:"ibx-icon-overlay",
-					_create:function()
-					{
-						this._super();
-						var label = this._label = $("<label>");
-					},
-					_destroy:function()
-					{
-						this._super();
-					},
-					_refresh:function()
-					{
-						this._super();
-					}
+					e.preventDefault();
+					var dt = e.originalEvent.dataTransfer;
+					dt.dropEffect = "none";
+					console.log("body."+e.type);
 				});
-				ibx.bindElements();
-			}, [{"src":"./test_res_bundle.xml", "loadContext":"app"}], false);
+				$(".main-box").css("display", "none");
+			}, [{"src":"./test_res_bundle.xml", "loadContext":"app"}], true);
 		</script>
 		<style type="text/css">
 			html, body
