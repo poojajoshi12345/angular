@@ -21,6 +21,47 @@
 	flex:0 0 auto;
 }
 
+.csl-btn-float
+{
+	position:absolute;
+	z-index:2147483647;
+	background-color:white;
+	opacity:0;
+	transition:opacity .3s;
+}
+
+.csl-btn-float:hover
+{
+	opacity:.75;
+}
+.ibx-csl-prev-btn.csl-btn-float
+{
+	left:0px;
+	top:0px;
+	bottom:0px;
+}
+.ibx-csl-next-btn.csl-btn-float
+{
+	right:0px;
+	top:0px;
+	bottom:0px;
+}
+
+.ibx-v-carousel .ibx-csl-prev-btn.csl-btn-float
+{
+	left:0px;
+	right:0px;
+	top:0px;
+	bottom:auto;
+}
+.ibx-v-carousel .ibx-csl-next-btn.csl-btn-float
+{
+	top:auto;
+	left:0px;
+	right:0px;
+	bottom:0px;
+}
+
 .ibx-csl-prev-btn-disabled.csl-btn-hidden, .ibx-csl-next-btn-disabled.csl-btn-hidden
 {
 	visibility:hidden;
@@ -74,9 +115,4 @@
 .ibx-csl-item
 {
 	flex:0 0 auto;
-}
-
-.csl-buffer
-{
-	transition:width 2s;
 }

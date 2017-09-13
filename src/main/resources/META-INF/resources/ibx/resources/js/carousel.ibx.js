@@ -18,6 +18,7 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 		prevNextButtonPos:"ends",	//ends/start/end
 		showPrevButton:true,
 		showNextButton:true,
+		floatButtons:false,
 		hideDisabledButtons:false,
 		alignChildren:"center",
 
@@ -187,6 +188,15 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 		if(this._scrollInfo)
 			this._scrollInfo.stop = true;
 	},
+	page:function(pageNo)
+	{
+		var info = this.getPageInfo();
+		if(pageNo === undefined)
+			return info.curPage;
+
+		var newPage = pageNo - info.curPage
+		this.scroll(newPage, "page", 0);
+	},
 	_onPageMarkerClick:function(e)
 	{
 		var markerInfo = $(e.currentTarget).data("ibxPageMarkerInfo");
@@ -247,27 +257,9 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 		info.scrollBottom = info.scrollTop + info.pageHeight;
 		return info;
 	},
-	page:function(pageNo)
-	{
-		var info = this.getPageInfo();
-		if(pageNo === undefined)
-			return info.curPage;
-
-		var newPage = pageNo - info.curPage
-		this.scroll(newPage, "page");
-
-/*
-		var pageNo = (pageNo == -1) ? info.curPage : pageNo;
-		if(pageNo <= info.pages-1)
-		{
-			this._itemsBox.prop(this.options.scrollProps.axis, info[this.options.scrollProps.pageSize] * pageNo);
-			this._adjustPageMarkers();
-		}
-*/
-	},
 	option:function(key, value)
 	{
-		this._needsLayout = (key == "prevNextButtonPos" && value != this.options[key]);
+		this._needsLayout = (key == "prevNextButtonPos" || key == "floatButtons" && value != this.options[key]);
 		return this._superApply(arguments);
 	},
 	_refresh:function()
@@ -277,6 +269,12 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 		this._itemsBox.ibxDragScrolling("option", "disabled", !options.allowDragScrolling);
 		this._prevBtn.css("display", options.showPrevButton ? "" : "none");
 		this._nextBtn.css("display", options.showNextButton ? "" : "none");
+
+		//floated buttons force position to either end of the carousel
+		this._prevBtn.toggleClass("csl-btn-float", options.floatButtons);	
+		this._nextBtn.toggleClass("csl-btn-float", options.floatButtons);	
+		if(options.floatButtons)
+			options.prevNextButtonPos = "ends";
 
 		if(!this._created || this._needsLayout)
 		{

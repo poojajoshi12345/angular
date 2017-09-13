@@ -78,7 +78,6 @@
 	</head>
 	<body class="ibx-root">
 		<div class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="center" data-ibxp-justify="center">
-			<div class="test-label xicon-no-scale" data-ibx-type="ibxLabel" data-ibxp-icon="./choropleth.svg" data-ibxp-icon-position="left">Test Label</div>
 			<div class="test-label" data-ibx-type="ibxLabel" data-ibxp-glyph-classes="fa fa-cogs" data-ibxp-overlays="[{'position':'bl', 'glyphClasses':'short-cut-overlay fa fa-share'}]">Test Label</div>
 		</div>
 	</body>
