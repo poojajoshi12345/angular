@@ -6,10 +6,10 @@ $.widget("ibi.ibxDatePicker", $.ibi.ibxVBox,
 	options:
 		{
 			"type": "popup", // valid values: "popup", "simple", "inline"
-			"dateFormat": "mm/dd/yy",
+			"dateFormat": "MM d, yy",
 			"wrap": "false",
 			"align": "stretch",
-			"date": $.datepicker.formatDate("mm/dd/yy", new Date()),
+			"date": $.datepicker.formatDate("MM d, yy", new Date()),
 		},
 	_widgetClass: "ibx-datepicker",
 	_create: function ()
@@ -98,8 +98,8 @@ $.widget("ibi.ibxDateRange", $.ibi.ibxDatePicker,
 {
 	options:
 	{
-		"dateTo": $.datepicker.formatDate("mm/dd/yy", new Date()),
-		"dateFrom": $.datepicker.formatDate("mm/dd/yy", new Date()),
+		"dateTo": $.datepicker.formatDate("MM d, yy", new Date()),
+		"dateFrom": $.datepicker.formatDate("MM d, yy", new Date()),
 	},
 	_create: function ()
 	{
