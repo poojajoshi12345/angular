@@ -265,7 +265,7 @@ $.widget("ibi.ibxSelect", $.ibi.ibxTextField,
 	selected: function (element)
 	{
 		if (typeof (element) == "undefined")
-			return this._list.find('.sel-selected').first();
+			return this._list.find('.sel-selected');
 		else
 		{
 			$(element).trigger("click");
