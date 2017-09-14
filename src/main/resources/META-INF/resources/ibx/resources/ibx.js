@@ -86,7 +86,7 @@ function ibx()
 				//wait for jQuery to be fully loaded...
 				$(function()
 				{
-					ibx.loadEvent("ibx_loading", {"ibx":ibx});
+					ibx.dispatchEvent("ibx", {"ibx":ibx, "hint":"loading"});
 
 					//continue booting ibx...
 					ibx._loadPromise = $.Deferred();
@@ -137,7 +137,7 @@ function ibx()
 									
 							});
 							ibx._loadPromise.resolve(ibx);//let everyone know the system is booted.
-							ibx.loadEvent("ibx_loaded", {"ibx":ibx});
+							ibx.dispatchEvent("ibx", {"ibx":ibx, "hint":"loaded"});
 						});
 					});
 				});
@@ -184,12 +184,20 @@ ibx._appName = "";
 ibx.getAppName = function(){return this._appName;};
 
 //emit events during the ibx load process so progress can be tracked.
-ibx.loadEvent = function(type, data)
+ibx.dispatchEvent = function(type, data)
 {
 	data = data || {}
 	data.type = type;
-	//console.log(data.type, data.bundle ? data.bundle.getAttribute("name") : "", data.src ? data.src : "");
-	var e = $(window).trigger("ibxloadevent", data);
+	var e = null;
+	if(typeof(Event) === "function")
+		e = new Event("ibxevent", {"bubbles":true})
+	else
+	{
+		e = document.createEvent("CustomEvent");
+		e.initCustomEvent("ibxevent", true, true, null);
+	}
+	e.data = data;
+	window.dispatchEvent(e);
 	return e;
 }
 
