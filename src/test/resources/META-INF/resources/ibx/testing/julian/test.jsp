@@ -19,13 +19,10 @@
 		<Script src="<%=request.getContextPath()%>/ibx/resources/ibx.js" type="text/javascript"></script>
 		<script type="text/javascript">
 			<jsp:include page="/WEB-INF/jsp/global/wf_globals.jsp" flush="false" />
+
+			ibx.showOnLoad = false;
 			ibx(function()
 			{
-				ibx.showOnLoad = false;
-				window.setTimeout(function()
-				{
-					$("body").addClass("ibx-visible");
-				}, 5000);
 			}, [{"src":"./test_res_bundle.xml", "loadContext":"app"}], true);
 		</script>
 		<style type="text/css">
@@ -49,7 +46,7 @@
 
 			.test-label
 			{
-				font-size:11em;
+				font-size:6em;
 			}
 
 			.short-cut-overlay 
@@ -62,7 +59,8 @@
 	</head>
 	<body class="ibx-root">
 		<div class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="center" data-ibxp-justify="center">
-			<div class="test-label" data-ibx-type="ibxLabel" data-ibxp-glyph-classes="fa fa-cogs" data-ibxp-overlays="[{'position':'bl', 'glyphClasses':'short-cut-overlay fa fa-share'}]">Test Label</div>
+			<div class="test-label" data-ibx-type="ibxLabel" data-ibxp-glyph-classes="fa fa-cogs"
+				data-ibxp-overlays="[{'position':'bl', 'glyphClasses':'short-cut-overlay fa fa-user'}, {'position':'br', 'glyphClasses':'short-cut-overlay fa fa-share-alt'}]">Test Label</div>
 		</div>
 	</body>
 </html>

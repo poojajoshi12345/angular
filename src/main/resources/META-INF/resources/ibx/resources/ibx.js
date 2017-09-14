@@ -121,7 +121,9 @@ function ibx()
 							//bool means just bind everything...string means select these and bind them
 							var autoBind = ibx._loadPromise._autoBind;
 							if(autoBind)
+							{
 								ibx.bindElements((typeof(autoBind) === "string") ? autoBind : "");
+							}
 
 							$("head").append(inlineStyles);//append the inline style blocks back to end of head.
 						
@@ -131,8 +133,7 @@ function ibx()
 							ibx._loadPromise.then(function()
 							{
 								var ibxRoots = $(".ibx-root").addClass("ibx-loaded");//display all ibx-roots, now that we are loaded.
-								if(ibx.showOnLoad)
-									ibxRoots.addClass("ibx-visible");
+								ibx.showRootNodes(ibx.showOnLoad);
 									
 							});
 							ibx._loadPromise.resolve(ibx);//let everyone know the system is booted.
@@ -159,7 +160,14 @@ ibx.loadTimeout = 10000;	//can't get preloads in running state by this interval,
 ibx._loaded = false;		//is ibx loaded.
 ibx._loadPromise = null;	//internal promise/deferred for ibx resource loading
 ibx.resourceMgr = null;		//ibx default resource manager	
-ibx.showOnLoad = true;		//should the ibx-roots be made visible by default on load.
+
+//show all ibx root nodes when loaded...or don't, and show manually at user's discression.
+ibx.showOnLoad = true;
+ibx.showRootNodes = function(bShow)
+{
+	$(".ibx-root").toggleClass("ibx-visible", bShow);
+	return ibx;//for chaining
+};
 
 //where ibx.js loaded from
 ibx._path = "";
