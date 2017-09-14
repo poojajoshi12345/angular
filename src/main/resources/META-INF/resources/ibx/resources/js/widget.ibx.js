@@ -81,7 +81,6 @@ $.widget("ibi.ibxWidget", $.Widget,
 		{
 			if(key.search("ibiIbx") == 0 || key.search("ibx") == 0)
 				this.element.removeData(key);
-			console.log();
 		}.bind(this));
 		
 		this.element.removeAttr("data-ibx-type");
