@@ -64,7 +64,6 @@ $.widget("ibi.ibxDatePicker", $.ibi.ibxVBox,
 	{
 		this.element.removeClass('popup simple inline');
 		this._datePicker.datepicker('option', this.options);
-		//this._datePicker.datepicker('option', 'dateFormat', this.options.dateFormat);
 		this._datePicker.datepicker('setDate', this.options.date);
 		this._input.ibxWidget('option', 'text', this.options.date);
 		this._super();
