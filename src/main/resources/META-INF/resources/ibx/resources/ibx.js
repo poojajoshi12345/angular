@@ -130,7 +130,10 @@ function ibx()
 							ibx._loadPromise.then(fn);
 							ibx._loadPromise.then(function()
 							{
-								$(".ibx-root").addClass("ibx-loaded");//display all ibx-roots, now that we are loaded.
+								var ibxRoots = $(".ibx-root").addClass("ibx-loaded");//display all ibx-roots, now that we are loaded.
+								if(ibx.showOnLoad)
+									ibxRoots.addClass("ibx-visible");
+									
 							});
 							ibx._loadPromise.resolve(ibx);//let everyone know the system is booted.
 							ibx.loadEvent("ibx_loaded", {"ibx":ibx});
@@ -149,21 +152,30 @@ function ibx()
 	}
 	return ibx;
 }
-ibx.version = "0.1";
-ibx.loadTimeout = 10000;//can't get preloads in running state by this interval, then bail!
-ibx._loaded = false;
-ibx._loadPromise = null;
-ibx.resourceMgr = null;
 
+//various static resources.
+ibx.version = "0.9";		//ibx version...just a placeholder for now.
+ibx.loadTimeout = 10000;	//can't get preloads in running state by this interval, then bail!
+ibx._loaded = false;		//is ibx loaded.
+ibx._loadPromise = null;	//internal promise/deferred for ibx resource loading
+ibx.resourceMgr = null;		//ibx default resource manager	
+ibx.showOnLoad = true;		//should the ibx-roots be made visible by default on load.
+
+//where ibx.js loaded from
 ibx._path = "";
 ibx.getPath = function(){return ibx._path;};
 ibx.setPath = function(path){ibx._path = path;};
-this._appPath = "";
+
+//the window's location when the ibx <script> tag was loaded.
+ibx._appPath = "";
 ibx.getAppPath = function(){return ibx._appPath;};
 ibx.setAppPath = function(path){ibx._appPath = path;};
-this._appName = "";
+
+//the endpoint of the windows location when ibx <script> tag was loaded.
+ibx._appName = "";
 ibx.getAppName = function(){return this._appName;};
 
+//emit events during the ibx load process so progress can be tracked.
 ibx.loadEvent = function(type, data)
 {
 	data = data || {}

@@ -21,14 +21,11 @@
 			<jsp:include page="/WEB-INF/jsp/global/wf_globals.jsp" flush="false" />
 			ibx(function()
 			{
-				$("body").on("dragenter dragleave", function(e)
+				ibx.showOnLoad = false;
+				window.setTimeout(function()
 				{
-					e.preventDefault();
-					var dt = e.originalEvent.dataTransfer;
-					dt.dropEffect = "none";
-					console.log("body."+e.type);
-				});
-				$(".main-box").css("display", "none");
+					$("body").addClass("ibx-visible");
+				}, 5000);
 			}, [{"src":"./test_res_bundle.xml", "loadContext":"app"}], true);
 		</script>
 		<style type="text/css">

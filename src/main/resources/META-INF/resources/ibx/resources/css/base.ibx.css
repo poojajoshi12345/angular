@@ -46,7 +46,14 @@ body
 {
 	visibility:hidden;
 }
-.ibx-root.ibx-loaded
+
+/*ibx is fully loaded*/
+.ibx-loaded
+{
+}
+
+/*any ibx root nodes will no longer be explicitly hidden*/
+.ibx-root.ibx-visible
 {
 	visibility:inherit;
 }
