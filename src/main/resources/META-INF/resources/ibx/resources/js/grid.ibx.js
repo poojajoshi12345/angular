@@ -142,10 +142,10 @@ $.widget("ibi.ibxFlexGrid", $.ibi.ibxHBox,
 		this.remove(".ibx-flex-grid-cell");
 		this._super();
 	},
-	remove:function(el, refresh)
+	remove:function(el, destroy, refresh)
 	{
 		this.children().removeAttr("data-grid-row data-grid-col data-grid-span").removeClass("ibx-flex-grid-cell");
-		this._super(el, refresh);
+		this._super(el, destroy, refresh);
 	},
 	_colSize:-1,
 	colSize:function()

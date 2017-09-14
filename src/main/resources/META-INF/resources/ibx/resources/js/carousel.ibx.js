@@ -66,11 +66,11 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 		if(refresh)
 			this.refresh();
 	},
-	remove:function(el, refresh)
+	remove:function(el, destroy, refresh)
 	{
 		var children = (!el || typeof(el) === "string") ? this.children(el) : $(el);
 		children.removeClass("ibx-csl-item");
-		this._itemsBox.ibxWidget("remove", children, refresh);
+		this._itemsBox.ibxWidget("remove", children, destroy, refresh);
 		if(refresh)
 			this.refresh();
 	},

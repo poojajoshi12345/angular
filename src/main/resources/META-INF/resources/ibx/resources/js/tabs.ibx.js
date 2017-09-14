@@ -63,14 +63,14 @@ $.widget("ibi.ibxTabPane", $.ibi.ibxFlexBox,
 		}.bind(this));
 		this.refresh();
 	},
-	remove:function(el, refresh)
+	remove:function(el, destroy, refresh)
 	{
 		el = $(el).filter(".ibx-tab-page");
 		el.each(function(idx, el)
 		{
 			$(el).ibxWidget('button').css("flex", "").removeClass("tpg-hidden").detach();
 		}.bind(this));
-		this._super(el);
+		this._super(el, destroy, refresh);
 	},
 	option:function (key, value)
 	{

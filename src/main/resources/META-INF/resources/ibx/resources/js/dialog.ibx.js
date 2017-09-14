@@ -54,9 +54,9 @@ $.widget("ibi.ibxDialog", $.ibi.ibxPopup,
 	{
 		this.contentBox.ibxWidget("add", el, sibling, before, refresh);
 	},
-	remove:function(el)
+	remove:function(el, destroy, refresh)
 	{
-		this.contentBox.ibxWidget("remove", el, refresh);
+		this.contentBox.ibxWidget("remove", el, destroy, refresh);
 	},
 	apply:function(e)
 	{

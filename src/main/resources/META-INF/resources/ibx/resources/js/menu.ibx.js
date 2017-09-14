@@ -39,9 +39,9 @@ $.widget("ibi.ibxMenu", $.ibi.ibxPopup,
 	{
 		this._box.ibxWidget("add", menuItem, sibling, before, refresh);
 	},
-	remove:function(menuItem, refresh)
+	remove:function(menuItem, destroy, refresh)
 	{
-		this._box.ibxWidget("remove", menuItem, refresh);
+		this._box.ibxWidget("remove", menuItem, destroy, refresh);
 	},
 	_onMenuItemClick:function(e, menuItem)
 	{

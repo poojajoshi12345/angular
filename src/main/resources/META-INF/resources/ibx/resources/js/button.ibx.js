@@ -408,7 +408,7 @@ $.widget("ibi.ibxButtonGroup", $.ibi.ibxFlexBox,
 			this.refresh();
 		}
 	},
-	remove:function(el, refresh)
+	remove:function(el, destroy, refresh)
 	{
 		if(this._group)
 		{
@@ -423,7 +423,7 @@ $.widget("ibi.ibxButtonGroup", $.ibi.ibxFlexBox,
 			this.refresh();
 		}
 
-		this._super(el, refresh);
+		this._super(el, destroy, refresh);
 	},
 	_createGroupSelection: function ()
 	{

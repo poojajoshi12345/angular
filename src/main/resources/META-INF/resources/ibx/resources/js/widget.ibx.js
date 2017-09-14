@@ -173,9 +173,10 @@ $.widget("ibi.ibxWidget", $.Widget,
 		if(refresh)
 			this.refresh();
 	},
-	remove:function(el, refresh)
+	remove:function(el, destroy, refresh)
 	{
-		var ret = this.element.children().filter(el).detach();
+		var children = this.element.children().filter(el);
+		var ret = (destroy) ? children.remove() : children.detach();
 		if(refresh)
 			this.refresh();
 	},

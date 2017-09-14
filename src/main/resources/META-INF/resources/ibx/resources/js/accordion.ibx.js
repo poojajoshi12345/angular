@@ -40,7 +40,7 @@ $.widget("ibi.ibxAccordionPane", $.ibi.ibxFlexBox,
 
 		this._super(el, sibling, before, false);
 	},
-	remove:function(el, refresh)
+	remove:function(el, destroy, refresh)
 	{
 		el = $(el);
 		el.filter(".ibx-accordion-page").each(function(idx, el)
@@ -49,7 +49,7 @@ $.widget("ibi.ibxAccordionPane", $.ibi.ibxFlexBox,
 			el.ibxWidget("option", "groupName", "");
 			this._group.ibxRadioGroup("removeControl", el);
 		}.bind(this));
-		this._super(el, refresh);
+		this._super(el, destroy, refresh);
 	},
 	group:function(){return this._group;},
 	next:function()
@@ -153,9 +153,9 @@ $.widget("ibi.ibxAccordionPage", $.ibi.ibxFlexBox,
 	{
 		this._content.ibxWidget("add",  $(el).not(".ibx-accordion-page-button, .ibx-accordion-page-content"), sibling, before, refresh);
 	},
-	remove:function(el, refresh)
+	remove:function(el, destroy, refresh)
 	{
-		this._content.ibxWidget("remove", el, refresh);
+		this._content.ibxWidget("remove", el, destroy, refresh);
 	},
 
 	/*Needed so this object can be part of an ibxRadioGroup.*/
