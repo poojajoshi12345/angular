@@ -4,12 +4,40 @@
     <meta charset="UTF-8">
     <title>Title</title>
     <link rel="stylesheet" href="./css/examples.css">
+    <style>
+        div[role="button"] {
+            background-color: lightgrey;
+            display: inline-block;
+            padding: 10px;
+            border-radius: 4px;
+            border: 1px solid black;
 
+        }
+
+
+        div[role="tab"]{
+            height: 20px;
+            display: inline-block;
+            background-color: rgba(127, 127, 127, 0.6);
+            vertical-align: middle;
+            line-height: 20px;
+            border: 2px solid grey;
+            border-radius: 3px;
+            padding: 5px;
+        }
+        [aria-disabled="true"] {
+            opacity: 0.3;
+            cursor: default !important;
+        }
+    </style>
 </head>
 <body>
 <!--empty div for the modal overlay-->
 <div class="overlay" style="display: none;"></div>
 <div id="main">
+    <!--separator examples:-->
+    <!--<div role="separator" id="ex1_start_sep" aria-labelledby="ex1_start_sep ex1_label" aria-label="Start of"></div>-->
+    <!--<div role="separator" id="ex1_end_sep" aria-labelledby="ex1_end_sep ex1_label" aria-label="End of"></div>-->
 
 
     <h1 style="text-align: center;">Aria Example Page</h1>
@@ -18,31 +46,52 @@
 
     <div class="tabs">
         <div role="tablist">
-            <button role="tab" aria-selected="false" aria-controls="btn-examples" id="btns">Button Examples</button>
-            <button role="tab" aria-selected="false" aria-controls="progressbar-examples" id="progressbar">Progress Bar
+            <div role="tab" tabindex="0" aria-selected="true" aria-controls="btn-examples" id="btns">Button Examples</div>
+            <div role="tab" tabindex="0" aria-selected="false" aria-controls="progressbar-examples" id="progressbar">Progress Bar
                 Example
-            </button>
-            <button role="tab" aria-selected="false" aria-controls="dialog-examples" id="dialogs">Modal Examples
-            </button>
-            <button role="tab" aria-selected="false" aria-controls="menu-examples" id="menu">Menu</button>
+            </div>
+            <div role="tab" tabindex="0" aria-selected="false" aria-controls="dialog-examples" id="dialogs">Modal Examples
+            </div>
+            <div role="tab" tabindex="0" aria-selected="false" aria-controls="menu-examples" id="menu">Menu</div>
+            <div role="tab" tabindex="0" aria-selected="false" aria-controls="dropdown-menu-examples" id="dropdown-menu">Dropdown
+                Menu
+            </div>
+            <div role="tab" tabindex="0" aria-selected="false" aria-controls="radio-examples" id="radio">radio</div>
+            <div role="tab" tabindex="0" aria-selected="false" aria-controls="link-examples" id="link">link</div>
+            <div role="tab" tabindex="0" aria-selected="false" aria-controls="listbox-examples" id="listbox">listbox</div>
+            <div role="tab" tabindex="0" aria-selected="false" aria-controls="menu-button-examples" id="menu-button">menu-button
+            </div>
+            <div role="tab" tabindex="0" aria-selected="false" aria-controls="alert-examples" id="alert">
+                Alert
+            </div>
+            <div role="tab" tabindex="0" aria-selected="false" aria-controls="tree-examples" id="tree">Tree</div>
+            <div role="tab" tabindex="0" aria-selected="false" aria-controls="grid-examples" id="grid">grid</div>
+            <div role="tab" tabindex="0" aria-selected="false" aria-controls="accordion-examples" id="accordion">accordion
+            </div>
+            <div role="tab" tabindex="0" aria-selected="false" aria-controls="textbox-examples" id="textbox">Text Box</div>
+            <div role="tab" tabindex="0" aria-selected="false" aria-controls="checkbox-examples" id="checkbox">checkbox</div>
+            <div role="tab" tabindex="0" aria-selected="false" aria-controls="slider-examples" id="slider">slider</div>
+
         </div>
 
-        <!--Button Examples-->
+        <!--BUTTON Examples-->
+        <div role="separator" aria-label="Start of Button Example"></div>
         <div id="btn-examples" tabindex="0" role="tabpanel" aria-hidden="false" aria-labelledby="btns">
-            <h3>Button (div)</h3>
-            <!--for div/ span/ other elements that aren't selectable by default,
-            we _must_ set the tabindex property to 0 or greater
-            so that it can be reached via tabbing-->
+            <h2>Button (div)</h2>
             <div id="div-btn-ex1" role="button" tabindex="0" onKeyPress="btnKeyPress(event)">Click</div>
-            <h3>button (A tag)</h3>
+            <h2>button (A tag)</h2>
             <a id="div-btn-ex2" role="button" tabindex="0" onKeyPress="btnKeyPress(event)">Click</a>
-            <h3>button toggle (a tag)</h3>
-            <a id="div-btn-ex3" role="button" tabindex="0" aria-pressed="false" onclick="toggleBtnClick(event)"
+            <h2>button toggle (a tag)</h2>
+            <a id="div-btn-ex3" role="button" tabindex="0" aria-pressed="true" onclick="toggleBtnClick(event)"
                onKeyPress="toggleBtnKeyPress(event)">Click</a>
         </div>
+        <div role="separator" aria-label="End of Button Example"></div>
 
-        <!--progress bar examples-->
-        <div id="progressbar-examples" tabindex="0" role="tabpanel" aria-hidden="true" aria-labelledby="progressbar">
+
+        <!--PROGRESSBAR examples-->
+        <div role="separator" aria-label=" Start of Progress Bar Example"></div>
+        <div id="progressbar-examples" tabindex="0" role="tabpanel" aria-hidden="true"
+             aria-labelledby="progressbar">
             <h3>Progress Bar </h3>
             <div id="progress-container" onClick="updateProgressBar(event)" onKeyPress="updateProgressBar(event)">
                 <!--because this is a div, we must add tabindex so that it's selectable-->
@@ -51,30 +100,36 @@
                      style="width: 10%"></div>
             </div>
         </div>
+        <div role="separator" aria-label="End of Progress Bar Example"></div>
 
         <!--DIALOG EXAMPLES-->
+        <div role="separator" aria-label=" Start of Dialog Example"></div>
         <div id="dialog-examples" tabindex="0" role="tabpanel" aria-hidden="true" aria-labelledby="dialogs">
             <h3>ModalDialog Examples</h3>
             <div id="dialog-btn" role="button" tabindex="0" onClick="toggleModalDialog(event)"
                  onKeyPress="toggleModalDialog(event)">Show me the ModalDialog
             </div>
-            <div id="d-ex" aria-hidden="true" role="dialog" aria-labelledby="d-ex-label" onkeydown="modalEscape(event)">
+            <div id="d-ex" aria-hidden="true" role="dialog" aria-labelledby="d-ex-label"
+                 onkeydown="modalEscape(event)">
                 <h3 id="d-ex-label">ModalDialog Example</h3>
-                <div id="div-btn-modal" role="button" aria-label="Test" tabindex="-1" onkeypress="btnKeyPress(event)">
+                <div id="div-btn-modal" role="button" aria-label="Test" tabindex="-1"
+                     onkeypress="btnKeyPress(event)">
                     Test
                 </div>
                 <div id="div-btn-modal-end" role="button" aria-label="Test Trap" tabindex="-1"
                 >Test Trap
                 </div>
-                <div id="div-btn-modal-close" role="button" aria-label="Close" tabindex="-1" onclick="modalClose(event)"
+                <div id="div-btn-modal-close" role="button" aria-label="Close" tabindex="-1"
+                     onclick="modalClose(event)"
                      onkeypress="modalClose(event)" onkeydown="modalTabRedirect(event)">Close
                 </div>
             </div>
         </div>
+        <div role="separator" aria-label="End of Dialog Example"></div>
 
         <!--MENU EXAMPLE-->
+        <div role="separator" aria-label=" Start of Menu Example"></div>
         <div id="menu-examples" tabindex="0" role="tabpanel" aria-hidden="true" aria-labelledby="menu">
-
             <div class="menu_button">
                 <a id="menubutton"
                    role="button"
@@ -85,53 +140,764 @@
 
                 </a>
                 <!--NOTE: the li's have a role of none because screen readers won't allow-->
-                <!--NOTE : for rendering anytin ginside of menuitems. see here : https://www.w3.org/TR/wai-aria-practices/examples/menubar/menubar-1/menubar-1.html-->
-                <ul id="menu2"
-                    role="menu"
-                    aria-labelledby="menubutton">
-                    <li role="none">
+                <!--NOTE : for rendering anytin ginside of menuitems. see here :
+                https://www.w3.org/TR/wai-aria-practices/examples/menubar/menubar-1/menubar-1.html-->
+                <div id="menu2"
+                     role="menu"
+                     aria-labelledby="menubutton">
+                    <div role="none">
                         <a role="menuitem" href="https://www.w3.org/">
                             W3C Home Page
                         </a>
-                    </li>
-                    <li role="none">
+                    </div>
+                    <div role="none">
                         <a role="menuitem" href="https://www.w3.org/standards/webdesign/accessibility">
                             W3C Web Accessibility Initiative
                         </a>
-                    </li>
-                    <li role="none">
+                    </div>
+                    <div role="none">
                         <a role="menuitem" href="https://www.w3.org/TR/wai-aria/">
                             Accessible Rich Internet Application Specification
                         </a>
-                    </li>
-                    <li role="none">
+                    </div>
+                    <div role="none">
                         <a role="menuitem" href="https://www.w3.org/TR/wai-aria-practices/">
                             WAI-ARIA Authoring Practices
                         </a>
-                    </li>
-                    <li role="none">
+                    </div>
+                    <div role="none">
                         <a role="menuitem" href="https://www.w3.org/TR/wai-aria-implementation/">
                             WAI-ARIA Implementation Guide
                         </a>
-                    </li>
-                    <li role="none">
+                    </div>
+                    <div role="none">
                         <a role="menuitem" href="https://www.w3.org/TR/accname-aam-1.1/">
                             Accessible Name and Description
                         </a>
-                    </li>
-                </ul>
+                    </div>
+                </div>
 
             </div>
         </div>
+        <div role="separator" aria-label="End of Menu Example"></div>
+
+        <!--DROPDOWN-MENU EXAMPLE-->
+        <div role="separator" aria-label=" Start of Dropdown Menu Example"></div>
+        <style>
+            [role="menubar"] {
+                margin: 10px;
+                padding: 10px;
+                font-size: 110%;
+                list-style: none;
+                background-color: #EEEEEE;
+            }
+
+            [role="menubar"] > li {
+                display: inline;
+                position: relative;
+            }
+
+            [role="menubar"] ul[role="menu"] {
+                position: absolute;
+                top: 30px;
+                left: 0;
+                margin: 0;
+                padding: 0;
+            }
+        </style>
+        <div id="dropdown-menu-examples" tabindex="0" role="tabpanel" aria-hidden="true"
+             aria-labelledby="dropdown-menu">
+            <div id="dropdown-menubar" role="menubar" aria-label="example">
+                <div>
+                    <a href="/#1" role="menuitem"
+                       aria-haspopup="true"
+                       aria-expanded="false">
+                        submenu 1</a>
+                    <div id="submenu-1" role="menu" aria-label="submenu 1" aria-hidden="true">
+                        <div role="none"><a href="/#1.1" role="menuitem">item-1.1</a></div>
+                        <div role="none"><a href="/#1.2" role="menuitem">item-1.2</a></div>
+                        <div role="none"><a href="/#1.3" role="menuitem">item-1.3</a></div>
+                        <div role="none"><a href="/#1.4" role="menuitem">item-1.4</a></div>
+                        <div role="none"><a href="/#1.5" role="menuitem">item-1.5</a></div>
+                    </div>
+                </div>
+                <div><a href="/#2" role="menuitem" aria-haspopup="true" aria-expanded="false">
+                    submenu 2</a>
+                    <div id="submenu-2" role="menu" aria-label="submenu 2" aria-hidden="true">
+                        <div role="none"><a href="/#2.1" role="menuitem">item-2.1</a></div>
+                        <div role="none"><a href="/#2.2" role="menuitem">item-2.2</a></div>
+                        <div role="none"><a href="/#2.3" role="menuitem">item-2.3</a></div>
+                        <div role="none"><a href="/#2.4" role="menuitem">item-2.4</a></div>
+                        <div role="none"><a href="/#2.5" role="menuitem">item-2.5</a></div>
+                    </div>
+                </div>
+                <div><a href="/#3" role="menuitem" aria-haspopup="true" aria-expanded="false">
+                    submenu 3</a>
+                    <div id="submenu-3" role="menu" aria-label="submenu 3" aria-hidden="true">
+                        <div role="none"><a href="/#3.1" role="menuitem">item-3.1</a></div>
+                        <div role="none"><a href="/#3.2" role="menuitem">item-3.2</a></div>
+                        <div role="none"><a href="/#3.3" role="menuitem">item-3.3</a></div>
+                        <div role="none"><a href="/#3.4" role="menuitem">item-3.4</a></div>
+                        <div role="none"><a href="/#3.5" role="menuitem">item-3.5</a></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script>
+            // element to add hover to
+            var menus = document.querySelectorAll("div#dropdown-menubar>div");
+
+            for (var i = 0; i < menus.length; i++)
+            {
+
+                menus[i].addEventListener('mouseover', function (event)
+                {
+                    this.querySelector("a[role='menuitem']")
+                        .setAttribute("aria-expanded", "true");
+                    this.querySelector("div")
+                        .setAttribute('aria-hidden', 'false');
+                });
+
+                menus[i].addEventListener('mouseout', function (event)
+                {
+                    this.querySelector("a[role='menuitem']")
+                        .setAttribute("aria-expanded", "false");
+                    this.querySelector("div")
+                        .setAttribute('aria-hidden', 'true');
+                });
+            }
+
+        </script>
+        <div role="separator" aria-label="End of Dropdown Menu Example"></div>
+
+        <!--RADIO EXAMPLE-->
+        <div role="separator" aria-label=" Start of Radio Example"></div>
+        <style>
+            div#radio-examples {
+                position: relative;
+            }
+
+            div#radio-examples li {
+                list-style: none;
+                position: relative;
+            }
+
+            [role="radio"]::before,
+            [role="radio"]::after {
+                position: absolute;
+                top: 50%;
+                left: -17px;
+                transform: translate(-50%, -50%);
+                content: '';
+            }
+
+            [role="radio"]::before {
+                width: 14px;
+                height: 14px;
+                border: 1px solid hsl(0, 0%, 66%);
+                border-radius: 100%;
+                background-image: linear-gradient(to bottom, hsl(300, 3%, 93%), #fff 60%);
+            }
+
+            [role="radio"]:active::before {
+                background-image: linear-gradient(to bottom, hsl(300, 3%, 73%), hsl(300, 3%, 93%));
+            }
+
+            [role="radio"][aria-checked="true"]::before {
+                border-color: hsl(216, 80%, 50%);
+                background: hsl(217, 95%, 68%);
+                background-image: linear-gradient(to bottom, hsl(217, 95%, 68%), hsl(216, 80%, 57%));
+            }
+
+            [role="radio"][aria-checked="true"]::after {
+                display: block;
+                border: .1875em solid #fff;
+                border-radius: 100%;
+            / / transform: translateY(- 65 %) translateX(- 50 %);
+            }
+
+            [role="radio"][aria-checked="mixed"]:active::before,
+            [role="radio"][aria-checked="true"]:active::before {
+                background-image: linear-gradient(to bottom, hsl(216, 80%, 57%), hsl(217, 95%, 68%) 60%);
+            }
+
+            [role="radio"]:hover::before {
+                border-color: hsl(216, 94%, 65%);
+            }
+        </style>
+        <div id="radio-examples" tabindex="0" role="tabpanel" aria-hidden="true" aria-labelledby="radio">
+            <h3 id="radio-label">radio group (tab index)</h3>
+            <div id="radio-list" role="radiogroup" aria-labelledby="radio-label">
+                <div id="rbtn-1" role="radio" aria-checked="false" tabindex="0">radio 1</div>
+                <div id="rbtn-2" role="radio" aria-checked="false" tabindex="-1">radio 2</div>
+                <div id="rbtn-3" role="radio" aria-checked="false" tabindex="-1">radio 3</div>
+                <div id="rbtn-4" role="radio" aria-checked="false" tabindex="-1">radio 4</div>
+            </div>
+            <h3 id="radio-label2">radio group (tab index)</h3>
+            <div id="radio-list" role="radiogroup" aria-labelledby="radio-label2">
+                <div id="rbtn-5" role="radio" aria-checked="false" tabindex="0">radio 5</div>
+                <div id="rbtn-6" role="radio" aria-checked="false" tabindex="-1">radio 6</div>
+                <div id="rbtn-7" role="radio" aria-checked="false" tabindex="-1">radio 7</div>
+            </div>
+        </div>
+        <!--quick script to ensure that the checked works-->
+        <script>
+            var radioListItems = document.querySelectorAll("ul#radio-list > li");
+            console.log(radioListItems)
+            for (var i = 0; i < radioListItems.length; i++)
+            {
+                radioListItems[i].addEventListener("click", function (e)
+                {
+                    console.log(i)
+                    console.log(event.currentTarget)
+                    document.querySelectorAll("#radio-list>li")
+                            .forEach(function (val, index)
+                            {
+                                val.setAttribute("aria-checked", "false");
+                                // next time we navigate to this level,,
+                                // force tab to select currently selected option
+                                val.setAttribute("tabindex", "-1");
+                            })
+
+                    event.currentTarget.setAttribute("aria-checked", "true");
+                    event.currentTarget.setAttribute("tabindex", "0");
+                });
+            }
+        </script>
+        <div role="separator" aria-label="End of Radio Example"></div>
+
+        <!--LINK EXAMPLE-->
+        <div role="separator" aria-label=" Start of Link Example"></div>
+        <style>
+            [role="link"] {
+                cursor: pointer;
+            }
+        </style>
+        <!--used when elements other than a tags will be used as links-->
+        <div id="link-examples" tabindex="0" role="tabpanel" aria-hidden="true" aria-labelledby="link">
+            <!--span element with text content-->
+            <!--would have to implement custom functionality for click handlers-->
+            <span role="link" tabindex="0" onclick="" onkeydown="">Clickable Text</span>
+            <hr>
+            <!--img element with alt attribute-->
+            <img role="link" tabindex="0" onclick="" onkeydown="" alt="inner image" src="#">
+            <hr>
+                <span role="link" tabindex="0" onclick="" onkeydown="" aria-label="Clickable Text"><div
+                        style="width: 20px; height: 20px; background-color: blue;"></div></span>
+            <!--css :before content property on a span element-->
+        </div>
+        <div role="separator" aria-label="End of Link Example"></div>
+
+        <!--LISTBOX EXAMPLE-->
+        <div role="separator" aria-label=" Start of Listbox Example"></div>
+        <div id="listbox-examples" tabindex="0" role="tabpanel" aria-hidden="true" aria-labelledby="listbox">
+            <!--NOTE!!!!! the listbox example needs to be updated with js to clarify the role that active-descendant plays-->
+            <!--Single Select Listbox-->
+            <div id="single-select-listbox" aria-label="single select listbox">
+                <h3 id="ex1_label">Example 1: Single-Select Listbox</h3>
+                <div role="separator" id="ex1_start_sep" aria-labelledby="ex1_start_sep ex1_label"
+                     aria-label="Start of"></div>
+                <div id="ex1">
+                    <p>Rank features important to you when choosing where to live. If a feature is unimportant, move
+                        it to the unimportant features list.</p>
+                    <div class="listbox-area">
+                        <div class="left-area">
+                            <div id="ss_imp_l">Important Features:</div>
+                            <div id="ss_imp_list" tabindex="0" role="listbox" aria-labelledby="ss_imp_l">
+                                <div id="ss_opt1" role="option">Proximity of public K-12 schools</div>
+                                <div id="ss_opt2" role="option">Proximity of child-friendly parks</div>
+                                <div id="ss_opt3" role="option">Proximity of grocery shopping</div>
+                                <div id="ss_opt4" role="option">Proximity of fast food</div>
+                                <div id="ss_opt5" role="option">Proximity of fine dining</div>
+                                <div id="ss_opt6" role="option">Neighborhood walkability</div>
+                                <div id="ss_opt7" role="option">Availability of public transit</div>
+                                <div id="ss_opt8" role="option">Proximity of hospital and medical services</div>
+                                <div id="ss_opt9" role="option">Level of traffic noise</div>
+                                <div id="ss_opt10" role="option">Access to major highways</div>
+                            </div>
+                            <div role="toolbar" aria-label="Actions">
+                                <div role="button" tabindex="0" id="ex1-up" class="toolbar-item selected"
+                                     aria-keyshortcuts="Alt+ArrowUp" aria-disabled="true">Up
+                                </div>
+                                <div role="button" id="ex1-down" class="toolbar-item" tabindex="-1"
+                                     aria-keyshortcuts="Alt+ArrowDown" aria-disabled="true">Down
+                                </div>
+                                <div role="button" id="ex1-delete" class="toolbar-item move-right-btn" tabindex="-1"
+                                     aria-keyshortcuts="Alt+ArrowRight Delete" aria-disabled="true">Not Important
+                                </div>
+                            </div>
+                        </div>
+                        <div class="right-area">
+                            <span id="ss_unimp_l">Unimportant Features:</span>
+                            <div id="ss_unimp_list" tabindex="0" role="listbox" aria-labelledby="ss_unimp_l"
+                                 aria-activedescendant="">
+                            </div>
+                            <div role="button" tabindex="0" id="ex1-add" class="move-left-btn"
+                                 aria-keyshortcuts="Alt+ArrowLeft Delete" aria-disabled="true">Important
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <!--MULTI select listbox-->
+            <div id="multi-select-listbox" aria-label="multi select listbox">
+                <h3 id="ex2_label">Example 2: Multi-Select Listbox</h3>
+                <div role="separator" id="ex2_start_sep" aria-labelledby="ex2_start_sep ex2_label"
+                     aria-label="Start of"></div>
+                <div id="ex2">
+                    <div class="left-area">
+                        <span id="ms_av_l">Available upgrades:</span>
+                        <div
+                                id="ms_imp_list"
+                                tabindex="0"
+                                role="listbox"
+                                aria-labelledby="ms_av_l"
+                                aria-multiselectable="true">
+                            <div id="ms_opt1" role="option" aria-selected="false">Leather seats</div>
+                            <div id="ms_opt2" role="option" aria-selected="false">Front seat warmers</div>
+                            <div id="ms_opt3" role="option" aria-selected="false">Rear bucket seats</div>
+                            <div id="ms_opt4" role="option" aria-selected="false">Rear seat warmers</div>
+                            <div id="ms_opt5" role="option" aria-selected="false">Front sun roof</div>
+                            <div id="ms_opt6" role="option" aria-selected="false">Rear sun roof</div>
+                            <div id="ms_opt7" role="option" aria-selected="false">Privacy cloque</div>
+                            <div id="ms_opt8" role="option" aria-selected="false">Food synthesizer</div>
+                            <div id="ms_opt9" role="option" aria-selected="false">Advanced waste recycling system
+                            </div>
+                            <div id="ms_opt10" role="option" aria-selected="false">Turbo vertical take-off
+                                capability
+                            </div>
+                        </div>
+                        <div role="button" tabindex="0" id="ex2-add" class="move-right-btn"
+                             aria-keyshortcuts="Alt+ArrowRight Delete"
+                             aria-disabled="true">Add
+                        </div>
+                    </div>
+                    <div class="right-area">
+                        <span id="ms_ch_l">Upgrades you have chosen:</span>
+                        <div
+                                id="ms_unimp_list"
+                                tabindex="0"
+                                role="listbox"
+                                aria-labelledby="ms_ch_l"
+                                aria-activedescendant=""
+                                aria-multiselectable="true">
+                        </div>
+                        <div role="button" tabindex="0" id="ex2-delete" class="move-left-btn"
+                             aria-keyshortcuts="Alt+ArrowLeft Delete"
+                             aria-disabled="true">Remove
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div role="separator" aria-label="End of Listbox Example"></div>
+
+        <!--MENU-BUTTON EXAMPLE-->
+        <div role="separator" aria-label=" Start of Menu Button Example"></div>
+        <div id="menu-button-examples" tabindex="0" role="tabpanel" aria-hidden="true"
+             aria-labelledby="menu-button">
+            <div class="menu_button">
+                <div
+                        role="button"
+                        tabindex="0"
+                        id="menubutton1"
+                        aria-haspopup="true"
+                        aria-controls="menu1"
+                >
+                    Actions
+                </div>
+
+                <div id="menu1" role="menu" aria-labelledby="menubutton1">
+                    <div role="menuitem" onclick="updateLastAction(event)">Action 1</div>
+                    <div role="menuitem" onclick="updateLastAction(event)">Action 2</div>
+                    <div role="menuitem" onclick="updateLastAction(event)">Action 3</div>
+                    <div role="menuitem" onclick="updateLastAction(event)">Action 4</div>
+                </div>
+            </div>
+        </div>
+        <div role="separator" aria-label="End of Menu Button Example"></div>
+
+        <!--ALERT EXAMPLE-->
+        <div role="separator" aria-label=" Start of Alert Example"></div>
+        <style>
+            [role="alert"] {
+                padding: 10px;
+                border: 2px solid hsl(206, 74%, 54%);
+                border-radius: 4px;
+                background: hsl(206, 74%, 90%);
+            }
+
+            [role="alert"]:empty {
+                display: none;
+            }
+        </style>
+        <div id="alert-examples" tabindex="0" role="tabpanel" aria-hidden="true"
+             aria-labelledby="alert">
+            <div id="alert-trigger" role="button">Trigger Alert</div>
+
+            <div id="alert-example" role="alert"></div>
+        </div>
+        <script>
+            var trigger = document.getElementById("alert-trigger");
+            var alertTarget = document.getElementById("alert-example");
+
+            trigger.addEventListener("click", function (e)
+            {
+                alertTarget.innerHTML = "<p><strong>I'm an Alert</strong></p>";
+            })
+        </script>
+        <div role="separator" aria-label="End of Alert Example"></div>
+
+        <!--TREE EXAMPLE-->
+        <div role="separator" aria-label=" Start of Tree Example"></div>
+
+        <div id="tree-examples" tabindex="0" role="tabpanel" aria-hidden="true" aria-labelledby="tree">
+            <h3 id="tree_label">
+                Projects
+            </h3>
+            <div role="tree" aria-labelledby="tree_label">
+                <div role="treeitem" class="doc">
+                    project-1.docx
+                </div>
+
+                <div role="treeitem" class="doc">
+                    project-2.docx
+                </div>
+
+                <div role="treeitem" aria-expanded="true">
+                    <span>Project 3</span>
+                    <div role="group">
+                        <div role="treeitem" class="doc">
+                            project-3A.docx
+                        </div>
+                        <div role="treeitem" class="doc">
+                            project-3B.docx
+                        </div>
+                        <div role="treeitem" class="doc">
+                            project-3C.docx
+                        </div>
+                    </div>
+                </div>
+
+                <div role="treeitem" class="doc">
+                    project-4.docx
+                </div>
+
+                <div role="treeitem" aria-expanded="true">
+                    <span>Project 5</span>
+                    <div role="group">
+                        <div role="treeitem" class="doc">
+                            project-5A.docx
+                        </div>
+                        <div role="treeitem" class="doc">
+                            project-5B.docx
+                        </div>
+                        <div role="treeitem" class="doc">
+                            project-5C.docx
+                        </div>
+                        <div role="treeitem" class="doc">
+                            project-5D.docx
+                        </div>
+                        <div role="treeitem" class="doc">
+                            project-5E.docx
+                        </div>
+                        <div role="treeitem" class="doc">
+                            project-5F.docx
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div role="separator" aria-label="End of Tree Example"></div>
+        <!--GRID EXAMPLE-->
+        <div role="separator" aria-label=" Start of Grid Example"></div>
+
+        <style>
+            div[role='row'] > div {
+                display: inline-block;
+                width: 15%;
+            }
+
+            div[role='columnheader'] {
+                font-weight: bold;
+            }
+        </style>
+        <!--NOTE: th edifference between a grid and a table is that a table is not supposed to be interactive-->
+        <!--NOTE: the aria-rowindex and aria-colindex are only necessaey in the cases where the columns/ rows are ragged-->
+        <!--/ not-contiguous-->
+        <div id="grid-examples" tabindex="0" role="tabpanel" aria-hidden="true" aria-label="grid example">
+            <div id="ex1">
+                <h4 id="grid1Label">Transactions January 1 through January 6</h4>
+                <div role="grid" aria-labelledby="grid1Label" class="data">
+                    <div role="row" aria-rowindex="1">
+                        <div role="columnheader" aria-colindex="1">Date</div>
+                        <div role="columnheader" aria-colindex="2">Type</div>
+                        <div role="columnheader" aria-colindex="3">Description</div>
+                        <div role="columnheader" aria-colindex="4">Amount</div>
+                        <div role="columnheader" aria-colindex="5">Balance</div>
+                    </div>
+                    <div role="row" aria-rowindex="2">
+                        <div tabindex="0" role="gridcell" aria-colindex="1">01-Jan-16</div>
+                        <div tabindex="0" role="gridcell" aria-colindex="2">Deposit</div>
+                        <div role="gridcell" aria-colindex="3">
+                            <a tabindex="0" href="#">Cash Deposit</a>
+                        </div>
+                        <div tabindex="0" role="gridcell" aria-colindex="4">$1,000,000.00</div>
+                        <div tabindex="0" role="gridcell" aria-colindex="5">$1,000,000.00</div>
+                    </div>
+                    <div role="row" aria-rowindex="3">
+                        <div tabindex="0" role="gridcell" aria-colindex="1">02-Jan-16</div>
+                        <div tabindex="0" role="gridcell" aria-colindex="2">Debit</div>
+                        <div role="gridcell" aria-colindex="3">
+                            <a tabindex="0" href="#">Down Town Grocery</a>
+                        </div>
+                        <div tabindex="0" role="gridcell" aria-colindex="4">$250.00</div>
+                        <div tabindex="0" role="gridcell" aria-colindex="5">$999,750.00</div>
+                    </div>
+                    <div role="row" aria-rowindex="4">
+                        <div tabindex="0" role="gridcell" aria-colindex="1">03-Jan-16</div>
+                        <div tabindex="0" role="gridcell" aria-colindex="2">Debit</div>
+                        <div role="gridcell" aria-colindex="3">
+                            <a tabindex="0" href="#">Hot Coffee</a>
+                        </div>
+                        <div tabindex="0" role="gridcell" aria-colindex="4">$9.00</div>
+                        <div tabindex="0" role="gridcell" aria-colindex="5">$999,741.00</div>
+                    </div>
+                    <div role="row" aria-rowindex="5">
+                        <div tabindex="0" role="gridcell" aria-colindex="1">04-Jan-16</div>
+                        <div tabindex="0" role="gridcell" aria-colindex="2">Debit</div>
+                        <div role="gridcell" aria-colindex="3">
+                            <a tabindex="0" href="#">The Filling Station</a>
+                        </div>
+                        <div tabindex="0" role="gridcell" aria-colindex="4">$88.00</div>
+                        <div tabindex="0" role="gridcell" aria-colindex="5">$999,653.00</div>
+                    </div>
+                    <div role="row" aria-rowindex="6">
+                        <div tabindex="0" role="gridcell" aria-colindex="1">05-Jan-16</div>
+                        <div tabindex="0" role="gridcell" aria-colindex="2">Debit</div>
+                        <div role="gridcell" aria-colindex="3">
+                            <a tabindex="0" href="#">Tinker's Hardware</a>
+                        </div>
+                        <div tabindex="0" role="gridcell" aria-colindex="4">$3,421.00</div>
+                        <div tabindex="0" role="gridcell" aria-colindex="5">$996,232.00</div>
+                    </div>
+                    <div role="row" aria-rowindex="7">
+                        <div tabindex="0" role="gridcell" aria-colindex="1">06-Jan-16</div>
+                        <div tabindex="0" role="gridcell" aria-colindex="2">Debit</div>
+                        <div role="gridcell" aria-colindex="3">
+                            <a tabindex="0" href="#">Cutey's Salon</a>
+                        </div>
+                        <div tabindex="0" role="gridcell" aria-colindex="4">$700.00</div>
+                        <div tabindex="0" role="gridcell" aria-colindex="5">$995,532.00</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div role="separator" aria-label="End of Grid Example"></div>
+
+        <!--ACCORDION EXAMPLE-->
+        <div role="separator" aria-label=" Start of Accordion Example"></div>
+
+        <div id="accordion-examples" tabindex="0" role="tabpanel" aria-hidden="true" aria-labelledby="accordion">
+            <h2 id="ex_label">Example</h2>
+            <div role="separator" id="ex_start_sep" aria-labelledby="ex_start_sep ex_label"
+                 aria-label="Start of"></div>
+            <div id="coding-arena">
+                <div class="demo-block">
+                    <!-- Accordion Configuration Options
+
+                      data-allow-toggle
+                        Allow for each toggle to both open and close individually
+
+                      data-allow-multiple
+                        Allow for multiple accordion sections to be expanded at the same time
+                      __________
+
+                      Ex:
+                        <dl id="accordionGroup" role="presentation" class="Accordion" data-allow-multiple data-allow-toggle>
+
+                    -->
+                    <div id="accordionGroup" role="presentation" class="Accordion">
+                        <div role="heading" aria-level="3">
+                            <button aria-expanded="true" class="Accordion-trigger"
+                                    aria-controls="sect1" id="accordion1id"
+                            >
+                                <span class="Accordion-title">Personal Information</span><span
+                                    class="Accordion-icon"></span>
+                            </button>
+                        </div>
+                        <div id="sect1" role="region" aria-labelledby="accordion1id" class="Accordion-panel">
+                            <div>
+                                <!-- Variable content within section, may include any type of markup or interactive widgets. -->
+                                <p>
+                                    <label for="cufc1">Name:</label>
+                                    <input type="text" value="" name="Name" id="cufc1" class="required"
+                                           aria-required="true"
+                                    >
+                                </p>
+                                <p>
+                                    <label for="cufc2">Email:</label>
+                                    <input type="text" value="" name="Email" id="cufc2"
+                                           aria-required="true"
+                                    >
+                                </p>
+                                <p>
+                                    <label for="cufc3">Phone:</label>
+                                    <input type="text" value="" name="Phone" id="cufc3">
+                                </p>
+                                <p>
+                                    <label for="cufc4">Extension:</label>
+                                    <input type="text" value="" name="Ext" id="cufc4">
+                                </p>
+                                <p>
+                                    <label for="cufc5">Country:</label>
+                                    <input type="text" value="" name="Country" id="cufc5">
+                                </p>
+                                <p>
+                                    <label for="cufc6">City/Province:</label>
+                                    <input type="text" value="" name="City_Province" id="cufc6">
+                                </p>
+                            </div>
+                        </div>
+                        <div role="heading" aria-level="3">
+                            <button aria-expanded="true" class="Accordion-trigger"
+                                    aria-controls="sect2" id="accordion2id"
+                            >
+                                <span class="Accordion-title">Billing Address</span><span
+                                    class="Accordion-icon"></span>
+                            </button>
+                        </div>
+                        <div id="sect2" role="region" aria-labelledby="accordion2id" class="Accordion-panel"
+                             aria-hidden="true">
+                            <div>
+                                <p>
+                                    <label for="b-add1">Address 1:</label>
+                                    <input type="text" name="b-add1" id="b-add1"/>
+                                </p>
+                                <p>
+                                    <label for="b-add2">Address 2:</label>
+                                    <input type="text" name="b-add2" id="b-add2"/>
+                                </p>
+                                <p>
+                                    <label for="b-city">City:</label>
+                                    <input type="text" name="b-city" id="b-city"/>
+                                </p>
+                                <p>
+                                    <label for="b-state">State:</label>
+                                    <input type="text" name="b-state" id="b-state"/>
+                                </p>
+                                <p>
+                                    <label for="b-zip">Zip Code:</label>
+                                    <input type="text" name="b-zip" id="b-zip"/>
+                                </p>
+                            </div>
+                        </div>
+                        <div role="heading" aria-level="3">
+                            <button aria-expanded="false" class="Accordion-trigger"
+                                    aria-controls="sect3" id="accordion3id"
+                            >
+                                <span class="Accordion-title">Shipping Address</span><span
+                                    class="Accordion-icon"></span>
+                            </button>
+                        </div>
+                        <div id="sect3" role="region" aria-labelledby="accordion3id" class="Accordion-panel"
+                             aria-hidden="true">
+                            <div>
+                                <p>
+                                    <label for="m-add1">Address 1:</label>
+                                    <input type="text" name="m-add1" id="m-add1"/>
+                                </p>
+                                <p>
+                                    <label for="m-add2">Address 2:</label>
+                                    <input type="text" name="m-add2" id="m-add2"/>
+                                </p>
+                                <p>
+                                    <label for="m-city">City:</label>
+                                    <input type="text" name="m-city" id="m-city"/>
+                                </p>
+                                <p>
+                                    <label for="m-state">State:</label>
+                                    <input type="text" name="m-state" id="m-state"/>
+                                </p>
+                                <p>
+                                    <label for="m-zip">Zip Code:</label>
+                                    <input type="text" name="m-zip" id="m-zip"/>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div role="separator" id="ex_end_sep" aria-labelledby="ex_end_sep ex_label" aria-label="End of"></div>
+        </div>
+        <div role="separator" aria-label="End of Accordion Example"></div>
+
+        <!--TEXTBOX EXAMPLE-->
+        <div role="separator" aria-label=" Start of Textbox Example"></div>
+
+        <div id="textbox-examples" tabindex="0" role="tabpanel" aria-hidden="true" aria-labelledby="textbox">
+            <div id="multiline" role="textbox" contenteditable="true" aria-multiline="true"
+                 aria-label="Textbox"></div>
+        </div>
+        <div role="separator" aria-label="End of Textbox Example"></div>
+
+        <!--CHECKBOX EXAMPLE-->
+        <div role="separator" aria-label=" Start of Checkbox Example"></div>
+        <style>
+            [aria-checked="true"] {
+                background-color: lightblue;
+            }
+        </style>
+        <div id="checkbox-examples" tabindex="0" role="tabpanel" aria-hidden="true" aria-labelledby="checkbox">
+            <div id="chkbox" role="checkbox" aria-checked="false" tabindex="0" aria-label="checkbox toggle"
+                 style="width: 20px; height: 20px; border: 2px solid black;"></div>
+        </div>
+        <script>
+            var check = document.getElementById("chkbox");
+            check.addEventListener("click", function (e)
+            {
+                var bool = ( e.target.getAttribute("aria-checked") === "false") ? "true" : "false";
+                e.target.setAttribute("aria-checked", bool)
+            })
+        </script>
+        <div role="separator" aria-label="End of Checkbox Example"></div>
+
+        <!--SLIDER EXAMPLE-->
+        <div role="separator" aria-label=" Start of Slider Example"></div>
+        <div id="slider-examples" tabindex="0" role="tabpanel" aria-hidden="true" aria-labelledby="slider">
+            <div id="idSlider">Red</div>
+            <div class="aria-widget-slider">
+                <div class="rail">
+                    <div id="idSliderValue"
+                         role="slider"
+                         tabindex="0"
+                         class="thumb"
+                         aria-valuemin="0"
+                         aria-valuenow="0"
+                         aria-valuemax="100"
+                         aria-labelledby="idSlider"></div>
+                </div>
+                <div class="value">0</div>
+            </div>
+        </div>
+        <div role="separator" aria-label="End of Slider Example"></div>
+
 
 
     </div> <!--END OF TABS-->
 </div> <!--END OF MAIN-->
 
 
+<script src="./js/utils.js"></script>
 <script src="./js/tabs.js"></script>
 <script src="./js/button.js"></script>
 <script src="./js/progress.js"></script>
 <script src="./js/dialog.js"></script>
+<script>
+    var utils = new Utils();
+    document.body.addEventListener('keydown', utils.keydown());
+</script>
 </body>
 </html>
