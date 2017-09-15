@@ -19,6 +19,7 @@
 		<Script src="<%=request.getContextPath()%>/ibx/resources/ibx.js" type="text/javascript"></script>
 		<script type="text/javascript">
 			<jsp:include page="/WEB-INF/jsp/global/wf_globals.jsp" flush="false" />
+			ibx.showOnLoad = false;
 			ibx(function()
 			{
 			}, [{"src":"./test_res_bundle.xml", "loadContext":"app"}], true);
@@ -28,16 +29,29 @@
 			window.addEventListener("ibx_resmgr", ibxSystemEvent);
 			function ibxSystemEvent(e)
 			{
-				//console.log(e.type, e.data.hint, e.data);
-			};
+				var splash = $(".ibx-splash-screen");
+				var eType = e.type;
+				var data = e.data;
+				if(eType == "ibx_ibxevent" && data.hint == "loading")
+				{
+					$(".ibx-splash-logo-image").prop("src", ibx.getPath() + "css/images/ibx.png");
+					splash.addClass("ibx-splash-show");
+				}
+				else
+				if(eType == "ibx_ibxevent" && data.hint == "loaded")
+				{
+					splash.removeClass("ibx-splash-show");
+					ibx.showRootNodes(true);
+				}
 
-			window.addEventListener("ibx_res_mgr_resolve_uri", function(e)
-			{
-				console.log(e);
-				//e.data.uri = "";
-				e.data.uri;
-				//e.preventDefault();
-			});
+				window.requestAnimationFrame(splashOut.bind(this, e));
+				function splashOut(e)
+				{
+					var text = sformat("Loading...{1} {2}", data.src ? " - " + data.src : "", data.hint);
+					$(".ibx-splash-status").text(text);
+
+				};
+			};
 		</script>
 		<style type="text/css">
 			html, body
@@ -54,7 +68,6 @@
 				top:0px;
 				right:0px;
 				bottom:0px;
-				border:2px solid red;
 				padding:5px;
 			}
 
@@ -69,31 +82,62 @@
 				border:1px solid black;
 				background-color:white;
 			}
+
+			.ibx-splash-screen
+			{
+				display:none;
+				position:absolute;
+				left:0px;
+				top:0px;
+				right:0px;
+				bottom:0px;
+				font-size:1em;
+				flex-direction:column;
+				align-items:center;
+				justify-content:center;
+			}
+			.ibx-splash-show
+			{
+				display:flex;
+			}
+			.ibx-splash-frame
+			{
+				border:5px solid black;
+				padding:5px;
+				background-color:white;
+			}
+			.ibx-splash-logo-image
+			{
+			}
+			.ibx-splash-logo-text
+			{
+				font-size:36pt;
+				font-weight:bold;
+			}
+			.ibx-splash-status
+			{
+				position:abolute;
+				right:0px;
+				color:#aaa;
+			}
+
 		</style>
 	</head>
-	<body class="ibx-root">
-		<div class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="center" data-ibxp-justify="center">
+	<body class="">
+		<div class="ibx-root main-box" data-ibx-type="ibxVBox" data-ibxp-align="center" data-ibxp-justify="center">
 			<div class="test-label" data-ibx-type="ibxButtonSimple" data-ibxp-glyph-classes="fa fa-cogs"
 				data-ibxp-overlays="[{'position':'bl', 'glyphClasses':'short-cut-overlay fa fa-user'}, {'position':'br', 'glyphClasses':'short-cut-overlay fa fa-share-alt'}]">Test Label</div>
+		</div>
+
+		<div class="ibx-splash-screen">
+			<img class="ibx-splash-logo-image"/>
+			<span class="ibx-splash-logo-text">ibx</span>
+			<div class="ibx-splash-status"></div>
 		</div>
 	</body>
 </html>
 
 
-<!--
-<div style="display:none;" class="test-label" data-ibx-type="ibxLabel"
-	data-ibxp-overlays=
-	'[
-		{"position":"tc", "glyph":"face" ,"glyphClasses":"material-icons"},
-		{"position":"tr", "glyph":"face" ,"glyphClasses":"material-icons"},
-		{"position":"rc", "glyph":"face" ,"glyphClasses":"material-icons"},
-		{"position":"rb", "glyph":"face" ,"glyphClasses":"material-icons xfa xfa-share"},
-		{"position":"bc", "glyph":"face" ,"glyphClasses":"material-icons"},
-		{"position":"bl", "glyph":"face" ,"glyphClasses":"material-icons"},
-		{"position":"lc", "glyph":"face" ,"glyphClasses":"material-icons"},
-		{"position":"lt", "glyph":"face" ,"glyphClasses":"material-icons"},
-		{"position":"cc", "glyph":"face" ,"glyphClasses":"material-icons"},
-	]'
-	data-ibxp-icon="./ren1.png" data-ibxp-glyph="face" data-ibxp-glyph-classes="material-icons">Julian
-</div>
--->
+
+
+

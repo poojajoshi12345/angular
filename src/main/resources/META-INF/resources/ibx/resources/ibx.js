@@ -56,6 +56,18 @@ function ibx()
 		ibx.setAppPath(window.location.href.substring(0, window.location.href.lastIndexOf("/") + 1));
 		ibx._appName = window.location.href.substring(window.location.href.lastIndexOf("/") + 1)
 		ibx._isLoading = !ibx.loaded;
+		
+		//save the parameters, if any, passed on the url
+		ibx._appParms = {};
+		if(document.location.search)
+		{
+			var parms = document.location.search.replace(/^\?/, "").split("&");
+			for(var i = 0; i < parms.length; ++i)
+			{
+				parm = parms[i].split("=");
+				ibx._appParms[decodeURIComponent(parm[0])] = decodeURIComponent(parm[1]);
+			};
+		}
 
 		//things to preload for ibx.  Everything else is in the root resource bundle
 		var scripts = 
@@ -114,8 +126,7 @@ function ibx()
 						//make the master/default resource manager for ibx.
 						ibx.resourceMgr = new ibxResourceManager();
 
-						//save the current inline head style blocks so they can be moved after all ibx loaded css files.
-						var inlineStyles = $("head > style").detach();
+						var inlineStyles = $("head > style");//save the pre-ibx styles so they can be moved to the end after load.
 						var packages = ibx._loadPromise._resPackages;
 						packages.unshift(ibx._path + "./ibx_resource_bundle.xml");
 						ibx.resourceMgr.addBundles(packages).done(function()
@@ -127,7 +138,7 @@ function ibx()
 								ibx.bindElements((typeof(autoBind) === "string") ? autoBind : "");
 							}
 
-							$("head").append(inlineStyles);//append the inline style blocks back to end of head.
+							$("head").append(inlineStyles);//move any non-ibx styles to the end so they will override ibx styles.
 						
 							ibx._loaded = true;
 							ibx._isLoading = !ibx._loaded;
@@ -183,9 +194,11 @@ ibx._appPath = "";
 ibx.getAppPath = function(){return ibx._appPath;};
 ibx.setAppPath = function(path){ibx._appPath = path;};
 
-//the endpoint of the windows location when ibx <script> tag was loaded.
+//the endpoint of the windows location when ibx <script> tag was loaded....and any parms passed via url
 ibx._appName = "";
-ibx.getAppName = function(){return this._appName;};
+ibx.getAppName = function(){return ibx._appName;};
+ibx._appParms;
+ibx.getAppParms = function(){return ibx._appParms;};
 
 //attach ibxWidgets to dom elements
 ibx.bindElements = function(elements)
