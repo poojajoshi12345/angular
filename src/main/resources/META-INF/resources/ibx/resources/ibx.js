@@ -88,7 +88,7 @@ function ibx()
 				//wait for jQuery to be fully loaded...
 				$(function()
 				{
-					ibx.dispatchEvent("ibx", {"ibx":ibx, "hint":"loading"});
+					$(window).dispatchEvent("ibx_ibxevent", {"hint":"loading", "ibx":ibx});
 
 					//continue booting ibx...
 					ibx._loadPromise = $.Deferred();
@@ -139,7 +139,7 @@ function ibx()
 									
 							});
 							ibx._loadPromise.resolve(ibx);//let everyone know the system is booted.
-							ibx.dispatchEvent("ibx", {"ibx":ibx, "hint":"loaded"});
+							$(window).dispatchEvent("ibx_ibxevent", {"hint":"loaded", "ibx":ibx});
 						});
 					});
 				});
@@ -155,6 +155,7 @@ function ibx()
 	}
 	return ibx;
 }
+ibx.dispatchEvent = function(){};
 
 //various static resources.
 ibx.version = "0.9";		//ibx version...just a placeholder for now.
@@ -184,24 +185,6 @@ ibx.setAppPath = function(path){ibx._appPath = path;};
 //the endpoint of the windows location when ibx <script> tag was loaded.
 ibx._appName = "";
 ibx.getAppName = function(){return this._appName;};
-
-//emit events during the ibx load process so progress can be tracked.
-ibx.dispatchEvent = function(type, data)
-{
-	data = data || {}
-	data.type = type;
-	var e = null;
-	if(typeof(Event) === "function")
-		e = new Event("ibxevent", {"bubbles":true})
-	else
-	{
-		e = document.createEvent("CustomEvent");
-		e.initCustomEvent("ibxevent", true, true, null);
-	}
-	e.data = data;
-	window.dispatchEvent(e);
-	return e;
-}
 
 //attach ibxWidgets to dom elements
 ibx.bindElements = function(elements)

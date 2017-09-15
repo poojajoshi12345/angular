@@ -184,23 +184,27 @@ jQuery.fn.textNodes = function()
 };
 
 //let jQuery dispatch custom native events
-jQuery.fn.dispatchEvent = function(type, data)
+jQuery.fn.dispatchEvent = function(type, data, canBubble, cancelable)
 {
+	canBubble = canBubble !== undefined ? canBubble : true;
+	cancelable = cancelable !== undefined ? cancelable : true;
+
 	data = data || {}
-	this.each(function(type, data, idx, el)
+	var e = null;
+	if(typeof(Event) === "function")
+		e = new Event(type, {"bubbles":true})
+	else
 	{
-		var e = null;
-		if(typeof(Event) === "function")
-			e = new Event(type, {"bubbles":true})
-		else
-		{
-			e = document.createEvent("CustomEvent");
-			e.initCustomEvent(type, true, true, null);
-		}
-		e.data = data;
+		e = document.createEvent("CustomEvent");
+		e.initCustomEvent(type, canBubble, cancelable, null);
+	}
+	e.data = data;
+
+	this.each(function(e, idx, el)
+	{
 		el.dispatchEvent(e);
-	}.bind(this, type, data));
-	return this;
+	}.bind(this, e));
+	return e;
 }
 
 

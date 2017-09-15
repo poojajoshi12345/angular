@@ -24,11 +24,20 @@
 			}, [{"src":"./test_res_bundle.xml", "loadContext":"app"}], true);
 
 
-			window.addEventListener("ibxevent", function(e)
+			window.addEventListener("ibx_ibxevent", ibxSystemEvent);
+			window.addEventListener("ibx_resmgr", ibxSystemEvent);
+			function ibxSystemEvent(e)
 			{
-				console.log(e.data.type, e.data.hint, e.data);
-			});
+				//console.log(e.type, e.data.hint, e.data);
+			};
 
+			window.addEventListener("ibx_res_mgr_resolve_uri", function(e)
+			{
+				console.log(e);
+				//e.data.uri = "";
+				e.data.uri;
+				//e.preventDefault();
+			});
 		</script>
 		<style type="text/css">
 			html, body
