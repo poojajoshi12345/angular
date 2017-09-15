@@ -187,7 +187,7 @@ _p.getResPath = function(src, loadContext)
 		loadContext = ibx.getPath();
 
 	//give interested parties the ability to modify the resource uri
-	evt = $(window).dispatchEvent("ibx_res_mgr_resolve_uri", {"resourceMgr":this, "uri":src, "loadCtx":loadContext}, true, false);
+	evt = $(window).dispatchEvent("ibx_resmgr_resolveuri", {"resourceMgr":this, "uri":src, "loadCtx":loadContext}, true, false);
 	var src = evt.data.uri;
 	if(!(/^[/\\]/).test(src))
 		src = loadContext + src;
