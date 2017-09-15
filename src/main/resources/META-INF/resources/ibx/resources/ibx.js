@@ -135,7 +135,8 @@ function ibx()
 							ibx._loadPromise.then(function()
 							{
 								var ibxRoots = $(".ibx-root").addClass("ibx-loaded");//display all ibx-roots, now that we are loaded.
-								ibx.showRootNodes(ibx.showOnLoad);
+								if(ibx.showOnLoad)
+									ibx.showRootNodes(true);
 									
 							});
 							ibx._loadPromise.resolve(ibx);//let everyone know the system is booted.
