@@ -521,7 +521,7 @@ $.widget("ibi.ibxSelect", $.ibi.ibxTextField,
 		{
 			if (!bKeep && menuItem.hasClass('sel-selected'))
 			{
-				this._removeSelection(menuItem, bKeepAnchor, bNoUpdate, true);
+				this._removeSelection(menuItem, bKeepAnchor, bNoUpdate, bNoChange);
 				return;
 			}
 			bKeep = true;
