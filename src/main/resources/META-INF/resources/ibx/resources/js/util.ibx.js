@@ -183,6 +183,27 @@ jQuery.fn.textNodes = function()
 	return $(ret);
 };
 
+//let jQuery dispatch custom native events
+jQuery.fn.dispatchEvent = function(type, data)
+{
+	data = data || {}
+	this.each(function(type, data, idx, el)
+	{
+		var e = null;
+		if(typeof(Event) === "function")
+			e = new Event(type, {"bubbles":true})
+		else
+		{
+			e = document.createEvent("CustomEvent");
+			e.initCustomEvent(type, true, true, null);
+		}
+		e.data = data;
+		el.dispatchEvent(e);
+	}.bind(this, type, data));
+	return this;
+}
+
+
 //Sorts elements on zIndex (in descending order).
 function fnSortZIndex(el1, el2)
 {

@@ -136,10 +136,6 @@ $Revision$:-->
 
 	<!--scripts-->
 	<scripts>
-		<!--PRELOADS FIRST-->
-		<script-file src="./js/util.ibx.js"/>
-		<script-file src="./js/ibxPreLoad.ibx.js"/>
-
 		<!--POLYFILL/SHIM AND PLUGINS-->
 		<script-file src="./etc/resizepolyfill/ResizeSensor.js"/>
 		<script-file src="./etc/scrollwidthpolyfill/scrollwidthpolyfill.js"/>

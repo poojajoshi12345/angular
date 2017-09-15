@@ -23,9 +23,10 @@
 			{
 			}, [{"src":"./test_res_bundle.xml", "loadContext":"app"}], true);
 
+
 			window.addEventListener("ibxevent", function(e)
 			{
-				console.log(e.data.type, e.data.hint, e.data.src);
+				console.log(e.data.type, e.data.hint, e.data);
 			});
 
 		</script>
