@@ -40,16 +40,16 @@
 				else
 				if(eType == "ibx_ibxevent" && data.hint == "loaded")
 				{
-					splash.removeClass("ibx-splash-show");
-					ibx.showRootNodes(true);
+					//splash.removeClass("ibx-splash-show");
+					//ibx.showRootNodes(true);
 				}
 
 				window.requestAnimationFrame(splashOut.bind(this, e));
 				function splashOut(e)
 				{
-					var text = sformat("Loading...{1} {2}", data.src ? " - " + data.src : "", data.hint);
-					$(".ibx-splash-status").text(text);
-
+					var text  = $(sformat("<div>Loading...{1}: {2} {3}</div>", eType, data.hint, data.src ? " - " + data.src : ""));
+					var status = $(".ibx-splash-status");
+					status.append(text);
 				};
 			};
 		</script>
@@ -118,7 +118,11 @@
 			{
 				position:abolute;
 				right:0px;
+				height:300px;
+				overflow:auto;
 				color:#aaa;
+				border:none;
+				wrap:off;
 			}
 
 		</style>
