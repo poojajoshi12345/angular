@@ -316,6 +316,10 @@
             / / transform: translateY(- 65 %) translateX(- 50 %);
             }
 
+            [role="radio"][aria-checked="true"]{
+                color: blue;
+            }
+
             [role="radio"][aria-checked="mixed"]:active::before,
             [role="radio"][aria-checked="true"]:active::before {
                 background-image: linear-gradient(to bottom, hsl(216, 80%, 57%), hsl(217, 95%, 68%) 60%);
@@ -340,30 +344,7 @@
                 <div id="rbtn-7" role="radio" aria-checked="false" tabindex="-1">radio 7</div>
             </div>
         </div>
-        <!--quick script to ensure that the checked works-->
-        <script>
-            var radioListItems = document.querySelectorAll("ul#radio-list > li");
-            console.log(radioListItems)
-            for (var i = 0; i < radioListItems.length; i++)
-            {
-                radioListItems[i].addEventListener("click", function (e)
-                {
-                    console.log(i)
-                    console.log(event.currentTarget)
-                    document.querySelectorAll("#radio-list>li")
-                            .forEach(function (val, index)
-                            {
-                                val.setAttribute("aria-checked", "false");
-                                // next time we navigate to this level,,
-                                // force tab to select currently selected option
-                                val.setAttribute("tabindex", "-1");
-                            })
 
-                    event.currentTarget.setAttribute("aria-checked", "true");
-                    event.currentTarget.setAttribute("tabindex", "0");
-                });
-            }
-        </script>
         <div role="separator" aria-label="End of Radio Example"></div>
 
         <!--LINK EXAMPLE-->
@@ -552,7 +533,6 @@
 
         <!--TREE EXAMPLE-->
         <div role="separator" aria-label=" Start of Tree Example"></div>
-
         <div id="tree-examples" tabindex="0" role="tabpanel" aria-hidden="true" aria-labelledby="tree">
             <h3 id="tree_label">
                 Projects
@@ -611,9 +591,9 @@
             </div>
         </div>
         <div role="separator" aria-label="End of Tree Example"></div>
+
         <!--GRID EXAMPLE-->
         <div role="separator" aria-label=" Start of Grid Example"></div>
-
         <style>
             div[role='row'] > div {
                 display: inline-block;
@@ -630,7 +610,7 @@
         <div id="grid-examples" tabindex="0" role="tabpanel" aria-hidden="true" aria-label="grid example">
             <div id="ex1">
                 <h4 id="grid1Label">Transactions January 1 through January 6</h4>
-                <div role="grid" aria-labelledby="grid1Label" class="data">
+                <div role="grid" aria-labelledby="grid1Label" class="data" aria-rowcount="6" aria-colcount="5">
                     <div role="row" aria-rowindex="1">
                         <div role="columnheader" aria-colindex="1">Date</div>
                         <div role="columnheader" aria-colindex="2">Type</div>
@@ -699,7 +679,6 @@
 
         <!--ACCORDION EXAMPLE-->
         <div role="separator" aria-label=" Start of Accordion Example"></div>
-
         <div id="accordion-examples" tabindex="0" role="tabpanel" aria-hidden="true" aria-labelledby="accordion">
             <h2 id="ex_label">Example</h2>
             <div role="separator" id="ex_start_sep" aria-labelledby="ex_start_sep ex_label"
@@ -722,13 +701,13 @@
                     <div id="accordionGroup" role="presentation" class="Accordion">
                         <div role="heading" aria-level="3">
                             <button aria-expanded="true" class="Accordion-trigger"
-                                    aria-controls="sect1" id="accordion1id"
+                                    aria-controls="sect1" id="accordion1id" tabindex="0"
                             >
                                 <span class="Accordion-title">Personal Information</span><span
                                     class="Accordion-icon"></span>
                             </button>
                         </div>
-                        <div id="sect1" role="region" aria-labelledby="accordion1id" class="Accordion-panel">
+                        <div id="sect1" role="region" aria-labelledby="accordion1id" class="Accordion-panel" aria-hidden="false">
                             <div>
                                 <!-- Variable content within section, may include any type of markup or interactive widgets. -->
                                 <p>
@@ -763,7 +742,7 @@
                         </div>
                         <div role="heading" aria-level="3">
                             <button aria-expanded="true" class="Accordion-trigger"
-                                    aria-controls="sect2" id="accordion2id"
+                                    aria-controls="sect2" id="accordion2id" tabindex="0"
                             >
                                 <span class="Accordion-title">Billing Address</span><span
                                     class="Accordion-icon"></span>
@@ -794,9 +773,9 @@
                                 </p>
                             </div>
                         </div>
-                        <div role="heading" aria-level="3">
+                        <div role="heading"  aria-level="3">
                             <button aria-expanded="false" class="Accordion-trigger"
-                                    aria-controls="sect3" id="accordion3id"
+                                    aria-controls="sect3" id="accordion3id" tabindex="0"
                             >
                                 <span class="Accordion-title">Shipping Address</span><span
                                     class="Accordion-icon"></span>
@@ -836,7 +815,6 @@
 
         <!--TEXTBOX EXAMPLE-->
         <div role="separator" aria-label=" Start of Textbox Example"></div>
-
         <div id="textbox-examples" tabindex="0" role="tabpanel" aria-hidden="true" aria-labelledby="textbox">
             <div id="multiline" role="textbox" contenteditable="true" aria-multiline="true"
                  aria-label="Textbox"></div>
@@ -854,14 +832,6 @@
             <div id="chkbox" role="checkbox" aria-checked="false" tabindex="0" aria-label="checkbox toggle"
                  style="width: 20px; height: 20px; border: 2px solid black;"></div>
         </div>
-        <script>
-            var check = document.getElementById("chkbox");
-            check.addEventListener("click", function (e)
-            {
-                var bool = ( e.target.getAttribute("aria-checked") === "false") ? "true" : "false";
-                e.target.setAttribute("aria-checked", bool)
-            })
-        </script>
         <div role="separator" aria-label="End of Checkbox Example"></div>
 
         <!--SLIDER EXAMPLE-->
@@ -884,20 +854,27 @@
         </div>
         <div role="separator" aria-label="End of Slider Example"></div>
 
-
-
     </div> <!--END OF TABS-->
 </div> <!--END OF MAIN-->
 
 
 <script src="./js/utils.js"></script>
-<script src="./js/tabs.js"></script>
+
+<script src="./js/accordion.js"></script>
 <script src="./js/button.js"></script>
-<script src="./js/progress.js"></script>
+<script src="./js/checkbox.js"></script>
 <script src="./js/dialog.js"></script>
+<script src="./js/grid.js"></script>
+<script src="./js/link.js"></script>
+<script src="./js/progress.js"></script>
+<script src="./js/radio.js"></script>
+<script src="./js/tabs.js"></script>
 <script>
-    var utils = new Utils();
-    document.body.addEventListener('keydown', utils.keydown());
+    if(typeof(utils) === 'undefined'){
+        var utils = new Utils();
+        document.body.addEventListener('keydown', utils.keydown());
+    }
+
 </script>
 </body>
 </html>

@@ -47,6 +47,7 @@ function Utils()
                e.target.dispatchEvent(eventListeners['ESC'])
                break;
             case this.keys.SPACE:
+               e.preventDefault()
                e.target.dispatchEvent(eventListeners['SPACE'])
                break;
             case this.keys.PAGEUP:
@@ -62,15 +63,19 @@ function Utils()
                e.target.dispatchEvent(eventListeners['HOME'])
                break;
             case this.keys.LEFT:
+               e.preventDefault()
                e.target.dispatchEvent(eventListeners['LEFT'])
                break;
             case this.keys.UP:
+               e.preventDefault()
                e.target.dispatchEvent(eventListeners['UP'])
                break;
             case this.keys.RIGHT:
+               e.preventDefault()
                e.target.dispatchEvent(eventListeners['RIGHT'])
                break;
             case this.keys.DOWN:
+               e.preventDefault()
                e.target.dispatchEvent(eventListeners['DOWN'])
                break;
          }
