@@ -592,17 +592,45 @@ $.widget("ibi.ibxSelect", $.ibi.ibxTextField,
 		this._fnMatch = fnMatch;
 		this._setHighlight();
 	},
+	externalResetFilter: function ()
+	{
+		this._externalFilter = false;
+		this._resetHighlight();
+	},
+	_externalFilter: false,
+	externalApplyFilter: function (searchText)
+	{
+		this._externalFilter = true;
+		this._list.find(".ibx-select-item").each(function (index, el)
+		{
+			var itemText = $(el).data('ibxWidget').option('labelOptions.text') + "";
+			if (0 == itemText.toLowerCase().indexOf(searchText.toLowerCase()))
+				$(el).show();
+			else
+				$(el).hide();
+		}.bind(this));
+
+		this._list.find(".ibx-select-group").each(function (index, el)
+		{
+			if (this._list.find(".ibx-radio-group-" + $(el).attr("id") + ":ibxFocusable").length > 0)
+				$(el).show();
+			else
+				$(el).hide();
+		}.bind(this));
+},
 	_resetHighlight: function ()
 	{
+		if (this._externalFilter)
+			return;
 		this._list.find(".ibx-select-item").show();
 		this._list.find(".ibx-select-group").show();
 	},
-	_setHighlight: function ()
+	_setHighlight: function (search)
 	{
 		this._list.find('.ibx-select-radio-item,.ibx-select-check-item').each(function (index, el) { $(el).data('ibxWidget').option('checked', false); })
 		this._list.find('.sel-selected').removeClass('sel-selected');
 		var bFound = false;
-		var searchText = this._textInput.val();
+		var searchText = search ? search : this._textInput.val();
 		if (searchText)
 		{
 			this._list.find(".ibx-select-item").each(function (index, el)
