@@ -10,7 +10,7 @@ function ibxEventManager()
 	window.addEventListener("dragover", ibxEventManager._onDragEvent);
 	window.addEventListener("drop", ibxEventManager._onDragEvent);
 }
-ibxEventManager.noBrowserCtxMenu = false;
+ibxEventManager.noBrowserCtxMenu = true;
 ibxEventManager.msDblClick = 300;
 ibxEventManager.msCtxMenu = 500;
 ibxEventManager.createMouseEvent = function(eType, e)
