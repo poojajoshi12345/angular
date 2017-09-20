@@ -170,12 +170,12 @@ ibxEventManager._onKeyDown = function(event)
 			else
 			if(d.is("textarea"))
 				doPrevent = false;
+		}
 
-			if(doPrevent)
-			{
-				event.preventDefault();
-				return false;
-			}
+		if(doPrevent)
+		{
+			event.preventDefault();
+			return false;
 		}
 	};
 };
