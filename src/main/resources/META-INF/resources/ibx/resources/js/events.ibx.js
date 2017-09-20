@@ -6,11 +6,13 @@ function ibxEventManager()
 	window.addEventListener("touchstart", ibxEventManager._onTouchEvent.bind(this), true)
 	window.addEventListener("touchend", ibxEventManager._onTouchEvent, true)
 	window.addEventListener("touchmove", ibxEventManager._onTouchEvent, true)
-	window.addEventListener("contextmenu", ibxEventManager._onContextMenu);
 	window.addEventListener("dragover", ibxEventManager._onDragEvent);
 	window.addEventListener("drop", ibxEventManager._onDragEvent);
+	window.addEventListener("contextmenu", ibxEventManager._onContextMenu);
+	window.addEventListener("keydown", ibxEventManager._onKeyDown);
 }
 ibxEventManager.noBrowserCtxMenu = true;
+ibxEventManager.noBackspaceNavigate = true;
 ibxEventManager.msDblClick = 300;
 ibxEventManager.msCtxMenu = 500;
 ibxEventManager.createMouseEvent = function(eType, e)
@@ -129,18 +131,56 @@ ibxEventManager._onTouchEvent = function(e)
 	}
 };
 
-ibxEventManager._onContextMenu = function(e)
-{
-	if(ibxEventManager.noBrowserCtxMenu)
-		e.preventDefault();
-};
-
 ibxEventManager._onDragEvent = function(e)
 {
 	e.dataTransfer.dropEffect = "none";
 	e.preventDefault();
 };
 
+ibxEventManager._onContextMenu = function(e)
+{
+	if(ibxEventManager.noBrowserCtxMenu)
+		e.preventDefault();
+};
+
+//[HOME-183] stop backspace from navigating
+//see: https://stackoverflow.com/questions/1495219/how-can-i-prevent-the-backspace-key-from-navigating-back
+ibxEventManager._onKeyDown = function(event)
+{
+	if(ibxEventManager.noBackspaceNavigate && (event.keyCode === 8))
+	{
+		var doPrevent = true;
+		var types = ["text", "password", "file", "search", "email", "number", "date", "color", "datetime", "datetime-local", "month", "range", "search", "tel", "time", "url", "week"];
+		var d = $(event.srcElement || event.target);
+		var disabled = d.prop("readonly") || d.prop("disabled");
+
+		if(!disabled)
+		{
+			if(d[0].isContentEditable)
+				doPrevent = false;
+			else
+			if(d.is("input"))
+			{
+				var type = d.attr("type");
+				if(type)
+					type = type.toLowerCase();
+				if(types.indexOf(type) > -1)
+					doPrevent = false;
+			}
+			else
+			if(d.is("textarea"))
+				doPrevent = false;
+
+			if(doPrevent)
+			{
+				event.preventDefault();
+				return false;
+			}
+		}
+	};
+};
+
+//singleton event manager object.
 window["ibxEventMgr"] = new ibxEventManager();
 
 //# sourceURL=events.ibx.js
