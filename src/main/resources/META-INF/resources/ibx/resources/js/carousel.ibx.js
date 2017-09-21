@@ -104,10 +104,12 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 		this._adjustPageMarkers();
 	},
 	_scrollInfo:null,
-	scroll:function(steps, scrollType, stepRate)
+	scroll:function(steps, scrollType, stepRate, jumpScroll)
 	{
 		if(this._scrollInfo || !steps)
 			return;
+
+		stepRate = (stepRate !== undefined) ? stepRate : this.options.scrollStepRate;
 
 		var options = this.options;
 		this._scrollInfo = info = 
@@ -115,19 +117,28 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 			"forward": (steps >= 0),
 			"scrollType": scrollType || options.scrollType,
 			"steps": Math.abs(steps),
-			"nFrames": ((stepRate !== undefined ? stepRate : options.scrollStepRate)/1000) * 60,
+			"nFrames": Math.ceil((stepRate/1000) * 60),
 			"curFrame": 0,
 			"scrollAxis": options.scrollProps.axis,
 			"animationFrameId": null
 		};
-		info.stepSize = this._calcScrollStepSize(info.scrollType, info.forward);
+		info.stepSize = this._calcScrollStepSize(info.scrollType, info.forward);1
 		info.scrollEndPos = this._itemsBox.prop(info.scrollAxis) + info.stepSize;
 		info.frameDelta = info.forward ? Math.ceil(info.stepSize/info.nFrames) : Math.floor(info.stepSize/info.nFrames);
+
+		//do the whole thin
+		if(jumpScroll)
+		{
+			info.stepSize = info.stepSize * info.steps;
+			info.scrollEndPos = this._itemsBox.prop(info.scrollAxis) + info.stepSize;
+			info.frameDelta = info.forward ? Math.ceil(info.stepSize/info.nFrames) : Math.floor(info.stepSize/info.nFrames);
+			info.steps = 1;
+		}
 
 		var fnFrame = function(info, timeStamp)
 		{
 			var newScroll = this._itemsBox.prop(info.scrollAxis) + info.frameDelta;
-			if((info.forward && newScroll > info.scrollEndPos) || (!info.forward && newScroll < info.scrollEndPos))
+			if((info.forward && newScroll >= info.scrollEndPos) || (!info.forward && newScroll <= info.scrollEndPos))
 			{
 				newScroll = info.scrollEndPos;
 				info.curFrame = info.nFrames;
@@ -188,14 +199,14 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 		if(this._scrollInfo)
 			this._scrollInfo.stop = true;
 	},
-	page:function(pageNo)
+	page:function(pageNo, stepRate)
 	{
 		var info = this.getPageInfo();
 		if(pageNo === undefined)
 			return info.curPage;
 
-		var newPage = pageNo - info.curPage
-		this.scroll(newPage, "page", 0);
+		var pages = (pageNo - info.curPage);
+		this.scroll(pages, "page", stepRate, true);
 	},
 	_onPageMarkerClick:function(e)
 	{
@@ -209,7 +220,7 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 		for(var i = 0; i < pageInfo.pages; ++i)
 		{
 			var pageMarker = $(sformat("<div class='{1} {2}' tabIndex='0'>", this.options.pageMarkerClass, i == pageInfo.curPage ? this.options.pageMarkerSelectedClass : ""));
-			pageMarker.prop("title", "Page - " + (i + 1));
+			pageMarker.prop("title", "Page " + (i + 1));
 			pageMarker.data("ibxPageMarkerInfo", {"pageNo":i, "pageInfo":pageInfo}).on("click", this._onPageMarkerClick.bind(this));
 			this._pageMarkers.append(pageMarker)
 		}
