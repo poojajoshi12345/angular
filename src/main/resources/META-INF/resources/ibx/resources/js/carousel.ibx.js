@@ -22,9 +22,9 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 		hideDisabledButtons:false,
 		alignChildren:"center",
 
-		scrollType:"fractional",	//page/integral/fractional
-		scrollStep:25,				//page:1, integral:1, fractional:25px
-		scrollStepRate:25,			//page:500, integral:250, fractional:25ms
+		scrollType:"integral",											//page/integral/fractional
+		scrollStep:{"page":1, "integral":1, "fractional":25},			//units of type to scroll
+		scrollStepRate:{"page":300, "integral":250, "fractional":25},	//time per scroll unit (ms)
 		scrollProps:
 		{
 			"axis":"scrollLeft",
@@ -109,7 +109,11 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 		if(this._scrollInfo || !steps)
 			return;
 
-		stepRate = (stepRate !== undefined) ? stepRate : this.options.scrollStepRate;
+		//use defaults if no value specified
+		var options = this.options;
+		scrollType = (scrollType !== undefined) ? scrollType : options.scrollType;
+		steps = (steps !== undefined) ? steps : options.scrollStep[scrollType];
+		stepRate = (stepRate !== undefined) ? stepRate : this.options.scrollStepRate[scrollType];
 
 		var options = this.options;
 		this._scrollInfo = info = 
@@ -122,11 +126,11 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 			"scrollAxis": options.scrollProps.axis,
 			"animationFrameId": null
 		};
-		info.stepSize = this._calcScrollStepSize(info.scrollType, info.forward);1
+		info.stepSize = this._calcScrollStepSize(info.scrollType, info.forward);
 		info.scrollEndPos = this._itemsBox.prop(info.scrollAxis) + info.stepSize;
 		info.frameDelta = info.forward ? Math.ceil(info.stepSize/info.nFrames) : Math.floor(info.stepSize/info.nFrames);
 
-		//do the whole thin
+		//do the all steps in one jump
 		if(jumpScroll)
 		{
 			info.stepSize = info.stepSize * info.steps;
@@ -177,7 +181,7 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 		var options = this.options;
 		var delta = 0;
 		if(scrollType == "fractional")
-			delta = options.scrollStep;
+			delta = options.scrollStep[scrollType];
 		else
 		if(scrollType == "page")
 			delta =  this._itemsBox.prop(options.scrollProps.size);
