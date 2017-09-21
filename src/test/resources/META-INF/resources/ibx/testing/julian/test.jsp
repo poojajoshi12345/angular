@@ -25,15 +25,20 @@
 				var itemBox = $(".item-box");
 				for(var i = 0; i < 50; ++i)
 				{
-					var listItem = $("<div class='list-item'>");
+					var listItem = $("<div class='list-item' tabindex='0'>");
 					listItem.text("List Item " + i);
 					listBox.ibxWidget("add", listItem);
 
-					var testItem = $("<div class='test-item'>");
+					var testItem = $("<div class='test-item' tabindex='0'>");
 					testItem.text("Test Item " + i);
 					itemBox.ibxWidget("add", testItem);
 
 				}
+
+				window.onpopstate = function(e)
+				{
+					debugger;
+				};
 			}, null, true);
 		</script>
 		<style type="text/css">
@@ -51,7 +56,7 @@
 				flex:0 0 auto;
 				border:1px solid black;
 			}
-			.content-box
+			.content-area
 			{
 				flex:1 1 auto;
 				border:1px solid lime;
@@ -87,6 +92,7 @@
 	<body class="ibx-root">
 		<div class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
 			<div class="menu-bar" data-ibx-type="ibxHMenuBar">
+				<div data-ibx-type="ibxTextField" data-ibxp-readonly="true">Test</div>
 				<div data-ibx-type="ibxMenuButton">File
 					<div data-ibx-type="ibxMenu">
 						<div data-ibx-type="ibxMenuItem">Open...</div>
@@ -100,11 +106,14 @@
 				</div>
 			</div>
 		
-			<div class="content-box" data-ibx-type="ibxHBox" data-ibxp-align="stretch">
+			<div class="content-area" data-ibx-type="ibxHBox" data-ibxp-align="stretch">
 				<div class="list-box" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
 				</div>
 				<div data-ibx-type="ibxVSplitter"></div>
-				<div class="item-box" data-ibx-type="ibxHBox" data-ibxp-wrap="true">
+				<div class="content-box" data-ibx-type="ibxVBox" data-ibxp-wrap="true">
+					<div class="content-title" data-ibx-type="ibxLabel">Titles</div>
+					<div class="item-box" data-ibx-type="ibxHBox" data-ibxp-wrap="true">
+					</div>
 				</div>
 			</div>
 		</div>
