@@ -21,6 +21,7 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 		floatButtons:false,
 		hideDisabledButtons:false,
 		alignChildren:"center",
+		sizeToFit:false,	//sizes each child to fit exactly one page.
 
 		scrollType:"integral",											//page/integral/fractional
 		scrollStep:{"page":1, "integral":1, "fractional":25},			//units of type to scroll
@@ -46,7 +47,7 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 		this.element.on("keydown keyup", this._onItemsKeyEvent.bind(this)).on("ibx_resize", this._onResize.bind(this));
 		this._prevBtn.on("mousedown mouseup mouseleave", this._onPrev.bind(this));
 		this._nextBtn.on("mousedown mouseup mouseleave", this._onNext.bind(this));
-		this._itemsBox.ibxDragScrolling({overflowY:"hidden"}).on("ibx_scroll", this._onItemsBoxScroll.bind(this));
+		this._itemsBox.ibxDragScrolling({overflowY:"hidden"}).on("ibx_scroll", this._onItemsBoxScroll.bind(this));	
 		this.add(children);
 	},
 	_destroy:function()
@@ -97,6 +98,20 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 	},
 	_onResize:function()
 	{
+		if(this.options.sizeToFit)
+		{
+			var options = this.options;
+			var pageInfo = this.getPageInfo();
+			var children = this.children();
+			children.each(function(idx, child)
+			{
+				child = $(child);
+				child.css({"width":pageInfo.pageWidth + "px", "height":pageInfo.pageHeight + "px"});
+			}.bind(this));
+			var curPage = this._pageMarkers.ibxWidget("children", "." + options.pageMarkerSelectedClass).data("ibxPageMarkerInfo");
+			curPage = curPage ? curPage.pageNo : 9999;
+			this._itemsBox.prop(options.scrollProps.axis, curPage * pageInfo[options.scrollProps.pageSize]);
+		}
 		this._adjustPageMarkers();
 	},
 	_onItemsBoxScroll:function(e)
@@ -266,8 +281,8 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 			pageWidth:		this._itemsBox.prop("offsetWidth") || 1,
 			pageHeight:		this._itemsBox.prop("offsetHeight") || 1,
 		};
-		info.pages = Math.floor(info.scrollWidth / info.pageWidth) || 1;
-		info.curPage = Math.floor(info.scrollLeft / info.pageWidth);
+		info.pages = Math.round(info.scrollWidth / info.pageWidth) || 1;
+		info.curPage = Math.round(info.scrollLeft / info.pageWidth);
 		info.scrollRight = info.scrollLeft + info.pageWidth;
 		info.scrollBottom = info.scrollTop + info.pageHeight;
 		return info;
@@ -304,8 +319,13 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 				this._itemsContainer.append(this._itemsBox, this._prevBtn, this._nextBtn);
 		}
 
-		this._adjustPageMarkers();
-		this._pageMarkers.css("display", options.showPageMarkers ? "" : "none");
+		//size to fit needs to adjust all elements for the current items box size...it'll adjust the page markers.
+		if(options.sizeToFit)
+			this._onResize()
+		else
+			this._adjustPageMarkers();
+	
+	this._pageMarkers.css("display", options.showPageMarkers ? "" : "none");
 		(options.pageMarkersPos == "start")
 			? this._pageMarkers.insertBefore(this._itemsContainer)
 			: this._pageMarkers.insertAfter(this._itemsContainer);
@@ -385,8 +405,8 @@ $.widget("ibi.ibxVCarousel", $.ibi.ibxCarousel,
 	getPageInfo:function(metrics)
 	{
 		var info = this._super();
-		info.pages = Math.floor(info.scrollHeight / info.pageHeight) || 1;
-		info.curPage = Math.floor(info.scrollTop / info.pageHeight);
+		info.pages = Math.round(info.scrollHeight / info.pageHeight) || 1;
+		info.curPage = Math.round(info.scrollTop / info.pageHeight);
 		return info;
 	},
 });
