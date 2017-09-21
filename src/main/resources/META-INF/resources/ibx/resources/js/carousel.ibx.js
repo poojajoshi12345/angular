@@ -282,6 +282,7 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 		this._super();
 		var options = this.options;
 		this._itemsBox.ibxDragScrolling("option", "disabled", !options.allowDragScrolling);
+		this._itemsBox.ibxWidget("option", "align", options.alignChildren);
 		this._prevBtn.css("display", options.showPrevButton ? "" : "none");
 		this._nextBtn.css("display", options.showNextButton ? "" : "none");
 
