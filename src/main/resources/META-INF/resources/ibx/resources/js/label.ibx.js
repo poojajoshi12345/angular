@@ -68,7 +68,7 @@ $.widget("ibi.ibxLabel", $.ibi.ibxFlexBox,
 		
 		//only update if changed
 		if(options.text != lastOptions.text)
-			this._text.html(options.text)
+			this._text.text(options.text)
 		this._text.removeClass(lastOptions.textElClass).addClass(options.textElClass).css({"text-align":options.textAlign, "white-space":options.textWrap ? "" : "nowrap"});
 
 		//add appropriate spacer classes

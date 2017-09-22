@@ -52,8 +52,8 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 	},
 	_destroy:function()
 	{
-		this._resSensor.detach();
 		this.remove(this.children());
+		this._super();
 	},
 	children:function(selector)
 	{
