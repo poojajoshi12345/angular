@@ -49,6 +49,9 @@ $.widget("ibi.ibxWidget", $.Widget,
 		this.element.on("contextmenu", this._onWidgetContextMenu.bind(this));
 		this._adjustWidgetClasses(true);
 
+		//save the resize sensor callback;
+		this._resizeCallbackBound = this._resizeCallback.bind(this);
+
 		//Ritalin, if ya know what I mean!
 		this.element.children("[tabindex]").first().focus();
 		
@@ -224,6 +227,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 		options.focusRoot ? this.element.addClass("ibx-focus-root") : this.element.removeClass("ibx-focus-root");
 		options.defaultFocused ? this.element.addClass("ibx-default-focused") : this.element.removeClass("ibx-default-focused");
 	
+
 		//hookup the resize sensor if interested in resize events.
 		if(!options.wantResize && this._resizeSensor)
 		{
@@ -231,8 +235,21 @@ $.widget("ibi.ibxWidget", $.Widget,
 			delete this._resizeSensor;
 		}
 		else
-		if(options.wantResize && !this._resizeSensor)
-			this._resizeSensor = new ResizeSensor(this.element[0], this._resizeCallback.bind(this));
+		if(options.wantResize)
+		{
+			//create a new resize sensor if we don't have one.
+			if(!this._resizeSensor)
+				this._resizeSensor = new ResizeSensor(this.element[0],this._resizeCallbackBound);
+
+			//due to a problem with the resize sensor, when things are created in memory and then
+			//added to the dom these values are all set to 0 and need to be set as follows.
+			var expand = this.element.find(".resize-sensor-expand");
+			var shrink = this.element.find(".resize-sensor-shrink");
+            expand.prop("scrollLeft", 100000);
+            expand.prop("scrollTop", 100000);
+            shrink.prop("scrollLeft", 100000);
+            shrink.prop("scrollTop", 100000);
+		}
 	}
 });
 
