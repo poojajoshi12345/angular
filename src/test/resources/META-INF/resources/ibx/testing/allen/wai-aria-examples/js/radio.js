@@ -19,7 +19,7 @@
          }
       }
       return -1;
-   }
+   };
 
    function registerListeners()
    {
@@ -41,7 +41,7 @@
 
    function onSelect(e)
    {
-      var radioBtn = e.currentTarget
+      var radioBtn = e.currentTarget;
       if (radioBtn.getAttribute("aria-checked") === "false")
       {
          for (var i = 0; i < radioBtn.parentNode.children.length; i++)
@@ -63,7 +63,6 @@
       var radioGroup = radioButton.parentNode;
 
       var radioIndex = index(radioButton);
-      index
       if (radioIndex === radioGroup.children.length - 1)
       {
          radioGroup.children[0].focus();
