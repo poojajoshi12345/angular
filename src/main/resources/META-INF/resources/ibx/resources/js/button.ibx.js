@@ -18,6 +18,11 @@ $.widget("ibi.ibxButton", $.ibi.ibxLabel,
 	{
 		this._super();
 	},
+	_makeAccessible:function()
+	{
+		this.element.attr("role", "button");
+		this._super();
+	},
 	checked: function (value)
 	{
 		// does nothing - used when in an ibxRadioGroup

@@ -49,73 +49,16 @@
 				top:0px;
 				right:0px;
 				bottom:0px;
-				border:1px solid red;
 			}
-			.menu-bar
-			{
-				flex:0 0 auto;
-				border:1px solid black;
-			}
-			.content-area
-			{
-				flex:1 1 auto;
-				border:1px solid lime;
-			}
-			.list-box
-			{
-				flex:1 0 auto;
-				overflow:auto;
-				border:2px solid magenta;
-			}
-			.list-item
-			{
-				padding:5px;
-				margin:2px;
-				border:1px solid cyan;
-			}
-			.item-box
-			{
-				flex:1 1 auto;
-				overflow:auto;
-				border:2px solid yellow;
-			}
-			.test-item
-			{
-				flex:0 0 auto;
-				width:100px;
-				height:100px;
-				margin:5px;
-				border:1px solid orange;
-			}
+			h1{display:none;}
 		</style>
 	</head>
 	<body class="ibx-root">
-		<div class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
-			<div class="menu-bar" data-ibx-type="ibxHMenuBar">
-				<div data-ibx-type="ibxTextField" data-ibxp-readonly="true">Test</div>
-				<div data-ibx-type="ibxMenuButton">File
-					<div data-ibx-type="ibxMenu">
-						<div data-ibx-type="ibxMenuItem">Open...</div>
-						<div data-ibx-type="ibxMenuItem">Close...</div>
-						<div data-ibx-type="ibxMenuSeparator"></div>
-						<div data-ibx-type="ibxMenuItem">Save</div>
-						<div data-ibx-type="ibxMenuItem">Save As...</div>
-						<div data-ibx-type="ibxMenuSeparator"></div>
-						<div data-ibx-type="ibxMenuItem">Quit</div>
-					</div>
-				</div>
-			</div>
-		
-			<div class="content-area" data-ibx-type="ibxHBox" data-ibxp-align="stretch">
-				<div class="list-box" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
-				</div>
-				<div data-ibx-type="ibxVSplitter"></div>
-				<div class="content-box" data-ibx-type="ibxVBox" data-ibxp-wrap="true">
-					<div class="content-title" data-ibx-type="ibxLabel">Titles</div>
-					<div class="item-box" data-ibx-type="ibxHBox" data-ibxp-wrap="true">
-					</div>
-				</div>
-			</div>
+		<h1>Stupid fake heading</h1>
+
+		<div class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="center" data-ibxp-justify="center">
+			<div id="button-label" data-ibx-type="ibxLabel">Test Button Label</div>
+			<div data-ibx-type="ibxButton">Test Button</div>
 		</div>
 	</body>
 </html>
