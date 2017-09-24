@@ -39,6 +39,8 @@
 				{
 					debugger;
 				};
+
+				ibx.accessible(true);
 			}, null, true);
 		</script>
 		<style type="text/css">
@@ -55,10 +57,16 @@
 	</head>
 	<body class="ibx-root">
 		<h1>Stupid fake heading</h1>
-
+		<div data-ibx-type="ibxRadioGroup" data-ibxp-name="rgTest"></div>
 		<div class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="center" data-ibxp-justify="center">
-			<div id="button-label" data-ibx-type="ibxLabel">Test Button Label</div>
-			<div data-ibx-type="ibxButton">Test Button</div>
+			<div data-ibx-type="ibxLabel" tabIndex="0">Test Button Label</div>
+			<div data-ibx-type="ibxButton" tabIndex="0">Test Button</div>
+			<div data-ibx-type="ibxLabel" tabIndex="0">Check Button Label</div>
+			<div data-ibx-type="ibxCheckBox" tabIndex="0">CheckBox Button</div>
+			<div data-ibx-type="ibxLabel" tabIndex="0">Test Radio Button Label</div>
+			<div data-ibx-type="ibxRadioButton" data-ibxp-group="rgTest" tabIndex="0">Radio Button1</div>
+			<div data-ibx-type="ibxRadioButton" data-ibxp-group="rgTest" tabIndex="0">Radio Button2</div>
+			<div data-ibx-type="ibxRadioButton" data-ibxp-group="rgTest" tabIndex="0">Radio Button3</div>
 		</div>
 	</body>
 </html>

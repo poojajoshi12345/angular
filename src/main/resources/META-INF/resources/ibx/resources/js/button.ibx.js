@@ -6,6 +6,7 @@ $.widget("ibi.ibxButton", $.ibi.ibxLabel,
 {
 	options:
 		{
+			"role":"button",
 			"iconPosition": "left",
 		},
 	_widgetClass: "ibx-button",
@@ -18,10 +19,10 @@ $.widget("ibi.ibxButton", $.ibi.ibxLabel,
 	{
 		this._super();
 	},
-	_makeAccessible:function()
+	_setAccessibility:function(accessible)
 	{
 		this.element.attr("role", "button");
-		this._super();
+		this._super(accessible);
 	},
 	checked: function (value)
 	{
@@ -99,6 +100,7 @@ $.widget("ibi.ibxCheckBox", $.ibi.ibxLabel,
 {
 	options:
 		{
+			"role":"checkbox",
 			"checked": false,
 			"hideCheck": true,
 			"group": "",
@@ -119,6 +121,11 @@ $.widget("ibi.ibxCheckBox", $.ibi.ibxLabel,
 	{
 		this._super();
 		this._trigger("set_form_value", null, { "elem": this.element, "value": this.options.checked ? this.options.userValue : "" });
+	},
+	_setAccessibility:function(accessible)
+	{
+		this._super(accessible);
+		accessible ? this.element.attr("aria-checked", this.options.checked) : this.element.removeAttr("aria-checked");
 	},
 	userValue: function (value)
 	{
@@ -191,13 +198,13 @@ $.widget("ibi.ibxCheckBox", $.ibi.ibxLabel,
 		if (typeof (value) == "undefined")
 			return this.options.checked;
 		else
-			if(this.options.checked != value)
-			{
-				this.options.checked = value;
-				this._trigger("set_form_value", null, { "elem": this.element, "value": this.options.userValue });
-				this._trigger("change", null, this.element);
-				this.refresh();
-			}
+		if(this.options.checked != value)
+		{
+			this.options.checked = value;
+			this._trigger("set_form_value", null, { "elem": this.element, "value": this.options.userValue });
+			this._trigger("change", null, this.element);
+			this.refresh();
+		}
 		return this;
 	},
 	_refresh: function ()
@@ -272,8 +279,9 @@ $.widget("ibi.ibxCheckBoxSimple", $.ibi.ibxCheckBox,
 $.widget("ibi.ibxRadioButton", $.ibi.ibxCheckBox,
 {
 	options:
-		{
-		},
+	{
+		"role":"radio"
+	},
 	_widgetClass: "ibx-radio-button",
 	_create: function ()
 	{

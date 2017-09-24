@@ -184,6 +184,13 @@ ibx.showRootNodes = function(bShow)
 	return ibx;//for chaining
 };
 
+//turn on WAI Aria
+ibx.accessible = function(accessible)
+{
+	var widgets = $(".ibx-widget");
+	widgets.ibxWidget("option", "accessible", accessible);
+}
+
 //where ibx.js loaded from
 ibx._path = "";
 ibx.getPath = function(){return ibx._path;};

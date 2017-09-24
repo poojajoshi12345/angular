@@ -40,8 +40,8 @@ $.widget("ibi.ibxLabel", $.ibi.ibxFlexBox,
 		options.text = options.text || this.element.textNodes().remove().text().replace(/^\s*|\s*$/g, "");
 
 		//add the sub-elements
-		this._glyph = $("<label>").addClass(options.glyphElClass);
-		this._text = $("<label>").addClass(options.textElClass);
+		this._glyph = $("<div>").addClass(options.glyphElClass);
+		this._text = $("<div>").addClass(options.textElClass);
 	},
 	_destroy:function()
 	{
@@ -49,6 +49,17 @@ $.widget("ibi.ibxLabel", $.ibi.ibxFlexBox,
 		this._glyph.remove();
 		this._text.remove();
 		this.element.removeClass("icon-left icon-top icon-right icon-bottom")
+	},
+	_setAccessibility:function(accessible)
+	{
+		this._super(accessible);
+		if(accessible)
+		{
+			var id = this._text.uniqueId().prop("id");
+			this.element.attr("aria-labelledby", id);
+		}
+		else
+			this.element.removeAttr("arial-labelledby");
 	},
 	_refresh:function()
 	{

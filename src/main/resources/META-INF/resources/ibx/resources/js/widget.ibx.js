@@ -12,6 +12,10 @@ $.widget("ibi.ibxWidget", $.Widget,
 		"ctxMenu":null,
 		"dragScrolling":false,
 		"wantResize":false,
+
+		//508 ARIA
+		"accessible":false,
+		"role":"widget"
 	},
 	_widgetClass:"ibx-widget",
 	_adjustWidgetClasses:function(bAdd)
@@ -62,7 +66,6 @@ $.widget("ibi.ibxWidget", $.Widget,
 			this.member(memberName, memberValue);
 		}.bind(this));
 		this.element.removeData("_ibxPrecreateMemberVariables");
-
 		this._super();
 	},
 	destroyed:function(){return this._destroyed;},
@@ -89,6 +92,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 		this.element.removeAttr("data-ibx-type");
 		this.element.removeClass(this.options.class);
 		this._adjustWidgetClasses(false);
+		this._setAccessibility(false);
 		this._created = false;
 		this._destroyed = true;
 		this._trigger("destroy");
@@ -97,6 +101,22 @@ $.widget("ibi.ibxWidget", $.Widget,
 	{
 		var options = $.extend(true, {}, this.options, ibx.getIbxMarkupOptions(this.element))
 		this.option(options);
+	},
+	_setAccessibility:function(accessible)
+	{
+		if(accessible)
+			this.element.uniqueId().attr("role", this.options.role);
+		else
+		{
+			this.element.removeAttr("role");
+			var attributes = this.element.prop("attributes");
+			for(var i = 0; i < attributes.length; ++i)
+			{
+				var attr = attributes[i].nodeName;
+				if(/^aria-/i.test(attr))
+					this.element.removeAttr(attr);
+			}
+		}
 	},
 	member:function(memberName, value)
 	{
@@ -224,6 +244,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 	{
 		var options = this.options;
 		this.element.addClass(options.class);
+		this._setAccessibility(options.accessible);
 		options.focusRoot ? this.element.addClass("ibx-focus-root") : this.element.removeClass("ibx-focus-root");
 		options.defaultFocused ? this.element.addClass("ibx-default-focused") : this.element.removeClass("ibx-default-focused");
 	
