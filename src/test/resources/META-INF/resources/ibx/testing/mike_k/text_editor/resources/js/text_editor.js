@@ -6,6 +6,7 @@ $.widget("ibi.textEditor", $.ibi.ibxDialog,
 	{
 		modal:false,
 		resizable:true,
+		defaultAction:"",
 		captionLabelOptions:
 		{
 			text:ibx.resourceMgr.getString("BT_UNTITLED")
@@ -97,7 +98,9 @@ $.widget("ibi.textEditor", $.ibi.ibxDialog,
 		$(".btnReplaceAll").ibxWidget("option", "disabled", true);
 		$(".btnUndo").ibxWidget("option", "disabled", true);
 		
-		this.element.on("ibx_open", this._onIbxOpen.bind(this)); // On open of the Editor.
+		this.element.on("ibx_open", this._onEditorOpen.bind(this)); // On open of the Editor.
+		this.element.on("ibx_beforeclose", this._onEditorBeforeclose.bind(this)); // On 'X' close of the Editor.
+
 		
 		$(".goToLine").hide();
 		$(".findReplace").hide();
@@ -107,16 +110,27 @@ $.widget("ibi.textEditor", $.ibi.ibxDialog,
 		this.btnBox.css("display", "none"); // Editor Dialog OK / Cancel buttons
 	},
 	
-	_onIbxOpen()
+	_onEditorOpen()
 	{
-		//alert("_onIbxOpen");
+		this._setCursorPositionInfo();
+		$(".te-txt-area")[0].focus();
+	},
+	
+	_onEditorBeforeclose(e)
+	{			
+		if(this.currentAction != -1)
+		{
+			e.preventDefault();
+			this._setCursorPositionInfo();
+			this._onExit();
+		}
 	},
 	
 	setEditorPath:function(rootPath, folderPath, fileName) // Public method to setup Editor.
 	{
 		this.rootPath = this._checkPath(rootPath);
 		
-		this._setEditorPath( this._checkPath( this.folderPath ), fileName);			
+		this._setEditorPath( this._checkPath(folderPath), fileName);			
 	},
 	
 	_setEditorPath:function(folderPath, fileName)
@@ -293,8 +307,8 @@ $.widget("ibi.textEditor", $.ibi.ibxDialog,
 			// Save Confirm Dialog
 			var options = 
 			{		
-				type:"std question",
-				caption:"Select An Option", // TODO: NLS
+				type:"std warning",
+				caption:ibx.resourceMgr.getString("BT_WARNING"),
 				buttons:"okcancelapply",
 				moveable:false,
 				closeButton:false,
@@ -303,9 +317,9 @@ $.widget("ibi.textEditor", $.ibi.ibxDialog,
 			
 			var dlg = $.ibi.ibxDialog.createMessageDialog(options);
 			
-			dlg.ibxWidget("member", "btnOK").ibxWidget("option", "text", "Yes"); // TODO: NLS
-			dlg.ibxWidget("member", "btnApply").ibxWidget("option", "text", "No");
-			dlg.ibxWidget("member", "btnCancel").ibxWidget("option", "text", "Cancel");
+			dlg.ibxWidget("member", "btnOK").ibxWidget("option", "text", ibx.resourceMgr.getString("bid_yes"));
+			dlg.ibxWidget("member", "btnApply").ibxWidget("option", "text", ibx.resourceMgr.getString("bid_no"));
+			dlg.ibxWidget("member", "btnCancel").ibxWidget("option", "text", ibx.resourceMgr.getString("bid_cancel"));
 			
 			dlg.ibxDialog("open");
 			
@@ -328,7 +342,7 @@ $.widget("ibi.textEditor", $.ibi.ibxDialog,
 					}
 	                this.closing = true;							
 					this.fexText = $(".te-txt-area").ibxWidget("option", "text");
-					this._onSave(e);				
+					this._onSave();				
 	            }				
 				else if (closeData == "cancel") // CANCEL
 				{	
@@ -352,7 +366,7 @@ $.widget("ibi.textEditor", $.ibi.ibxDialog,
 			fileTypes:[[ibx.resourceMgr.getString("focexecType"), "fex"],[ibx.resourceMgr.getString("htmlType"), "htm"], [ibx.resourceMgr.getString("wfStyleType"), "sty"],[ibx.resourceMgr.getString("cssType"), "css"]], 
 			dlgType:"open", 
 			title: ibx.resourceMgr.getString("bid_open"), 
-			ctxPath:this.folderPath.length > 0 ? this.folderPath.length : this.rootPath,
+			ctxPath:this.folderPath.length > 0 ? this.folderPath : this.rootPath,
 			rootPath:this.rootPath});
 		
 		openDlg.ibxWidget('open');
@@ -470,10 +484,7 @@ $.widget("ibi.textEditor", $.ibi.ibxDialog,
 				this.fexText = fText;					
 				$(".te-txt-area").ibxWidget("option", "text", fText);
 				
-				//this.setCaption(decodeHtmlEncoding(this.folderPath) + "/" + decodeHtmlEncoding(this.itemDescription));
-				//$(".text-editor-resources").ibxWidget("option", "text", this.folderPath + this.itemDescription);
-				//this.options.text = this.folderPath + this.itemDescription;
-				this.options.captionLabelOptions.text = this.folderPath + "/" + this.itemDescription;
+				$(".text-editor").ibxWidget("option", "captionOptions", {text: this.folderPath + "/" + this.itemDescription});
 				
 	 			this._setCursorPosition($(".te-txt-area")[0].firstChild);
 	 			this._setCursorPositionInfo();
@@ -541,7 +552,7 @@ $.widget("ibi.textEditor", $.ibi.ibxDialog,
 						var options = 
 						{
 							type:"std error",
-							caption: "Error", // TODO: NLS
+							caption:ibx.resourceMgr.getString("BT_ERROR"),
 							buttons:"ok",
 							messageOptions:
 							{
@@ -873,7 +884,7 @@ $.widget("ibi.textEditor", $.ibi.ibxDialog,
 					var options = 
 					{
 						type:"std error",
-						caption: "Error", // TODO: NLS title
+						caption:ibx.resourceMgr.getString("BT_ERROR"),
 						buttons:"ok",
 						messageOptions:
 						{
@@ -896,7 +907,7 @@ $.widget("ibi.textEditor", $.ibi.ibxDialog,
 					var options = 
 					{
 						type:"std error",
-						caption: "Error", // TODO: NLS title
+						caption:ibx.resourceMgr.getString("BT_ERROR"),
 						buttons:"ok",
 						messageOptions:
 						{
@@ -919,7 +930,7 @@ $.widget("ibi.textEditor", $.ibi.ibxDialog,
 					var options = 
 					{
 						type:"std error",
-						caption: "Error", // TODO: NLS title
+						caption:ibx.resourceMgr.getString("BT_ERROR"),
 						buttons:"ok",
 						messageOptions:
 						{
@@ -1025,11 +1036,11 @@ $.widget("ibi.textEditor", $.ibi.ibxDialog,
 						var options = 
 						{		
 							type:"std question",
-							caption:"Message", // TODO: NLS
+							caption:ibx.resourceMgr.getString("BT_MESSAGE"),
 							buttons:"okcancel",
 							moveable:false,
 							closeButton:false,
-							messageOptions:{text:ibx.resourceMgr.getString("BT_LOSE_TOOL"), }
+							messageOptions:{text:ibx.resourceMgr.getString("BT_LOSE_TOOL")}
 						};
 						
 						var dlg = $.ibi.ibxDialog.createMessageDialog(options);						
@@ -1098,7 +1109,7 @@ $.widget("ibi.textEditor", $.ibi.ibxDialog,
 				var options = 
 				{
 					type:"std error",
-					caption: "Error", // TODO: NLS title
+					caption:ibx.resourceMgr.getString("BT_ERROR"),
 					buttons:"ok",
 					messageOptions:
 					{
@@ -1115,7 +1126,7 @@ $.widget("ibi.textEditor", $.ibi.ibxDialog,
 				var options = 
 				{
 					type:"std error",
-					caption: "Error", // TODO: NLS title
+					caption:ibx.resourceMgr.getString("BT_ERROR"),
 					buttons:"ok",
 					messageOptions:
 					{
@@ -1141,7 +1152,7 @@ $.widget("ibi.textEditor", $.ibi.ibxDialog,
 	        this.folderPath = path;
    
 	        if (!e || !this.closing)	// cannot access caption during closing
-	        	this.options.captionLabelOptions.text = this.folderPath + "/" + this.itemDescription;
+				$(".text-editor").ibxWidget("option", "captionOptions", {text: this.folderPath + "/" + this.itemDescription});
 		}
 
 		this._saveSetup(mode);     
@@ -1161,8 +1172,7 @@ $.widget("ibi.textEditor", $.ibi.ibxDialog,
 			if (!this.closing)
 			{
 				$(".te-txt-area").focus();
-				//this.setCaption(decodeHtmlEncoding(this.folderPath) + "/" + decodeHtmlEncoding(this.itemDescription));		
-				this.options.captionLabelOptions.text = this.folderPath + "/" + this.itemDescription;
+				$(".text-editor").ibxWidget("option", "captionOptions", {text: this.folderPath + "/" + this.itemDescription});
 			}
 		}
 		
@@ -1192,8 +1202,8 @@ $.widget("ibi.textEditor", $.ibi.ibxDialog,
 		}
 		else if(this.currentAction == 4)
 		{
-			this.currentAction = 0;
 			this._clearEditorEnvironment();
+			this.currentAction = -1;
 			this.close();      
 		}
 	},
@@ -1211,8 +1221,8 @@ $.widget("ibi.textEditor", $.ibi.ibxDialog,
 		{
 			var options = 
 			{		
-				type:"std question",
-				caption:"Select An Option", // TODO: NLS
+				type:"std warning",
+				caption:ibx.resourceMgr.getString("BT_WARNING"),
 				buttons:"okcancelapply",
 				moveable:false,
 				closeButton:false,
@@ -1221,9 +1231,9 @@ $.widget("ibi.textEditor", $.ibi.ibxDialog,
 			
 			var dlg = $.ibi.ibxDialog.createMessageDialog(options);
 			
-			dlg.ibxWidget("member", "btnOK").ibxWidget("option", "text", "Yes"); // TODO: NLS
-			dlg.ibxWidget("member", "btnApply").ibxWidget("option", "text", "No");
-			dlg.ibxWidget("member", "btnCancel").ibxWidget("option", "text", "Cancel");
+			dlg.ibxWidget("member", "btnOK").ibxWidget("option", "text", ibx.resourceMgr.getString("bid_yes"));
+			dlg.ibxWidget("member", "btnApply").ibxWidget("option", "text", ibx.resourceMgr.getString("bid_no"));
+			dlg.ibxWidget("member", "btnCancel").ibxWidget("option", "text", ibx.resourceMgr.getString("bid_cancel"));
 			
 			dlg.ibxDialog("open");
 			
@@ -1272,10 +1282,67 @@ $.widget("ibi.textEditor", $.ibi.ibxDialog,
 
 	_onExit:function(e)
 	{
-		this._clearEditorEnvironment(e);
-		this.close();
+		if (this.changed || this.optionsChanged)
+		{
+			var options = 
+			{		
+				type:"std warning",
+				caption:ibx.resourceMgr.getString("BT_WARNING"),
+				buttons:"okcancelapply",
+				moveable:false,
+				closeButton:false,
+				messageOptions:{text:ibx.resourceMgr.getString("BT_CONFIRM_CANCEL")}
+			};
+			
+			var dlg = $.ibi.ibxDialog.createMessageDialog(options);
+			
+			dlg.ibxWidget("member", "btnOK").ibxWidget("option", "text", ibx.resourceMgr.getString("bid_yes"));
+			dlg.ibxWidget("member", "btnApply").ibxWidget("option", "text", ibx.resourceMgr.getString("bid_no"));
+			dlg.ibxWidget("member", "btnCancel").ibxWidget("option", "text", ibx.resourceMgr.getString("bid_cancel"));
+			
+			dlg.ibxDialog("open");
+			
+			dlg.on("ibx_apply", function(e, closeData)
+					{
+						// NO				
+						dlg.ibxWidget("close");
+						this._clearEditorEnvironment(e);
+						this.currentAction = -1;
+						this.close();
+						
+					}.bind(this)).on("ibx_close", function (e, closeData)
+					{
+						
+						this._onExitResult(closeData);
+						
+					}.bind(this));		
+		}
+		else
+		{			
+			this._clearEditorEnvironment(e);
+			this.currentAction = -1;
+			this.close();
+		}
 	},
 	
+	_onExitResult:function(closeData)
+	{
+		if (closeData == "ok") // YES
+		{
+            this.fromClose = true;
+            this.closing = true;							
+			this.fexText = $(".te-txt-area").ibxWidget("option", "text");
+			this._onSave();		
+			this._clearEditorEnvironment();
+			this.currentAction = -1;
+			this.close();
+        }				
+		else if (closeData == "cancel") // CANCEL
+		{	
+			this.currentAction = 0;
+ 			$(".te-txt-area").focus();
+		}
+	},
 
 	
 	_selectionToUpperCase:function(e)
@@ -1293,8 +1360,6 @@ $.widget("ibi.textEditor", $.ibi.ibxDialog,
 	{
 		var textArea = $(".te-txt-area")[0].firstChild;
 		
-		//alert("Selection Start="+textArea.selectionStart + " Selection End="+textArea.selectionEnd);
-
 		this._changeSelectionCase(textArea, false);
 			
 		this.changed = true;
@@ -1308,8 +1373,6 @@ $.widget("ibi.textEditor", $.ibi.ibxDialog,
 		
 		this._selectAll(textArea);
 		
-		//alert("Selection Start="+textArea.selectionStart + " Selection End="+textArea.selectionEnd);
-
 	},
 	
 	_deleteSelectedText:function(e)
@@ -1394,7 +1457,7 @@ $.widget("ibi.textEditor", $.ibi.ibxDialog,
 
 		this.unDoText = [];
 		
-		this.options.captionLabelOptions.text = ibx.resourceMgr.getString("BT_UNTITLED");
+		$(".text-editor").ibxWidget("option", "captionOptions", {text: ibx.resourceMgr.getString("BT_UNTITLED")});
 	},
 	
 	_setCursorPositionInfo:function(e)
@@ -1764,7 +1827,7 @@ $.widget("ibi.textEditor", $.ibi.ibxDialog,
 			var options = 
 			{
 				type:"std error",
-				caption: "Error", // TODO: NLS title
+				caption: ibx.resourceMgr.getString("BT_ERROR"),
 				buttons:"ok",
 				messageOptions:
 				{
@@ -1877,7 +1940,7 @@ $.widget("ibi.textEditor", $.ibi.ibxDialog,
 			var options = 
 			{
 				type:"std information",
-				caption: "Message", // TODO: NLS
+				caption:ibx.resourceMgr.getString("BT_MESSAGE"),
 				buttons:"ok",
 				messageOptions:
 				{
@@ -1951,21 +2014,395 @@ $.widget("ibi.textEditor", $.ibi.ibxDialog,
 		}
 	},
 
+	
 
 	_onOptions:function(e)
+	{	
+		var editorOptionsDlg = ibx.resourceMgr.getResource('.text-editor-options', true);
+		
+		editorOptionsDlg.ibxWidget("option", "captionOptions", {text: ibx.resourceMgr.getString("bid_editor_options")});
+		editorOptionsDlg.ibxWidget({buttons:"okcancelapply"});
+		
+		editorOptionsDlg.ibxWidget("member", "btnOK").ibxWidget("option", "text", ibx.resourceMgr.getString("bid_OK"));
+		editorOptionsDlg.ibxWidget("member", "btnApply").ibxWidget("option", "text", ibx.resourceMgr.getString("bid_reset"));
+		editorOptionsDlg.ibxWidget("member", "btnCancel").ibxWidget("option", "text", ibx.resourceMgr.getString("bid_cancel"));
+		
+		editorOptionsDlg.ibxWidget('open');		
+		
+		this._initOptions();		
+		
+		editorOptionsDlg.on("ibx_beforeclose", function(e, closeData)
+		{
+			//debugger;
+			//return false;
+		}).on("ibx_apply", function(e, closeData)
+		{
+			// RESET
+			
+			//alert($(".te-txt-area").ibxWidget("option", "text"));
+			
+			this._resetOptions();
+			
+		}.bind(this)).on("ibx_close", function (e, closeData)
+		{						
+			if(closeData == "ok")
+			{
+				
+				this._gatherOptions(editorOptionsDlg);
+				/*
+				var fileName = saveDlg.ibxWidget('fileName');			
+				var description = saveDlg.ibxWidget('fileTitle');
+				var ibfsItems = saveDlg.ibxWidget('ibfsItems');
+				var itemPath = (ibfsItems.length > 0) ? ibfsItems[0].fullPath : "none";
+				alert("fileName = " + fileName + "\ndescription = " + description + "\nIbfsItem = " + itemPath);
+				*/
+			}	
+		}.bind(this));
+	},
+	
+	_initOptions:function()
+	{	
+		var servers = this.editor_options.servers;
+		var defServer = this.editor_options.server;
+		
+		var srvList = $(".srvList");
+		srvList.ibxWidget("remove", srvList.ibxWidget("children"));
+		
+	 	function sortServers(name1, name2)
+	 	{
+	 		return (name1 < name2 ? -1 : (name1 > name2 ? 1 : 0));
+	 	}
+	 	
+	 	servers = servers.sort(sortServers);
+
+		for (var i = 0; i < servers.length; i++)
+		{
+			var srv = servers[i];
+			var selected = (defServer && srv == defServer);
+			
+			var selItem = $("<div>").ibxSelectItem({ labelOptions: { text: srv }, userValue: srv, selected: selected});
+			srvList.ibxListBox("add", selItem);
+		}
+		
+		$(".srvChk").ibxWidget("checked", this.editor_options.srvChk);
+
+		if (this.editor_options.srvChk)
+		{
+			srvList.ibxWidget("option", "disabled", false);
+		}
+
+		$(".appChk").ibxWidget("checked", this.editor_options.appChk);
+
+
+		if (this.editor_options.appChk)
+		{
+			$(".avlAppList").ibxWidget("option", "disabled", false);
+			$(".selAppList").ibxWidget("option", "disabled", false);
+		}
+		else
+		{
+			$(".avlAppList").ibxWidget("option", "disabled", true);
+			$(".selAppList").ibxWidget("option", "disabled", true);
+		}
+		
+		this._getApps(); // TODO: Check Server Access !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+		var defApp = this.editor_options.appPath;
+		
+		var appParts = defApp.split(" ");
+		
+		var selAppList = $(".selAppList");
+		selAppList.ibxWidget("remove", selAppList.ibxWidget("children"));
+		
+		for (var k = 0; k < appParts.length; k++)
+		{
+			var selApp = appParts[k];
+
+			//selApp = decodeHtmlEncoding(selApp);
+			
+			if (selApp.length > 0)
+			{
+				var selItem = $("<div>").ibxSelectItem({ labelOptions: { text: selApp }, userValue: selApp});
+				selAppList.ibxList("add", selItem);
+			}
+		}
+		
+		$(".paramPrompt").ibxWidget("checked", this.editor_options.paramPrompt);
+
+		$(".srvChk").on("click", this._srvChkChange.bind(this));
+		$(".appChk").on("click", this._appChkChange.bind(this));
+		$(".srvList").on("ibx_change", this._srvListChange.bind(this));
+		
+		//$(".appBtn").on("click", this._chkSrvAccess.bind(this)); :TODO Check Server Access		
+		
+		$(".selAppBtn").on("click", this._addApp.bind(this));		
+		$(".delAppBtn").on("click", this._delApp.bind(this));
+		
+		$(".avlAppList").on("dblclick", this._addApp.bind(this));
+		$(".selAppList").on("dblclick", this._delApp.bind(this));
+		
+		$(".appUp").on("click", this._upApp.bind(this));
+		$(".appDown").on("click", this._dwnApp.bind(this));
+	},
+	
+	_resetOptions:function()
 	{
-		/*
-		this.optionsDlg = new BipEditorOptionsDlg(this);
-		this.optionsDlg.setVisible(true);
-		this.optionsDlg.init(this.options);
-		this.optionsDlg.addEventListener("dialogresult", this.gatherOptions, this);
-		*/
+		this._optionsChanged = false;
+		
+		var path = this.options.newDoc ? this.folderPath : this.folderPath + "/" + this.fullName; 
+
+		this._getEditorEnv(path);
+		
+		var srvList = $(".srvList");
+		srvList.ibxWidget("remove", srvList.ibxWidget("children"));
+		
+		var avlAppList = $(".avlAppList");
+		avlAppList.ibxWidget("remove", avlAppList.ibxWidget("children"));
+		
+		var selAppList = $(".selAppList");
+		selAppList.ibxWidget("remove", selAppList.ibxWidget("children"));
+
+		$(".appChk").ibxWidget("checked", false);
+
+		this._initOptions();
+	},
+	
+	_gatherOptions:function(optionsDlg)
+	{		
+		if (!optionsDlg)
+		{
+			return;
+		}
+		else 
+		{
+			this.optionsChanged = true;
+			this.editor_options.paramPrompt = $(".paramPrompt").ibxWidget("checked");
+			this.editor_options.srvChk = $(".srvChk").ibxWidget("checked");
+			this.editor_options.appChk = $(".appChk").ibxWidget("checked");
+					
+			this.editor_options.server = $(".srvList").ibxWidget("userValue");
+
+			
+			this.editor_options.appPath = "";
+						
+			/*
+			var ch = $(".selAppList").ibxWidget("children", ".ibx-select-item"); // Selector in case there are groups on the list
+			
+			ch.each(function (index, el){
+				var text = $(t).ibxWidget("userValue");
+			})
+			*/
+			var ch = $(".selAppList").ibxWidget("children");
+			
+			var appPathValue = "";
+			
+			for (var i = 0; i < ch.length; i++)
+			{
+				var aP = ch[i];
+				var aPText = $(aP).ibxWidget("userValue");
+
+				if (i == 0)
+				{
+					appPathValue = aPText;
+				}
+				else
+				{
+					appPathValue += (" " + aPText);
+				}
+			}
+			
+			this.editor_options.appPath = appPathValue;
+		}
+
+	},
+	
+
+	_upApp:function(e)
+	{		
+		var selAppList = $(".selAppList");
+		var selApp = selAppList.ibxWidget("selected");
+
+		if(!selApp || selApp.length != 1)
+			return;
+		
+		var prevSibling = selApp.prev();
+		
+	    if(prevSibling.length == 1) 
+		{		
+	    	selAppList.ibxWidget("add", selApp, prevSibling, true);
+		}
 	},
 
+	_dwnApp:function(e)
+	{
+		var selAppList = $(".selAppList");
+		var selApp = selAppList.ibxWidget("selected");
+
+		if(!selApp || selApp.length != 1)
+			return;
+		
+		var nextSibling = selApp.next();
+		
+	    if(nextSibling.length == 1) 
+		{		
+	    	selAppList.ibxWidget("add", selApp, nextSibling);
+		}
+	},
+
+	_addApp:function(e)
+	{		
+		var avlAppList = $(".avlAppList");
+		var avlSelApp = avlAppList.ibxWidget("selected");
+
+		if(!avlSelApp)
+			return;
+		
+		var selAppList = $(".selAppList");
+		var al = avlSelApp.length;
+		
+		for(var i = 0; i < al; i++)
+		{
+	    	selAppList.ibxWidget("add", avlSelApp[i]);
+		}
+	},
+	
+	_delApp:function(e)
+	{
+		var selAppList = $(".selAppList");
+		var selSelApp = selAppList.ibxWidget("selected");
+		
+		if(!selSelApp)
+			return;
+		
+		var avlAppList = $(".avlAppList");
+
+		var sl = selSelApp.length;
+		
+		for(var i = 0; i < sl; i++)
+		{
+			avlAppList.ibxWidget("add", selSelApp[i]);
+		}
+	},
+	
+	_getApps:function() 
+	{ 
+		var server = $(".srvList").ibxWidget("userValue");
+		if (!server)
+		{
+			return;
+		}
+
+		var uriExec = sformat("{1}"+this.editorActionHandler, applicationContext);
+		var randomnum = Math.floor(Math.random() * 100000);	
+		var argument=
+	 	{
+	 		BIP_REQUEST_TYPE: "BIP_GET_APPS",		
+	 		server: server,
+	 		IBI_random: randomnum				 		
+	 	};
+ 	
+		$.get({	"url": uriExec,	"context": this,"data": argument})
+			.done(function( data ) 
+			{				
+				this._gotApps(data);
+			});
+	},
+	
+	_gotApps:function(data)
+	{
+		var avlAppList = $(".avlAppList");
+		
+		avlAppList.ibxWidget("remove", avlAppList.ibxWidget("children"));
+		
+		var status =  $("status", data);
+		el = $(status);
+		var result =  el.attr("result");
+
+		if(result != "success")
+		{
+			if (result != "n/a")
+			{
+				var message = el.attr("message");
+				
+				var options = 
+				{
+					type:"std error",
+					caption:ibx.resourceMgr.getString("BT_ERROR"),
+					buttons:"ok",
+					messageOptions:
+					{
+						text:sformat("{1}"+ibx.resourceMgr.getString("BT_EDA_ERROR"), message)
+					}
+				};
+				var dlg = $.ibi.ibxDialog.createMessageDialog(options);
+				dlg.ibxDialog("open");	
+			}
+			return;
+		}
+		else
+		{
+			var ch = $(".selAppList").ibxWidget("children");
+			
+			var selApps = [];
+			
+			for (var i = 0; i < ch.length; i++)
+			{
+				var aP = ch[i];
+				selApps.push( $(aP).ibxWidget("userValue") );
+			}
+
+			var apps = $("app", data);
+			
+			apps.each(function(idx, el)
+			{				
+				el = $(el);
+				
+				var appName = el.attr("name");	
+				var selected = false;
+
+				for(var j = 0; j < selApps.length; j++ )
+				{
+					if(appName == selApps[j])
+					{
+						selected = true;
+						break;
+					}
+				}
+				
+				if(!selected)
+				{
+					var selItem = $("<div>").ibxSelectItem({ labelOptions: { text: appName }, userValue: appName});
+					avlAppList.ibxList("add", selItem);
+				}
+				
+			}.bind(this));			
+		} 
+	},
+	
+	_srvListChange:function(e)
+	{		
+		$(".avlAppList").ibxWidget("remove", $(".avlAppList").ibxWidget("children"));
+		$(".selAppList").ibxWidget("remove", $(".selAppList").ibxWidget("children"));
+	},
+	
+	_srvChkChange:function(e)
+	{
+		var isSrvChecked = $(".srvChk").ibxWidget("checked");
+		$(".srvList").ibxWidget("option", "disabled", !isSrvChecked);
+	},
+	
+	_appChkChange:function(e)
+	{
+		var isAppChecked = $(".appChk").ibxWidget("checked");		
+		$(".avlAppList").ibxWidget("option", "disabled", !isAppChecked);
+		$(".selAppList").ibxWidget("option", "disabled", !isAppChecked);
+	},
+	
+
+	
 	_selectAll:function(textArea)
 	{
-		textArea.focus();
-		
+		textArea.focus();		
 		textArea.select();
 	},
 
