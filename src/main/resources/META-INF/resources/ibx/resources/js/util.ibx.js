@@ -269,6 +269,57 @@ function FindStyleRules(selector)
 }
 
 /****
+[133907]
+Function you can call to take a string that might have single or double quotes in it, and get back a string you can
+use inside an xpath select statement.
+****/
+function XPathStringLiteral(s)
+{
+	if (s.indexOf('"')===-1)
+		return '"'+s+'"';
+	if (s.indexOf("'")===-1)
+		return "'"+s+"'";
+	return 'concat("'+s.replace(/"/g, '",\'"\',"')+'")';
+}
+
+/****
+Function you can call to handel relative pathing.
+Takes:	IBFS:/SSYS/USERS/../../EDA/EDASERVE/./ibisamp
+Return:	IBFS:/EDA/EDASERVE/ibisamp
+****/
+function CanonicalizePath(strPath)
+{
+	var arPathOut = [];
+	var arPathIn = strPath.replace("http://", "http:>>").split("/");
+	while(arPathIn.length)
+	{
+		var strPathElem = arPathIn.shift();
+		if(strPathElem == "..")
+			arPathOut.pop();
+		else
+		if(!strPathElem || strPathElem == ".")
+			/*do nothing*/;
+		else
+			arPathOut.push(strPathElem);
+	}
+	return arPathOut.join("/").replace("http:>>", "http://");
+}
+
+/**
+*
+*  Simple function to escape a string used as an attribute value in xml.
+*  it will replace & with &amp;, < with &lt;, > with &gt;, ' with &apos;, and " with &quot;
+*  use it when generating xml string in javascript code
+*
+**/
+function escapeXmlString(string) 
+{
+    var s = "" + string;
+    return s.replace(/\&/g,'&'+'amp;').replace(/</g,'&'+'lt;').replace(/>/g,'&'+'gt;').replace(/\'/g,'&'+'apos;').replace(/\"/g,'&'+'quot;');
+}
+
+
+/****
 	MediaQuery is used to wrap the idea of creating javascript breakpoints to our code.  Also allows
 	manipulation of the <meta name="viewport"> tag.
 ****/
