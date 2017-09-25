@@ -29,7 +29,7 @@ $.widget("ibi.ibxForm", $.ibi.ibxWidget,
 		{
 			this.element.uniqueId();
 			var id = this.element.prop("id");
-			var doc = $(doc.documentElement || document.documentElement);
+			var doc = $(doc ? doc.documentElement : document.documentElement);
 			doc.append(this.element.prop("outerHTML")).find("#"+id).submit().remove();
 			this.element.removeUniqueId();
 		}
