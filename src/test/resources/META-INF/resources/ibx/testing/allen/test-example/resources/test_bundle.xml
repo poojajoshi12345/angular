@@ -27,7 +27,8 @@
   </markup>
 
   <scripts>
-    <script-file src="./js/script.js"/>
+    <script-file src="./js/sidebar.js"/>
+    <script-file src="./js/listbox.js"/>
 
   </scripts>
 </ibx-res-bundle>
