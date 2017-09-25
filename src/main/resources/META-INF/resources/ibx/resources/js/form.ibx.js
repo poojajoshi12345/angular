@@ -51,7 +51,7 @@ $.widget("ibi.ibxForm", $.ibi.ibxWidget,
 			{
 				"type": "hidden",
 				"name": name,
-				"value": encodeURIComponent(value)
+				"value": value
 			});
 			this.element.append(input);
 		}.bind(this));
