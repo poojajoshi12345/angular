@@ -8,10 +8,11 @@ $.widget("ibi.ibxMenu", $.ibi.ibxPopup,
 {
 	options:
 	{
-		modal:false,
-		destroyOnClose:false,
-		multiSelect:false, //user can select multiple items without closing menu (checkboxes, etc.)
-		effect:"fade",
+		"role":"menu",
+		"modal":false,
+		"destroyOnClose":false,
+		"multiSelect":false, //user can select multiple items without closing menu (checkboxes, etc.)
+		"effect":"fade",
 	},
 	_widgetClass: "ibx-menu",
 	_create: function ()
@@ -87,19 +88,22 @@ $.widget("ibi.ibxMenuItem", $.ibi.ibxHBox,
 {
 	options:
 	{
-		iconPosition:"right",
-		justify:"start",
-		align:"center",
-		type:"plain",
-		markerClass:"ibx-menu-item-marker",
-		startMarkerClass:"ibx-start-marker",
-		endMarkerClass:"ibx-end-marker",
-		labelClass:"ibx-menu-item-label",
-		labelOptions:{},
+		"role":"menuitem",
+		"iconPosition":"right",
+		"justify":"start",
+		"align":"center",
+		"type":"plain",
+		"markerClass":"ibx-menu-item-marker",
+		"startMarkerClass":"ibx-start-marker",
+		"endMarkerClass":"ibx-end-marker",
+		"labelClass":"ibx-menu-item-label",
+		"labelOptions":{},
 	},
 	_widgetClass: "ibx-menu-item",
 	_create:function()
 	{
+		this._super();
+
 		var options = this.options;
 
 		//alternate to data-ibxp-text...direct text node children can be used to set the text.
@@ -118,9 +122,14 @@ $.widget("ibi.ibxMenuItem", $.ibi.ibxHBox,
 			"keydown": this._onMenuItemKeyEvent.bind(this)
 		});
 		this.addSubMenu(this.element.children(".ibx-menu"));
-		this._super();
 	},
-	_onMenuItemKeyEvent: function (e)
+	_setAccessibility: function(accessible)
+	{
+		this._super(accessible);
+		var subMenu = this.subMenu();
+		subMenu ? this.element.attr("aria-haspopup", true) : this.element.removeAttr("aria-haspopup");
+	},
+	_onMenuItemKeyEvent:function(e)
 	{
 		var menuItem = $(e.target);
 		if (e.keyCode == 37 || e.keyCode == 38)//left/up
@@ -132,7 +141,7 @@ $.widget("ibi.ibxMenuItem", $.ibi.ibxHBox,
 		if (e.keyCode == 13 || e.keyCode == 32)//enter/space
 			menuItem.trigger("click");
 
-		if (e.keyCode != 9)
+		if (e.keyCode != 9)//tab
 			e.preventDefault();
 	},
 	_onMenuItemClick: function (e)
@@ -210,8 +219,8 @@ $.widget("ibi.ibxMenuItem", $.ibi.ibxHBox,
 	_refresh:function()
 	{
 		this._super();
-		var options = this.options;
 
+		var options = this.options;
 		this._startMarker.addClass(sformat("{1} {2}", options.markerClass, options.startMarkerClass));
 		this._label.addClass(options.labelClass);
 		this._endMarker.addClass(sformat("{1} {2}", options.markerClass, options.endMarkerClass));
@@ -233,14 +242,20 @@ $.widget("ibi.ibxCheckMenuItem", $.ibi.ibxMenuItem,
 {
 	options:
 	{
-		type:"check",
-		checked:false,
+		"role":"menuitemcheckbox",
+		"type":"check",
+		"checked":false,
 	},
 	_widgetClass: "ibx-menu-item-check",
 	_create:function()
 	{
 		this._super();
 		this.element.prepend(this._startMarker);
+	},
+	_setAccessibility:function(accessible)
+	{
+		this._super(accessible);
+		this.options.checked ? this.element.attr("aria-checked", true) : this.element.removeAttr("aria-checked");
 	},
 	_onMenuItemClick:function(e)
 	{
@@ -268,7 +283,8 @@ $.widget("ibi.ibxRadioMenuItem", $.ibi.ibxCheckMenuItem,
 {
 	options:
 	{
-		group:""
+		"role":"menuitemradio",
+		"group":""
 	},
 	_widgetClass: "ibx-menu-item-radio",
 	_create:function()
@@ -311,13 +327,13 @@ $.ibi.ibxRadioMenuItem.statics =
 	ibxMenuSeparator
 	Just a utility widget for handling a menu separator...really just sets the class on the div.
 ******************************************************************************/
-$.widget("ibi.ibxMenuSeparator", $.ibi.ibxWidget,{options:{},_widgetClass: "ibx-menu-separator",});
+$.widget("ibi.ibxMenuSeparator", $.ibi.ibxWidget,{options:{"role":"separator"},_widgetClass: "ibx-menu-separator",});
 
 /******************************************************************************
 	ibxMenuBar
 	Simple derivation of ibxHBox/ibxVBox...mostly for markup readability
 ******************************************************************************/
-$.widget("ibi.ibxMenuBar", $.ibi.ibxHBox, {options:{align:"stretch"}, _widgetClass:"ibx-menu-bar"});
+$.widget("ibi.ibxMenuBar", $.ibi.ibxHBox, {"options":{"role":"menubar", "align":"stretch"},_widgetClass:"ibx-menu-bar",});
 $.widget("ibi.ibxHMenuBar", $.ibi.ibxMenuBar, {options:{}, _widgetClass:"ibx-hmenu-bar"});
 $.widget("ibi.ibxVMenuBar", $.ibi.ibxMenuBar, {options:{direction:"column"}, _widgetClass:"ibx-vmenu-bar"});
 
@@ -329,6 +345,7 @@ $.widget("ibi.ibxMenuButton", $.ibi.ibxButtonSimple,
 {
 	options:
 	{
+		"role":"menu",
 		"menu":null,
 		"position":
 		{
@@ -352,9 +369,6 @@ $.widget("ibi.ibxMenuButton", $.ibi.ibxButtonSimple,
 	_onClick:function(e)
 	{
 		var options = this.options;
-		var event = $.Event(e.origionalEvent);
-		event.type = "ibx_click";
-		this.element.trigger(event);
 		var menu = event.menu || options.menu;
 		$(menu).ibxWidget("option", {position:options.position}).ibxWidget("open");
 	},
@@ -406,7 +420,7 @@ $.widget("ibi.ibxSplitMenuButton", $.ibi.ibxHBox,
 
 		var separator = this._separator = $("<div class='split-separator'>");
 
-		this.element.append(btn, separator, menu);
+		this.element.append(btn, separator, menu)	;
 		options.menuOptions.menu.appendTo("body");
 	},
 	_onBtnClick:function(e)
@@ -444,7 +458,7 @@ $.widget("ibi.ibxHSplitMenuButton", $.ibi.ibxSplitMenuButton,{options:{},_widget
 $.widget("ibi.ibxVSplitMenuButton", $.ibi.ibxSplitMenuButton,{options:{menuOptions:{position:{my:"left top", at:"right top"}}},_widgetClass: "ibx-vsplit-menu-button"});
 
 //separator between menu buttons
-$.widget("ibi.ibxMenuButtonSeparator", $.ibi.ibxWidget,{options:{},_widgetClass: "ibx-menu-button-separator",});
+$.widget("ibi.ibxMenuButtonSeparator", $.ibi.ibxWidget,{options:{"role":"separator"},_widgetClass: "ibx-menu-button-separator",});
 
 
 //# sourceURL=menu.ibx.js

@@ -21,25 +21,6 @@
 			<jsp:include page="/WEB-INF/jsp/global/wf_globals.jsp" flush="false" />
 			ibx(function()
 			{
-				var listBox = $(".list-box");
-				var itemBox = $(".item-box");
-				for(var i = 0; i < 50; ++i)
-				{
-					var listItem = $("<div class='list-item' tabindex='0'>");
-					listItem.text("List Item " + i);
-					listBox.ibxWidget("add", listItem);
-
-					var testItem = $("<div class='test-item' tabindex='0'>");
-					testItem.text("Test Item " + i);
-					itemBox.ibxWidget("add", testItem);
-
-				}
-
-				window.onpopstate = function(e)
-				{
-					debugger;
-				};
-
 				ibx.accessible(true);
 			}, null, true);
 		</script>
@@ -52,6 +33,12 @@
 				right:0px;
 				bottom:0px;
 			}
+			.test-frame
+			{
+				flex:1 1 auto;
+				align-self:stretch;
+				
+			}
 			h1{display:none;}
 		</style>
 	</head>
@@ -59,14 +46,23 @@
 		<h1>Stupid fake heading</h1>
 		<div data-ibx-type="ibxRadioGroup" data-ibxp-name="rgTest"></div>
 		<div class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="center" data-ibxp-justify="center">
-			<div data-ibx-type="ibxLabel" tabIndex="0">Test Button Label</div>
-			<div data-ibx-type="ibxButton" tabIndex="0">Test Button</div>
-			<div data-ibx-type="ibxLabel" tabIndex="0">Check Button Label</div>
-			<div data-ibx-type="ibxCheckBox" tabIndex="0">CheckBox Button</div>
-			<div data-ibx-type="ibxLabel" tabIndex="0">Test Radio Button Label</div>
-			<div data-ibx-type="ibxRadioButton" data-ibxp-group="rgTest" tabIndex="0">Radio Button1</div>
-			<div data-ibx-type="ibxRadioButton" data-ibxp-group="rgTest" tabIndex="0">Radio Button2</div>
-			<div data-ibx-type="ibxRadioButton" data-ibxp-group="rgTest" tabIndex="0">Radio Button3</div>
+			
+			<div class="menu-bar-test" tabindex="0" data-ibx-type="ibxHMenuBar">
+				<div role="menubutton" tabindex="0" class="menu-btn-file" data-ibx-type="ibxHMenuButton">Menu 1
+					<div role="menu" class="menu-file" data-ibx-type="ibxMenu">
+						<div role="menuitem" data-ibx-type="ibxMenuItem">Item1</div>
+						<div role="menuitem" data-ibx-type="ibxMenuItem">Item2</div>
+						<div role="menuitem" data-ibx-type="ibxMenuItem">Item3</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="test-a" data-ibx-type="ibxButton" tabIndex="0">a</div>
+			<div class="test-b" data-ibx-type="ibxButton" tabIndex="0">b</div>
+			<div data-ibx-type="ibxCheckBox" tabIndex="0">Two</div>
+			<div data-ibx-type="ibxRadioButton" data-ibxp-group="rgTest" tabIndex="0">Three.1</div>
+			<div data-ibx-type="ibxRadioButton" data-ibxp-group="rgTest" tabIndex="0">Three.2</div>
+			<div data-ibx-type="ibxRadioButton" data-ibxp-group="rgTest" tabIndex="0">Three.3</div>
 		</div>
 	</body>
 </html>

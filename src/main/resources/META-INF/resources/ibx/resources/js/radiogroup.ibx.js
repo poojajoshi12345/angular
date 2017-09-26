@@ -26,6 +26,21 @@ $.widget("ibi.ibxRadioGroup", $.ibi.ibxWidget,
 	{
 		this._super();
 	},
+	_setAccessibility:function(accessible)
+	{
+		this._super(accessible);
+		if(accessible)
+		{
+			var btnIds = "";
+			$(".ibx-radio-group-" + this.options.name).each(function(members, idx, el)
+			{
+				btnIds += " " + el.id;	
+			}.bind(this, btnIds));
+			this.element.attr("aria-owns", btnIds);
+		}
+		else
+			this.element.removeAttr("aria-owns");
+	},
 	_onBeforeChange: function (e, el)
 	{
 		if (!$(e.currentTarget).ibxWidget('checked'))
@@ -173,15 +188,6 @@ $.widget("ibi.ibxRadioGroup", $.ibi.ibxWidget,
 		var disabled = !!value;
 		$(".ibx-radio-group-" + this.options.name).ibxWidget('option', 'disabled', disabled);
 	},
-	_setAccessibility:function(accessible)
-	{
-		var btnIds = "";
-		$(".ibx-radio-group-" + this.options.name).each(function(members, idx, el)
-		{
-			btnIds += " " + el.id;	
-		}.bind(this, btnIds));
-		accessible ? this.element.attr("aria-owns", btnIds) : this.element.removeAttr("aria-owns");
-},
 	_refresh: function ()
 	{
 		this.element.addClass('ibx-radio-group-control-' + this.options.name);

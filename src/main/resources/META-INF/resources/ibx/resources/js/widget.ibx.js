@@ -105,7 +105,10 @@ $.widget("ibi.ibxWidget", $.Widget,
 	_setAccessibility:function(accessible)
 	{
 		if(accessible)
+		{
 			this.element.uniqueId().attr("role", this.options.role);
+			(this.options.disabled) ? this.element.attr("aria-disabled", true) : this.element.removeAttr("aria-disabled");
+		}
 		else
 		{
 			this.element.removeAttr("role");
@@ -247,7 +250,6 @@ $.widget("ibi.ibxWidget", $.Widget,
 		this._setAccessibility(options.accessible);
 		options.focusRoot ? this.element.addClass("ibx-focus-root") : this.element.removeClass("ibx-focus-root");
 		options.defaultFocused ? this.element.addClass("ibx-default-focused") : this.element.removeClass("ibx-default-focused");
-	
 
 		//hookup the resize sensor if interested in resize events.
 		if(!options.wantResize && this._resizeSensor)
@@ -266,10 +268,10 @@ $.widget("ibi.ibxWidget", $.Widget,
 			//added to the dom these values are all set to 0 and need to be set as follows.
 			var expand = this.element.find(".resize-sensor-expand");
 			var shrink = this.element.find(".resize-sensor-shrink");
-            expand.prop("scrollLeft", 100000);
-            expand.prop("scrollTop", 100000);
-            shrink.prop("scrollLeft", 100000);
-            shrink.prop("scrollTop", 100000);
+			expand.prop("scrollLeft", 100000);
+			expand.prop("scrollTop", 100000);
+			shrink.prop("scrollLeft", 100000);
+			shrink.prop("scrollTop", 100000);
 		}
 	}
 });
@@ -318,9 +320,9 @@ $.widget("ibi.ibxWidget", $.Widget,
 		_createOrig:$.ibi.ibxWidget.prototype._create,
 		_create:function()
 		{
-			this._createOrig.apply(this, arguments);
 			this._onDragMouseEventBound = this._onDragMouseEvent.bind(this);
 			this._onDragKeyEventBound = this._onDragKeyEvent.bind(this);
+			this._createOrig.apply(this, arguments);
 		},
 		getDefaultDragImage:function(el)
 		{

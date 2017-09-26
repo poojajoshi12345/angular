@@ -13,7 +13,7 @@ $.widget("ibi.ibxButton", $.ibi.ibxLabel,
 	_create: function ()
 	{
 		this._super();
-		this.element.on("keydown", this._onKeyDown.bind(this));
+		this.element.on("keydown", this._onKeyDown.bind(this)).prop("tabIndex", 0);
 	},
 	_destroy: function ()
 	{

@@ -188,7 +188,7 @@ ibx.showRootNodes = function(bShow)
 ibx.accessible = function(accessible)
 {
 	var widgets = $(".ibx-widget");
-	widgets.ibxWidget("option", "accessible", accessible);
+	widgets.ibxWidget("option", "accessible", accessible).ibxWidget("refresh");
 }
 
 //where ibx.js loaded from
