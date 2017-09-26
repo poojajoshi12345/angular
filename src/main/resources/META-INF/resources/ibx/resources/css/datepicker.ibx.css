@@ -19,6 +19,13 @@
     padding: 3px;
 }
 
+.ibx-datepicker-clear
+{
+    font-size: 1.3em;
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
 .ibx-datepicker.popup .ibx-datepicker-input {
     border-bottom: none;
 }

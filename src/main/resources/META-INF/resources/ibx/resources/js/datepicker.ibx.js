@@ -9,6 +9,7 @@ $.widget("ibi.ibxDatePicker", $.ibi.ibxVBox,
 			"dateFormat": "MM d, yy",
 			"wrap": "false",
 			"align": "stretch",
+			"showClear": false,
 			"date": $.datepicker.formatDate("MM d, yy", new Date()),
 		},
 	_widgetClass: "ibx-datepicker",
@@ -16,8 +17,9 @@ $.widget("ibi.ibxDatePicker", $.ibi.ibxVBox,
 	{
 		this._super();
 		this._input = $('<div class="ibx-default-ctrl-focus ibx-datepicker-input">').ibxLabel({glyphClasses:"fa fa-calendar", 'align': 'stretch'}).on("focus", this._showPopup.bind(this)).on('click', this._showPopup.bind(this));
-		this._inputWrapper = $('<div>').ibxHBox().addClass('ibx-datepicker-input-wrapper');
-		this._inputWrapper.append(this._input);
+		this._clear = $('<div class="ibx-datepicker-clear">').ibxButtonSimple({glyphClasses:"fa fa-times"}).on('click', this._onClear.bind(this)).hide();
+		this._inputWrapper = $('<div>').ibxHBox({align: 'center'}).addClass('ibx-datepicker-input-wrapper');
+		this._inputWrapper.append(this._input, this._clear);
 		this._dateWrapper = $('<div>').ibxFlexBox({ 'wrap': false });
 		this._datePicker = $('<div>').datepicker({'onSelect': this._onSelect.bind(this), numberOfMonths: 1 });
 		this._dateWrapper.append(this._datePicker).addClass('ibx-datepicker-date-wrapper');
@@ -31,6 +33,14 @@ $.widget("ibi.ibxDatePicker", $.ibi.ibxVBox,
 	_destroy: function ()
 	{
 		this._super();
+	},
+	_onClear: function ()
+	{
+		this.options.date = '';
+		this._datePicker.datepicker('setDate', this.options.date);
+		this._input.ibxWidget('option', 'text', this.options.date);
+		this._trigger("change", null, { 'date': '' });
+		this._trigger("set_form_value", null, { "elem": this.element, "value": '' });
 	},
 	_onSelect: function (dateText, inst)
 	{
@@ -63,6 +73,10 @@ $.widget("ibi.ibxDatePicker", $.ibi.ibxVBox,
 	_refresh: function ()
 	{
 		this.element.removeClass('popup simple inline');
+		if (this.options.showClear)
+			this._clear.show();
+		else
+			this._clear.hide();
 		this._datePicker.datepicker('option', this.options);
 		this._datePicker.datepicker('setDate', this.options.date);
 		this._input.ibxWidget('option', 'text', this.options.date);
@@ -105,7 +119,8 @@ $.widget("ibi.ibxDateRange", $.ibi.ibxDatePicker,
 	{
 		this._super();
 		this._input2 = $('<div class="ibx-default-ctrl-focus ibx-datepicker-input">').ibxLabel({ glyphClasses: "fa fa-calendar", 'align': 'stretch' }).on("focus", this._showPopup.bind(this)).on('click', this._showPopup.bind(this));
-		this._inputWrapper.append(this._input2);
+		this._clear2 = $('<div class="ibx-datepicker-clear">').ibxButtonSimple({glyphClasses:"fa fa-times"}).on('click', this._onClear2.bind(this)).hide();
+		this._inputWrapper.append(this._input2, this._clear2);
 		this._datePicker.datepicker('option', 'numberOfMonths', 2);
 		this._datePicker.datepicker('option', 'onChangeMonthYear', this._onChangeMonthYear.bind(this));
 		this._input.ibxWidget('option', 'text', this.options.dateFrom);
@@ -115,6 +130,20 @@ $.widget("ibi.ibxDateRange", $.ibi.ibxDatePicker,
 	_onChangeMonthYear: function (year, month, inst)
 	{
 		window.setTimeout(function () { this._highlightRange(); }.bind(this), 10);
+	},
+	_onClear: function ()
+	{
+		this.options.dateFrom  = '';
+		this._trigger("change", null, { 'dateFrom': this.options.dateFrom, 'dateTo': this.options.dateTo});
+		this._trigger("set_form_value", null, { "elem": this.element, "value": "['" + this.options.dateFrom + "','" + this.options.dateTo + "']" });
+		this._input.ibxWidget('option', 'text', this.options.dateFrom);
+	},
+	_onClear2: function ()
+	{
+		this.options.dateTo  = '';
+		this._trigger("change", null, { 'dateFrom': this.options.dateFrom, 'dateTo': this.options.dateTo});
+		this._trigger("set_form_value", null, { "elem": this.element, "value": "['" + this.options.dateFrom + "','" + this.options.dateTo + "']" });
+		this._input2.ibxWidget('option', 'text', this.options.dateTo);
 	},
 	_onSelect: function (dateText, inst)
 	{
@@ -192,6 +221,10 @@ $.widget("ibi.ibxDateRange", $.ibi.ibxDatePicker,
 	_refresh: function ()
 	{
 		this._super();
+		if (this.options.showClear)
+			this._clear2.show();
+		else
+			this._clear2.hide();
 		this._datePicker.datepicker('setDate', this.options.dateTo);
 		this._input.ibxWidget('option', 'text', this.options.dateFrom);
 		this._input2.ibxWidget('option', 'text', this.options.dateTo);
