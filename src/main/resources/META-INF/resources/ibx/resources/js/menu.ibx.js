@@ -75,6 +75,9 @@ $.widget("ibi.ibxMenu", $.ibi.ibxPopup,
 	_refresh: function ()
 	{
 		this._super();
+
+		//default focus the first menu item.
+		this.children(".ibx-menu-item").removeClass("ibx-default-focused").first().addClass("ibx-default-focused");
 	}
 });
 $.ibi.ibxMenu.statics = 
@@ -132,17 +135,19 @@ $.widget("ibi.ibxMenuItem", $.ibi.ibxHBox,
 	_onMenuItemKeyEvent:function(e)
 	{
 		var menuItem = $(e.target);
-		if (e.keyCode == 37 || e.keyCode == 38)//left/up
+		if (e.keyCode == 38)//up
 			menuItem.prevAll(":ibxFocusable").first().focus();
 		else
-		if (e.keyCode == 39 || e.keyCode == 40)//right/down
+		if(e.keyCode == 40)//down
 			menuItem.nextAll(":ibxFocusable").first().focus();
+		else
+		if(e.keyCode == 39 && this.subMenu())
+			menuItem.trigger("click");
 		else
 		if (e.keyCode == 13 || e.keyCode == 32)//enter/space
 			menuItem.trigger("click");
 
-		if (e.keyCode != 9)//tab
-			e.preventDefault();
+		e.preventDefault();
 	},
 	_onMenuItemClick: function (e)
 	{
