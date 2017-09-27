@@ -457,7 +457,10 @@ $.widget("ibi.ibxButtonGroup", $.ibi.ibxFlexBox,
 			el = $(el);
 			//el.on("ibx_change", this._onSelectedBound)
 			el.addClass("ibx-button-group-member");
-			window.setTimeout(function (el, groupName) { el.ibxWidget('option', 'group', groupName) }.bind(null, el, this.options.name), 1);
+			window.setTimeout(function (el, groupName) { 
+				if (el.data('ibxWidget'))
+					el.ibxWidget('option', 'group', groupName); 
+			}.bind(null, el, this.options.name), 1);
 		}.bind(this));
 	},
 	_removeGroupSelection: function ()
