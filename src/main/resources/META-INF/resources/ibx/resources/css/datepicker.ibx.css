@@ -12,7 +12,7 @@
 }
 
 .ibx-datepicker-input {
-    flex: 1 1 1px;
+    flex: 1 1 auto;
     border: none;
     border-bottom: 1px solid #c5c5c5;
     margin: 3px;
