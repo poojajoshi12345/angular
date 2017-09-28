@@ -374,6 +374,7 @@ $.widget("ibi.ibxMenuButton", $.ibi.ibxButtonSimple,
 	_onClick:function(e)
 	{
 		var options = this.options;
+		this._trigger("click", e.originalEvent);//[HOME-584]
 		$(options.menu).ibxWidget("option", {position:options.position}).ibxWidget("open");
 	},
 	_refresh:function()
