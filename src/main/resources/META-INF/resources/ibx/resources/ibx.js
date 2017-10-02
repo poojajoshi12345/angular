@@ -145,6 +145,8 @@ function ibx()
 							ibx._loadPromise.then(fn);
 							ibx._loadPromise.then(function()
 							{
+								ibx._setAccessibility(ibx.isAccessible);//turn on/off default accessibility
+
 								var ibxRoots = $(".ibx-root").addClass("ibx-loaded");//display all ibx-roots, now that we are loaded.
 								if(ibx.showOnLoad)
 									ibx.showRootNodes(true);
@@ -184,12 +186,28 @@ ibx.showRootNodes = function(bShow)
 	return ibx;//for chaining
 };
 
-//turn on WAI Aria
+//manage ARIA
+ibx.isAccessible = true;
 ibx.accessible = function(accessible)
 {
+	if(accessible === undefined)
+		return ibx.isAccessible;
+
+	ibx.isAccessible = accessible;
+	ibx._setAccessibility(accessible);
 	var widgets = $(".ibx-widget");
-	widgets.ibxWidget("option", "accessible", accessible).ibxWidget("refresh");
+	widgets.each(function(idx, el)
+	{
+		//need to check destroyed, as some widgets destroy others when refreshing.
+		var widget = $(el).data("ibxWidget");
+		if(widget && !widget.destroyed())
+			$(el).ibxWidget("option", "accessible", accessible);
+	});
 }
+ibx._setAccessibility = function(accessible)
+{
+	accessible ? $(".ibx-root").attr("role", "application") : $(".ibx-root").removeAttr("role");
+};
 
 //where ibx.js loaded from
 ibx._path = "";

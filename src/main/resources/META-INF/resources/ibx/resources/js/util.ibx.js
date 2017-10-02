@@ -74,7 +74,7 @@ jQuery.expr[":"]["ibxFocusable"] = function(elem)
 	var el = $(elem);
 	var tabIndex = el.attr("tabIndex")
 	var visible = (el.css("visibility") != "hidden" && el.css("display") != "none");
-	var ret = ((tabIndex >= 0) && visible);
+	var ret = ( ((tabIndex >= 0) || (tabIndex == -1)) && visible);
 	return ret;
 };
 jQuery.expr[":"]["openPopup"] = function(elem, idx, meta, stack)
@@ -206,6 +206,28 @@ jQuery.fn.dispatchEvent = function(type, data, canBubble, cancelable)
 	}.bind(this, e));
 	return e;
 }
+
+jQuery.fn.extend( {
+	ariaUniqueId: ( function() {
+		var ariaid = 0;
+
+		return function() {
+			return this.each( function() {
+				if ( !this.id ) {
+					this.id = "aria-id-" + ( ++ariaid );
+				}
+			} );
+		};
+	} )(),
+
+	removeAriaUniqueId: function() {
+		return this.each( function() {
+			if ( /^aria-id-\d+$/.test( this.id ) ) {
+				$( this ).removeAttr( "id" );
+			}
+		} );
+	}
+} );
 
 
 //Sorts elements on zIndex (in descending order).

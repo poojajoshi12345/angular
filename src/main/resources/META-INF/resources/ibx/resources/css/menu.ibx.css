@@ -50,13 +50,18 @@
 	background-color:#ddd;
 }
 
+.ibx-menu-item-selected
+{
+	font-size:2em;
+	transition:all 1s;
+}
+
 .ibx-menu-separator
 {
 	margin-top:.25em;
 	margin-bottom:.25em;
 	border-top:1px solid #ccc;
 }
-
 
 .ibx-menu-item:focus
 {
@@ -132,10 +137,6 @@
 	padding:.25em;
 	border:1px solid #aaa;
 }
-.ibx-split-menu-button > .split-button
-{
-	flex:1 1 auto;
-}
 
 .ibx-split-menu-button > .split-menu::before
 {
@@ -152,7 +153,8 @@
 
 .ibx-split-menu-button > .split-separator
 {
-	margin:0px .25em 0px .25em;
+	height:1.5em;
+	margin:0px .25em 0px .5em;
 	border-left:1px solid #aaa;
 }
 
@@ -171,6 +173,11 @@
 	padding:5px;
 }
 
+.ibx-menu-bar .ibx-nav-item-active
+{
+	text-decoration:underline;
+}
+
 .ibx-hmenu-bar .ibx-menu-button-separator
 {
 	margin:2px;
@@ -182,3 +189,5 @@
 	margin:2px;
 	border-top:1px solid #ccc;
 }
+
+

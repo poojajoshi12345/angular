@@ -5,6 +5,7 @@ $.widget("ibi.ibxDialog", $.ibi.ibxPopup,
 {
 	options:
 	{
+		"role":"dialog",
 		"nameRoot":true,
 		"template":".dialog-template",
 		"type":"std",
@@ -39,6 +40,12 @@ $.widget("ibi.ibxDialog", $.ibi.ibxPopup,
 		this.btnApply.on("click", this.apply.bind(this));
 		this.btnCancel.on("click", this.close.bind(this, "cancel"));
 		this.btnOK.on("click", this.close.bind(this, "ok"));
+	},
+	_setAccessibility:function(accessible)
+	{
+		this._super(accessible);
+		this.caption.ariaUniqueId();
+		accessible ? this.element.attr("aria-labelledby", this.caption.prop("id")) : this.element.removeAttr("aria-labeledby");
 	},
 	_init:function()
 	{
@@ -90,7 +97,7 @@ $.widget("ibi.ibxDialog", $.ibi.ibxPopup,
 $.ibi.ibxDialog.createMessageDialog = function(options)
 {
 	options.captionOptions = {text:options.caption};//map caption to proper option.
-	options = $.extend(true, {}, {type:"std", messageOptions:{textWrap:true, justify:"start"}}, options);
+	options = $.extend(true, {"role":"alertdialog"}, {type:"std", messageOptions:{textWrap:true, justify:"start"}}, options);
 	var msg = $("<div data-ibx-name='message'>").ibxLabel(options.messageOptions).addClass("ibx-dialog-message");
 	var dlg = $("<div>").ibxDialog().ibxDialog("option", options);
 	dlg.ibxWidget("add", msg);

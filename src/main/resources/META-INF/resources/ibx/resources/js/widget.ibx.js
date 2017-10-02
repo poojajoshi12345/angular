@@ -7,15 +7,22 @@ $.widget("ibi.ibxWidget", $.Widget,
 	{
 		"class":"",
 		"nameRoot":false,
-		"focusRoot":false,
-		"defaultFocused":false,
 		"ctxMenu":null,
 		"dragScrolling":false,
 		"wantResize":false,
-
+		"defaultFocused":false,		//for popup...should this be focused on open
+		
+		//for circular tabbing
+		"focusRoot":false,			//for circular tabbing management
+		
+		//for keyboard navigation (mostly composite widgets like menus/selects/etc)
+		"navKeyRoot":false,			//start key nav here
+		"navKeyDir": "horizontal",	//horizontal = left/right, vertical = up/down, or both
+		"navKeyAutoFocus":true,		//do an initial nav when this gets focus (basically focus first nav item)
+		
 		//508 ARIA
 		"accessible":false,
-		"role":"widget"
+		"role":""
 	},
 	_widgetClass:"ibx-widget",
 	_adjustWidgetClasses:function(bAdd)
@@ -38,6 +45,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 	_created:false,
 	_createWidget:function(options, element)
 	{
+		this.options.accessible = ibx.isAccessible;//default accessible to ibx, but allow markup/js to override.
 		this._super(options, element);
 		this._created = true;
 		this._destroyed = false;
@@ -49,16 +57,14 @@ $.widget("ibi.ibxWidget", $.Widget,
 		this.element.data("ibxWidget", this);
 		this.element.data("ibiIbxWidget", this);
 		this.element.attr("data-ibx-type", this.widgetName);
-		this.element.on("click keydown keypress", this._onFocusRootEvent.bind(this));
+		this.element.on("keydown", this._onWidgetKeyEvent.bind(this));
+		this.element.on("focusin", this._onWidgetFocusEvent.bind(this));
 		this.element.on("contextmenu", this._onWidgetContextMenu.bind(this));
 		this._adjustWidgetClasses(true);
 
 		//save the resize sensor callback;
 		this._resizeCallbackBound = this._resizeCallback.bind(this);
 
-		//Ritalin, if ya know what I mean!
-		this.element.children("[tabindex]").first().focus();
-		
 		//assign memember variables
 		var memberData = this.element.data("_ibxPrecreateMemberVariables");
 		$.each(memberData, function(memberName, memberValue)
@@ -67,6 +73,28 @@ $.widget("ibi.ibxWidget", $.Widget,
 		}.bind(this));
 		this.element.removeData("_ibxPrecreateMemberVariables");
 		this._super();
+	},
+	_setAccessibility:function(accessible)
+	{
+		var options = this.options;
+		if(accessible)
+		{
+			options.role ? this.element.ariaUniqueId().attr("role", this.options.role) : this.element.removeAttr("role");
+			(this.options.disabled) ? this.element.attr("aria-disabled", true) : this.element.removeAttr("aria-disabled");
+		}
+		else
+		{
+			this.element.removeAriaUniqueId().removeAttr("role");
+			this.element.removeAttr("aria-disabled");
+			return;
+			var attributes = this.element.prop("attributes");
+			for(var i = 0; i < attributes.length; ++i)
+			{
+				var attr = attributes[i].nodeName;
+				if(/^aria-/i.test(attr))
+					this.element.removeAttr(attr);
+			}
+		}
 	},
 	destroyed:function(){return this._destroyed;},
 	_destroyed:false,
@@ -102,25 +130,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 		var options = $.extend(true, {}, this.options, ibx.getIbxMarkupOptions(this.element))
 		this.option(options);
 	},
-	_setAccessibility:function(accessible)
-	{
-		if(accessible)
-		{
-			this.element.uniqueId().attr("role", this.options.role);
-			(this.options.disabled) ? this.element.attr("aria-disabled", true) : this.element.removeAttr("aria-disabled");
-		}
-		else
-		{
-			this.element.removeAttr("role");
-			var attributes = this.element.prop("attributes");
-			for(var i = 0; i < attributes.length; ++i)
-			{
-				var attr = attributes[i].nodeName;
-				if(/^aria-/i.test(attr))
-					this.element.removeAttr(attr);
-			}
-		}
-	},
+	owner:function(){return this.element.parent();},
 	member:function(memberName, value)
 	{
 		var ret = null;
@@ -138,28 +148,97 @@ $.widget("ibi.ibxWidget", $.Widget,
 	{
 		this._trigger("resize");
 	},
-	_onFocusRootEvent:function(e)
+	_onWidgetFocusEvent:function(e)
 	{
-		if(this.options.focusRoot)
+		if(this.options.navKeyRoot)
 		{
-			if(e.keyCode == 9)
+			var target = $(e.target);
+			var isChild = this.element.is(target.parent());
+			if(isChild)
 			{
-				var elActive = $(document.activeElement).closest("[tabIndex][tabIndex != -1]");
-				var tabKids = $(this.element).find(":ibxFocusable");
-				var curIdx = tabKids.index(elActive);
-				var target = null;
-				if(e.shiftKey)
-					target = (0 == curIdx) ? tabKids.last() : tabKids[--curIdx];
-				else
-					target = ((tabKids.length - 1) == curIdx) ? tabKids.first() : tabKids[++curIdx];
-
-				target = $(target);
-				var ret = this._trigger("focusing", null, {"target":target, "relatedTarget":elActive});
-				if(ret)
-					target.focus();
-				e.preventDefault();
+				var children = this.children();
+				children.removeClass("ibx-nav-item-active").removeProp("aria-activedescendant");
+				target.addClass("ibx-nav-item-active").attr("aria-activedescendant", true);
 			}
+			else
+			if(this.options.navKeyAutoFocus && this.element.is(target) && !$.contains(this.element[0], e.relatedTarget))
+				this.children().filter(".ibx-nav-item-active").focus();
+		}
+	},
+	_onWidgetKeyEvent:function(e)
+	{
+		//if specified, keep traversal of children localized and circular within this widget.  
+		//tabbing is for things like popups/dialogs, and arrows for composite widgets (menus/selects)...ARIA support relies on this.
+		var options = this.options;
+		if(options.focusRoot && e.keyCode == $.ui.keyCode.TAB)
+		{
+			var elActive = $(document.activeElement).closest("[tabIndex][tabIndex != -1]");
+			var tabKids = $(this.element).find(":ibxFocusable");
+			var curIdx = tabKids.index(elActive);
+			var target = null;
+			if(e.shiftKey)
+				target = (0 == curIdx) ? tabKids.last() : tabKids[--curIdx];
+			else
+				target = ((tabKids.length - 1) == curIdx) ? tabKids.first() : tabKids[++curIdx];
+
+			target = $(target);
+			var ret = this._trigger("focusing", null, {"target":target, "relatedTarget":elActive});
+			if(ret)
+				target.focus();
+			e.preventDefault();
 			e.stopPropagation();
+		}
+		else
+		if(options.navKeyRoot && (-1 != $.ibi.ibxWidget.navKeys.indexOf(e.keyCode)))
+		{
+			var navKids = this.children(":ibxFocusable");
+			var active = current = navKids.filter(".ibx-nav-item-active");
+			if(active)
+			{
+				active.removeClass("ibx-nav-item-active").removeAttr("aria-activedescendant")
+				if(options.navKeyDir == "horizontal" || options.navKeyDir == "both")
+				{
+					if(e.keyCode == $.ui.keyCode.LEFT)
+					{
+						var prev = active.prevAll(":ibxFocusable").first();
+						active = prev.length ? prev : navKids.last();
+					}
+					else
+					if(e.keyCode == $.ui.keyCode.RIGHT)
+					{
+						var next = active.nextAll(":ibxFocusable").first();
+						active = next.length ? next : navKids.first();
+					}
+				}
+
+				if(options.navKeyDir == "vertical" || options.navKeyDir == "both")
+				{
+					if(e.keyCode == $.ui.keyCode.UP)
+					{
+						var prev = active.prevAll(":ibxFocusable").first();
+						active = prev.length ? prev : navKids.last();
+					}
+					else
+					if(e.keyCode == $.ui.keyCode.DOWN)
+					{
+						var next = active.nextAll(":ibxFocusable").first();
+						active = next.length ? next : navKids.first();
+					}
+				}
+			}
+			else
+				active = navKids.first();
+
+			var event = $.Event(e);
+			event.type = "ibx_beforekeynav";
+			event.target = active;
+			event.relatedTarget = current;
+			this.element.trigger(event);
+			if(!event.isDefaultPrevented())
+			{
+				active.addClass("ibx-nav-item-active").attr("aria-activedescendant", true).focus();
+				e.stopPropagation();
+			}
 		}
 	},
 	_onWidgetContextMenu:function(e)
@@ -275,6 +354,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 		}
 	}
 });
+$.ibi.ibxWidget.navKeys = [$.ui.keyCode.LEFT, $.ui.keyCode.RIGHT, $.ui.keyCode.UP, $.ui.keyCode.DOWN];
 
 /****
  	Drag/Drop mix in

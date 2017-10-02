@@ -5,24 +5,23 @@
 $.widget("ibi.ibxButton", $.ibi.ibxLabel,
 {
 	options:
-		{
-			"role":"button",
-			"iconPosition": "left",
-		},
+	{
+		"role":"button",
+		"iconPosition": "left",
+	},
 	_widgetClass: "ibx-button",
 	_create: function ()
 	{
 		this._super();
-		this.element.on("keydown", this._onKeyDown.bind(this)).prop("tabIndex", 0);
+		this.element.on("keydown", this._onKeyDown.bind(this));
+	},
+	_setAccessibility:function(accessible)
+	{
+		this._super(accessible);
 	},
 	_destroy: function ()
 	{
 		this._super();
-	},
-	_setAccessibility:function(accessible)
-	{
-		this.element.attr("role", "button");
-		this._super(accessible);
 	},
 	checked: function (value)
 	{
@@ -372,13 +371,14 @@ $.widget("ibi.ibxSwitch", $.ibi.ibxCheckBox,
 $.widget("ibi.ibxButtonGroup", $.ibi.ibxFlexBox,
 {
 	options:
-		{
-			name: "",
-			form: "",
-			align: "stretch",
-			wrap: false,
-			groupSelection: false,
-		},
+	{
+		role: "group",
+		name: "",
+		form: "",
+		align: "stretch",
+		wrap: false,
+		groupSelection: false,
+	},
 	_widgetClass: "ibx-button-group",
 	_group: null,
 	_create: function ()

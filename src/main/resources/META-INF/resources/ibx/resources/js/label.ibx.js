@@ -8,6 +8,7 @@ $.widget("ibi.ibxLabel", $.ibi.ibxFlexBox,
 		"text":"",
 		"textWrap":false,
 		"textAlign":"",
+		"textIsHtml":false,
 		"textElClass":"ibx-label-text",
 		"iconPosition":"left",
 		"icon":"",
@@ -55,11 +56,17 @@ $.widget("ibi.ibxLabel", $.ibi.ibxFlexBox,
 		this._super(accessible);
 		if(accessible)
 		{
-			var id = this._text.uniqueId().prop("id");
-			this.element.attr("aria-labelledby", id);
+			this._glyph.attr("aria-hidden", true);
+			this._text.attr("aria-hidden", true);
+			var id = this._text.ariaUniqueId().prop("id");
+			id ? this.element.attr("aria-labelledby", id) : null;
 		}
 		else
-			this.element.removeAttr("arial-labelledby");
+		{
+			this.element.removeAttr("aria-labelledby");
+			this._text.removeAriaUniqueId().removeAttr("aria-hidden");
+			this._glyph.removeAttr("aria-hidden");
+		}
 	},
 	_refresh:function()
 	{
@@ -79,7 +86,7 @@ $.widget("ibi.ibxLabel", $.ibi.ibxFlexBox,
 		
 		//only update if changed
 		if(options.text != lastOptions.text)
-			this._text.text(options.text)
+			options.textIsHtml ? this._text.html(options.text) : this._text.text(options.text);
 		this._text.removeClass(lastOptions.textElClass).addClass(options.textElClass).css({"text-align":options.textAlign, "white-space":options.textWrap ? "" : "nowrap"});
 
 		//add appropriate spacer classes

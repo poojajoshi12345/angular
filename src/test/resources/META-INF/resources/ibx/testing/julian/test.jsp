@@ -7,7 +7,7 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-		<title>ibx test</title>
+		<title>IBX test</title>
 		<meta http-equiv="X-UA-Compatible" content="IE=11" >
 		<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
 		<meta http-equiv="Pragma" content="no-cache" />
@@ -46,23 +46,12 @@
 		<h1>Stupid fake heading</h1>
 		<div data-ibx-type="ibxRadioGroup" data-ibxp-name="rgTest"></div>
 		<div class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="center" data-ibxp-justify="center">
-			
-			<div class="menu-bar-test" tabindex="0" data-ibx-type="ibxHMenuBar">
-				<div role="menubutton" tabindex="0" class="menu-btn-file" data-ibx-type="ibxHMenuButton">Menu 1
-					<div role="menu" class="menu-file" data-ibx-type="ibxMenu">
-						<div role="menuitem" data-ibx-type="ibxMenuItem">Item1</div>
-						<div role="menuitem" data-ibx-type="ibxMenuItem">Item2</div>
-						<div role="menuitem" data-ibx-type="ibxMenuItem">Item3</div>
-					</div>
-				</div>
+			<div role="menu" aria-label="Test Menu" tabIndex="0">
+				<div role="menuitem" tabIndex="0">Menu Item 1</div>
+				<div role="menuitem" tabIndex="0">Menu Item 2</div>
+				<div role="menuitem" tabIndex="0">Menu Item 3</div>
+				<div role="menuitem" tabIndex="0">Menu Item 4</div>
 			</div>
-
-			<div class="test-a" data-ibx-type="ibxButton" tabIndex="0">a</div>
-			<div class="test-b" data-ibx-type="ibxButton" tabIndex="0">b</div>
-			<div data-ibx-type="ibxCheckBox" tabIndex="0">Two</div>
-			<div data-ibx-type="ibxRadioButton" data-ibxp-group="rgTest" tabIndex="0">Three.1</div>
-			<div data-ibx-type="ibxRadioButton" data-ibxp-group="rgTest" tabIndex="0">Three.2</div>
-			<div data-ibx-type="ibxRadioButton" data-ibxp-group="rgTest" tabIndex="0">Three.3</div>
 		</div>
 	</body>
 </html>

@@ -6,6 +6,7 @@ $.widget("ibi.ibxPopup", $.ibi.ibxWidget,
 {
 	options:
 	{
+		"role":"alert",
 		"focusRoot":true,
 		"modal":false,
 		"autoClose":true,
@@ -42,7 +43,7 @@ $.widget("ibi.ibxPopup", $.ibi.ibxWidget,
 	},
 	_onPopupCloseKeyEvent:function(e)
 	{
-		if(this.options.escapeToClose && e.keyCode == 27)
+		if(this.options.escapeToClose && e.keyCode == $.ui.keyCode.ESCAPE)
 			this.close("cancel");
 	},
 	_onPopupWindowResize:function(e)
@@ -72,8 +73,10 @@ $.widget("ibi.ibxPopup", $.ibi.ibxWidget,
 
 					if(this.options.autoFocus)
 					{
-						//only do focusing if allowed.
-						this.element.find(".ibx-default-focused").first().focus();//then the first default focused item specified
+						//focus default item...otherwise find first focusable item (ARIA needs SOMETHING to be focused on the popup)
+						var defItem = this.element.find(".ibx-default-focused");
+						defItem = defItem.length ? defItem : this.element.find(":ibxFocusable").first();
+						defItem.focus();
 					}
 					this._trigger("open");
 
@@ -135,6 +138,7 @@ function ibxPopupManager()
 {
 	$(window).on("ibx_popup_mgr_open ibx_popup_mgr_close", ibxPopupManager.onPopupEvent.bind(this));
 	window.addEventListener("mousedown", ibxPopupManager.onWindowEvent.bind(this), true);
+	window.addEventListener("keydown", ibxPopupManager.onWindowEvent.bind(this), true);
 	this._gp = $("<div class='ibx-popup-glass-pane'>").on("mousedown mouseup click", function(e){e.stopPropagation();});
 };
 ibxPopupManager.autoDisableIFrames = true;
@@ -187,40 +191,50 @@ ibxPopupManager.onWindowEvent = function(e)
 {
 	if(e.eventPhase == 1)
 	{
-		//if we clicked on a popup, then close all higher zIndex popups
-		var popup = $(e.target).closest(".ibx-popup");
-		if(popup.length)
+		if(e.type == "mousedown")
 		{
-			var zMin = popup.zIndex() + 1;
-			ibxPopupManager.closeOpenPopups("", zMin, Infinity, false, e);
-			return;
-		}
-
-		//otherwise, close all open menus
-		var menus = ibxPopupManager.getOpenPopups(":openMenuPopup");
-		if(menus.length)
-		{
-			menus.ibxWidget("close", e);
-			return;
-		}
-
-		//otherwise, if any modals are open, then attempt to close any popups abover the top modal, or
-		//the modal itself if it's autoClose
-		var modal = ibxPopupManager.getOpenPopups(":openModalPopup").first();
-		if(modal.length)
-		{
-			var zMin = modal.zIndex() + 1;//add one so the modal isn't included in the get open popups.
-			popup = ibxPopupManager.getOpenPopups(":autoClose", zMin);
+			//if we clicked on a popup, then close all higher zIndex popups
+			var popup = $(e.target).closest(".ibx-popup");
 			if(popup.length)
-				popup.ibxWidget("close", e);
-			else
-			if(modal.ibxWidget("option", "autoClose"))
-				modal.ibxWidget("close", e);
-			return;
-		}
+			{
+				var zMin = popup.zIndex() + 1;
+				ibxPopupManager.closeOpenPopups("", zMin, Infinity, false, e);
+				return;
+			}
 
-		//finally, close all open autoClose popups
-		ibxPopupManager.closeOpenPopups(null, null, null, false, e);
+			//otherwise, close all open menus
+			var menus = ibxPopupManager.getOpenPopups(":openMenuPopup");
+			if(menus.length)
+			{
+				menus.ibxWidget("close", e);
+				return;
+			}
+
+			//otherwise, if any modals are open, then attempt to close any popups abover the top modal, or
+			//the modal itself if it's autoClose
+			var modal = ibxPopupManager.getOpenPopups(":openModalPopup").first();
+			if(modal.length)
+			{
+				var zMin = modal.zIndex() + 1;//add one so the modal isn't included in the get open popups.
+				popup = ibxPopupManager.getOpenPopups(":autoClose", zMin);
+				if(popup.length)
+					popup.ibxWidget("close", e);
+				else
+				if(modal.ibxWidget("option", "autoClose"))
+					modal.ibxWidget("close", e);
+				return;
+			}
+
+			//finally, close all open autoClose popups
+			ibxPopupManager.closeOpenPopups(null, null, null, false, e);
+		}
+		else
+		if(e.type = "keydown")
+		{
+			//tab key closes all open menus
+			if(e.keyCode == $.ui.keyCode.TAB)
+				ibxPopupManager.getOpenPopups(":openMenuPopup").ibxWidget("close");
+		}
 	}
 };
 ibxPopupManager.getOpenPopups = function(filter, zMin, zMax)
