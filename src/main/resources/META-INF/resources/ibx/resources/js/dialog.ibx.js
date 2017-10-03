@@ -45,7 +45,7 @@ $.widget("ibi.ibxDialog", $.ibi.ibxPopup,
 	{
 		this._super(accessible);
 		accessible ? this.caption.ariaUniqueId() : this.caption.removeAriaUniqueId();
-		this.options.labelledBy = this.caption.prop("id");
+		this.options.labelledBy = this.options.labelledBy || this.caption.prop("id");
 		this._super(accessible);
 	},
 	_init:function()

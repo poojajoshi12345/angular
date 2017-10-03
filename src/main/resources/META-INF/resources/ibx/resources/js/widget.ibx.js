@@ -22,7 +22,9 @@ $.widget("ibi.ibxWidget", $.Widget,
 		
 		//508 ARIA
 		"accessible":false,
-		"role":""
+		"role":null,
+		"describedBy":null,
+		"labelledBy":null,
 	},
 	_widgetClass:"ibx-widget",
 	_adjustWidgetClasses:function(bAdd)
@@ -79,13 +81,17 @@ $.widget("ibi.ibxWidget", $.Widget,
 		var options = this.options;
 		if(accessible)
 		{
-			options.role ? this.element.ariaUniqueId().attr("role", this.options.role) : this.element.removeAttr("role");
+			this.element.ariaUniqueId().attr("role", this.options.role);
 			(this.options.disabled) ? this.element.attr("aria-disabled", true) : this.element.removeAttr("aria-disabled");
+			this.element.attr("aria-labelledby", options.labelledBy);
+			this.element.attr("aria-describedby", options.describedBy);
 		}
 		else
 		{
 			this.element.removeAriaUniqueId().removeAttr("role");
-			this.element.removeAttr("aria-disabled");
+			this.element.removeAttr("aria-disabled")
+			this.element.removeAttr("aria-labelledby")
+			this.element.removeAttr("aria-describedby");
 			return;
 			var attributes = this.element.prop("attributes");
 			for(var i = 0; i < attributes.length; ++i)

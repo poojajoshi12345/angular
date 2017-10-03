@@ -53,20 +53,18 @@ $.widget("ibi.ibxLabel", $.ibi.ibxFlexBox,
 	},
 	_setAccessibility:function(accessible)
 	{
-		this._super(accessible);
 		if(accessible)
 		{
 			this._glyph.attr("aria-hidden", true);
-			this._text.attr("aria-hidden", true);
-			var id = this._text.ariaUniqueId().prop("id");
-			id ? this.element.attr("aria-labelledby", id) : null;
+			this.options.labelledBy = this.options.labelledBy || this._text.ariaUniqueId().prop("id");
 		}
 		else
 		{
-			this.element.removeAttr("aria-labelledby");
-			this._text.removeAriaUniqueId().removeAttr("aria-hidden");
 			this._glyph.removeAttr("aria-hidden");
+			this._text.removeAriaUniqueId();
+			this.element.removeAttr("aria-labelledby");
 		}
+		this._super(accessible);
 	},
 	_refresh:function()
 	{
