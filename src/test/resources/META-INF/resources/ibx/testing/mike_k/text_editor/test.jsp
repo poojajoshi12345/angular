@@ -41,12 +41,12 @@ page import="org.owasp.esapi.*"
 			<jsp:include page="/WEB-INF/jsp/ibx/ibxInit.jsp" flush="false" />
 
 			ibx(function()
-			{
+			{				
 				$(".btn-show-text-editor").on("click", function()
 				{
-					$(".text-editor").ibxWidget("setEditorPath", "IBFS:/WFC/Repository", "IBFS:/WFC/Repository/Public", "");
-					
-					$(".text-editor").ibxWidget("open");
+					var editorDlg = ibx.resourceMgr.getResource('.text-editor-resources', true);						
+					editorDlg.ibxWidget("setEditorPath", "IBFS:/WFC/Repository", "IBFS:/WFC/Repository/Public", "");					
+					editorDlg.ibxWidget("open");
 				});
 				
 			}, ["<%=context%>/ibx/testing/mike_k/text_editor/resources/texteditor_bundle.xml"], true);
@@ -73,13 +73,10 @@ page import="org.owasp.esapi.*"
 		<div class="main-box" data-ibx-type="ibxVBox" data-ibxp-justify="center" data-ibxp-align="center">
 			<div class="btn-show-text-editor" data-ibx-type="ibxButton" ><%=res.getStringXml("bid_menu_edit")%></div>
 			<div class="te-blurb">
-				This is not an example of an ibxTextEditor, but it is an example of how you can use ibx to easily create one.
-				<p>
-				The basic front end of this example is exactly copied from the current WebFOCUS text editor.  I would probably
-				not use that as a template for a future general purpose text editor.
+				The basic front end of this example is exactly copied from the current WebFOCUS text editor.
 			</div>
 		<div>
-		<div class="text-editor" data-ibx-type="textEditor" data-ibxp-destroy-on-close="false"></div>
+		<!-- div data-ibx-type="textEditor" data-ibxp-destroy-on-close="false"></div-->
 	</body>
 </html>
 
