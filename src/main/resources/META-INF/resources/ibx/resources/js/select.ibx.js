@@ -100,7 +100,7 @@ $.widget("ibi.ibxSelect", $.ibi.ibxTextField,
 		}
 		else
 		{
-			this._list = $("<div>").ibxVBox({ align: "stretch",  });
+			this._list = $("<div tabindex='-1'>").ibxVBox({ align: "stretch",  });
 			this._list.css("width", "100%").css("align-self", "flex-start");
 			this._listWidget = this._list.data("ibxWidget");
 		}
@@ -341,7 +341,7 @@ $.widget("ibi.ibxSelect", $.ibi.ibxTextField,
 		var newVal = this._textInput.val();
 		if (newVal != this._focusVal)
 		{
-			if (!$.contains(this._list[0], event.relatedTarget))
+			if (!$.contains(this._list[0], event.relatedTarget) && this._list[0] != event.relatedTarget)
 				this._setValue(newVal, true);
 		}
 	},
