@@ -339,6 +339,11 @@ function escapeXmlString(string)
     var s = "" + string;
     return s.replace(/\&/g,'&'+'amp;').replace(/</g,'&'+'lt;').replace(/>/g,'&'+'gt;').replace(/\'/g,'&'+'apos;').replace(/\"/g,'&'+'quot;');
 }
+function unescapeXmlString(string) 
+{
+    var s = "" + string;
+    return s.replace(/&amp;/g, '&').replace(/&lt/g, '<').replace(/&gt;/g, '>').replace(/&apos;/g, '\'').replace(/&quot;/g, '\"');
+}
 
 
 /****

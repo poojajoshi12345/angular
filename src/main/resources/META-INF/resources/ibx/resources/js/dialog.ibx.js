@@ -104,12 +104,6 @@ $.ibi.ibxDialog.createMessageDialog = function(options)
 	var dlg = $("<div>").ibxDialog().ibxDialog("option", options);
 	dlg.ibxWidget("add", msg);
 	ibx.bindElements(dlg);
-
-	if(ibx.accessible())
-	{
-		//msg.ariaUniqueId();
-		//dlg.attr("aria-describedby", msg.prop("id"));
-	}
 	return dlg;
 };
 

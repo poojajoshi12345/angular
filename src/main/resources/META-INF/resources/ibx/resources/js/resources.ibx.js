@@ -348,7 +348,10 @@ _p.preProcessResource = function(resource, language)
 	var strInfo = [];
 	var regEx = /@ibxString\((.[^\)]*)\)/gi;
 	while(match = regEx.exec(resource))
-		strInfo.push({"match":match, "string":eval("(this.getString(" + match[1] + "))")});
+	{
+		str = unescapeXmlString(match[1]);
+		strInfo.push({"match":match, "string":eval("(this.getString(" + str + "))")});
+	}
 
 	$(strInfo).each(function(idx, info)
 	{

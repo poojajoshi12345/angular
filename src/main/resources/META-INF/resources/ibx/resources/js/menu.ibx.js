@@ -124,7 +124,7 @@ $.widget("ibi.ibxMenuItem", $.ibi.ibxHBox,
 		this._endMarker = $("<div>");
 		this._label = $("<div>").ibxLabel();
 
-		this.element.prop("tabIndex", -1).append(this._label, this._endMarker);
+		this.element.attr("tabIndex", -1).append(this._label, this._endMarker);
 		this.element.on(
 		{
 			"keydown":this._onMenuItemKeyEvent.bind(this),
@@ -377,7 +377,7 @@ $.widget("ibi.ibxMenuBar", $.ibi.ibxHBox,
 	_refresh:function()
 	{
 		this._super();
-		this.children(".ibx-menu-button").prop("tabIndex", -1);
+		this.children(".ibx-menu-button").attr("tabIndex", -1);
 	}
 });
 $.widget("ibi.ibxHMenuBar", $.ibi.ibxMenuBar, {options:{direction:"row"}, _widgetClass:"ibx-hmenu-bar"});

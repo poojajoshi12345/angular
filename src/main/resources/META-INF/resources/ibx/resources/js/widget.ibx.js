@@ -309,16 +309,17 @@ $.widget("ibi.ibxWidget", $.Widget,
 
 		this._setAccessibility(this.options.accessible);
 		
+		//the add(this.element) looks weird, but it's just adding the element into the previous answer set so each opperates on it.
 		this.element.find("[tabIndex]").add(this.element).each(function(disabled, idx, el)
 		{
 			el = $(el);
 			var tabIndex = el.data("ibxDisabledTabIndex");
 			var tabIndexSet = tabIndex !== undefined;
 			if(!disabled && tabIndexSet)
-				el.prop("tabIndex", tabIndex).removeData("ibxDisabledTabIndex");
+				el.attr("tabIndex", tabIndex).removeData("ibxDisabledTabIndex");
 			else
 			if(disabled && !tabIndexSet)
-				el.data("ibxDisabledTabIndex", el.prop("tabIndex")).prop("tabIndex", -1);
+				el.data("ibxDisabledTabIndex", el.attr("tabIndex")).removeAttr("tabIndex");
 		}.bind(this, value));
 	},
 	refreshEx:function (childRefresh)
