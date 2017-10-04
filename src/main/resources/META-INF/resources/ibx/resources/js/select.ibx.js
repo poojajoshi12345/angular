@@ -341,7 +341,8 @@ $.widget("ibi.ibxSelect", $.ibi.ibxTextField,
 		var newVal = this._textInput.val();
 		if (newVal != this._focusVal)
 		{
-			if (!$.contains(this._list[0], event.relatedTarget) && this._list[0] != event.relatedTarget)
+			var relatedTarget = event.relatedTarget ? event.relatedTarget : document.activeElement;
+			if (!$.contains(this._list[0], relatedTarget) && this._list[0] != relatedTarget)
 				this._setValue(newVal, true);
 		}
 	},
