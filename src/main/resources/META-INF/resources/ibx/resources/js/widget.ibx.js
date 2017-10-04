@@ -82,7 +82,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 		if(accessible)
 		{
 			this.element.ariaUniqueId().attr("role", this.options.role);
-			(this.options.disabled) ? this.element.attr("aria-disabled", true) : this.element.removeAttr("aria-disabled");
+			this.element.attr("aria-disabled", options.disabled);
 			this.element.attr("aria-labelledby", options.labelledBy);
 			this.element.attr("aria-describedby", options.describedBy);
 		}
@@ -307,6 +307,8 @@ $.widget("ibi.ibxWidget", $.Widget,
 		if(this.options.class)
 			(value) ? this.element.addClass(this.options.class + "-disabled") : this.element.removeClass(this.options.class + "-disabled");
 
+		this._setAccessibility(this.options.accessible);
+		
 		this.element.find("[tabIndex]").add(this.element).each(function(disabled, idx, el)
 		{
 			el = $(el);
