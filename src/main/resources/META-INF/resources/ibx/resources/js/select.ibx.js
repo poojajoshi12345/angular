@@ -598,16 +598,26 @@ $.widget("ibi.ibxSelect", $.ibi.ibxTextField,
 		this._resetHighlight();
 	},
 	_externalFilter: false,
-	externalApplyFilter: function (searchText)
+	externalApplyFilter: function (searchText, fnFilter)
 	{
 		this._externalFilter = true;
 		this._list.find(".ibx-select-item").each(function (index, el)
 		{
 			var itemText = $(el).data('ibxWidget').option('labelOptions.text') + "";
-			if (0 == itemText.toLowerCase().indexOf(searchText.toLowerCase()))
-				$(el).show();
+			if (fnFilter)
+			{
+				if (fnFilter(itemText, searchText))
+					$(el).show();
+				else
+					$(el).hide();
+			}
 			else
-				$(el).hide();
+			{
+				if (0 == itemText.toLowerCase().indexOf(searchText.toLowerCase()))
+					$(el).show();
+				else
+					$(el).hide();
+			}
 		}.bind(this));
 
 		this._list.find(".ibx-select-group").each(function (index, el)
