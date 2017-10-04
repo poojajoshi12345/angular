@@ -8,7 +8,7 @@ $.widget("ibi.ibxDialog", $.ibi.ibxPopup,
 		"role":"dialog",
 		"nameRoot":true,
 		"template":".dialog-template",
-		"type":"std",
+		"type":"std", //predefines: std and plain/error/warning/information/question
 		"autoSize":true,
 		"modal":true,
 		"autoClose":false,
@@ -84,7 +84,30 @@ $.widget("ibi.ibxDialog", $.ibi.ibxPopup,
 	{
 		this._super();
 		var options = this.options;
+
+		//manage default captions
+		var caption = options.captionOptions.text;
+		if(!caption)
+		{
+			if(-1 != options.type.search("plain"))
+				caption = ibx.resourceMgr.getString("DLG_CAPTION_PLN");
+			else
+			if(-1 != options.type.search("error"))
+				caption = ibx.resourceMgr.getString("DLG_CAPTION_ERR");
+			else
+			if(-1 != options.type.search("warn"))
+				caption = ibx.resourceMgr.getString("DLG_CAPTION_WRN");
+			else
+			if(-1 != options.type.search("information"))
+				caption = ibx.resourceMgr.getString("DLG_CAPTION_INF");
+			else
+			if(-1 != options.type.search("question"))
+				caption = ibx.resourceMgr.getString("DLG_CAPTION_QST");
+		
+			options.captionOptions.text = caption;
+		}			
 		this.caption.ibxLabel(options.captionOptions);
+
 		this.titleClose.css("display", options.closeButton ? "" : "none");
 		this.btnOK.css("display", options.buttons.search("ok") != -1 ? "" : "none");
 		this.btnCancel.css("display", options.buttons.search("cancel") != -1 ? "" : "none");

@@ -179,6 +179,7 @@ $.widget("ibi.ibxTabPage", $.ibi.ibxWidget,
 {
 	options:
 	{
+		role:"tabpanel",
 		focusRoot:false,
 		selected: false,
 		tabOptions:{},
@@ -195,9 +196,14 @@ $.widget("ibi.ibxTabPage", $.ibi.ibxWidget,
 
 		this._tabButton = $("<div>").prop("tabIndex", 0).ibxTabButton();
 		this._tabButton.ibxTabButton("option", "tabPage", this.element);
-		this.element.on("focus", this._onPageFocus.bind(this));
+		this.element.attr("tabIndex", -1).on("focus", this._onPageFocus.bind(this));
 		this.element.append(this._tabButton);
 
+	},
+	_setAccessible:function(accessible)
+	{
+		accessible ? this._tabButton.attr("aria-controls", this.element.prop("id")) : this._tabButton.removeAttr("aria-controls");
+		this._super(accessible);
 	},
 	_destroy:function()
 	{
@@ -248,13 +254,13 @@ $.widget("ibi.ibxTabButton", $.ibi.ibxRadioButton,
 {
 	options:
 		{
+			role:"tab",
 			tabPage: null,
 		},
 	_widgetClass: "ibx-tab-button",
 	_create: function ()
 	{
-		if (!this.element.attr('tabindex'))
-			this.element.attr('tabindex', 1);
+		this.element.attr('tabindex', -1);
 		this._super();
 	},
 	_refresh: function ()
@@ -280,13 +286,17 @@ $.widget("ibi.ibxTabGroup", $.ibi.ibxButtonGroup,
 {
 	options:
 	{
+		role:"tablist",
+		navKeyRoot:true,
 		position: "top",
 		groupSelection: true,
 		wrap: true,
 	},
+	_widgetClass:"ibx-tab-group",
 	_create: function ()
 	{
 		this._super();
+		this.element.attr("tabindex", 0);
 	},
 	_fixFirstLast: function ()
 	{

@@ -18,12 +18,19 @@ $Revision$:-->
 			"language":"en",
 			"strings":
 			{
-				"STR_SAMPLE":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-				"STR_LOADING":"Waiting...",
-				"STR_OK":"OK",
-				"STR_CANCEL":"Cancel",
-				"STR_APPLY":"Apply",
-				"STR_CLOSE":"Close",
+				"IBX_STR_SAMPLE":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+				"IBX_STR_LOADING":"Waiting...",
+				"IBX_STR_OK":"OK",
+				"IBX_STR_CANCEL":"Cancel",
+				"IBX_STR_APPLY":"Apply",
+				"IBX_STR_CLOSE":"Close",
+
+				"IBX_DLG_CAPTION_PLN":"Attention",
+				"IBX_DLG_CAPTION_ERR":"Error",
+				"IBX_DLG_CAPTION_WRN":"Warning",
+				"IBX_DLG_CAPTION_INF":"Information",
+				"IBX_DLG_CAPTION_QST":"Question",
+
 				"IDS_IBFS_ERROR_UNKNOWN":"Unknown webFOCUS communications error.",
 				"IDS_IBFS_ERROR_DETAILS_LABEL":"Details:",
 				"IDS_IBFS_ERROR_DETAILS_PARMS":"Parameters:",
@@ -116,14 +123,14 @@ $Revision$:-->
 				<div class="ibx-dialog-main-box" data-ibx-type="ibxVBox" data-ibx-name="vbMain" data-ibxp-align="stretch">
 					<div class="ibx-dialog-title-box" data-ibx-type="ibxHBox" data-ibx-name="titleBox" data-ibxp-align="center">
 						<div class="ibx-title-bar-caption" data-ibx-type="ibxLabel" data-ibx-name="caption" data-ibxp-justify="start"></div>
-						<div class="ibx-title-bar-close-button" data-ibx-type="ibxButton" data-ibx-name="titleClose" title='@ibxString("STR_CLOSE")'></div>
+						<div class="ibx-title-bar-close-button" data-ibx-type="ibxButton" data-ibx-name="titleClose" title='@ibxString("IBX_STR_CLOSE")'></div>
 					</div>
 					<div class="ibx-dialog-content" data-ibx-type="ibxVBox" data-ibx-name="contentBox" data-ibxp-align="stretch"></div>
 					<div class='ibx-dialog-button-box' data-ibx-type='ibxHBox' data-ibx-name='btnBox' data-ibxp-align='stretch'>
 						<div class="ibx-dialog-button-padding" data-ibx-name="btnPadding"></div>
-						<div class='ibx-dialog-ok-button' data-ibx-type='ibxButton' data-ibx-name='btnOK' data-ibxp-text='@ibxString("STR_OK")' tabIndex='0'></div>
-						<div class='ibx-dialog-apply-button' data-ibx-type='ibxButton' data-ibx-name='btnApply' data-ibxp-text='@ibxString("STR_APPLY")' tabIndex='0'></div>
-						<div class='ibx-dialog-cancel-button' data-ibx-type='ibxButton' data-ibx-name='btnCancel' data-ibxp-text='@ibxString("STR_CANCEL")' tabIndex='0'></div>
+						<div class='ibx-dialog-ok-button' data-ibx-type='ibxButton' data-ibx-name='btnOK' data-ibxp-text='@ibxString("IBX_STR_OK")' tabIndex='0'></div>
+						<div class='ibx-dialog-apply-button' data-ibx-type='ibxButton' data-ibx-name='btnApply' data-ibxp-text='@ibxString("IBX_STR_APPLY")' tabIndex='0'></div>
+						<div class='ibx-dialog-cancel-button' data-ibx-type='ibxButton' data-ibx-name='btnCancel' data-ibxp-text='@ibxString("IBX_STR_CANCEL")' tabIndex='0'></div>
 					</div>
 				</div>
 			</div>

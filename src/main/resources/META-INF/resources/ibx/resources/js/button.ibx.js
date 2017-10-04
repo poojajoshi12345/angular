@@ -373,6 +373,7 @@ $.widget("ibi.ibxButtonGroup", $.ibi.ibxFlexBox,
 	options:
 	{
 		role: "group",
+		navKeyRoot:true,
 		name: "",
 		form: "",
 		align: "stretch",
@@ -396,7 +397,6 @@ $.widget("ibi.ibxButtonGroup", $.ibi.ibxFlexBox,
 				this.element.uniqueId();
 			this.options.name = this.element.attr("id");
 		}
-		this.element.on("keydown", this._onKeyDown.bind(this));
 		this.add(this.element.children(".ibx-button, .ibx-check-box, .ibx-check-box-simple, .ibx-radio-button-simple"));
 		this._super();
 	},
@@ -485,34 +485,6 @@ $.widget("ibi.ibxButtonGroup", $.ibi.ibxFlexBox,
 	{
 		this._trigger("change", null, data);
 	},	
-	_onKeyDown: function (e)
-	{
-		switch (e.which)
-		{
-			case 37: //left
-			case 38: //up
-				if (e.target)
-				{
-					var prev = $(e.target).prev();
-					if (prev)
-						prev.focus();
-				}
-				break;
-
-			case 39: //right
-			case 40: //down
-				if (e.target)
-				{
-					var next = $(e.target).next();
-					if (next)
-						next.focus();
-				}
-				break;
-
-			default: return;
-		}
-		e.preventDefault();
-	},
 	/*
 	_onSelectedBound: null,
 	_onSelected: function (e)
