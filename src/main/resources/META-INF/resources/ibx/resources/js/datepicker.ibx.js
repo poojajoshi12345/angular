@@ -79,7 +79,7 @@ $.widget("ibi.ibxDatePicker", $.ibi.ibxVBox,
 		else
 			this._clear.hide();
 		if (this.options.pickerClasses)
-			this._datePicker.addClass(this.options.pickerClasses);
+			this._popup.addClass(this.options.pickerClasses);
 		this._datePicker.datepicker('option', this.options);
 		this._datePicker.datepicker('setDate', this.options.date);
 		this._input.ibxWidget('option', 'text', this.options.date);
