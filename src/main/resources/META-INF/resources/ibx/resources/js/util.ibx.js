@@ -214,7 +214,7 @@ jQuery.fn.extend( {
 		return function() {
 			return this.each( function() {
 				if ( !this.id ) {
-					this.id = "aria-id-" + ( ++ariaid );
+					this.id = "ibx-aria-id-" + ( ++ariaid );
 				}
 			} );
 		};
@@ -222,7 +222,7 @@ jQuery.fn.extend( {
 
 	removeAriaUniqueId: function() {
 		return this.each( function() {
-			if ( /^aria-id-\d+$/.test( this.id ) ) {
+			if ( /^ibx-aria-id-\d+$/.test( this.id ) ) {
 				$( this ).removeAttr( "id" );
 			}
 		} );
