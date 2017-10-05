@@ -23,8 +23,9 @@ $.widget("ibi.ibxWidget", $.Widget,
 		//508 ARIA
 		"accessible":false,
 		"role":null,
-		"describedBy":null,
+		"label":null,
 		"labelledBy":null,
+		"describedBy":null,
 	},
 	_widgetClass:"ibx-widget",
 	_adjustWidgetClasses:function(bAdd)
@@ -542,7 +543,7 @@ $.ibi.ibxWidget.navKeys = [$.ui.keyCode.LEFT, $.ui.keyCode.RIGHT, $.ui.keyCode.U
 							{
 								"left":e.clientX + this._dataTransfer.dragXOffset + "px",
 								"top":e.clientY + this._dataTransfer.dragYOffset + "px",
-							}).appendTo("body");
+							}).appendTo("body.ibx-root");
 						}
 					}
 					break;
