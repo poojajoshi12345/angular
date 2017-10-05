@@ -8,7 +8,7 @@ $.widget("ibi.ibxDialog", $.ibi.ibxPopup,
 		"role":"dialog",
 		"nameRoot":true,
 		"template":".dialog-template",
-		"type":"std", //predefines: std and plain/error/warning/information/question
+		"type":"std plain", //predefines: std and plain/error/warning/information/question
 		"autoSize":true,
 		"modal":true,
 		"autoClose":false,
@@ -35,7 +35,7 @@ $.widget("ibi.ibxDialog", $.ibi.ibxPopup,
 		}
 
 		options.moveHandle = this.titleBox;
-		this.element.on("keydown", this.__onDialogKeyDown.bind(this));
+		this.element.on("keydown", this._onDialogKeyDown.bind(this));
 		this.titleClose.on("click", this.close.bind(this, "cancel"));
 		this.btnApply.on("click", this.apply.bind(this));
 		this.btnCancel.on("click", this.close.bind(this, "cancel"));
@@ -70,7 +70,7 @@ $.widget("ibi.ibxDialog", $.ibi.ibxPopup,
 	{
 		this._trigger("apply");
 	},
-	__onDialogKeyDown:function(e)
+	_onDialogKeyDown:function(e)
 	{
 		var defAction = this.options.defaultAction;
 		if(e.keyCode == 13 && defAction)
@@ -90,19 +90,19 @@ $.widget("ibi.ibxDialog", $.ibi.ibxPopup,
 		if(!caption)
 		{
 			if(-1 != options.type.search("plain"))
-				caption = ibx.resourceMgr.getString("DLG_CAPTION_PLN");
+				caption = ibx.resourceMgr.getString("IBX_DLG_CAPTION_PLN");
 			else
 			if(-1 != options.type.search("error"))
-				caption = ibx.resourceMgr.getString("DLG_CAPTION_ERR");
+				caption = ibx.resourceMgr.getString("IBX_DLG_CAPTION_ERR");
 			else
 			if(-1 != options.type.search("warn"))
-				caption = ibx.resourceMgr.getString("DLG_CAPTION_WRN");
+				caption = ibx.resourceMgr.getString("IBX_DLG_CAPTION_WRN");
 			else
 			if(-1 != options.type.search("information"))
-				caption = ibx.resourceMgr.getString("DLG_CAPTION_INF");
+				caption = ibx.resourceMgr.getString("IBX_DLG_CAPTION_INF");
 			else
 			if(-1 != options.type.search("question"))
-				caption = ibx.resourceMgr.getString("DLG_CAPTION_QST");
+				caption = ibx.resourceMgr.getString("IBX_DLG_CAPTION_QST");
 		
 			options.captionOptions.text = caption;
 		}			
