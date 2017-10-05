@@ -10,6 +10,7 @@ $.widget("ibi.ibxDatePicker", $.ibi.ibxVBox,
 			"wrap": "false",
 			"align": "stretch",
 			"showClear": false,
+			"pickerClasses": '',
 			"date": $.datepicker.formatDate("MM d, yy", new Date()),
 		},
 	_widgetClass: "ibx-datepicker",
@@ -77,6 +78,8 @@ $.widget("ibi.ibxDatePicker", $.ibi.ibxVBox,
 			this._clear.show();
 		else
 			this._clear.hide();
+		if (this.options.pickerClasses)
+			this._datePicker.addClass(this.options.pickerClasses);
 		this._datePicker.datepicker('option', this.options);
 		this._datePicker.datepicker('setDate', this.options.date);
 		this._input.ibxWidget('option', 'text', this.options.date);
