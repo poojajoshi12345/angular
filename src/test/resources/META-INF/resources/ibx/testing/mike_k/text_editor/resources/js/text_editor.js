@@ -2051,14 +2051,13 @@ $.widget("ibi.textEditor", $.ibi.ibxDialog,
 		
 		this._editorOptionsDlg.on("ibx_beforeclose", function(e, closeData)
 		{
-			//debugger;
 			//return false;
 		}).on("ibx_apply", function(e, closeData)
 		{
 			// RESET			
 			this._resetOptions();
 			
-		}.bind(this)).on("ibx_close", function (e, closeData)
+		}.bind(this)).on("ibx_beforeclose", function (e, closeData)
 		{						
 			if(closeData == "ok")
 			{
@@ -2146,8 +2145,8 @@ $.widget("ibi.textEditor", $.ibi.ibxDialog,
 		this._editorOptionsDlg.ibxWidget("member", "_appChk").on("click", this._appChkChange.bind(this));
 		this._editorOptionsDlg.ibxWidget("member", "_srvList").on("ibx_change", this._srvListChange.bind(this));
 		
-		//this._editorOptionsDlg.ibxWidget("member", "_appBtn").on("click", this._chkSrvAccess.bind(this)); //:TODO Check Server Access	
-		this._editorOptionsDlg.ibxWidget("member", "_appBtn").on("click", this._getApps.bind(this));
+		this._editorOptionsDlg.ibxWidget("member", "_appBtn").on("click", this._chkSrvAccess.bind(this)); //:TODO Check Server Access	
+		//this._editorOptionsDlg.ibxWidget("member", "_appBtn").on("click", this._getApps.bind(this));
 		
 		this._editorOptionsDlg.ibxWidget("member", "_selAppBtn").on("click", this._addApp.bind(this));		
 		this._editorOptionsDlg.ibxWidget("member", "_delAppBtn").on("click", this._delApp.bind(this));
@@ -2157,6 +2156,12 @@ $.widget("ibi.textEditor", $.ibi.ibxDialog,
 		
 		this._editorOptionsDlg.ibxWidget("member", "_appUp").on("click", this._upApp.bind(this));
 		this._editorOptionsDlg.ibxWidget("member", "_appDown").on("click", this._dwnApp.bind(this));
+	},
+	
+	_chkSrvAccess:function()
+	{		
+		var sa = new ServerAccess();
+		sa.checkCredentials(this.editor_options.server, this._getApps.bind(this), "", false);
 	},
 	
 	_resetOptions:function()
@@ -2190,11 +2195,11 @@ $.widget("ibi.textEditor", $.ibi.ibxDialog,
 		else 
 		{
 			this.optionsChanged = true;
-			this.editor_options.paramPrompt = this._paramPrompt.ibxWidget("checked");
-			this.editor_options.srvChk = this._srvChk.ibxWidget("checked");
-			this.editor_options.appChk = this._appChk.ibxWidget("checked");
+			this.editor_options.paramPrompt = this._editorOptionsDlg.ibxWidget("member", "_paramPrompt").ibxWidget("checked");
+			this.editor_options.srvChk = this._editorOptionsDlg.ibxWidget("member", "_srvChk").ibxWidget("checked");
+			this.editor_options.appChk = this._editorOptionsDlg.ibxWidget("member", "_appChk").ibxWidget("checked");
 					
-			this.editor_options.server = this._srvList.ibxWidget("userValue");
+			this.editor_options.server = this._editorOptionsDlg.ibxWidget("member", "_srvList").ibxWidget("userValue");
 
 			
 			this.editor_options.appPath = "";
@@ -2206,7 +2211,7 @@ $.widget("ibi.textEditor", $.ibi.ibxDialog,
 				var text = $(t).ibxWidget("userValue");
 			})
 			*/
-			var ch = this._selAppList.ibxWidget("children");
+			var ch = this._editorOptionsDlg.ibxWidget("member", "_selAppList").ibxWidget("children");
 			
 			var appPathValue = "";
 			
