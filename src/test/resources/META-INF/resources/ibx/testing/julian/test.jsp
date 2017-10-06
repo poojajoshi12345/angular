@@ -21,7 +21,21 @@
 			<jsp:include page="/WEB-INF/jsp/global/wf_globals.jsp" flush="false" />
 			ibx(function()
 			{
-				ibx.accessible(true);
+				var date = new Date();
+				var menu = $(".test-menu");
+				for(var i = 0; i < 10; ++i)
+				{
+					var item = $("<div>").ibxMenuItem({"labelOptions":{"text": "Menu Item " + i}});
+					//var item = $("<div class='ibx-menu-item'>").ibxLabel({"text": "Menu Item " + i});
+					menu.ibxWidget("add", item, null, null, false);
+				}
+				menu.ibxWidget("refresh");
+				console.log(new Date() - date);
+
+				$(".btn").on("click", function(e)
+				{
+					$(".dlg").ibxWidget("open");
+				});
 			}, null, true);
 		</script>
 		<style type="text/css">
@@ -37,26 +51,48 @@
 			{
 				flex:1 1 auto;
 				align-self:stretch;
-				
 			}
-			h1{display:none;}
+
+			.parent-key-root
+			{
+				height:100px;
+				border:1px solid black;
+			}
+
+			.child
+			{
+				border:1px solid red;
+			}
+
+			.child-key-root
+			{
+				height:50px;
+				border:1px solid lime;
+			}
+
+			.dlg
+			{
+				width:400px;
+				height:300px;
+			}
+			.dlg-ctl-label
+			{
+				margin:10px 0px 2px 0px;
+			}
+
+			.txt-body
+			{
+				flex:1 1 auto;
+			}
 		</style>
 	</head>
 	<body class="ibx-root">
-		<h1>Stupid fake heading</h1>
-		<div data-ibx-type="ibxRadioGroup" data-ibxp-name="rgTest"></div>
-		<div class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="center" data-ibxp-justify="center">
-			<div role="menu" aria-label="Test Menu" tabIndex="0">
-				<div role="menuitem" tabIndex="0">Menu Item 1</div>
-				<div role="menuitem" tabIndex="0">Menu Item 2</div>
-				<div role="menuitem" tabIndex="0">Menu Item 3</div>
-				<div role="menuitem" tabIndex="0">Menu Item 4</div>
-			</div>
+		<div class="btn" data-ibx-type="ibxButton">Dialog</div>
+		<div class="dlg" data-ibx-type="ibxDialog" data-ibxp-destroy-on-close="false" data-ibxp-auto-size="false">
+			<div id="txtTitleLabel" class="dlg-ctl-label" data-ibx-type="ibxLabel">Enter Title:</div>
+			<div tabindex="0" class="txt-title" data-ibx-type="ibxTextField" data-ibxp-aria.labelled-By="txtTitleLabel" data-ibxp-default-focused="true"></div>
+			<div id="txtBodyLabel" class="dlg-ctl-label" data-ibx-type="ibxLabel">Enter Text Here:</div>
+			<div tabindex="0" class="txt-body" data-ibx-type="ibxTextArea" data-ibxp-aria.label="I'm a label" data-ibxp-aria.labelled-by="txtBodyLabel" data-ibxp-aria.described-by="txtBodyLabel"></div>
 		</div>
 	</body>
 </html>
-
-
-
-
-
