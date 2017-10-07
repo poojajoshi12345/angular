@@ -13,19 +13,22 @@ $.widget("ibi.ibxWidget", $.Widget,
 		"defaultFocused":false,		//for popup...should this be focused on open
 		
 		//for circular tabbing
-		"focusRoot":false,			//for circular tabbing management
+		"focusRoot":false,			//for circular tabbing management...like in a dialog.
 		
-		//for keyboard navigation (mostly composite widgets like menus/selects/etc)
+		//for keyboard arrows navigation (mostly composite widgets like menus/selects/etc...508)
 		"navKeyRoot":false,			//start key nav here
 		"navKeyDir": "horizontal",	//horizontal = left/right, vertical = up/down, or both
-		"navKeyAutoFocus":true,		//do an initial nav when this gets focus (basically focus first nav item)
+		"navKeyAutoFocus":true,		//do an initial nav when this gets focus (basically focus first child focusable item on this focus)
 		
-		//508 ARIA
-		"accessible":false,
-		"role":null,
-		"label":null,
-		"labelledBy":null,
-		"describedBy":null,
+		//ARIA (508)
+		"aria":
+		{
+			"accessible":false,
+			"role":null,
+			"label":null,
+			"labelledBy":null,
+			"describedBy":null,
+		}
 	},
 	_widgetClass:"ibx-widget",
 	_adjustWidgetClasses:function(bAdd)
@@ -48,7 +51,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 	_created:false,
 	_createWidget:function(options, element)
 	{
-		this.options.accessible = ibx.isAccessible;//default accessible to ibx, but allow markup/js to override.
+		this.options.aria.accessible = ibx.isAccessible;//default accessible to ibx, but allow markup/js to override.
 		this._super(options, element);
 		this._created = true;
 		this._destroyed = false;
@@ -77,30 +80,30 @@ $.widget("ibi.ibxWidget", $.Widget,
 		this.element.removeData("_ibxPrecreateMemberVariables");
 		this._super();
 	},
+	setAccessibility:function(accessible)
+	{
+		var options = this.options;
+		accessible = (accessible === undefined) ? options.aria.accessible : accessible;
+		options.aria.accessible = accessible;
+		accessible ? this.element.ibxAriaId().attr("role", this.options.aria.role) : this.element.removeIbxAriaId().removeAttr("role");
+		this._setAccessibility(accessible);
+	},
 	_setAccessibility:function(accessible)
 	{
 		var options = this.options;
 		if(accessible)
 		{
-			this.element.ariaUniqueId().attr("role", this.options.role);
 			this.element.attr("aria-disabled", options.disabled);
-			this.element.attr("aria-labelledby", options.labelledBy);
-			this.element.attr("aria-describedby", options.describedBy);
+			this.element.attr("aria-label", options.aria.label);
+			this.element.attr("aria-labelledby", options.aria.labelledBy);
+			this.element.attr("aria-describedby", options.aria.describedBy);
 		}
 		else
 		{
-			this.element.removeAriaUniqueId().removeAttr("role");
 			this.element.removeAttr("aria-disabled")
+			this.element.removeAttr("aria-label")
 			this.element.removeAttr("aria-labelledby")
 			this.element.removeAttr("aria-describedby");
-			return;
-			var attributes = this.element.prop("attributes");
-			for(var i = 0; i < attributes.length; ++i)
-			{
-				var attr = attributes[i].nodeName;
-				if(/^aria-/i.test(attr))
-					this.element.removeAttr(attr);
-			}
 		}
 	},
 	destroyed:function(){return this._destroyed;},
@@ -308,19 +311,19 @@ $.widget("ibi.ibxWidget", $.Widget,
 		if(this.options.class)
 			(value) ? this.element.addClass(this.options.class + "-disabled") : this.element.removeClass(this.options.class + "-disabled");
 
-		this._setAccessibility(this.options.accessible);
+		this.setAccessibility();
 		
 		//the add(this.element) looks weird, but it's just adding the element into the previous answer set so each opperates on it.
-		this.element.find("[tabIndex]").add(this.element).each(function(disabled, idx, el)
+		this.element.find("[tabIndex], input, textarea").add(this.element).each(function(disabled, idx, el)
 		{
 			el = $(el);
 			var tabIndex = el.data("ibxDisabledTabIndex");
 			var tabIndexSet = tabIndex !== undefined;
 			if(!disabled && tabIndexSet)
-				el.attr("tabIndex", tabIndex).removeData("ibxDisabledTabIndex");
+				el.prop("tabIndex", tabIndex).removeData("ibxDisabledTabIndex");
 			else
 			if(disabled && !tabIndexSet)
-				el.data("ibxDisabledTabIndex", el.attr("tabIndex")).removeAttr("tabIndex");
+				el.data("ibxDisabledTabIndex", el.prop("tabIndex")).prop("tabIndex", -1);
 		}.bind(this, value));
 	},
 	refreshEx:function (childRefresh)
@@ -336,7 +339,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 	{
 		var options = this.options;
 		this.element.addClass(options.class);
-		this._setAccessibility(options.accessible);
+		this.setAccessibility();
 		options.focusRoot ? this.element.addClass("ibx-focus-root") : this.element.removeClass("ibx-focus-root");
 		options.defaultFocused ? this.element.addClass("ibx-default-focused") : this.element.removeClass("ibx-default-focused");
 

@@ -201,7 +201,7 @@ ibx.accessible = function(accessible)
 		//need to check destroyed, as some widgets destroy others when refreshing.
 		var widget = $(el).data("ibxWidget");
 		if(widget && !widget.destroyed())
-			$(el).ibxWidget("option", "accessible", accessible);
+			$(el).ibxWidget("option", "aria.accessible", accessible);
 	});
 }
 ibx._setAccessibility = function(accessible)
@@ -293,7 +293,7 @@ ibx.getIbxMarkupOptions = function(el)
 
 	//first get the ibx-options value and convert that to individual options.
 	var ibxOptions = el.attr("data-ibx-options") || "{}";
-	var options = this.parseIbxOptions(ibxOptions);
+	var options = this.parseOptions(ibxOptions);
 
 	//then overlay any specific options on top.
 	var attrs = el.prop("attributes");
@@ -303,18 +303,24 @@ ibx.getIbxMarkupOptions = function(el)
 		var name = attr.name;
 		if(name.search("data-ibxp-") == 0)
 		{
-			var prop = name.replace("data-ibxp-", "");
-			var props = prop.split(".");
-			prop = $.camelCase(props.shift());
-			prop += props.length ? sformat(".{1}", props.join(".")) : "";
-			var option = (attr.value[0] == "{" || attr.value[0] == "[") ? this.parseIbxOptions(attr.value) : null; //check for '{' to see if we parse as object.
-			if(option instanceof Array)
-				options[prop] = option;
-			else
-			if(option instanceof Object)
+			var props = name.replace("data-ibxp-", "").split(".");
+			var prop = $.camelCase(props.shift());
+			if(props.length)
+			{
+				var option= ibx.parseCompoundOptions(props, attr.value);
 				options[prop] = $.extend(true, options[prop], option)
+			}
 			else
-				options[prop] = attr.value;
+			{
+				var option = (attr.value[0] == "{" || attr.value[0] == "[") ? ibx.parseOptions(attr.value) : null; //check for '{' to see if we parse as object.
+				if(option instanceof Array)
+					options[prop] = option;
+				else
+				if(option instanceof Object)
+					options[prop] = $.extend(true, options[prop], option)
+				else
+					options[prop] = attr.value;
+			}
 		}
 	}
 
@@ -326,7 +332,18 @@ ibx.getIbxMarkupOptions = function(el)
 	return options;
 };
 
-ibx.parseIbxOptions = function(opts)
+ibx.parseCompoundOptions = function(props, value)
+{
+	var prop = $.camelCase(props.shift());
+	var options = {};
+	if(props.length)
+		options[prop] = ibx.parseCompoundOptions(props, value);
+	else
+		options[prop] = value;
+	return options;
+}
+
+ibx.parseOptions = function(opts)
 {
 	return eval("("+ opts +")");
 };

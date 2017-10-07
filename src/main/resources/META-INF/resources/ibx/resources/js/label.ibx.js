@@ -53,17 +53,9 @@ $.widget("ibi.ibxLabel", $.ibi.ibxFlexBox,
 	},
 	_setAccessibility:function(accessible)
 	{
-		if(accessible)
-		{
-			this._glyph.attr("aria-hidden", true);
-			this.options.labelledBy = this.options.labelledBy || this._text.ariaUniqueId().prop("id");
-		}
-		else
-		{
-			this._glyph.removeAttr("aria-hidden");
-			this._text.removeAriaUniqueId();
-			this.element.removeAttr("aria-labelledby");
-		}
+		var aria = this.options.aria;
+		(accessible) ? this._glyph.attr("aria-hidden", true) : this._glyph.removeAttr("aria-hidden");
+		aria.labelledBy = aria.labelledBy || this.element.prop("id");
 		this._super(accessible);
 	},
 	_refresh:function()

@@ -26,21 +26,6 @@ $.widget("ibi.ibxRadioGroup", $.ibi.ibxWidget,
 	{
 		this._super();
 	},
-	_setAccessibility:function(accessible)
-	{
-		this._super(accessible);
-		if(accessible)
-		{
-			var btnIds = "";
-			$(".ibx-radio-group-" + this.options.name).each(function(members, idx, el)
-			{
-				btnIds += " " + el.id;	
-			}.bind(this, btnIds));
-			this.element.attr("aria-owns", btnIds);
-		}
-		else
-			this.element.removeAttr("aria-owns");
-	},
 	_onBeforeChange: function (e, el)
 	{
 		if (!$(e.currentTarget).ibxWidget('checked'))

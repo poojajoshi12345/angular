@@ -5,7 +5,6 @@ $.widget("ibi.ibxDialog", $.ibi.ibxPopup,
 {
 	options:
 	{
-		"role":"dialog",
 		"nameRoot":true,
 		"template":".dialog-template",
 		"type":"std plain", //predefines: std and plain/error/warning/information/question
@@ -19,6 +18,11 @@ $.widget("ibi.ibxDialog", $.ibi.ibxPopup,
 		"defaultAction":".ibx-dialog-ok-button",
 		"effect":"fade",
 		"captionOptions":{},
+		
+		"aria":
+		{
+			"role":"dialog"
+		}
 	},
 	_widgetClass:"ibx-dialog",
 	_create:function()
@@ -43,9 +47,9 @@ $.widget("ibi.ibxDialog", $.ibi.ibxPopup,
 	},
 	_setAccessibility:function(accessible)
 	{
-		this._super(accessible);
-		accessible ? this.caption.ariaUniqueId() : this.caption.removeAriaUniqueId();
-		this.options.labelledBy = this.options.labelledBy || this.caption.prop("id");
+		var aria = this.options.aria;
+		if(!aria.labelledBy)
+			aria.labelledBy = (accessible) ? this.caption.prop("id") : null;
 		this._super(accessible);
 	},
 	_init:function()
@@ -122,9 +126,8 @@ $.ibi.ibxDialog.createMessageDialog = function(options)
 {
 	options.captionOptions = {text:options.caption};//map caption to proper option.
 	options = $.extend(true, {}, {type:"std", messageOptions:{textWrap:true, justify:"start"}}, options);
-	var msg = $("<div data-ibx-name='message'>").ibxLabel(options.messageOptions).addClass("ibx-dialog-message").ariaUniqueId();
-	options.describedBy = options.describedBy || msg.prop("id");
-	var dlg = $("<div>").ibxDialog().ibxDialog("option", options);
+	var msg = $("<div data-ibx-name='message'>").ibxLabel(options.messageOptions).addClass("ibx-dialog-message").ibxAriaId();
+	var dlg = $("<div>").ibxDialog().ibxDialog("option", options).ibxWidget("option", "aria.describedBy", options.describedBy || msg.prop("id"));
 	dlg.ibxWidget("add", msg);
 	ibx.bindElements(dlg);
 	return dlg;

@@ -207,28 +207,40 @@ jQuery.fn.dispatchEvent = function(type, data, canBubble, cancelable)
 	return e;
 }
 
+//For accessibility we need to create ibx specific aria ids
 jQuery.fn.extend( {
-	ariaUniqueId: ( function() {
-		var ariaid = 0;
+	ibxAriaId: ( function() {
+		var ibxariaid = 0;
 
 		return function() {
 			return this.each( function() {
 				if ( !this.id ) {
-					this.id = "ibx-aria-id-" + ( ++ariaid );
+					this.id = "ibx-aria-id-" + ( ++ibxariaid );
 				}
 			} );
 		};
 	} )(),
-
-	removeAriaUniqueId: function() {
+	removeIbxAriaId: function() {
 		return this.each( function() {
 			if ( /^ibx-aria-id-\d+$/.test( this.id ) ) {
 				$( this ).removeAttr( "id" );
 			}
 		} );
+	},
+	hasIbxAriaId:function()
+	{
+		return isIbxAriaId(this.prop("id"));
 	}
-} );
-
+});
+(function()
+{
+	//using closure here so we don't keep redefining regEx
+	var regEx = /^ibx-aria-id-/;
+	window.isIbxAriaId = function(id)
+	{
+		return regEx.test(id);
+	};
+})();
 
 //Sorts elements on zIndex (in descending order).
 function fnSortZIndex(el1, el2)

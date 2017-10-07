@@ -6,18 +6,14 @@ $.widget("ibi.ibxButton", $.ibi.ibxLabel,
 {
 	options:
 	{
-		"role":"button",
 		"iconPosition": "left",
+		"aria":{"role":"button"}
 	},
 	_widgetClass: "ibx-button",
 	_create: function ()
 	{
 		this._super();
 		this.element.on("keydown", this._onKeyDown.bind(this));
-	},
-	_setAccessibility:function(accessible)
-	{
-		this._super(accessible);
 	},
 	_destroy: function ()
 	{
@@ -99,12 +95,12 @@ $.widget("ibi.ibxCheckBox", $.ibi.ibxLabel,
 {
 	options:
 		{
-			"role":"checkbox",
 			"checked": false,
 			"hideCheck": true,
 			"group": "",
 			"forId": "",
 			"userValue": "",
+			"aria":{"role":"checkbox"}
 		},
 	_widgetClass: "ibx-check-box",
 	_create: function ()
@@ -279,7 +275,7 @@ $.widget("ibi.ibxRadioButton", $.ibi.ibxCheckBox,
 {
 	options:
 	{
-		"role":"radio"
+		"aria":{"role":"radio"}
 	},
 	_widgetClass: "ibx-radio-button",
 	_create: function ()

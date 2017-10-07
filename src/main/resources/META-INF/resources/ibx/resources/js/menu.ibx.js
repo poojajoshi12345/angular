@@ -8,7 +8,6 @@ $.widget("ibi.ibxMenu", $.ibi.ibxPopup,
 {
 	options:
 	{
-		"role":"menu",
 		"navKeyRoot":true,
 		"navKeyDir":"vertical",
 		"navKeyAutoFocus":false,
@@ -16,6 +15,7 @@ $.widget("ibi.ibxMenu", $.ibi.ibxPopup,
 		"destroyOnClose":false,
 		"multiSelect":false, //user can select multiple items without closing menu (checkboxes, etc.)
 		"effect":"fade",
+		"aria":{"role":"menu"}
 	},
 	_widgetClass: "ibx-menu",
 	_create: function ()
@@ -29,10 +29,6 @@ $.widget("ibi.ibxMenu", $.ibi.ibxPopup,
 		{
 			this.add(el);
 		}.bind(this));
-	},
-	_setAccessibility:function(accessible)
-	{
-		this._super(accessible);
 	},
 	_destroy: function ()
 	{
@@ -74,6 +70,7 @@ $.widget("ibi.ibxMenu", $.ibi.ibxPopup,
 	close:function(closeData)
 	{
 		this.closeSubMenus(null, closeData);
+		this.children().removeClass("ibx-nav-item-active");//no active item for next open.
 		this._super(closeData);
 	},
 	closeSubMenus:function(e, closeData)
@@ -99,7 +96,6 @@ $.widget("ibi.ibxMenuItem", $.ibi.ibxHBox,
 {
 	options:
 	{
-		"role":"menuitem",
 		"iconPosition":"right",
 		"justify":"start",
 		"align":"center",
@@ -109,6 +105,7 @@ $.widget("ibi.ibxMenuItem", $.ibi.ibxHBox,
 		"endMarkerClass":"ibx-end-marker",
 		"labelClass":"ibx-menu-item-label",
 		"labelOptions":{},
+		"aria":{"role":"menuitem"}
 	},
 	_widgetClass: "ibx-menu-item",
 	_create:function()
@@ -136,11 +133,13 @@ $.widget("ibi.ibxMenuItem", $.ibi.ibxHBox,
 	},
 	_setAccessibility:function(accessible)
 	{
-		this._super(accessible);
 		var subMenu = this.subMenu();
-		(accessible && subMenu) ? this.element.attr("aria-haspopup", true) : this.element.removeAttr("aria-haspopup");
+		if(!this.options.aria.labelledBy)
+			this.options.aria.labelledBy = (accessible) ? this._label.prop("id") : null;
+		(accessible) ? this.element.attr("aria-haspopup", subMenu) : this.element.removeAttr("aria-haspopup");
 		(accessible) ? this._startMarker.attr("aria-hidden", true) : this._startMarker.removeAttr("aria-hidden");
 		(accessible) ? this._endMarker.attr("aria-hidden", true) : this._endMarker.removeAttr("aria-hidden");
+		this._super(accessible);
 	},
 	_onMenuItemKeyEvent:function(e)
 	{
@@ -254,9 +253,9 @@ $.widget("ibi.ibxCheckMenuItem", $.ibi.ibxMenuItem,
 {
 	options:
 	{
-		"role":"menuitemcheckbox",
 		"type":"check",
 		"checked":false,
+		"aria":{"role":"menuitemcheckbox"}
 	},
 	_widgetClass: "ibx-menu-item-check",
 	_create:function()
@@ -295,8 +294,8 @@ $.widget("ibi.ibxRadioMenuItem", $.ibi.ibxCheckMenuItem,
 {
 	options:
 	{
-		"role":"menuitemradio",
-		"group":""
+		"group":"",
+		"aria":{"role":"menuitemradio"}
 	},
 	_widgetClass: "ibx-menu-item-radio",
 	_create:function()
@@ -339,7 +338,7 @@ $.ibi.ibxRadioMenuItem.statics =
 	ibxMenuSeparator
 	Just a utility widget for handling a menu separator...really just sets the class on the div.
 ******************************************************************************/
-$.widget("ibi.ibxMenuSeparator", $.ibi.ibxWidget,{options:{"role":"separator"},_widgetClass: "ibx-menu-separator",});
+$.widget("ibi.ibxMenuSeparator", $.ibi.ibxWidget,{options:{"aria":{"role":"separator"}},_widgetClass: "ibx-menu-separator",});
 
 /******************************************************************************
 	ibxMenuBar
@@ -351,28 +350,13 @@ $.widget("ibi.ibxMenuBar", $.ibi.ibxHBox,
 	{
 		"navKeyRoot":true,
 		"direction":"row",
-		"role":"menubar",
-		"align":"stretch"
+		"align":"stretch",
+		"aria":{"role":"menubar"}
 	},
 	_widgetClass:"ibx-menu-bar",
 	_create:function()
 	{
 		this._super();
-	},
-	_setAccessibility:function(accessible)
-	{
-		this._super(accessible);
-		if(accessible)
-		{
-			var ids = "";
-			var btns = this.element.children(".ibx-menu-button").each(function(idx, el)
-			{
-				ids += el.id + " ";
-			}.bind(this));
-			this.element.attr("aria-owns", ids);
-		}
-		else
-			this.element.removeAttr("aria-owns");
 	},
 	_refresh:function()
 	{
@@ -391,7 +375,6 @@ $.widget("ibi.ibxMenuButton", $.ibi.ibxButtonSimple,
 {
 	options:
 	{
-		"role":"menu",
 		"menu":null,
 		"position":
 		{
@@ -403,6 +386,7 @@ $.widget("ibi.ibxMenuButton", $.ibi.ibxButtonSimple,
 			"using":null,
 			"within":null,
 		},
+		"aria":{"role":"menu"}
 	},
 	_widgetClass: "ibx-menu-button",
 	_create:function()
@@ -415,9 +399,7 @@ $.widget("ibi.ibxMenuButton", $.ibi.ibxButtonSimple,
 	_setAccessibility:function(accessible)
 	{
 		this._super(accessible);
-		var options = this.options;
-		accessible ? this.element.attr("aria-owns", options.menu.prop("id")) : this.element.removeAttr("aria-owns");
-		//accessible ? this.element.attr("aria-haspopup", true) : this.element.removeAttr("aria-haspopup");
+		accessible ? this.element.attr("aria-haspopup", !!this.options.menu.length) : this.element.removeAttr("aria-haspopup");
 	},
 	_onClick:function(e)
 	{
@@ -440,6 +422,7 @@ $.widget("ibi.ibxMenuButton", $.ibi.ibxButtonSimple,
 	},
 	_refresh:function()
 	{
+		this.options.menu = $(this.options.menu);
 		this._super();
 	}
 });
@@ -465,7 +448,6 @@ $.widget("ibi.ibxSplitMenuButton", $.ibi.ibxButtonSimple,
 {
 	options:
 	{
-		"role":"button",
 		"class":"split-button",
 		"defaultMenuItem":null,
 		"align":"center",
@@ -478,7 +460,8 @@ $.widget("ibi.ibxSplitMenuButton", $.ibi.ibxButtonSimple,
 				"my":"left top",
 				"at":"left bottom",
 			}
-		}
+		},
+		"aria":{"role":"button"}
 	},
 	_widgetClass:"ibx-split-menu-button",
 	_create:function()
@@ -486,14 +469,11 @@ $.widget("ibi.ibxSplitMenuButton", $.ibi.ibxButtonSimple,
 		this._super();
 		var options = this.options;
 
-		options.menuOptions.menu = this.element.children(".ibx-menu");
 		options.menuOptions.position.of = this.element;
-		var menu = this._menuBtn = $("<div>").ibxMenuButton().on("click", this._onMenuBtnClick.bind(this));
-
+		var menu = this.element.children(".ibx-menu");
+		var menuBtn = this._menuBtn = $("<div>").append(menu).ibxMenuButton().on("click", this._onMenuBtnClick.bind(this));
 		var separator = this._separator = $("<div class='split-separator'>");
-
-		this.element.append(separator, menu).on({"click":this._onBtnClick.bind(this), "keydown":this._onBtnKeyDown.bind(this)});
-		options.menuOptions.menu.appendTo("body");
+		this.element.append(separator, menuBtn).on({"click":this._onBtnClick.bind(this), "keydown":this._onBtnKeyDown.bind(this)});
 	},
 	_setAccessibility:function(accessibility)
 	{
@@ -539,7 +519,7 @@ $.widget("ibi.ibxHSplitMenuButton", $.ibi.ibxSplitMenuButton,{options:{},_widget
 $.widget("ibi.ibxVSplitMenuButton", $.ibi.ibxSplitMenuButton,{options:{menuOptions:{position:{my:"left top", at:"right top"}}},_widgetClass: "ibx-vsplit-menu-button"});
 
 //separator between menu buttons
-$.widget("ibi.ibxMenuButtonSeparator", $.ibi.ibxWidget,{options:{"role":"separator"},_widgetClass: "ibx-menu-button-separator",});
+$.widget("ibi.ibxMenuButtonSeparator", $.ibi.ibxWidget,{options:{"aria":{"role":"separator"}},_widgetClass: "ibx-menu-button-separator",});
 
 
 //# sourceURL=menu.ibx.js

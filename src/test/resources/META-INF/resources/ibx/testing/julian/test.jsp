@@ -87,7 +87,23 @@
 		</style>
 	</head>
 	<body class="ibx-root">
-		<div class="btn" data-ibx-type="ibxButton">Dialog</div>
+		<div class="test" tabIndex="0" data-ibx-type="ibxMenuButton">File
+			<div data-ibx-type="ibxMenu">
+				<div data-ibx-type="ibxMenuItem" data-ibxp-label-options='{"glyph":"fiber_new", "glyphClasses":"material-icons"}'>New</div>
+				<div data-ibx-type="ibxMenuItem" data-ibxp-label-options='{"glyph":"open_in_new", "glyphClasses":"material-icons"}'>Open...</div>
+				<div data-ibx-type="ibxMenuSeparator"></div>
+				<div data-ibx-type="ibxMenuItem" data-ibxp-label-options='{"glyph":"save", "glyphClasses":"material-icons"}'>Save</div>
+				<div data-ibx-type="ibxMenuItem">Save As...</div>
+				<div data-ibx-type="ibxMenuSeparator"></div>
+				<div data-ibx-type="ibxMenuItem" data-ibxp-label-options='{"glyph":"exit_to_app", "glyphClasses":"material-icons"}'>Exit</div>
+			</div>
+		</div>
+
+		<div tabIndex="0" data-ibxp-disabled="true" data-ibx-type="ibxTextField">Text Field</div>
+		
+		<div tabIndex="0" data-ibxp-disabled="true" data-ibx-type="ibxTextArea">Text Area</div>
+
+		<div class="btn" tabIndex="0" data-ibx-type="ibxButton">Dialog</div>
 		<div class="dlg" data-ibx-type="ibxDialog" data-ibxp-destroy-on-close="false" data-ibxp-auto-size="false">
 			<div id="txtTitleLabel" class="dlg-ctl-label" data-ibx-type="ibxLabel">Enter Title:</div>
 			<div tabindex="0" class="txt-title" data-ibx-type="ibxTextField" data-ibxp-aria.labelled-By="txtTitleLabel" data-ibxp-default-focused="true"></div>
