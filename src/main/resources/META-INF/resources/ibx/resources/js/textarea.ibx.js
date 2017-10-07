@@ -70,9 +70,9 @@ $.widget("ibi.ibxTextArea", $.ibi.ibxFlexBox,
 	},
 	_onKeyDown: function (e)
 	{
-		if (e.which == 37 || e.which == 38 || e.which == 39 || e.which == 40)
+		//stop various keys from bubbling
+		if (e.which == $.ui.keyCode.ENTER || e.which == $.ui.keyCode.LEFT || e.which == $.ui.keyCode.RIGHT || e.which == $.ui.keyCode.UP || e.which == $.ui.keyCode.DOWN)
 		{
-			// stop arrow keys from bubbling
 			e.stopPropagation();
 		}
 		else
