@@ -108,7 +108,7 @@ $.widget("ibi.ibxPopup", $.ibi.ibxWidget,
 				{
 					this.element.off("transitionend");//.css({top:"", left:""});//remove event handler, and jQueryUI position info.
 					this._trigger("close", null, closeInfo);
-
+					this.element.css({"top":"", "left":""});
 					//destroy on close, if desired
 					if(!this._destroyed && this.options.destroyOnClose)
 					{
