@@ -106,9 +106,11 @@ $.widget("ibi.ibxPopup", $.ibi.ibxWidget,
 			{
 				if(e.originalEvent.propertyName == "visibility" && !this.isOpen())
 				{
-					this.element.off("transitionend");//.css({top:"", left:""});//remove event handler, and jQueryUI position info.
+					//remove the transition event listener.
+					//remove top/left to get way off screen and stop weird scrollbars on body.
+					this.element.off("transitionend").css({top:"", left:""});
 					this._trigger("close", null, closeInfo);
-					this.element.css({"top":"", "left":""});
+					
 					//destroy on close, if desired
 					if(!this._destroyed && this.options.destroyOnClose)
 					{
