@@ -90,25 +90,9 @@
 			{
 				flex:1 1 auto;
 			}
-
-			.parent
-			{
-				border:1px solid red;
-				padding:20px;
-			}
-			.child
-			{
-				border:1px solid lime;
-			}
 		</style>
 	</head>
 	<body class="ibx-root">
-
-		<div class="parent" tabIndex="0" data-ibx-type="ibxWidget">
-			parent
-			<div class="child" tabIndex="-1">child</div>
-		</div>	
-
 		<div class="test" tabIndex="0" data-ibx-type="ibxMenuButton">File
 			<div data-ibx-type="ibxMenu">
 				<div data-ibx-type="ibxMenuItem" data-ibxp-label-options='{"glyph":"fiber_new", "glyphClasses":"material-icons"}'>New</div>
@@ -121,9 +105,11 @@
 			</div>
 		</div>
 
-		<div tabIndex="0" data-ibxp-disabled="true" data-ibx-type="ibxTextField">Text Field</div>
+		<div id="txtFieldLabel" data-ibx-type="ibxLabel">Text Field Label:</div>
+		<div tabIndex="0" data-ibxp-disabled="false" data-ibx-type="ibxTextField" data-ibxp-aria.labelled-by="txtFieldLabel"></div>
 		
-		<div tabIndex="0" data-ibxp-disabled="true" data-ibx-type="ibxTextArea">Text Area</div>
+		<div id="txtAreaLabel" data-ibx-type="ibxLabel">Text Area Label:</div>
+		<div tabIndex="0" data-ibxp-disabled="false" data-ibx-type="ibxTextArea" data-ibxp-aria.labelled-by="txtAreaLabel"></div>
 
 		<div class="btn" tabIndex="0" data-ibx-type="ibxButton">Dialog</div>
 		<div class="dlg" data-ibx-type="ibxDialog" data-ibxp-destroy-on-close="false" data-ibxp-auto-size="false">

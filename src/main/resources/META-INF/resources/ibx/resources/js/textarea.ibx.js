@@ -37,6 +37,11 @@ $.widget("ibi.ibxTextArea", $.ibi.ibxFlexBox,
 		this.element.append(this._textInput).on("focus", this._onControlFocus.bind(this)).on("input", this._onInput.bind(this)).on("keydown", this._onKeyDown.bind(this));
 		this._setValue(this.options.text, true);
 	},
+	_setAccessibility:function(accessible)
+	{
+		this._super(accessible);
+		accessible ? this._textInput.attr("aria-labelledby", this.options.aria.labelledBy) : this._textInput.removeAttr("aria-labelledby");
+	},
 	_setOption: function (key, value)
 	{
 		this._super(key, value);

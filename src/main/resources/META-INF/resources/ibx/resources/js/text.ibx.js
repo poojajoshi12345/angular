@@ -43,6 +43,11 @@ $.widget("ibi.ibxTextField", $.ibi.ibxFlexBox,
 				this._setAutoSize();
 		}.bind(this));
 	},
+	_setAccessibility:function(accessible)
+	{
+		this._super(accessible);
+		accessible ? this._textInput.attr("aria-labelledby", this.options.aria.labelledBy) : this._textInput.removeAttr("aria-labelledby");
+	},
 	_setValue: function (value, bFormat)
 	{
 		this.options.text = bFormat && this.options.fnFormat ? this.options.fnFormat(value) : value;
