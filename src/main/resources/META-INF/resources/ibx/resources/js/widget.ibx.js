@@ -64,7 +64,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 		this.element.data("ibiIbxWidget", this);
 		this.element.attr("data-ibx-type", this.widgetName);
 		this.element.on("keydown", this._onWidgetKeyEvent.bind(this));
-		this.element.on("focusin", this._onWidgetFocusEvent.bind(this));
+		this.element.on("focusin focusout", this._onWidgetFocusEvent.bind(this));
 		this.element.on("contextmenu", this._onWidgetContextMenu.bind(this));
 		this._adjustWidgetClasses(true);
 
@@ -160,6 +160,9 @@ $.widget("ibi.ibxWidget", $.Widget,
 	},
 	_onWidgetFocusEvent:function(e)
 	{
+		if(e.type == "focusout" && !this.element.is(e.relatedTarget) && !$.contains(this.element[0], e.relatedTarget))
+			this._trigger("widgetblur", e);
+		else
 		if(this.options.navKeyRoot)
 		{
 			var target = $(e.target);

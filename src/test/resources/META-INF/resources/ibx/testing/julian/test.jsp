@@ -21,7 +21,6 @@
 			<jsp:include page="/WEB-INF/jsp/global/wf_globals.jsp" flush="false" />
 			ibx(function()
 			{
-				var date = new Date();
 				var menu = $(".test-menu");
 				for(var i = 0; i < 10; ++i)
 				{
@@ -30,18 +29,25 @@
 					menu.ibxWidget("add", item, null, null, false);
 				}
 				menu.ibxWidget("refresh");
-				console.log(new Date() - date);
 
 				$(".btn").on("click", function(e)
 				{
 					$(".dlg").ibxWidget("open");
+				});
+
+				$(".parent").on("focusin", function(e)
+				{
+				});
+				$("body").on("ibx_widgetblur", function(e)
+				{
+					console.log(e.type);
 				});
 			}, null, true);
 		</script>
 		<style type="text/css">
 			.main-box
 			{
-				position:absolute;
+				position:abso8lute;
 				left:0px;
 				top:0px;
 				right:0px;
@@ -84,9 +90,25 @@
 			{
 				flex:1 1 auto;
 			}
+
+			.parent
+			{
+				border:1px solid red;
+				padding:20px;
+			}
+			.child
+			{
+				border:1px solid lime;
+			}
 		</style>
 	</head>
 	<body class="ibx-root">
+
+		<div class="parent" tabIndex="0" data-ibx-type="ibxWidget">
+			parent
+			<div class="child" tabIndex="-1">child</div>
+		</div>	
+
 		<div class="test" tabIndex="0" data-ibx-type="ibxMenuButton">File
 			<div data-ibx-type="ibxMenu">
 				<div data-ibx-type="ibxMenuItem" data-ibxp-label-options='{"glyph":"fiber_new", "glyphClasses":"material-icons"}'>New</div>
