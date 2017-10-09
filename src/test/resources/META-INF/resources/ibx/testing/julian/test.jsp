@@ -40,7 +40,6 @@
 				});
 				$("body").on("ibx_widgetblur", function(e)
 				{
-					console.log(e.type);
 				});
 			}, null, true);
 		</script>
@@ -109,14 +108,14 @@
 		<div tabIndex="0" data-ibxp-disabled="true" data-ibx-type="ibxTextField" data-ibxp-aria.labelled-by="txtFieldLabel"></div>
 		
 		<div id="txtAreaLabel" data-ibx-type="ibxLabel">Text Area Label:</div>
-		<div tabIndex="0" data-ibxp-disabled="true" data-ibx-type="ibxTextArea" data-ibxp-aria.labelled-by="txtAreaLabel"></div>
+		<div tabIndex="0" data-ibxp-disabled="true" data-ibx-type="ibxTextArea" data-ibx-type="ibxTextField" data-ibxp-aria.labelled-by="txtAreaLabel"></div>
 
 		<div class="btn" tabIndex="0" data-ibx-type="ibxButton">Dialog</div>
 		<div class="dlg" data-ibx-type="ibxDialog" data-ibxp-destroy-on-close="false" data-ibxp-auto-size="false">
 			<div id="txtTitleLabel" class="dlg-ctl-label" data-ibx-type="ibxLabel">Enter Title:</div>
-			<div tabindex="0" class="txt-title" data-ibx-type="ibxTextField" data-ibxp-aria.labelled-By="txtTitleLabel" data-ibxp-default-focused="true"></div>
+			<div tabindex="0" class="txt-title" data-ibx-type="ibxTextField" data-ibxp-placeholder="Enter one line of text" data-ibxp-aria.labelled-By="txtTitleLabel" data-ibxp-default-focused="true"></div>
 			<div id="txtBodyLabel" class="dlg-ctl-label" data-ibx-type="ibxLabel">Enter Text Here:</div>
-			<div tabindex="0" class="txt-body" data-ibx-type="ibxTextArea" data-ibxp-aria.label="I'm a label" data-ibxp-aria.labelled-by="txtBodyLabel" data-ibxp-aria.described-by="txtBodyLabel"></div>
+			<div tabindex="0" class="txt-body" data-ibx-type="ibxTextArea"  data-ibxp-placeholder="Enter multiple line of text" data-ibxp-aria.labelled-by="txtBodyLabel" data-ibxp-aria.described-by="txtBodyLabel"></div>
 		</div>
 	</body>
 </html>

@@ -91,20 +91,10 @@ $.widget("ibi.ibxWidget", $.Widget,
 	_setAccessibility:function(accessible)
 	{
 		var options = this.options;
-		if(accessible)
-		{
-			this.element.attr("aria-disabled", options.disabled);
-			this.element.attr("aria-label", options.aria.label);
-			this.element.attr("aria-labelledby", options.aria.labelledBy);
-			this.element.attr("aria-describedby", options.aria.describedBy);
-		}
-		else
-		{
-			this.element.removeAttr("aria-disabled")
-			this.element.removeAttr("aria-label")
-			this.element.removeAttr("aria-labelledby")
-			this.element.removeAttr("aria-describedby");
-		}
+		accessible ? this.element.attr("aria-label", options.aria.label) : this.element.removeAttr("aria-label");
+		accessible ? this.element.attr("aria-labelledby", options.aria.labelledBy) : this.element.removeAttr("aria-labelledby");
+		accessible ? this.element.attr("aria-describedby", options.aria.describedBy) : this.element.removeAttr("aria-describedby");
+		accessible ? this.element.attr("aria-disabled", options.disabled) : this.element.removeAttr("aria-disabled");
 	},
 	destroyed:function(){return this._destroyed;},
 	_destroyed:false,
