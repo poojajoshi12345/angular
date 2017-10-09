@@ -55,8 +55,6 @@ iframe.ibx-popup-disabled-iframe
 /*visiual effects*/
 .pop-closed
 {
-	left:-1000000px;
-	top:-1000000px;
 	visibility:hidden;
 	transition:visibility .001s; /*needed so transitionend event always fires during open/close of popup*/
 }

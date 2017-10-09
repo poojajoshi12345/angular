@@ -106,10 +106,10 @@
 		</div>
 
 		<div id="txtFieldLabel" data-ibx-type="ibxLabel">Text Field Label:</div>
-		<div tabIndex="0" data-ibxp-disabled="false" data-ibx-type="ibxTextField" data-ibxp-aria.labelled-by="txtFieldLabel"></div>
+		<div tabIndex="0" data-ibxp-disabled="true" data-ibx-type="ibxTextField" data-ibxp-aria.labelled-by="txtFieldLabel"></div>
 		
 		<div id="txtAreaLabel" data-ibx-type="ibxLabel">Text Area Label:</div>
-		<div tabIndex="0" data-ibxp-disabled="false" data-ibx-type="ibxTextArea" data-ibxp-aria.labelled-by="txtAreaLabel"></div>
+		<div tabIndex="0" data-ibxp-disabled="true" data-ibx-type="ibxTextArea" data-ibxp-aria.labelled-by="txtAreaLabel"></div>
 
 		<div class="btn" tabIndex="0" data-ibx-type="ibxButton">Dialog</div>
 		<div class="dlg" data-ibx-type="ibxDialog" data-ibxp-destroy-on-close="false" data-ibxp-auto-size="false">
