@@ -36,7 +36,7 @@ $.widget("ibi.ibxTextArea", $.ibi.ibxFlexBox,
 		this.options.text = this.options.text || this.element.textNodes().remove().text().replace(/^\s*|\s*$/g, "");
 		this._textInput = $('<textarea tabIndex="-1" class="ibx-text-area-ctrl"></textarea>').css("flex", "1 1 auto");
 		this._textInput.on("blur", this._onCtrlBlur.bind(this)).on("focus", this._onCtrlFocus.bind(this));
-		this.element.append(this._textInput).on("input", this._onInput.bind(this)).on("keydown", this._onWidgetKeyDown.bind(this));
+		this.element.append(this._textInput).on("focus", this._onWidgetFocus.bind(this)).on("input", this._onInput.bind(this)).on("keydown", this._onWidgetKeyDown.bind(this));
 		this._setValue(this.options.text, true);
 	},
 	_setAccessibility:function(accessible)
@@ -70,6 +70,12 @@ $.widget("ibi.ibxTextArea", $.ibi.ibxFlexBox,
 		var newVal = this._textInput.val();
 		if (newVal != this._focusVal)
 			this._setValue(newVal, true);
+	},
+	_onWidgetFocus:function(e)
+	{
+		//we don't want focus...move it to prev widget
+		if(this._textInput.is(e.relatedTarget))
+			this.element.prevAll(":ibxFocusable").first().focus();
 	},
 	_onWidgetKeyDown: function (e)
 	{

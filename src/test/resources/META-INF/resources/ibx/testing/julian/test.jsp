@@ -98,9 +98,6 @@
 		</style>
 	</head>
 	<body class="ibx-root">
-		<div class="test-btn" data-ibx-type="ibxButton">Submit</div>
-		<form data-ibx-type="ibxForm"></form>
-
 		<div class="test" tabIndex="0" data-ibx-type="ibxMenuButton">File
 			<div data-ibx-type="ibxMenu">
 				<div data-ibx-type="ibxMenuItem" data-ibxp-label-options='{"glyph":"fiber_new", "glyphClasses":"material-icons"}'>New</div>
@@ -138,5 +135,8 @@
 			<div id="txtBodyLabel" class="dlg-ctl-label" data-ibx-type="ibxLabel">Enter Text Here:</div>
 			<div tabindex="0" class="txt-body" data-ibx-type="ibxTextArea"  data-ibxp-placeholder="Enter multiple line of text" data-ibxp-aria.labelled-by="txtBodyLabel" data-ibxp-aria.described-by="txtBodyLabel"></div>
 		</div>
+
+		<div class="test-btn" data-ibx-type="ibxButton">Submit</div>
+		<form data-ibx-type="ibxForm"></form>
 	</body>
 </html>

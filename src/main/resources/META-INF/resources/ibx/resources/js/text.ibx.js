@@ -38,7 +38,7 @@ $.widget("ibi.ibxTextField", $.ibi.ibxFlexBox,
 		this._textInput = $('<input tabIndex="-1" type="' + this.options.ctrlType + '"></input>');
 		this._textInput.on("blur", this._onCtrlBlur.bind(this)).on("focus", this._onCtrlFocus.bind(this))
 		this._setValue(this.options.text, true);
-		this.element.append(this._textInput).on("input", this._onInput.bind(this)).on("keydown", this._onWidgetKeyDown.bind(this));
+		this.element.append(this._textInput).on("focus", this._onWidgetFocus.bind(this)).on("input", this._onInput.bind(this)).on("keydown", this._onWidgetKeyDown.bind(this));
 		this.element.on("ibx_change", function (e)
 		{
 			if (this.options.autoSize)
@@ -99,6 +99,12 @@ $.widget("ibi.ibxTextField", $.ibi.ibxFlexBox,
 		var newVal = this._textInput.val();
 		if (newVal != this._focusVal)
 			this._setValue(newVal, true);
+	},
+	_onWidgetFocus:function(e)
+	{
+		//we don't want focus...move it to prev focusable item.
+		if(this._textInput.is(e.relatedTarget))
+			this.element.prevAll(":ibxFocusable").first().focus();
 	},
 	_onWidgetKeyDown: function (e)
 	{
