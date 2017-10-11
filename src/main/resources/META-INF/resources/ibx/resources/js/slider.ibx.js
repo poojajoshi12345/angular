@@ -97,7 +97,7 @@ $.widget("ibi.ibxSlider", $.ibi.ibxGrid,
 				{
 					this._focusSlider(e);
 					e.preventDefault();
-					if (this._trigger("start", this.info()))
+					if (this._trigger("start", null, this.info()))
 					{
 						$(document.body).css("pointerEvents", "none");
 						$(document).on("mouseup mousemove", this._fnSliderMouseEvent);
@@ -111,7 +111,7 @@ $.widget("ibi.ibxSlider", $.ibi.ibxGrid,
 					$(document).off("mouseup mousemove", this._fnSliderMouseEvent);
 					this._activeSlider.removeClass('ibx-slider-marker-move');
 					e.preventDefault();
-					this._trigger("end", this.info())
+					this._trigger("end", null, this.info());
 				}
 				break;
 			case "mousemove":
