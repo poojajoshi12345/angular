@@ -35,11 +35,17 @@
 					$(".dlg").ibxWidget("open");
 				});
 
-				$(".parent").on("focusin", function(e)
+				$(".test-btn").on("click", function(e)
 				{
-				});
-				$("body").on("ibx_widgetblur", function(e)
-				{
+					var wnd = window.open("test.html");
+
+					var form = $("<form>");
+					var fields = 
+					{
+						"firstName":"Julian",
+						"lastName":"Hyman"
+					}
+					form.ibxForm({"action":"about:blank", "fields":fields}).ibxForm("submit",null);
 				});
 			}, null, true);
 		</script>
@@ -92,6 +98,9 @@
 		</style>
 	</head>
 	<body class="ibx-root">
+		<div class="test-btn" data-ibx-type="ibxButton">Submit</div>
+		<form data-ibx-type="ibxForm"></form>
+
 		<div class="test" tabIndex="0" data-ibx-type="ibxMenuButton">File
 			<div data-ibx-type="ibxMenu">
 				<div data-ibx-type="ibxMenuItem" data-ibxp-label-options='{"glyph":"fiber_new", "glyphClasses":"material-icons"}'>New</div>

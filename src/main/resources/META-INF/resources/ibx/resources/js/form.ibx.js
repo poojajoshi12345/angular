@@ -30,8 +30,12 @@ $.widget("ibi.ibxForm", $.ibi.ibxWidget,
 			this.element.uniqueId();
 			var id = this.element.prop("id");
 			var doc = $(doc ? doc.documentElement : document.documentElement);
-			doc.append(this.element.prop("outerHTML")).find("#"+id).submit().remove();
-			this.element.removeUniqueId();
+			var frm = doc.find("body").append(this.element.prop("outerHTML")).find("#"+id);
+			frm.submit();
+
+			//clean up after our selves.
+			if(doc.is(document.documentElement))
+				frm.remove();
 		}
 		return;
 	},
