@@ -5,6 +5,8 @@ $.widget("ibi.ibxTextField", $.ibi.ibxFlexBox,
 {
 	options:
 		{
+			"navKeyRoot":true,
+			"navKeyAutoFocus":true,
 			"text": "",
 			"autoSize": false,
 			"readonly": false,
@@ -33,10 +35,10 @@ $.widget("ibi.ibxTextField", $.ibi.ibxFlexBox,
 	{
 		this._super();
 		this.options.text = this.options.text || this.element.textNodes().remove().text().replace(/^\s*|\s*$/g, "");
-		this._textInput = $('<input class="ibx-default-ctrl-focus" type="' + this.options.ctrlType + '"></input>');
-		this._textInput.on("blur", this._onBlur.bind(this)).on("focus", this._onFocus.bind(this))
+		this._textInput = $('<input tabIndex="-1" type="' + this.options.ctrlType + '"></input>');
+		this._textInput.on("blur", this._onCtrlBlur.bind(this)).on("focus", this._onCtrlFocus.bind(this))
 		this._setValue(this.options.text, true);
-		this.element.append(this._textInput).on("focus", this._onControlFocus.bind(this)).on("input", this._onInput.bind(this)).on("keydown", this._onKeyDown.bind(this));
+		this.element.append(this._textInput).on("input", this._onInput.bind(this)).on("keydown", this._onWidgetKeyDown.bind(this));
 		this.element.on("ibx_change", function (e)
 		{
 			if (this.options.autoSize)
@@ -88,23 +90,19 @@ $.widget("ibi.ibxTextField", $.ibi.ibxFlexBox,
 			scrollWidth = this._textInput[0].scrollWidth + "px";
 		this._textInput.css('min-width', scrollWidth).css("max-width", curMax);
 	},
-	_onControlFocus: function (event)
-	{
-		this.element.find(".ibx-default-ctrl-focus").focus();
-	},
-	_onFocus: function (event)
+	_onCtrlFocus: function (event)
 	{
 		this._focusVal = this.options.text;
 	},
-	_onBlur: function ()
+	_onCtrlBlur: function ()
 	{
 		var newVal = this._textInput.val();
 		if (newVal != this._focusVal)
 			this._setValue(newVal, true);
 	},
-	_onKeyDown: function (e)
+	_onWidgetKeyDown: function (e)
 	{
-		if (e.which == 13) // enter
+		if (e.which == $.ui.keyCode.ENTER) // enter
 		{
 			var newVal = this._textInput.val();
 			this._focusVal = newVal;
@@ -112,15 +110,9 @@ $.widget("ibi.ibxTextField", $.ibi.ibxFlexBox,
 			this._trigger("action", e, [this.element, this.options.text]);
 			e.preventDefault();
 		}
-		else if (e.which == 37 || e.which == 38 || e.which == 39 || e.which == 40)
-		{
-			// stop arrow keys from bubbling
-			e.stopPropagation();
-		}
 		else
-		{
+		if(-1 == $.ibi.ibxWidget.navKeys.indexOf(e.which))//not arrow key
 			this._trigger("textchanging", e, [this.element, this.options.text, e.key]);
-		}
 	},
 	_onInput: function (e)
 	{

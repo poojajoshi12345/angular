@@ -104,11 +104,23 @@
 			</div>
 		</div>
 
+		<div tabIndex="0" data-ibx-type="ibxWidget" data-ibxp-nav-key-root="true" data-ibxp-nav-key-dir="both">
+			<div tabIndex="-1" data-ibx-type="ibxCheckBoxSimple">Check 1</div>
+			<div tabIndex="-1" data-ibx-type="ibxCheckBoxSimple">Check 2</div>
+			<div tabIndex="-1" data-ibx-type="ibxCheckBoxSimple">Check 3</div>
+		</div>
+		<div tabIndex="0" data-ibx-type="ibxWidget" data-ibxp-nav-key-root="true" data-ibxp-nav-key-dir="both">
+			<div data-ibx-type="ibxRadioGroup" data-ibxp-name="rgTest"></div>
+			<div tabIndex="-1" data-ibx-type="ibxRadioButtonSimple" data-ibxp-group="rgTest">Radio 1</div>
+			<div tabIndex="-1" data-ibx-type="ibxRadioButtonSimple" data-ibxp-group="rgTest">Radio 2</div>
+			<div tabIndex="-1" data-ibx-type="ibxRadioButtonSimple" data-ibxp-group="rgTest">Radio 3</div>
+		</div>
+
 		<div id="txtFieldLabel" data-ibx-type="ibxLabel">Text Field Label:</div>
-		<div tabIndex="0" data-ibxp-disabled="true" data-ibx-type="ibxTextField" data-ibxp-aria.labelled-by="txtFieldLabel"></div>
+		<div tabIndex="0" data-ibxp-disabled="false" data-ibx-type="ibxTextField" data-ibxp-aria.labelled-by="txtFieldLabel"></div>
 		
 		<div id="txtAreaLabel" data-ibx-type="ibxLabel">Text Area Label:</div>
-		<div tabIndex="0" data-ibxp-disabled="true" data-ibx-type="ibxTextArea" data-ibx-type="ibxTextField" data-ibxp-aria.labelled-by="txtAreaLabel"></div>
+		<div tabIndex="0" data-ibxp-disabled="false" data-ibx-type="ibxTextArea" data-ibx-type="ibxTextField" data-ibxp-aria.labelled-by="txtAreaLabel"></div>
 
 		<div class="btn" tabIndex="0" data-ibx-type="ibxButton">Dialog</div>
 		<div class="dlg" data-ibx-type="ibxDialog" data-ibxp-destroy-on-close="false" data-ibxp-auto-size="false">

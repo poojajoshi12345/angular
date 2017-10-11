@@ -10,7 +10,7 @@ $.widget("ibi.ibxMenu", $.ibi.ibxPopup,
 	{
 		"navKeyRoot":true,
 		"navKeyDir":"vertical",
-		"navKeyAutoFocus":false,
+		"navKeyAutoFocus":true,
 		"modal":false,
 		"destroyOnClose":false,
 		"multiSelect":false, //user can select multiple items without closing menu (checkboxes, etc.)

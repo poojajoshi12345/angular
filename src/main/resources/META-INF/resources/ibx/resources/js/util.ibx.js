@@ -184,7 +184,7 @@ jQuery.fn.textNodes = function()
 };
 
 //let jQuery dispatch custom native events
-jQuery.fn.dispatchEvent = function(type, data, canBubble, cancelable)
+jQuery.fn.dispatchEvent = function(type, data, canBubble, cancelable, relatedTarget)
 {
 	canBubble = canBubble !== undefined ? canBubble : true;
 	cancelable = cancelable !== undefined ? cancelable : true;
@@ -199,6 +199,7 @@ jQuery.fn.dispatchEvent = function(type, data, canBubble, cancelable)
 		e.initCustomEvent(type, canBubble, cancelable, null);
 	}
 	e.data = data;
+	e.relatedTarget = relatedTarget;
 
 	this.each(function(e, idx, el)
 	{

@@ -4,6 +4,8 @@ $.widget("ibi.ibxTextArea", $.ibi.ibxFlexBox,
 {
 	options:
 	{
+		"navKeyRoot":true,
+		"navKeyAutoFocus":true,
 		"cols": "",
 		"rows": "",
 		"maxlength": "",
@@ -32,9 +34,9 @@ $.widget("ibi.ibxTextArea", $.ibi.ibxFlexBox,
 	{
 		this._super();
 		this.options.text = this.options.text || this.element.textNodes().remove().text().replace(/^\s*|\s*$/g, "");
-		this._textInput = $('<textarea class="ibx-text-area-ctrl ibx-default-ctrl-focus"></textarea>').css("flex", "1 1 auto");
-		this._textInput.on("blur", this._onBlur.bind(this)).on("focus", this._onFocus.bind(this));
-		this.element.append(this._textInput).on("focus", this._onControlFocus.bind(this)).on("input", this._onInput.bind(this)).on("keydown", this._onKeyDown.bind(this));
+		this._textInput = $('<textarea tabIndex="-1" class="ibx-text-area-ctrl"></textarea>').css("flex", "1 1 auto");
+		this._textInput.on("blur", this._onCtrlBlur.bind(this)).on("focus", this._onCtrlFocus.bind(this));
+		this.element.append(this._textInput).on("input", this._onInput.bind(this)).on("keydown", this._onWidgetKeyDown.bind(this));
 		this._setValue(this.options.text, true);
 	},
 	_setAccessibility:function(accessible)
@@ -59,28 +61,19 @@ $.widget("ibi.ibxTextArea", $.ibi.ibxFlexBox,
 	{
 		this._textInput.select();
 	},
-	_onControlFocus: function (event)
-	{
-		this.element.find(".ibx-default-ctrl-focus").focus();
-	},
-	_onFocus: function ()
+	_onCtrlFocus: function ()
 	{
 		this._focusVal = this.options.text;
 	},
-	_onBlur: function ()
+	_onCtrlBlur: function ()
 	{
 		var newVal = this._textInput.val();
 		if (newVal != this._focusVal)
 			this._setValue(newVal, true);
 	},
-	_onKeyDown: function (e)
+	_onWidgetKeyDown: function (e)
 	{
-		//stop various keys from bubbling
-		if (e.which == $.ui.keyCode.ENTER || e.which == $.ui.keyCode.LEFT || e.which == $.ui.keyCode.RIGHT || e.which == $.ui.keyCode.UP || e.which == $.ui.keyCode.DOWN)
-		{
-			e.stopPropagation();
-		}
-		else
+		if(-1 == $.ibi.ibxWidget.navKeys.indexOf(e.which))//not arrow key
 			this._trigger("textchanging", e, [this.element, this.options.text, e.key]);
 	},
 	_onInput: function (e)

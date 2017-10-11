@@ -18,7 +18,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 		//for keyboard arrows navigation (mostly composite widgets like menus/selects/etc...508)
 		"navKeyRoot":false,			//start key nav here
 		"navKeyDir": "horizontal",	//horizontal = left/right, vertical = up/down, or both
-		"navKeyAutoFocus":true,		//do an initial nav when this gets focus (basically focus first child focusable item on this focus)
+		"navKeyAutoFocus":false,	//do an initial nav when this gets focus (basically focus first child focusable item on this focus)
 		
 		//ARIA (508)
 		"aria":
@@ -150,12 +150,30 @@ $.widget("ibi.ibxWidget", $.Widget,
 	},
 	_onWidgetFocusEvent:function(e)
 	{
-		if(e.type == "focusout" && !this.element.is(e.relatedTarget) && !$.contains(this.element[0], e.relatedTarget))
-			this._trigger("widgetblur", e);
-		else
-		if(this.options.navKeyRoot)
+		var target = $(e.target);
+		if(!this.element.is(e.relatedTarget) && !$.contains(this.element[0], e.relatedTarget))
 		{
-			var target = $(e.target);
+			//these events are only triggered when the entire widget gains/loses focus...not a child.
+			if(e.type == "focusin")
+			{
+				if(this.options.navKeyAutoFocus && this.element.is(target))
+				{
+					var children = this.children();
+					children.first().focus();//focus first by default.
+					children.filter(".ibx-nav-item-active").focus();//then focus first active item if possible.
+				}
+				this._trigger("widgetfocus", e);
+			}
+			else
+			if(e.type == "focusout")
+			{
+				this._trigger("widgetblur", e);
+				this.children().removeClass("ibx-nav-item-active").removeProp("aria-activedescendant");
+			}
+		}
+
+		if(e.type == "focusin" && this.options.navKeyRoot)
+		{
 			var isChild = this.element.is(target.parent());
 			if(isChild)
 			{
@@ -163,9 +181,6 @@ $.widget("ibi.ibxWidget", $.Widget,
 				children.removeClass("ibx-nav-item-active").removeProp("aria-activedescendant");
 				target.addClass("ibx-nav-item-active").attr("aria-activedescendant", true);
 			}
-			else
-			if(this.options.navKeyAutoFocus && this.element.is(target) && !$.contains(this.element[0], e.relatedTarget))
-				this.children().filter(".ibx-nav-item-active").focus();
 		}
 	},
 	_onWidgetKeyEvent:function(e)
@@ -175,21 +190,25 @@ $.widget("ibi.ibxWidget", $.Widget,
 		var options = this.options;
 		if(options.focusRoot && e.keyCode == $.ui.keyCode.TAB)
 		{
-			var elActive = $(document.activeElement).closest("[tabIndex][tabIndex != -1]");
 			var tabKids = $(this.element).find(":ibxFocusable");
-			var curIdx = tabKids.index(elActive);
 			var target = null;
-			if(e.shiftKey)
-				target = (0 == curIdx) ? tabKids.last() : tabKids[--curIdx];
+			if(tabKids.first().is(e.target) && e.shiftKey)
+				target = tabKids.last();
 			else
-				target = ((tabKids.length - 1) == curIdx) ? tabKids.first() : tabKids[++curIdx];
+			if(tabKids.last().is(e.target) && !e.shiftKey)
+				target = tabKids.first();
 
-			target = $(target);
-			var ret = this._trigger("focusing", null, {"target":target, "relatedTarget":elActive});
-			if(ret)
-				target.focus();
-			e.preventDefault();
-			e.stopPropagation();
+			if(target)
+			{
+				target = $(target);
+				var ret = this._trigger("focusing", null, {"target":target, "relatedTarget":e.relatedTarget});
+				if(ret)
+				{
+					target.focus();
+					e.preventDefault();
+					e.stopPropagation();
+				}
+			}
 		}
 		else
 		if(options.navKeyRoot && (-1 != $.ibi.ibxWidget.navKeys.indexOf(e.keyCode)))

@@ -6,7 +6,6 @@ $.widget("ibi.ibxPopup", $.ibi.ibxWidget,
 {
 	options:
 	{
-		"role":"alert",
 		"focusRoot":true,
 		"modal":false,
 		"autoClose":true,
@@ -27,6 +26,7 @@ $.widget("ibi.ibxPopup", $.ibi.ibxWidget,
 			"using":null,
 			"within":null,
 		},
+		"aria":{"role":"alert"}
 	},
 	_widgetClass:"ibx-popup",
 	_create:function()
