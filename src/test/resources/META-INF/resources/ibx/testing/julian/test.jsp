@@ -114,12 +114,12 @@
 			<div tabIndex="-1" data-ibx-type="ibxCheckBoxSimple">Check 1</div>
 			<div tabIndex="-1" data-ibx-type="ibxCheckBoxSimple">Check 2</div>
 			<div tabIndex="-1" data-ibx-type="ibxCheckBoxSimple">Check 3</div>
-		</div>
-		<div tabIndex="0" data-ibx-type="ibxWidget" data-ibxp-nav-key-root="true" data-ibxp-nav-key-dir="both">
-			<div data-ibx-type="ibxRadioGroup" data-ibxp-name="rgTest"></div>
-			<div tabIndex="-1" data-ibx-type="ibxRadioButtonSimple" data-ibxp-group="rgTest">Radio 1</div>
-			<div tabIndex="-1" data-ibx-type="ibxRadioButtonSimple" data-ibxp-group="rgTest">Radio 2</div>
-			<div tabIndex="-1" data-ibx-type="ibxRadioButtonSimple" data-ibxp-group="rgTest">Radio 3</div>
+			<div tabIndex="0" data-ibx-type="ibxWidget" data-ibxp-nav-key-root="true" data-ibxp-nav-key-dir="both">
+				<div data-ibx-type="ibxRadioGroup" data-ibxp-name="rgTest"></div>
+				<div tabIndex="-1" data-ibx-type="ibxRadioButtonSimple" data-ibxp-group="rgTest">Radio 1</div>
+				<div tabIndex="-1" data-ibx-type="ibxRadioButtonSimple" data-ibxp-group="rgTest">Radio 2</div>
+				<div tabIndex="-1" data-ibx-type="ibxRadioButtonSimple" data-ibxp-group="rgTest">Radio 3</div>
+			</div>
 		</div>
 
 		<div id="txtFieldLabel" data-ibx-type="ibxLabel">Text Field Label:</div>

@@ -5,7 +5,7 @@ $.widget("ibi.ibxSlider", $.ibi.ibxGrid,
 {
 	options:
 	{
-	"navKeyRoot":true,
+		"navKeyRoot":true,
 		"value": 50,
 		"min": 0,
 		"max": 100,
