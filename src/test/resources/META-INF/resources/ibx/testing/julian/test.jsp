@@ -82,10 +82,15 @@
 			{
 				flex:1 1 auto;
 			}
+
+			.h-slider.ibx-slider
+			{
+				width:200px;
+			}
 		</style>
 	</head>
 	<body class="ibx-root">
-		<div tabIndex="0" data-ibx-type="ibxHSlider"></div>
+		<div class="h-slider" tabIndex="0" data-ibx-type="ibxHSlider" data-ibxp-value-text-pos="end" data-ibxp-min-text-pos="center" data-ibxp-max-text-pos="center"></div>
 		
 		<button tabIndex="0">Julian</button>
 		<div tabIndex="0" data-ibx-type="ibxButton">Press Me!</div>
@@ -102,6 +107,8 @@
 				<div data-ibx-type="ibxMenuItem" data-ibxp-label-options='{"glyph":"exit_to_app", "glyphClasses":"material-icons"}'>Exit</div>
 			</div>
 		</div>
+
+		<div tabIndex="0" data-ibx-type="ibxSwitch" data-ibxp-aria.label="Switch"></div>
 
 		<div tabIndex="0" data-ibx-type="ibxWidget" data-ibxp-nav-key-root="true" data-ibxp-nav-key-dir="both">
 			<div tabIndex="-1" data-ibx-type="ibxCheckBoxSimple">Check 1</div>

@@ -85,9 +85,10 @@ $.widget("ibi.ibxWidget", $.Widget,
 		var options = this.options;
 		accessible = (accessible === undefined) ? options.aria.accessible : accessible;
 		options.aria.accessible = accessible;
-		accessible ? this.element.ibxAriaId().attr("role", this.options.aria.role) : this.element.removeIbxAriaId().removeAttr("role");
+		accessible ? this.element.ibxAriaId().attr("role", options.aria.role) : this.element.removeIbxAriaId().removeAttr("role", options.aria.role);
 		this._setAccessibility(accessible);
 	},
+	ARIA_IGNORE:{"role":true, "accessible":true},
 	_setAccessibility:function(accessible)
 	{
 		var options = this.options;
@@ -95,7 +96,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 		aria.disabled = options.disabled;
 		for(var key in aria)
 		{
-			if(key == "role" || key == "accessible")
+			if(this.ARIA_IGNORE[key])
 				continue;
 			var ariaAttr = "aria-" + key;
 			accessible ? this.element.attr(ariaAttr, aria[key]) : this.element.removeAttr(ariaAttr);
@@ -218,7 +219,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 		else
 		if(options.navKeyRoot && (-1 != $.ibi.ibxWidget.navKeys.indexOf(e.keyCode)))
 		{
-			var navKids = this.children(":ibxFocusable");
+			var navKids = this.element.find(":ibxFocusable");
 			var active = current = navKids.filter(".ibx-nav-item-active");
 			if(active)
 			{
@@ -355,10 +356,12 @@ $.widget("ibi.ibxWidget", $.Widget,
 	_refresh:function()
 	{
 		var options = this.options;
+
 		this.element.addClass(options.class);
+		this.element.toggleClass("ibx-focus-root", options.focusRoot);
+		this.element.toggleClass("ibx-nav-key-root", options.navKeyRoot);
+		this.element.toggleClass("ibx-default-focused", options.defaultFocused);
 		this.setAccessibility();
-		options.focusRoot ? this.element.addClass("ibx-focus-root") : this.element.removeClass("ibx-focus-root");
-		options.defaultFocused ? this.element.addClass("ibx-default-focused") : this.element.removeClass("ibx-default-focused");
 
 		//hookup the resize sensor if interested in resize events.
 		if(!options.wantResize && this._resizeSensor)

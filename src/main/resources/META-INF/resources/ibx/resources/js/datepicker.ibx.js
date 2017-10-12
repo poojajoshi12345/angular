@@ -17,7 +17,7 @@ $.widget("ibi.ibxDatePicker", $.ibi.ibxVBox,
 	_create: function ()
 	{
 		this._super();
-		this._input = $('<div class="ibx-default-ctrl-focus ibx-datepicker-input">').ibxLabel({glyphClasses:"fa fa-calendar", 'align': 'stretch'}).on("focus", this._showPopup.bind(this)).on('click', this._showPopup.bind(this));
+		this._input = $('<div class="ibx-datepicker-input">').ibxLabel({glyphClasses:"fa fa-calendar", 'align': 'stretch'}).on("focus", this._showPopup.bind(this)).on('click', this._showPopup.bind(this));
 		this._clear = $('<div class="ibx-datepicker-clear">').ibxButtonSimple({glyphClasses:"fa fa-times"}).on('click', this._onClear.bind(this)).hide();
 		this._inputWrapper = $('<div>').ibxHBox({align: 'center'}).addClass('ibx-datepicker-input-wrapper');
 		this._inputWrapper.append(this._input, this._clear);
@@ -121,7 +121,7 @@ $.widget("ibi.ibxDateRange", $.ibi.ibxDatePicker,
 	_create: function ()
 	{
 		this._super();
-		this._input2 = $('<div class="ibx-default-ctrl-focus ibx-datepicker-input">').ibxLabel({ glyphClasses: "fa fa-calendar", 'align': 'stretch' }).on("focus", this._showPopup.bind(this)).on('click', this._showPopup.bind(this));
+		this._input2 = $('<div class="ibx-datepicker-input">').ibxLabel({ glyphClasses: "fa fa-calendar", 'align': 'stretch' }).on("focus", this._showPopup.bind(this)).on('click', this._showPopup.bind(this));
 		this._clear2 = $('<div class="ibx-datepicker-clear">').ibxButtonSimple({glyphClasses:"fa fa-times"}).on('click', this._onClear2.bind(this)).hide();
 		this._inputWrapper.append(this._input2, this._clear2);
 		this._datePicker.datepicker('option', 'numberOfMonths', 2);

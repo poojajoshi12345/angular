@@ -4,38 +4,39 @@
 $.widget("ibi.ibxSlider", $.ibi.ibxGrid,
 {
 	options:
-		{
-			"value": 50,
-			"min": 0,
-			"max": 100,
-			"step": 1,
-			"lock": false,
-			"popupValue": false,
-			"orientation": "horizontal",
-			"flipLayout": false,
-			"edge": "inside",
-			"markerShape": "rectangle",
-			"minTextPos": "none",
-			"maxTextPos": "none",
-			"valueTextPos": "none",
-			//"textPosition": "none",
-			"fnFormat": null,
-			"inline":true,
-			"align": "center",
-			"cols": "auto 1fr auto",
-			"rows": "auto 1fr auto",
-			"align": "stretch",
+	{
+	"navKeyRoot":true,
+		"value": 50,
+		"min": 0,
+		"max": 100,
+		"step": 1,
+		"lock": false,
+		"popupValue": false,
+		"orientation": "horizontal",
+		"flipLayout": false,
+		"edge": "inside",
+		"markerShape": "rectangle",
+		"minTextPos": "none",
+		"maxTextPos": "none",
+		"valueTextPos": "none",
+		//"textPosition": "none",
+		"fnFormat": null,
+		"inline":true,
+		"align": "center",
+		"cols": "auto 1fr auto",
+		"rows": "auto 1fr auto",
+		"align": "stretch",
 
-			"aria":
-			{
-				"role":"slider",
-				"orientation":"horizontal",
-				"valuemin":null,
-				"valuemax":null,
-				"valuenow":null,
-				"valuetext":null
-			}
-		},
+		"aria":
+		{
+			"role":"slider",
+			"orientation":"horizontal",
+			"valuemin":null,
+			"valuemax":null,
+			"valuenow":null,
+			"valuetext":null
+		}
+	},
 	_widgetClass: "ibx-slider",
 	_create: function ()
 	{
@@ -68,6 +69,11 @@ $.widget("ibi.ibxSlider", $.ibi.ibxGrid,
 		aria.valuemax = options.max;
 		aria.valuenow = options.value;
 		aria.valuetext = this._labelValue.ibxWidget("option", "text");
+
+		this._labelMin.ibxWidget("option", "aria.hidden", accessible ? true : null);
+		this._labelMax.ibxWidget("option", "aria.hidden", accessible ? true : null);
+		this._labelValue.ibxWidget("option", "aria.hidden", accessible ? true : null);
+
 		this._super(accessible);
 	},
 	_init: function ()

@@ -110,7 +110,6 @@ $.widget("ibi.ibxCheckBox", $.ibi.ibxLabel,
 		this.add(this._check, this.children()[0], true);
 		this.element.on("click", this._onClick.bind(this));
 		this.element.on("keydown", this._onKeyEvent.bind(this));
-		this.element.on("focus", this._onFocus.bind(this))
 	},
 	_setAccessibility:function(accessible)
 	{
@@ -174,10 +173,6 @@ $.widget("ibi.ibxCheckBox", $.ibi.ibxLabel,
 		this.element.focus();
 		this.refresh();
 		this._trigger("change", null, this.element);
-	},
-	_onFocus: function (e)
-	{
-		this.element.find(".ibx-default-ctrl-focus").focus();
 	},
 	_destroy: function ()
 	{
