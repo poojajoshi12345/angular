@@ -443,9 +443,9 @@ $.widget("ibi.ibxVMenuButton", $.ibi.ibxMenuButton,
 {
 	options:{position:{at:"right top"}},
 	_widgetClass: "ibx-vmenu-button",
-	_onDoClickEvent:function(e)
+	_onKeyEvent:function(e)
 	{
-		$.ibi.ibxButtonSimple.prototype._onDoClickEvent.call(this, e);
+		$.ibi.ibxButtonSimple.prototype._onKeyEvent.call(this, e);
 		if(e.keyCode == $.ui.keyCode.RIGHT)
 		{
 			this._onClick(e);
