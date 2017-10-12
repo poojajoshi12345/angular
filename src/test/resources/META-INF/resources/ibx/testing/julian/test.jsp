@@ -85,10 +85,11 @@
 		</style>
 	</head>
 	<body class="ibx-root">
+		<div tabIndex="0" data-ibx-type="ibxHSlider"></div>
+		
 		<button tabIndex="0">Julian</button>
 		<div tabIndex="0" data-ibx-type="ibxButton">Press Me!</div>
 
-		<div tabIndex="0" data-ibx-type="ibxSlider"></div>
 
 		<div class="test" tabIndex="0" data-ibx-type="ibxMenuButton">File
 			<div data-ibx-type="ibxMenu">
