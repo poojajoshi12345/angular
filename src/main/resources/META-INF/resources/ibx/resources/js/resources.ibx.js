@@ -11,8 +11,8 @@ function ibxResourceManager()
 	
 	this.loadedBundles = {};
 	this.loadedFiles = {};
-	this.language = "IBX_LAN_DEFAULT";
-	this.strings = {"IBX_LAN_DEFAULT":{}};
+	this.language = document.documentElement.getAttribute("lan");
+	this.strings = {"ibx_default":{}};
 
 	this.setContextPath(ibx.getPath());//default to the global ibx context path.
 }
@@ -43,7 +43,7 @@ _p.language = null;
 _p.strings = null;
 _p.getString = function(id, def, language)
 {
-	language = language || this.language || "IBX_LAN_DEFAULT";
+	language = language || this.language || "ibx_default";
 	if(!this.strings[language][id] === undefined)
 		console.warn("ibx string not found, id:", id);
 	return this.strings[language][id] || def || this.missingString;
