@@ -11,7 +11,7 @@ function ibxResourceManager()
 	
 	this.loadedBundles = {};
 	this.loadedFiles = {};
-	this.language = document.documentElement.getAttribute("lan");
+	this.language = document.documentElement.getAttribute("lang");
 	this.strings = {"ibx_default":{}};
 
 	this.setContextPath(ibx.getPath());//default to the global ibx context path.
