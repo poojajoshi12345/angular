@@ -169,21 +169,23 @@ $.widget("ibi.ibxSlider", $.ibi.ibxGrid,
 	_keyRepeat: false,
 	_onSliderKeyUp : function (e)
 	{
-		this._trigger("end", null, this.info());
-		this._keyRepeat = false;
+		if (e.keyCode == 37 || e.keyCode == 38 || e.keyCode == 39 || e.keyCode == 40)
+		{
+			this._trigger("end", null, this.info());
+			this._keyRepeat = false;
+		}
 	},
 	_onSliderKeyDown : function (e)
 	{
-		if (!this._keyRepeat)
-			this._trigger("start", null, this.info());
-		this._keyRepeat = true;
 		
+		var isSlide = false;
 		if (e.keyCode == 37 || e.keyCode == 38) // left or up - decrease position
 		{
 			e.stopPropagation();
 			e.preventDefault();
 			this._activeSlider = $(e.target);
 			this._stepSlider(true);
+			isSlide = true;
 		}
 		else if (e.keyCode == 39 || e.keyCode == 40) // right or down - increase position
 		{
@@ -191,6 +193,14 @@ $.widget("ibi.ibxSlider", $.ibi.ibxGrid,
 			e.preventDefault();
 			this._activeSlider = $(e.target);
 			this._stepSlider(false);
+			isSlide = true;
+		}
+
+		if (isSlide)
+		{
+			if (!this._keyRepeat)
+				this._trigger("start", null, this.info());
+			this._keyRepeat = true;
 		}
 	},
 	_posMarker: function (e, value, min, max)
