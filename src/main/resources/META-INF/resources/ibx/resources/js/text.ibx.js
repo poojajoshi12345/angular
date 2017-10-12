@@ -47,8 +47,8 @@ $.widget("ibi.ibxTextField", $.ibi.ibxFlexBox,
 	},
 	_setAccessibility:function(accessible)
 	{
+		accessible ? this._textInput.attr("aria-labelledby", this.options.aria.labelledby) : this._textInput.removeAttr("aria-labelledby");
 		this._super(accessible);
-		accessible ? this._textInput.attr("aria-labelledby", this.options.aria.labelledBy) : this._textInput.removeAttr("aria-labelledby");
 	},
 	_setValue: function (value, bFormat)
 	{

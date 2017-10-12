@@ -25,6 +25,16 @@ $.widget("ibi.ibxSlider", $.ibi.ibxGrid,
 			"cols": "auto 1fr auto",
 			"rows": "auto 1fr auto",
 			"align": "stretch",
+
+			"aria":
+			{
+				"role":"slider",
+				"orientation":"horizontal",
+				"valuemin":null,
+				"valuemax":null,
+				"valuenow":null,
+				"valuetext":null
+			}
 		},
 	_widgetClass: "ibx-slider",
 	_create: function ()
@@ -49,6 +59,16 @@ $.widget("ibi.ibxSlider", $.ibi.ibxGrid,
 		this._slider.on("keyup", this._onSliderKeyUp.bind(this));
 		
 		window.setTimeout(this._initSlider.bind(this), 1);
+	},
+	_setAccessibility:function(accessible)
+	{
+		var options = this.options;
+		var aria = options.aria;
+		aria.valuemin = options.min;
+		aria.valuemax = options.max;
+		aria.valuenow = options.value;
+		aria.valuetext = this._labelValue.ibxWidget("option", "text");
+		this._super(accessible);
 	},
 	_init: function ()
 	{
@@ -492,18 +512,19 @@ $.widget("ibi.ibxSlider", $.ibi.ibxGrid,
 	}
 });
 
-$.widget("ibi.ibxHSlider", $.ibi.ibxSlider, { options: { orientation: "horizontal" } });
-$.widget("ibi.ibxVSlider", $.ibi.ibxSlider, { options: { orientation: "vertical" } });
+$.widget("ibi.ibxHSlider", $.ibi.ibxSlider, { options: { orientation: "horizontal"} });
+$.widget("ibi.ibxVSlider", $.ibi.ibxSlider, { options: { orientation: "vertical", aria:{orientation:"vertical"} } });
 
 
 $.widget("ibi.ibxRange", $.ibi.ibxSlider,
 {
 	options:
-		{
-			"value2": 0,
-			"lock2": false,
-			"markerShape2": "",
-		},
+	{
+		"value2": 0,
+		"lock2": false,
+		"markerShape2": "",
+		"aria":{"orientation":"horizontal"}
+	},
 	_widgetClass: "ibx-range",
 	_create: function ()
 	{
@@ -738,11 +759,14 @@ $.widget("ibi.ibxRange", $.ibi.ibxSlider,
 });
 
 $.widget("ibi.ibxHRange", $.ibi.ibxRange, { options: { orientation: "horizontal" } });
-$.widget("ibi.ibxVRange", $.ibi.ibxRange, { options: { orientation: "vertical" } });
-
+$.widget("ibi.ibxVRange", $.ibi.ibxRange, { options: { orientation: "vertical", aria:{orientation:"vertical"} } });
 
 $.widget("ibi.ibxLeftRange", $.ibi.ibxRange,
 {
+	options:
+	{
+		aria:{orientation:"horizontal"}
+	},
 	_create: function ()
 	{
 		this._super();
@@ -787,8 +811,8 @@ $.widget("ibi.ibxRightRange", $.ibi.ibxRange,
 
 $.widget("ibi.ibxHLeftRange", $.ibi.ibxLeftRange, { options: { orientation: "horizontal" } });
 $.widget("ibi.ibxHRightRange", $.ibi.ibxRightRange, { options: { orientation: "horizontal" } });
-$.widget("ibi.ibxVLeftRange", $.ibi.ibxLeftRange, { options: { orientation: "vertical" } });
-$.widget("ibi.ibxVRightRange", $.ibi.ibxRightRange, { options: { orientation: "vertical" } });
+$.widget("ibi.ibxVLeftRange", $.ibi.ibxLeftRange, { options: { orientation: "vertical", aria:{orientation:"vertical"} } });
+$.widget("ibi.ibxVRightRange", $.ibi.ibxRightRange, { options: { orientation: "vertical", aria:{orientation:"vertical"} } });
 
 
 //# sourceURL=slider.ibx.js

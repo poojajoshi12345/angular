@@ -26,8 +26,8 @@ $.widget("ibi.ibxWidget", $.Widget,
 			"accessible":false,
 			"role":null,
 			"label":null,
-			"labelledBy":null,
-			"describedBy":null,
+			"labelledby":null,
+			"describedby":null,
 		}
 	},
 	_widgetClass:"ibx-widget",
@@ -91,10 +91,15 @@ $.widget("ibi.ibxWidget", $.Widget,
 	_setAccessibility:function(accessible)
 	{
 		var options = this.options;
-		accessible ? this.element.attr("aria-label", options.aria.label) : this.element.removeAttr("aria-label");
-		accessible ? this.element.attr("aria-labelledby", options.aria.labelledBy) : this.element.removeAttr("aria-labelledby");
-		accessible ? this.element.attr("aria-describedby", options.aria.describedBy) : this.element.removeAttr("aria-describedby");
-		accessible ? this.element.attr("aria-disabled", options.disabled) : this.element.removeAttr("aria-disabled");
+		var aria = this.options.aria;
+		aria.disabled = options.disabled;
+		for(var key in aria)
+		{
+			if(key == "role" || key == "accessible")
+				continue;
+			var ariaAttr = "aria-" + key;
+			accessible ? this.element.attr(ariaAttr, aria[key]) : this.element.removeAttr(ariaAttr);
+		}
 	},
 	destroyed:function(){return this._destroyed;},
 	_destroyed:false,

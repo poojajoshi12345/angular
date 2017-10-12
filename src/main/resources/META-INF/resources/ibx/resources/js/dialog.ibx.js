@@ -48,8 +48,8 @@ $.widget("ibi.ibxDialog", $.ibi.ibxPopup,
 	_setAccessibility:function(accessible)
 	{
 		var aria = this.options.aria;
-		if(!aria.labelledBy)
-			aria.labelledBy = (accessible) ? this.caption.prop("id") : null;
+		if(!aria.labelledby)
+			aria.labelledby = this.caption.prop("id");
 		this._super(accessible);
 	},
 	_init:function()

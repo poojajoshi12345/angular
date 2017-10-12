@@ -13,7 +13,7 @@ $.widget("ibi.ibxButton", $.ibi.ibxLabel,
 	_create: function ()
 	{
 		this._super();
-		this.element.on("keydown", this._onKeyDown.bind(this));
+		this.element.on("keydown", this._onKeyEvent.bind(this));
 	},
 	_destroy: function ()
 	{
@@ -25,14 +25,10 @@ $.widget("ibi.ibxButton", $.ibi.ibxLabel,
 		if (typeof (value) === "undefined")
 			return false;
 	},
-	_onKeyDown: function (e)
+	_onKeyEvent: function (e)
 	{
-		if (e.keyCode === $.ui.keyCode.ENTER || e.keyCode === $.ui.keyCode.SPACE)
-		{
+		if(e.keyCode === $.ui.keyCode.ENTER || e.keyCode === $.ui.keyCode.SPACE)
 			this.element.trigger('click');
-			this.element.focus();
-			e.stopPropagation();
-		}
 	},
 	_refresh: function ()
 	{
@@ -100,7 +96,11 @@ $.widget("ibi.ibxCheckBox", $.ibi.ibxLabel,
 			"group": "",
 			"forId": "",
 			"userValue": "",
-			"aria":{"role":"checkbox"}
+			"aria":
+			{
+				"role":"checkbox",
+				"checked":false,
+			}
 		},
 	_widgetClass: "ibx-check-box",
 	_create: function ()
@@ -109,18 +109,18 @@ $.widget("ibi.ibxCheckBox", $.ibi.ibxLabel,
 		this._check = $('<input type="checkbox" class="ibx-native-input"></input>');
 		this.add(this._check, this.children()[0], true);
 		this.element.on("click", this._onClick.bind(this));
-		this.element.on("keydown", this._onKeyDown.bind(this));
+		this.element.on("keydown", this._onKeyEvent.bind(this));
 		this.element.on("focus", this._onFocus.bind(this))
+	},
+	_setAccessibility:function(accessible)
+	{
+		this.options.aria.checked = this.options.checked;
+		this._super(accessible);
 	},
 	_init: function ()
 	{
 		this._super();
 		this._trigger("set_form_value", null, { "elem": this.element, "value": this.options.checked ? this.options.userValue : "" });
-	},
-	_setAccessibility:function(accessible)
-	{
-		this._super(accessible);
-		accessible ? this.element.attr("aria-checked", this.options.checked) : this.element.removeAttr("aria-checked");
 	},
 	userValue: function (value)
 	{
@@ -155,14 +155,10 @@ $.widget("ibi.ibxCheckBox", $.ibi.ibxLabel,
 		}
 		this._super(key, value);
 	},
-	_onKeyDown: function (e)
+	_onKeyEvent: function (e)
 	{
-		if (e.keyCode === $.ui.keyCode.ENTER || e.keyCode === $.ui.keyCode.SPACE)
-		{
+		if(e.keyCode === $.ui.keyCode.ENTER || e.keyCode === $.ui.keyCode.SPACE)
 			this.element.trigger('click');
-			this.element.focus();
-			e.stopPropagation();
-		}
 	},
 	_onClick: function (e)
 	{

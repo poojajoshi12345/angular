@@ -34,19 +34,6 @@
 				{
 					$(".dlg").ibxWidget("open");
 				});
-
-				$(".test-btn").on("click", function(e)
-				{
-					var wnd = window.open("test.html");
-
-					var form = $("<form>");
-					var fields = 
-					{
-						"firstName":"Julian",
-						"lastName":"Hyman"
-					}
-					form.ibxForm({"action":"about:blank", "fields":fields}).ibxForm("submit",null);
-				});
 			}, null, true);
 		</script>
 		<style type="text/css">
@@ -98,6 +85,11 @@
 		</style>
 	</head>
 	<body class="ibx-root">
+		<button tabIndex="0">Julian</button>
+		<div tabIndex="0" data-ibx-type="ibxButton">Press Me!</div>
+
+		<div tabIndex="0" data-ibx-type="ibxSlider"></div>
+
 		<div class="test" tabIndex="0" data-ibx-type="ibxMenuButton">File
 			<div data-ibx-type="ibxMenu">
 				<div data-ibx-type="ibxMenuItem" data-ibxp-label-options='{"glyph":"fiber_new", "glyphClasses":"material-icons"}'>New</div>
@@ -123,10 +115,10 @@
 		</div>
 
 		<div id="txtFieldLabel" data-ibx-type="ibxLabel">Text Field Label:</div>
-		<div tabIndex="0" data-ibxp-disabled="false" data-ibx-type="ibxTextField" data-ibxp-aria.labelled-by="txtFieldLabel"></div>
+		<div tabIndex="0" data-ibxp-disabled="false" data-ibx-type="ibxTextField" data-ibxp-aria.labelledby="txtFieldLabel"></div>
 		
 		<div id="txtAreaLabel" data-ibx-type="ibxLabel">Text Area Label:</div>
-		<div tabIndex="0" data-ibxp-disabled="false" data-ibx-type="ibxTextArea" data-ibx-type="ibxTextField" data-ibxp-aria.labelled-by="txtAreaLabel"></div>
+		<div tabIndex="0" data-ibxp-disabled="false" data-ibx-type="ibxTextArea" data-ibx-type="ibxTextField" data-ibxp-aria.labelledby="txtAreaLabel"></div>
 
 		<div class="btn" tabIndex="0" data-ibx-type="ibxButton">Dialog</div>
 		<div class="dlg" data-ibx-type="ibxDialog" data-ibxp-destroy-on-close="false" data-ibxp-auto-size="false">
@@ -136,7 +128,5 @@
 			<div tabindex="0" class="txt-body" data-ibx-type="ibxTextArea"  data-ibxp-placeholder="Enter multiple line of text" data-ibxp-aria.labelled-by="txtBodyLabel" data-ibxp-aria.described-by="txtBodyLabel"></div>
 		</div>
 
-		<div class="test-btn" data-ibx-type="ibxButton">Submit</div>
-		<form data-ibx-type="ibxForm"></form>
 	</body>
 </html>
