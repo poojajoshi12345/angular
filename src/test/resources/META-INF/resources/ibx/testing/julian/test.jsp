@@ -83,7 +83,7 @@
 				flex:1 1 auto;
 			}
 
-			.h-slider.ibx-slider
+			.r-slider.ibx-slider, .h-slider.ibx-slider
 			{
 				width:200px;
 			}
@@ -91,9 +91,10 @@
 	</head>
 	<body class="ibx-root">
 		<div class="h-slider" tabIndex="0" data-ibx-type="ibxHSlider" data-ibxp-value-text-pos="end" data-ibxp-min-text-pos="center" data-ibxp-max-text-pos="center"></div>
+		<div class="r-slider" tabIndex="0" data-ibx-type="ibxHRange" data-ibx-options="{value:25, value2:75, valueTextPos:'end', minTextPos:'center', maxTextPos:'center'}"></div>
 		
-		<button tabIndex="0">Julian</button>
-		<div tabIndex="0" data-ibx-type="ibxButton">Press Me!</div>
+		<button tabIndex="0">Native</button>
+		<div tabIndex="0" data-ibx-type="ibxButton">IBX</div>
 
 
 		<div class="test" tabIndex="0" data-ibx-type="ibxMenuButton">File
@@ -108,18 +109,18 @@
 			</div>
 		</div>
 
-		<div tabIndex="0" data-ibx-type="ibxSwitch" data-ibxp-aria.label="Switch"></div>
+		<div tabIndex="0" data-ibx-type="ibxSwitch" data-ibxp-aria.label="IBX switch"></div>
 
 		<div tabIndex="0" data-ibx-type="ibxWidget" data-ibxp-nav-key-root="true" data-ibxp-nav-key-dir="both">
 			<div tabIndex="-1" data-ibx-type="ibxCheckBoxSimple">Check 1</div>
 			<div tabIndex="-1" data-ibx-type="ibxCheckBoxSimple">Check 2</div>
 			<div tabIndex="-1" data-ibx-type="ibxCheckBoxSimple">Check 3</div>
-			<div tabIndex="0" data-ibx-type="ibxWidget" data-ibxp-nav-key-root="true" data-ibxp-nav-key-dir="both">
-				<div data-ibx-type="ibxRadioGroup" data-ibxp-name="rgTest"></div>
-				<div tabIndex="-1" data-ibx-type="ibxRadioButtonSimple" data-ibxp-group="rgTest">Radio 1</div>
-				<div tabIndex="-1" data-ibx-type="ibxRadioButtonSimple" data-ibxp-group="rgTest">Radio 2</div>
-				<div tabIndex="-1" data-ibx-type="ibxRadioButtonSimple" data-ibxp-group="rgTest">Radio 3</div>
-			</div>
+		</div>
+		<div tabIndex="-1" data-ibx-type="ibxWidget" data-ibxp-nav-key-root="true" data-ibxp-nav-key-dir="both">
+			<div data-ibx-type="ibxRadioGroup" data-ibxp-name="rgTest"></div>
+			<div tabIndex="-1" data-ibx-type="ibxRadioButtonSimple" data-ibxp-group="rgTest">Radio 1</div>
+			<div tabIndex="-1" data-ibx-type="ibxRadioButtonSimple" data-ibxp-group="rgTest">Radio 2</div>
+			<div tabIndex="-1" data-ibx-type="ibxRadioButtonSimple" data-ibxp-group="rgTest">Radio 3</div>
 		</div>
 
 		<div id="txtFieldLabel" data-ibx-type="ibxLabel">Text Field Label:</div>

@@ -31,6 +31,9 @@ $Revision$:-->
 				"IBX_DLG_CAPTION_INF":"Information",
 				"IBX_DLG_CAPTION_QST":"Question",
 
+				"IBX_STR_508_SLIDER_VAL":"Current value {1}, min {2} max {3}",
+				"IBX_STR_508_RANGE_VAL":"Start value {1}, end value {2}, min {3} max {4}",
+
 				"IDS_IBFS_ERROR_UNKNOWN":"Unknown webFOCUS communications error.",
 				"IDS_IBFS_ERROR_DETAILS_LABEL":"Details:",
 				"IDS_IBFS_ERROR_DETAILS_PARMS":"Parameters:",

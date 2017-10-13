@@ -49,7 +49,7 @@ $.widget("ibi.ibxSlider", $.ibi.ibxGrid,
 
 		this._sliderBody = $('<div class="ibx-slider-body">');
 		this._sliderWrapper.append(this._sliderBody);
-		this._slider = $('<div class="ibx-default-ctrl-focus ibx-slider-marker ibx-slider-marker-one" tabIndex="1">');
+		this._slider = $('<div class="ibx-slider-marker ibx-slider-marker-one" tabIndex="-1">');
 		this._slider.hide();
 		this._sliderWrapper.append(this._slider);
 		this.element.append(this._sliderWrapper);
@@ -68,7 +68,7 @@ $.widget("ibi.ibxSlider", $.ibi.ibxGrid,
 		aria.valuemin = options.min;
 		aria.valuemax = options.max;
 		aria.valuenow = options.value;
-		aria.valuetext = this._labelValue.ibxWidget("option", "text");
+		aria.valuetext = sformat(ibx.resourceMgr.getString("IBX_STR_508_SLIDER_VAL"), options.value, options.min, options.max);
 
 		this._labelMin.ibxWidget("option", "aria.hidden", accessible ? true : null);
 		this._labelMax.ibxWidget("option", "aria.hidden", accessible ? true : null);
@@ -183,26 +183,28 @@ $.widget("ibi.ibxSlider", $.ibi.ibxGrid,
 	},
 	_onSliderKeyDown : function (e)
 	{
-		
 		var isSlide = false;
-		if (e.keyCode == 37 || e.keyCode == 38) // left or up - decrease position
+		if(!e.shiftKey)
 		{
-			e.stopPropagation();
-			e.preventDefault();
-			this._activeSlider = $(e.target);
-			this._stepSlider(true);
-			isSlide = true;
+			if(e.keyCode == $.ui.keyCode.LEFT || e.keyCode == $.ui.keyCode.DOWN) //decrease position
+			{
+				e.stopPropagation();
+				e.preventDefault();
+				this._activeSlider = $(e.target);
+				this._stepSlider(true);
+				isSlide = true;
+			}
+			else
+			if (e.keyCode == $.ui.keyCode.RIGHT || e.keyCode == $.ui.keyCode.UP) //increase position
+			{
+				e.stopPropagation();
+				e.preventDefault();
+				this._activeSlider = $(e.target);
+				this._stepSlider(false);
+				isSlide = true;
+			}
 		}
-		else if (e.keyCode == 39 || e.keyCode == 40) // right or down - increase position
-		{
-			e.stopPropagation();
-			e.preventDefault();
-			this._activeSlider = $(e.target);
-			this._stepSlider(false);
-			isSlide = true;
-		}
-
-		if (isSlide)
+		if(isSlide)
 		{
 			if (!this._keyRepeat)
 				this._trigger("start", null, this.info());
@@ -529,7 +531,7 @@ $.widget("ibi.ibxSlider", $.ibi.ibxGrid,
 });
 
 $.widget("ibi.ibxHSlider", $.ibi.ibxSlider, { options: { orientation: "horizontal"} });
-$.widget("ibi.ibxVSlider", $.ibi.ibxSlider, { options: { orientation: "vertical", aria:{orientation:"vertical"} } });
+$.widget("ibi.ibxVSlider", $.ibi.ibxSlider, { options: { orientation: "vertical", navKeyDir:"vertical", aria:{orientation:"vertical"} } });
 
 
 $.widget("ibi.ibxRange", $.ibi.ibxSlider,
@@ -547,7 +549,7 @@ $.widget("ibi.ibxRange", $.ibi.ibxSlider,
 		this._super();
 		this._sliderRangeBody = $('<div class="ibx-slider-range-body">');
 		this._sliderRangeBody.insertBefore(this._slider);
-		this._slider2 = $('<div class="ibx-default-ctrl-focus ibx-slider-marker ibx-slider-marker-two" tabIndex="1">');
+		this._slider2 = $('<div class="ibx-slider-marker ibx-slider-marker-two" tabIndex="-1">');
 		this._slider2.hide();
 		this._sliderWrapper.append(this._slider2);
 		this._slider2.on("keydown", this._onSliderKeyDown.bind(this));
@@ -564,6 +566,22 @@ $.widget("ibi.ibxRange", $.ibi.ibxSlider,
 		if (options.value2 < options.value)
 			options.value2 = options.value;
 		options.value2 = this._adjustStep(options.value2, options.value, options.max, options.step);
+	},
+	_setAccessibility:function(accessible)
+	{
+		var options = this.options;
+		var aria = options.aria;
+		aria.valuemin = options.min;
+		aria.valuemax = options.max;
+		aria.valuenow = options.value;
+		aria.valuetext = sformat(ibx.resourceMgr.getString("IBX_STR_508_RANGE_VAL"), options.value, options.value2, options.min, options.max);
+
+		this._labelMin.ibxWidget("option", "aria.hidden", accessible ? true : null);
+		this._labelMax.ibxWidget("option", "aria.hidden", accessible ? true : null);
+		this._labelValue.ibxWidget("option", "aria.hidden", accessible ? true : null);
+
+		//don't call super, as it will overwrite our settings...go to the super parent.
+		$.ibi.ibxGrid.prototype._setAccessibility.call(this, accessible);
 	},
 	_initSlider: function ()
 	{
@@ -775,7 +793,7 @@ $.widget("ibi.ibxRange", $.ibi.ibxSlider,
 });
 
 $.widget("ibi.ibxHRange", $.ibi.ibxRange, { options: { orientation: "horizontal" } });
-$.widget("ibi.ibxVRange", $.ibi.ibxRange, { options: { orientation: "vertical", aria:{orientation:"vertical"} } });
+$.widget("ibi.ibxVRange", $.ibi.ibxRange, { options: { orientation: "vertical", navKeyDir:"vertical", aria:{orientation:"vertical"} } });
 
 $.widget("ibi.ibxLeftRange", $.ibi.ibxRange,
 {
@@ -827,8 +845,8 @@ $.widget("ibi.ibxRightRange", $.ibi.ibxRange,
 
 $.widget("ibi.ibxHLeftRange", $.ibi.ibxLeftRange, { options: { orientation: "horizontal" } });
 $.widget("ibi.ibxHRightRange", $.ibi.ibxRightRange, { options: { orientation: "horizontal" } });
-$.widget("ibi.ibxVLeftRange", $.ibi.ibxLeftRange, { options: { orientation: "vertical", aria:{orientation:"vertical"} } });
-$.widget("ibi.ibxVRightRange", $.ibi.ibxRightRange, { options: { orientation: "vertical", aria:{orientation:"vertical"} } });
+$.widget("ibi.ibxVLeftRange", $.ibi.ibxLeftRange, { options: { orientation: "vertical", navKeyDir:"vertical", aria:{orientation:"vertical"} } });
+$.widget("ibi.ibxVRightRange", $.ibi.ibxRightRange, { options: { orientation: "vertical", navKeyDir:"vertical", aria:{orientation:"vertical"} } });
 
 
 //# sourceURL=slider.ibx.js
