@@ -80,27 +80,27 @@ $.widget("ibi.ibxWidget", $.Widget,
 		this.element.removeData("_ibxPrecreateMemberVariables");
 		this._super();
 	},
+	ARIA_PROPS_IGNORE:{"role":true, "accessible":true},
 	setAccessibility:function(accessible)
 	{
-		var options = this.options;
-		accessible = (accessible === undefined) ? options.aria.accessible : accessible;
-		options.aria.accessible = accessible;
-		accessible ? this.element.ibxAriaId().attr("role", options.aria.role) : this.element.removeIbxAriaId().removeAttr("role", options.aria.role);
-		this._setAccessibility(accessible);
-	},
-	ARIA_IGNORE:{"role":true, "accessible":true},
-	_setAccessibility:function(accessible)
-	{
-		var options = this.options;
-		var aria = this.options.aria;
-		aria.disabled = options.disabled;
+		var aria = $.extend(true, {}, this.options.aria);
+		aria.disabled = this.options.disabled;
+		aria.accessible = accessible = (accessible === undefined) ? aria.accessible : accessible;
+		accessible ? this.element.ibxAriaId().attr("role", aria.role) : this.element.removeIbxAriaId().removeAttr("role", aria.role);
+
+		aria = this._setAccessibility(accessible, aria);
 		for(var key in aria)
 		{
-			if(this.ARIA_IGNORE[key])
+			if(this.ARIA_PROPS_IGNORE[key])
 				continue;
 			var ariaAttr = "aria-" + key;
 			accessible ? this.element.attr(ariaAttr, aria[key]) : this.element.removeAttr(ariaAttr);
 		}
+	},
+	_setAccessibility:function(accessible, aria)
+	{
+		//do nothing.
+		return aria
 	},
 	destroyed:function(){return this._destroyed;},
 	_destroyed:false,
@@ -126,7 +126,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 		this.element.removeAttr("data-ibx-type");
 		this.element.removeClass(this.options.class);
 		this._adjustWidgetClasses(false);
-		this._setAccessibility(false);
+		this.setAccessibility(false);
 		this._created = false;
 		this._destroyed = true;
 		this._trigger("destroy");
@@ -164,7 +164,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 			{
 				if(this.options.navKeyAutoFocus && this.element.is(target))
 				{
-					var children = this.children();
+					var children = this.element.children();
 					children.first().focus();//focus first by default.
 					children.filter(".ibx-nav-item-active").focus();//then focus first active item if possible.
 				}
@@ -437,6 +437,12 @@ $.ibi.ibxWidget.navKeys = [$.ui.keyCode.LEFT, $.ui.keyCode.RIGHT, $.ui.keyCode.U
 			this._onDragKeyEventBound = this._onDragKeyEvent.bind(this);
 			this._createOrig.apply(this, arguments);
 		},
+		_destroyOrig:$.ibi.ibxWidget.prototype._destroy,
+		_destroy:function()
+		{
+			this._destroyOrig.apply(this, arguments);
+			this.element.removeClass("ibx-draggable");
+		},
 		getDefaultDragImage:function(el)
 		{
 			//clone the node and make sure the width/height are preserved so it lays out correctly.
@@ -614,8 +620,7 @@ $.ibi.ibxWidget.navKeys = [$.ui.keyCode.LEFT, $.ui.keyCode.RIGHT, $.ui.keyCode.U
 			(options.draggable) ? this.element.on("keydown", this._onDragKeyEventBound) : this.element.off("keydown", this._onDragKeyEventBound);
 			(options.nativeDropTarget) ? this.element.on("dragover dragleave drop", this._onDragMouseEventBound) : this.element.off("dragover dragleave drop", this._onDragMouseEventBound);
 
-			this.element.toggleClass("ibx-draggable", options.draggable);
-			this.element.toggleClass("ibx-droppable", options.droppable);
+			this.element.toggleClass("ibx-draggable", !!options.draggable);
 		}
 	};
 

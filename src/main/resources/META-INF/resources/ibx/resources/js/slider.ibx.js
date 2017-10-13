@@ -61,10 +61,10 @@ $.widget("ibi.ibxSlider", $.ibi.ibxGrid,
 		
 		window.setTimeout(this._initSlider.bind(this), 1);
 	},
-	_setAccessibility:function(accessible)
+	_setAccessibility:function(accessible, aria)
 	{
 		var options = this.options;
-		var aria = options.aria;
+		aria = this._super(accessible, aria);
 		aria.valuemin = options.min;
 		aria.valuemax = options.max;
 		aria.valuenow = options.value;
@@ -73,8 +73,7 @@ $.widget("ibi.ibxSlider", $.ibi.ibxGrid,
 		this._labelMin.ibxWidget("option", "aria.hidden", accessible ? true : null);
 		this._labelMax.ibxWidget("option", "aria.hidden", accessible ? true : null);
 		this._labelValue.ibxWidget("option", "aria.hidden", accessible ? true : null);
-
-		this._super(accessible);
+		return aria;
 	},
 	_init: function ()
 	{
@@ -183,9 +182,9 @@ $.widget("ibi.ibxSlider", $.ibi.ibxGrid,
 	},
 	_onSliderKeyDown : function (e)
 	{
-		var isSlide = false;
-		if(!e.shiftKey)
+		if(!e.ctrlKey)//ctrl means let base do it's thing...(navKeyRoot use)
 		{
+			var isSlide = false;
 			if(e.keyCode == $.ui.keyCode.LEFT || e.keyCode == $.ui.keyCode.DOWN) //decrease position
 			{
 				e.stopPropagation();
@@ -203,12 +202,13 @@ $.widget("ibi.ibxSlider", $.ibi.ibxGrid,
 				this._stepSlider(false);
 				isSlide = true;
 			}
-		}
-		if(isSlide)
-		{
-			if (!this._keyRepeat)
-				this._trigger("start", null, this.info());
-			this._keyRepeat = true;
+
+			if(isSlide)
+			{
+				if (!this._keyRepeat)
+					this._trigger("start", null, this.info());
+				this._keyRepeat = true;
+			}
 		}
 	},
 	_posMarker: function (e, value, min, max)
@@ -567,21 +567,12 @@ $.widget("ibi.ibxRange", $.ibi.ibxSlider,
 			options.value2 = options.value;
 		options.value2 = this._adjustStep(options.value2, options.value, options.max, options.step);
 	},
-	_setAccessibility:function(accessible)
+	_setAccessibility:function(accessible, aria)
 	{
+		this._super(accessible, aria);
 		var options = this.options;
-		var aria = options.aria;
-		aria.valuemin = options.min;
-		aria.valuemax = options.max;
-		aria.valuenow = options.value;
 		aria.valuetext = sformat(ibx.resourceMgr.getString("IBX_STR_508_RANGE_VAL"), options.value, options.value2, options.min, options.max);
-
-		this._labelMin.ibxWidget("option", "aria.hidden", accessible ? true : null);
-		this._labelMax.ibxWidget("option", "aria.hidden", accessible ? true : null);
-		this._labelValue.ibxWidget("option", "aria.hidden", accessible ? true : null);
-
-		//don't call super, as it will overwrite our settings...go to the super parent.
-		$.ibi.ibxGrid.prototype._setAccessibility.call(this, accessible);
+		return aria;
 	},
 	_initSlider: function ()
 	{

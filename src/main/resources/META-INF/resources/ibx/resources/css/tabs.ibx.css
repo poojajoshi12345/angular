@@ -8,17 +8,18 @@
 }
 
 .ibx-tab-page {
+	position:relative;
     flex: 1 1 auto;
     overflow: auto;
     -webkit-overflow-scrolling: touch;
 }
 
-    .ibx-tab-page.tpg-hidden {
-        display: none;
-    }
+.ibx-tab-page.tpg-hidden {
+    display: none;
+}
 
-    .ibx-tab-page.tpg-selected {
-    }
+.ibx-tab-page.tpg-selected {
+}
 
 /* Horizontal tab */
 

@@ -39,10 +39,11 @@ $.widget("ibi.ibxTextArea", $.ibi.ibxFlexBox,
 		this.element.append(this._textInput).on("focus", this._onWidgetFocus.bind(this)).on("input", this._onInput.bind(this)).on("keydown", this._onWidgetKeyDown.bind(this));
 		this._setValue(this.options.text, true);
 	},
-	_setAccessibility:function(accessible)
+	_setAccessibility:function(accessible, aria)
 	{
-		accessible ? this._textInput.attr("aria-labelledby", this.options.aria.labelledby) : this._textInput.removeAttr("aria-labelledby");
-		this._super(accessible);
+		aria = this._super(accessible, aria);
+		accessible ? this._textInput.attr("aria-labelledby", aria.labelledby) : this._textInput.removeAttr("aria-labelledby");
+		return aria;
 	},
 	_setOption: function (key, value)
 	{

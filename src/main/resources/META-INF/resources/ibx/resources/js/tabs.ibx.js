@@ -8,15 +8,15 @@ $.widget("ibi.ibxTabPane", $.ibi.ibxFlexBox,
 {
 	options:
 	{
+		navKeyRoot:true,
+		navKeyAutoFocus:true,
 		position: "top",
 		direction: "column",
 		align: "stretch",
 		wrap: "false",
 		selected: "",
-		tabBarOptions:
-		{
-			justify: "flex-start",
-		},
+		tabBarOptions:{justify: "flex-start"},
+		aria:{}
 	},
 	_widgetClass: "ibx-tab-pane",
 	_tabBar: null,
@@ -24,6 +24,11 @@ $.widget("ibi.ibxTabPane", $.ibi.ibxFlexBox,
 	{
 		this._super();
 		this._createTabBar();
+	},
+	_setAccessibility:function(accessible, aria)
+	{
+		aria = this._super(accessible, aria);
+		return aria;
 	},
 	_destroy: function ()
 	{
@@ -133,7 +138,8 @@ $.widget("ibi.ibxTabPane", $.ibi.ibxFlexBox,
 				break;
 
 		}
-		this._tabBar.on("ibx_change", this._onTabChange.bind(this));
+
+		this._tabBar.addClass("ibx-nav-item-active").on("ibx_change", this._onTabChange.bind(this)).attr("tabIndex", -1);
 		this.element.prepend(this._tabBar);
 	},
 	_removeTabBar: function ()
@@ -179,10 +185,10 @@ $.widget("ibi.ibxTabPage", $.ibi.ibxWidget,
 {
 	options:
 	{
-		role:"tabpanel",
 		focusRoot:false,
 		selected: false,
 		tabOptions:{},
+		aria:{role:"tabpanel"}
 	},
 	_widgetClass:"ibx-tab-page",
 	getValue: $.noop,
@@ -202,7 +208,6 @@ $.widget("ibi.ibxTabPage", $.ibi.ibxWidget,
 	},
 	_setAccessible:function(accessible)
 	{
-		accessible ? this._tabButton.attr("aria-controls", this.element.prop("id")) : this._tabButton.removeAttr("aria-controls");
 		this._super(accessible);
 	},
 	_destroy:function()
@@ -222,7 +227,6 @@ $.widget("ibi.ibxTabPage", $.ibi.ibxWidget,
 	button: function () { return this._tabButton; },
 	_onPageFocus: function (e)
 	{
-		this._tabButton.focus();
 	},
 	checked: function (bChecked)
 	{
@@ -254,8 +258,8 @@ $.widget("ibi.ibxTabButton", $.ibi.ibxRadioButton,
 {
 	options:
 		{
-			role:"tab",
 			tabPage: null,
+			aria:{role:"tab"}
 		},
 	_widgetClass: "ibx-tab-button",
 	_create: function ()
@@ -286,11 +290,11 @@ $.widget("ibi.ibxTabGroup", $.ibi.ibxButtonGroup,
 {
 	options:
 	{
-		role:"tablist",
 		navKeyRoot:true,
 		position: "top",
 		groupSelection: true,
 		wrap: true,
+		aria:{role:"tablist"}
 	},
 	_widgetClass:"ibx-tab-group",
 	_create: function ()

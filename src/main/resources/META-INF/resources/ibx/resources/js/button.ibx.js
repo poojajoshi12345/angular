@@ -111,10 +111,11 @@ $.widget("ibi.ibxCheckBox", $.ibi.ibxLabel,
 		this.element.on("click", this._onClick.bind(this));
 		this.element.on("keydown", this._onKeyEvent.bind(this));
 	},
-	_setAccessibility:function(accessible)
+	_setAccessibility:function(accessible, aria)
 	{
-		this.options.aria.checked = this.options.checked;
-		this._super(accessible);
+		aria = this._super(accessible, aria);
+		aria.checked = this.options.checked;
+		return aria;
 	},
 	_init: function ()
 	{

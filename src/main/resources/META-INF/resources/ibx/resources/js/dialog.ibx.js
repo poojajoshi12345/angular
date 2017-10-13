@@ -45,12 +45,12 @@ $.widget("ibi.ibxDialog", $.ibi.ibxPopup,
 		this.btnCancel.on("click", this.close.bind(this, "cancel"));
 		this.btnOK.on("click", this.close.bind(this, "ok"));
 	},
-	_setAccessibility:function(accessible)
+	_setAccessibility:function(accessible, aria)
 	{
-		var aria = this.options.aria;
+		aria = this._super(accessible, aria);
 		if(!aria.labelledby)
 			aria.labelledby = this.caption.prop("id");
-		this._super(accessible);
+		return aria;
 	},
 	_init:function()
 	{

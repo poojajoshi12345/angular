@@ -129,16 +129,15 @@ $.widget("ibi.ibxMenuItem", $.ibi.ibxHBox,
 		});
 		this.addSubMenu(this.element.children(".ibx-menu"));
 	},
-	_setAccessibility:function(accessible)
+	_setAccessibility:function(accessible, aria)
 	{
-		var subMenu = this.subMenu();
-		var aria = this.options.aria;
+		aria = this._super(accessible, aria);
 		if(!aria.labelledby)
 			aria.labelledby = (accessible) ? this._label.prop("id") : null;
-		aria.haspopup = !!subMenu;
+		aria.haspopup = !!this.subMenu();
 		(accessible) ? this._startMarker.attr("aria-hidden", true) : this._startMarker.removeAttr("aria-hidden");
 		(accessible) ? this._endMarker.attr("aria-hidden", true) : this._endMarker.removeAttr("aria-hidden");
-		this._super(accessible);
+		return aria;
 	},
 	_onMenuItemKeyEvent:function(e)
 	{
@@ -266,10 +265,11 @@ $.widget("ibi.ibxCheckMenuItem", $.ibi.ibxMenuItem,
 		this._super();
 		this.element.prepend(this._startMarker);
 	},
-	_setAccessibility:function(accessible)
+	_setAccessibility:function(accessible, aria)
 	{
-		this.options.aria.checked = this.options.checked;
-		this._super(accessible);
+		aria = this._super(accessible, aria);
+		aria.checked = this.options.checked;
+		return aria;
 	},
 	_onMenuItemClick:function(e)
 	{
@@ -407,10 +407,11 @@ $.widget("ibi.ibxMenuButton", $.ibi.ibxButtonSimple,
 		this.element.on({"click": this._onClick.bind(this), "keydown": this._onKeyEvent.bind(this)});
 		this.options.menu = this.element.children(".ibx-menu").appendTo("body");
 	},
-	_setAccessibility:function(accessible)
+	_setAccessibility:function(accessible, aria)
 	{
-		this.options.aria.haspopup = this.options.menu.length;
-		this._super(accessible);
+		aria = this._super(accessible, aria);
+		aria.haspopup = this.options.menu.length;
+		return aria;
 	},
 	_onClick:function(e)
 	{

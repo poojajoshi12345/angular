@@ -45,10 +45,11 @@ $.widget("ibi.ibxTextField", $.ibi.ibxFlexBox,
 				this._setAutoSize();
 		}.bind(this));
 	},
-	_setAccessibility:function(accessible)
+	_setAccessibility:function(accessible, aria)
 	{
-		accessible ? this._textInput.attr("aria-labelledby", this.options.aria.labelledby) : this._textInput.removeAttr("aria-labelledby");
-		this._super(accessible);
+		aria = this._super(accessible, aria);
+		accessible ? this._textInput.attr("aria-labelledby", aria.labelledby) : this._textInput.removeAttr("aria-labelledby");
+		return aria;
 	},
 	_setValue: function (value, bFormat)
 	{
