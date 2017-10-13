@@ -94,7 +94,7 @@ $.widget("ibi.ibxSpinner", $.ibi.ibxTextField,
 		this._trigger("change", null, this._getInfo());
 		this._trigger("set_form_value", null, { "elem": this.element, "value": value });
 	},
-	_onKeyDown: function (e)
+	_onWidgetKeyDown: function (e)
 	{
 		this._super(e);
 
@@ -109,7 +109,7 @@ $.widget("ibi.ibxSpinner", $.ibi.ibxTextField,
 			e.preventDefault();
 		}
 	},
-	_onBlur: function (e)
+	_onCtrlBlur: function (e)
 	{
 		var value = this._textInput.val();
 		var numValue = parseInt(value, 10);

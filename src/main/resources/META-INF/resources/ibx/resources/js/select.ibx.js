@@ -17,6 +17,7 @@ $.widget("ibi.ibxSelect", $.ibi.ibxTextField,
 			"spellCheck": "false",
 			"listClasses": "",
 			"filter": false,
+			"align": "start",
 		},
 	_widgetClass: "ibx-select",
 	_create: function ()
@@ -336,7 +337,7 @@ $.widget("ibi.ibxSelect", $.ibi.ibxTextField,
 		}
 		e.stopPropagation();
 	},
-	_onBlur: function (event)
+	_onCtrlBlur: function (event)
 	{
 		var newVal = this._textInput.val();
 		if (newVal != this._focusVal)
