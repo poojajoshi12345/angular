@@ -55,7 +55,6 @@ $.widget("ibi.ibxLabel", $.ibi.ibxFlexBox,
 	{
 		aria = this._super(accessible, aria);
 		(accessible) ? this._glyph.attr("aria-hidden", true) : this._glyph.removeAttr("aria-hidden");
-		aria.labelledby = aria.labelledby || this.element.prop("id");
 		return aria;
 	},
 	_refresh:function()
