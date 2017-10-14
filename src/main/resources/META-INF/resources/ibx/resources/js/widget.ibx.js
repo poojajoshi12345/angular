@@ -268,6 +268,9 @@ $.widget("ibi.ibxWidget", $.Widget,
 				e.stopPropagation();
 			}
 		}
+		else
+		if(options.navKeyRoot && e.keyCode == $.ui.keyCode.ESCAPE)
+			this.element.focus();//on escape with a navkeyroot, focus the parent.
 	},
 	_onWidgetContextMenu:function(e)
 	{
