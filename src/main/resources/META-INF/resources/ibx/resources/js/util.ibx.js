@@ -72,7 +72,7 @@ jQuery.expr[":"]["visible"] = function(elem)
 jQuery.expr[":"]["ibxFocusable"] = function(elem)
 {
 	var el = $(elem);
-	var tabIndex = el.attr("tabIndex")
+	var tabIndex = parseInt(el.attr("tabIndex"), 10);
 	var visible = (el.css("visibility") != "hidden" && el.css("display") != "none");
 	var ret = ( ((tabIndex >= 0) || (tabIndex == -1)) && visible);
 	return ret;
