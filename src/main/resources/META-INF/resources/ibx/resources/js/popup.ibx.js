@@ -98,12 +98,13 @@ $.widget("ibi.ibxPopup", $.ibi.ibxWidget,
 	{
 		if(this._trigger("beforeclose", null, closeInfo))
 		{
-			if(this._elPrevActive)
-				this._elPrevActive.focus();
-			delete this._elPrevActive;
-
 			this.element.on("transitionend", function(closeInfo, e)
 			{
+				//refocus the previously active element.
+				if(this._elPrevActive)
+					this._elPrevActive.focus();
+				delete this._elPrevActive;
+
 				if(e.originalEvent.propertyName == "visibility" && !this.isOpen())
 				{
 					//remove the transition event listener.

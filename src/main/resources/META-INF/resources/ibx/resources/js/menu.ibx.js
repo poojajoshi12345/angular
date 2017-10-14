@@ -404,7 +404,7 @@ $.widget("ibi.ibxMenuButton", $.ibi.ibxButtonSimple,
 	{
 		this._super();
 		this.options.position.of = this.element[0];
-		this.element.on({"click": this._onClick.bind(this), "keydown": this._onKeyEvent.bind(this)});
+		this.element.on({"mousedown": this._onMenuButtonMouseDown.bind(this), "keydown": this._onMenuButtonKeyDown.bind(this)});
 		this.options.menu = this.element.children(".ibx-menu").appendTo("body");
 	},
 	_setAccessibility:function(accessible, aria)
@@ -413,7 +413,7 @@ $.widget("ibi.ibxMenuButton", $.ibi.ibxButtonSimple,
 		aria.haspopup = this.options.menu.length;
 		return aria;
 	},
-	_onClick:function(e)
+	_onMenuButtonMouseDown:function(e)
 	{
 		//[HOME-584]...my bad.
 		var options = this.options;
@@ -423,12 +423,11 @@ $.widget("ibi.ibxMenuButton", $.ibi.ibxButtonSimple,
 		var menu = event.menu || options.menu;
 		$(menu).ibxWidget("option", {position:options.position}).ibxWidget("open");
 	},
-	_onKeyEvent:function(e)
+	_onMenuButtonKeyDown:function(e)
 	{
-		this._super(e);
-		if(e.keyCode == $.ui.keyCode.DOWN)
+		if(e.keyCode == $.ui.keyCode.DOWN || e.keyCode == $.ui.keyCode.SPACE || e.keyCode == $.ui.keyCode.ENTER)
 		{
-			this._onClick(e);
+			this._onMenuButtonMouseDown(e);
 			e.preventDefault();
 		}
 	},
@@ -486,7 +485,7 @@ $.widget("ibi.ibxSplitMenuButton", $.ibi.ibxButtonSimple,
 
 		options.menuOptions.position.of = this.element;
 		var menu = this.element.children(".ibx-menu");
-		var menuBtn = this._menuBtn = $("<div>").append(menu).ibxMenuButton().on("click", this._onMenuBtnClick.bind(this));
+		var menuBtn = this._menuBtn = $("<div>").append(menu).ibxMenuButton().on("mousedown click", this._onMenuButtonMouseEvent.bind(this));
 		var separator = this._separator = $("<div class='split-separator'>");
 		this.element.append(separator, menuBtn).on({"click":this._onBtnClick.bind(this), "keydown":this._onBtnKeyDown.bind(this)});
 	},
@@ -503,13 +502,17 @@ $.widget("ibi.ibxSplitMenuButton", $.ibi.ibxButtonSimple,
 	_onBtnKeyDown:function(e)
 	{
 		if(e.keyCode == $.ui.keyCode.DOWN)
-			this._menuBtn.trigger("click");
+			this._menuBtn.trigger("mousedown");
 	},
-	_onMenuBtnClick:function(e)
+	_onMenuButtonMouseEvent:function(e)
 	{
-		var menu = this._menuBtn.ibxWidget("option", "menu");
-		menu.css("minWidth", this.element.css("width"));
-		e.stopPropagation();
+		if(e.type == "mousedown")
+		{
+			var menu = this._menuBtn.ibxWidget("option", "menu");
+			menu.css("minWidth", this.element.css("width"));
+		}
+		if(e.type == "click")
+			e.stopPropagation();
 	},
 	_refresh:function()
 	{
@@ -526,7 +529,7 @@ $.widget("ibi.ibxSplitMenuButton", $.ibi.ibxButtonSimple,
 });
 //defined types mostly for markup readability
 $.widget("ibi.ibxHSplitMenuButton", $.ibi.ibxSplitMenuButton,{options:{},_widgetClass: "ibx-hsplit-menu-button"});
-$.widget("ibi.ibxVSplitMenuButton", $.ibi.ibxSplitMenuButton,{options:{}, menuOptions:{position:{my:"left top", at:"right top"}},_widgetClass: "ibx-vsplit-menu-button"});
+$.widget("ibi.ibxVSplitMenuButton", $.ibi.ibxSplitMenuButton,{options:{menuOptions:{position:{my:"left top", at:"right top"}}},_widgetClass: "ibx-vsplit-menu-button"});
 
 //separator between menu buttons
 $.widget("ibi.ibxMenuButtonSeparator", $.ibi.ibxWidget,{options:{"aria":{"role":"separator"}},_widgetClass: "ibx-menu-button-separator",});

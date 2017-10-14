@@ -156,13 +156,13 @@ $.widget("ibi.ibxWidget", $.Widget,
 	},
 	_onWidgetFocusEvent:function(e)
 	{
-		var target = $(e.target);
-		if(!this.element.is(e.relatedTarget) && !$.contains(this.element[0], e.relatedTarget))
+		var isTarget = this.element.is(e.target);
+		var ownsTarget = $.contains(this.element[0], e.target);
+		if(isTarget && !ownsTarget)
 		{
-			//these events are only triggered when the entire widget gains/loses focus...not a child.
 			if(e.type == "focusin")
 			{
-				if(this.options.navKeyAutoFocus && this.element.is(target))
+				if(this.options.navKeyAutoFocus)
 				{
 					var children = this.element.children();
 					children.first().focus();//focus first by default.
@@ -174,19 +174,15 @@ $.widget("ibi.ibxWidget", $.Widget,
 			if(e.type == "focusout")
 			{
 				this._trigger("widgetblur", e);
-				this.children().removeClass("ibx-nav-item-active").removeProp("aria-activedescendant");
+				this.children().removeClass("ibx-nav-item-active").removeAttr("aria-activedescendant");
 			}
 		}
 
-		if(e.type == "focusin" && this.options.navKeyRoot)
+		if(e.type == "focusin" && !isTarget && ownsTarget && this.options.navKeyRoot)
 		{
-			var isChild = this.element.is(target.parent());
-			if(isChild)
-			{
-				var children = this.children();
-				children.removeClass("ibx-nav-item-active").removeProp("aria-activedescendant");
-				target.addClass("ibx-nav-item-active").attr("aria-activedescendant", true);
-			}
+			var children = this.children();
+			children.removeClass("ibx-nav-item-active").removeAttr("aria-activedescendant");
+			$(e.target).addClass("ibx-nav-item-active").attr("aria-activedescendant", true);
 		}
 	},
 	_onWidgetKeyEvent:function(e)
@@ -223,7 +219,6 @@ $.widget("ibi.ibxWidget", $.Widget,
 			var active = current = navKids.filter(".ibx-nav-item-active");
 			if(active)
 			{
-				active.removeClass("ibx-nav-item-active").removeAttr("aria-activedescendant")
 				if(options.navKeyDir == "horizontal" || options.navKeyDir == "both")
 				{
 					if(e.keyCode == $.ui.keyCode.LEFT)
@@ -264,7 +259,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 			this.element.trigger(event);
 			if(!event.isDefaultPrevented())
 			{
-				active.addClass("ibx-nav-item-active").attr("aria-activedescendant", true).focus();
+				active.focus();
 				e.stopPropagation();
 			}
 		}
