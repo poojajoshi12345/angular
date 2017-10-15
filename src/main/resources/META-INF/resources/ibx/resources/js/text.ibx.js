@@ -105,7 +105,7 @@ $.widget("ibi.ibxTextField", $.ibi.ibxFlexBox,
 	{
 		//we don't want focus...move it to prev focusable item.
 		if(this._textInput.is(e.relatedTarget))
-			this.element.closest(":ibxFocusable").focus();
+			this.element.prevAll(":ibxFocusable").focus();
 	},
 	_onTextFieldKeyDown: function (e)
 	{
