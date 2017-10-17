@@ -144,7 +144,8 @@ function ibxPopupManager()
 	window.addEventListener("keydown", ibxPopupManager.onWindowEvent.bind(this), true);
 	this._gp = $("<div class='ibx-popup-glass-pane'>").on("mousedown mouseup click", function(e){e.stopPropagation();});
 };
-ibxPopupManager.autoDisableIFrames = true;
+ibxPopupManager._openPopups = $();//array of currently open ixbPoups
+ibxPopupManager.autoDisableIFrames = true;//no pointer events for iframes
 ibxPopupManager.onPopupEvent = function(e, popup)
 {
 	var popup = $(popup);
@@ -165,6 +166,9 @@ ibxPopupManager.onPopupEvent = function(e, popup)
 		//turn off pointer events for iframes when popup is open.
 		if(ibxPopupManager.autoDisableIFrames)
 			$("iframe").toggleClass("ibx-popup-disabled-iframe", true)
+
+		//manage the currently open popups
+		ibxPopupManager._openPopups = ibxPopupManager._openPopups.add(popup);
 	}
 	else
 	if(eType == "ibx_popup_mgr_close")
@@ -175,6 +179,9 @@ ibxPopupManager.onPopupEvent = function(e, popup)
 		//on close if we are the last popup, then re-enable pointer events on the iframes.
 		if(ibxPopupManager.autoDisableIFrames && !topPop.length)
 			$("iframe").toggleClass("ibx-popup-disabled-iframe", false);
+
+		//manage the currently open popups
+		ibxPopupManager._openPopups = ibxPopupManager._openPopups.not(popup);
 	}
 
 	//now, find the topmost modal popup...if there is one, stick the glass pane behind it, and stop mouse events
@@ -243,7 +250,7 @@ ibxPopupManager.onWindowEvent = function(e)
 ibxPopupManager.getOpenPopups = function(filter, zMin, zMax)
 {
 	var pattern = sformat("{1}:openPopup({2}, {3})", (filter || ""), zMin, zMax);
-	var popups = $($(pattern).sort(fnSortZIndex));
+	var popups = ibxPopupManager._openPopups.filter(pattern).sort(fnSortZIndex);
 	return popups;
 };
 ibxPopupManager.closeOpenPopups = function(filter, zMin, zMax, forceClose, closeData)
