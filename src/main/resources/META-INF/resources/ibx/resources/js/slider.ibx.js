@@ -26,6 +26,7 @@ $.widget("ibi.ibxSlider", $.ibi.ibxGrid,
 		"cols": "auto 1fr auto",
 		"rows": "auto 1fr auto",
 		"align": "stretch",
+		"wantResize": true,
 
 		"aria":
 		{
@@ -84,6 +85,7 @@ $.widget("ibi.ibxSlider", $.ibi.ibxGrid,
 		if (options.value > options.max)
 			options.value = options.max;
 		options.value = this._adjustStep(options.value, options.min, options.max, options.step);
+		this.element.on("ibx_resize", this._onResize.bind(this));
 	},
 	_initSlider: function ()
 	{
@@ -95,6 +97,10 @@ $.widget("ibi.ibxSlider", $.ibi.ibxGrid,
 		this.refresh();
 		this._trigger("change", null, data);
 		this._trigger("set_form_value", null, { "elem": this.element, "value": value });
+	},
+	_onResize: function ()
+	{
+		this.refresh();
 	},
 	_activeSlider: null,
 	_focusSlider: function (e)
