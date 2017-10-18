@@ -23,6 +23,7 @@ $.widget("ibi.ibxMenu", $.ibi.ibxPopup,
 		this._super();
 		var box = this._box = $("<div>").ibxVBox({"wrap":"false", "align":"stretch"}).addClass("ibx-menu-box");
 		this.element.append(box);
+		this.element.on("keydown", this._onMenuKeyDown.bind(this));
 		this.element.on("ibx_menu_item_click", this._onMenuItemClick.bind(this));
 		this.element.on("ibx_close_sub_menus", this.closeSubMenus.bind(this));
 		this.element.children(".ibx-menu-item, .ibx-menu-separator").each(function(idx, el)
@@ -47,6 +48,11 @@ $.widget("ibi.ibxMenu", $.ibi.ibxPopup,
 	remove:function(menuItem, destroy, refresh)
 	{
 		this._box.ibxWidget("remove", menuItem, destroy, refresh);
+	},
+	_onMenuKeyDown:function(e)
+	{
+		if(e.keyCode == $.ui.keyCode.TAB)
+			e.preventDefault();
 	},
 	_onMenuItemClick:function(e, menuItem)
 	{

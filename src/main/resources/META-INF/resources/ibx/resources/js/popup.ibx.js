@@ -32,7 +32,7 @@ $.widget("ibi.ibxPopup", $.ibi.ibxWidget,
 	_create:function()
 	{
 		var options = this.options;
-		this.element.addClass("pop-closed").prop("tabIndex", -1).css("position", "absolute").on("keydown", this._onPopupCloseKeyEvent.bind(this));
+		this.element.addClass("pop-closed").prop("tabIndex", -1).css("position", "absolute").on("keydown", this._onPopupKeyEvent.bind(this));
 		$(window).resize(this._onPopupWindowResize.bind(this));
 		this._super();
 	},
@@ -41,7 +41,7 @@ $.widget("ibi.ibxPopup", $.ibi.ibxWidget,
 		this._super();
 		this.element.removeClass("pop-closed").off("mousedown");
 	},
-	_onPopupCloseKeyEvent:function(e)
+	_onPopupKeyEvent:function(e)
 	{
 		if(this.options.escapeToClose && e.keyCode == $.ui.keyCode.ESCAPE)
 			this.close("cancel");
@@ -241,9 +241,6 @@ ibxPopupManager.onWindowEvent = function(e)
 		else
 		if(e.type = "keydown")
 		{
-			//tab key closes all open menus
-			if(e.keyCode == $.ui.keyCode.TAB)
-				ibxPopupManager.getOpenPopups(":openMenuPopup").ibxWidget("close");
 		}
 	}
 };

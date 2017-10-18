@@ -206,16 +206,16 @@ $.widget("ibi.ibxWidget", $.Widget,
 			if(tabKids.last().is(e.target) && !e.shiftKey)
 				target = tabKids.first();
 
-			if(target)
+			//target means first/last item and need to loop...or no kids, so do nothing.
+			if(target || !tabKids.length)
 			{
 				target = $(target);
 				var ret = this._trigger("focusing", null, {"target":target, "relatedTarget":e.relatedTarget});
 				if(ret)
-				{
 					target.focus();
-					e.preventDefault();
-					e.stopPropagation();
-				}
+
+				e.preventDefault();
+				e.stopPropagation();
 			}
 		}
 		else
