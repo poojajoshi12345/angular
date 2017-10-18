@@ -157,8 +157,11 @@ $.widget("ibi.ibxWidget", $.Widget,
 	_onWidgetFocusEvent:function(e)
 	{
 		var isTarget = this.element.is(e.target);
+		var isRelTarget = this.element.is(e.relatedTarget);
 		var ownsTarget = $.contains(this.element[0], e.target);
-		if(isTarget && !ownsTarget)
+		var ownsRelTarget = $.contains(this.element[0], e.relatedTarget);
+
+		if(!isRelTarget && !ownsRelTarget && (isTarget || ownsTarget))
 		{
 			if(e.type == "focusin")
 			{
