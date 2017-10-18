@@ -161,11 +161,13 @@ $.widget("ibi.ibxWidget", $.Widget,
 		var ownsTarget = $.contains(this.element[0], e.target);
 		var ownsRelTarget = $.contains(this.element[0], e.relatedTarget);
 
+		//manage the global widget focus states...that is, for complex widgets (subwidget)...treat this as a single unit.
 		if(!isRelTarget && !ownsRelTarget && (isTarget || ownsTarget))
 		{
 			if(e.type == "focusin")
 			{
-				if(this.options.navKeyAutoFocus)
+				//auto focus the first child if specified
+				if(this.options.navKeyAutoFocus && isTarget)
 				{
 					var children = this.element.children();
 					children.first().focus();//focus first by default.
@@ -181,6 +183,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 			}
 		}
 
+		//manage states of children
 		if(e.type == "focusin" && !isTarget && ownsTarget && this.options.navKeyRoot)
 		{
 			var children = this.children();
