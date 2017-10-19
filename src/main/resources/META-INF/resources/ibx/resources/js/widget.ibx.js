@@ -89,6 +89,8 @@ $.widget("ibi.ibxWidget", $.Widget,
 		accessible ? this.element.ibxAriaId().attr("role", aria.role) : this.element.removeIbxAriaId().removeAttr("role", aria.role);
 
 		aria = this._setAccessibility(accessible, aria);
+		aria.labelledby = aria.label ? null : aria.labelledby; //can't have aria-label and aria-labelledby at same time...label wins.
+
 		for(var key in aria)
 		{
 			if(this.ARIA_PROPS_IGNORE[key])
