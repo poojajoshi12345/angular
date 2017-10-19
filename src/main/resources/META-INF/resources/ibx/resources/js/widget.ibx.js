@@ -180,7 +180,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 			if(e.type == "focusout")
 			{
 				this._trigger("widgetblur", e);
-				this.children().removeClass("ibx-nav-item-active").removeAttr("aria-activedescendant");
+				//this.children().removeClass("ibx-nav-item-active").removeAttr("aria-activedescendant");
 			}
 		}
 
@@ -226,6 +226,12 @@ $.widget("ibi.ibxWidget", $.Widget,
 			var active = current = navKids.filter(".ibx-nav-item-active");
 			if(active)
 			{
+				if(e.keyCode == $.ui.keyCode.HOME)
+					active = navKids.first();
+				else
+				if(e.keyCode == $.ui.keyCode.END)
+					active = navKids.last();
+				else
 				if(options.navKeyDir == "horizontal" || options.navKeyDir == "both")
 				{
 					if(e.keyCode == $.ui.keyCode.LEFT)
@@ -240,7 +246,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 						active = next.length ? next : navKids.first();
 					}
 				}
-
+				else
 				if(options.navKeyDir == "vertical" || options.navKeyDir == "both")
 				{
 					if(e.keyCode == $.ui.keyCode.UP)
@@ -268,6 +274,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 			{
 				active.focus();
 				e.stopPropagation();
+				e.preventDefault();
 			}
 		}
 		else
@@ -392,7 +399,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 		}
 	}
 });
-$.ibi.ibxWidget.navKeys = [$.ui.keyCode.LEFT, $.ui.keyCode.RIGHT, $.ui.keyCode.UP, $.ui.keyCode.DOWN];
+$.ibi.ibxWidget.navKeys = [$.ui.keyCode.LEFT, $.ui.keyCode.RIGHT, $.ui.keyCode.UP, $.ui.keyCode.DOWN, $.ui.keyCode.HOME, $.ui.keyCode.END];
 
 /****
  	Drag/Drop mix in

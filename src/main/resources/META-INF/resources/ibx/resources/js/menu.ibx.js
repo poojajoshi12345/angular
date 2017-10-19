@@ -371,6 +371,7 @@ $.widget("ibi.ibxMenuBar", $.ibi.ibxHBox,
 	"options":
 	{
 		"navKeyRoot":true,
+		"navKeyAutoFocus":true,
 		"direction":"row",
 		"align":"stretch",
 		"aria":
@@ -424,7 +425,7 @@ $.widget("ibi.ibxMenuButton", $.ibi.ibxButtonSimple,
 	{
 		this._super();
 		this.options.position.of = this.element[0];
-		this.element.on({"mousedown": this._onMenuButtonMouseDown.bind(this), "keydown": this._onMenuButtonKeyDown.bind(this)});
+		this.element.on({"click": this._onMenuButtonMouseDown.bind(this), "keydown": this._onMenuButtonKeyDown.bind(this)});
 		this.options.menu = this.element.children(".ibx-menu").appendTo("body");
 	},
 	_setAccessibility:function(accessible, aria)
