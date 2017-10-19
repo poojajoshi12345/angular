@@ -6,6 +6,7 @@ $.widget("ibi.ibxSlider", $.ibi.ibxGrid,
 	options:
 	{
 		"navKeyRoot":true,
+		"navKeyAutoFocus":true,
 		"value": 50,
 		"min": 0,
 		"max": 100,
@@ -30,12 +31,7 @@ $.widget("ibi.ibxSlider", $.ibi.ibxGrid,
 
 		"aria":
 		{
-			"role":"slider",
-			"orientation":"horizontal",
-			"valuemin":null,
-			"valuemax":null,
-			"valuenow":null,
-			"valuetext":null
+			"role":"",
 		}
 	},
 	_widgetClass: "ibx-slider",
@@ -66,10 +62,16 @@ $.widget("ibi.ibxSlider", $.ibi.ibxGrid,
 	{
 		var options = this.options;
 		aria = this._super(accessible, aria);
-		aria.valuemin = options.min;
-		aria.valuemax = options.max;
-		aria.valuenow = options.value;
-		aria.valuetext = sformat(ibx.resourceMgr.getString("IBX_STR_508_SLIDER_VAL"), options.value, options.min, options.max);
+
+		//thumb needs to actually be a slider too for ie/firefox.
+		var attrs = 
+		{
+			"role":"slider",
+			"aria-valuemin":options.min,
+			"aria-valuemax":options.max,
+			"aria-valuenow":options.value
+		}
+		accessible ? this._slider.attr(attrs) : this._slider.removeAttr("aria-valuemin aria-valuemax aria-valuenow role");
 
 		this._labelMin.ibxWidget("option", "aria.hidden", accessible ? true : null);
 		this._labelMax.ibxWidget("option", "aria.hidden", accessible ? true : null);
@@ -577,7 +579,16 @@ $.widget("ibi.ibxRange", $.ibi.ibxSlider,
 	{
 		this._super(accessible, aria);
 		var options = this.options;
-		aria.valuetext = sformat(ibx.resourceMgr.getString("IBX_STR_508_RANGE_VAL"), options.value, options.value2, options.min, options.max);
+
+		//thumb needs to actually be a slider too for ie/firefox.
+		var attrs = 
+		{
+			"role":"slider",
+			"aria-valuemin":options.min,
+			"aria-valuemax":options.max,
+			"aria-valuenow":options.value2
+		}
+		accessible ? this._slider2.attr(attrs) : this._slider2.removeAttr("aria-valuemin aria-valuemax aria-valuenow role");
 		return aria;
 	},
 	_initSlider: function ()

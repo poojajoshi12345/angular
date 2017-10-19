@@ -166,12 +166,13 @@ $.widget("ibi.ibxWidget", $.Widget,
 		{
 			if(e.type == "focusin")
 			{
-				//auto focus the first child if specified
 				if(this.options.navKeyAutoFocus && isTarget)
 				{
-					var children = this.element.children();
-					children.first().focus();//focus first by default.
-					children.filter(".ibx-nav-item-active").focus();//then focus first active item if possible.
+					//auto focus the first child if specified
+					var focusable = this.element.find(":ibxFocusable");
+					var child = focusable.filter(".ibx-nav-item-active").first();
+					child = child.length ? child :  focusable.first();
+					child.focus();
 				}
 				this._trigger("widgetfocus", e);
 			}

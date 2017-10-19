@@ -31,6 +31,11 @@ $.widget("ibi.ibxMenu", $.ibi.ibxPopup,
 			this.add(el);
 		}.bind(this));
 	},
+	_setAccessibility:function(accessible, aria)
+	{
+		this._super(accessible, aria);
+		return aria;
+	},
 	_destroy: function ()
 	{
 		this._super();
@@ -140,7 +145,11 @@ $.widget("ibi.ibxMenuItem", $.ibi.ibxHBox,
 		aria = this._super(accessible, aria);
 		if(!aria.labelledby)
 			aria.labelledby = (accessible) ? this._label.prop("id") : null;
-		aria.haspopup = !!this.subMenu();
+
+		var subMenu = this.subMenu();
+		aria.haspopup = !!subMenu;
+		aria.expanded = subMenu ? subMenu.ibxWidget("isOpen") : null;
+
 		(accessible) ? this._startMarker.attr("aria-hidden", true) : this._startMarker.removeAttr("aria-hidden");
 		(accessible) ? this._endMarker.attr("aria-hidden", true) : this._endMarker.removeAttr("aria-hidden");
 		return aria;
@@ -200,7 +209,7 @@ $.widget("ibi.ibxMenuItem", $.ibi.ibxHBox,
 		{
 			this.element.data("ibxSubMenu", subMenu);
 			subMenu.appendTo(this.element);
-			subMenu.on("ibx_close", this._onSubMenuClose.bind(this))
+			subMenu.on("ibx_open ibx_close", this._onSubMenuOpenClose.bind(this))
 			this.refresh();
 		}
 	},
@@ -211,7 +220,7 @@ $.widget("ibi.ibxMenuItem", $.ibi.ibxHBox,
 		if(subMenu)
 		{
 			this.element.removeData("ibxSubMenu");
-			subMenu.detach().off("ibx_close").removeData("ibxParentMenu");
+			subMenu.detach().off("ibx_open ibx_close").removeData("ibxParentMenu");
 			this.refresh();
 		}
 	},
@@ -221,11 +230,15 @@ $.widget("ibi.ibxMenuItem", $.ibi.ibxHBox,
 		if(subMenu && subMenu.is(":openPopup"))
 			subMenu.ibxMenu("close", closeData);
 	},
-	_onSubMenuClose:function(e)
+	_onSubMenuOpenClose:function(e)
 	{
-		//on close put it back under this menuitem so it's a submenu again.
-		var subMenu = this.subMenu();
-		this.element.append(subMenu);
+		if(e.type == "ibx_close")
+		{
+			//on close put it back under this menuitem so it's a submenu again.
+			var subMenu = this.subMenu();
+			this.element.append(subMenu);
+		}
+		this.setAccessibility();
 	},
 	userValue:function()
 	{
@@ -389,6 +402,7 @@ $.widget("ibi.ibxMenuButton", $.ibi.ibxButtonSimple,
 	options:
 	{
 		"menu":null,
+		"menuOpen":false,
 		"position":
 		{
 			/* for my/at position values see: http://api.jqueryui.com/position/ */
@@ -401,7 +415,7 @@ $.widget("ibi.ibxMenuButton", $.ibi.ibxButtonSimple,
 		},
 		"aria":
 		{
-			"role":"menu",
+			"role":"menuitem",
 			"haspopup":false
 		}
 	},
@@ -417,6 +431,7 @@ $.widget("ibi.ibxMenuButton", $.ibi.ibxButtonSimple,
 	{
 		aria = this._super(accessible, aria);
 		aria.haspopup = this.options.menu.length;
+		aria.expanded = this.options.menuOpen;
 		return aria;
 	},
 	_onMenuButtonMouseDown:function(e)
@@ -437,9 +452,16 @@ $.widget("ibi.ibxMenuButton", $.ibi.ibxButtonSimple,
 			e.preventDefault();
 		}
 	},
+	_onMenuButtonMenuOpenClose:function(e)
+	{
+		this.options.menuOpen = (e.type == "ibx_open");
+		this.setAccessibility();
+	},
 	_refresh:function()
 	{
+		$(this.options.menu).off("ibx_open ibx_close");
 		this.options.menu = $(this.options.menu);
+		this.options.menu.on("ibx_open ibx_close", this._onMenuButtonMenuOpenClose.bind(this));
 		this._super();
 	}
 });

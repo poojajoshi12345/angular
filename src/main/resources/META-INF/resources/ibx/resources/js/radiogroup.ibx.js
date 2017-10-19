@@ -22,6 +22,17 @@ $.widget("ibi.ibxRadioGroup", $.ibi.ibxWidget,
 		this.element.append(this._formControl);
 		this.addControl($(".ibx-radio-group-" + this.options.name));
 	},
+	_setAccessibility:function(accessible, aria)
+	{
+		aria = this._super(accessible, aria);
+		var btnIds = "";
+		$(".ibx-radio-group-" + this.options.name).each(function(members, idx, el)
+		{
+			btnIds += " " + el.id;	
+		}.bind(this, btnIds));
+		aria.controls = btnIds;
+		return aria;
+	},
 	_destroy: function ()
 	{
 		this._super();

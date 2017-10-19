@@ -183,8 +183,8 @@ jQuery.fn.textNodes = function()
 	return $(ret);
 };
 
-//let jQuery dispatch custom native events
-jQuery.fn.dispatchEvent = function(type, data, canBubble, cancelable, relatedTarget)
+//create a native browser event.
+function createNativeEvent(type, data, canBubble, cancelable, relatedTarget)
 {
 	canBubble = canBubble !== undefined ? canBubble : true;
 	cancelable = cancelable !== undefined ? cancelable : true;
@@ -200,7 +200,13 @@ jQuery.fn.dispatchEvent = function(type, data, canBubble, cancelable, relatedTar
 	}
 	e.data = data;
 	e.relatedTarget = relatedTarget;
+	return e;
+}
 
+//let jQuery dispatch custom native events
+jQuery.fn.dispatchEvent = function(type, data, canBubble, cancelable, relatedTarget)
+{
+	var e = createNativeEvent(type, data, canBubble, cancelable, relatedTarget);
 	this.each(function(e, idx, el)
 	{
 		el.dispatchEvent(e);
