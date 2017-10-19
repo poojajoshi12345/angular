@@ -431,7 +431,7 @@ $.widget("ibi.ibxMenuButton", $.ibi.ibxButtonSimple,
 	_setAccessibility:function(accessible, aria)
 	{
 		aria = this._super(accessible, aria);
-		aria.haspopup = this.options.menu.length;
+		aria.haspopup = !!this.options.menu.length;
 		aria.expanded = this.options.menuOpen;
 		return aria;
 	},

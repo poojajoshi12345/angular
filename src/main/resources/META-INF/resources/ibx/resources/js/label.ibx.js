@@ -44,13 +44,6 @@ $.widget("ibi.ibxLabel", $.ibi.ibxFlexBox,
 		this._glyph = $("<div>").addClass(options.glyphElClass);
 		this._text = $("<div>").addClass(options.textElClass);
 	},
-	_destroy:function()
-	{
-		this._super();
-		this._glyph.remove();
-		this._text.remove();
-		this.element.removeClass("icon-left icon-top icon-right icon-bottom")
-	},
 	_setAccessibility:function(accessible, aria)
 	{
 		aria = this._super(accessible, aria);
@@ -58,6 +51,13 @@ $.widget("ibi.ibxLabel", $.ibi.ibxFlexBox,
 		(accessible) ? this._text.ibxAriaId() : this._text.removeIbxAriaId();
 		aria.labelledby = this._text.prop("id");
 		return aria;
+	},
+	_destroy:function()
+	{
+		this._super();
+		this._glyph.remove();
+		this._text.remove();
+		this.element.removeClass("icon-left icon-top icon-right icon-bottom")
 	},
 	_refresh:function()
 	{
