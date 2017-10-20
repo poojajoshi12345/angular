@@ -8,33 +8,50 @@ $.widget("ibi.ibxSpinner", $.ibi.ibxTextField,
 {
 	options:
 	{
-		"value": 50,
+		"value": 0,
 		"min" :0,
 		"max" :100,
 		"step" :1,
 
-		btnGroupClass:"ibx-spinner-btn-grp",
-		btnUpClass:"ibx-spinner-btn-up",
-		btnUpOptions:
+		"btnGroupClass":"ibx-spinner-btn-grp",
+		"btnUpClass":"ibx-spinner-btn-up",
+		"btnUpOptions":
 		{
 		},
-		btnDownClass:"ibx-spinner-btn-down",
-		btnDownOptions:
+		"btnDownClass":"ibx-spinner-btn-down",
+		"btnDownOptions":
 		{
 		},
+		"aria":{}
 	},
 	_widgetClass:"ibx-spinner",
 	_create:function()
 	{
 		this._super();
-		this._btnUp = $("<div tabIndex='0'>").ibxButton().on("mousedown mouseup mouseout", this._onBtnEvent.bind(this));
-		this._btnDown = $("<div tabIndex='0'>").ibxButton().on("mousedown mouseup mouseout", this._onBtnEvent.bind(this));
+		this._btnUp = $("<div tabIndex='-1'>").ibxButton().on("mousedown mouseup mouseout", this._onSpinBtnEvent.bind(this));
+		this._btnDown = $("<div tabIndex='-1'>").ibxButton().on("mousedown mouseup mouseout", this._onSpinBtnEvent.bind(this));
 		this._btnBox = $("<div>").ibxVButtonGroup();
 		this._btnBox.append(this._btnUp);
 		this._btnBox.append(this._btnDown);
 		this._textInput.addClass("ibx-spinner-text-input");
 		this.element.on("ibx_textchanging", this._onTextChanging.bind(this)).append(this._btnBox);
 		this._textInput.css('width', '1px');
+	},
+	_setAccessibility:function(accessible, aria)
+	{
+		aria = this._super(accessible, aria);
+		accessible ? this._textInput.ibxAriaId() : this._textInput.removeIbxAriaId();
+
+		var options = this.options;
+		var attr = 
+		{
+			"role": "spinbutton",
+			"aria-valuemin": options.min,
+			"aria-valuemax": options.max,
+			"aria-valuenow": options.value,
+		};
+		accessible ? this._textInput.attr(attr) : this._textInput.removeAttr("aria-valuemin aria-valuemax aria-valuenow");
+		return aria;
 	},
 	_init: function ()
 	{
@@ -57,7 +74,7 @@ $.widget("ibi.ibxSpinner", $.ibi.ibxTextField,
 	_intervalId: null,
 	_bUp: true,
 	_cleared: false,
-	_onBtnEvent:function(e)
+	_onSpinBtnEvent:function(e)
 	{
 		if(e.type == "mouseup" || e.type == "mouseout")
 		{
@@ -88,28 +105,28 @@ $.widget("ibi.ibxSpinner", $.ibi.ibxTextField,
 	},
 	_setValue: function (value, bFormat)
 	{
-		this.options.value = parseInt(value, 10);
+		this.options.value = $.isNumeric(value) ? parseInt(value, 10) : this.options.value;
 		this.options.text = bFormat && this.options.fnFormat ? this.options.fnFormat(value) : value;
 		this.refresh();
 		this._trigger("change", null, this._getInfo());
 		this._trigger("set_form_value", null, { "elem": this.element, "value": value });
 	},
-	_onWidgetKeyDown: function (e)
+	_onTextInputKeyDown: function (e)
 	{
 		this._super(e);
-
-		if (e.which == 38) // up
+		if(e.keyCode == $.ui.keyCode.UP)
 		{
 			this._stepSpinner(true);
 			e.preventDefault();
 		}
-		else if (e.which == 40) // down
+		else
+		if(e.keyCode == $.ui.keyCode.DOWN)
 		{
 			this._stepSpinner(false);
 			e.preventDefault();
 		}
 	},
-	_onCtrlBlur: function (e)
+	_onTextInputBlur: function (e)
 	{
 		var value = this._textInput.val();
 		var numValue = parseInt(value, 10);
