@@ -143,8 +143,7 @@ $.widget("ibi.ibxMenuItem", $.ibi.ibxHBox,
 	_setAccessibility:function(accessible, aria)
 	{
 		aria = this._super(accessible, aria);
-		if(!aria.labelledby)
-			aria.labelledby = (accessible) ? this._label.prop("id") : null;
+		aria.labelledby = aria.labelledby || this._label.prop("id");
 
 		var subMenu = this.subMenu();
 		aria.haspopup = !!subMenu;
