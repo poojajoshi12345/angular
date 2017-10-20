@@ -13,7 +13,7 @@ $.widget("ibi.ibxButton", $.ibi.ibxLabel,
 	_create: function ()
 	{
 		this._super();
-		this.element.on("keydown", this._onKeyEvent.bind(this));
+		this.element.on("keydown keyup", this._onKeyEvent.bind(this));
 	},
 	_destroy: function ()
 	{
@@ -27,8 +27,18 @@ $.widget("ibi.ibxButton", $.ibi.ibxLabel,
 	},
 	_onKeyEvent: function (e)
 	{
-		if(e.keyCode === $.ui.keyCode.ENTER || e.keyCode === $.ui.keyCode.SPACE)
-			this.element.trigger('click');
+		if(e.type == "keydown")
+		{
+			if(e.keyCode === $.ui.keyCode.ENTER || e.keyCode === $.ui.keyCode.SPACE)
+			{
+				this.element.addClass("ibx-button-active");
+				this.element.trigger('click');
+			}
+		}
+		else
+		if(e.type == "keyup")
+			this.element.removeClass("ibx-button-active");
+		this.setAccessibility();
 	},
 	_refresh: function ()
 	{

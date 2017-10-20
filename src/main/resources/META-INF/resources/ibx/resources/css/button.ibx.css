@@ -22,7 +22,7 @@
     border: 1px solid #aaa;
 }
 
-.ibx-button:active
+.ibx-button:active, .ibx-button-active
 {
 	background-color:#ddd;
 }
@@ -35,7 +35,6 @@
 {
 	background-color:#ddd;
 }
-
 
 /* End button classes */
 
