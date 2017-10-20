@@ -49,7 +49,7 @@ $.widget("ibi.ibxLabel", $.ibi.ibxFlexBox,
 		aria = this._super(accessible, aria);
 		(accessible) ? this._glyph.attr("aria-hidden", true) : this._glyph.removeAttr("aria-hidden");
 		(accessible) ? this._text.ibxAriaId() : this._text.removeIbxAriaId();
-		aria.labelledby = this._text.prop("id");
+		aria.labelledby = aria.labelledby || this._text.prop("id");
 		return aria;
 	},
 	_destroy:function()

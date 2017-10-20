@@ -5,8 +5,6 @@ $.widget("ibi.ibxTextField", $.ibi.ibxFlexBox,
 {
 	options:
 		{
-			"navKeyRoot":true,
-			"navKeyAutoFocus":true,
 			"text": "",
 			"autoSize": false,
 			"readonly": false,
@@ -149,6 +147,16 @@ $.widget("ibi.ibxTextField", $.ibi.ibxFlexBox,
 	_refresh: function ()
 	{
 		this._super();
+
+		//move the tabbing to the child.
+		var curIdx = this.element.attr("tabIndex");
+		var savIdx = this.element.data("ibxTextFieldTabIndex");
+		if(curIdx != savIdx)
+		{
+			this.element.data("ibxSliderTabIndex", curIdx).removeAttr("tabIndex");
+			this._textInput.attr("tabIndex", curIdx);
+		}
+
 		this._textInput.attr("type", this.options.ctrlType);
 		if (this.options.forId)
 			this._textInput.attr("id", this.options.forId);
