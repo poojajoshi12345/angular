@@ -112,12 +112,11 @@ $.widget("ibi.ibxTextArea", $.ibi.ibxFlexBox,
 		this._super();
 
 		//move the tabbing to the child.
-		var curIdx = this.element.attr("tabIndex");
-		var savIdx = this.element.data("ibxTextFieldTabIndex");
-		if(curIdx != savIdx)
+		var idxCur = this.element.attr("tabIndex");
+		if(idxCur >= 0)
 		{
-			this.element.data("ibxSliderTabIndex", curIdx).attr("tabIndex", -1);
-			this._textArea.attr("tabIndex", curIdx);
+			this._textArea.attr("tabIndex", idxCur);
+			this.element.attr("tabIndex", -1);
 		}
 
 		if (this.options.cols)

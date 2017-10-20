@@ -338,12 +338,11 @@ $.widget("ibi.ibxSlider", $.ibi.ibxGrid,
 	_refresh: function ()
 	{
 		//move the tabbing to the sliders.
-		var curIdx = this.element.attr("tabIndex");
-		var savIdx = this.element.data("ibxSliderTabIndex");
-		if(curIdx != savIdx)
+		var idxCur = this.element.attr("tabIndex");
+		if(idxCur >= 0)
 		{
-			this.element.data("ibxSliderTabIndex", curIdx).removeAttr("tabIndex");
-			var markers = this.element.find(".ibx-slider-marker").attr("tabIndex", curIdx);
+			var markers = this.element.find(".ibx-slider-marker").attr("tabIndex", idxCur);
+			this.element.attr("tabIndex", -1);
 		}
 
 		this._labelMin.ibxWidget('option', 'text', this._getFormattedText("min"));

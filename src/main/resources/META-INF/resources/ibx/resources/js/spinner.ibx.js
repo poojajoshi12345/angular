@@ -28,8 +28,8 @@ $.widget("ibi.ibxSpinner", $.ibi.ibxTextField,
 	_create:function()
 	{
 		this._super();
-		this._btnUp = $("<div tabIndex='-1'>").ibxButton().on("mousedown mouseup mouseout", this._onSpinBtnEvent.bind(this));
-		this._btnDown = $("<div tabIndex='-1'>").ibxButton().on("mousedown mouseup mouseout", this._onSpinBtnEvent.bind(this));
+		this._btnUp = $("<div>").ibxButton().on("mousedown mouseup mouseout", this._onSpinBtnEvent.bind(this));
+		this._btnDown = $("<div>").ibxButton().on("mousedown mouseup mouseout", this._onSpinBtnEvent.bind(this));
 		this._btnBox = $("<div>").ibxVButtonGroup();
 		this._btnBox.append(this._btnUp);
 		this._btnBox.append(this._btnDown);
@@ -39,16 +39,15 @@ $.widget("ibi.ibxSpinner", $.ibi.ibxTextField,
 	},
 	_setAccessibility:function(accessible, aria)
 	{
+		var options = this.options;
 		aria = this._super(accessible, aria);
 		accessible ? this._textInput.ibxAriaId() : this._textInput.removeIbxAriaId();
-
-		var options = this.options;
 		var attr = 
 		{
-			"role": "spinbutton",
-			"aria-valuemin": options.min,
-			"aria-valuemax": options.max,
-			"aria-valuenow": options.value,
+			"role":"spinbutton",
+			"aria-valuemin":options.min,
+			"aria-valuemax":options.max,
+			"aria-valuenow":options.value,
 		};
 		accessible ? this._textInput.attr(attr) : this._textInput.removeAttr("aria-valuemin aria-valuemax aria-valuenow");
 		return aria;
@@ -145,7 +144,7 @@ $.widget("ibi.ibxSpinner", $.ibi.ibxTextField,
 	},
 	_onTextChanging: function (e, txtField)
 	{
-		if (!jQuery.isNumeric(e.key) && e.which != 37 && e.which != 38 && e.which != 39 && e.which != 40 && e.which != 8 && e.which != 46 && e.which != 190)
+		if (!jQuery.isNumeric(e.key) && e.which != 9 && e.which != 37 && e.which != 38 && e.which != 39 && e.which != 40 && e.which != 8 && e.which != 46 && e.which != 190)
 			e.preventDefault();
 	},
 	_stepSpinner: function (bUp)

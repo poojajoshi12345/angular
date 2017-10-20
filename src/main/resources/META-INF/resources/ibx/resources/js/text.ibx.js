@@ -152,8 +152,7 @@ $.widget("ibi.ibxTextField", $.ibi.ibxFlexBox,
 
 		//move the tabbing to the child.
 		var idxCur = this.element.attr("tabIndex");
-		var idxSav = this.element.data("ibxTextFieldTabIndex");
-		if(idxCur != idxSav)
+		if(idxCur >= 0)
 		{
 			this._textInput.attr("tabIndex", idxCur);
 			this.element.attr("tabIndex", -1);
