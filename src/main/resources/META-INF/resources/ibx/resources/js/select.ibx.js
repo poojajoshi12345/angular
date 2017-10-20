@@ -337,7 +337,7 @@ $.widget("ibi.ibxSelect", $.ibi.ibxTextField,
 		}
 		e.stopPropagation();
 	},
-	_onCtrlBlur: function (event)
+	_onTextInputBlur: function (event)
 	{
 		var newVal = this._textInput.val();
 		if (newVal != this._focusVal)

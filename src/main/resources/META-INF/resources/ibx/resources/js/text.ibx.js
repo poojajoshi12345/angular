@@ -34,14 +34,22 @@ $.widget("ibi.ibxTextField", $.ibi.ibxFlexBox,
 		this._super();
 		this.options.text = this.options.text || this.element.textNodes().remove().text().replace(/^\s*|\s*$/g, "");
 		this._textInput = $('<input tabIndex="-1" type="' + this.options.ctrlType + '"></input>');
-		this._textInput.on("blur", this._onCtrlBlur.bind(this)).on("focus", this._onCtrlFocus.bind(this))
+		this._textInput.on("blur", this._onTextInputBlur.bind(this)).on("focus", this._onTextInputFocus.bind(this));
+		this._textInput.on("keydown", this._onTextInputKeyDown.bind(this)).on("input", this._onTextInputInput.bind(this));
 		this._setValue(this.options.text, true);
-		this.element.append(this._textInput).on("focusin", this._onTextFieldFocus.bind(this)).on("input", this._onInput.bind(this)).on("keydown", this._onTextFieldKeyDown.bind(this));
-		this.element.on("ibx_change", function (e)
+		this.element.append(this._textInput);
+		this.element.on(
 		{
-			if (this.options.autoSize)
-				this._setAutoSize();
-		}.bind(this));
+			"focus":function(e)
+			{
+				this._textInput.focus();
+			}.bind(this),
+			"ibx_change":function(e)
+			{
+				if (this.options.autoSize)
+					this._setAutoSize();
+			}.bind(this)
+		});
 	},
 	_setAccessibility:function(accessible, aria)
 	{
@@ -89,23 +97,17 @@ $.widget("ibi.ibxTextField", $.ibi.ibxFlexBox,
 			scrollWidth = this._textInput[0].scrollWidth + "px";
 		this._textInput.css('min-width', scrollWidth).css("max-width", curMax);
 	},
-	_onCtrlFocus: function (event)
+	_onTextInputFocus: function (event)
 	{
 		this._focusVal = this.options.text;
 	},
-	_onCtrlBlur: function ()
+	_onTextInputBlur: function ()
 	{
 		var newVal = this._textInput.val();
 		if (newVal != this._focusVal)
 			this._setValue(newVal, true);
 	},
-	_onTextFieldFocus:function(e)
-	{
-		//we don't want focus...move it to prev focusable item.
-		if(this._textInput.is(e.relatedTarget))
-			this.element.prevAll(":ibxFocusable").focus();
-	},
-	_onTextFieldKeyDown: function (e)
+	_onTextInputKeyDown: function (e)
 	{
 		if (e.which == $.ui.keyCode.ENTER) // enter
 		{
@@ -116,10 +118,10 @@ $.widget("ibi.ibxTextField", $.ibi.ibxFlexBox,
 			e.preventDefault();
 		}
 		else
-		if(-1 == $.ibi.ibxWidget.navKeys.indexOf(e.which))//not arrow key
+		if(-1 == $.ibi.ibxWidget.navKeys.indexOf(e.which))//not a nav key
 			this._trigger("textchanging", e, [this.element, this.options.text, e.key]);
 	},
-	_onInput: function (e)
+	_onTextInputInput: function (e)
 	{
 		var value = this._textInput.val();
 		if (this.options.text != value)
@@ -149,12 +151,12 @@ $.widget("ibi.ibxTextField", $.ibi.ibxFlexBox,
 		this._super();
 
 		//move the tabbing to the child.
-		var curIdx = this.element.attr("tabIndex");
-		var savIdx = this.element.data("ibxTextFieldTabIndex");
-		if(curIdx != savIdx)
+		var idxCur = this.element.attr("tabIndex");
+		var idxSav = this.element.data("ibxTextFieldTabIndex");
+		if(idxCur != idxSav)
 		{
-			this.element.data("ibxSliderTabIndex", curIdx).removeAttr("tabIndex");
-			this._textInput.attr("tabIndex", curIdx);
+			this._textInput.attr("tabIndex", idxCur);
+			this.element.attr("tabIndex", -1);
 		}
 
 		this._textInput.attr("type", this.options.ctrlType);

@@ -32,21 +32,28 @@ $.widget("ibi.ibxTextArea", $.ibi.ibxFlexBox,
 	{
 		this._super();
 		this.options.text = this.options.text || this.element.textNodes().remove().text().replace(/^\s*|\s*$/g, "");
-		this._textInput = $('<textarea tabIndex="-1" class="ibx-text-area-ctrl"></textarea>').css("flex", "1 1 auto");
-		this._textInput.on("blur", this._onCtrlBlur.bind(this)).on("focus", this._onCtrlFocus.bind(this));
-		this.element.append(this._textInput).on("focusin", this._onWidgetFocus.bind(this)).on("input", this._onInput.bind(this)).on("keydown", this._onWidgetKeyDown.bind(this));
+		this._textArea = $('<textarea tabIndex="-1" class="ibx-text-area-ctrl"></textarea>').css("flex", "1 1 auto");
+		this._textArea.on("blur", this._onTextAreaBlur.bind(this)).on("focus", this._onTextAreaFocus.bind(this));
+		this._textArea.on("input", this._onTextAreaInput.bind(this)).on("keydown", this._onTextAreaKeyDown.bind(this));
 		this._setValue(this.options.text, true);
+		this.element.append(this._textArea).on(
+		{
+			"focus":function(e)
+			{
+				this._textArea.focus();
+			}.bind(this)
+		});
 	},
 	_setAccessibility:function(accessible, aria)
 	{
 		aria = this._super(accessible, aria);
-		accessible ? this._textInput.attr("aria-labelledby", aria.labelledby) : this._textInput.removeAttr("aria-labelledby");
+		accessible ? this._textArea.attr("aria-labelledby", aria.labelledby) : this._textArea.removeAttr("aria-labelledby");
 		return aria;
 	},
 	_setOption: function (key, value)
 	{
 		this._super(key, value);
-		if (key == "text" && this._textInput) // only do this after create
+		if (key == "text" && this._textArea) // only do this after create
 			this._setValue(value, true);
 	},
 	_setValue: function (value, bFormat)
@@ -58,32 +65,26 @@ $.widget("ibi.ibxTextArea", $.ibi.ibxFlexBox,
 	},
 	selectAll: function ()
 	{
-		this._textInput.select();
+		this._textArea.select();
 	},
-	_onCtrlFocus: function ()
+	_onTextAreaFocus: function ()
 	{
 		this._focusVal = this.options.text;
 	},
-	_onCtrlBlur: function ()
+	_onTextAreaBlur: function ()
 	{
-		var newVal = this._textInput.val();
+		var newVal = this._textArea.val();
 		if (newVal != this._focusVal)
 			this._setValue(newVal, true);
 	},
-	_onWidgetFocus:function(e)
+	_onTextAreaKeyDown: function (e)
 	{
-		//we don't want focus...move it to prev widget
-		if(this._textInput.is(e.relatedTarget))
-			this.element.prevAll(":ibxFocusable").first().focus();
-	},
-	_onWidgetKeyDown: function (e)
-	{
-		if(-1 == $.ibi.ibxWidget.navKeys.indexOf(e.which))//not arrow key
+		if(-1 == $.ibi.ibxWidget.navKeys.indexOf(e.which))//not a nav
 			this._trigger("textchanging", e, [this.element, this.options.text, e.key]);
 	},
-	_onInput: function (e)
+	_onTextAreaInput: function (e)
 	{
-		var value = this._textInput.val();
+		var value = this._textArea.val();
 		if (this.options.text != value)
 		{
 			this.options.text = value;
@@ -104,7 +105,7 @@ $.widget("ibi.ibxTextArea", $.ibi.ibxFlexBox,
 	_destroy: function ()
 	{
 		this._super();
-		this._textInput.remove();
+		this._textArea.remove();
 	},
 	_refresh: function ()
 	{
@@ -115,53 +116,53 @@ $.widget("ibi.ibxTextArea", $.ibi.ibxFlexBox,
 		var savIdx = this.element.data("ibxTextFieldTabIndex");
 		if(curIdx != savIdx)
 		{
-			this.element.data("ibxSliderTabIndex", curIdx).removeAttr("tabIndex");
-			this._textInput.attr("tabIndex", curIdx);
+			this.element.data("ibxSliderTabIndex", curIdx).attr("tabIndex", -1);
+			this._textArea.attr("tabIndex", curIdx);
 		}
 
 		if (this.options.cols)
-			this._textInput.attr("cols", this.options.cols);
+			this._textArea.attr("cols", this.options.cols);
 		else
-			this._textInput.removeAttr("cols");
+			this._textArea.removeAttr("cols");
 		if (this.options.rows)
-			this._textInput.attr("rows", this.options.rows);
+			this._textArea.attr("rows", this.options.rows);
 		else
-			this._textInput.removeAttr("rows");
+			this._textArea.removeAttr("rows");
 		if (this.options.maxlength)
-			this._textInput.attr("maxlength", this.options.maxlength);
+			this._textArea.attr("maxlength", this.options.maxlength);
 		else
-			this._textInput.removeAttr("maxlength");
+			this._textArea.removeAttr("maxlength");
 		if (this.options.forId)
-			this._textInput.attr("id", this.options.forId);
+			this._textArea.attr("id", this.options.forId);
 		else
-			this._textInput.removeAttr("id");
-		this._textInput.val(this.options.text);
-		this._textInput.prop("readonly", this.options.readonly ? 'true' : '');
+			this._textArea.removeAttr("id");
+		this._textArea.val(this.options.text);
+		this._textArea.prop("readonly", this.options.readonly ? 'true' : '');
 		if (this.options.maxLength)
-			this._textInput.attr("maxlength", this.options.maxLength);
+			this._textArea.attr("maxlength", this.options.maxLength);
 		else
-			this._textInput.removeAttr("maxlength");
+			this._textArea.removeAttr("maxlength");
 		if (this.options.placeholder)
-			this._textInput.attr("placeholder", this.options.placeholder);
+			this._textArea.attr("placeholder", this.options.placeholder);
 		else
-			this._textInput.removeAttr("placeholder");
+			this._textArea.removeAttr("placeholder");
 		if (this.options.required)
-			this._textInput.attr("required");
+			this._textArea.attr("required");
 		else
-			this._textInput.removeAttr("required");
+			this._textArea.removeAttr("required");
 		if (this.options.textWrap)
-			this._textInput.attr("wrap", this.options.textWrap);
+			this._textArea.attr("wrap", this.options.textWrap);
 		else
-			this._textInput.removeAttr("wrap");
+			this._textArea.removeAttr("wrap");
 		if (this.options.textAlign)
-			this._textInput.css("text-align", this.options.textAlign);
+			this._textArea.css("text-align", this.options.textAlign);
 		else
-			this._textInput.css("text-align", "");
+			this._textArea.css("text-align", "");
 
-		this._textInput.attr("autocomplete", this.options.autoComplete);
-		this._textInput.attr("autocorrect", this.options.autoCorrect);
-		this._textInput.attr("autocapitalize", this.options.autoCapitalize);
-		this._textInput.attr("spellcheck", this.options.spellCheck != "off" ? "true" : "false");
+		this._textArea.attr("autocomplete", this.options.autoComplete);
+		this._textArea.attr("autocorrect", this.options.autoCorrect);
+		this._textArea.attr("autocapitalize", this.options.autoCapitalize);
+		this._textArea.attr("spellcheck", this.options.spellCheck != "off" ? "true" : "false");
 	}
 });
 //# sourceURL=textarea.ibx.js
