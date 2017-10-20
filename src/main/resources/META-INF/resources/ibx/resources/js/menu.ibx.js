@@ -531,7 +531,7 @@ $.widget("ibi.ibxSplitMenuButton", $.ibi.ibxButtonSimple,
 	_onBtnKeyDown:function(e)
 	{
 		if(e.keyCode == $.ui.keyCode.DOWN)
-			this._menuBtn.trigger("mousedown");
+			this._menuBtn.trigger("click");
 	},
 	_onMenuButtonMouseEvent:function(e)
 	{
