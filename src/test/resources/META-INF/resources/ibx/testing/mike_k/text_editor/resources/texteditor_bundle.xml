@@ -31,7 +31,7 @@
 				</div>
 				<div class="te-menu-bar" data-ibx-type="ibxMenuBar">
 					<div data-ibx-type="ibxMenuButton" data-ibx-name="_menuFile" tabindex="5">@ibxString('bid_menu_file')
-						<div class="te-file-menu ibx-menu-no-icons te-menu" data-ibx-type="ibxMenu" data-ibx-name-root="true">
+						<div class="te-file-menu ibx-menu-no-icons te-menu" data-ibx-type="ibxMenu">
 							<div data-ibx-type="ibxMenuItem" data-ibx-name="_fileNew" data-menu-cmd="fileNew">@ibxString('bid_menu_file_new')</div>
 							<div data-ibx-type="ibxMenuItem" data-ibx-name="_fileOpen" data-menu-cmd="fileOpen">@ibxString('bid_menu_file_open')</div>
 							<div data-ibx-type="ibxMenuItem" data-ibx-name="_fileSave" data-menu-cmd="fileSave">@ibxString('bid_menu_file_save')</div>
