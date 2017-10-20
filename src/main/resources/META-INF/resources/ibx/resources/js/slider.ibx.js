@@ -69,7 +69,7 @@ $.widget("ibi.ibxSlider", $.ibi.ibxGrid,
 			"aria-valuemax":options.max,
 			"aria-valuenow":options.value,
 			"aria-labelledby":aria.labelledby,
-			"aria-label":aria.label
+			"aria-label":aria.label || sformat(ibx.resourceMgr.getString("IBX_STR_SLIDER_DEF_LABEL"), options.min, options.max)
 		}
 		accessible ? this._slider.attr(attrs) : this._slider.removeAttr("aria-valuemin aria-valuemax aria-valuenow aria-valuetext role");
 
@@ -593,9 +593,11 @@ $.widget("ibi.ibxRange", $.ibi.ibxSlider,
 			"aria-valuemin":options.min,
 			"aria-valuemax":options.max,
 			"aria-valuenow":options.value2,
-			"aria-valuetext": sformat(ibx.resourceMgr.getString("IBX_STR_SLIDER_RANGE_VAL_HIGH"), options.value2)
+			"aria-valuetext": sformat(ibx.resourceMgr.getString("IBX_STR_SLIDER_RANGE_VAL_HIGH"), options.value2),
+			"aria-label":aria.label || sformat(ibx.resourceMgr.getString("IBX_STR_SLIDER_RANGE_DEF_LABEL"), options.min, options.max)
 		}
 
+		accessible ? this._slider.attr("aria-label", sformat(ibx.resourceMgr.getString("IBX_STR_SLIDER_RANGE_DEF_LABEL"), options.min, options.max)) : null;
 		accessible ? this._slider.attr("aria-valuetext", sformat(ibx.resourceMgr.getString("IBX_STR_SLIDER_RANGE_VAL_LOW"), options.value)) : null;
 		accessible ? this._slider2.attr(attrs) : this._slider2.removeAttr("aria-valuemin aria-valuemax aria-valuenow aria-valuetext role");
 		return aria;
