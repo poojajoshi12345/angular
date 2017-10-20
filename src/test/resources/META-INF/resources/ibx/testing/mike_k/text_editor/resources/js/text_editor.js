@@ -19,13 +19,7 @@ $.widget("ibi.textEditor", $.ibi.ibxDialog,
 
 	_create:function()
 	{
-		
-		this._super();	
-		
-		//var resBody = ibx.resourceMgr.getResource(".text-editor-resources", false);
-		//this.contentBox.append(resBody.children());
-		//ibx.bindElements(this.contentBox);		
-		
+		this._super();
 		this.bipActionHandler = "/views.bip";
 		this.editorActionHandler = "/editor.bip";
 		this.checkServerAccessHandler = "/chksrvacc.bip";		
@@ -68,18 +62,33 @@ $.widget("ibi.textEditor", $.ibi.ibxDialog,
 		
 		this.unDoText = [];
 		
-		// BIP-893 - postpone key enable until know if autolink property is set on the item
-		//if (this.folderPath.indexOf("IBFS:/EDA") == 0)  // BIP-1496 set now for reporting servers // Why do we need this???
 		this._txtArea.on("keyup", this._onEditorAreaKeyUp.bind(this));
-
-		//this._txtArea.on("keydown", this._onEditorAreaKeyDown.bind(this));  // !!!!!!!!!!!!!!!!!
 		this._txtArea.on("click", this._onEditorAreaClickEvent.bind(this));
-		
 		this._txtArea.on("ibx_textchanged", this._onEditorAreaTextchanged.bind(this));
-		$(".te-menu").on("ibx_menu_item_click", this._onMenuItemSelect.bind(this));
-		this.element.find(".te-menu-button").on("click", this._onMenuButtonSelect.bind(this));
-		this.element.find(".te-tb-btn").on("click", this._onButtonSimpleSelect.bind(this));
-		//$("#fjkdvnkl").on("click", this._onButtonSimpleSelect.bind(this)); // acces DOM element by ID
+		
+		this._fileNew.on("ibx_menu_item_click", this._onMenuFileNew.bind(this));
+		this._fileOpen.on("ibx_menu_item_click", this._onMenuFileOpen.bind(this));
+		this._fileSave.on("ibx_menu_item_click", this._onMenuFileSave.bind(this));
+		this._fileSaveAs.on("ibx_menu_item_click", this._onMenuFileSaveAs.bind(this));
+		this._fileClose.on("ibx_menu_item_click", this._onMenuFileClose.bind(this));
+		this._fileExit.on("ibx_menu_item_click", this._onMenuFileExit.bind(this));
+
+		this._editDelete.on("ibx_menu_item_click", this._onMenuEditDelete.bind(this));
+		this._editSelectAll.on("ibx_menu_item_click", this._onMenuEditSelectAll.bind(this));
+		this._editUpperCase.on("ibx_menu_item_click", this._onMenuEditUpperCase.bind(this));
+		this._editLowerCase.on("ibx_menu_item_click", this._onMenuEditLowerCase.bind(this));
+
+		this._searchFind.on("ibx_menu_item_click", this._onMenuSearchFind.bind(this));
+		this._searchGoTo.on("ibx_menu_item_click", this._onMenuSearchGoTo.bind(this));
+		
+		this._menuOptions.on("click", this._onMenuButtonOptions.bind(this));
+		this._menuHelp.on("click", this._onMenuButtonHelp.bind(this));
+
+		this._tbNew.on("click", this._onButtonSimpleNew.bind(this));
+		this._tbOpen.on("click", this._onButtonSimpleOpen.bind(this));
+		this._tbSave.on("click", this._onButtonSimpleSave.bind(this));
+		this._tbRun.on("click", this._onButtonSimpleRun.bind(this));	
+		//$("#fjkdvnkl").on("click", this._onButtonSimpleSelect.bind(this)); // example acces DOM element by ID
 	
 		this._btnCloseGoToLine.on("click", this._toggleGoToLine.bind(this));
 		this._btnGoToLine.on("click", this._actionGoToLine.bind(this));
@@ -110,14 +119,132 @@ $.widget("ibi.textEditor", $.ibi.ibxDialog,
 		
 		this.btnBox.css("display", "none"); // Hide Editor Dialog OK and Cancel buttons
 	},
+		
+	// Menu Items
+	_onMenuFileNew:function(e)
+	{
+		this.currentAction = 1;
+		this._onNewFunction(e);
+	},
 	
-	_onEditorOpen()
+	_onMenuFileOpen:function(e)
+	{
+		this.currentAction = 2;
+		this._onOpen(e);
+	},
+	
+	_onMenuFileSave:function(e)
+	{
+		this._onSaveFunction(e);
+	},
+	
+	_onMenuFileSaveAs:function(e)
+	{
+		this._onSaveAsFunction(e);
+	},
+	
+	_onMenuFileClose:function(e)
+	{
+		this.currentAction = 3;
+		this._onClose(e);
+	},
+	
+	_onMenuFileExit:function(e)
+	{
+    	this.currentAction = 4;
+    	this._onExitFunction(e);
+	},
+	
+	_onMenuEditDelete:function(e)
+	{
+		this._deleteSelectedText(e);
+	},
+	
+	_onMenuEditSelectAll:function(e)
+	{
+		this._selectAllText(e);
+	},
+	
+	_onMenuEditUpperCase:function(e)
+	{
+    	this._selectionToUpperCase(e);
+	},
+
+	_onMenuEditLowerCase:function(e)
+	{
+    	this._selectionToLowerCase(e);
+	},
+
+	_onMenuSearchFind:function(e)
+	{
+    	this._toggleFindReplace(e);
+	},
+	
+	_onMenuSearchGoTo:function(e)
+	{
+    	this._toggleGoToLine(e);
+	},	
+	
+	// Menu Buttons
+	_onMenuButtonOptions:function(e)
+	{
+		this._onOptions(e);
+	},	
+
+	_onMenuButtonHelp:function(e)
+	{
+		this._onHelp(e);
+	},
+		
+	// Toolbar Buttons
+	_onButtonSimpleNew:function(e)
+	{
+		this.currentAction = 1;
+		this._onNewFunction(e);
+	},
+	
+	_onButtonSimpleOpen:function(e)
+	{
+		this.currentAction = 2;
+		this._onOpen(e);
+	},
+	
+	_onButtonSimpleSave:function(e)
+	{
+		this._onSaveFunction(e);
+	},
+	
+	_onButtonSimpleRun:function(e)
+	{
+    	this._onRunFunction(e);
+	},
+		
+	// Text Area
+	_onEditorAreaTextchanged:function (e)
+	{   
+		this.changed = true;
+	},	
+	_onEditorAreaClickEvent:function (e)
+	{	
+		this._setCursorPositionInfo(e);
+	},	
+	_onEditorAreaKeyDown:function (e)
+	{		
+		this._setCursorPositionInfo(e);
+	},	
+	_onEditorAreaKeyUp:function (e)
+	{		
+		this._setCursorPositionInfo(e);
+	},
+
+	//---------------------------------------------------------------------------------------------------------
+	_onEditorOpen:function()
 	{
 		this._setCursorPositionInfo();
 		this._txtArea[0].focus();
 	},
 	
-	_onEditorBeforeclose(e)
+	_onEditorBeforeclose:function(e)
 	{			
 		if(this.currentAction != -1)
 		{
@@ -167,139 +294,11 @@ $.widget("ibi.textEditor", $.ibi.ibxDialog,
 		}			
 	},
 	
-	_onMenuItemSelect:function(e, menuItem) //Menu Items
-	{
-		var cmd = $(menuItem).data("menuCmd");
-		
-		switch (cmd) 
-		{
-			case "fileNew":
-				
-				this.currentAction = 1;
-				this._onNewFunction(e);
-				break;
-			case "fileOpen":
-				
-				this.currentAction = 2;
-				this._onOpen(e);
-				break;
-			case "fileSave":
-				
-				this._onSaveFunction(e);
-				break;
-			case "fileSaveAs":
-				this._onSaveAsFunction(e);
-				break;
-			case "fileClose":
-				
-				this.currentAction = 3;
-				this._onClose(e);
-				break;
-		    case "fileExit":
-		    	
-		    	this.currentAction = 4;
-		    	this._onExitFunction(e);		    	
-		    	break;
-		    case "editDelete":
-		    	
-				this._deleteSelectedText(e);
-		    	break;		    
-		    case "editSelectAll":
-		    	
-		    	this._selectAllText(e);
-		    	break;
-		    case "editUpperCase":
-		    	
-		    	this._selectionToUpperCase(e);
-		    	break;
-		    case "editLowerCase":
-		    	
-		    	this._selectionToLowerCase(e);
-		    	break;
-		    case "searchFind":
-		    	
-		    	this._toggleFindReplace(e);
-		    	break;
-		    case "searchGoTo":
-		    	
-		    	this._toggleGoToLine(e);
-		    	break;
-	    	
-			default:
-		}
-	},
-		
-	_onMenuButtonSelect:function(e) // Menu Buttons (Options, Help)
-	{
-		var cmd = $(e.currentTarget).data("menuCmd");
-		
-		switch (cmd) 
-		{
-			case "menuOptions":
-				
-				this._onOptions(e);
-				break;
-			case "menuHelp":
-				
-				this._onHelp(e);
-				break;	
-			default:
-		}
-		
-	},
-	
-	_onButtonSimpleSelect:function(e) // Toolbar Buttons
-	{
-		var cmd = $(e.currentTarget).data("menuCmd");
-		
-		switch (cmd) 
-		{
-			case "onNew":
-				
-				this.currentAction = 1;
-				this._onNewFunction(e);
-				break;
-			case "onOpen":
-				
-				this.currentAction = 2;
-				this._onOpen(e);
-				break;
-			case "onSave":
-				
-				this._onSaveFunction(e);
-				break;
-		    case "onRun":
-		    	
-		    	this._onRunFunction(e);
-		    	break;
-
-			default:
-		}
-	
-	},	
-	
-	_onEditorAreaTextchanged:function (e)
-	{   
-		this.changed = true;
-	},	
-	_onEditorAreaClickEvent:function (e)
-	{	
-		this._setCursorPositionInfo(e);
-	},	
-	_onEditorAreaKeyDown:function (e)
-	{		
-		this._setCursorPositionInfo(e);
-	},	
-	_onEditorAreaKeyUp:function (e)
-	{		
-		this._setCursorPositionInfo(e);
-		this._setBtns(e);	    
-	},
-
 	_onNewFunction:function(e)
 	{
 		this._onClose(e);
-	},	
+	},
+	
 	_onOpen:function(e)
 	{       
 		
@@ -518,28 +517,7 @@ $.widget("ibi.textEditor", $.ibi.ibxDialog,
  	
 		$.get(uriExec, argument)
 			.done(function( data ) 
-			{
-			/*<edaEnv>
-				<status result="success" message=""/>
-					<servers>						
-						<server name="EDASERVE" />						
-						<server name="KRAK2" />						
-						<server name="KRAK" />						
-						<server name="MARTA" />						
-						<defServer name="EDASERVE" assigned="true">
-							<defApp name="baseapp ibisamp" assigned="true"/>
-							<apps>											
-							</apps>
-						</defServer>
-					</servers>
-					<flags>
-						<paramPrompt value="true"/>
-						<runOlap value="false"/>
-						<casterStdAlone value="false"/>
-						<enableAutoLink value="false"/>
-						<autoLinkTarget value="false"/>
-					</flags>
-				</edaEnv> */								
+			{								
 				var status =  $("status", data);
 				el = $(status);
 				var result =  el.attr("result");
@@ -614,16 +592,6 @@ $.widget("ibi.textEditor", $.ibi.ibxDialog,
 					el = $(autoLinkTargetElement);
 					var autoLinkTarget = el.attr("value") == "true";	
 					this.editor_options.autoLinkTarget = autoLinkTarget;
-					
-					if (this.options.autoLinkTarget)
-					{
-						// keep keys disabled for now to avoid propagation of enter key during credential verification 
-						this._checkCredentials(event, defServer, true);  	
-					}
-					else
-					{
-						this._txtArea.on("keyup", this._onEditorAreaKeyUp.bind(this));
-					}
 				}           		
 				
 			}.bind(this));
@@ -701,11 +669,7 @@ $.widget("ibi.textEditor", $.ibi.ibxDialog,
 		
 		saveDlg.data("mode", "saveas");
 		
-		saveDlg.on("ibx_beforeclose", function(e, closeData)
-		{
-			//alert("ibx_beforeclose");
-			//return false;
-		}).on("ibx_close", function (e, closeData)
+		saveDlg.on("ibx_close", function (e, closeData)
 		{						
 			if(closeData == "ok") 
 			{
@@ -762,200 +726,6 @@ $.widget("ibi.textEditor", $.ibi.ibxDialog,
 		} 	
 	},
 	
-	
-	// BIP-893 rewritten for being called after editor instantiation based on item property 'autolink'
-	_credentialResponse:function(e) 
-	{
-		alert("_credentialResponse");
-		
-		
-		//msg = sformat(ibx.resourceMgr.getString("key"), param1);
-
-/*		
-		var msg;
-		var loader = e.getTarget();
-		var udata = loader.getUserData();
-		var server = udata.server;
-		// var func = udata.func;  func not needed, on success return, editor is already open 
-		var tree = udata.tree;
-		var doc = loader.getDocument();
-		var status = doc.getElementsByTagName("status")[0].getAttribute("result");
-		if (status == "credentials")   // failed attempt - TRY AGAIN
-		{
-			this.checkCredentials(e, server, false);
-			return;
-		}
-		else if (status == "serverdown")  // server could have gone down since prior attempt was made		
-		{
-			msg = BiStringBundle.formatString(g_strBundle.getString("BT_SERVER_DOWN"), server);
-			mdlg = BiDialog.createMessageDialog(msg);  
-			mdlg.addEventListener("dialogresult", function(){ this.close();}, this); 
-			mdlg.setVisible(true);
-		}
-		else if (status == "error")  // ditto
-		{
-			msg = doc.getElementsByTagName("status")[0].getAttribute("message");
-			msg = BiStringBundle.formatString(g_strBundle.getString("BT_ERROR_RUN"), server, msg);
-			mdlg = BiDialog.createMessageDialog(msg);
-			mdlg.addEventListener("dialogresult", function(){ this.close();}, this);
-			mdlg.setVisible(true);
-		}
-		else  // BIP-893 - on success just return - editor is already open 
-		{   
-			// enable the edit keys now 
-			this._txtArea.on("keyup", this._onEditorAreaKeyUp.bind(this));
-			return;
-		}
-		
-*/		
-	},
-
-	_sendCredentials:function(e)
-	{
-		alert("_sendCredentials");
-/*
-		var dlg = e.getTarget();
-		var res = dlg.getDialogResult();
-		if (!res)
-		{	
-			// BIP-893 - on cancel - close editor window
-			this.close();
-			return;
-		}
-			
-		var userid = res.strUserName;
-		var pwd = res.strPassword;
-
-		var udata = dlg.getUserData();
-		var server = udata.server;
-		var tree = udata.tree;
-
-		var parms = [];
-		parms.push("BIP_REQUEST_TYPE=BIP_SET_SRV_CRED"); 
-		parms.push("server=" + server); 
-		parms.push("IBIR_userid=" + userid);
-		parms.push("IBIR_password=" + pwd); 
-		parms.push(IBI_random + "=" + rand());
-		this.tree.ajaxRequestEx(this.bipActionHandler, parms, true, this.credentialResponse, udata, this);
-*/		
-	},
-
-	//BIP-893 rewritten to be called after editor instantiation based on item property 'autolink'
-	//SEC-347 after the first time, need to let the user know if his attempt has failed
-	_checkCredentials:function(ev, server, firstTime)
-	{
-		alert("_checkCredentials");
-
-		var msg;
-	 	var uriExec = sformat("{1}"+this.checkServerAccessHandler, applicationContext);
-	 	var randomnum = Math.floor(Math.random() * 100000);	
-	 	var argument = {};
-	 	
-	 	argument["BIP_REQUEST_TYPE"] = "BIP_CHK_SRVR_ACCESS";		
-
-	 	argument["server"] = server;
-	 	argument["IBI_random"] = randomnum;
-	 	argument[WFGlobals.getSesAuthParm()] = WFGlobals.getSesAuthVal();		
-
-	 	$.post(uriExec, argument)  
-	 		.done(function( data ) 
-	 		{
-
-				var status =  $("status", data);
-				el = $(status);
-				var result =  el.attr("result");
-
-				if(result != "credentials")
-				{
-
-					/*
-					 if (!firstTime)		
-	 				{
-	 					alert(g_strBundle.getString("BT_BAD_CREDENTIALS"));		
-	 				}
-	 				var dlg = serverLogon(server);
-	 				dlg.setUserData({"server":server, "tree":this.tree});
-	 				dlg.addEventListener("dialogresult", this.sendCredentials, this);
-					 */
-				}
-				else if (status == "serverdown")  // close Editor
-	 			{					
-					msg = sformat(ibx.resourceMgr.getString("BT_SERVER_DOWN"), server);
-					
-					var options = 
-					{
-						type:"std error",
-						caption:ibx.resourceMgr.getString("BT_ERROR"),
-						buttons:"ok",
-						messageOptions:
-						{
-							text:msg
-						}
-					};
-					
-					var dlg = $.ibi.ibxDialog.createMessageDialog(options);
-					dlg.ibxDialog("open");			
-					
-					dlg.on("ibx_close", function (e, closeData)
-							{						
-								this._onExit(ev);
-							}.bind(this));
-	 			}
-				else if (status == "serverundefined")
-	 			{					
-					msg = sformat(ibx.resourceMgr.getString("BT_SERVER_UNDEF"), server);
-					
-					var options = 
-					{
-						type:"std error",
-						caption:ibx.resourceMgr.getString("BT_ERROR"),
-						buttons:"ok",
-						messageOptions:
-						{
-							text:msg
-						}
-					};
-					
-					var dlg = $.ibi.ibxDialog.createMessageDialog(options);
-					dlg.ibxDialog("open");			
-					
-					dlg.on("ibx_close", function (e, closeData)
-							{						
-								this._onExit(ev);
-							}.bind(this));
-	 			}
-				else if (status == "error")
-	 			{					
-					msg = sformat(ibx.resourceMgr.getString("BT_ERROR_RUN"), server);
-
-					var options = 
-					{
-						type:"std error",
-						caption:ibx.resourceMgr.getString("BT_ERROR"),
-						buttons:"ok",
-						messageOptions:
-						{
-							text:msg
-						}
-					};
-					
-					var dlg = $.ibi.ibxDialog.createMessageDialog(options);
-					dlg.ibxDialog("open");			
-					
-					dlg.on("ibx_close", function (e, closeData)
-							{						
-								this._onExit(ev);
-							}.bind(this));
-	 			}
-				else // BIP-893 - on success just return - editor is already open 
-	 			{		 
-	 				// enable the keys now
-	 				this._txtArea.on("keyup", this._onEditorAreaKeyUp.bind(this));	
-	 			}
-				
-	 		}.bind(this));
-	},
-	
 	_doSave:function(mode)
 	{
 		if (!this.changed && !this.optionsChanged && !this.newDoc) // nothing changed so no save action, unless it is a new doc. allow to save empty file
@@ -997,12 +767,7 @@ $.widget("ibi.textEditor", $.ibi.ibxDialog,
 	},
 	
 	_saveSetup:function(mode)
-	{
-		var tool = this.tool;
- 
-//Text already retrieved if closing.
-//Doing it now would set 'null' as the fextext
-		
+	{	
 		if (!this.closing)	
 		{
 			this.fexText =  this._txtArea.ibxWidget('option', 'text');
@@ -1011,7 +776,7 @@ $.widget("ibi.textEditor", $.ibi.ibxDialog,
 		this.iaSave = false;
 		this.toolLost = false;
 
-		if ((!this.newDoc || mode=="saveas") && tool && tool != "editor")		
+		if ((!this.newDoc || mode=="saveas") && this.tool && this.tool != "editor")		
 		{
 
 			var uriExec = sformat("{1}"+this.editorActionHandler, applicationContext);
@@ -1075,7 +840,6 @@ $.widget("ibi.textEditor", $.ibi.ibxDialog,
 	_saveResource:function(e, saveDlg)
 	{	
 		var mode = null;
-		//var saveDlg = null;
 
 		if (saveDlg != null)  // this routine can be called via a dialog or straight (with a null event)
 		{			
@@ -1085,8 +849,6 @@ $.widget("ibi.textEditor", $.ibi.ibxDialog,
 			var fileTitle = saveDlg.ibxWidget('fileTitle');				
 			var path = this._checkPath( saveDlg.ibxWidget('path') );
 			var fileExists = saveDlg.ibxWidget('fileExists');
-				
-			//msg = sformat(ibx.resourceMgr.getString("key"), param1);
 
 			if (mode == "saveas")
 			{	   
@@ -1387,46 +1149,6 @@ $.widget("ibi.textEditor", $.ibi.ibxDialog,
 		this._setCursorPositionInfo(e);
 	},
 	
-	
-	
-	_setBtns:function(e)
-	{
-		// What does this do ????
-		
-		//this._setCursorPositionInfo(e);
-		
-/*		
-		var keyCode = e.getKeyCode();
-		if (e.getCtrlKey())
-		{
-			var key = String.fromCharCode(keyCode).toUpperCase();
-			if (key == 'C' || key == 'A')
-			{
-				return;
-			}
-		}
-		else
-		{
-			switch (keyCode)
-			{
-				// these are cursor movement keys
-				case BiKeyboardEvent.UP:
-				case BiKeyboardEvent.DOWN:
-				case BiKeyboardEvent.LEFT:
-				case BiKeyboardEvent.RIGHT:
-				case BiKeyboardEvent.SHIFT:
-				case BiKeyboardEvent.CTRL:
-				case BiKeyboardEvent.END:
-				case BiKeyboardEvent.HOME:
-				case BiKeyboardEvent.TAB:
-				return;
-			}
-		}
-
-		this.changed = true;
-*/		
-	},
-	
 	_clearEditorEnvironment:function(e)
 	{
 		this.currentAction = 0;
@@ -1637,45 +1359,7 @@ $.widget("ibi.textEditor", $.ibi.ibxDialog,
 			this._txtArea[0].focus();
 			return;
 		}
-			
-		/*
-		// set lables width based on widest
-		var fLen = $(".findLbl").width();
-		var rLen = $(".replaceLbl").width();
 
-		var maxLblLen =  fLen > rLen ? fLen : rLen;
-		
-		$(".findLbl").width(maxLblLen);
-		$(".replaceLbl").width(maxLblLen);
-		
-		// set buttons width based on widest
-		var btnWidths = [];
-		
-		btnWidths.push(this._btnFind.width());
-		btnWidths.push(this._btnFindPrevious.width());
-		btnWidths.push(this._btnReplace.width());
-		btnWidths.push(this._btnReplaceAll.width());
-		btnWidths.push(this._btnUndo.width());
-		btnWidths.push(this._btnFindClose.width());
-		
-		function numSort(a, b)
-		{
-			a = Number(a);
-			b = Number(b);
-			
-			return a < b ? -1 : a > b ? 1 : 0;
-		}
-		
-		btnWidths.sort(numSort);
-		var maxBtnLen = btnWidths[5];
-		
-		this._btnFind.width(maxBtnLen);
-		this._btnFindPrevious.width(maxBtnLen);
-		this._btnReplace.width(maxBtnLen);
-		this._btnReplaceAll.width(maxBtnLen);
-		this._btnUndo.width(maxBtnLen);
-		this._btnFindClose.width(maxBtnLen);
-*/
 		var selection;
 		var ta = this._txtArea[0].firstChild;
 		var tav = ta.value;
@@ -2035,9 +1719,6 @@ $.widget("ibi.textEditor", $.ibi.ibxDialog,
 		
 		this._editorOptionsDlg = ibx.resourceMgr.getResource('.text-editor-options', true);
 		
-		//var jsWidget = this._editorOptionsDlg.data("ibxWidget")
-		//jsWidget.btnOk
-		
 		this._editorOptionsDlg.ibxWidget("option", "captionOptions", {text: ibx.resourceMgr.getString("bid_editor_options")});
 		this._editorOptionsDlg.ibxWidget({buttons:"okcancelapply"});
 		
@@ -2049,10 +1730,7 @@ $.widget("ibi.textEditor", $.ibi.ibxDialog,
 		
 		this._initOptions();		
 		
-		this._editorOptionsDlg.on("ibx_beforeclose", function(e, closeData)
-		{
-			//return false;
-		}).on("ibx_apply", function(e, closeData)
+		this._editorOptionsDlg.on("ibx_apply", function(e, closeData)
 		{
 			// RESET			
 			this._resetOptions();
@@ -2117,8 +1795,6 @@ $.widget("ibi.textEditor", $.ibi.ibxDialog,
 			this._editorOptionsDlg.ibxWidget("member", "_selAppList").ibxWidget("option", "disabled", true);
 		}
 		
-		//this._getApps(); // TODO: Check Server Access !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
 		var defApp = this.editor_options.appPath;
 		
 		var appParts = defApp.split(" ");
@@ -2145,9 +1821,7 @@ $.widget("ibi.textEditor", $.ibi.ibxDialog,
 		this._editorOptionsDlg.ibxWidget("member", "_appChk").on("click", this._appChkChange.bind(this));
 		this._editorOptionsDlg.ibxWidget("member", "_srvList").on("ibx_change", this._srvListChange.bind(this));
 		
-		this._editorOptionsDlg.ibxWidget("member", "_appBtn").on("click", this._chkSrvAccess.bind(this)); //:TODO Check Server Access	
-		//this._editorOptionsDlg.ibxWidget("member", "_appBtn").on("click", this._getApps.bind(this));
-		
+		this._editorOptionsDlg.ibxWidget("member", "_appBtn").on("click", this._getAppsServerAccess.bind(this));
 		this._editorOptionsDlg.ibxWidget("member", "_selAppBtn").on("click", this._addApp.bind(this));		
 		this._editorOptionsDlg.ibxWidget("member", "_delAppBtn").on("click", this._delApp.bind(this));
 		
@@ -2158,7 +1832,7 @@ $.widget("ibi.textEditor", $.ibi.ibxDialog,
 		this._editorOptionsDlg.ibxWidget("member", "_appDown").on("click", this._dwnApp.bind(this));
 	},
 	
-	_chkSrvAccess:function()
+	_getAppsServerAccess:function()
 	{		
 		var sa = new ServerAccess();
 		sa.checkCredentials(this.editor_options.server, this._getApps.bind(this), "", false);
@@ -2201,16 +1875,8 @@ $.widget("ibi.textEditor", $.ibi.ibxDialog,
 					
 			this.editor_options.server = this._editorOptionsDlg.ibxWidget("member", "_srvList").ibxWidget("userValue");
 
-			
 			this.editor_options.appPath = "";
 						
-			/*
-			var ch = this._selAppList.ibxWidget("children", ".ibx-select-item"); // Selector in case there are groups on the list
-			
-			ch.each(function (index, el){
-				var text = $(t).ibxWidget("userValue");
-			})
-			*/
 			var ch = this._editorOptionsDlg.ibxWidget("member", "_selAppList").ibxWidget("children");
 			
 			var appPathValue = "";
@@ -2447,7 +2113,7 @@ $.widget("ibi.textEditor", $.ibi.ibxDialog,
 		textArea.focus();
 	},
 
-	_checkPath(path)
+	_checkPath:function(path)
 	{
 		if(path.endsWith("/"))
 			path = path.substring(0, path.lastIndexOf("/"))
