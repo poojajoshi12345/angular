@@ -113,7 +113,7 @@ $.widget("ibi.ibxSpinner", $.ibi.ibxTextField,
 	{
 		var value = this._textInput.val();
 		var numValue = parseInt(value, 10);
-		if (isNaN(numValue))
+		if (!$.isNumeric(numValue))
 			numValue = this.options.min;
 		if (numValue > this.options.max)
 			numValue = this.options.max;
