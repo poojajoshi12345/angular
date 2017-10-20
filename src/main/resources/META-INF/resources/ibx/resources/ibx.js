@@ -353,14 +353,14 @@ ibx.coercePropVal = function (val)
 	if(typeof(val) == "string" && val.length)
 	{
 		var tempVal = $.trim(val.toLowerCase());
-		if (tempVal == "true")
+		if(tempVal == "true")
 			val = true;
 		else
-		if (tempVal == "false")
+		if(tempVal == "false")
 			val = false;
 		else
-		if (!isNaN(tempVal = Number(val)))
-			val = tempVal;
+		if($.isNumeric(val))
+			val = Number(tempVal);
 	}
 	return val;
 };
