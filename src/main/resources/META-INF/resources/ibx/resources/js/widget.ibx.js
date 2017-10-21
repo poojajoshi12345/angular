@@ -10,16 +10,16 @@ $.widget("ibi.ibxWidget", $.Widget,
 		"ctxMenu":null,
 		"dragScrolling":false,
 		"wantResize":false,
-		"defaultFocused":false,		//for popup...should this be focused on open
+		"defaultFocused":false,			//for popup...should this be focused on open
 		
 		//for circular tabbing
-		"focusRoot":false,			//for circular tabbing management...like in a dialog.
+		"focusRoot":false,				//for circular tabbing management...like in a dialog.
 		
 		//for keyboard arrows navigation (mostly composite widgets like menus/selects/etc...508)
-		"navKeyRoot":false,			//start key nav here
-		"navKeyDir": "horizontal",	//horizontal = left/right, vertical = up/down, or both
-		"navKeyAutoFocus":false,	//do an initial nav when this gets focus (basically focus first child focusable item on this focus)
-		
+		"navKeyRoot":false,						//start key nav here
+		"navKeyDir": "horizontal",		//horizontal = left/right, vertical = up/down, or both
+		"navKeyAutoFocus":false,		//do an initial nav when this gets focus (basically focus first child focusable item on this focus)
+
 		//ARIA (508)
 		"aria":
 		{
@@ -158,6 +158,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 	},
 	_onWidgetFocusEvent:function(e)
 	{
+		var options = this.options;
 		var isTarget = this.element.is(e.target);
 		var isRelTarget = this.element.is(e.relatedTarget);
 		var ownsTarget = $.contains(this.element[0], e.target);
@@ -168,13 +169,12 @@ $.widget("ibi.ibxWidget", $.Widget,
 		{
 			if(e.type == "focusin")
 			{
-				if(this.options.navKeyAutoFocus && isTarget)
+				if((options.navKeyAutoFocus !== false) && isTarget)
 				{
-					//auto focus the first child if specified
-					var focusable = this.element.find(":ibxFocusable");
-					var child = focusable.filter(".ibx-nav-item-active").first();
-					child = child.length ? child :  focusable.first();
-					child.focus();
+					//auto focus default to the first focusable child (or last active)
+					var focusable = this.element.find((options.navKeyAutoFocus === true) ? ":ibxFocusable" : options.navKeyAutoFocus);
+					var focusItem = (options.navKeyAutoFocus === true) ? focusable.filter(".ibx-nav-item-active") : focusable;
+					focusItem.length ? focusItem.focus() : focusable.first().focus();
 				}
 				this._trigger("widgetfocus", e);
 			}
