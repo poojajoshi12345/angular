@@ -5,9 +5,12 @@ $.widget("ibi.ibxRadioGroup", $.ibi.ibxWidget,
 {
 	options:
 		{
-			name: "",
-			form: "",
-			userValue: "",
+			"navKeyRoot":true,
+			"navKeyAutoFocus":true,
+			"name": "",
+			"form": "",
+			"userValue": "",
+			"aria":{"role":"radiogroup"}
 		},
 	_widgetClass: "ibx-radio-group",
 	_onChangeBind: null,
@@ -17,10 +20,8 @@ $.widget("ibi.ibxRadioGroup", $.ibi.ibxWidget,
 		this._onChangeBind = this._onChange.bind(this);
 		this._onBeforeChangeBind = this._onBeforeChange.bind(this);
 		this._super();
-		this.element.hide();
 		this._formControl = $("<div>").ibxFormControl({name: this.options.name, form: this.options.form});
 		this.element.append(this._formControl);
-		this.addControl($(".ibx-radio-group-" + this.options.name));
 	},
 	_setAccessibility:function(accessible, aria)
 	{
@@ -36,6 +37,12 @@ $.widget("ibi.ibxRadioGroup", $.ibi.ibxWidget,
 	_destroy: function ()
 	{
 		this._super();
+	},
+	_init:function()
+	{
+		this._super();
+		var radioButtons = this.element.children(".ibx-radio-button, .ibx-radio-button-simple").add(".ibx-radio-group-" + this.options.name);
+		this.addControl(radioButtons);
 	},
 	_onBeforeChange: function (e, el)
 	{
@@ -187,6 +194,8 @@ $.widget("ibi.ibxRadioGroup", $.ibi.ibxWidget,
 	_refresh: function ()
 	{
 		this.element.addClass('ibx-radio-group-control-' + this.options.name);
+		if(!this.element.children().length)
+			this.element.hide();
 		this._super();
 	}
 });
