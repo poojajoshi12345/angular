@@ -119,7 +119,7 @@ $.widget("ibi.ibxCheckBox", $.ibi.ibxLabel,
 		this._check = $('<input type="checkbox" class="ibx-native-input"></input>');
 		this.add(this._check, this.children()[0], true);
 		this.element.on("click", this._onClick.bind(this));
-		this.element.on("keydown", this._onKeyEvent.bind(this));
+		this.element.on("keydown", this._onKeyEvent.bind(this)).addClass("ibx-can-toggle");
 	},
 	_setAccessibility:function(accessible, aria)
 	{

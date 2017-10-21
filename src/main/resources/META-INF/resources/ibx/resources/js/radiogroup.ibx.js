@@ -41,7 +41,7 @@ $.widget("ibi.ibxRadioGroup", $.ibi.ibxWidget,
 	_init:function()
 	{
 		this._super();
-		var radioButtons = this.element.children(".ibx-radio-button, .ibx-radio-button-simple").add(".ibx-radio-group-" + this.options.name);
+		var radioButtons = this.element.children(".ibx-can-toggle").add(".ibx-radio-group-" + this.options.name);
 		this.addControl(radioButtons);
 	},
 	_onBeforeChange: function (e, el)
