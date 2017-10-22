@@ -194,7 +194,7 @@ $.widget("ibi.ibxRadioGroup", $.ibi.ibxWidget,
 	_refresh: function ()
 	{
 		this.element.addClass('ibx-radio-group-control-' + this.options.name);
-		if(!this.element.children().length)
+		if(!this.element.children(":visible").length)
 			this.element.hide();
 		this._super();
 	}
