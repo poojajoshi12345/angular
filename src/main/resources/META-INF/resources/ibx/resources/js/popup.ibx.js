@@ -91,6 +91,7 @@ $.widget("ibi.ibxPopup", $.ibi.ibxWidget,
 
 				}
 			}.bind(this));
+
 			this._trigger("popup_mgr_open", null, this.element);
 		}
 	},
@@ -109,6 +110,7 @@ $.widget("ibi.ibxPopup", $.ibi.ibxWidget,
 				{
 					//remove the transition event listener.
 					//remove top/left to get way off screen and stop weird scrollbars on body.
+					this.element.removeClass("ibx-popup-closing");
 					this.element.off("transitionend").css({top:"", left:""});
 					this._trigger("close", null, closeInfo);
 					
@@ -120,6 +122,8 @@ $.widget("ibi.ibxPopup", $.ibi.ibxWidget,
 					}
 				}
 			}.bind(this, closeInfo));
+
+			this.element.addClass("ibx-popup-closing");
 			this._trigger("popup_mgr_close", null, this.element);
 		}
 	},
