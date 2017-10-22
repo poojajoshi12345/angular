@@ -1,10 +1,11 @@
 /*Copyright 1996-2016 Information Builders, Inc. All rights reserved.*/
 // $Revision$:
 
-$.widget("ibi.ibxRadioGroup", $.ibi.ibxWidget,
+$.widget("ibi.ibxRadioGroup", $.ibi.ibxFlexBox,
 {
 	options:
 		{
+			"inline":true,
 			"navKeyRoot":true,
 			"navKeyAutoFocus":true,
 			"name": "",
@@ -194,10 +195,12 @@ $.widget("ibi.ibxRadioGroup", $.ibi.ibxWidget,
 	_refresh: function ()
 	{
 		this.element.addClass('ibx-radio-group-control-' + this.options.name);
-		if(!this.element.children(":visible").length)
-			this.element.hide();
+		(!this.element.children(":not(.ibx-form-control)").length) ? this.element.css("display", "none") : this.element.css("display", null);
 		this._super();
 	}
 });
+$.widget("ibi.ibxHRadioGroup", $.ibi.ibxRadioGroup, {options:{direction:"row"}});
+$.widget("ibi.ibxVRadioGroup", $.ibi.ibxRadioGroup, {options:{direction:"column"}});
+
 //# sourceURL=radiogroup.ibx.js
 
