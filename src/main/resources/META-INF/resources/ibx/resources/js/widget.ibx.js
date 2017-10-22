@@ -10,15 +10,16 @@ $.widget("ibi.ibxWidget", $.Widget,
 		"ctxMenu":null,
 		"dragScrolling":false,
 		"wantResize":false,
-		"defaultFocused":false,			//for popup...should this be focused on open
+		"defaultFocused":false,					//for popup...should this be focused on open
 		
 		//for circular tabbing
-		"focusRoot":false,				//for circular tabbing management...like in a dialog.
+		"focusRoot":false,						//for circular tabbing management...like in a dialog.
 		
 		//for keyboard arrows navigation (mostly composite widgets like menus/selects/etc...508)
 		"navKeyRoot":false,						//start key nav here
-		"navKeyDir": "horizontal",		//horizontal = left/right, vertical = up/down, or both
-		"navKeyAutoFocus":false,		//do an initial nav when this gets focus (basically focus first child focusable item on this focus)
+		"navKeyDir": "horizontal",				//horizontal = left/right, vertical = up/down, or both
+		"navKeyAutoFocus":false,				//do an initial nav when this gets focus (basically focus first child or last active item)
+		"navKeyResetFocusOnBlur": false,		//when widget loses focus, reset the current active navKey child.
 
 		//ARIA (508)
 		"aria":
@@ -171,18 +172,29 @@ $.widget("ibi.ibxWidget", $.Widget,
 			{
 				if((options.navKeyAutoFocus !== false) && isTarget)
 				{
-					//auto focus default to the first focusable child (or last active)
+					//auto focus - default to the first focusable child (or last active)
 					var focusable = this.element.find((options.navKeyAutoFocus === true) ? ":ibxFocusable" : options.navKeyAutoFocus);
 					var focusItem = (options.navKeyAutoFocus === true) ? focusable.filter(".ibx-nav-item-active") : focusable;
 					focusItem.length ? focusItem.focus() : focusable.first().focus();
+
+					//take this element out of the tab order...so that shift+tab will go from child to natural prev tab item.
+					this.element.data("navKeyRootTabIndex", this.element.prop("tabIndex")).prop("tabIndex", -1);
 				}
+
 				this._trigger("widgetfocus", e);
 			}
 			else
 			if(e.type == "focusout")
 			{
+				//next time we get focus focus the first item.
+				if(options.navKeyResetFocusOnBlur)
+					this.children().removeClass("ibx-nav-item-active").removeAttr("aria-activedescendant");
+				
+				//put this element back in the tab order...so that next tab into will will do auto-focus.
+				if(options.navKeyAutoFocus)
+					this.element.prop("tabIndex", this.element.data("navKeyRootTabIndex")).removeData("navKeyRootTabIndex");
+				
 				this._trigger("widgetblur", e);
-				//this.children().removeClass("ibx-nav-item-active").removeAttr("aria-activedescendant");
 			}
 		}
 

@@ -34,7 +34,7 @@ $.widget("ibi.ibxRadioGroup", $.ibi.ibxWidget,
 		aria.controls = btnIds;
 		return aria;
 	},
-	_destroy: function ()
+	_destroy:function()
 	{
 		this._super();
 	},
