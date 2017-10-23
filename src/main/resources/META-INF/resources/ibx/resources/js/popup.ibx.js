@@ -16,6 +16,8 @@ $.widget("ibi.ibxPopup", $.ibi.ibxWidget,
 		"autoFocus":true,
 		"effect":"none",
 		"closeOnTimer":-1,
+		"refocusLastActiveOnClose":true,
+
 		"position":
 		{
 			/* for my/at position values see: http://api.jqueryui.com/position/ */
@@ -102,7 +104,7 @@ $.widget("ibi.ibxPopup", $.ibi.ibxWidget,
 			this.element.on("transitionend", function(closeInfo, e)
 			{
 				//refocus the previously active element.
-				if(this._elPrevActive)
+				if(this._elPrevActive && this.options.refocusLastActiveOnClose)
 					this._elPrevActive.focus();
 				delete this._elPrevActive;
 
