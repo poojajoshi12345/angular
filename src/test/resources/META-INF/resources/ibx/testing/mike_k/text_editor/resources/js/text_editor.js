@@ -32,6 +32,7 @@ $.widget("ibi.textEditor", $.ibi.ibxDialog,
 		this.oldCursorCharacterPosition = 0;
 		this.tool = "";
 		this.type = "";
+		this._callbackFunc = null;
 		
 		this.fullName = "";
 		this.itemName = "";
@@ -252,6 +253,11 @@ $.widget("ibi.textEditor", $.ibi.ibxDialog,
 			this._setCursorPositionInfo();
 			this._onExit();
 		}
+	},
+	
+	setCallbackFunction:function(f)
+	{
+		this._callbackFunc = f;
 	},
 	
 	setEditorPath:function(rootPath, folderPath, fileName) // Public method to setup Editor.
@@ -924,11 +930,15 @@ $.widget("ibi.textEditor", $.ibi.ibxDialog,
 	},
 	
 	_gotSaveResponse:function(data)
-	{				
+	{
 		if (this.newDoc)
-		{
-			// TODO: refresh tree if any
+		{			
+			if(this._callbackFunc)
+			{
+				this._callbackFunc.call();
+			}
 			
+			$(document).trigger( 'FORCE_ACTION_ON_FOLDER', {"detail":this.folderPath} );			
 		}
 		else
 		{		
@@ -1106,7 +1116,6 @@ $.widget("ibi.textEditor", $.ibi.ibxDialog,
  			this._txtArea.focus();
 		}
 	},
-
 	
 	_selectionToUpperCase:function(e)
 	{
@@ -1296,8 +1305,6 @@ $.widget("ibi.textEditor", $.ibi.ibxDialog,
 //		}
 	},
 	
-	
-	
 	_toggleGoToLine:function(e)
 	{
 		var isVisible = this._goToLine.is(":visible");
@@ -1347,7 +1354,6 @@ $.widget("ibi.textEditor", $.ibi.ibxDialog,
 		this._toggleGoToLine(e);
 		this._setCursorPositionInfo(e);
 	},
-	
 	
 	_toggleFindReplace:function(e)
 	{
@@ -1712,8 +1718,6 @@ $.widget("ibi.textEditor", $.ibi.ibxDialog,
 		}
 	},
 
-	
-
 	_onOptions:function(e)
 	{	
 		
@@ -1899,8 +1903,7 @@ $.widget("ibi.textEditor", $.ibi.ibxDialog,
 			this.editor_options.appPath = appPathValue;
 		}
 
-	},
-	
+	},	
 
 	_upApp:function(e)
 	{		
@@ -2083,8 +2086,6 @@ $.widget("ibi.textEditor", $.ibi.ibxDialog,
 		this._editorOptionsDlg.ibxWidget("member", "_selAppList").ibxWidget("option", "disabled", !isAppChecked);
 	},
 	
-
-	
 	_selectAll:function(textArea)
 	{
 		textArea.focus();		
@@ -2116,7 +2117,7 @@ $.widget("ibi.textEditor", $.ibi.ibxDialog,
 	_checkPath:function(path)
 	{
 		if(path.endsWith("/"))
-			path = path.substring(0, path.lastIndexOf("/"))
+			path = path.substring(0, path.lastIndexOf("/"));
 			
 		return path;
 	},
