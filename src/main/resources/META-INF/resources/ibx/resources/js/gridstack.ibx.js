@@ -33,7 +33,7 @@ $.widget("ibi.ibxGridStack", $.ibi.ibxWidget,
 	{
 		width = width || this.options.defaultCellWidth;
 		height = height || this.options.defaultCellHeight;
-		this.element.css('min-height', "initial");
+		this.element.css('min-height', "");
 		var grid = this.element.data('gridstack');
 		var outercell = $("<div class='grid-stack-item'>");
 		var innercell = $("<div class='grid-stack-item-content'>");
