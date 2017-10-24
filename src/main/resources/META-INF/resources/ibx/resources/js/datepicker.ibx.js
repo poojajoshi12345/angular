@@ -12,7 +12,19 @@ $.widget("ibi.ibxDatePicker", $.ibi.ibxVBox,
 			"showClear": false,
 			"pickerClasses": '',
 			"date": $.datepicker.formatDate("MM d, yy", new Date()),
-		},
+			"numberOfMonths": 1,
+			"closeText" : ibx.resourceMgr.getString("IBX_DP_CLOSE_TEXT"),
+			"prevText" : ibx.resourceMgr.getString("IBX_DP_PREV_TEXT"),
+			"nextText" : ibx.resourceMgr.getString("IBX_DP_NEXT_TEXT"),
+			"currentText" : ibx.resourceMgr.getString("IBX_DP_CUR_TEXT"),
+			"weekHeader" : ibx.resourceMgr.getString("IBX_DP_WEEK_HEADER"),
+			"monthNames" : (eval(ibx.resourceMgr.getString("IBX_DP_MONTHS"))),
+			"monthNamesShort" : (eval(ibx.resourceMgr.getString("IBX_DP_MONTHS_SHORT"))),
+			"dayNames" : (eval(ibx.resourceMgr.getString("IBX_DP_DAYS"))),
+			"dayNamesShort" : (eval(ibx.resourceMgr.getString("IBX_DP_DAYS_SHORT"))),
+			"dayNamesMin" : (eval(ibx.resourceMgr.getString("IBX_DP_DAYS_MIN"))),
+			"buttonText" : ibx.resourceMgr.getString("IBX_DP_BUTTON_TEXT"),
+	},
 	_widgetClass: "ibx-datepicker",
 	_create: function ()
 	{
@@ -23,7 +35,7 @@ $.widget("ibi.ibxDatePicker", $.ibi.ibxVBox,
 		this._inputWrapper = $('<div>').ibxHBox({align: 'center'}).addClass('ibx-datepicker-input-wrapper');
 		this._inputWrapper.append(this._input, this._clear);
 		this._dateWrapper = $('<div>').ibxFlexBox({ 'wrap': false });
-		this._datePicker = $('<div>').datepicker({'onSelect': this._onSelect.bind(this), numberOfMonths: 1 });
+		this._datePicker = $('<div>').datepicker({"onSelect": this._onSelect.bind(this)});
 		this._dateWrapper.append(this._datePicker).addClass('ibx-datepicker-date-wrapper');
 		this.element.append(this._inputWrapper, this._dateWrapper);
 		this._popup = $('<div class="ibx-datepicker-popup">').ibxPopup({'destroyOnClose': false});
@@ -49,7 +61,8 @@ $.widget("ibi.ibxDatePicker", $.ibi.ibxVBox,
 		switch (this.options.type)
 		{
 			case 'popup':
-				this._popup.ibxWidget('close');
+				if (this._popup.ibxWidget('isOpen'))
+					this._popup.ibxWidget('close');
 				break;
 			default:
 				break;
@@ -85,7 +98,8 @@ $.widget("ibi.ibxDatePicker", $.ibi.ibxVBox,
 		this._datePicker.datepicker('setDate', this.options.date);
 		this._input.ibxWidget('option', 'text', this.options.date);
 		this._super();
-		this._popup.ibxWidget('close');
+		if (this._popup.ibxWidget('isOpen'))
+			this._popup.ibxWidget('close');
 		switch (this.options.type)
 		{
 			default:
@@ -118,15 +132,15 @@ $.widget("ibi.ibxDateRange", $.ibi.ibxDatePicker,
 	{
 		"dateTo": $.datepicker.formatDate("MM d, yy", new Date()),
 		"dateFrom": $.datepicker.formatDate("MM d, yy", new Date()),
+		"numberOfMonths": 2,
 	},
 	_create: function ()
 	{
 		this._super();
 		this._input2 = $('<div class="ibx-datepicker-input">').ibxLabel({ glyphClasses: "fa fa-calendar", 'align': 'stretch' }).on('click', this._showPopup.bind(this));
 		this._clear2 = $('<div class="ibx-datepicker-clear">').ibxButtonSimple({glyphClasses:"fa fa-times"}).on('click', this._onClear2.bind(this)).hide();
-		this._inputWrapper.append(this._input2, this._clear2);
-		this._datePicker.datepicker('option', 'numberOfMonths', 2);
 		this._datePicker.datepicker('option', 'onChangeMonthYear', this._onChangeMonthYear.bind(this));
+		this._inputWrapper.append(this._input2, this._clear2);
 		this._input.ibxWidget('option', 'text', this.options.dateFrom);
 		this._input2.ibxWidget('option', 'text', this.options.dateTo);
 		window.setTimeout(function () { this._highlightRange(); }.bind(this), 10);
