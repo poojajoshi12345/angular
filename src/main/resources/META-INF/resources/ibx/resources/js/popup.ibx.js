@@ -94,7 +94,8 @@ $.widget("ibi.ibxPopup", $.ibi.ibxWidget,
 				}
 			}.bind(this));
 
-			this._trigger("popup_mgr_open", null, this.element);
+			if(!this.isOpen())
+				this._trigger("popup_mgr_open", null, this.element);
 		}
 	},
 	close:function(closeInfo)
@@ -125,8 +126,11 @@ $.widget("ibi.ibxPopup", $.ibi.ibxWidget,
 				}
 			}.bind(this, closeInfo));
 
-			this.element.addClass("ibx-popup-closing");
-			this._trigger("popup_mgr_close", null, this.element);
+			if(this.isOpen())
+			{
+				this.element.addClass("ibx-popup-closing");
+				this._trigger("popup_mgr_close", null, this.element);
+			}
 		}
 	},
 	_refresh:function()
