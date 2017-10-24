@@ -186,7 +186,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 			else
 			if(e.type == "focusout")
 			{
-				//next time we get focus focus the first item.
+				//remove active so next focus goes to first item.
 				if(options.navKeyResetFocusOnBlur)
 					this.children().removeClass("ibx-nav-item-active").removeAttr("aria-activedescendant");
 				

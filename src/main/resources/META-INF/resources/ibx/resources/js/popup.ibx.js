@@ -61,6 +61,7 @@ $.widget("ibi.ibxPopup", $.ibi.ibxWidget,
 	{
 		if(this._trigger("beforeopen", null, openInfo))
 		{
+			//save currently active element for refocusing on close.
 			this._elPrevActive = document.activeElement;
 			if(!this.element.parent().length)
 				this.element.appendTo(document.body);
