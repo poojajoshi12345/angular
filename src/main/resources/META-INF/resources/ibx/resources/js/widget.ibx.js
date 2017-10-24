@@ -186,14 +186,19 @@ $.widget("ibi.ibxWidget", $.Widget,
 			else
 			if(e.type == "focusout")
 			{
-				//remove active so next focus goes to first item.
-				if(options.navKeyResetFocusOnBlur)
-					this.children().removeClass("ibx-nav-item-active").removeAttr("aria-activedescendant");
+				//active items and tabbing are handled in a given 'context'...popups introduce a higher context, so ignore them here.
+				if(!$(e.relatedTarget).is(".ibx-popup"))
+				{
+					//remove active so next focus goes to first item.
+					if(options.navKeyResetFocusOnBlur)
+						this.children().removeClass("ibx-nav-item-active").removeAttr("aria-activedescendant");
 				
-				//put this element back in the tab order...so that next tab into will will do auto-focus.
-				if(options.navKeyAutoFocus)
-					this.element.prop("tabIndex", this.element.data("navKeyRootTabIndex")).removeData("navKeyRootTabIndex");
+					//put this element back in the tab order...so that next tab into will will do auto-focus.
+					if(options.navKeyAutoFocus)
+						this.element.prop("tabIndex", this.element.data("navKeyRootTabIndex")).removeData("navKeyRootTabIndex");
 				
+				}
+
 				this._trigger("widgetblur", e);
 			}
 		}
