@@ -13,17 +13,6 @@ $.widget("ibi.ibxDatePicker", $.ibi.ibxVBox,
 			"pickerClasses": '',
 			"date": $.datepicker.formatDate("MM d, yy", new Date()),
 			"numberOfMonths": 1,
-			"closeText" : ibx.resourceMgr.getString("IBX_DP_CLOSE_TEXT"),
-			"prevText" : ibx.resourceMgr.getString("IBX_DP_PREV_TEXT"),
-			"nextText" : ibx.resourceMgr.getString("IBX_DP_NEXT_TEXT"),
-			"currentText" : ibx.resourceMgr.getString("IBX_DP_CUR_TEXT"),
-			"weekHeader" : ibx.resourceMgr.getString("IBX_DP_WEEK_HEADER"),
-			"monthNames" : (eval(ibx.resourceMgr.getString("IBX_DP_MONTHS"))),
-			"monthNamesShort" : (eval(ibx.resourceMgr.getString("IBX_DP_MONTHS_SHORT"))),
-			"dayNames" : (eval(ibx.resourceMgr.getString("IBX_DP_DAYS"))),
-			"dayNamesShort" : (eval(ibx.resourceMgr.getString("IBX_DP_DAYS_SHORT"))),
-			"dayNamesMin" : (eval(ibx.resourceMgr.getString("IBX_DP_DAYS_MIN"))),
-			"buttonText" : ibx.resourceMgr.getString("IBX_DP_BUTTON_TEXT"),
 	},
 	_widgetClass: "ibx-datepicker",
 	_create: function ()
@@ -35,7 +24,20 @@ $.widget("ibi.ibxDatePicker", $.ibi.ibxVBox,
 		this._inputWrapper = $('<div>').ibxHBox({align: 'center'}).addClass('ibx-datepicker-input-wrapper');
 		this._inputWrapper.append(this._input, this._clear);
 		this._dateWrapper = $('<div>').ibxFlexBox({ 'wrap': false });
-		this._datePicker = $('<div>').datepicker({"onSelect": this._onSelect.bind(this)});
+		this._datePicker = $('<div>').datepicker({
+			"closeText" : ibx.resourceMgr.getString("IBX_DP_CLOSE_TEXT"),
+			"prevText" : ibx.resourceMgr.getString("IBX_DP_PREV_TEXT"),
+			"nextText" : ibx.resourceMgr.getString("IBX_DP_NEXT_TEXT"),
+			"currentText" : ibx.resourceMgr.getString("IBX_DP_CUR_TEXT"),
+			"weekHeader" : ibx.resourceMgr.getString("IBX_DP_WEEK_HEADER"),
+			"monthNames" : (eval(ibx.resourceMgr.getString("IBX_DP_MONTHS"))),
+			"monthNamesShort" : (eval(ibx.resourceMgr.getString("IBX_DP_MONTHS_SHORT"))),
+			"dayNames" : (eval(ibx.resourceMgr.getString("IBX_DP_DAYS"))),
+			"dayNamesShort" : (eval(ibx.resourceMgr.getString("IBX_DP_DAYS_SHORT"))),
+			"dayNamesMin" : (eval(ibx.resourceMgr.getString("IBX_DP_DAYS_MIN"))),
+			"buttonText" : ibx.resourceMgr.getString("IBX_DP_BUTTON_TEXT"),
+			"onSelect": this._onSelect.bind(this),
+		});
 		this._dateWrapper.append(this._datePicker).addClass('ibx-datepicker-date-wrapper');
 		this.element.append(this._inputWrapper, this._dateWrapper);
 		this._popup = $('<div class="ibx-datepicker-popup">').ibxPopup({'destroyOnClose': false});
