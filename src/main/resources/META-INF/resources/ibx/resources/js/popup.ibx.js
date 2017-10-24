@@ -109,19 +109,22 @@ $.widget("ibi.ibxPopup", $.ibi.ibxWidget,
 					this._elPrevActive.focus();
 				delete this._elPrevActive;
 
-				if(e.originalEvent.propertyName == "visibility" && !this.isOpen())
+				if(e.originalEvent.propertyName == "visibility")
 				{
-					//remove the transition event listener.
-					//remove top/left to get way off screen and stop weird scrollbars on body.
 					this.element.removeClass("ibx-popup-closing");
-					this.element.off("transitionend").css({top:"", left:""});
-					this._trigger("close", null, closeInfo);
-					
-					//destroy on close, if desired
-					if(!this._destroyed && this.options.destroyOnClose)
+					if(!this.isOpen())
 					{
-						this.destroy();
-						this.element.remove();
+						//remove the transition event listener.
+						//remove top/left to get way off screen and stop weird scrollbars on body.
+						this.element.off("transitionend").css({top:"", left:""});
+						this._trigger("close", null, closeInfo);
+					
+						//destroy on close, if desired
+						if(!this._destroyed && this.options.destroyOnClose)
+						{
+							this.destroy();
+							this.element.remove();
+						}
 					}
 				}
 			}.bind(this, closeInfo));
