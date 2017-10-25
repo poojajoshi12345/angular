@@ -1,3 +1,10 @@
+		var tabIndex = this.element.attr("tabIndex");
+		if(e.type == "focus" && ibxPlatformCheck.isIE && tabIndex < 0)
+			this.element.addClass("ibx-ie-widget-pseudo-focus");
+		else
+		if(e.type == "blur" && ibxPlatformCheck.isIE && tabIndex < 0)
+			this.element.removeClass("ibx-ie-widget-pseudo-focus");
+
 
 
 

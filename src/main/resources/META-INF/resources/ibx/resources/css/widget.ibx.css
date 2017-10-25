@@ -16,6 +16,11 @@
 {
 }
 
+.ibx-ie-widget-pseudo-focus
+{
+	outline:1px dotted black;
+}
+
 .ibx-widget-disabled
 {
 	opacity:.5;
