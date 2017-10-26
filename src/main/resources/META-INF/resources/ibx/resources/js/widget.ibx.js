@@ -464,6 +464,7 @@ $.ibi.ibxWidget.navKeys = [$.ui.keyCode.LEFT, $.ui.keyCode.RIGHT, $.ui.keyCode.U
 	_p.setDragImage = function(img, xOffset, yOffset)
 	{
 		this._dragImage = $(img);
+		this._dragImage.css("position", "absolute");
 		this.dragXOffset = xOffset || this.dragXOffset;
 		this.dragYOffset = yOffset || this.dragYOffset;
 	};
@@ -575,9 +576,10 @@ $.ibi.ibxWidget.navKeys = [$.ui.keyCode.LEFT, $.ui.keyCode.RIGHT, $.ui.keyCode.U
 						dEvent = this._dispatchDragEvent(e, "ibx_dragstart", this.element);
 						if(!dEvent.isDefaultPrevented())
 						{
+							//start dragging...and also set default drag image if not already set.
 							this.element.addClass(options.dragClass);
-							var img = this.getDefaultDragImage(this.element).addClass(options.dragImageClass);
-							this._dataTransfer.setDragImage(img);
+							if(!this._dataTransfer._dragImage)
+								this._dataTransfer.setDragImage(this.getDefaultDragImage(this.element).addClass(options.dragImageClass));
 						}
 					}
 
