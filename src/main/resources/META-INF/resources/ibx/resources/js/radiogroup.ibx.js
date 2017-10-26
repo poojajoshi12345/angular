@@ -42,8 +42,8 @@ $.widget("ibi.ibxRadioGroup", $.ibi.ibxFlexBox,
 	_init:function()
 	{
 		this._super();
-		var radioButtons = this.element.children(".ibx-can-toggle").add(".ibx-radio-group-" + this.options.name);
-		this.addControl(radioButtons);
+		this.add(this.element.children(".ibx-can-toggle").detach());//add children to this group.
+		this.addControl(".ibx-radio-group-" + this.options.name);//any buttons specified for this group.
 	},
 	_onBeforeChange: function (e, el)
 	{
@@ -87,6 +87,22 @@ $.widget("ibi.ibxRadioGroup", $.ibi.ibxFlexBox,
 			}.bind(this));
 			return this;
 		}
+	},
+	add:function(el, elSibling, before, refresh)
+	{
+		$(el).each(function(idx, el)
+		{
+			el = $(el)
+			if(!el.attr("tabIndex"))
+				el.attr("tabIndex", -1);
+			this.addControl(el);
+		}.bind(this));
+		this._super(el, elSibling, before, refresh);
+	},
+	remove:function(el, destroy, refresh)
+	{
+		this.removeControl(el);
+		this._super(el, destroy, refresh);
 	},
 	addControl: function (element)
 	{
@@ -195,7 +211,7 @@ $.widget("ibi.ibxRadioGroup", $.ibi.ibxFlexBox,
 	_refresh: function ()
 	{
 		this.element.addClass('ibx-radio-group-control-' + this.options.name);
-		(!this.element.children(":not(.ibx-form-control)").length) ? this.element.css("display", "none") : this.element.css("display", null);
+		(!this.element.children(":not(.ibx-form-control)").length) ? this.element.css("display", "none") : this.element.css("display", "");
 		this._super();
 	}
 });
