@@ -8,28 +8,55 @@ $.widget("ibi.ibxProgressBar", $.ibi.ibxHBox,
 {
 	options:
 	{
-		minVal:0,
-		maxVal:100,
-		curVal:0,
-		curValClasses:"",
-		markerClasses:"",
-		progText:"",
+		"minVal":0,
+		"maxVal":100,
+		"curVal":0,
+		"markerClasses":"",
+
+		"showProgText":false,
+		"progText":"",
+		"progTextClasses":"",
+		"progArea":"body",
 
 		//flexbox options
-		inline:true,
-		align:"stretch",
+		"inline":true,
+		"align":"stretch",
+
+		"aria":{"role":"progressbar"},
 	},
 	_widgetClass:"ibx-progress-bar",
 	_create:function()
 	{
 		this._super();
-		this.progLabel = $("<div class='ibx-progress-label'>").ibxHBox({align:"stretch", justify:"end"});
+		this.progText = $("<div class='ibx-progress-label'>").ibxHBox({align:"stretch", justify:"end"});
 		this.progMarker = $("<div class='ibx-progress-marker'>").ibxHBox({align:"stretch"});
-		this.element.append(this.progMarker, this.progLabel);
+		this.element.append(this.progMarker);
+	},
+	_setAccessibility:function(accessible, aria)
+	{
+		aria = this._super(accessible, aria);
+		var options = this.options;
+
+		accessible ? this.progText.ibxAriaId() : this.progText.removeIbxAriaId();
+		aria.live = "assertive";
+		aria.valuemin = options.minVal;
+		aria.valuemax = options.maxVal;
+		aria.valuenow = options.curVal;
+
+		var progArea = $(options.progArea);
+		(accessible && this.inProgress()) ? progArea.attr("aria-busy", true) : progArea.removeAttr("aria-busy");
+
+		return aria;
 	},
 	_destroy:function()
 	{
 		this._super();
+	},
+	inProgress:function()
+	{
+		var options = this.options;
+		return (options.curVal > options.minVal && options.curVal < options.maxVal);
+
 	},
 	_refresh:function()
 	{
@@ -37,11 +64,13 @@ $.widget("ibi.ibxProgressBar", $.ibi.ibxHBox,
 		var options = this.options;
 
 		this._trigger("format_value", this.element, options.curVal);
-		this.progLabel.text(options.progText);
+		this.progText.text(options.progText || options.curVal);
 
 		var flex = (options.curVal - options.minVal)/(options.maxVal - options.minVal);
 		this.progMarker.css("flex-grow", flex).addClass(options.markerClasses);
-		this.progLabel.css("flex-grow", 1-flex).addClass(options.curValClasses);
+		this.progText.css({"flex-grow":1-flex, "display":options.showProgText ? "" : "none"}).addClass(options.progTextClasses);
+	
+		this.element.append(this.progMarker, this.progText);
 	}
 });
 
