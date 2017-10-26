@@ -76,13 +76,18 @@
 	<body class="ibx-root">
 		<div class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="center" data-ibxp-justify="center">
 
+
 			<div id="parentDiv" class="parent parent-div" tabIndex="0">Parent Div
 				<div id="childDiv" class="child child-div" tabIndex="-1" data-ibx-type="ibxWidget">Child Div</div>
 			</div>
 
+			<input tabIndex="0" type="text"></text>
+			<textarea tabIndex="0"></textarea>
+
 			<div id="parentWidget" class="parent parent-widget" tabIndex="0" data-ibx-type="ibxWidget" data-ibxp-nav-key-root="true" data-ibxp-nav-key-auto-focus="true">Parent Widget
 				<div id="childWidget" class="child child-widget" tabIndex="-1" data-ibx-type="ibxWidget">Child Widget</div>
 			</div>
+
 
 			<div id="menubar" class="test-menubar" tabIndex="0" aria-label="Example IBX horizontal menu bar" data-ibx-type="ibxHMenuBar" data-ibxp-aria.label="Menus">
 				<div id="filemenu" class="menu-btn-file" data-ibx-type="ibxMenuButton" data-ibxp-text="File">

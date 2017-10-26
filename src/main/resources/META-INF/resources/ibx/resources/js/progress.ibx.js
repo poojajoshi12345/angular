@@ -85,19 +85,26 @@ $.widget("ibi.ibxWaiting", $.ibi.ibxLabel,
 {
 	options:
 	{
-		stretch:false,
-		align:"center",
-		justify:"center",
-		iconPosition:"top",
-		glyphClasses:"fa fa-spin fa-spinner",
-		text:"",
-		textWrap:true,
-		textAlign:"center",
+		"stretch":false,
+		"align":"center",
+		"justify":"center",
+		"iconPosition":"top",
+		"glyphClasses":"fa fa-spin fa-spinner",
+		"text":"",
+		"textWrap":true,
+		"textAlign":"center",
+		"aria":{"role":"progressbar"}
+
 	},
 	_widgetClass:"ibx-waiting",
 	_create:function()
 	{
 		this._super();
+	},
+	_setAccessibility:function(accessible, aria)
+	{
+		aria = this._super(accessible, aria);
+		return aria;
 	},
 	_destroy:function()
 	{
