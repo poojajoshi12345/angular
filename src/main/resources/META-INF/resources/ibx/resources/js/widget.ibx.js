@@ -167,6 +167,17 @@ $.widget("ibi.ibxWidget", $.Widget,
 		var ownsTarget = $.contains(this.element[0], e.target);
 		var ownsRelTarget = $.contains(this.element[0], e.relatedTarget);
 
+		//ie doesn't put a focus outline on -1 tabindex items.  Do manually for consistency.
+		var tabIndex = this.element.attr("tabIndex");
+		if((tabIndex < 0) && ibxPlatformCheck.isIE)
+		{
+			if(e.type == "focus" )
+				this.element.addClass("ibx-ie-pseudo-focus");
+			else
+			if(e.type == "blur")
+				this.element.removeClass("ibx-ie-pseudo-focus");
+		}
+
 		//manage the global widget focus states. That is, for complex widgets (has subwidgets), is the whole thing logically focused.
 		if(e.type == "focusin")
 		{
@@ -186,34 +197,39 @@ $.widget("ibi.ibxWidget", $.Widget,
 				
 				if(isTarget && (options.navKeyAutoFocus !== false))
 				{
-					//auto focus - default to the first focusable child (or last active)
-					var focusable = this.element.find((options.navKeyAutoFocus === true) ? ":ibxFocusable" : options.navKeyAutoFocus);
-					var focusItem = (options.navKeyAutoFocus === true) ? focusable.filter(".ibx-nav-item-active").first() : focusable.first();
-					focusItem.length ? focusItem.first().focus() : focusable.first().focus();
-
 					//take this element out of the tab order...so that shift+tab will go from child to natural prev tab item.
 					this.element.data("navKeyRootTabIndex", this.element.prop("tabIndex")).prop("tabIndex", -1);
+
+					//auto focus - default to the first focusable child (or last active).  Do on timer to preserve proper focusin/out/blur sequence.
+					window.setTimeout(function()
+					{
+						var options = this.options;
+						var focusable = this.element.find((options.navKeyAutoFocus === true) ? ":ibxFocusable" : options.navKeyAutoFocus);
+						var focusItem = (options.navKeyAutoFocus === true) ? focusable.filter(".ibx-nav-item-active").first() : focusable.first();
+						focusItem.length ? focusItem.first().focus() : focusable.first().focus();
+					}.bind(this), 0)
+
 				}
 			}
 		}
 		else
 		if(e.type == "focusout" && this._widgetFocused && (isTarget || (!isRelTarget && ownsTarget)) && !ownsRelTarget)
 		{
+			this._widgetFocused = false;
+			this.element.dispatchEvent("ibx_widgetblur", e, false, false, e.relatedTarget);
+
 			//active items and tabbing are handled in a given 'context'...popups introduce a higher context, so ignore them here.
 			if(!$(e.relatedTarget).is(".ibx-popup"))
 			{
+				//put this element back in the tab order...so that next tab into will will do auto-focus.
+				if(options.navKeyAutoFocus !== false)
+					this.element.prop("tabIndex", this.element.data("navKeyRootTabIndex")).removeData("navKeyRootTabIndex");
+
 				//remove active so next focus goes to first item.
 				if(options.navKeyResetFocusOnBlur)
 					this.children().removeClass("ibx-nav-item-active").removeAttr("aria-activedescendant");
-				
-				//put this element back in the tab order...so that next tab into will will do auto-focus.
-				if(options.navKeyAutoFocus)
-					this.element.prop("tabIndex", this.element.data("navKeyRootTabIndex")).removeData("navKeyRootTabIndex");
-				
 			}
 
-			this._widgetFocused = false;
-			this.element.dispatchEvent("ibx_widgetblur", e, false, false, e.relatedTarget);
 		}
 	},
 	_onWidgetKeyEvent:function(e)
@@ -397,6 +413,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 		this.element.toggleClass("ibx-focus-root", options.focusRoot);
 		this.element.toggleClass("ibx-nav-key-root", options.navKeyRoot);
 		this.element.toggleClass("ibx-default-focused", options.defaultFocused);
+		this.element.toggleClass("ibx-nav-key-auto-focus", options.navKeyAutoFocus);
 		this.setAccessibility();
 
 		//hookup the resize sensor if interested in resize events.

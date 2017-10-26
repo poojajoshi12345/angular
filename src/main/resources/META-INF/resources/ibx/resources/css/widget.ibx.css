@@ -12,19 +12,25 @@
 	-webkit-overflow-scrolling: touch;
 }
 
-.ibx-widget:focus
-{
-}
-
-.ibx-ie-widget-pseudo-focus
-{
-	outline:1px dotted black;
-}
-
 .ibx-widget-disabled
 {
 	opacity:.5;
 	pointer-events:none;
+}
+
+.ibx-widget:focus
+{
+}
+
+/*IE will not draw a focus outline on nodes with tabIndex -1. So, for consistency, I add it manually.*/
+.ibx-ie-pseudo-focus
+{
+	outline:1px dotted black;
+}
+
+.ibx-nav-key-auto-focus
+{
+	outline:none;
 }
 
 .ibx-focus-root

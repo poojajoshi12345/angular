@@ -33,7 +33,6 @@
 }
 
 .ibx-slider-marker:focus {
-    outline: none;
     background-color: #ccc;
     border: 1px solid #555;
     z-index: 1;
