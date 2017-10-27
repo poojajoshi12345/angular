@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--Copyright 1996-2017 Information Builders, Inc. All rights reserved. $Revision$:-->
+<ibx-res-bundle name="pd-res-shared.xml" loadContext="bundle">
+  
+	<ibx-res-bundle src="{context}/ibxtools/shared_resources/res/ibxdefaults.xml"/>
+  
+  <strings>
+   <string-file src="{res}/com.ibi.intl.ibxtools.shared_resources"  default="true"  /> 
+  </strings>
+
+  <styles>
+    <style-file src="{context}/ibxtools/shared_resources/css/search_list.css"/>
+  </styles>
+
+  <markup>
+  </markup>
+
+  <scripts>
+    <script-file src="{context}/ibxtools/shared_resources/js/search_list.js"/>
+  </scripts>
+</ibx-res-bundle>
