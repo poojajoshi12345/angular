@@ -78,10 +78,6 @@ $.widget("ibi.ibxProgressBar", $.ibi.ibxHBox,
 	}
 });
 
-$.ibi.ibxProgressBar.statics = 
-{
-};
-
 /******************************************************************************
 	WAITING WIDGET
 ******************************************************************************/
@@ -89,6 +85,7 @@ $.widget("ibi.ibxWaiting", $.ibi.ibxLabel,
 {
 	options:
 	{
+		"waiting":false,
 		"stretch":false,
 		"align":"center",
 		"justify":"center",
@@ -97,22 +94,65 @@ $.widget("ibi.ibxWaiting", $.ibi.ibxLabel,
 		"text":"",
 		"textWrap":true,
 		"textAlign":"center",
-		"aria":{"role":"progressbar"}
-
+		"aria":
+		{
+			"role":"progressbar",
+			"live":"assertive",
+			"relevant":"all",
+			"valuemin":0,
+			"valuemax":0,
+		}
 	},
 	_widgetClass:"ibx-waiting",
 	_create:function()
 	{
 		this._super();
+		this.element.attr("tabIndex", 0);
+		this.element.on("mousedown mouseup mousemove click keydown keyup keypress", function(e){e.preventDefault();e.stopPropagation();});
 	},
 	_setAccessibility:function(accessible, aria)
 	{
 		aria = this._super(accessible, aria);
+		var options = this.options;
+		aria.describedby = aria.describedby || this._text.prop("id");
+		var waitArea = $(options.waitArea || this.element.parent());
+		(accessible && options.waiting) ? waitArea.attr("aria-busy", true) : waitArea.removeAttr("aria-busy");
 		return aria;
 	},
 	_destroy:function()
 	{
 		this._super();
+	},
+	message:function(msg, isHtml)
+	{
+		if(msg)
+		{
+			this.options.text = msg;
+			isHtml ? this._text.html(msg) : this._text.text(msg);
+			return this.element;
+		}
+		else
+			return this.options.text;
+	},
+	start:function()
+	{
+		this.options.waiting = true;
+		window.requestAnimationFrame(this._doWait.bind(this));
+	},
+	stop:function()
+	{
+		this.options.waiting = false;
+	},
+	_doWait:function(timestampe)
+	{
+		var options = this.options;
+		if(options.waiting)
+		{
+			if(!this._trigger("waiting", null, this.element))
+				this.stop();
+			else
+				window.requestAnimationFrame(this._doWait.bind(this));
+		}
 	},
 	_refresh:function()
 	{
@@ -159,14 +199,15 @@ ibx.waitStart = function(el, message)
 		//kill any current waiting with this element.
 		ibx.waitStop(el);
 
-		message = (typeof(message) === "string") ? {text:message} : message;//overload message to allow string/object.
-		var waitTemp = $("<div>").addClass(global ? "ibx-waiting-global" : null).ibxWaiting(message);
+		options = (typeof(message) === "string") ? {text:message} : message;//overload message to allow string/object.
+		var waitTemp = $("<div>").addClass(global ? "ibx-waiting-global" : null).ibxWaiting(options);
 		var waitInfo = {posInline:el[0].style.position,	ibxWaiting:waitTemp};
 
 		if(!el.is("body") && el.css("position") == "static")
 			el.css("position", "relative");
 
 		el.data("ibxWaitingInfo", waitInfo).append(waitTemp);
+		waitTemp.ibxWidget("start");
 		waiting = waiting.add(waitTemp);
 	}.bind(this, message));
 	return waiting;
@@ -178,7 +219,7 @@ ibx.waitStop = function(el)
 	{
 		el = $(el);
 		var waitInfo = el.data("ibxWaitingInfo");
-		waitInfo.ibxWaiting.detach();
+		waitInfo.ibxWaiting.ibxWidget("stop").detach();
 		el.css("position", waitInfo.posInline);
 		el.removeData("ibxWaitingInfo");
 	});

@@ -29,16 +29,12 @@
 
 				$(".parent, .child, .ibx-menu-bar, .ibx-menu-button").on("focus blur", function(e)
 				{
-					//if(e.target.id == "parent")
-					//	debugger;
-					console.log(e.type, e.target.id);
+					//console.log(e.type, e.target.id);
 				});
 
 				$(".parent-widget, .child-widget, .ibx-menu-bar").on("ibx_widgetfocus ibx_widgetblur", function(e)
 				{
-					//if(e.type == "ibx_widgetfocus" && e.target.id == "child")
-					//	debugger;
-					console.log(e.type, e.target.id);
+					//console.log(e.type, e.target.id);
 				});
 
 				$(".parent-div").on("focusin", function(e)
@@ -46,7 +42,6 @@
 					if($(this).is(e.target))
 						$(".child-div").focus();
 				});
-
 			}, null, true);
 		</script>
 		<style type="text/css">
@@ -84,7 +79,7 @@
 			<input tabIndex="0" type="text"></text>
 			<textarea tabIndex="0"></textarea>
 
-			<div id="parentWidget" class="parent parent-widget" tabIndex="0" data-ibx-type="ibxWidget" data-ibxp-nav-key-root="true" data-ibxp-nav-key-auto-focus="true">Parent Widget
+			<div data-ibxp-draggable="true" id="parentWidget" class="parent parent-widget" tabIndex="0" data-ibx-type="ibxWidget" data-ibxp-nav-key-root="true" data-ibxp-nav-key-auto-focus="true">Parent Widget
 				<div id="childWidget" class="child child-widget" tabIndex="-1" data-ibx-type="ibxWidget">Child Widget</div>
 			</div>
 

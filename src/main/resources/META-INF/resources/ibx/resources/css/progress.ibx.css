@@ -41,6 +41,8 @@
 	right:0px;
 	bottom:0px;
 	z-index:2147483647;/*basically max 32 bit value*/
+	background-color:white;
+	opacity:.8
 }
 
 .ibx-waiting .ibx-label-text
@@ -55,7 +57,7 @@
 
 .ibx-waiting .ibx-label-glyph
 {
-	color:#aaa;
+	font-size:2em;
 }
 
 .ibx-label-icon.wait-stretch
