@@ -501,7 +501,7 @@ $.widget("ibi.ibxSelect", $.ibi.ibxTextField,
 		else
 		{
 			this.options.userValue = $(elems[0]).ibxWidget('userValue');
-			this._selectItem(elems[0]);
+			this.selectItem(elems[0]);
 		}
 	},
 	selectItem: function (el)
