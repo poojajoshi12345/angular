@@ -464,7 +464,7 @@ $.ibi.ibxWidget.navKeys = [$.ui.keyCode.LEFT, $.ui.keyCode.RIGHT, $.ui.keyCode.U
 	_p.setDragImage = function(img, xOffset, yOffset)
 	{
 		this._dragImage = $(img);
-		this._dragImage.css("position", "absolute");
+		this._dragImage.css("position", "absolute").addClass("ibx-drag-image");
 		this.dragXOffset = xOffset || this.dragXOffset;
 		this.dragYOffset = yOffset || this.dragYOffset;
 	};
@@ -475,7 +475,7 @@ $.ibi.ibxWidget.navKeys = [$.ui.keyCode.LEFT, $.ui.keyCode.RIGHT, $.ui.keyCode.U
 		{
 			draggable:false,			//!!!!IBX DRAGGABLE!!!! ...NOTHING TO DO WITH NATIVE DRAG/DROP
 			dragClass:"ibx-drag-source",
-			dragImageClass:"ibx-default-drag-image",
+			dragImageClass:"",
 			dragStartDistanceX:5,
 			dragStartDistanceY:5,
 
