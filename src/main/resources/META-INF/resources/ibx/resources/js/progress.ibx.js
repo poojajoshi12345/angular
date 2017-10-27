@@ -22,7 +22,11 @@ $.widget("ibi.ibxProgressBar", $.ibi.ibxHBox,
 		"inline":true,
 		"align":"stretch",
 
-		"aria":{"role":"progressbar"},
+		"aria":
+		{
+			"role":"progressbar",
+			"live":"polite",
+		},
 	},
 	_widgetClass:"ibx-progress-bar",
 	_create:function()
@@ -38,10 +42,10 @@ $.widget("ibi.ibxProgressBar", $.ibi.ibxHBox,
 		var options = this.options;
 
 		accessible ? this.progText.ibxAriaId() : this.progText.removeIbxAriaId();
-		aria.live = "assertive";
 		aria.valuemin = options.minVal;
 		aria.valuemax = options.maxVal;
 		aria.valuenow = options.curVal;
+		aria.describedby = aria.describedby || this.progText.prop("id");
 
 		var progArea = $(options.progArea);
 		(accessible && this.inProgress()) ? progArea.attr("aria-busy", true) : progArea.removeAttr("aria-busy");
