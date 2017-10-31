@@ -22,7 +22,7 @@ $.widget("ibi.ibxCommand", $.ibi.ibxWidget,
 	},
 	trigger:function(e)
 	{
-		this._trigger("triggered", e);
+		this.element.dispatchEvent("ibx_triggered", e, false, false, e.target);
 	},
 	_onCommandKeyEvent:function(e)
 	{
@@ -47,8 +47,6 @@ $.widget("ibi.ibxCommand", $.ibi.ibxWidget,
 				e.stopPropagation();
 			}
 		}
-				e.preventDefault();
-				e.stopPropagation();
 	},
 	_refresh:function()
 	{
