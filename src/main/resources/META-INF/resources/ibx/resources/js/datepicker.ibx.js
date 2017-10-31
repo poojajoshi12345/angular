@@ -6,17 +6,23 @@ $.widget("ibi.ibxDatePicker", $.ibi.ibxVBox,
 	options:
 		{
 			"type": "popup", // valid values: "popup", "simple", "inline"
-			"dateFormat": "MM d, yy",
+			"dateFormat": '', // used as internal formatting
+			"outDateFormat": '', // used to format what's shown in the associated label
 			"wrap": "false",
 			"align": "stretch",
 			"showClear": false,
 			"pickerClasses": '',
-			"date": $.datepicker.formatDate("MM d, yy", new Date()),
+			"date": '',
 			"numberOfMonths": 1,
+			"initDate": true, // set date to the current date
 	},
 	_widgetClass: "ibx-datepicker",
 	_create: function ()
 	{
+		this.options.dateFormat = $.ibi.ibxDatePicker.statics.defaultDateFormat;
+		this.options.outDateFormat = $.ibi.ibxDatePicker.statics.defaultOutDateFormat;
+		if (this.options.initDate)
+			this.options.date = $.datepicker.formatDate($.ibi.ibxDatePicker.statics.defaultDateFormat, new Date());
 		this._super();
 		this.element.on("focus", this._showPopup.bind(this));
 		this._input = $('<div class="ibx-datepicker-input">').ibxLabel({glyphClasses:"fa fa-calendar", 'align': 'stretch'}).on('click', this._showPopup.bind(this));
@@ -38,6 +44,18 @@ $.widget("ibi.ibxDatePicker", $.ibi.ibxVBox,
 			"buttonText" : ibx.resourceMgr.getString("IBX_DP_BUTTON_TEXT"),
 			"onSelect": this._onSelect.bind(this),
 		});
+		this._pickerOptions = {
+			"closeText" : ibx.resourceMgr.getString("IBX_DP_CLOSE_TEXT"),
+			"prevText" : ibx.resourceMgr.getString("IBX_DP_PREV_TEXT"),
+			"nextText" : ibx.resourceMgr.getString("IBX_DP_NEXT_TEXT"),
+			"currentText" : ibx.resourceMgr.getString("IBX_DP_CUR_TEXT"),
+			"weekHeader" : ibx.resourceMgr.getString("IBX_DP_WEEK_HEADER"),
+			"monthNames" : (eval(ibx.resourceMgr.getString("IBX_DP_MONTHS"))),
+			"monthNamesShort" : (eval(ibx.resourceMgr.getString("IBX_DP_MONTHS_SHORT"))),
+			"dayNames" : (eval(ibx.resourceMgr.getString("IBX_DP_DAYS"))),
+			"dayNamesShort" : (eval(ibx.resourceMgr.getString("IBX_DP_DAYS_SHORT"))),
+			"dayNamesMin" : (eval(ibx.resourceMgr.getString("IBX_DP_DAYS_MIN"))),
+			"buttonText" : ibx.resourceMgr.getString("IBX_DP_BUTTON_TEXT")};
 		this._dateWrapper.append(this._datePicker).addClass('ibx-datepicker-date-wrapper');
 		this.element.append(this._inputWrapper, this._dateWrapper);
 		this._popup = $('<div class="ibx-datepicker-popup">').ibxPopup({'destroyOnClose': false});
@@ -53,8 +71,8 @@ $.widget("ibi.ibxDatePicker", $.ibi.ibxVBox,
 	_onClear: function ()
 	{
 		this.options.date = '';
-		this._datePicker.datepicker('setDate', this.options.date);
-		this._input.ibxWidget('option', 'text', this.options.date);
+		this._datePicker.datepicker('setDate', '');
+		this._input.ibxWidget('option', 'text', '');
 		this._trigger("change", null, { 'date': '' });
 		this._trigger("set_form_value", null, { "elem": this.element, "value": '' });
 	},
@@ -73,7 +91,7 @@ $.widget("ibi.ibxDatePicker", $.ibi.ibxVBox,
 		this.options.date = value;
 		this._trigger("change", null, { 'date': value });
 		this._trigger("set_form_value", null, { "elem": this.element, "value": value });
-		this._input.ibxWidget('option', 'text', this.options.date);
+		this._input.ibxWidget('option', 'text', $.datepicker.formatDate(this.options.outDateFormat, this._datePicker.datepicker('getDate'), this._pickerOptions));
 	},
 	_showPopup: function ()
 	{
@@ -98,7 +116,7 @@ $.widget("ibi.ibxDatePicker", $.ibi.ibxVBox,
 			this._popup.addClass(this.options.pickerClasses);
 		this._datePicker.datepicker('option', this.options);
 		this._datePicker.datepicker('setDate', this.options.date);
-		this._input.ibxWidget('option', 'text', this.options.date);
+		this._input.ibxWidget('option', 'text', $.datepicker.formatDate(this.options.outDateFormat, this._datePicker.datepicker('getDate'), this._pickerOptions));
 		this._super();
 		if (this._popup.ibxWidget('isOpen'))
 			this._popup.ibxWidget('close');
@@ -125,6 +143,13 @@ $.widget("ibi.ibxDatePicker", $.ibi.ibxVBox,
 	}
 });
 
+$.ibi.ibxDatePicker.statics =
+{
+	defaultDateFormat: "MM d, yy",
+	defaultOutDateFormat: "M d, yy",
+};
+
+
 $.widget("ibi.ibxDatePickerSimple", $.ibi.ibxDatePicker, { options: { type: "simple" } });
 $.widget("ibi.ibxDatePickerInline", $.ibi.ibxDatePicker, { options: { type: "inline" } });
 
@@ -132,19 +157,22 @@ $.widget("ibi.ibxDateRange", $.ibi.ibxDatePicker,
 {
 	options:
 	{
-		"dateTo": $.datepicker.formatDate("MM d, yy", new Date()),
-		"dateFrom": $.datepicker.formatDate("MM d, yy", new Date()),
+		"dateTo": '',
+		"dateFrom": '',
 		"numberOfMonths": 2,
 	},
 	_create: function ()
 	{
+		if (this.options.initDate)
+		{
+			this.options.dateTo = $.datepicker.formatDate($.ibi.ibxDatePicker.statics.defaultDateFormat, new Date());
+			this.options.dateFrom = $.datepicker.formatDate($.ibi.ibxDatePicker.statics.defaultDateFormat, new Date());
+		}
 		this._super();
 		this._input2 = $('<div class="ibx-datepicker-input">').ibxLabel({ glyphClasses: "fa fa-calendar", 'align': 'stretch' }).on('click', this._showPopup.bind(this));
 		this._clear2 = $('<div class="ibx-datepicker-clear">').ibxButtonSimple({glyphClasses:"fa fa-times"}).on('click', this._onClear2.bind(this)).hide();
 		this._datePicker.datepicker('option', 'onChangeMonthYear', this._onChangeMonthYear.bind(this));
 		this._inputWrapper.append(this._input2, this._clear2);
-		this._input.ibxWidget('option', 'text', this.options.dateFrom);
-		this._input2.ibxWidget('option', 'text', this.options.dateTo);
 		window.setTimeout(function () { this._highlightRange(); }.bind(this), 10);
 	},
 	_onChangeMonthYear: function (year, month, inst)
@@ -154,23 +182,25 @@ $.widget("ibi.ibxDateRange", $.ibi.ibxDatePicker,
 	_onClear: function ()
 	{
 		this.options.dateFrom  = '';
-		this._trigger("change", null, { 'dateFrom': this.options.dateFrom, 'dateTo': this.options.dateTo});
-		this._trigger("set_form_value", null, { "elem": this.element, "value": "['" + this.options.dateFrom + "','" + this.options.dateTo + "']" });
-		this._input.ibxWidget('option', 'text', this.options.dateFrom);
+		this._datePicker.datepicker('setDate', '');
+		this._trigger("change", null, { 'dateFrom': '', 'dateTo': this.options.dateTo});
+		this._trigger("set_form_value", null, { "elem": this.element, "value": "['" + '' + "','" + this.options.dateTo + "']" });
+		this._input.ibxWidget('option', 'text', '');
 	},
 	_onClear2: function ()
 	{
 		this.options.dateTo  = '';
-		this._trigger("change", null, { 'dateFrom': this.options.dateFrom, 'dateTo': this.options.dateTo});
-		this._trigger("set_form_value", null, { "elem": this.element, "value": "['" + this.options.dateFrom + "','" + this.options.dateTo + "']" });
-		this._input2.ibxWidget('option', 'text', this.options.dateTo);
+		this._datePicker.datepicker('setDate', '');
+		this._trigger("change", null, { 'dateFrom': this.options.dateFrom, 'dateTo': ''});
+		this._trigger("set_form_value", null, { "elem": this.element, "value": "['" + this.options.dateFrom + "','" + '' + "']" });
+		this._input2.ibxWidget('option', 'text', '');
 	},
 	_onSelect: function (dateText, inst)
 	{
 		//var value = $.datepicker.formatDate(this.options.dateFormat, this._datePicker.datepicker('getDate'));
 		var value = this._datePicker.datepicker('getDate');
 		var v = value.getTime();
-		var to;
+
 		var from;
 		var parseFrom = $.datepicker.parseDate(this.options.dateFormat, this.options.dateFrom);
 		if (!parseFrom)
@@ -178,6 +208,7 @@ $.widget("ibi.ibxDateRange", $.ibi.ibxDatePicker,
 		else
 			from = parseFrom.getTime();
 
+		var to;
 		var parseTo = $.datepicker.parseDate(this.options.dateFormat, this.options.dateTo);
 		if (!parseTo)
 			to = (new Date()).getTime();
@@ -188,22 +219,39 @@ $.widget("ibi.ibxDateRange", $.ibi.ibxDatePicker,
 		{
 			// extend from
 			this.options.dateFrom = $.datepicker.formatDate(this.options.dateFormat, value);
+			from = value;
 		}
 		else if (v > to)
 		{
 			// extend to
 			this.options.dateTo = $.datepicker.formatDate(this.options.dateFormat, value);
+			to = value;
 		}
 		else
 		{
 			// set both to current
 			this.options.dateTo = this.options.dateFrom = $.datepicker.formatDate(this.options.dateFormat, value);
+			to = from = value;
 		}
 
 		this._trigger("change", null, { 'dateFrom': this.options.dateFrom, 'dateTo': this.options.dateTo});
 		this._trigger("set_form_value", null, { "elem": this.element, "value": "['" + this.options.dateFrom + "','" + this.options.dateTo + "']" });
-		this._input.ibxWidget('option', 'text', this.options.dateFrom);
-		this._input2.ibxWidget('option', 'text', this.options.dateTo);
+
+		this._datePicker.datepicker('setDate', this.options.dateTo);
+		if (this.options.dateFrom)
+		{
+			var parseFrom = $.datepicker.parseDate(this.options.dateFormat, this.options.dateFrom) || $.datepicker.formatDate($.ibi.ibxDatePicker.statics.defaultDateFormat, new Date());
+			this._input.ibxWidget('option', 'text', $.datepicker.formatDate(this.options.outDateFormat, parseFrom, this._pickerOptions));
+		}
+		else
+			this._input.ibxWidget('option', 'text', '');
+		if (this.options.dateTo)
+		{
+			var parseTo = $.datepicker.parseDate(this.options.dateFormat, this.options.dateTo) || $.datepicker.formatDate($.ibi.ibxDatePicker.statics.defaultDateFormat, new Date());
+			this._input2.ibxWidget('option', 'text', $.datepicker.formatDate(this.options.outDateFormat, parseTo, this._pickerOptions));
+		}
+		else
+			this._input2.ibxWidget('option', 'text', '');
 		window.setTimeout(function () { this._highlightRange(); }.bind(this), 10);
 	},
 	_highlightRange: function ()
@@ -245,9 +293,22 @@ $.widget("ibi.ibxDateRange", $.ibi.ibxDatePicker,
 			this._clear2.show();
 		else
 			this._clear2.hide();
+
 		this._datePicker.datepicker('setDate', this.options.dateTo);
-		this._input.ibxWidget('option', 'text', this.options.dateFrom);
-		this._input2.ibxWidget('option', 'text', this.options.dateTo);
+		if (this.options.dateFrom)
+		{
+			var parseFrom = $.datepicker.parseDate(this.options.dateFormat, this.options.dateFrom) || $.datepicker.formatDate($.ibi.ibxDatePicker.statics.defaultDateFormat, new Date());
+			this._input.ibxWidget('option', 'text', $.datepicker.formatDate(this.options.outDateFormat, parseFrom, this._pickerOptions));
+		}
+		else
+			this._input.ibxWidget('option', 'text', '');
+		if (this.options.dateTo)
+		{
+			var parseTo = $.datepicker.parseDate(this.options.dateFormat, this.options.dateTo) || $.datepicker.formatDate($.ibi.ibxDatePicker.statics.defaultDateFormat, new Date());
+			this._input2.ibxWidget('option', 'text', $.datepicker.formatDate(this.options.outDateFormat, parseTo, this._pickerOptions));
+		}
+		else
+			this._input2.ibxWidget('option', 'text', '');
 		window.setTimeout(function () { this._highlightRange(); }.bind(this), 10);
 	}
 });
