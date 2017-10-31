@@ -32,7 +32,7 @@
 					e.dataTransfer.dropEffect = "pointer";
 				});
 
-				$(".cmd-test").on("ibx_action", function(e)
+				$(".cmd-test").on("ibx_triggered", function(e)
 				{
 					debugger;
 				});
@@ -65,7 +65,7 @@
 	</head>
 	<body class="ibx-root">
 		<div class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="center" data-ibxp-justify="center" data-ibx-name-root="true">
-			<div class="cmd-test" data-ibx-type="ibxCommand" data-ibx-name="cmdTest" data-ibxp-cmd-id="cmdTest" data-ibxp-shortcut="ctrl+x"></div>
+			<div class="cmd-test" data-ibx-type="ibxCommand" data-ibx-name="cmdTest" data-ibxp-cmd-id="cmdTest" data-ibxp-shortcut="ctrl+u"></div>
 
 			<div tabIndex="0" id="parentDiv" class="parent parent-div">Parent Div</div>
 			<div tabIndex="0" id="parentWidget" class="parent parent-widget source" data-ibx-type="ibxWidget" data-ibxp-command="cmdTest" data-ibxp-draggable="true">Source Widget</div>

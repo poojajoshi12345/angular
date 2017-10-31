@@ -22,7 +22,7 @@ $.widget("ibi.ibxCommand", $.ibi.ibxWidget,
 	},
 	trigger:function(e)
 	{
-		this._trigger("action", e);
+		this._trigger("triggered", e);
 	},
 	_onCommandKeyEvent:function(e)
 	{
@@ -30,16 +30,16 @@ $.widget("ibi.ibxCommand", $.ibi.ibxWidget,
 		if(sc)
 		{
 			var trigger = true;
-			sc = sc.toLowerCase();
-			if(-1 != sc.indexOf("ctrl"))
+			sc = sc.toUpperCase();
+			if(-1 != sc.indexOf("CTRL"))
 				trigger = trigger & (e.ctrlKey);
-			if(-1 != sc.indexOf("alt"))
+			if(-1 != sc.indexOf("ALT"))
 				trigger = trigger & (e.altKey);
-			if(-1 != sc.indexOf("shift"))
+			if(-1 != sc.indexOf("SHIFT"))
 				trigger = trigger & (e.shiftKey);
 
-			sc.replace(/[ctrl,alt,shift,\+]/gi, "");
-			trigger = trigger & (-1 != sc.search(e.key));
+			sc = sc.replace(/CTRL|ALT|SHIFT|\+| /gi, "");
+			trigger = trigger & (($.ui.keyCode[sc] == e.keyCode) || (-1 != sc.search(e.key.toUpperCase())));
 			if(trigger)
 			{
 				this.trigger(e);
@@ -47,6 +47,8 @@ $.widget("ibi.ibxCommand", $.ibi.ibxWidget,
 				e.stopPropagation();
 			}
 		}
+				e.preventDefault();
+				e.stopPropagation();
 	},
 	_refresh:function()
 	{
