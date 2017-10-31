@@ -27,21 +27,16 @@
 						console.clear();
 				});
 
-				$(".parent, .child, .ibx-menu-bar, .ibx-menu-button").on("focus blur", function(e)
+				$(".target").on("ibx_dragover", function(e)
 				{
-					//console.log(e.type, e.target.id);
+					e.dataTransfer.dropEffect = "pointer";
 				});
 
-				$(".parent-widget, .child-widget, .ibx-menu-bar").on("ibx_widgetfocus ibx_widgetblur", function(e)
+				$(".cmd-test").on("ibx_action", function(e)
 				{
-					//console.log(e.type, e.target.id);
+					debugger;
 				});
 
-				$(".parent-div").on("focusin", function(e)
-				{
-					if($(this).is(e.target))
-						$(".child-div").focus();
-				});
 			}, null, true);
 		</script>
 		<style type="text/css">
@@ -69,25 +64,18 @@
 		</style>
 	</head>
 	<body class="ibx-root">
-		<div class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="center" data-ibxp-justify="center">
+		<div class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="center" data-ibxp-justify="center" data-ibx-name-root="true">
+			<div class="cmd-test" data-ibx-type="ibxCommand" data-ibx-name="cmdTest" data-ibxp-cmd-id="cmdTest" data-ibxp-shortcut="ctrl+x"></div>
+
+			<div tabIndex="0" id="parentDiv" class="parent parent-div">Parent Div</div>
+			<div tabIndex="0" id="parentWidget" class="parent parent-widget source" data-ibx-type="ibxWidget" data-ibxp-command="cmdTest" data-ibxp-draggable="true">Source Widget</div>
+			<div tabIndex="0" id="parentWidget" class="parent parent-widget target" data-ibx-type="ibxWidget">Target Widget</div>
 
 
-			<div id="parentDiv" class="parent parent-div" tabIndex="0">Parent Div
-				<div id="childDiv" class="child child-div" tabIndex="-1" data-ibx-type="ibxWidget">Child Div</div>
-			</div>
-
-			<input tabIndex="0" type="text"></text>
-			<textarea tabIndex="0"></textarea>
-
-			<div data-ibxp-draggable="true" id="parentWidget" class="parent parent-widget" tabIndex="0" data-ibx-type="ibxWidget" data-ibxp-nav-key-root="true" data-ibxp-nav-key-auto-focus="true">Parent Widget
-				<div id="childWidget" class="child child-widget" tabIndex="-1" data-ibx-type="ibxWidget">Child Widget</div>
-			</div>
-
-
-			<div id="menubar" class="test-menubar" tabIndex="0" aria-label="Example IBX horizontal menu bar" data-ibx-type="ibxHMenuBar" data-ibxp-aria.label="Menus">
+			<div data-ibxp-draggable="true" id="menubar" class="test-menubar" tabIndex="0" aria-label="Example IBX horizontal menu bar" data-ibx-type="ibxHMenuBar" data-ibxp-aria.label="Menus">
 				<div id="filemenu" class="menu-btn-file" data-ibx-type="ibxMenuButton" data-ibxp-text="File">
 					<div data-ibx-type="ibxMenu">
-						<div data-ibx-type="ibxMenuItem" data-ibxp-label-options='{"glyph":"fiber_new", "glyphClasses":"material-icons"}'>New</div>
+						<div data-ibxp-command="cmdTest" data-ibx-type="ibxMenuItem" data-ibxp-label-options='{"glyph":"fiber_new", "glyphClasses":"material-icons"}'>New</div>
 						<div data-ibx-type="ibxMenuItem" data-ibxp-label-options='{"glyph":"open_in_new", "glyphClasses":"material-icons"}'>Open...</div>
 						<div data-ibx-type="ibxMenuSeparator"></div>
 						<div data-ibx-type="ibxMenuItem" data-ibxp-label-options='{"glyph":"save", "glyphClasses":"material-icons"}'>Save</div>
@@ -104,9 +92,9 @@
 						<div data-ibx-type="ibxMenuSeparator"></div>
 						<div data-ibx-type="ibxMenuItem" data-ibxp-label-options='{"glyph":"find_in_page", "glyphClasses":"material-icons"}'>Find...</div>
 						<div data-ibx-type="ibxMenuSeparator"></div>
-						<div data-ibx-type="ibxCheckMenuItem" data-ibxp-label-options='{"glyph":"accessibility", "glyphClasses":"material-icons"}'>Check This</div>
-						<div data-ibx-type="ibxCheckMenuItem" data-ibxp-label-options='{"glyph":"android", "glyphClasses":"material-icons"}'>Check That</div>
-						<div data-ibx-type="ibxCheckMenuItem" data-ibxp-label-options='{"glyph":"face", "glyphClasses":"material-icons"}'>Check Yo Head</div>
+						<div data-ibxp-command="cmdTest" data-ibx-type="ibxCheckMenuItem" data-ibxp-label-options='{"glyph":"accessibility", "glyphClasses":"material-icons"}'>Check This</div>
+						<div data-ibxp-command="cmdTest" data-ibx-type="ibxCheckMenuItem" data-ibxp-label-options='{"glyph":"android", "glyphClasses":"material-icons"}'>Check That</div>
+						<div data-ibxp-command="cmdTest" data-ibx-type="ibxCheckMenuItem" data-ibxp-label-options='{"glyph":"face", "glyphClasses":"material-icons"}'>Check Yo Head</div>
 					</div>
 				</div>
 				<div id="viewmenu" class="menu-btn-view" data-ibx-type="ibxMenuButton" data-ibxp-text="View">

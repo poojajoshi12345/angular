@@ -8,6 +8,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 		"class":"",
 		"nameRoot":false,
 		"ctxMenu":null,
+		"command":null,
 		"dragScrolling":false,
 		"wantResize":false,
 		"defaultFocused":false,					//for popup...should this be focused on open
@@ -67,7 +68,9 @@ $.widget("ibi.ibxWidget", $.Widget,
 		this.element.on("keydown", this._onWidgetKeyEvent.bind(this));
 		this.element.on("focus blur focusin focusout", this._onWidgetFocusEvent.bind(this));
 		this.element.on("contextmenu", this._onWidgetContextMenu.bind(this));
+		this.element.on("click", this._onWidgetClickEvent.bind(this));
 		this._adjustWidgetClasses(true);
+
 
 		//save the resize sensor callback;
 		this._resizeCallbackBound = this._resizeCallback.bind(this);
@@ -152,6 +155,12 @@ $.widget("ibi.ibxWidget", $.Widget,
 			this[memberName] = value;
 		}
 		return ret || $();
+	},
+	_triggerCommand:function(e)
+	{
+		var options = this.options;
+		if(options.command)
+			$(sformat(".ibx-command[data-ibxp-cmd-id='{1}'", this.options.command)).ibxWidget("trigger", e);
 	},
 	_resizeCallback:function()
 	{
@@ -320,6 +329,13 @@ $.widget("ibi.ibxWidget", $.Widget,
 		else
 		if(options.navKeyRoot && e.keyCode == $.ui.keyCode.ESCAPE)
 			this.element.focus();//on escape with a navkeyroot, focus the parent.
+
+		if(options.command && (e.keyCode == $.ui.keyCode.ENTER || e.keyCode == $.ui.keyCode.SPACE))
+			this._triggerCommand(e);
+	},
+	_onWidgetClickEvent:function(e)
+	{
+		this._triggerCommand(e);
 	},
 	_onWidgetContextMenu:function(e)
 	{
@@ -367,6 +383,8 @@ $.widget("ibi.ibxWidget", $.Widget,
 	option:function(key, value)
 	{
 		var bRefresh = (typeof(key) == "object") || (value !== undefined && (this.options[key] != value));
+		if(bRefresh)
+			this._preRefresh(key, value);
 		var ret = this._superApply(arguments);
 		if(bRefresh)
 			this.refresh();
@@ -396,14 +414,13 @@ $.widget("ibi.ibxWidget", $.Widget,
 				el.data("ibxDisabledTabIndex", el.prop("tabIndex")).prop("tabIndex", -1);
 		}.bind(this, value));
 	},
-	refreshEx:function (childRefresh)
-	{
-		this.element.find(':ibxWidget').filter(childRefresh || '*').add(this.element).ibxWidget('refresh');
-	},
 	refresh:function()
 	{
 		if(!$.ibi.ibxWidget.noRefresh)
 			this._refresh();
+	},
+	_preRefresh:function(option, value)
+	{
 	},
 	_refresh:function()
 	{

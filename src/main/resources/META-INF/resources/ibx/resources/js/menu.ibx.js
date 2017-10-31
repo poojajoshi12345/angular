@@ -281,7 +281,7 @@ $.widget("ibi.ibxCheckMenuItem", $.ibi.ibxMenuItem,
 	_create:function()
 	{
 		this._super();
-		this.element.prepend(this._startMarker);
+		this.element.prepend(this._startMarker).addClass("ibx-can-toggle");
 	},
 	_setAccessibility:function(accessible, aria)
 	{
