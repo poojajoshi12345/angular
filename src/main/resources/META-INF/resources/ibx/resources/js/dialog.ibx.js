@@ -44,6 +44,7 @@ $.widget("ibi.ibxDialog", $.ibi.ibxPopup,
 		this.btnApply.on("click", this.apply.bind(this));
 		this.btnCancel.on("click", this.close.bind(this, "cancel"));
 		this.btnOK.on("click", this.close.bind(this, "ok"));
+		this.btnNo.on("click", this.close.bind(this, "no"));
 	},
 	_setAccessibility:function(accessible, aria)
 	{
@@ -114,6 +115,7 @@ $.widget("ibi.ibxDialog", $.ibi.ibxPopup,
 
 		this.titleClose.css("display", options.closeButton ? "" : "none");
 		this.btnOK.css("display", options.buttons.search("ok") != -1 ? "" : "none");
+		this.btnNo.css("display", options.buttons.search("no") != -1 ? "" : "none");
 		this.btnCancel.css("display", options.buttons.search("cancel") != -1 ? "" : "none");
 		this.btnApply.css("display", options.buttons.search("apply") != -1 ? "" : "none");
 		this.element.find(".ibx-dlg-default-action").removeClass("ibx-dlg-default-action");

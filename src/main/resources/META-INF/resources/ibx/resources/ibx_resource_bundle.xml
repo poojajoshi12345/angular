@@ -21,6 +21,7 @@ $Revision$:-->
 				"IBX_STR_SAMPLE":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
 				"IBX_STR_LOADING":"Waiting...",
 				"IBX_STR_OK":"OK",
+				"IBX_STR_NO":"No",
 				"IBX_STR_CANCEL":"Cancel",
 				"IBX_STR_APPLY":"Apply",
 				"IBX_STR_CLOSE":"Close",
@@ -147,6 +148,7 @@ $Revision$:-->
 					<div class='ibx-dialog-button-box' data-ibx-type='ibxHBox' data-ibx-name='btnBox' data-ibxp-align='stretch'>
 						<div class="ibx-dialog-button-padding" data-ibx-name="btnPadding"></div>
 						<div class='ibx-dialog-ok-button' data-ibx-type='ibxButton' data-ibx-name='btnOK' data-ibxp-text='@ibxString("IBX_STR_OK")' tabIndex='0'></div>
+						<div class='ibx-dialog-no-button' data-ibx-type='ibxButton' data-ibx-name='btnNo' data-ibxp-text='@ibxString("IBX_STR_NO")' tabIndex='0'></div>
 						<div class='ibx-dialog-apply-button' data-ibx-type='ibxButton' data-ibx-name='btnApply' data-ibxp-text='@ibxString("IBX_STR_APPLY")' tabIndex='0'></div>
 						<div class='ibx-dialog-cancel-button' data-ibx-type='ibxButton' data-ibx-name='btnCancel' data-ibxp-text='@ibxString("IBX_STR_CANCEL")' tabIndex='0'></div>
 					</div>
