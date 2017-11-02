@@ -27,14 +27,37 @@
 						console.clear();
 				});
 
-				$(".target").on("ibx_dragover", function(e)
+				$(".parent-div").on("ibx_dragover", function(e)
 				{
 					e.dataTransfer.dropEffect = "pointer";
 				});
 
-				$(".cmd-test").on("ibx_triggered", function(e)
+				$(".parent-div").on("click", function(e)
 				{
-					debugger;
+					$.ibi.ibxWidget.noRefresh = true;
+
+					var date = new Date();
+					var parent = $(".parent-div");
+					for(var i = 0; i < 1000; ++i)
+					{
+						var item = $("<div>").ibxLabel({"text":"Item " + i});
+						parent.append(item);
+					}
+					console.log("CREATED: " +  (new Date() - date).toString());
+
+					$.ibi.ibxWidget.noRefresh = false;
+					date = new Date();
+					$(".ibx-widget").ibxWidget("refresh");
+					console.log("REFRESHED: " + (new Date() - date).toString());
+				});
+
+				$(".parent, .child").on("ibx_widgetfocus ibx_widgetblur", function(e)
+				{
+					console.log(e.type, e.target.id, e.relatedTarget ? e.relatedTarget.id : "");
+				});
+				$(".parent, .child").on("focus blur", function(e)
+				{
+					//console.log(e.type, e.target.id, e.relatedTarget ? e.relatedTarget.id : "");
 				});
 
 			}, null, true);
@@ -52,27 +75,57 @@
 
 			.parent
 			{
-				border:2px solid red;
+				overflow:auto;
+				border:1px solid black;
 				margin-bottom:10px;
+				padding:5px;
 			}
 
 			.child
 			{
-				border:inherit;
-				border-color:lime;
+				xborder:inherit;
+				xborder-color:lime;
+			}
+
+			.test-menubar
+			{
+				border:1px solid black;
+				border-radius:.25em;
+				padding:5px;
+			}
+
+			.ibx-nav-item-active
+			{
+				background-color:thistle;
 			}
 		</style>
 	</head>
 	<body class="ibx-root">
-		<div class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="center" data-ibxp-justify="center" data-ibx-name-root="true">
-			<div class="cmd-test" data-ibx-type="ibxCommand" data-ibx-name="cmdTest" data-ibxp-cmd-id="cmdTest" data-ibxp-shortcut="ctrl+u"></div>
+		<div id="mainBox" class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="center" data-ibxp-justify="center" data-ibx-name-root="true">
+			<div class="cmd-test" data-ibx-type="ibxCommand" data-ibx-name="cmdTest" data-ibxp-cmd-id="cmdTest" data-ibxp-shortcut="ctrl+x"></div>
 
-			<div tabIndex="0" id="parentDiv" class="parent parent-div">Parent Div</div>
-			<div tabIndex="0" id="parentWidget" class="parent parent-widget source" data-ibx-type="ibxWidget" data-ibxp-command="cmdTest" data-ibxp-draggable="true">Source Widget</div>
-			<div tabIndex="0" id="parentWidget" class="parent parent-widget target" data-ibx-type="ibxWidget">Target Widget</div>
+			
+			<div id="parent1" tabIndex="0" class="parent parent1 source" data-ibx-type="ibxWidget" data-ibxp-nav-key-root="true" data-ibxp-nav-key-auto-focus="true">
+				Parent Widget 1
+				<div id="p1_child1" tabIndex="-1" class="child child1" data-ibx-type="ibxWidget">Child Widget</div>
+				<div id="p1_child2" tabIndex="-1" class="child child2" data-ibx-type="ibxWidget">Child Widget</div>
+				<div id="p1_child3" tabIndex="-1" class="child child3" data-ibx-type="ibxWidget">Child Widget</div>
+			</div>
+			
+			<div id="parent2" tabIndex="0" class="parent parent2 source" data-ibx-type="ibxWidget" data-ibxp-nav-key-root="true" data-ibxp-nav-key-auto-focus="true">
+				Parent Widget 2
+				<div id="p2_child1" tabIndex="-1" class="child child1" data-ibx-type="ibxWidget">Child Widget</div>
+				<div id="p2_child2" tabIndex="-1" class="child child2" data-ibx-type="ibxWidget">Child Widget</div>
+				<div id="p2_child3" tabIndex="-1" class="child child3" data-ibx-type="ibxWidget">Child Widget</div>
+			</div>
 
+			<!--
+			<div id="parentDiv" class="parent parent-div">Parent Div</div>
+			<div id="parentWidget" class="parent parent-widget source" data-ibx-type="ibxWidget" data-ibxp-draggable="true">Source Widget</div>
+			<div id="parentWidget" class="parent parent-widget target" data-ibx-type="ibxWidget">Target Widget</div>
+			-->
 
-			<div data-ibxp-draggable="true" id="menubar" class="test-menubar" tabIndex="0" aria-label="Example IBX horizontal menu bar" data-ibx-type="ibxHMenuBar" data-ibxp-aria.label="Menus">
+			<div data-ibxp-draggable="true" id="menubar" class="test-menubar" tabIndex="0" aria-label="Example IBX horizontal menu bar" data-ibx-type="ibxHMenuBar" data-ibxp-aria.label="Menus" data-ibxp-nav-key-reset-focus-on-blur="true">
 				<div id="filemenu" class="menu-btn-file" data-ibx-type="ibxMenuButton" data-ibxp-text="File">
 					<div data-ibx-type="ibxMenu">
 						<div data-ibxp-command="cmdTest" data-ibx-type="ibxMenuItem" data-ibxp-label-options='{"glyph":"fiber_new", "glyphClasses":"material-icons"}'>New</div>
@@ -133,7 +186,6 @@
 				</div>
 				<div id="helpmenu" class="menu-btn-help" title="Help" data-ibx-type="ibxMenuButton" data-ibxp-glyph="help_outline" data-ibxp-glyph-classes="material-icons md-14"></div>
 			</div>
-
 		</div>
 	</body>
 </html>

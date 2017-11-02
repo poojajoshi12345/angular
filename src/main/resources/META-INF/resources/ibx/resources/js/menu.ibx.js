@@ -471,12 +471,12 @@ $.widget("ibi.ibxVMenuButton", $.ibi.ibxMenuButton,
 {
 	options:{position:{at:"right top"}},
 	_widgetClass: "ibx-vmenu-button",
-	_onKeyEvent:function(e)
+	_onMenuButtonKeyDown:function(e)
 	{
 		$.ibi.ibxButtonSimple.prototype._onKeyEvent.call(this, e);
 		if(e.keyCode == $.ui.keyCode.RIGHT)
 		{
-			this._onClick(e);
+			this._onMenuButtonMouseDown(e);
 			e.preventDefault();
 		}
 	}

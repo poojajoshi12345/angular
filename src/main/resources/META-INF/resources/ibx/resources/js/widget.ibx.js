@@ -66,7 +66,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 		this.element.data("ibiIbxWidget", this);
 		this.element.attr("data-ibx-type", this.widgetName);
 		this.element.on("keydown", this._onWidgetKeyEvent.bind(this));
-		this.element.on("focus blur focusin focusout", this._onWidgetFocusEvent.bind(this));
+		this.element.on("focus focusin blur focusout", this._onWidgetFocusEvent.bind(this));
 		this.element.on("contextmenu", this._onWidgetContextMenu.bind(this));
 		this.element.on("click", this._onWidgetClickEvent.bind(this));
 		this._adjustWidgetClasses(true);
@@ -170,65 +170,67 @@ $.widget("ibi.ibxWidget", $.Widget,
 	widgetFocused:function(){return this._widgetFocused;},
 	_onWidgetFocusEvent:function(e)
 	{
+		//manage the global widget focus states. That is, for complex widgets (has subwidgets), is the whole thing logically focused.
 		var options = this.options;
 		var isTarget = this.element.is(e.target);
-		var isRelTarget = this.element.is(e.relatedTarget);
-		var ownsTarget = $.contains(this.element[0], e.target);
 		var ownsRelTarget = $.contains(this.element[0], e.relatedTarget);
 
-		//ie doesn't put a focus outline on -1 tabindex items.  Do manually for consistency.
-		var tabIndex = this.element.attr("tabIndex");
-		if((tabIndex < 0) && ibxPlatformCheck.isIE)
-		{
-			if(e.type == "focus" )
-				this.element.addClass("ibx-ie-pseudo-focus");
-			else
-			if(e.type == "blur")
-				this.element.removeClass("ibx-ie-pseudo-focus");
-		}
-
-		//manage the global widget focus states. That is, for complex widgets (has subwidgets), is the whole thing logically focused.
 		if(e.type == "focusin")
 		{
-			//manage states of children
-			if(!isTarget && ownsTarget && this.options.navKeyRoot)
-			{
-				var children = this.children();
-				children.removeClass("ibx-nav-item-active").removeAttr("aria-activedescendant");
-				$(e.target).addClass("ibx-nav-item-active").attr("aria-activedescendant", true);
-			}
-
-			//manage state of widget
 			if(!this._widgetFocused)
 			{
 				this._widgetFocused = true;
 				this.element.dispatchEvent("ibx_widgetfocus", e, false, false, e.relatedTarget);
-				
-				if(isTarget && (options.navKeyAutoFocus !== false))
+			}
+
+			if(options.navKeyRoot)
+			{
+				var children = this.children(":ibxFocusable");
+				var navFocusItem = $();
+				if(isTarget)
 				{
-					//take this element out of the tab order...so that shift+tab will go from child to natural prev tab item.
-					this.element.data("navKeyRootTabIndex", this.element.prop("tabIndex")).prop("tabIndex", -1);
-
-					//auto focus - default to the first focusable child (or last active).  Do on timer to preserve proper focusin/out/blur sequence.
-					window.setTimeout(function()
+					if(options.navKeyAutoFocus)
 					{
-						var options = this.options;
-						var focusable = this.element.find((options.navKeyAutoFocus === true) ? ":ibxFocusable" : options.navKeyAutoFocus);
-						var focusItem = (options.navKeyAutoFocus === true) ? focusable.filter(".ibx-nav-item-active").first() : focusable.first();
-						focusItem.length ? focusItem.first().focus() : focusable.first().focus();
-					}.bind(this), 0)
+						var navFocusItem = children.filter(".ibx-nav-item-active");
+						if(!navFocusItem.length)
+							navFocusItem = children.first();
 
+						window.setTimeout(function(navFocusItem)
+						{
+							navFocusItem.focus();
+							this.element.data("navKeyRootTabIndex", this.element.prop("tabindex"));
+							this.element.attr("tabindex", -1);
+						}.bind(this, navFocusItem), 0);
+					}
 				}
+				else
+				{
+					if(this.element.is(e.target.parentNode))
+						navFocusItem = $(e.target);
+					else
+					{
+						children.each(function(navFocusItem, target, idx, el)
+						{
+							if(el === target || $.contains(el, target))
+							{
+								navFocusItem.push(el);
+								return false;
+							}
+						}.bind(this, navFocusItem, e.target));
+					}
+				}
+				children.removeClass("ibx-nav-item-active").attr("aria-activedescendant");
+				navFocusItem.addClass("ibx-nav-item-active").attr("aria-activedescendant", true);
 			}
 		}
 		else
-		if(e.type == "focusout" && this._widgetFocused && (isTarget || (!isRelTarget && ownsTarget)) && !ownsRelTarget)
+		if(e.type == "focusout" && this._widgetFocused && !ownsRelTarget)
 		{
 			this._widgetFocused = false;
 			this.element.dispatchEvent("ibx_widgetblur", e, false, false, e.relatedTarget);
 
 			//active items and tabbing are handled in a given 'context'...popups introduce a higher context, so ignore them here.
-			if(!$(e.relatedTarget).is(".ibx-popup"))
+			if(options.navKeyRoot && !$(e.relatedTarget).is(".ibx-popup"))
 			{
 				//put this element back in the tab order...so that next tab into will will do auto-focus.
 				if(options.navKeyAutoFocus !== false)
@@ -236,9 +238,22 @@ $.widget("ibi.ibxWidget", $.Widget,
 
 				//remove active so next focus goes to first item.
 				if(options.navKeyResetFocusOnBlur)
-					this.children().removeClass("ibx-nav-item-active").removeAttr("aria-activedescendant");
+				{
+					var children = this.children(":ibxFocusable");
+					children.removeClass("ibx-nav-item-active").removeAttr("aria-activedescendant");
+				}
 			}
+		}
 
+		//ie doesn't put a focus outline on -1 tabindex items.  Do manually for consistency.
+		var tabIndex = this.element.attr("tabindex");
+		if((tabIndex < 0) && ibxPlatformCheck.isIE)
+		{
+			if(e.type == "focus" )
+				this.element.addClass("ibx-ie-pseudo-focus");
+			else
+			if(e.type == "blur")
+				this.element.removeClass("ibx-ie-pseudo-focus");
 		}
 	},
 	_onWidgetKeyEvent:function(e)
@@ -430,7 +445,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 		this.element.toggleClass("ibx-focus-root", options.focusRoot);
 		this.element.toggleClass("ibx-nav-key-root", options.navKeyRoot);
 		this.element.toggleClass("ibx-default-focused", options.defaultFocused);
-		this.element.toggleClass("ibx-nav-key-auto-focus", options.navKeyAutoFocus);
+		//this.element.toggleClass("ibx-nav-key-auto-focus", options.navKeyAutoFocus);
 		this.setAccessibility();
 
 		//hookup the resize sensor if interested in resize events.
