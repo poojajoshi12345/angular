@@ -185,6 +185,97 @@
 .ibx-glyph-html5:before {
   content: "\e99d";
 }
+.ibx-glyph-play:before {
+  content: "\e97c";
+}
+.ibx-glyph-minus:before {
+  content: "\e99c";
+}
+.ibx-glyph-search:before {
+  content: "\e969";
+}
+.ibx-glyph-refresh:before {
+  content: "\e96a";
+}
+.ibx-glyph-clock:before {
+  content: "\e96f";
+}
+.ibx-glyph-edit:before {
+  content: "\e970";
+}
+.ibx-glyph-copy:before {
+  content: "\e971";
+}
+.ibx-glyph-cut:before {
+  content: "\e972";
+}
+.ibx-glyph-paste:before {
+  content: "\e973";
+}
+.ibx-glyph-clone:before {
+  content: "\e974";
+}
+.ibx-glyph-favorite:before {
+  content: "\e975";
+}
+.ibx-glyph-hide:before {
+  content: "\e976";
+}
+.ibx-glyph-security:before {
+  content: "\e977";
+}
+.ibx-glyph-properties:before {
+  content: "\e978";
+}
+.ibx-glyph-lock:before {
+  content: "\e97a";
+}
+.ibx-glyph-unlock:before {
+  content: "\e97b";
+}
+.ibx-glyph-profile-data:before {
+  content: "\e9b7";
+}
+.ibx-glyph-insight .path1:before {
+  content: "\e9b5";
+  color: rgb(0, 0, 0);
+}
+.ibx-glyph-insight .path2:before {
+  content: "\e9b6";
+  margin-left: -1em;
+  color: rgb(0, 0, 0);
+  opacity: 0.99;
+}
+.ibx-glyph-join-inner:before {
+  content: "\e9af";
+}
+.ibx-glyph-join-left-outer:before {
+  content: "\e9b0";
+}
+.ibx-glyph-join-right-outer:before {
+  content: "\e9b2";
+}
+.ibx-glyph-join-full-outer:before {
+  content: "\e9b3";
+}
+.ibx-glyph-join-none:before {
+  content: "\e9b4";
+}
+.ibx-glyph-header:before {
+  content: "\e9ab";
+}
+.ibx-glyph-footer:before {
+  content: "\e9ac";
+}
+.ibx-glyph-split-y:before {
+  content: "\e9ad";
+}
+.ibx-glyph-log-scale:before {
+  content: "\e9ae";
+}
+.ibx-glyph-reset-thin:before {
+  content: "\e9b1";
+}
 .ibx-glyph-new:before {
   content: "\e99b";
 }
@@ -235,7 +326,6 @@
 }
 .ibx-glyph-new-database:before {
   content: "\e91e";
-  color: #000;
 }
 .ibx-glyph-new-page:before {
   content: "\e91f";
@@ -245,14 +335,12 @@
 }
 .ibx-glyph-new-visualization:before {
   content: "\e921";
-  color: #000;
 }
 .ibx-glyph-new-table:before {
   content: "\e926";
 }
 .ibx-glyph-clear-canvas:before {
   content: "\e944";
-  color: #000;
 }
 .ibx-glyph-preview:before {
   content: "\e927";
@@ -271,19 +359,15 @@
 }
 .ibx-glyph-label-top:before {
   content: "\e92b";
-  color: #3c3c3c;
 }
 .ibx-glyph-label-right:before {
   content: "\e92c";
-  color: #3c3c3c;
 }
 .ibx-glyph-label-left:before {
   content: "\e92f";
-  color: #3c3c3c;
 }
 .ibx-glyph-label-none:before {
   content: "\e930";
-  color: #3c3c3c;
 }
 .ibx-glyph-label-bold:before {
   content: "\e945";
@@ -305,19 +389,21 @@
 }
 .ibx-glyph-cell-merge:before {
   content: "\e931";
-  color: #000;
 }
 .ibx-glyph-cell-split:before {
   content: "\e932";
-  color: #000;
 }
 .ibx-glyph-insert-after:before {
   content: "\e933";
-  color: #000;
 }
 .ibx-glyph-insert-before:before {
   content: "\e934";
-  color: #000;
+}
+.ibx-glyph-insert-left:before {
+  content: "\e9b8";
+}
+.ibx-glyph-insert-right:before {
+  content: "\e9b9";
 }
 .ibx-glyph-drop-target:before {
   content: "\e957";
@@ -376,12 +462,6 @@
 .ibx-glyph-restore:before {
   content: "\e968";
 }
-.ibx-glyph-search:before {
-  content: "\e969";
-}
-.ibx-glyph-refresh:before {
-  content: "\e96a";
-}
 .ibx-glyph-list:before {
   content: "\e96b";
 }
@@ -393,51 +473,6 @@
 }
 .ibx-glyph-ellipsis-h:before {
   content: "\e96e";
-}
-.ibx-glyph-play:before {
-  content: "\e97c";
-}
-.ibx-glyph-clock:before {
-  content: "\e96f";
-}
-.ibx-glyph-edit:before {
-  content: "\e970";
-}
-.ibx-glyph-copy:before {
-  content: "\e971";
-}
-.ibx-glyph-cut:before {
-  content: "\e972";
-}
-.ibx-glyph-paste:before {
-  content: "\e973";
-}
-.ibx-glyph-clone:before {
-  content: "\e974";
-}
-.ibx-glyph-favorite:before {
-  content: "\e975";
-}
-.ibx-glyph-hide:before {
-  content: "\e976";
-}
-.ibx-glyph-security:before {
-  content: "\e977";
-}
-.ibx-glyph-properties:before {
-  content: "\e978";
-}
-.ibx-glyph-lock:before {
-  content: "\e97a";
-}
-.ibx-glyph-unlock:before {
-  content: "\e97b";
-}
-.ibx-glyph-plus:before {
-  content: "\e97d";
-}
-.ibx-glyph-minus:before {
-  content: "\e99c";
 }
 .ibx-glyph-trace:before {
   content: "\e97e";
@@ -474,6 +509,9 @@
 }
 .ibx-glyph-arrow-circle-left:before {
   content: "\f0a8";
+}
+.ibx-glyph-plus:before {
+  content: "\e97d";
 }
 .ibx-glyph-question:before {
   content: "\e999";
@@ -561,11 +599,9 @@
 }
 .ibx-glyph-button:before {
   content: "\e955";
-  color: #606060;
 }
 .ibx-glyph-submit:before {
   content: "\e9a4";
-  color: #606060;
 }
 .ibx-glyph-text-area:before {
   content: "\e956";
