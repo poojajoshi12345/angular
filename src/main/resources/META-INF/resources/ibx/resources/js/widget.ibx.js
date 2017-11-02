@@ -177,6 +177,9 @@ $.widget("ibi.ibxWidget", $.Widget,
 
 		if(e.type == "focusin")
 		{
+			if(e.target.id == "parent1a")
+				var x = 10;
+
 			if(!this._widgetFocused)
 			{
 				this._widgetFocused = true;
@@ -195,12 +198,15 @@ $.widget("ibi.ibxWidget", $.Widget,
 						if(!navFocusItem.length)
 							navFocusItem = children.first();
 
-						window.setTimeout(function(navFocusItem)
+						if(navFocusItem.length)
 						{
-							navFocusItem.focus();
-							this.element.data("navKeyRootTabIndex", this.element.prop("tabindex"));
-							this.element.attr("tabindex", -1);
-						}.bind(this, navFocusItem), 0);
+							window.setTimeout(function(navFocusItem)
+							{
+								navFocusItem.focus();
+								this.element.data("navKeyRootTabIndex", this.element.prop("tabindex"));
+								this.element.attr("tabindex", -1);
+							}.bind(this, navFocusItem), 0);
+						}
 					}
 				}
 				else
@@ -209,6 +215,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 						navFocusItem = $(e.target);
 					else
 					{
+						//figure out which direct child owns the event target.
 						children.each(function(navFocusItem, target, idx, el)
 						{
 							if(el === target || $.contains(el, target))
@@ -219,8 +226,12 @@ $.widget("ibi.ibxWidget", $.Widget,
 						}.bind(this, navFocusItem, e.target));
 					}
 				}
-				children.removeClass("ibx-nav-item-active").attr("aria-activedescendant");
-				navFocusItem.addClass("ibx-nav-item-active").attr("aria-activedescendant", true);
+
+				if(navFocusItem.length)
+				{
+					children.removeClass("ibx-nav-item-active").attr("aria-activedescendant");
+					navFocusItem.addClass("ibx-nav-item-active").attr("aria-activedescendant", true);
+				}
 			}
 		}
 		else
@@ -288,46 +299,42 @@ $.widget("ibi.ibxWidget", $.Widget,
 		{
 			var navKids = this.element.find(":ibxFocusable");
 			var active = current = navKids.filter(".ibx-nav-item-active");
-			if(active)
+
+			if(e.keyCode == $.ui.keyCode.HOME)
+				active = navKids.first();
+			else
+			if(e.keyCode == $.ui.keyCode.END)
+				active = navKids.last();
+			else
+			if(options.navKeyDir == "horizontal" || options.navKeyDir == "both")
 			{
-				if(e.keyCode == $.ui.keyCode.HOME)
-					active = navKids.first();
-				else
-				if(e.keyCode == $.ui.keyCode.END)
-					active = navKids.last();
-				else
-				if(options.navKeyDir == "horizontal" || options.navKeyDir == "both")
+				if(e.keyCode == $.ui.keyCode.LEFT)
 				{
-					if(e.keyCode == $.ui.keyCode.LEFT)
-					{
-						var prev = active.prevAll(":ibxFocusable").first();
-						active = prev.length ? prev : navKids.last();
-					}
-					else
-					if(e.keyCode == $.ui.keyCode.RIGHT)
-					{
-						var next = active.nextAll(":ibxFocusable").first();
-						active = next.length ? next : navKids.first();
-					}
+					var prev = active.prevAll(":ibxFocusable").first();
+					active = prev.length ? prev : navKids.last();
 				}
 				else
-				if(options.navKeyDir == "vertical" || options.navKeyDir == "both")
+				if(e.keyCode == $.ui.keyCode.RIGHT)
 				{
-					if(e.keyCode == $.ui.keyCode.UP)
-					{
-						var prev = active.prevAll(":ibxFocusable").first();
-						active = prev.length ? prev : navKids.last();
-					}
-					else
-					if(e.keyCode == $.ui.keyCode.DOWN)
-					{
-						var next = active.nextAll(":ibxFocusable").first();
-						active = next.length ? next : navKids.first();
-					}
+					var next = active.nextAll(":ibxFocusable").first();
+					active = next.length ? next : navKids.first();
 				}
 			}
 			else
-				active = navKids.first();
+			if(options.navKeyDir == "vertical" || options.navKeyDir == "both")
+			{
+				if(e.keyCode == $.ui.keyCode.UP)
+				{
+					var prev = active.prevAll(":ibxFocusable").first();
+					active = prev.length ? prev : navKids.last();
+				}
+				else
+				if(e.keyCode == $.ui.keyCode.DOWN)
+				{
+					var next = active.nextAll(":ibxFocusable").first();
+					active = next.length ? next : navKids.first();
+				}
+			}
 
 			var event = $.Event(e);
 			event.type = "ibx_beforekeynav";

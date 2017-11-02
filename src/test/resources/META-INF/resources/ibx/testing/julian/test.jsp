@@ -80,11 +80,16 @@
 				margin-bottom:10px;
 				padding:5px;
 			}
+			.parent1a
+			{
+				margin:5px;
+			}
 
 			.child
 			{
 				xborder:inherit;
 				xborder-color:lime;
+				margin:5px;
 			}
 
 			.test-menubar
@@ -105,15 +110,24 @@
 			<div class="cmd-test" data-ibx-type="ibxCommand" data-ibx-name="cmdTest" data-ibxp-cmd-id="cmdTest" data-ibxp-shortcut="ctrl+x"></div>
 
 			
-			<div id="parent1" tabIndex="0" class="parent parent1 source" data-ibx-type="ibxWidget" data-ibxp-nav-key-root="true" data-ibxp-nav-key-auto-focus="true">
-				Parent Widget 1
+			<div id="parent1" tabIndex="0" class="parent parent1 source" data-ibx-type="ibxHBox" data-ibxp-align="center" data-ibxp-nav-key-root="true" data-ibxp-nav-key-auto-focus="true">
+				Parent Widget 1:
 				<div id="p1_child1" tabIndex="-1" class="child child1" data-ibx-type="ibxWidget">Child Widget</div>
 				<div id="p1_child2" tabIndex="-1" class="child child2" data-ibx-type="ibxWidget">Child Widget</div>
+
+				<div id="parent1a" tabIndex="-1" class="parent parent1a source" data-ibx-type="ibxHBox" data-ibxp-align="center" data-ibxp-nav-key-root="true" data-ibxp-nav-key-auto-focus="true">
+					Parent Widget 1A:
+					<div id="p1a_child1" tabIndex="-1" class="child child1" data-ibx-type="ibxWidget">Child Widget</div>
+					<div id="p1a_child2" tabIndex="-1" class="child child2" data-ibx-type="ibxWidget">Child Widget</div>
+					<div id="p1a_child3" tabIndex="-1" class="child child3" data-ibx-type="ibxWidget">Child Widget</div>
+				</div>
+
 				<div id="p1_child3" tabIndex="-1" class="child child3" data-ibx-type="ibxWidget">Child Widget</div>
+				<div id="p1_child4" tabIndex="-1" class="child child4" data-ibx-type="ibxWidget">Child Widget</div>
 			</div>
 			
-			<div id="parent2" tabIndex="0" class="parent parent2 source" data-ibx-type="ibxWidget" data-ibxp-nav-key-root="true" data-ibxp-nav-key-auto-focus="true">
-				Parent Widget 2
+			<div id="parent2" tabIndex="0" class="parent parent2 source" data-ibx-type="ibxHBox" data-ibxp-align="center" data-ibxp-nav-key-root="true" data-ibxp-nav-key-auto-focus="true">
+				Parent Widget 2:
 				<div id="p2_child1" tabIndex="-1" class="child child1" data-ibx-type="ibxWidget">Child Widget</div>
 				<div id="p2_child2" tabIndex="-1" class="child child2" data-ibx-type="ibxWidget">Child Widget</div>
 				<div id="p2_child3" tabIndex="-1" class="child child3" data-ibx-type="ibxWidget">Child Widget</div>
@@ -125,7 +139,7 @@
 			<div id="parentWidget" class="parent parent-widget target" data-ibx-type="ibxWidget">Target Widget</div>
 			-->
 
-			<div data-ibxp-draggable="true" id="menubar" class="test-menubar" tabIndex="0" aria-label="Example IBX horizontal menu bar" data-ibx-type="ibxHMenuBar" data-ibxp-aria.label="Menus" data-ibxp-nav-key-reset-focus-on-blur="true">
+			<div data-ibxp-draggable="true" id="menubar" class="test-menubar" tabIndex="0" aria-label="Example IBX horizontal menu bar" data-ibx-type="ibxHMenuBar" data-ibxp-aria.label="Menus" data-ibxp-nav-key-reset-focus-on-blur="false">
 				<div id="filemenu" class="menu-btn-file" data-ibx-type="ibxMenuButton" data-ibxp-text="File">
 					<div data-ibx-type="ibxMenu">
 						<div data-ibxp-command="cmdTest" data-ibx-type="ibxMenuItem" data-ibxp-label-options='{"glyph":"fiber_new", "glyphClasses":"material-icons"}'>New</div>
