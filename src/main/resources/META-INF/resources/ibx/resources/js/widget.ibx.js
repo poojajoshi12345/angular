@@ -177,9 +177,6 @@ $.widget("ibi.ibxWidget", $.Widget,
 
 		if(e.type == "focusin")
 		{
-			if(e.target.id == "parent1a")
-				var x = 10;
-
 			if(!this._widgetFocused)
 			{
 				this._widgetFocused = true;
