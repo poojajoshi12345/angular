@@ -32,10 +32,10 @@ $Revision$:-->
 				"IBX_DLG_CAPTION_INF":"Information",
 				"IBX_DLG_CAPTION_QST":"Question",
 
-				"IBX_STR_SLIDER_DEF_LABEL":"Slider min {1} max {2}",
-				"IBX_STR_SLIDER_RANGE_DEF_LABEL":"Range min {1} max {2}",
-				"IBX_STR_SLIDER_RANGE_VAL_LOW":"Low range value {1}",
-				"IBX_STR_SLIDER_RANGE_VAL_HIGH":"High range value {1}",
+				"IBX_STR_SLIDER_DEF_LABEL":"Slider {1} to {2}",
+				"IBX_STR_SLIDER_RANGE_DEF_LABEL":"Range {1} to {2}",
+				"IBX_STR_SLIDER_RANGE_VAL_LOW":"Low value {1}",
+				"IBX_STR_SLIDER_RANGE_VAL_HIGH":"High value {1}",
 
 				"IDS_IBFS_ERROR_UNKNOWN":"Unknown webFOCUS communications error.",
 				"IDS_IBFS_ERROR_DETAILS_LABEL":"Details:",
