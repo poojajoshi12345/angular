@@ -5,10 +5,10 @@
 .ibx-progress-bar
 {
 	min-width:50px;
+	min-height:3px;
 	padding:1px;
 	border:1px solid #aaa;
 	border-radius:3px;
-	min-height:2px;
 	overflow:hidden;
 	background-color:transparent;
 }

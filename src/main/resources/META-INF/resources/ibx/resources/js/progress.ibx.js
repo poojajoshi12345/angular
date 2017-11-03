@@ -97,10 +97,10 @@ $.widget("ibi.ibxWaiting", $.ibi.ibxLabel,
 		"aria":
 		{
 			"role":"progressbar",
-			"live":"assertive",
+			"live":"polite",
 			"relevant":"all",
 			"valuemin":0,
-			"valuemax":0,
+			"valuemax":100,
 		}
 	},
 	_widgetClass:"ibx-waiting",
