@@ -104,11 +104,6 @@ $.widget("ibi.ibxPopup", $.ibi.ibxWidget,
 		{
 			this.element.on("transitionend", function(closeInfo, e)
 			{
-				//refocus the previously active element.
-				if(this._elPrevActive && this.options.refocusLastActiveOnClose)
-					this._elPrevActive.focus();
-				delete this._elPrevActive;
-
 				if(e.originalEvent.propertyName == "visibility")
 				{
 					this.element.removeClass("ibx-popup-closing");
@@ -126,6 +121,14 @@ $.widget("ibi.ibxPopup", $.ibi.ibxWidget,
 							this.destroy();
 							this.element.remove();
 						}
+
+						/****[IBX-29]
+							Refocus the previously active element. The check for body being focused is because if the user has clicked on something else to dismiss
+							the popup, then that should retain focus and WE DON'T WANT TO MOVE IT TO THE ORIGINAL FOCUSED ELEMENT!!!
+						****/
+						if(this._elPrevActive && this.options.refocusLastActiveOnClose && document.body === document.activeElement)
+							this._elPrevActive.focus();
+						delete this._elPrevActive;
 					}
 				}
 			}.bind(this, closeInfo));
