@@ -126,6 +126,8 @@ $.widget("ibi.ibxDialog", $.ibi.ibxPopup,
 });
 $.ibi.ibxDialog.createMessageDialog = function(options)
 {
+	options = options || {};
+
 	//setup the options for the dialog
 	options = $.extend(true, {},
 	{
