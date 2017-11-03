@@ -126,13 +126,26 @@ $.widget("ibi.ibxDialog", $.ibi.ibxPopup,
 });
 $.ibi.ibxDialog.createMessageDialog = function(options)
 {
-	//setup the message for the dialog
-	options = $.extend(true, {}, {type:"std", messageOptions:{textWrap:true, justify:"start"}}, options);
+	//setup the options for the dialog
+	options = $.extend(true, {},
+	{
+		type:"std",
+		captionOptions:
+		{
+			text:options.caption,
+		},
+		messageOptions:
+		{
+			text:options.message,
+			textWrap:true,
+			justify:"start",
+		},
+		aria:{role:"alertdialog"}
+	}, options);
 	var msg = $("<div data-ibx-name='message'>").ibxLabel(options.messageOptions).addClass("ibx-dialog-message").ibxAriaId();
 
 	//setup the dialog
-	options.captionOptions = {text:options.caption};//map caption to proper option.
-	options.aria = $.extend(true, {}, {"role":"alertdialog", "describedby":msg.prop("id")}, options.aria);
+	options.aria = $.extend(true, {}, {"describedby":msg.prop("id")}, options.aria);
 	var dlg = $("<div>").ibxDialog(options).ibxDialog("add", msg);
 	ibx.bindElements(dlg);
 	return dlg;

@@ -4,7 +4,7 @@
 /*CLASSES FOR PROGRESS BAR*/
 .ibx-progress-bar
 {
-	width:100px;
+	min-width:50px;
 	padding:1px;
 	border:1px solid #aaa;
 	border-radius:3px;
