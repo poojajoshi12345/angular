@@ -128,7 +128,10 @@ $.widget("ibi.ibxWaiting", $.ibi.ibxLabel,
 	{
 		if(msg)
 		{
+			//do directly so as not to interrupt animation of icon/glyph.  If we set this via
+			//the regular ibxLabel options it will cause a refresh which will restart animation.
 			this.options.text = msg;
+			this.options.textIsHtml = isHtml;
 			isHtml ? this._text.html(msg) : this._text.text(msg);
 			return this.element;
 		}
