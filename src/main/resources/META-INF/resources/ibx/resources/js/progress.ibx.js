@@ -71,7 +71,6 @@ $.widget("ibi.ibxProgressBar", $.ibi.ibxHBox,
 		this.progText.text(options.showProgText ? (options.progText || options.curVal) : "");
 
 		var flex = (options.curVal - options.minVal)/(options.maxVal - options.minVal);
-		console.log(flex);
 		this.progMarker.css("flex-grow", flex).addClass(options.markerClasses);
 		this.progText.css("flex-grow", 1-flex).addClass(options.progTextClasses);
 	
