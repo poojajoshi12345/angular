@@ -63,8 +63,7 @@ $.widget("ibi.ibxPopup", $.ibi.ibxWidget,
 		{
 			//save currently active element for refocusing on close.
 			this._elPrevActive = document.activeElement;
-			if(!this.element.parent().length)
-				this.element.appendTo(document.body);
+			this.element.data("ibxPopupParent", this.element.parent()).appendTo(document.body);
 
 			this.element.position(this.options.position);
 			this.element.on("transitionend", function(e)
@@ -115,8 +114,9 @@ $.widget("ibi.ibxPopup", $.ibi.ibxWidget,
 					this.element.removeClass("ibx-popup-closing");
 					if(!this.isOpen())
 					{
-						//remove the transition event listener.
-						//remove top/left to get way off screen and stop weird scrollbars on body.
+						//remove the transition event listener...put popup back under original parent..remove current position info.
+						var parent = this.element.data("ibxPopupParent") || document.body;
+						this.element.appendTo(parent);
 						this.element.off("transitionend").css({top:"", left:""});
 						this._trigger("close", null, closeInfo);
 					

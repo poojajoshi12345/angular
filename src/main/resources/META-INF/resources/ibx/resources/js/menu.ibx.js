@@ -176,7 +176,7 @@ $.widget("ibi.ibxMenuItem", $.ibi.ibxHBox,
 		if(subMenu)
 		{
 			subMenu.data("ibxParentMenu", this.parentMenu());
-			subMenu.appendTo(document.body).ibxMenu({destroyOnClose: false, position:{of: this.element, at:"right top", my:"left top"}}).ibxMenu("open");
+			subMenu.ibxMenu({destroyOnClose: false, position:{of: this.element, at:"right top", my:"left top"}}).ibxMenu("open");
 		}
 		else
 		{
@@ -231,12 +231,6 @@ $.widget("ibi.ibxMenuItem", $.ibi.ibxHBox,
 	},
 	_onSubMenuOpenClose:function(e)
 	{
-		if(e.type == "ibx_close")
-		{
-			//on close put it back under this menuitem so it's a submenu again.
-			var subMenu = this.subMenu();
-			this.element.append(subMenu);
-		}
 		this.setAccessibility();
 	},
 	userValue:function()
