@@ -53,7 +53,7 @@
 
 				$(".parent, .child").on("ibx_widgetfocus ibx_widgetblur", function(e)
 				{
-					console.log(e.type, e.target.id, e.relatedTarget ? e.relatedTarget.id : "");
+					//console.log(e.type, e.target.id, e.relatedTarget ? e.relatedTarget.id : "");
 				});
 				$(".parent, .child").on("focus blur", function(e)
 				{
