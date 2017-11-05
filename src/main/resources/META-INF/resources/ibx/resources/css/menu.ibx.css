@@ -97,6 +97,15 @@
 	width:1em;
 }
 
+.ibx-end-marker-cmd-shortcut
+{
+	flex:1 0 auto;
+	font-family:inherit;
+	text-align:right;
+	margin-left:3em;
+	width:auto;
+}
+
 .ibx-start-marker.ibx-marker-uncheck,
 .ibx-start-marker.ibx-marker-check,
 .ibx-start-marker.ibx-marker-radio-uncheck,

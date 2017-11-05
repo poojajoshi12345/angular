@@ -71,7 +71,6 @@ $.widget("ibi.ibxWidget", $.Widget,
 		this.element.on("click", this._onWidgetClickEvent.bind(this));
 		this._adjustWidgetClasses(true);
 
-
 		//save the resize sensor callback;
 		this._resizeCallbackBound = this._resizeCallback.bind(this);
 
@@ -156,11 +155,15 @@ $.widget("ibi.ibxWidget", $.Widget,
 		}
 		return ret || $();
 	},
+	getCommand:function()
+	{
+		return $(sformat("[data-ibx-cmd-id='{1}']", this.options.command));
+	},
 	_triggerCommand:function(e)
 	{
 		var options = this.options;
 		if(options.command)
-			$(sformat(".ibx-command[data-ibxp-cmd-id='{1}'", this.options.command)).ibxWidget("trigger", e);
+			this.getCommand().ibxWidget("trigger", e);
 	},
 	_resizeCallback:function()
 	{
@@ -449,8 +452,11 @@ $.widget("ibi.ibxWidget", $.Widget,
 		this.element.toggleClass("ibx-focus-root", options.focusRoot);
 		this.element.toggleClass("ibx-nav-key-root", options.navKeyRoot);
 		this.element.toggleClass("ibx-default-focused", options.defaultFocused);
-		//this.element.toggleClass("ibx-nav-key-auto-focus", options.navKeyAutoFocus);
+		this.element.toggleClass("ibx-nav-key-auto-focus", options.navKeyAutoFocus);
 		this.setAccessibility();
+
+		//associate widget with the command
+		(options.command) ? this.element.attr("data-ibx-command", options.command) : this.element.removeAttr("data-ibx-command");
 
 		//hookup the resize sensor if interested in resize events.
 		if(!options.wantResize && this._resizeSensor)

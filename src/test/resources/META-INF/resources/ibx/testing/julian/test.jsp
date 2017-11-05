@@ -59,6 +59,11 @@
 				{
 					//console.log(e.type, e.target.id, e.relatedTarget ? e.relatedTarget.id : "");
 				});
+				$("#cmdCut, #cmdCopy, #cmdPaste").on("ibx_triggered", function(e)
+				{
+					console.log(e.type);
+					$(e.target).ibxWidget("option", "checked", true);
+				});
 
 			}, null, true);
 		</script>
@@ -107,8 +112,9 @@
 	</head>
 	<body class="ibx-root">
 		<div id="mainBox" class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="center" data-ibxp-justify="center" data-ibx-name-root="true">
-			<div class="cmd-test" data-ibx-type="ibxCommand" data-ibx-name="cmdTest" data-ibxp-cmd-id="cmdTest" data-ibxp-shortcut="ctrl+x"></div>
-
+			<div id="cmdCut" data-ibx-type="ibxCommand" data-ibxp-id="cmdCut" data-ibx-name="cmdTest" data-ibxp-shortcut="ctrl+x"></div>
+			<div id="cmdCopy" data-ibx-type="ibxCommand" data-ibxp-id="cmdCopy" data-ibx-name="cmdTest" data-ibxp-shortcut="ctrl+c"></div>
+			<div id="cmdPaste" data-ibx-type="ibxCommand" data-ibxp-id="cmdPaste" data-ibx-name="cmdTest" data-ibxp-shortcut="ctrl+v"></div>
 			
 			<div id="parent1" tabIndex="0" class="parent parent1 source" data-ibx-type="ibxHBox" data-ibxp-align="center" data-ibxp-nav-key-root="true" data-ibxp-nav-key-auto-focus="true">
 				Parent Widget 1:
@@ -142,7 +148,7 @@
 			<div data-ibxp-draggable="true" id="menubar" class="test-menubar" tabIndex="0" aria-label="Example IBX horizontal menu bar" data-ibx-type="ibxHMenuBar" data-ibxp-aria.label="Menus" data-ibxp-nav-key-reset-focus-on-blur="false">
 				<div id="filemenu" class="menu-btn-file" data-ibx-type="ibxMenuButton" data-ibxp-text="File">
 					<div data-ibx-type="ibxMenu">
-						<div data-ibxp-command="cmdTest" data-ibx-type="ibxMenuItem" data-ibxp-label-options='{"glyph":"fiber_new", "glyphClasses":"material-icons"}'>New</div>
+						<div data-ibx-type="ibxMenuItem" data-ibxp-label-options='{"glyph":"fiber_new", "glyphClasses":"material-icons"}'>New</div>
 						<div data-ibx-type="ibxMenuItem" data-ibxp-label-options='{"glyph":"open_in_new", "glyphClasses":"material-icons"}'>Open...</div>
 						<div data-ibx-type="ibxMenuSeparator"></div>
 						<div data-ibx-type="ibxMenuItem" data-ibxp-label-options='{"glyph":"save", "glyphClasses":"material-icons"}'>Save</div>
@@ -153,15 +159,15 @@
 				</div>
 				<div id="editmenu" class="menu-btn-edit" data-ibx-type="ibxMenuButton" data-ibxp-text="Edit">
 					<div data-ibx-type="ibxMenu" data-ibxp-multi-select="true">
-						<div data-ibx-type="ibxMenuItem" data-ibxp-label-options='{"glyph":"content_cut", "glyphClasses":"material-icons"}'>Cut</div>
-						<div data-ibx-type="ibxMenuItem" data-ibxp-label-options='{"glyph":"content_copy", "glyphClasses":"material-icons"}'>Copy</div>
-						<div data-ibx-type="ibxMenuItem" data-ibxp-label-options='{"glyph":"content_paste", "glyphClasses":"material-icons"}'>Paste</div>
+						<div data-ibxp-command="cmdCut" data-ibx-type="ibxMenuItem" data-ibxp-label-options='{"glyph":"content_cut", "glyphClasses":"material-icons"}'>Cut</div>
+						<div data-ibxp-command="cmdCopy" data-ibx-type="ibxMenuItem" data-ibxp-label-options='{"glyph":"content_copy", "glyphClasses":"material-icons"}'>Copy</div>
+						<div data-ibxp-command="cmdPaste" data-ibx-type="ibxMenuItem" data-ibxp-label-options='{"glyph":"content_paste", "glyphClasses":"material-icons"}'>Paste</div>
 						<div data-ibx-type="ibxMenuSeparator"></div>
 						<div data-ibx-type="ibxMenuItem" data-ibxp-label-options='{"glyph":"find_in_page", "glyphClasses":"material-icons"}'>Find...</div>
 						<div data-ibx-type="ibxMenuSeparator"></div>
-						<div data-ibxp-command="cmdTest" data-ibx-type="ibxCheckMenuItem" data-ibxp-label-options='{"glyph":"accessibility", "glyphClasses":"material-icons"}'>Check This</div>
-						<div data-ibxp-command="cmdTest" data-ibx-type="ibxCheckMenuItem" data-ibxp-label-options='{"glyph":"android", "glyphClasses":"material-icons"}'>Check That</div>
-						<div data-ibxp-command="cmdTest" data-ibx-type="ibxCheckMenuItem" data-ibxp-label-options='{"glyph":"face", "glyphClasses":"material-icons"}'>Check Yo Head</div>
+						<div data-ibx-type="ibxCheckMenuItem" data-ibxp-label-options='{"glyph":"accessibility", "glyphClasses":"material-icons"}'>Check This</div>
+						<div data-ibx-type="ibxCheckMenuItem" data-ibxp-label-options='{"glyph":"android", "glyphClasses":"material-icons"}'>Check That</div>
+						<div data-ibx-type="ibxCheckMenuItem" data-ibxp-label-options='{"glyph":"face", "glyphClasses":"material-icons"}'>Check Yo Head</div>
 					</div>
 				</div>
 				<div id="viewmenu" class="menu-btn-view" data-ibx-type="ibxMenuButton" data-ibxp-text="View">
