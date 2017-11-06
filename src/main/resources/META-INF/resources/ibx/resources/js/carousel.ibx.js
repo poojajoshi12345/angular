@@ -8,6 +8,8 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 {
 	options:
 	{
+		navKeyRoot:true,
+		navKeyAutoFocus:true,
 		wantResize:true,
 		nameRoot:true,
 		align:"stretch",
@@ -34,7 +36,12 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 			"forward":{"child":"right", "page":"scrollRight"},
 			"backward":{"child":"left", "page":"scrollLeft"},
 		},//html props to use for calculating scroll position/delta
-		allowDragScrolling:true
+		allowDragScrolling:true,
+
+		aria:
+		{
+			role:"listbox"
+		}
 	},
 	_widgetClass:"ibx-carousel",
 	_create:function()
@@ -62,7 +69,9 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 	},
 	add:function(el, sibling, before, refresh)
 	{
-		$(el).addClass("ibx-csl-item");
+		el = $(el);
+		el.addClass("ibx-csl-item").prop("tabIndex", -1).attr("role", "listitem");
+		
 		this._itemsBox.ibxWidget("add", el, sibling, before, refresh);
 		if(refresh)
 			this.refresh();
@@ -232,15 +241,24 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 		var markerInfo = $(e.currentTarget).data("ibxPageMarkerInfo");
 		this.page(markerInfo.pageNo);
 	},
+	_onPageMarkerKeyDown:function(e)
+	{
+		if(e.keyCode == $.ui.keyCode.ENTER || e.keyCode == $.ui.keyCode.SPACE)
+		{		
+			var markerInfo = $(e.target).data("ibxPageMarkerInfo");
+			this.page(markerInfo.pageNo);
+			e.target.focus();
+		}
+	},
 	_adjustPageMarkers:function()
 	{
 		this._pageMarkers.empty();
 		var pageInfo = this.getPageInfo();
 		for(var i = 0; i < pageInfo.pages; ++i)
 		{
-			var pageMarker = $(sformat("<div class='{1} {2}' tabIndex='0'>", this.options.pageMarkerClass, i == pageInfo.curPage ? this.options.pageMarkerSelectedClass : ""));
+			var pageMarker = $(sformat("<div role='radio' class='{1} {2}' tabIndex='-1'>", this.options.pageMarkerClass, i == pageInfo.curPage ? this.options.pageMarkerSelectedClass : ""));
 			pageMarker.prop("title", "Page " + (i + 1));
-			pageMarker.data("ibxPageMarkerInfo", {"pageNo":i, "pageInfo":pageInfo}).on("click", this._onPageMarkerClick.bind(this));
+			pageMarker.data("ibxPageMarkerInfo", {"pageNo":i, "pageInfo":pageInfo}).on("click", this._onPageMarkerClick.bind(this)).on("keydown", this._onPageMarkerKeyDown.bind(this));
 			this._pageMarkers.append(pageMarker)
 		}
 

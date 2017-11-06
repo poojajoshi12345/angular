@@ -37,6 +37,9 @@ $Revision$:-->
 				"IBX_STR_SLIDER_RANGE_VAL_LOW":"Low value {1}",
 				"IBX_STR_SLIDER_RANGE_VAL_HIGH":"High value {1}",
 
+				"IBX_CAROUSEL_PREV":"Previous carousel items",
+				"IBX_CAROUSEL_NEXT":"Next carousel items",
+
 				"IDS_IBFS_ERROR_UNKNOWN":"Unknown webFOCUS communications error.",
 				"IDS_IBFS_ERROR_DETAILS_LABEL":"Details:",
 				"IDS_IBFS_ERROR_DETAILS_PARMS":"Parameters:",
@@ -162,11 +165,11 @@ $Revision$:-->
 
 			<div class="res-ibx-carousel-body">
 				<div class="ibx-csl-items-container" data-ibx-name="_itemsContainer" data-ibx-type="ibxHBox" data-ibxp-align="stretch">
-					<div class="csl-scroll-btn" tabIndex="0" data-ibx-name="_prevBtn" data-ibx-type="ibxButtonSimple" data-ibxp-class="ibx-csl-prev-btn"></div>
-					<div class="ibx-csl-items-box" data-ibx-name="_itemsBox" data-ibx-type="ibxHBox" data-ibxp-align="center"></div>
-					<div class="csl-scroll-btn" tabIndex="0" data-ibx-name="_nextBtn" data-ibx-type="ibxButtonSimple" data-ibxp-class="ibx-csl-next-btn"></div>
+					<div class="csl-scroll-btn" tabIndex="0" title="@ibxString('IBX_CAROUSEL_PREV')" data-ibx-name="_prevBtn" data-ibx-type="ibxButtonSimple" data-ibxp-class="ibx-csl-prev-btn"></div>
+					<div class="ibx-csl-items-box" tabIndex="0" data-ibx-name="_itemsBox" data-ibx-type="ibxHBox" data-ibxp-nav-key-root="true" data-ibxp-nav-key-auto-focus="true" data-ibxp-align="center"></div>
+					<div class="csl-scroll-btn" tabIndex="0" title="@ibxString('IBX_CAROUSEL_NEXT')" data-ibx-name="_nextBtn" data-ibx-type="ibxButtonSimple" data-ibxp-class="ibx-csl-next-btn"></div>
 				</div>
-				<div class="ibx-csl-page-markers" tabIndex="0" data-ibx-name="_pageMarkers" data-ibx-type="ibxHBox" data-ibxp-justify="center" data-ibxp-align="center">
+				<div class="ibx-csl-page-markers" tabIndex="0" data-ibxp-aria.role="radiogroup" data-ibx-name="_pageMarkers" data-ibx-type="ibxHBox" data-ibxp-nav-key-root="true" data-ibxp-nav-key-auto-focus="true" data-ibxp-justify="center" data-ibxp-align="center">
 				</div>
 			</div>
 		</markup-block>
