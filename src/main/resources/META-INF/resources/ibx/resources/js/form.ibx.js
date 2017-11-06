@@ -10,6 +10,7 @@ $.widget("ibi.ibxForm", $.ibi.ibxWidget,
 		target:"_self",
 		method:"post",
 		encType:"application/x-www-form-urlencoded; charset=utf-8",
+		acceptCharset:"",
 		fields:{}		
 	},
 	_widgetClass: "ibx-form",
@@ -48,6 +49,7 @@ $.widget("ibi.ibxForm", $.ibi.ibxWidget,
 		this.element.attr("target", options.target);
 		this.element.attr("method", options.method);
 		this.element.attr("enctype", options.encType);
+		this.element.attr("accept-charset", options.acceptCharset);
 		this.element.remove(".ibx-form-internal-field");
 		$.each(options.fields, function(name, value)
 		{
