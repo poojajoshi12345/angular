@@ -22,7 +22,8 @@ $.widget("ibi.ibxCommand", $.ibi.ibxWidget,
 	},
 	trigger:function(e)
 	{
-		this.element.dispatchEvent("ibx_triggered", e, false, false, e.target);
+		if(!this.options.disabled)
+			this.element.dispatchEvent("ibx_triggered", e, false, false, e.target);
 	},
 	check:function(checked)
 	{
@@ -59,10 +60,10 @@ $.widget("ibi.ibxCommand", $.ibi.ibxWidget,
 		this._super();
 		var options = this.options;
 		this.element.attr("data-ibx-cmd-id", options.id);
-		var triggers = $(sformat(".ibx-widget[data-ibx-command='{1}']", options.id))
+		var widgets = $(sformat(".ibx-widget[data-ibx-command='{1}']", options.id))
 		
-		triggers.ibxWidget("option", "disabled", options.disabled);
-		triggers.filter(".ibx-can-toggle").ibxWidget("option", "checked", options.checked);
+		widgets.ibxWidget("option", "disabled", options.disabled);
+		widgets.filter(".ibx-can-toggle").ibxWidget("option", "checked", options.checked);
 
 		//add shortcut key handling...during capture phase.
 		if(options.shortcut)
