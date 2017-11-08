@@ -17,6 +17,7 @@
 
 .ibx-csl-prev-btn, .ibx-csl-next-btn
 {
+	margin:3px;
 	font-family:"Material Icons";
 	font-size:1.5em;
 	flex:0 0 auto;

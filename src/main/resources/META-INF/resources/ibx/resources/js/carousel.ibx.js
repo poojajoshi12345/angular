@@ -10,6 +10,7 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 	{
 		navKeyRoot:true,
 		navKeyAutoFocus:true,
+		navKeyResetFocusOnBlur:true,
 		wantResize:true,
 		nameRoot:true,
 		align:"stretch",
@@ -51,10 +52,10 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 		var resBody = ibx.resourceMgr.getResource(".res-ibx-carousel-body", false);
 		this.element.append(resBody.children());
 		ibx.bindElements(this.element.children());
-		this.element.on("keydown keyup", this._onItemsKeyEvent.bind(this)).on("ibx_resize", this._onResize.bind(this));
-		this._prevBtn.on("mousedown mouseup mouseleave", this._onPrev.bind(this));
-		this._nextBtn.on("mousedown mouseup mouseleave", this._onNext.bind(this));
-		this._itemsBox.ibxDragScrolling({overflowY:"hidden"}).on("ibx_scroll", this._onItemsBoxScroll.bind(this));	
+		this.element.on("ibx_resize", this._onResize.bind(this));
+		this._prevBtn.on("click mousedown mouseup mouseleave", this._onPrev.bind(this));
+		this._nextBtn.on("click mousedown mouseup mouseleave", this._onNext.bind(this));
+		this._itemsBox.ibxDragScrolling({overflowY:"hidden"}).on("scroll", this._onItemsBoxScroll.bind(this));	
 		this.add(children);
 	},
 	_destroy:function()
@@ -66,6 +67,11 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 	{
 		selector = selector || ".ibx-csl-item";
 		return this._itemsBox.ibxWidget("children", selector);
+	},
+	navKeyChildren:function(selector)
+	{
+		var ret = $([this._prevBtn, this._nextBtn, this._itemsBox, this._pageMarkers]);
+		return ret;
 	},
 	add:function(el, sibling, before, refresh)
 	{
@@ -86,24 +92,25 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 	},
 	_onPrev:function(e)
 	{
-		e.type == "mousedown" ? this.scroll(-Infinity) : this.stop();
+		if(e.type == "mousedown")
+			this.scroll(Number.NEGATIVE_INFINITY)
+		else
+		if(e.type == "mouseup")
+			this.stop();
+		else
+		if(e.type == "click")
+			this.scroll(-1);
 	},
 	_onNext:function(e)
 	{
-		e.type == "mousedown" ? this.scroll(Infinity) : this.stop();
-	},
-	_onItemsKeyEvent:function(e)
-	{
-		if(e.type == "keydown")
-		{
-			if(e.keyCode == 37)
-				this.scroll(-Infinity);
-			else
-			if(e.keyCode == 39)
-				this.scroll(Infinity);
-		}
+		if(e.type == "mousedown")
+			this.scroll(Number.POSITIVE_INFINITY)
 		else
+		if(e.type == "mouseup")
 			this.stop();
+		else
+		if(e.type == "click")
+			this.scroll(1);
 	},
 	_onResize:function()
 	{
@@ -143,7 +150,7 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 		this._scrollInfo = info = 
 		{
 			"forward": (steps >= 0),
-			"scrollType": scrollType || options.scrollType,
+			"scrollType": scrollType,
 			"steps": Math.abs(steps),
 			"nFrames": Math.ceil((stepRate/1000) * 60),
 			"curFrame": 0,
@@ -184,6 +191,14 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 				{
 					window.cancelAnimationFrame(info.animationFrameId)
 					this._scrollInfo = null;
+
+					/*
+					var scrollChild = this.getScrollChild(false);
+					scrollChild.el.focus();
+					this.children().removeClass("ibx-nav-item-active").attr("aria-activedescendant");
+					$(scrollChild.el).addClass("ibx-nav-item-active").attr("aria-activedescendant", true);
+					*/
+
 					this._trigger("scrollend", null, [this._itemsBox, info, this.getPageInfo()]);
 				}
 				else
@@ -213,7 +228,7 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 		if(scrollType == "integral")
 		{
 			var pageInfo = this.getPageInfo();
-			var scrollChild = this._getScrollChild(forward);
+			var scrollChild = this.getScrollChild(forward);
 			if(scrollChild)
 			{
 				var props = options.scrollProps[(forward) ? "forward" : "backward"];
@@ -269,7 +284,7 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 		disabled = (pageInfo.scrollLeft + pageInfo.pageWidth) >= pageInfo.scrollWidth;
 		this._nextBtn.ibxWidget("option", "disabled", disabled).toggleClass("csl-btn-hidden", (disabled && options.hideDisabledButtons));
 	},
-	_getScrollChild:function(forward)
+	getScrollChild:function(forward)
 	{
 		var childInfo = null;
 		var pageInfo = this.getPageInfo();
@@ -278,10 +293,10 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 		{
 			var child = children[i];
 			var info = GetElementInfo(child);
-			if(forward && (info.right > pageInfo.scrollRight))
+			if((forward === true) && (info.right > pageInfo.scrollRight))
 				childInfo = info;
 			else
-			if(!forward && (info.left < pageInfo.scrollLeft && info.right >= pageInfo.scrollLeft))
+			if((forward === false) && (info.left < pageInfo.scrollLeft && info.right >= pageInfo.scrollLeft))
 				childInfo = info;
 			if(childInfo)
 				break;
@@ -401,7 +416,7 @@ $.widget("ibi.ibxVCarousel", $.ibi.ibxCarousel,
 		this._prevBtn.ibxWidget("option", "disabled", pageInfo.scrollTop <= 0);
 		this._nextBtn.ibxWidget("option", "disabled", (pageInfo.scrollTop + pageInfo.pageHeight) >= pageInfo.scrollHeight);
 	},
-	_getScrollChild:function(forward)
+	getScrollChild:function(forward)
 	{
 		var childInfo = null;
 		var pageInfo = this.getPageInfo();

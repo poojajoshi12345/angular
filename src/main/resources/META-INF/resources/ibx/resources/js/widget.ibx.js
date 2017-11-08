@@ -188,7 +188,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 
 			if(options.navKeyRoot)
 			{
-				var children = this.children(":ibxFocusable");
+				var children = this.navKeyChildren();
 				var navFocusItem = $();
 				if(isTarget)
 				{
@@ -229,7 +229,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 
 				if(navFocusItem.length)
 				{
-					children.removeClass("ibx-nav-item-active").attr("aria-activedescendant");
+					children.removeClass("ibx-nav-item-active").removeAttr("aria-activedescendant");
 					navFocusItem.addClass("ibx-nav-item-active").attr("aria-activedescendant", true);
 				}
 			}
@@ -250,7 +250,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 				//remove active so next focus goes to first item.
 				if(options.navKeyResetFocusOnBlur)
 				{
-					var children = this.children(":ibxFocusable");
+					var children = this.navKeyChildren(":ibxFocusable");
 					children.removeClass("ibx-nav-item-active").removeAttr("aria-activedescendant");
 				}
 			}
@@ -297,7 +297,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 		else
 		if(options.navKeyRoot && (-1 != $.ibi.ibxWidget.navKeys.indexOf(e.keyCode)))
 		{
-			var navKids = this.element.find(":ibxFocusable");
+			var navKids = this.navKeyChildren();
 			var active = current = navKids.filter(".ibx-nav-item-active");
 
 			if(e.keyCode == $.ui.keyCode.HOME)
@@ -382,6 +382,11 @@ $.widget("ibi.ibxWidget", $.Widget,
 	children:function(selector)
 	{
 		return this.element.children(selector);
+	},
+	navKeyChildren:function(selector)
+	{
+		selector = selector || ":ibxFocusable";
+		return this.children(selector);
 	},
 	add:function(el, elSibling, before, refresh)
 	{
