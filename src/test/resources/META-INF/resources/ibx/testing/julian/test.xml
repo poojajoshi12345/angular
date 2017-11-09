@@ -1,0 +1,30 @@
+<ibfsrpc _jt="IBFSResponseObject" language="en_US" name="listShares" returncode="10000" returndesc="SUCCESS" subreturncode="0" type="simple">
+	<ibfsparams size="1">
+		<entry key="IBFS_path" value="IBFS:/WFC/Repository/Public/~admin/a.fex"/>
+	</ibfsparams>
+	<rootObject _jt="IBFSObject" container="true" createdOn="0" description="Shares for:IBFS:/WFC/Repository/Public/~admin/a.fex" dummy="false" lastModified="0" lastaccessOn="0" length="0" name="IBFS:/WFC/Repository/Public/~admin/a.fex" type="IBFSFolder">
+		<children _jt="ArrayList" size="3">
+			<item _jt="IBFSUserObject" createdOn="0" description="aa1x" dummy="false" email="" fullPath="IBFS:/SSYS/USERS/aa1" handle="2100267008" index="0" lastModified="0" lastSignin="1474900719410" lastaccessOn="0" length="0" name="aa1" nameSpace="DB" parent="IBFS:/WFC/Repository/Public/~admin/a.fex" type="User" userStatusDisplay="Active">
+				<properties size="3">
+					<entry key="SeatDate" value="20160926"/>
+					<entry key="AuthNType" value="IntAuthN"/>
+					<entry key="SeatType" value="PU"/>
+				</properties>
+				<status _jt="IBSSUserStatus" name="ACTIVE"/>
+				<groups _jt="ArrayList" size="0"/>
+				<pSetList _jt="ArrayList" size="0"/>
+			</item>
+			<item _jt="IBFSUserObject" createdOn="0" description="atest" dummy="false" email="" fullPath="IBFS:/SSYS/USERS/atest" handle="1197427711" index="1" lastModified="0" lastaccessOn="0" length="0" name="atest" nameSpace="DB" parent="IBFS:/WFC/Repository/Public/~admin/a.fex" type="User" userStatusDisplay="Active">
+				<status _jt="IBSSUserStatus" name="ACTIVE"/>
+				<groups _jt="ArrayList" size="0"/>
+				<pSetList _jt="ArrayList" size="0"/>
+			</item>
+			<item _jt="IBFSGroupObject" container="true" createdOn="0" description="aaaa" dummy="false" externalGroupName="" fullPath="IBFS:/SSYS/GROUPS/aaa" handle="287370242" index="2" lastModified="0" lastaccessOn="0" length="0" name="aaa" parent="IBFS:/WFC/Repository/Public/~admin/a.fex" type="Group">
+				<properties size="1">
+					<entry key="LastChanged" value="1494615930119"/>
+				</properties>
+				<users _jt="ArrayList" size="0"/>
+			</item>
+		</children>
+	</rootObject>
+</ibfsrpc>"
