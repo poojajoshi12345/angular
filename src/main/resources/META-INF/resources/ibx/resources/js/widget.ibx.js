@@ -66,7 +66,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 		this.element.data("ibiIbxWidget", this);
 		this.element.attr("data-ibx-type", this.widgetName);
 		this.element.on("keydown", this._onWidgetKeyEvent.bind(this));
-		this.element.on("focus focusin blur focusout", this._onWidgetFocusEvent.bind(this));
+		this.element.on("focusin focusout", this._onWidgetFocusEvent.bind(this));
 		this.element.on("contextmenu", this._onWidgetContextMenu.bind(this));
 		this.element.on("click", this._onWidgetClickEvent.bind(this));
 		this._adjustWidgetClasses(true);
@@ -192,9 +192,10 @@ $.widget("ibi.ibxWidget", $.Widget,
 				var navFocusItem = $();
 				if(isTarget)
 				{
-					if(options.navKeyAutoFocus)
+					if(options.navKeyAutoFocus !== false)
 					{
-						var navFocusItem = children.filter(".ibx-nav-item-active");
+						//can use custom filter for navKeyAutoFocus, or just use the first nav active item.
+						var navFocusItem = children.filter((options.navKeyAutoFocus === true) ? ".ibx-nav-item-active" : options.navKeyAutoFocus);
 						if(!navFocusItem.length)
 							navFocusItem = children.first();
 
@@ -211,6 +212,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 				}
 				else
 				{
+					//use target if direct child of this, or find the direct child that ultimately owns the target.
 					if(this.element.is(e.target.parentNode))
 						navFocusItem = $(e.target);
 					else
@@ -227,6 +229,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 					}
 				}
 
+				//set the child to be the active nav key item.
 				if(navFocusItem.length)
 				{
 					children.removeClass("ibx-nav-item-active ibx-ie-pseudo-focus").removeAttr("aria-activedescendant");

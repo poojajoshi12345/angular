@@ -39,6 +39,9 @@ $Revision$:-->
 
 				"IBX_CAROUSEL_PREV":"Previous carousel items",
 				"IBX_CAROUSEL_NEXT":"Next carousel items",
+				"IBX_CAROUSEL_ITEMS":"Carousel Items",
+				"IBX_CAROUSEL_PAGES":"Carousel Pages",
+				"IBX_CAROUSEL_PAGE":"Go to Page",
 
 				"IDS_IBFS_ERROR_UNKNOWN":"Unknown webFOCUS communications error.",
 				"IDS_IBFS_ERROR_DETAILS_LABEL":"Details:",
@@ -169,7 +172,7 @@ $Revision$:-->
 					<div class="ibx-csl-items-box" tabIndex="0" data-ibx-name="_itemsBox" data-ibx-type="ibxHBox" data-ibxp-nav-key-root="true" data-ibxp-nav-key-auto-focus="true" data-ibxp-align="center"></div>
 					<div class="csl-scroll-btn" tabIndex="0" title="@ibxString('IBX_CAROUSEL_NEXT')" data-ibx-name="_nextBtn" data-ibx-type="ibxButtonSimple" data-ibxp-class="ibx-csl-next-btn"></div>
 				</div>
-				<div class="ibx-csl-page-markers" tabIndex="0" data-ibxp-aria.role="radiogroup" data-ibx-name="_pageMarkers" data-ibx-type="ibxHBox" data-ibxp-nav-key-root="true" data-ibxp-nav-key-auto-focus="true" data-ibxp-justify="center" data-ibxp-align="center">
+				<div class="ibx-csl-page-markers" tabIndex="0" data-ibx-name="_pageMarkers" data-ibx-type="ibxHBox" data-ibxp-nav-key-root="true" data-ibxp-nav-key-auto-focus="true" data-ibxp-justify="center" data-ibxp-align="center">
 				</div>
 			</div>
 		</markup-block>

@@ -58,6 +58,14 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 		this._itemsBox.ibxDragScrolling({overflowY:"hidden"}).on("scroll", this._onItemsBoxScroll.bind(this));	
 		this.add(children);
 	},
+	_setAccessibility:function(accessible, aria)
+	{
+		this._super(accessible, aria);
+
+		this._itemsBox.ibxWidget("option", "aria", {"role":"listbox", "label":ibx.resourceMgr.getString("IBX_CAROUSEL_ITEMS")}).ibxWidget("setAccessibility", this.options.aria.accessible);
+		this._pageMarkers.ibxWidget("option", "aria", {"role":"listbox", "label":ibx.resourceMgr.getString("IBX_CAROUSEL_PAGES")}).ibxWidget("setAccessibility", this.options.aria.accessible);
+		return aria;
+	},
 	_destroy:function()
 	{
 		this.remove(this.children());
@@ -271,9 +279,13 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 		var pageInfo = this.getPageInfo();
 		for(var i = 0; i < pageInfo.pages; ++i)
 		{
-			var pageMarker = $(sformat("<div role='radio' class='{1} {2}' tabIndex='-1'>", this.options.pageMarkerClass, i == pageInfo.curPage ? this.options.pageMarkerSelectedClass : ""));
-			pageMarker.prop("title", "Page " + (i + 1));
+			var isCurPage = (i == pageInfo.curPage);
+			var pageMarker = $(sformat("<div role='option' class='{1} {2}' tabIndex='-1'>", this.options.pageMarkerClass, isCurPage ? this.options.pageMarkerSelectedClass : ""));
+			pageMarker.prop("title", sformat("{1} {2}", ibx.resourceMgr.getString("IBX_CAROUSEL_PAGE"), i+1));
 			pageMarker.data("ibxPageMarkerInfo", {"pageNo":i, "pageInfo":pageInfo}).on("click", this._onPageMarkerClick.bind(this)).on("keydown", this._onPageMarkerKeyDown.bind(this));
+
+			if(this.options.aria.accessible)
+				pageMarker.attr({"role":"option", "aria-checked": isCurPage})
 			this._pageMarkers.append(pageMarker)
 		}
 
@@ -358,6 +370,7 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 		else
 			this._adjustPageMarkers();
 	
+	this._pageMarkers.ibxWidget("option", "navKeyAutoFocus", "." + this.options.pageMarkerSelectedClass);
 	this._pageMarkers.css("display", options.showPageMarkers ? "" : "none");
 		(options.pageMarkersPos == "start")
 			? this._pageMarkers.insertBefore(this._itemsContainer)
