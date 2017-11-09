@@ -55,7 +55,7 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 		this.element.on("ibx_resize", this._onResize.bind(this));
 		this._prevBtn.on("click mousedown mouseup mouseleave", this._onPrev.bind(this));
 		this._nextBtn.on("click mousedown mouseup mouseleave", this._onNext.bind(this));
-		this._itemsBox.ibxDragScrolling({overflowY:"hidden"}).on("scroll", this._onItemsBoxScroll.bind(this));	
+		this._itemsBox.on("keydown", this._onItemsBoxKeydown.bind(this)).ibxDragScrolling({overflowY:"hidden"}).on("scroll", this._onItemsBoxScroll.bind(this));	
 		this.add(children);
 	},
 	_setAccessibility:function(accessible, aria)
@@ -103,7 +103,7 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 		if(e.type == "mousedown")
 			this.scroll(Number.NEGATIVE_INFINITY)
 		else
-		if(e.type == "mouseup")
+		if(e.type == "mouseup" || e.type == "mouseleave")
 			this.stop();
 		else
 		if(e.type == "click")
@@ -114,7 +114,7 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 		if(e.type == "mousedown")
 			this.scroll(Number.POSITIVE_INFINITY)
 		else
-		if(e.type == "mouseup")
+		if(e.type == "mouseup" || e.type == "mouseleave")
 			this.stop();
 		else
 		if(e.type == "click")
@@ -136,10 +136,6 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 			curPage = curPage ? curPage.pageNo : 9999;
 			this._itemsBox.prop(options.scrollProps.axis, curPage * pageInfo[options.scrollProps.pageSize]);
 		}
-		this._adjustPageMarkers();
-	},
-	_onItemsBoxScroll:function(e)
-	{
 		this._adjustPageMarkers();
 	},
 	_scrollInfo:null,
@@ -187,9 +183,9 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 				info.curFrame = info.nFrames;
 			}
 
-			this._itemsBox.prop(info.scrollAxis, newScroll);
-			if(!this._trigger("scroll", null, [this._itemsBox, info, this.getPageInfo()]))
+			if(!this._trigger("carouselscroll", null, [this._itemsBox, info, this.getPageInfo()]))
 				return;
+			this._itemsBox.prop(info.scrollAxis, newScroll);
 
 			info.animationFrameId = window.requestAnimationFrame(fnFrame.bind(this, info));
 			if(++info.curFrame >= info.nFrames)
@@ -197,17 +193,10 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 				this._adjustPageMarkers();
 				if(info.stop || --info.steps <= 0)
 				{
+					//we done...stop scrolling...let world know.
 					window.cancelAnimationFrame(info.animationFrameId)
 					this._scrollInfo = null;
-
-					/*
-					var scrollChild = this.getScrollChild(false);
-					scrollChild.el.focus();
-					this.children().removeClass("ibx-nav-item-active").attr("aria-activedescendant");
-					$(scrollChild.el).addClass("ibx-nav-item-active").attr("aria-activedescendant", true);
-					*/
-
-					this._trigger("scrollend", null, [this._itemsBox, info, this.getPageInfo()]);
+					this._trigger("carouselscrollend", null, [this._itemsBox, info, this.getPageInfo()]);
 				}
 				else
 				{
@@ -219,7 +208,7 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 			}
 		};
 
-		if(!this._trigger("beforescroll", null, [this._itemsBox, info,  this.getPageInfo()]))
+		if(!this._trigger("beforescarouselcroll", null, [this._itemsBox, info,  this.getPageInfo()]))
 			return;
 		info.animationFrameId = window.requestAnimationFrame(fnFrame.bind(this, info));
 	},
@@ -250,13 +239,26 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 		if(this._scrollInfo)
 			this._scrollInfo.stop = true;
 	},
-	page:function(pageNo, stepRate)
+	_onItemsBoxScroll:function(e)
+	{
+		this._adjustPageMarkers();
+	},
+	_onItemsBoxKeydown:function(e)
+	{
+		if(e.keyCode == $.ui.keyCode.LEFT || e.keyCode == $.ui.keyCode.RIGHT && e.ctrlKey)
+		{
+			this.page((e.keyCode == $.ui.keyCode.LEFT) ? -1 : 1, null, true);
+			e.preventDefault();
+			e.stopPropagation();
+		}
+	},
+	page:function(pageNo, stepRate, relative)
 	{
 		var info = this.getPageInfo();
 		if(pageNo === undefined)
 			return info.curPage;
 
-		var pages = (pageNo - info.curPage);
+		var pages = relative ? (info.curPage + pageNo) : (pageNo - info.curPage);
 		this.scroll(pages, "page", stepRate, true);
 	},
 	_onPageMarkerClick:function(e)
@@ -310,6 +312,7 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 			else
 			if((forward === false) && (info.left < pageInfo.scrollLeft && info.right >= pageInfo.scrollLeft))
 				childInfo = info;
+			
 			if(childInfo)
 				break;
 		}
