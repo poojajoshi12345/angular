@@ -229,8 +229,8 @@ $.widget("ibi.ibxWidget", $.Widget,
 
 				if(navFocusItem.length)
 				{
-					children.removeClass("ibx-nav-item-active").removeAttr("aria-activedescendant");
-					navFocusItem.addClass("ibx-nav-item-active").attr("aria-activedescendant", true);
+					children.removeClass("ibx-nav-item-active ibx-ie-pseudo-focus").removeAttr("aria-activedescendant");
+					navFocusItem.addClass("ibx-nav-item-active").toggleClass("ibx-ie-pseudo-focus", ibxPlatformCheck.isIE).attr("aria-activedescendant", true);
 				}
 			}
 		}
@@ -254,17 +254,6 @@ $.widget("ibi.ibxWidget", $.Widget,
 					children.removeClass("ibx-nav-item-active").removeAttr("aria-activedescendant");
 				}
 			}
-		}
-
-		//ie doesn't put a focus outline on -1 tabindex items.  Do manually for consistency.
-		var tabIndex = this.element.attr("tabindex");
-		if((tabIndex < 0) && ibxPlatformCheck.isIE)
-		{
-			if(e.type == "focus" )
-				this.element.addClass("ibx-ie-pseudo-focus");
-			else
-			if(e.type == "blur")
-				this.element.removeClass("ibx-ie-pseudo-focus");
 		}
 	},
 	_onWidgetKeyEvent:function(e)
