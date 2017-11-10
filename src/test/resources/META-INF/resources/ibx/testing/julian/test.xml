@@ -27,4 +27,22 @@
 			</item>
 		</children>
 	</rootObject>
-</ibfsrpc>"
+</ibfsrpc>
+
+<ibfsrpc _jt="IBFSResponseObject" language="en_US" name="setShares" returncode="10000" returndesc="SUCCESS" subreturncode="0" type="simple">
+	<ibfsparams size="2">
+		<entry key="IBFS_subjectsList" value="&#9;&#9;&lt;rootObject _jt='ArrayList' size='2'&gt;&#9;&#9;&#9;&lt;item _jt='string' index='0' value='IBFS:/SSYS/GROUPS/a'/&gt;&lt;item _jt='string' index='1' value='IBFS:/SSYS/USERS/admin'/&gt;&#9;&#9;&lt;/rootObject&gt;&#9;"/>
+		<entry key="IBFS_path" value="IBFS:/WFC/Repository/Summit_2017/~admin/a.url"/>
+	</ibfsparams>
+	<rootObject _jt="IBFSObject" container="true" createdOn="0" description="IBFS:/WFC/Repository/Summit_2017/~admin/a.url" dummy="false" lastModified="0" lastaccessOn="0" length="0" name="IBFS:/WFC/Repository/Summit_2017/~admin/a.url" type="unknownType">
+		<children _jt="ArrayList" size="2">
+			<item _jt="IBFSGroupObject" container="true" createdOn="0" description="" dummy="false" fullPath="IBFS:/SSYS/GROUPS/a" index="0" lastModified="0" lastaccessOn="0" length="0" name="a" parent="IBFS:/WFC/Repository/Summit_2017/~admin/a.url" type="Group">
+				<users _jt="ArrayList" size="0"/>
+			</item>
+			<item _jt="IBFSUserObject" createdOn="0" description="" dummy="false" email="" fullPath="IBFS:/SSYS/USERS/admin" index="1" lastModified="0" lastaccessOn="0" length="0" name="admin" parent="IBFS:/WFC/Repository/Summit_2017/~admin/a.url" type="User" userStatusDisplay="UNDEFINED">
+				<status _jt="IBSSUserStatus" name="UNDEFINED"/>
+				<groups _jt="ArrayList" size="0"/>
+			</item>
+		</children>
+	</rootObject>
+</ibfsrpc>
