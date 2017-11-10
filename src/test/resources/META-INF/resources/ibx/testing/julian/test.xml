@@ -1,48 +1,91 @@
-<ibfsrpc _jt="IBFSResponseObject" language="en_US" name="listShares" returncode="10000" returndesc="SUCCESS" subreturncode="0" type="simple">
-	<ibfsparams size="1">
-		<entry key="IBFS_path" value="IBFS:/WFC/Repository/Public/~admin/a.fex"/>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<ibfsrpc _jt="IBFSResponseObject" language="en_US" name="list" returncode="10000" returndesc="SUCCESS" subreturncode="0" type="simple">
+	<ibfsparams size="6">
+		<entry key="IBFS_recursionDepth" value="1"/>
+		<entry key="IBFS_args" value="__null"/>
+		<entry key="IBFS_forGroupObjs" value="__null"/>
+		<entry key="IBFS_path" value="IBFS:/BIP/Portals"/>
+		<entry key="IBFS_options"/>
+		<entry key="IBFS_flatten" value="false"/>
 	</ibfsparams>
-	<rootObject _jt="IBFSObject" container="true" createdOn="0" description="Shares for:IBFS:/WFC/Repository/Public/~admin/a.fex" dummy="false" lastModified="0" lastaccessOn="0" length="0" name="IBFS:/WFC/Repository/Public/~admin/a.fex" type="IBFSFolder">
-		<children _jt="ArrayList" size="3">
-			<item _jt="IBFSUserObject" createdOn="0" description="aa1x" dummy="false" email="" fullPath="IBFS:/SSYS/USERS/aa1" handle="2100267008" index="0" lastModified="0" lastSignin="1474900719410" lastaccessOn="0" length="0" name="aa1" nameSpace="DB" parent="IBFS:/WFC/Repository/Public/~admin/a.fex" type="User" userStatusDisplay="Active">
-				<properties size="3">
-					<entry key="SeatDate" value="20160926"/>
-					<entry key="AuthNType" value="IntAuthN"/>
-					<entry key="SeatType" value="PU"/>
-				</properties>
-				<status _jt="IBSSUserStatus" name="ACTIVE"/>
-				<groups _jt="ArrayList" size="0"/>
-				<pSetList _jt="ArrayList" size="0"/>
-			</item>
-			<item _jt="IBFSUserObject" createdOn="0" description="atest" dummy="false" email="" fullPath="IBFS:/SSYS/USERS/atest" handle="1197427711" index="1" lastModified="0" lastaccessOn="0" length="0" name="atest" nameSpace="DB" parent="IBFS:/WFC/Repository/Public/~admin/a.fex" type="User" userStatusDisplay="Active">
-				<status _jt="IBSSUserStatus" name="ACTIVE"/>
-				<groups _jt="ArrayList" size="0"/>
-				<pSetList _jt="ArrayList" size="0"/>
-			</item>
-			<item _jt="IBFSGroupObject" container="true" createdOn="0" description="aaaa" dummy="false" externalGroupName="" fullPath="IBFS:/SSYS/GROUPS/aaa" handle="287370242" index="2" lastModified="0" lastaccessOn="0" length="0" name="aaa" parent="IBFS:/WFC/Repository/Public/~admin/a.fex" type="Group">
-				<properties size="1">
-					<entry key="LastChanged" value="1494615930119"/>
-				</properties>
-				<users _jt="ArrayList" size="0"/>
-			</item>
-		</children>
-	</rootObject>
-</ibfsrpc>
-
-<ibfsrpc _jt="IBFSResponseObject" language="en_US" name="setShares" returncode="10000" returndesc="SUCCESS" subreturncode="0" type="simple">
-	<ibfsparams size="2">
-		<entry key="IBFS_subjectsList" value="&#9;&#9;&lt;rootObject _jt='ArrayList' size='2'&gt;&#9;&#9;&#9;&lt;item _jt='string' index='0' value='IBFS:/SSYS/GROUPS/a'/&gt;&lt;item _jt='string' index='1' value='IBFS:/SSYS/USERS/admin'/&gt;&#9;&#9;&lt;/rootObject&gt;&#9;"/>
-		<entry key="IBFS_path" value="IBFS:/WFC/Repository/Summit_2017/~admin/a.url"/>
-	</ibfsparams>
-	<rootObject _jt="IBFSObject" container="true" createdOn="0" description="IBFS:/WFC/Repository/Summit_2017/~admin/a.url" dummy="false" lastModified="0" lastaccessOn="0" length="0" name="IBFS:/WFC/Repository/Summit_2017/~admin/a.url" type="unknownType">
-		<children _jt="ArrayList" size="2">
-			<item _jt="IBFSGroupObject" container="true" createdOn="0" description="" dummy="false" fullPath="IBFS:/SSYS/GROUPS/a" index="0" lastModified="0" lastaccessOn="0" length="0" name="a" parent="IBFS:/WFC/Repository/Summit_2017/~admin/a.url" type="Group">
-				<users _jt="ArrayList" size="0"/>
-			</item>
-			<item _jt="IBFSUserObject" createdOn="0" description="" dummy="false" email="" fullPath="IBFS:/SSYS/USERS/admin" index="1" lastModified="0" lastaccessOn="0" length="0" name="admin" parent="IBFS:/WFC/Repository/Summit_2017/~admin/a.url" type="User" userStatusDisplay="UNDEFINED">
-				<status _jt="IBSSUserStatus" name="UNDEFINED"/>
-				<groups _jt="ArrayList" size="0"/>
-			</item>
-		</children>
+	<rootObject _jt="ArrayList" size="6">
+		<item _jt="IBFSBIPObject" actions="export,refresh,ownership,manageRulesOn,viewRulesOn,viewPortal,viewPortalInWindow,editPortal,chgDesc,updateProps,resourceRules,selectDefault,publish,delete,doCopy,cut,rename,open,editPortal,infoAssist,infoAssistViaReportingObject,reportingObject,editor,scheduleAdvancedTool,scheduleTaskMR,schedAccessList,schedDistributionList,url,alertAssist,createItem,visualization,revertCustomizations,revertAllCustomizations,getTranslations,visualDefaults" bipHandle="-5337085909663294427" bipName="a" bipPath="/a" bipProperties="def_folder=&quot;&quot; description=&quot;&quot; icon=&quot;&quot; publish=&quot;false&quot; versionMajor=&quot;3&quot; versionMinor=&quot;1&quot; " bipType="viewroot" container="true" createdBy="10001" createdOn="1465396070453" defLang="en_US" description="a" dummy="false" fullPath="IBFS:/BIP/Portals/a" handle="-5337085909663294427" index="0" isNew="true" lastModBy="10001" lastModOn="1477082790426" lastModified="1477082790426" lastaccessOn="0" length="0" menuActionBitMap="ABgAEAYcDQIACQwKAAEgBiAcIAAAIBAGAAwAAA==" name="a" ownerId="10001" ownerName="admin" ownerPath="IBFS:/SSYS/USERS/admin" ownerType="U" parent="Portals" policy="/9+794f///9vo/+9///t/////////f8AAAAA" rsPath="/ibi_apps/wfirs/ibfs/BIP/Portals/a" summary="" thumbPath="/ibi_apps/ibi_html/ibi_images/file_type/prtl_basic.svg" type="BipPortalsPortal" typeDescription="Portals" version="3">
+			<bipNlses _jt="HashMap" loadFactor="0.75" threshold="12">
+				<entry>
+					<key _jt="string" value="en_US/name"/>
+					<value class="com.ibi.bip.objects.BIP_NLS_Data" key="name" language="en_US" value="a"/>
+				</entry>
+			</bipNlses>
+			<userMappings _jt="HashMap" loadFactor="0.75" threshold="0"/>
+			<groupMappings _jt="HashMap" loadFactor="0.75" threshold="0"/>
+			<referencerMappings _jt="ArrayList" size="0"/>
+			<referenceeMappings _jt="ArrayList" size="0"/>
+			<aliases _jt="ArrayList" size="0"/>
+		</item>
+		<item _jt="IBFSBIPObject" actions="export,refresh,ownership,manageRulesOn,viewRulesOn,viewPortal,viewPortalInWindow,editPortal,chgDesc,updateProps,resourceRules,selectDefault,publish,delete,doCopy,cut,rename,open,editPortal,infoAssist,infoAssistViaReportingObject,reportingObject,editor,scheduleAdvancedTool,scheduleTaskMR,schedAccessList,schedDistributionList,url,alertAssist,createItem,visualization,revertCustomizations,revertAllCustomizations,getTranslations,visualDefaults" bipHandle="-2344478257049156385" bipName="aa" bipPath="/aa" bipProperties="def_folder=&quot;&quot; description=&quot;&quot; icon=&quot;&quot; publish=&quot;false&quot; versionMajor=&quot;3&quot; versionMinor=&quot;1&quot; " bipType="viewroot" container="true" createdBy="10001" createdOn="1510345055003" defLang="en_US" description="aa" dummy="false" fullPath="IBFS:/BIP/Portals/aa" handle="-2344478257049156385" index="1" isNew="true" lastModBy="10001" lastModOn="1510345055003" lastModified="1510345055003" lastaccessOn="0" length="0" menuActionBitMap="ABgAEAYcDQIACQwKAAEgBiAcIAAAIBAGAAwAAA==" name="aa" ownerId="10001" ownerName="admin" ownerPath="IBFS:/SSYS/USERS/admin" ownerType="U" parent="Portals" policy="/9+794f///9vo/+9///t/////////f8AAAAA" rsPath="/ibi_apps/wfirs/ibfs/BIP/Portals/aa" summary="" thumbPath="/ibi_apps/ibi_html/ibi_images/file_type/prtl_basic.svg" type="BipPortalsPortal" typeDescription="Portals" version="3">
+			<bipNlses _jt="HashMap" loadFactor="0.75" threshold="12">
+				<entry>
+					<key _jt="string" value="en_US/name"/>
+					<value class="com.ibi.bip.objects.BIP_NLS_Data" key="name" language="en_US" value="aa"/>
+				</entry>
+			</bipNlses>
+			<userMappings _jt="HashMap" loadFactor="0.75" threshold="0"/>
+			<groupMappings _jt="HashMap" loadFactor="0.75" threshold="0"/>
+			<referencerMappings _jt="ArrayList" size="0"/>
+			<referenceeMappings _jt="ArrayList" size="0"/>
+			<aliases _jt="ArrayList" size="0"/>
+		</item>
+		<item _jt="IBFSBIPObject" actions="export,refresh,ownership,manageRulesOn,viewRulesOn,viewPortal,viewPortalInWindow,editPortal,chgDesc,updateProps,resourceRules,selectDefault,publish,delete,doCopy,cut,rename,open,editPortal,infoAssist,infoAssistViaReportingObject,reportingObject,editor,scheduleAdvancedTool,scheduleTaskMR,schedAccessList,schedDistributionList,url,alertAssist,createItem,visualization,revertCustomizations,revertAllCustomizations,getTranslations,visualDefaults" bipHandle="-2614102487300183354" bipName="atest" bipPath="/atest" bipProperties="def_folder=&quot;&quot; description=&quot;&quot; icon=&quot;&quot; publish=&quot;false&quot; versionMajor=&quot;3&quot; versionMinor=&quot;1&quot; " bipType="viewroot" container="true" createdBy="10001" createdOn="1462204743791" defLang="en_US" description="atest" dummy="false" fullPath="IBFS:/BIP/Portals/atest" handle="-2614102487300183354" index="2" isNew="true" lastModBy="10001" lastModOn="1462205574243" lastModified="1462205574243" lastaccessOn="0" length="0" menuActionBitMap="ABgAEAYcDQIACQwKAAEgBiAcIAAAIBAGAAwAAA==" name="atest" ownerId="10001" ownerName="admin" ownerPath="IBFS:/SSYS/USERS/admin" ownerType="U" parent="Portals" policy="/9+794f///9vo/+9///t/////////f8AAAAA" rsPath="/ibi_apps/wfirs/ibfs/BIP/Portals/atest" summary="" thumbPath="/ibi_apps/ibi_html/ibi_images/file_type/prtl_basic.svg" type="BipPortalsPortal" typeDescription="Portals" version="3">
+			<bipNlses _jt="HashMap" loadFactor="0.75" threshold="12">
+				<entry>
+					<key _jt="string" value="en_US/name"/>
+					<value class="com.ibi.bip.objects.BIP_NLS_Data" key="name" language="en_US" value="atest"/>
+				</entry>
+			</bipNlses>
+			<userMappings _jt="HashMap" loadFactor="0.75" threshold="0"/>
+			<groupMappings _jt="HashMap" loadFactor="0.75" threshold="0"/>
+			<referencerMappings _jt="ArrayList" size="0"/>
+			<referenceeMappings _jt="ArrayList" size="0"/>
+			<aliases _jt="ArrayList" size="0"/>
+		</item>
+		<item _jt="IBFSBIPObject" actions="export,refresh,ownership,manageRulesOn,viewRulesOn,viewPortal,viewPortalInWindow,editPortal,chgDesc,updateProps,resourceRules,selectDefault,publish,delete,doCopy,cut,rename,open,editPortal,infoAssist,infoAssistViaReportingObject,reportingObject,editor,scheduleAdvancedTool,scheduleTaskMR,schedAccessList,schedDistributionList,url,alertAssist,createItem,visualization,revertCustomizations,revertAllCustomizations,getTranslations,visualDefaults" bipHandle="6717247156060602165" bipName="p1" bipPath="/p1" bipProperties="def_folder=&quot;&quot; description=&quot;&quot; icon=&quot;&quot; publish=&quot;false&quot; versionMajor=&quot;3&quot; versionMinor=&quot;1&quot; " bipType="viewroot" container="true" createdBy="10001" createdOn="1471451138708" defLang="en_US" description="p1" dummy="false" fullPath="IBFS:/BIP/Portals/p1" handle="6717247156060602165" index="3" isNew="true" lastModBy="10001" lastModOn="1471451150264" lastModified="1471451150264" lastaccessOn="0" length="0" menuActionBitMap="ABgAEAYcDQIACQwKAAEgBiAcIAAAIBAGAAwAAA==" name="p1" ownerId="10001" ownerName="admin" ownerPath="IBFS:/SSYS/USERS/admin" ownerType="U" parent="Portals" policy="/9+794f///9vo/+9///t/////////f8AAAAA" rsPath="/ibi_apps/wfirs/ibfs/BIP/Portals/p1" summary="" thumbPath="/ibi_apps/ibi_html/ibi_images/file_type/prtl_basic.svg" type="BipPortalsPortal" typeDescription="Portals" version="3">
+			<bipNlses _jt="HashMap" loadFactor="0.75" threshold="12">
+				<entry>
+					<key _jt="string" value="en_US/name"/>
+					<value class="com.ibi.bip.objects.BIP_NLS_Data" key="name" language="en_US" value="p1"/>
+				</entry>
+			</bipNlses>
+			<userMappings _jt="HashMap" loadFactor="0.75" threshold="0"/>
+			<groupMappings _jt="HashMap" loadFactor="0.75" threshold="0"/>
+			<referencerMappings _jt="ArrayList" size="0"/>
+			<referenceeMappings _jt="ArrayList" size="0"/>
+			<aliases _jt="ArrayList" size="0"/>
+		</item>
+		<item _jt="IBFSBIPObject" actions="export,refresh,ownership,manageRulesOn,viewRulesOn,viewPortal,viewPortalInWindow,editPortal,chgDesc,updateProps,resourceRules,selectDefault,delete,doCopy,cut,unpublish,rename,open,editPortal,infoAssist,infoAssistViaReportingObject,reportingObject,editor,scheduleAdvancedTool,scheduleTaskMR,schedAccessList,schedDistributionList,url,alertAssist,createItem,visualization,revertCustomizations,revertAllCustomizations,getTranslations,visualDefaults" bipHandle="TEST-4OKD157IU6S4DDF" bipName="test" bipPath="/test" bipProperties="def_folder=&quot;&quot; description=&quot;&quot; icon=&quot;&quot; publish=&quot;true&quot; versionMajor=&quot;3&quot; versionMinor=&quot;0&quot; " bipType="viewroot" container="true" createdBy="10001" createdOn="1474665068278" defLang="en_US" description="test" dummy="false" fullPath="IBFS:/BIP/Portals/test" handle="TEST-4OKD157IU6S4DDF" index="4" isNew="true" lastModBy="10001" lastModOn="1474665068278" lastModified="1474665068278" lastaccessOn="0" length="0" menuActionBitMap="ABgAEAYcDQIACQwCAAEgByAcIAAAIBAGAAwAAA==" name="test" parent="Portals" policy="/9/794f///9vo/+9///t/////////f8AAAAA" rsPath="/ibi_apps/wfirs/ibfs/BIP/Portals/test" summary="" thumbPath="/ibi_apps/ibi_html/ibi_images/file_type/prtl_basic.svg" type="BipPortalsPortal" typeDescription="Portals" version="3">
+			<bipNlses _jt="HashMap" loadFactor="0.75" threshold="12">
+				<entry>
+					<key _jt="string" value="en_US/name"/>
+					<value class="com.ibi.bip.objects.BIP_NLS_Data" key="name" language="en_US" value="test"/>
+				</entry>
+			</bipNlses>
+			<userMappings _jt="HashMap" loadFactor="0.75" threshold="0"/>
+			<groupMappings _jt="HashMap" loadFactor="0.75" threshold="0"/>
+			<referencerMappings _jt="ArrayList" size="0"/>
+			<referenceeMappings _jt="ArrayList" size="0"/>
+			<aliases _jt="ArrayList" size="0"/>
+		</item>
+		<item _jt="IBFSBIPObject" actions="export,refresh,ownership,manageRulesOn,viewRulesOn,viewPortal,viewPortalInWindow,editPortal,chgDesc,updateProps,resourceRules,selectDefault,publish,delete,doCopy,cut,rename,open,editPortal,infoAssist,infoAssistViaReportingObject,reportingObject,editor,scheduleAdvancedTool,scheduleTaskMR,schedAccessList,schedDistributionList,url,alertAssist,createItem,visualization,revertCustomizations,revertAllCustomizations,getTranslations,visualDefaults" bipHandle="7539551944941914135" bipName="x" bipPath="/x" bipProperties="def_folder=&quot;&quot; description=&quot;&quot; icon=&quot;&quot; publish=&quot;false&quot; versionMajor=&quot;3&quot; versionMinor=&quot;1&quot; " bipType="viewroot" container="true" createdBy="10001" createdOn="1510345064612" defLang="en_US" description="x" dummy="false" fullPath="IBFS:/BIP/Portals/x" handle="7539551944941914135" index="5" isNew="true" lastModBy="10001" lastModOn="1510345064612" lastModified="1510345064612" lastaccessOn="0" length="0" menuActionBitMap="ABgAEAYcDQIACQwKAAEgBiAcIAAAIBAGAAwAAA==" name="x" ownerId="10001" ownerName="admin" ownerPath="IBFS:/SSYS/USERS/admin" ownerType="U" parent="Portals" policy="/9+794f///9vo/+9///t/////////f8AAAAA" rsPath="/ibi_apps/wfirs/ibfs/BIP/Portals/x" summary="" thumbPath="/ibi_apps/ibi_html/ibi_images/file_type/prtl_basic.svg" type="BipPortalsPortal" typeDescription="Portals" version="3">
+			<bipNlses _jt="HashMap" loadFactor="0.75" threshold="12">
+				<entry>
+					<key _jt="string" value="en_US/name"/>
+					<value class="com.ibi.bip.objects.BIP_NLS_Data" key="name" language="en_US" value="x"/>
+				</entry>
+			</bipNlses>
+			<userMappings _jt="HashMap" loadFactor="0.75" threshold="0"/>
+			<groupMappings _jt="HashMap" loadFactor="0.75" threshold="0"/>
+			<referencerMappings _jt="ArrayList" size="0"/>
+			<referenceeMappings _jt="ArrayList" size="0"/>
+			<aliases _jt="ArrayList" size="0"/>
+		</item>
 	</rootObject>
 </ibfsrpc>
