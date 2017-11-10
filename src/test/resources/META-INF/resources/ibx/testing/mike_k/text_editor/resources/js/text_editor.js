@@ -62,6 +62,7 @@ $.widget("ibi.textEditor", $.ibi.ibxDialog,
 		this.iaMode = false;
 		
 		this.unDoText = [];
+		this.canchangeserverprops = true;
 		
 		this._txtArea.on("keyup", this._onEditorAreaKeyUp.bind(this));
 		this._txtArea.on("click", this._onEditorAreaClickEvent.bind(this));
@@ -474,15 +475,22 @@ $.widget("ibi.textEditor", $.ibi.ibxDialog,
 				var rDescription = el.attr("description");
 				var rTool = el.attr("tool");
 				var rType = el.attr("type");
-								
+				var rCanChangeServerProps = el.attr("canchangeserverprops");
+
 				this.folderPath = rPath;
 				this.fullName = rName + "." + rExtension;
 				this.itemName = rName;
 				this.extension = rExtension;
 				this.itemDescription = rDescription;	
 				this.tool = rTool;
-				this.type = rType;
-	 
+				this.type = rType;				
+				this.canchangeserverprops = rCanChangeServerProps == "true";
+
+				if(this.canchangeserverprops)
+					this._menuOptions.show();
+				else
+					this._menuOptions.hide();
+				
 				var item_content = $("item_content", data);
 				el = $(item_content);				
 				var fText = el.text();
@@ -1174,6 +1182,9 @@ $.widget("ibi.textEditor", $.ibi.ibxDialog,
 		this.changed = false;
 		this.optionsChanged = false;
 	    this.fromClose = false;
+		this.canchangeserverprops = true;
+		this._menuOptions.show();
+		
 	    this.editor_options = {
 				"fType":"",
 				"newDoc":true,
