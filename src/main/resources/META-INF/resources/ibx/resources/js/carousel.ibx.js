@@ -53,8 +53,8 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 		this.element.append(resBody.children());
 		ibx.bindElements(this.element.children());
 		this.element.on("ibx_resize", this._onResize.bind(this));
-		this._prevBtn.on("click mousedown mouseup mouseleave", this._onPrev.bind(this));
-		this._nextBtn.on("click mousedown mouseup mouseleave", this._onNext.bind(this));
+		this._prevBtn.on("click mousedown mouseup mouseleave", this._onPrevNext.bind(this));
+		this._nextBtn.on("click mousedown mouseup mouseleave", this._onPrevNext.bind(this));
 		this._itemsBox.on("keydown", this._onItemsBoxKeydown.bind(this)).ibxDragScrolling({overflowY:"hidden"}).on("scroll", this._onItemsBoxScroll.bind(this));	
 		this.add(children);
 	},
@@ -97,28 +97,6 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 		this._itemsBox.ibxWidget("remove", children, destroy, refresh);
 		if(refresh)
 			this.refresh();
-	},
-	_onPrev:function(e)
-	{
-		if(e.type == "mousedown")
-			this.scroll(Number.NEGATIVE_INFINITY)
-		else
-		if(e.type == "mouseup" || e.type == "mouseleave")
-			this.stop();
-		else
-		if(e.type == "click")
-			this.scroll(-1);
-	},
-	_onNext:function(e)
-	{
-		if(e.type == "mousedown")
-			this.scroll(Number.POSITIVE_INFINITY)
-		else
-		if(e.type == "mouseup" || e.type == "mouseleave")
-			this.stop();
-		else
-		if(e.type == "click")
-			this.scroll(1);
 	},
 	_onResize:function()
 	{
@@ -170,8 +148,8 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 		{
 			info.stepSize = info.stepSize * info.steps;
 			info.scrollEndPos = this._itemsBox.prop(info.scrollAxis) + info.stepSize;
-			info.frameDelta = info.forward ? Math.ceil(info.stepSize/info.nFrames) : Math.floor(info.stepSize/info.nFrames);
-			info.steps = 1;
+			info.frameDelta = info.forward ? Math.ceil(info.stepSize) : Math.floor(info.stepSize);
+			info.steps = info.nFrames = 1;
 		}
 
 		var fnFrame = function(info, timeStamp)
@@ -197,6 +175,7 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 					window.cancelAnimationFrame(info.animationFrameId)
 					this._scrollInfo = null;
 					this._trigger("carouselscrollend", null, [this._itemsBox, info, this.getPageInfo()]);
+					return;
 				}
 				else
 				{
@@ -238,6 +217,15 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 	{
 		if(this._scrollInfo)
 			this._scrollInfo.stop = true;
+	},
+	_onPrevNext:function(e)
+	{
+		var forward = this._nextBtn.is(e.target) ? true : false;
+		if(e.type == "mousedown")
+			this.scroll(forward ? Number.POSITIVE_INFINITY : Number.NEGATIVE_INFINITY)
+		else
+		if(e.type == "mouseup" || e.type == "mouseleave")
+			this.stop();
 	},
 	_onItemsBoxScroll:function(e)
 	{
@@ -310,9 +298,9 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 			if((forward === true) && (info.right > pageInfo.scrollRight))
 				childInfo = info;
 			else
-			if((forward === false) && (info.left < pageInfo.scrollLeft && info.right >= pageInfo.scrollLeft))
-				childInfo = info;
-			
+			if((forward === false) && info.left >= pageInfo.scrollLeft)
+				childInfo = GetElementInfo(child.previousSibling);
+
 			if(childInfo)
 				break;
 		}
