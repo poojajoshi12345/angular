@@ -474,12 +474,14 @@ if(window.matchMedia)//Declare the static singleton if browser supports the matc
 /******************************************************************************
 		USED FOR BUILDING WEBAPI WRAPPERS
 ******************************************************************************/
-function WebApi(webAppContext, webAppName, options)
+function WebApi(webAppContext, options)
 {
+	//[IBX-39] webAppName now passed as an option, not a parameter...so people can set when creating an ibfs, or derived, object.
+	options = options || {};
 	var webApiOptions = 
 	{
 		appContext: webAppContext,
-		appName: webAppName,
+		appName: options.webAppName,
 		ppCtx: this,
 		ajax:
 		{
