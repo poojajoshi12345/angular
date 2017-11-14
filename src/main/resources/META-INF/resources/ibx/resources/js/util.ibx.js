@@ -64,11 +64,6 @@ jQuery.expr[":"]["ibxRadioGroup"] = function(elem, idx, meta, stack)
 	var selector = sformat(".ibx-radio-group-control-{1}", name);
 	return elem.is(selector);
 };
-jQuery.expr[":"]["visible"] = function(elem)
-{
-	var el = $(elem);
-	return (el.css("visibility") != "hidden" && el.css("display") != "none");
-};
 jQuery.expr[":"]["ibxFocusable"] = function(elem)
 {
 	var el = $(elem);

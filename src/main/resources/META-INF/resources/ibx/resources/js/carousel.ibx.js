@@ -55,7 +55,7 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 		this.element.on("ibx_resize", this._onResize.bind(this));
 		this._prevBtn.on("click mousedown mouseup mouseleave", this._onPrevNext.bind(this));
 		this._nextBtn.on("click mousedown mouseup mouseleave", this._onPrevNext.bind(this));
-		this._itemsBox.on("keydown", this._onItemsBoxKeydown.bind(this)).ibxDragScrolling({overflowY:"hidden"}).on("scroll", this._onItemsBoxScroll.bind(this));	
+		this._itemsBox.on("ibx_widgetfocus", this._onItemsBoxFocus.bind(this)).on("keydown", this._onItemsBoxKeydown.bind(this)).ibxDragScrolling({overflowY:"hidden"}).on("scroll", this._onItemsBoxScroll.bind(this));	
 		this.add(children);
 	},
 	_setAccessibility:function(accessible, aria)
@@ -226,10 +226,17 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 		else
 		if(e.type == "mouseup" || e.type == "mouseleave")
 			this.stop();
+		else
+		if(e.type == "click")
+			this.scroll(forward ? 1 : -1);
 	},
 	_onItemsBoxScroll:function(e)
 	{
 		this._adjustPageMarkers();
+	},
+	_onItemsBoxFocus:function(e)
+	{
+		//var elInfo = GetElementInfo();	
 	},
 	_onItemsBoxKeydown:function(e)
 	{
@@ -253,6 +260,7 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 	{
 		var markerInfo = $(e.currentTarget).data("ibxPageMarkerInfo");
 		this.page(markerInfo.pageNo);
+		this._pageMarkers.find("."+this.options.pageMarkerSelectedClass).focus()
 	},
 	_onPageMarkerKeyDown:function(e)
 	{
@@ -432,8 +440,9 @@ $.widget("ibi.ibxVCarousel", $.ibi.ibxCarousel,
 			if(forward && (info.bottom > pageInfo.scrollBottom))
 				childInfo = info;
 			else
-			if(!forward && (info.top < pageInfo.scrollTop && info.bottom >= pageInfo.scrollTop))
-				childInfo = info;
+			if((forward === false) && info.bottom >= pageInfo.scrollTop)
+				childInfo = GetElementInfo(child.previousSibling);
+
 			if(childInfo)
 				break;
 		}
