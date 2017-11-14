@@ -790,7 +790,7 @@ $.widget("ibi.textEditor", $.ibi.ibxDialog,
 		this.iaSave = false;
 		this.toolLost = false;
 
-		if ((!this.newDoc || mode=="saveas") && this.tool && this.tool != "editor")		
+		if ((!this.newDoc || mode=="saveas") && this.tool &&  (tool != "editor" && tool != "htmlcanvas"))		
 		{
 
 			var uriExec = sformat("{1}"+this.editorActionHandler, applicationContext);
