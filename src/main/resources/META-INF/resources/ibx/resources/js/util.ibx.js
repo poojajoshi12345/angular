@@ -72,6 +72,17 @@ jQuery.expr[":"]["ibxFocusable"] = function(elem)
 	var ret = ((tabIndex >= 0) || (tabIndex <= 0) && visible);
 	return ret;
 };
+jQuery.expr[":"]["inViewport"] = function(elem, idx, meta, stack)
+{
+	var elInfo = GetElementInfo(elem);
+	var pInfo = GetElementInfo(elem.offsetParent);
+	var ret = false;
+	if(meta[3] == "true")//is partially visible
+		ret = !(elInfo.left > pInfo.viewPort.right || elInfo.right < pInfo.viewPort.left || elInfo.top > pInfo.viewPort.bottom ||elInfo.bottom < pInfo.viewPort.top);
+	else
+		ret = elInfo.left >= pInfo.viewPort.left && elInfo.top >= pInfo.viewPort.top && elInfo.right <= pInfo.viewPort.right && elInfo.bottom <= pInfo.viewPort.bottom;
+	return ret;
+};
 jQuery.expr[":"]["openPopup"] = function(elem, idx, meta, stack)
 {
 	elem = $(elem);
@@ -270,17 +281,24 @@ function GetRandomInt(min, max)
 }
 
 //just returns metrics/info for an element.
-function GetElementInfo(el)
+function GetElementInfo(el, withMargin)
 {
 	el = $(el);
 	var elInfo = el.position() || {};
+	elInfo.el = el;
 	elInfo.left = el.prop("offsetLeft");
 	elInfo.top = el.prop("offsetTop");
-	elInfo.width = el.outerWidth(true);
-	elInfo.height = el.outerHeight(true);
+	elInfo.width = el.outerWidth(!!withMargin);
+	elInfo.height = el.outerHeight(!!withMargin);
 	elInfo.right = elInfo.left + elInfo.width;
 	elInfo.bottom = elInfo.top + elInfo.height;
-	elInfo.el = el;
+	elInfo.viewPort = 
+	{
+		"left":el.prop("scrollLeft"),
+		"top":el.prop("scrollTop")
+	}
+	elInfo.viewPort.right = elInfo.viewPort.left + el.innerWidth();
+	elInfo.viewPort.bottom = elInfo.viewPort.top + el.innerHeight();
 	return elInfo;
 }
 

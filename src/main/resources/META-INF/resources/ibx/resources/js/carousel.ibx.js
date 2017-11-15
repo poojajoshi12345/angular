@@ -236,11 +236,14 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 	},
 	_onItemsBoxFocus:function(e)
 	{
-		//var elInfo = GetElementInfo();	
+		//if the current active item is not in the viewport, then focus the first child that is.
+		var children = this.children(":inViewport(true)");
+		if(!children.filter(".ibx-nav-item-active").length)
+			children.first().focus();
 	},
 	_onItemsBoxKeydown:function(e)
 	{
-		if(e.keyCode == $.ui.keyCode.LEFT || e.keyCode == $.ui.keyCode.RIGHT && e.ctrlKey)
+		if((e.keyCode == $.ui.keyCode.LEFT || e.keyCode == $.ui.keyCode.RIGHT) && e.ctrlKey)
 		{
 			this.page((e.keyCode == $.ui.keyCode.LEFT) ? -1 : 1, null, true);
 			e.preventDefault();
