@@ -57,6 +57,8 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 		this._nextBtn.on("click mousedown mouseup mouseleave", this._onPrevNext.bind(this));
 		this._itemsBox.on("ibx_widgetfocus", this._onItemsBoxFocus.bind(this)).on("keydown", this._onItemsBoxKeydown.bind(this)).ibxDragScrolling({overflowY:"hidden"}).on("scroll", this._onItemsBoxScroll.bind(this));	
 		this.add(children);
+
+		this._onCarouselScrollEndBound = this._onCarouselScrollEnd.bind(this);
 	},
 	_setAccessibility:function(accessible, aria)
 	{
@@ -160,7 +162,7 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 				newScroll = info.scrollEndPos;
 				info.curFrame = info.nFrames;
 			}
-
+	
 			if(!this._trigger("carouselscroll", null, [this._itemsBox, info, this.getPageInfo()]))
 				return;
 			this._itemsBox.prop(info.scrollAxis, newScroll);
@@ -185,7 +187,7 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 					info.curFrame = 0;
 				}
 			}
-		};
+	};
 
 		if(!this._trigger("beforescarouselcroll", null, [this._itemsBox, info,  this.getPageInfo()]))
 			return;
@@ -259,20 +261,21 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 		var pages = relative ? (info.curPage + pageNo) : (pageNo - info.curPage);
 		this.scroll(pages, "page", stepRate, true);
 	},
+	_onPageMarkerKeyDown:function(e)
+	{
+		if(e.keyCode == $.ui.keyCode.ENTER || e.keyCode == $.ui.keyCode.SPACE)
+			$(e.target).trigger("click");
+	},
 	_onPageMarkerClick:function(e)
 	{
 		var markerInfo = $(e.currentTarget).data("ibxPageMarkerInfo");
 		this.page(markerInfo.pageNo);
-		this._pageMarkers.find("."+this.options.pageMarkerSelectedClass).focus()
+		this.element.on("ibx_carouselscrollend", this._onCarouselScrollEndBound);
 	},
-	_onPageMarkerKeyDown:function(e)
+	_onCarouselScrollEnd:function(e)
 	{
-		if(e.keyCode == $.ui.keyCode.ENTER || e.keyCode == $.ui.keyCode.SPACE)
-		{		
-			var markerInfo = $(e.target).data("ibxPageMarkerInfo");
-			this.page(markerInfo.pageNo);
-			e.target.focus();
-		}
+		this._pageMarkers.find("."+this.options.pageMarkerSelectedClass).focus()
+		this.element.off("ibx_carouselscrollend", this._onCarouselScrollEndBound);
 	},
 	_adjustPageMarkers:function()
 	{
