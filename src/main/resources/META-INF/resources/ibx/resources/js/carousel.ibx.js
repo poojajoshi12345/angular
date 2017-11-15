@@ -176,7 +176,10 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 					//we done...stop scrolling...let world know.
 					window.cancelAnimationFrame(info.animationFrameId)
 					this._scrollInfo = null;
-					this._trigger("carouselscrollend", null, [this._itemsBox, info, this.getPageInfo()]);
+					window.setTimeout(function()
+					{
+						this._trigger("carouselscrollend", null, [this._itemsBox, info, this.getPageInfo()]);
+					}.bind(this), 20);
 					return;
 				}
 				else
@@ -239,9 +242,9 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 	_onItemsBoxFocus:function(e)
 	{
 		//if the current active item is not in the viewport, then focus the first child that is.
-		var children = this.children(":inViewport(true)");
-		if(!children.filter(".ibx-nav-item-active").length)
-			children.first().focus();
+		var visChildren = this.children(":inViewport(true)");
+		if(!visChildren.filter(".ibx-nav-item-active").length)
+			visChildren.first().focus();
 	},
 	_onItemsBoxKeydown:function(e)
 	{
