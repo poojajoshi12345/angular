@@ -78,6 +78,7 @@ ibxEventManager._onTouchEvent = function(e)
 		{
 			var me = ibxEventManager.createMouseEvent("dblclick", e);
 			e.target.dispatchEvent(me);
+			e.preventDefault();//[IBX-40]stop double tap zoom on ios.
 		}
 
 		ibxEventManager._eLast = null;
