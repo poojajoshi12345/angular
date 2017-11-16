@@ -198,7 +198,7 @@ function createNativeEvent(type, data, canBubble, cancelable, relatedTarget)
 	data = data || {}
 	var e = null;
 	if(typeof(Event) === "function")
-		e = new Event(type, {"bubbles":canBubble})
+		e = new Event(type, {"bubbles":canBubble, "cancelable":true})
 	else
 	{
 		e = document.createEvent("CustomEvent");
