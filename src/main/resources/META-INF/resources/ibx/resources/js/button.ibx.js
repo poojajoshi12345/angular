@@ -30,14 +30,17 @@ $.widget("ibi.ibxButton", $.ibi.ibxLabel,
 		if(e.type == "keydown")
 		{
 			if(e.keyCode === $.ui.keyCode.ENTER || e.keyCode === $.ui.keyCode.SPACE)
-			{
 				this.element.addClass("ibx-button-active");
-				this.element.trigger('click');
-			}
 		}
 		else
 		if(e.type == "keyup")
-			this.element.removeClass("ibx-button-active");
+		{
+			if(e.keyCode === $.ui.keyCode.ENTER || e.keyCode === $.ui.keyCode.SPACE)
+			{
+				this.element.removeClass("ibx-button-active");
+				this.element.trigger('click');
+			}
+		}
 		this.setAccessibility();
 	},
 	_refresh: function ()
@@ -119,7 +122,7 @@ $.widget("ibi.ibxCheckBox", $.ibi.ibxLabel,
 		this._check = $('<input type="checkbox" class="ibx-native-input"></input>');
 		this.add(this._check, this.children()[0], true);
 		this.element.on("click", this._onClick.bind(this));
-		this.element.on("keydown", this._onKeyEvent.bind(this)).addClass("ibx-can-toggle");
+		this.element.on("keyup", this._onKeyEvent.bind(this)).addClass("ibx-can-toggle");
 	},
 	_setAccessibility:function(accessible, aria)
 	{
