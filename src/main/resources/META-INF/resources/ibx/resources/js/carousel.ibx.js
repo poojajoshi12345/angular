@@ -58,7 +58,7 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 		this._itemsBox.on("ibx_widgetfocus", this._onItemsBoxFocus.bind(this)).on("keydown", this._onItemsBoxKeydown.bind(this)).ibxDragScrolling({overflowY:"hidden"}).on("scroll", this._onItemsBoxScroll.bind(this));	
 		this.add(children);
 
-		this._onCarouselScrollEndBound = this._onCarouselScrollEnd.bind(this);
+		this._onPageMarkerScrollEndBound = this._onPageMarkerScrollEnd.bind(this);
 	},
 	_setAccessibility:function(accessible, aria)
 	{
@@ -118,6 +118,20 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 		}
 		this._adjustPageMarkers();
 	},
+	page:function(pageNo, stepRate, relative)
+	{
+		var info = this.getPageInfo();
+		if(pageNo === undefined)
+			return info.curPage;
+
+		var pages = relative ? (info.curPage + pageNo) : (pageNo - info.curPage);
+		this.scroll(pages, "page", stepRate, true);
+	},
+	stop:function()
+	{
+		if(this._scrollInfo)
+			this._scrollInfo.stop = true;
+	},
 	_scrollInfo:null,
 	scroll:function(steps, scrollType, stepRate, jumpScroll)
 	{
@@ -157,20 +171,16 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 		var fnFrame = function(info, timeStamp)
 		{
 			var newScroll = this._itemsBox.prop(info.scrollAxis) + info.frameDelta;
-			if((info.forward && newScroll >= info.scrollEndPos) || (!info.forward && newScroll <= info.scrollEndPos))
+			if(this._scrollInfo.stop || (info.forward && newScroll >= info.scrollEndPos) || (!info.forward && newScroll <= info.scrollEndPos))
 			{
 				newScroll = info.scrollEndPos;
 				info.curFrame = info.nFrames;
 			}
-	
-			if(!this._trigger("carouselscroll", null, [this._itemsBox, info, this.getPageInfo()]))
-				return;
 			this._itemsBox.prop(info.scrollAxis, newScroll);
 
 			info.animationFrameId = window.requestAnimationFrame(fnFrame.bind(this, info));
 			if(++info.curFrame >= info.nFrames)
 			{
-				this._adjustPageMarkers();
 				if(info.stop || --info.steps <= 0)
 				{
 					//we done...stop scrolling...let world know.
@@ -190,7 +200,7 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 					info.curFrame = 0;
 				}
 			}
-	};
+		}.bind(this, info);
 
 		if(!this._trigger("beforescarouselcroll", null, [this._itemsBox, info,  this.getPageInfo()]))
 			return;
@@ -218,26 +228,12 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 		}
 		return forward ? delta : -delta;
 	},
-	stop:function()
-	{
-		if(this._scrollInfo)
-			this._scrollInfo.stop = true;
-	},
-	_onPrevNext:function(e)
-	{
-		var forward = this._nextBtn.is(e.target) ? true : false;
-		if(e.type == "mousedown")
-			this.scroll(forward ? Number.POSITIVE_INFINITY : Number.NEGATIVE_INFINITY)
-		else
-		if(e.type == "mouseup" || e.type == "mouseleave")
-			this.stop();
-		else
-		if(e.type == "click")
-			this.scroll(forward ? 1 : -1);
-	},
 	_onItemsBoxScroll:function(e)
 	{
 		this._adjustPageMarkers();
+		var evt = this.element.dispatchEvent("ibx_carouselscroll", [this._scrollInfo, this.getPageInfo()], false, true, this._itemsBox); 
+		if(evt.defaultPrevented && this._scrollInfo)
+			this._scrollInfo.stop = true;
 	},
 	_onItemsBoxFocus:function(e)
 	{
@@ -255,16 +251,19 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 			e.stopPropagation();
 		}
 	},
-	page:function(pageNo, stepRate, relative)
+	_onPrevNext:function(e)
 	{
-		var info = this.getPageInfo();
-		if(pageNo === undefined)
-			return info.curPage;
-
-		var pages = relative ? (info.curPage + pageNo) : (pageNo - info.curPage);
-		this.scroll(pages, "page", stepRate, true);
+		var forward = this._nextBtn.is(e.target) ? true : false;
+		if(e.type == "mousedown")
+			this.scroll(forward ? Number.POSITIVE_INFINITY : Number.NEGATIVE_INFINITY)
+		else
+		if(e.type == "mouseup" || e.type == "mouseleave")
+			this.stop();
+		else
+		if(e.type == "click")
+			this.scroll(forward ? 1 : -1);
 	},
-	_onPageMarkerKeyDown:function(e)
+	_onPageMarkerKeyEvent:function(e)
 	{
 		if(e.keyCode == $.ui.keyCode.ENTER || e.keyCode == $.ui.keyCode.SPACE)
 			$(e.target).trigger("click");
@@ -273,12 +272,12 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 	{
 		var markerInfo = $(e.currentTarget).data("ibxPageMarkerInfo");
 		this.page(markerInfo.pageNo);
-		this.element.on("ibx_carouselscrollend", this._onCarouselScrollEndBound);
+		this.element.on("ibx_carouselscrollend", this._onPageMarkerScrollEndBound);
 	},
-	_onCarouselScrollEnd:function(e)
+	_onPageMarkerScrollEnd:function(e)
 	{
 		this._pageMarkers.find("."+this.options.pageMarkerSelectedClass).focus()
-		this.element.off("ibx_carouselscrollend", this._onCarouselScrollEndBound);
+		this.element.off("ibx_carouselscrollend", this._onPageMarkerScrollEndBound);
 	},
 	_adjustPageMarkers:function()
 	{
@@ -289,7 +288,7 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 			var isCurPage = (i == pageInfo.curPage);
 			var pageMarker = $(sformat("<div role='option' class='{1} {2}' tabIndex='-1'>", this.options.pageMarkerClass, isCurPage ? this.options.pageMarkerSelectedClass : ""));
 			pageMarker.prop("title", sformat("{1} {2}", ibx.resourceMgr.getString("IBX_CAROUSEL_PAGE"), i+1));
-			pageMarker.data("ibxPageMarkerInfo", {"pageNo":i, "pageInfo":pageInfo}).on("click", this._onPageMarkerClick.bind(this)).on("keydown", this._onPageMarkerKeyDown.bind(this));
+			pageMarker.data("ibxPageMarkerInfo", {"pageNo":i, "pageInfo":pageInfo}).on("click", this._onPageMarkerClick.bind(this)).on("keyup", this._onPageMarkerKeyEvent.bind(this));
 
 			if(this.options.aria.accessible)
 				pageMarker.attr({"role":"option", "aria-checked": isCurPage})
