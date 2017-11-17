@@ -19,6 +19,13 @@ $.widget("ibi.ibxCommand", $.ibi.ibxWidget,
 		this._super();
 		this.element.css("display", "none");
 		this._onCommandKeyEventBound = this._onCommandKeyEvent.bind(this);
+		document.documentElement.addEventListener("keydown", this._onCommandKeyEventBound, true);
+	},
+	_destroy:function()
+	{
+		this._super();
+		document.documentElement.removeEventListener("keydown", this._onCommandKeyEventBound, true);
+		delete $.ibi.ibxCommand.cmds[this.options.id];
 	},
 	trigger:function(e)
 	{
@@ -29,7 +36,7 @@ $.widget("ibi.ibxCommand", $.ibi.ibxWidget,
 	{
 		if(checked != this.options.checked)
 			$(window).trigger("ibx_cmdchecked");
-		this.options.checked = checked;
+		this.option("checked", checked);
 	},
 	_onCommandKeyEvent:function(e)
 	{
@@ -55,23 +62,35 @@ $.widget("ibi.ibxCommand", $.ibi.ibxWidget,
 			}
 		}
 	},
+	_setOptionDisabled:function(value)
+	{
+		this._super(value);
+		this._refresh()
+	},
+	_preRefresh:function(option, value)
+	{
+		var options = this.options
+		if(options.id)
+			delete $.ibi.ibxCommand.cmds[options.id];
+	},
 	_refresh:function()
 	{
 		this._super();
 		var options = this.options;
-		this.element.attr("data-ibx-cmd-id", options.id);
+
+		//configure associated widgets
 		var widgets = $(sformat(".ibx-widget[data-ibx-command='{1}']", options.id))
-		
-		widgets.ibxWidget("option", "disabled", options.disabled);
+		widgets.ibxWidget("option", "disabled", options.disabled)
 		widgets.filter(".ibx-can-toggle").ibxWidget("option", "checked", options.checked);
 
-		//add shortcut key handling...during capture phase.
-		if(options.shortcut)
-			document.documentElement.addEventListener("keydown", this._onCommandKeyEventBound, true);
-		else
-			document.documentElement.removeEventListener("keydown", this._onCommandKeyEventBound, true);
+		if(options.id)
+			$.ibi.ibxCommand.cmds[options.id] = this.element;
+
+		//commands don't have to be in the dom to work.
+		this.element.detach();
 	}
 });
+$.ibi.ibxCommand.cmds = {};
 
 //# sourceURL=commands.ibx.js
 

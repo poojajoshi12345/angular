@@ -157,13 +157,13 @@ $.widget("ibi.ibxWidget", $.Widget,
 	},
 	getCommand:function()
 	{
-		return $(sformat("[data-ibx-cmd-id='{1}']", this.options.command));
+		return $.ibi.ibxCommand.cmds[this.options.command];
 	},
 	_triggerCommand:function(e)
 	{
-		var options = this.options;
-		if(options.command)
-			this.getCommand().ibxWidget("trigger", e);
+		var cmd = this.getCommand();
+		if(cmd)
+			cmd.ibxWidget("trigger", e);
 	},
 	_resizeCallback:function()
 	{
@@ -343,9 +343,6 @@ $.widget("ibi.ibxWidget", $.Widget,
 		else
 		if(options.navKeyRoot && e.keyCode == $.ui.keyCode.ESCAPE)
 			this.element.focus();//on escape with a navkeyroot, focus the parent.
-
-		if(options.command && (e.keyCode == $.ui.keyCode.ENTER || e.keyCode == $.ui.keyCode.SPACE))
-			this._triggerCommand(e);
 	},
 	_onWidgetClickEvent:function(e)
 	{

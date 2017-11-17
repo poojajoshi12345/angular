@@ -247,12 +247,9 @@ $.widget("ibi.ibxMenuItem", $.ibi.ibxHBox,
 		this._endMarker.addClass(sformat("{1} {2}", options.markerClass, options.endMarkerClass));
 		this._endMarker.toggleClass("ibx-marker-sub", !!this.subMenu());
 
-		if(options.command)
-		{
-			var cmd = this.getCommand();
-			var scut = cmd.ibxWidget("option", "shortcut");
-			this._endMarker.text(scut).addClass("ibx-end-marker-cmd-shortcut");
-		}
+		var cmd = this.getCommand();
+		var scut = cmd ? cmd.ibxWidget("option", "shortcut") : null;
+		this._endMarker.text(scut).toggleClass("ibx-end-marker-cmd-shortcut", cmd);
 
 		//set the label's options...if there's no start marker (not check or radio) and no glyph...add space for glyph.
 		var labelOptions = options.labelOptions;
