@@ -39,7 +39,8 @@
 	padding:.15em;
 }
 
-.ibx-menu-item .ibx-label-no-icon .ibx-label-text::before
+/*[IBX-45] don't add space when check/radio menu item*/
+.ibx-menu-item:not(.ibx-menu-item-check) .ibx-label-no-icon .ibx-label-text::before
 {
 	content:"\00a0";
 	padding-left:1em;
