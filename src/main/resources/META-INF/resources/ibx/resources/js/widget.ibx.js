@@ -68,7 +68,6 @@ $.widget("ibi.ibxWidget", $.Widget,
 		this.element.on("keydown", this._onWidgetKeyEvent.bind(this));
 		this.element.on("focusin focusout", this._onWidgetFocusEvent.bind(this));
 		this.element.on("contextmenu", this._onWidgetContextMenu.bind(this));
-		this.element.on("click", this._onWidgetClickEvent.bind(this));
 		this._adjustWidgetClasses(true);
 
 		//save the resize sensor callback;
@@ -159,11 +158,17 @@ $.widget("ibi.ibxWidget", $.Widget,
 	{
 		return $.ibi.ibxCommand.cmds[this.options.command];
 	},
-	_triggerCommand:function(e)
+	doCommandAction(action)
 	{
 		var cmd = this.getCommand();
 		if(cmd)
-			cmd.ibxWidget("trigger", e);
+		{
+			if(action == $.ibi.ibxCommand.TRIGGER)
+				cmd.ibxWidget(action, arguments[1], this.element[0]);
+			else
+			if(action == $.ibi.ibxCommand.CHECK)
+				cmd.ibxWidget(action, arguments[1], arguments[2], this.element[0]);
+		}
 	},
 	_resizeCallback:function()
 	{
@@ -344,10 +349,6 @@ $.widget("ibi.ibxWidget", $.Widget,
 		if(options.navKeyRoot && e.keyCode == $.ui.keyCode.ESCAPE)
 			this.element.focus();//on escape with a navkeyroot, focus the parent.
 	},
-	_onWidgetClickEvent:function(e)
-	{
-		this._triggerCommand(e);
-	},
 	_onWidgetContextMenu:function(e)
 	{
 		var ctxEvent = $.Event(e.originalEvent);
@@ -399,8 +400,6 @@ $.widget("ibi.ibxWidget", $.Widget,
 	option:function(key, value)
 	{
 		var bRefresh = (typeof(key) == "object") || (value !== undefined && (this.options[key] != value));
-		if(bRefresh)
-			this._preRefresh(key, value);
 		var ret = this._superApply(arguments);
 		if(bRefresh)
 			this.refresh();
@@ -434,9 +433,6 @@ $.widget("ibi.ibxWidget", $.Widget,
 	{
 		if(!$.ibi.ibxWidget.noRefresh)
 			this._refresh();
-	},
-	_preRefresh:function(option, value)
-	{
 	},
 	_refresh:function()
 	{

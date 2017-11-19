@@ -36,6 +36,11 @@
     background-color: #eee;
 }
 
+.ibx-button-simple:active
+{
+    background-color: #ddd;
+}
+
 /* End button classes */
 
 /* Start check box classes */

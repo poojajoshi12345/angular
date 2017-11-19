@@ -13,17 +13,15 @@ $.widget("ibi.ibxButton", $.ibi.ibxLabel,
 	_create: function ()
 	{
 		this._super();
-		this.element.on("keydown keyup", this._onKeyEvent.bind(this));
+		this.element.on("keydown keyup", this._onKeyEvent.bind(this)).on("click", this._onButtonClickEvent.bind(this));
 	},
 	_destroy: function ()
 	{
 		this._super();
 	},
-	checked: function (value)
+	_onButtonClickEvent:function(e)
 	{
-		// does nothing - used when in an ibxRadioGroup
-		if (typeof (value) === "undefined")
-			return false;
+		this.doCommandAction($.ibi.ibxCommand.TRIGGER);
 	},
 	_onKeyEvent: function (e)
 	{
@@ -118,11 +116,11 @@ $.widget("ibi.ibxCheckBox", $.ibi.ibxLabel,
 	_widgetClass: "ibx-check-box",
 	_create: function ()
 	{
-		this._super();
 		this._check = $('<input type="checkbox" class="ibx-native-input"></input>');
 		this.add(this._check, this.children()[0], true);
 		this.element.on("click", this._onClick.bind(this));
 		this.element.on("keyup", this._onKeyEvent.bind(this)).addClass("ibx-can-toggle");
+		this._super();
 	},
 	_setAccessibility:function(accessible, aria)
 	{
@@ -146,8 +144,35 @@ $.widget("ibi.ibxCheckBox", $.ibi.ibxLabel,
 			return this;
 		}
 	},
+	_onKeyEvent: function (e)
+	{
+		if(e.keyCode === $.ui.keyCode.ENTER || e.keyCode === $.ui.keyCode.SPACE)
+			this.element.trigger('click');
+	},
+	_onClick: function (e)
+	{
+		if (this.options.disabled || this.options.group && this.options.checked)
+			return;
+		this.option("checked", (this.options.group) ? true : !this.options.checked);
+	},
+	_destroy: function ()
+	{
+		this._super();
+		this._check.remove();
+	},
+	checked: function (value)
+	{
+		if (typeof (value) == "undefined")
+			return this.options.checked;
+		else
+		if(this.options.checked != value)
+			this.option("checked", value)
+		return this;
+	},
 	_setOption: function (key, value)
 	{
+		var changed = this.options[key] != value;
+		this._super(key, value);
 		if (key == "group")
 		{
 			if (this.options.group)
@@ -166,46 +191,15 @@ $.widget("ibi.ibxCheckBox", $.ibi.ibxLabel,
 					group.data("ibiIbxWidget").addControl(this.element);
 			}
 		}
-		this._super(key, value);
-	},
-	_onKeyEvent: function (e)
-	{
-		if(e.keyCode === $.ui.keyCode.ENTER || e.keyCode === $.ui.keyCode.SPACE)
-			this.element.trigger('click');
-	},
-	_onClick: function (e)
-	{
-		if (this.options.disabled || this.options.group && this.options.checked)
-			return;
-		if (!this._trigger('beforechange', null, this.element))
-			return;
-		if (this.options.group)
-			this.options.checked = true;
 		else
-			this.options.checked = !this.options.checked;
-		this._trigger("set_form_value", null, { "elem": this.element, "value": this.options.checked ? this.options.userValue : "" });
-		this.element.focus();
-		this.refresh();
-		this._trigger("change", null, this.element);
-	},
-	_destroy: function ()
-	{
-		this._super();
-		this._check.remove();
-	},
-	checked: function (value)
-	{
-		if (typeof (value) == "undefined")
-			return this.options.checked;
-		else
-		if(this.options.checked != value)
+		if(key == "checked" && changed)
 		{
-			this.options.checked = value;
-			this._trigger("set_form_value", null, { "elem": this.element, "value": this.options.userValue });
+			if (!this._trigger('beforechange', null, this.element))
+				return;
+			this._trigger("set_form_value", null, { "elem": this.element, "value": value ? this.options.userValue : "" });
 			this._trigger("change", null, this.element);
-			this.refresh();
+			this.doCommandAction($.ibi.ibxCommand.CHECK, value);
 		}
-		return this;
 	},
 	_refresh: function ()
 	{

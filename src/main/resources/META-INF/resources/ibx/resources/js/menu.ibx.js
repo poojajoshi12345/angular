@@ -182,6 +182,7 @@ $.widget("ibi.ibxMenuItem", $.ibi.ibxHBox,
 		{
 			this.refresh();
 			this._trigger("menu_item_click", e, this.element);//bubble click event to owner menu.
+			this.doCommandAction($.ibi.ibxCommand.TRIGGER);
 		}
 	},
 	_subTimer:null,
@@ -247,18 +248,16 @@ $.widget("ibi.ibxMenuItem", $.ibi.ibxHBox,
 		this._endMarker.addClass(sformat("{1} {2}", options.markerClass, options.endMarkerClass));
 		this._endMarker.toggleClass("ibx-marker-sub", !!this.subMenu());
 
+		//setup the command shortcut key for the menu item
 		var cmd = this.getCommand();
 		var scut = cmd ? cmd.ibxWidget("option", "shortcut") : null;
-		this._endMarker.text(scut).toggleClass("ibx-end-marker-cmd-shortcut", cmd);
+		this._endMarker.text(scut).toggleClass("ibx-end-marker-cmd-shortcut", !!cmd);
 
 		//set the label's options...if there's no start marker (not check or radio) and no glyph...add space for glyph.
 		var labelOptions = options.labelOptions;
 		this._label.ibxLabel("option", labelOptions);
 	}
 });
-$.ibi.ibxMenuItem.statics = 
-{
-};
 
 /******************************************************************************
 	IbxCheckMenuItem
@@ -289,10 +288,25 @@ $.widget("ibi.ibxCheckMenuItem", $.ibi.ibxMenuItem,
 	},
 	_onMenuItemClick:function(e)
 	{
-		var options = this.options;
-		options.checked = !options.checked;
+		this.option("checked", !this.options.checked);
 		this._super(e);
-		this._trigger("change", e, this.element);
+	},
+	checked:function(checked)
+	{
+		if(checked === undefined)
+			return this.options.checked;
+		else
+			this.option("checked", checked);
+	},
+	_setOption:function(key, value)
+	{
+		var changed = this.options[key] != value;
+		this._super(key, value);
+		if(key == "checked" && changed)
+		{
+			this._trigger("change", null, this.element);
+			this.doCommandAction($.ibi.ibxCommand.CHECK, value);
+		}
 	},
 	_refresh:function()
 	{
@@ -302,9 +316,6 @@ $.widget("ibi.ibxCheckMenuItem", $.ibi.ibxMenuItem,
 		this._super();
 	}
 });
-$.ibi.ibxCheckMenuItem.statics = 
-{
-};
 
 /******************************************************************************
 	IbxRadioMenuItem

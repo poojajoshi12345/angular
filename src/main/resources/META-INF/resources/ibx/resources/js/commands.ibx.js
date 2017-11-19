@@ -27,19 +27,23 @@ $.widget("ibi.ibxCommand", $.ibi.ibxWidget,
 		document.documentElement.removeEventListener("keydown", this._onCommandKeyEventBound, true);
 		delete $.ibi.ibxCommand.cmds[this.options.id];
 	},
-	trigger:function(e)
+	trigger:function(data, src)
 	{
 		if(!this.options.disabled)
-			this.element.dispatchEvent("ibx_triggered", e, false, false, e.target);
+			this.element.dispatchEvent("ibx_triggered", data, false, false, src);
 	},
-	check:function(checked)
+	checked:function(checked, data, src)
 	{
-		if(checked != this.options.checked)
-			$(window).trigger("ibx_cmdchecked");
+		if(checked === undefined)
+			return this.options.checked;
 		this.option("checked", checked);
+		this.element.dispatchEvent("ibx_checkchanged", data, false, false, src);
 	},
 	_onCommandKeyEvent:function(e)
 	{
+		e.preventDefault();
+		e.stopPropagation();
+
 		var sc = this.options.shortcut;
 		if(sc)
 		{
@@ -67,11 +71,13 @@ $.widget("ibi.ibxCommand", $.ibi.ibxWidget,
 		this._super(value);
 		this._refresh()
 	},
-	_preRefresh:function(option, value)
+	_setOption:function(key, value)
 	{
-		var options = this.options
-		if(options.id)
-			delete $.ibi.ibxCommand.cmds[options.id];
+		var changed = this.options[key] != value;
+		this._super(key, value);
+
+		if(changed && key == "id")
+			delete $.ibi.ibxCommand.cmds[this.options.id];
 	},
 	_refresh:function()
 	{
@@ -81,7 +87,7 @@ $.widget("ibi.ibxCommand", $.ibi.ibxWidget,
 		//configure associated widgets
 		var widgets = $(sformat(".ibx-widget[data-ibx-command='{1}']", options.id))
 		widgets.ibxWidget("option", "disabled", options.disabled)
-		widgets.filter(".ibx-can-toggle").ibxWidget("option", "checked", options.checked);
+		widgets.filter(".ibx-can-toggle").ibxWidget("checked", options.checked);
 
 		if(options.id)
 			$.ibi.ibxCommand.cmds[options.id] = this.element;
@@ -91,6 +97,8 @@ $.widget("ibi.ibxCommand", $.ibi.ibxWidget,
 	}
 });
 $.ibi.ibxCommand.cmds = {};
+$.ibi.ibxCommand.TRIGGER = "trigger";
+$.ibi.ibxCommand.CHECK = "checked";
 
 //# sourceURL=commands.ibx.js
 
