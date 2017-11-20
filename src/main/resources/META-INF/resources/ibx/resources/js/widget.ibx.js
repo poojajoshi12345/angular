@@ -158,7 +158,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 	{
 		return $.ibi.ibxCommand.cmds[this.options.command];
 	},
-	doCommandAction(action)
+	doCommandAction:function(action)
 	{
 		var cmd = this.getCommand();
 		if(cmd)
