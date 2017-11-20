@@ -41,9 +41,6 @@ $.widget("ibi.ibxCommand", $.ibi.ibxWidget,
 	},
 	_onCommandKeyEvent:function(e)
 	{
-		e.preventDefault();
-		e.stopPropagation();
-
 		var sc = this.options.shortcut;
 		if(sc)
 		{
