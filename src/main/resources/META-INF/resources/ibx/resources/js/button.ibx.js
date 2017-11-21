@@ -172,33 +172,37 @@ $.widget("ibi.ibxCheckBox", $.ibi.ibxLabel,
 	_setOption: function (key, value)
 	{
 		var changed = this.options[key] != value;
-		this._super(key, value);
-		if (key == "group")
-		{
-			if (this.options.group)
-			{
-				this.element.removeClass('ibx-radio-group-' + this.options.group);
-				var group = $(".ibx-radio-group-control-" + this.options.group);
-				if (group.length > 0)
-					group.data("ibiIbxWidget").removeControl(this.element);
-			}
-
-			if (value)
-			{
-				this.element.addClass('ibx-radio-group-' + value);
-				var group = $(".ibx-radio-group-control-" + value);
-				if (group.length > 0)
-					group.data("ibiIbxWidget").addControl(this.element);
-			}
-		}
-		else
 		if(key == "checked" && changed)
 		{
 			if (!this._trigger('beforechange', null, this.element))
 				return;
+			this._super(key, value);
+			this.element.toggleClass("checked", value);
 			this._trigger("set_form_value", null, { "elem": this.element, "value": value ? this.options.userValue : "" });
 			this._trigger("change", null, this.element);
 			this.doCommandAction($.ibi.ibxCommand.CHECK, value);
+		}
+		else
+		{
+			this._super(key, value);
+			if (key == "group")
+			{
+				if (this.options.group)
+				{
+					this.element.removeClass('ibx-radio-group-' + this.options.group);
+					var group = $(".ibx-radio-group-control-" + this.options.group);
+					if (group.length > 0)
+						group.data("ibiIbxWidget").removeControl(this.element);
+				}
+
+				if(value)
+				{
+					this.element.addClass('ibx-radio-group-' + value);
+					var group = $(".ibx-radio-group-control-" + value);
+					if (group.length > 0)
+						group.data("ibiIbxWidget").addControl(this.element);
+				}
+			}
 		}
 	},
 	_refresh: function ()
@@ -208,25 +212,16 @@ $.widget("ibi.ibxCheckBox", $.ibi.ibxLabel,
 			this._check.hide();
 		else
 			this._check.show();
+		this.element.toggleClass("hide-check", this.options.hideCheck);
+
 		this._check.prop('checked', this.options.checked);
-		if (this.options.hideCheck)
-			this.element.addClass("hide-check");
-		else
-			this.element.removeClass("hide-check");
-		if (this.options.checked)
-			this.element.addClass("checked");
-		else
-			this.element.removeClass("checked");
-		if (this.options.forId)
-			this._check.attr("id", this.options.forId);
-		else
-			this._check.removeAttr("id");
+		this.element.toggleClass("checked", this.options.checked);
+
+		(this.options.forId) ? this._check.attr("id", this.options.forId) : this._check.removeAttr("id");
+		(this.options.disabled) ? this._check.prop("disabled", true) : this._check.removeProp("disabled");
+
 		this._text.removeAttr("for");
 		this._glyph.removeAttr("for");
-		if (this.options.disabled)
-			this._check.prop("disabled", true);
-		else
-			this._check.removeProp("disabled");
 	}
 });
 $.widget("ibi.ibxCheckBoxSimple", $.ibi.ibxCheckBox,

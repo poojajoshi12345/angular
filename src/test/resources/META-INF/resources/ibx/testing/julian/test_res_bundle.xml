@@ -5,10 +5,10 @@
 		<string-bundle>
 		<![CDATA[
 			{
-				"language":"en",
+				"language":"ibx_default",
 				"strings":
 				{
-					"TEST":"{1} A"
+					"A_TEST_STRING":"String with 'apostrophy and a \"quote"
 				}
 			}
 		]]>
@@ -40,6 +40,7 @@
 	<markup>
 		<markup-file src="./test_res_markup.xml"/>
 		<markup-block>
+			<div class="test-res-label" data-ibx-type="ibxLabel" data-ibxp-text="@ibxString(A_TEST_STRING)" data-ibx-options='{text:"@ibxString(A_TEST_STRING)"}'></div>
 		</markup-block>
 	</markup>
 

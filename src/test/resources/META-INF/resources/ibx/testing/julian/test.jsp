@@ -34,7 +34,15 @@
 						console.log(e.type, e);
 					});
 				});
-			}, null, true);
+
+				$(".rg-test").on("ibx_change", function(e)
+				{
+					var selItem = $(e.target).ibxWidget("selected");
+					console.log(e.type, selItem[0]);
+				});
+
+
+			}, [{src:"./test_res_bundle.xml", loadContext:"app"}], true);
 		</script>
 		<style type="text/css">
 			.main-box
@@ -50,13 +58,14 @@
 	</head>
 	<body class="ibx-root">
 		<div data-ibx-type="ibxCommand" data-ibxp-id="cmdTest" data-ibxp-shortcut="Ctrl+T"></div>
-		<div data-ibx-type="ibxRadioGroup" data-ibxp-name="rgTest"></div>
+		<div class="rg-test" data-ibx-type="ibxRadioGroup" data-ibxp-name="rgTest"></div>
 
 		<div tabIndex="0" id="mainBox" class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="center" data-ibxp-justify="center" data-ibx-name-root="true">
 				<div tabIndex="0" data-ibx-type="ibxButtonSimple" data-ibxp-command="cmdTest">Test Button</div>
 				<div tabIndex="0" data-ibx-type="ibxCheckBoxSimple" data-ibxp-command="cmdTest">Check 1</div>
 				<div tabIndex="0" data-ibx-type="ibxRadioButtonSimple" data-ibxp-group="rgTest">Radio 1</div>
 				<div tabIndex="0" data-ibx-type="ibxRadioButtonSimple" data-ibxp-group="rgTest">Radio 2</div>
+				<!--
 				<div tabIndex="0" class="menu-btn-test" data-ibx-type="ibxMenuButton" data-ibxp-multi-select="true" data-ibxp-text="Test Menu">
 					<div data-ibx-type="ibxMenu" data-ibxp-multi-select="true">
 						<div data-ibx-type="ibxCheckMenuItem" data-ibxp-command="cmdTest" data-ibxp-label-options="{'glyph':'face', 'glyphClasses':'material-icons'}">Check 1</div>
@@ -68,6 +77,7 @@
 						<div data-ibx-type="ibxMenuItem" data-ibxp-command="cmdTest" data-ibxp-label-options="{'glyph':'face', 'glyphClasses':'material-icons'}">Item 2</div>
 					</div>
 				</div>
+				-->
 		</div>
 	</body>
 </html>
