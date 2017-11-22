@@ -364,7 +364,9 @@ _p.preProcessResource = function(resource, language)
 		if(match[0].search("@ibxStringJson") == 0)
 		{
 			//[IBX-46]Have to escape the quotes so when turned back into a string JSON will parse correctly.
-			str = str.replace(/("|')/g, "\\\$1");
+
+			str = JSON.stringify(str).slice(1,-1); // escape string and then remove leading and trainling double quotes that stringify adds
+			str = str.replace(/'/g, "\\'"); // escape single quotes as it's not done by stringify
 			str = escapeXmlString(str);
 		}
 		strInfo.push({"match":match, "string":str});
