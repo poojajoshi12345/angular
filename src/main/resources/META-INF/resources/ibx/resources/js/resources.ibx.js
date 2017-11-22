@@ -353,11 +353,17 @@ _p.preProcessResource = function(resource, language)
 	language = language || this.language;
 	
 	var strInfo = [];
-	var regEx = /@ibxString\((.[^\)]*)\)/gi;
+	var regEx = /@ibxString\w*\((.[^\)]*)\)/gi;
 	while(match = regEx.exec(resource))
 	{
-		str = unescapeXmlString(match[1]);
-		strInfo.push({"match":match, "string":eval("(this.getString(" + str + "))")});
+		var symbol = unescapeXmlString(match[1]).replace(/\"|\'/g, "");//remove quotes around symbol...not needed.
+		var str = eval("(this.getString(\"" + symbol + "\"))");
+		if(match[0].search("@ibxStringXml") == 0)
+			str = escapeXmlString(str);
+		else
+		if(match[0].search("@ibxStringJson") == 0)
+			str = str.replace(/"/g, "\\&quot;");
+		strInfo.push({"match":match, "string":str});
 	}
 
 	$(strInfo).each(function(idx, info)

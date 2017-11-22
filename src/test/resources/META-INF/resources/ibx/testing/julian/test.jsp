@@ -19,6 +19,7 @@
 		<Script src="<%=request.getContextPath()%>/ibx/resources/ibx.js" type="text/javascript"></script>
 		<script type="text/javascript">
 			<jsp:include page="/WEB-INF/jsp/global/wf_globals.jsp" flush="false" />
+			
 			ibx(function()
 			{
 				$("body").on("keydown", function(e)
@@ -40,8 +41,6 @@
 					var selItem = $(e.target).ibxWidget("selected");
 					console.log(e.type, selItem[0]);
 				});
-
-
 			}, [{src:"./test_res_bundle.xml", loadContext:"app"}], true);
 		</script>
 		<style type="text/css">
