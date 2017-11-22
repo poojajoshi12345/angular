@@ -356,8 +356,9 @@ _p.preProcessResource = function(resource, language)
 	var regEx = /@ibxString\w*\((.[^\)]*)\)/gi;
 	while(match = regEx.exec(resource))
 	{
-		var symbol = unescapeXmlString(match[1]).replace(/\"|\'/g, "");//remove quotes around symbol...not needed.
-		var str = eval("(this.getString(\"" + symbol + "\"))");
+		var symbol = unescapeXmlString(match[1]).replace(/ |\"|\'/g, "").split(",");//remove any existing quotes and split parms into array.
+		symbol = sformat("\"{1}\"", symbol.join("\",\""));//recombine parms with quotes.
+		var str = eval("(this.getString(" + symbol + "))");//get the string.
 		if(match[0].search("@ibxStringXml") == 0)
 			str = escapeXmlString(str);
 		else
