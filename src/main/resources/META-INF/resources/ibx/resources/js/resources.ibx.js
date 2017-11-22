@@ -362,7 +362,11 @@ _p.preProcessResource = function(resource, language)
 			str = escapeXmlString(str);
 		else
 		if(match[0].search("@ibxStringJson") == 0)
-			str = str.replace(/"/g, "\\&quot;");
+		{
+			//[IBX-46]Have to escape the quotes so when turned back into a string JSON will parse correctly.
+			str = str.replace(/"/g, "\\\"");
+			str = escapeXmlString(str);
+		}
 		strInfo.push({"match":match, "string":str});
 	}
 
