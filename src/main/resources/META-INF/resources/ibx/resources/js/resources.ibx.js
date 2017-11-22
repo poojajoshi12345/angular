@@ -358,15 +358,12 @@ _p.preProcessResource = function(resource, language)
 	{
 		var symbol = unescapeXmlString(match[1]).replace(/\"|\'/g, "");//remove quotes around symbol...not needed.
 		var str = eval("(this.getString(\"" + symbol + "\"))");
-		if(match[0].search("@ibxStringXml") == 0)
-			str = escapeXmlString(str);
-		else
 		if(match[0].search("@ibxStringJson") == 0)
 		{
 			//[IBX-46]Have to escape the quotes so when turned back into a string JSON will parse correctly.
-			str = str.replace(/"/g, "\\\"");
-			str = escapeXmlString(str);
+			str = str.replace(/("|')/g, "\\\$1");
 		}
+		str = escapeXmlString(str);
 		strInfo.push({"match":match, "string":str});
 	}
 
