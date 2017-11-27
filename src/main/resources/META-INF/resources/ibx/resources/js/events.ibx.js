@@ -6,8 +6,6 @@ function ibxEventManager()
 	window.addEventListener("touchstart", ibxEventManager._onTouchEvent.bind(this), true)
 	window.addEventListener("touchend", ibxEventManager._onTouchEvent, true)
 	window.addEventListener("touchmove", ibxEventManager._onTouchEvent, true)
-	window.addEventListener("dragover", ibxEventManager._onDragEvent);
-	window.addEventListener("drop", ibxEventManager._onDragEvent);
 	window.addEventListener("contextmenu", ibxEventManager._onContextMenu);
 	window.addEventListener("keydown", ibxEventManager._onKeyDown);
 }
@@ -130,12 +128,6 @@ ibxEventManager._onTouchEvent = function(e)
 		ibxEventManager._eLast = e;
 		ibxEventManager._hasMoved = true;//stop possible dblclick on touchend
 	}
-};
-
-ibxEventManager._onDragEvent = function(e)
-{
-	e.dataTransfer.dropEffect = "none";
-	e.preventDefault();
 };
 
 ibxEventManager._onContextMenu = function(e)

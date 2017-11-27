@@ -1,23 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<ibfsrpc _jt="IBFSResponseObject" language="en_US" name="properties" returncode="10000" returndesc="SUCCESS" subreturncode="0" type="simple">
-	<ibfsparams size="2">
-		<entry key="IBFS_args" value="__null"/>
-		<entry key="IBFS_path" value="IBFS:/WFC/Repository/Public"/>
+<ibfsrpc _jt="IBFSResponseObject" language="en_US" name="findFolderToCreateIn" returncode="10000" returndesc="SUCCESS" subreturncode="0" type="simple">
+	<ibfsparams size="3">
+		<entry key="IBFS_args"/>
+		<entry key="IBFS_path" value="IBFS:/SSYS"/>
+		<entry key="IBFS_topPath" value="IBFS:/"/>
 	</ibfsparams>
-	<rootObject _jt="IBFSMRObject" binary="false" container="true" createdBy="WebFOCUS" createdOn="1455655808670" defaultLng="en_US" description="Public" dummy="false" effectiveRSName="EDASERVE" expireDate="1455655808670" externalId="" fullPath="IBFS:/WFC/Repository/Public" handle="000000000004" lastAnnotated="1506367037484" lastAnnotatingUser="admin" lastModified="1506367037549" lastaccessBy="admin" lastaccessOn="1509033502081" lastmodBy="admin" length="0" name="Public" policy="/9/794c///9vo/+9///t//+//////f8AAAAA" returnedLng="en_US" rsPath="/ibi_apps/wfirs/ibfs/WFC/Repository/Public" summary="Public Folder" thumbPath="/ibi_apps/ibi_html/ibi_images/file_type/unknown.svg" type="MRFolder" typeDescription="Folder">
-		<properties size="3">
-			<entry key="LastAnnotated" value="1506367037484"/>
-			<entry key="LastAnnotatedBy" value="admin"/>
-			<entry key="autogenmyreports" value="on"/>
+	<rootObject _jt="IBFSObject" container="true" createdOn="0" description="WFC" dummy="false" fullPath="IBFS:/WFC" lastModified="0" lastaccessOn="0" length="0" name="WFC" policy="/9/794f///9vo/+9///t/////////f8AAAAA" rsPath="/ibi_apps/wfirs/ibfs/WFC" thumbPath="/ibi_apps/ibi_html/ibi_images/file_type/unknown.svg" type="WebFOCUSComponent">
+		<properties size="1">
+			<entry key="MakeSelectedInGUI" value="TRUE"/>
 		</properties>
-		<nlsValues _jt="HashMap" loadFactor="0.75" threshold="12">
-			<entry>
-				<key _jt="string" value="en_US"/>
-				<value _jt="ArrayList" size="2">
-					<item _jt="string" index="0" value="Public"/>
-					<item _jt="string" index="1" value="Public Folder"/>
-				</value>
-			</entry>
-		</nlsValues>
 	</rootObject>
 </ibfsrpc>

@@ -539,12 +539,11 @@ $.ibi.ibxWidget.navKeys = [$.ui.keyCode.LEFT, $.ui.keyCode.RIGHT, $.ui.keyCode.U
 			return clone;
 		},
 		isDragging:function(){return this.element.hasClass(this.options.dragClass);},
-		_dispatchDragEvent:function(e, type, target, relatedTarget, data)
+		_dispatchDragEvent:function(e, type, target, data)
 		{
 			var dEvent = $.Event(e);
 			dEvent.type = type;
 			dEvent.target = (target instanceof jQuery) ? target[0] : target;
-			dEvent.relatedTarget =(relatedTarget instanceof jQuery) ?  relatedTarget[0] : relatedTarget;
 			dEvent.dataTransfer = this._dataTransfer || e.dataTransfer;
 			$(target).trigger(dEvent, data);
 			return dEvent;
@@ -556,15 +555,15 @@ $.ibi.ibxWidget.navKeys = [$.ui.keyCode.LEFT, $.ui.keyCode.RIGHT, $.ui.keyCode.U
 			
 			if(this._dataTransfer)
 				$(this._dataTransfer._dragImage).remove();
-			
+
+			document.documentElement.removeEventListener("mouseup", this._onDragMouseEventBound, true);
+			document.documentElement.removeEventListener("mousemove", this._onDragMouseEventBound, true);
+			this.element.removeClass(this.options.dragClass);
+			this._curTarget.css("cursor", this._curTarget.data("ibxDragTargetCursor"));
+
 			delete this._dataTransfer;
 			delete this._curTarget;
 			delete this._mDownLoc;
-
-			$("body").css("pointerEvents", "");
-			$("html").off("mouseup mousemove", this._onDragMouseEventBound).css("cursor", "");
-
-			this.element.removeClass(this.options.dragClass);
 		},
 		_onDragKeyEvent:function(e)
 		{
@@ -574,13 +573,13 @@ $.ibi.ibxWidget.navKeys = [$.ui.keyCode.LEFT, $.ui.keyCode.RIGHT, $.ui.keyCode.U
 		_onDragMouseEvent:function(e)
 		{
 			var options = this.options;
-			var e = e.originalEvent;
 			var eType = e.type;
 			switch(eType)
 			{
 				case "mousedown":
 					this._mDownLoc = {"x":e.clientX, "y":e.clientY};
-					$("html").on("mouseup mousemove", this._onDragMouseEventBound);
+					document.documentElement.addEventListener("mouseup", this._onDragMouseEventBound, true);
+					document.documentElement.addEventListener("mousemove", this._onDragMouseEventBound, true);
 					this._curTarget = $();
 					break;
 				case "mouseup":
@@ -588,7 +587,7 @@ $.ibi.ibxWidget.navKeys = [$.ui.keyCode.LEFT, $.ui.keyCode.RIGHT, $.ui.keyCode.U
 					{
 						//if allowed let target know it was dropped on
 						if(!this._curTarget._dragPrevented)
-							this._dispatchDragEvent(e, "ibx_drop", this._curTarget, this.element);
+							this._dispatchDragEvent(e, "ibx_drop", this._curTarget);
 					}
 
 					//end the drag operation
@@ -601,7 +600,6 @@ $.ibi.ibxWidget.navKeys = [$.ui.keyCode.LEFT, $.ui.keyCode.RIGHT, $.ui.keyCode.U
 					var isDragging = this.isDragging();
 					if(!isDragging && (dx >= options.dragStartDistanceX || dy >= this.options.dragStartDistanceY))
 					{
-						$("body").css("pointerEvents", "none");
 						e.stopPropagation();
 
 						this._dataTransfer = new ibxDataTransfer();
@@ -617,11 +615,8 @@ $.ibi.ibxWidget.navKeys = [$.ui.keyCode.LEFT, $.ui.keyCode.RIGHT, $.ui.keyCode.U
 
 					if(isDragging)
 					{
-						//what's the current ibx droppable target...have to do this weird thing with the pointerEvents
-						//because the browsers (Chrome) won't find a no pointer event node in elementFromPoint
-						$("body").css("pointerEvents", "");
+						//find the element under the mouse.
 						var elTarget = $(document.elementFromPoint(e.clientX, e.clientY));
-						$("body").css("pointerEvents", "none");
 
 						//manage the current target
 						if(!this._curTarget.is(elTarget))
@@ -630,18 +625,19 @@ $.ibi.ibxWidget.navKeys = [$.ui.keyCode.LEFT, $.ui.keyCode.RIGHT, $.ui.keyCode.U
 							this._dataTransfer.dropEffect = "not-allowed";
 
 							//spit out events for source/target
-							dEvent = this._dispatchDragEvent(e, "ibx_dragleave", this.element, elTarget);
-							dEvent = this._dispatchDragEvent(e, "ibx_dragexit", this._curTarget, elTarget);
-							dEvent = this._dispatchDragEvent(e, "ibx_dragenter", this.element, this._curTarget);
+							dEvent = this._dispatchDragEvent(e, "ibx_dragleave", this._curTarget);
+							dEvent = this._dispatchDragEvent(e, "ibx_dragenter", elTarget);
 
-							//if mouse up happens next, then are we allowed to drop?
+							//save the current drag target info.
+							this._curTarget.css("cursor", this._curTarget.data("ibxDragTargetCursor"));
 							this._curTarget = elTarget;
+							this._curTarget.data("ibxDragTargetCursor", this._curTarget.css("cursor"));
 							this._curTarget._dragPrevented = dEvent.isDefaultPrevented();
 						}
 
 						//send drag messages if 'ibx_dragover' was not prevented
-						dEvent = this._dispatchDragEvent(e, "ibx_drag", this.element, this._curTarget);
-						dEvent = this._dispatchDragEvent(e, "ibx_dragover", this._curTarget, this.element);
+						dEvent = this._dispatchDragEvent(e, "ibx_drag", this.element);
+						dEvent = this._dispatchDragEvent(e, "ibx_dragover", this._curTarget);
 
 						//figure out the cursor
 						var cursor = "not-allowed";
@@ -650,7 +646,7 @@ $.ibi.ibxWidget.navKeys = [$.ui.keyCode.LEFT, $.ui.keyCode.RIGHT, $.ui.keyCode.U
 						else
 						if(this._dataTransfer.effectAllowed == this._dataTransfer.dropEffect)
 							cursor = this._dataTransfer.dropEffect;
-						$("html").css("cursor", cursor);
+						this._curTarget.css("cursor", cursor);
 
 						//manage the drag cursor
 						if(this._dataTransfer._dragImage)
@@ -667,8 +663,9 @@ $.ibi.ibxWidget.navKeys = [$.ui.keyCode.LEFT, $.ui.keyCode.RIGHT, $.ui.keyCode.U
 				/*file drop target native drag/drop event handling*/
 				case "dragover":
 				case "dragleave":
+					e.preventDefault();
 				case "drop":
-					dEvent = this._dispatchDragEvent(e, "ibx_" + eType, this.element, e.relatedTarget);
+					dEvent = this._dispatchDragEvent(e, "ibx_" + eType, this.element);
 					var dt = e.dataTransfer;
 					if(eType == "drop" && !dEvent.defaultPrevented && dt.files.length)
 					{
@@ -687,11 +684,11 @@ $.ibi.ibxWidget.navKeys = [$.ui.keyCode.LEFT, $.ui.keyCode.RIGHT, $.ui.keyCode.U
 							"dataTransfer":dt
 						}, options.fileUploadAjaxOptions);
 
-						if(this._dispatchDragEvent(e, "ibx_beforefilesupload", this.element, e.relatedTarget, ajaxOptions).isDefaultPrevented())
+						if(this._dispatchDragEvent(e, "ibx_beforefilesupload", this.element, ajaxOptions).isDefaultPrevented())
 							return;
 
 						var deferred = $.ajax(ajaxOptions);
-						this._dispatchDragEvent(e, "ibx_filesuploading", this.element, e.relatedTarget, deferred);
+						this._dispatchDragEvent(e, "ibx_filesuploading", this.element, deferred);
 					}
 					e.preventDefault();
 					e.stopPropagation();

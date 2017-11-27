@@ -28,23 +28,42 @@
 						console.clear();
 				});
 
-				$.each($.ibi.ibxCommand.cmds, function(key, cmd)
+				$("#nativeDragSource, #nativeDropTarget").on("drag dragend dragenter dragexit dragleave dragover dragstart drop", function(e)
 				{
-					cmd.on("ibx_checkchanged ibx_triggered", function(e)
+					var dt = e.originalEvent.dataTransfer;
+					if(e.type == "dragstart")
 					{
-						console.log(e.type, e);
-					});
+						dt.setData("text", "I'm some drag data");
+						dt.dropEffect = "move";
+						dt.effectAllowed = "all";
+					}
+					if(e.type == "dragover")
+					{
+						dt.dropEffect = "move";
+						e.preventDefault();
+					}
+					if(e.type == "drop")
+					{
+						e.preventDefault();
+						var data = dt.getData("text");
+						console.log(data);
+					}
+
+					//if(e.type == "drag"|| e.type == "dragover")
+					//	console.log(e.type, "TARGET:", e.currentTarget.id, "RELATED TARGET", e.rlatedTarget ? e.relatedTarget.id : "None");
 				});
 
-				$(".rg-test").on("ibx_change", function(e)
+				$("#ibxDragSource, #ibxDropTarget").on("ibx_drag ibx_dragend ibx_dragenter ibx_dragexit ibx_dragleave ibx_dragover ibx_dragstart ibx_drop", function(e)
 				{
-					var selItem = $(e.target).ibxWidget("selected");
-					console.log(e.type, selItem[0]);
+					//if(e.target.id == "dragSource")
+					//if(e.target.id == "dropTarget")
+					//if(e.type == "ibx_drag" || e.type == "ibx_dragover")
+					//	console.log(e.type, "TARGET:", e.currentTarget.id);
 				});
 			}, [{src:"./test_res_bundle.xml", loadContext:"app"}], true);
 		</script>
 		<style type="text/css">
-			.main-box
+			.ibx-flexbox.main-box
 			{
 				position:absolute;
 				left:0px;
@@ -60,23 +79,28 @@
 		<div class="rg-test" data-ibx-type="ibxRadioGroup" data-ibxp-name="rgTest"></div>
 
 		<div tabIndex="0" id="mainBox" class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="center" data-ibxp-justify="center" data-ibx-name-root="true">
-				<div tabIndex="0" data-ibx-type="ibxButtonSimple" data-ibxp-command="cmdTest">Test Button</div>
-				<div tabIndex="0" data-ibx-type="ibxCheckBoxSimple" data-ibxp-command="cmdTest">Check 1</div>
-				<div tabIndex="0" data-ibx-type="ibxRadioButtonSimple" data-ibxp-group="rgTest">Radio 1</div>
-				<div tabIndex="0" data-ibx-type="ibxRadioButtonSimple" data-ibxp-group="rgTest">Radio 2</div>
-				<!--
-				<div tabIndex="0" class="menu-btn-test" data-ibx-type="ibxMenuButton" data-ibxp-multi-select="true" data-ibxp-text="Test Menu">
-					<div data-ibx-type="ibxMenu" data-ibxp-multi-select="true">
-						<div data-ibx-type="ibxCheckMenuItem" data-ibxp-command="cmdTest" data-ibxp-label-options="{'glyph':'face', 'glyphClasses':'material-icons'}">Check 1</div>
-						<div data-ibx-type="ibxMenuSeparator"></div>
-						<div data-ibx-type="ibxRadioMenuItem" data-ibxp-group="rgTest" data-ibxp-checked="true">Radio 1</div>
-						<div data-ibx-type="ibxRadioMenuItem" data-ibxp-group="rgTest">Radio 2</div>
-						<div data-ibx-type="ibxMenuSeparator"></div>
-						<div data-ibx-type="ibxMenuItem" data-ibxp-command="cmdTest">Item 1</div>
-						<div data-ibx-type="ibxMenuItem" data-ibxp-command="cmdTest" data-ibxp-label-options="{'glyph':'face', 'glyphClasses':'material-icons'}">Item 2</div>
-					</div>
+			<div id="nativeDragSource" draggable="true">Native Drag Source</div>
+			<div id="nativeDropTarget">Native Drop Target</div>
+			<div style="height:50px;"></div>
+			<div id="ibxDragSource" data-ibx-type="ibxLabel" data-ibxp-draggable="true">ibx Drag Source</div>
+			<div id="ibxDropTarget" data-ibx-type="ibxLabel" style="cursor:progress;">ibx Drop Target</div>
+
+			<!--
+			<div tabIndex="0" data-ibx-type="ibxButtonSimple" data-ibxp-command="cmdTest">Test Button</div>
+			<div tabIndex="0" data-ibx-type="ibxCheckBoxSimple" data-ibxp-command="cmdTest">Check 1</div>
+			<div tabIndex="0" data-ibx-type="ibxRadioButtonSimple" data-ibxp-group="rgTest">Radio 1</div>
+			<div tabIndex="0" data-ibx-type="ibxRadioButtonSimple" data-ibxp-group="rgTest">Radio 2</div>
+			<div tabIndex="0" class="menu-btn-test" data-ibx-type="ibxMenuButton" data-ibxp-multi-select="true" data-ibxp-text="Test Menu">
+				<div data-ibx-type="ibxMenu" data-ibxp-multi-select="true">
+					<div data-ibx-type="ibxCheckMenuItem" data-ibxp-command="cmdTest" data-ibxp-label-options="{'glyph':'face', 'glyphClasses':'material-icons'}">Check 1</div>
+					<div data-ibx-type="ibxMenuSeparator"></div>
+					<div data-ibx-type="ibxRadioMenuItem" data-ibxp-group="rgTest" data-ibxp-checked="true">Radio 1</div>
+					<div data-ibx-type="ibxRadioMenuItem" data-ibxp-group="rgTest">Radio 2</div>
+					<div data-ibx-type="ibxMenuSeparator"></div>
+					<div data-ibx-type="ibxMenuItem" data-ibxp-command="cmdTest">Item 1</div>
+					<div data-ibx-type="ibxMenuItem" data-ibxp-command="cmdTest" data-ibxp-label-options="{'glyph':'face', 'glyphClasses':'material-icons'}">Item 2</div>
 				</div>
-				-->
-		</div>
+			</div>
+			-->
 	</body>
 </html>
