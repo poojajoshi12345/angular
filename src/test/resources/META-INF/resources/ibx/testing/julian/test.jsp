@@ -22,6 +22,8 @@
 			
 			ibx(function()
 			{
+				ibxEventManager.noIOSBodyScroll = false;
+
 				$("body").on("keydown", function(e)
 				{
 					if(e.ctrlKey && e.key == 'c')
