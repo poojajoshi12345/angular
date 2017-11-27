@@ -224,33 +224,31 @@ $.widget("ibi.ibxDateRange", $.ibi.ibxDatePicker,
 		var to;
 		var parseTo = $.datepicker.parseDate(this.options.dateFormat, this.options.dateTo);
 		if (!parseTo)
-			to = (new Date()).getTime();
+			to = from;
 		else
 			to = parseTo.getTime();
 
-		if (v < from)
+		if (v <= from)
 		{
 			// extend from
 			this.options.dateFrom = $.datepicker.formatDate(this.options.dateFormat, value);
-			from = value;
 		}
-		else if (v > to)
+		else if (v >= to)
 		{
 			// extend to
 			this.options.dateTo = $.datepicker.formatDate(this.options.dateFormat, value);
-			to = value;
 		}
 		else
 		{
-			// set both to current
-			this.options.dateTo = this.options.dateFrom = $.datepicker.formatDate(this.options.dateFormat, value);
-			to = from = value;
+			// in between - reset
+			this.options.dateFrom = $.datepicker.formatDate(this.options.dateFormat, value);
+			this.options.dateTo = '';
 		}
 
 		this._trigger("change", null, { 'dateFrom': this.options.dateFrom, 'dateTo': this.options.dateTo});
 		this._trigger("set_form_value", null, { "elem": this.element, "value": "['" + this.options.dateFrom + "','" + this.options.dateTo + "']" });
 
-		this._datePicker.datepicker('setDate', new Date(this.options.dateTo));
+		//this._datePicker.datepicker('setDate', new Date(this.options.dateTo));
 
 		if (this.options.singleInput)
 		{
