@@ -215,7 +215,7 @@ _p.loadBundle = function(xResDoc)
 	xResDoc.resLoaded = xResDoc.resLoaded || $.Deferred();
 
 	//let the loading begin!
-	$(window).dispatchEvent("ibx_resmgr", {"hint":"loading", "loadDepth":this._loadDepth, "resMgr":this, "bundle":bundle[0], src:xResDoc.path});
+	$(window).dispatchEvent("ibx_resmgr", {"hint":"bundleloading", "loadDepth":this._loadDepth, "resMgr":this, "bundle":bundle[0], src:xResDoc.path});
 
 	//First load the dependency Resource Bundles...this will chain to any depth
 	var files = [];
@@ -304,7 +304,7 @@ _p.loadBundle = function(xResDoc)
 			//give the main thread a chance to render what's been loaded before resolving the promise
 			window.setTimeout(function(bundle)
 			{
-				$(window).dispatchEvent("ibx_resmgr", {"hint":"loaded", "loadDepth":this._loadDepth, "resMgr":this, "bundle":bundle[0]});
+				$(window).dispatchEvent("ibx_resmgr", {"hint":"bundleloaded", "loadDepth":this._loadDepth, "resMgr":this, "bundle":bundle[0]});
 				--this._loadDepth;
 				xResDoc.resLoaded.resolve(bundle, this);
 			}.bind(this, bundle), 0);

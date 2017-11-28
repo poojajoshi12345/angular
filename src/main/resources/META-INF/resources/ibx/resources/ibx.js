@@ -100,9 +100,11 @@ function ibx()
 				//wait for jQuery to be fully loaded...
 				$(function()
 				{
-					$(window).dispatchEvent("ibx_ibxevent", {"hint":"loading", "ibx":ibx});
+					//jquery is fully loaded and running
+					$(window).dispatchEvent("ibx_ibxevent", {"hint":"jqueryloaded", "ibx":ibx});
 
 					//continue booting ibx...
+					$(window).dispatchEvent("ibx_ibxevent", {"hint":"ibxloading", "ibx":ibx});
 					ibx._loadPromise = $.Deferred();
 					ibx._loadPromise._autoBind = autoBind;
 					ibx._loadPromise._resPackages = resPackages;
@@ -131,11 +133,16 @@ function ibx()
 						packages.unshift(ibx._path + "./ibx_resource_bundle.xml");
 						ibx.resourceMgr.addBundles(packages).done(function()
 						{
+							//ibx is fully loaded and running.
+							$(window).dispatchEvent("ibx_ibxevent", {"hint":"ibxloaded", "ibx":ibx});
+
 							//bool means just bind everything...string means select these and bind them
+							$(window).dispatchEvent("ibx_ibxevent", {"hint":"markupbinding", "ibx":ibx});
 							var autoBind = ibx._loadPromise._autoBind;
 							if(autoBind)
 							{
 								ibx.bindElements((typeof(autoBind) === "string") ? autoBind : "");
+								$(window).dispatchEvent("ibx_ibxevent", {"hint":"markupbound", "ibx":ibx});
 							}
 
 							$("head").append(inlineStyles);//move any non-ibx styles to the end so they will override ibx styles.
@@ -153,7 +160,7 @@ function ibx()
 									
 							});
 							ibx._loadPromise.resolve(ibx);//let everyone know the system is booted.
-							$(window).dispatchEvent("ibx_ibxevent", {"hint":"loaded", "ibx":ibx});
+							$(window).dispatchEvent("ibx_ibxevent", {"hint":"apploaded", "ibx":ibx});
 						});
 					});
 				});
@@ -169,7 +176,6 @@ function ibx()
 	}
 	return ibx;
 }
-ibx.dispatchEvent = function(){};
 
 //various static resources.
 ibx.version = "0.9";		//ibx version...just a placeholder for now.
