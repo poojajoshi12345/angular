@@ -12,8 +12,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 		"dragScrolling":false,
 		"wantResize":false,
 		"defaultFocused":false,					//for popup...should this be focused on open
-		
-		//for circular tabbing
+		"opaque":false,							//add iframe behind to stop pdf from bleading through.
 		"focusRoot":false,						//for circular tabbing management...like in a dialog.
 		
 		//for keyboard arrows navigation (mostly composite widgets like menus/selects/etc...508)
@@ -258,7 +257,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 				//remove active so next focus goes to first item.
 				if(options.navKeyResetFocusOnBlur)
 				{
-					var children = this.navKeyChildren(":ibxFocusable");
+					var children = this.navKeyChildren();
 					children.removeClass("ibx-nav-item-active").removeAttr("aria-activedescendant");
 				}
 			}
@@ -447,6 +446,19 @@ $.widget("ibi.ibxWidget", $.Widget,
 
 		//associate widget with the command
 		(options.command) ? this.element.attr("data-ibx-command", options.command) : this.element.removeAttr("data-ibx-command");
+
+		//[PD-198] pdf files in ie bleed through divs above.  This stops that!
+		if(options.opaque)
+		{
+			var path = sformat("{1}/{2}", ibx.getPath(), "markup/blank.html");
+			var iframe = $("<iframe class='ibx-opaque-frame' allowTransparency='false'>").prop("src", path);
+			this.element.addClass("ibx-opaque").append(iframe);
+		}
+		else
+		{
+			this.element.children(".ibx-opacity-frame").remove();
+			this.element.removeClass("ibx-opaque");
+		}
 
 		//hookup the resize sensor if interested in resize events.
 		if(!options.wantResize && this._resizeSensor)

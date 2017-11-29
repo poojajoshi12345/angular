@@ -74,13 +74,32 @@
 				bottom:0px;
 				overflow:auto;
 			}
+
+			.test-widget
+			{
+				relative:absolute;
+				top:120px;
+				z-index:100;
+				background-color:white;
+			}
+
+			.test-frame
+			{
+				width:200px;
+				height:300px;
+				z-index:0;
+			}
 		</style>
 	</head>
 	<body class="ibx-root">
+		<!--
 		<div data-ibx-type="ibxCommand" data-ibxp-id="cmdTest" data-ibxp-shortcut="Ctrl+T"></div>
 		<div class="rg-test" data-ibx-type="ibxRadioGroup" data-ibxp-name="rgTest"></div>
+		-->
 
 		<div tabIndex="0" id="mainBox" class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="center" data-ibxp-justify="center" data-ibx-name-root="true">
+
+			<div class="test-widget" data-ibx-type="ibxWidget" data-ibxp-opaque="true">Test opaque label</div>
 
             <div tabIndex="1" data-ibx-type="ibxListBox" class="" data-ibxp-text-overflow="ellipsis" data-ibxp-for-id="ps-id-4" data-ibxp-list-classes="ibx-menu-no-icons">
               <div id="listItem1" data-ibx-type="ibxSelectItem" class="pd-page-select-Item pd-page-select-none" data-ibxp-user-value="none" data-ibxp-selected="false">List Item 1</div>
@@ -89,8 +108,8 @@
               <div id="listItem4" data-ibx-type="ibxSelectItem" class="pd-page-select-Item pd-page-select-none" data-ibxp-user-value="none" data-ibxp-selected="false">List Item 4</div>
             </div>
 
+			<iframe class="test-frame" src="./test.pdf"></iframe>
 
-			<!--
 			<div id="nativeDragSource" draggable="true">Native Drag Source</div>
 			<div id="nativeDropTarget">Native Drop Target</div>
 			<div style="height:50px;"></div>
@@ -112,6 +131,8 @@
 					<div data-ibx-type="ibxMenuItem" data-ibxp-command="cmdTest" data-ibxp-label-options="{'glyph':'face', 'glyphClasses':'material-icons'}">Item 2</div>
 				</div>
 			</div>
+			<!--
 			-->
+		</div>
 	</body>
 </html>
