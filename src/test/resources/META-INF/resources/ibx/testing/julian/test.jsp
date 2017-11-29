@@ -46,21 +46,23 @@
 					}
 					if(e.type == "drop")
 					{
-						e.preventDefault();
 						var data = dt.getData("text");
 						console.log(data);
 					}
 
 					//if(e.type == "drag"|| e.type == "dragover")
-					//	console.log(e.type, "TARGET:", e.currentTarget.id, "RELATED TARGET", e.rlatedTarget ? e.relatedTarget.id : "None");
+						console.log(e.type, "TARGET:", e.currentTarget.id, (new Date()));
 				});
 
 				$("#ibxDragSource, #ibxDropTarget").on("ibx_drag ibx_dragend ibx_dragenter ibx_dragexit ibx_dragleave ibx_dragover ibx_dragstart ibx_drop", function(e)
 				{
-					//if(e.target.id == "dragSource")
-					//if(e.target.id == "dropTarget")
-					//if(e.type == "ibx_drag" || e.type == "ibx_dragover")
-					//	console.log(e.type, "TARGET:", e.currentTarget.id);
+					var eType = e.type;
+					if(eType == "ibx_dragover" && e.currentTarget.id == "ibxDropTarget")
+					{
+						var dt = e.dataTransfer;
+						dt.dropEffect = "move";
+						e.preventDefault();
+					}
 				});
 			}, [{src:"./test_res_bundle.xml", loadContext:"app"}], true);
 		</script>
@@ -99,22 +101,14 @@
 
 		<div tabIndex="0" id="mainBox" class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="center" data-ibxp-justify="center" data-ibx-name-root="true">
 
-			<div class="test-widget" data-ibx-type="ibxWidget" data-ibxp-opaque="true">Test opaque label</div>
-
-            <div tabIndex="1" data-ibx-type="ibxListBox" class="" data-ibxp-text-overflow="ellipsis" data-ibxp-for-id="ps-id-4" data-ibxp-list-classes="ibx-menu-no-icons">
-              <div id="listItem1" data-ibx-type="ibxSelectItem" class="pd-page-select-Item pd-page-select-none" data-ibxp-user-value="none" data-ibxp-selected="false">List Item 1</div>
-              <div id="listItem2" data-ibx-type="ibxSelectItem" class="pd-page-select-Item pd-page-select-none" data-ibxp-user-value="none" data-ibxp-selected="false">List Item 2</div>
-              <div id="listItem3" data-ibx-type="ibxSelectItem" class="pd-page-select-Item pd-page-select-none" data-ibxp-user-value="none" data-ibxp-selected="true">List Item 3</div>
-              <div id="listItem4" data-ibx-type="ibxSelectItem" class="pd-page-select-Item pd-page-select-none" data-ibxp-user-value="none" data-ibxp-selected="false">List Item 4</div>
-            </div>
-
-			<iframe class="test-frame" src="./test.pdf"></iframe>
-
 			<div id="nativeDragSource" draggable="true">Native Drag Source</div>
 			<div id="nativeDropTarget">Native Drop Target</div>
 			<div style="height:50px;"></div>
 			<div id="ibxDragSource" data-ibx-type="ibxLabel" data-ibxp-draggable="true">ibx Drag Source</div>
 			<div id="ibxDropTarget" data-ibx-type="ibxLabel" style="cursor:progress;">ibx Drop Target</div>
+
+			<!--
+			<div class="test-widget" data-ibx-type="ibxWidget" data-ibxp-opaque="true">Test opaque label</div>
 
 			<div tabIndex="0" data-ibx-type="ibxButtonSimple" data-ibxp-command="cmdTest">Test Button</div>
 			<div tabIndex="0" data-ibx-type="ibxCheckBoxSimple" data-ibxp-command="cmdTest">Check 1</div>
@@ -131,7 +125,14 @@
 					<div data-ibx-type="ibxMenuItem" data-ibxp-command="cmdTest" data-ibxp-label-options="{'glyph':'face', 'glyphClasses':'material-icons'}">Item 2</div>
 				</div>
 			</div>
-			<!--
+            <div tabIndex="1" data-ibx-type="ibxListBox" class="" data-ibxp-text-overflow="ellipsis" data-ibxp-for-id="ps-id-4" data-ibxp-list-classes="ibx-menu-no-icons">
+              <div id="listItem1" data-ibx-type="ibxSelectItem" class="pd-page-select-Item pd-page-select-none" data-ibxp-user-value="none" data-ibxp-selected="false">List Item 1</div>
+              <div id="listItem2" data-ibx-type="ibxSelectItem" class="pd-page-select-Item pd-page-select-none" data-ibxp-user-value="none" data-ibxp-selected="false">List Item 2</div>
+              <div id="listItem3" data-ibx-type="ibxSelectItem" class="pd-page-select-Item pd-page-select-none" data-ibxp-user-value="none" data-ibxp-selected="true">List Item 3</div>
+              <div id="listItem4" data-ibx-type="ibxSelectItem" class="pd-page-select-Item pd-page-select-none" data-ibxp-user-value="none" data-ibxp-selected="false">List Item 4</div>
+            </div>
+
+			<iframe class="test-frame" src="./test.pdf"></iframe>
 			-->
 		</div>
 	</body>

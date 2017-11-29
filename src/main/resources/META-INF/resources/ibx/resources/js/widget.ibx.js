@@ -571,7 +571,7 @@ $.ibi.ibxWidget.navKeys = [$.ui.keyCode.LEFT, $.ui.keyCode.RIGHT, $.ui.keyCode.U
 			document.documentElement.removeEventListener("mouseup", this._onDragMouseEventBound, true);
 			document.documentElement.removeEventListener("mousemove", this._onDragMouseEventBound, true);
 			this.element.removeClass(this.options.dragClass);
-			this._curTarget.css("cursor", this._curTarget.data("ibxDragTargetCursor"));
+			this._curTarget.css("cursor", this._curTarget.data("ibxDragTargetCursor")).removeClass("ibx-drag-target");
 
 			delete this._dataTransfer;
 			delete this._curTarget;
@@ -641,24 +641,29 @@ $.ibi.ibxWidget.navKeys = [$.ui.keyCode.LEFT, $.ui.keyCode.RIGHT, $.ui.keyCode.U
 							dEvent = this._dispatchDragEvent(e, "ibx_dragenter", elTarget);
 
 							//save the current drag target info.
-							this._curTarget.css("cursor", this._curTarget.data("ibxDragTargetCursor"));
+							this._curTarget.css("cursor", this._curTarget.data("ibxDragTargetCursor")).removeClass("ibx-drag-target");
 							this._curTarget = elTarget;
-							this._curTarget.data("ibxDragTargetCursor", this._curTarget.css("cursor"));
-							this._curTarget._dragPrevented = dEvent.isDefaultPrevented();
+							this._curTarget.data("ibxDragTargetCursor", this._curTarget.css("cursor")).addClass("ibx-drag-target");
 						}
 
 						//send drag messages if 'ibx_dragover' was not prevented
 						dEvent = this._dispatchDragEvent(e, "ibx_drag", this.element);
 						dEvent = this._dispatchDragEvent(e, "ibx_dragover", this._curTarget);
+						var dragPrevented = this._curTarget._dragPrevented = !dEvent.isDefaultPrevented();
 
 						//figure out the cursor
 						var cursor = "not-allowed";
-						if(this._dataTransfer.effectAllowed == "all")
-							cursor = this._dataTransfer.dropEffect;
-						else
-						if(this._dataTransfer.effectAllowed == this._dataTransfer.dropEffect)
-							cursor = this._dataTransfer.dropEffect;
-						this._curTarget.css("cursor", cursor);
+						if(!dragPrevented)
+						{
+							if(this._dataTransfer.effectAllowed == "all")
+								cursor = this._dataTransfer.dropEffect;
+							else
+							if(this._dataTransfer.effectAllowed == this._dataTransfer.dropEffect)
+								cursor = this._dataTransfer.dropEffect;
+						}
+						var curCursor = this._curTarget.css("cursor");
+						if(curCursor != cursor)
+							this._curTarget.css("cursor", cursor);
 
 						//manage the drag cursor
 						if(this._dataTransfer._dragImage)
