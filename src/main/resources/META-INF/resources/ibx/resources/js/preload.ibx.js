@@ -10,5 +10,5 @@ if(DataTransfer && !DataTransfer.prototype.setDragImage)
 	DataTransfer.prototype.setDragImage = function(){};
 
 
-//# sourceURL=ibxPreLoad.ibx.js
+//# sourceURL=preload.ibx.js
 
