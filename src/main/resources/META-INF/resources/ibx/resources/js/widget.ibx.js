@@ -523,7 +523,7 @@ $.ibi.ibxWidget.navKeys = [$.ui.keyCode.LEFT, $.ui.keyCode.RIGHT, $.ui.keyCode.U
 			dragStartDistanceX:5,
 			dragStartDistanceY:5,
 
-			nativeDropTarget:false,		//!!!!NATIVE DROP!!!!
+			nativeFileDropTarget:false, //!!!!NATIVE FILE DROP TARGET!!!! 
 			fileUploadAjaxOptions:
 			{
 			}
@@ -679,12 +679,12 @@ $.ibi.ibxWidget.navKeys = [$.ui.keyCode.LEFT, $.ui.keyCode.RIGHT, $.ui.keyCode.U
 
 				/*file drop target native drag/drop event handling*/
 				case "dragover":
-				case "dragleave":
-					e.preventDefault();
+					if(options.nativeFileDropTarget)
+						e.preventDefault();
+					break;
 				case "drop":
-					dEvent = this._dispatchDragEvent(e, "ibx_" + eType, this.element);
-					var dt = e.dataTransfer;
-					if(eType == "drop" && !dEvent.defaultPrevented && dt.files.length)
+					var dt = e.originalEvent.dataTransfer;
+					if(options.nativeFileDropTarget && dt.files.length)
 					{
 						var formData = new FormData();
 						$.each(dt.files, function(idx, file)
@@ -701,11 +701,11 @@ $.ibi.ibxWidget.navKeys = [$.ui.keyCode.LEFT, $.ui.keyCode.RIGHT, $.ui.keyCode.U
 							"dataTransfer":dt
 						}, options.fileUploadAjaxOptions);
 
-						if(this._dispatchDragEvent(e, "ibx_beforefilesupload", this.element, ajaxOptions).isDefaultPrevented())
+						if(this._dispatchDragEvent(e.originalEvent, "ibx_beforefilesupload", this.element, ajaxOptions).isDefaultPrevented())
 							return;
 
 						var deferred = $.ajax(ajaxOptions);
-						this._dispatchDragEvent(e, "ibx_filesuploading", this.element, deferred);
+						this._dispatchDragEvent(e.originalEvent, "ibx_filesuploading", this.element, deferred);
 					}
 					e.preventDefault();
 					e.stopPropagation();
@@ -719,7 +719,7 @@ $.ibi.ibxWidget.navKeys = [$.ui.keyCode.LEFT, $.ui.keyCode.RIGHT, $.ui.keyCode.U
 			var options = this.options;
 			(options.draggable) ? this.element.on("mousedown", this._onDragMouseEventBound) : this.element.off("mousedown", this._onDragMouseEventBound);
 			(options.draggable) ? this.element.on("keydown", this._onDragKeyEventBound) : this.element.off("keydown", this._onDragKeyEventBound);
-			(options.nativeDropTarget) ? this.element.on("dragover dragleave drop", this._onDragMouseEventBound) : this.element.off("dragover dragleave drop", this._onDragMouseEventBound);
+			(options.nativeFileDropTarget) ? this.element.on("dragover drop", this._onDragMouseEventBound) : this.element.off("dragover drop", this._onDragMouseEventBound);
 
 			this.element.toggleClass("ibx-draggable", !!options.draggable);
 		}
