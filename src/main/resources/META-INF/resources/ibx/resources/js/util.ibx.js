@@ -540,6 +540,7 @@ WebApi.statics =
 		//async and dataType are exposed at root object because they are commonly set.
 		//they get copied into the ajax options in _p.exec.
 		//note: ajax.context is set in WebApi constructor, as it's instance based.
+		url:null,
 		async:true,
 		dataType:"xml",
 		ajax:
@@ -588,10 +589,13 @@ _p.exec = function exec(options)
 	$.extend(true, exInfo, options);
 	$.extend(true, exInfo.ajax.data, exInfo.parms);
 	exInfo.deferred = $.Deferred();
-	exInfo.ajax.async = exInfo.async; //copy the outer value to the actual ajax option
-	exInfo.ajax.dataType = exInfo.dataType; //copy the outer value to the actual ajax option
-	exInfo.ajax.url =  sformat("{1}/{2}{3}", exInfo.appContext, exInfo.appName,  exInfo.relPath ? ("/" + exInfo.relPath) : "");
+	
+	//copy outer values to actual ajax options.
+	exInfo.ajax.url =  options.url || sformat("{1}/{2}{3}", exInfo.appContext, exInfo.appName,  exInfo.relPath ? ("/" + exInfo.relPath) : "");
+	exInfo.ajax.async = exInfo.async;
+	exInfo.ajax.dataType = exInfo.dataType;
 	$.ajax(exInfo.ajax);
+
 	return exInfo;
 };
 
