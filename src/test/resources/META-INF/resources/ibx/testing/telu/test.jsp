@@ -1,4 +1,4 @@
-﻿<%-- Copyright 1996-2017 Information Builders, Inc. All rights reserved. 
+<%-- Copyright 1996-2017 Information Builders, Inc. All rights reserved. 
  $Revision$:
 --%><!DOCTYPE html>
 <jsp:useBean id="WEBFOCUS_SECURITY_SETTING" class="com.ibi.webapp.security.config.WFSecuritySetting" scope="request"></jsp:useBean><jsp:useBean 
@@ -11,9 +11,9 @@ id="resourceBean" class="com.ibi.web.res.ResourceBundleBean" scope="request"><js
 name="resourceBean" property="request" value="<%= request %>" /></jsp:useBean><jsp:useBean 
 id="wfLanguage" class="com.ibi.web.bean.WFLanguageBean" scope="request"><jsp:setProperty 
 name="wfLanguage" property="inLang" value="<%=browser.getSelLanguage()%>"/></jsp:useBean><%@ 
-page import="org.owasp.esapi.*" 
-%><%@ page import="org.apache.commons.lang.StringEscapeUtils"
-%><%@ page import="com.ibi.webapp.security.util.WFSecurityUtils"
+page import="org.owasp.esapi.*, 
+			com.ibi.util..StringEscapeUtils,
+			com.ibi.webapp.security.util.WFSecurityUtils"
 %><%
 	browser.setClearCache();
 	String applicationContext = ESAPI.encoder().encodeForHTMLAttribute(request.getContextPath() );
@@ -22,8 +22,7 @@ page import="org.owasp.esapi.*"
 	String SecurityUserDescription = WFSecurityUtils.getUserDescription();
 	String SecurityUserLabel = StringEscapeUtils.escapeXml(SecurityUserDescription.equals("") ? SecurityUserName : SecurityUserDescription);
 	String context = request.getContextPath();
-%>
-<html>
+%><html>
 	<head>
 		<title>ibx text editor sample</title>
 		<meta http-equiv="X-UA-Compatible" content="IE=EDGE" >

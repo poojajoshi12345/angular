@@ -1,10 +1,10 @@
 <%-- Copyright 1996-2016 Information Builders, Inc. All rights reserved.
 --%><%-- $Revision$
 --%><%@ page pageEncoding="UTF-8"
-%><%@ page import="org.apache.commons.lang.StringEscapeUtils"
-%><%@ page import="com.ibi.ibt.WFLicense"
-%><%@ page import="com.ibi.ibfs.languages.IBFSLanguageObject"
-%><%@ page import="com.ibi.web.bean.WFDetectBrowserBean"
+%><%@ page import="com.ibi.util.StringEscapeUtils,
+					com.ibi.ibt.WFLicense,
+					com.ibi.ibfs.languages.IBFSLanguageObject,
+					com.ibi.web.bean.WFDetectBrowserBean"
 %><%@ taglib uri="localizedstring" prefix="localizedstring"
 %><%@ taglib prefix="spring" uri="http://www.springframework.org/tags"
 %><jsp:useBean id="browser" class="com.ibi.web.bean.WFDetectBrowserBean" scope="request"

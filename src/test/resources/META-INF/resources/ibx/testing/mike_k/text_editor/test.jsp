@@ -11,9 +11,9 @@ id="resourceBean" class="com.ibi.web.res.ResourceBundleBean" scope="request"><js
 name="resourceBean" property="request" value="<%= request %>" /></jsp:useBean><jsp:useBean 
 id="wfLanguage" class="com.ibi.web.bean.WFLanguageBean" scope="request"><jsp:setProperty 
 name="wfLanguage" property="inLang" value="<%=browser.getSelLanguage()%>"/></jsp:useBean><%@ 
-page import="org.owasp.esapi.*" 
-%><%@ page import="org.apache.commons.lang.StringEscapeUtils"
-%><%@ page import="com.ibi.webapp.security.util.WFSecurityUtils"
+page import="org.owasp.esapi.*,  
+			com.ibi.util.StringEscapeUtils,
+			com.ibi.webapp.security.util.WFSecurityUtils"
 %><%
 	browser.setClearCache();
 	String applicationContext = ESAPI.encoder().encodeForHTMLAttribute(request.getContextPath() );
