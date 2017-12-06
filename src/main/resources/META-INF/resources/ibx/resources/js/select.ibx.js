@@ -17,7 +17,6 @@ $.widget("ibi.ibxSelect", $.ibi.ibxTextField,
 			"spellCheck": "false",
 			"listClasses": "",
 			"filter": false,
-			"align": "start",
 		},
 	_widgetClass: "ibx-select",
 	_create: function ()
