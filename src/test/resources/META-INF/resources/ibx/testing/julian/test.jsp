@@ -22,8 +22,14 @@
 			
 			ibx(function()
 			{
-				Ibfs.load();
-				Ibfs.ibfs.setExOptions({async:false, asJSON:true, asJSONShallow:true});
+				Ibfs.load().done(function(ibfs)
+				{
+					ibfs.setExOptions({async:false, asJSON:true, asJSONShallow:false});
+					ibfs.login("admin", "admin").done(function(exInfo)
+					{
+						console.log("IBFS is logged in.");
+					});
+				});
 
 				ibxEventManager.noIOSBodyScroll = false;
 
