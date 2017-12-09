@@ -24,7 +24,6 @@
 			{
 				Ibfs.load().done(function(ibfs)
 				{
-					ibfs.setExOptions({async:false, asJSON:true, asJSONShallow:false});
 					ibfs.login("admin", "admin").done(function(exInfo)
 					{
 						console.log("IBFS is logged in.");
@@ -39,25 +38,26 @@
 						console.clear();
 				});
 
-				$(".test-ibx-select").on("ibx_textchanged", function(e, txtInput, str)
+				$(".index-search-select").on("ibx_textchanged", function(e, txtInput, str)
 				{
-					var regx = new RegExp(sformat("^{1}", str), "i");
-					var select = $(this).data("ibxWidget");
-					var dir = "IBFS:/WFC/Repository/Public/repros/";
-					var selItems = [];
-					var items = Ibfs.ibfs.listItems(dir, {async:false, asJSON:true}).result;
-					for(var i = 0; i < items.length; ++i)
+					var byGroups = $(".index-search-by-group").ibxWidget("checked");
+					Ibfs.ibfs.searchDimensionalIndex(str + "*", byGroups, false, false, {dataType:"json"}).done(function(exInfo)
 					{
-						var item = items[i];
-						if(regx.test(item.name))
+						var select = $(".index-search-select").data("ibxWidget");
+						var items = exInfo.result.results;
+						var selItems = [];
+						$.each(items, function(selItems, idx, item)
 						{
-							var selItem = $("<div>").ibxSelectItem({labelOptions:{text:item.name}});
-							selItems.push(selItem[0]);
-						}
-					}
+							if(item.type == "Gen" || idx > 10)
+								return;
 
-					select.children().remove();
-					select.add(selItems, null, null, true);
+							var selItem = $(sformat("<div{1}</div>", item.Display)).ibxSelectItem();
+							selItem.data("idxSearchInfo", item);
+							selItems.push(selItem[0]);
+						}.bind(this, selItems));
+						select.children().remove();
+						select.add(selItems, null, null, true);
+					});
 				});
 			}, [{src:"./test_res_bundle.xml", loadContext:"app"}], true);
 		</script>
@@ -70,10 +70,27 @@
 				right:0px;
 				bottom:0px;
 				overflow:auto;
-				background-color:thistle;
+				background-color:white;
 			}
+			.ibx-logo
+			{
+				font-size:64pt;
+				font-weight:bold;
+				margin-bottom:10px;
+				color:thistle;
+				text-shadow:3px 3px 5px #ccc;
+			}
+			.ibx-logo-i{}
+			.ibx-logo-b{}
+			.ibx-logo-x{}
 
-			.test-ibx-test-select-popup
+			.index-search-select
+			{
+				flex:0 0 auto;
+				width:350px;
+				margin-bottom:5px;
+			}
+			.index-search-select-popup
 			{
 				max-height:200px;
 				overflow:auto;
@@ -82,8 +99,9 @@
 	</head>
 	<body class="ibx-root">
 		<div tabIndex="0" id="mainBox" class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="center" data-ibxp-justify="center" data-ibx-name-root="true">
-			<div class="test-label" data-ibx-type="ibxLabel" data-ibxp-text="123456789012345678901234567890123456789012345678"></div>
-            <div tabIndex="1" data-ibx-type="ibxComboBox" class="test-ibx-select" data-ibxp-text-overflow="ellipsis" data-ibxp-list-classes="ibx-test-select-popup"></div>
+			<div class="ibx-logo" data-ibx-type="ibxLabel"><span class="ibx-logo-i">i</span><span class="ibx-logo-b">b</span><span class="ibx-logo-x">x</span></div>
+			<div tabIndex="1" class="index-search-select" data-ibx-type="ibxComboBox"  data-ibxp-text-overflow="ellipsis" data-ibxp-list-classes="index-search-select-popup"></div>
+			<div tabIndex="1" class="index-search-by-group" data-ibx-type="ibxCheckBoxSimple" data-ibxp-checked="true">Organize By Groups</div>
 		</div>
 	</body>
 </html>
