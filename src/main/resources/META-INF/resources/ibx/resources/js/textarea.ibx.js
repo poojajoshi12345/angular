@@ -63,6 +63,13 @@ $.widget("ibi.ibxTextArea", $.ibi.ibxFlexBox,
 		this._trigger("change", null, [this.element, this.options.text]);
 		this._trigger("set_form_value", null, { "elem": this.element, "value": this.options.text });
 	},
+	value:function(val)
+	{
+		if(!val)
+			return this.options.text;
+		else
+			this._setValue(val, bFormat);
+	},
 	selectAll: function ()
 	{
 		this._textArea.select();
