@@ -156,10 +156,12 @@ $.widget("ibi.ibxTextArea", $.ibi.ibxFlexBox,
 			this._textArea.attr("required");
 		else
 			this._textArea.removeAttr("required");
+
 		if (this.options.textWrap)
 			this._textArea.attr("wrap", this.options.textWrap);
 		else
-			this._textArea.removeAttr("wrap");
+			this._textArea.attr("wrap", "off");
+		
 		if (this.options.textAlign)
 			this._textArea.css("text-align", this.options.textAlign);
 		else
