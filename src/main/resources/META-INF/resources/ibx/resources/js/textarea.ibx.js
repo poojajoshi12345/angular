@@ -65,7 +65,7 @@ $.widget("ibi.ibxTextArea", $.ibi.ibxFlexBox,
 	},
 	value:function(val, bFormat)
 	{
-		if(!val)
+		if(val === undefined)
 			return this.options.text;
 		else
 			this._setValue(val, bFormat);
