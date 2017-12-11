@@ -40,8 +40,7 @@
 
 				$(".index-search-select").on("ibx_textchanged", function(e, txtInput, str)
 				{
-					var byGroups = $(".index-search-by-group").ibxWidget("checked");
-					Ibfs.ibfs.searchDimensionalIndex(str + "*", byGroups, false, false, {dataType:"json"}).done(function(exInfo)
+					Ibfs.ibfs.searchDimensionalIndex(str + "*", false, false, {dataType:"json"}).done(function(exInfo)
 					{
 						var select = $(".index-search-select").data("ibxWidget");
 						var items = exInfo.result.results;
@@ -101,7 +100,6 @@
 		<div tabIndex="0" id="mainBox" class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="center" data-ibxp-justify="center" data-ibx-name-root="true">
 			<div class="ibx-logo" data-ibx-type="ibxLabel"><span class="ibx-logo-i">i</span><span class="ibx-logo-b">b</span><span class="ibx-logo-x">x</span></div>
 			<div tabIndex="1" class="index-search-select" data-ibx-type="ibxComboBox"  data-ibxp-text-overflow="ellipsis" data-ibxp-list-classes="index-search-select-popup"></div>
-			<div tabIndex="1" class="index-search-by-group" data-ibx-type="ibxCheckBoxSimple" data-ibxp-checked="true">Organize By Groups</div>
 		</div>
 	</body>
 </html>
