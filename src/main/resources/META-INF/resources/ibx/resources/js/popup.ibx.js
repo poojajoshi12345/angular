@@ -70,16 +70,19 @@ $.widget("ibi.ibxPopup", $.ibi.ibxWidget,
 			{
 				if(e.originalEvent.propertyName == "visibility" && this.isOpen())
 				{
-					this.element.off("transitionend");
-					this.element.focus();
-
+					this.element.off("transitionend");//no longer interested in transition events.
 					if(this.options.autoFocus)
 					{
+						//focus the popup first.				
+						this.element.focus();
+
 						//focus default item...otherwise find first focusable item (ARIA needs SOMETHING to be focused on the popup)
 						var defItem = this.element.find(".ibx-default-focused");
 						defItem = defItem.length ? defItem : this.element.find(":ibxFocusable").first();
 						defItem.focus();
 					}
+
+					//let people know we are fully open
 					this._trigger("open");
 
 					//auto close the dialog after the specified time.
