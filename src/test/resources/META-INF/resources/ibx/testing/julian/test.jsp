@@ -40,14 +40,14 @@
 
 				$(".index-search-select").on("ibx_textchanged", function(e, txtInput, str)
 				{
-					Ibfs.ibfs.searchDimensionalIndex(str + "*", false, false, {dataType:"json"}).done(function(exInfo)
+					Ibfs.ibfs.searchDimensionalIndex(str + "*", {dataType:"json"}).done(function(exInfo)
 					{
 						var select = $(".index-search-select").data("ibxWidget");
 						var items = exInfo.result.results;
 						var selItems = [];
 						$.each(items, function(selItems, idx, item)
 						{
-							if(item.type == "Gen" || idx > 10)
+							if(idx > 10)
 								return;
 
 							var selItem = $(sformat("<div{1}</div>", item.Display)).ibxSelectItem();
@@ -56,6 +56,18 @@
 						}.bind(this, selItems));
 						select.children().remove();
 						select.add(selItems, null, null, true);
+					});
+				}).on("ibx_change", function(e, eData)
+				{
+					var idxInfo = eData.item.data("idxSearchInfo");
+					var query = idxInfo.DimensionFieldName + ":" + idxInfo.DimensionFieldValue;
+					Ibfs.ibfs.searchDimensionalIndex(query, {dataType:"json"}).done(function(exInfo)
+					{
+						console.dir(exInfo.result);
+					});
+					Ibfs.ibfs.searchDimensionalInformation(query, {asJSON:true}).done(function(exInfo)
+					{
+						console.dir(exInfo.result);
 					});
 				});
 			}, [{src:"./test_res_bundle.xml", loadContext:"app"}], true);
