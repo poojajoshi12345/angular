@@ -40,7 +40,7 @@
 
 				$(".index-search-select").on("ibx_textchanged", function(e, txtInput, str)
 				{
-					Ibfs.ibfs.searchDimensionalIndex(str + "*", {dataType:"json"}).done(function(exInfo)
+					Ibfs.ibfs.searchDimensionalIndex(str + "*", {asJSON:true}).done(function(exInfo)
 					{
 						var select = $(".index-search-select").data("ibxWidget");
 						var items = exInfo.result.results;
@@ -57,17 +57,35 @@
 						select.children().remove();
 						select.add(selItems, null, null, true);
 					});
-				}).on("ibx_change", function(e, eData)
+				}).on("ibx_change", function(e, eData, text)
 				{
-					var idxInfo = eData.item.data("idxSearchInfo");
-					var query = idxInfo.DimensionFieldName + ":" + idxInfo.DimensionFieldValue;
-					Ibfs.ibfs.searchDimensionalIndex(query, {dataType:"json"}).done(function(exInfo)
+					var query = text + "*";
+					if(!(eData instanceof jQuery))
 					{
-						console.dir(exInfo.result);
-					});
+						idxInfo = eData.item.data;
+						var idxInfo = eData.item.data("idxSearchInfo");
+						query = idxInfo.DimensionFieldName + ":" + idxInfo.DimensionFieldValue;
+					}
+
 					Ibfs.ibfs.searchDimensionalInformation(query, {asJSON:true}).done(function(exInfo)
 					{
-						console.dir(exInfo.result);
+						var queryResults = $(".query-results");
+						var items = exInfo.result;
+						for(var i = 0; i < items.length; ++i)
+						{
+							var item = items[i];
+							var tile = $("<div class='res-tile'></div>").text(item.name);
+							if(item.thumbPath)
+								tile.css("background-image", sformat("url(\"{1}\")", item.thumbPath));
+
+							tile.data("idxResInfo", item).on("click", function(e)
+							{
+								var item = $(this);
+								var info = item.data("idxResInfo");
+								console.log(info);
+							});
+							queryResults.append(tile);
+						}
 					});
 				});
 			}, [{src:"./test_res_bundle.xml", loadContext:"app"}], true);
@@ -106,12 +124,37 @@
 				max-height:200px;
 				overflow:auto;
 			}
+
+			.query-results
+			{
+				flex:1 1 auto;
+				align-self:stretch;
+				overflow:auto;
+				margin:10px;
+				border:1px solid #ccc;
+				border-radius:.25em;
+			}
+
+			.res-tile
+			{
+				width:150px;
+				height:150px;
+				margin:5px;
+				border:1px solid #aaa;
+				word-wrap:break-word;
+				font-weight:bold;
+				background-repeat:no-repeat;
+				background-size:100%;
+				background-position:center;
+			}
 		</style>
 	</head>
 	<body class="ibx-root">
 		<div tabIndex="0" id="mainBox" class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="center" data-ibxp-justify="center" data-ibx-name-root="true">
 			<div class="ibx-logo" data-ibx-type="ibxLabel"><span class="ibx-logo-i">i</span><span class="ibx-logo-b">b</span><span class="ibx-logo-x">x</span></div>
-			<div tabIndex="1" class="index-search-select" data-ibx-type="ibxComboBox"  data-ibxp-text-overflow="ellipsis" data-ibxp-list-classes="index-search-select-popup"></div>
+			<div tabIndex="0" class="index-search-select" data-ibx-type="ibxComboBox"  data-ibxp-text-overflow="ellipsis" data-ibxp-list-classes="index-search-select-popup"></div>
+			<div tabIndex="0" class="query-results" data-ibx-type="ibxHBox" data-ibxp-wrap="true">
+			</div>
 		</div>
 	</body>
 </html>
