@@ -93,7 +93,7 @@ $.widget("ibi.ibxSelect", $.ibi.ibxTextField,
 	{
 		if (this._isDropDown())
 		{
-			this._list = $("<div>").ibxMenu({"navKeyAutoFocus": !this._isEditable(), "position": { my: "left top", at: "left bottom+1px", of: this.element }, "autoFocus": !this._isEditable()});
+			this._list = $("<div>").ibxMenu({"navKeyRoot":false, "position": { my: "left top", at: "left bottom+1px", of: this.element }, "autoFocus": !this._isEditable() });
 			this._listWidget = this._list.data("ibxWidget");
 			this._list.css('min-width', this.element.outerWidth() + "px");
 		}
