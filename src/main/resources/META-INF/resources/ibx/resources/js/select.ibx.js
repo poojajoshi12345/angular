@@ -42,7 +42,6 @@ $.widget("ibi.ibxSelect", $.ibi.ibxTextField,
 		else
 		{
 			this.element.on("ibx_textchanged", this._onTextChanged.bind(this));
-			this._textInput.on("keydown", this._onTextKeyDown.bind(this));
 			if (this._isDropDown())
 				this._textInput.on('click', this._onTextClick.bind(this));
 		}
@@ -94,7 +93,7 @@ $.widget("ibi.ibxSelect", $.ibi.ibxTextField,
 	{
 		if (this._isDropDown())
 		{
-			this._list = $("<div>").ibxMenu({"navKeyRoot":false, "position": { my: "left top", at: "left bottom+1px", of: this.element }, "autoFocus": !this._isEditable() });
+			this._list = $("<div>").ibxMenu({"navKeyAutoFocus": !this._isEditable(), "position": { my: "left top", at: "left bottom+1px", of: this.element }, "autoFocus": !this._isEditable()});
 			this._listWidget = this._list.data("ibxWidget");
 			this._list.css('min-width', this.element.outerWidth() + "px");
 		}
@@ -205,7 +204,7 @@ $.widget("ibi.ibxSelect", $.ibi.ibxTextField,
 		else
 		{
 			this._resetHighlight();
-			this._removeSelection(this._list.find('.ibx-select-item'), false, true, true);
+			this._removeSelection(this._list.find('.ibx-select-item'), false, true);
 
 			if (this.options.multiSelect)
 			{
@@ -276,7 +275,8 @@ $.widget("ibi.ibxSelect", $.ibi.ibxTextField,
 	{
 		this._textInput.focus();
 	},
-	_onTextKeyDown: function (e)
+	// Override text
+	_onTextInputKeyDown: function (e)
 	{
 		if (e.keyCode == 40) // open dropdown on down arrow
 		{
@@ -335,6 +335,7 @@ $.widget("ibi.ibxSelect", $.ibi.ibxTextField,
 			}
 		}
 		e.stopPropagation();
+		this._super(e);
 	},
 	_onTextInputBlur: function (event)
 	{
@@ -443,9 +444,9 @@ $.widget("ibi.ibxSelect", $.ibi.ibxTextField,
 		}
 		anchor.focus();
 	},
-	_removeSelection: function (menuItem, bKeepAnchor, bNoUpdate, bNoChange)
+	_removeSelection: function (menuItem, bKeepAnchor, bNoUpdate)
 	{
-		if (!this._trigger('beforechange', null, this.element))
+		if (!this._trigger('beforechange', null, [this.element]))
 			return;
 
 		var menuItem = $(menuItem);
@@ -460,10 +461,8 @@ $.widget("ibi.ibxSelect", $.ibi.ibxTextField,
 			menuItem.addClass('sel-anchor');
 		}
 		if (!bNoUpdate)
-			this._updateText();
-		if (!bNoChange)
 		{
-			this._trigger("change", null, { "item": menuItem });
+			this._setValue(this._getText(), true);
 			this._trigger("set_form_value", null, { "elem": this.element, "value": this._getUserValue() });
 		}
 	},
@@ -476,18 +475,18 @@ $.widget("ibi.ibxSelect", $.ibi.ibxTextField,
 		else
 			items = this._list.find('.ibx-select-item').first();
 
-		this._setSelection(items, false, false, false, false);
+		this._setSelection(items, false, false, false);
 	},
 	removeSelection: function ()
 	{
 		this._resetHighlight();
-		this._removeSelection(this._list.find('.ibx-select-item'), false, false, false);
+		this._removeSelection(this._list.find('.ibx-select-item'), false, false);
 		this.options.userValue = '';
 	},
 	selectItems: function (elems)
 	{
 		this._resetHighlight();
-		this._removeSelection(this._list.find('.ibx-select-item'), false, true, true);
+		this._removeSelection(this._list.find('.ibx-select-item'), false, true);
 
 		if (this.options.multiSelect)
 		{
@@ -509,9 +508,9 @@ $.widget("ibi.ibxSelect", $.ibi.ibxTextField,
 		this.options.userValue = $(el).ibxWidget('userValue');
 		this._setSelection(el, false);
 	},
-	_setSelection: function (menuItem, bKeep, bKeepAnchor, bNoUpdate, bNoChange)
+	_setSelection: function (menuItem, bKeep, bKeepAnchor, bNoUpdate)
 	{
-		if (!this._trigger('beforechange', null, this.element))
+		if (!this._trigger('beforechange', null, [this.element]))
 			return;
 		
 		var menuItem = $(menuItem);
@@ -522,7 +521,7 @@ $.widget("ibi.ibxSelect", $.ibi.ibxTextField,
 		{
 			if (!bKeep && menuItem.hasClass('sel-selected'))
 			{
-				this._removeSelection(menuItem, bKeepAnchor, bNoUpdate, bNoChange);
+				this._removeSelection(menuItem, bKeepAnchor, bNoUpdate);
 				return;
 			}
 			bKeep = true;
@@ -543,10 +542,8 @@ $.widget("ibi.ibxSelect", $.ibi.ibxTextField,
 		}
 		this._list.find('.sel-selected.ibx-select-check-item').each(function (index, el) { $(el).data('ibxWidget').option('checked', true); })
 		if (!bNoUpdate)
-			this._updateText();
-		if (!bNoChange)
 		{
-			this._trigger("change", null, {"item": menuItem});
+			this._setValue(this._getText(), true);
 			this._trigger("set_form_value", null, { "elem": this.element, "value": this._getUserValue() });
 		}
 	},
@@ -650,7 +647,7 @@ $.widget("ibi.ibxSelect", $.ibi.ibxTextField,
 				if (this._fnMatch ? (this._fnMatch(searchText, itemText)) : (0 == itemText.toLowerCase().indexOf(searchText.toLowerCase())))
 				{
 					if (!bFound)
-						this._setSelection(el, false, false, true, true);
+						this._setSelection(el, false, false, true);
 					bFound = true;
 					if (!this._applyFilter())
 						return false;
@@ -681,7 +678,7 @@ $.widget("ibi.ibxSelect", $.ibi.ibxTextField,
 
 		if (!bFound)
 		{
-			this._setSelection(null, false, false, true, true);
+			this._setSelection(null, false, false, true);
 		}
 
 	},
@@ -884,18 +881,22 @@ $.ibi.ibxSelectItem.statics =
 			if (e.keyCode == 38)//up
 			{
 				var prev = this.element.prevAll('.ibx-select-item:ibxFocusable').first();
-				if (prev)
+				if (prev.length == 0)
+					prev = this.element.nextAll('.ibx-select-item:ibxFocusable').last();
+				if (prev.length > 0)
 				{
-					prev.focus();
+					//prev.focus();
 					prev.trigger(event, prev);
 				}
 			}
 			else //down
 			{
 				var next = this.element.nextAll('.ibx-select-item:ibxFocusable').first();
-				if (next)
+				if (next.length == 0)
+					next = this.element.prevAll('.ibx-select-item:ibxFocusable').last();
+				if (next.length > 0)
 				{
-					next.focus();
+					//next.focus();
 					next.trigger(event, next);
 				}
 			}
