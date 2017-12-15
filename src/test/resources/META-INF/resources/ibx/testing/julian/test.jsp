@@ -50,7 +50,7 @@
 				box-sizing:border-box;
 			}
 
-			.overlay-box
+			.overlay-box.ibx-flexbox
 			{
 				position:absolute;
 				left:0px;
@@ -58,6 +58,7 @@
 				right:0px;
 				bottom:0px;
 				z-index:100;
+				pointer-events:none;
 			}
 
 			.test-overlay
@@ -68,6 +69,7 @@
 				border:1px solid black;
 				background-color:thistle;
 				box-sizing:border-box;
+				pointer-events:all;
 			}
 	
 			.test-carousel
@@ -92,7 +94,7 @@
 			<div tabindex="0" class="test-overlay" data-ibx-type="ibxLabel"></div>
 		</div>
 		<div class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="center" data-ibxp-justify="center">
-			<div tabindex="0" class="test-carousel" data-ibx-type="ibxCarousel"></div>
+			<div tabindex="0" class="test-carousel" data-ibx-type="ibxHCarousel"></div>
 		</div>
 	</body>
 </html>
