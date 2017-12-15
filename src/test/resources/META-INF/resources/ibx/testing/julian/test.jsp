@@ -22,7 +22,9 @@
 			
 			ibx(function()
 			{
-				$(".test-overlay").text(ibx.resourceMgr.getString("IBX_STR_SAMPLE"));
+				//ibxEventManager.noIOSBodyScroll = true;
+				$(".test-popup-inner-text").text(ibx.resourceMgr.getString("IBX_STR_SAMPLE"));
+				$(".test-popup").ibxWidget("open");
 
 				var csl = $(".test-carousel");
 				for(var i = 0; i < 25; ++i)
@@ -50,26 +52,21 @@
 				box-sizing:border-box;
 			}
 
-			.overlay-box.ibx-flexbox
+			.test-popup-inner-box
 			{
-				position:absolute;
-				left:0px;
-				top:0px;
-				right:0px;
-				bottom:0px;
-				z-index:100;
-				pointer-events:none;
+				width:400px;
+				height:175px;
+				border:2px solid red;
+				pointer-events:all;
 			}
 
-			.test-overlay
+			.test-popup-inner-text
 			{
-				width:50%;
-				height:175px;
-				white-space:nowrap;
-				border:1px solid black;
-				background-color:thistle;
 				box-sizing:border-box;
-				pointer-events:all;
+				white-space:nowrap;
+				border:2px solid green;
+				margin:10px;
+				overflow:auto;
 			}
 	
 			.test-carousel
@@ -90,11 +87,14 @@
 		</style>
 	</head>
 	<body class="ibx-root">
-		<div class="overlay-box" data-ibx-type="ibxVBox" data-ibxp-align="center" data-ibxp-justify="center">
-			<div tabindex="0" class="test-overlay" data-ibx-type="ibxLabel"></div>
-		</div>
 		<div class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="center" data-ibxp-justify="center">
 			<div tabindex="0" class="test-carousel" data-ibx-type="ibxHCarousel"></div>
+		</div>
+
+		<div class="test-popup" data-ibx-type="ibxPopup" data-ibxp-auto-close="false">
+			<div class="test-popup-inner-box" data-ibx-type="ibxVBox" data-ibxp-align="stretch" data-ibxp-justify="center">
+				<div tabindex="0" class="test-popup-inner-text" data-ibx-type="ibxLabel"></div>
+			</div>
 		</div>
 	</body>
 </html>
