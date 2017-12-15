@@ -97,7 +97,7 @@
 			<div tabindex="0" class="test-carousel" data-ibx-type="ibxHCarousel"></div>
 		</div>
 
-		<div class="test-popup" data-ibx-type="ibxPopup" data-ibxp-auto-close="false">
+		<div class="test-popup" data-ibx-type="ibxPopup" data-ibxp-auto-close="false" data-ibxp-destroy-on-close="false">
 			<div class="test-popup-inner-box" data-ibx-type="ibxVBox" data-ibxp-align="stretch" data-ibxp-justify="center">
 				<div tabindex="0" class="test-popup-inner-text" data-ibx-type="ibxLabel"></div>
 			</div>
