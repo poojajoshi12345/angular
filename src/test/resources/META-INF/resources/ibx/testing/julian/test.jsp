@@ -52,20 +52,26 @@
 				box-sizing:border-box;
 			}
 
+			.test-popup
+			{
+				border:1px solid #aaa;
+				box-shadow:0px 0px 15px 0px #999;
+			}
+			
 			.test-popup-inner-box
 			{
 				width:400px;
 				height:175px;
-				border:2px solid red;
-				pointer-events:all;
+				border-radius:.5em;
 			}
 
 			.test-popup-inner-text
 			{
 				box-sizing:border-box;
 				white-space:nowrap;
-				border:2px solid green;
+				border:2px solid #ccc;
 				margin:10px;
+				padding:5px;
 				overflow:auto;
 			}
 	
@@ -74,7 +80,7 @@
 				max-width:75%;
 				border:1px solid #aaa;
 				border-radius:.5em;
-				box-shadow:5px 5px 5px 0px #aaa;
+				box-shadow:0px 0px 15px 0px #999;
 			}
 
 			.test-tile
