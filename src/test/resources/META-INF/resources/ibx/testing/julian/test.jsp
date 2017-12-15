@@ -50,14 +50,20 @@
 				box-sizing:border-box;
 			}
 
+			.overlay-box
+			{
+				position:absolute;
+				left:0px;
+				top:0px;
+				right:0px;
+				bottom:0px;
+				z-index:100;
+			}
+
 			.test-overlay
 			{
-				position:relative;
-				top:175px;
 				width:50%;
-				height:150px;
-				z-index:100;
-				overflow:hidden;
+				height:175px;
 				white-space:nowrap;
 				border:1px solid black;
 				background-color:thistle;
@@ -82,8 +88,10 @@
 		</style>
 	</head>
 	<body class="ibx-root">
-		<div id="mainBox" class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="center" data-ibxp-justify="center" data-ibx-name-root="true">
-			<div tabindex="0" class="test-overlay"></div>
+		<div class="overlay-box" data-ibx-type="ibxVBox" data-ibxp-align="center" data-ibxp-justify="center">
+			<div tabindex="0" class="test-overlay" data-ibx-type="ibxLabel"></div>
+		</div>
+		<div class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="center" data-ibxp-justify="center">
 			<div tabindex="0" class="test-carousel" data-ibx-type="ibxCarousel"></div>
 		</div>
 	</body>
