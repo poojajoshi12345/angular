@@ -69,12 +69,12 @@
 	visibility:hidden;
 }
 
-.ibx-h-carousel .ibx-csl-prev-btn::before
+.ibx-carousel .ibx-csl-prev-btn::before, .ibx-h-carousel .ibx-csl-prev-btn::before
 {
 	content:"\E314";
 }
 
-.ibx-h-carousel .ibx-csl-next-btn::before
+.ibx-carousel .ibx-csl-next-btn::before,.ibx-h-carousel .ibx-csl-next-btn::before
 {
 	content:"\E315";
 }
