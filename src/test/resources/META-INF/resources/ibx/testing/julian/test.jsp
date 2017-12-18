@@ -22,6 +22,15 @@
 			
 			ibx(function()
 			{
+				Ibfs.load().done(function()
+				{
+					var xml = $.get("./test.xml").done(function(xDoc, status)
+					{
+						var json = Ibfs.ibfs._ppsearchDimensionalInformation(xDoc, {asJSON:true, ajax:{dataType:"xml"}});
+						console.dir(json);
+					});
+				});
+
 				//ibxEventManager.noIOSBodyScroll = true;
 				$(".test-popup-inner-text").text(ibx.resourceMgr.getString("IBX_STR_SAMPLE"));
 				$(".test-popup").ibxWidget("open");
