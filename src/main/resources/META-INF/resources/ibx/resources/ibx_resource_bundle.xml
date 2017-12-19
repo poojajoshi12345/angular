@@ -188,7 +188,6 @@ $Revision$:-->
 
 		<!--IBX CORE-->
 		<script-file src="./js/events.ibx.js"/>
-		<script-file src="./js/ibfs.ibx.js"/>
 		<script-file src="./js/mutationobserver.ibx.js"/>
 		<script-file src="./js/widget.ibx.js"/>
 		<script-file src="./js/commands.ibx.js"/>
