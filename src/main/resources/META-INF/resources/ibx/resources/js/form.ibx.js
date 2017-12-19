@@ -11,6 +11,7 @@ $.widget("ibi.ibxForm", $.ibi.ibxWidget,
 		method:"post",
 		encType:"application/x-www-form-urlencoded; charset=utf-8",
 		acceptCharset:"",
+		encodeData:true,
 		fields:{}		
 	},
 	_widgetClass: "ibx-form",
@@ -51,16 +52,16 @@ $.widget("ibi.ibxForm", $.ibi.ibxWidget,
 		this.element.attr("enctype", options.encType);
 		this.element.attr("accept-charset", options.acceptCharset);
 		this.element.remove(".ibx-form-internal-field");
-		$.each(options.fields, function(name, value)
+		$.each(options.fields, function(options, name, value)
 		{
 			var input = $("<input class='ibx-form-internal-field'>").prop(
 			{
 				"type": "hidden",
-				"name": name,
-				"value": value
+				"name": options.encodeData ? encodeURIComponent(name) : name,
+				"value": options.encodeData ? encodeURIComponent(value) : value;
 			});
 			this.element.append(input);
-		}.bind(this));
+		}.bind(this, options));
 	}
 });
 //# sourceURL=form.ibx.js
