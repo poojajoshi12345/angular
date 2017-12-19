@@ -51,7 +51,7 @@ $.widget("ibi.ibxForm", $.ibi.ibxWidget,
 		this.element.attr("enctype", options.encType);
 		this.element.attr("accept-charset", options.acceptCharset);
 		this.element.remove(".ibx-form-internal-field");
-		$.each(options.fields, function(options, name, value)
+		$.each(options.fields, function(name, value)
 		{
 			var input = $("<input class='ibx-form-internal-field'>").prop(
 			{
@@ -60,7 +60,7 @@ $.widget("ibi.ibxForm", $.ibi.ibxWidget,
 				"value": value
 			});
 			this.element.append(input);
-		}.bind(this, options));
+		}.bind(this));
 	}
 });
 //# sourceURL=form.ibx.js
