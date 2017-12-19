@@ -11,7 +11,6 @@ $.widget("ibi.ibxForm", $.ibi.ibxWidget,
 		method:"post",
 		encType:"application/x-www-form-urlencoded; charset=utf-8",
 		acceptCharset:"",
-		encodeData:true,
 		fields:{}		
 	},
 	_widgetClass: "ibx-form",
@@ -57,8 +56,8 @@ $.widget("ibi.ibxForm", $.ibi.ibxWidget,
 			var input = $("<input class='ibx-form-internal-field'>").prop(
 			{
 				"type": "hidden",
-				"name": options.encodeData ? encodeURIComponent(name) : name,
-				"value": options.encodeData ? encodeURIComponent(value) : value
+				"name": name,
+				"value": value
 			});
 			this.element.append(input);
 		}.bind(this, options));
