@@ -84,10 +84,22 @@ $.widget("ibi.ibxSelect", $.ibi.ibxTextField,
 					this._setSelection(el, true);
 			}
 		}.bind(this, sibling, before, refresh));
+		this._toogleEmptyPopup();
 	},
 	remove: function (el, destroy, refresh)
 	{
 		this._listWidget.remove(el, destroy, refresh);
+		this._toogleEmptyPopup();
+	},
+	_toogleEmptyPopup: function ()
+	{
+		if (this._isDropDown())
+		{
+			if (0 == this._listWidget.element.find(".ibx-select-group, .ibx-select-item").length)
+				this._list.hide();
+			else
+				this._list.show();
+		}
 	},
 	_createPopup: function ()
 	{
@@ -625,7 +637,7 @@ $.widget("ibi.ibxSelect", $.ibi.ibxTextField,
 			else
 				$(el).hide();
 		}.bind(this));
-},
+	},
 	_resetHighlight: function ()
 	{
 		if (this._externalFilter)
