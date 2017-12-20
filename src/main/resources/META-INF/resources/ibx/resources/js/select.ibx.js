@@ -96,9 +96,9 @@ $.widget("ibi.ibxSelect", $.ibi.ibxTextField,
 		if (this._isDropDown())
 		{
 			if (0 == this._listWidget.element.find(".ibx-select-group, .ibx-select-item").length)
-				this._list.hide();
+				this._list.css('visibility', 'hidden');
 			else
-				this._list.show();
+				this._list.css('visibility', 'visible');
 		}
 	},
 	_createPopup: function ()
