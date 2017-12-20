@@ -174,12 +174,12 @@ $.widget("ibi.ibxCheckBox", $.ibi.ibxLabel,
 		var changed = this.options[key] != value;
 		if(key == "checked" && changed)
 		{
-			if (!this._trigger('beforechange', null, this.element))
+			if (!this._trigger("beforechange"))
 				return;
 			this._super(key, value);
 			this.element.toggleClass("checked", value);
 			this._trigger("set_form_value", null, { "elem": this.element, "value": value ? this.options.userValue : "" });
-			this._trigger("change", null, this.element);
+			this._trigger("change");
 			this.doCommandAction($.ibi.ibxCommand.CHECK, value);
 		}
 		else
@@ -475,13 +475,6 @@ $.widget("ibi.ibxButtonGroup", $.ibi.ibxFlexBox,
 	{
 		this._trigger("change", null, data);
 	},	
-	/*
-	_onSelectedBound: null,
-	_onSelected: function (e)
-	{
-		this._trigger("selected", null, this.element);
-	},
-	*/
 	selectNext: function ()
 	{
 		if (this._group)

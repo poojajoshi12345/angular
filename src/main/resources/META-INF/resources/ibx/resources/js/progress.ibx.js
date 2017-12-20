@@ -67,7 +67,7 @@ $.widget("ibi.ibxProgressBar", $.ibi.ibxHBox,
 		this._super();
 		var options = this.options;
 
-		this._trigger("format_value", this.element, options.curVal);
+		this._trigger("format_value", null, options.curVal);
 		this.progText.text(options.showProgText ? (options.progText || options.curVal) : "");
 
 		var flex = (options.curVal - options.minVal)/(options.maxVal - options.minVal);

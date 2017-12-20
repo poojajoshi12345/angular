@@ -52,7 +52,7 @@ $.widget("ibi.ibxCollapsible", $.Widget,
 	},
 	open: function ()
 	{
-		if (!this.isOpen() && !this.options.disabled && this._trigger("beforeopen", null, this.element))
+		if (!this.isOpen() && !this.options.disabled && this._trigger("beforeopen"))
 		{
 			//remove the initializing class that stops transitions. Could be done just first time, but really doesn't matter to do it every time
 			this.element.removeClass("ibx-collapsible-initializing")
@@ -64,7 +64,7 @@ $.widget("ibi.ibxCollapsible", $.Widget,
 	},
 	close: function ()
 	{
-		if (this.isOpen() && !this.options.disabled && this._trigger("beforeclose", null, this.element))
+		if (this.isOpen() && !this.options.disabled && this._trigger("beforeclose"))
 		{
 			this._isOpen = false;
 			this.refresh();
@@ -92,12 +92,12 @@ $.widget("ibi.ibxCollapsible", $.Widget,
 		if (this.isOpen())
 		{
 			$(window).on("click", this._boundWindowMouseEvent);
-			this._trigger("open", null, this.element);
+			this._trigger("open");
 		}
 		else
 		{
 			$(window).off("click", this._boundWindowMouseEvent);
-			this._trigger("close", null, this.element);
+			this._trigger("close");
 		}
 	},
 	refresh: function ()
