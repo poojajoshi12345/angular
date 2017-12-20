@@ -31,7 +31,7 @@
 					});
 				});
 
-				//ibxEventManager.noIOSBodyScroll = true;
+				ibxEventManager.noIOSBodyScroll = true;
 				$(".test-popup-inner-text").text(ibx.resourceMgr.getString("IBX_STR_SAMPLE"));
 				$(".test-popup").ibxWidget("open");
 

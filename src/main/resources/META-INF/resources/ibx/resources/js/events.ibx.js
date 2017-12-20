@@ -8,7 +8,8 @@ function ibxEventManager()
 	window.addEventListener("touchmove", ibxEventManager._onTouchEvent, true)
 	window.addEventListener("contextmenu", ibxEventManager._onContextMenu);
 	window.addEventListener("keydown", ibxEventManager._onKeyDown);
-	document.body.addEventListener("touchstart", ibxEventManager._onBodyTouchEvent);
+
+	document.body.addEventListener("touchstart", ibxEventManager._onNoScrollTouchEvent);
 }
 ibxEventManager.noBrowserCtxMenu = true;
 ibxEventManager.noBackspaceNavigate = true;
@@ -176,9 +177,9 @@ ibxEventManager._onKeyDown = function(event)
 };
 
 //ios has an annoying habit of attempting to scroll the body element even when it has nothing to scroll.  This stops that!
-ibxEventManager._onBodyTouchEvent = function(e)
+ibxEventManager._onNoScrollTouchEvent = function(e)
 {
-	if(ibxPlatformCheck.isIOS && ibxEventManager.noIOSBodyScroll)
+	if(ibxPlatformCheck.isIOS && ibxEventManager.noIOSBodyScroll && e.target === document.body)
 		e.preventDefault();
 };
 
