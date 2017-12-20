@@ -101,6 +101,7 @@ $.widget("ibi.ibxSelect", $.ibi.ibxTextField,
 			{
 				this._list.show();
 				this._listWidget.element.position(this._listWidget.options.position);
+				this._listWidget.element.removeClass("ibx-popup-closing");
 			}
 		}
 	},
