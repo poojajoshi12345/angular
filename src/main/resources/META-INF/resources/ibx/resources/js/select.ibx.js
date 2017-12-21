@@ -96,12 +96,16 @@ $.widget("ibi.ibxSelect", $.ibi.ibxTextField,
 		if (this._isDropDown())
 		{
 			if (0 == this._listWidget.element.find(".ibx-select-group, .ibx-select-item").length)
-				this._list.hide();
+				this._list.css('visibility', 'hidden')
 			else
 			{
+				this._list.css('visibility', 'visible')
+				this._listWidget.element.removeClass("ibx-popup-closing");
+				/*
 				this._list.show();
 				this._listWidget.element.position(this._listWidget.options.position);
 				this._listWidget.element.removeClass("ibx-popup-closing");
+				*/
 			}
 		}
 	},
@@ -462,7 +466,7 @@ $.widget("ibi.ibxSelect", $.ibi.ibxTextField,
 	},
 	_removeSelection: function (menuItem, bKeepAnchor, bNoUpdate)
 	{
-		if (!this._trigger('beforechange', null, menuItem))
+		if (!this._trigger('beforechange', null, {"item": menuItem, "action": "remove"}))
 			return;
 
 		var menuItem = $(menuItem);
@@ -526,7 +530,7 @@ $.widget("ibi.ibxSelect", $.ibi.ibxTextField,
 	},
 	_setSelection: function (menuItem, bKeep, bKeepAnchor, bNoUpdate)
 	{
-		if (!this._trigger('beforechange', null, menuItem))
+		if (!this._trigger('beforechange', null, {"item": menuItem, "action": "remove"}))
 			return;
 		
 		var menuItem = $(menuItem);

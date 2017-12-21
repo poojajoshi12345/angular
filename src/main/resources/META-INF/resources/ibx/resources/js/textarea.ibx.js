@@ -60,7 +60,7 @@ $.widget("ibi.ibxTextArea", $.ibi.ibxFlexBox,
 	{
 		this.options.text = bFormat && this.options.fnFormat ? this.options.fnFormat(value) : value;
 		this.refresh();
-		this._trigger("change", null, this.options.text);
+		this._trigger("change", null, {"text": this.options.text});
 		this._trigger("set_form_value", null, { "elem": this.element, "value": this.options.text });
 	},
 	value:function(val, bFormat)
@@ -87,7 +87,7 @@ $.widget("ibi.ibxTextArea", $.ibi.ibxFlexBox,
 	_onTextAreaKeyDown: function (e)
 	{
 		if(-1 == $.ibi.ibxWidget.navKeys.indexOf(e.which))//not a nav
-			this._trigger("textchanging", e, this.options.text);
+			this._trigger("textchanging", e, {"text": this.options.text});
 	},
 	_onTextAreaInput: function (e)
 	{
@@ -95,7 +95,7 @@ $.widget("ibi.ibxTextArea", $.ibi.ibxFlexBox,
 		if (this.options.text != value)
 		{
 			this.options.text = value;
-			this._trigger("textchanged", e, value);
+			this._trigger("textchanged", e, {"text": value});
 		}
 	},
 	format: function (fnFormat)
