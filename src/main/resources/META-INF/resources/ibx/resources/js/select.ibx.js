@@ -84,30 +84,10 @@ $.widget("ibi.ibxSelect", $.ibi.ibxTextField,
 					this._setSelection(el, true);
 			}
 		}.bind(this, sibling, before, refresh));
-		this._toogleEmptyPopup();
 	},
 	remove: function (el, destroy, refresh)
 	{
 		this._listWidget.remove(el, destroy, refresh);
-		this._toogleEmptyPopup();
-	},
-	_toogleEmptyPopup: function ()
-	{
-		if (this._isDropDown())
-		{
-			if (0 == this._listWidget.element.find(".ibx-select-group, .ibx-select-item").length)
-				this._list.css('visibility', 'hidden')
-			else
-			{
-				this._list.css('visibility', 'visible')
-				this._listWidget.element.removeClass("ibx-popup-closing");
-				/*
-				this._list.show();
-				this._listWidget.element.position(this._listWidget.options.position);
-				this._listWidget.element.removeClass("ibx-popup-closing");
-				*/
-			}
-		}
 	},
 	_createPopup: function ()
 	{
@@ -298,9 +278,9 @@ $.widget("ibi.ibxSelect", $.ibi.ibxTextField,
 	// Override text
 	_onTextInputKeyDown: function (e)
 	{
-		if (e.keyCode == 40) // open dropdown on down arrow
+		if(e.keyCode == $.ui.keyCode.DOWN) // open dropdown on down arrow
 		{
-			if (this._isDropDown())
+			if(this._isDropDown())
 			{
 
 				if (this._listWidget.isOpen())
@@ -314,37 +294,27 @@ $.widget("ibi.ibxSelect", $.ibi.ibxTextField,
 			else
 				this._focusSelItem();
 		}
-		else if (e.keyCode == 38) // close dropdown on up arrow or enter
+		else if(e.keyCode == $.ui.keyCode.ESCAPE) // close dropdown on up arrow or enter
 		{
-			if (this._isDropDown())
-			{
-				if (this._listWidget.isOpen())
-					this._listWidget.close();
-			}
+			if(this._isDropDown() && this._listWidget.isOpen())
+				this._listWidget.close();
 		}
-		else if (e.keyCode == 13) // close dropdown on enter and update with the selection
+		else if(e.keyCode == $.ui.keyCode.ENTER) // close dropdown on enter and update with the selection
 		{
-			if (this._isDropDown())
+			if(this._isDropDown() && this._listWidget.isOpen())
 			{
-				if (this._listWidget.isOpen())
-				{
-
-					this._updateText(true);
-					this._listWidget.close();
-				}
+				this._updateText(true);
+				this._listWidget.close();
 			}
 			else
 			{
 				this._updateText(true);
 			}
 		}
-		else if (e.keyCode == 9) // close popup on tab
+		else if (e.keyCode == $.ui.keyCode.TAB) // close popup on tab
 		{
-			if (this._isDropDown())
-			{
-				if (this._listWidget.isOpen())
-					this._listWidget.close();
-			}
+			if(this._isDropDown() && this._listWidget.isOpen())
+				this._listWidget.close();
 		}
 		else if (e.keyCode != 37 && e.keyCode != 39 && !e.shiftKey && !e.ctrlKey) // open popup for everything except left/right arrows
 		{
@@ -530,7 +500,7 @@ $.widget("ibi.ibxSelect", $.ibi.ibxTextField,
 	},
 	_setSelection: function (menuItem, bKeep, bKeepAnchor, bNoUpdate)
 	{
-		if (!this._trigger('beforechange', null, {"item": menuItem, "action": "remove"}))
+		if (!this._trigger('beforechange', null, {"item": menuItem, "action": "select"}))
 			return;
 		
 		var menuItem = $(menuItem);
@@ -645,7 +615,7 @@ $.widget("ibi.ibxSelect", $.ibi.ibxTextField,
 			else
 				$(el).hide();
 		}.bind(this));
-	},
+},
 	_resetHighlight: function ()
 	{
 		if (this._externalFilter)
@@ -712,16 +682,17 @@ $.widget("ibi.ibxSelect", $.ibi.ibxTextField,
 	},
 	_openPopup: function ()
 	{
-		if (!this._dontOpen)
+		if(this._trigger("beforeopenpopup"))
 		{
-			if (!this._listWidget.isOpen())
+			if(!this._listWidget.isOpen())
 			{
 				$("body").append(this._list);
 				this._listWidget.open();
 				this._list.css('min-width', this.element.outerWidth() + "px");
 			}
 		}
-		this._dontOpen = false;
+		else
+			this._listWidget.close();
 	},
 	formatValue: function (value)
 	{
