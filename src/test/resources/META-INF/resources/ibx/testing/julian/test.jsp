@@ -39,6 +39,8 @@
 				for(var i = 0; i < 25; ++i)
 				{
 					var tile = $("<div class='test-tile'>").text("Test Tile " + i);
+					//if(i == 1)
+					//	tile.css("display", "none");
 					csl.ibxWidget("add", tile);
 				}
 			}, [{src:"./test_res_bundle.xml", loadContext:"app"}], true);
@@ -66,7 +68,7 @@
 				border:1px solid #aaa;
 				box-shadow:0px 0px 15px 0px #999;
 			}
-			
+
 			.test-popup-inner-box
 			{
 				width:400px;
@@ -92,6 +94,11 @@
 				box-shadow:0px 0px 15px 0px #999;
 			}
 
+			.test-carousel .ibx-csl-items-box
+			{
+				border:2px solid red;
+			}
+
 			.test-tile
 			{
 				width:200px;
@@ -103,10 +110,10 @@
 	</head>
 	<body class="ibx-root">
 		<div class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="center" data-ibxp-justify="center">
-			<div tabindex="0" class="test-carousel" data-ibx-type="ibxHCarousel"></div>
+			<div tabindex="0" class="test-carousel" data-ibx-type="ibxHCarousel" data-ibxp-hide-disabled-buttons="true"></div>
 		</div>
 
-		<div class="test-popup" data-ibx-type="ibxPopup" data-ibxp-auto-close="false" data-ibxp-destroy-on-close="false">
+		<div class="test-popup" data-ibx-type="ibxPopup" data-ibxp-auto-close="false" data-ibxp-destroy-on-close="false" data-ibxp-opaque="true">
 			<div class="test-popup-inner-box" data-ibx-type="ibxVBox" data-ibxp-align="stretch" data-ibxp-justify="center">
 				<div tabindex="0" class="test-popup-inner-text" data-ibx-type="ibxLabel"></div>
 			</div>
