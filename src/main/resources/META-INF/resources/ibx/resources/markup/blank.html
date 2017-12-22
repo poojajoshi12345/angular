@@ -1,5 +1,7 @@
-/*Copyright 1996-2016 Information Builders, Inc. All rights reserved.*/
-// $Revision$:
+<!--
+Copyright 1996-2016 Information Builders, Inc. All rights reserved.*/
+$Revision$:
+-->
 <!DOCTYPE html>
 <html lang="en">
 	<head>
@@ -10,19 +12,54 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 
 		<script type="text/javascript">
+		(function()
+		{
+			/**** Platform checks ****/
+			var ua = navigator.userAgent;
+			var pc = window.ibxPlatformCheck = 
+			{
+				"isEdge": ((ua.match(".*Windows NT 10.0.*") != null) && (ua.match(".*Edge*.") != null)),
+				"isIE": (ua.match(".*Trident.*") != null),
+				"isFirefox": (ua.match(".*Firefox.*") != null),
+				"isAndroid": (ua.match(".*Android.*") != null),
+				"isChrome": (ua.match(".*Chrome.*") != null),
+				"isiPad": (ua.match(".*iPad.*") != null),
+				"isiPhone": (ua.match(".*iPhone.*") != null)
+			};
+			pc.isSafari = ua.match(".*Safari.*") && !pc.isChrome;
+			pc.isIOS = pc.isiPad || pc.isiPhone;
+			pc.isMobile = pc.isiPad || pc.isiPhone || pc.isAndroid;
+		})();
+		window.addEventListener("load", function(e)
+		{
+				if(ibxPlatformCheck.isIOS)
+					document.body.className = "stop-ios-scroll-body";
+		});
 		</script>
 		<style type="text/css">
 			html, body
 			{
 				width:100%;
 				height:100%;
-				background-color:white;
 				box-sizing:border-box;
+				background-color:white;
 				margin:0px;
+				overflow:auto;
+				-webkit-overflow-scrolling:touch;
+			}
+
+			/****
+				iOS has a z-index bug in momentum-scrolling.  If the top div doesn't have overflow,
+				but the one behind does, then the one behind will scroll.  This stops that.
+			****/
+			.stop-ios-scroll-body > .stop-ios-scroll-child
+			{
+				height:100.9%;
 			}
 		</style>
 	</head>
 	<body>
+		<div class="stop-ios-scroll-child"></div>
 	</body>
 </html>
 
