@@ -128,7 +128,7 @@
 	</head>
 	<body class="ibx-root">
 		<div class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="center" data-ibxp-justify="center">
-			<div tabindex="0" class="test-carousel" data-ibx-type="ibxHCarousel" data-ibxp-hide-disabled-buttons="true"></div>
+			<div tabindex="0" class="test-carousel" data-ibx-type="ibxHCarousel" data-ibxp-scroll-type="page" data-ibxp-hide-disabled-buttons="true"></div>
 		</div>
 
 		<div class="test-popup" data-ibx-type="ibxPopup" data-ibxp-auto-close="false" data-ibxp-destroy-on-close="false" data-ibxp-opaque="true">
