@@ -179,8 +179,9 @@ ibxEventManager._onKeyDown = function(event)
 //ios has an annoying habit of attempting to scroll the body element even when it has nothing to scroll.  This stops that!
 ibxEventManager._onNoScrollTouchEvent = function(e)
 {
-	if(ibxPlatformCheck.isIOS && ibxEventManager.noIOSBodyScroll && e.target === document.body)
-		e.preventDefault();
+	//THIS IS NOT WORKING CORRECTLY YET...DO NOT UNCOMMENT!!!!
+	//if(ibxPlatformCheck.isIOS && ibxEventManager.noIOSBodyScroll && e.target === document.body)
+	//	e.preventDefault();
 };
 
 //singleton event manager object.
