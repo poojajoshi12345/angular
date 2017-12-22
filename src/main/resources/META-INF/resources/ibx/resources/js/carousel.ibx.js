@@ -80,7 +80,7 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 	},
 	navKeyChildren:function(selector)
 	{
-		var ret = $([this._prevBtn, this._nextBtn, this._itemsBox, this._pageMarkers]);
+		var ret = $([this._prevBtn[0], this._itemsBox[0], this._nextBtn[0], this._pageMarkers[0]]).filter(":ibxFocusable");
 		return ret;
 	},
 	add:function(el, sibling, before, refresh)
