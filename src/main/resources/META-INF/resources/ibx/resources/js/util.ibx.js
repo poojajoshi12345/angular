@@ -635,7 +635,7 @@ _p._onComplete = function(exInfo, xhr, status)
 	{
 		exInfo.result = (exInfo.ppFun) ? exInfo.ppFun.call(exInfo.ppCtx, res, exInfo) : res;
 		if(exInfo.public || exInfo.async)
-			$(window).trigger(WebApi.genEventType(exInfo.eSuccess, exInfo), exInfo);
+			$(window).dispatchEvent(WebApi.genEventType(exInfo.eSuccess, exInfo), exInfo);
 		exInfo.deferred.resolve(exInfo);
 	}
 	else
@@ -643,7 +643,7 @@ _p._onComplete = function(exInfo, xhr, status)
 		exInfo.deferred.reject(exInfo);
 		this._handleError(error, res, exInfo);
 	}
-	$(window).trigger(WebApi.genEventType(exInfo.ePostCall, exInfo), exInfo);
+	$(window).dispatchEvent(WebApi.genEventType(exInfo.ePostCall, exInfo), exInfo);
 };
 _p._errorCheck = function(xhr, res, exInfo)
 {
@@ -659,7 +659,7 @@ _p._errorCheck = function(xhr, res, exInfo)
 };
 _p._handleError = function(error, res, exInfo)
 {
-	if($(window).trigger(WebApi.genEventType(exInfo.eError, exInfo), exInfo) && exInfo.errorHandling)
+	if($(window).dispatchEvent(WebApi.genEventType(exInfo.eError, exInfo), exInfo) && exInfo.errorHandling)
 	{
 		var options = 
 		{

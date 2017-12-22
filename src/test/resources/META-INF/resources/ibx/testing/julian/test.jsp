@@ -22,27 +22,25 @@
 			
 			ibx(function()
 			{
+				ibxEventManager.noIOSBodyScroll = true;
 				Ibfs.load().done(function()
 				{
-					var xml = $.get("./test.xml").done(function(xDoc, status)
+					Ibfs.ibfs.login("admin", "admin").done(function(e)
 					{
-						var json = Ibfs.ibfs._ppsearchDimensionalInformation(xDoc, {asJSON:true, ajax:{dataType:"xml"}});
-						console.dir(json);
+						console.log("ibfs logged in.");
+						Ibfs.ibfs.listItems("IBFS:/WFC/Repository/Public", {asJSON:true});
 					});
 				});
 
-				ibxEventManager.noIOSBodyScroll = true;
-				$(".test-popup-inner-text").text(ibx.resourceMgr.getString("IBX_STR_SAMPLE"));
-				$(".test-popup").ibxWidget("open");
-
-				var csl = $(".test-carousel");
-				for(var i = 0; i < 25; ++i)
+				window.addEventListener("ibfs_list_items", function(e)
 				{
-					var tile = $("<div class='test-tile'>").text("Test Tile " + i);
-					//if(i == 1)
-					//	tile.css("display", "none");
-					csl.ibxWidget("add", tile);
-				}
+					var csl = $(".test-carousel");
+					console.log(e.data.result);
+				});
+
+
+				$(".test-popup-inner-text").text(ibx.resourceMgr.getString("IBX_STR_SAMPLE"));
+				//$(".test-popup").ibxWidget("open");
 			}, [{src:"./test_res_bundle.xml", loadContext:"app"}], true);
 		</script>
 		<style type="text/css">
@@ -66,6 +64,7 @@
 			.test-popup
 			{
 				border:1px solid #aaa;
+				background-color:transparent;
 				box-shadow:0px 0px 15px 0px #999;
 			}
 
@@ -92,11 +91,6 @@
 				border:1px solid #aaa;
 				border-radius:.5em;
 				box-shadow:0px 0px 15px 0px #999;
-			}
-
-			.test-carousel .ibx-csl-items-box
-			{
-				border:2px solid red;
 			}
 
 			.test-tile
