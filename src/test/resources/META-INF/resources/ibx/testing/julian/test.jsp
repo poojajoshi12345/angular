@@ -32,10 +32,23 @@
 					});
 				});
 
+
 				window.addEventListener("ibfs_list_items", function(e)
 				{
 					var csl = $(".test-carousel");
-					console.log(e.data.result);
+					csl.ibxWidget("children").remove();
+
+					var items = e.data.result;
+					for(var i = 0; i < items.length; ++i)
+					{
+						var item = items[i];
+						//if(item.container)
+						//	continue;
+
+						var qItem = $(sformat("<div class='test-tile' title='{1}'>{2}</div>", item.fullPath, item.name));
+						qItem.css("background-image", sformat('url("{1}")', item.thumbPath));
+						csl.ibxWidget("add", qItem);
+					}
 				});
 
 
@@ -95,10 +108,21 @@
 
 			.test-tile
 			{
-				width:200px;
-				height:200px;
-				border:1px solid black;
-				margin:5px;
+				width:100px;
+				height:100px;
+				display:flex;
+				align-items:flex-end;
+				justify-content:center;
+				margin:10px;
+				padding:5px;
+				background-repeat:no-repeat;
+				background-position:top;
+				background-size:80%;
+				overflow:hidden;
+			}
+			.test-tile:hover
+			{
+				background-color:#eee;
 			}
 		</style>
 	</head>
