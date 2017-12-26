@@ -43,18 +43,11 @@ $.widget("ibi.ibxTextField", $.ibi.ibxFlexBox,
 		this._textInput.on("keydown", this._onTextInputKeyDown.bind(this)).on("input", this._onTextInputInput.bind(this));
 		this._setValue(this.options.text, true);
 		this.element.append(this._textInput);
-		this.element.on(
+		this.element.on("ibx_change", function(e)
 		{
-			"focus":function(e)
-			{
-				this._textInput.focus();
-			}.bind(this),
-			"ibx_change":function(e)
-			{
-				if (this.options.autoSize)
-					this._setAutoSize();
-			}.bind(this)
-		});
+			if (this.options.autoSize)
+				this._setAutoSize();
+		}.bind(this));
 	},
 	_setAccessibility:function(accessible, aria)
 	{
