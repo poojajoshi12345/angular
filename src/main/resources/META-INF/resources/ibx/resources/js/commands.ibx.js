@@ -88,9 +88,6 @@ $.widget("ibi.ibxCommand", $.ibi.ibxWidget,
 
 		if(options.id)
 			$.ibi.ibxCommand.cmds[options.id] = this.element;
-
-		//commands don't have to be in the dom to work.
-		this.element.detach();
 	}
 });
 $.ibi.ibxCommand.cmds = {};

@@ -42,13 +42,15 @@
 					for(var i = 0; i < items.length; ++i)
 					{
 						var item = items[i];
-						//if(item.container)
-						//	continue;
-
 						var qItem = $(sformat("<div class='test-tile' title='{1}'>{2}</div>", item.fullPath, item.name));
 						qItem.css("background-image", sformat('url("{1}")', item.thumbPath));
 						csl.ibxWidget("add", qItem);
 					}
+
+					$(".cmd-files").on("ibx_triggered", function(e)
+					{
+						$(".test-carousel").focus();
+					});
 				});
 
 
@@ -127,8 +129,10 @@
 		</style>
 	</head>
 	<body class="ibx-root">
+		<div class="cmd-files" data-ibx-type="ibxCommand" data-ibxp-shortcut="CTRL+F"></div>
+		<div class="cmd-files2" data-ibx-type="ibxCommand" data-ibxp-shortcut="CTRL+F"></div>
 		<div class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="center" data-ibxp-justify="center">
-			<div tabindex="0" class="test-carousel" data-ibx-type="ibxHCarousel" data-ibxp-scroll-type="page" data-ibxp-hide-disabled-buttons="true"></div>
+			<div data-ibxp-nav-key-auto-focus="false" data-ibxp-aria="{role:'region', keyshortcuts:'Control+F', label:'IBFS Files List'}" data-ibxp-aria.label="IBFS File List" tabindex="0" class="test-carousel" data-ibx-type="ibxHCarousel" data-ibxp-scroll-type="page" data-ibxp-hide-disabled-buttons="true"></div>
 		</div>
 
 		<div class="test-popup" data-ibx-type="ibxPopup" data-ibxp-auto-close="false" data-ibxp-destroy-on-close="false" data-ibxp-opaque="true">
