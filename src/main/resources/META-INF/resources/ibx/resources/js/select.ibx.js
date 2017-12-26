@@ -18,11 +18,21 @@ $.widget("ibi.ibxSelect", $.ibi.ibxTextField,
 			"spellCheck": "false",
 			"listClasses": "",
 			"filter": false,
+
+			"aria":
+			{
+				"role":"combobox",
+				"multiline":false,
+			}
 		},
 	_widgetClass: "ibx-select",
 	_create: function ()
 	{
 		this._super();
+	},
+	_setAccessibility:function(accessible, aria)
+	{
+		return this._super(accessible, aria);
 	},
 	_init: function ()
 	{
@@ -99,7 +109,7 @@ $.widget("ibi.ibxSelect", $.ibi.ibxTextField,
 	{
 		if (this._isDropDown())
 		{
-			this._list = $("<div>").ibxMenu({"navKeyRoot":false, "position": { my: "left top", at: "left bottom+1px", of: this.element }, "autoFocus": !this._isEditable() });
+			this._list = $("<div>").ibxMenu({"navKeyRoot":true, "position": { my: "left top", at: "left bottom+1px", of: this.element }, "autoFocus": !this._isEditable() });
 			this._listWidget = this._list.data("ibxWidget");
 			this._list.css('min-width', this.element.outerWidth() + "px");
 		}

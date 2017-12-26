@@ -138,13 +138,6 @@
 	<body class="ibx-root">
 		<div class="cmd-files" data-ibx-type="ibxCommand" data-ibxp-shortcut="CTRL+F"></div>
 		<div class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="center" data-ibxp-justify="center">
-			<div class="test-select" tabindex="0" data-ibx-type="ibxSelect">
-				<div class="test-select-item" data-ibx-type="ibxSelectItem">Select Item</div>
-				<div class="test-select-item" data-ibx-type="ibxSelectItem">Select Item</div>
-				<div class="test-select-item" data-ibx-type="ibxSelectItem">Select Item</div>
-				<div class="test-select-item" data-ibx-type="ibxSelectItem">Select Item</div>
-				<div class="test-select-item" data-ibx-type="ibxSelectItem">Select Item</div>
-			</div>
 			<div class="test-button" tabindex="0" data-ibx-type="ibxButton">Test Button 1</div>
 			<div class="test-carousel" tabindex="0" data-ibx-type="ibxHCarousel" data-ibxp-scroll-type="integral" data-ibxp-hide-disabled-buttons="true" data-ibxp-nav-key-auto-focus="true" data-ibxp-show-page-markers="false" data-ibxp-float-buttons="true" data-ibxp-hide-disabled-buttons="true" data-ibxp-aria="{role:'region', keyshortcuts:'Control+F', label:'IBFS Files List'}"></div>
 			<div class="test-button" tabindex="0" data-ibx-type="ibxButton">Test Button 2</div>

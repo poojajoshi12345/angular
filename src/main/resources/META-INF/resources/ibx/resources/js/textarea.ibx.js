@@ -25,7 +25,13 @@ $.widget("ibi.ibxTextArea", $.ibi.ibxFlexBox,
 		"inline": true,
 		"wrap": false,
 		"align": "stretch",
-		},
+
+		"aria":
+		{
+			"role":"textbox",
+			"multiline":true,
+		}
+	},
 	_widgetClass: "ibx-text-area",
 	_valueOnFocus: null,
 	_create: function ()

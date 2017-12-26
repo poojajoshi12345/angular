@@ -31,6 +31,11 @@ $.widget("ibi.ibxTextField", $.ibi.ibxFlexBox,
 			"inline": true,
 			"wrap": "false",
 			"align": "center",
+
+			"aria":
+			{
+				"role":"textbox"
+			}
 		},
 	_widgetClass: "ibx-text-field",
 	_valueOnFocus: null,
@@ -52,6 +57,7 @@ $.widget("ibi.ibxTextField", $.ibi.ibxFlexBox,
 	_setAccessibility:function(accessible, aria)
 	{
 		aria = this._super(accessible, aria);
+		accessible ? this._textInput.attr("role", "textbox") : this._textInput.removeAttr("role");
 		accessible ? this._textInput.attr("aria-labelledby", aria.labelledby) : this._textInput.removeAttr("aria-labelledby");
 		return aria;
 	},
