@@ -10,6 +10,7 @@ $.widget("ibi.ibxSelect", $.ibi.ibxTextField,
 			"type": "drop-down-combo",
 			"userValue": "",
 			"multiSelect": false,
+			
 			// overrides for the base
 			"autoComplete": "off",
 			"autoCorrect": "off",
@@ -49,6 +50,11 @@ $.widget("ibi.ibxSelect", $.ibi.ibxTextField,
 		this._super();
 		this.add(this.element.children(".ibx-menu-item, .ibx-select-group"));
 		this.refresh();
+	},
+	navKeyChildren:function(selector)
+	{
+		selector = selector || ":ibxFocusable";
+		return this.element.children(selector);
 	},
 	children:function(selector)
 	{

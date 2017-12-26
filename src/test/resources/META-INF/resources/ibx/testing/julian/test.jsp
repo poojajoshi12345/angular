@@ -41,6 +41,8 @@
 					var items = e.data.result;
 					for(var i = 0; i < items.length; ++i)
 					{
+						if(i > 5)
+							continue;
 						var item = items[i];
 						var qItem = $(sformat("<div class='test-tile' title='{1}'>{2}</div>", item.fullPath, item.name));
 						qItem.css("background-image", sformat('url("{1}")', item.thumbPath));
@@ -126,19 +128,33 @@
 			{
 				background-color:#eee;
 			}
+
+			.test-button
+			{
+				margin:10px;
+			}
 		</style>
 	</head>
 	<body class="ibx-root">
 		<div class="cmd-files" data-ibx-type="ibxCommand" data-ibxp-shortcut="CTRL+F"></div>
-		<div class="cmd-files2" data-ibx-type="ibxCommand" data-ibxp-shortcut="CTRL+F"></div>
 		<div class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="center" data-ibxp-justify="center">
-			<div data-ibxp-nav-key-auto-focus="false" data-ibxp-aria="{role:'region', keyshortcuts:'Control+F', label:'IBFS Files List'}" data-ibxp-aria.label="IBFS File List" tabindex="0" class="test-carousel" data-ibx-type="ibxHCarousel" data-ibxp-scroll-type="page" data-ibxp-hide-disabled-buttons="true"></div>
+			<div class="test-select" tabindex="0" data-ibx-type="ibxSelect">
+				<div class="test-select-item" data-ibx-type="ibxSelectItem">Select Item</div>
+				<div class="test-select-item" data-ibx-type="ibxSelectItem">Select Item</div>
+				<div class="test-select-item" data-ibx-type="ibxSelectItem">Select Item</div>
+				<div class="test-select-item" data-ibx-type="ibxSelectItem">Select Item</div>
+				<div class="test-select-item" data-ibx-type="ibxSelectItem">Select Item</div>
+			</div>
+			<div class="test-button" tabindex="0" data-ibx-type="ibxButton">Test Button 1</div>
+			<div class="test-carousel" tabindex="0" data-ibx-type="ibxHCarousel" data-ibxp-scroll-type="integral" data-ibxp-hide-disabled-buttons="true" data-ibxp-nav-key-auto-focus="true" data-ibxp-show-page-markers="false" data-ibxp-float-buttons="true" data-ibxp-hide-disabled-buttons="true" data-ibxp-aria="{role:'region', keyshortcuts:'Control+F', label:'IBFS Files List'}"></div>
+			<div class="test-button" tabindex="0" data-ibx-type="ibxButton">Test Button 2</div>
 		</div>
-
 		<div class="test-popup" data-ibx-type="ibxPopup" data-ibxp-auto-close="false" data-ibxp-destroy-on-close="false" data-ibxp-opaque="true">
 			<div class="test-popup-inner-box" data-ibx-type="ibxVBox" data-ibxp-align="stretch" data-ibxp-justify="center">
 				<div tabindex="0" class="test-popup-inner-text" data-ibx-type="ibxLabel"></div>
 			</div>
 		</div>
+		<!--
+		-->
 	</body>
 </html>

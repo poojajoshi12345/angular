@@ -22,6 +22,11 @@ $.widget("ibi.ibxTextField", $.ibi.ibxFlexBox,
 			"textAlign": "",
 			"textOverflow": "",
 
+			/*nav key will autofocus the input control and manage focus of children*/
+			"navKeyRoot":true,
+			"navKeyAutoFocus":true,
+			"navKeyResetFocusOnBlur":true,
+
 			/*ibxFlexBox default options*/
 			"inline": true,
 			"wrap": "false",
@@ -149,14 +154,6 @@ $.widget("ibi.ibxTextField", $.ibi.ibxFlexBox,
 	_refresh: function ()
 	{
 		this._super();
-
-		//move the tabbing to the child.
-		var idxCur = this.element.attr("tabIndex");
-		if(idxCur >= 0)
-		{
-			this._textInput.attr("tabIndex", idxCur);
-			this.element.attr("tabIndex", -1);
-		}
 
 		this._textInput.attr("type", this.options.ctrlType);
 		if (this.options.forId)
