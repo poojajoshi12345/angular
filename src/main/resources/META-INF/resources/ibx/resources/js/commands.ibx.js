@@ -11,7 +11,8 @@ $.widget("ibi.ibxCommand", $.ibi.ibxWidget,
 	{
 		"id":null,
 		"checked":false,
-		"shortcut":null
+		"shortcut":null,
+		"userValue":null,
 	},
 	_widgetClass:"ibx-command",
 	_create:function()
@@ -32,12 +33,21 @@ $.widget("ibi.ibxCommand", $.ibi.ibxWidget,
 		if(!this.options.disabled)
 			this.element.dispatchEvent("ibx_triggered", data, false, false, src);
 	},
-	checked:function(checked, data, src)
+	checked:function(checked, src)
 	{
 		if(checked === undefined)
 			return this.options.checked;
+		this._relTarget = src;
 		this.option("checked", checked);
-		this.element.dispatchEvent("ibx_checkchanged", data, false, false, src);
+		this._relTarget = null;
+	},
+	userValue:function(value, src)
+	{
+		if(value === undefined)
+			return this.options.userValue;
+		this._relTarget = src;
+		this.option("userValue", value);
+		this._relTarget = null;
 	},
 	_onCommandKeyEvent:function(e)
 	{
@@ -75,6 +85,12 @@ $.widget("ibi.ibxCommand", $.ibi.ibxWidget,
 
 		if(changed && key == "id")
 			delete $.ibi.ibxCommand.cmds[this.options.id];
+		else
+		if(changed && key == "checked")
+			this.element.dispatchEvent("ibx_checkchanged", value, false, false, this._relTarget);
+		else
+		if(changed && key == "userValue")
+			this.element.dispatchEvent("ibx_uservaluechanged", value, false, false, this._relTarget);
 	},
 	_refresh:function()
 	{
@@ -83,7 +99,8 @@ $.widget("ibi.ibxCommand", $.ibi.ibxWidget,
 
 		//configure associated widgets
 		var widgets = $(sformat(".ibx-widget[data-ibx-command='{1}']", options.id))
-		widgets.ibxWidget("option", "disabled", options.disabled)
+		widgets.ibxWidget("option", "disabled", options.disabled);
+		widgets.ibxWidget("option", "userValue", options.userValue);
 		widgets.filter(".ibx-can-toggle").ibxWidget("checked", options.checked);
 
 		if(options.id)
@@ -93,6 +110,7 @@ $.widget("ibi.ibxCommand", $.ibi.ibxWidget,
 $.ibi.ibxCommand.cmds = {};
 $.ibi.ibxCommand.TRIGGER = "trigger";
 $.ibi.ibxCommand.CHECK = "checked";
+$.ibi.ibxCommand.USER_VALUE = "userValue";
 
 //# sourceURL=commands.ibx.js
 

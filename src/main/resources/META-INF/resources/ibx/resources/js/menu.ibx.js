@@ -268,6 +268,7 @@ $.widget("ibi.ibxCheckMenuItem", $.ibi.ibxMenuItem,
 	{
 		"type":"check",
 		"checked":false,
+		"userValue":null,
 		"aria":
 		{
 			"role":"menuitemcheckbox",
@@ -295,8 +296,13 @@ $.widget("ibi.ibxCheckMenuItem", $.ibi.ibxMenuItem,
 	{
 		if(checked === undefined)
 			return this.options.checked;
-		else
-			this.option("checked", checked);
+		this.option("checked", checked);
+	},
+	userValue: function (value)
+	{
+		if (typeof (value) == "undefined")
+			return this.options.userValue;
+		this.option("userValue", value);
 	},
 	_setOption:function(key, value)
 	{
@@ -339,19 +345,6 @@ $.widget("ibi.ibxRadioMenuItem", $.ibi.ibxCheckMenuItem,
 		groups.ibxRadioGroup("addControl", this.element);
 	},
 	getValue:$.noop,
-	checked:function(checked)
-	{
-		var options = this.options;
-		if(typeof(checked) === "undefined")
-			return this.options.checked;
-		else
-		if(checked != options.checked)
-		{
-			options.checked = checked;
-			this.refresh();
-			return this;
-		}
-	},
 	_refresh:function()
 	{
 		var options = this.options;

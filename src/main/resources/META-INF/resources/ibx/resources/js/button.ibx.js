@@ -153,7 +153,8 @@ $.widget("ibi.ibxCheckBox", $.ibi.ibxLabel,
 	{
 		if (this.options.disabled || this.options.group && this.options.checked)
 			return;
-		this.option("checked", (this.options.group) ? true : !this.options.checked);
+		this.checked((this.options.group) ? true : !this.options.checked);
+		this.doCommandAction($.ibi.ibxCommand.TRIGGER);
 	},
 	_destroy: function ()
 	{
@@ -164,10 +165,7 @@ $.widget("ibi.ibxCheckBox", $.ibi.ibxLabel,
 	{
 		if (typeof (value) == "undefined")
 			return this.options.checked;
-		else
-		if(this.options.checked != value)
-			this.option("checked", value)
-		return this;
+		this.option("checked", value)
 	},
 	_setOption: function (key, value)
 	{

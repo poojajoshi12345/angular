@@ -74,19 +74,7 @@ $.widget("ibi.ibxRadioGroup", $.ibi.ibxFlexBox,
 	{
 		if (typeof (value) == "undefined")
 			return this._getItemUserValue($(".radio-group-checked.ibx-radio-group-" + this.options.name));
-		else
-		{
-			$(".ibx-radio-group-" + this.options.name).each(function (index, el)
-			{
-				var itemUserValue = this._getItemUserValue(el);
-				if (itemUserValue == value)
-				{
-					$(el).ibxWidget('checked', true);
-					return true;
-				}
-			}.bind(this));
-			return this;
-		}
+		this.option("userValue", value);
 	},
 	add:function(el, elSibling, before, refresh)
 	{
@@ -180,25 +168,27 @@ $.widget("ibi.ibxRadioGroup", $.ibi.ibxFlexBox,
 	_setSelected: function (el)
 	{
 		var el = $(el);
-		if (el.length > 0)
-		{
-			$(".ibx-radio-group-" + this.options.name).not(el).removeClass('radio-group-checked').ibxWidget('checked', false);
-			el.addClass('radio-group-checked');
-			this._trigger("set_form_value", null, { "elem": el, "value": this._getItemUserValue(el) });
-			this._trigger("change", null, el);
-		}
+		$(".ibx-radio-group-" + this.options.name).not(el).removeClass('radio-group-checked').ibxWidget('checked', false);
+		el.addClass('radio-group-checked');
+			
+		var val = el.ibxWidget("option", "userValue");
+		if(val)
+			this.option("userValue", val);
+			
+		this._trigger("set_form_value", null, { "elem": el, "value": this._getItemUserValue(el) });
+		this._trigger("change", null, el);
 	},
 	selected: function (element)
 	{
-		if (this.element.hasClass("ibx-widget-disabled"))
+		element = $(element);
+		if(this.element.hasClass("ibx-widget-disabled"))
 			return this;
-		if (typeof (element) == "undefined")
-		{
+		if(!element.length)
 			return $(".checked.ibx-radio-group-" + this.options.name);
-		}
 		else
 		{
-			$(element).ibxWidget("checked", true);
+			//YOU WERE FIGURING OUT HOW TO SET THE USER VALUE TO NULL AND DESELECT ALL ITEMS.
+			element.ibxWidget("checked", true);
 			this._setSelected(element);
 			return this;
 		}
@@ -207,6 +197,25 @@ $.widget("ibi.ibxRadioGroup", $.ibi.ibxFlexBox,
 	{
 		var disabled = !!value;
 		$(".ibx-radio-group-" + this.options.name).ibxWidget('option', 'disabled', disabled);
+	},
+	_setOption:function(key, value)
+	{
+		var changed = this.options[key] != value;
+		this._super(key, value);
+
+		if(key == "userValue" && changed)
+		{
+			$(".ibx-radio-group-" + this.options.name).each(function (index, el)
+			{
+				var itemUserValue = this._getItemUserValue(el);
+				if (itemUserValue == value)
+				{
+					$(el).ibxWidget('checked', true);
+					return true;
+				}
+			}.bind(this));
+			this.doCommandAction($.ibi.ibxCommand.USER_VALUE, value);
+		}
 	},
 	_refresh: function ()
 	{
