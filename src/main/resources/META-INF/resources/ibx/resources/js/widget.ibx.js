@@ -166,7 +166,10 @@ $.widget("ibi.ibxWidget", $.Widget,
 				cmd.ibxWidget(action, arguments[1], this.element[0]);
 			else
 			if(action == $.ibi.ibxCommand.CHECK)
-				cmd.ibxWidget(action, arguments[1], arguments[2], this.element[0]);
+				cmd.ibxWidget(action, arguments[1], this.element[0]);
+			else
+			if(action == $.ibi.ibxCommand.USER_VALUE)
+				cmd.ibxWidget(action, arguments[1], this.element[0]);
 		}
 	},
 	_resizeCallback:function()
@@ -187,7 +190,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 			if(!this._widgetFocused)
 			{
 				this._widgetFocused = true;
-				this.element.dispatchEvent("ibx_widgetfocus", e, false, false, e.relatedTarget);
+				this.element.dispatchEvent("ibx_widgetfocus", e.originalEvent, false, false, e.relatedTarget);
 			}
 
 			if(options.navKeyRoot)

@@ -237,10 +237,15 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 	},
 	_onItemsBoxFocus:function(e)
 	{
-		//if the current active item is not in the viewport, then focus the first child that is.
-		var visChildren = this.children(":inViewport(true)");
-		if(!visChildren.filter(".ibx-nav-item-active").length)
-			visChildren.first().focus();
+		//don't do the focusing if selected item is already a child.
+		var oEvent = e.originalEvent.data;
+		if(!$.contains(e.target, oEvent.target))
+		{
+			//if the current active item is not in the viewport, then focus the first child that is.
+			var visChildren = this.children(":inViewport(true)");
+			if(!visChildren.filter(".ibx-nav-item-active").length)
+				visChildren.first().focus();
+		}
 	},
 	_onItemsBoxKeydown:function(e)
 	{
