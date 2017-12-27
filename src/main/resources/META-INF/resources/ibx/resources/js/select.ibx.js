@@ -23,6 +23,7 @@ $.widget("ibi.ibxSelect", $.ibi.ibxTextField,
 			{
 				"role":"combobox",
 				"multiline":false,
+				"haspopup":"listbox"
 			}
 		},
 	_widgetClass: "ibx-select",
@@ -32,7 +33,12 @@ $.widget("ibi.ibxSelect", $.ibi.ibxTextField,
 	},
 	_setAccessibility:function(accessible, aria)
 	{
-		return this._super(accessible, aria);
+		var options = this.options;
+		aria = this._super(accessible, aria);
+		aria.expanded = (this._listWidget) ? this._listWidget.isOpen() : false;
+		aria.owns = (this._listWidget) ? this._listWidget.element.prop("id") : "";
+		aria.controls = (this._listWidget) ? this._listWidget.element.prop("id") : "";
+		return aria;
 	},
 	_init: function ()
 	{
@@ -109,9 +115,18 @@ $.widget("ibi.ibxSelect", $.ibi.ibxTextField,
 	{
 		if (this._isDropDown())
 		{
-			this._list = $("<div>").ibxMenu({"navKeyRoot":true, "position": { my: "left top", at: "left bottom+1px", of: this.element }, "autoFocus": !this._isEditable() });
+			this._list = $("<div>").ibxMenu(
+			{
+				"navKeyRoot":true,
+				"position":{ my: "left top", at: "left bottom+1px", of: this.element },
+				"autoFocus": !this._isEditable(),
+				"aria":{"role":"listbox"},
+			});
 			this._listWidget = this._list.data("ibxWidget");
-			this._list.css('min-width', this.element.outerWidth() + "px");
+			this._list.css('min-width', this.element.outerWidth() + "px").on("ibx_open ibx_close", function(e)
+			{
+				this.setAccessibility();
+			}.bind(this));
 		}
 		else
 		{
@@ -702,7 +717,6 @@ $.widget("ibi.ibxSelect", $.ibi.ibxTextField,
 		{
 			if(!this._listWidget.isOpen())
 			{
-				$("body").append(this._list);
 				this._listWidget.open();
 				this._list.css('min-width', this.element.outerWidth() + "px");
 			}
@@ -777,12 +791,16 @@ $.ibi.ibxSelect.statics =
 $.widget("ibi.ibxSelectItem", $.ibi.ibxMenuItem,
 {
 	options:
+	{
+		selected: false,
+		userValue: "",
+		startMarker: false,
+		endMarker: false,
+		aria:
 		{
-			selected: false,
-			userValue: "",
-			startMarker: false,
-			endMarker: false,
-		},
+			"role":"option"
+		}
+	},
 	_widgetClass: "ibx-select-item",
 	_onMenuItemClick: function (e)
 	{
@@ -810,11 +828,15 @@ $.widget("ibi.ibxSelectItem", $.ibi.ibxMenuItem,
 $.widget("ibi.ibxSelectCheckItem", $.ibi.ibxCheckMenuItem,
 {
 	options:
+	{
+		selected: false,
+		userValue: "",
+		endMarker: false,
+		aria:
 		{
-			selected: false,
-			userValue: "",
-			endMarker: false,
-		},
+			"role":"option"
+		}
+	},
 	_widgetClass: "ibx-select-check-item",
 	_create: function ()
 	{
@@ -841,11 +863,15 @@ $.widget("ibi.ibxSelectCheckItem", $.ibi.ibxCheckMenuItem,
 $.widget("ibi.ibxSelectRadioItem", $.ibi.ibxRadioMenuItem,
 {
 	options:
+	{
+		selected: false,
+		userValue: "",
+		endMarker: false,
+		aria:
 		{
-			selected: false,
-			userValue: "",
-			endMarker: false,
-		},
+			"role":"option"
+		}
+	},
 	_widgetClass: "ibx-select-radio-item",
 	_create: function ()
 	{
