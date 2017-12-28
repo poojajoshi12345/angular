@@ -34,7 +34,7 @@ $.widget("ibi.ibxSelect", $.ibi.ibxTextField,
 	{
 		var options = this.options;
 		aria = this._super(accessible, aria);
-		aria.expanded = (this._listWidget) ? this._listWidget.isOpen() : false;
+		aria.expanded = (this._listWidget && this._listWidget.element.is(".ibx-popup")) ? this._listWidget.isOpen() : true;
 		aria.owns = (this._listWidget) ? this._listWidget.element.prop("id") : "";
 		aria.controls = (this._listWidget) ? this._listWidget.element.prop("id") : "";
 		return aria;
@@ -116,10 +116,8 @@ $.widget("ibi.ibxSelect", $.ibi.ibxTextField,
 		{
 			this._list = $("<div>").ibxMenu(
 			{
-				"navKeyRoot":true,
 				"position":{ my: "left top", at: "left bottom+1px", of: this.element },
-				"autoFocus": !this._isEditable(),
-				"aria":{"role":"listbox"},
+				"autoFocus": !this._isEditable()
 			});
 			this._listWidget = this._list.data("ibxWidget");
 			this._list.css('min-width', this.element.outerWidth() + "px").on("ibx_open ibx_close", function(e)
@@ -134,6 +132,7 @@ $.widget("ibi.ibxSelect", $.ibi.ibxTextField,
 			this._listWidget = this._list.data("ibxWidget");
 		}
 
+		this._listWidget.option({"navKeyRoot":true, "navKeyAutoFocus":true, "aria":{"accessible":true, "role":"listbox", "hidden":false}});
 		this._list.addClass("ibx-select-list");
 		this._list.on("ibx_select", this._onSelect.bind(this));
 		this.element.append(this._list);
