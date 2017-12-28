@@ -27,6 +27,9 @@ $.widget("ibi.ibxSlider", $.ibi.ibxGrid,
 		"align": "stretch",
 		"wantResize": true,
 
+		"navKeyRoot":true,
+		"navKeyAutoFocus":true,
+
 		"aria":
 		{
 			"role":"",
@@ -44,7 +47,7 @@ $.widget("ibi.ibxSlider", $.ibi.ibxGrid,
 
 		this._sliderBody = $('<div class="ibx-slider-body">');
 		this._sliderWrapper.append(this._sliderBody);
-		this._slider = $('<div tabindex="0" class="ibx-slider-marker ibx-slider-marker-one">');
+		this._slider = $('<div tabindex="-1" class="ibx-slider-marker ibx-slider-marker-one">');
 		this._slider.hide();
 		this._sliderWrapper.append(this._slider);
 		this.element.append(this._sliderWrapper);
@@ -558,7 +561,7 @@ $.widget("ibi.ibxRange", $.ibi.ibxSlider,
 		this._super();
 		this._sliderRangeBody = $('<div class="ibx-slider-range-body">');
 		this._sliderRangeBody.insertBefore(this._slider);
-		this._slider2 = $('<div tabindex="0" class="ibx-slider-marker ibx-slider-marker-two">');
+		this._slider2 = $('<div tabindex="-1" class="ibx-slider-marker ibx-slider-marker-two">');
 		this._slider2.hide();
 		this._sliderWrapper.append(this._slider2);
 		this._slider2.on("keydown", this._onSliderKeyDown.bind(this));
