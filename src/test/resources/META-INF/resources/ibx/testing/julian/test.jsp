@@ -78,12 +78,6 @@
 				box-sizing:border-box;
 			}
 
-			.test-popup
-			{
-				border:1px solid #aaa;
-				box-shadow:0px 0px 15px 0px #999;
-			}
-
 			.test-carousel
 			{
 				max-width:75%;
@@ -116,11 +110,19 @@
 				margin:10px;
 			}
 
-			.ibx-slider.test-slider
+			.test-popup
+			{
+				border:1px solid #aaa;
+				box-shadow:0px 0px 15px 0px #999;
+			}
+			.test-popup-box
 			{
 				width:400px;
-				height:175px;
-				border-radius:.5em;
+				height:200px;
+			}
+			.ibx-slider.test-slider
+			{
+				flex:1 1 auto;
 			}
 		</style>
 	</head>
@@ -133,7 +135,10 @@
 		</div>
 
 		<div class="test-popup" data-ibx-type="ibxPopup" data-ibxp-auto-close="false" data-ibxp-destroy-on-close="false" data-ibxp-opaque="true">
-			<div class="test-slider" data-ibx-type="ibxHRange" data-ibx-options="{value:25, value2:75, valueTextPos:'end', minTextPos:'center', maxTextPos:'center'}"></div>
+			<div class="test-popup-box" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
+				<div class="test-slider" tabIndex="0" data-ibx-type="ibxHSlider" data-ibxp-value-text-pos="end" data-ibxp-min-text-pos="center" data-ibxp-max-text-pos="center"></div>
+				<div class="test-slider" tabindex="0" data-ibx-type="ibxHRange" data-ibx-options="{value:25, value2:75, valueTextPos:'end', minTextPos:'center', maxTextPos:'center'}"></div>
+			</div>
 		</div>
 	</body>
 </html>

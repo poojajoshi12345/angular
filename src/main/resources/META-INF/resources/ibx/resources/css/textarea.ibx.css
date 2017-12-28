@@ -8,4 +8,6 @@
 .ibx-text-area-ctrl
 {
 	resize:none;
+	min-width:1px;
+	width:1px;
 }

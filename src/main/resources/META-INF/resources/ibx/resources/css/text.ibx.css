@@ -6,6 +6,7 @@
     border: none;
     flex: 1 1 auto;
     min-width: 1px;
+	width:1px;
 }
 
 .ibx-text-field.txt-auto-size input {

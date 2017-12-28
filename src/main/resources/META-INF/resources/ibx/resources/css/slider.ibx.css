@@ -8,14 +8,6 @@
     overflow: visible;
 }
 
-.ibx-slider.ibx-slider-horizontal {
-    width: 100px;
-}
-
-.ibx-slider.ibx-slider-vertical {
-    height: 100px;
-}
-
 .ibx-slider-marker {
     position: absolute;
     height: 1.2em;
