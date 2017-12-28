@@ -8,7 +8,6 @@ $.widget("ibi.ibxSelect", $.ibi.ibxTextField,
 			// accepted values: "drop-down-combo" (default), "combo", "drop-down-list", "list"
 			"btnShow": true,
 			"type": "drop-down-combo",
-			"userValue": "",
 			"multiSelect": false,
 			
 			// overrides for the base

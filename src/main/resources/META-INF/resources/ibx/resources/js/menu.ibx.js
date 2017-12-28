@@ -182,7 +182,7 @@ $.widget("ibi.ibxMenuItem", $.ibi.ibxHBox,
 		{
 			this.refresh();
 			this._trigger("menu_item_click", e, this.element);//bubble click event to owner menu.
-			this.doCommandAction($.ibi.ibxCommand.TRIGGER);
+			this.doCommandAction("trigger");
 		}
 	},
 	_subTimer:null,
@@ -234,10 +234,6 @@ $.widget("ibi.ibxMenuItem", $.ibi.ibxHBox,
 	{
 		this.setAccessibility();
 	},
-	userValue:function()
-	{
-		return this.options.userValue;
-	},
 	_refresh:function()
 	{
 		this._super();
@@ -268,7 +264,6 @@ $.widget("ibi.ibxCheckMenuItem", $.ibi.ibxMenuItem,
 	{
 		"type":"check",
 		"checked":false,
-		"userValue":null,
 		"aria":
 		{
 			"role":"menuitemcheckbox",
@@ -298,12 +293,6 @@ $.widget("ibi.ibxCheckMenuItem", $.ibi.ibxMenuItem,
 			return this.options.checked;
 		this.option("checked", checked);
 	},
-	userValue: function (value)
-	{
-		if (typeof (value) == "undefined")
-			return this.options.userValue;
-		this.option("userValue", value);
-	},
 	_setOption:function(key, value)
 	{
 		var changed = this.options[key] != value;
@@ -311,7 +300,7 @@ $.widget("ibi.ibxCheckMenuItem", $.ibi.ibxMenuItem,
 		if(key == "checked" && changed)
 		{
 			this._trigger("change", null, this.element);
-			this.doCommandAction($.ibi.ibxCommand.CHECK, value);
+			this.doCommandAction("checked", value);
 		}
 	},
 	_refresh:function()

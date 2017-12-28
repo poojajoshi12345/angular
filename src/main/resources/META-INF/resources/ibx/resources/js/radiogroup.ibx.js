@@ -10,7 +10,6 @@ $.widget("ibi.ibxRadioGroup", $.ibi.ibxFlexBox,
 			"navKeyAutoFocus":true,
 			"name": "",
 			"form": "",
-			"userValue": "",
 			"aria":{"role":"radiogroup"}
 		},
 	_widgetClass: "ibx-radio-group",
@@ -72,9 +71,9 @@ $.widget("ibi.ibxRadioGroup", $.ibi.ibxFlexBox,
 	},
 	userValue: function (value)
 	{
-		if (typeof (value) == "undefined")
+		if(typeof(value) == "undefined")
 			return this._getItemUserValue($(".radio-group-checked.ibx-radio-group-" + this.options.name));
-		this.option("userValue", value);
+		this._super(value);
 	},
 	add:function(el, elSibling, before, refresh)
 	{
@@ -214,7 +213,7 @@ $.widget("ibi.ibxRadioGroup", $.ibi.ibxFlexBox,
 					return true;
 				}
 			}.bind(this));
-			this.doCommandAction($.ibi.ibxCommand.USER_VALUE, value);
+			this.doCommandAction("uservalue", value);
 		}
 	},
 	_refresh: function ()

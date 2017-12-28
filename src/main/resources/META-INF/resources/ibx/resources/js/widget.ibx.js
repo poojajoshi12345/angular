@@ -9,6 +9,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 		"nameRoot":false,
 		"ctxMenu":null,
 		"command":null,
+		"userValue":null,
 		"dragScrolling":false,
 		"wantResize":false,
 		"defaultFocused":false,					//for popup...should this be focused on open
@@ -153,24 +154,21 @@ $.widget("ibi.ibxWidget", $.Widget,
 		}
 		return ret || $();
 	},
+	userValue:function(value)
+	{
+		if(value === undefined)
+			return this.options.userValue;
+		this.option("userValue", value);
+	},
 	getCommand:function()
 	{
 		return $.ibi.ibxCommand.cmds[this.options.command];
 	},
-	doCommandAction:function(action)
+	doCommandAction:function(action, data)
 	{
 		var cmd = this.getCommand();
 		if(cmd)
-		{
-			if(action == $.ibi.ibxCommand.TRIGGER)
-				cmd.ibxWidget(action, arguments[1], this.element[0]);
-			else
-			if(action == $.ibi.ibxCommand.CHECK)
-				cmd.ibxWidget(action, arguments[1], this.element[0]);
-			else
-			if(action == $.ibi.ibxCommand.USER_VALUE)
-				cmd.ibxWidget(action, arguments[1], this.element[0]);
-		}
+			cmd.ibxWidget("doAction", action, data, this.element[0]);
 	},
 	_resizeCallback:function()
 	{

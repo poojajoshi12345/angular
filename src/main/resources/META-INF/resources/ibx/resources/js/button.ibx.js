@@ -21,7 +21,7 @@ $.widget("ibi.ibxButton", $.ibi.ibxLabel,
 	},
 	_onButtonClickEvent:function(e)
 	{
-		this.doCommandAction($.ibi.ibxCommand.TRIGGER);
+		this.doCommandAction("trigger");
 	},
 	_onKeyEvent: function (e)
 	{
@@ -106,7 +106,6 @@ $.widget("ibi.ibxCheckBox", $.ibi.ibxLabel,
 			"hideCheck": true,
 			"group": "",
 			"forId": "",
-			"userValue": "",
 			"aria":
 			{
 				"role":"checkbox",
@@ -135,14 +134,10 @@ $.widget("ibi.ibxCheckBox", $.ibi.ibxLabel,
 	},
 	userValue: function (value)
 	{
-		if (typeof (value) == "undefined")
-			return this.options.userValue;
-		else
-		{
-			this.options.userValue = value;
+		var ret = this._super(value);
+		if(value)
 			this._trigger("set_form_value", null, { "elem": this.element, "value": this.options.checked ? this.options.userValue : "" });
-			return this;
-		}
+		return ret;
 	},
 	_onKeyEvent: function (e)
 	{
@@ -154,7 +149,7 @@ $.widget("ibi.ibxCheckBox", $.ibi.ibxLabel,
 		if (this.options.disabled || this.options.group && this.options.checked)
 			return;
 		this.checked((this.options.group) ? true : !this.options.checked);
-		this.doCommandAction($.ibi.ibxCommand.TRIGGER);
+		this.doCommandAction("trigger");
 	},
 	_destroy: function ()
 	{
@@ -178,7 +173,7 @@ $.widget("ibi.ibxCheckBox", $.ibi.ibxLabel,
 			this.element.toggleClass("checked", value);
 			this._trigger("set_form_value", null, { "elem": this.element, "value": value ? this.options.userValue : "" });
 			this._trigger("change");
-			this.doCommandAction($.ibi.ibxCommand.CHECK, value);
+			this.doCommandAction("checked", value);
 		}
 		else
 		{
