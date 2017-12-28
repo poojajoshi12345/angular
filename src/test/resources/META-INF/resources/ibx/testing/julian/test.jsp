@@ -57,7 +57,7 @@
 
 
 				$(".test-popup-inner-text").text(ibx.resourceMgr.getString("IBX_STR_SAMPLE"));
-				//$(".test-popup").ibxWidget("open");
+				$(".test-popup").ibxWidget("open");
 			}, [{src:"./test_res_bundle.xml", loadContext:"app"}], true);
 		</script>
 		<style type="text/css">
@@ -81,27 +81,9 @@
 			.test-popup
 			{
 				border:1px solid #aaa;
-				background-color:transparent;
 				box-shadow:0px 0px 15px 0px #999;
 			}
 
-			.test-popup-inner-box
-			{
-				width:400px;
-				height:175px;
-				border-radius:.5em;
-			}
-
-			.test-popup-inner-text
-			{
-				box-sizing:border-box;
-				white-space:nowrap;
-				border:2px solid #ccc;
-				margin:10px;
-				padding:5px;
-				overflow:auto;
-			}
-	
 			.test-carousel
 			{
 				max-width:75%;
@@ -133,6 +115,13 @@
 			{
 				margin:10px;
 			}
+
+			.ibx-slider.test-slider
+			{
+				width:400px;
+				height:175px;
+				border-radius:.5em;
+			}
 		</style>
 	</head>
 	<body class="ibx-root">
@@ -142,12 +131,9 @@
 			<div class="test-carousel" tabindex="0" data-ibx-type="ibxHCarousel" data-ibxp-scroll-type="integral" data-ibxp-hide-disabled-buttons="true" data-ibxp-nav-key-auto-focus="true" data-ibxp-show-page-markers="false" data-ibxp-float-buttons="true" data-ibxp-hide-disabled-buttons="true" data-ibxp-aria="{role:'region', keyshortcuts:'Control+F', label:'IBFS Files List'}"></div>
 			<div class="test-button" tabindex="0" data-ibx-type="ibxButton">Test Button 2</div>
 		</div>
+
 		<div class="test-popup" data-ibx-type="ibxPopup" data-ibxp-auto-close="false" data-ibxp-destroy-on-close="false" data-ibxp-opaque="true">
-			<div class="test-popup-inner-box" data-ibx-type="ibxVBox" data-ibxp-align="stretch" data-ibxp-justify="center">
-				<div tabindex="0" class="test-popup-inner-text" data-ibx-type="ibxLabel"></div>
-			</div>
+			<div class="test-slider" data-ibx-type="ibxHRange" data-ibx-options="{value:25, value2:75, valueTextPos:'end', minTextPos:'center', maxTextPos:'center'}"></div>
 		</div>
-		<!--
-		-->
 	</body>
 </html>

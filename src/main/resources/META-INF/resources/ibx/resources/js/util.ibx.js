@@ -64,13 +64,28 @@ jQuery.expr[":"]["ibxRadioGroup"] = function(elem, idx, meta, stack)
 	var selector = sformat(".ibx-radio-group-control-{1}", name);
 	return elem.is(selector);
 };
-jQuery.expr[":"]["ibxFocusable"] = function(elem)
+jQuery.expr[":"]["ibxFocusable"] = function(elem, idx, meta, stack)
 {
 	var el = $(elem);
+	var tRanges = meta[3] ? meta[3].split(",") : [0, Infinity];
+	var tMin = 0, tMax = NaN;
+	if(meta[3])
+	{
+		var range = meta[3].split(",");
+		tMin = parseInt(range[0], 10);
+		tMax = parseInt(range[1], 10);
+	}
+	tMax = isNaN(tMax) ? Infinity : tMax;
+
 	var tabIndex = parseInt(el.attr("tabIndex"), 10);
 	var visible = (el.css("visibility") != "hidden" && el.css("display") != "none");
-	var ret = ((tabIndex >= 0 || tabIndex <= 0) && visible);
+	var ret = (tabIndex >= tMin && tabIndex <= tMax && visible);
 	return ret;
+};
+jQuery.expr[":"]["ibxNavFocusable"] = function(elem, idx, meta, stack)
+{
+	var arrowsOnly = meta[3] ? (meta[3].toLowercase() == "true") : false;
+	return $(elem).is(":ibxFocusable(-1, -1)");
 };
 jQuery.expr[":"]["inViewport"] = function(elem, idx, meta, stack)
 {

@@ -307,13 +307,13 @@ $.widget("ibi.ibxWidget", $.Widget,
 			{
 				if(e.keyCode == $.ui.keyCode.LEFT)
 				{
-					var prev = active.prevAll(":ibxFocusable").first();
+					var prev = active.prevAll(":ibxNavFocusable").first();
 					active = prev.length ? prev : navKids.last();
 				}
 				else
 				if(e.keyCode == $.ui.keyCode.RIGHT)
 				{
-					var next = active.nextAll(":ibxFocusable").first();
+					var next = active.nextAll(":ibxNavFocusable").first();
 					active = next.length ? next : navKids.first();
 				}
 			}
@@ -322,13 +322,13 @@ $.widget("ibi.ibxWidget", $.Widget,
 			{
 				if(e.keyCode == $.ui.keyCode.UP)
 				{
-					var prev = active.prevAll(":ibxFocusable").first();
+					var prev = active.prevAll(":ibxNavFocusable").first();
 					active = prev.length ? prev : navKids.last();
 				}
 				else
 				if(e.keyCode == $.ui.keyCode.DOWN)
 				{
-					var next = active.nextAll(":ibxFocusable").first();
+					var next = active.nextAll(":ibxNavFocusable").first();
 					active = next.length ? next : navKids.first();
 				}
 			}
@@ -375,7 +375,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 	},
 	navKeyChildren:function(selector)
 	{
-		selector = selector || ":ibxFocusable";
+		selector = selector || ":ibxNavFocusable";
 		return this.children(selector);
 	},
 	add:function(el, elSibling, before, refresh)

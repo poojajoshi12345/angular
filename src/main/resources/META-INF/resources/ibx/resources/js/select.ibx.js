@@ -17,6 +17,8 @@ $.widget("ibi.ibxSelect", $.ibi.ibxTextField,
 			"spellCheck": "false",
 			"listClasses": "",
 			"filter": false,
+			
+			"navKeyDir":"vertical",
 
 			"aria":
 			{
@@ -68,8 +70,7 @@ $.widget("ibi.ibxSelect", $.ibi.ibxTextField,
 	},
 	navKeyChildren:function(selector)
 	{
-		selector = selector || ":ibxFocusable";
-		return this.element.children(selector);
+		return this.element.children(selector || ":ibxNavFocusable");
 	},
 	children:function(selector)
 	{
@@ -132,7 +133,7 @@ $.widget("ibi.ibxSelect", $.ibi.ibxTextField,
 			this._listWidget = this._list.data("ibxWidget");
 		}
 
-		this._listWidget.option({"navKeyRoot":true, "navKeyAutoFocus":true, "aria":{"accessible":true, "role":"listbox", "hidden":false}});
+		this._listWidget.option({"navKeyRoot":true, "navKeyAutoFocus":false, "navKeyDir":"vertical", "aria":{"accessible":true, "role":"listbox", "hidden":false}});
 		this._list.addClass("ibx-select-list");
 		this._list.on("ibx_select", this._onSelect.bind(this));
 		this.element.append(this._list);
@@ -458,7 +459,7 @@ $.widget("ibi.ibxSelect", $.ibi.ibxTextField,
 			anchor = this._list.find('.sel-selected').first();
 		if (anchor.length == 0)
 		{
-			anchor = this._list.find('.ibx-select-item:ibxFocusable').first();
+			anchor = this._list.find('.ibx-select-item:ibxNavFocusable').first();
 			//this._setSelection(anchor, false, false);
 		}
 		anchor.focus();
@@ -639,7 +640,7 @@ $.widget("ibi.ibxSelect", $.ibi.ibxTextField,
 
 		this._list.find(".ibx-select-group").each(function (index, el)
 		{
-			if (this._list.find(".ibx-radio-group-" + $(el).attr("id") + ":ibxFocusable").length > 0)
+			if (this._list.find(".ibx-radio-group-" + $(el).attr("id") + ":ibxNavFocusable").length > 0)
 				$(el).show();
 			else
 				$(el).hide();
@@ -685,7 +686,7 @@ $.widget("ibi.ibxSelect", $.ibi.ibxTextField,
 			{
 				this._list.find(".ibx-select-group").each(function (index, el)
 				{
-					if (this._list.find(".ibx-radio-group-" + $(el).attr("id") + ":ibxFocusable").length > 0)
+					if (this._list.find(".ibx-radio-group-" + $(el).attr("id") + ":ibxNavFocusable").length > 0)
 						$(el).show();
 					else
 						$(el).hide();
@@ -810,10 +811,6 @@ $.widget("ibi.ibxSelectItem", $.ibi.ibxMenuItem,
 				this.element.closest('.ibx-select-list').data('ibxWidget')._trigger("select", e, this.element);
 		}
 	},
-	_onMenuItemKeyEvent: function (e)
-	{
-		$.ibi.ibxSelectItem.statics.onMenuItemKeyEvent.call(this, e);
-	},
 	option:function(key, value)
 	{
 		var ret = this._superApply(arguments);
@@ -848,10 +845,6 @@ $.widget("ibi.ibxSelectCheckItem", $.ibi.ibxCheckMenuItem,
 		else
 			this.element.closest('.ibx-select-list').data('ibxWidget')._trigger("select", e, this.element);
 	},
-	_onMenuItemKeyEvent: function (e)
-	{
-		$.ibi.ibxSelectItem.statics.onMenuItemKeyEvent.call(this, e);
-	},
 	_refresh: function ()
 	{
 		this._super();
@@ -883,95 +876,11 @@ $.widget("ibi.ibxSelectRadioItem", $.ibi.ibxRadioMenuItem,
 		else
 			this.element.closest('.ibx-select-list').data('ibxWidget')._trigger("select", e, this.element);
 	},
-	_onMenuItemKeyEvent: function (e)
-	{
-		$.ibi.ibxSelectItem.statics.onMenuItemKeyEvent.call(this, e);
-	},
 });
 
 
 $.ibi.ibxSelectItem.statics =
 {
-	onMenuItemKeyEvent: function (e)
-	{
-		var isDropDown = $.ibi.ibxSelectItem.statics.isDropDown.call(this);
-
-		if (isDropDown)
-		{
-			this._super(e);
-
-			if (e.keyCode != 38 && e.keyCode != 40)
-				return;
-
-			var event = jQuery.Event('click');
-			event.ctrlKey = e.ctrlKey;
-			event.shiftKey = e.shiftKey;
-			event.keepAnchor = e.shiftKey;
-			event.synthetic = true;
-
-			if (e.keyCode == 38)//up
-			{
-				var prev = this.element.prevAll('.ibx-select-item:ibxFocusable').first();
-				if (prev.length == 0)
-					prev = this.element.nextAll('.ibx-select-item:ibxFocusable').last();
-				if (prev.length > 0)
-				{
-					//prev.focus();
-					prev.trigger(event, prev);
-				}
-			}
-			else //down
-			{
-				var next = this.element.nextAll('.ibx-select-item:ibxFocusable').first();
-				if (next.length == 0)
-					next = this.element.prevAll('.ibx-select-item:ibxFocusable').last();
-				if (next.length > 0)
-				{
-					//next.focus();
-					next.trigger(event, next);
-				}
-			}
-		}
-		else
-		{
-
-			this._super(e);
-			if (e.keyCode == 9) // Normal tab behaviour for non-drop-down
-				return;
-
-			e.preventDefault();
-
-			var event = jQuery.Event('click');
-			event.ctrlKey = e.ctrlKey;
-			event.shiftKey = e.shiftKey;
-			event.keepAnchor = e.shiftKey;
-			event.synthetic = true;
-
-			if (e.keyCode == 38)//up
-			{
-				var prev = this.element.prevAll('.ibx-select-item:ibxFocusable').first();
-				if (prev)
-				{
-					prev.focus();
-					prev.trigger(event, prev);
-				}
-			}
-			else if (e.keyCode == 40)//down
-			{
-				var next = this.element.nextAll('.ibx-select-item:ibxFocusable').first();
-				if (next)
-				{
-					next.focus();
-					next.trigger(event, next);
-				}
-			}
-			else if (e.keyCode == 32 || e.keyCode == 13) // select item on space and enter with non-drop-down
-			{
-				this.element.trigger(event, this.element);
-			}
-		}
-
-	},
 	isDropDown: function ()
 	{
 		return this.element.closest('.ibx-select-list').hasClass('ibx-menu');

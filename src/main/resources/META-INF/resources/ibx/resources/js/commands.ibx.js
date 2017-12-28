@@ -59,7 +59,7 @@ $.widget("ibi.ibxCommand", $.ibi.ibxWidget,
 			trigger = trigger & (($.ui.keyCode[sc] == e.keyCode) || (-1 != sc.search(e.key.toUpperCase())));
 			if(trigger)
 			{
-				this.trigger(e);
+				this.doAction("trigger", null, e.target);
 				e.preventDefault();
 				e.stopPropagation();
 			}
