@@ -183,10 +183,6 @@ ibxPopupManager.onPopupEvent = function(e, popup)
 		popup.removeClass("pop-closed");
 		topPop = popup;
 
-		//turn off pointer events for iframes when popup is open.
-		if(ibxPopupManager.autoDisableIFrames)
-			$("iframe").toggleClass("ibx-popup-disabled-iframe", true)
-
 		//manage the currently open popups
 		ibxPopupManager._openPopups = ibxPopupManager._openPopups.add(popup);
 	}
@@ -195,10 +191,6 @@ ibxPopupManager.onPopupEvent = function(e, popup)
 	{
 		popup.addClass("pop-closed")
 		topPop.addClass("pop-top");
-
-		//on close if we are the last popup, then re-enable pointer events on the iframes.
-		if(ibxPopupManager.autoDisableIFrames && !topPop.length)
-			$("iframe").toggleClass("ibx-popup-disabled-iframe", false);
 
 		//manage the currently open popups
 		ibxPopupManager._openPopups = ibxPopupManager._openPopups.not(popup);
@@ -215,7 +207,9 @@ ibxPopupManager.onPopupEvent = function(e, popup)
 	else
 		this._gp.css("zIndex", "").detach();
 
-
+	//[IBX-66]if desired, kill all pointer events on background iframes.
+	if(ibxPopupManager.autoDisableIFrames)
+		$("iframe:not(.pop-top iframe)").toggleClass("ibx-popup-disabled-iframe", !!topPop.length);
 };
 ibxPopupManager.onWindowEvent = function(e)
 {
