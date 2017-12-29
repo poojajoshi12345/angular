@@ -245,6 +245,12 @@ $.widget("ibi.ibxWidget", $.Widget,
 		else
 		if(e.type == "focusout" && this._widgetFocused && !ownsRelTarget)
 		{
+			if(options.focusRoot)
+			{
+				//console.warn("[ibx Tetsting] When losing focus on a focusRoot, reset focus to first/last item.");
+				//this.element.find(":ibxFocusable").first().focus();
+			}
+
 			this._widgetFocused = false;
 			this.element.dispatchEvent("ibx_widgetblur", e, false, false, e.relatedTarget);
 

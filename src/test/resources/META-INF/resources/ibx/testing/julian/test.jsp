@@ -22,42 +22,10 @@
 			
 			ibx(function()
 			{
-				ibxEventManager.noIOSBodyScroll = true;
-				Ibfs.load().done(function()
+				$(".right-side").ibxCollapsible(
 				{
-					Ibfs.ibfs.login("admin", "admin").done(function(e)
-					{
-						console.log("ibfs logged in.");
-						Ibfs.ibfs.listItems("IBFS:/WFC/Repository/Public", {asJSON:true});
-					});
+					direction:"right",
 				});
-
-
-				window.addEventListener("ibfs_list_items", function(e)
-				{
-					var csl = $(".test-carousel");
-					csl.ibxWidget("children").remove();
-
-					var items = e.data.result;
-					for(var i = 0; i < items.length; ++i)
-					{
-						if(i > 5)
-							continue;
-						var item = items[i];
-						var qItem = $(sformat("<div class='test-tile' title='{1}'>{2}</div>", item.fullPath, item.name));
-						qItem.css("background-image", sformat('url("{1}")', item.thumbPath));
-						csl.ibxWidget("add", qItem);
-					}
-
-					$(".cmd-files").on("ibx_triggered", function(e)
-					{
-						$(".test-carousel").focus();
-					});
-				});
-
-
-				$(".test-popup-inner-text").text(ibx.resourceMgr.getString("IBX_STR_SAMPLE"));
-				$(".test-popup").ibxWidget("open");
 			}, [{src:"./test_res_bundle.xml", loadContext:"app"}], true);
 		</script>
 		<style type="text/css">
@@ -73,71 +41,36 @@
 			{
 				width:100%;
 				height:100%;
-				overflow:auto;
+				overflow:hidden;
 				background-color:white;
 				box-sizing:border-box;
 			}
 
-			.test-carousel
+			.side
 			{
-				max-width:75%;
-				border:1px solid #aaa;
-				border-radius:.5em;
-				box-shadow:0px 0px 15px 0px #999;
+				border:1px solid black;
+				margin:2px;
 			}
-
-			.test-tile
-			{
-				width:100px;
-				height:100px;
-				display:flex;
-				align-items:flex-end;
-				justify-content:center;
-				margin:10px;
-				padding:5px;
-				background-repeat:no-repeat;
-				background-position:top;
-				background-size:80%;
-				overflow:hidden;
-			}
-			.test-tile:hover
-			{
-				background-color:#eee;
-			}
-
-			.test-button
-			{
-				margin:10px;
-			}
-
-			.test-popup
-			{
-				border:1px solid #aaa;
-				box-shadow:0px 0px 15px 0px #999;
-			}
-			.test-popup-box
-			{
-				width:400px;
-				height:200px;
-			}
-			.ibx-slider.test-slider
+			.left-side
 			{
 				flex:1 1 auto;
+			}
+			.right-side
+			{
+				width:200px;
 			}
 		</style>
 	</head>
 	<body class="ibx-root">
 		<div class="cmd-files" data-ibx-type="ibxCommand" data-ibxp-shortcut="CTRL+F"></div>
-		<div class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="center" data-ibxp-justify="center">
-			<div class="test-button" tabindex="0" data-ibx-type="ibxButton">Test Button 1</div>
-			<div class="test-carousel" tabindex="0" data-ibx-type="ibxHCarousel" data-ibxp-scroll-type="integral" data-ibxp-hide-disabled-buttons="true" data-ibxp-nav-key-auto-focus="true" data-ibxp-show-page-markers="false" data-ibxp-float-buttons="true" data-ibxp-hide-disabled-buttons="true" data-ibxp-aria="{role:'region', keyshortcuts:'Control+F', label:'IBFS Files List'}"></div>
-			<div class="test-button" tabindex="0" data-ibx-type="ibxButton">Test Button 2</div>
-		</div>
+		<div class="main-box" data-ibx-type="ibxHBox" data-ibxp-align="stretch" data-ibxp-justify="start">
 
-		<div class="test-popup" data-ibx-type="ibxPopup" data-ibxp-auto-close="false" data-ibxp-destroy-on-close="false" data-ibxp-opaque="true">
-			<div class="test-popup-box" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
-				<div class="test-slider" tabIndex="0" data-ibx-type="ibxHSlider" data-ibxp-value-text-pos="end" data-ibxp-min-text-pos="center" data-ibxp-max-text-pos="center"></div>
-				<div class="test-slider" tabindex="0" data-ibx-type="ibxHRange" data-ibx-options="{value:25, value2:75, valueTextPos:'end', minTextPos:'center', maxTextPos:'center'}"></div>
+			<div class="side left-side" data-ibx-type="ibxVBox">
+				<div data-ibx-type="ibxLabel">Left Side</div>
+			</div>
+
+			<div class="side right-side" data-ibx-type="ibxVBox">
+				<div tabindex="0" data-ibx-type="ibxLabel">Right Side</div>
 			</div>
 		</div>
 	</body>

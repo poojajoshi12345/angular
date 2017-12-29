@@ -26,7 +26,6 @@ $.widget("ibi.ibxCollapsible", $.Widget,
 		this.element.on("transitionend", this._onTransitionEnd.bind(this))
 		this.element.on("click", this._onMouseEvent.bind(this));
 		this._boundWindowMouseEvent = this._onWindowMouseEvent.bind(this);
-
 		this._super();
 	},
 	_destroy:function()
@@ -57,9 +56,16 @@ $.widget("ibi.ibxCollapsible", $.Widget,
 			//remove the initializing class that stops transitions. Could be done just first time, but really doesn't matter to do it every time
 			this.element.removeClass("ibx-collapsible-initializing")
 			this._isOpen = true;
-			this.refresh();
 			if(this.options.autoClose)
 				$("body").addClass("body-collapsible-auto-close");
+
+			//[IBX-65]must happen on timer or the css display won't have rendered yet and the transition effect will not work.
+			//this.element.css("display", "");
+			//window.setTimeout(function()
+			//{
+				this.refresh();
+			//}.bind(this), 1);
+
 		}
 	},
 	close: function ()
@@ -89,15 +95,20 @@ $.widget("ibi.ibxCollapsible", $.Widget,
 	},
 	_onTransitionEnd: function (e)
 	{
-		if (this.isOpen())
+		if(this.isOpen())
 		{
 			$(window).on("click", this._boundWindowMouseEvent);
 			this._trigger("open");
 		}
 		else
 		{
-			$(window).off("click", this._boundWindowMouseEvent);
-			this._trigger("close");
+			if(!e || e.originalEvent.propertyName.search("margin") != -1)
+			{
+				//[IBX-65]have to hide the element when closed or you'll still be able to tab to it...even though not visible.
+				//this.element.css("display", "none");
+				$(window).off("click", this._boundWindowMouseEvent);
+				this._trigger("close");
+			}
 		}
 	},
 	refresh: function ()
@@ -105,12 +116,13 @@ $.widget("ibi.ibxCollapsible", $.Widget,
 		var options = this.options;
 		var isOpen = this.isOpen();
 
-		options.autoClose ? this.element.addClass("auto-close") : this.element.removeClass("auto-close");
+		this.element.toggleClass("auto-close", options.autoClose);
+		
 		var nMargin = 0;
 		if(isOpen)
 			nMargin = this._marginInfo["margin-" + options.direction];
 		else
-			nMargin = options.gap + -1 * ((options.direction == "left" || options.direction == "right") ? this.element.outerWidth(true) : this.element.outerHeight(true));
+			nMargin = options.gap + (-1 * ((options.direction == "left" || options.direction == "right") ? this.element.outerWidth(true) : this.element.outerHeight(true)));
 		this.element.css("margin-" + options.direction, nMargin)
 		
 		//IE has a problem with opacity and zIndex...it'll put the collapsed widget on top of everything else (at least in the case of a grid).
