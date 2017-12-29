@@ -85,7 +85,7 @@ jQuery.expr[":"]["ibxFocusable"] = function(elem, idx, meta, stack)
 jQuery.expr[":"]["ibxNavFocusable"] = function(elem, idx, meta, stack)
 {
 	var arrowsOnly = meta[3] ? (meta[3].toLowercase() == "true") : false;
-	return $(elem).is(":ibxFocusable(-1, -1)");
+	return $(elem).is(":ibxFocusable(-1)");
 };
 jQuery.expr[":"]["inViewport"] = function(elem, idx, meta, stack)
 {
@@ -224,6 +224,18 @@ function createNativeEvent(type, data, canBubble, cancelable, relatedTarget)
 	return e;
 }
 
+//force redraw/repaint element...I'm dubious about whether this actually works...got from:
+//https://stackoverflow.com/questions/3485365/how-can-i-force-webkit-to-redraw-repaint-to-propagate-style-changes
+jQuery.fn.redraw = function()
+{
+	this.each(function(idx, el)
+	{
+		el.offsetHeight;
+	});
+	return this;
+};
+
+
 //let jQuery dispatch custom native events
 jQuery.fn.dispatchEvent = function(type, data, canBubble, cancelable, relatedTarget)
 {
@@ -233,7 +245,7 @@ jQuery.fn.dispatchEvent = function(type, data, canBubble, cancelable, relatedTar
 		el.dispatchEvent(e);
 	}.bind(this, e));
 	return e;
-}
+};
 
 //For accessibility we need to create ibx specific aria ids
 jQuery.fn.extend( {
