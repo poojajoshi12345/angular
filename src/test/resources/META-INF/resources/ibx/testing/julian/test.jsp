@@ -25,6 +25,13 @@
 				$(".right-side").ibxCollapsible(
 				{
 					direction:"right",
+					startCollapsed:true,
+					autoClose:true
+				});
+
+				$(".btn-toggle").on("click", function(e)
+				{
+					$(".right-side").ibxCollapsible("toggle");
 				});
 			}, [{src:"./test_res_bundle.xml", loadContext:"app"}], true);
 		</script>
@@ -64,11 +71,9 @@
 	<body class="ibx-root">
 		<div class="cmd-files" data-ibx-type="ibxCommand" data-ibxp-shortcut="CTRL+F"></div>
 		<div class="main-box" data-ibx-type="ibxHBox" data-ibxp-align="stretch" data-ibxp-justify="start">
-
 			<div class="side left-side" data-ibx-type="ibxVBox">
-				<div data-ibx-type="ibxLabel">Left Side</div>
+				<div class="btn-toggle" data-ibx-type="ibxLabel">Left Side</div>
 			</div>
-
 			<div class="side right-side" data-ibx-type="ibxVBox">
 				<div tabindex="0" data-ibx-type="ibxLabel">Right Side</div>
 			</div>

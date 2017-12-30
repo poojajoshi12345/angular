@@ -54,18 +54,11 @@ $.widget("ibi.ibxCollapsible", $.Widget,
 		if (!this.isOpen() && !this.options.disabled && this._trigger("beforeopen"))
 		{
 			//remove the initializing class that stops transitions. Could be done just first time, but really doesn't matter to do it every time
-			this.element.removeClass("ibx-collapsible-initializing")
 			this._isOpen = true;
+			this.element.removeClass("ibx-collapsed ibx-collapsible-initializing")
 			if(this.options.autoClose)
 				$("body").addClass("body-collapsible-auto-close");
-
-			//[IBX-65]must happen on timer or the css display won't have rendered yet and the transition effect will not work.
-			//this.element.css("display", "");
-			//window.setTimeout(function()
-			//{
-				this.refresh();
-			//}.bind(this), 1);
-
+			this.refresh();
 		}
 	},
 	close: function ()
@@ -104,8 +97,7 @@ $.widget("ibi.ibxCollapsible", $.Widget,
 		{
 			if(!e || e.originalEvent.propertyName.search("margin") != -1)
 			{
-				//[IBX-65]have to hide the element when closed or you'll still be able to tab to it...even though not visible.
-				//this.element.css("display", "none");
+				this.element.addClass("ibx-collapsed");
 				$(window).off("click", this._boundWindowMouseEvent);
 				this._trigger("close");
 			}

@@ -21,3 +21,8 @@
 {
 	transition:all 0s;
 }
+
+.ibx-collapsible.ibx-collapsed
+{
+	visibility:hidden;
+}
