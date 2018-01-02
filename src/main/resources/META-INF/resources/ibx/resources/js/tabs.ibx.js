@@ -15,7 +15,11 @@ $.widget("ibi.ibxTabPane", $.ibi.ibxFlexBox,
 		align: "stretch",
 		wrap: "false",
 		selected: "",
-		tabBarOptions:{justify: "flex-start"},
+		tabBarOptions:{
+			"showPrevButton": false,
+			"showNextButton": false,
+			"alignChildren": "flex-start",
+		},
 		aria:{}
 	},
 	_widgetClass: "ibx-tab-pane",
@@ -23,7 +27,8 @@ $.widget("ibi.ibxTabPane", $.ibi.ibxFlexBox,
 	_create: function ()
 	{
 		this._super();
-		this._createTabBar();
+		this._group = $("<div>").uniqueId().appendTo(this.element);
+		this._group.ibxRadioGroup({name:this._group.prop("id")}).on("ibx_change", this._onTabChange.bind(this));
 	},
 	_setAccessibility:function(accessible, aria)
 	{
@@ -38,6 +43,7 @@ $.widget("ibi.ibxTabPane", $.ibi.ibxFlexBox,
 	_init: function ()
 	{
 		this._super();
+		this._createTabBar();
 		this.add(this.element.children(".ibx-tab-page"));
 	},
 	children:function(selector)
@@ -54,12 +60,15 @@ $.widget("ibi.ibxTabPane", $.ibi.ibxFlexBox,
 			el = $(el);
 			el.css("flex", "1 1 auto").addClass("tpg-hidden").on("keydown", this._onTabPaneKeyDown.bind(this));
 			var button = el.ibxWidget('button');
+			var groupName = this._group.ibxWidget("option", "name");
+			button.ibxWidget("option", "group", groupName);
+			this._group.ibxRadioGroup("addControl", button);
 			var nextPage = el.next('.ibx-tab-page');
 			if (nextPage.length > 0)
 			{
 				nextButton = nextPage.ibxWidget('button');
 				if ($.contains(this._tabBar[0], nextButton[0]))
-					button.insertBefore(nextButton);
+					this._tabBar.ibxWidget("add", button, nextButton, true, true);
 				else
 					this._tabBar.ibxWidget("add", button, null, null, true);
 			}
@@ -73,10 +82,14 @@ $.widget("ibi.ibxTabPane", $.ibi.ibxFlexBox,
 		el = $(el).filter(".ibx-tab-page");
 		el.each(function(idx, el)
 		{
-			$(el).ibxWidget('button').css("flex", "").removeClass("tpg-hidden").detach();
+			var button = $(el).ibxWidget('button');
+			button.css("flex", "").removeClass("tpg-hidden").detach();
+			button.ibxWidget("option", "group", "");
+			this._group.ibxRadioGroup("removeControl", button);
 		}.bind(this));
 		this._super(el, destroy, refresh);
 	},
+	/*
 	option:function (key, value)
 	{
 		var posValue = null;
@@ -112,33 +125,36 @@ $.widget("ibi.ibxTabPane", $.ibi.ibxFlexBox,
 
 		return ret;
 	},
+	*/
 	_createTabBar: function ()
 	{
+		var name = "" + this.widgetName + this.uuid;
 		switch (this.options.position)
 		{
 			default:
 			case "top":
 				this.option("direction", "column");
-				this._tabBar = $("<div>").ibxTabGroup({ name: "" + this.widgetName + this.uuid, direction: "row", position: "top"}, this.options.tabBarOptions).css("flex", "0 0 auto");
+				this._tabBar = $("<div>").ibxHTabGroup({ "name": name, position: "top"}, this.options.tabBarOptions);
 				break;
 
 			case "bottom":
 				this.option("direction", "columnReverse");
-				this._tabBar = $("<div>").ibxTabGroup({ name: "" + this.widgetName + this.uuid, direction: "row", position: "bottom" }, this.options.tabBarOptions).css("flex", "0 0 auto");
+				this._tabBar = $("<div>").ibxHTabGroup({ "name": name, position: "bottom" }, this.options.tabBarOptions);
 				break;
 
 			case "left":
 				this.option("direction", "row");
-				this._tabBar = $("<div>").ibxTabGroup({ name: "" + this.widgetName + this.uuid, direction: "column", position: "left" }, this.options.tabBarOptions).css("flex", "0 0 auto");
+				this._tabBar = $("<div>").ibxVTabGroup({ "name": name, position: "left" }, this.options.tabBarOptions);
 				break;
 
 			case "right":
 				this.option("direction", "rowReverse");
-				this._tabBar = $("<div>").ibxTabGroup({ name: "" + this.widgetName + this.uuid, direction: "column", position: "right" }, this.options.tabBarOptions).css("flex", "0 0 auto");
+				this._tabBar = $("<div>").ibxVTabGroup({ "name": name, position: "right" }, this.options.tabBarOptions);
 				break;
 
 		}
 
+		this._tabBar.css("flex", "0 0 auto");
 		this._tabBar.on("ibx_change", this._onTabChange.bind(this)).attr("tabIndex", -1);
 		this.element.prepend(this._tabBar);
 	},
@@ -151,24 +167,61 @@ $.widget("ibi.ibxTabPane", $.ibi.ibxFlexBox,
 		if(e.keyCode == $.ui.keyCode.ESCAPE)
 			;
 	},
-	_onTabChange: function (e, tabButton)
+	_onTabChange: function (e)
 	{
-		this.options.selected = $(tabButton).ibxWidget('option', 'tabPage');
+		var tabButton = $(e.target);
+		this.options.selected = tabButton.ibxWidget('option', 'tabPage');
 		this._trigger("change", e, this.options.selected);
 	},
 	next: function ()
 	{
-		this._tabBar.ibxTabGroup("selectNext");
+		this._group.ibxRadioGroup("selectNext");
 	},
 	previous: function ()
 	{
-		this._tabBar.ibxTabGroup("selectPrevious");
+		this._group.ibxRadioGroup("selectPrevious")
+	},
+	selected: function (element)
+	{
+		if (this._group)
+		{
+			if (!element)
+			{
+				var button = this._group.ibxWidget('selected');
+				if (button.length)
+				{
+					return button.ibxWidget('option', 'tabPage');
+				}
+				else
+					return null;
+			}
+			else
+				return this._group.ibxWidget('selected', element);
+
+		}
+		else
+			return null;
 	},
 	_refresh: function ()
 	{
 		this._super();
 		if (this._tabBar)
-			this._tabBar.ibxTabGroup(this.options.tabBarOptions);
+		{
+			switch (this.options.position)
+			{
+				default:
+				case "top":
+				case "bottom":
+					this._tabBar.ibxHTabGroup(this.options.tabBarOptions);
+					break;
+	
+				case "left":
+				case "right":
+					this._tabBar.ibxVTabGroup(this.options.tabBarOptions);
+					break;
+				
+			}
+		}
 	}
 });
 $.ibi.ibxTabPane.statics =
@@ -287,32 +340,30 @@ $.widget("ibi.ibxTabButton", $.ibi.ibxRadioButton,
 /******************************************************************************
 	TAB GROUP
 ******************************************************************************/
-$.widget("ibi.ibxTabGroup", $.ibi.ibxButtonGroup,
+$.widget("ibi.ibxHTabGroup", $.ibi.ibxHCarousel,
 {
 	options:
 	{
 		navKeyRoot:true,
 		navKeyAutoFocus:true,
 		position: "top",
-		groupSelection: true,
-		wrap: true,
-		aria:{role:"tablist"}
+		aria:{role:"tablist"},
+		showPageMarkers: false,
+		hideDisabledButtons: true,
+		floatButtons: false,
+		prevNextButtonPos: "end",
 	},
 	_widgetClass:"ibx-tab-group",
 	_create: function ()
 	{
 		this._super();
+		this.element.addClass("ibx-tab-group-horizontal");
 		this.element.attr("tabindex", 0);
-	},
-	_fixFirstLast: function ()
-	{
-		// override base
 	},
 	_refresh: function ()
 	{
 		this._super();
-		this.element.removeClass("ibx-button-group-horizontal ibx-button-group-vertical ibx-tab-group-horizontal ibx-tab-group-vertical ibx-tab-position-top ibx-tab-position-bottom ibx-tab-position-left ibx-tab-position-right");
-		this.element.addClass(this.options.direction == "row" ? "ibx-tab-group-horizontal" : "ibx-tab-group-vertical");
+		this.element.removeClass("ibx-tab-position-top ibx-tab-position-bottom");
 		switch (this.options.position)
 		{
 			default:
@@ -320,6 +371,37 @@ $.widget("ibi.ibxTabGroup", $.ibi.ibxButtonGroup,
 				this.element.addClass("ibx-tab-position-top"); break;
 			case "bottom":
 				this.element.addClass("ibx-tab-position-bottom"); break;
+		}
+	}
+});
+
+$.widget("ibi.ibxVTabGroup", $.ibi.ibxVCarousel,
+{
+	options:
+	{
+		navKeyRoot:true,
+		navKeyAutoFocus:true,
+		position: "left",
+		aria:{role:"tablist"},
+		showPageMarkers: false,
+		hideDisabledButtons: true,
+		floatButtons: false,
+		prevNextButtonPos: "end",
+	},
+	_widgetClass:"ibx-tab-group",
+	_create: function ()
+	{
+		this._super();
+		this.element.addClass("ibx-tab-group-vertical");
+		this.element.attr("tabindex", 0);
+	},
+	_refresh: function ()
+	{
+		this._super();
+		this.element.removeClass("ibx-tab-position-left ibx-tab-position-right");
+		switch (this.options.position)
+		{
+			default:
 			case "left":
 				this.element.addClass("ibx-tab-position-left"); break;
 			case "right":
@@ -328,9 +410,6 @@ $.widget("ibi.ibxTabGroup", $.ibi.ibxButtonGroup,
 		}
 	}
 });
-
-$.widget("ibi.ibxHTabGroup", $.ibi.ibxTabGroup, { options: { direction: "row", position: "top" } });
-$.widget("ibi.ibxVTabGroup", $.ibi.ibxTabGroup, { options: { direction: "column", position: "left" } });
 
 
 //# sourceURL=tabs.ibx.js

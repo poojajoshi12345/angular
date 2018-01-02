@@ -24,8 +24,8 @@
 /* Horizontal tab */
 
 
-.ibx-tab-group-horizontal > .ibx-check-box:focus,
-.ibx-tab-group-horizontal > .ibx-check-box.checked:focus
+.ibx-tab-group-horizontal .ibx-check-box:focus,
+.ibx-tab-group-horizontal .ibx-check-box.checked:focus
 {
     background-color: #eee;
     box-shadow: none;
@@ -85,14 +85,14 @@
 
 /* Vertical tab */
 
-.ibx-tab-group-vertical > .ibx-check-box:focus,
-.ibx-tab-group-vertical > .ibx-check-box.checked:focus
+.ibx-tab-group-vertical .ibx-check-box:focus,
+.ibx-tab-group-vertical .ibx-check-box.checked:focus
 {
     background-color: #eee;
     box-shadow: none;
 }
 
-.ibx-tab-group-vertical > .ibx-check-box.checked {
+.ibx-tab-group-vertical .ibx-check-box.checked {
     background-color: #fff;
     border: 1px solid #ccc;
     border-right-color: rgba(0,0,0,0);

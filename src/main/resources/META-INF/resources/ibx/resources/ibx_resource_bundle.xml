@@ -208,7 +208,6 @@ $Revision$:-->
 		<script-file src="./js/dialog.ibx.js"/>
 		<script-file src="./js/radiogroup.ibx.js"/>
 		<script-file src="./js/form.ibx.js"/>
-		<script-file src="./js/tabs.ibx.js"/>
 		<script-file src="./js/accordion.ibx.js"/>
 		<script-file src="./js/menu.ibx.js"/>
 		<script-file src="./js/groupbox.ibx.js"/>
@@ -216,6 +215,7 @@ $Revision$:-->
 		<script-file src="./js/select.ibx.js"/>
 		<script-file src="./js/iframe.ibx.js"/>
 		<script-file src="./js/carousel.ibx.js"/>
+		<script-file src="./js/tabs.ibx.js"/>
 		<script-file src="./js/datepicker.ibx.js"/>
 		
 		<!--scripts-->
