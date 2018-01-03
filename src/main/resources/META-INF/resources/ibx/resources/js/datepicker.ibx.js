@@ -115,7 +115,8 @@ $.widget("ibi.ibxDatePicker", $.ibi.ibxVBox,
 		if (this.options.pickerClasses)
 			this._popup.addClass(this.options.pickerClasses);
 		this._datePicker.datepicker('option', this.options);
-		this._datePicker.datepicker('setDate', new Date(this.options.date));
+		var dateObj = $.datepicker.parseDate(this.options.dateFormat, this.options.date) || $.datepicker.formatDate($.ibi.ibxDatePicker.statics.defaultDateFormat, new Date());
+		this._datePicker.datepicker('setDate', dateObj);
 		this._input.ibxWidget('option', 'text', $.datepicker.formatDate(this.options.outDateFormat, this._datePicker.datepicker('getDate'), this._pickerOptions));
 		this._super();
 		if (this._popup.ibxWidget('isOpen'))
@@ -329,7 +330,8 @@ $.widget("ibi.ibxDateRange", $.ibi.ibxDatePicker,
 				this._clear2.hide();
 		}
 
-		this._datePicker.datepicker('setDate', new Date(this.options.dateTo));
+		var toDateObj = $.datepicker.parseDate(this.options.dateFormat, this.options.dateTo) || $.datepicker.formatDate($.ibi.ibxDatePicker.statics.defaultDateFormat, new Date());
+		this._datePicker.datepicker('setDate', toDateObj);
 		if (this.options.singleInput)
 		{
 			var fromText = '';
