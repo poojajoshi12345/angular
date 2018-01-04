@@ -162,6 +162,10 @@ $.widget("ibi.ibxTabPane", $.ibi.ibxFlexBox,
 	{
 		this._tabBar.remove();
 	},
+	tabBar: function ()
+	{
+		return this._tabBar;
+	},
 	_onTabPaneKeyDown: function(e)
 	{
 		if(e.keyCode == $.ui.keyCode.ESCAPE)
@@ -344,14 +348,10 @@ $.widget("ibi.ibxHTabGroup", $.ibi.ibxHCarousel,
 {
 	options:
 	{
-		navKeyRoot:true,
-		navKeyAutoFocus:true,
 		position: "top",
 		aria:{role:"tablist"},
+		hideDisabledButtons:true,
 		showPageMarkers: false,
-		hideDisabledButtons: true,
-		floatButtons: false,
-		prevNextButtonPos: "end",
 	},
 	_widgetClass:"ibx-tab-group",
 	_create: function ()
@@ -379,14 +379,10 @@ $.widget("ibi.ibxVTabGroup", $.ibi.ibxVCarousel,
 {
 	options:
 	{
-		navKeyRoot:true,
-		navKeyAutoFocus:true,
 		position: "left",
 		aria:{role:"tablist"},
+		hideDisabledButtons:true,
 		showPageMarkers: false,
-		hideDisabledButtons: true,
-		floatButtons: false,
-		prevNextButtonPos: "end",
 	},
 	_widgetClass:"ibx-tab-group",
 	_create: function ()
