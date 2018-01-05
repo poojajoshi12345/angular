@@ -71,7 +71,9 @@ $.widget("ibi.ibxPopup", $.ibi.ibxWidget,
 				if(e.originalEvent.propertyName == "visibility" && this.isOpen())
 				{
 					this.element.off("transitionend");//no longer interested in transition events.
-					if(this.options.autoFocus)
+
+					//for autofocus, and navKeyRoots, we need to focus the popup so it can manage child focusing.
+					if(this.options.autoFocus || this.options.navKeyRoot)
 					{
 						//focus the popup first.				
 						this.element.focus();
@@ -128,8 +130,11 @@ $.widget("ibi.ibxPopup", $.ibi.ibxWidget,
 						/****[IBX-29]
 							Refocus the previously active element. The check for body being focused is because if the user has clicked on something else to dismiss
 							the popup, then that should retain focus and WE DON'T WANT TO MOVE IT TO THE ORIGINAL FOCUSED ELEMENT!!!
+
+							//NOTE: ADDED !active because IE (of course) doesn't set the active to body when nothing is active.
 						****/
-						if(this._elPrevActive && this.options.refocusLastActiveOnClose && document.body === document.activeElement)
+						var active = document.activeElement;
+						if(this.options.refocusLastActiveOnClose && this._elPrevActive && (!active || active === document.body))
 							this._elPrevActive.focus();
 						delete this._elPrevActive;
 					}
