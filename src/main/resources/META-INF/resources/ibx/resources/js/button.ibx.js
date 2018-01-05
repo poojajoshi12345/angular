@@ -36,7 +36,7 @@ $.widget("ibi.ibxButton", $.ibi.ibxLabel,
 			if(e.keyCode === $.ui.keyCode.ENTER || e.keyCode === $.ui.keyCode.SPACE)
 			{
 				this.element.removeClass("ibx-button-active");
-				this.element.trigger('click');
+				this.element.trigger("click");
 			}
 		}
 		this.setAccessibility();

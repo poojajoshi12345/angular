@@ -9,8 +9,6 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 	options:
 	{
 		navKeyRoot:true,
-		navKeyAutoFocus:true,
-		navKeyResetFocusOnBlur:true,
 		wantResize:true,
 		nameRoot:true,
 		align:"stretch",
@@ -63,7 +61,6 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 	_setAccessibility:function(accessible, aria)
 	{
 		this._super(accessible, aria);
-
 		this._itemsBox.ibxWidget("option", "aria", {"role":"listbox", "label":ibx.resourceMgr.getString("IBX_CAROUSEL_ITEMS")}).ibxWidget("setAccessibility", this.options.aria.accessible);
 		this._pageMarkers.ibxWidget("option", "aria", {"role":"listbox", "label":ibx.resourceMgr.getString("IBX_CAROUSEL_PAGES")}).ibxWidget("setAccessibility", this.options.aria.accessible);
 		return aria;
@@ -80,8 +77,9 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 	},
 	navKeyChildren:function(selector)
 	{
+		//return the specific high level elements of the carousel, but only the ones that can be focused.
 		var ret = $([this._prevBtn[0], this._itemsBox[0], this._nextBtn[0], this._pageMarkers[0]]);
-		return ret;
+		return ret.filter(selector || ":ibxNavFocusable()");
 	},
 	add:function(el, sibling, before, refresh)
 	{
@@ -238,13 +236,16 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 	_onItemsBoxFocus:function(e)
 	{
 		//don't do the focusing if selected item is already a child.
-		var oEvent = e.originalEvent.data;
-		if(!$.contains(e.target, oEvent.target))
+		if($(e.target).ibxWidget("navKeyActive"))
 		{
-			//if the current active item is not in the viewport, then focus the first child that is.
-			var visChildren = this.children(":inViewport(true)");
-			if(!visChildren.filter(".ibx-nav-item-active").length)
-				visChildren.first().focus();
+			var oEvent = e.originalEvent.data;
+			if(!$.contains(e.target, oEvent.target))
+			{
+				//if the current active item is not in the viewport, then focus the first child that is.
+				var visChildren = this.children(":inViewport(true)");
+				if(!visChildren.filter(".ibx-nav-item-active").length)
+					visChildren.first().focus();
+			}
 		}
 	},
 	_onItemsBoxKeydown:function(e)
@@ -382,7 +383,6 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 		else
 			this._adjustPageMarkers();
 	
-	this._pageMarkers.ibxWidget("option", "navKeyAutoFocus", "." + this.options.pageMarkerSelectedClass);
 	this._pageMarkers.css("display", options.showPageMarkers ? "" : "none");
 		(options.pageMarkersPos == "start")
 			? this._pageMarkers.insertBefore(this._itemsContainer)

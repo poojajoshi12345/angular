@@ -358,7 +358,6 @@ $.widget("ibi.ibxHTabGroup", $.ibi.ibxHCarousel,
 	{
 		this._super();
 		this.element.addClass("ibx-tab-group-horizontal");
-		this.element.attr("tabindex", 0);
 	},
 	_refresh: function ()
 	{

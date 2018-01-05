@@ -22,17 +22,48 @@
 			
 			ibx(function()
 			{
-				$(".right-side").ibxCollapsible(
+				ibxEventManager.noIOSBodyScroll = true;
+				Ibfs.load().done(function()
 				{
-					direction:"right",
-					startCollapsed:true,
-					autoClose:true
+					Ibfs.ibfs.login("admin", "admin").done(function(e)
+					{
+						console.log("ibfs logged in.");
+						Ibfs.ibfs.listItems("IBFS:/WFC/Repository/Public", {asJSON:true});
+					});
 				});
 
-				$(".btn-toggle").on("click", function(e)
+
+				window.addEventListener("ibfs_list_items", function(e)
 				{
-					$(".right-side").ibxCollapsible("toggle");
+					var csl = $(".test-carousel");
+					csl.ibxWidget("children").remove();
+
+					var items = e.data.result;
+					for(var i = 0; i < items.length; ++i)
+					{
+						if(i > 15)
+							continue;
+						var item = items[i];
+						var qItem = $(sformat("<div id='tile{3}' class='test-tile' title='{1}'>{2}</div>", item.fullPath, item.name, i));
+						qItem.css("background-image", sformat('url("{1}")', item.thumbPath));
+						csl.ibxWidget("add", qItem);
+					}
+
+					$(".cmd-files").on("ibx_triggered", function(e)
+					{
+						$(".test-carousel").focus();
+					});
 				});
+
+
+				$(".test-popup-inner-text").text(ibx.resourceMgr.getString("IBX_STR_SAMPLE"));
+				//$(".test-popup").ibxWidget("open");
+
+				$(".ibx-carousel").on("ibx_beforenavkey", function(e)
+				{
+					//console.dir(e);
+				});
+
 			}, [{src:"./test_res_bundle.xml", loadContext:"app"}], true);
 		</script>
 		<style type="text/css">
@@ -48,34 +79,88 @@
 			{
 				width:100%;
 				height:100%;
-				overflow:hidden;
+				overflow:auto;
 				background-color:white;
 				box-sizing:border-box;
 			}
 
-			.side
+			.test-carousel
 			{
-				border:1px solid black;
-				margin:2px;
+				max-width:75%;
+				border:1px solid #aaa;
+				border-radius:.5em;
+				box-shadow:0px 0px 15px 0px #999;
 			}
-			.left-side
+
+			.test-tile
+			{
+				width:100px;
+				height:100px;
+				display:flex;
+				align-items:flex-end;
+				justify-content:center;
+				margin:10px;
+				padding:5px;
+				background-repeat:no-repeat;
+				background-position:top;
+				background-size:80%;
+				overflow:hidden;
+			}
+			.test-tile:hover
+			{
+				background-color:#eee;
+			}
+
+			.test-button
+			{
+				margin:10px;
+			}
+
+			.test-popup
+			{
+				border:1px solid #aaa;
+				box-shadow:0px 0px 15px 0px #999;
+			}
+			.test-popup-box
+			{
+				width:400px;
+				padding:10px;
+			}
+			.ibx-slider.test-slider
 			{
 				flex:1 1 auto;
 			}
-			.right-side
+
+			.test-iframe1
 			{
-				width:200px;
+				width:400px;
+				height:400px;
+			}
+			.test-iframe2
+			{
+				border:1px solid black;
+				height:200px;
+				display:none;
 			}
 		</style>
 	</head>
 	<body class="ibx-root">
 		<div class="cmd-files" data-ibx-type="ibxCommand" data-ibxp-shortcut="CTRL+F"></div>
-		<div class="main-box" data-ibx-type="ibxHBox" data-ibxp-align="stretch" data-ibxp-justify="start">
-			<div class="side left-side" data-ibx-type="ibxVBox">
-				<div class="btn-toggle" data-ibx-type="ibxLabel">Left Side</div>
+		<div id="mainBox" class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="center" data-ibxp-justify="center">
+			<div id="testBtn1" class="ibx-button test-button" tabindex="0" data-ibx-type="ibxMenuButton">Test Button 1
+				<div data-ibx-type="ibxMenu">
+					<div data-ibx-type="ibxMenuItem">Menu Item</div>
+				</div>
 			</div>
-			<div class="side right-side" data-ibx-type="ibxVBox">
-				<div tabindex="0" data-ibx-type="ibxLabel">Right Side</div>
+			<div id="testCarousel" class="test-carousel" tabindex="0" data-ibx-type="ibxHCarousel" data-ibx-options="{navKeyRoot:true, scrollType:'integral', aria:{role:'region', keyshortcuts:'Control+F', label:'I B F S Files List'}}"></div>
+			<div id="testBtn2" class="test-button" tabindex="0" data-ibx-type="ibxButton">Test Button 2</div>
+		</div>
+
+		<div class="test-popup" data-ibx-type="ibxPopup" data-ibxp-auto-close="false" data-ibxp-escape-to-close="false" data-ibxp-destroy-on-close="false" data-ibxp-opaque="true">
+			<div class="test-popup-box" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
+				<div class="test-slider" tabIndex="0" data-ibx-type="ibxHSlider" data-ibx-options="{value:25, minTextPos:'center', maxTextPos:'center'}"></div>
+				<div class="test-slider" tabindex="0" data-ibx-type="ibxHRange" data-ibx-options="{value:25, value2:75, minTextPos:'center', maxTextPos:'center'}"></div>
+				<div class="test-iframe2" tabIndex="0" data-ibx-type="ibxIFrame" data-ibxp-src="./test.html"></div>
 			</div>
 		</div>
 	</body>

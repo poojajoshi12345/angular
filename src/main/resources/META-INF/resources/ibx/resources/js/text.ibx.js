@@ -25,7 +25,6 @@ $.widget("ibi.ibxTextField", $.ibi.ibxFlexBox,
 			/*nav key will autofocus the input control and manage focus of children*/
 			"navKeyRoot":true,
 			"navKeyAutoFocus":true,
-			"navKeyResetFocusOnBlur":true,
 
 			/*ibxFlexBox default options*/
 			"inline": true,

@@ -38,14 +38,6 @@ jQuery.expr[":"]["displayNone"] = function(elem)
 {
 	return ($(elem).css("display") == "none")
 };
-jQuery.expr[":"]["biComponent"] = function(elem)
-{
-	return $(elem).prop("_biComponent") ? true : false;
-};
-jQuery.expr[":"]["biFocusRoot"] = function(elem)
-{
-	return elem._biComponent ? elem._biComponent.isFocusRoot() : false;
-};
 jQuery.expr[":"]["ibxWidget"] = function(elem)
 {
 	return $(elem).data("ibxWidget") ? true : false;
@@ -182,6 +174,14 @@ jQuery.fn.extend({
 	},
 });
 
+//is the first element the focused element.
+jQuery.fn.isFocused = function()
+{
+	var el = this[0];
+	var isFocused = !!(el && (el === document.activeElement && (el.nodeType || el.href)));
+	return isFocused;
+};
+
 //simple plugin to get the zIndex of the 0th element.
 jQuery.fn["zIndex"] = function()
 {
@@ -239,7 +239,7 @@ jQuery.fn.redraw = function()
 //let jQuery dispatch custom native events
 jQuery.fn.dispatchEvent = function(type, data, canBubble, cancelable, relatedTarget)
 {
-	var e = createNativeEvent(type, data, canBubble, cancelable, relatedTarget);
+	var e = (type instanceof Event) ? type : createNativeEvent(type, data, canBubble, cancelable, relatedTarget);
 	this.each(function(e, idx, el)
 	{
 		el.dispatchEvent(e);
