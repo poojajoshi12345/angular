@@ -206,28 +206,25 @@ $.widget("ibi.ibxWidget", $.Widget,
 				if(this.element.data("navKeyRootTabIndex") !== undefined)
 					this.element.data("navKeyRootTabIndex", this.element.prop("tabindex")).prop("tabindex", -1);
 
-				if(options.navKeyAutoFocus)
+				if(options.navKeyAutoFocus || ownsTarget)
 				{
 					this.element.addClass(options.navKeyTrigger.class);
-					/*
-					if(!ownsTarget)
+					if(!ownsRelTarget)
 					{
+						/*
 						var navKids = this.navKeyChildren();
 						var navKid = navKids.filter("ibx-nav-item-active");
 						navKid = navKid.length ? navKid : navKids.first();
 						navKids.first().focus();
 						return;
+						*/
 					}
-					*/
 				}
 
-				if(ownsTarget)
-				{
-					this.element.filter("*").removeClass("ibx-nav-item-active ibx-ie-pseudo-focus").removeAttr("aria-activedescendant");
-					$(e.target).addClass("ibx-nav-item-active").toggleClass("ibx-ie-pseudo-focus", ibxPlatformCheck.isIE).attr("aria-activedescendant", true);
-					e.stopPropagation();
-					e.preventDefault();
-				}
+				this.element.find("*").removeClass("ibx-nav-item-active ibx-ie-pseudo-focus").removeAttr("aria-activedescendant");
+				$(e.target).addClass("ibx-nav-item-active").toggleClass("ibx-ie-pseudo-focus", ibxPlatformCheck.isIE).attr("aria-activedescendant", true);
+				e.stopPropagation();
+				e.preventDefault();
 			}
 		}
 		else
