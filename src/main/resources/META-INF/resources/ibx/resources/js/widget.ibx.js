@@ -203,7 +203,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 
 			if(options.navKeyRoot)
 			{
-				if(this.element.data("navKeyRootTabIndex") !== undefined)
+				if(this.element.data("navKeyRootTabIndex") === undefined)
 					this.element.data("navKeyRootTabIndex", this.element.prop("tabindex")).prop("tabindex", -1);
 				
 				//if we own the target, we are now nav active.
