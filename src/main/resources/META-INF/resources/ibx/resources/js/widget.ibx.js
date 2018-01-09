@@ -192,7 +192,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 		var isTarget = this.element.is(e.target);
 		var ownsTarget = $.contains(this.element[0], e.target);
 		var ownsRelTarget = $.contains(this.element[0], e.relatedTarget);
-		
+
 		if(e.type == "focusin")
 		{
 			if(!this._widgetFocused)
@@ -205,26 +205,35 @@ $.widget("ibi.ibxWidget", $.Widget,
 			{
 				if(this.element.data("navKeyRootTabIndex") !== undefined)
 					this.element.data("navKeyRootTabIndex", this.element.prop("tabindex")).prop("tabindex", -1);
-
-				if(options.navKeyAutoFocus || ownsTarget)
-				{
+				
+				if(ownsTarget)
 					this.element.addClass(options.navKeyTrigger.class);
-					if(!ownsRelTarget)
-					{
-						/*
-						var navKids = this.navKeyChildren();
-						var navKid = navKids.filter("ibx-nav-item-active");
-						navKid = navKid.length ? navKid : navKids.first();
-						navKids.first().focus();
-						return;
-						*/
-					}
-				}
 
-				this.element.find("*").removeClass("ibx-nav-item-active ibx-ie-pseudo-focus").removeAttr("aria-activedescendant");
-				$(e.target).addClass("ibx-nav-item-active").toggleClass("ibx-ie-pseudo-focus", ibxPlatformCheck.isIE).attr("aria-activedescendant", true);
-				e.stopPropagation();
-				e.preventDefault();
+				if(options.navKeyAutoFocus && isTarget)
+				{
+					var navKids = this.navKeyChildren();
+					navKid = navKids.filter(".ibx-nav-item-active");
+					navKid = navKid.length ? navKid : navKids.first();
+					navKid[0].focus();
+					return;
+				}
+				else
+				if(!isTarget)
+				{
+					var navKids = this.navKeyChildren();
+					var navFocusItem = $();
+					for(var i = 0; i < navKids.length; ++i)
+					{
+						var navKid = $(navKids[i]);
+						if(navKid.is(e.target) || $.contains(navKid[0], e.target))
+						{
+							navFocusItem = navKid;
+							break;
+						}
+					}
+					navKids.removeClass("ibx-nav-item-active ibx-ie-pseudo-focus").removeAttr("aria-activedescendant");
+					navFocusItem.addClass("ibx-nav-item-active").toggleClass("ibx-ie-pseudo-focus", ibxPlatformCheck.isIE).attr("aria-activedescendant", true);
+				}
 			}
 		}
 		else
@@ -289,7 +298,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 			{
 				isNavActive = true;
 				this.element.addClass(options.navKeyTrigger.class);
-				active = current.length ? current : navKids.first();
+				active = active = current.length ? current : navKids.first();
 			}
 			else
 			if(isNavActive && e.keyCode == options.navKeyTrigger.keyCancel)
@@ -353,7 +362,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 				this.element.trigger(event);
 				if(!event.isDefaultPrevented())
 				{
-					active.focus();
+					active[0].focus();
 					e.stopPropagation();
 					e.preventDefault();
 				}

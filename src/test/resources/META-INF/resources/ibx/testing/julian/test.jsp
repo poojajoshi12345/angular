@@ -49,6 +49,10 @@
 						csl.ibxWidget("add", qItem);
 					}
 
+					$(".cmd-clear").on("ibx_triggered", function(e)
+					{
+						console.clear();
+					});
 					$(".cmd-files").on("ibx_triggered", function(e)
 					{
 						$(".test-carousel").focus();
@@ -145,10 +149,13 @@
 		</style>
 	</head>
 	<body class="ibx-root">
+		<div class="cmd-clear" data-ibx-type="ibxCommand" data-ibxp-shortcut="CTRL+C"></div>
 		<div class="cmd-files" data-ibx-type="ibxCommand" data-ibxp-shortcut="CTRL+F"></div>
 		<div id="mainBox" class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="center" data-ibxp-justify="center">
 			<div id="testBtn1" class="ibx-button test-button" tabindex="0" data-ibx-type="ibxMenuButton">Test Button 1
 				<div data-ibx-type="ibxMenu">
+					<div data-ibx-type="ibxMenuItem">Menu Item</div>
+					<div data-ibx-type="ibxMenuItem">Menu Item</div>
 					<div data-ibx-type="ibxMenuItem">Menu Item</div>
 				</div>
 			</div>
