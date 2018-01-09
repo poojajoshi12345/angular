@@ -206,11 +206,13 @@ $.widget("ibi.ibxWidget", $.Widget,
 				if(this.element.data("navKeyRootTabIndex") !== undefined)
 					this.element.data("navKeyRootTabIndex", this.element.prop("tabindex")).prop("tabindex", -1);
 				
+				//if we own the target, we are now nav active.
 				if(ownsTarget)
 					this.element.addClass(options.navKeyTrigger.class);
 
 				if(options.navKeyAutoFocus && isTarget)
 				{
+					//we are the target and want autofocus...do it.
 					var navKids = this.navKeyChildren();
 					navKid = navKids.filter(".ibx-nav-item-active");
 					navKid = navKid.length ? navKid : navKids.first();
@@ -220,6 +222,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 				else
 				if(!isTarget)
 				{
+					//a kid was clicked/focused...find direct nav child to make active.
 					var navKids = this.navKeyChildren();
 					var navFocusItem = $();
 					for(var i = 0; i < navKids.length; ++i)
@@ -309,7 +312,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 			else
 			if(isNavActive)
 			{
-				if(-1 == $.ibi.ibxWidget.navKeys.indexOf(e.keyCode))
+				if(-1 == $.ibi.ibxWidget.navKeys.indexOf(e.keyCode) || $(e.target).is(":input"))
 					active = $();
 				else
 				if(e.keyCode == $.ui.keyCode.HOME)
