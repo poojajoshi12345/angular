@@ -252,7 +252,8 @@ $.widget("ibi.ibxWidget", $.Widget,
 				this.element.removeClass(options.navKeyTrigger.class);
 
 				//put this element back in the tab order...so that next tab into will will do auto-focus.
-				this.element.prop("tabIndex", this.element.data("navKeyRootTabIndex")).removeData("navKeyRootTabIndex");
+				if(this.element.data("navKeyRootTabIndex") !== undefined)
+					this.element.prop("tabIndex", this.element.data("navKeyRootTabIndex")).removeData("navKeyRootTabIndex");
 
 				//remove active so next focus goes to first item.
 				if(options.navKeyResetFocusOnBlur)

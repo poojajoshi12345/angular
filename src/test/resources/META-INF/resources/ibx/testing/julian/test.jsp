@@ -157,7 +157,6 @@
 		<div class="cmd-clear" data-ibx-type="ibxCommand" data-ibxp-shortcut="CTRL+C"></div>
 		<div class="cmd-files" data-ibx-type="ibxCommand" data-ibxp-shortcut="CTRL+F"></div>
 		<div id="mainBox" class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="center" data-ibxp-justify="center">
-			<div id="testEdit" class="test-edit" tabindex="0" data-ibx-type="ibxTextField">Test Text Field</div>
 			<div id="testBtn1" class="ibx-button test-button" tabindex="0" data-ibx-type="ibxMenuButton">Test Button 1
 				<div data-ibx-type="ibxMenu">
 					<div data-ibx-type="ibxMenuItem">Menu Item</div>
@@ -165,6 +164,7 @@
 					<div data-ibx-type="ibxMenuItem">Menu Item</div>
 				</div>
 			</div>
+			<div id="testEdit" class="test-edit" tabindex="0" data-ibx-type="ibxTextField">Test Text Field</div>
 			<div id="testCarousel" class="test-carousel" tabindex="0" data-ibx-type="ibxHCarousel" data-ibx-options="{navKeyRoot:true, scrollType:'integral', aria:{role:'region', keyshortcuts:'Control+F', label:'I B F S Files List'}}"></div>
 			<div id="testBtn2" class="test-button" tabindex="0" data-ibx-type="ibxButton">Test Button 2</div>
 		</div>
