@@ -460,14 +460,10 @@ $.widget("ibi.ibxVMenuButton", $.ibi.ibxMenuButton,
 {
 	options:{position:{at:"right top"}},
 	_widgetClass: "ibx-vmenu-button",
-	_onMenuButtonKeyDown:function(e)
+	_onMenuButtonKeyEvent:function(e)
 	{
-		$.ibi.ibxButtonSimple.prototype._onKeyEvent.call(this, e);
 		if(e.keyCode == $.ui.keyCode.RIGHT)
-		{
-			this._onMenuButtonMouseDown(e);
-			e.preventDefault();
-		}
+			this.element.trigger("click");
 	}
 });
 
