@@ -19,7 +19,7 @@
 		<Script src="<%=request.getContextPath()%>/ibx/resources/ibx.js" type="text/javascript"></script>
 		<script type="text/javascript">
 			<jsp:include page="/WEB-INF/jsp/global/wf_globals.jsp" flush="false" />
-			
+
 			ibx(function()
 			{
 				ibxEventManager.noIOSBodyScroll = true;
@@ -67,7 +67,6 @@
 				{
 					//console.dir(e);
 				});
-
 			}, [{src:"./test_res_bundle.xml", loadContext:"app"}], true);
 		</script>
 		<style type="text/css">

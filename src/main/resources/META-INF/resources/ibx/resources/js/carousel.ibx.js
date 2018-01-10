@@ -16,6 +16,8 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 		pageMarkersPos:"end",
 		pageMarkerClass:"ibx-csl-page-marker",
 		pageMarkerSelectedClass:"ibx-csl-page-selected",
+		pagePrev:"CTRL+LEFT",
+		pageNext:"CTRL+RIGHT",
 		prevNextButtonPos:"ends",	//ends/start/end
 		showPrevButton:true,
 		showNextButton:true,
@@ -250,12 +252,12 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 	},
 	_onItemsBoxKeydown:function(e)
 	{
-		if((e.keyCode == $.ui.keyCode.LEFT || e.keyCode == $.ui.keyCode.RIGHT) && e.ctrlKey)
-		{
-			this.page((e.keyCode == $.ui.keyCode.LEFT) ? -1 : 1, null, true);
-			e.preventDefault();
-			e.stopPropagation();
-		}
+		var options = this.options;
+		if(eventMatchesCommand(options.pagePrev, e))
+			this.page(-1, null, true);
+		else
+		if(eventMatchesCommand(options.pageNext, e))
+			this.page(1, null, true);
 	},
 	_onPrevNext:function(e)
 	{
@@ -395,6 +397,7 @@ $.widget("ibi.ibxVCarousel", $.ibi.ibxCarousel,
 {
 	options:
 	{
+		navKeyDir:"vertical",
 		direction:"row",
 		scrollProps://html props to use for calculating scroll position/delta
 		{
@@ -410,24 +413,10 @@ $.widget("ibi.ibxVCarousel", $.ibi.ibxCarousel,
 	{
 		this._super();
 		this._itemsContainer.ibxWidget("option", "direction", "column");
-		this._itemsBox.ibxWidget("option", "direction", "column");
+		this._itemsBox.ibxWidget("option", {"navKeyDir":"vertical", "direction":"column"}).ibxDragScrolling({overflowX:"hidden", overflowY:"auto"});
 		this._pageMarkers.ibxWidget("option", "direction", "column");
 		this._prevBtn.ibxWidget("option", {"iconPosition": "top"});
 		this._nextBtn.ibxWidget("option", {"iconPosition": "top"});
-		this._itemsBox.ibxDragScrolling({overflowX:"hidden", overflowY:"auto"});
-	},
-	_onItemsKeyEvent:function(e)
-	{
-		if(e.type == "keydown")
-		{
-			if(e.keyCode == 38)
-				this.scroll(false);
-			else
-			if(e.keyCode == 40)
-				this.scroll(true);
-		}
-		else
-			this._super(e);
 	},
 	_onPageMarkerClick:function(e)
 	{

@@ -43,26 +43,11 @@ $.widget("ibi.ibxCommand", $.ibi.ibxWidget,
 	},
 	_onCommandKeyEvent:function(e)
 	{
-		var sc = this.options.shortcut;
-		if(sc)
+		if(eventMatchesCommand(this.options.shortcut, e))
 		{
-			var trigger = true;
-			sc = sc.toUpperCase();
-			if(-1 != sc.indexOf("CTRL"))
-				trigger = trigger & (e.ctrlKey);
-			if(-1 != sc.indexOf("ALT"))
-				trigger = trigger & (e.altKey);
-			if(-1 != sc.indexOf("SHIFT"))
-				trigger = trigger & (e.shiftKey);
-
-			sc = sc.replace(/CTRL|ALT|SHIFT|\+| /gi, "");
-			trigger = trigger & (($.ui.keyCode[sc] == e.keyCode) || (-1 != sc.search(e.key.toUpperCase())));
-			if(trigger)
-			{
-				this.doAction("trigger", null, e.target);
-				e.preventDefault();
-				e.stopPropagation();
-			}
+			this.doAction("trigger", null, e.target);
+			e.preventDefault();
+			e.stopPropagation();
 		}
 	},
 	_setOptionDisabled:function(value)
@@ -74,7 +59,6 @@ $.widget("ibi.ibxCommand", $.ibi.ibxWidget,
 	{
 		var changed = this.options[key] != value;
 		this._super(key, value);
-
 		if(changed && key == "checked")
 			this.element.dispatchEvent("ibx_checkchanged", value, false, false, this._relTarget);
 		else

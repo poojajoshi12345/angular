@@ -31,6 +31,10 @@
 	opacity:0;
 	transition:opacity .3s;
 }
+.csl-btn-float:focus
+{
+	opacity:.75;
+}
 
 .csl-btn-float:hover
 {

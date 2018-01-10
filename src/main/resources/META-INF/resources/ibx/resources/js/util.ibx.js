@@ -204,6 +204,17 @@ jQuery.fn.textNodes = function()
 	return $(ret);
 };
 
+//force redraw/repaint element...I'm dubious about whether this actually works...got from:
+//https://stackoverflow.com/questions/3485365/how-can-i-force-webkit-to-redraw-repaint-to-propagate-style-changes
+jQuery.fn.redraw = function()
+{
+	this.each(function(idx, el)
+	{
+		el.offsetHeight;
+	});
+	return this;
+};
+
 //create a native browser event.
 function createNativeEvent(type, data, canBubble, cancelable, relatedTarget)
 {
@@ -223,18 +234,6 @@ function createNativeEvent(type, data, canBubble, cancelable, relatedTarget)
 	e.relatedTarget = relatedTarget;
 	return e;
 }
-
-//force redraw/repaint element...I'm dubious about whether this actually works...got from:
-//https://stackoverflow.com/questions/3485365/how-can-i-force-webkit-to-redraw-repaint-to-propagate-style-changes
-jQuery.fn.redraw = function()
-{
-	this.each(function(idx, el)
-	{
-		el.offsetHeight;
-	});
-	return this;
-};
-
 
 //let jQuery dispatch custom native events
 jQuery.fn.dispatchEvent = function(type, data, canBubble, cancelable, relatedTarget)
@@ -281,6 +280,28 @@ jQuery.fn.extend( {
 		return regEx.test(id);
 	};
 })();
+
+
+//does the keyboard event match the command string (CTRL+C, eg.)
+function eventMatchesCommand(cmdKey, evtKey)
+{
+	var ret = false;
+	if(cmdKey)
+	{
+		var match = true;
+		var sc = cmdKey.toUpperCase();
+		if(-1 != sc.indexOf("CTRL"))
+			match = match & evtKey.ctrlKey;
+		if(-1 != sc.indexOf("ALT"))
+			match = match & evtKey.altKey;
+		if(-1 != sc.indexOf("SHIFT"))
+			match = match & evtKey.shiftKey;
+
+		sc = sc.replace(/CTRL|ALT|SHIFT|\+| /gi, "");
+		ret = match & (($.ui.keyCode[sc] == evtKey.keyCode) || (evtKey.key && -1 != sc.search(evtKey.key.toUpperCase())));
+	}
+	return ret;
+};
 
 //Sorts elements on zIndex (in descending order).
 function fnSortZIndex(el1, el2)
