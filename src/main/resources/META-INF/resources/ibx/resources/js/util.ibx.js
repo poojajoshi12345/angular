@@ -298,7 +298,7 @@ function eventMatchesCommand(cmdKey, evtKey)
 			match = match & evtKey.shiftKey;
 
 		sc = sc.replace(/CTRL|ALT|SHIFT|\+| /gi, "");
-		ret = match & (($.ui.keyCode[sc] == evtKey.keyCode) || (evtKey.key && -1 != sc.search(evtKey.key.toUpperCase())));
+		ret = match & (($.ui.keyCode[sc] == evtKey.keyCode) || (parseInt(sc, 10) == evtKey.keyCode) || (evtKey.key && sc == evtKey.key.toUpperCase()));
 	}
 	return ret;
 };
