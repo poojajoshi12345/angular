@@ -12,23 +12,26 @@ $.widget("ibi.ibxWidget", $.Widget,
 		"userValue":null,
 		"dragScrolling":false,
 		"wantResize":false,
-		"defaultFocused":false,					//for popup...should this be focused on open
-		"opaque":false,							//add iframe behind to stop pdf from bleading through.
-		"focusRoot":false,						//for circular tabbing management...like in a dialog.
+		"defaultFocused":false,						//for popup...should this be focused on open
+		"opaque":false,								//add iframe behind to stop pdf from bleading through.
+		"focusRoot":false,							//for circular tabbing management...like in a dialog.
 		
 		//for keyboard navigation (mostly composite widgets like menus/selects/etc...508)
-		"navKeyRoot":false,						//start key nav here
-		"navKeyDir":"horizontal",				//horizontal = left/right, vertical = up/down, or both
-		"navKeyResetFocusOnBlur":true,			//when widget loses focus, reset the current active navKey child.
-		"navKeyAutoFocus":false,				//auto focus the first nav item.
-		"navKeyTrigger":						//activate nav key. Enter is default, Escape is cancel.
+		"navKeyActiveClass":"ibx-nav-key-active",	//class when navKeyRoot is active
+		"navKeyRoot":false,							//start key nav here
+		"navKeyDir":"horizontal",					//horizontal = left/right, vertical = up/down, or both
+		"navKeyResetFocusOnBlur":true,				//when widget loses focus, reset the current active navKey child.
+		"navKeyAutoFocus":false,					//auto focus the first nav item.
+		"navKeyKeys":								//keys for various nav key events
 		{
-			"keyCancel":$.ui.keyCode.ESCAPE,
-			"keyActivate":$.ui.keyCode.ENTER,
-			"class":"ibx-nav-key-active",
-			"ctrl":false,
-			"shift":false,
-			"alt":false
+			"activate":"ENTER",
+			"cancel":"ESCAPE",
+			"first":"HOME",
+			"last":"END",
+			"hprev":"LEFT",
+			"hnext":"RIGHT",
+			"vprev":"UP",
+			"vnext":"DOWN"
 		},
 
 		//ARIA (508)
@@ -192,7 +195,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 		var isTarget = this.element.is(e.target);
 		var ownsTarget = $.contains(this.element[0], e.target);
 		var ownsRelTarget = $.contains(this.element[0], e.relatedTarget);
-		
+
 		if(e.type == "focusin")
 		{
 			if(!this._widgetFocused)
@@ -203,70 +206,66 @@ $.widget("ibi.ibxWidget", $.Widget,
 
 			if(options.navKeyRoot)
 			{
+				//if(this.element.data("navKeyRootTabIndex") === undefined)
+				//	this.element.data("navKeyRootTabIndex", this.element.prop("tabindex")).prop("tabindex", -1);
+				
+				//if we own the target, we are now nav active.
+				if(ownsTarget)
+					this.element.addClass(options.navKeyActiveClass);
 
-				//make nav key active when tabbing to us and auto focus, or...someone clicked on a child .
-				if(options.navKeyAutoFocus || ownsTarget)
-					this.element.addClass(options.navKeyTrigger.class);
-
-				//take this parent navKeyAutoFocus out of the tab chain, so shift+tab will correctly
-				//move from current active nav key child to previous control in tab chain.
-				if(options.navKeyAutoFocus && (this.element.data("navKeyRootTabIndex") === undefined))
-					this.element.data("navKeyRootTabIndex", this.element.prop("tabindex")).prop("tabindex", -1);
-
-				//when nav active, set current active (or first) child to be focused.
-				var isNavActive = this.navKeyActive();
-				if(isNavActive)
+				if(options.navKeyAutoFocus && isTarget)
 				{
+					//we are the target and want autofocus...do it.
 					var navKids = this.navKeyChildren();
-					var navFocusItem = navKids.filter(".ibx-nav-item-active");
-					if(isTarget && !navFocusItem.length)
-						navFocusItem = navKids.first();
-					else
+					navKid = navKids.filter(".ibx-nav-item-active");
+					navKid = navKid.length ? navKid : navKids.first();
+					navKid[0].focus();
+					return;
+				}
+				else
+				if(!isTarget)
+				{
+					//a kid was clicked/focused...find direct nav child to make active.
+					var navKids = this.navKeyChildren();
+					var navFocusItem = $();
+					for(var i = 0; i < navKids.length; ++i)
 					{
-						for(var i = 0; i < navKids.length; ++i)
+						var navKid = $(navKids[i]);
+						if(navKid.is(e.target) || $.contains(navKid[0], e.target))
 						{
-							var navKid = $(navKids[i]);
-							if(navKid.is(e.target) || $.contains(navKid[0], e.target))
-							{
-								navFocusItem = navKid;
-								break;
-							}
+							navFocusItem = navKid;
+							break;
 						}
 					}
-
-					console.log(this.element.prop("id"), "isNavActive:", isNavActive, "focusing:", $(e.target).prop("id"));
-					if(!navFocusItem.hasClass("ibx-nav-item-active"))
-					{
-						this.element.find("*").removeClass("ibx-nav-item-active ibx-ie-pseudo-focus").removeAttr("aria-activedescendant");
-						navFocusItem.addClass("ibx-nav-item-active").toggleClass("ibx-ie-pseudo-focus", ibxPlatformCheck.isIE).attr("aria-activedescendant", true);
-					}
-					e.stopPropagation();
-					e.preventDefault();
+					navKids.removeClass("ibx-nav-item-active ibx-ie-pseudo-focus").removeAttr("aria-activedescendant");
+					navFocusItem.addClass("ibx-nav-item-active").toggleClass("ibx-ie-pseudo-focus", ibxPlatformCheck.isIE).attr("aria-activedescendant", true);
+					console.log(navFocusItem[0]);
 				}
 			}
 		}
 		else
-		if(e.type == "focusout" && this._widgetFocused && !ownsTarget && !ownsRelTarget)
+		if(e.type == "focusout" && this._widgetFocused && !ownsRelTarget)
 		{
 			this._widgetFocused = false;
 			this.element.dispatchEvent("ibx_widgetblur", e, false, false, e.relatedTarget);
+
+			var children = this.navKeyChildren("*");//all nav kids not just focusable...menus are hidden at this point.
+			children.removeClass("ibx-ie-pseudo-focus");
+
 
 			//active items and tabbing are handled in a given 'context'...popups introduce a higher context, so ignore them here.
 			if(options.navKeyRoot && !$(e.relatedTarget).is(".ibx-popup"))
 			{
 				//no longer navActive
-				this.element.removeClass(options.navKeyTrigger.class);
+				this.element.removeClass(options.navKeyActiveClass);
 
 				//put this element back in the tab order...so that next tab into will will do auto-focus.
-				if(options.navKeyAutoFocus)
-					this.element.prop("tabIndex", this.element.data("navKeyRootTabIndex")).removeData("navKeyRootTabIndex");
+				//if(this.element.data("navKeyRootTabIndex") !== undefined)
+				//	this.element.prop("tabIndex", this.element.data("navKeyRootTabIndex")).removeData("navKeyRootTabIndex");
 
 				//remove active so next focus goes to first item.
 				if(options.navKeyResetFocusOnBlur)
-				{
-					var children = this.navKeyChildren("*");//all nav kids not just focusable...menus are hidden at this point.
 					children.removeClass("ibx-nav-item-active").removeAttr("aria-activedescendant");
-				}
 			}
 		}
 	},
@@ -304,40 +303,40 @@ $.widget("ibi.ibxWidget", $.Widget,
 			var navKids = this.navKeyChildren();
 			var active = $();
 			var current = navKids.filter(".ibx-nav-item-active");
-			if(!isNavActive && e.keyCode == options.navKeyTrigger.keyActivate)
+			if(!isNavActive && eventMatchesCommand(options.navKeyKeys.activate, e))
 			{
 				isNavActive = true;
-				this.element.addClass(options.navKeyTrigger.class);
-				active = current.length ? current : navKids.first();
+				this.element.addClass(options.navKeyActiveClass);
+				active = active = current.length ? current : navKids.first();
 			}
 			else
-			if(isNavActive && e.keyCode == options.navKeyTrigger.keyCancel)
+			if(isNavActive && eventMatchesCommand(options.navKeyKeys.cancel, e))
 			{
-				this.element.removeClass(options.navKeyTrigger.class);
+				this.element.removeClass(options.navKeyActiveClass);
 				active = this.element;
 			}
 			else
 			if(isNavActive)
 			{
-				if(-1 == $.ibi.ibxWidget.navKeys.indexOf(e.keyCode))
+				if($(e.target).is(":input"))
 					active = $();
 				else
-				if(e.keyCode == $.ui.keyCode.HOME)
+				if(eventMatchesCommand(options.navKeyKeys.first, e))
 					active = navKids.first();
 				else
-				if(e.keyCode == $.ui.keyCode.END)
+				if(eventMatchesCommand(options.navKeyKeys.last, e))
 					active = navKids.last();
 				else
 				if(options.navKeyDir == "horizontal" || options.navKeyDir == "both")
 				{
-					if(e.keyCode == $.ui.keyCode.LEFT)
+					if(eventMatchesCommand(options.navKeyKeys.hprev, e))
 					{
 						var idx = navKids.index(current);
 						var prev = navKids.get(--idx)
 						active = prev ? $(prev) : navKids.last();
 					}
 					else
-					if(e.keyCode == $.ui.keyCode.RIGHT)
+					if(eventMatchesCommand(options.navKeyKeys.hnext, e))
 					{
 						var idx = navKids.index(current);
 						var next = navKids.get(++idx);
@@ -347,14 +346,14 @@ $.widget("ibi.ibxWidget", $.Widget,
 				else
 				if(options.navKeyDir == "vertical" || options.navKeyDir == "both")
 				{
-					if(e.keyCode == $.ui.keyCode.UP)
+					if(eventMatchesCommand(options.navKeyKeys.vprev, e))
 					{
 						var idx = navKids.index(current);
 						var prev = navKids.get(--idx);
 						active = prev ? $(prev) : navKids.last();
 					}
 					else
-					if(e.keyCode == $.ui.keyCode.DOWN)
+					if(eventMatchesCommand(options.navKeyKeys.vnext, e))
 					{
 						var idx = navKids.index(current);
 						var next = navKids.get(++idx);
@@ -372,9 +371,9 @@ $.widget("ibi.ibxWidget", $.Widget,
 				this.element.trigger(event);
 				if(!event.isDefaultPrevented())
 				{
-					active.focus();
-					e.stopPropagation();
+					active[0].focus();
 					e.preventDefault();
+					e.stopPropagation();
 				}
 			}
 		}
@@ -410,7 +409,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 	},
 	navKeyActive:function()
 	{
-		return this.element.hasClass(this.options.navKeyTrigger.class);
+		return this.element.hasClass(this.options.navKeyActiveClass);
 	},
 	add:function(el, elSibling, before, refresh)
 	{

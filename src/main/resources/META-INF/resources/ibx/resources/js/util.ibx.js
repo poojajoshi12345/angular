@@ -292,10 +292,21 @@ function eventMatchesCommand(cmdKey, evtKey)
 		var sc = cmdKey.toUpperCase();
 		if(-1 != sc.indexOf("CTRL"))
 			match = match & evtKey.ctrlKey;
+		else
+		if(evtKey.ctrlKey)
+			match = false;
+
 		if(-1 != sc.indexOf("ALT"))
 			match = match & evtKey.altKey;
+		else
+		if(evtKey.altKey)
+			match = false;
+
 		if(-1 != sc.indexOf("SHIFT"))
 			match = match & evtKey.shiftKey;
+		else
+		if(evtKey.shiftKey)
+			match = false;
 
 		sc = sc.replace(/CTRL|ALT|SHIFT|\+| /gi, "");
 		ret = match & (($.ui.keyCode[sc] == evtKey.keyCode) || (parseInt(sc, 10) == evtKey.keyCode) || (evtKey.key && sc == evtKey.key.toUpperCase()));

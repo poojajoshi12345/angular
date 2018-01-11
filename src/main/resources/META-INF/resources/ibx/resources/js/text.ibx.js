@@ -121,7 +121,7 @@ $.widget("ibi.ibxTextField", $.ibi.ibxFlexBox,
 			e.preventDefault();
 		}
 		else
-		if(-1 == $.ibi.ibxWidget.navKeys.indexOf(e.which))//not a nav key
+		if(!$.ibi.ibxWidget.isNavKey(e))
 			this._trigger("textchanging", e, {"text": this.options.text});
 	},
 	_onTextInputInput: function (e)

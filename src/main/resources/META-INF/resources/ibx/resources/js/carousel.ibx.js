@@ -8,7 +8,6 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 {
 	options:
 	{
-		navKeyRoot:true,
 		wantResize:true,
 		nameRoot:true,
 		align:"stretch",
@@ -16,8 +15,8 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 		pageMarkersPos:"end",
 		pageMarkerClass:"ibx-csl-page-marker",
 		pageMarkerSelectedClass:"ibx-csl-page-selected",
-		pagePrev:"CTRL+LEFT",
-		pageNext:"CTRL+RIGHT",
+		pagePrev:"SHIFT+LEFT",
+		pageNext:"SHIFT+RIGHT",
 		prevNextButtonPos:"ends",	//ends/start/end
 		showPrevButton:true,
 		showNextButton:true,
@@ -39,6 +38,17 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 		},//html props to use for calculating scroll position/delta
 		allowDragScrolling:true,
 
+		navKeyRoot:true,
+		navKeyAutoFocus:true,
+		navKeyKeys:
+		{
+			"hprev":"CTRL+LEFT",
+			"hnext":"CTRL+RIGHT",
+			"vprev":"CTRL+UP",
+			"vnext":"CTRL+DOWN",
+		},
+
+
 		aria:
 		{
 			role:"listbox"
@@ -55,7 +65,7 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 		this.element.on("ibx_resize", this._onResize.bind(this));
 		this._prevBtn.on("click mousedown mouseup mouseleave", this._onPrevNext.bind(this));
 		this._nextBtn.on("click mousedown mouseup mouseleave", this._onPrevNext.bind(this));
-		this._itemsBox.on("ibx_widgetfocus", this._onItemsBoxFocus.bind(this)).on("keydown", this._onItemsBoxKeydown.bind(this)).ibxDragScrolling({overflowY:"hidden"}).on("scroll", this._onItemsBoxScroll.bind(this));	
+		this._itemsBox.on("ibx_widgetfocus", this._onItemsBoxFocus.bind(this)).on("keydown", this._onItemsBoxKeyDown.bind(this)).ibxDragScrolling({overflowY:"hidden"}).on("scroll", this._onItemsBoxScroll.bind(this));	
 		this.add(children);
 
 		this._onPageMarkerScrollEndBound = this._onPageMarkerScrollEnd.bind(this);
@@ -124,7 +134,7 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 		if(pageNo === undefined)
 			return info.curPage;
 
-		var pages = relative ? (info.curPage + pageNo) : (pageNo - info.curPage);
+		var pages = relative ? pageNo : (pageNo - info.curPage);
 		this.scroll(pages, "page", stepRate, true);
 	},
 	stop:function()
@@ -250,7 +260,7 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 			}
 		}
 	},
-	_onItemsBoxKeydown:function(e)
+	_onItemsBoxKeyDown:function(e)
 	{
 		var options = this.options;
 		if(eventMatchesCommand(options.pagePrev, e))

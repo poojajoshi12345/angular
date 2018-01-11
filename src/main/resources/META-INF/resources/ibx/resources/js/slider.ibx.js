@@ -55,7 +55,6 @@ $.widget("ibi.ibxSlider", $.ibi.ibxGrid,
 		this._fnSliderMouseEvent = this._onSliderMouseEvent.bind(this);
 		this.element.on("mousedown", this._fnSliderMouseEvent);
 		this._slider.on("keydown", this._onSliderKeyDown.bind(this));
-		this._slider.on("keyup", this._onSliderKeyUp.bind(this));
 		
 		window.setTimeout(this._initSlider.bind(this), 1);
 	},
@@ -182,19 +181,10 @@ $.widget("ibi.ibxSlider", $.ibi.ibxGrid,
 			this._setValue("" + this.options.value, this.info());
 		}
 	},
-	_keyRepeat: false,
-	_onSliderKeyUp : function (e)
-	{
-		if (e.keyCode == 37 || e.keyCode == 38 || e.keyCode == 39 || e.keyCode == 40)
-		{
-			this._trigger("end", null, this.info());
-			this._keyRepeat = false;
-		}
-	},
 	_onSliderKeyDown : function (e)
 	{
 		var isSlide = false;
-		if(e.keyCode == $.ui.keyCode.LEFT || e.keyCode == $.ui.keyCode.DOWN) //decrease position
+		if(eventMatchesCommand("LEFT", e) || eventMatchesCommand("DOWN", e)) //decrease position
 		{
 			e.stopPropagation();
 			e.preventDefault();
@@ -203,20 +193,13 @@ $.widget("ibi.ibxSlider", $.ibi.ibxGrid,
 			isSlide = true;
 		}
 		else
-		if (e.keyCode == $.ui.keyCode.RIGHT || e.keyCode == $.ui.keyCode.UP) //increase position
+		if(eventMatchesCommand("RIGHT", e) || eventMatchesCommand("UP", e)) //increase position
 		{
 			e.stopPropagation();
 			e.preventDefault();
 			this._activeSlider = $(e.target);
 			this._stepSlider(false);
 			isSlide = true;
-		}
-
-		if(isSlide)
-		{
-			if (!this._keyRepeat)
-				this._trigger("start", null, this.info());
-			this._keyRepeat = true;
 		}
 	},
 	_posMarker: function (e, value, min, max)
@@ -553,7 +536,15 @@ $.widget("ibi.ibxRange", $.ibi.ibxSlider,
 		"value2": 0,
 		"lock2": false,
 		"markerShape2": "",
-		"aria":{"orientation":"horizontal"}
+		"aria":{"orientation":"horizontal"},
+
+		"navKeyKeys":
+		{
+			"hprev":"CTRL+LEFT",
+			"hnext":"CTRL+RIGHT",
+			"vprev":"CTRL+UP",
+			"vnext":"CTRL+DOWN",
+		},
 	},
 	_widgetClass: "ibx-range",
 	_create: function ()
@@ -565,7 +556,6 @@ $.widget("ibi.ibxRange", $.ibi.ibxSlider,
 		this._slider2.hide();
 		this._sliderWrapper.append(this._slider2);
 		this._slider2.on("keydown", this._onSliderKeyDown.bind(this));
-		this._slider2.on("keyup", this._onSliderKeyUp.bind(this));
 		
 		var options = this.options;
 		if (options.value < options.min)

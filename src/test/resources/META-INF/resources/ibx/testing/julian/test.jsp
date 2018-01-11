@@ -41,8 +41,8 @@
 					var items = e.data.result;
 					for(var i = 0; i < items.length; ++i)
 					{
-						if(i > 15)
-							continue;
+						//if(i > 15)
+						//	continue;
 						var item = items[i];
 						var qItem = $(sformat("<div id='tile{3}' class='test-tile' title='{1}'>{2}</div>", item.fullPath, item.name, i));
 						qItem.css("background-image", sformat('url("{1}")', item.thumbPath));
@@ -63,9 +63,9 @@
 				$(".test-popup-inner-text").text(ibx.resourceMgr.getString("IBX_STR_SAMPLE"));
 				//$(".test-popup").ibxWidget("open");
 
-				$(".ibx-carousel").on("ibx_beforenavkey", function(e)
+				$(".test-btn2").on("click", function(e)
 				{
-					//console.dir(e);
+					$(".test-popup").ibxWidget("open");
 				});
 			}, [{src:"./test_res_bundle.xml", loadContext:"app"}], true);
 		</script>
@@ -165,10 +165,10 @@
 			</div>
 			<div id="testEdit" class="test-edit" tabindex="0" data-ibx-type="ibxTextField">Test Text Field</div>
 			<div id="testCarousel" class="test-carousel" tabindex="0" data-ibx-type="ibxHCarousel" data-ibx-options="{navKeyRoot:true, scrollType:'integral', aria:{role:'region', keyshortcuts:'Control+F', label:'I B F S Files List'}}"></div>
-			<div id="testBtn2" class="test-button" tabindex="0" data-ibx-type="ibxButton">Test Button 2</div>
+			<div id="testBtn2" class="test-button test-btn2" tabindex="0" data-ibx-type="ibxButton">Test Button 2</div>
 		</div>
 
-		<div class="test-popup" data-ibx-type="ibxPopup" data-ibxp-auto-close="false" data-ibxp-escape-to-close="false" data-ibxp-destroy-on-close="false" data-ibxp-opaque="true">
+		<div class="test-popup" data-ibx-type="ibxPopup" data-ibxp-auto-close="false" data-ibxp-escape-to-close="true" data-ibxp-destroy-on-close="false" data-ibxp-opaque="false">
 			<div class="test-popup-box" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
 				<div class="test-slider" tabIndex="0" data-ibx-type="ibxHSlider" data-ibx-options="{value:25, minTextPos:'center', maxTextPos:'center'}"></div>
 				<div class="test-slider" tabindex="0" data-ibx-type="ibxHRange" data-ibx-options="{value:25, value2:75, minTextPos:'center', maxTextPos:'center'}"></div>

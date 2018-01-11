@@ -94,7 +94,7 @@ $.widget("ibi.ibxTextArea", $.ibi.ibxFlexBox,
 	},
 	_onTextAreaKeyDown: function (e)
 	{
-		if(-1 == $.ibi.ibxWidget.navKeys.indexOf(e.which))//not a nav
+		if(!$.ibi.ibxWidget.isNavKey(e))
 			this._trigger("textchanging", e, {"text": this.options.text});
 	},
 	_onTextAreaInput: function (e)
