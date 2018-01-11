@@ -929,5 +929,370 @@ $.widget("ibi.ibxSelectGroup", $.ibi.ibxLabel,
 	}
 });
 
+/* New version of select */
+$.widget("ibi.ibxSelect2", $.ibi.ibxTextField,
+{
+	options:
+		{
+			// accepted values: "drop-down-combo" (default), "combo", "drop-down-list", "list"
+			"btnShow": true,
+			"type": "drop-down-combo",
+			
+			// overrides for the base
+			"autoComplete": "off",
+			"autoCorrect": "off",
+			"autoCapitalize": "off",
+			"spellCheck": "false",
+			"controlClasses": "",
+			"filter": false,
+			
+			"navKeyDir":"vertical",
+
+			"aria":
+			{
+				"role":"combobox",
+				"multiline":false,
+				"haspopup":"listbox"
+			}
+		},
+	_widgetClass: "ibx-select2",
+	_control: null,
+	control: function () { return this._control; },
+	popup: function () { return this._popup;},
+	_create: function ()
+	{
+		this._super();
+	},
+	_setAccessibility:function(accessible, aria)
+	{
+		var options = this.options;
+		aria = this._super(accessible, aria);
+		aria.expanded = this._isDropDown() && this._popup ? this._popup.ibxWidget('isOpen') : true;
+		//aria.owns = (this._control) ? this._control.element.prop("id") : "";
+		//aria.controls = (this._control) ? this._control.element.prop("id") : "";
+		return aria;
+	},
+	_init: function ()
+	{
+		this._super();
+		if (this._isDropDown())
+		{
+			this.options.wrap = false;
+			this._dropButton = $("<div class='ibx-select-open-btn'>").ibxButton();
+			this.element.append(this._dropButton);
+			this._dropButton.on("mousedown", this._onButtonMouseDown.bind(this)).on('click', this._onButtonClick.bind(this));
+		}
+		else
+		{
+			this.options.wrap = true;
+		}
+
+		if (this.options.type == "list")
+			this._textInput.hide();
+		else
+		{
+			this.element.on("ibx_textchanged", this._onTextChanged.bind(this));
+			if (this._isDropDown())
+				this._textInput.on('click', this._onTextClick.bind(this));
+		}
+		this._bindControl();
+		this.refresh();
+	},
+	userValue: function (value)
+	{
+		return this._control.ibxWidget('userValue', value);
+	},
+	navKeyChildren:function(selector)
+	{
+		return this.element.children(selector || ":ibxNavFocusable");
+	},
+	children:function(selector)
+	{
+		selector = selector || ".ibx-select-item, ibx-select-group";
+		return this._control.ibxWidget('children', selector);
+	},
+	add:function(el, sibling, before, refresh)
+	{
+		this._control.ibxWidget('add', el, sibling, before, refresh);
+	},
+	remove: function (el, destroy, refresh)
+	{
+		this._control.ibxWidget('remove', el, destroy, refresh);
+	},
+
+	// overridables in derived functions
+	_createControl: function ()
+	{
+	},
+	_initControl: function ()
+	{
+	},
+	_onControlChange: function ()
+	{
+	},
+	_onPopupOpen: function ()
+	{
+	},
+	_onPopupClose: function ()
+	{
+	},
+	_onTextChanged: function (e)
+	{
+	},
+	_onDownArrow: function ()
+	{
+	},
+	// end overridables
+
+	_bindControl: function ()
+	{
+		this._control = this._createControl();
+		this._control.on('ibx_change', this._onControlChange.bind(this));
+		this._initControl();
+		
+		if (this._isDropDown())
+		{
+			this._popup = $("<div class='ibx-select-popup'>").ibxPopup(
+			{
+				"modal":false,
+				"destroyOnClose":false,
+				"effect":"fade",
+				"position":{ my: "left top", at: "left bottom+1px", of: this.element },
+				"autoFocus": !this._isEditable()
+			});
+			this._popup.css('min-width', this.element.width() + "px").on("ibx_open ibx_close", function(e)
+			{
+				this.setAccessibility();
+			}.bind(this));
+			this._popup.ibxWidget('add', this._control);
+			this.element.append(this._popup);
+			this._popup.on("ibx_open", function (e)
+			{
+				this._onPopupOpen();
+			}.bind(this)).on("ibx_beforeclose", function(e, closeData)
+			{
+				if (closeData && $.contains(this.element[0], closeData.target))
+					return false;
+			}.bind(this)).on("ibx_close", function ()
+			{
+				this._onPopupClose();
+			}.bind(this));
+			}
+		else
+		{
+			this._control.css("width", "100%").css("align-self", "flex-start");
+			this.element.append(this._control);
+		}
+	},
+	_isEditable: function ()
+	{
+		switch (this.options.type)
+		{
+			case "drop-down-combo":
+			case "combo":
+				return true;
+
+			default:
+			case "drop-down-list":
+			case "list":
+				return false;
+		}
+	},
+	_isDropDown: function ()
+	{
+		switch (this.options.type)
+		{
+			default:
+			case "drop-down-combo":
+			case "drop-down-list":
+				return true;
+
+			case "combo":
+			case "list":
+				return false;
+		}
+	},
+	_sortType: true,
+	_fnSort: null,
+	getSortType: function ()
+	{
+		return this._sortType;
+	},
+	sort: function (type, fnSort)
+	{
+		this._sortType = type = (typeof(type) !== "undefined") ? type : this._sortType;
+		this._fnSort = fnSort = fnSort || this._fnSort || $.ibi.ibxSelect.statics.sort;
+		var children = this._control.find(".ibx-select-item, .ibx-select-group").not(".ibx-select-group-item");
+		children.sort(fnSort.bind(this));
+		children.each(function (index, el)
+		{
+			this._control.append(el);
+			if ($(el).hasClass('ibx-select-group'))
+			{
+				var groupChildren = this._control.find(".ibx-radio-group-" + $(el).attr("id"));
+				groupChildren.sort(fnSort.bind(this));
+				groupChildren.insertAfter($(el));
+			}
+		}.bind(this));
+	},
+	_onButtonMouseDown: function (e)
+	{
+		this._textInput.focus();
+	},
+	// Override text
+	_onTextInputKeyDown: function (e)
+	{
+		if(e.keyCode == $.ui.keyCode.DOWN) // open dropdown on down arrow
+		{
+			this._onDownArrow();
+		}
+		else if(e.keyCode == $.ui.keyCode.ESCAPE) // close dropdown on up arrow or enter
+		{
+			if(this._isDropDown() && this._popup.ibxWidget('isOpen'))
+				this._popup.ibxWidget('close');
+		}
+		else if(e.keyCode == $.ui.keyCode.ENTER) // close dropdown on enter and update with the selection
+		{
+			if(this._isDropDown() && this._popup.ibxWidget('isOpen'))
+				this._popup.ibxWidget('close');
+		}
+		else if (e.keyCode == $.ui.keyCode.TAB) // close popup on tab
+		{
+			if(this._isDropDown() && this._popup.ibxWidget('isOpen'))
+				this._popup.ibxWidget('close');
+		}
+		else if (e.keyCode != 37 && e.keyCode != 39 && !e.shiftKey && !e.ctrlKey) // open popup for everything except left/right arrows
+		{
+			if (this._isDropDown())
+			{
+				if (!this._popup.ibxWidget('isOpen'))
+					this._openPopup();
+			}
+		}
+		e.stopPropagation();
+		this._super(e);
+	},
+	_onTextInputBlur: function (event)
+	{
+		var newVal = this._textInput.val();
+		if (newVal != this._focusVal)
+		{
+			var relatedTarget = event.relatedTarget ? event.relatedTarget : document.activeElement;
+			if (!$.contains(this._control[0], relatedTarget) && this._control[0] != relatedTarget)
+				this._setValue(newVal, true);
+		}
+	},
+	_onTextClick: function (e)
+	{
+		this._dontFocusText = true;
+		this._openPopup();
+	},
+	_onButtonClick: function (e)
+	{
+		if (this._popup.ibxWidget('isOpen'))
+			this._popup.ibxWidget('close');
+		else
+		{
+			this._dontFocusText = true;
+			this._openPopup();
+		}
+	},
+	closePopup: function ()
+	{
+		this._popup.ibxWidget('close');
+	},
+	openPopup: function ()
+	{
+		this._openPopup();
+	},
+	_openPopup: function ()
+	{
+		if(this._trigger("beforeopenpopup"))
+		{
+			if(!this._popup.ibxWidget('isOpen'))
+			{
+				this._popup.ibxWidget('open');
+				this._control.css('min-width', this.element.width() + "px");
+				this._control.ibxWidget('refresh');
+			}
+		}
+		else
+			this._popup.ibxWidget('close');
+	},
+	_getText: function ()
+	{
+		var newText = "";
+		var selection = this._control.find('.sel-selected');
+		selection.each(function (index, el)
+		{
+			if (newText)
+				newText += ", ";
+			newText += $(el).ibxWidget('option', 'labelOptions.text') + "";
+		}.bind(this));
+		return newText;
+	},
+	_updateText: function (bNotEmpty)
+	{
+		var selection = this._control.find('.sel-selected');
+		if (bNotEmpty && selection.length == 0)
+			return;
+		this.option("text", this._getText());
+	},
+	_destroy: function ()
+	{
+		this._super();
+		if (this._dropButton)
+			this._dropButton.remove();
+		this._control.remove();
+	},
+	_refresh: function ()
+	{
+		this._super();
+		switch (this.options.type)
+		{
+			default:
+				this._textInput.prop("readonly", this.options.readonly);
+				break;
+
+			case "drop-down-list":
+				this._textInput.prop("readonly", true);
+				break;
+		}
+		if (this._dropButton)
+			this.options.btnShow ? this._dropButton.show() : this._dropButton.hide();
+		this.element.removeClass('ibx-select-type-combo ibx-select-type-list ibx-select-type-drop-down-combo ibx-select-type-drop-down-list');
+		switch (this.options.type)
+		{
+			default:
+			case "drop-down-combo": this.element.addClass('ibx-select-type-drop-down-combo'); break;
+			case "drop-down-list": this.element.addClass('ibx-select-type-drop-down-list'); break;
+			case "combo": this.element.addClass('ibx-select-type-combo'); break;
+			case "list": this.element.addClass('ibx-select-type-list'); break;
+		}
+
+		if (this._control)
+		{
+			if (this.options.controlClasses && this._control)
+				this._control.addClass(this.options.controlClasses);
+		}
+	}
+});
+
+$.ibi.ibxSelect2.statics =
+{
+	sort: function (a, b)
+	{
+		var texta = ($(a).ibxWidget('option', 'text') + "").toLowerCase();
+		var textb = ($(b).ibxWidget('option', 'text') + "").toLowerCase();
+		if (texta < textb)
+			return this._sortType ? -1 : 1;
+		else if (texta > textb)
+			return this._sortType ? 1 : -1;
+		else
+			return 0;
+	}
+};
+
+
 //# sourceURL=select.ibx.js
 

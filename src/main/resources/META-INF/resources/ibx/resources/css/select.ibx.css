@@ -13,7 +13,8 @@
 }
 
 .ibx-select input {
-	margin-right:3px;
+    margin-right:3px;
+    width: unset;
 }
 
 .ibx-select-open-btn::before {
@@ -27,24 +28,6 @@
 
 .ibx-select > input:hover {
     border-bottom:none;
-}
-
-.ibx-select-list {
-}
-
-.ibx-select-item {
-}
-
-.ibx-select-type-combo {
-}
-
-.ibx-select-type-list {
-}
-
-.ibx-select-type-drop-down-combo {
-}
-
-.ibx-select-type-drop-down-list {
 }
 
 .ibx-select-type-combo > .ibx-select-list {
@@ -85,6 +68,43 @@
     font-weight: bold;
 }
 
-.ibx-select-group-item {
+/* New version of select */
+
+.ibx-select2 {
+    border-radius: 0.2em;
+    border: 1px solid #ccc;
+    background-color: white;
+    padding: 0.2em;
 }
 
+.ibx-select2.txt-auto-size {
+    width: auto;
+}
+
+.ibx-select2 input {
+	margin-right:3px;
+    width: unset;
+}
+
+.ibx-select-open-btn::before {
+	font-family:"FontAwesome";
+	content:"\f0d7";
+}
+
+.ibx-select2 > input {
+    border-bottom:none;
+}
+
+.ibx-select2 > input:hover {
+    border-bottom:none;
+}
+
+.ibx-select-popup
+{
+	padding:.25em;
+	border:1px solid #888;
+	border-radius:0px;
+	box-shadow:3px 3px 5px 0 #ccc;
+	overflow:hidden;
+	font-size:1em;
+}
