@@ -101,10 +101,5 @@
 
 .ibx-select-popup
 {
-	padding:.25em;
-	border:1px solid #888;
-	border-radius:0px;
-	box-shadow:3px 3px 5px 0 #ccc;
-	overflow:hidden;
-	font-size:1em;
+    overflow:hidden;
 }
