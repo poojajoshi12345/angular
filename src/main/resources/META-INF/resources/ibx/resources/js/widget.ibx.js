@@ -207,11 +207,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 			if(options.navKeyRoot)
 			{
 				if(options.navKeyAutoFocus && isTarget)
-				{
-					//activate navKey
-					var event = createNativeEvent("keydown", "NAV_KEY_ACTIVATE");
-					this.element.dispatchEvent(event);
-				}
+					this.element.dispatchEvent("keydown", "NAV_KEY_ACTIVATE");
 				else
 				if(!isTarget)
 				{
