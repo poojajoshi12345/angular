@@ -208,30 +208,13 @@ $.widget("ibi.ibxWidget", $.Widget,
 			{
 				if(options.navKeyAutoFocus && isTarget)
 				{
-					//we are the target and want autofocus...do it.
-					var navKids = this.navKeyChildren();
-					navKid = navKids.filter(".ibx-nav-item-active");
-					navKid = navKid.length ? navKid : navKids.first();
-					if(navKid.length)
-						navKid[0].focus();
-					return;
+					//activate navKey
+					var event = createNativeEvent("keydown", "NAV_KEY_ACTIVATE");
+					this.element.dispatchEvent(event);
 				}
 				else
 				if(!isTarget)
 				{
-					//a kid was clicked/focused...find direct nav child to make active.
-					var navKids = this.navKeyChildren();
-					var navFocusItem = $();
-					for(var i = 0; i < navKids.length; ++i)
-					{
-						var navKid = $(navKids[i]);
-						if(navKid.is(e.target) || $.contains(navKid[0], e.target))
-						{
-							navFocusItem = navKid;
-							break;
-						}
-					}
-
 					//if we own the target, we are now nav active.
 					this.element.addClass(options.navKeyActiveClass);
 
@@ -239,8 +222,14 @@ $.widget("ibi.ibxWidget", $.Widget,
 					if(this.element.data("navKeyRootTabIndex") === undefined)
 						this.element.data("navKeyRootTabIndex", this.element.prop("tabindex")).prop("tabindex", -1);
 
-					navKids.removeClass("ibx-nav-item-active ibx-ie-pseudo-focus").removeAttr("aria-activedescendant");
-					navFocusItem.addClass("ibx-nav-item-active").toggleClass("ibx-ie-pseudo-focus", ibxPlatformCheck.isIE).attr("aria-activedescendant", true);
+					//de-activate all children, and activate the direct child that is/owns the target.
+					this.navKeyChildren().each(function(target, idx, el)
+					{
+						var navKid = $(el);
+						navKid.removeClass("ibx-nav-item-active ibx-ie-pseudo-focus").removeAttr("aria-activedescendant");
+						if(navKid.is(target) || $.contains(navKid[0], target))
+							navKid.addClass("ibx-nav-item-active").toggleClass("ibx-ie-pseudo-focus", ibxPlatformCheck.isIE).attr("aria-activedescendant", true);
+					}.bind(this, e.target));
 				}
 			}
 		}
@@ -273,6 +262,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 	{
 		//if specified, keep traversal of children localized and circular within this widget.  
 		//tabbing is for things like popups/dialogs, and arrows for composite widgets (menus/selects)...ARIA support relies on this.
+		e = e.originalEvent;
 		var options = this.options;
 		if(options.focusRoot && e.keyCode == $.ui.keyCode.TAB)
 		{
@@ -305,14 +295,14 @@ $.widget("ibi.ibxWidget", $.Widget,
 			var navKids = this.navKeyChildren();
 			var active = $();
 			var current = navKids.filter(".ibx-nav-item-active");
-			if(!isNavActive && eventMatchesCommand(options.navKeyKeys.activate, e))
+			if(!isNavActive && (e.data == "NAV_KEY_ACTIVATE" || eventMatchesShortcut(options.navKeyKeys.activate, e)))
 			{
 				isNavActive = true;
 				this.element.addClass(options.navKeyActiveClass);
 				active = active = current.length ? current : navKids.first();
 			}
 			else
-			if(isNavActive && eventMatchesCommand(options.navKeyKeys.cancel, e))
+			if(isNavActive && eventMatchesShortcut(options.navKeyKeys.cancel, e))
 			{
 				this.element.removeClass(options.navKeyActiveClass);
 				active = this.element;
@@ -323,22 +313,22 @@ $.widget("ibi.ibxWidget", $.Widget,
 				if($(e.target).is(":input"))
 					active = $();
 				else
-				if(eventMatchesCommand(options.navKeyKeys.first, e))
+				if(eventMatchesShortcut(options.navKeyKeys.first, e))
 					active = navKids.first();
 				else
-				if(eventMatchesCommand(options.navKeyKeys.last, e))
+				if(eventMatchesShortcut(options.navKeyKeys.last, e))
 					active = navKids.last();
 				else
 				if(options.navKeyDir == "horizontal" || options.navKeyDir == "both")
 				{
-					if(eventMatchesCommand(options.navKeyKeys.hprev, e))
+					if(eventMatchesShortcut(options.navKeyKeys.hprev, e))
 					{
 						var idx = navKids.index(current);
 						var prev = navKids.get(--idx)
 						active = prev ? $(prev) : navKids.last();
 					}
 					else
-					if(eventMatchesCommand(options.navKeyKeys.hnext, e))
+					if(eventMatchesShortcut(options.navKeyKeys.hnext, e))
 					{
 						var idx = navKids.index(current);
 						var next = navKids.get(++idx);
@@ -348,14 +338,14 @@ $.widget("ibi.ibxWidget", $.Widget,
 				else
 				if(options.navKeyDir == "vertical" || options.navKeyDir == "both")
 				{
-					if(eventMatchesCommand(options.navKeyKeys.vprev, e))
+					if(eventMatchesShortcut(options.navKeyKeys.vprev, e))
 					{
 						var idx = navKids.index(current);
 						var prev = navKids.get(--idx);
 						active = prev ? $(prev) : navKids.last();
 					}
 					else
-					if(eventMatchesCommand(options.navKeyKeys.vnext, e))
+					if(eventMatchesShortcut(options.navKeyKeys.vnext, e))
 					{
 						var idx = navKids.index(current);
 						var next = navKids.get(++idx);

@@ -303,14 +303,14 @@ $.widget("ibi.ibxWidget", $.Widget,
 			var navKids = this.navKeyChildren();
 			var active = $();
 			var current = navKids.filter(".ibx-nav-item-active");
-			if(!isNavActive && eventMatchesCommand(options.navKeyKeys.activate, e))
+			if(!isNavActive && eventMatchesShortcut(options.navKeyKeys.activate, e))
 			{
 				isNavActive = true;
 				this.element.addClass(options.navKeyActiveClass);
 				active = active = current.length ? current : navKids.first();
 			}
 			else
-			if(isNavActive && eventMatchesCommand(options.navKeyKeys.cancel, e))
+			if(isNavActive && eventMatchesShortcut(options.navKeyKeys.cancel, e))
 			{
 				this.element.removeClass(options.navKeyActiveClass);
 				active = this.element;
@@ -321,22 +321,22 @@ $.widget("ibi.ibxWidget", $.Widget,
 				if($(e.target).is(":input"))
 					active = $();
 				else
-				if(eventMatchesCommand(options.navKeyKeys.first, e))
+				if(eventMatchesShortcut(options.navKeyKeys.first, e))
 					active = navKids.first();
 				else
-				if(eventMatchesCommand(options.navKeyKeys.last, e))
+				if(eventMatchesShortcut(options.navKeyKeys.last, e))
 					active = navKids.last();
 				else
 				if(options.navKeyDir == "horizontal" || options.navKeyDir == "both")
 				{
-					if(eventMatchesCommand(options.navKeyKeys.hprev, e))
+					if(eventMatchesShortcut(options.navKeyKeys.hprev, e))
 					{
 						var idx = navKids.index(current);
 						var prev = navKids.get(--idx)
 						active = prev ? $(prev) : navKids.last();
 					}
 					else
-					if(eventMatchesCommand(options.navKeyKeys.hnext, e))
+					if(eventMatchesShortcut(options.navKeyKeys.hnext, e))
 					{
 						var idx = navKids.index(current);
 						var next = navKids.get(++idx);
@@ -346,14 +346,14 @@ $.widget("ibi.ibxWidget", $.Widget,
 				else
 				if(options.navKeyDir == "vertical" || options.navKeyDir == "both")
 				{
-					if(eventMatchesCommand(options.navKeyKeys.vprev, e))
+					if(eventMatchesShortcut(options.navKeyKeys.vprev, e))
 					{
 						var idx = navKids.index(current);
 						var prev = navKids.get(--idx);
 						active = prev ? $(prev) : navKids.last();
 					}
 					else
-					if(eventMatchesCommand(options.navKeyKeys.vnext, e))
+					if(eventMatchesShortcut(options.navKeyKeys.vnext, e))
 					{
 						var idx = navKids.index(current);
 						var next = navKids.get(++idx);

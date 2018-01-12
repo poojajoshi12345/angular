@@ -43,7 +43,7 @@ $.widget("ibi.ibxCommand", $.ibi.ibxWidget,
 	},
 	_onCommandKeyEvent:function(e)
 	{
-		if(eventMatchesCommand(this.options.shortcut, e))
+		if(eventMatchesShortcut(this.options.shortcut, e))
 		{
 			this.doAction("trigger", null, e.target);
 			e.preventDefault();

@@ -184,7 +184,7 @@ $.widget("ibi.ibxSlider", $.ibi.ibxGrid,
 	_onSliderKeyDown : function (e)
 	{
 		var isSlide = false;
-		if(eventMatchesCommand("LEFT", e) || eventMatchesCommand("DOWN", e)) //decrease position
+		if(eventMatchesShortcut("LEFT", e) || eventMatchesShortcut("DOWN", e)) //decrease position
 		{
 			e.stopPropagation();
 			e.preventDefault();
@@ -193,7 +193,7 @@ $.widget("ibi.ibxSlider", $.ibi.ibxGrid,
 			isSlide = true;
 		}
 		else
-		if(eventMatchesCommand("RIGHT", e) || eventMatchesCommand("UP", e)) //increase position
+		if(eventMatchesShortcut("RIGHT", e) || eventMatchesShortcut("UP", e)) //increase position
 		{
 			e.stopPropagation();
 			e.preventDefault();

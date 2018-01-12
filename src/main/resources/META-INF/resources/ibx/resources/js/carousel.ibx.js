@@ -263,10 +263,10 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 	_onItemsBoxKeyDown:function(e)
 	{
 		var options = this.options;
-		if(eventMatchesCommand(options.pagePrev, e))
+		if(eventMatchesShortcut(options.pagePrev, e))
 			this.page(-1, null, true);
 		else
-		if(eventMatchesCommand(options.pageNext, e))
+		if(eventMatchesShortcut(options.pageNext, e))
 			this.page(1, null, true);
 	},
 	_onPrevNext:function(e)

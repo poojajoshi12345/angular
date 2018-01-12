@@ -282,14 +282,14 @@ jQuery.fn.extend( {
 })();
 
 
-//does the keyboard event match the command string (CTRL+C, eg.)
-function eventMatchesCommand(cmdKey, evtKey)
+//does the keyboard event match the shortcut string (CTRL+C, eg.)
+function eventMatchesShortcut(shortcut, evtKey)
 {
 	var ret = false;
-	if(cmdKey)
+	if(shortcut)
 	{
 		var match = true;
-		var sc = cmdKey.toUpperCase();
+		var sc = shortcut.toUpperCase();
 		if(-1 != sc.indexOf("CTRL"))
 			match = match & evtKey.ctrlKey;
 		else
