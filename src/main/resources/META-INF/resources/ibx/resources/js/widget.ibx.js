@@ -253,6 +253,13 @@ $.widget("ibi.ibxWidget", $.Widget,
 					children.removeClass("ibx-nav-item-active").removeAttr("aria-activedescendant");
 			}
 		}
+
+		//trying to move out of a focus root is a no no.
+		if(e.type == "focusout" && options.focusRoot && !ownsRelTarget)
+		{
+			var focusable = this.element.find(":ibxFocusable");
+			(focusable.length) ? focusable.first().focus() : this.element.focus();
+		}
 	},
 	_onWidgetKeyEvent:function(e)
 	{
@@ -298,7 +305,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 				active = active = current.length ? current : navKids.first();
 			}
 			else
-			if(isNavActive && eventMatchesShortcut(options.navKeyKeys.cancel, e))
+			if(isNavActive && !options.navKeyAutoFocus && eventMatchesShortcut(options.navKeyKeys.cancel, e))//you can't escape out of a navKeyAutoFocus.
 			{
 				this.element.removeClass(options.navKeyActiveClass);
 				active = this.element;
