@@ -985,14 +985,9 @@ $.widget("ibi.ibxSelect2", $.ibi.ibxTextField,
 			this.options.wrap = true;
 		}
 
-		if (this.options.type == "list")
-			this._textInput.hide();
-		else
-		{
-			this.element.on("ibx_textchanged", this._onTextChanged.bind(this));
-			if (this.options.popup)
-				this._textInput.on('click', this._onTextClick.bind(this));
-		}
+		this.element.on("ibx_textchanged", this._onTextChanged.bind(this));
+		if (this.options.popup)
+			this._textInput.on('click', this._onTextClick.bind(this));
 		this._bindControl();
 		this.refresh();
 	},
@@ -1051,7 +1046,7 @@ $.widget("ibi.ibxSelect2", $.ibi.ibxTextField,
 				"destroyOnClose":false,
 				"effect":"fade",
 				"position":{ my: "left top", at: "left bottom+1px", of: this.element },
-				"autoFocus": !this.options.readonly,
+				"autoFocus": this.options.readonly,
 			});
 			this._popup.ibxWidget('option', {"navKeyRoot":true, "navKeyAutoFocus":false, "navKeyDir":"vertical", "aria":{"accessible":true, "role":"listbox", "hidden":false}});
 			this._popup.css('min-width', this.element.width() + "px").on("ibx_open ibx_close", function(e)
@@ -1173,16 +1168,6 @@ $.widget("ibi.ibxSelect2", $.ibi.ibxTextField,
 	_refresh: function ()
 	{
 		this._super();
-		switch (this.options.type)
-		{
-			default:
-				this._textInput.prop("readonly", this.options.readonly);
-				break;
-
-			case "drop-down-list":
-				this._textInput.prop("readonly", true);
-				break;
-		}
 		if (this._dropButton)
 			this.options.btnShow ? this._dropButton.show() : this._dropButton.hide();
 
@@ -1229,7 +1214,7 @@ $.widget("ibi.ibxSelectList", $.ibi.ibxSelect2,
 			this._textInput.focus();
 		else
 		{
-			if (!this.options.readonly)
+			if (this.options.readonly)
 				this._control.ibxWidget('focusSelItem');
 		}
 		this._dontFocusText = false;
