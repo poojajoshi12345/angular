@@ -54,6 +54,7 @@ $Revision$:-->
 				"IBX_DP_DAYS":"['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']",
 				"IBX_DP_DAYS_SHORT":"['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']",
 				"IBX_DP_DAYS_MIN":"['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa']",
+				"IBX_DP_DATE_OUTPUT_FORMAT":"M d, yy",				
 				"IBX_DP_BUTTON_TEXT":"Choose",
 				"IBX_DP_CLOSE_TEXT":"Done",
 				"IBX_DP_PREV_TEXT":"Previous",

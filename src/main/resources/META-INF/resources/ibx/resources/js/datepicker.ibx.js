@@ -20,7 +20,7 @@ $.widget("ibi.ibxDatePicker", $.ibi.ibxVBox,
 	_create: function ()
 	{
 		this.options.dateFormat = $.ibi.ibxDatePicker.statics.defaultDateFormat;
-		this.options.outDateFormat = $.ibi.ibxDatePicker.statics.defaultOutDateFormat;
+		this.options.outDateFormat = ibx.resourceMgr.getString("IBX_DP_DATE_OUTPUT_FORMAT");
 		if (this.options.initDate)
 			this.options.date = $.datepicker.formatDate($.ibi.ibxDatePicker.statics.defaultDateFormat, new Date());
 		this._super();
@@ -115,7 +115,7 @@ $.widget("ibi.ibxDatePicker", $.ibi.ibxVBox,
 		if (this.options.pickerClasses)
 			this._popup.addClass(this.options.pickerClasses);
 		this._datePicker.datepicker('option', this.options);
-		var dateObj = $.datepicker.parseDate(this.options.dateFormat, this.options.date) || $.datepicker.formatDate($.ibi.ibxDatePicker.statics.defaultDateFormat, new Date());
+		var dateObj = $.datepicker.parseDate(this.options.dateFormat, this.options.date) || new Date();
 		this._datePicker.datepicker('setDate', dateObj);
 		this._input.ibxWidget('option', 'text', $.datepicker.formatDate(this.options.outDateFormat, this._datePicker.datepicker('getDate'), this._pickerOptions));
 		this._super();
@@ -146,8 +146,7 @@ $.widget("ibi.ibxDatePicker", $.ibi.ibxVBox,
 
 $.ibi.ibxDatePicker.statics =
 {
-	defaultDateFormat: "MM d, yy",
-	defaultOutDateFormat: "M d, yy",
+	defaultDateFormat: "MM d, yy"
 };
 
 
@@ -330,7 +329,7 @@ $.widget("ibi.ibxDateRange", $.ibi.ibxDatePicker,
 				this._clear2.hide();
 		}
 
-		var toDateObj = $.datepicker.parseDate(this.options.dateFormat, this.options.dateTo) || $.datepicker.formatDate($.ibi.ibxDatePicker.statics.defaultDateFormat, new Date());
+		var toDateObj = $.datepicker.parseDate(this.options.dateFormat, this.options.dateTo) || new Date();
 		this._datePicker.datepicker('setDate', toDateObj);
 		if (this.options.singleInput)
 		{
