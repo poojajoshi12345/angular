@@ -967,8 +967,7 @@ $.widget("ibi.ibxSelect2", $.ibi.ibxTextField,
 		var options = this.options;
 		aria = this._super(accessible, aria);
 		aria.expanded = this.options.popup && this._popup ? this._popup.ibxWidget('isOpen') : true;
-		//aria.owns = (this._control) ? this._control.element.prop("id") : "";
-		//aria.controls = (this._control) ? this._control.element.prop("id") : "";
+		aria.controls = aria.owns = (this.options.popup && this._popup) ? this._popup.prop("id") : (this._control ? this._control.prop("id"): "");
 		return aria;
 	},
 	_init: function ()
@@ -1054,6 +1053,7 @@ $.widget("ibi.ibxSelect2", $.ibi.ibxTextField,
 				"position":{ my: "left top", at: "left bottom+1px", of: this.element },
 				"autoFocus": !this.options.readonly,
 			});
+			this._popup.ibxWidget('option', {"navKeyRoot":true, "navKeyAutoFocus":false, "navKeyDir":"vertical", "aria":{"accessible":true, "role":"listbox", "hidden":false}});
 			this._popup.css('min-width', this.element.width() + "px").on("ibx_open ibx_close", function(e)
 			{
 				this.setAccessibility();
@@ -1074,6 +1074,7 @@ $.widget("ibi.ibxSelect2", $.ibi.ibxTextField,
 			}
 		else
 		{
+			//this._control.ibxWidget('option', {"navKeyRoot":true, "navKeyAutoFocus":false, "navKeyDir":"vertical", "aria":{"accessible":true, "role":"listbox", "hidden":false}});
 			this._control.css("width", "100%").css("align-self", "flex-start");
 			this.element.append(this._control);
 		}
