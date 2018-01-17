@@ -103,7 +103,6 @@ $Revision$:-->
 		<style-file src="./css/menu.ibx.css"/>
 		<style-file src="./css/groupbox.ibx.css"/>
 		<style-file src="./css/gridstack.ibx.css"/>
-		<style-file src="./css/selectlist.ibx.css"/>
 		<style-file src="./css/select.ibx.css"/>
 		<style-file src="./css/iframe.ibx.css"/>
 		<style-file src="./css/carousel.ibx.css"/>
@@ -215,9 +214,6 @@ $Revision$:-->
 		<script-file src="./js/groupbox.ibx.js"/>
 		<script-file src="./js/gridstack.ibx.js"/>
 		<script-file src="./js/select.ibx.js"/>
-		<script-file src="./js/selectlist.ibx.js"/>
-		<script-file src="./js/selectpagelist.ibx.js"/>
-		<script-file src="./js/selectrange.ibx.js"/>
 		<script-file src="./js/iframe.ibx.js"/>
 		<script-file src="./js/carousel.ibx.js"/>
 		<script-file src="./js/tabs.ibx.js"/>

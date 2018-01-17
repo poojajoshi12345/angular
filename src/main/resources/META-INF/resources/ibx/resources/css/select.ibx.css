@@ -101,5 +101,148 @@
 
 .ibx-select-popup
 {
+    padding:.25em;
+    border:1px solid #888;
+    border-radius:0px;
+    box-shadow:3px 3px 5px 0 #ccc;
     overflow:hidden;
+    font-size:1em;
+}
+
+.ibx-select2 .ibx-select-item-list {
+    border-top: 1px solid #ccc;
+    margin-top: 0.2em;
+    flex: 1 1 auto;
+}
+
+.ibx-select-item
+{
+	padding:.15em;
+}
+
+.ibx-select-item:hover{
+    background-color:#eee;
+}
+
+.ibx-select-item:focus
+{
+	box-shadow:none;
+	background-color:#eee;
+}
+
+.ibx-select-item.ibx-button-simple
+{
+    background-color:initial;
+}
+
+.ibx-select-item.ibx-check-box-simple,
+.ibx-select-item.ibx-radio-button-simple
+{
+    background-color:initial;
+}
+
+.ibx-select-item.ibx-check-box-simple:hover,
+.ibx-select-item.ibx-radio-button-simple:hover
+{
+	background-color:#ddd;
+}
+
+.ibx-select-item.ibx-check-box-simple:focus,
+.ibx-select-item.ibx-radio-button-simple:focus
+{
+	background-color:#ddd;
+}
+
+.ibx-select-item .ibx-label-text
+{
+    flex: 1 1 auto;
+}
+
+.ibx-select-group-marker
+{
+	font-family:"Material Icons";
+	font-size:1em;
+	color:#888;
+    width:1em;
+    order:-2;
+}
+
+.ibx-paged-item-list-inner
+{
+    overflow: auto;
+}
+
+.ibx-paged-item
+{
+    flex: 0 0 auto;
+}
+
+.ibx-page-list-options-box
+{
+    flex: 0 0 auto;
+}
+
+.ibx-page-list-search-wrapper
+{
+    margin: 10px 10px 5px;
+    position: relative;
+}
+
+.ibx-page-list-options-search
+{
+    flex: 1 1 auto;
+}
+
+.ibx-page-list-options-search.ibx-text-field > input,
+.ibx-page-list-options-search.ibx-text-field > input:hover {
+    line-height: 28px;
+    border-radius: 0;
+    height: 28px;
+    color: inherit;
+    box-shadow: none;
+    padding: 1px 30px 1px 12px;
+    text-overflow: ellipsis;
+    margin-right: 0;
+}
+
+.ibx-page-list-options-search-clear
+{
+    font-size: 14px;
+    padding: 5px;
+    height: 30px;
+    box-sizing: border-box;
+    opacity: 0;
+    text-align: center;
+    position: absolute;
+    right: 1px;
+    top: 1px;
+}
+
+.ibx-page-list-search-wrapper:hover .ibx-page-list-options-search-clear {
+	opacity: 1;
+}
+
+.ibx-page-list-select-options-buttons {
+    padding: 5px 10px;
+}
+.ibx-page-list-search-wrapper[style*="display: none"]+.ibx-page-list-select-options-buttons {
+    padding: 10px 10px 5px;
+}
+.ibx-page-list-select-options-all
+{
+    margin-left: 0px;
+    margin-right: 10px;
+    margin-bottom: 5px;
+    flex: 1 1 auto;
+    width: 1px;
+    font-size: 12px;
+}
+
+.ibx-page-list-select-options-none
+{
+    margin: 0px;
+    margin-bottom: 5px;
+    flex: 1 1 auto;
+    width: 1px;
+    font-size: 12px;
 }
