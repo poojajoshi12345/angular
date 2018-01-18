@@ -61,11 +61,13 @@ $.widget("ibi.ibxPopup", $.ibi.ibxWidget,
 	{
 		if(this._trigger("beforeopen", null, openInfo))
 		{
+			var options = this.options;
+
 			//save currently active element for refocusing on close.
 			this._elPrevActive = document.activeElement;
 			this.element.data("ibxPopupParent", this.element.parent()).appendTo(document.body);
 
-			this.element.position(this.options.position);
+			this.element.position(options.position);
 			this.element.on("transitionend", function(e)
 			{
 				if(e.originalEvent.propertyName == "visibility" && this.isOpen())
@@ -73,7 +75,7 @@ $.widget("ibi.ibxPopup", $.ibi.ibxWidget,
 					this.element.off("transitionend");//no longer interested in transition events.
 
 					//for autofocus, and navKeyRoots, we need to focus the popup so it can manage child focusing.
-					if(this.options.autoFocus || this.options.navKeyRoot)
+					if(options.autoFocus || (options.navKeyRoot && options.navKeyAutoFocus))
 					{
 						//focus the popup first.				
 						this.element.focus();
@@ -88,12 +90,12 @@ $.widget("ibi.ibxPopup", $.ibi.ibxWidget,
 					this._trigger("open");
 
 					//auto close the dialog after the specified time.
-					if(this.options.closeOnTimer >= 0)
+					if(options.closeOnTimer >= 0)
 					{
 						window.setTimeout(function()
 						{
 							this.close();
-						}.bind(this), this.options.closeOnTimer);
+						}.bind(this), options.closeOnTimer);
 					}
 
 				}

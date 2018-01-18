@@ -67,6 +67,27 @@
 				{
 					$(".test-popup").ibxWidget("open");
 				});
+
+
+				$(".btn-browse").on("ibx_change", function(e)
+				{
+					debugger;
+				});
+
+				$(".test-bucket").ibxWidget("option",
+				{
+					"align":"center",
+					"navKeyRoot":true,
+					"xnavKeyKeys":
+					{
+						"hprev":"CTRL+LEFT",
+						"hnext":"CTRL+RIGHT",
+						"vprev":"CTRL+UP",
+						"vnext":"CTRL+DOWN",
+					},
+					
+				});
+
 			}, [{src:"./test_res_bundle.xml", loadContext:"app"}], true);
 		</script>
 		<style type="text/css">
@@ -150,12 +171,31 @@
 				height:200px;
 				display:none;
 			}
+
+			.test-bucket .ibx-widget
+			{
+				margin:5px;
+			}
 		</style>
 	</head>
 	<body class="ibx-root">
 		<div class="cmd-clear" data-ibx-type="ibxCommand" data-ibxp-shortcut="CTRL+C"></div>
 		<div class="cmd-files" data-ibx-type="ibxCommand" data-ibxp-shortcut="CTRL+F"></div>
 		<div id="mainBox" class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="center" data-ibxp-justify="center">
+		
+			<div tabindex="0" data-ibx-type="ibxButtonBrowse" class="btn-browse">Browse...</div>
+
+			<div tabindex="0" class="test-bucket" data-ibx-type="ibxHBox">
+				<input tabindex="0" data-ibx-type="ibxText"></input>
+				<div tabindex="-1" class="bucket-button" data-ibx-type="ibxButton">Button1</div>
+				<div tabindex="-1" class="bucket-select" tabindex="0" data-ibx-type="ibxComboBox">
+					<div data-ibx-type="ibxSelectItem">Select Item</div>
+					<div data-ibx-type="ibxSelectItem">Select Item</div>
+					<div data-ibx-type="ibxSelectItem">Select Item</div>
+				</div>
+				<div tabindex="-1" class="bucket-button" data-ibx-type="ibxButton">Button2</div>
+			</div>		
+		
 			<div id="testBtn1" class="ibx-button test-button" tabindex="0" data-ibx-type="ibxMenuButton">Test Button 1
 				<div data-ibx-type="ibxMenu">
 					<div data-ibx-type="ibxMenuItem">Menu Item</div>

@@ -117,8 +117,8 @@ $.widget("ibi.ibxSelect", $.ibi.ibxTextField,
 		{
 			this._list = $("<div>").ibxMenu(
 			{
-				"position":{ my: "left top", at: "left bottom+1px", of: this.element },
-				"autoFocus": !this._isEditable()
+				"autoFocus":false,
+				"position":{ my: "left top", at: "left bottom+1px", of: this.element }
 			});
 			this._listWidget = this._list.data("ibxWidget");
 			this._list.css('min-width', this.element.outerWidth() + "px").on("ibx_open ibx_close", function(e)
@@ -133,7 +133,7 @@ $.widget("ibi.ibxSelect", $.ibi.ibxTextField,
 			this._listWidget = this._list.data("ibxWidget");
 		}
 
-		this._listWidget.option({"navKeyRoot":true, "navKeyAutoFocus":false, "navKeyDir":"vertical", "aria":{"accessible":true, "role":"listbox", "hidden":false}});
+		this._listWidget.option({"navKeyRoot":true, "navKeyAutoFocus":!this._isEditable(), "navKeyDir":"vertical", "aria":{"accessible":true, "role":"listbox", "hidden":false}});
 		this._list.addClass("ibx-select-list");
 		this._list.on("ibx_select", this._onSelect.bind(this));
 		this.element.append(this._list);
