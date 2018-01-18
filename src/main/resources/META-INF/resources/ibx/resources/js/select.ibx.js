@@ -291,16 +291,6 @@ $.widget("ibi.ibxSelect", $.ibi.ibxTextField,
 		}
 	},
 	list: function () { return this._list; },
-	selected: function (element)
-	{
-		if (typeof (element) == "undefined")
-			return this._list.find('.sel-selected');
-		else
-		{
-			$(element).trigger("click");
-			return this;
-		}
-	},
 	_onButtonMouseDown: function (e)
 	{
 		this._textInput.focus();
@@ -1444,7 +1434,7 @@ $.widget("ibi.ibxSelectItemList", $.ibi.ibxVBox,
 		this.element.find('.sel-selected.ibx-select-check-item').each(function (index, el) { $(el).data('ibxWidget').option('checked', true); })
 		if (!bNoUpdate)
 		{
-			this._trigger('change');
+			this._trigger("change");
 		}
 	},
 	_removeSelection: function (selItem, bKeepAnchor, bNoUpdate)
@@ -1853,7 +1843,7 @@ $.widget("ibi.ibxSelectPagedList", $.ibi.ibxSelect2, {
 	selected: function (element)
 	{
 		if (typeof (element) == "undefined")
-		return this._control.find('.sel-selected');
+			return this._control.find('.sel-selected');
 		else
 		{
 			$(element).trigger("click");
@@ -1862,20 +1852,6 @@ $.widget("ibi.ibxSelectPagedList", $.ibi.ibxSelect2, {
 	},
 	_onChange: function (e)
 	{
-		if (!this._control.ibxWidget('option', 'multiSelect'))
-		{
-			var values = this._control.ibxWidget('getSelected');
-			values.forEach(function (value){
-				value.checked = false;
-			});
-		}		
-		var item = this.selected().filter('.sel-anchor');
-		if (item && item.length == 1)
-		{
-			var obj = item.ibxWidget('option', 'valObj');
-			var checked = item.ibxWidget('option', 'checked');
-			obj.checked = checked;
-		}
 		this.option('text', this._getText());
 	},
 	_getText: function ()
@@ -2077,7 +2053,22 @@ $.widget("ibi.ibxPagedItemList", $.ibi.ibxVBox,
 	_onListControlChange: function (e)
 	{
 		if (!this._inSetPage)
+		{
+			if (!this.options.multiSelect)
+			{
+				this._values.forEach(function (value){
+					value.checked = false;
+				});
+			}		
+			var item = this.element.find('.sel-selected').filter('.sel-anchor');
+			if (item && item.length == 1)
+			{
+				var obj = item.ibxWidget('option', 'valObj');
+				var checked = item.ibxWidget('option', 'checked');
+				obj.checked = checked;
+			}
 			this._trigger("change", e);
+		}
 	},
 	getText: function ()
 	{
