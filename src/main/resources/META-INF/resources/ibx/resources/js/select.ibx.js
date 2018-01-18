@@ -1861,7 +1861,7 @@ $.widget("ibi.ibxSelectPagedList", $.ibi.ibxSelect2, {
 		var count = allValues.length; 
 		var selValues = [];
 		values.forEach(function (value){
-			selValues.push(value.display);
+			selValues.push(value.display ? value.display : value.value);
 		});
 
 		var ret = "";
@@ -2052,7 +2052,7 @@ $.widget("ibi.ibxPagedItemList", $.ibi.ibxVBox,
 	},
 	_onListControlChange: function (e)
 	{
-		if (!this._inSetPage)
+		if (!this._inSetPage && e.target === this._listControl[0])
 		{
 			if (!this.options.multiSelect)
 			{
@@ -2060,7 +2060,7 @@ $.widget("ibi.ibxPagedItemList", $.ibi.ibxVBox,
 					value.checked = false;
 				});
 			}		
-			var item = this.element.find('.sel-selected').filter('.sel-anchor');
+			var item = this.element.find('.sel-anchor');
 			if (item && item.length == 1)
 			{
 				var obj = item.ibxWidget('option', 'valObj');
@@ -2172,9 +2172,9 @@ $.widget("ibi.ibxPagedItemList", $.ibi.ibxVBox,
 			var valInfo = this._filteredValues[i];
 			var item;
 			if (options.multiSelect)
-				item = $("<div class='ibx-paged-item'>").ibxSelectCheckItem2({'text': valInfo.display, 'userValue': valInfo.value, 'selected': valInfo.checked });
+				item = $("<div class='ibx-paged-item'>").ibxSelectCheckItem2({'text': valInfo.display ? valInfo.display : valInfo.value, 'userValue': valInfo.value, 'selected': valInfo.checked });
 			else
-				item = $("<div class='ibx-paged-item'>").ibxSelectItem2({'text': valInfo.display, 'userValue': valInfo.value, 'selected': valInfo.checked });
+				item = $("<div class='ibx-paged-item'>").ibxSelectItem2({'text': valInfo.display ? valInfo.display : valInfo.value, 'userValue': valInfo.value, 'selected': valInfo.checked });
 			if (valInfo.class)
 				item.addClass(valInfo.class);
 			item.ibxWidget('option', 'valObj', valInfo);
