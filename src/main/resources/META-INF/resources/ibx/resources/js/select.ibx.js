@@ -344,7 +344,6 @@ $.widget("ibi.ibxSelect", $.ibi.ibxTextField,
 					this._openPopup();
 			}
 		}
-		e.stopPropagation();
 		this._super(e);
 	},
 	_onTextInputBlur: function (event)
@@ -1098,7 +1097,6 @@ $.widget("ibi.ibxSelect2", $.ibi.ibxTextField,
 					this._openPopup();
 			}
 		}
-		e.stopPropagation();
 		this._super(e);
 	},
 	_onTextInputBlur: function (event)
@@ -1997,13 +1995,13 @@ $.widget("ibi.ibxPagedItemList", $.ibi.ibxVBox,
 		
 		this._optionsBox = $("<div class='ibx-page-list-options-box'>").ibxVBox({'align': 'stretch'});
 		this._searchBoxWrapper = $("<div class='ibx-page-list-search-wrapper'>").ibxHBox({'align': 'stretch'});
-		this._searchBox = $("<div tabindex='0' class='ibx-page-list-options-search'>").ibxTextField();
-		this._clearSearch = $('<div class="ibx-page-list-options-search-clear">').ibxButtonSimple({glyphClasses:"fa fa-times"}).on('click', this._onClearSearch.bind(this));
+		this._searchBox = $("<div tabindex='-1' class='ibx-page-list-options-search'>").ibxTextField();
+		this._clearSearch = $("<div tabindex='-1' class='ibx-page-list-options-search-clear'>").ibxButtonSimple({glyphClasses:"fa fa-times"}).on('click', this._onClearSearch.bind(this));
 		this._clearSearch.prop('title', ibx.resourceMgr.getString('IBX_PAGE_LIST_TOOLTIP_CLEAR_SEARCH'));
 		this._searchBoxWrapper.append(this._searchBox, this._clearSearch);
 		this._buttonsBox = $("<div class='ibx-page-list-select-options-buttons'>").ibxHBox();
-		this._selectAll = $("<div tabindex='0' class='ibx-page-list-select-options-all'>").ibxButton({'justify': 'center', 'text': ibx.resourceMgr.getString('IBX_PAGE_LIST_SELECT_ALL')});
-		this._clearAll = $("<div tabindex='0' class='ibx-page-list-select-options-none'>").ibxButton({'justify': 'center', 'text': ibx.resourceMgr.getString('IBX_PAGE_LIST_SELECT_NONE')});
+		this._selectAll = $("<div tabindex='-1' class='ibx-page-list-select-options-all'>").ibxButton({'justify': 'center', 'text': ibx.resourceMgr.getString('IBX_PAGE_LIST_SELECT_ALL')});
+		this._clearAll = $("<div tabindex='-1' class='ibx-page-list-select-options-none'>").ibxButton({'justify': 'center', 'text': ibx.resourceMgr.getString('IBX_PAGE_LIST_SELECT_NONE')});
 		this._buttonsBox.ibxWidget('add', this._selectAll);
 		this._buttonsBox.ibxWidget('add', this._clearAll);
 		this._optionsBox.ibxWidget('add', this._searchBoxWrapper);
@@ -2016,8 +2014,8 @@ $.widget("ibi.ibxPagedItemList", $.ibi.ibxVBox,
 		this._clearAll.on("click", this._onClearAll.bind(this));
 
 		this._pageBox = $("<div class='ibx-page-list-page-box'>").ibxHBox({'align': 'stretch'});
-		this._pageLeft = $('<div class="ibx-page-list-page-box-left">').ibxButtonSimple({glyphClasses:"fa fa-chevron-left"}).on('click', this._onPageLeft.bind(this));
-		this._pageRight = $('<div class="ibx-page-list-page-box-right">').ibxButtonSimple({glyphClasses:"fa fa-chevron-right"}).on('click', this._onPageRight.bind(this));
+		this._pageLeft = $("<div tabindex='-1' class='ibx-page-list-page-box-left'>").ibxButtonSimple({glyphClasses:"fa fa-chevron-left"}).on('click', this._onPageLeft.bind(this));
+		this._pageRight = $("<div tabindex='-1' class='ibx-page-list-page-box-right'>").ibxButtonSimple({glyphClasses:"fa fa-chevron-right"}).on('click', this._onPageRight.bind(this));
 		this._pageLabel = $('<div class="ibx-page-list-page-box-label">').ibxLabel({'justify': 'center'});
 		this._pageBox.append(this._pageLeft, this._pageLabel, this._pageRight);
 
@@ -2202,7 +2200,7 @@ $.widget("ibi.ibxPagedItemList", $.ibi.ibxVBox,
 	{
 		this._filteredValues = [];
 		this._values.forEach(function (value){
-			if (!this._filter || value.display.toLowerCase().indexOf(this._filter) >= 0)
+			if (!this._filter || (value.display ? value.display : value.value).toLowerCase().indexOf(this._filter) >= 0)
 				this._filteredValues.push(value);
 		}.bind(this));
 	},
