@@ -1190,8 +1190,10 @@ $.widget("ibi.ibxSelectList", $.ibi.ibxSelect2,
 	{
 		this._control.ibxWidget('add', this.element.children(".ibx-select-item, .ibx-select-group"));
 	},
-	_onControlChange: function ()
+	_onControlChange: function (e)
 	{
+		if (e.target !== this._control[0])
+			return;
 		this._setValue(this._control.ibxWidget('getText'), true);
 		if(this.options.popup && !this._control.ibxWidget('option', 'multiSelect') && this._popup)
 			this._popup.ibxWidget('close');
@@ -1820,8 +1822,10 @@ $.widget("ibi.ibxSelectPagedList", $.ibi.ibxSelect2, {
 	{
 		this._control.ibxWidget('add', this.element.children(".ibx-select-item, .ibx-select-group"));
 	},
-	_onControlChange: function ()
+	_onControlChange: function (e)
 	{
+		if (e.target !== this._control[0])
+			return;
 		this._setValue(this._control.ibxWidget('getText'), true);
 		if(this.options.popup && !this._control.ibxWidget('option', 'multiSelect') && this._popup)
 			this._popup.ibxWidget('close');
@@ -1850,6 +1854,8 @@ $.widget("ibi.ibxSelectPagedList", $.ibi.ibxSelect2, {
 	},
 	_onChange: function (e)
 	{
+		if (e.target !== this.element[0])
+			return;
 		this.option('text', this._getText());
 	},
 	_getText: function ()
@@ -2050,6 +2056,8 @@ $.widget("ibi.ibxPagedItemList", $.ibi.ibxVBox,
 	},
 	_onListControlChange: function (e)
 	{
+		if (e.target !== this._listControl[0])
+			return;
 		if (!this._inSetPage && e.target === this._listControl[0])
 		{
 			if (!this.options.multiSelect)
