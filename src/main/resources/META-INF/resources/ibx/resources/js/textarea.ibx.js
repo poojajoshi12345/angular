@@ -26,6 +26,9 @@ $.widget("ibi.ibxTextArea", $.ibi.ibxFlexBox,
 		"wrap": false,
 		"align": "stretch",
 
+		"navKeyRoot":true,
+		"navKeyAutoFocus":true,
+
 		"aria":
 		{
 			"role":"textbox",
@@ -125,14 +128,6 @@ $.widget("ibi.ibxTextArea", $.ibi.ibxFlexBox,
 	_refresh: function ()
 	{
 		this._super();
-
-		//move the tabbing to the child.
-		var idxCur = this.element.attr("tabIndex");
-		if(idxCur >= 0)
-		{
-			this._textArea.attr("tabIndex", idxCur);
-			this.element.attr("tabIndex", -1);
-		}
 
 		if (this.options.cols)
 			this._textArea.attr("cols", this.options.cols);
