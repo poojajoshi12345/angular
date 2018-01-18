@@ -78,16 +78,27 @@
 				{
 					"align":"center",
 					"navKeyRoot":true,
-					"xnavKeyKeys":
+					"navKeyAutoFocus":true,
+					"navKeyKeys":
 					{
 						"hprev":"CTRL+LEFT",
 						"hnext":"CTRL+RIGHT",
 						"vprev":"CTRL+UP",
 						"vnext":"CTRL+DOWN",
 					},
-					
 				});
 
+				$(".dlg-button").on("click", function(e)
+				{
+					var options = 
+					{
+						type:"std warning",
+						buttons:"okcancel",
+						messageOptions:{text:"Are you absolutely sure you want to continue down this path?"}
+					};
+					var dlg = $.ibi.ibxDialog.createMessageDialog(options);
+					dlg.ibxDialog("open");
+				});
 			}, [{src:"./test_res_bundle.xml", loadContext:"app"}], true);
 		</script>
 		<style type="text/css">
@@ -142,7 +153,7 @@
 
 			.test-button
 			{
-				margin:10px;
+				margin:5px;
 			}
 
 			.test-popup
@@ -186,9 +197,13 @@
 			<div tabindex="0" data-ibx-type="ibxButtonBrowse" class="btn-browse">Browse...</div>
 
 			<div tabindex="0" class="test-bucket" data-ibx-type="ibxHBox">
-				<input tabindex="0" data-ibx-type="ibxText"></input>
 				<div tabindex="-1" class="bucket-button" data-ibx-type="ibxButton">Button1</div>
 				<div tabindex="-1" class="bucket-select" tabindex="0" data-ibx-type="ibxComboBox">
+					<div data-ibx-type="ibxSelectItem">Select Item</div>
+					<div data-ibx-type="ibxSelectItem">Select Item</div>
+					<div data-ibx-type="ibxSelectItem">Select Item</div>
+				</div>
+				<div tabindex="-1" class="bucket-select" tabindex="0" data-ibx-type="ibxListBox">
 					<div data-ibx-type="ibxSelectItem">Select Item</div>
 					<div data-ibx-type="ibxSelectItem">Select Item</div>
 					<div data-ibx-type="ibxSelectItem">Select Item</div>
@@ -210,9 +225,20 @@
 
 		<div class="test-popup" data-ibx-type="ibxPopup" data-ibxp-auto-close="false" data-ibxp-escape-to-close="true" data-ibxp-destroy-on-close="false" data-ibxp-opaque="false">
 			<div class="test-popup-box" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
+				<!--
 				<div class="test-slider" tabIndex="0" data-ibx-type="ibxHSlider" data-ibx-options="{value:25, minTextPos:'center', maxTextPos:'center'}"></div>
 				<div class="test-slider" tabindex="0" data-ibx-type="ibxHRange" data-ibx-options="{value:25, value2:75, minTextPos:'center', maxTextPos:'center'}"></div>
-				<div class="test-iframe2" tabIndex="0" data-ibx-type="ibxIFrame" data-ibxp-src="./test.html"></div>
+				-->
+				<div class="textfield" tabIndex="0" data-ibx-type="ibxTextField">Julian</div>
+				<div class="ibx-button dlg-button" tabindex="0" data-ibx-type="ibxButtonSimple" data-ibxp-justify="center">Dialog</div>
+				<div class="ibx-button test-button" tabindex="0" data-ibx-type="ibxMenuButton" data-ibxp-justify="center">Menu Button
+					<div data-ibx-type="ibxMenu">
+						<div data-ibx-type="ibxMenuItem">Menu Item</div>
+						<div data-ibx-type="ibxMenuItem">Menu Item</div>
+						<div data-ibx-type="ibxMenuItem">Menu Item</div>
+					</div>
+				</div>
+				<div class="textArea" tabIndex="0" data-ibx-type="ibxTextArea">Hyman</div>
 			</div>
 		</div>
 	</body>

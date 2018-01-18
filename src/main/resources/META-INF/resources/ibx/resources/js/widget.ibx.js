@@ -193,6 +193,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 		//manage the global widget focus states. That is, for complex widgets (has subwidgets), is the whole thing logically focused.
 		var options = this.options;
 		var isTarget = this.element.is(e.target);
+		var isRelTarget = this.element.is(e.relatedTarget);
 		var ownsTarget = $.contains(this.element[0], e.target);
 		var ownsRelTarget = $.contains(this.element[0], e.relatedTarget);
 
@@ -229,7 +230,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 				}
 			}
 		}
-		else
+
 		if(e.type == "focusout" && this._widgetFocused && !ownsRelTarget)
 		{
 			this._widgetFocused = false;
@@ -239,7 +240,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 			children.removeClass("ibx-ie-pseudo-focus");
 
 			//active items and tabbing are handled in a given 'context'...popups introduce a higher context, so ignore them here.
-			if(options.navKeyRoot && !$(e.relatedTarget).is(".ibx-popup"))
+			if(options.navKeyRoot)
 			{
 				//no longer navActive
 				this.element.removeClass(options.navKeyActiveClass);
@@ -255,7 +256,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 		}
 
 		//trying to move out of a focus root is a no no.
-		if(e.type == "focusout" && options.focusRoot && !ownsRelTarget)
+		if(e.type == "focusout" && options.focusRoot && !ownsRelTarget && !$(e.relatedTarget).is(":openPopup"))
 		{
 			var focusable = this.element.find(":ibxFocusable");
 			(focusable.length) ? focusable.first().focus() : this.element.focus();
@@ -313,9 +314,9 @@ $.widget("ibi.ibxWidget", $.Widget,
 			else
 			if(isNavActive)
 			{
-				if($(e.target).is(":input"))
-					active = $();
-				else
+				//if($(e.target).is(":input"))
+				//	active = $();
+				//else
 				if(eventMatchesShortcut(options.navKeyKeys.first, e))
 					active = navKids.first();
 				else
@@ -357,7 +358,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 				}
 			}
 
-			if(isNavActive && active.length)
+			if(isNavActive && active.length && !current.is(active))
 			{
 				var event = $.Event(e);
 				event.type = "ibx_beforenavkey";
@@ -432,6 +433,15 @@ $.widget("ibi.ibxWidget", $.Widget,
 		if(bRefresh)
 			this.refresh();
 		return ret;
+	},
+	_setOption: function( key, value )
+	{
+		//if the key/value is an object, then extend it.
+		if(value instanceof Object)
+			$.extend(true, this.options[key], value);
+		else
+			this._super(key, value);	
+		return this;
 	},
 	_setOptionDisabled:function(value)
 	{
