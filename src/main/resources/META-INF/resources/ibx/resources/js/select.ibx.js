@@ -1820,7 +1820,18 @@ $.widget("ibi.ibxSelectPagedList", $.ibi.ibxSelect2, {
 	},
 	_initControl: function ()
 	{
-		this._control.ibxWidget('add', this.element.children(".ibx-select-item, .ibx-select-group"));
+		// remove markup children and add them as values
+		var children = this.element.find('.ibx-select-item').detach();
+		var values = [];
+		children.each(function (){
+			var obj = {};
+			obj.display = $(this).ibxWidget('option', 'text');
+			obj.value = $(this).ibxWidget('option', 'userValue');
+			if (!obj.value)
+				obj.value = obj.display;
+			values.push(obj);
+		});
+		this.values(values);
 	},
 	_onControlChange: function (e)
 	{
@@ -1869,11 +1880,11 @@ $.widget("ibi.ibxSelectPagedList", $.ibi.ibxSelect2, {
 		});
 
 		var ret = "";
-		for (var i = 0; i < values.length; i++)
+		for (var i = 0; i < selValues.length; i++)
 		{
 			if (i > 0)
 				ret += ', ';
-			ret += values[i];
+			ret += selValues[i];
 		}
 		return ret;	
 	},
@@ -1998,6 +2009,18 @@ $.widget("ibi.ibxPagedItemList", $.ibi.ibxVBox,
 	_create: function ()
 	{
 		this._super();
+
+		// remove markup children and add them as values
+		var children = this.element.find('.ibx-select-item').detach();
+		var values = this._values;
+		children.each(function (){
+			var obj = {};
+			obj.display = $(this).ibxWidget('option', 'text');
+			obj.value = $(this).ibxWidget('option', 'userValue');
+			if (!obj.value)
+				obj.value = obj.display;
+			values.push(obj);
+		});
 		
 		this._optionsBox = $("<div class='ibx-page-list-options-box'>").ibxVBox({'align': 'stretch'});
 		this._searchBoxWrapper = $("<div class='ibx-page-list-search-wrapper'>").ibxHBox({'align': 'stretch'});
@@ -2032,6 +2055,9 @@ $.widget("ibi.ibxPagedItemList", $.ibi.ibxVBox,
 		this._super();
 		this._listControl.ibxWidget('option', 'multiSelect', this.options.multiSelect);
 		this._listControl.on("ibx_change", this._onListControlChange.bind(this));
+		// add markup items
+		if (this._values.length > 0)
+			this.values(this._values);
 	},
 	_refresh: function ()
 	{
