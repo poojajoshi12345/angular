@@ -291,6 +291,16 @@ $.widget("ibi.ibxSelect", $.ibi.ibxTextField,
 		}
 	},
 	list: function () { return this._list; },
+	selected: function (element)
+	{
+		if (typeof (element) == "undefined")
+			return this._list.find('.sel-selected');
+		else
+		{
+			$(element).trigger("click");
+			return this;
+		}
+	},	
 	_onButtonMouseDown: function (e)
 	{
 		this._textInput.focus();
