@@ -76,6 +76,7 @@ $.widget("ibi.ibxButtonBrowse", $.ibi.ibxButton,
 	},
 	_onBrowseBtnClick:function(e)
 	{
+		this._btnBrowse.prop("value", "");
 		this._btnBrowse.click();
 	},
 	_onBrowseBtnChange:function(e)
