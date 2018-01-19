@@ -17,7 +17,6 @@ $.widget("ibi.ibxWidget", $.Widget,
 		"focusRoot":false,							//for circular tabbing management...like in a dialog.
 		
 		//for keyboard navigation (mostly composite widgets like menus/selects/etc...508)
-		"navKeyActiveClass":"ibx-nav-key-active",	//class when navKeyRoot is active
 		"navKeyRoot":false,							//start key nav here
 		"navKeyDir":"horizontal",					//horizontal = left/right, vertical = up/down, or both
 		"navKeyResetFocusOnBlur":true,				//when widget loses focus, reset the current active navKey child.
@@ -213,7 +212,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 				if(!isTarget)
 				{
 					//if we own the target, we are now nav active.
-					this.element.addClass(options.navKeyActiveClass);
+					this.element.addClass("ibx-nav-key-active");
 
 					//take the element out of the tab order so shift+tab will work when auto focusing first nav item.
 					if(this.element.data("navKeyRootTabIndex") === undefined)
@@ -243,7 +242,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 			if(options.navKeyRoot)
 			{
 				//no longer navActive
-				this.element.removeClass(options.navKeyActiveClass);
+				this.element.removeClass("ibx-nav-key-active");
 
 				//put this element back in the tab order...so that next tab into will will do auto-focus.
 				if(this.element.data("navKeyRootTabIndex") !== undefined)
@@ -254,13 +253,6 @@ $.widget("ibi.ibxWidget", $.Widget,
 					children.removeClass("ibx-nav-item-active").removeAttr("aria-activedescendant");
 			}
 		}
-
-		//trying to move out of a focus root is a no no.
-		if(e.type == "focusout" && options.focusRoot && !ownsRelTarget && !$(e.relatedTarget).is(":openPopup"))
-		{
-			var focusable = this.element.find(":ibxFocusable");
-			(focusable.length) ? focusable.first().focus() : this.element.focus();
-		}
 	},
 	_onWidgetKeyEvent:function(e)
 	{
@@ -270,14 +262,14 @@ $.widget("ibi.ibxWidget", $.Widget,
 		var options = this.options;
 		if(options.focusRoot && e.keyCode == $.ui.keyCode.TAB)
 		{
-			var tabKids = $(this.element).find(":ibxFocusable");
+			var tabKids = this.element.find(":ibxFocusable, .ibx-nav-key-active");
 			var target = null;
 			var firstKid = tabKids.first();
 			var lastKid = tabKids.last();
-			if(firstKid.is(e.target) || $.contains(firstKid[0], e.target) && e.shiftKey)
+			if((firstKid.is(e.target) || $.contains(firstKid[0], e.target)) && e.shiftKey)
 				target = tabKids.last();
 			else
-			if(lastKid.is(e.target) || $.contains(lastKid[0], e.target))
+			if((lastKid.is(e.target) || $.contains(lastKid[0], e.target)) && !e.shiftKey)
 				target = tabKids.first();
 
 			//target means first/last item and need to loop...or no kids, so do nothing.
@@ -302,21 +294,14 @@ $.widget("ibi.ibxWidget", $.Widget,
 			if(!isNavActive && (e.data == "NAV_KEY_ACTIVATE" || eventMatchesShortcut(options.navKeyKeys.activate, e)))
 			{
 				isNavActive = true;
-				this.element.addClass(options.navKeyActiveClass);
 				active = active = current.length ? current : navKids.first();
 			}
 			else
 			if(isNavActive && !options.navKeyAutoFocus && eventMatchesShortcut(options.navKeyKeys.cancel, e))//you can't escape out of a navKeyAutoFocus.
-			{
-				this.element.removeClass(options.navKeyActiveClass);
 				active = this.element;
-			}
 			else
 			if(isNavActive)
 			{
-				//if($(e.target).is(":input"))
-				//	active = $();
-				//else
 				if(eventMatchesShortcut(options.navKeyKeys.first, e))
 					active = navKids.first();
 				else
@@ -358,7 +343,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 				}
 			}
 
-			if(isNavActive && active.length && !current.is(active))
+			if(isNavActive && active.length)
 			{
 				var event = $.Event(e);
 				event.type = "ibx_beforenavkey";
@@ -405,7 +390,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 	},
 	navKeyActive:function()
 	{
-		return this.element.hasClass(this.options.navKeyActiveClass);
+		return this.element.hasClass("ibx-nav-key-active");
 	},
 	add:function(el, elSibling, before, refresh)
 	{
