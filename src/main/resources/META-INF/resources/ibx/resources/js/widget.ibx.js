@@ -161,7 +161,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 		else
 		{
 			if(this[memberName])
-				console.warn("Overwriting member '" + memberName + "' in nameroot, info=>", {nameRoot:this, memberExisting:this[memberName], memberOverwrite:value});
+				console.warn("Overwriting Member '" + memberName + "' in nameroot, info=>", {nameRoot:this, memberExisting:this[memberName], memberOverwrite:value});
 			this[memberName] = value;
 		}
 		return ret || $();
@@ -433,11 +433,6 @@ $.widget("ibi.ibxWidget", $.Widget,
 		if(bRefresh)
 			this.refresh();
 		return ret;
-	},
-	_setOption: function( key, value )
-	{
-		this._super(key, value);	
-		return this;
 	},
 	_setOptionDisabled:function(value)
 	{

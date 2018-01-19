@@ -38,14 +38,23 @@
 					var csl = $(".test-carousel");
 					csl.ibxWidget("children").remove();
 
+					var overlays = [{"position":"bl", "glyph":"", "glyphClasses":"material-icons md-24", "icon":""}];
 					var items = e.data.result;
 					for(var i = 0; i < items.length; ++i)
 					{
-						//if(i > 15)
-						//	continue;
 						var item = items[i];
 						var qItem = $(sformat("<div id='tile{3}' class='test-tile' title='{1}'>{2}</div>", item.fullPath, item.name, i));
-						qItem.css("background-image", sformat('url("{1}")', item.thumbPath));
+
+						overlays[0].glyph = (i%2) ? "face" : "accessibility";
+						var itemOptions =
+						{
+							"iconPosition":"top",
+							"icon":item.thumbPath,
+							"align":"center",
+							"justify":"center",
+							"overlays":overlays,
+						};
+						qItem.ibxLabel(itemOptions);
 						csl.ibxWidget("add", qItem);
 					}
 
@@ -85,7 +94,7 @@
 						"hnext":"CTRL+RIGHT",
 						"vprev":"CTRL+UP",
 						"vnext":"CTRL+DOWN",
-					},
+					}
 				});
 
 				$(".dlg-button").on("click", function(e)
@@ -136,16 +145,18 @@
 				justify-content:center;
 				margin:10px;
 				padding:5px;
-				background-repeat:no-repeat;
-				background-position:top;
-				background-size:80%;
 				overflow:hidden;
 			}
 			.test-tile:hover
 			{
 				background-color:#eee;
 			}
-			
+			.test-tile > .ibx-label-glyph
+			{
+				flex:1 1 auto;
+				align-self:stretch;
+			}
+
 			.test-edit
 			{
 				width:200px;
@@ -229,10 +240,8 @@
 
 		<div class="test-popup" data-ibx-type="ibxPopup" data-ibxp-auto-close="false" data-ibxp-escape-to-close="true" data-ibxp-destroy-on-close="false" data-ibxp-opaque="false">
 			<div class="test-popup-box" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
-				<!--
 				<div class="test-slider" tabIndex="0" data-ibx-type="ibxHSlider" data-ibx-options="{value:25, minTextPos:'center', maxTextPos:'center'}"></div>
 				<div class="test-slider" tabindex="0" data-ibx-type="ibxHRange" data-ibx-options="{value:25, value2:75, minTextPos:'center', maxTextPos:'center'}"></div>
-				-->
 				<div class="textfield" tabIndex="0" data-ibx-type="ibxTextField">Julian</div>
 				<div class="ibx-button dlg-button" tabindex="0" data-ibx-type="ibxButtonSimple" data-ibxp-justify="center">Dialog</div>
 				<div class="ibx-button test-button" tabindex="0" data-ibx-type="ibxMenuButton" data-ibxp-justify="center">Menu Button
