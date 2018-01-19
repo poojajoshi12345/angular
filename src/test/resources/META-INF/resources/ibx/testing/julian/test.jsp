@@ -187,6 +187,10 @@
 			{
 				margin:5px;
 			}
+			.bucket-select
+			{
+				width:150px;
+			}
 		</style>
 	</head>
 	<body class="ibx-root">
