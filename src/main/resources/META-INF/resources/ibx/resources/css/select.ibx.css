@@ -70,18 +70,18 @@
 
 /* New version of select */
 
-.ibx-select2 {
+.ibx-select-base {
     border-radius: 0.2em;
     border: 1px solid #ccc;
     background-color: white;
     padding: 0.2em;
 }
 
-.ibx-select2.txt-auto-size {
+.ibx-select-base.txt-auto-size {
     width: auto;
 }
 
-.ibx-select2 input {
+.ibx-select-base input {
 	margin-right:3px;
     width: unset;
 }
@@ -91,11 +91,11 @@
 	content:"\f0d7";
 }
 
-.ibx-select2 > input {
+.ibx-select-base > input {
     border-bottom:none;
 }
 
-.ibx-select2 > input:hover {
+.ibx-select-base > input:hover {
     border-bottom:none;
 }
 
@@ -109,7 +109,7 @@
     font-size:1em;
 }
 
-.ibx-select2 .ibx-select-item-list {
+.ibx-select-base .ibx-select-item-list {
     border-top: 1px solid #ccc;
     margin-top: 0.2em;
     flex: 1 1 auto;
@@ -167,12 +167,12 @@
     order:-2;
 }
 
-.ibx-paged-item-list
+.ibx-select-item-list-paged
 {
 }
 
 /* inner list */
-.ibx-paged-item-list-inner
+.ibx-select-item-list-paged-inner
 {
     overflow: auto;
     flex: 1 1 auto;

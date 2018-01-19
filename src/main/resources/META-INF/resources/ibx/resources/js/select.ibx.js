@@ -929,7 +929,7 @@ $.widget("ibi.ibxSelectGroup", $.ibi.ibxLabel,
 });
 
 /* New version of select */
-$.widget("ibi.ibxSelect2", $.ibi.ibxTextField,
+$.widget("ibi.ibxSelectBase", $.ibi.ibxTextField,
 {
 	options:
 		{
@@ -952,7 +952,7 @@ $.widget("ibi.ibxSelect2", $.ibi.ibxTextField,
 				"haspopup":"listbox"
 			}
 		},
-	_widgetClass: "ibx-select2",
+	_widgetClass: "ibx-select-base",
 	_control: null,
 	control: function () { return this._control; },
 	_popup: null,
@@ -1173,7 +1173,7 @@ $.widget("ibi.ibxSelect2", $.ibi.ibxTextField,
 	}
 });
 
-$.widget("ibi.ibxSelectList", $.ibi.ibxSelect2,
+$.widget("ibi.ibxSelectList", $.ibi.ibxSelectBase,
 {
 	options:
 		{
@@ -1235,6 +1235,10 @@ $.widget("ibi.ibxSelectList", $.ibi.ibxSelect2,
 		}
 		else
 			this._control.ibxWidget('focusSelItem');
+	},
+	selected: function (element)
+	{
+		return this._control.ibxWidget('selected', element);
 	},
 	_refresh: function ()
 	{
@@ -1781,7 +1785,7 @@ $.widget("ibi.ibxSelectGroup2", $.ibi.ibxLabel,
 	}
 });
 
-$.widget("ibi.ibxSelectPagedList", $.ibi.ibxSelect2, {
+$.widget("ibi.ibxSelectPaged", $.ibi.ibxSelectBase, {
 	options:
 	{
         'readonly': true,
@@ -1793,7 +1797,7 @@ $.widget("ibi.ibxSelectPagedList", $.ibi.ibxSelect2, {
         'listClasses': 'search-list ibx-menu-no-icons',
         */
 	},
-	_widgetClass: "ibx-select-paged-list",
+	_widgetClass: "ibx-select-paged",
 	_create: function ()
 	{
 		this._super();
@@ -1818,7 +1822,7 @@ $.widget("ibi.ibxSelectPagedList", $.ibi.ibxSelect2, {
 	},
 	_createControl: function ()
 	{
-		return $("<div tabindex='-1'>").ibxPagedItemList(this.options.listOptions);
+		return $("<div tabindex='-1'>").ibxSelectItemListPaged(this.options.listOptions);
 	},
 	_initControl: function ()
 	{
@@ -1987,7 +1991,7 @@ $.widget("ibi.ibxSelectPagedList", $.ibi.ibxSelect2, {
 	},
 });
 
-$.widget("ibi.ibxPagedItemList", $.ibi.ibxVBox,
+$.widget("ibi.ibxSelectItemListPaged", $.ibi.ibxVBox,
 {
 	options:
 	{
@@ -1999,7 +2003,7 @@ $.widget("ibi.ibxPagedItemList", $.ibi.ibxVBox,
 		"pageSize": 10,
 		"align": "stretch",
 	},
-	_widgetClass: "ibx-paged-item-list",
+	_widgetClass: "ibx-select-item-list-paged",
 	_create: function ()
 	{
 		this._super();
@@ -2030,7 +2034,7 @@ $.widget("ibi.ibxPagedItemList", $.ibi.ibxVBox,
 		this._optionsBox.ibxWidget('add', this._searchBoxWrapper);
 		this._optionsBox.ibxWidget('add', this._buttonsBox);
 
-		this._listControl = $("<div class='ibx-paged-item-list-inner'>").ibxSelectItemList({'align': 'stretch'});
+		this._listControl = $("<div class='ibx-select-item-list-paged-inner'>").ibxSelectItemList({'align': 'stretch'});
 		
 		this._searchBox.on("ibx_textchanged", this._onSearch.bind(this));
 		this._selectAll.on("click", this._onSelectAll.bind(this));
