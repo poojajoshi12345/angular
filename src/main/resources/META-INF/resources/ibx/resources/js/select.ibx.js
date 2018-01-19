@@ -1038,7 +1038,7 @@ $.widget("ibi.ibxSelect2", $.ibi.ibxTextField,
 				"autoFocus": this.options.readonly,
 			});
 			this._popup.ibxWidget('option', {"navKeyRoot":true, "navKeyAutoFocus":false, "navKeyDir":"vertical", "aria":{"accessible":true, "role":"listbox", "hidden":false}});
-			this._popup.css('min-width', this.element.width() + "px").on("ibx_open ibx_close", function(e)
+			this._popup.on("ibx_open ibx_close", function(e)
 			{
 				this.setAccessibility();
 			}.bind(this));
@@ -1091,11 +1091,7 @@ $.widget("ibi.ibxSelect2", $.ibi.ibxTextField,
 		}
 		else if (e.keyCode != 37 && e.keyCode != 39 && !e.shiftKey && !e.ctrlKey) // open popup for everything except left/right arrows
 		{
-			if (this.options.popup)
-			{
-				if (!this._popup.ibxWidget('isOpen'))
-					this._openPopup();
-			}
+			this._onDownArrow();
 		}
 		this._super(e);
 	},
@@ -1803,14 +1799,10 @@ $.widget("ibi.ibxSelectPagedList", $.ibi.ibxSelect2, {
         $(window).on('resize', this._onWindowResize.bind(this));
         if (this._popup)
         {
-            this._popup.css('min-width', this.element.outerWidth() + "px");
             this._popup.on("ibx_open", function (e)
             {
                 this._control.ibxWidget('resetSearch', true);
-                window.setTimeout(function (){
-                    this._setMaxHeight();
-                    this._popup.css('min-width', this._popup.outerWidth() + "px");
-                }.bind(this), 10);
+				this._setMaxHeight();
             }.bind(this));
         }
 	},
@@ -1936,7 +1928,6 @@ $.widget("ibi.ibxSelectPagedList", $.ibi.ibxSelect2, {
 	values: function (listValues)
 	{
 		this._control.ibxWidget('values', listValues);
-        this._setHeight();
         window.setTimeout(function (){this.option('text', this._getText());}.bind(this), 100);
 	},
 	selectItems: function (elems)
@@ -1965,7 +1956,6 @@ $.widget("ibi.ibxSelectPagedList", $.ibi.ibxSelect2, {
         if (this._popup)
         {
             this._setMaxHeight();
-			this._setHeight();
             window.setTimeout(function (){
 				this._popup.css('min-width', this.element.width() + "px");
 			}.bind(this), 10);
@@ -1976,14 +1966,8 @@ $.widget("ibi.ibxSelectPagedList", $.ibi.ibxSelect2, {
 		if (this.options.autoHeight)
 		{
 			var popupTop = this._control.offset().top;
-			this._control.css('height', '');
 			this._control.css('max-height', Math.max(100,$(window).outerHeight() - popupTop - this.options.autoHeightGap) + "px");
 		}
-	},
-	_setHeight: function ()
-	{
-		this._control.css('height', '');
-		window.setTimeout(function () {this._control.css('height', this._control.outerHeight()+"px");}.bind(this), 100);
 	},
 	_refresh: function ()
 	{
@@ -2122,7 +2106,6 @@ $.widget("ibi.ibxPagedItemList", $.ibi.ibxVBox,
 			this._filter = '';
 			this._extractFiltered();
 			this._setPage(0);
-			//this._setHeight();
 		}
 		else if (bForceFirstPage)
 			this._setPage(0);
@@ -2135,7 +2118,6 @@ $.widget("ibi.ibxPagedItemList", $.ibi.ibxVBox,
 			this._filter = text;
 			this._extractFiltered();
 			this._setPage(0);
-			//this._setHeight();
 		}
 	},
 	_onSelectAll: function ()
@@ -2253,7 +2235,6 @@ $.widget("ibi.ibxPagedItemList", $.ibi.ibxVBox,
 			this._values = values;
 			this._extractFiltered();
 			this._setPage(0);
-			//this._setHeight();
 			return this;
 		}
 	},
