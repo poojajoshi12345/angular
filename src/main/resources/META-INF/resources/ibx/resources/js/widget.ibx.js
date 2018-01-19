@@ -436,11 +436,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 	},
 	_setOption: function( key, value )
 	{
-		//if the key/value is an object, then extend it.
-		if(value instanceof Object)
-			$.extend(true, this.options[key], value);
-		else
-			this._super(key, value);	
+		this._super(key, value);	
 		return this;
 	},
 	_setOptionDisabled:function(value)
