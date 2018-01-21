@@ -18,7 +18,8 @@
 				{
 					"introduction":"./intro.html",
 					"ibx_app":"./ibx_application.html",
-					"binding":"./binding.html"
+					"binding":"./binding.html",
+					"widgets":"./widgets.html"
 				};
 				$.each(doc, function(entry, url)
 				{
@@ -28,16 +29,24 @@
 						article.appendTo(document.body);
 					});
 				});
-			});
+			}, true);
 		</script>
 		<style type="text/css">
 			pre
 			{
 				tab-size:4;
 			}
+			.title
+			{
+				font:24pt arial;
+			}
 		</style>
 	</head>
-	<body>
+	<body class="ibx-root">
+		<div data-ibx-type="ibxVBox" data-ibxp-align="center" data-ibxp-justify="center">
+			<img src="../resources/css/images/ibx.png"/>
+			<div class="title" data-ibx-type="ibxLabel">ibx Info</div>
+		</div>
 	</body>
 </html>
 
