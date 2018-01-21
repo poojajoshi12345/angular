@@ -28,7 +28,7 @@
 					Ibfs.ibfs.login("admin", "admin").done(function(e)
 					{
 						console.log("ibfs logged in.");
-						Ibfs.ibfs.listItems("IBFS:/WFC/Repository/Public", {asJSON:true});
+						Ibfs.ibfs.listItems("IBFS:/WFC/Repository/test", {asJSON:true});
 					});
 				});
 
@@ -237,7 +237,7 @@
 			<div class="test-popup-box" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
 				<div class="test-slider" tabIndex="0" data-ibx-type="ibxHSlider" data-ibx-options="{value:25, minTextPos:'center', maxTextPos:'center'}"></div>
 				<div class="test-slider" tabindex="0" data-ibx-type="ibxHRange" data-ibx-options="{value:25, value2:75, minTextPos:'center', maxTextPos:'center'}"></div>
-				<div class="textfield" tabIndex="0" data-ibx-type="ibxTextField">Julian</div>
+				<div class="textfield" tabIndex="0" data-ibx-type="ibxTextField">Text field</div>
 				<div class="ibx-button dlg-button" tabindex="0" data-ibx-type="ibxButtonSimple" data-ibxp-justify="center">Dialog</div>
 				<div class="ibx-button test-button" tabindex="0" data-ibx-type="ibxMenuButton" data-ibxp-justify="center">Menu Button
 					<div data-ibx-type="ibxMenu">
@@ -246,7 +246,7 @@
 						<div data-ibx-type="ibxMenuItem">Menu Item</div>
 					</div>
 				</div>
-				<div class="textArea" tabIndex="0" data-ibx-type="ibxTextArea">Hyman</div>
+				<div class="textArea" tabIndex="0" data-ibx-type="ibxTextArea">Text area</div>
 			</div>
 		</div>
 	</body>
