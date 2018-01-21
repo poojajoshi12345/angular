@@ -202,6 +202,8 @@
 		</style>
 	</head>
 	<body class="ibx-root">
+		<div class="sample" data-ibx-type="ibxWidget" data-ibxp-xxx="value" data-ibx-options="{'option1':'one', 'option2':'two'}"></div>
+
 		<div class="cmd-clear" data-ibx-type="ibxCommand" data-ibxp-shortcut="CTRL+C"></div>
 		<div class="cmd-files" data-ibx-type="ibxCommand" data-ibxp-shortcut="CTRL+F"></div>
 		<div id="mainBox" class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="center" data-ibxp-justify="center">
