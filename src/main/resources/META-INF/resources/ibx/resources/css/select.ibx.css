@@ -30,16 +30,6 @@
     border-bottom:none;
 }
 
-.ibx-select-type-combo > .ibx-select-list {
-    border-top: 1px solid #ccc;
-    margin-top: 0.2em;
-    flex: 1 1 auto;
-}
-
-.ibx-select-type-list > .ibx-select-list {
-    flex: 1 1 auto;
-}
-
 .sel-selected:not(.ibx-select-check-item):not(.ibx-select-radio-item),
 .sel-selected:not(.ibx-select-check-item):not(.ibx-select-radio-item):hover,
 .sel-selected:not(.ibx-select-check-item):not(.ibx-select-radio-item):focus{
