@@ -249,7 +249,7 @@ $.widget("ibi.ibxSelect", $.ibi.ibxSelectBase,
 {
 	options:
 		{
-            "listOptions": {"multiSelect": false},
+			"multiSelect": false,
 		},
 	_widgetClass: "ibx-select",
 	_create: function ()
@@ -262,7 +262,7 @@ $.widget("ibi.ibxSelect", $.ibi.ibxSelectBase,
 	},
 	_createControl: function ()
 	{
-		return $("<div tabindex='-1'>").ibxSelectItemList(this.options.listOptions);
+		return $("<div tabindex='-1'>").ibxSelectItemList({'multiSelect': this.options.multiSelect});
 	},
 	_initControl: function ()
 	{
@@ -320,7 +320,7 @@ $.widget("ibi.ibxSelect", $.ibi.ibxSelectBase,
 	{
 		this._super();
 		if (this._control)
-			this._control.ibxWidget('option', this.options.listOptions);
+			this._control.ibxWidget('option', 'multiSelect', this.options.multiSelect);
 	},
 });
 
@@ -867,8 +867,9 @@ $.widget("ibi.ibxSelectPaged", $.ibi.ibxSelectBase, {
         'readonly': true,
         'autoHeight': true,
 		'autoHeightGap': 50,
-        "listOptions": {"search": false, "selectionControls": false, "multiSelect": false},
-        
+		"search": false,
+		"selectionControls": false,
+		"multiSelect": false,
 		/*
         'listClasses': 'search-list ibx-menu-no-icons',
         */
@@ -898,7 +899,7 @@ $.widget("ibi.ibxSelectPaged", $.ibi.ibxSelectBase, {
 	},
 	_createControl: function ()
 	{
-		return $("<div tabindex='-1'>").ibxSelectItemListPaged(this.options.listOptions);
+		return $("<div tabindex='-1'>").ibxSelectItemListPaged({"search": this.options.search, "selectionControls": this.options.selectionControls, "multiSelect": this.options.multiSelect});
 	},
 	_initControl: function ()
 	{
@@ -1063,7 +1064,7 @@ $.widget("ibi.ibxSelectPaged", $.ibi.ibxSelectBase, {
 	{
 		this._super();
 		if (this._control)
-			this._control.ibxWidget('option', this.options.listOptions);
+			this._control.ibxWidget('option', {"search": this.options.search, "selectionControls": this.options.selectionControls, "multiSelect": this.options.multiSelect});
 	},
 });
 
