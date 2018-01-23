@@ -15,13 +15,14 @@
 			ibx(function()
 			{
 				var doc = 
-				{
-					"introduction":"./intro.html",
-					"ibx_app":"./ibx_application.html",
-					"binding":"./binding.html",
-					"nameRoot":"",
-					"widgets":"./widgets.html"
-				};
+				[
+					"./intro.html",
+					"./ibx_application.html",
+					"./binding.html",
+					"./nameroot.html",
+					"./widgets.html"
+				];
+
 				$.each(doc, function(entry, url)
 				{
 					if(!url)
@@ -30,15 +31,62 @@
 					$.get({"async":false, "url":url, "dataType":"text"}).done(function(text, status, xhr)
 					{
 						var article = $("<article>").append(text);
+						var info = article.find("h1").uniqueId();
+						info.each(function(idx, el)
+						{
+							el = $(el);
+							var tocEntry = $(sformat("<a class='toc-entry toc-section' href='#{1}'>{2}</a>", el.prop("id"), el.text()));
+							$(".toc").append(tocEntry);
+
+							article.find("h4").uniqueId().each(function(idx, el)
+							{
+								el = $(el);
+								var tocSubEntry = $(sformat("<a class='toc-entry toc-sub-section' href='#{1}'>{2}</a>", el.prop("id"), el.text()));
+								tocEntry.append(tocSubEntry);
+							});
+
+						});
 						article.appendTo(".content");
 					});
 				});
 			}, true);
 		</script>
 		<style type="text/css">
+			
+			html, body, .main-box
+			{
+				width:100%;
+				height:100%;
+				margin:0px;
+				overflow:auto;
+				box-sizing:border-box;
+			}
 			pre
 			{
 				tab-size:4;
+			}
+			.toc, .content
+			{
+				padding:10px;
+				overflow:auto;
+			}
+			.toc
+			{
+				flex:1 1 auto;
+				width:33%;
+			}
+			.toc-entry
+			{
+				display:block;
+			}
+			.toc-section
+			{
+				font-weight:bold;
+			}
+			.toc-sub-section
+			{
+				font-weight:normal;
+				margin-left:1.5em;
 			}
 			.title
 			{
@@ -47,9 +95,8 @@
 		</style>
 	</head>
 	<body class="ibx-root">
-		<div data-ibx-type="ibxHBox" data-ibxp-align="stretch">
+		<div class="main-box" data-ibx-type="ibxHBox" data-ibxp-align="stretch">
 			<div class="toc" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
-				<a href="#test"></a>
 			</div>
 			<div data-ibx-type="ibxSplitter"></div>
 			<div class="content" data-ibx-type="ibxWidget">
