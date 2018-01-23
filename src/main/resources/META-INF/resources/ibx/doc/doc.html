@@ -19,14 +19,18 @@
 					"introduction":"./intro.html",
 					"ibx_app":"./ibx_application.html",
 					"binding":"./binding.html",
+					"nameRoot":"",
 					"widgets":"./widgets.html"
 				};
 				$.each(doc, function(entry, url)
 				{
+					if(!url)
+						return;
+
 					$.get({"async":false, "url":url, "dataType":"text"}).done(function(text, status, xhr)
 					{
 						var article = $("<article>").append(text);
-						article.appendTo(document.body);
+						article.appendTo(".content");
 					});
 				});
 			}, true);
@@ -43,9 +47,17 @@
 		</style>
 	</head>
 	<body class="ibx-root">
-		<div data-ibx-type="ibxVBox" data-ibxp-align="center" data-ibxp-justify="center">
-			<img src="../resources/css/images/ibx.png"/>
-			<div class="title" data-ibx-type="ibxLabel">ibx Info</div>
+		<div data-ibx-type="ibxHBox" data-ibxp-align="stretch">
+			<div class="toc" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
+				<a href="#test"></a>
+			</div>
+			<div data-ibx-type="ibxSplitter"></div>
+			<div class="content" data-ibx-type="ibxWidget">
+				<div data-ibx-type="ibxVBox" data-ibxp-align="center" data-ibxp-justify="center">
+					<img src="../resources/css/images/ibx.png"/>
+					<div class="title" data-ibx-type="ibxLabel">ibx Info</div>
+				</div>
+			</div>
 		</div>
 	</body>
 </html>
