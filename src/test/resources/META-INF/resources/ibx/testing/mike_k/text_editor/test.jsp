@@ -39,13 +39,20 @@ page import="org.owasp.esapi.*,
 		<script type="text/javascript">
 			<jsp:include page="/WEB-INF/jsp/global/wf_globals.jsp" flush="false" />
 			<jsp:include page="/WEB-INF/jsp/ibx/ibxInit.jsp" flush="false" />
+			
+			function callBack()
+			{
+				alert("CallBack");
+			}
 
 			ibx(function()
 			{				
 				$(".btn-show-text-editor").on("click", function()
 				{
 					var editorDlg = ibx.resourceMgr.getResource('.text-editor-resources', true);						
-					editorDlg.ibxWidget("setEditorPath", "IBFS:/WFC/Repository", "IBFS:/WFC/Repository/Public", "");					
+					editorDlg.ibxWidget("setEditorPath", "IBFS:/WFC/Repository", "IBFS:/WFC/Repository/Public", "");	
+					editorDlg.ibxWidget("setCallbackFunction", callBack);					
+
 					editorDlg.ibxWidget("open");
 				});
 				
