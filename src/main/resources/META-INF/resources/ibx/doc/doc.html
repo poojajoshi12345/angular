@@ -57,7 +57,7 @@
 				var temp = $("<div>");
 				$.each($.ibi, function(type, ctor)
 				{
-					console.log(type);
+					//console.log(type);
 					//var widget = $.ibi[type].call($.ibi, {}, temp[0]);
 				});
 
@@ -109,6 +109,7 @@
 		</style>
 	</head>
 	<body class="ibx-root">
+		<div data-ibx-type="ibxMutationObserver"></div>
 		<div class="main-box" data-ibx-type="ibxHBox" data-ibxp-align="stretch">
 			<div class="toc" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
 			</div>
