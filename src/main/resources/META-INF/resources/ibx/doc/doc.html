@@ -49,6 +49,19 @@
 						article.appendTo(".content");
 					});
 				});
+
+				var hierarchy = $("<div class='toc-entry toc-section'>ibx Widget Hierarchy</div>");
+
+				hierarchy.appendTo(".toc");
+
+				var temp = $("<div>");
+				$.each($.ibi, function(type, ctor)
+				{
+					console.log(type);
+					//var widget = $.ibi[type].call($.ibi, {}, temp[0]);
+				});
+
+
 			}, true);
 		</script>
 		<style type="text/css">
@@ -78,6 +91,7 @@
 			.toc-entry
 			{
 				display:block;
+				margin:.25em 0px .25em 0px;
 			}
 			.toc-section
 			{
