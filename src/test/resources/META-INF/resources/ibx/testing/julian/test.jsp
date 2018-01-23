@@ -28,7 +28,7 @@
 					Ibfs.ibfs.login("admin", "admin").done(function(e)
 					{
 						console.log("ibfs logged in.");
-						Ibfs.ibfs.listItems("IBFS:/WFC/Repository/test", {asJSON:true});
+						Ibfs.ibfs.listItems("IBFS:/WFC/Repository/", {asJSON:true});
 					});
 				});
 
@@ -38,14 +38,18 @@
 					var csl = $(".test-carousel");
 					csl.ibxWidget("children").remove();
 
-					var overlays = [{"position":"bl", "glyph":"", "glyphClasses":"material-icons md-24", "icon":""}];
+					var overlays =
+					[
+						{"position":"bl", "icon":"./ren1.png"},
+						{"position":"tr", "glyph":"face", "glyphClasses":"material-icons", "icon":""}
+					];
 					var items = e.data.result;
 					for(var i = 0; i < items.length; ++i)
 					{
 						var item = items[i];
 						var qItem = $(sformat("<div id='tile{3}' class='test-tile' title='{1}'>{2}</div>", item.fullPath, item.name, i));
 
-						overlays[0].glyph = (i%2) ? "face" : "accessible";
+						//overlays[0].glyph = (i%2) ? "face" : "accessible";
 						var itemOptions =
 						{
 							"iconPosition":"top",
@@ -97,7 +101,12 @@
 						messageOptions:{text:"Are you absolutely sure you want to continue down this path?"}
 					};
 					var dlg = $.ibi.ibxDialog.createMessageDialog(options);
-					dlg.ibxDialog("open");
+					dlg.ibxDialog("open").on("ibx_close", function(e)
+					{
+						$(".test-slider").focus();
+						console.log(e.type);
+					});
+
 				});
 			}, [{src:"./test_res_bundle.xml", loadContext:"app"}], true);
 		</script>
@@ -146,12 +155,6 @@
 			{
 				flex:1 1 auto;
 				align-self:stretch;
-			}
-			.test-tile .ibx-label-overlay
-			{
-				color:yellow;
-				background-color:black;
-				border-radius:.5em;
 			}
 
 			.test-edit
@@ -210,12 +213,12 @@
 		
 			<div tabindex="0" class="test-bucket" data-ibx-type="ibxHBox">
 				<div tabindex="0" class="bucket-button" data-ibx-type="ibxButton">Button1</div>
-				<div tabindex="0" class="bucket-select" data-ibx-type="ibxComboBox">
-					<div data-ibx-type="ibxSelectItem">Select Item</div>
-					<div data-ibx-type="ibxSelectItem">Select Item</div>
-					<div data-ibx-type="ibxSelectItem">Select Item</div>
+				<div tabindex="0" class="bucket-select" data-ibx-type="ibxSelect" data-ibxp-list-options.multiSelect="true">
+					<div data-ibx-type="ibxSelectItem">Select Item1</div>
+					<div data-ibx-type="ibxSelectItem">Select Item2</div>
+					<div data-ibx-type="ibxSelectItem">Select Item3</div>
 				</div>
-				<div tabindex="0" class="bucket-select" data-ibx-type="ibxListBox">
+				<div tabindex="0" class="bucket-select" data-ibx-type="ibxSelect" data-ibxp-readonly="true">
 					<div data-ibx-type="ibxSelectItem">Select Item</div>
 					<div data-ibx-type="ibxSelectItem">Select Item</div>
 					<div data-ibx-type="ibxSelectItem">Select Item</div>

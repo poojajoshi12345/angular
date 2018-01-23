@@ -19,7 +19,7 @@ $.widget("ibi.ibxLabel", $.ibi.ibxFlexBox,
 		"glyphElSpacerClass":"ibx-glyph-spacer",
 		"forId":"",
 
-		/*label overlays...array of objects: {"position":"xx", "glyph":"xx", "glyphClasses":"xx", "icon":"xx"}*/
+		/*label overlays...array of objects: {"position":"xx", "glyph":"xx", "glyphClasses":"xx", "icon":"xx", "iconClasses":"xx"}*/
 		"overlays":[],
 
 		/*ibxFlexBox default options*/
@@ -104,7 +104,12 @@ $.widget("ibi.ibxLabel", $.ibi.ibxFlexBox,
 			var elFrame = $("<label class='ibx-label-overlay-frame'>").addClass(overlay.position)
 			this._glyph.append(elFrame);
 			
-			var elOverlay = $("<span class='ibx-label-overlay'>").addClass(overlay.glyphClasses).text(overlay.glyph);
+			var elOverlay = null;
+			if(overlay.icon)
+				elOverlay = $(sformat("<img class='ibx-label-overlay {1}' src='{2}'/>", overlay.iconClasses || "ibx-overlay-image", overlay.icon));
+			else	
+				elOverlay = $("<span class='ibx-label-overlay'>").addClass(overlay.glyphClasses).text(overlay.glyph);
+
 			elFrame.append(elOverlay);
 		}
 

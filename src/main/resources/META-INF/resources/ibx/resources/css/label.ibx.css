@@ -106,7 +106,12 @@
 
 .ibx-label-overlay
 {
-	font-size:.25em;
+}
+
+.ibx-overlay-image
+{
+	width:33%;
+	height:auto;
 }
 
 /*top-left*/
