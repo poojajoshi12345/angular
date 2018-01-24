@@ -107,7 +107,6 @@ $.widget("ibi.ibxSelectBase", $.ibi.ibxTextField,
 	{
 		this._control = this._createControl();
 		this._control.on('ibx_change', this._onControlChange.bind(this));
-		this._initControl();
 		
 		if (this.options.popup)
 		{
@@ -144,6 +143,8 @@ $.widget("ibi.ibxSelectBase", $.ibi.ibxTextField,
 			this._control.css("width", "100%").css("align-self", "flex-start");
 			this.element.append(this._control);
 		}
+
+		this._initControl();
 	},
 	_onButtonMouseDown: function (e)
 	{
@@ -884,19 +885,6 @@ $.widget("ibi.ibxSelectPaged", $.ibi.ibxSelectBase, {
 		this._super();
 		this.element.on('ibx_change', this._onChange.bind(this));
 	},
-	_bindControl: function ()
-	{
-		this._super();
-        $(window).on('resize', this._onWindowResize.bind(this));
-        if (this._popup)
-        {
-            this._popup.on("ibx_open", function (e)
-            {
-                this._control.ibxWidget('resetSearch', true);
-				this._setMaxHeight();
-            }.bind(this));
-        }
-	},
 	_createControl: function ()
 	{
 		return $("<div tabindex='-1'>").ibxSelectItemListPaged({"search": this.options.search, "selectionControls": this.options.selectionControls, "multiSelect": this.options.multiSelect});
@@ -915,6 +903,16 @@ $.widget("ibi.ibxSelectPaged", $.ibi.ibxSelectBase, {
 			values.push(obj);
 		});
 		this.values(values);
+
+        $(window).on('resize', this._onWindowResize.bind(this));
+        if (this._popup)
+        {
+            this._popup.on("ibx_open", function (e)
+            {
+                this._control.ibxWidget('resetSearch', true);
+				this._setMaxHeight();
+            }.bind(this));
+		}
 	},
 	_onControlChange: function (e)
 	{
