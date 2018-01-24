@@ -20,8 +20,6 @@ $.widget("ibi.ibxRadioGroup", $.ibi.ibxFlexBox,
 		this._onChangeBind = this._onChange.bind(this);
 		this._onBeforeChangeBind = this._onBeforeChange.bind(this);
 		this._super();
-		this._formControl = $("<div>").ibxFormControl({name: this.options.name, form: this.options.form});
-		this.element.append(this._formControl);
 	},
 	_setAccessibility:function(accessible, aria)
 	{
@@ -174,7 +172,6 @@ $.widget("ibi.ibxRadioGroup", $.ibi.ibxFlexBox,
 		if(val)
 			this.option("userValue", val);
 			
-		this._trigger("set_form_value", null, { "elem": el, "value": this._getItemUserValue(el) });
 		this._trigger("change", null, el);
 	},
 	selected: function (element)

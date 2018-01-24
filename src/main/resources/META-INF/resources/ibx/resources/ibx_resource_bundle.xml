@@ -199,7 +199,6 @@ $Revision$:-->
 		<script-file src="./js/splitter.ibx.js"/>
 		<script-file src="./js/label.ibx.js"/>
 		<script-file src="./js/progress.ibx.js"/>
-		<script-file src="./js/control.ibx.js"/>
 		<script-file src="./js/text.ibx.js"/>
 		<script-file src="./js/textarea.ibx.js"/>
 		<script-file src="./js/spinner.ibx.js"/>

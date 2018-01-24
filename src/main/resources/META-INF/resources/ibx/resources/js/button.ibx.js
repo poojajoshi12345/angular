@@ -131,14 +131,10 @@ $.widget("ibi.ibxCheckBox", $.ibi.ibxLabel,
 	_init: function ()
 	{
 		this._super();
-		this._trigger("set_form_value", null, { "elem": this.element, "value": this.options.checked ? this.options.userValue : "" });
 	},
 	userValue: function (value)
 	{
-		var ret = this._super(value);
-		if(value)
-			this._trigger("set_form_value", null, { "elem": this.element, "value": this.options.checked ? this.options.userValue : "" });
-		return ret;
+		return this._super(value);
 	},
 	_onKeyEvent: function (e)
 	{
@@ -172,7 +168,6 @@ $.widget("ibi.ibxCheckBox", $.ibi.ibxLabel,
 				return;
 			this._super(key, value);
 			this.element.toggleClass("checked", value);
-			this._trigger("set_form_value", null, { "elem": this.element, "value": value ? this.options.userValue : "" });
 			this._trigger("change");
 			this.doCommandAction("checked", value);
 		}

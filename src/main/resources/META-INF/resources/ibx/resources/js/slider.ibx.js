@@ -100,7 +100,6 @@ $.widget("ibi.ibxSlider", $.ibi.ibxGrid,
 	{
 		this.refresh();
 		this._trigger("change", null, data);
-		this._trigger("set_form_value", null, { "elem": this.element, "value": value });
 	},
 	_onResize: function ()
 	{

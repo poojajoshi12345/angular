@@ -72,7 +72,6 @@ $.widget("ibi.ibxTextArea", $.ibi.ibxFlexBox,
 		this.options.text = bFormat && this.options.fnFormat ? this.options.fnFormat(value) : value;
 		this.refresh();
 		this._trigger("change", null, {"text": this.options.text});
-		this._trigger("set_form_value", null, { "elem": this.element, "value": this.options.text });
 	},
 	value:function(val, bFormat)
 	{

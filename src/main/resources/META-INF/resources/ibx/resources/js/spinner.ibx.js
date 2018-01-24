@@ -108,7 +108,6 @@ $.widget("ibi.ibxSpinner", $.ibi.ibxTextField,
 		this.options.text = bFormat && this.options.fnFormat ? this.options.fnFormat(value) : value;
 		this.refresh();
 		this._trigger("change", null, this._getInfo());
-		this._trigger("set_form_value", null, { "elem": this.element, "value": value });
 	},
 	_onTextInputKeyDown: function (e)
 	{

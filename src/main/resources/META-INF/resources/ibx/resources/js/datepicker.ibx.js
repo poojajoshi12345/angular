@@ -74,7 +74,6 @@ $.widget("ibi.ibxDatePicker", $.ibi.ibxVBox,
 		this._datePicker.datepicker('setDate', '');
 		this._input.ibxWidget('option', 'text', '');
 		this._trigger("change", null, { 'date': '' });
-		this._trigger("set_form_value", null, { "elem": this.element, "value": '' });
 	},
 	_onSelect: function (dateText, inst)
 	{
@@ -90,7 +89,6 @@ $.widget("ibi.ibxDatePicker", $.ibi.ibxVBox,
 		var value = $.datepicker.formatDate(this.options.dateFormat, this._datePicker.datepicker('getDate'));
 		this.options.date = value;
 		this._trigger("change", null, { 'date': value });
-		this._trigger("set_form_value", null, { "elem": this.element, "value": value });
 		this._input.ibxWidget('option', 'text', $.datepicker.formatDate(this.options.outDateFormat, this._datePicker.datepicker('getDate'), this._pickerOptions));
 	},
 	_showPopup: function ()
@@ -197,7 +195,6 @@ $.widget("ibi.ibxDateRange", $.ibi.ibxDatePicker,
 			this.options.dateTo = '';
 		this._datePicker.datepicker('setDate', '');
 		this._trigger("change", null, { 'dateFrom': '', 'dateTo': this.options.dateTo});
-		this._trigger("set_form_value", null, { "elem": this.element, "value": "['" + '' + "','" + this.options.dateTo + "']" });
 		this._input.ibxWidget('option', 'text', '');
 	},
 	_onClear2: function ()
@@ -205,7 +202,6 @@ $.widget("ibi.ibxDateRange", $.ibi.ibxDatePicker,
 		this.options.dateTo  = '';
 		this._datePicker.datepicker('setDate', '');
 		this._trigger("change", null, { 'dateFrom': this.options.dateFrom, 'dateTo': ''});
-		this._trigger("set_form_value", null, { "elem": this.element, "value": "['" + this.options.dateFrom + "','" + '' + "']" });
 		this._input2.ibxWidget('option', 'text', '');
 	},
 	_onSelect: function (dateText, inst)
@@ -246,7 +242,6 @@ $.widget("ibi.ibxDateRange", $.ibi.ibxDatePicker,
 		}
 
 		this._trigger("change", null, { 'dateFrom': this.options.dateFrom, 'dateTo': this.options.dateTo});
-		this._trigger("set_form_value", null, { "elem": this.element, "value": "['" + this.options.dateFrom + "','" + this.options.dateTo + "']" });
 
 		//this._datePicker.datepicker('setDate', new Date(this.options.dateTo));
 
