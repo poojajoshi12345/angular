@@ -65,9 +65,11 @@
 						var infoValue = docEntry.find(".ibx-info-options.value");
 						$.each(ctor._proto.options, function(option, value)
 						{
+							if(option == "overlays")
+								var x = 10;
 							var opEntry = $(sformat("<div>{1}</div>", option));
 							infoName.append(opEntry);
-							var opEntry = $(sformat("<div>{1}</div>", value));
+							var opEntry = $(sformat("<div>{1}</div>", (typeof(value) == "object") ? "{object}" : value || "-"));
 							infoValue.append(opEntry);
 						});
 
