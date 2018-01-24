@@ -38,6 +38,15 @@
 	font-feature-settings: 'liga';
 }
 
+.ibx-glyph-average:before {
+  content: "\e9c2";
+}
+.ibx-glyph-count:before {
+  content: "\e9c3";
+}
+.ibx-glyph-summary:before {
+  content: "\e9c1";
+}
 .ibx-glyph-axis-1:before {
   content: "\e9a2";
 }
@@ -233,18 +242,23 @@
 .ibx-glyph-unlock:before {
   content: "\e97b";
 }
+.ibx-glyph-greater-than-or-equal:before {
+  content: "\e9bc";
+}
+.ibx-glyph-less-than-or-equal:before {
+  content: "\e9be";
+}
+.ibx-glyph-greater-than:before {
+  content: "\e9bf";
+}
+.ibx-glyph-less-than:before {
+  content: "\e9c0";
+}
 .ibx-glyph-profile-data:before {
   content: "\e9b7";
 }
-.ibx-glyph-insight .path1:before {
+.ibx-glyph-insight:before {
   content: "\e9b5";
-  color: rgb(0, 0, 0);
-}
-.ibx-glyph-insight .path2:before {
-  content: "\e9b6";
-  margin-left: -1em;
-  color: rgb(0, 0, 0);
-  opacity: 0.99;
 }
 .ibx-glyph-join-inner:before {
   content: "\e9af";
@@ -260,6 +274,9 @@
 }
 .ibx-glyph-join-none:before {
   content: "\e9b4";
+}
+.ibx-glyph-layout:before {
+  content: "\e9b6";
 }
 .ibx-glyph-header:before {
   content: "\e9ab";
@@ -336,6 +353,12 @@
 .ibx-glyph-new-visualization:before {
   content: "\e921";
 }
+.ibx-glyph-new-data-flow:before {
+  content: "\e9ba";
+}
+.ibx-glyph-new-portal:before {
+  content: "\e9bd";
+}
 .ibx-glyph-new-table:before {
   content: "\e926";
 }
@@ -353,6 +376,9 @@
 }
 .ibx-glyph-pane_resources:before {
   content: "\e929";
+}
+.ibx-glyph-pane_buckets:before {
+  content: "\e9bb";
 }
 .ibx-glyph-close:before {
   content: "\e92a";
@@ -506,6 +532,12 @@
 }
 .ibx-glyph-align-control-right:before {
   content: "\e9aa";
+}
+.ibx-glyph-tree:before {
+  content: "\e9c5";
+}
+.ibx-glyph-connect:before {
+  content: "\e9c4";
 }
 .ibx-glyph-arrow-circle-left:before {
   content: "\f0a8";
