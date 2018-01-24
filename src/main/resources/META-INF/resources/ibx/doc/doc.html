@@ -50,31 +50,42 @@
 					});
 				});
 
-				var ibxWidgetsToc = $("<div class='toc-entry toc-section'>ibx Widgets</div>");
-				ibxWidgetsToc.appendTo(".toc");
 				var widgets = [];
-				try
+				var temp = $("<div>");
+				$.each($.ibi, function(type, ctor)
 				{
-					var temp = $("<div>");
-					$.each($.ibi, function(type, ctor)
+					try
 					{
-						var widget = $.ibi[type].call($.ibi, {}, temp[0]);
-						var tocEntry = $(sformat("<a class='toc-entry toc-ibx-widget' href='#{1}'>{2}</a>", type, widget.widgetName));
-						tocEntry.appendTo(ibxWidgetsToc);
+						var ctor = $.ibi[type];
+						var widget = ctor.call($.ibi, {}, temp[0]);
+						var docEntry = $(".ibx-widget-info").clone().removeAttr("data-ibx-no-bind").css("display", "").uniqueId();
+						docEntry.find("h1").text(widget.widgetName);
+
+						var infoName = docEntry.find(".ibx-info-options.name");
+						var infoValue = docEntry.find(".ibx-info-options.value");
+						$.each(ctor._proto.options, function(option, value)
+						{
+							var opEntry = $(sformat("<div>{1}</div>", option));
+							infoName.append(opEntry);
+							var opEntry = $(sformat("<div>{1}</div>", value));
+							infoValue.append(opEntry);
+						});
+
+						var tocEntry = $(sformat("<a class='toc-entry toc-ibx-widget' href='#{1}'>{2}</a>", docEntry.prop("id"), widget.widgetName));
 
 						widgets.push( 
 						{
-							"ctor":$.ibi[type],
+							"ctor":ctor,
 							"widget":widget,
 							"tocEntry":tocEntry,
-							"docEntry":null
+							"docEntry":docEntry
 						});
-					});
-				}
-				catch(ex)
-				{
-					console.dir(ex);
-				}
+					}
+					catch(ex)
+					{
+						console.dir(ex);
+					}
+				});
 
 				widgets.sort(function(w1, w2)
 				{
@@ -87,9 +98,12 @@
 					return 0;
 				});
 
+				var ibxWidgetsToc = $("<div class='toc-entry toc-section'>ibx Widgets</div>");
+				ibxWidgetsToc.appendTo(".toc");
 				$.each(widgets, function(idx, widget)
 				{
 					ibxWidgetsToc.append(widget.tocEntry);
+					$(".content").append(ibx.bindElements(widget.docEntry));
 				});
 			}, true);
 		</script>
@@ -135,9 +149,31 @@
 			{
 				margin-left:1.5em;
 			}
-			.title
+
+			.ibx-widget-info
 			{
-				font:24pt arial;
+				border-bottom:2px solid #ccc;
+				margin-bottom:10px;
+			}
+			.ibx-widget-info-box
+			{
+				margin:10px;				
+			}
+			.ibx-info-grid
+			{
+				flex:0 0 auto;
+			}
+
+			.info-header
+			{
+				font-weight:bold;
+				margin-bottom:5px;
+				border-bottom:1px solid #ccc;
+			}
+
+			.ibx-info-options.name
+			{
+				margin-right:50px;
 			}
 		</style>
 	</head>
@@ -155,11 +191,17 @@
 			</div>
 		</div>
 
-		<div class="ibx-widget-info" style="display:none">
+		<article class="ibx-widget-info" style="display:none" data-ibx-no-bind="true">
 			<h1>name</h1>
-			<div class="ibx-widget-info" data-ibx-type="ibxHBox">
+			<div class="ibx-widget-info-box" data-ibx-type="ibxHBox" data-ibxp-inline="true">
+				<div class="ibx-info-options name" data-ibx-type="ibxVBox">
+					<div class="info-header">Option</div>
+				</div>
+				<div class="ibx-info-options value" data-ibx-type="ibxVBox">
+					<div class="info-header">Default Value</div>
+				</div>
 			</div>
-		</div>
+		</article>
 	</body>
 </html>
 
