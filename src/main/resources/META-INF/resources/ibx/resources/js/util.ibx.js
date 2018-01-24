@@ -8,7 +8,7 @@ function sformat()
 	var i = arguments.length;
     while (i--)
 	{
-		val = arguments[i] || "";
+		val = (arguments[i] === undefined || arguments[i] === null) ? "" : arguments[i];
         s = s.replace(new RegExp('\\{' + i + '\\}', 'gm'), val);
 	}
     return s;

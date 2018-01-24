@@ -50,18 +50,47 @@
 					});
 				});
 
-				var hierarchy = $("<div class='toc-entry toc-section'>ibx Widget Hierarchy</div>");
-
-				hierarchy.appendTo(".toc");
-
-				var temp = $("<div>");
-				$.each($.ibi, function(type, ctor)
+				var ibxWidgetsToc = $("<div class='toc-entry toc-section'>ibx Widgets</div>");
+				ibxWidgetsToc.appendTo(".toc");
+				var widgets = [];
+				try
 				{
-					//console.log(type);
-					//var widget = $.ibi[type].call($.ibi, {}, temp[0]);
+					var temp = $("<div>");
+					$.each($.ibi, function(type, ctor)
+					{
+						var widget = $.ibi[type].call($.ibi, {}, temp[0]);
+						var tocEntry = $(sformat("<a class='toc-entry toc-ibx-widget' href='#{1}'>{2}</a>", type, widget.widgetName));
+						tocEntry.appendTo(ibxWidgetsToc);
+
+						widgets.push( 
+						{
+							"ctor":$.ibi[type],
+							"widget":widget,
+							"tocEntry":tocEntry,
+							"docEntry":null
+						});
+					});
+				}
+				catch(ex)
+				{
+					console.dir(ex);
+				}
+
+				widgets.sort(function(w1, w2)
+				{
+					var n1 = w1.widget.widgetName.toLowerCase();
+					var n2 = w2.widget.widgetName.toLowerCase();
+					if(n1 < n2)
+						return -1;
+					if(n2 < n1)
+						return 1;
+					return 0;
 				});
 
-
+				$.each(widgets, function(idx, widget)
+				{
+					ibxWidgetsToc.append(widget.tocEntry);
+				});
 			}, true);
 		</script>
 		<style type="text/css">
@@ -102,6 +131,10 @@
 				font-weight:normal;
 				margin-left:1.5em;
 			}
+			.toc-ibx-widget
+			{
+				margin-left:1.5em;
+			}
 			.title
 			{
 				font:24pt arial;
@@ -119,6 +152,12 @@
 					<img src="../resources/css/images/ibx.png"/>
 					<div class="title" data-ibx-type="ibxLabel">ibx Info</div>
 				</div>
+			</div>
+		</div>
+
+		<div class="ibx-widget-info" style="display:none">
+			<h1>name</h1>
+			<div class="ibx-widget-info" data-ibx-type="ibxHBox">
 			</div>
 		</div>
 	</body>
