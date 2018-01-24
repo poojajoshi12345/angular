@@ -140,6 +140,13 @@
 .ibx-select-item.ibx-check-box-simple:focus,
 .ibx-select-item.ibx-radio-button-simple:focus
 {
+	background-color:#eee;
+}
+
+.ibx-select-item.ibx-button-simple.ibx-select-item-highlight,
+.ibx-select-item.ibx-check-box-simple.ibx-select-item-highlight,
+.ibx-select-item.ibx-radio-button-simple.ibx-select-item-highlight
+{
 	background-color:#ddd;
 }
 

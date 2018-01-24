@@ -174,7 +174,8 @@ $.widget("ibi.ibxSelectBase", $.ibi.ibxTextField,
 		}
 		else if (e.keyCode != 37 && e.keyCode != 39 && !e.shiftKey && !e.ctrlKey) // open popup for everything except left/right arrows
 		{
-			this._onDownArrow();
+			if(this.options.popup && !this._popup.ibxWidget('isOpen'))
+				this._openPopup();
 		}
 		this._super(e);
 	},
@@ -260,6 +261,7 @@ $.widget("ibi.ibxSelect", $.ibi.ibxSelectBase,
 	_init: function ()
 	{
 		this._super();
+		this.element.on('ibx_action', this._onAction.bind(this));
 	},
 	_createControl: function ()
 	{
@@ -295,6 +297,10 @@ $.widget("ibi.ibxSelect", $.ibi.ibxSelectBase,
 	_onTextChanged: function (e)
 	{
 		this._control.ibxWidget('setHighlight', this._textInput.val());
+	},
+	_onAction: function (e)
+	{
+		this._control.ibxWidget('selectHighlight');
 	},
 	_onDownArrow: function ()
 	{
@@ -411,16 +417,15 @@ $.widget("ibi.ibxSelectItemList", $.ibi.ibxVBox,
 	},
 	_onSelect: function (e)
 	{
-		if (!e.originalEvent)
-			return;
-
-		var selItem = $(e.originalEvent.target).hasClass('ibx-select-item') ? $(e.originalEvent.target) : $(e.originalEvent.target).closest('.ibx-select-item');
+		var event = (e.originalEvent && e.originalEvent.target) ? e.originalEvent : e;
+		var target = (e.originalEvent && e.originalEvent.target) ? e.originalEvent.target : e.target;
+		var selItem = $(target).hasClass('ibx-select-item') ? $(target) : $(target).closest('.ibx-select-item');
 		if (selItem.length == 0)
 			return;
 
 		var bKeepAnchor = false;
 		var bSynthetic = false;
-		if (e.originalEvent.shiftKey)
+		if (event.shiftKey)
 		{
 			bKeepAnchor = true;
 			// select block - select between current anchor and current item.
@@ -462,7 +467,7 @@ $.widget("ibi.ibxSelectItemList", $.ibi.ibxVBox,
 				this._setSelection(selItem, true, bKeepAnchor);
 			}
 		}
-		else if (e.originalEvent.ctrlKey)
+		else if (event.ctrlKey)
 		{
 			// multi select
 			if ($(selItem).hasClass("sel-selected"))
@@ -518,7 +523,7 @@ $.widget("ibi.ibxSelectItemList", $.ibi.ibxVBox,
 				selItem.data('ibxWidget').option('checked', true);
 			}
 		}
-		this.element.find('.sel-selected.ibx-select-check-item').each(function (index, el) { $(el).data('ibxWidget').option('checked', true); })
+		this.element.find('.sel-selected.ibx-select-check-item, .sel-selected.ibx-select-radio-item').each(function (index, el) { $(el).data('ibxWidget').option('checked', true); })
 		if (!bNoUpdate)
 		{
 			this._trigger("change");
@@ -547,41 +552,41 @@ $.widget("ibi.ibxSelectItemList", $.ibi.ibxVBox,
 			this._trigger("change");
 		}
 	},
+	selectHighlight: function ()
+	{
+		this.element.find('.ibx-select-item-highlight').trigger('click');
+	},
 	resetHighlight: function ()
 	{
 		this._resetHighlight();
 	},
 	_resetHighlight: function ()
 	{
+		this.element.find(".ibx-select-item").removeClass('ibx-select-item-highlight');
 		this.element.find(".ibx-select-item").show();
 		this.element.find(".ibx-select-group").show();
 	},
-	setHighlight: function (search)
+	setHighlight: function (searchText)
 	{
-		this._setHighlight(search);
+		this._setHighlight(searchText);
 	},
 	_setHighlight: function (searchText)
 	{
-		this.element.find('.ibx-select-radio-item,.ibx-select-check-item').each(function (index, el) { $(el).data('ibxWidget').option('checked', false); })
-		this.element.find('.sel-selected').removeClass('sel-selected');
-		var bFound = false;
 		if (searchText)
 		{
+			var found = false;
 			this.element.find(".ibx-select-item").each(function (index, el)
 			{
 				var itemText = $(el).data('ibxWidget').option('text') + "";
-				if (this._fnMatch ? (this._fnMatch(searchText, itemText)) : (0 == itemText.toLowerCase().indexOf(searchText.toLowerCase())))
+				if (!found && (this._fnMatch ? (this._fnMatch(searchText, itemText)) : (0 == itemText.toLowerCase().indexOf(searchText.toLowerCase()))))
 				{
-					if (!bFound)
-						this._setSelection(el, false, false, true);
-					bFound = true;
-					if (!this.options.filter)
-						return false;
-					else
-						$(el).show();
+					found = true;
+					$(el).addClass('ibx-select-item-highlight');
+					$(el).show();
 				}
 				else
 				{
+					$(el).removeClass('ibx-select-item-highlight');
 					if (this.options.filter)
 						$(el).hide();
 				}
@@ -601,12 +606,6 @@ $.widget("ibi.ibxSelectItemList", $.ibi.ibxVBox,
 		}
 		else
 			this._resetHighlight();
-
-		if (!bFound)
-		{
-			this._setSelection(null, false, false, true);
-		}
-
 	},
 	getText: function ()
 	{
