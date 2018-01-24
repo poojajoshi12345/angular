@@ -814,7 +814,7 @@ $.widget("ibi.ibxLeftRange", $.ibi.ibxRange,
 	_create: function ()
 	{
 		this._super();
-		options.value = options.value = this.options.min;
+		this.options.value = this.options.min;
 	},
 	_initSlider: function ()
 	{
@@ -836,7 +836,7 @@ $.widget("ibi.ibxRightRange", $.ibi.ibxRange,
 	_create: function ()
 	{
 		this._super();
-		options.value2 = this.options.max;
+		this.options.value2 = this.options.max;
 	},
 	_initSlider: function ()
 	{
