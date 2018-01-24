@@ -235,7 +235,6 @@ ibx.getAppParms = function(){return ibx._appParms;};
 ibx.bindElements = function(elements)
 {
 	//get elements to bind
-	var elBound = $();
 	var elBind = elements ? $(elements) : $("[data-ibx-type]");
 
 	//construct all the widgets
@@ -244,9 +243,11 @@ ibx.bindElements = function(elements)
 		var element = $(el);
 
 		//construct any unconstructed children first...ignore any no-binds.
-		var childWidgets = element.children(":not([data-ibx-no-bind])");
-		var childBound = ibx.bindElements(childWidgets);
-		elBound = elBound.add(childBound);
+		if(element.closest("[data-ibx-no-bind=true]").length)
+			return;
+
+		var childWidgets = element.children();
+		ibx.bindElements(childWidgets);
 
 		//only for elements that haven't been bound before.
 		if(!element.data("ibxIsBound"))
@@ -275,10 +276,7 @@ ibx.bindElements = function(elements)
 				//construct the widget...problem is that there is a dependency on ibi widget's here...fix this!
 				var widgetType = element.attr("data-ibx-type");
 				if($.ibi[widgetType])
-				{
 					var widget = $.ibi[widgetType].call($.ibi, {}, element);
-					elBound = elBound.add(widget.element);
-				}
 				else
 				{
 					console.error("Unknown ibxWidget type:", widgetType, element[0]);
@@ -290,7 +288,7 @@ ibx.bindElements = function(elements)
 		//mark this element as having been bound.
 		element.data("ibxIsBound", true);
 	}.bind(this));
-	return elBound;
+	return elBind;
 };
 
 ibx.getIbxMarkupOptions = function(el)
