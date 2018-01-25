@@ -262,11 +262,20 @@ $.widget("ibi.ibxSelect", $.ibi.ibxSelectBase,
 	{
 		this._control.ibxWidget('add', this.element.children(".ibx-select-item, .ibx-select-group"));
 	},
-	_onControlChange: function (e)
+	_setValue: function (value, bFormat, extra)
+	{
+		this.options.text = bFormat && this.options.fnFormat ? this.options.fnFormat(value) : value;
+		this.refresh();
+		var data = {"text": this.options.text};
+		if (extra)
+			$.extend(data, extra);
+		this._trigger("change", null, data);
+	},
+	_onControlChange: function (e, data)
 	{
 		if (e.target !== this._control[0])
 			return;
-		this._setValue(this._control.ibxWidget('getText'), true);
+		this._setValue(this._control.ibxWidget('getText'), true, data);
 		if(this.options.popup && !this._control.ibxWidget('option', 'multiSelect') && this._popup)
 			this._popup.ibxWidget('close');
 	},
@@ -512,7 +521,7 @@ $.widget("ibi.ibxSelectItemList", $.ibi.ibxVBox,
 			}
 			bKeep = true;
 		}
-		this.element.find('.ibx-select-radio-item,.ibx-select-check-item').each(function (index, el) { $(el).data('ibxWidget').option('checked', false); })
+		this.element.find('.ibx-select-radio-item,.ibx-select-check-item').each(function (index, el) { $(el).data('ibxWidget').option({'checked': false, 'selected': false}); })
 		if (!this.options.multiSelect || !bKeep)
 		{
 			this.element.find('.sel-selected').removeClass('sel-selected');
@@ -523,13 +532,13 @@ $.widget("ibi.ibxSelectItemList", $.ibi.ibxVBox,
 			if (selItem.length > 0)
 			{
 				selItem.addClass('sel-selected sel-anchor');
-				selItem.data('ibxWidget').option('checked', true);
+				selItem.data('ibxWidget').option({'checked': true, 'selected': true});
 			}
 		}
-		this.element.find('.sel-selected.ibx-select-check-item, .sel-selected.ibx-select-radio-item').each(function (index, el) { $(el).data('ibxWidget').option('checked', true); })
+		this.element.find('.sel-selected.ibx-select-check-item, .sel-selected.ibx-select-radio-item').each(function (index, el) { $(el).data('ibxWidget').option({'checked': true, 'selected': true}); })
 		if (!bNoUpdate)
 		{
-			this._trigger("change");
+			this._trigger("change", null, {"item": selItem, "action": "select"});
 		}
 	},
 	_removeSelection: function (selItem, bKeepAnchor, bNoUpdate)
@@ -543,7 +552,7 @@ $.widget("ibi.ibxSelectItemList", $.ibi.ibxVBox,
 
 		selItem.removeClass("sel-selected");
 		selItem.each(function (index,el){
-			$(el).ibxWidget('option', 'checked', false);
+			$(el).ibxWidget('option', {'checked': false, 'selected': false});
 		})
 		if (!bKeepAnchor)
 		{
@@ -552,7 +561,7 @@ $.widget("ibi.ibxSelectItemList", $.ibi.ibxVBox,
 		}
 		if (!bNoUpdate)
 		{
-			this._trigger("change");
+			this._trigger("change", null, {"item": selItem, "action": "remove"});
 		}
 	},
 	selectHighlight: function ()
@@ -918,11 +927,20 @@ $.widget("ibi.ibxSelectPaged", $.ibi.ibxSelectBase, {
             }.bind(this));
 		}
 	},
-	_onControlChange: function (e)
+	_setValue: function (value, bFormat, extra)
+	{
+		this.options.text = bFormat && this.options.fnFormat ? this.options.fnFormat(value) : value;
+		this.refresh();
+		var data = {"text": this.options.text};
+		if (extra)
+			$.extend(data, extra);
+		this._trigger("change", null, data);
+	},
+	_onControlChange: function (e, data)
 	{
 		if (e.target !== this._control[0])
 			return;
-		this._setValue(this._control.ibxWidget('getText'), true);
+		this._setValue(this._control.ibxWidget('getText'), true, data);
 		if(this.options.popup && !this._control.ibxWidget('option', 'multiSelect') && this._popup)
 			this._popup.ibxWidget('close');
 	},
@@ -1130,6 +1148,8 @@ $.widget("ibi.ibxSelectItemListPaged", $.ibi.ibxVBox,
 		this._super();
 		this._listControl.ibxWidget('option', 'multiSelect', this.options.multiSelect);
 		this._listControl.on("ibx_change", this._onListControlChange.bind(this));
+		this._searchBox.on('ibx_action', this._onSearchAction.bind(this));
+		this._searchBox.on("ibx_textchanged", this._onSearchTextChanged.bind(this));
 		// add markup items
 		if (this._values.length > 0)
 			this.values(this._values);
@@ -1155,7 +1175,15 @@ $.widget("ibi.ibxSelectItemListPaged", $.ibi.ibxVBox,
 		else
 			this._pageBox.hide();
 	},
-	_onListControlChange: function (e)
+	_onSearchTextChanged: function (e)
+	{
+		this._listControl.ibxWidget('setHighlight', this._searchBox.ibxWidget('option', 'text'));
+	},
+	_onSearchAction: function (e)
+	{
+		this._listControl.ibxWidget('selectHighlight');
+	},
+	_onListControlChange: function (e, data)
 	{
 		if (e.target !== this._listControl[0])
 			return;
@@ -1174,7 +1202,7 @@ $.widget("ibi.ibxSelectItemListPaged", $.ibi.ibxVBox,
 				var checked = item.ibxWidget('option', 'checked');
 				obj.checked = checked;
 			}
-			this._trigger("change", e);
+			this._trigger("change", e, data);
 		}
 	},
 	getText: function ()
