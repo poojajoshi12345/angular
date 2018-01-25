@@ -58,11 +58,11 @@
 					{
 						var ctor = $.ibi[type];
 						var widget = ctor.call($.ibi, {}, temp[0]);
+						var infoRow = $("body > .widget-info-row").clone().removeAttr("data-ibx-no-bind").css("display", "");
 						var docEntry = $(".ibx-widget-info").clone().removeAttr("data-ibx-no-bind").css("display", "").uniqueId();
 						docEntry.find("h1").text(widget.widgetName);
 
-						var widgetInfo = docEntry.find(".widget-member-box.options");
-						var infoRow = $("body > .widget-info-row").clone().removeAttr("data-ibx-no-bind").css("display", "");
+						var arOptions = [];
 						$.each(ctor._proto.options, function(option, value)
 						{
 							if(typeof(value) == "object")
@@ -82,32 +82,27 @@
 							else
 							if(!value)
 								value = value.toString();
-							var tempRow = infoRow.clone();
-							tempRow.find(".name").html(option);
-							tempRow.find(".value").html(value);
-							widgetInfo.append(tempRow);
-						});
 
-						var widgetInfo = docEntry.find(".widget-member-box.methods");
-						var infoRow = $("body > .widget-info-row").clone().removeAttr("data-ibx-no-bind").css("display", "");
-						$.each(ctor._proto, function(member, value)
+							var tempRow = infoRow.clone();
+							tempRow.find(".name").text(option);
+							tempRow.find(".value").text(value);
+							arOptions.push(tempRow);
+						});
+						arOptions.sort(function(r1, r2)
 						{
-							if(member.search("_") == 0 || typeof(value) != "function")
-								return;
-
-							var tempRow = infoRow.clone();
-							tempRow.find(".name").text(member);
-							tempRow.find(".value").text(value.toString().replace(/\)[\s|\S]*/g, ")").replace(/.*\(/g, "("));
-							widgetInfo.append(tempRow);
+							var n1 = r1.find(".name").text().toLowerCase();
+							var n2 = r2.find(".name").text().toLowerCase();
+							if(n1 < n2) return -1;
+							if(n2 < n1) return 1;
+							return 0;
 						});
+						var widgetInfo = docEntry.find(".widget-member-box.options").append(arOptions);
 
-
-						var tocEntry = $(sformat("<a class='toc-entry toc-ibx-widget' href='#{1}'>{2}</a>", docEntry.prop("id"), widget.widgetName));
 						widgets.push( 
 						{
 							"ctor":ctor,
 							"widget":widget,
-							"tocEntry":tocEntry,
+							"tocEntry":$(sformat("<a class='toc-entry toc-ibx-widget' href='#{1}'>{2}</a>", docEntry.prop("id"), type)),
 							"docEntry":docEntry
 						});
 					}
@@ -121,10 +116,8 @@
 				{
 					var n1 = w1.widget.widgetName.toLowerCase();
 					var n2 = w2.widget.widgetName.toLowerCase();
-					if(n1 < n2)
-						return -1;
-					if(n2 < n1)
-						return 1;
+					if(n1 < n2) return -1;
+					if(n2 < n1) return 1;
 					return 0;
 				});
 
@@ -190,12 +183,22 @@
 			{
 				flex:1 1 auto;
 			}
+			.widget-member-box > .heading
+			{
+				font-size:1.25em;
+				font-weight:bold;
+				margin-bottom:5px;
+			}
 			.widget-info-header
 			{
 				font-weight:bold;
 				margin-bottom:5px;
+			}
+			.widget-info-header > .name, .widget-info-header > .value
+			{
 				border-bottom:1px solid #ccc;
 			}
+
 			.widget-info-row
 			{
 				margin-bottom:5px;
@@ -203,6 +206,7 @@
 			.widget-info-row > .name
 			{
 				width:150px;
+				margin-right:5px;
 			}
 			.widget-info-row > .value
 			{
@@ -229,13 +233,15 @@
 			<h1>name</h1>
 			<div class="widget-info-box" data-ibx-type="ibxHBox" data-ibxp-align="stretch">
 				<div class="widget-member-box options" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
+					<div class="heading">Options</div>
 					<div class="widget-info-row widget-info-header" data-ibx-type="ibxHBox">
-						<div class="name">Option</div><div class="value">Default Value</div>
+						<div class="name">Name</div><div class="value">Default Value</div>
 					</div>
 				</div>
 				<div class="widget-member-box methods" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
+					<div class="heading">Methods</div>
 					<div class="widget-info-row widget-info-header" data-ibx-type="ibxHBox">
-						<div class="name">Method</div><div class="value">Parameters</div>
+						<div class="name">Name</div><div class="value">Parameters</div>
 					</div>
 				</div>
 			</div>
