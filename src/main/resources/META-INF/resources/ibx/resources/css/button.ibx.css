@@ -81,12 +81,28 @@
 	font-family:"Material Icons";
 	font-size:1em;
 	color:#888;
-	width:1.5em;
 }
 
-.ibx-check-box-simple-marker::before
+.icon-left > .ibx-check-box-simple-marker
 {
-	margin-left:.25em;
+	margin-right:.25em;
+}
+
+.icon-right > .ibx-check-box-simple-marker
+{
+    margin-left:.25em;
+   order: 3;
+}
+
+.icon-top > .ibx-check-box-simple-marker
+{
+	margin-bottom:.25em;
+}
+
+.icon-bottom > .ibx-check-box-simple-marker
+{
+	margin-top:.25em;
+   order: 3;
 }
 
 .ibx-check-box-simple-marker-uncheck::before
@@ -105,6 +121,8 @@
 .ibx-radio-button-simple-marker
 {
 	font-family:"Material Icons";
+	font-size:1em;
+	color:#888;
 }
 
 .icon-left > .ibx-radio-button-simple-marker
@@ -114,7 +132,7 @@
 
 .icon-right > .ibx-radio-button-simple-marker
 {
-	margin-left:.25em;
+    margin-left:.25em;
    order: 3;
 }
 

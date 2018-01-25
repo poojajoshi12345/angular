@@ -110,7 +110,8 @@
 {
     border: 1px solid #ccc;
 	padding:5px;
-	border-radius:5px;
+    border-radius:5px;
+    min-height: 1em;
 }
 
 .ibx-select-popup .ibx-select-item-list,
