@@ -83,10 +83,8 @@
 							if(!value)
 								value = value.toString();
 
-							var tempRow = infoRow.clone();
-							tempRow.find(".name").text(option);
-							tempRow.find(".value").text(value);
-							arOptions.push(tempRow);
+							var infoRow = $(sformat("<div class='name' data-ibx-col-span='6'>{1}</div><div class='value' data-ibx-col-span='6'>{2}</div>", option, value));
+							arOptions.push(infoRow);
 						});
 						arOptions.sort(function(r1, r2)
 						{
@@ -177,11 +175,15 @@
 			}
 			.widget-info-box
 			{
-				margin:10px;				
+				margin:5px;
 			}
 			.widget-member-box
 			{
-				flex:1 1 auto;
+				flex:4 4 1px;
+				margin:5px;
+				padding:5px;
+				border:1px solid #ccc;
+				border-radius:5px;
 			}
 			.widget-member-box > .heading
 			{
@@ -189,29 +191,16 @@
 				font-weight:bold;
 				margin-bottom:5px;
 			}
-			.widget-info-header
+			.widget-member-box > .col-heading
 			{
 				font-weight:bold;
-				margin-bottom:5px;
-			}
-			.widget-info-header > .name, .widget-info-header > .value
-			{
-				border-bottom:1px solid #ccc;
+				margin-bottom:7px;
+				text-decoration:underline;
 			}
 
-			.widget-info-row
+			.name, .value
 			{
 				margin-bottom:5px;
-			}
-			.widget-info-row > .name
-			{
-				width:150px;
-				margin-right:5px;
-			}
-			.widget-info-row > .value
-			{
-				flex:1 1 auto;
-				xwidth:300px;
 			}
 		</style>
 	</head>
@@ -231,24 +220,20 @@
 
 		<article class="ibx-widget-info" data-ibx-no-bind="true" style="display:none">
 			<h1>name</h1>
-			<div class="widget-info-box" data-ibx-type="ibxHBox" data-ibxp-align="stretch">
-				<div class="widget-member-box options" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
-					<div class="heading">Options</div>
-					<div class="widget-info-row widget-info-header" data-ibx-type="ibxHBox">
-						<div class="name">Name</div><div class="value">Default Value</div>
-					</div>
+			<div class="widget-info-box" data-ibx-type="ibxHBox">
+				<div class="widget-member-box options" data-ibx-type="ibxFlexGrid" data-ibxp-align="stretch">
+					<div class="heading" data-ibx-col-span="12">Options</div>
+					<div class="col-heading name" data-ibx-col-span="6">Name</div>
+					<div class="col-heading value" data-ibx-col-span="6">Default Value</div>
 				</div>
-				<div class="widget-member-box methods" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
-					<div class="heading">Methods</div>
-					<div class="widget-info-row widget-info-header" data-ibx-type="ibxHBox">
-						<div class="name">Name</div><div class="value">Parameters</div>
-					</div>
+				<div class="widget-member-box methods" data-ibx-type="ibxFlexGrid" data-ibxp-align="stretch">
+					<div class="heading" data-ibx-col-span="12">Methods</div>
+					<div class="col-heading name" data-ibx-col-span="6">Name</div>
+					<div class="col-heading value" data-ibx-col-span="6">Parameters</div>
 				</div>
+				<div style="border:1px solid red;flex:2 2 auto;"></div>
 			</div>
 		</article>
-		<div class="widget-info-row" data-ibx-type="ibxHBox" data-ibx-no-bind="true" data-ibxp-wrap="false" style="display:none">
-			<div class="name"></div><div class="value"></div>
-		</div>
 	</body>
 </html>
 
