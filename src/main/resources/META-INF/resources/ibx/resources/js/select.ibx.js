@@ -66,15 +66,6 @@ $.widget("ibi.ibxSelectBase", $.ibi.ibxTextField,
 	{
 		return this.element.children(selector || ":ibxNavFocusable");
 	},
-	add:function(el, sibling, before, refresh)
-	{
-		this._control.ibxWidget('add', el, sibling, before, refresh);
-	},
-	remove: function (el, destroy, refresh)
-	{
-		this._control.ibxWidget('remove', el, destroy, refresh);
-	},
-
 	// overridables in derived functions
 	_createControl: function ()
 	{
@@ -314,6 +305,18 @@ $.widget("ibi.ibxSelect", $.ibi.ibxSelectBase,
 		}
 		else
 			this._control.ibxWidget('focusSelItem');
+	},
+	addControlItem:function(el, sibling, before, refresh)
+	{
+		this._control.ibxWidget('add', el, sibling, before, refresh);
+	},
+	removeControlItem: function (el, destroy, refresh)
+	{
+		this._control.ibxWidget('remove', el, destroy, refresh);
+	},
+	controlItems: function (selector)
+	{
+		this._control.ibxWidget('children', selector);
 	},
 	selected: function (element)
 	{
