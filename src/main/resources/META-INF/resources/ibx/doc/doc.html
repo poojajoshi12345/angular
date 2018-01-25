@@ -60,7 +60,7 @@
 						var widget = ctor.call($.ibi, {}, temp[0]);
 						var infoRow = $("body > .widget-info-row").clone().removeAttr("data-ibx-no-bind").css("display", "");
 						var docEntry = $(".ibx-widget-info").clone().removeAttr("data-ibx-no-bind").css("display", "").uniqueId();
-						docEntry.find("h1").text(widget.widgetName);
+						docEntry.children(".title").text(widget.widgetName);
 
 						var arOptions = [];
 						$.each(ctor._proto.options, function(option, value)
@@ -88,13 +88,35 @@
 						});
 						arOptions.sort(function(r1, r2)
 						{
-							var n1 = r1.find(".name").text().toLowerCase();
-							var n2 = r2.find(".name").text().toLowerCase();
+							var n1 = r1[0].textContent.toLowerCase();
+							var n2 = r2[0].textContent.toLowerCase();
 							if(n1 < n2) return -1;
 							if(n2 < n1) return 1;
 							return 0;
 						});
 						var widgetInfo = docEntry.find(".widget-member-box.options").append(arOptions);
+
+						arMethods = [];
+						$.each(ctor._proto, function(method, value)
+						{
+							if(method.search(/^_/) != -1 || typeof(value) != "function")
+								return;
+							
+							var sig = value.toString();
+							sig = sig.substring(sig.indexOf("("), sig.indexOf(")")+1)
+							
+							var infoRow = $(sformat("<div class='name' data-ibx-col-span='6'>{1}</div><div class='value' data-ibx-col-span='6'>{2}</div>", method, sig));
+							arMethods.push(infoRow);
+						});
+						arMethods.sort(function(r1, r2)
+						{
+							var n1 = r1[0].textContent.toLowerCase();
+							var n2 = r2[0].textContent.toLowerCase();
+							if(n1 < n2) return -1;
+							if(n2 < n1) return 1;
+							return 0;
+						});
+						var widgetInfo = docEntry.find(".widget-member-box.methods").append(arMethods);
 
 						widgets.push( 
 						{
@@ -112,8 +134,8 @@
 
 				widgets.sort(function(w1, w2)
 				{
-					var n1 = w1.widget.widgetName.toLowerCase();
-					var n2 = w2.widget.widgetName.toLowerCase();
+					var n1 = w1.widget.widgetName;
+					var n2 = w2.widget.widgetName;
 					if(n1 < n2) return -1;
 					if(n2 < n1) return 1;
 					return 0;
@@ -138,6 +160,10 @@
 				overflow:auto;
 				box-sizing:border-box;
 				tab-size:4;
+			}
+			article
+			{
+				margin-bottom:1em;
 			}
 			.toc, .content
 			{
@@ -170,19 +196,28 @@
 
 			.ibx-widget-info
 			{
-				border-bottom:2px solid #ccc;
 				margin-bottom:10px;
 			}
+			.ibx-widget-info > .title
+			{
+				font-size:2em;
+				font-weight:bold;
+				color:white;
+				background-color:#a5c0e5;
+				border-radius:5px;
+				padding:3px;
+			}
+
 			.widget-info-box
 			{
 				margin:5px;
 			}
 			.widget-member-box
 			{
-				flex:4 4 1px;
+				flex:0 1 40%;
 				margin:5px;
 				padding:5px;
-				border:1px solid #ccc;
+				border:1px solid #ddd;
 				border-radius:5px;
 			}
 			.widget-member-box > .heading
@@ -219,7 +254,7 @@
 		</div>
 
 		<article class="ibx-widget-info" data-ibx-no-bind="true" style="display:none">
-			<h1>name</h1>
+			<span class="title">name</span>
 			<div class="widget-info-box" data-ibx-type="ibxHBox">
 				<div class="widget-member-box options" data-ibx-type="ibxFlexGrid" data-ibxp-align="stretch">
 					<div class="heading" data-ibx-col-span="12">Options</div>
@@ -231,7 +266,6 @@
 					<div class="col-heading name" data-ibx-col-span="6">Name</div>
 					<div class="col-heading value" data-ibx-col-span="6">Parameters</div>
 				</div>
-				<div style="border:1px solid red;flex:2 2 auto;"></div>
 			</div>
 		</article>
 	</body>
