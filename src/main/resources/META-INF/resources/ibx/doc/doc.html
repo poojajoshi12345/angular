@@ -12,6 +12,17 @@
 
 		<script src="../resources/ibx.js" type="text/javascript"></script>
 		<script type="text/javascript">
+			var widgetMap = {};
+			function scrollToWidgetInfo(name)
+			{
+				var el = document.querySelector("#" + widgetMap[name]);
+				if(el)
+				{
+					window.history.pushState({"name":name}, name, window.location.href);
+					el.scrollIntoView();
+				}
+			}
+
 			ibx(function()
 			{
 				var doc = 
@@ -61,6 +72,21 @@
 						var infoRow = $("body > .widget-info-row").clone().removeAttr("data-ibx-no-bind").css("display", "");
 						var docEntry = $(".ibx-widget-info").clone().removeAttr("data-ibx-no-bind").css("display", "").uniqueId();
 						docEntry.children(".title").text(widget.widgetName);
+
+						var arDerived = [];
+						$.each(ctor._childConstructors, function(idx, derivedWidget)
+						{
+							arDerived.push($(sformat("<a class='derived-widget' href='javascript:scrollToWidgetInfo(\"{1}\")'>{1}</a>", derivedWidget.prototype.widgetName)));
+						});
+						arDerived.sort(function(d1, d2)
+						{
+							var n1 = d1[0].textContent.toLowerCase();
+							var n2 = d2[0].textContent.toLowerCase();
+							if(n1 < n2) return -1;
+							if(n2 < n1) return 1;
+							return 0;
+						});
+						var derivedWidgets = docEntry.find(".derived-widgets").append(arDerived);
 
 						var arOptions = [];
 						$.each(ctor._proto.options, function(option, value)
@@ -125,6 +151,8 @@
 							"tocEntry":$(sformat("<a class='toc-entry toc-ibx-widget' href='#{1}'>{2}</a>", docEntry.prop("id"), type)),
 							"docEntry":docEntry
 						});
+
+						widgetMap[type] = docEntry.prop("id");
 					}
 					catch(ex)
 					{
@@ -172,8 +200,11 @@
 			}
 			.toc
 			{
+				flex:0 0 auto;
+			}
+			.content
+			{
 				flex:1 1 auto;
-				width:33%;
 			}
 			.toc-entry
 			{
@@ -198,7 +229,7 @@
 			{
 				margin-bottom:10px;
 			}
-			.ibx-widget-info > .title
+			.ibx-widget-info .title
 			{
 				font-size:2em;
 				font-weight:bold;
@@ -207,43 +238,46 @@
 				border-radius:5px;
 				padding:3px;
 			}
-
+			.ibx-widget-info > .description
+			{
+				margin-top:1em;
+			}
 			.widget-info-box
 			{
-				margin:5px;
 			}
 			.widget-member-box
 			{
 				flex:0 1 40%;
-				margin:5px;
 				padding:5px;
 				border:1px solid #ddd;
 				border-radius:5px;
+				margin:7px;
 			}
-			.widget-member-box > .heading
+			.ibx-widget-info .heading
 			{
 				font-size:1.25em;
 				font-weight:bold;
 				margin-bottom:5px;
 			}
-			.widget-member-box > .col-heading
+			.ibx-widget-info .col-heading
 			{
 				font-weight:bold;
 				margin-bottom:7px;
 				text-decoration:underline;
 			}
-
 			.name, .value
 			{
 				margin-bottom:5px;
 			}
+			.derived-widget
+			{
+				margin-right:7px;
+			}
 		</style>
 	</head>
 	<body class="ibx-root">
-		<div data-ibx-type="ibxMutationObserver"></div>
 		<div class="main-box" data-ibx-type="ibxHBox" data-ibxp-align="stretch">
-			<div class="toc" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
-			</div>
+			<div class="toc" data-ibx-type="ibxVBox" data-ibxp-align="stretch"></div>
 			<div data-ibx-type="ibxSplitter"></div>
 			<div class="content" data-ibx-type="ibxWidget">
 				<div data-ibx-type="ibxVBox" data-ibxp-align="center" data-ibxp-justify="center">
@@ -253,8 +287,9 @@
 			</div>
 		</div>
 
-		<article class="ibx-widget-info" data-ibx-no-bind="true" style="display:none">
-			<span class="title">name</span>
+		<div class="ibx-widget-info" data-ibx-no-bind="true" style="display:none">
+			<span class="title"></span>
+			<div class="description"></div>
 			<div class="widget-info-box" data-ibx-type="ibxHBox">
 				<div class="widget-member-box options" data-ibx-type="ibxFlexGrid" data-ibxp-align="stretch">
 					<div class="heading" data-ibx-col-span="12">Options</div>
@@ -267,7 +302,10 @@
 					<div class="col-heading value" data-ibx-col-span="6">Parameters</div>
 				</div>
 			</div>
-		</article>
+			<div class="widget-member-box derived-widgets">
+				<div class="heading">Derived Widgets:</div>
+			</div>
+		</div>
 	</body>
 </html>
 
