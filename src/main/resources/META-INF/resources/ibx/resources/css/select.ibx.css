@@ -105,6 +105,21 @@
     flex: 1 1 auto;
 }
 
+.ibx-select-item-list,
+.ibx-select-item-list-paged
+{
+    border: 1px solid #ccc;
+	padding:5px;
+	border-radius:5px;
+}
+
+.ibx-select-popup .ibx-select-item-list,
+.ibx-select-popup .ibx-select-item-list-paged
+{
+    border: none;
+	border-radius:0px;
+}
+
 .ibx-select-item
 {
 	padding:.15em;
@@ -162,10 +177,6 @@
 	color:#888;
     width:1em;
     order:-2;
-}
-
-.ibx-select-item-list-paged
-{
 }
 
 /* inner list */

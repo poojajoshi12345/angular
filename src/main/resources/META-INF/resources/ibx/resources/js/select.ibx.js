@@ -869,6 +869,8 @@ $.widget("ibi.ibxSelectPaged", $.ibi.ibxSelectBase, {
 		'autoHeightGap': 50,
 		"search": false,
 		"selectionControls": false,
+		'enablePagingTrigger': 200,
+		"pageSize": 10,
 		"multiSelect": false,
 		/*
         'listClasses': 'search-list ibx-menu-no-icons',
@@ -886,7 +888,7 @@ $.widget("ibi.ibxSelectPaged", $.ibi.ibxSelectBase, {
 	},
 	_createControl: function ()
 	{
-		return $("<div tabindex='-1'>").ibxSelectItemListPaged({"search": this.options.search, "selectionControls": this.options.selectionControls, "multiSelect": this.options.multiSelect});
+		return $("<div tabindex='-1'>").ibxSelectItemListPaged({"search": this.options.search, "selectionControls": this.options.selectionControls, "multiSelect": this.options.multiSelect, "enablePagingTrigger": this.options.enablePagingTrigger, "pageSize": this.options.pageSize});
 	},
 	_initControl: function ()
 	{
@@ -1061,7 +1063,7 @@ $.widget("ibi.ibxSelectPaged", $.ibi.ibxSelectBase, {
 	{
 		this._super();
 		if (this._control)
-			this._control.ibxWidget('option', {"search": this.options.search, "selectionControls": this.options.selectionControls, "multiSelect": this.options.multiSelect});
+			this._control.ibxWidget('option', {"search": this.options.search, "selectionControls": this.options.selectionControls, "multiSelect": this.options.multiSelect, "enablePagingTrigger": this.options.enablePagingTrigger, "pageSize": this.options.pageSize});
 	},
 });
 
@@ -1097,9 +1099,7 @@ $.widget("ibi.ibxSelectItemListPaged", $.ibi.ibxVBox,
 		this._optionsBox = $("<div class='ibx-page-list-options-box'>").ibxVBox({'align': 'stretch'});
 		this._searchBoxWrapper = $("<div class='ibx-page-list-search-wrapper'>").ibxHBox({'align': 'stretch'});
 		this._searchBox = $("<div tabindex='-1' class='ibx-page-list-options-search'>").ibxTextField();
-		this._clearSearch = $("<div tabindex='-1' class='ibx-page-list-options-search-clear'>").ibxButtonSimple({glyphClasses:"fa fa-times"}).on('click', this._onClearSearch.bind(this));
-		this._clearSearch.prop('title', ibx.resourceMgr.getString('IBX_PAGE_LIST_TOOLTIP_CLEAR_SEARCH'));
-		this._searchBoxWrapper.append(this._searchBox, this._clearSearch);
+		this._searchBoxWrapper.append(this._searchBox);
 		this._buttonsBox = $("<div class='ibx-page-list-select-options-buttons'>").ibxHBox();
 		this._selectAll = $("<div tabindex='-1' class='ibx-page-list-select-options-all'>").ibxButton({'justify': 'center', 'text': ibx.resourceMgr.getString('IBX_PAGE_LIST_SELECT_ALL')});
 		this._clearAll = $("<div tabindex='-1' class='ibx-page-list-select-options-none'>").ibxButton({'justify': 'center', 'text': ibx.resourceMgr.getString('IBX_PAGE_LIST_SELECT_NONE')});
@@ -1178,10 +1178,6 @@ $.widget("ibi.ibxSelectItemListPaged", $.ibi.ibxVBox,
 	{
 		return this._listControl.ibxWidget('getText');
 	},
-	_onClearSearch: function ()
-	{
-		this._resetSearch(false);
-    },
     resetSearch: function (bForceFirstPage)
     {
         this._resetSearch(bForceFirstPage);

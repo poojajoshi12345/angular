@@ -60,8 +60,14 @@ $Revision$:-->
 				"IBX_DP_PREV_TEXT":"Previous",
 				"IBX_DP_NEXT_TEXT":"Next",
 				"IBX_DP_CUR_TEXT":"Today",
-				"IBX_DP_WEEK_HEADER":"Wk"
+				"IBX_DP_WEEK_HEADER":"Wk",
 
+				"IBX_PAGE_LIST_SELECT_ALL":"Select all",
+				"IBX_PAGE_LIST_SELECT_NONE":"Clear",
+				"IBX_PAGE_LIST_PAGES":"Page {1} of {2}",
+				"IBX_PAGE_LIST_TOOLTIP_CLEAR_SEARCH":"Clear search text",
+
+				"IBX_TERMINATING_STRING":""
 			}
 		}
 		]]>
