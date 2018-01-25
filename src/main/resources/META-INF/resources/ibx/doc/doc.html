@@ -61,20 +61,48 @@
 						var docEntry = $(".ibx-widget-info").clone().removeAttr("data-ibx-no-bind").css("display", "").uniqueId();
 						docEntry.find("h1").text(widget.widgetName);
 
-						var infoName = docEntry.find(".ibx-info-options.name");
-						var infoValue = docEntry.find(".ibx-info-options.value");
+						var widgetInfo = docEntry.find(".widget-member-box.options");
+						var infoRow = $("body > .widget-info-row").clone().removeAttr("data-ibx-no-bind").css("display", "");
 						$.each(ctor._proto.options, function(option, value)
 						{
-							if(option == "overlays")
-								var x = 10;
-							var opEntry = $(sformat("<div>{1}</div>", option));
-							infoName.append(opEntry);
-							var opEntry = $(sformat("<div>{1}</div>", (typeof(value) == "object") ? "{object}" : value || "-"));
-							infoValue.append(opEntry);
+							if(typeof(value) == "object")
+								value = "{object}";
+							else
+							if(typeof(value) == "function")
+								value = "function";
+							else
+							if(typeof(value) == "string")
+								value = sformat("\"{1}\"", value);
+							else
+							if(value === null)
+								value = "null";
+							else
+							if(value === undefined)
+								value = "undefined";
+							else
+							if(!value)
+								value = value.toString();
+							var tempRow = infoRow.clone();
+							tempRow.find(".name").html(option);
+							tempRow.find(".value").html(value);
+							widgetInfo.append(tempRow);
 						});
 
-						var tocEntry = $(sformat("<a class='toc-entry toc-ibx-widget' href='#{1}'>{2}</a>", docEntry.prop("id"), widget.widgetName));
+						var widgetInfo = docEntry.find(".widget-member-box.methods");
+						var infoRow = $("body > .widget-info-row").clone().removeAttr("data-ibx-no-bind").css("display", "");
+						$.each(ctor._proto, function(member, value)
+						{
+							if(member.search("_") == 0 || typeof(value) != "function")
+								return;
 
+							var tempRow = infoRow.clone();
+							tempRow.find(".name").text(member);
+							tempRow.find(".value").text(value.toString().replace(/\)[\s|\S]*/g, ")").replace(/.*\(/g, "("));
+							widgetInfo.append(tempRow);
+						});
+
+
+						var tocEntry = $(sformat("<a class='toc-entry toc-ibx-widget' href='#{1}'>{2}</a>", docEntry.prop("id"), widget.widgetName));
 						widgets.push( 
 						{
 							"ctor":ctor,
@@ -118,9 +146,6 @@
 				margin:0px;
 				overflow:auto;
 				box-sizing:border-box;
-			}
-			pre
-			{
 				tab-size:4;
 			}
 			.toc, .content
@@ -157,25 +182,32 @@
 				border-bottom:2px solid #ccc;
 				margin-bottom:10px;
 			}
-			.ibx-widget-info-box
+			.widget-info-box
 			{
 				margin:10px;				
 			}
-			.ibx-info-grid
+			.widget-member-box
 			{
-				flex:0 0 auto;
+				flex:1 1 auto;
 			}
-
-			.info-header
+			.widget-info-header
 			{
 				font-weight:bold;
 				margin-bottom:5px;
 				border-bottom:1px solid #ccc;
 			}
-
-			.ibx-info-options.name
+			.widget-info-row
 			{
-				margin-right:50px;
+				margin-bottom:5px;
+			}
+			.widget-info-row > .name
+			{
+				width:150px;
+			}
+			.widget-info-row > .value
+			{
+				flex:1 1 auto;
+				xwidth:300px;
 			}
 		</style>
 	</head>
@@ -193,17 +225,24 @@
 			</div>
 		</div>
 
-		<article class="ibx-widget-info" style="display:none" data-ibx-no-bind="true">
+		<article class="ibx-widget-info" data-ibx-no-bind="true" style="display:none">
 			<h1>name</h1>
-			<div class="ibx-widget-info-box" data-ibx-type="ibxHBox" data-ibxp-inline="true">
-				<div class="ibx-info-options name" data-ibx-type="ibxVBox">
-					<div class="info-header">Option</div>
+			<div class="widget-info-box" data-ibx-type="ibxHBox" data-ibxp-align="stretch">
+				<div class="widget-member-box options" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
+					<div class="widget-info-row widget-info-header" data-ibx-type="ibxHBox">
+						<div class="name">Option</div><div class="value">Default Value</div>
+					</div>
 				</div>
-				<div class="ibx-info-options value" data-ibx-type="ibxVBox">
-					<div class="info-header">Default Value</div>
+				<div class="widget-member-box methods" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
+					<div class="widget-info-row widget-info-header" data-ibx-type="ibxHBox">
+						<div class="name">Method</div><div class="value">Parameters</div>
+					</div>
 				</div>
 			</div>
 		</article>
+		<div class="widget-info-row" data-ibx-type="ibxHBox" data-ibx-no-bind="true" data-ibxp-wrap="false" style="display:none">
+			<div class="name"></div><div class="value"></div>
+		</div>
 	</body>
 </html>
 
