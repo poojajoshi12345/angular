@@ -73,8 +73,15 @@ $.widget("ibi.ibxSelectBase", $.ibi.ibxTextField,
 	_initControl: function ()
 	{
 	},
-	_onControlChange: function ()
+	_onControlChange: function (e, data)
 	{
+		if (e.target == this._control[0])
+			return this._trigger('change', e, data);
+	},
+	_onControlBeforeChange: function (e, data)
+	{
+		if (e.target == this._control[0])
+			return this._trigger('beforechange', e, data);
 	},
 	_onPopupOpen: function ()
 	{
@@ -98,6 +105,7 @@ $.widget("ibi.ibxSelectBase", $.ibi.ibxTextField,
 	{
 		this._control = this._createControl();
 		this._control.on('ibx_change', this._onControlChange.bind(this));
+		this._control.on('ibx_beforechange', this._onControlBeforeChange.bind(this));
 		
 		if (this.options.popup)
 		{
@@ -506,7 +514,13 @@ $.widget("ibi.ibxSelectItemList", $.ibi.ibxVBox,
 	_setSelection: function (selItem, bKeep, bKeepAnchor, bNoUpdate)
 	{
 		if (!this._trigger('beforechange', null, {"item": selItem, "action": "select"}))
+		{
+			/*
+			if (selItem.ibxWidget('option', 'checked'))
+				selItem.ibxWidget('option', 'checked', false);
+			*/
 			return;
+		}
 		
 		var selItem = $(selItem);
 		if (selItem.length == 0)
@@ -544,7 +558,13 @@ $.widget("ibi.ibxSelectItemList", $.ibi.ibxVBox,
 	_removeSelection: function (selItem, bKeepAnchor, bNoUpdate)
 	{
 		if (!this._trigger('beforechange', null, {"item": selItem, "action": "remove"}))
+		{
+			/*
+			if (!selItem.ibxWidget('option', 'checked'))
+				selItem.ibxWidget('option', 'checked', true);
+			*/
 			return;
+		}
 
 		var selItem = $(selItem);
 		if (selItem.length == 0)
@@ -1092,7 +1112,6 @@ $.widget("ibi.ibxSelectItemListPaged", $.ibi.ibxVBox,
 {
 	options:
 	{
-		'enablePaging': false,
 		"multiSelect": false,
 		'search': false,
 		'selectionControls': false,
@@ -1101,6 +1120,7 @@ $.widget("ibi.ibxSelectItemListPaged", $.ibi.ibxVBox,
 		"align": "stretch",
 	},
 	_widgetClass: "ibx-select-item-list-paged",
+	_enablePaging: false,
 	_create: function ()
 	{
 		this._super();
@@ -1148,6 +1168,7 @@ $.widget("ibi.ibxSelectItemListPaged", $.ibi.ibxVBox,
 		this._super();
 		this._listControl.ibxWidget('option', 'multiSelect', this.options.multiSelect);
 		this._listControl.on("ibx_change", this._onListControlChange.bind(this));
+		this._listControl.on('ibx_beforechange', this._onListControlBeforeChange.bind(this));
 		this._searchBox.on('ibx_action', this._onSearchAction.bind(this));
 		this._searchBox.on("ibx_textchanged", this._onSearchTextChanged.bind(this));
 		// add markup items
@@ -1170,7 +1191,7 @@ $.widget("ibi.ibxSelectItemListPaged", $.ibi.ibxVBox,
 		else
 			this._buttonsBox.hide();
 
-		if (this.options.enablePaging)
+		if (this._enablePaging)
 			this._pageBox.show();
 		else
 			this._pageBox.hide();
@@ -1183,27 +1204,29 @@ $.widget("ibi.ibxSelectItemListPaged", $.ibi.ibxVBox,
 	{
 		this._listControl.ibxWidget('selectHighlight');
 	},
+	_onListControlBeforeChange: function (e, data)
+	{
+		if (e.target === this._listControl[0])
+			return this._trigger("beforechange", e, data);
+	},
 	_onListControlChange: function (e, data)
 	{
-		if (e.target !== this._listControl[0])
+		if (e.target !== this._listControl[0] || this._inSetPage)
 			return;
-		if (!this._inSetPage && e.target === this._listControl[0])
+		if (!this.options.multiSelect)
 		{
-			if (!this.options.multiSelect)
-			{
-				this._values.forEach(function (value){
-					value.checked = false;
-				});
-			}		
-			var item = this.element.find('.sel-anchor');
-			if (item && item.length == 1)
-			{
-				var obj = item.ibxWidget('option', 'valObj');
-				var checked = item.ibxWidget('option', 'checked');
-				obj.checked = checked;
-			}
-			this._trigger("change", e, data);
+			this._values.forEach(function (value){
+				value.checked = false;
+			});
+		}		
+		var item = this.element.find('.sel-anchor');
+		if (item && item.length == 1)
+		{
+			var obj = item.ibxWidget('option', 'valObj');
+			var checked = item.ibxWidget('option', 'checked');
+			obj.checked = checked;
 		}
+		this._trigger("change", e, data);
 	},
 	getText: function ()
 	{
@@ -1281,7 +1304,7 @@ $.widget("ibi.ibxSelectItemListPaged", $.ibi.ibxVBox,
 		var options = this.options;
 		//options.parent.options.userValue = '';
 
-		if (options.enablePaging)
+		if (this._enablePaging)
 		{
 			if (this._filteredValues.length <= options.pageSize)
 				this._pageBox.hide();
@@ -1293,8 +1316,8 @@ $.widget("ibi.ibxSelectItemListPaged", $.ibi.ibxVBox,
 
 		this._listControl.empty();
 
-		var pageStart = options.enablePaging ? (options.pageSize * pageIndex) : 0;
-		var pageEnd = options.enablePaging ? Math.min(this._filteredValues.length, pageStart + options.pageSize) : this._filteredValues.length;
+		var pageStart = this._enablePaging ? (options.pageSize * pageIndex) : 0;
+		var pageEnd = this._enablePaging ? Math.min(this._filteredValues.length, pageStart + options.pageSize) : this._filteredValues.length;
 
 		for (var i = pageStart; i < pageEnd; ++i)
 		{
@@ -1346,7 +1369,7 @@ $.widget("ibi.ibxSelectItemListPaged", $.ibi.ibxVBox,
 		else
 		{
 			var options = this.options;
-			this.options.enablePaging = values.length >= this.options.enablePagingTrigger;
+			this._enablePaging = values.length >= this.options.enablePagingTrigger;
 			this._values = values;
 			this._extractFiltered();
 			this._setPage(0);
