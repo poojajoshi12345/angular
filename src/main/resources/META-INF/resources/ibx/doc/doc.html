@@ -15,14 +15,17 @@
 			var widgetMap = {};
 			function scrollToWidgetInfo(name)
 			{
-				var href = "#" + widgetMap[name];
+				var href = "#" + widgetMap[name].id;
 				window.location = href;
 			}
 			window.addEventListener("hashchange",function(e)
 			{
-				var hash = e.newURL.substring(e.newURL.indexOf("#"));
-				document.title="ibx - " + hash;
-				window.location.href=hash;
+				if(e.newURL)
+				{
+					var hash = e.newURL.substring(e.newURL.indexOf("#"));
+					document.title="ibx - " + $(hash).children("h1, h2, h3, h4, h5").first().text();
+					window.location.href=hash;
+				}
 			});
 
 			ibx(function()
@@ -43,23 +46,22 @@
 
 					$.get({"async":false, "url":url, "dataType":"text"}).done(function(text, status, xhr)
 					{
-						var article = $("<article>").append(text);
-						var info = article.find("h1").uniqueId();
-						info.each(function(idx, el)
+						var article = $(text);
+						var doc = article.find("section").addBack().uniqueId();
+						doc.each(function(idx, el)
 						{
 							el = $(el);
-							var tocEntry = $(sformat("<a class='toc-entry toc-section' href='#{1}'>{2}</a>", el.prop("id"), el.text()));
-							$(".toc").append(tocEntry);
-
-							article.find("h4").uniqueId().each(function(idx, el)
-							{
-								el = $(el);
-								var tocSubEntry = $(sformat("<a class='toc-entry toc-sub-section' href='#{1}'>{2}</a>", el.prop("id"), el.text()));
-								tocEntry.append(tocSubEntry);
-							});
+							var entry = null;
+							var title = el.children("h1, h2, h3, h4, h5, h6").first();
+							if(el.is("article"))
+								entry = $(sformat("<a class='toc-entry toc-section' href='#{1}'>{2}</a>", el.prop("id"), title.text()));
+							else
+							if(el.is("section"))
+								entry = $(sformat("<a class='toc-entry toc-sub-section' href='#{1}'>{2}</a>", el.prop("id"), title.text()));
+							$(".toc").append(entry);
 
 						});
-						article.appendTo(".content");
+						$(".content").append(article);
 					});
 				});
 
@@ -72,19 +74,22 @@
 						var ctor = $.ibi[type];
 						var widget = ctor.call($.ibi, {}, temp[0]);
 						var infoRow = $("body > .widget-info-row").clone().removeAttr("data-ibx-no-bind").css("display", "");
-						var docEntry = $(".ibx-widget-info").clone().removeAttr("data-ibx-no-bind").css("display", "").uniqueId();
-						docEntry.children(".title").text(widget.widgetName);
+						var article = $(".ibx-widget-info").clone().removeAttr("data-ibx-no-bind").css("display", "").uniqueId();
+						article.children(".title").text(widget.widgetName);
 
-						var chain = "";
+						var arParents = [];
 						var proto = widget.__proto__;
 						while(proto)
 						{
-							if(proto.widgetName)
-								chain += proto.widgetName + "<-";
+							if(proto.widgetName && proto.widgetName.search(/^ibx/) != -1)
+							{
+								arParents.push($(sformat("<a class='parent-widget' href='javascript:scrollToWidgetInfo(\"{1}\")'>{1}</a>", proto.widgetName)));
+							}
 							proto = proto.__proto__;
 						}
-						console.log(chain);
-
+						arParents.reverse();
+						article.find(".parent-widgets").append(arParents);
+						
 						var arDerived = [];
 						$.each(ctor._childConstructors, function(idx, derivedWidget)
 						{
@@ -98,7 +103,7 @@
 							if(n2 < n1) return 1;
 							return 0;
 						});
-						var derivedWidgets = docEntry.find(".derived-widgets").append(arDerived);
+						article.find(".derived-widgets").append(arDerived);
 
 						var arOptions = [];
 						$.each(ctor._proto.options, function(option, value)
@@ -132,7 +137,7 @@
 							if(n2 < n1) return 1;
 							return 0;
 						});
-						var widgetInfo = docEntry.find(".widget-member-box.options").append(arOptions);
+						article.find(".widget-member-box.options").append(arOptions);
 
 						arMethods = [];
 						$.each(ctor._proto, function(method, value)
@@ -154,17 +159,19 @@
 							if(n2 < n1) return 1;
 							return 0;
 						});
-						var widgetInfo = docEntry.find(".widget-member-box.methods").append(arMethods);
+						article.find(".widget-member-box.methods").append(arMethods);
 
-						widgets.push( 
+						var widgetInfo = 
 						{
+							"id":article.prop("id"),
 							"ctor":ctor,
 							"widget":widget,
-							"tocEntry":$(sformat("<a class='toc-entry toc-ibx-widget' href='#{1}'>{2}</a>", docEntry.prop("id"), type)),
-							"docEntry":docEntry
-						});
+							"tocEntry":$(sformat("<a class='toc-entry toc-ibx-widget' href='#{1}'>{2}</a>", article.prop("id"), type)),
+							"article":article
+						};
 
-						widgetMap[type] = docEntry.prop("id");
+						widgets.push(widgetInfo);
+						widgetMap[type] = widgetInfo;
 					}
 					catch(ex)
 					{
@@ -186,7 +193,7 @@
 				$.each(widgets, function(idx, widget)
 				{
 					ibxWidgetsToc.append(widget.tocEntry);
-					$(".content").append(ibx.bindElements(widget.docEntry));
+					$(".content").append(ibx.bindElements(widget.article));
 				});
 			}, true);
 		</script>
@@ -243,8 +250,7 @@
 			}
 			.ibx-widget-info .title
 			{
-				font-size:2em;
-				font-weight:bold;
+				display:inline-block;
 				color:white;
 				background-color:#a5c0e5;
 				border-radius:5px;
@@ -281,6 +287,10 @@
 			{
 				margin-bottom:5px;
 			}
+			.parent-widget
+			{
+				margin-right:7px;
+			}
 			.derived-widget
 			{
 				margin-right:7px;
@@ -293,15 +303,21 @@
 			<div data-ibx-type="ibxSplitter"></div>
 			<div class="content" data-ibx-type="ibxWidget">
 				<div data-ibx-type="ibxVBox" data-ibxp-align="center" data-ibxp-justify="center">
-					<img src="../resources/css/images/ibx.png"/>
+					<a href="http://www.ibi.com"><img src="../resources/css/images/ibx.png"/></a>
 					<div class="title" data-ibx-type="ibxLabel">ibx Info</div>
 				</div>
 			</div>
 		</div>
 
-		<div class="ibx-widget-info" data-ibx-no-bind="true" style="display:none">
-			<span class="title"></span>
+		<article class="ibx-widget-info" data-ibx-no-bind="true" style="display:none">
+			<h1 class="title"></h1>
 			<div class="description"></div>
+			<div class="widget-member-box parent-widgets">
+				<div class="heading">Class Hierarchy</div>
+			</div>
+			<div class="widget-member-box derived-widgets">
+				<div class="heading">Derived Widgets</div>
+			</div>
 			<div class="widget-info-box" data-ibx-type="ibxHBox">
 				<div class="widget-member-box options" data-ibx-type="ibxFlexGrid" data-ibxp-align="stretch">
 					<div class="heading" data-ibx-col-span="12">Options</div>
@@ -314,10 +330,7 @@
 					<div class="col-heading value" data-ibx-col-span="6">Parameters</div>
 				</div>
 			</div>
-			<div class="widget-member-box derived-widgets">
-				<div class="heading">Derived Widgets:</div>
-			</div>
-		</div>
+		</article>
 	</body>
 </html>
 
