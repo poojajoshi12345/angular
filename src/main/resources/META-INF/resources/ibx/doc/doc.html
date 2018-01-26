@@ -148,7 +148,8 @@
 							var sig = value.toString();
 							sig = sig.substring(sig.indexOf("("), sig.indexOf(")")+1)
 							
-							var infoRow = $(sformat("<div class='name' data-ibx-col-span='6'>{1}</div><div class='value' data-ibx-col-span='6'>{2}</div>", method, sig));
+							var infoRow = $(sformat("<div class='name' data-ibx-col-span='6'>{1}</div><a class='value function-parms' href='' data-ibx-col-span='6'>{2}</a>", method, sig));
+							infoRow.data("widgetInfo", {"widget":widget, "method":method, "fn":value});
 							arMethods.push(infoRow);
 						});
 						arMethods.sort(function(r1, r2)
@@ -194,6 +195,20 @@
 				{
 					ibxWidgetsToc.append(widget.tocEntry);
 					$(".content").append(ibx.bindElements(widget.article));
+				});
+
+				$(".function-parms").on("click", function(e)
+				{
+					var widgetInfo = $(e.target).data("widgetInfo");
+					var popup = $(".info-popup").resizable();
+
+					var title = popup.find(".title");
+					title.text(sformat("Function: {1}.{2}", widgetInfo.widget.widgetName, widgetInfo.method));
+
+					var content = popup.find(".content");
+					content.text(widgetInfo.fn.toString());
+					popup.ibxWidget("open");
+					return false;
 				});
 			}, true);
 		</script>
@@ -295,6 +310,34 @@
 			{
 				margin-right:7px;
 			}
+			.info-popup
+			{
+				width:500px;
+				height:400px;
+			}
+			.info-popup-main-box
+			{
+				position:absolute;
+				left:0px;
+				top:0px;
+				right:0px;
+				bottom:0px;
+				padding:10px;
+			}
+			.info-popup .title
+			{
+				font-size:1.5em;
+				font-weight:bold;
+				margin-bottom:3px;
+			}
+			.info-popup-main-box .content
+			{
+				flex:1 1 auto;
+				overflow:auto;
+				border:1px solid #ccc;
+				margin:0px;
+				padding:0px;
+			}
 		</style>
 	</head>
 	<body class="ibx-root">
@@ -332,5 +375,12 @@
 			</div>
 		</article>
 	</body>
+
+	<div class="info-popup" data-ibx-type="ibxPopup" data-ibxp-destroy-on-close="false" data-ibxp-moveable="true">
+		<div class="info-popup-main-box" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
+			<div class="title"></div>
+			<pre class="content"></pre>
+		</div>
+	</div>
 </html>
 

@@ -340,7 +340,7 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 		}
 		return childInfo;
 	},
-	getPageInfo:function(metrics)
+	getPageInfo:function()
 	{
 		var info = 
 		{
