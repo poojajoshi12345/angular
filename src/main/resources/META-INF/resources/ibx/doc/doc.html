@@ -107,7 +107,7 @@
 						$.each(ctor._proto.options, function(option, value)
 						{
 							if(typeof(value) == "object")
-								value = "<a class='prop-object' href=''>{object}</a>";
+								value = "<span class='prop-object'>{object}</span>";
 							else
 							if(typeof(value) == "function")
 								value = "function";
@@ -209,21 +209,24 @@
 					return false;
 				});
 
-				$(".prop-object").on("click", function(e)
+				$(".prop-object").on("mouseenter mouseleave", function(e)
 				{
-					var widgetInfo = $(e.target).data("widgetInfo");
-					var popup = $(".info-popup").resizable();
-
-					var title = popup.find(".title");
-					title.text(sformat("{1}.options.{2}", widgetInfo.widget.widgetName, widgetInfo.prop));
-
-					var obj = JSON.stringify(widgetInfo.widget.options[widgetInfo.prop]);
-					obj = obj.replace(/(\{)|,|(\})/g, "$1\n$2\t");
-
-					var content = popup.find(".content");
-					content.text(obj);
-					popup.ibxWidget("open");
-					return false;
+					if(e.type == "mouseenter")
+					{
+						var widgetInfo = $(e.target).data("widgetInfo");
+						var obj = JSON.stringify(widgetInfo.widget.options[widgetInfo.prop]);
+						obj = obj.replace(/(\{)|,|(\})/g, "$1\n$2\t");
+						var popup = $(sformat("<div class='prop-object-popup'><pre style='margin:4px;tab-size:3;' class='info'>{1}</pre></div>", obj)).ibxPopup(
+						{
+							position:{my:"left center", at:"right center", of:e.target}
+						});
+						popup.ibxWidget("open");
+					}
+					else
+					if(e.type == "mouseleave")
+					{
+						$(".prop-object-popup").ibxPopup("close");
+					}
 				});
 			}, true);
 		</script>
@@ -318,6 +321,11 @@
 			{
 				margin-bottom:5px;
 			}
+			.prop-object
+			{
+				font-weight:bold;
+			}
+
 			.parent-widget
 			{
 				margin-right:7px;
@@ -354,6 +362,11 @@
 				padding:0px;
 				border:1px solid #ccc;
 				border-radius:5px;
+			}
+			textarea
+			{
+				tab-size:3;
+				font-family:courier new;
 			}
 		</style>
 	</head>
@@ -396,7 +409,7 @@
 	<div class="info-popup" data-ibx-type="ibxPopup" data-ibxp-destroy-on-close="false" data-ibxp-moveable="true">
 		<div class="info-popup-main-box" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
 			<div class="title"></div>
-			<pre class="content"></pre>
+			<textarea readonly="true" wrap="off" class="content"></textarea>
 		</div>
 	</div>
 </html>
