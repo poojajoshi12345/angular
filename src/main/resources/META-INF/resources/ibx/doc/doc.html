@@ -82,9 +82,7 @@
 						while(proto)
 						{
 							if(proto.widgetName && proto.widgetName.search(/^ibx/) != -1)
-							{
 								arParents.push($(sformat("<a class='parent-widget' href='javascript:scrollToWidgetInfo(\"{1}\")'>{1}</a>", proto.widgetName)));
-							}
 							proto = proto.__proto__;
 						}
 						arParents.reverse();
@@ -109,7 +107,7 @@
 						$.each(ctor._proto.options, function(option, value)
 						{
 							if(typeof(value) == "object")
-								value = "{object}";
+								value = "<a class='prop-object' href=''>{object}</a>";
 							else
 							if(typeof(value) == "function")
 								value = "function";
@@ -126,7 +124,8 @@
 							if(!value)
 								value = value.toString();
 
-							var infoRow = $(sformat("<div class='name' data-ibx-col-span='6'>{1}</div><div class='value' data-ibx-col-span='6'>{2}</div>", option, value));
+							var infoRow = $(sformat("<div class='name prop-info' data-ibx-col-span='6'>{1}</div><div class='value prop-info' data-ibx-col-span='6'>{2}</div>", option, value));
+							infoRow.find(".prop-object").data("widgetInfo", {"widget":widget, "prop":option, "val":value});
 							arOptions.push(infoRow);
 						});
 						arOptions.sort(function(r1, r2)
@@ -148,7 +147,7 @@
 							var sig = value.toString();
 							sig = sig.substring(sig.indexOf("("), sig.indexOf(")")+1)
 							
-							var infoRow = $(sformat("<div class='name' data-ibx-col-span='6'>{1}</div><a class='value function-parms' href='' data-ibx-col-span='6'>{2}</a>", method, sig));
+							var infoRow = $(sformat("<a class='name method-info' href='' data-ibx-col-span='6'>{1}</a><a class='value method-info' href='' data-ibx-col-span='6'>{2}</a>", method, sig));
 							infoRow.data("widgetInfo", {"widget":widget, "method":method, "fn":value});
 							arMethods.push(infoRow);
 						});
@@ -179,7 +178,6 @@
 						console.dir(ex);
 					}
 				});
-
 				widgets.sort(function(w1, w2)
 				{
 					var n1 = w1.widget.widgetName;
@@ -197,16 +195,33 @@
 					$(".content").append(ibx.bindElements(widget.article));
 				});
 
-				$(".function-parms").on("click", function(e)
+				$(".method-info").on("click", function(e)
 				{
 					var widgetInfo = $(e.target).data("widgetInfo");
 					var popup = $(".info-popup").resizable();
 
 					var title = popup.find(".title");
-					title.text(sformat("Function: {1}.{2}", widgetInfo.widget.widgetName, widgetInfo.method));
+					title.text(sformat("Method: {1}.{2}", widgetInfo.widget.widgetName, widgetInfo.method));
 
 					var content = popup.find(".content");
 					content.text(widgetInfo.fn.toString());
+					popup.ibxWidget("open");
+					return false;
+				});
+
+				$(".prop-object").on("click", function(e)
+				{
+					var widgetInfo = $(e.target).data("widgetInfo");
+					var popup = $(".info-popup").resizable();
+
+					var title = popup.find(".title");
+					title.text(sformat("{1}.options.{2}", widgetInfo.widget.widgetName, widgetInfo.prop));
+
+					var obj = JSON.stringify(widgetInfo.widget.options[widgetInfo.prop]);
+					obj = obj.replace(/(\{)|,|(\})/g, "$1\n$2\t");
+
+					var content = popup.find(".content");
+					content.text(obj);
 					popup.ibxWidget("open");
 					return false;
 				});
@@ -269,6 +284,7 @@
 				color:white;
 				background-color:#a5c0e5;
 				border-radius:5px;
+				margin-bottom:0px;
 				padding:3px;
 			}
 			.ibx-widget-info > .description
@@ -284,7 +300,7 @@
 				padding:5px;
 				border:1px solid #ddd;
 				border-radius:5px;
-				margin:7px;
+				margin:5px;
 			}
 			.ibx-widget-info .heading
 			{
@@ -334,9 +350,10 @@
 			{
 				flex:1 1 auto;
 				overflow:auto;
-				border:1px solid #ccc;
 				margin:0px;
 				padding:0px;
+				border:1px solid #ccc;
+				border-radius:5px;
 			}
 		</style>
 	</head>
@@ -346,7 +363,7 @@
 			<div data-ibx-type="ibxSplitter"></div>
 			<div class="content" data-ibx-type="ibxWidget">
 				<div data-ibx-type="ibxVBox" data-ibxp-align="center" data-ibxp-justify="center">
-					<a href="http://www.ibi.com"><img src="../resources/css/images/ibx.png"/></a>
+					<a href="https://www.google.com/search?q=ibex&rlz=1C1CHBF_enUS757US757&source=lnms&tbm=isch&sa=X&ved=0ahUKEwj7tMCGvfbYAhVOGt8KHQyYBL8Q_AUICigB&biw=1546&bih=837"><img src="../resources/css/images/ibx.png"/></a>
 					<div class="title" data-ibx-type="ibxLabel">ibx Info</div>
 				</div>
 			</div>
@@ -356,7 +373,7 @@
 			<h1 class="title"></h1>
 			<div class="description"></div>
 			<div class="widget-member-box parent-widgets">
-				<div class="heading">Class Hierarchy</div>
+				<div class="heading">Widget Hierarchy</div>
 			</div>
 			<div class="widget-member-box derived-widgets">
 				<div class="heading">Derived Widgets</div>
