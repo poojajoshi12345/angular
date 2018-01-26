@@ -137,23 +137,21 @@
 	background-color:#eee;
 }
 
-.ibx-select-item.ibx-button-simple
-{
-    background-color:initial;
-}
-
+.ibx-select-item.ibx-button-simple,
 .ibx-select-item.ibx-check-box-simple,
 .ibx-select-item.ibx-radio-button-simple
 {
     background-color:initial;
 }
 
+.ibx-select-item.ibx-button-simple:hover,
 .ibx-select-item.ibx-check-box-simple:hover,
 .ibx-select-item.ibx-radio-button-simple:hover
 {
 	background-color:#ddd;
 }
 
+.ibx-select-item.ibx-button-simple:focus,
 .ibx-select-item.ibx-check-box-simple:focus,
 .ibx-select-item.ibx-radio-button-simple:focus
 {
