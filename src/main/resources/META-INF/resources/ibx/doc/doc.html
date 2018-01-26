@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-		<title>IBX Documentation</title>
+		<title>ibx Documentation</title>
 		<meta http-equiv="X-UA-Compatible" content="IE=11" >
 		<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
 		<meta http-equiv="Pragma" content="no-cache" />
@@ -15,13 +15,15 @@
 			var widgetMap = {};
 			function scrollToWidgetInfo(name)
 			{
-				var el = document.querySelector("#" + widgetMap[name]);
-				if(el)
-				{
-					window.history.pushState({"name":name}, name, window.location.href);
-					el.scrollIntoView();
-				}
+				var href = "#" + widgetMap[name];
+				window.location = href;
 			}
+			window.addEventListener("hashchange",function(e)
+			{
+				var hash = e.newURL.substring(e.newURL.indexOf("#"));
+				document.title="ibx - " + hash;
+				window.location.href=hash;
+			});
 
 			ibx(function()
 			{
@@ -72,6 +74,16 @@
 						var infoRow = $("body > .widget-info-row").clone().removeAttr("data-ibx-no-bind").css("display", "");
 						var docEntry = $(".ibx-widget-info").clone().removeAttr("data-ibx-no-bind").css("display", "").uniqueId();
 						docEntry.children(".title").text(widget.widgetName);
+
+						var chain = "";
+						var proto = widget.__proto__;
+						while(proto)
+						{
+							if(proto.widgetName)
+								chain += proto.widgetName + "<-";
+							proto = proto.__proto__;
+						}
+						console.log(chain);
 
 						var arDerived = [];
 						$.each(ctor._childConstructors, function(idx, derivedWidget)
