@@ -106,7 +106,7 @@
 						var arOptions = [];
 						$.each(ctor._proto.options, function(option, value)
 						{
-							if(typeof(value) == "object")
+							if(typeof(value) == "object" && value !== null)
 								value = "<span class='prop-object'>{object}</span>";
 							else
 							if(typeof(value) == "function")
@@ -290,7 +290,11 @@
 				margin-bottom:0px;
 				padding:3px;
 			}
-			.ibx-widget-info > .description
+			.widget-info-container
+			{
+				padding-left:15px;
+			}
+			.ibx-widget-info .description
 			{
 				margin-top:1em;
 			}
@@ -384,23 +388,25 @@
 
 		<article class="ibx-widget-info" data-ibx-no-bind="true" style="display:none">
 			<h1 class="title"></h1>
-			<div class="description"></div>
-			<div class="widget-member-box parent-widgets">
-				<div class="heading">Widget Hierarchy</div>
-			</div>
-			<div class="widget-member-box derived-widgets">
-				<div class="heading">Derived Widgets</div>
-			</div>
-			<div class="widget-info-box" data-ibx-type="ibxHBox">
-				<div class="widget-member-box options" data-ibx-type="ibxFlexGrid" data-ibxp-align="stretch">
-					<div class="heading" data-ibx-col-span="12">Options</div>
-					<div class="col-heading name" data-ibx-col-span="6">Name</div>
-					<div class="col-heading value" data-ibx-col-span="6">Default Value</div>
+			<div class="widget-info-container">
+				<div class="description"></div>
+				<div class="widget-member-box parent-widgets">
+					<div class="heading">Widget Hierarchy</div>
 				</div>
-				<div class="widget-member-box methods" data-ibx-type="ibxFlexGrid" data-ibxp-align="stretch">
-					<div class="heading" data-ibx-col-span="12">Methods</div>
-					<div class="col-heading name" data-ibx-col-span="6">Name</div>
-					<div class="col-heading value" data-ibx-col-span="6">Parameters</div>
+				<div class="widget-member-box derived-widgets">
+					<div class="heading">Derived Widgets</div>
+				</div>
+				<div class="widget-info-box" data-ibx-type="ibxHBox">
+					<div class="widget-member-box options" data-ibx-type="ibxFlexGrid" data-ibxp-align="stretch">
+						<div class="heading" data-ibx-col-span="12">Options</div>
+						<div class="col-heading name" data-ibx-col-span="6">Name</div>
+						<div class="col-heading value" data-ibx-col-span="6">Default Value</div>
+					</div>
+					<div class="widget-member-box methods" data-ibx-type="ibxFlexGrid" data-ibxp-align="stretch">
+						<div class="heading" data-ibx-col-span="12">Methods</div>
+						<div class="col-heading name" data-ibx-col-span="6">Name</div>
+						<div class="col-heading value" data-ibx-col-span="6">Parameters</div>
+					</div>
 				</div>
 			</div>
 		</article>
