@@ -216,8 +216,9 @@
 						var widgetInfo = $(e.target).data("widgetInfo");
 						var obj = JSON.stringify(widgetInfo.widget.options[widgetInfo.prop]);
 						obj = obj.replace(/(\{)|,|(\})/g, "$1\n$2\t");
-						var popup = $(sformat("<div class='prop-object-popup'><pre style='margin:4px;tab-size:3;' class='info'>{1}</pre></div>", obj)).ibxPopup(
+						var popup = $(sformat("<div class='prop-object-popup'><pre style='margin:4px;tab-size:3;' class='info'>{1}</pre></div>",obj)).ibxPopup(
 						{
+							refocusLastActiveOnClose: false,
 							position:{my:"left center", at:"right center", of:e.target}
 						});
 						popup.ibxWidget("open");
