@@ -362,15 +362,12 @@
 			{
 				flex:1 1 auto;
 				overflow:auto;
-				margin:0px;
-				padding:0px;
+				tab-size:3;
+				font-family:monospace;
+				font-size:12px;
+				padding:.5em;
 				border:1px solid #ccc;
 				border-radius:5px;
-			}
-			textarea
-			{
-				tab-size:3;
-				font-family:courier new;
 			}
 		</style>
 	</head>
@@ -390,12 +387,6 @@
 			<h1 class="title"></h1>
 			<div class="widget-info-container">
 				<div class="description"></div>
-				<div class="widget-member-box parent-widgets">
-					<div class="heading">Widget Hierarchy</div>
-				</div>
-				<div class="widget-member-box derived-widgets">
-					<div class="heading">Derived Widgets</div>
-				</div>
 				<div class="widget-info-box" data-ibx-type="ibxHBox">
 					<div class="widget-member-box options" data-ibx-type="ibxFlexGrid" data-ibxp-align="stretch">
 						<div class="heading" data-ibx-col-span="12">Options</div>
@@ -407,6 +398,12 @@
 						<div class="col-heading name" data-ibx-col-span="6">Name</div>
 						<div class="col-heading value" data-ibx-col-span="6">Parameters</div>
 					</div>
+				</div>
+				<div class="widget-member-box parent-widgets">
+					<div class="heading">Widget Hierarchy</div>
+				</div>
+				<div class="widget-member-box derived-widgets">
+					<div class="heading">Derived Widgets</div>
 				</div>
 			</div>
 		</article>
