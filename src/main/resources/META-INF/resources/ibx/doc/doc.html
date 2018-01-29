@@ -205,7 +205,7 @@
 					title.text(sformat("Method: {1}.{2}", widgetInfo.widget.widgetName, widgetInfo.method));
 
 					var content = popup.find(".content");
-					content.text(widgetInfo.fn.toString());
+					content.text(widgetInfo.fn.toString().replace("function ", "function " + widgetInfo.method));
 					popup.ibxWidget("open");
 					return false;
 				});
