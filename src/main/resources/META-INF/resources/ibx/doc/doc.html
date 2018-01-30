@@ -13,12 +13,6 @@
 
 		<script src="../resources/ibx.js" type="text/javascript"></script>
 		<script type="text/javascript">
-			var widgetMap = {};
-			function scrollToWidgetInfo(name)
-			{
-				var href = "#" + widgetMap[name].id;
-				window.location = href;
-			}
 			window.addEventListener("hashchange",function(e)
 			{
 				if(e.newURL)
@@ -37,7 +31,9 @@
 					"./ibx_application.html",
 					"./binding.html",
 					"./nameroot.html",
-					"./widgets.html"
+					"./widgets.html",
+					"./samples.html",
+					"./ibxlibrary.html",
 				];
 
 				$.each(doc, function(entry, url)
@@ -47,188 +43,26 @@
 
 					$.get({"async":false, "url":url, "dataType":"text"}).done(function(text, status, xhr)
 					{
-						var article = $(text);
-						var doc = article.find("section").addBack().uniqueId();
-						doc.each(function(idx, el)
-						{
-							el = $(el);
-							var entry = null;
-							var title = el.children("h1, h2, h3, h4, h5, h6").first();
-							if(el.is("article"))
-								entry = $(sformat("<a class='toc-entry toc-section' href='#{1}'>{2}</a>", el.prop("id"), title.text()));
-							else
-							if(el.is("section"))
-								entry = $(sformat("<a class='toc-entry toc-sub-section' href='#{1}'>{2}</a>", el.prop("id"), title.text()));
-							$(".toc").append(entry);
+						var doc = $(text);
+						$(".content").append(doc);
 
+						var articles = doc.filter("article").uniqueId();
+						articles.each(function(idx, article)
+						{
+							article = $(article);
+							tocArticle = $(sformat("<a class='toc-entry toc-section' href='#{1}'>{2}</a>", article.prop("id"), article.children("h1").text()));
+							$(".toc").append(tocArticle);
+
+							var sections = article.find("section:parent(:visible)").uniqueId();
+							sections.each(function(tocArticle, idx, el)
+							{
+								el = $(el);
+								var title = el.children("h1, h2, h3, h4, h5, h6").first();
+								var tocSection = $(sformat("<a class='toc-entry toc-sub-section' href='#{1}'>{2}</a>", el.prop("id"), title.text()));
+								tocArticle.append(tocSection);
+							}.bind(this, tocArticle));
 						});
-						$(".content").append(article);
 					});
-				});
-
-				var widgets = [];
-				var temp = $("<div>");
-				$.each($.ibi, function(type, ctor)
-				{
-					try
-					{
-						var ctor = $.ibi[type];
-						var widget = ctor.call($.ibi, {}, temp[0]);
-						var infoRow = $("body > .widget-info-row").clone().removeAttr("data-ibx-no-bind").css("display", "");
-						var article = $(".ibx-widget-info").clone().removeAttr("data-ibx-no-bind").css("display", "").uniqueId();
-						article.children(".title").text(widget.widgetName);
-
-						var arParents = [];
-						var proto = widget.__proto__;
-						while(proto)
-						{
-							if(proto.widgetName && proto.widgetName.search(/^ibx/) != -1)
-								arParents.push($(sformat("<a class='parent-widget' href='javascript:scrollToWidgetInfo(\"{1}\")'>{1}</a>", proto.widgetName)));
-							proto = proto.__proto__;
-						}
-						arParents.reverse();
-						article.find(".parent-widgets").append(arParents);
-						
-						var arDerived = [];
-						$.each(ctor._childConstructors, function(idx, derivedWidget)
-						{
-							arDerived.push($(sformat("<a class='derived-widget' href='javascript:scrollToWidgetInfo(\"{1}\")'>{1}</a>", derivedWidget.prototype.widgetName)));
-						});
-						arDerived.sort(function(d1, d2)
-						{
-							var n1 = d1[0].textContent.toLowerCase();
-							var n2 = d2[0].textContent.toLowerCase();
-							if(n1 < n2) return -1;
-							if(n2 < n1) return 1;
-							return 0;
-						});
-						article.find(".derived-widgets").append(arDerived);
-
-						var arOptions = [];
-						$.each(ctor._proto.options, function(option, value)
-						{
-							if(typeof(value) == "object" && value !== null)
-								value = "<span class='prop-object'>{object}</span>";
-							else
-							if(typeof(value) == "function")
-								value = "function";
-							else
-							if(typeof(value) == "string")
-								value = sformat("\"{1}\"", value);
-							else
-							if(value === null)
-								value = "null";
-							else
-							if(value === undefined)
-								value = "undefined";
-							else
-							if(!value)
-								value = value.toString();
-
-							var infoRow = $(sformat("<div class='name prop-info' data-ibx-col-span='6'>{1}</div><div class='value prop-info' data-ibx-col-span='6'>{2}</div>", option, value));
-							infoRow.find(".prop-object").data("widgetInfo", {"widget":widget, "prop":option, "val":value});
-							arOptions.push(infoRow);
-						});
-						arOptions.sort(function(r1, r2)
-						{
-							var n1 = r1[0].textContent.toLowerCase();
-							var n2 = r2[0].textContent.toLowerCase();
-							if(n1 < n2) return -1;
-							if(n2 < n1) return 1;
-							return 0;
-						});
-						article.find(".widget-member-box.options").append(arOptions);
-
-						arMethods = [];
-						$.each(ctor._proto, function(method, value)
-						{
-							if(method.search(/^_/) != -1 || typeof(value) != "function")
-								return;
-							
-							var sig = value.toString();
-							sig = sig.substring(sig.indexOf("("), sig.indexOf(")")+1)
-							
-							var infoRow = $(sformat("<a class='name method-info' href='' data-ibx-col-span='6'>{1}</a><a class='value method-info' href='' data-ibx-col-span='6'>{2}</a>", method, sig));
-							infoRow.data("widgetInfo", {"widget":widget, "method":method, "fn":value});
-							arMethods.push(infoRow);
-						});
-						arMethods.sort(function(r1, r2)
-						{
-							var n1 = r1[0].textContent.toLowerCase();
-							var n2 = r2[0].textContent.toLowerCase();
-							if(n1 < n2) return -1;
-							if(n2 < n1) return 1;
-							return 0;
-						});
-						article.find(".widget-member-box.methods").append(arMethods);
-
-						var widgetInfo = 
-						{
-							"id":article.prop("id"),
-							"ctor":ctor,
-							"widget":widget,
-							"tocEntry":$(sformat("<a class='toc-entry toc-ibx-widget' href='#{1}'>{2}</a>", article.prop("id"), type)),
-							"article":article
-						};
-
-						widgets.push(widgetInfo);
-						widgetMap[type] = widgetInfo;
-					}
-					catch(ex)
-					{
-						console.dir(ex);
-					}
-				});
-				widgets.sort(function(w1, w2)
-				{
-					var n1 = w1.widget.widgetName;
-					var n2 = w2.widget.widgetName;
-					if(n1 < n2) return -1;
-					if(n2 < n1) return 1;
-					return 0;
-				});
-
-				var ibxWidgetsToc = $("<div class='toc-entry toc-section'>ibx Widgets</div>");
-				ibxWidgetsToc.appendTo(".toc");
-				$.each(widgets, function(idx, widget)
-				{
-					ibxWidgetsToc.append(widget.tocEntry);
-					$(".content").append(ibx.bindElements(widget.article));
-				});
-
-				$(".method-info").on("click", function(e)
-				{
-					var widgetInfo = $(e.target).data("widgetInfo");
-					var popup = $(".info-popup").resizable();
-
-					var title = popup.find(".title");
-					title.text(sformat("Method: {1}.{2}", widgetInfo.widget.widgetName, widgetInfo.method));
-
-					var content = popup.find(".content");
-					content.text(widgetInfo.fn.toString().replace("function ", "function " + widgetInfo.method));
-					popup.ibxWidget("open");
-					return false;
-				});
-
-				$(".prop-object").on("mouseenter mouseleave", function(e)
-				{
-					if(e.type == "mouseenter")
-					{
-						var widgetInfo = $(e.target).data("widgetInfo");
-						var obj = JSON.stringify(widgetInfo.widget.options[widgetInfo.prop]);
-						obj = obj.replace(/(\{)|,|(\})/g, "$1\n$2\t");
-						var popup = $(sformat("<div class='prop-object-popup'><pre style='margin:4px;tab-size:3;' class='info'>{1}</pre></div>",obj)).ibxPopup(
-						{
-							refocusLastActiveOnClose: false,
-							position:{my:"left center", at:"right center", of:e.target}
-						});
-						popup.ibxWidget("open");
-					}
-					else
-					if(e.type == "mouseleave")
-					{
-						$(".prop-object-popup").ibxPopup("close");
-					}
 				});
 			}, true);
 		</script>
@@ -384,38 +218,6 @@
 				</div>
 			</div>
 		</div>
-
-		<article class="ibx-widget-info" data-ibx-no-bind="true" style="display:none">
-			<h1 class="title"></h1>
-			<div class="widget-info-container">
-				<div class="description"></div>
-				<div class="widget-info-box" data-ibx-type="ibxHBox">
-					<div class="widget-member-box options" data-ibx-type="ibxFlexGrid" data-ibxp-align="stretch">
-						<div class="heading" data-ibx-col-span="12">Options</div>
-						<div class="col-heading name" data-ibx-col-span="6">Name</div>
-						<div class="col-heading value" data-ibx-col-span="6">Default Value</div>
-					</div>
-					<div class="widget-member-box methods" data-ibx-type="ibxFlexGrid" data-ibxp-align="stretch">
-						<div class="heading" data-ibx-col-span="12">Methods</div>
-						<div class="col-heading name" data-ibx-col-span="6">Name</div>
-						<div class="col-heading value" data-ibx-col-span="6">Parameters</div>
-					</div>
-				</div>
-				<div class="widget-member-box parent-widgets">
-					<div class="heading">Widget Hierarchy</div>
-				</div>
-				<div class="widget-member-box derived-widgets">
-					<div class="heading">Derived Widgets</div>
-				</div>
-			</div>
-		</article>
 	</body>
-
-	<div class="info-popup" data-ibx-type="ibxPopup" data-ibxp-destroy-on-close="false" data-ibxp-moveable="true">
-		<div class="info-popup-main-box" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
-			<div class="title"></div>
-			<textarea readonly="true" wrap="off" class="content"></textarea>
-		</div>
-	</div>
 </html>
 
