@@ -50,7 +50,7 @@
 						articles.each(function(idx, article)
 						{
 							article = $(article);
-							tocArticle = $(sformat("<a class='toc-entry toc-section' href='#{1}'>{2}</a>", article.prop("id"), article.children("h1").text()));
+							tocArticle = $(sformat("<a class='toc-entry toc-section' href='#{1}'>{2}</a>", article.prop("id"), article.children("h1, h2, h3, h4, h5, h6").text()));
 							$(".toc").append(tocArticle);
 
 							var sections = article.find("section:parent(:visible)").uniqueId();
@@ -107,103 +107,6 @@
 			{
 				font-weight:normal;
 				margin-left:1.5em;
-			}
-			.toc-ibx-widget
-			{
-				margin-left:1.5em;
-			}
-
-			.ibx-widget-info
-			{
-				margin-bottom:10px;
-			}
-			.ibx-widget-info .title
-			{
-				display:inline-block;
-				color:white;
-				background-color:#a5c0e5;
-				border-radius:5px;
-				margin-bottom:0px;
-				padding:3px;
-			}
-			.widget-info-container
-			{
-				padding-left:15px;
-			}
-			.ibx-widget-info .description
-			{
-				margin-top:1em;
-			}
-			.widget-info-box
-			{
-			}
-			.widget-member-box
-			{
-				flex:0 1 40%;
-				padding:5px;
-				border:1px solid #ddd;
-				border-radius:5px;
-				margin:5px;
-			}
-			.ibx-widget-info .heading
-			{
-				font-size:1.25em;
-				font-weight:bold;
-				margin-bottom:5px;
-			}
-			.ibx-widget-info .col-heading
-			{
-				font-weight:bold;
-				margin-bottom:7px;
-				text-decoration:underline;
-			}
-			.name, .value
-			{
-				margin-bottom:5px;
-			}
-			.prop-object
-			{
-				font-weight:bold;
-			}
-
-			.parent-widget
-			{
-				margin-right:7px;
-			}
-			.derived-widget
-			{
-				margin-right:7px;
-			}
-			.info-popup
-			{
-				width:500px;
-				height:400px;
-			}
-			.info-popup-main-box
-			{
-				position:absolute;
-				left:0px;
-				top:0px;
-				right:0px;
-				bottom:0px;
-				padding:10px;
-			}
-			.info-popup .title
-			{
-				font-size:1.5em;
-				font-weight:bold;
-				margin-bottom:3px;
-			}
-			.info-popup-main-box .content
-			{
-				flex:1 1 auto;
-				overflow:auto;
-				tab-size:3;
-				font-family:monospace;
-				font-size:12px;
-				padding:.5em;
-				border:1px solid #ccc;
-				border-radius:5px;
 			}
 		</style>
 	</head>

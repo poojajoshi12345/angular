@@ -42,17 +42,28 @@
 	});
 
 	var path = ibx.getPath();
-	var sampleSection = $(".ibx-samples")
+	var sampleSelect = $(".select-sample")
 	$(samples).each(function(idx, item)
 	{
-		var anchor = $(sformat("<a href='{1}{2}' target='sampleFrame'>{3}</a>, ", path, item.url, item.name));
-		sampleSection.append(anchor);
+		var option = $(sformat("<option value='{1}'>{2}</option>", item.url, item.name));
+		option.data("sampleInfo", item);
+		sampleSelect.append(option);
 	});
+
+	sampleSelect.on("change", function(e)
+	{
+		$(".ibx-sample-frame").prop("contentWindow").location.href = e.target.value;
+	});
+
 </script>
 <style type="text/css">
 	.ibx-samples > a
 	{
 		margin-right:5px;
+	}
+	.ibx-samples
+	{
+		margin-bottom:5px;
 	}
 	.ibx-sample-frame
 	{
@@ -63,7 +74,11 @@
 <article>
 	<h1>Samples</h1>
 	<section>
-		<div class="ibx-samples"></div>
+		<div class="ibx-samples">
+			<select class="select-sample">
+				<option>Pick an ibx Sample</option>
+			</select>
+		</div>
 		<iframe name="sampleFrame" class="ibx-sample-frame"/>
 	</section>
 </article>
