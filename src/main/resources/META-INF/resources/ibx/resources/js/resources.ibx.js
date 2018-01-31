@@ -43,10 +43,14 @@ _p.language = null;
 _p.strings = null;
 _p.getString = function(id, def, language)
 {
-	//make sure language is loaded...or, fallback to ibx_default
+	//make sure language is loaded...or, cascade back to ibx_default
 	language = language || this.language;
 	if(!this.strings[language])
-		language = "ibx_default";
+	{
+		language = language.substr(0, 2);
+		if(!this.strings[language])
+			language = "ibx_default";
+	}
 
 	//string not found...bad!
 	if(!this.strings[language][id] === undefined)
@@ -57,6 +61,8 @@ _p.getString = function(id, def, language)
 };
 _p.addStringBundle = function(bundle, defLang)
 {
+	if(!bundle.language)
+		bundle.language = "ibx_default";
 	this.strings[bundle.language] = $.extend(this.strings[bundle.language], bundle.strings);
 	if(defLang)
 		this.language = bundle.language;
@@ -111,9 +117,7 @@ _p._onBundleFileProgress = function()
 };
 _p._onBundleFileLoadError = function(xhr, status, msg)
 {
-	var e = $(window).dispatchEvent("ibx_resmgr", {"hint":"load_error", "loadDepth":this._loadDepth, "resMgr":this, "bundle":null, "xhr":xhr, "status":status, "msg":msg});
-	if(!e.defaultPrevented)
-		console.error(status, msg, xhr.responseText);
+	$(window).dispatchEvent("ibx_resmgr", {"hint":"load_error", "loadDepth":this._loadDepth, "resMgr":this, "bundle":null, "xhr":xhr, "status":status, "msg":msg});
 };
 
 _p.loadExternalResFile = function(elFile)
@@ -176,9 +180,7 @@ _p.loadExternalResFile = function(elFile)
 //if something bad happens while retrieving a source file in the bundle.
 _p._resFileRetrievalError = function(src, xhr, status, msg)
 {
-	var e = $(window).dispatchEvent("ibx_resmgr", {"hint":"fileloaderror", "loadDepth":this._loadDepth, "resMgr":this, "bundle":null, "src":src, "xhr":xhr, "status":status, "msg":msg});
-	if(!e.defaultPrevented)
-		console.error(status, msg, xhr.responseText);
+	$(window).dispatchEvent("ibx_resmgr", {"hint":"fileloaderror", "loadDepth":this._loadDepth, "resMgr":this, "bundle":null, "src":src, "xhr":xhr, "status":status, "msg":msg});
 };
 
 _p.getResPath = function(src, loadContext)
