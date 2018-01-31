@@ -276,7 +276,10 @@ ibx.bindElements = function(elements)
 				//construct the widget...problem is that there is a dependency on ibi widget's here...fix this!
 				var widgetType = element.attr("data-ibx-type");
 				if($.ibi[widgetType])
+				{
 					var widget = $.ibi[widgetType].call($.ibi, {}, element);
+					element.data("ibxIsBound", true);//mark this element as having been bound.
+				}
 				else
 				{
 					console.error("Unknown ibxWidget type:", widgetType, element[0]);
@@ -284,9 +287,6 @@ ibx.bindElements = function(elements)
 				}
 			}
 		}
-
-		//mark this element as having been bound.
-		element.data("ibxIsBound", true);
 	}.bind(this));
 	return elBind;
 };
