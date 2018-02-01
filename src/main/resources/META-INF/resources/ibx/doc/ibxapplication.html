@@ -1,16 +1,21 @@
 <!--Copyright 1996-2016 Information Builders, Inc. All rights reserved.-->
 <!--$Revision$:-->
 <script type="text/javascript">
-	var app = $.get("./samples/helloworld/helloworld.jsp").done(function(content, status, xhr)
+	var path = "./samples/helloworld/"
+	var app = $.get(path + "helloworld.jsp").done(function(path, content, status, xhr)
 	{
 		content = content.replace(/</g, "&lt;");
 		$(".figure-helloworld-app").append(content);
-	});
-	var app = $.get("./samples/helloworld/resources/helloworld.res.xml").done(function(content, status, xhr)
+	}.bind(this, path));
+	path += "resources/";
+	var app = $.get(path + "helloworld.res.xml").done(function(path, content, status, xhr)
 	{
 		content = content.documentElement.outerHTML.replace(/</g, "&lt;");
+		content = content.replace(/(src=")(.*")/g, sformat("<a class='src-file-link' target='_blank' href=\"{1}$2\">$1$2</a>", path));
 		$(".figure-helloworld-resbundle").append(content);
-	});
+	}.bind(this, path));
+
+	ibx.resourceMgr.addBundle("../doc/samples/helloworld/resources/helloworld.res.xml");
 </script>
 <article>
 	<h1 data-title="ibx Application">Basic ibx Application</h1>
@@ -57,17 +62,18 @@
 </article>
 <article>
 	<h1 data-title="ibx Application">Resource Bundles</h1>
-		Resource bundles are simple xml files that tie together all of an ibx module's assets.
+		Resource bundles are simple xml files that tie together all of an ibx module's assets and dependencies.
 	<section>
-		<h4>Simple Resource Bundle</h4>
+		<h4 id="simpleResBundle">Simple Resource Bundle</h4>
 		<pre class="figure-helloworld-resbundle"></pre>
 	</section>
 
 	<section>
 		<h4>Some things to know about resource bundles</h4>
 		<ol>
+			<li style="color:red;font-weight:bold;">There are no ibx specific best practices regarding how you manage your resources.  It depends on your situation and preferences.
 			<li>Bundles can contain any xml markup you like.  You should treat them as a place to organize ALL of the things your specific app needs to run.</li>
-			<li>Bundles don't have to have all the sections.</li>
+			<li>Bundles don't have to have all the sections (just the ones you need).</li>
 			<li>The sections "&lt;strings>, &lt;styles>, etc" are just for readability, they are not relevent to the processing.</li>
 			<li>You can organize your assets any way you please.  The 'src' attribute of the varous file types can point to any valid url.</li>
 			<li>Bundles are processed in the following order (first external files, then inline by type):
@@ -82,4 +88,17 @@
 			</li>
 		</ol>
 	</section>
+</article>
+<article>
+	<h1 data-title="ibx Application">ibxResourceManager</h1>
+		The ibxResourceManager is responsible for:
+		<ol>
+			<li>Loading resources bundles, and all associated files (css/strings/markup/javascript/other resource bundles).</li>
+			<li>Retrieving loaded resources and, if desired, bringing them into a running state (get me this widget!).</li>
+			<li>Manging loaded string bundles by langauge, and finding string based on langauge settings (with cascading en-us -> en -> ibx_default).</li>
+			<li>Replacing string tokens with runtime string values (for translatable strings)</li>
+		</ol>
+
+		So, let's say you wanted to load the "helloworld.res.xml" resource bundle (shown <a href="#simpleResBundle">here</a>), but not the ibx app, you would do the following (path is relative to ibx.js by default):
+		<pre>ibx.resourceMgr.addBundle("../doc/samples/helloworld/resources/helloworld.res.xml");</pre>
 </article>
