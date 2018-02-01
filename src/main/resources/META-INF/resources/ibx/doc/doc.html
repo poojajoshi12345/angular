@@ -30,7 +30,7 @@
 					"./intro.html",
 					"./ibxapplication.html",
 					"./samples.html",
-					"./xibxlibrary.html",
+					"./ibxlibrary.html",
 				];
 
 				$.each(doc, function(entry, url)
@@ -47,7 +47,7 @@
 						articles.each(function(idx, article)
 						{
 							article = $(article);
-							tocArticle = $(sformat("<a class='toc-entry toc-section' href='#{1}'>{2}</a>", article.prop("id"), article.children("h1, h2, h3, h4, h5, h6").text()));
+							tocArticle = $(sformat("<a class='toc-entry toc-section' href='#{1}'>{2}</a>", article.prop("id"), article.children("h1, h2, h3, h4, h5, h6").first().text()));
 							$(".toc").append(tocArticle);
 
 							var sections = article.find("section:parent(:visible)").uniqueId();
