@@ -6,6 +6,11 @@
 		content = content.replace(/</g, "&lt;");
 		$(".figure-helloworld-app").append(content);
 	});
+	var app = $.get("./samples/helloworld/resources/helloworld.res.xml").done(function(content, status, xhr)
+	{
+		content = content.documentElement.outerHTML.replace(/</g, "&lt;");
+		$(".figure-helloworld-resbundle").append(content);
+	});
 </script>
 <article>
 	<h1 data-title="ibx Application">Basic ibx Application</h1>
@@ -49,4 +54,22 @@
 			&lt;div data-ibx-type="ibxWidget" data-ibxp-xxx.subOption="value">&lt;/div>
 		</pre>
 	</section>
+</article>
 <article>
+	<h1 data-title="ibx Application">Resource Bundles</h1>
+		Resource bundles are simple xml files that tie together all of an ibx module's assets.
+	<section>
+		<h4>Simple Resource Bundle</h4>
+		<pre class="figure-helloworld-resbundle"></pre>
+	</section>
+
+	<section>
+		<h4>Some things to know about resource bundles</h4>
+		
+		1. Bundles can contain any xml markup you like.
+		<p/>
+		2. Bundles don't have to have all the sections.
+		<p/>
+		3. The sections "&lt;strings>, &lt;styles>, etc" are just for readability, they are not relevent to the processing.
+	</section>
+</article>
