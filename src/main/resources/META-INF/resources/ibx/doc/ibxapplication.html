@@ -20,7 +20,7 @@
 		<pre class="figure-helloworld-app"></pre>
 	</section>
 	<section>
-		<h4>Binding Properties in detail</h4>
+		<h4>Binding Widget Properties in detail</h4>
 		There are actually serveral ways you can set the properties of a widget via markup.  The most simple way is mentioned above...data-ibxp-xxx...but, 
 		this can be verbose if you are setting a lot of properties.
 		
@@ -65,11 +65,21 @@
 
 	<section>
 		<h4>Some things to know about resource bundles</h4>
-		
-		1. Bundles can contain any xml markup you like.
-		<p/>
-		2. Bundles don't have to have all the sections.
-		<p/>
-		3. The sections "&lt;strings>, &lt;styles>, etc" are just for readability, they are not relevent to the processing.
+		<ol>
+			<li>Bundles can contain any xml markup you like.  You should treat them as a place to organize ALL of the things your specific app needs to run.</li>
+			<li>Bundles don't have to have all the sections.</li>
+			<li>The sections "&lt;strings>, &lt;styles>, etc" are just for readability, they are not relevent to the processing.</li>
+			<li>You can organize your assets any way you please.  The 'src' attribute of the varous file types can point to any valid url.</li>
+			<li>Bundles are processed in the following order (first external files, then inline by type):
+				<ol>
+					<li>Dependent resource bundles</li>
+					<li>Strings</li>
+					<li>CSS</li>
+					<li>Markup</li>
+					<li>Javascript</li>
+					<li>Package resource bundles</li>
+				</ol>
+			</li>
+		</ol>
 	</section>
 </article>
