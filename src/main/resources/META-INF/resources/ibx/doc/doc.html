@@ -28,12 +28,14 @@
 				var doc = 
 				[
 					"./intro.html",
-					"./ibx_application.html",
+					"./ibxapplication.html",
+					/*
 					"./binding.html",
 					"./nameroot.html",
 					"./widgets.html",
 					"./samples.html",
 					"./ibxlibrary.html",
+					*/
 				];
 
 				$.each(doc, function(entry, url)
@@ -77,9 +79,36 @@
 				box-sizing:border-box;
 				tab-size:4;
 			}
+			pre
+			{
+				user-select:text;
+				background-color:#efefef;
+				margin:5px 1em;
+				overflow:hidden;
+				white-space:pre-wrap;
+			}
+			.ibx-doc-title-box img
+			{
+				width:100px;
+				height:auto;
+			}
+			.ibx-doc-title
+			{
+				font-size:3em;
+				font-weight:bold;
+			}
+			.ibx-doc-sub-title
+			{
+				font-weight:bold;
+				color:#bbb;
+			}
 			article
 			{
 				margin-bottom:1em;
+			}
+			article h1
+			{
+				font-size:2em;
 			}
 			.toc, .content
 			{
@@ -115,9 +144,12 @@
 			<div class="toc" data-ibx-type="ibxVBox" data-ibxp-align="stretch"></div>
 			<div data-ibx-type="ibxSplitter"></div>
 			<div class="content" data-ibx-type="ibxWidget">
-				<div data-ibx-type="ibxVBox" data-ibxp-align="center" data-ibxp-justify="center">
-					<a href="https://www.google.com/search?q=ibex&rlz=1C1CHBF_enUS757US757&source=lnms&tbm=isch&sa=X&ved=0ahUKEwj7tMCGvfbYAhVOGt8KHQyYBL8Q_AUICigB&biw=1546&bih=837"><img src="../resources/css/images/ibx.png"/></a>
-					<div class="title" data-ibx-type="ibxLabel">ibx Info</div>
+				<div class="ibx-doc-title-box" data-ibx-type="ibxVBox" data-ibxp-align="center" data-ibxp-justify="center">
+					<a href="https://en.wikipedia.org/wiki/Alpine_ibex" target="_blank">
+						<img src="../resources/css/images/ibx.png"/>
+					</a>
+					<div class="ibx-doc-title" data-ibx-type="ibxLabel">ibx</div>
+					<div class="ibx-doc-sub-title">(This is preliminary, and constantly under construction!)</div>
 				</div>
 			</div>
 		</div>

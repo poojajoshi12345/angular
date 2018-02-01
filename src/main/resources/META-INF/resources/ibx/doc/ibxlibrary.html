@@ -129,11 +129,12 @@
 		return 0;
 	});
 
-	var widgetsArticle = $(".ibx-widgets-article");
+	var widgetsArticle = $(".ibx-widgets-library-article");
 	$.each(widgets, function(idx, widget)
 	{
 		widgetsArticle.append(widget.section);
 	});
+
 	ibx.bindElements(widgetsArticle);
 
 	$(".method-info").on("click", function(e)
@@ -269,7 +270,7 @@
 	}
 </style>
 
-<article class="ibx-widgets-article">
+<article class="ibx-widgets-library-article">
 	<h1>ibx Widget Library</h1>
 </article>
 

@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ibx-res-bundle name="ibfs_bundle.xml">
+	<res-bundles>
+	</res-bundles>
+	
+	<strings>
+		<string-bundle>
+			<![CDATA[
+			]]>
+		</string-bundle>
+	</strings>
+
+	<styles>
+		<style-sheet>
+			<![CDATA[
+				.ibfs-explore-dialog
+				{
+					width:435px;
+					height:300px;
+				}
+				.ibfs-explore-tool-bar
+				{
+					flex:0 0 auto;
+					font-size:2em;
+					margin-bottom:3px;
+				}
+				.ibfs-explore-folder-box
+				{
+					flex:1 1 auto;
+					font-size:.5em;
+					border:1px solid #ddd;
+					padding:3px;
+					margin-right:3px;
+				}
+				.ibfs-explore-file-box
+				{
+					flex:1 1 1px;
+					overflow:auto;
+					border-top:1px solid #ccc;
+					border-bottom:1px solid #ccc;
+				}
+				.ibfs-explore-fname-box
+				{
+					padding:10px;
+				}
+				.ibfs-explore-fname-label
+				{
+					margin-right:5px;
+				}
+				.ibfs-explore-fname-text
+				{
+					flex:1 1 auto;
+				}
+				.ibfs-item
+				{
+					flex:0 0 auto;
+				},
+				.ibfs-explore-item-folder
+				{
+				}
+				.ibfs-explore-item-file
+				{
+					flex:0 0 auto;
+					margin-right:.25em;
+				}
+				.ibfs-explore-tool-bar > .ibx-radio-button
+				{
+					color:#aaa;
+					padding:0px;
+					border:none;
+					border-radius:0px;
+					box-shadow:none;
+				}
+				.ibfs-explore-tool-bar > .ibx-radio-button.checked
+				{
+					background-color:transparent;
+					color:black;
+				}
+				.ibfs-explore-tool-bar > .ibx-radio-button:focus
+				{
+					box-shadow:0 0 1px 0 black;
+				}
+			]]>
+		</style-sheet>
+	</styles>
+
+	<markup>
+		<markup-block>
+			<div class="ibfs-explore-dialog" data-ibx-name-root="true" data-ibx-type="ibfsExploreDialog" data-ibxp-auto-size="false">
+				<div class="ibfs-explore-tool-bar" data-ibx-type="ibxHBox" data-ibxp-align="center">
+					<div class="ibfs-explore-folder-box" data-ibx-type="ibxHBox" data-ibx-name="folderBox" data-ibxp-align="center"></div>
+					<div data-ibx-type="ibxRadioGroup" data-ibx-name="rgViewAs" data-ibxp-name="rgViewAs"></div>
+					<div tabindex="0" data-ibxp-user-value="details" data-ibx-type="ibxRadioButton" data-ibxp-group="rgViewAs" title="View as details" data-ibxp-glyph="view_list" data-ibxp-glyph-classes="material-icons"></div>
+					<div tabindex="0" data-ibxp-user-value="list" data-ibx-type="ibxRadioButton" data-ibxp-group="rgViewAs" title="View as List" data-ibxp-glyph="view_comfy" data-ibxp-glyph-classes="material-icons"></div>
+					<div tabindex="0" data-ibxp-user-value="thumbs" data-ibx-type="ibxRadioButton" data-ibxp-group="rgViewAs" title="View as Thumbnails" data-ibxp-glyph="image" data-ibxp-glyph-classes="material-icons"></div>
+				</div>
+				<div class="ibfs-explore-file-box" data-ibx-type="ibxVBox" data-ibx-name="fileBox" data-ibxp-justify="start" data-ibxp-wrap="true">
+				</div>
+				<div class="ibfs-explore-fname-box" data-ibx-type="ibxHBox" data-ibx-name="fnameBox" data-ibxp-align="center">
+					<div class="ibfs-explore-fname-label" data-ibx-type="ibxLabel" data-ibxp-text="Filename:" data-ibxp-for-id="txtFilename"></div>
+					<div class="ibfs-explore-fname-text" data-ibx-type="ibxTextField" data-ibx-name="txtFilename" data-ibxp-for-id="txtFilename"></div>
+				</div>
+			</div>
+		</markup-block>
+	</markup>
+
+	<scripts>
+		<script-block name="ibfs_script_block">
+			<![CDATA[
+				$.widget("ibi.ibfsExploreDialog", $.ibi.ibxDialog, 
+				{
+					options:
+					{
+						autoClose:true,
+						modal:false,
+						rootPath:"IBFS:",
+						ctxPath:"IBFS:",
+						viewAs:"list"
+					},
+					_ibfs:null,
+					_create:function()
+					{
+						this._super();
+						this.element.resizable();
+						this.rgViewAs.on("ibx_change", this._onViewAs.bind(this));
+						$(window).on("ibfs_list_items", this._onListItems.bind(this));
+					},
+					_onViewAs:function(e)
+					{
+						var rg = $(e.target);
+						this.option("viewAs", rg.ibxWidget("userValue"));
+					},
+					_onListItems:function(e, exInfo)
+					{
+						var path = exInfo.parms.IBFS_path;
+						this.option("caption", "Browsing - " + path);
+
+						this.folderBox.empty();
+						var curPath = "";
+						var arPath = path.split("/");
+						$.each(arPath, function(idx, item)
+						{
+							var options = 
+							{
+								class:"ibfs-item ibfs-explore-folder",
+								text: item,
+								glyph: "folder",
+								glyphClasses: "material-icons"
+							};
+
+							curPath += (idx == 0) ? item : ("/" + item)
+							var folderItem = $("<div tabIndex='0'>").ibxLabel(options).data("ibfsPath", curPath);
+							folderItem.on("click", this._onFolderClick.bind(this));
+							this.folderBox.append(folderItem);
+						}.bind(this));
+
+						this.fileBox.empty();
+						$.each(exInfo.result, function(idx, item)
+						{
+							var options = 
+							{
+								class: "ibfs-item " + (item.container ? "ibfs-explore-folder" : "ibfs-explore-item-file"),
+								text:item.description || item.name,
+								glyph: item.container ? "folder" : "insert_drive_file",
+								glyphClasses: "material-icons"
+							};
+							var item = $("<div tabIndex='0'>").ibxLabel(options).data("ibfsItem", item);
+							item.on("click", this._onFileClick.bind(this));
+							item.on("dblclick", this._onFileDblClick.bind(this));
+							this.fileBox.append(item);
+						}.bind(this));
+					},
+					_onFolderClick:function(e)
+					{
+						var path = $(e.currentTarget).data("ibfsPath");
+						Ibfs.load().done(function(folderItem, ibfs)
+						{
+							ibfs.listItems(path, null, null, {asJSON:true});
+						}.bind(this, path));
+					},
+					_onFileClick:function(e)
+					{
+						var item = $(e.currentTarget);
+						var ibfsItem = item.data("ibfsItem");
+						if(!ibfsItem.container)
+							this.txtFilename.ibxWidget("option", "text", ibfsItem.name);
+					},
+					_onFileDblClick:function(e)
+					{
+						var item = $(e.currentTarget);
+						var ibfsItem = item.data("ibfsItem");
+						if(ibfsItem.container)
+							this.option("ctxPath", ibfsItem.fullPath);
+					},
+					refresh:function()
+					{
+						this._super();
+						var options = this.options;
+
+						if(this.options.ctxPath != this._ctxPath)
+						{
+							Ibfs.loaded.done(function(ibfs)
+							{
+								this._ibfs = ibfs;
+								this._ctxPath = this.options.ctxPath;
+								ibfs.listItems(this.options.ctxPath, null, null, {asJSON:true});
+							}.bind(this));
+						}
+
+						if(options.viewAs == "list" || options.viewAs == "thumbs")
+							this.fileBox.ibxWidget("option", {wrap:true});
+						else
+						if(options.viewAs == "details")
+							this.fileBox.ibxWidget("option", {wrap:false});
+					}
+				});
+				//# sourceURL=ibfs_bundle_script
+			]]>
+		</script-block>
+	</scripts>
+</ibx-res-bundle>

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ibx-res-bundle name="resbundle2.xml" loadContext="bundle">
+	<strings>
+		<string-file src="./resbundle2_strings.txt"/>
+		<string-bundle>
+			<![CDATA[
+			{
+				"language":"en",
+				"strings":
+				{
+					"RESBUNDLE2_INLINE_STRING":"resbundle2.xml inline string"
+				}
+			}
+		]]>
+		</string-bundle>
+	</strings>
+
+	<styles>
+		<style-file src="./resbundle2_styles.css"/>
+		<style-sheet>
+		<![CDATA[
+			.resbundle2-label
+			{
+				font-size:24px;
+				font-weight:bold;
+				color:blue;
+			}
+		]]>
+		</style-sheet>
+	</styles>
+
+	<markup>
+		<markup-file src="./resbundle2_markup.xml"/>
+		<markup-block>
+			<div class="resbundle2-label" data-ibx-type="ibxLabel">resbundle2.xml ibxLabel</div>
+		</markup-block>
+	</markup>
+
+	<scripts>
+		<script-file src="./resbundle2_script.js"/>
+		<script-block>
+		<![CDATA[
+			function resbundle2()
+			{
+				return "Called: resbundle2()";
+			}
+			//# sourceURL=resbundle2.xml
+		]]>
+		</script-block>
+	</scripts>
+</ibx-res-bundle>

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ibx-res-bundle name="resbundle.xml" loadContext="bundle">
+
+	<res-bundles>
+		<ibx-res-bundle src="./resbundle2/resbundle2.xml"/>
+	</res-bundles>
+
+	<strings>
+		<!--
+		<string-file src="../../rb/ibx/com.ibi.intl.ibfssecurity.ibfssecurity" loadContext="ibx"/>
+		-->
+		<string-file src="./strings/resbundle_strings.txt"/>
+		<string-bundle>
+		<![CDATA[
+			{
+				"language":"en",
+				"strings":
+				{
+					"RESBUNDLE_INLINE_STRING":"resbundle.xml inline string",
+					"STRSUB1":"String Substitution 1",
+					"STRSUB2":"String Substitution 2",
+					"STRSUB3":"String Substitution 3",
+					"CSS_COLOR":"red"
+				}
+			}
+		]]>
+		</string-bundle>
+	</strings>
+
+	<styles>
+		<style-file src="./css/resbundle_styles.css"/>
+		<style-sheet>
+		<![CDATA[
+			.resbundle-label,.resbundle-strings
+			{
+				font-size:18px;
+				font-weight:bold;
+				color:@ibxString("CSS_COLOR");
+			}
+		]]>
+		</style-sheet>
+	</styles>
+
+	<markup>
+		<markup-file src="./markup/resbundle_markup.xml"/>
+		<markup-block>
+			<div class="resbundle-label" data-ibx-type="ibxLabel" data-ibxp-text="@ibxString('RESBUNDLE_INLINE_STRING')">
+			</div>
+			<div class="resbundle-strings" data-ibx-type="ibxWidget">
+				STRSUB1: @ibxString("STRSUB1"), STRSUB2: @ibxString("STRSUB2"), STRSUB3:  @ibxString("STRSUB3")
+			</div>
+		</markup-block>
+	</markup>
+
+	<scripts>
+		<script-file src="./src/resbundle_script.js"/>
+		<script-block>
+		<![CDATA[
+			function resbundle()
+			{
+				return "Called: resbundle()";
+			}
+			//# sourceURL=resbundle.xml
+		]]>
+		</script-block>
+	</scripts>
+</ibx-res-bundle>

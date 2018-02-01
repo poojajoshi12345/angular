@@ -1,0 +1,52 @@
+<!--Copyright 1996-2016 Information Builders, Inc. All rights reserved.-->
+<!--$Revision$:-->
+<script type="text/javascript">
+	var app = $.get("./samples/helloworld/helloworld.jsp").done(function(content, status, xhr)
+	{
+		content = content.replace(/</g, "&lt;");
+		$(".figure-helloworld-app").append(content);
+	});
+</script>
+<article>
+	<h1 data-title="ibx Application">Basic ibx Application</h1>
+	A basic ibx application is very simple.  It's just an html file that includes 'ibx.js', and has an 'ibx()' main function.
+	<section>
+		<h4>Basic application skeleton</h4>
+		<pre class="figure-helloworld-app"></pre>
+	</section>
+	<section>
+		<h4>Binding Properties in detail</h4>
+		There are actually serveral ways you can set the properties of a widget via markup.  The most simple way is mentioned above...data-ibxp-xxx...but, 
+		this can be verbose if you are setting a lot of properties.
+		
+		<p/>
+		With that in mind, you can set multiple options at once using a JSON type method:
+		<pre>
+			&lt;!-- Note: when you set the PROPERTIES via JSON, the attribute is data-ibx-, not data-ibxp! -->
+			&lt;div data-ibx-type="ibxWidget" data-ibx-options="{'option1':'value1', 'option2':'value2'}">&lt;/div>
+		</pre>
+
+		<p/>
+		Additionally, if the option you are setting is itself an object:
+		<pre>
+			&lt;!-- Note: when you set a specific OPTION via JSON, the attribute is data-ibxp-, not data-ibx! -->
+			&lt;div data-ibx-type="ibxWidget" data-ibxp-xxx="{'option1':'value1', 'option2':'value2'}">&lt;/div>
+		</pre>
+
+		<p/>
+		Finally, if you are setting a property of an option that is an object:
+		<pre>
+			//the widget's options, with a sub object called xxx with a property subOption:
+			options:
+			{
+				xxx:
+				{
+					subOption:""
+				}
+			}
+
+			&lt;!-- setting xxx from markup -->
+			&lt;div data-ibx-type="ibxWidget" data-ibxp-xxx.subOption="value">&lt;/div>
+		</pre>
+	</section>
+<article>

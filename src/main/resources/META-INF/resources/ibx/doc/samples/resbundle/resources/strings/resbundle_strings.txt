@@ -1,0 +1,7 @@
+{
+	"language":"en",
+	"strings":
+	{
+		"RESBUNDLE_EXTERNAL_STRING":"resbundle_strings.txt imported string"
+	}
+}

@@ -1,0 +1,347 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ibx-res-bundle name="dragdrop_bundle.xml" loadContext="bundle">
+	<strings>
+		<string-bundle>
+			<![CDATA[
+			{
+				"language":"en",
+				"strings":
+				{
+					"STR_MENU_NEW":"New",
+					"STR_MENU_OPTIONS":"Options...",
+					"STR_MENU_QUIT":"Quit"
+				}
+			}
+		]]>
+		</string-bundle>
+	</strings>
+
+	<styles>
+		<style-sheet>
+			<![CDATA[
+			.game-box
+			{
+				flex:1 1 auto;
+				padding:5px;
+			}
+			.game-menu-bar
+			{
+				font-size:18px;
+				padding:5px;
+				margin-bottom:5px;
+				border:1px solid #ccc;
+				border-radius:3px;
+			}
+			.new-game-button
+			{
+				padding:5px;
+				border-radius:5px;
+				border:2px solid black;
+				margin-left:5px;
+				transition:background-color .5s;
+				mix-blend-mode:overlay;
+				color:white;
+			}
+			.tile-count-label
+			{
+				margin-left:10px;
+			}
+			.tile-count
+			{
+				flex:0 0 3em;
+				margin-left:5px;
+				border:1px solid #ccc;
+			}
+			.tile-score-label
+			{
+				margin-left:20px;
+			}
+			.tile-score-count
+			{
+				flex:0 0 3em;
+				margin-left:5px;
+				border:1px solid #ccc;
+			}
+			.menu-spacer
+			{
+				flex:1 1 auto;
+			}
+			.game-board
+			{
+				position:relative;
+				flex:1 1 auto;
+				border:1px solid #ccc;
+				border-radius:3px;
+				padding:5px;
+				oveflow:auto;
+			}
+			.game-tile
+			{
+				position:absolute;
+				background-size:contain;
+				background-repeat:no-repeat;
+				background-position:center;
+				outline:none;
+			}
+
+			.tile-type-1
+			{
+				background-image:url('ren1.png');
+			}
+			.tile-type-2
+			{
+				background-image:url('ren2.png');
+			}
+			.tile-type-3
+			{
+				background-image:url('stimpy1.png');
+			}
+			.tile-type-4
+			{
+				background-image:url('stimpy2.png');
+			}
+
+			.game-over
+			{
+				position:absolute;
+				z-index:9999;
+				left:0px;
+				top:0px;
+				right:0px;
+				bottom:0px;
+			}
+			.game-over-label
+			{
+				color:silver;
+				font-size:3em;
+				font-weight:bold;
+				background-color:white;
+				border:1px solid #ccc;
+				border-radius:5%;
+				padding:20px;
+				box-shadow:5px 5px 10px 0px #ccc;
+				transform:scale(0);
+				transition:transform 1s ease-in-out;
+			}
+			.game-over-label.open
+			{
+				transform:scale(1);
+			}
+
+			.custom-drag-cursor
+			{
+				opacity:.75;
+				width:64px;
+				height:64px;
+			}
+
+			.tile-drop-target
+			{
+			}
+		]]>
+		</style-sheet>
+	</styles>
+
+	<markup>
+		<markup-block>
+			<div class="game-over" data-ibx-type="ibxHBox" data-ibx-name-root="true" data-ibxp-align="center" data-ibxp-justify="center">
+				<div class="game-over-label" data-ibx-name="_label" data-ibx-type="ibxLabel" data-ibxp-icon="./renstimpy.png" data-ibxp-icon-position="top">You eeeeeediot...GAME OVER!</div>
+			</div>
+			<div class="game-box" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
+				<div class="game-menu-bar" data-ibx-type="ibxHBox" data-ibxp-align="center">
+					<div class="new-game-button" data-ibx-name="_btnNewGame" data-ibx-type="ibxButtonSimple" data-ibxp-glyph-classes="fa fa-trophy" title="New Game!"></div>
+					<div class="menu-spacer"></div>
+					<div class="tile-count-label" data-ibx-type="ibxLabel">Tile Count:</div>
+					<div class="tile-count" data-ibx-name="_tileCount" data-ibx-type="ibxLabel" data-ibxp-justify="center">- -</div>
+					<div class="tile-score-label" data-ibx-type="ibxLabel">Score:</div>
+					<div class="tile-score-count" data-ibx-name="_tileScore" data-ibx-type="ibxLabel" data-ibxp-justify="center">- -</div>
+					<div class="menu-spacer"></div>
+					<div data-ibx-type="ibxMenuButton" data-ibxp-glyph-classes="fa fa-cogs">
+						<div data-ibx-type="ibxMenu" data-ibx-name="_menuNew">
+							<div data-ibx-type="ibxMenuItem" data-user-data="options" data-ibxp-glyph-classes="fa fa-cog">@ibxString("STR_MENU_OPTIONS")</div>
+							<div data-ibx-type="ibxMenuSeparator"></div>
+							<div data-ibx-type="ibxMenuItem" data-user-data="quit" data-ibxp-glyph-classes="fa fa-times">@ibxString("STR_MENU_QUIT")</div>
+						</div>
+					</div>
+				</div>
+				<div class="game-board" data-ibx-name="_gameBoard" data-ibx-type="ibxWidget">
+				</div>
+			</div>
+		</markup-block>
+	</markup>
+
+	<scripts>
+		<script-block>
+			<![CDATA[
+			function getRandomInt(min, max)
+			{
+			  min = Math.ceil(min);
+			  max = Math.floor(max);
+			  return Math.floor(Math.random() * (max - min)) + min; //The maximum is exclusive and the minimum is inclusive
+			}
+
+			$.widget("ibi.genericGame", $.ibi.ibxWidget, 
+			{
+				options:
+				{
+					nameRoot:true,
+					speed:500,
+					maxTiles:50,
+					tileMinSize:24,
+					tileMaxSize:128,
+					score:0,
+				},
+				_widgetClass:"generic-game",
+				_create:function()
+				{
+					this._super();
+					ibx.resourceMgr.getResource(".game-box", false).appendTo(this.element);
+					ibx.bindElements(this.element);
+					this._gameOver = ibx.resourceMgr.getResource(".game-over");
+					this._menuNew.on("ibx_select", this._onMenuSelect.bind(this));
+					this._btnNewGame.on("click", this.newGame.bind(this));
+					$(window).on("tiledetached", this._onTileDetached.bind(this));
+				},
+				_destroy:function()
+				{
+					this._super();
+				},
+				_onMenuSelect:function(e, menuItem)
+				{
+					var item = $(menuItem).data("userData");
+					if(item == "new")
+						this.newGame();
+					else
+						$("<div>").ibxPopup({closeOnTimer:1500, effect:"fade"}).css("padding", "20px").text("Not Implemented Yet").ibxPopup("open");
+				},
+				_gameStart:null,
+				_gameStep:0,
+				newGame:function()
+				{
+					this._gameOver.removeClass("over").detach();
+					this._gameBoard.find(".game-tile").remove();
+					this._gameStart = new Date();
+					this.options.score = 0;
+					this.refresh();
+				},
+				_onTimerClick:function()
+				{
+					var options = this.options;
+					this._btnNewGame.css(
+					{
+						"color": sformat("rgb({1}, {2}, {3})", getRandomInt(0, 255), getRandomInt(0, 255), getRandomInt(0, 255)),
+						"backgroundColor": sformat("rgb({1}, {2}, {3})", getRandomInt(0, 255), getRandomInt(0, 255), getRandomInt(0, 255))
+					});
+					if(this._gameStart)
+					{
+						var tiles = this._gameBoard.find(".game-tile");
+						if((tiles.length + 1) > options.maxTiles)
+						{
+							this._gameBoard.append(this._gameOver);
+							this._gameOver.data("ibxWidget")._label.addClass("open");
+							this._gameStart = null;
+						}
+						this._tileCount.text(tiles.length);
+						this._tileScore.text(options.score);
+
+						var tileSize = getRandomInt(options.tileMinSize, options.tileMaxSize);
+						var x = getRandomInt(tileSize, this._gameBoard.width() - tileSize);
+						var y = getRandomInt(tileSize, this._gameBoard.height() - tileSize);
+						var op = Math.random();
+						var tile = $("<div>").gameTile({type:getRandomInt(1, 5)}).css(
+						{
+							"left":x+"px",
+							"top":y+"px",
+							"width":tileSize+"px",
+							"height":tileSize+"px",
+							"opacity": op,
+							"zIndex":op*100
+						});
+						this._gameBoard.append(tile);
+					}
+				},
+				_onTileDetached:function(e, tile)
+				{
+					++this.options.score;
+				},
+				refresh:function()
+				{
+					this._super();
+					var options = this.options;
+					window.clearInterval(this._timer);
+					this._timer = window.setInterval(this._onTimerClick.bind(this), options.speed)
+				}
+			});
+
+			$.widget("ibi.gameTile", $.ibi.ibxWidget, 
+			{
+				options:
+				{
+					type:-1,
+					draggable:true,
+					droppable:true,
+					dropTargetClass:"tile-drop-target",
+				},
+				_widgetClass:"game-tile",
+				_create:function()
+				{
+					var options = this.options;
+					this.element.prop("tabIndex", 0).uniqueId();
+					this.element.on("ibx_dragstart ibx_dragleave ibx_dragover ibx_drop", this._onDragEvent.bind(this));
+					this._super();
+				},
+				_onDragEvent:function(e)
+				{
+					var eType = e.type;
+					var dt = e.dataTransfer;
+					var data = dt.getData()
+					var rand = getRandomInt(0, 3);
+					var isDragging = this.isDragging();
+
+					if(eType == "ibx_dragstart")
+					{
+						dt.setData("gameTile", this.element);
+						var pos = this.element.offset();
+						dt.dragXOffset = -(e.clientX - pos.left);
+						dt.dragYOffset = -(e.clientY - pos.top);
+					}
+					else
+					if(eType == "ibx_dragover")
+					{
+						var src = dt.getData("gameTile");
+						if( !this.element.is(src) &&
+							(
+							this.element.hasClass("tile-type-1") && src.hasClass("tile-type-3") ||
+							this.element.hasClass("tile-type-2") && src.hasClass("tile-type-4") ||
+							this.element.hasClass("tile-type-3") && src.hasClass("tile-type-1") ||
+							this.element.hasClass("tile-type-4") && src.hasClass("tile-type-2")
+							))
+							dt.dropEffect = "copy";
+					}
+					else
+					if(eType == "ibx_drop")
+					{
+						var src = dt.getData("gameTile");
+						if(	this.element.hasClass("tile-type-1") && src.hasClass("tile-type-3") ||
+							this.element.hasClass("tile-type-2") && src.hasClass("tile-type-4") ||
+							this.element.hasClass("tile-type-3") && src.hasClass("tile-type-1") ||
+							this.element.hasClass("tile-type-4") && src.hasClass("tile-type-2"))
+						{
+							this.element.remove();
+							src.remove();
+						}
+					}
+				},
+				refresh:function()
+				{
+					var options = this.options;
+					this.element.removeClass("tile-type-1 tile-type-2 tile-type-3 tile-type-4");
+					this.element.addClass("tile-type-" + options.type);
+					this._super();
+				}
+			});
+			//# sourceURL=dragdrop_bundle.xml
+		]]>
+		</script-block>
+	</scripts>
+</ibx-res-bundle>

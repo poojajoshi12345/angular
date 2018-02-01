@@ -1,0 +1,29 @@
+﻿/*Copyright 1996-2017 Information Builders, Inc. All rights reserved.*/
+/* $Revision$: */
+
+html, body {
+    margin: 0;
+    height: 100%;
+}
+
+.main-grid {
+    width:100%;
+    background-color: #FDFEFE;
+}
+
+.grid-cell {
+    margin: 10px;
+    border-radius: 0.5em;
+    border: 1px solid #ccc;
+    background-color: #F9E79F;
+    font-size: 1.25em;
+}
+
+.grid-cell-overlay {
+    opacity: 0.3;
+    background-color: tomato;
+}
+
+.grid-inner {
+}
+

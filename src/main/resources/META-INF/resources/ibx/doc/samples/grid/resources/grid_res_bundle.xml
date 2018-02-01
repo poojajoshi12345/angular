@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--Copyright 1996-2016 Information Builders, Inc. All rights reserved. $Revision$:-->
+<ibx-res-bundle name="grid_res.xml">
+	<strings>
+		<string-bundle>
+		<![CDATA[
+		]]>
+		</string-bundle>
+	</strings>
+
+	<styles>
+		<style-sheet>
+		<![CDATA[
+			.blurb
+			{
+				font-weight:bold;
+				padding:10px;
+			}
+
+			.toolbar
+			{
+				margin-bottom:5px;
+			}
+
+			.toolbar-item
+			{
+			}
+			.grid-label
+			{
+				margin-left:10px;
+			}
+
+			.grid-tabs > .ibx-tab-page
+			{
+				padding:10px;
+			}
+
+			.grid-tool-bar
+			{
+				padding:3px;
+				border:1px solid #ccc;
+			}
+
+			.grid, .flex-grid
+			{
+				border:1px solid black;
+			}
+
+			.cell-label, .grid-label, .button-group
+			{
+				margin-right:3px;
+			}
+
+			.chk-box-inline
+			{
+				margin-left:3px;
+			}
+
+			.grid-cell, .flex-grid-cell
+			{
+				border:1px solid red;
+			}
+
+			.cell
+			{
+				border:1px solid black;
+			}
+		]]>
+		</style-sheet>
+	</styles>
+
+	<markup>
+		<markup-block>
+			<div class="grid-tabs" data-ibx-type="ibxTabPane" data-ibx-name-root="true">
+				<div data-ibx-type="ibxRadioGroup" data-ibx-name="rgCellsJustify" data-ibxp-name="rgCellsJustify"></div>
+				<div data-ibx-type="ibxRadioGroup" data-ibx-name="rgCellsAlign" data-ibxp-name="rgCellsAlign"></div>
+				<div data-ibx-type="ibxRadioGroup" data-ibx-name="rgGridJustify" data-ibxp-name="rgGridJustify"></div>
+				<div data-ibx-type="ibxRadioGroup" data-ibx-name="rgGridAlign" data-ibxp-name="rgGridAlign"></div>
+				<div class="grid-tab" data-ibx-name="tabGrid" data-ibx-type="ibxTabPage" data-ibxp-selected="true" data-ibxp-tab-options="{'text':'ibxGrid - CSS Grid'}" data-ibxp-ctx-menu=".grid-menu">
+					<div class="toolbar" data-ibx-type="ibxHBox" data-ibxp-align="center">
+						<div class="toolbar-item cell-label" data-ibx-type="ibxLabel" data-ibxp-text="Cells:"></div>
+						<div class="button-group" data-ibx-type="ibxHButtonGroup">
+							<div data-ibxp-user-value="start"  class="toolbar-item" data-ibx-type="ibxRadioButton" data-ibxp-group="rgCellsJustify" data-ibxp-text="Left" data-ibxp-icon-position="top" data-ibxp-glyph="format_align_left" data-ibxp-glyph-classes="material-icons"></div>
+							<div data-ibxp-user-value="center" class="toolbar-item" data-ibx-type="ibxRadioButton" data-ibxp-group="rgCellsJustify" data-ibxp-text="Center" data-ibxp-icon-position="top" data-ibxp-glyph="format_align_center" data-ibxp-glyph-classes="material-icons"></div>
+							<div data-ibxp-user-value="end" class="toolbar-item" data-ibx-type="ibxRadioButton" data-ibxp-group="rgCellsJustify" data-ibxp-text="Right" data-ibxp-icon-position="top" data-ibxp-glyph="format_align_right" data-ibxp-glyph-classes="material-icons"></div>
+							<div data-ibxp-user-value="stretch" class="toolbar-item" data-ibx-type="ibxRadioButton" data-ibxp-group="rgCellsJustify" data-ibxp-checked="true" data-ibxp-text="Stretch" data-ibxp-icon-position="top" data-ibxp-glyph="format_align_justify" data-ibxp-glyph-classes="material-icons"></div>
+						</div>
+						<div class="button-group" data-ibx-type="ibxHButtonGroup">
+							<div data-ibxp-user-value="start" class="toolbar-item" data-ibx-type="ibxRadioButton" data-ibxp-group="rgCellsAlign" data-ibxp-text="Top" data-ibxp-icon-position="top" data-ibxp-glyph="vertical_align_top" data-ibxp-glyph-classes="material-icons"></div>
+							<div data-ibxp-user-value="center" class="toolbar-item" data-ibx-type="ibxRadioButton" data-ibxp-group="rgCellsAlign" data-ibxp-text="Center" data-ibxp-icon-position="top" data-ibxp-glyph="vertical_align_center" data-ibxp-glyph-classes="material-icons"></div>
+							<div data-ibxp-user-value="end" class="toolbar-item" data-ibx-type="ibxRadioButton" data-ibxp-group="rgCellsAlign" data-ibxp-text="Bottom" data-ibxp-icon-position="top" data-ibxp-glyph="vertical_align_bottom" data-ibxp-glyph-classes="material-icons"></div>
+							<div data-ibxp-user-value="stretch" class="toolbar-item" data-ibx-type="ibxRadioButton" data-ibxp-group="rgCellsAlign" data-ibxp-checked="true" data-ibxp-text="Stretch" data-ibxp-icon-position="top" data-ibxp-glyph="format_align_justify" data-ibxp-glyph-classes="material-icons"></div>
+						</div>
+						<div class="toolbar-item grid-label" data-ibx-type="ibxLabel" data-ibxp-text="Grid:"></div>
+						<div class="button-group" data-ibx-type="ibxHButtonGroup">
+							<div data-ibxp-user-value="start" class="toolbar-item" data-ibx-type="ibxRadioButton" data-ibxp-group="rgGridJustify" data-ibxp-text="Left" data-ibxp-icon-position="top" data-ibxp-glyph="format_align_left" data-ibxp-glyph-classes="material-icons"></div>
+							<div data-ibxp-user-value="center" class="toolbar-item" data-ibx-type="ibxRadioButton" data-ibxp-group="rgGridJustify" data-ibxp-text="Center" data-ibxp-icon-position="top" data-ibxp-glyph="format_align_center" data-ibxp-glyph-classes="material-icons"></div>
+							<div data-ibxp-user-value="end" class="toolbar-item" data-ibx-type="ibxRadioButton" data-ibxp-group="rgGridJustify" data-ibxp-text="Right" data-ibxp-icon-position="top" data-ibxp-glyph="format_align_right" data-ibxp-glyph-classes="material-icons"></div>
+							<div data-ibxp-user-value="stretch" class="toolbar-item" data-ibx-type="ibxRadioButton" data-ibxp-group="rgGridJustify" data-ibxp-checked="true" data-ibxp-text="Stretch" data-ibxp-icon-position="top" data-ibxp-glyph="format_align_justify" data-ibxp-glyph-classes="material-icons"></div>
+						</div>
+						<div class="button-group" data-ibx-type="ibxHButtonGroup">
+							<div data-ibxp-user-value="start" class="toolbar-item" data-ibx-type="ibxRadioButton" data-ibxp-group="rgGridAlign" data-ibxp-text="Top" data-ibxp-icon-position="top" data-ibxp-glyph="vertical_align_top" data-ibxp-glyph-classes="material-icons"></div>
+							<div data-ibxp-user-value="center" class="toolbar-item" data-ibx-type="ibxRadioButton" data-ibxp-group="rgGridAlign" data-ibxp-text="Center" data-ibxp-icon-position="top" data-ibxp-glyph="vertical_align_center" data-ibxp-glyph-classes="material-icons"></div>
+							<div data-ibxp-user-value="end" class="toolbar-item" data-ibx-type="ibxRadioButton" data-ibxp-group="rgGridAlign" data-ibxp-text="Bottom" data-ibxp-icon-position="top" data-ibxp-glyph="vertical_align_bottom" data-ibxp-glyph-classes="material-icons"></div>
+							<div data-ibxp-user-value="stretch" class="toolbar-item" data-ibx-type="ibxRadioButton" data-ibxp-group="rgGridAlign" data-ibxp-checked="true" data-ibxp-text="Stretch" data-ibxp-icon-position="top" data-ibxp-glyph="format_align_justify" data-ibxp-glyph-classes="material-icons"></div>
+						</div>
+						<div class="toolbar-item chk-box-inline" data-ibx-type="ibxCheckBox" data-ibx-name="chkInline" data-ibxp-text="Inline" data-ibxp-icon-position="top" data-ibxp-glyph="format_align_justify" data-ibxp-glyph-classes="material-icons"></div>
+					</div>
+					<div class="grid" data-ibx-type="ibxGrid" data-ibxp-cols="100px 100px 100px 100px 100px" data-ibxp-rows="100px 100px 100px">
+						<div class="grid-cell" data-ibx-col="1/span 1" data-ibx-row="1/span 1">Grid Cell</div>
+						<div class="grid-cell" data-ibx-col="2/span 1" data-ibx-row="1/span 1">Grid Cell</div>
+						<div class="grid-cell" data-ibx-col="3/span 1" data-ibx-row="1/span 1">Grid Cell</div>
+						<div class="grid-cell" data-ibx-col="4/span 1" data-ibx-row="1/span 1">Grid Cell</div>
+						<div class="grid-cell" data-ibx-col="5/span 1" data-ibx-row="1/span 1">Grid Cell</div>
+
+						<div class="grid-cell" data-ibx-col="1/span 1" data-ibx-row="2/span 1">Grid Cell</div>
+						<div class="grid-cell" data-ibx-col="2/span 1" data-ibx-row="2/span 1">Grid Cell</div>
+						<div class="grid-cell" data-ibx-col="3/span 1" data-ibx-row="2/span 1">Grid Cell</div>
+						<div class="grid-cell" data-ibx-col="4/span 1" data-ibx-row="2/span 1">Grid Cell</div>
+						<div class="grid-cell" data-ibx-col="5/span 1" data-ibx-row="2/span 1">Grid Cell</div>
+
+						<div class="grid-cell" data-ibx-col="1/span 1" data-ibx-row="3/span 1">Grid Cell</div>
+						<div class="grid-cell" data-ibx-col="2/span 1" data-ibx-row="3/span 1">Grid Cell</div>
+						<div class="grid-cell" data-ibx-col="3/span 1" data-ibx-row="3/span 1">Grid Cell</div>
+						<div class="grid-cell" data-ibx-col="4/span 1" data-ibx-row="3/span 1">Grid Cell</div>
+						<div class="grid-cell" data-ibx-col="5/span 1" data-ibx-row="3/span 1">Grid Cell</div>
+					</div>
+				</div>
+				<div class="flex-grid-tab" data-ibx-name="tabFlexGrid" data-ibx-type="ibxTabPage" data-ibxp-tab-options="{'text':'ibxFlexGrid - CSS Flex Box'}">
+					<div class="flex-grid" data-ibx-type="ibxFlexGrid" data-ibxp-align="stretch" data-ibx-column="2" data-ibx-row="1">
+						<div class="flex-grid-cell" data-ibx-col-span="12">grid cell</div>
+						<div class="flex-grid-cell" data-ibx-col-span="6">grid cell</div>
+						<div class="flex-grid-cell" data-ibx-col-span="6">grid cell</div>
+
+
+						<div class="flex-grid-cell" data-ibx-col-span="4">grid cell</div>
+						<div class="flex-grid-cell" data-ibx-col-span="4">grid cell</div>
+						<div class="flex-grid-cell" data-ibx-col-span="4">grid cell</div>
+
+						<div class="flex-grid-cell" data-ibx-col-span="3">grid cell</div>
+						<div class="flex-grid-cell" data-ibx-col-span="3">grid cell</div>
+						<div class="flex-grid-cell" data-ibx-col-span="3">grid cell</div>
+						<div class="flex-grid-cell" data-ibx-col-span="3">grid cell</div>
+
+
+						<div class="flex-grid-cell" data-ibx-col-span="2">grid cell</div>
+						<div class="flex-grid-cell" data-ibx-col-span="2">grid cell</div>
+						<div class="flex-grid-cell" data-ibx-col-span="2">grid cell</div>
+						<div class="flex-grid-cell" data-ibx-col-span="2">grid cell</div>
+						<div class="flex-grid-cell" data-ibx-col-span="2">grid cell</div>
+						<div class="flex-grid-cell" data-ibx-col-span="2">grid cell</div>
+
+						<div class="flex-grid-cell" data-ibx-col-span="1">grid cell</div>
+						<div class="flex-grid-cell" data-ibx-col-span="1">grid cell</div>
+						<div class="flex-grid-cell" data-ibx-col-span="1">grid cell</div>
+						<div class="flex-grid-cell" data-ibx-col-span="1">grid cell</div>
+						<div class="flex-grid-cell" data-ibx-col-span="1">grid cell</div>
+						<div class="flex-grid-cell" data-ibx-col-span="1">grid cell</div>
+						<div class="flex-grid-cell" data-ibx-col-span="1">grid cell</div>
+						<div class="flex-grid-cell" data-ibx-col-span="1">grid cell</div>
+						<div class="flex-grid-cell" data-ibx-col-span="1">grid cell</div>
+						<div class="flex-grid-cell" data-ibx-col-span="1">grid cell</div>
+						<div class="flex-grid-cell" data-ibx-col-span="1">grid cell</div>
+						<div class="flex-grid-cell" data-ibx-col-span="1">grid cell</div>
+					</div>
+				</div>
+			</div>
+			<div class="grid-menu" data-ibx-name-root="true" data-ibx-type="ibxMenu">
+				<div data-ibx-type="ibxRadioGroup" data-ibx-name="rgSelfJustify" data-ibxp-name="rgSelfJustify"></div>
+				<div data-ibx-type="ibxRadioGroup" data-ibx-name="rgSelfAlign" data-ibxp-name="rgSelfAlign"></div>
+				<div data-ibxp-user-value="" data-ibx-type="ibxRadioMenuItem" data-ibxp-group="rgSelfJustify" data-ibxp-text="Default" data-ibxp-glyph="border_outer" data-ibxp-glyph-classes="material-icons"></div>
+				<div data-ibxp-user-value="start" data-ibx-type="ibxRadioMenuItem" data-ibxp-group="rgSelfJustify" data-ibxp-text="Left" data-ibxp-glyph="format_align_left" data-ibxp-glyph-classes="material-icons"></div>
+				<div data-ibxp-user-value="center" data-ibx-type="ibxRadioMenuItem" data-ibxp-group="rgSelfJustify" data-ibxp-text="Center" data-ibxp-glyph="format_align_center" data-ibxp-glyph-classes="material-icons"></div>
+				<div data-ibxp-user-value="end" data-ibx-type="ibxRadioMenuItem" data-ibxp-group="rgSelfJustify" data-ibxp-text="Right" data-ibxp-glyph="format_align_right" data-ibxp-glyph-classes="material-icons"></div>
+				<div data-ibxp-user-value="stretch" data-ibx-type="ibxRadioMenuItem" data-ibxp-group="rgSelfJustify" data-ibxp-checked="true" data-ibxp-text="Stretch" data-ibxp-glyph="format_align_justify" data-ibxp-glyph-classes="material-icons"></div>
+				<div data-ibx-type="ibxMenuSeparator"></div>
+				<div data-ibxp-user-value="" data-ibx-type="ibxRadioMenuItem" data-ibxp-group="rgSelfAlign" data-ibxp-text="Default" data-ibxp-glyph="border_outer" data-ibxp-glyph-classes="material-icons"></div>
+				<div data-ibxp-user-value="start" data-ibx-type="ibxRadioMenuItem" data-ibxp-group="rgSelfAlign" data-ibxp-text="Top" data-ibxp-glyph="vertical_align_top" data-ibxp-glyph-classes="material-icons"></div>
+				<div data-ibxp-user-value="center" data-ibx-type="ibxRadioMenuItem" data-ibxp-group="rgSelfAlign" data-ibxp-text="Middle" data-ibxp-glyph="vertical_align_center" data-ibxp-glyph-classes="material-icons"></div>
+				<div data-ibxp-user-value="end" data-ibx-type="ibxRadioMenuItem" data-ibxp-group="rgSelfAlign" data-ibxp-text="Bottom" data-ibxp-glyph="vertical_align_bottom" data-ibxp-glyph-classes="material-icons"></div>
+				<div data-ibxp-user-value="stretch" data-ibx-type="ibxRadioMenuItem" data-ibxp-group="rgSelfAlign" data-ibxp-checked="true" data-ibxp-text="Stretch" data-ibxp-glyph="format_align_justify" data-ibxp-glyph-classes="material-icons"></div>
+				<div data-ibx-type="ibxMenuSeparator"></div>
+				<div data-ibx-name="chkInline" data-ibx-type="ibxCheckMenuItem" data-ibxp-text="Inline Grid"></div>
+			</div>
+		</markup-block>
+	</markup>
+
+	<scripts>
+		<script-block>
+		<![CDATA[
+			//# sourceURL=grid_res_bundle_script.xml
+		]]>
+		</script-block>
+	</scripts>
+</ibx-res-bundle>

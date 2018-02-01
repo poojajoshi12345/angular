@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ibx-res-bundle name="res_bundle.xml">
+	<res-bundles>
+	</res-bundles>
+	
+	<strings>
+		<string-bundle>
+			<![CDATA[
+				{
+					"language":"en",
+					"strings":
+					{
+						"res_bundle_inline_string":"from res_bundle.xml"
+					}
+				}
+			]]>
+		</string-bundle>
+	</strings>
+
+	<styles>
+		<style-sheet>
+			<![CDATA[
+				.sample-calculator
+				{
+					font-size:1em;
+					overflow:hidden;
+					border:1px solid black;
+					border-radius:5px;
+					box-shadow:3px 3px 10px 0px #aaa;
+				}
+
+				.calc-outer-box
+				{
+					background-color:white;
+					padding:5px;
+				}
+
+				.calc-title
+				{
+					position:relative;
+					padding:.15em;
+					background-color:#eee;
+					margin-bottom:5px;
+					border-radius:2px;
+				}
+
+				.calc-title > .ibx-label-text
+				{
+					flex:1 1 auto;
+				}
+
+				.calc-close-btn
+				{
+					color:#999;
+					right:.25em;
+					z-index:1;/*bug in chrome...causes things to dissapear if default to 0*/
+					transition:transform .5s;
+				}
+				.calc-close-btn:hover
+				{
+					font-weight:bold;
+					color:black;
+					transform:rotate(360deg);
+					transition:transform .5s;
+				}
+
+				.calc-output-value
+				{
+					flex:1 1 auto;
+					border:1px solid #ccc;
+					border-radius:2px;
+					margin-bottom:5px;
+				}
+
+				.calc-buttons-box
+				{
+					justify-self:center;
+				}
+
+				.calc-number-grid, .calc-operations-grid
+				{
+					background-color:#eee;
+					border:1px solid #ccc;
+					border-radius:5px;
+					padding:2px;
+				}
+				.calc-number-grid
+				{
+					margin-right:5px;
+				}
+
+				.calc-number
+				{
+					background-color:white;
+				}
+
+				.calc-operation
+				{
+					background-color:white;
+					width:1.2em;
+					height:1.2em;
+				}
+			]]>
+		</style-sheet>
+	</styles>
+
+	<markup>
+		<markup-block name="res_bundle_markup_block">
+			<div class="sample-calculator" data-ibx-type="sample_calculator" data-ibx-name-root="true" data-ibxp-focus-root="true">
+				<div class="calc-outer-box" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
+					<div class="calc-title" data-ibx-type="ibxLabel" data-ibxp-justify="start" data-ibxp-text="Sample Calculator">
+						<div class="calc-close-btn" data-ibx-name="_btnClose" data-ibx-type="ibxLabel" data-ibxp-glyph="close" data-ibxp-glyph-classes="material-icons" title="Close calculator"></div>
+					</div>
+					<div class="calc-output-value" data-ibx-name="_output" data-ibx-type="ibxLabel" data-ibxp-justify="end"></div>
+					<div class="calc-buttons-box" data-ibx-type="ibxHBox" data-ibxp-align="stretch">
+						<div class="calc-number-grid" data-ibx-type="ibxFlexGrid" data-ibxp-align="stretch" style="flex:1 1 auto;">
+							<div class="calc-number calc-button" data-ibx-type="ibxButton" data-ibx-col-span="4" data-calc-val="7">7</div>
+							<div class="calc-number calc-button" data-ibx-type="ibxButton" data-ibx-col-span="4" data-calc-val="8">8</div>
+							<div class="calc-number calc-button" data-ibx-type="ibxButton" data-ibx-col-span="4" data-calc-val="9">9</div>
+							<div class="calc-number calc-button" data-ibx-type="ibxButton" data-ibx-col-span="4" data-calc-val="4">4</div>
+							<div class="calc-number calc-button" data-ibx-type="ibxButton" data-ibx-col-span="4" data-calc-val="5">5</div>
+							<div class="calc-number calc-button" data-ibx-type="ibxButton" data-ibx-col-span="4" data-calc-val="6">6</div>
+							<div class="calc-number calc-button" data-ibx-type="ibxButton" data-ibx-col-span="4" data-calc-val="1">1</div>
+							<div class="calc-number calc-button" data-ibx-type="ibxButton" data-ibx-col-span="4" data-calc-val="2">2</div>
+							<div class="calc-number calc-button" data-ibx-type="ibxButton" data-ibx-col-span="4" data-calc-val="3">3</div>
+							<div class="calc-number calc-button" data-ibx-type="ibxButton" data-ibx-col-span="4" data-calc-val="sgn">+/-</div>
+							<div class="calc-number calc-button" data-ibx-type="ibxButton" data-ibx-col-span="4" data-calc-val="0">0</div>
+							<div class="calc-number calc-button" data-ibx-type="ibxButton" data-ibx-col-span="4" data-calc-val=".">.</div>
+						</div>
+						<div class="calc-operations-grid" data-ibx-type="ibxFlexGrid" data-ibxp-align="stretch">
+							<div class="calc-operation op-clear calc-button" data-ibx-type="ibxButton" data-ibx-col-span="12" data-calc-val="clr">Clear</div>
+							<div class="calc-operation op-plus calc-button" data-ibx-type="ibxButton" data-ibx-col-span="6" data-calc-val="+">+</div>
+							<div class="calc-operation op-minus calc-button" data-ibx-type="ibxButton" data-ibx-col-span="6" data-calc-val="-">-</div>
+							<div class="calc-operation op-divide calc-button" data-ibx-type="ibxButton" data-ibx-col-span="6" data-calc-val="/">/</div>
+							<div class="calc-operation op-multiply calc-button" data-ibx-type="ibxButton" data-ibx-col-span="6" data-calc-val="*">*</div>
+							<div class="calc-operation op-equals calc-button" data-ibx-type="ibxButton" data-ibx-col-span="12" data-calc-val="eq">=</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</markup-block>
+	</markup>
+
+	<scripts>
+		<script-block name="res_bundle_script_block">
+			<![CDATA[
+				$.widget("ibi.sample_calculator", $.ibi.ibxWidget, 
+				{
+					options:
+					{
+						value:"0"
+					},
+					_widgetClass:"sample_calculator",
+					_left:0,
+					_right:0,
+					_curr:0,
+					_operation:null,
+					_create:function()
+					{
+						this._super();
+						this._btnClose.on("click", this._onClose.bind(this));
+						this.element.find(".calc-button").ibxWidget("option", "justify", "center");
+						this.element.find(".calc-number").on("click", this._onNumberClick.bind(this)).prop("tabIndex", 0);
+						this.element.find(".calc-operation").on("click", this._onOperationClick.bind(this)).prop("tabIndex", 0);
+						this.element.draggable().css("position", "absolute");//need to force absolute, as relative does weird layout things.
+					},
+					_destroy:function()
+					{
+						this._super();
+						this.element.empty();
+						this.element.removeClass("sample-calculator");
+						this.element.draggable("destroy");
+					},
+					reset:function()
+					{
+						this._operation = this._curr = this._left = this._right = "";
+						this.options.value = 0;
+						this.refresh();
+					},
+					_onClose:function(e)
+					{
+						this.destroy();
+					},
+					_onNumberClick:function(e)
+					{
+						var val = $(e.currentTarget).data("calc-val");
+						this._processNumber(val);
+					},
+					_processNumber:function(num)
+					{
+						num = num.toString();
+						if(num == "sgn")
+							this._curr = (parseFloat(this._curr) * -1).toString();
+						else
+							this._curr = this._curr ? this._curr + num : num;
+						this._output.ibxWidget("option", "text", parseFloat(this._curr));
+					},
+					_onOperationClick:function(e)
+					{
+						var op = $(e.currentTarget).data("calc-val");
+						this._processOperation(op);
+					},
+					_processOperation:function(op)
+					{
+						if(op == "clr")
+							this.reset();
+						else
+						if(op == "eq")
+							this._calculate();
+						else
+						{
+							this._left = this._curr;
+							this._curr = "";
+							this._operation = op;
+						}
+					},
+					_calculate:function()
+					{
+						this._right = this._curr;
+						if(this._left && this._operation && this._right)
+						{
+							var val = eval(sformat("{1} {2} {3}", this._left, this._operation, this._right));
+							this.options.value = val;
+							this._curr = val.toString();
+							this.refresh();
+						};
+						return this.options.value;
+					},
+					refresh:function()
+					{
+						this._super();
+						var options = this.options;
+						this._output.ibxLabel("option", "text", options.value);
+					}
+				});
+				//# sourceURL=res_bundle.xml
+			]]>
+		</script-block>
+	</scripts>
+</ibx-res-bundle>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ibx-res-bundle name="popups_bundle.xml">
+	<res-bundles>
+	</res-bundles>
+	
+	<strings>
+		<string-bundle>
+			<![CDATA[
+			]]>
+		</string-bundle>
+	</strings>
+
+	<styles>
+		<style-sheet>
+			<![CDATA[
+				.test-notify-popup-content
+				{
+					padding:10px;
+				}
+				.test-notify-popup.ibx-popup.pop-effect-fade, .test-notify-popup.ibx-popup.pop-effect-fade.pop-closed
+				{
+					transition:opacity 1s, visibility 1s;
+				}
+			]]>
+		</style-sheet>
+	</styles>
+
+	<markup>
+		<markup-block>
+			<div class="test-notify-popup" data-ibx-type="ibxPopup" data-ibxp-effect="fade" data-ibxp-close-on-timer="750">
+				<div class="test-notify-popup-content" data-ixb-type="ibxHBox" data-ixbp-justify="start" data-ibxp-align="start">
+					<div data-ibx-type="ibxLabel" data-ibxp-text="I'm a notification...I'll fade away in a about a second...bye!" data-ibxp-icon-position="left" data-ibxp-glyph="add_alert" data-ibxp-glyph-classes="material-icons md-24"></div>
+				</div>
+			</div>
+		</markup-block>
+	</markup>
+
+	<scripts>
+		<script-block name="popups_script_block">
+			<![CDATA[
+				//# sourceURL=popups_bundle_script
+			]]>
+		</script-block>
+	</scripts>
+</ibx-res-bundle>

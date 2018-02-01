@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ibx-res-bundle>
+	<strings>
+		<string-bundle>
+		<![CDATA[
+		]]>
+		</string-bundle>
+	</strings>
+
+	<styles>
+		<style-sheet>
+		<![CDATA[
+			.test-text-editor
+			{
+				width:600px;
+				height:350px;
+			}
+
+			.test-text-editor .ibx-dialog-main-box
+			{
+				position:absolute;
+				left:0px;
+				top:0px;
+				right:0px;
+				bottom:0px;
+			}
+
+			.te-tool-bar
+			{
+				padding:0px;
+				margin-bottom:4px;
+				border-bottom:1px solid #ccc;
+			}
+
+			.te-tb-btn
+			{
+				margin:3px;
+			}
+
+			.te-menu-bar
+			{
+				padding:3px;
+				margin-bottom:4px;
+			}
+
+			.te-btn-menu
+			{
+				margin-right:10px;
+			}
+
+			.te-txt-area
+			{
+				flex:1 1 auto;
+				font-family:consolas, menlo, courier new;
+				font-size:10pt;
+				margin-bottom:4px;
+			}
+
+			.te-sb-line-marker
+			{
+				margin-right:50px;
+			}
+		]]>
+		</style-sheet>
+	</styles>
+
+	<markup>
+		<markup-block>
+			<div class="text-editor-resources">
+				<div class="te-tool-bar" data-ibx-type="ibxHBox" data-ibxp-justify="start" data-ibxp-align="center">
+					<div class="te-tb-new te-tb-btn" data-ibx-type="ibxButtonSimple" data-ibx-name="tbNew" title="New Document" data-ibxp-glyph="insert_drive_file" data-ibxp-glyph-classes="material-icons md-18"></div>
+					<div class="te-tb-open te-tb-btn" data-ibx-type="ibxButtonSimple" data-ibx-name="tbOpen" title="Open Document" data-ibxp-glyph="folder_open" data-ibxp-glyph-classes="material-icons md-18"></div>
+					<div class="te-tb-save te-tb-btn" data-ibx-type="ibxButtonSimple" data-ibx-name="tbSave" title="Save Document" data-ibxp-glyph="save" data-ibxp-glyph-classes="material-icons md-18"></div>
+					<div class="te-tb-run te-tb-btn" data-ibx-type="ibxButtonSimple" data-ibx-name="tbRun" title="Run Document" data-ibxp-glyph="help" data-ibxp-glyph-classes="material-icons md-18"></div>
+				</div>
+				<div class="te-menu-bar" data-ibx-type="ibxMenuBar">
+					<div data-ibx-type="ibxMenuButton" data-ibx-name="menuFile">
+						File
+						<div class="te-file-menu te-menu" data-ibx-type="ibxMenu">
+							<div data-ibx-type="ibxMenuItem" data-menu-cmd="fileNew">New</div>
+							<div data-ibx-type="ibxMenuItem" data-menu-cmd="fileOpen">Open</div>
+							<div data-ibx-type="ibxMenuItem" data-menu-cmd="fileSave">Save</div>
+							<div data-ibx-type="ibxMenuItem" data-menu-cmd="fileSaveAS">Save AS...</div>
+							<div data-ibx-type="ibxMenuItem" data-menu-cmd="fileClose">Close</div>
+							<div data-ibx-type="ibxMenuItem" data-menu-cmd="fileExit">Exit</div>
+						</div>
+					</div>
+					<div data-ibx-type="ibxMenuButton" data-ibx-name="menuEdit">
+						Edit
+						<div class="te-edit-menu te-menu" data-ibx-type="ibxMenu">
+							<div data-ibx-type="ibxMenuItem" data-menu-cmd="editDelete">Delete</div>
+							<div data-ibx-type="ibxMenuItem" data-menu-cmd="editSelectAll">Select All</div>
+							<div data-ibx-type="ibxMenuItem" data-menu-cmd="editUpperCase">Upper Case</div>
+							<div data-ibx-type="ibxMenuItem" data-menu-cmd="editLowerCase">Lower Case</div>
+						</div>
+					</div>
+					<div data-ibx-type="ibxMenuButton" data-ibx-name="menuSearch">
+						Search
+						<div class="te-search-menu te-menu" data-ibx-type="ibxMenu">
+							<div data-ibx-type="ibxMenuItem" data-menu-cmd="searchFind">Find</div>
+							<div data-ibx-type="ibxMenuItem" data-menu-cmd="searchGoTo">Go To</div>
+						</div>
+					</div>
+					<div class="te-menu-button" data-ibx-type="ibxMenuButton" data-ibx-name="menuOptions" data-menu-cmd="options">Options</div>
+					<div class="te-menu-button" data-ibx-type="ibxMenuButton" data-ibx-name="menuHelp" data-menu-cmd="help">Help</div>
+				</div>
+				<div class="te-txt-area" data-ibx-type="ibxTextArea" data-ibx-name="txtArea"></div>
+				<div class="te-status-bar" data-ibx-type="ibxHBox" data-ibxp-justify="start" data-ibxp-align="center">
+					<div class="te-sb-line-marker" data-ibx-type="ibxLabel">Line: 1</div>
+					<div class="te-sb-column-marker" data-ibx-type="ibxLabel">Column: 1</div>
+				</div>
+			</div>
+		</markup-block>
+	</markup>
+
+	<scripts>
+		<script-block>
+		<![CDATA[
+			$.widget("ibi.textEditor", $.ibi.ibxDialog, 
+			{
+				options:
+				{
+					modal:false,
+					resizable:true,
+					captionLabelOptions:
+					{
+						text:"Edit - IBFS:/some/file/path.fex"
+					}
+				},
+				_widgetClass:"test-text-editor",
+				_create:function()
+				{
+					this._super();
+					var resBody = ibx.resourceMgr.getResource(".text-editor-resources", false);
+					this.contentBox.append(resBody.children());
+					ibx.bindElements(this.contentBox);
+					$(".te-menu").on("ibx_select", this._onMenuItemSelect.bind(this));
+					$(".te-menu-button").on("click", this._onMenuButtonSelect.bind(this));
+					this.element.resizable();
+					this.btnBox.css("display", "none");
+				},
+				_destroy:function()
+				{
+					this._super();
+				},
+				_onMenuItemSelect:function(e, menuItem)
+				{
+					var cmd = $(menuItem).data("menuCmd");
+					alert("You selected: " + cmd);
+				},
+				_onMenuButtonSelect:function(e)
+				{
+					var cmd = $(e.currentTarget).data("menuCmd");
+					alert("You selected: " + cmd);
+				},
+				refresh:function()
+				{
+					this._super();
+				}
+			});
+			//# sourceURL=texteditor_bundle.xml
+		]]>
+		</script-block>
+	</scripts>
+</ibx-res-bundle>

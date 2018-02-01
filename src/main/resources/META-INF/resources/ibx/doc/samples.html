@@ -4,28 +4,29 @@
 	/*LIST OF AVAILABLE SAMPLES*/
 	var samples = 
 	[
-		{name:"Hello World", url:"../testing/samples/hello_world/hello_world.jsp", class:"hello-world-sample", glyph:"face"},
-		{name:"IBFS (Simple Navigator)", url:"../testing/samples/ibfs/ibfs.jsp", class:"ibfs-sample", glyph:"search"},
-		{name:"calculator", url:"../testing/samples/calculator/calculator.jsp", class:"calculator-sample", glyph:"apps"},
-		{name:"Menus", url:"../testing/samples/menus/menus.jsp", class:"menus-sample", glyph:"menu"},
-		{name:"Popups and Dialogs", url:"../testing/samples/popups/popups.jsp", class:"popups-sample", glyph:"desktop_windows"},
-		{name:"Grids", url:"../testing/samples/grid/grid.jsp", class:"grid-sample", glyph:"grid_on"},
-		{name:"Splitters", url:"../testing/samples/splitters/splitters.jsp", class:"splitter-sample", glyph:"vertical_align_center"},
-		{name:"Collapsible", url:"../testing/samples/collapsible/collapsible.jsp", class:"collapsible-sample", glyph:"swap_vert"},
-		{name:"ibx Library Diagram", url:"../testing/samples/ibxhier/ibxhier.jsp", class:"ibxhier-sample", glyph:"filter_list"},
-		{name:"Accordion", url:"../testing/samples/accordion/accordion.jsp", class:"accordion-sample", glyph:"view_day"},
-		{name:"Form (standard controls)", url:"../testing/samples/forms/forms.jsp", class:"forms-sample", glyph:"directions_boat"},
-		{name:"iFrame", url:"../testing/samples/iframe/iframe.jsp", class:"iframe-sample", glyph:"public"},
-		{name:"Carousel", url:"../testing/samples/carousel/carousel.jsp", class:"carousel-sample", glyph:"view_carousel"},
-		{name:"Text Editor", url:"../testing/samples/texteditor/texteditor.jsp", class:"texteditor-sample", glyph:"border_color"},
-		{name:"Labels & Fonts", url:"../testing/samples/labels/labels.jsp", class:"labels-sample", glyph:"label"},
-		{name:"Sliders & Ranges", url:"../testing/samples/slider/slider.jsp", class:"slider-sample", glyph:"straighten"},
-		{name:"Progress", url:"../testing/samples/progress/progress.jsp", class:"progress-sample", glyphClasses:"fa fa-spin fa-spinner"},
-		{name:"Date Picker", url:"../testing/samples/datepicker/datepicker.jsp", class:"datepicker-sample", glyphClasses:"fa fa-calendar"},
-		{name:"Resource Bundle", url:"../testing/samples/resbundle/resbundle.jsp", class:"resbundle-sample", glyphClasses:"fa fa-gift"},
-		{name:"Drag/Drop", url:"../testing/samples/dragdrop/dragdrop.jsp", class:"drag-drop-sample", glyphClasses:"fa fa-arrows-alt"},
-		{name:"Splash Screen", url:"../testing/samples/splashscreen/splashscreen.jsp", class:"splash-screen-sample", glyphClasses:"fa fa-hand-spock-o"},
-		{name:"Accessibility", url:"../testing/samples/accessibility/accessibility.jsp", class:"accessibility-sample", glyphClasses:"material-icons", glyph:"accessibility"},
+		{name:"ibx Samples", url:"./samples/samples.jsp"},
+		{name:"Hello World", url:"./samples/helloworld/helloworld.jsp"},
+		{name:"IBFS (Simple Navigator)", url:"./samples/ibfs/ibfs.jsp"},
+		{name:"calculator", url:"./samples/calculator/calculator.jsp"},
+		{name:"Menus", url:"./samples/menus/menus.jsp"},
+		{name:"Popups and Dialogs", url:"./samples/popups/popups.jsp"},
+		{name:"Grids", url:"./samples/grid/grid.jsp"},
+		{name:"Splitters", url:"./samples/splitters/splitters.jsp"},
+		{name:"Collapsible", url:"./samples/collapsible/collapsible.jsp"},
+		{name:"ibx Library Diagram", url:"./samples/ibxhier/ibxhier.jsp"},
+		{name:"Accordion", url:"./samples/accordion/accordion.jsp"},
+		{name:"Form (standard controls)", url:"./samples/forms/forms.jsp"},
+		{name:"iFrame", url:"./samples/iframe/iframe.jsp"},
+		{name:"Carousel", url:"./samples/carousel/carousel.jsp"},
+		{name:"Text Editor", url:"./samples/texteditor/texteditor.jsp"},
+		{name:"Labels & Fonts", url:"./samples/labels/labels.jsp"},
+		{name:"Sliders & Ranges", url:"./samples/slider/slider.jsp"},
+		{name:"Progress", url:"./samples/progress/progress.jsp"},
+		{name:"Date Picker", url:"./samples/datepicker/datepicker.jsp"},
+		{name:"Resource Bundle", url:"./samples/resbundle/resbundle.jsp"},
+		{name:"Drag/Drop", url:"./samples/dragdrop/dragdrop.jsp"},
+		{name:"Splash Screen", url:"./samples/splashscreen/splashscreen.jsp"},
+		{name:"Accessibility", url:"./samples/accessibility/accessibility.jsp"},
 	];
 
 	/*SORT SAMPLES ALPHABETICALLY*/
@@ -54,7 +55,6 @@
 	{
 		$(".ibx-sample-frame").prop("contentWindow").location.href = e.target.value;
 	});
-
 </script>
 <style type="text/css">
 	.ibx-samples > a
@@ -63,20 +63,31 @@
 	}
 	.ibx-samples
 	{
-		margin-bottom:5px;
+		margin:10px 0px 10px 0px;
 	}
 	.ibx-sample-frame
 	{
 		width:100%;
 		height:500px;
+		border:1px solid #ccc;
+		border-radius:5px;
 	}
 </style>
 <article>
 	<h1>Samples</h1>
+	These "samples" were created during the development of ibx.  They were written as quick/dirty tests of various concepts, so there was very little attention
+	given to making them look nice, or be written efficiently (much like this 'documentation').
+
+	<p/>
+	However, that does not mean they have no value for someone interested in learning ibx.  Although they don't use a consistent approach in implementation
+	(specifically because they were trying to test many different scenarios) they can be looked at to see the kinds of ways ibx can be used.
+	
+	<p/>
+	You can find them in the 'ibx/doc/samples'.  Each one has its own folder.
 	<section>
 		<div class="ibx-samples">
 			<select class="select-sample">
-				<option>Pick an ibx Sample</option>
+				<option value="about:blank">Pick an ibx Sample</option>
 			</select>
 		</div>
 		<iframe name="sampleFrame" class="ibx-sample-frame"/>

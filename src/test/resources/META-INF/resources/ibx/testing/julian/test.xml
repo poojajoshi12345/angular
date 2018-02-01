@@ -1,45 +1,74 @@
-<bean id="fontawesome" class="com.ibi.webapp.license.ThirdPartyJar" singleton="true">
-	<constructor-arg index="0">
-		<value>
-			Font Awesome
-		</value>
-		<!-- Description -->
-	</constructor-arg>
-	<constructor-arg index="1">
-		<value>4.7.0</value>
-		<!-- version -->
-	</constructor-arg>
-	<constructor-arg index="2">
-		<!-- jars -->
-		<list>
-			<value>font-awesome.css</value>
-		</list>
-	</constructor-arg>
-	<constructor-arg index="3">
-		<value>OFL 1.1</value>
-		<!-- license_type -->
-	</constructor-arg>
-	<constructor-arg index="4">
-		<!-- license_file -->
-		<list>
-			<value>bootstrap.js_license.txt</value>
-		</list>
-	</constructor-arg>
-	<constructor-arg index="5">
-		<list>
-			<value>http://getbootstrap.com/getting-started/#license-faqs</value>
-			<!-- links -->
-		</list>
-	</constructor-arg>
-	<constructor-arg index="6">
-		<value>false</value>
-		<!-- hide from i5 -->
-	</constructor-arg>
-	<constructor-arg index="7">
-		<!-- when updating a js, or a jar, please add the History of patches about the file, just the filename version number and date and time -->
-		<list>
-			<value> bootstrap.js v1.3, 2016-12-26 13:23:53, 8.0.01</value>
-
-		</list>
-	</constructor-arg>
-</bean>
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<ibfsrpc _jt="IBFSResponseObject" language="en_US" name="searchDomainIndexs" returncode="10000" returndesc="SUCCESS" subreturncode="0" type="simple">
+	<ibfsparams size="9">
+		<entry key="IBFS_filterQuery"/>
+		<entry key="IBFS_domainsFilter"/>
+		<entry key="IBFS_args" value="__null"/>
+		<entry key="IBFS_path"/>
+		<entry key="IBFS_maxCount" value="1"/>
+		<entry key="IBFS_searchQuery" value="five year performance"/>
+		<entry key="IBFS_operations" value="opRun"/>
+		<entry key="IBFS_magRowType" value="WFCDesc"/>
+		<entry key="IBFS_startingIndex" value="0"/>
+	</ibfsparams>
+	<rootObject _jt="ArrayList" size="1">
+		<item _jt="IBFSMRObject" binary="false" createdBy="admin" createdOn="1515687472060" defaultLng="en_US" description="five year performance" dummy="false" effectiveAppName="mutual_funds" effectiveRSName="EDASERVE" extension="fex" fullPath="IBFS:/WFC/Repository/mutual_funds/five_year_performance.fex" handle="d4452637_381b_4ca1_a348_a061b88ca11a" index="0" lastModified="1517504456503" lastaccessBy="admin" lastaccessOn="1517504456503" lastmodBy="admin" length="1568" name="five_year_performance.fex" ownerId="10001" ownerName="admin" ownerPath="IBFS:/SSYS/USERS/admin" ownerType="U" policy="/+/d+8Of///30f/e///2///f/////v+AAAAA" returnedLng="en_US" rsPath="/ibi_apps80/wfirs/ibfs/WFC/Repository/mutual_funds/five_year_performance.fex" summary="five year performance summary test for mutual funds to see how this works" thumbPath="/ibi_apps80/ibi_html/ibi_images/file_type/fex.svg" type="FexFile" typeDescription="Report">
+			<properties size="3">
+				<entry key="skipamper" value="on"/>
+				<entry key="LastDescribed" value="1517504456501"/>
+				<entry key="tool" value="editor"/>
+			</properties>
+			<extendedProperties _jt="HashMap" loadFactor="0.75" threshold="0"/>
+			<searchResultList _jt="IBFSSearchResultList">
+				<resultList _jt="ArrayList" size="1">
+					<item _jt="IBFSWfcRepositorySearchResult" domain="mutual_funds" ibfsPath="IBFS:/WFC/Repository/mutual_funds/five_year_performance.fex" index="0" indexedAt="1517504050744" language="en_US" objectType="FexFile" rowtype="WFCDesc" searchScore="3.463026" title="five year performance" titleUrl="./wfirs/ibfs/WFC/Repository/mutual_funds/five_year_performance.fex" uniqueKey="IBFS:/WFC/Repository/mutual_funds/five_year_performance.fex"/>
+				</resultList>
+			</searchResultList>
+			<nlsValues _jt="HashMap" loadFactor="0.75" threshold="1">
+				<entry>
+					<key _jt="string" value="en_US"/>
+					<value _jt="ArrayList" size="2">
+						<item _jt="string" index="0" value="five year performance"/>
+						<item _jt="string" index="1" value="five year performance summary test for mutual funds to see how this works"/>
+					</value>
+				</entry>
+			</nlsValues>
+			<fexParameters _jt="ArrayList" size="2">
+				<item _jt="IBRFexParameter" datadomain="FUND_FAMILY" index="0" multiselect="true" parmname="FUND_FAMILY" required="false">
+					<amperVar _jt="IBFSWFDescribe.AmperVar" chainIdx="-1" description="FUND_FAMILY:" format="A255V" idxInChain="-1" inForm="true" isDefault="true" max="0.0" min="0.0" name="FUND_FAMILY" noSelection="false" operation="OR" parent="FUND_CATEGORY" sortOrder="" strDef="_FOC_NULL" validate="">
+						<type _jt="IBFSAmperVarType" name="defaultType"/>
+						<defValues _jt="array" itemsClass="string" size="1">
+							<item _jt="string" index="0" value="_FOC_NULL"/>
+						</defValues>
+						<displayType _jt="IBFSAmperDisplayType" name="find"/>
+						<values _jt="LinkedHashMap" accessOrder="false" loadFactor="0.75" threshold="0"/>
+						<dynValues _jt="IBFSWFDescribe.DynamicAmper" displayField="" field="MUTUAL_FUNDS.SEG01.FUND_FAMILY" file="mutual_funds/MUTUAL_FUNDS"/>
+						<parameters _jt="HashMap" loadFactor="0.75" threshold="12">
+							<entry>
+								<key _jt="string" value="WITHIN"/>
+								<value _jt="string" value="FUND_CATEGORY"/>
+							</entry>
+						</parameters>
+					</amperVar>
+				</item>
+				<item _jt="IBRFexParameter" datadomain="FUND_NAME" index="1" multiselect="true" parmname="FUND_NAME" required="false">
+					<amperVar _jt="IBFSWFDescribe.AmperVar" chainIdx="-1" description="FUND_NAME:" format="A255V" idxInChain="-1" inForm="true" isDefault="true" max="0.0" min="0.0" name="FUND_NAME" noSelection="false" operation="OR" parent="FUND_FAMILY" sortOrder="" strDef="_FOC_NULL" validate="">
+						<type _jt="IBFSAmperVarType" name="defaultType"/>
+						<defValues _jt="array" itemsClass="string" size="1">
+							<item _jt="string" index="0" value="_FOC_NULL"/>
+						</defValues>
+						<displayType _jt="IBFSAmperDisplayType" name="find"/>
+						<values _jt="LinkedHashMap" accessOrder="false" loadFactor="0.75" threshold="0"/>
+						<dynValues _jt="IBFSWFDescribe.DynamicAmper" displayField="" field="MUTUAL_FUNDS.SEG01.FUND_NAME" file="mutual_funds/MUTUAL_FUNDS"/>
+						<parameters _jt="HashMap" loadFactor="0.75" threshold="12">
+							<entry>
+								<key _jt="string" value="WITHIN"/>
+								<value _jt="string" value="FUND_FAMILY"/>
+							</entry>
+						</parameters>
+					</amperVar>
+				</item>
+			</fexParameters>
+		</item>
+	</rootObject>
+</ibfsrpc>
