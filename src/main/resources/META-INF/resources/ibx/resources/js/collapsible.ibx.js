@@ -59,6 +59,7 @@ $.widget("ibi.ibxCollapsible", $.Widget,
 			if(this.options.autoClose)
 				$("body").addClass("body-collapsible-auto-close");
 			this.refresh();
+			this._trigger("opened")
 		}
 	},
 	close: function ()
@@ -67,6 +68,7 @@ $.widget("ibi.ibxCollapsible", $.Widget,
 		{
 			this._isOpen = false;
 			this.refresh();
+			this._trigger("closed");
 		}
 	},
 	toggle: function ()
