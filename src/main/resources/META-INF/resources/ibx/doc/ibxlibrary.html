@@ -8,20 +8,22 @@
 		window.location = href;
 	}
 
+	var sectionTemplate = $(".ibx-widget-info[data-ibx-no-bind]");
+	var temp = $("<div>");
 	var arDeferred = [];
 	var widgets = [];
-	var temp = $("<div>");
 	for(var name in $.ibi)
 	{
 		var deferred = $.Deferred();
 		arDeferred.push(deferred);
-		window.setTimeout(function(name, deferred)
+
+		var ctor = $.ibi[name];
+		window.setTimeout(function(ctor, deferred)
 		{
 			try
 			{
-				var ctor = $.ibi[name];
 				var widget = ctor.call($.ibi, {}, temp[0]);
-				var section = $(".ibx-widget-info").clone().removeAttr("data-ibx-no-bind").css("display", "").prop("id", widget.widgetName);
+				var section = sectionTemplate.clone().removeAttr("data-ibx-no-bind").css("display", "").prop("id", widget.widgetName);
 				section.children(".title").text(widget.widgetName);
 
 				var arParents = [];
@@ -113,21 +115,21 @@
 					"id":section.prop("id"),
 					"ctor":ctor,
 					"widget":widget,
-					"tocEntry":$(sformat("<a class='toc-entry toc-sub-section toc-ibx-widget' href='#{1}'>{2}</a>", section.prop("id"), name)),
+					"tocEntry":$(sformat("<a class='toc-entry toc-sub-section toc-ibx-widget' href='#{1}'>{2}</a>", section.prop("id"),  widget.widgetName)),
 					"section":ibx.bindElements(section)
 				};
-				widgets.push(widgetInfo);
 				widgetMap[name] = widgetInfo;
+				widgets.push(widgetInfo);
 			}
 			catch(ex)
 			{
 				console.dir(ex);
 			}
-			deferred.resolve();
-		}.bind(this, name, deferred), 1);
+			deferred.resolve(widgetInfo);
+		}.bind(this, ctor, deferred), 0);
 	}
 
-	$.when.apply($, arDeferred).then(function()
+	$.when.apply($, arDeferred).then(function(widgets)
 	{
 		widgets.sort(function(w1, w2)
 		{
@@ -140,12 +142,14 @@
 
 		var widgetsArticle = $(".ibx-widgets-library-article");
 		var widgetsToc = widgetsArticle.data("tocEntry");
-		$.each(widgets, function(idx, widget)
+		for(var i = 0;i  < widgets.length; ++i)
 		{
-			widgetsArticle.append(widget.section);
-			widgetsToc.append(widget.tocEntry);
-		});
-	});
+			var widgetInfo = widgets[i];
+			widgetsArticle.append(widgetInfo.section);
+			widgetsToc.append(widgetInfo.tocEntry);
+		}
+	}.bind(this, widgets));
+
 
 	$(".method-info").on("click", function(e)
 	{

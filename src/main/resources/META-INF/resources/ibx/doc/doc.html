@@ -42,6 +42,7 @@
 					{
 						var doc = $(text);
 						$(".content").append(doc);
+
 						var articles = doc.filter("article").uniqueId();
 						articles.each(function(idx, article)
 						{
