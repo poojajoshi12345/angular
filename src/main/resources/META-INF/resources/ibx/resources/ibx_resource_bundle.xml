@@ -95,7 +95,6 @@ $Revision$:-->
 		<style-file src="./css/splitter.ibx.css"/>
 		<style-file src="./css/label.ibx.css"/>
 		<style-file src="./css/progress.ibx.css"/>
-		<style-file src="./css/control.ibx.css"/>
 		<style-file src="./css/text.ibx.css"/>
 		<style-file src="./css/textarea.ibx.css"/>
 		<style-file src="./css/spinner.ibx.css"/>
