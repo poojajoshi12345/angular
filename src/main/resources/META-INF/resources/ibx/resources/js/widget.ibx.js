@@ -294,7 +294,8 @@ $.widget("ibi.ibxWidget", $.Widget,
 			if(!isNavActive && (e.data == "NAV_KEY_ACTIVATE" || eventMatchesShortcut(options.navKeyKeys.activate, e)))
 			{
 				isNavActive = true;
-				active = active = current.length ? current : navKids.first();
+				active = current.length ? current : navKids.first();
+				current = null;//[HOME-921]this allows activation to focus child, but not key events when child is already active. (think text arrow keys!)
 			}
 			else
 			if(isNavActive && !options.navKeyAutoFocus && eventMatchesShortcut(options.navKeyKeys.cancel, e))//you can't escape out of a navKeyAutoFocus.
@@ -343,7 +344,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 				}
 			}
 
-			if(isNavActive && active.length)
+			if(isNavActive && !active.is(current) && active.length)
 			{
 				var event = $.Event(e);
 				event.type = "ibx_beforenavkey";
