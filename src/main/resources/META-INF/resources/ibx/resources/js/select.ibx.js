@@ -1044,6 +1044,7 @@ $.widget("ibi.ibxSelectPaged", $.ibi.ibxSelectBase, {
 				userValues = [];
 				userValues.push(value);
 			}
+			this._control.ibxWidget("userValue", userValues);
 
 			var currentValues = this._control.ibxWidget("values");
 			currentValues.forEach(function (cv){
@@ -1293,6 +1294,10 @@ $.widget("ibi.ibxSelectItemListPaged", $.ibi.ibxVBox,
 	add:function(item, sibling, before, refresh)
 	{
 		this._listControl.ibxWidget("add", item, sibling, before, refresh);
+	},
+	userValue: function (value)
+	{
+		return this._listControl.ibxWidget('userValue', value);
 	},
 	_updatePageLabel: function ()
 	{
