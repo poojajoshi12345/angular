@@ -23,8 +23,9 @@
 			try
 			{
 				var widget = ctor.call($.ibi, {}, temp[0]);
-				var section = sectionTemplate.clone().removeAttr("data-ibx-no-bind").css("display", "").prop("id", widget.widgetName);
-				section.children(".title").text(widget.widgetName);
+				var name = widget.widgetName;
+				var section = sectionTemplate.clone().removeAttr("data-ibx-no-bind").css("display", "").prop("id", name);
+				section.children(".title").text(name);
 
 				var arParents = [];
 				var proto = widget.__proto__;
@@ -115,7 +116,7 @@
 					"id":section.prop("id"),
 					"ctor":ctor,
 					"widget":widget,
-					"tocEntry":$(sformat("<a class='toc-entry toc-sub-section toc-ibx-widget' href='#{1}'>{2}</a>", section.prop("id"),  widget.widgetName)),
+					"tocEntry":$(sformat("<a class='toc-entry toc-sub-section toc-ibx-widget' href='#{1}'>{2}</a>", section.prop("id"),  name)),
 					"section":ibx.bindElements(section)
 				};
 				widgetMap[name] = widgetInfo;
@@ -148,10 +149,13 @@
 			widgetsArticle.append(widgetInfo.section);
 			widgetsToc.append(widgetInfo.tocEntry);
 		}
+
+		$(".prop-object").on("mouseenter mouseleave", _onPropObjectMouseEvent);
+		$(".method-info").on("click", _onMethodInfoMouseEvent);
 	}.bind(this, widgets));
 
 
-	$(".method-info").on("click", function(e)
+	function _onMethodInfoMouseEvent(e)
 	{
 		var widgetInfo = $(e.target).data("widgetInfo");
 		var popup = $(".info-popup").resizable();
@@ -163,9 +167,9 @@
 		content.text(widgetInfo.fn.toString().replace("function ", "function " + widgetInfo.method));
 		popup.ibxWidget("open");
 		return false;
-	});
+	};
 
-	$(".prop-object").on("mouseenter mouseleave", function(e)
+	function _onPropObjectMouseEvent(e)
 	{
 		if(e.type == "mouseenter")
 		{
@@ -184,9 +188,10 @@
 		{
 			$(".prop-object-popup").ibxPopup("close");
 		}
-	});
+	};
 
 	ibx.bindElements(".info-popup");
+	//# sourceURL=ibxlibrary.html
 </script>
 <style type="text/css">
 	.ibx-widget-info
