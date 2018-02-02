@@ -40,27 +40,27 @@
 
 					$.get({"async":false, "url":url, "dataType":"text"}).done(function(text, status, xhr)
 					{
+						var toc = $(".toc");
 						var doc = $(text);
-						$(".content").append(doc);
-
 						var articles = doc.filter("article").uniqueId();
 						articles.each(function(idx, article)
 						{
 							article = $(article);
 							tocArticle = $(sformat("<a class='toc-entry toc-section' href='#{1}'>{2}</a>", article.prop("id"), article.children("h1, h2, h3, h4, h5, h6").first().text()));
-							$(".toc").append(tocArticle);
+							toc.append(tocArticle);
 							article.data("tocEntry", tocArticle);
 
 							var sections = article.find("section:parent(:visible)").uniqueId();
-							sections.each(function(tocArticle, idx, section)
+							for(var i = 0; i < sections.length; ++i)
 							{
-								section = $(section);
+								section = $(sections[i]);
 								var title = section.children("h1, h2, h3, h4, h5, h6").first();
 								var tocSection = $(sformat("<a class='toc-entry toc-sub-section' href='#{1}'>{2}</a>", section.prop("id"), title.text()));
 								section.data("tocEntry", tocSection);
 								tocArticle.append(tocSection);
-							}.bind(this, tocArticle));
+							};
 						});
+						$(".content").append(doc);
 					});
 				});
 
@@ -97,6 +97,7 @@
 				user-select:text;
 				background-color:#efefef;
 				margin:5px 1em;
+				padding:5px;
 				overflow:auto;
 				-webkit-overflow-scrolling: touch;
 			}

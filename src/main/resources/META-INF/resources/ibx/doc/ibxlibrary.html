@@ -8,161 +8,146 @@
 		window.location = href;
 	}
 
-
 	var sectionTemplate = $(".ibx-widget-info[data-ibx-no-bind]");
 	var temp = $("<div>");
-	var arDeferred = [];
 	var widgets = [];
 	for(var name in $.ibi)
 	{
-		var deferred = $.Deferred();
-		arDeferred.push(deferred);
-
-		var ctor = $.ibi[name];
-		window.setTimeout(function(ctor, deferred)
+		try
 		{
-			try
+			var ctor = $.ibi[name];
+			var section = sectionTemplate.clone().removeAttr("data-ibx-no-bind").css("display", "").prop("id", name);
+			section.children(".title").text(name);
+
+			var arParents = [];
+			var proto = ctor.prototype;
+			while(proto)
 			{
-				var widget = ctor.call($.ibi, {}, temp[0]);
-				var name = widget.widgetName;
-				var section = sectionTemplate.clone().removeAttr("data-ibx-no-bind").css("display", "").prop("id", name);
-				section.children(".title").text(name);
-
-				var arParents = [];
-				var proto = widget.__proto__;
-				while(proto)
-				{
-					if(proto.widgetName && proto.widgetName.search(/^ibx/) != -1)
-						arParents.push($(sformat("<a class='parent-widget' href='javascript:scrollToWidgetInfo(\"{1}\")'>{1}</a>", proto.widgetName)));
-					proto = proto.__proto__;
-				}
-				arParents.reverse();
-				section.find(".parent-widgets").append(arParents);
-						
-				var arDerived = [];
-				$.each(ctor._childConstructors, function(idx, derivedWidget)
-				{
-					arDerived.push($(sformat("<a class='derived-widget' href='javascript:scrollToWidgetInfo(\"{1}\")'>{1}</a>", derivedWidget.prototype.widgetName)));
-				});
-				arDerived.sort(function(d1, d2)
-				{
-					var n1 = d1[0].textContent.toLowerCase();
-					var n2 = d2[0].textContent.toLowerCase();
-					if(n1 < n2) return -1;
-					if(n2 < n1) return 1;
-					return 0;
-				});
-				section.find(".derived-widgets").append(arDerived);
-
-				var arOptions = [];
-				$.each(ctor._proto.options, function(option, value)
-				{
-					if(typeof(value) == "object" && value !== null)
-						value = "<span class='prop-object'>{object}</span>";
-					else
-					if(typeof(value) == "function")
-						value = "function";
-					else
-					if(typeof(value) == "string")
-						value = sformat("\"{1}\"", value);
-					else
-					if(value === null)
-						value = "null";
-					else
-					if(value === undefined)
-						value = "undefined";
-					else
-					if(!value)
-						value = value.toString();
-
-					var infoRow = $(sformat("<div class='name prop-info' data-ibx-col-span='6'>{1}</div><div class='value prop-info' data-ibx-col-span='6'>{2}</div>", option, value));
-					infoRow.find(".prop-object").data("widgetInfo", {"widget":widget, "prop":option, "val":value});
-					arOptions.push(infoRow);
-				});
-				arOptions.sort(function(r1, r2)
-				{
-					var n1 = r1[0].textContent.toLowerCase();
-					var n2 = r2[0].textContent.toLowerCase();
-					if(n1 < n2) return -1;
-					if(n2 < n1) return 1;
-					return 0;
-				});
-				section.find(".widget-member-box.options").append(arOptions);
-
-				arMethods = [];
-				$.each(ctor._proto, function(method, value)
-				{
-					if(method.search(/^_/) != -1 || typeof(value) != "function")
-						return;
-							
-					var sig = value.toString();
-					sig = sig.substring(sig.indexOf("("), sig.indexOf(")")+1)
-							
-					var infoRow = $(sformat("<a class='name method-info' href='' data-ibx-col-span='6'>{1}</a><a class='value method-info' href='' data-ibx-col-span='6'>{2}</a>", method, sig));
-					infoRow.data("widgetInfo", {"widget":widget, "method":method, "fn":value});
-					arMethods.push(infoRow);
-				});
-				arMethods.sort(function(r1, r2)
-				{
-					var n1 = r1[0].textContent.toLowerCase();
-					var n2 = r2[0].textContent.toLowerCase();
-					if(n1 < n2) return -1;
-					if(n2 < n1) return 1;
-					return 0;
-				});
-				section.find(".widget-member-box.methods").append(arMethods);
-
-				var widgetInfo = 
-				{
-					"id":section.prop("id"),
-					"ctor":ctor,
-					"widget":widget,
-					"tocEntry":$(sformat("<a class='toc-entry toc-sub-section toc-ibx-widget' href='#{1}'>{2}</a>", section.prop("id"),  name)),
-					"section":ibx.bindElements(section)
-				};
-				widgetMap[name] = widgetInfo;
-				widgets.push(widgetInfo);
+				if(proto.widgetName && proto.widgetName.search(/^ibx/) != -1)
+					arParents.push($(sformat("<a class='parent-widget' href='javascript:scrollToWidgetInfo(\"{1}\")'>{1}</a>", proto.widgetName)));
+				else
+					break;
+				proto = proto.__proto__;
 			}
-			catch(ex)
+			arParents.reverse();
+			section.find(".parent-widgets").append(arParents);
+
+			var arDerived = [];
+			$.each(ctor._childConstructors, function(idx, derivedWidget)
 			{
-				console.dir(ex);
-			}
-			deferred.resolve(widgetInfo);
-		}.bind(this, ctor, deferred), 0);
+				arDerived.push($(sformat("<a class='derived-widget' href='javascript:scrollToWidgetInfo(\"{1}\")'>{1}</a>", derivedWidget.prototype.widgetName)));
+			});
+			arDerived.sort(function(d1, d2)
+			{
+				var n1 = d1[0].textContent.toLowerCase();
+				var n2 = d2[0].textContent.toLowerCase();
+				if(n1 < n2) return -1;
+				if(n2 < n1) return 1;
+				return 0;
+			});
+			section.find(".derived-widgets").append(arDerived);
+
+			var arOptions = [];
+			$.each(ctor._proto.options, function(option, value)
+			{
+				if(typeof(value) == "object" && value !== null)
+					value = "<span class='prop-object'>{object}</span>";
+				else
+				if(typeof(value) == "function")
+					value = "function";
+				else
+				if(typeof(value) == "string")
+					value = sformat("\"{1}\"", value);
+				else
+				if(value === null)
+					value = "null";
+				else
+				if(value === undefined)
+					value = "undefined";
+				else
+				if(!value)
+					value = value.toString();
+
+				var infoRow = $(sformat("<div class='name prop-info' data-ibx-col-span='6'>{1}</div><div class='value prop-info' data-ibx-col-span='6'>{2}</div>", option, value));
+				infoRow.find(".prop-object").data("widgetInfo", {"ctor":ctor, "prop":option, "val":value});
+				arOptions.push(infoRow);
+			});
+			arOptions.sort(function(r1, r2)
+			{
+				var n1 = r1[0].textContent.toLowerCase();
+				var n2 = r2[0].textContent.toLowerCase();
+				if(n1 < n2) return -1;
+				if(n2 < n1) return 1;
+				return 0;
+			});
+			section.find(".widget-member-box.options").append(arOptions);
+
+			arMethods = [];
+			$.each(ctor._proto, function(method, value)
+			{
+				if(method.search(/^_/) != -1 || typeof(value) != "function")
+					return;
+							
+				var sig = value.toString();
+				sig = sig.substring(sig.indexOf("("), sig.indexOf(")")+1)
+							
+				var infoRow = $(sformat("<a class='name method-info' href='' data-ibx-col-span='6'>{1}</a><a class='value method-info' href='' data-ibx-col-span='6'>{2}</a>", method, sig));
+				infoRow.data("widgetInfo", {"ctor":ctor, "method":method, "fn":value});
+				arMethods.push(infoRow);
+			});
+			arMethods.sort(function(r1, r2)
+			{
+				var n1 = r1[0].textContent.toLowerCase();
+				var n2 = r2[0].textContent.toLowerCase();
+				if(n1 < n2) return -1;
+				if(n2 < n1) return 1;
+				return 0;
+			});
+			section.find(".widget-member-box.methods").append(arMethods);
+
+			var widgetInfo = 
+			{
+				"id":section.prop("id"),
+				"ctor":ctor,
+				"tocEntry":$(sformat("<a class='toc-entry toc-sub-section toc-ibx-widget' href='#{1}'>{2}</a>", section.prop("id"),  name)),
+				"section":ibx.bindElements(section)
+			};
+			widgetMap[name] = widgetInfo;
+			widgets.push(widgetInfo);
+		}
+		catch(ex)
+		{
+			console.dir(ex);
+		}
+	}
+	
+	widgets.sort(function(w1, w2)
+	{
+		var n1 = w1.ctor.prototype.widgetName;
+		var n2 = w2.ctor.prototype.widgetName;
+		if(n1 < n2) return -1;
+		if(n2 < n1) return 1;
+		return 0;
+	});
+
+	var widgetsArticle = $(".ibx-widgets-library-article");
+	var widgetsToc = widgetsArticle.data("tocEntry");
+	for(var i = 0; i < widgets.length; ++i)
+	{
+		var widgetInfo = widgets[i];
+		widgetsArticle.append(widgetInfo.section);
+		widgetsToc.append(widgetInfo.tocEntry);
 	}
 
-	$.when.apply($, arDeferred).then(function(widgets)
-	{
-		widgets.sort(function(w1, w2)
-		{
-			var n1 = w1.widget.widgetName;
-			var n2 = w2.widget.widgetName;
-			if(n1 < n2) return -1;
-			if(n2 < n1) return 1;
-			return 0;
-		});
-
-		var widgetsArticle = $(".ibx-widgets-library-article");
-		var widgetsToc = widgetsArticle.data("tocEntry");
-		for(var i = 0;i  < widgets.length; ++i)
-		{
-			var widgetInfo = widgets[i];
-			widgetsArticle.append(widgetInfo.section);
-			widgetsToc.append(widgetInfo.tocEntry);
-		}
-
-		$(".prop-object").on("mouseenter mouseleave", _onPropObjectMouseEvent);
-		$(".method-info").on("click", _onMethodInfoMouseEvent);
-	}.bind(this, widgets));
-
-
+	$(".prop-object").on("mouseenter mouseleave", _onPropObjectMouseEvent);
+	$(".method-info").on("click", _onMethodInfoMouseEvent);
 	function _onMethodInfoMouseEvent(e)
 	{
 		var widgetInfo = $(e.target).data("widgetInfo");
 		var popup = $(".info-popup").resizable();
 
 		var title = popup.find(".title");
-		title.text(sformat("Method: {1}.{2}", widgetInfo.widget.widgetName, widgetInfo.method));
+		title.text(sformat("Method: {1}.{2}", widgetInfo.ctor.prototype.widgetName, widgetInfo.method));
 
 		var content = popup.find(".content");
 		content.text(widgetInfo.fn.toString().replace("function ", "function " + widgetInfo.method));
@@ -175,7 +160,7 @@
 		if(e.type == "mouseenter")
 		{
 			var widgetInfo = $(e.target).data("widgetInfo");
-			var obj = JSON.stringify(widgetInfo.widget.options[widgetInfo.prop]);
+			var obj = JSON.stringify(widgetInfo.ctor._proto.options[widgetInfo.prop]);
 			obj = obj.replace(/(\{)|,|(\})/g, "$1\n$2\t");
 			var popup = $(sformat("<div class='prop-object-popup'><pre style='margin:4px;tab-size:3;' class='info'>{1}</pre></div>",obj)).ibxPopup(
 			{
