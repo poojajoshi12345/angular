@@ -8,134 +8,144 @@
 		window.location = href;
 	}
 
+	var arDeferred = [];
 	var widgets = [];
 	var temp = $("<div>");
-	$.each($.ibi, function(type, ctor)
+	for(var name in $.ibi)
 	{
-		try
+		var deferred = $.Deferred();
+		arDeferred.push(deferred);
+		window.setTimeout(function(name, deferred)
 		{
-			var ctor = $.ibi[type];
-			var widget = ctor.call($.ibi, {}, temp[0]);
-			var section = $(".ibx-widget-info").clone().removeAttr("data-ibx-no-bind").css("display", "").prop("id", widget.widgetName);
-			section.children(".title").text(widget.widgetName);
-
-			var arParents = [];
-			var proto = widget.__proto__;
-			while(proto)
+			try
 			{
-				if(proto.widgetName && proto.widgetName.search(/^ibx/) != -1)
-					arParents.push($(sformat("<a class='parent-widget' href='javascript:scrollToWidgetInfo(\"{1}\")'>{1}</a>", proto.widgetName)));
-				proto = proto.__proto__;
-			}
-			arParents.reverse();
-			section.find(".parent-widgets").append(arParents);
+				var ctor = $.ibi[name];
+				var widget = ctor.call($.ibi, {}, temp[0]);
+				var section = $(".ibx-widget-info").clone().removeAttr("data-ibx-no-bind").css("display", "").prop("id", widget.widgetName);
+				section.children(".title").text(widget.widgetName);
+
+				var arParents = [];
+				var proto = widget.__proto__;
+				while(proto)
+				{
+					if(proto.widgetName && proto.widgetName.search(/^ibx/) != -1)
+						arParents.push($(sformat("<a class='parent-widget' href='javascript:scrollToWidgetInfo(\"{1}\")'>{1}</a>", proto.widgetName)));
+					proto = proto.__proto__;
+				}
+				arParents.reverse();
+				section.find(".parent-widgets").append(arParents);
 						
-			var arDerived = [];
-			$.each(ctor._childConstructors, function(idx, derivedWidget)
-			{
-				arDerived.push($(sformat("<a class='derived-widget' href='javascript:scrollToWidgetInfo(\"{1}\")'>{1}</a>", derivedWidget.prototype.widgetName)));
-			});
-			arDerived.sort(function(d1, d2)
-			{
-				var n1 = d1[0].textContent.toLowerCase();
-				var n2 = d2[0].textContent.toLowerCase();
-				if(n1 < n2) return -1;
-				if(n2 < n1) return 1;
-				return 0;
-			});
-			section.find(".derived-widgets").append(arDerived);
+				var arDerived = [];
+				$.each(ctor._childConstructors, function(idx, derivedWidget)
+				{
+					arDerived.push($(sformat("<a class='derived-widget' href='javascript:scrollToWidgetInfo(\"{1}\")'>{1}</a>", derivedWidget.prototype.widgetName)));
+				});
+				arDerived.sort(function(d1, d2)
+				{
+					var n1 = d1[0].textContent.toLowerCase();
+					var n2 = d2[0].textContent.toLowerCase();
+					if(n1 < n2) return -1;
+					if(n2 < n1) return 1;
+					return 0;
+				});
+				section.find(".derived-widgets").append(arDerived);
 
-			var arOptions = [];
-			$.each(ctor._proto.options, function(option, value)
-			{
-				if(typeof(value) == "object" && value !== null)
-					value = "<span class='prop-object'>{object}</span>";
-				else
-				if(typeof(value) == "function")
-					value = "function";
-				else
-				if(typeof(value) == "string")
-					value = sformat("\"{1}\"", value);
-				else
-				if(value === null)
-					value = "null";
-				else
-				if(value === undefined)
-					value = "undefined";
-				else
-				if(!value)
-					value = value.toString();
+				var arOptions = [];
+				$.each(ctor._proto.options, function(option, value)
+				{
+					if(typeof(value) == "object" && value !== null)
+						value = "<span class='prop-object'>{object}</span>";
+					else
+					if(typeof(value) == "function")
+						value = "function";
+					else
+					if(typeof(value) == "string")
+						value = sformat("\"{1}\"", value);
+					else
+					if(value === null)
+						value = "null";
+					else
+					if(value === undefined)
+						value = "undefined";
+					else
+					if(!value)
+						value = value.toString();
 
-				var infoRow = $(sformat("<div class='name prop-info' data-ibx-col-span='6'>{1}</div><div class='value prop-info' data-ibx-col-span='6'>{2}</div>", option, value));
-				infoRow.find(".prop-object").data("widgetInfo", {"widget":widget, "prop":option, "val":value});
-				arOptions.push(infoRow);
-			});
-			arOptions.sort(function(r1, r2)
-			{
-				var n1 = r1[0].textContent.toLowerCase();
-				var n2 = r2[0].textContent.toLowerCase();
-				if(n1 < n2) return -1;
-				if(n2 < n1) return 1;
-				return 0;
-			});
-			section.find(".widget-member-box.options").append(arOptions);
+					var infoRow = $(sformat("<div class='name prop-info' data-ibx-col-span='6'>{1}</div><div class='value prop-info' data-ibx-col-span='6'>{2}</div>", option, value));
+					infoRow.find(".prop-object").data("widgetInfo", {"widget":widget, "prop":option, "val":value});
+					arOptions.push(infoRow);
+				});
+				arOptions.sort(function(r1, r2)
+				{
+					var n1 = r1[0].textContent.toLowerCase();
+					var n2 = r2[0].textContent.toLowerCase();
+					if(n1 < n2) return -1;
+					if(n2 < n1) return 1;
+					return 0;
+				});
+				section.find(".widget-member-box.options").append(arOptions);
 
-			arMethods = [];
-			$.each(ctor._proto, function(method, value)
-			{
-				if(method.search(/^_/) != -1 || typeof(value) != "function")
-					return;
+				arMethods = [];
+				$.each(ctor._proto, function(method, value)
+				{
+					if(method.search(/^_/) != -1 || typeof(value) != "function")
+						return;
 							
-				var sig = value.toString();
-				sig = sig.substring(sig.indexOf("("), sig.indexOf(")")+1)
+					var sig = value.toString();
+					sig = sig.substring(sig.indexOf("("), sig.indexOf(")")+1)
 							
-				var infoRow = $(sformat("<a class='name method-info' href='' data-ibx-col-span='6'>{1}</a><a class='value method-info' href='' data-ibx-col-span='6'>{2}</a>", method, sig));
-				infoRow.data("widgetInfo", {"widget":widget, "method":method, "fn":value});
-				arMethods.push(infoRow);
-			});
-			arMethods.sort(function(r1, r2)
-			{
-				var n1 = r1[0].textContent.toLowerCase();
-				var n2 = r2[0].textContent.toLowerCase();
-				if(n1 < n2) return -1;
-				if(n2 < n1) return 1;
-				return 0;
-			});
-			section.find(".widget-member-box.methods").append(arMethods);
+					var infoRow = $(sformat("<a class='name method-info' href='' data-ibx-col-span='6'>{1}</a><a class='value method-info' href='' data-ibx-col-span='6'>{2}</a>", method, sig));
+					infoRow.data("widgetInfo", {"widget":widget, "method":method, "fn":value});
+					arMethods.push(infoRow);
+				});
+				arMethods.sort(function(r1, r2)
+				{
+					var n1 = r1[0].textContent.toLowerCase();
+					var n2 = r2[0].textContent.toLowerCase();
+					if(n1 < n2) return -1;
+					if(n2 < n1) return 1;
+					return 0;
+				});
+				section.find(".widget-member-box.methods").append(arMethods);
 
-			var widgetInfo = 
+				var widgetInfo = 
+				{
+					"id":section.prop("id"),
+					"ctor":ctor,
+					"widget":widget,
+					"tocEntry":$(sformat("<a class='toc-entry toc-sub-section toc-ibx-widget' href='#{1}'>{2}</a>", section.prop("id"), name)),
+					"section":ibx.bindElements(section)
+				};
+				widgets.push(widgetInfo);
+				widgetMap[name] = widgetInfo;
+			}
+			catch(ex)
 			{
-				"id":section.prop("id"),
-				"ctor":ctor,
-				"widget":widget,
-				"tocEntry":$(sformat("<a class='toc-entry toc-ibx-widget' href='#{1}'>{2}</a>", section.prop("id"), type)),
-				"section":section
-			};
+				console.dir(ex);
+			}
+			deferred.resolve();
+		}.bind(this, name, deferred), 1);
+	}
 
-			widgets.push(widgetInfo);
-			widgetMap[type] = widgetInfo;
-		}
-		catch(ex)
+	$.when.apply($, arDeferred).then(function()
+	{
+		widgets.sort(function(w1, w2)
 		{
-			console.dir(ex);
-		}
-	});
-	widgets.sort(function(w1, w2)
-	{
-		var n1 = w1.widget.widgetName;
-		var n2 = w2.widget.widgetName;
-		if(n1 < n2) return -1;
-		if(n2 < n1) return 1;
-		return 0;
-	});
+			var n1 = w1.widget.widgetName;
+			var n2 = w2.widget.widgetName;
+			if(n1 < n2) return -1;
+			if(n2 < n1) return 1;
+			return 0;
+		});
 
-	var widgetsArticle = $(".ibx-widgets-library-article");
-	$.each(widgets, function(idx, widget)
-	{
-		widgetsArticle.append(widget.section);
+		var widgetsArticle = $(".ibx-widgets-library-article");
+		var widgetsToc = widgetsArticle.data("tocEntry");
+		$.each(widgets, function(idx, widget)
+		{
+			widgetsArticle.append(widget.section);
+			widgetsToc.append(widget.tocEntry);
+		});
 	});
-
-	ibx.bindElements(widgetsArticle);
 
 	$(".method-info").on("click", function(e)
 	{
