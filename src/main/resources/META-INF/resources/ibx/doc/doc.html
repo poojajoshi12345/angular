@@ -52,16 +52,19 @@
 							article.data("tocEntry", tocArticle);
 
 							var sections = article.find("section:parent(:visible)").uniqueId();
-							sections.each(function(tocArticle, idx, el)
+							sections.each(function(tocArticle, idx, section)
 							{
-								el = $(el);
-								var title = el.children("h1, h2, h3, h4, h5, h6").first();
-								var tocSection = $(sformat("<a class='toc-entry toc-sub-section' href='#{1}'>{2}</a>", el.prop("id"), title.text()));
+								section = $(section);
+								var title = section.children("h1, h2, h3, h4, h5, h6").first();
+								var tocSection = $(sformat("<a class='toc-entry toc-sub-section' href='#{1}'>{2}</a>", section.prop("id"), title.text()));
+								section.data("tocEntry", tocSection);
 								tocArticle.append(tocSection);
 							}.bind(this, tocArticle));
 						});
 					});
 				});
+
+				$(".toc").ibxCollapsible();
 			}, true);
 			//# sourceURL=doc.html
 		</script>
@@ -75,6 +78,19 @@
 				overflow:auto;
 				box-sizing:border-box;
 				tab-size:4;
+			}
+
+			.main-box .ibx-splitter
+			{
+				background-color:white;
+				border:1px solid #ccc;
+			}
+			@media screen and (max-device-width: 768px)
+			{
+				.main-box > .ibx-splitter
+				{
+					width: 20px;
+				}
 			}
 			pre
 			{
