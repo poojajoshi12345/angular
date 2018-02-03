@@ -568,8 +568,8 @@ $.ibi.ibxWidget.isNavKey = function(keyCode)
 		{
 			//clone the node and make sure the width/height are preserved so it lays out correctly.
 			el = $(el);
-			var width = el.outerWidth();
-			var height = el.outerHeight();
+			var width = el.width();
+			var height = el.height();
 			var clone = el.clone().css({"width":width + "px", "height":height + "px", "margin":"0px"});
 			return clone;
 		},
