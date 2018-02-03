@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ibx-res-bundle name="helloworld_res_bundle.xml" loadContext="bundle">
+	
+	<!--this section contains references to resources bundles this bundle requires.-->
+	<res-bundles>
+		<!--
+		<ibx-res-bundle src=""/>
+		-->
+	</res-bundles>
+
+	<!--this section contains references to resources bundles that will be loaded after this bundle (forward references rarely, if ever, used).-->
+	<res-packages>
+		<!--
+		<ibx-package src=""/>
+		-->
+	</res-packages>
+
+	<!--this section contains the string assets the bundle requires.-->
+	<strings>
+		<!--strings can be stored in external files-->
+		<string-file src="./strings/helloworld_strings.txt" default="false"/>
+
+		<!--strings can be stored directly in the resource bundle-->
+		<string-bundle>
+		<![CDATA[
+		{
+			"language":"en-us",
+			"strings":
+			{
+				"STR_HELLO_WORLD_RES_BUNDLE":"String from an inline string bundle."
+			}
+		}
+		]]>
+		</string-bundle>
+	</strings>
+
+	<!--this section contains the css style assets the bundle requires.-->
+	<styles>
+		<style-file src="./css/helloworld_styles.css"/>
+		<style-sheet>
+		<![CDATA[
+			.class-inline-res-bundle
+			{
+				color:green;
+			}
+		]]>
+		</style-sheet>
+	</styles>
+
+	<!--this section contains the markup assets the bundle requires (can be any html, not just ibx widgets).-->
+	<markup>
+		<markup-file src="./markup/helloworld_markup.xml"/>
+		<markup-block>
+			<div class="class-inline-res-bundle" data-ibx-type="ibxLabel">Hello World (inline res bundle)</div>
+		</markup-block>
+	</markup>
+
+	<!--this section contains the javascript assets this bundle requires.-->
+	<scripts>
+		<script-file src="./js/helloworld_script.js"/>
+		<script-block>
+		<![CDATA[
+			function fnInlineScript()
+			{
+				alert("You called: fnInlineScript");
+			}
+			//# sourceURL=helloworld_res_bundle.xml
+		]]>
+		</script-block>
+	</scripts>
+</ibx-res-bundle>

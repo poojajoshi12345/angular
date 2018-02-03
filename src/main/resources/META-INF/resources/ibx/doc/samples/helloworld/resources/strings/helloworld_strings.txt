@@ -1,0 +1,7 @@
+{
+	"language":"en-us",
+	"strings":
+	{
+		"STR_HELLO_WORLD_EXTERNAL_STRING_FILE":"String from an external string file."
+	}
+}

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--this root node is just to encapsulate all the markup resources in this file-->
+<helloworld_markup-resources>
+
+	<!--any markup you want to retrieve from the ibxResourceManager must be in a 'markup-block' node-->
+	<markup-block>
+		<div class="class-external-file" data-ibx-type="ibxLabel">Hello World (external markup file)</div>
+	</markup-block>
+
+</helloworld_markup-resources>
