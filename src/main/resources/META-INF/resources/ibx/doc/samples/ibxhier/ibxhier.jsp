@@ -38,7 +38,7 @@
 						findChildren(wObjects[i].name, $(".ih-hier-wrapper"));
 				}
 
-			}, ["../testing/samples/ibxhier/resources/ibxhier_res_bundle.xml"], true);
+			}, [{"src":"./resources/ibxhier_res_bundle.xml", "loadContext":"app"}], true);
 
 			function findChildren(name, elem)
 			{

@@ -108,7 +108,7 @@
 
 
 				$(".thumb-label").ibxWidget("option", "icon", "./renstimpy.png");
-			}, ["../testing/samples/popups/resources/popups_bundle.xml"], true);
+			}, ["../doc/samples/popups/resources/popups_bundle.xml"], true);
 
 		</script>
 		<style type="text/css">

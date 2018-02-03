@@ -25,7 +25,7 @@
 				{
 					$(".test-text-editor").ibxWidget("open");
 				});
-			}, ["../testing/samples/texteditor/texteditor_bundle.xml"], true);
+			}, [{"src":"./texteditor_bundle.xml", "loadContext":"app"}], true);
 		</script>
 		<style type="text/css">
 			.main-box

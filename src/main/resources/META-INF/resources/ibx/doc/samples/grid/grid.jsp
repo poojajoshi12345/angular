@@ -86,7 +86,7 @@
 					var col = cell.data("gridCol");
 					alert(sformat("You clickd on - row: {1} column: {2}", row, col));
 				});
-			}, ["../testing/samples/grid/resources/grid_res_bundle.xml"], true);
+			}, [{"src":"./resources/grid_res_bundle.xml", "loadContext":"app"}], true);
 		</script>
 		<style type="text/css">
 		</style>

@@ -28,7 +28,7 @@
 					var calc = ibx.resourceMgr.getResource(".sample-calculator");
 					calc.appendTo("body").position({my:"left top", at:"right+10 top", of:".show-calc"});
 				});
-			}, ["../testing/samples/calculator/calculator_res.xml"], true);
+			}, [{"src":"./calculator_res.xml", "loadContext":"app"}], true);
 		</script>
 
 		<style type="text/css">
