@@ -570,7 +570,7 @@ $.ibi.ibxWidget.isNavKey = function(keyCode)
 			el = $(el);
 			var width = el.outerWidth();
 			var height = el.outerHeight();
-			var clone = el.clone().css({"width":width + "px", "height":height + "px"});
+			var clone = el.clone().css({"width":width + "px", "height":height + "px", "margin":"0px"});
 			return clone;
 		},
 		isDragging:function(){return this.element.hasClass(this.options.dragClass);},
