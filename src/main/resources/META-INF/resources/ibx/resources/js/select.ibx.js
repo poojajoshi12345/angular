@@ -1227,6 +1227,10 @@ $.widget("ibi.ibxSelectItemListPaged", $.ibi.ibxVBox,
 			this._pageBox.show();
 		else
 			this._pageBox.hide();
+		if (this.options.search || this.options.selectionControls || this._enablePaging)
+			this.element.addClass("paged");
+		else
+			this.element.removeClass("paged");
 	},
 	_onSearchTextChanged: function (e)
 	{
