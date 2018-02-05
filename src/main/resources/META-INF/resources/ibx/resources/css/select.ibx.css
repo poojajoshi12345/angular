@@ -112,6 +112,7 @@
 	padding:5px;
     border-radius:5px;
     min-height: 1em;
+    overflow: auto;
 }
 
 .ibx-select-popup .ibx-select-item-list,
@@ -124,7 +125,8 @@
 
 .ibx-select-item
 {
-	padding:.15em;
+    padding:.15em;
+    flex: 0 0 auto;
 }
 
 .ibx-select-item:hover{

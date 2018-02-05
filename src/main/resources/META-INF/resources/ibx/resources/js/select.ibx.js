@@ -218,7 +218,7 @@ $.widget("ibi.ibxSelectBase", $.ibi.ibxTextField,
 			if(!this._popup.ibxWidget("isOpen"))
 			{
 				this._popup.ibxWidget("open");
-				this._popup.css("min-width", this.element.width() + "px");
+				this._popup.css("min-width", this.element.innerWidth() + "px");
 				this._control.ibxWidget("refresh");
 			}
 		}
@@ -251,6 +251,8 @@ $.widget("ibi.ibxSelect", $.ibi.ibxSelectBase,
 	options:
 		{
 			"multiSelect": false,
+			"autoHeight": true,
+			"autoHeightGap": 50,
 		},
 	_widgetClass: "ibx-select",
 	_create: function ()
@@ -269,6 +271,14 @@ $.widget("ibi.ibxSelect", $.ibi.ibxSelectBase,
 	_initControl: function ()
 	{
 		this._control.ibxWidget("add", this.element.children(".ibx-select-item, .ibx-select-group"));
+        $(window).on("resize", this._onWindowResize.bind(this));
+        if (this._popup)
+        {
+            this._popup.on("ibx_open", function (e)
+            {
+				this._setMaxHeight();
+            }.bind(this));
+		}
 	},
 	_setValue: function (value, bFormat, extra)
 	{
@@ -342,6 +352,24 @@ $.widget("ibi.ibxSelect", $.ibi.ibxSelectBase,
 	userValue: function (value)
 	{
 		return this._control.ibxWidget("userValue", value);
+	},
+    _onWindowResize: function ()
+    {
+        if (this._popup)
+        {
+            this._setMaxHeight();
+            window.setTimeout(function (){
+				this._popup.css("min-width", this.element.innerWidth() + "px");
+			}.bind(this), 10);
+        }
+	},
+	_setMaxHeight: function ()
+	{
+		if (this.options.autoHeight)
+		{
+			var popupTop = this._control.offset().top;
+			this._control.css("max-height", Math.max(100,$(window).outerHeight() - popupTop - this.options.autoHeightGap) + "px");
+		}
 	},
 	_refresh: function ()
 	{
@@ -1092,7 +1120,7 @@ $.widget("ibi.ibxSelectPaged", $.ibi.ibxSelectBase, {
         {
             this._setMaxHeight();
             window.setTimeout(function (){
-				this._popup.css("min-width", this.element.width() + "px");
+				this._popup.css("min-width", this.element.innerWidth() + "px");
 			}.bind(this), 10);
         }
 	},
