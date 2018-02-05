@@ -610,10 +610,13 @@ $.widget("ibi.ibxSelectItemList", $.ibi.ibxVBox,
 			this.element.find(".ibx-select-item").each(function (index, el)
 			{
 				var itemText = $(el).data("ibxWidget").option("text") + "";
-				if (!found && (this._fnMatch ? (this._fnMatch(searchText, itemText)) : (0 == itemText.toLowerCase().indexOf(searchText.toLowerCase()))))
+				if (this._fnMatch ? (this._fnMatch(searchText, itemText)) : (0 == itemText.toLowerCase().indexOf(searchText.toLowerCase())))
 				{
+					if (!found)
+						$(el).addClass("ibx-select-item-highlight");
+					else
+						$(el).removeClass("ibx-select-item-highlight");
 					found = true;
-					$(el).addClass("ibx-select-item-highlight");
 					$(el).show();
 				}
 				else
