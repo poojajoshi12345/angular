@@ -530,8 +530,9 @@ $.ibi.ibxWidget.isNavKey = function(keyCode)
 	_p.dragYOffset = 0;
 	_p.setDragImage = function(img, xOffset, yOffset)
 	{
-		this._dragImage = $(img);
-		this._dragImage.css("position", "absolute").addClass("ibx-drag-image");
+		this._dragImage = img ? $(img) : this._dragImage;
+		if(this._dragImage)
+			this._dragImage.css("position", "absolute").addClass("ibx-drag-image");
 		this.dragXOffset = xOffset || this.dragXOffset;
 		this.dragYOffset = yOffset || this.dragYOffset;
 	};
@@ -690,11 +691,14 @@ $.ibi.ibxWidget.isNavKey = function(keyCode)
 
 						//manage the drag cursor
 						if(this._dataTransfer._dragImage)
-						{	
+						{
+							var dragImage = this._dataTransfer._dragImage;
+							var xOffset = (this._dataTransfer.dragXOffset == "center") ? -(dragImage.width()/2) : dragImage.width();
+							var yOffset = (this._dataTransfer.dragYOffset == "center") ? -(dragImage.height()/2) : dragImage.height();
 							$(this._dataTransfer._dragImage).css(
 							{
-								"left":e.clientX + this._dataTransfer.dragXOffset + "px",
-								"top":e.clientY + this._dataTransfer.dragYOffset + "px",
+								"left":e.clientX + xOffset + "px",
+								"top":e.clientY + yOffset + "px",
 							}).appendTo("body.ibx-root");
 						}
 					}
