@@ -692,7 +692,7 @@ _p._onComplete = function(exInfo, xhr, status)
 	xhr.exInfo = exInfo;
 
 	var res = xhr.responseXML || xhr.responseJSON || xhr.responseText;
-	var error = this._errorCheck(xhr, res, exInfo)
+	var error = this._errorCheck(xhr, res, exInfo);
 	if(!error)
 	{
 		exInfo.result = (exInfo.ppFun) ? exInfo.ppFun.call(exInfo.ppCtx, res, exInfo) : res;
@@ -721,34 +721,7 @@ _p._errorCheck = function(xhr, res, exInfo)
 };
 _p._handleError = function(error, res, exInfo)
 {
-	if($(window).dispatchEvent(WebApi.genEventType(exInfo.eError, exInfo), exInfo) && exInfo.errorHandling)
-	{
-		var options = 
-		{
-			"resizable":true,
-			"type":"std error",
-			"caption":"Ibfs Error",
-			"messageOptions":{text:"Error: " + error.name},
-			"buttons":"ok"
-		};
-		var info = ibx.resourceMgr.getResource(".ibfs-dlg-error", false);
-		var dlg = $.ibi.ibxDialog.createMessageDialog(options).addClass("ibfs-error-dialog");
-		dlg.ibxWidget("add", info.children()).resizable();
-		ibx.bindElements(dlg[0])
-		widget = dlg.data("ibxWidget");
-		widget._errDetails.ibxWidget("option", "text", this._getErrorDetails(error, exInfo));
-		dlg.ibxWidget("open");
-	}
-}
-_p._getErrorDetails = function(error, exInfo)
-{
-	var strMsg = error.message + ":\n  " + exInfo.ajax.url + "\n";
-	var strParms = ibx.resourceMgr.getString("IDS_IBFS_ERROR_DETAILS_PARMS") + "\n";
-	for(var parm in exInfo.parms)
-		strParms = sformat("{1}  {2}: {3}\n", strParms, parm, exInfo.parms[parm]);
-	var strDoc = ibx.resourceMgr.getString("IDS_IBFS_ERROR_DETAILS_RET_DOC") + "\n" + exInfo.xhr.responseText;
-	var strErr = sformat("{1}\n{2}\n{3}", strMsg, strParms, strDoc);
-	return strErr;
-}
+	//empty in base
+};
 
 //# sourceURL=util.ibx.js

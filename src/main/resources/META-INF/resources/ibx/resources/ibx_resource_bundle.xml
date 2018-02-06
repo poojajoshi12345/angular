@@ -43,12 +43,6 @@ $Revision$:-->
 				"IBX_CAROUSEL_PAGES":"Carousel Pages",
 				"IBX_CAROUSEL_PAGE":"Go to Page",
 
-				"IDS_IBFS_ERROR_UNKNOWN":"Unknown webFOCUS communications error.",
-				"IDS_IBFS_ERROR_DETAILS_LABEL":"Details:",
-				"IDS_IBFS_ERROR_DETAILS_PARMS":"Parameters:",
-				"IDS_IBFS_ERROR_DETAILS_EXINFO":"Error: ",
-				"IDS_IBFS_ERROR_DETAILS_RET_DOC":"Return Payload:",
-
 				"IBX_DP_MONTHS":"['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']",
 				"IBX_DP_MONTHS_SHORT":"['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']",
 				"IBX_DP_DAYS":"['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']",
@@ -112,38 +106,6 @@ $Revision$:-->
 		<style-file src="./css/iframe.ibx.css"/>
 		<style-file src="./css/carousel.ibx.css"/>
 		<style-file src="./css/datepicker.ibx.css"/>
-		
-		<!--inline-->
-		<style-sheet name="">
-		<![CDATA[
-			.ibfs-error-dialog
-			{
-				width:450px;
-				height:300px;
-			}
-			.ibfs-error-dialog > .ibx-dialog-main-box
-			{
-				position:absolute;
-				left:0px;
-				top:0px;
-				right:0px;
-				bottom:0px
-			}
-			.ibfs-error-details-label
-			{
-				margin-top:6px;
-				margin-bottom:2px;
-				font-weight:bold;
-			}
-			.ibfs-error-details
-			{
-				flex:1 1 auto;
-				font-family:courier new;
-				font-size:11px;
-				margin-bottom:6px;
-			}
-		]]>
-		</style-sheet>
 	</styles>
 
 	<!--markup-->
@@ -166,12 +128,6 @@ $Revision$:-->
 					</div>
 				</div>
 			</div>
-
-			<div class="ibfs-dlg-error">
-				<div class="ibfs-error-details-label" data-ibx-type="ibxLabel">@ibxString("IDS_IBFS_ERROR_DETAILS_LABEL")</div>
-				<div class="ibfs-error-details" data-ibx-name="_errDetails" data-ibx-type="ibxTextArea" data-ibxp-text-wrap="off"></div>
-			</div>
-
 			<div class="res-ibx-carousel-body">
 				<div class="ibx-csl-items-container" data-ibx-name="_itemsContainer" data-ibx-type="ibxHBox" data-ibxp-align="stretch">
 					<div class="csl-scroll-btn" tabIndex="-1" title="@ibxString('IBX_CAROUSEL_PREV')" data-ibx-name="_prevBtn" data-ibx-type="ibxButtonSimple" data-ibxp-class="ibx-csl-prev-btn"></div>
