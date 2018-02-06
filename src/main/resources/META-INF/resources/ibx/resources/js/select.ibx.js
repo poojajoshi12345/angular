@@ -973,8 +973,11 @@ $.widget("ibi.ibxSelectPaged", $.ibi.ibxSelectBase, {
         {
             this._popup.on("ibx_open", function (e)
             {
-                this._control.ibxWidget("resetSearch", true);
 				this._setMaxHeight();
+            }.bind(this));
+            this._popup.on("ibx_close", function (e)
+            {
+				this._control.ibxWidget("resetSearch", true);
             }.bind(this));
 		}
 	},
