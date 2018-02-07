@@ -33,13 +33,24 @@
 				{
 					$(".test-dlg").resizable().ibxWidget("open");
 
-					var url =
-					[
-						"customClassName=a",
-						"customScriptFileName=b",
-					];
-					url = "http://localhost:8080/ibi_apps/tools/ibfs_explore/resources/markup/ibfs_explore_app.htm?" + url.join("&");
-					$(".test-frame").ibxWidget("option", "src", url);
+					url = "http://localhost:8080/ibi_apps/tools/ibfs_explore/resources/markup/ibfs_explore_app.htm";
+					$(".test-frame").on("load", function(e)
+					{
+						debugger;
+						var wnd = $(this).ibxWidget("contentWindow");
+						$(wnd).on("ibfs_explore_loaded", function(e)
+						{
+							var oConfig = {};
+							oConfig.strCaption = "Open";
+							oConfig.strRootPath = "IBFS:/WFC/Repository";
+							oConfig.strContextPath = "";
+							oConfig.strDefaultName = "";
+							oConfig.strDefaultExt = "";
+							oConfig.typeDefaultExplore = "details";
+							oConfig.nFilterIndex = 0;
+							oConfig.arFilters = [["All Files", "*.*"]];
+						});
+					}).ibxWidget("option", "src", url);
 				})
 			}, [{src:"./test_res_bundle.xml", loadContext:"app"}], true);
 		</script>

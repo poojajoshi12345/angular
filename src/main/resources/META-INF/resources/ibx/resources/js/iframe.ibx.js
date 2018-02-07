@@ -33,7 +33,7 @@ $.widget("ibi.ibxIFrame", $.ibi.ibxWidget,
 	},
 	_onIFrameEvent:function(e)
 	{
-		this.element.trigger(e);
+		this.element.dispatchEvent(e.originalEvent);
 	},
 	contentDocument:function()
 	{
