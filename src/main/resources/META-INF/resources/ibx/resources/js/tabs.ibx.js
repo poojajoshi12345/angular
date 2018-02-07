@@ -62,7 +62,6 @@ $.widget("ibi.ibxTabPane", $.ibi.ibxFlexBox,
 			var button = el.ibxWidget('button');
 			var groupName = this._group.ibxWidget("option", "name");
 			button.ibxWidget("option", "group", groupName);
-			this._group.ibxRadioGroup("addControl", button);
 			var nextPage = el.next('.ibx-tab-page');
 			if (nextPage.length > 0)
 			{
@@ -171,9 +170,9 @@ $.widget("ibi.ibxTabPane", $.ibi.ibxFlexBox,
 		if(e.keyCode == $.ui.keyCode.ESCAPE)
 			;
 	},
-	_onTabChange: function (e)
+	_onTabChange: function (e, button)
 	{
-		var tabButton = $(e.target);
+		var tabButton = $(button);
 		this.options.selected = tabButton.ibxWidget('option', 'tabPage');
 		this._trigger("change", e, this.options.selected);
 	},
