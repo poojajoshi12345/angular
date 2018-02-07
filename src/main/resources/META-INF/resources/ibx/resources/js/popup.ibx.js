@@ -11,6 +11,8 @@ $.widget("ibi.ibxPopup", $.ibi.ibxWidget,
 		"autoClose":true,
 		"moveable":false,
 		"moveHandle":null,
+		"resizable":false,
+		"resizeHandles":null,
 		"escapeToClose":true,
 		"destroyOnClose":true,
 		"autoFocus":true,
@@ -157,6 +159,13 @@ $.widget("ibi.ibxPopup", $.ibi.ibxWidget,
 		this.element.addClass($.ibi.ibxPopup.statics.effect[options.effect]);
 		options.modal ? this.element.addClass("pop-modal") : this.element.removeClass("pop-modal");
 		this.element.draggable({disabled:!options.moveable, handle:options.moveHandle});
+		this.element.resizable({disabled:!options.resizable, handles:options.resizeHandles});
+		this.element.on("resizestart resizestop dragstart dragstop", function(e)
+		{
+			//[IBX-78] make resize/move work when content has iframes...stop pointer events so they don't eat the events.
+			var frames = this.element.find("iframe")
+			frames.css("pointerEvents", (e.type == "resizestart" || e.type == "dragstart") ? "none" : "");
+		}.bind(this));
 	}
 });
 
