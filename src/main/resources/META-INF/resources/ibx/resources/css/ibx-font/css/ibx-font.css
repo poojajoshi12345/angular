@@ -89,6 +89,19 @@
 .ibx-glyph-number:before {
   content: "\e985";
 }
+.ibx-glyph-file-ely:before {
+  content: "\e9c8";
+  color: #000;
+}
+.ibx-glyph-file-zip:before {
+  content: "\e9c9";
+}
+.ibx-glyph-what-if-icon:before {
+  content: "\e9c7";
+}
+.ibx-glyph-what-if:before {
+  content: "\e9c6";
+}
 .ibx-glyph-folder:before {
   content: "\e900";
 }
