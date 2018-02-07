@@ -929,7 +929,7 @@ $.widget("ibi.ibxSelectPaged", $.ibi.ibxSelectBase, {
 	{
         "readonly": true,
         "autoHeight": true,
-		"autoHeightGap": 50,
+		"autoHeightGap": 100,
 		"search": false,
 		"selectionControls": false,
 		"enablePagingTrigger": 200,
@@ -1132,7 +1132,7 @@ $.widget("ibi.ibxSelectPaged", $.ibi.ibxSelectBase, {
 		if (this.options.autoHeight)
 		{
 			var popupTop = this._control.offset().top;
-			this._control.css("max-height", Math.max(100,$(window).outerHeight() - popupTop - this.options.autoHeightGap) + "px");
+			this._control.ibxWidget('listControl').css("max-height", Math.max(100,$(window).outerHeight() - popupTop - this.options.autoHeightGap) + "px");
 		}
 	},
 	_refresh: function ()
@@ -1156,6 +1156,10 @@ $.widget("ibi.ibxSelectItemListPaged", $.ibi.ibxVBox,
 	},
 	_widgetClass: "ibx-select-item-list-paged",
 	_enablePaging: false,
+	listControl: function ()
+	{
+		return this._listControl;
+	},
 	_create: function ()
 	{
 		this._super();
