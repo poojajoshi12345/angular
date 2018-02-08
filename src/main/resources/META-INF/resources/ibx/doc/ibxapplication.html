@@ -104,6 +104,35 @@
 
 	<section>
 		<h4>Retrieving Resources</h4>
-		...UNDER CONSTRUCTION
+		Resource bundles server two purposes, first, they load resources (like css/js/markup files), and second they can retrieve and bind resources so you can
+		use them in your application.
+		
+		<p/>
+		There are two main types of resources you can retrieve:
+		<ul>
+			<li>
+				Strings:<br/>
+				A string is retrieved from the resource manager by:
+				<pre>ibx.resourceMgr.getString("STRING_SYMBOL", "missingString", "language")</pre>
+				<p/>
+				Where:
+				<ul>
+					<li>STRING_SYMBOL is the language independent identifier of the string to be retrieved.</li>
+					<li>missingString is the string to use if the STRING_SYMBOL is not found.<br/>
+						* The missing string can also be set as a global value for the entire resource manager, so you don't have to pass it every time.
+					</li>
+					<li>language is the language code you want to get (en_us).<br/>
+						* The resource bundle has a default language you can set so you don't have to pass it every time.<br/>
+						* The resource bundle will cascade the language code if it can't be located. That is: en_us  ->  en  ->  ibx_default
+					</li>
+				</ul>
+				<p/>
+				Also:<br/>
+				You can do string substitutions in resources too by putting @ibxString(STRING_SYMBOL) where the string would be:
+				<pre>&lt;div data-ibx-type="ibxLabel" data-ibxp-label="@ibxString(STRING_SYMBOL)">&lt;/div></pre>
+				<pre>&lt;div data-ibx-type="ibxLabel">@ibxString(STRING_SYMBOL)&lt;/div></pre>
+				<pre>&lt;div>I'm some random piece of markup with a runtime string: @ibxString(STRING_SYMBOL)&lt;/div></pre>
+			</li>
+		<ul>
 	</section>
 </article>
