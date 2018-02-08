@@ -286,6 +286,15 @@ jQuery.fn.extend( {
 
 
 //does the keyboard event match the shortcut string (CTRL+C, eg.)
+//[IBX-79](extend jQueryUI's key aliases to include abreviated versions)
+$.extend($.ui.keyCode, 
+{
+	"BACK":8,
+	"DEL":46,
+	"ESC":27,
+	"PG-DOWN":34,
+	"PG-UP":33,
+});
 function eventMatchesShortcut(shortcut, evtKey)
 {
 	var ret = false;
