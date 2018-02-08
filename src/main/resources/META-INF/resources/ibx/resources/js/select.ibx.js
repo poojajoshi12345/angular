@@ -406,11 +406,11 @@ $.widget("ibi.ibxSelectItemList", $.ibi.ibxVBox,
 	add: function (el, sibling, before, refresh)
 	{
 		el = $(el).filter(".ibx-select-group, .ibx-select-item");
-		el.each(function(sibling, before, refresh, idx, el)
+		this._super(el, sibling, before, false);
+
+		el.each(function(idx, el)
 		{
 			el = $(el);
-			this._super(el, sibling, before, false);
-
 			if (el.hasClass("ibx-select-group"))
 			{
 				el.ibxWidget("option", "selectCtrl", this.element);
@@ -431,7 +431,7 @@ $.widget("ibi.ibxSelectItemList", $.ibi.ibxVBox,
 				if (el.ibxWidget("option", "selected") || this.options.userValue && this.options.userValue == el.ibxWidget("option", "userValue"))
 					this._setSelection(el, true);
 			}
-		}.bind(this, sibling, before, refresh));
+		}.bind(this));
 	},
 	_sortType: true,
 	_fnSort: null,
@@ -1367,6 +1367,7 @@ $.widget("ibi.ibxSelectItemListPaged", $.ibi.ibxVBox,
 		var pageStart = this._enablePaging ? (options.pageSize * pageIndex) : 0;
 		var pageEnd = this._enablePaging ? Math.min(this._filteredValues.length, pageStart + options.pageSize) : this._filteredValues.length;
 
+		var nodes = [];
 		for (var i = pageStart; i < pageEnd; ++i)
 		{
 			var valInfo = this._filteredValues[i];
@@ -1378,8 +1379,9 @@ $.widget("ibi.ibxSelectItemListPaged", $.ibi.ibxVBox,
 			if (valInfo.class)
 				item.addClass(valInfo.class);
 			item.ibxWidget("option", "valObj", valInfo);
-			this.add(item);
+			nodes.push(item[0]);
 		}
+		this.add($(nodes));
 
 		this._updatePageLabel();
 		this._inSetPage = false;
