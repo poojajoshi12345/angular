@@ -176,7 +176,6 @@ _p.loadExternalResFile = function(elFile)
 	return elFile;
 };
 
-
 //if something bad happens while retrieving a source file in the bundle.
 _p._resFileRetrievalError = function(src, xhr, status, msg)
 {

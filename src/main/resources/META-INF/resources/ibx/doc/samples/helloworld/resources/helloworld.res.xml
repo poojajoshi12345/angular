@@ -51,7 +51,7 @@
 	<markup>
 		<markup-file src="./markup/helloworld_markup.xml"/>
 		<markup-block>
-			<div class="class-inline-res-bundle" data-ibx-type="ibxLabel">Hello World (inline res bundle)</div>
+			<div class="class-inline-res-bundle res-bundle-label" data-ibx-type="ibxLabel">Hello World (inline res bundle)</div>
 		</markup-block>
 	</markup>
 

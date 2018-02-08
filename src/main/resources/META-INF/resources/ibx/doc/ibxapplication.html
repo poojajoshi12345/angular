@@ -111,17 +111,17 @@
 		There are two main types of resources you can retrieve:
 		<ul>
 			<li>
-				Strings:<br/>
+				<b>Strings:</b><br/>
 				A string is retrieved from the resource manager by:
-				<pre>ibx.resourceMgr.getString("STRING_SYMBOL", "missingString", "language")</pre>
+				<pre>ibx.resourceMgr.getString(id, def, language)</pre>
 				<p/>
 				Where:
 				<ul>
-					<li>STRING_SYMBOL is the language independent identifier of the string to be retrieved.</li>
-					<li>missingString is the string to use if the STRING_SYMBOL is not found.<br/>
+					<li><b>id</b> is the language independent identifier of the string to be retrieved.</li>
+					<li><b>def</b> is the string to use if the STRING_SYMBOL is not found.<br/>
 						* The missing string can also be set as a global value for the entire resource manager, so you don't have to pass it every time.
 					</li>
-					<li>language is the language code you want to get (en_us).<br/>
+					<li><b>language</b> is the language code you want to get (en_us).<br/>
 						* The resource bundle has a default language you can set so you don't have to pass it every time.<br/>
 						* The resource bundle will cascade the language code if it can't be located. That is: en_us  ->  en  ->  ibx_default
 					</li>
@@ -132,6 +132,29 @@
 				<pre>&lt;div data-ibx-type="ibxLabel" data-ibxp-label="@ibxString(STRING_SYMBOL)">&lt;/div></pre>
 				<pre>&lt;div data-ibx-type="ibxLabel">@ibxString(STRING_SYMBOL)&lt;/div></pre>
 				<pre>&lt;div>I'm some random piece of markup with a runtime string: @ibxString(STRING_SYMBOL)&lt;/div></pre>
+			</li>
+			<li>
+				<b>Markup:</b><br/>
+				Resource bundles can have any type of well formed markup you like.  They are just XML files.  You retrieve a pice of markup by:
+				<pre>ibx.resourceMgr.getResource(selector, ibxBind, forceCreate)</pre>
+				<p/>
+				Where:
+				<ul>
+					<li><b>selector</b> is any valid jQuery selector to find the desired resource(s) in all loaded bundles managed by that instance of the resource manager.
+					<li><b>ibxBind</b> when selector is found, automatically bind that resource into ibxWidgets</li>
+					<li><b>forceCreate</b> NOT USED AT THIS TIME - DO NOT PASS</li>
+				</ul>
+				For Example:<br/>
+				This is a snippet from the <a href="#simpleResBundle">'Simple Resource Bundle'</a> code above...
+				<pre>
+					&lt;markup>
+						&lt;markup-file src="./markup/helloworld_markup.xml"/>
+						&lt;markup-block>
+							&lt;div class="class-inline-res-bundle res-bundle-label" data-ibx-type="ibxLabel">Hello World (inline res bundle)</div>
+						&lt;/markup-block>
+					&lt;/markup>
+				</pre>
+
 			</li>
 		<ul>
 	</section>

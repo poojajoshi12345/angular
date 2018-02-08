@@ -9,6 +9,7 @@ $.widget("ibi.ibxPopup", $.ibi.ibxWidget,
 		"focusRoot":true,
 		"modal":false,
 		"autoClose":true,
+		"movable":false,
 		"moveable":false,
 		"moveHandle":null,
 		"resizable":false,
@@ -158,13 +159,30 @@ $.widget("ibi.ibxPopup", $.ibi.ibxWidget,
 		var options = this.options;
 		this.element.addClass($.ibi.ibxPopup.statics.effect[options.effect]);
 		options.modal ? this.element.addClass("pop-modal") : this.element.removeClass("pop-modal");
-		this.element.draggable({disabled:!options.moveable, handle:options.moveHandle});
-		this.element.resizable({disabled:!options.resizable, handles:options.resizeHandles});
+		
+		//WRONG OPTION!
+		if(options.moveable)
+			console.warn("incorrect option 'moveable', use 'movable' instead! =>", this.element);
+
+		//turn draggable on/off
+		if(options.movable || options.moveable)
+			this.element.draggable({handle:options.moveHandle});
+		else
+		if(this.element.is(".ui-draggable"))
+			this.element.draggable("destroy");
+
+		//turn resizable on/off
+		if(options.resizable)
+			this.element.resizable({handles:options.resizeHandles});
+		else
+		if(this.element.is(".ui-resizable"))
+			this.element.resizable("destroy");
+
 		this.element.on("resizestart resizestop dragstart dragstop", function(e)
 		{
 			//[IBX-78] make resize/move work when content has iframes...stop pointer events so they don't eat the events.
 			var frames = this.element.find("iframe")
-			frames.css("pointerEvents", (e.type == "resizestart" || e.type == "dragstart") ? "none" : "");
+			frames.css("pointerEvents", (e.type == "resizestart" || e.type == "dragstart") ? "none" : "NONE");
 		}.bind(this));
 	}
 });

@@ -31,12 +31,11 @@
 				});
 				$(".show-dlg").on("click", function(e)
 				{
-					$(".test-dlg").resizable().ibxWidget("open");
+					$(".test-dlg").ibxWidget("open");
 
 					url = "http://localhost:8080/ibi_apps/tools/ibfs_explore/resources/markup/ibfs_explore_app.htm";
 					$(".test-frame").on("load", function(e)
 					{
-						debugger;
 						var wnd = $(this).ibxWidget("contentWindow");
 						$(wnd).on("ibfs_explore_loaded", function(e)
 						{
@@ -49,6 +48,19 @@
 							oConfig.typeDefaultExplore = "details";
 							oConfig.nFilterIndex = 0;
 							oConfig.arFilters = [["All Files", "*.*"]];
+							oConfig.arShortcuts = [];
+
+							var dlgArgs = 
+							{
+								"oConfig":oConfig,
+								"customClassName":null,
+								"customScriptFilename":null,
+								"theme":null,
+							};
+							wnd.dialogArguments = dlgArgs;
+							e.originalEvent.data._args = dlgArgs;
+							e.originalEvent.data._init();
+
 						});
 					}).ibxWidget("option", "src", url);
 				})
@@ -76,7 +88,7 @@
 	<body class="ibx-root">
 		<div class="show-dlg" data-ibx-type="ibxButton">Dialog...</div>
 		
-		<div class="test-dlg" data-ibx-type="ibxDialog" data-ibxp-auto-size="false" data-ibxp-destroy-on-close="false" data-ibxp-caption-options.text="Security Center">
+		<div class="test-dlg" data-ibx-type="ibxDialog" data-ibxp-auto-size="false" data-ibxp-resizable="true" data-ibxp-destroy-on-close="false" data-ibxp-caption-options.text="Open">
 			<div class="test-frame" data-ibx-type="ibxIFrame" data-ibxp-src=""></div>
 		</div>
 	</body>
