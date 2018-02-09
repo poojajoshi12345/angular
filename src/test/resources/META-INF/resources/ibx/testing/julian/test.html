@@ -8,45 +8,34 @@
 		<meta http-equiv="Expires" content="0" />
 		<meta name="google" value="notranslate">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
-
+		<script type="text/javascript" src="../../resources/ibx.js"></script>
 		<script type="text/javascript">
-			function resize(w, h)
+			window.addEventListener("load", function(e)
 			{
-				var body = document.body;
-			}
+				ibx(function(e)
+				{
+					debugger;
+				}, true);
+
+				/*
+				var el = document.createElement("script");
+				el.setAttribute("type", "text/javascript");
+				el.setAttribute("src", "../../resources/ibx.js");
+				document.head.appendChild(el);
+				el.addEventListener("load", function(e)
+				{
+					ibx(function(e)
+					{
+						debugger;
+					}, true);
+				});
+				*/
+			});
 		</script>
 		<style type="text/css">
-			html
-			{
-			}
-			body
-			{
-				margin:0px;
-			}
-			.test-div
-			{
-				margin:10px;
-				border:1px solid black;
-				background-color:thistle;
-				overflow:auto;
-				height:500px;
-			}
 		</style>
 	</head>
 	<body>
-		<a href="#s1">Section 1</a><a href="#s2">Section 2</a><a href="#s3">Section 3</a><a href="#s4">Section 4</a>
-		<div id="s1" tabindex="0" class="test-div">
-			Section 1
-		</div>
-		<div id="s2" tabindex="0" class="test-div">
-			Section 2
-		</div>
-		<div id="s3" tabindex="0" class="test-div">
-			Section 3
-		</div>
-		<div id="s4" tabindex="0" class="test-div">
-			Section 4
-		</div>
 	</body>
 </html>
 
