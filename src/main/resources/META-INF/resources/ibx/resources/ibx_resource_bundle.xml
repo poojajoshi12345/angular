@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--Copyright 1996-2016 Information Builders, Inc. All rights reserved.
 $Revision$:-->
-<ibx-res-bundle name="ibx_resourece_bundle.xml">
+<ibx-res-bundle name="ibx_resourece_bundle.xml" loadContext="ibx">
 	
 	<!--dependent resource bundles this bundle needs-->
 	<res-bundles>
@@ -80,7 +80,7 @@ $Revision$:-->
 		<style-file src="./etc/google/css/open-sans.css"/>
 		<style-file src="./etc/google/css/roboto.css"/>
 
-		<!--IBI ASSETS-->
+		<!--IBX ASSETS-->
 		<style-file src="./css/ibx-font/css/ibx-font.css"/>
 		<style-file src="./css/widget.ibx.css"/>
 		<style-file src="./css/collapsible.ibx.css"/>
@@ -142,13 +142,13 @@ $Revision$:-->
 
 	<!--scripts-->
 	<scripts>
-		<!--POLYFILL/SHIM AND PLUGINS-->
+		<!--EXTERNAL ASSETS-->
 		<script-file src="./etc/resizepolyfill/ResizeSensor.js"/>
 		<script-file src="./etc/scrollwidthpolyfill/scrollwidthpolyfill.js"/>
-		<script-file src="./etc/gridstack/underscore.js"/>
+		<script-file inline="false" src="./etc/gridstack/underscore.js"/> <!--inline false because file as an incorrect source mapping will generate a warning.-->
 		<script-file src="./etc/gridstack/gridstack.js"/>
 
-		<!--IBX CORE-->
+		<!--IBX ASSETS-->
 		<script-file src="./js/events.ibx.js"/>
 		<script-file src="./js/mutationobserver.ibx.js"/>
 		<script-file src="./js/widget.ibx.js"/>

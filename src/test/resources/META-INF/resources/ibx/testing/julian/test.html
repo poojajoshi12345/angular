@@ -8,34 +8,20 @@
 		<meta http-equiv="Expires" content="0" />
 		<meta name="google" value="notranslate">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<script type="text/javascript">
+			window.startDate = new Date();
+		</script>
 		<script type="text/javascript" src="../../resources/ibx.js"></script>
 		<script type="text/javascript">
-			window.addEventListener("load", function(e)
+			ibx(function(e)
 			{
-				ibx(function(e)
-				{
-					debugger;
-				}, true);
-
-				/*
-				var el = document.createElement("script");
-				el.setAttribute("type", "text/javascript");
-				el.setAttribute("src", "../../resources/ibx.js");
-				document.head.appendChild(el);
-				el.addEventListener("load", function(e)
-				{
-					ibx(function(e)
-					{
-						debugger;
-					}, true);
-				});
-				*/
-			});
+				$("body").append(sformat("ibx loaded in {1}ms", (new Date())-startDate));
+			}, true);
 		</script>
 		<style type="text/css">
 		</style>
 	</head>
-	<body>
+	<body class="ibx-root">
 	</body>
 </html>
 

@@ -91,7 +91,6 @@ function ibx()
 				window.clearInterval(ibx._loadTimer);
 				throw("Error loading pre ibx resources: " + scripts);
 			}
-
 			if(window.jQuery && window.jQuery.widget)
 			{
 				//jQuery/jQueryUI is in scope...stop polling...
@@ -130,7 +129,7 @@ function ibx()
 
 						var inlineStyles = $("head > style");//save the pre-ibx styles so they can be moved to the end after load.
 						var packages = ibx._loadPromise._resPackages;
-						packages.unshift(ibx._path + "./ibx_resource_bundle.xml");
+						packages.unshift("./ibx_resource_bundle.xml");
 						ibx.resourceMgr.addBundles(packages).done(function()
 						{
 							//ibx is fully loaded and running.

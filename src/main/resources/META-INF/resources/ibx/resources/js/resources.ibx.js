@@ -130,7 +130,7 @@ _p.loadExternalResFile = function(elFile)
 		if(!this.loadedFiles[src])
 		{
 			var fileType = elFile.prop("tagName");
-			var asInline = (!!elFile.attr("inline") && !!eFile.attr("link")) || (fileType == "string-file") || (fileType == "markup-file");
+			var asInline = (fileType == "script-file" && (elFile.attr("inline") !== "false")) || (fileType == "string-file") || (fileType == "markup-file");
 			if(asInline)
 			{
 				$.get({async:false, url:src, dataType:"text", error:this._resFileRetrievalError.bind(this, src)}).done(function(elFIle, src, fileType, content, status, xhr)
@@ -152,11 +152,17 @@ _p.loadExternalResFile = function(elFile)
 							eType = "markupfileloaded";
 						}
 						else
+						if(fileType == "style-file")
 						{
-							var isStyle = (fileType == "style-file");
-							var tag = $( isStyle ? "<style type='text/css'>" : "<script type='text/javascript'>").attr("data-ibx-src", src).text(content);
+							var tag = $("<style type='text/css'>").attr("data-ibx-src", src).text(content);
 							$("head").append(tag);
-							eType = isStyle ? "cssfileinlineloaded" : "scriptfileinlineloaded";
+							eType = "cssfileinlineloaded";
+						}
+						else
+						if(fileType == "script-file")
+						{
+							eval.call(window, content);
+							eType = "scriptfileinlineloaded";
 						}
 						this.loadedFiles[src] = true;
 						$(window).dispatchEvent("ibx_resmgr", {"hint":eType, "loadDepth":this._loadDepth, "resMgr":this, "fileNode":elFile[0], "src":src});
