@@ -154,7 +154,7 @@ $.widget("ibi.ibxTabPane", $.ibi.ibxFlexBox,
 		}
 
 		this._tabBar.css("flex", "0 0 auto");
-		this._tabBar.on("ibx_change", this._onTabChange.bind(this)).attr("tabIndex", -1);
+		//this._tabBar.on("ibx_change", this._onTabChange.bind(this)).attr("tabIndex", -1);
 		this.element.prepend(this._tabBar);
 	},
 	_removeTabBar: function ()
