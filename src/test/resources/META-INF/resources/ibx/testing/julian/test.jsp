@@ -29,41 +29,12 @@
 						console.log("ibfs logged in.");
 					});
 				});
-				$(".show-dlg").on("click", function(e)
+
+				$(".ibx-command").on("ibx_triggered", function(e)
 				{
-					$(".test-dlg").ibxWidget("open");
+					console.log(e.target);
+				});
 
-					url = "http://localhost:8080/ibi_apps/tools/ibfs_explore/resources/markup/ibfs_explore_app.htm";
-					$(".test-frame").on("load", function(e)
-					{
-						var wnd = $(this).ibxWidget("contentWindow");
-						$(wnd).on("ibfs_explore_loaded", function(e)
-						{
-							var oConfig = {};
-							oConfig.strCaption = "Open";
-							oConfig.strRootPath = "IBFS:/WFC/Repository";
-							oConfig.strContextPath = "";
-							oConfig.strDefaultName = "";
-							oConfig.strDefaultExt = "";
-							oConfig.typeDefaultExplore = "details";
-							oConfig.nFilterIndex = 0;
-							oConfig.arFilters = [["All Files", "*.*"]];
-							oConfig.arShortcuts = [];
-
-							var dlgArgs = 
-							{
-								"oConfig":oConfig,
-								"customClassName":null,
-								"customScriptFilename":null,
-								"theme":null,
-							};
-							wnd.dialogArguments = dlgArgs;
-							e.originalEvent.data._args = dlgArgs;
-							e.originalEvent.data._init();
-
-						});
-					}).ibxWidget("option", "src", url);
-				})
 			}, [{src:"./test_res_bundle.xml", loadContext:"app"}], true);
 		</script>
 		<style type="text/css">
@@ -74,22 +45,16 @@
 				margin:0px;
 				box-sizing:border-box;
 			}
-			.test-dlg
+			.test-txt
 			{
-				width:600px;
-				height:400px;
-			}
-			.test-frame
-			{
-				flex:1 1 auto;
-			}
+				width:200px;
+			}			
 		</style>
 	</head>
 	<body class="ibx-root">
-		<div class="show-dlg" data-ibx-type="ibxButton">Dialog...</div>
-		
-		<div class="test-dlg" data-ibx-type="ibxDialog" data-ibxp-auto-size="false" data-ibxp-resizable="true" data-ibxp-destroy-on-close="false" data-ibxp-caption-options.text="Open">
-			<div class="test-frame" data-ibx-type="ibxIFrame" data-ibxp-src=""></div>
-		</div>
+		<div data-ibx-type="ibxCommand" data-ibxp-id="cmdCut" data-ibxp-shortcut="CTRL+X"></div>
+		<div data-ibx-type="ibxCommand" data-ibxp-id="cmdCut" data-ibxp-shortcut="CTRL+C"></div>
+		<div data-ibx-type="ibxCommand" data-ibxp-id="cmdCut" data-ibxp-shortcut="CTRL+V"></div>
+		<div tabindex="0" class="test-txt" data-ibx-type="ibxTextField">Julian</div>
 	</body>
 </html>

@@ -30,9 +30,13 @@ $.widget("ibi.ibxCommand", $.ibi.ibxWidget,
 	},
 	doAction:function(action, data, src)
 	{
+		var ret = true;
 		this._relTarget = src;
 		if(action == "trigger" && !this.options.disabled)
-			this.element.dispatchEvent("ibx_triggered", data, false, false, src);
+		{
+			event = this.element.dispatchEvent("ibx_triggered", data, false, false, src);
+			ret = !event.defaultPrevented;
+		}
 		else
 		if(action == "checked")
 			this.option("checked", data);
@@ -40,14 +44,14 @@ $.widget("ibi.ibxCommand", $.ibi.ibxWidget,
 		if(action == "uservalue")
 			this.option("userValue", data);
 		this._relTarget = null;
+		return ret;
 	},
 	_onCommandKeyEvent:function(e)
 	{
 		if(eventMatchesShortcut(this.options.shortcut, e))
 		{
-			this.doAction("trigger", null, e.target);
-			e.preventDefault();
-			e.stopPropagation();
+			if(!this.doAction("trigger", null, e.target))
+				e.preventDefault();
 		}
 	},
 	_setOptionDisabled:function(value)
