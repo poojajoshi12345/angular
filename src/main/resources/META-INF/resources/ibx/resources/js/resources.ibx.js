@@ -130,7 +130,9 @@ _p.loadExternalResFile = function(elFile)
 		if(!this.loadedFiles[src])
 		{
 			var fileType = elFile.prop("tagName");
-			var asInline = (fileType == "script-file" && (elFile.attr("inline") !== "false")) || (fileType == "string-file") || (fileType == "markup-file");
+			if(fileType == "style-file")
+				var x = 10;
+			var asInline = (elFile.attr("inline") == "true") || (fileType == "script-file" && (elFile.attr("inline") !== "false")) || (fileType == "string-file") || (fileType == "markup-file");
 			if(asInline)
 			{
 				$.get({async:false, url:src, dataType:"text", error:this._resFileRetrievalError.bind(this, src)}).done(function(elFIle, src, fileType, content, status, xhr)
