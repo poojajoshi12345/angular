@@ -35,8 +35,12 @@ $.widget("ibi.ibxButton", $.ibi.ibxLabel,
 		{
 			if(e.keyCode === $.ui.keyCode.ENTER || e.keyCode === $.ui.keyCode.SPACE)
 			{
+				//[IBX-81] without this, then keydown to activate a navKeyRoot was autofocusing a button and the keyup was trigger click.
+				//clearly this is wrong and should only happen if the button got the keydown first.
+				var isActive = this.element.hasClass("ibx-button-active");
+				if(isActive)
+					this.element.trigger("click");
 				this.element.removeClass("ibx-button-active");
-				this.element.trigger("click");
 			}
 		}
 		this.setAccessibility();
