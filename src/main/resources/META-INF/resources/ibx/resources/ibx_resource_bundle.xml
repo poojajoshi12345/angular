@@ -120,7 +120,7 @@ $Revision$:-->
 					</div>
 					<div class="ibx-dialog-content" data-ibx-type="ibxVBox" data-ibx-name="contentBox" data-ibxp-align="stretch"></div>
 					<div class='ibx-dialog-button-box' data-ibx-type='ibxHBox' data-ibx-name='btnBox' data-ibxp-align='stretch'>
-						<div class="ibx-dialog-button-padding" data-ibx-name="btnPadding"></div>
+						<div class="ibx-dialog-button-padding" data-ibx-type="ibxNull" data-ibx-name="btnPadding"></div>
 						<div class='ibx-dialog-ok-button' data-ibx-type='ibxButton' data-ibx-name='btnOK' data-ibxp-text='@ibxString("IBX_STR_OK")' tabIndex='0'></div>
 						<div class='ibx-dialog-no-button' data-ibx-type='ibxButton' data-ibx-name='btnNo' data-ibxp-text='@ibxString("IBX_STR_NO")' tabIndex='0'></div>
 						<div class='ibx-dialog-apply-button' data-ibx-type='ibxButton' data-ibx-name='btnApply' data-ibxp-text='@ibxString("IBX_STR_APPLY")' tabIndex='0'></div>

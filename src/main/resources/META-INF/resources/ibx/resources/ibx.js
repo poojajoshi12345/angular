@@ -272,18 +272,16 @@ ibx.bindElements = function(elements)
 			//then construct the parent element, if not already constructed.
 			if(element.is("[data-ibx-type]") && !element.is(":ibxWidget"))
 			{
-				//construct the widget...problem is that there is a dependency on ibi widget's here...fix this!
 				var widgetType = element.attr("data-ibx-type");
 				if($.ibi[widgetType])
-				{
 					var widget = $.ibi[widgetType].call($.ibi, {}, element);
-					element.data("ibxIsBound", true);//mark this element as having been bound.
-				}
 				else
+				if(widgetType != "ibxNull")
 				{
 					console.error("Unknown ibxWidget type:", widgetType, element[0]);
 					debugger;
 				}
+				element.data("ibxIsBound", true);//mark this element as having been bound.
 			}
 		}
 	}.bind(this));
