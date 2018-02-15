@@ -320,26 +320,26 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 		disabled = (pageInfo.scrollLeft + pageInfo.pageWidth) >= pageInfo.scrollWidth;
 		this._nextBtn.ibxWidget("option", "disabled", disabled).toggleClass("csl-btn-hidden", (disabled && options.hideDisabledButtons));
 	},
-	getScrollChild:function(forward)
-	{
-		var childInfo = null;
-		var pageInfo = this.getPageInfo();
-		var children = this.children();
-		for(var i = 0; i < children.length; ++i)
-		{
-			var child = children[i];
-			var info = GetElementInfo(child);
-			if((forward === true) && (info.right > pageInfo.scrollRight))
-				childInfo = info;
-			else
-			if((forward === false) && info.left >= pageInfo.scrollLeft)
-				childInfo = GetElementInfo(child.previousSibling);
+	getScrollChild:function(forward) 
+	{ 
+		 var childInfo = null; 
+		 var pageInfo = this.getPageInfo(); 
+		 var children = this.children(); 
+		 for(var i = 0; i < children.length; ++i) 
+		 { 
+			  var child = children[i]; 
+			  var info = GetElementInfo(child); 
+			  if((forward === true) && (Math.floor(info.right) > pageInfo.scrollRight)) 
+				   childInfo = info; 
+			  else 
+			  if((forward === false) && (Math.floor(info.left) >= pageInfo.scrollLeft)) 
+				   childInfo = GetElementInfo(child.previousSibling); 
 
-			if(childInfo)
-				break;
-		}
-		return childInfo;
-	},
+			  if(childInfo) 
+				   break; 
+		 } 
+		 return childInfo; 
+	},  
 	getPageInfo:function()
 	{
 		var info = 
@@ -449,11 +449,12 @@ $.widget("ibi.ibxVCarousel", $.ibi.ibxCarousel,
 		{
 			var child = children[i];
 			var info = GetElementInfo(child);
-			if(forward && (info.bottom > pageInfo.scrollBottom))
-				childInfo = info;
-			else
-			if((forward === false) && info.bottom >= pageInfo.scrollTop)
-				childInfo = GetElementInfo(child.previousSibling);
+			
+			if((forward === true) && (Math.floor(info.bottom) > pageInfo.scrollBottom)) 
+				childInfo = info; 
+			else 
+			if((forward === false) && (Math.floor(info.top) >= pageInfo.scrollTop)) 
+				childInfo = GetElementInfo(child.previousSibling); 
 
 			if(childInfo)
 				break;
