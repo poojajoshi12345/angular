@@ -22,6 +22,18 @@
 
 			ibx(function()
 			{
+				$("#cmdClear").on("ibx_triggered", function(e)
+				{
+					console.clear();
+					//$(".ibx-menu-button").css("visibility", "hidden");
+					//$(".temp").focus();
+					//$(".ibx-menu").ibxWidget("close");
+					//$(".ibx-menu").css("visibility", "hidden");
+					//$(".ibx-menu-button").focus();
+					$(".ibx-menu").addClass("pop-closed");
+					//console.log(document.activeElement);
+				});
+				/*
 				Ibfs.load().done(function()
 				{
 					Ibfs.ibfs.login("admin", "admin").done(function(e)
@@ -29,12 +41,7 @@
 						console.log("ibfs logged in.");
 					});
 				});
-
-				$(".ibx-command").on("ibx_triggered", function(e)
-				{
-					console.log(e.target);
-				});
-
+				*/
 			}, [{src:"./test_res_bundle.xml", loadContext:"app"}], true);
 		</script>
 		<style type="text/css">
@@ -45,16 +52,22 @@
 				margin:0px;
 				box-sizing:border-box;
 			}
-			.test-txt
+
+			.test-menu-button
 			{
-				width:200px;
-			}			
+				position:absolute;
+				left:200px;
+				top:50px;
+			}
 		</style>
 	</head>
 	<body class="ibx-root">
-		<div data-ibx-type="ibxCommand" data-ibxp-id="cmdCut" data-ibxp-shortcut="CTRL+X"></div>
-		<div data-ibx-type="ibxCommand" data-ibxp-id="cmdCut" data-ibxp-shortcut="CTRL+C"></div>
-		<div data-ibx-type="ibxCommand" data-ibxp-id="cmdCut" data-ibxp-shortcut="CTRL+V"></div>
-		<div tabindex="0" class="test-txt" data-ibx-type="ibxTextField">Julian</div>
+		<div id="cmdClear" data-ibx-type="ibxCommand" data-ibxp-shortcut="CTRL+C"></div>
+		<div id="menuButton" class="test-menu-button" tabindex="0" data-ibx-type="ibxMenuButton">
+			Menu
+			<div id="menu" data-ibx-type="ibxMenu">
+				<div id="menuItem1" data-ibx-type="ibxMenuItem">Item</div>
+			</div>
+		</div>
 	</body>
 </html>

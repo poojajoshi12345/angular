@@ -23,10 +23,6 @@
 
 			ibx(function()
 			{
-				$(".ibx-menu-bar").on("blur focusout focus focusin", function(e)
-				{
-					console.log(e.type);
-				});
 			}, true);
 			//# sourceURL=menus.jsp
 		</script>
