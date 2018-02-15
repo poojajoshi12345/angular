@@ -7,7 +7,7 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-		<title>IBX popups sample</title>
+		<title>ibx popups sample</title>
 		<meta http-equiv="X-UA-Compatible" content="IE=EDGE" >
 		<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
 		<meta http-equiv="Pragma" content="no-cache" />
