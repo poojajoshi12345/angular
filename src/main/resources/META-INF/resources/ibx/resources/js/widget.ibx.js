@@ -290,7 +290,9 @@ $.widget("ibi.ibxWidget", $.Widget,
 			var navKids = this.navKeyChildren();
 			var active = $();
 			var current = navKids.filter(".ibx-nav-item-active");
-			if(!isNavActive && (e.data == "NAV_KEY_ACTIVATE" || eventMatchesShortcut(options.navKeyKeys.activate, e)))
+
+			//[IBX-83]
+			if(!isNavActive && this.element.is(e.target) && (e.data == "NAV_KEY_ACTIVATE" || eventMatchesShortcut(options.navKeyKeys.activate, e)))
 			{
 				isNavActive = true;
 				active = current.length ? current : navKids.first();
