@@ -77,7 +77,7 @@
 			<div class="menubar-label grid-cell" data-ibx-row="1/span 1" data-ibx-col="1/span 1" data-ibx-type="ibxLabel" data-ibxp-text-wrap="true" data-ibxp-text="This is an ibxHMenuBar (Horizontal)"></div>
 			<div class="menubar grid-cell" tabIndex="0" aria-label="Example IBX horizontal menu bar" data-ibx-type="ibxHMenuBar" data-ibx-row="1/span 1" data-ibx-col="2/span 1fr">
 				<div class="menu-btn-file" data-ibx-type="ibxMenuButton" data-ibxp-text="File">
-					<div data-ibx-type="ibxMenu">
+					<div class="file-menu" data-ibx-type="ibxMenu">
 						<div data-ibx-type="ibxMenuItem" data-ibxp-label-options='{"glyph":"fiber_new", "glyphClasses":"material-icons"}'>New</div>
 						<div data-ibx-type="ibxMenuItem" data-ibxp-label-options='{"glyph":"open_in_new", "glyphClasses":"material-icons"}'>Open...</div>
 						<div data-ibx-type="ibxMenuSeparator"></div>
