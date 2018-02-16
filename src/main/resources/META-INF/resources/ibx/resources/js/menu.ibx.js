@@ -164,7 +164,7 @@ $.widget("ibi.ibxMenuItem", $.ibi.ibxHBox,
 		if(e.keyCode == $.ui.keyCode.RIGHT && this.subMenu())//open if submenu
 			this.element.trigger("click");
 		else
-		if (e.keyCode == $.ui.keyCode.ENTER || e.keyCode == $.ui.keyCode.SPACE)//activate
+		if(e.keyCode == $.ui.keyCode.ENTER || e.keyCode == $.ui.keyCode.SPACE)//activate
 			this.element.trigger("click");
 	},
 	_onMenuItemClick:function (e)
@@ -416,7 +416,7 @@ $.widget("ibi.ibxMenuButton", $.ibi.ibxButtonSimple,
 		this._super();
 		this.options.position.of = this.element[0];
 		this.element.on({"click": this._onMenuButtonMouseEvent.bind(this), "keyup": this._onMenuButtonKeyEvent.bind(this)});
-		this.options.menu = this.element.children(".ibx-menu").appendTo("body");
+		this.options.menu = this.element.children(".ibx-menu");
 	},
 	_setAccessibility:function(accessible, aria)
 	{

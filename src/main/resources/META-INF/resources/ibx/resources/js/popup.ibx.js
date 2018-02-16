@@ -56,101 +56,95 @@ $.widget("ibi.ibxPopup", $.ibi.ibxWidget,
 		if(this.isOpen() && (window === e.target))
 			this.element.position(this.options.position);
 	},
+	isClosing:function()
+	{
+		return this.element.hasClass("pop-closing");
+	},
+	isOpening:function()
+	{
+		return this.element.hasClass("pop-opening");
+	},
 	isOpen:function()
 	{
-		return !(this.element.hasClass("pop-closed"));
+		return !this.element.hasClass("pop-closed");
 	},
 	open:function(openInfo)
 	{
-		if(this._trigger("beforeopen", null, openInfo))
+		if(!this.isOpen() && !this.isClosing() && this._trigger("beforeopen", null, openInfo))
 		{
+			//we are fully open...no longer interested in transition events.
+			this.element.on("transitionend", function(e)
+			{
+				this.element.removeClass("pop-opening").off("transitionend");
+			}.bind(this));
+
 			var options = this.options;
 
 			//save currently active element for refocusing on close.
 			this._elPrevActive = document.activeElement;
+
+
+			//move the popup to the body so it can be top level...and position it correctly.
 			this.element.data("ibxPopupParent", this.element.parent()).appendTo(document.body);
-
 			this.element.position(options.position);
-			this.element.on("transitionend", function(e)
+
+			//tell manager to open the popup.
+			this.element.addClass("pop-opening");
+			this._trigger("popup_mgr_open", null, this.element);
+
+			//for autofocus, and navKeyRoots, we need to focus the popup so it can manage child focusing.
+			if(options.autoFocus || (options.navKeyRoot && options.navKeyAutoFocus))
 			{
-				if(e.originalEvent.propertyName == "visibility" && this.isOpen())
+				//focus the popup first.				
+				this.element.focus();
+
+				//focus default item...otherwise find first focusable item (ARIA needs SOMETHING to be focused on the popup)
+				var defItem = this.element.find(".ibx-default-focused");
+				defItem = defItem.length ? defItem : this.element.find(":ibxFocusable").first();
+				defItem.focus();
+			}
+
+			//let people know we are fully open
+			this._trigger("open");
+
+			//auto close the dialog after the specified time.
+			if(options.closeOnTimer >= 0)
+			{
+				window.setTimeout(function()
 				{
-					this.element.off("transitionend");//no longer interested in transition events.
-
-					//for autofocus, and navKeyRoots, we need to focus the popup so it can manage child focusing.
-					if(options.autoFocus || (options.navKeyRoot && options.navKeyAutoFocus))
-					{
-						//focus the popup first.				
-						this.element.focus();
-
-						//focus default item...otherwise find first focusable item (ARIA needs SOMETHING to be focused on the popup)
-						var defItem = this.element.find(".ibx-default-focused");
-						defItem = defItem.length ? defItem : this.element.find(":ibxFocusable").first();
-						defItem.focus();
-					}
-
-					//let people know we are fully open
-					this._trigger("open");
-
-					//auto close the dialog after the specified time.
-					if(options.closeOnTimer >= 0)
-					{
-						window.setTimeout(function()
-						{
-							this.close();
-						}.bind(this), options.closeOnTimer);
-					}
-
-				}
-			}.bind(this));
-
-			if(!this.isOpen())
-				this._trigger("popup_mgr_open", null, this.element);
+					this.close();
+				}.bind(this), options.closeOnTimer);
+			}
 		}
 	},
 	close:function(closeInfo)
 	{
-		if(this._trigger("beforeclose", null, closeInfo))
+		if(this.isOpen() && !this.isOpening() && this._trigger("beforeclose", null, closeInfo))
 		{
-			this.element.on("transitionend", function(closeInfo, e)
+			//we are fully closed...no longer interested in transition events.
+			this.element.on("transitionend", function(e)
 			{
-				if(e.originalEvent.propertyName == "visibility")
+				//destroy on close, if desired, or put popup back under it's original parent.
+				if(!this._destroyed && this.options.destroyOnClose)
 				{
-					this.element.removeClass("ibx-popup-closing");
-					if(!this.isOpen())
-					{
-						//remove the transition event listener...put popup back under original parent..remove current position info.
-						var parent = this.element.data("ibxPopupParent") || document.body;
-						this.element.appendTo(parent);
-						this.element.off("transitionend").css({top:"", left:""});
-						this._trigger("close", null, closeInfo);
-					
-						//destroy on close, if desired
-						if(!this._destroyed && this.options.destroyOnClose)
-						{
-							this.destroy();
-							this.element.remove();
-						}
-
-						/****[IBX-29]
-							Refocus the previously active element. The check for body being focused is because if the user has clicked on something else to dismiss
-							the popup, then that should retain focus and WE DON'T WANT TO MOVE IT TO THE ORIGINAL FOCUSED ELEMENT!!!
-
-							//NOTE: ADDED !active because IE (of course) doesn't set the active to body when nothing is active.
-						****/
-						var active = document.activeElement;
-						if(this.options.refocusLastActiveOnClose && this._elPrevActive && (!active || active === document.body))
-							this._elPrevActive.focus();
-						delete this._elPrevActive;
-					}
+					this.destroy();
+					this.element.remove();
 				}
-			}.bind(this, closeInfo));
+				else
+				{
+					var parent = this.element.data("ibxPopupParent") || document.body;
+					this.element.appendTo(parent).css({top:"", left:""});
+					this.element.removeClass("pop-closing").off("transitionend");
+				}
+			}.bind(this));
 
-			if(this.isOpen())
-			{
-				this.element.addClass("ibx-popup-closing");
-				this._trigger("popup_mgr_close", null, this.element);
-			}
+			this.element.addClass("pop-closing");
+			this._trigger("popup_mgr_close", null, this.element);
+			this._trigger("close", null, closeInfo);
+
+			if(this.options.refocusLastActiveOnClose && this._elPrevActive)
+				this._elPrevActive.focus();
+			delete this._elPrevActive;
 		}
 	},
 	_refresh:function()
