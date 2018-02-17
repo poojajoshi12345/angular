@@ -25,15 +25,7 @@
 				$("#cmdClear").on("ibx_triggered", function(e)
 				{
 					console.clear();
-					//$(".ibx-menu-button").css("visibility", "hidden");
-					//$(".temp").focus();
-					//$(".ibx-menu").ibxWidget("close");
-					//$(".ibx-menu").css("visibility", "hidden");
-					//$(".ibx-menu-button").focus();
-					$(".ibx-menu").addClass("pop-closed");
-					//console.log(document.activeElement);
 				});
-				/*
 				Ibfs.load().done(function()
 				{
 					Ibfs.ibfs.login("admin", "admin").done(function(e)
@@ -41,7 +33,6 @@
 						console.log("ibfs logged in.");
 					});
 				});
-				*/
 			}, [{src:"./test_res_bundle.xml", loadContext:"app"}], true);
 		</script>
 		<style type="text/css">
@@ -53,7 +44,7 @@
 				box-sizing:border-box;
 			}
 
-			.test-menu-button
+			.test-tree
 			{
 				position:absolute;
 				left:200px;
@@ -63,11 +54,7 @@
 	</head>
 	<body class="ibx-root">
 		<div id="cmdClear" data-ibx-type="ibxCommand" data-ibxp-shortcut="CTRL+C"></div>
-		<div id="menuButton" class="test-menu-button" tabindex="0" data-ibx-type="ibxMenuButton">
-			Menu
-			<div id="menu" data-ibx-type="ibxMenu">
-				<div id="menuItem1" data-ibx-type="ibxMenuItem">Item</div>
-			</div>
+		<div class="test-tree" data-ibx-type="ibxTree">
 		</div>
 	</body>
 </html>
