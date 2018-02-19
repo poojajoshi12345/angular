@@ -62,11 +62,23 @@ iframe.ibx-popup-disabled-iframe
 	visibility:hidden;
 }
 
+/*nuttin*/
+.ibx-popup.pop-effect-none
+{
+	opacity:1;
+	transition:opacity .001s;
+}
+.ibx-popup.pop-effect-none.pop-closed
+{
+	opacity:0;
+	transition:opacity .001s;
+}
+
 /*fade*/
 .ibx-popup.pop-effect-fade
 {
 	opacity:1;
-	transition:opacity .2s;
+	transition:opacity 1s;
 }
 .ibx-popup.pop-effect-fade.pop-closed
 {

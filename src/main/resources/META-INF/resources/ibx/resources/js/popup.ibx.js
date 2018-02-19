@@ -75,6 +75,7 @@ $.widget("ibi.ibxPopup", $.ibi.ibxWidget,
 			//we are fully open...no longer interested in transition events.
 			this.element.on("transitionend", function(e)
 			{
+				console.log("popup opened");
 				this.element.removeClass("pop-opening").off("transitionend");
 			}.bind(this));
 
@@ -82,7 +83,6 @@ $.widget("ibi.ibxPopup", $.ibi.ibxWidget,
 
 			//save currently active element for refocusing on close.
 			this._elPrevActive = document.activeElement;
-
 
 			//move the popup to the body so it can be top level...and position it correctly.
 			this.element.data("ibxPopupParent", this.element.parent()).appendTo(document.body);
@@ -124,6 +124,7 @@ $.widget("ibi.ibxPopup", $.ibi.ibxWidget,
 			//we are fully closed...no longer interested in transition events.
 			this.element.on("transitionend", function(e)
 			{
+				console.log("popup closed");
 				//destroy on close, if desired, or put popup back under it's original parent.
 				if(!this._destroyed && this.options.destroyOnClose)
 				{
@@ -153,7 +154,8 @@ $.widget("ibi.ibxPopup", $.ibi.ibxWidget,
 		var options = this.options;
 		this.element.addClass($.ibi.ibxPopup.statics.effect[options.effect]);
 		options.modal ? this.element.addClass("pop-modal") : this.element.removeClass("pop-modal");
-		
+		console.log(this.element);
+
 		//WRONG OPTION!
 		if(options.moveable)
 			console.warn("incorrect option 'moveable', use 'movable' instead! =>", this.element);
@@ -304,7 +306,7 @@ $.ibi.ibxPopup.statics =
 {
 	effect:
 	{
-		none:"",
+		none:"pop-effect-none",
 		fade:"pop-effect-fade",
 		scale:"pop-effect-scale",
 		blind:"pop-effect-blind"

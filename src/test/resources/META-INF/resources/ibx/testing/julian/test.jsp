@@ -55,6 +55,9 @@
 	<body class="ibx-root">
 		<div id="cmdClear" data-ibx-type="ibxCommand" data-ibxp-shortcut="CTRL+C"></div>
 		<div class="test-tree" data-ibx-type="ibxTree">
+			<div class="test-row" data-ibx-type="ibxTreeRow">
+				<div data-ibx-type="ibx-tree-cell">Tree Root</div>
+			</div>
 		</div>
 	</body>
 </html>

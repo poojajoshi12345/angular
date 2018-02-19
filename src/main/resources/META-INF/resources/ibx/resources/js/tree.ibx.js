@@ -1,17 +1,19 @@
 /*Copyright 1996-2016 Information Builders, Inc. All rights reserved.*/
 // $Revision$:
 
-$.widget("ibi.ibxTree", $.ibi.ibxWidget, 
+$.widget("ibi.ibxTree", $.ibi.ibxFlexBox, 
 {
 	options:
 	{
+		"direction":"column",
+		"align":"stretch",
 		"aria":
 		{
 			"role":"treegrid",
 			"readonly":true
 		}
 	},
-	_widgetClass:"ibx-treegrid",
+	_widgetClass:"ibx-tree",
 	_create:function()
 	{
 		this._super();
@@ -26,7 +28,6 @@ $.widget("ibi.ibxTree", $.ibi.ibxWidget,
 		this._super();
 	}
 });
-
 
 //# sourceURL=tree.ibx.js
 

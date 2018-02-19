@@ -128,40 +128,40 @@
 				</div>
 				<div class="flex-grid-tab" data-ibx-name="tabFlexGrid" data-ibx-type="ibxTabPage" data-ibxp-tab-options="{'text':'ibxFlexGrid - CSS Flex Box'}">
 					<div class="flex-grid" data-ibx-type="ibxFlexGrid" data-ibxp-align="stretch" data-ibx-column="2" data-ibx-row="1">
-						<div class="flex-grid-cell" data-ibx-col-span="12">grid cell</div>
-						<div class="flex-grid-cell" data-ibx-col-span="6">grid cell</div>
-						<div class="flex-grid-cell" data-ibx-col-span="6">grid cell</div>
+						<div class="flex-grid-cell r1c1" data-ibx-col-span="12">grid cell</div>
+						<div class="flex-grid-cell r1c1" data-ibx-col-span="6">grid cell</div>
+						<div class="flex-grid-cell r1c1" data-ibx-col-span="6">grid cell</div>
 
 
-						<div class="flex-grid-cell" data-ibx-col-span="4">grid cell</div>
-						<div class="flex-grid-cell" data-ibx-col-span="4">grid cell</div>
-						<div class="flex-grid-cell" data-ibx-col-span="4">grid cell</div>
+						<div class="flex-grid-cell r1c1" data-ibx-col-span="4">grid cell</div>
+						<div class="flex-grid-cell r1c2" data-ibx-col-span="4">grid cell</div>
+						<div class="flex-grid-cell r1c3" data-ibx-col-span="4">grid cell</div>
 
-						<div class="flex-grid-cell" data-ibx-col-span="3">grid cell</div>
-						<div class="flex-grid-cell" data-ibx-col-span="3">grid cell</div>
-						<div class="flex-grid-cell" data-ibx-col-span="3">grid cell</div>
-						<div class="flex-grid-cell" data-ibx-col-span="3">grid cell</div>
+						<div class="flex-grid-cell r2c1" data-ibx-col-span="3">grid cell</div>
+						<div class="flex-grid-cell r2c2" data-ibx-col-span="3">grid cell</div>
+						<div class="flex-grid-cell r2c3" data-ibx-col-span="3">grid cell</div>
+						<div class="flex-grid-cell r2c4" data-ibx-col-span="3">grid cell</div>
 
 
-						<div class="flex-grid-cell" data-ibx-col-span="2">grid cell</div>
-						<div class="flex-grid-cell" data-ibx-col-span="2">grid cell</div>
-						<div class="flex-grid-cell" data-ibx-col-span="2">grid cell</div>
-						<div class="flex-grid-cell" data-ibx-col-span="2">grid cell</div>
-						<div class="flex-grid-cell" data-ibx-col-span="2">grid cell</div>
-						<div class="flex-grid-cell" data-ibx-col-span="2">grid cell</div>
+						<div class="flex-grid-cell r3c1" data-ibx-col-span="2">grid cell</div>
+						<div class="flex-grid-cell r3c2" data-ibx-col-span="2">grid cell</div>
+						<div class="flex-grid-cell r3c3" data-ibx-col-span="2">grid cell</div>
+						<div class="flex-grid-cell r3c4" data-ibx-col-span="2">grid cell</div>
+						<div class="flex-grid-cell r3c5" data-ibx-col-span="2">grid cell</div>
+						<div class="flex-grid-cell r3c6" data-ibx-col-span="2">grid cell</div>
 
-						<div class="flex-grid-cell" data-ibx-col-span="1">grid cell</div>
-						<div class="flex-grid-cell" data-ibx-col-span="1">grid cell</div>
-						<div class="flex-grid-cell" data-ibx-col-span="1">grid cell</div>
-						<div class="flex-grid-cell" data-ibx-col-span="1">grid cell</div>
-						<div class="flex-grid-cell" data-ibx-col-span="1">grid cell</div>
-						<div class="flex-grid-cell" data-ibx-col-span="1">grid cell</div>
-						<div class="flex-grid-cell" data-ibx-col-span="1">grid cell</div>
-						<div class="flex-grid-cell" data-ibx-col-span="1">grid cell</div>
-						<div class="flex-grid-cell" data-ibx-col-span="1">grid cell</div>
-						<div class="flex-grid-cell" data-ibx-col-span="1">grid cell</div>
-						<div class="flex-grid-cell" data-ibx-col-span="1">grid cell</div>
-						<div class="flex-grid-cell" data-ibx-col-span="1">grid cell</div>
+						<div class="flex-grid-cell r4c1" data-ibx-col-span="1">grid cell</div>
+						<div class="flex-grid-cell r4c2" data-ibx-col-span="1">grid cell</div>
+						<div class="flex-grid-cell r4c3" data-ibx-col-span="1">grid cell</div>
+						<div class="flex-grid-cell r4c4" data-ibx-col-span="1">grid cell</div>
+						<div class="flex-grid-cell r4c5" data-ibx-col-span="1">grid cell</div>
+						<div class="flex-grid-cell r4c6" data-ibx-col-span="1">grid cell</div>
+						<div class="flex-grid-cell r4c7" data-ibx-col-span="1">grid cell</div>
+						<div class="flex-grid-cell r4c8" data-ibx-col-span="1">grid cell</div>
+						<div class="flex-grid-cell r4c9" data-ibx-col-span="1">grid cell</div>
+						<div class="flex-grid-cell r4c10" data-ibx-col-span="1">grid cell</div>
+						<div class="flex-grid-cell r4c11" data-ibx-col-span="1">grid cell</div>
+						<div class="flex-grid-cell r4c12" data-ibx-col-span="1">grid cell</div>
 					</div>
 				</div>
 			</div>
