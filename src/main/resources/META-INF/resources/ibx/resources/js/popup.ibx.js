@@ -124,7 +124,6 @@ $.widget("ibi.ibxPopup", $.ibi.ibxWidget,
 			//we are fully closed...no longer interested in transition events.
 			this.element.on("transitionend", function(e)
 			{
-				console.log("popup closed");
 				//destroy on close, if desired, or put popup back under it's original parent.
 				if(!this._destroyed && this.options.destroyOnClose)
 				{
@@ -154,7 +153,6 @@ $.widget("ibi.ibxPopup", $.ibi.ibxWidget,
 		var options = this.options;
 		this.element.addClass($.ibi.ibxPopup.statics.effect[options.effect]);
 		options.modal ? this.element.addClass("pop-modal") : this.element.removeClass("pop-modal");
-		console.log(this.element);
 
 		//WRONG OPTION!
 		if(options.moveable)
