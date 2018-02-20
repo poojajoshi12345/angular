@@ -184,6 +184,11 @@ $.widget("ibi.ibxMenuItem", $.ibi.ibxHBox,
 			this._trigger("menu_item_click", e, this.element);//bubble click event to owner menu.
 			this.doCommandAction("trigger");
 		}
+
+		//stop this from bubbling, as menus can be stored under other objects, and a click on the menu item should not be
+		//confused with a click on the parent...have to check for 'e' because this can be called directly without an event.
+		if(e)
+			e.stopPropagation();
 	},
 	_subTimer:null,
 	_onMenuItemMouseEvent:function(e)
