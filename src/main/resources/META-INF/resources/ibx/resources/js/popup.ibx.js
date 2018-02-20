@@ -75,7 +75,6 @@ $.widget("ibi.ibxPopup", $.ibi.ibxWidget,
 			//we are fully open...no longer interested in transition events.
 			this.element.on("transitionend", function(e)
 			{
-				console.log("popup opened");
 				this.element.removeClass("pop-opening").off("transitionend");
 			}.bind(this));
 

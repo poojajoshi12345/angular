@@ -66,12 +66,12 @@ iframe.ibx-popup-disabled-iframe
 .ibx-popup.pop-effect-none
 {
 	opacity:1;
-	transition:opacity .001s;
+	transition:opacity 1ms;
 }
 .ibx-popup.pop-effect-none.pop-closed
 {
 	opacity:0;
-	transition:opacity .001s;
+	transition:opacity 1ms;
 }
 
 /*fade*/
