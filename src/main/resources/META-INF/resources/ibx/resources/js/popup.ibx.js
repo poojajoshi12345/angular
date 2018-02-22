@@ -76,6 +76,15 @@ $.widget("ibi.ibxPopup", $.ibi.ibxWidget,
 			this.element.on("transitionend", function(e)
 			{
 				this.element.removeClass("pop-opening").off("transitionend");
+
+				//auto close the dialog after the specified time.
+				if(options.closeOnTimer >= 0)
+				{
+					window.setTimeout(function()
+					{
+						this.close();
+					}.bind(this), options.closeOnTimer);
+				}
 			}.bind(this));
 
 			var options = this.options;
@@ -105,15 +114,6 @@ $.widget("ibi.ibxPopup", $.ibi.ibxWidget,
 
 			//let people know we are fully open
 			this._trigger("open");
-
-			//auto close the dialog after the specified time.
-			if(options.closeOnTimer >= 0)
-			{
-				window.setTimeout(function()
-				{
-					this.close();
-				}.bind(this), options.closeOnTimer);
-			}
 		}
 	},
 	close:function(closeInfo)

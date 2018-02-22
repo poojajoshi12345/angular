@@ -17,10 +17,6 @@
 				{
 					padding:10px;
 				}
-				.test-notify-popup.ibx-popup.pop-effect-fade, .test-notify-popup.ibx-popup.pop-effect-fade.pop-closed
-				{
-					transition:opacity 1s, visibility 1s;
-				}
 			]]>
 		</style-sheet>
 	</styles>
