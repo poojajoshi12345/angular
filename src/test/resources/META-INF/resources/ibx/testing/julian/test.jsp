@@ -24,7 +24,6 @@
 			{
 				$("#cmdClear").on("ibx_triggered", function(e)
 				{
-					debugger;
 					console.clear();
 				});
 				Ibfs.load().done(function()
@@ -44,21 +43,28 @@
 				margin:0px;
 				box-sizing:border-box;
 			}
-
-			.test-tree
+			.item-box
 			{
-				position:absolute;
-				left:200px;
-				top:50px;
+				border:1px solid black;
+				margin:10px;
 			}
+			.item
+			{
+				width:25px;
+				height:25px;
+				border:1px solid black;
+				margin:5px;
+			}
+
 		</style>
 	</head>
 	<body class="ibx-root">
-		<div id="cmdClear" data-ibxp-id="cmdClear" data-ibx-type="ibxCommand" data-ibxp-shortcut="CTRL+C"></div>
-		<div data-ibx-type="ibxMenuButton">Menu
-			<div data-ibx-type="ibxMenu">
-				<div data-ibx-type="ibxMenuItem" data-ibxp-command="cmdClear">Menu Item</div>
-			</div>
+		<div tabindex="0" class="item-box" data-ibx-type="ibxFlexBox" data-ibxp-inline="true" data-ibxp-focus-root="true" data-ibxp-auto-focus="true">
+			<div class="item" tabindex="0">Item</div>
+			<div class="item" tabindex="0">Item</div>
+			<div class="item" tabindex="0">Item</div>
+			<div class="item" tabindex="0">Item</div>
+			<div class="item" tabindex="0">Item</div>
 		</div>
 	</body>
 </html>
