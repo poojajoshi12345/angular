@@ -20,7 +20,7 @@
 			section.children(".title").text(name);
 
 			var arParents = [];
-			var proto = ctor.prototype;
+			var proto = ctor.prototype.__proto__;
 			while(proto)
 			{
 				if(proto.widgetName && proto.widgetName.search(/^ibx/) != -1)
@@ -172,7 +172,8 @@
 		else
 		if(e.type == "mouseleave")
 		{
-			$(".prop-object-popup").ibxPopup("close");
+			var popup = $(".prop-object-popup");
+			popup.ibxPopup("close");
 		}
 	};
 
