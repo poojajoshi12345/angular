@@ -38,20 +38,10 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 		},//html props to use for calculating scroll position/delta
 		allowDragScrolling:true,
 
-		navKeyRoot:true,
-		navKeyAutoFocus:true,
-		navKeyKeys:
-		{
-			"hprev":"CTRL+LEFT",
-			"hnext":"CTRL+RIGHT",
-			"vprev":"CTRL+UP",
-			"vnext":"CTRL+DOWN",
-		},
-
-
 		aria:
 		{
-			role:"listbox"
+			role:"region",
+			label: ibx.resourceMgr.getString("IBX_CAROUSEL")
 		}
 	},
 	_widgetClass:"ibx-carousel",
@@ -73,6 +63,8 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 	_setAccessibility:function(accessible, aria)
 	{
 		this._super(accessible, aria);
+		var options = this.options;
+
 		this._itemsBox.ibxWidget("option", "aria", {"role":"listbox", "label":ibx.resourceMgr.getString("IBX_CAROUSEL_ITEMS")}).ibxWidget("setAccessibility", this.options.aria.accessible);
 		this._pageMarkers.ibxWidget("option", "aria", {"role":"listbox", "label":ibx.resourceMgr.getString("IBX_CAROUSEL_PAGES")}).ibxWidget("setAccessibility", this.options.aria.accessible);
 		return aria;
@@ -86,12 +78,6 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 	{
 		selector = selector || ".ibx-csl-item";
 		return this._itemsBox.ibxWidget("children", selector);
-	},
-	navKeyChildren:function(selector)
-	{
-		//return the specific high level elements of the carousel, but only the ones that can be focused.
-		var ret = $([this._prevBtn[0], this._itemsBox[0], this._nextBtn[0], this._pageMarkers[0]]);
-		return ret.filter(selector || ":ibxNavFocusable()");
 	},
 	add:function(el, sibling, before, refresh)
 	{
@@ -213,7 +199,10 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 		}.bind(this, info);
 
 		if(!this._trigger("beforescarouselcroll", null, [this._itemsBox, info,  this.getPageInfo()]))
+		{
+			this._scrollInfo = null;
 			return;
+		}
 		info.animationFrameId = window.requestAnimationFrame(fnFrame.bind(this, info));
 	},
 	_calcScrollStepSize:function(scrollType, forward)
@@ -365,11 +354,12 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 	_refresh:function()
 	{
 		this._super();
+		var tabIndex = this.element.attr("tabindex");
 		var options = this.options;
 		this._itemsBox.ibxDragScrolling("option", "disabled", !options.allowDragScrolling);
-		this._itemsBox.ibxWidget("option", "align", options.alignChildren);
-		this._prevBtn.css("display", options.showPrevButton ? "" : "none");
-		this._nextBtn.css("display", options.showNextButton ? "" : "none");
+		this._itemsBox.ibxWidget("option", "align", options.alignChildren).attr("tabindex", tabIndex);
+		this._prevBtn.css("display", options.showPrevButton ? "" : "none").attr("tabindex", tabIndex);
+		this._nextBtn.css("display", options.showNextButton ? "" : "none").attr("tabindex", tabIndex);
 
 		//floated buttons force position to either end of the carousel
 		this._prevBtn.toggleClass("csl-btn-float", options.floatButtons);	
@@ -395,7 +385,7 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 		else
 			this._adjustPageMarkers();
 	
-	this._pageMarkers.css("display", options.showPageMarkers ? "" : "none");
+	this._pageMarkers.css("display", options.showPageMarkers ? "" : "none").attr("tabindex", tabIndex);
 		(options.pageMarkersPos == "start")
 			? this._pageMarkers.insertBefore(this._itemsContainer)
 			: this._pageMarkers.insertAfter(this._itemsContainer);

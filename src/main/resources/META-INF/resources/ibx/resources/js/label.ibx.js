@@ -48,8 +48,11 @@ $.widget("ibi.ibxLabel", $.ibi.ibxFlexBox,
 	{
 		aria = this._super(accessible, aria);
 		(accessible) ? this._glyph.attr("aria-hidden", true) : this._glyph.removeAttr("aria-hidden");
+		(accessible) ? this._text.attr("aria-hidden", true) : this_text.removeAttr("aria-hidden");
 		(accessible) ? this._text.ibxAriaId() : this._text.removeIbxAriaId();
-		aria.labelledby = aria.labelledby || this._text.prop("id");
+		
+		var textLabel = this._text.parent().length ? this._text.prop("id") : null;
+		aria.labelledBy = aria.labelledBy || textLabel;
 		return aria;
 	},
 	_destroy:function()
@@ -88,7 +91,6 @@ $.widget("ibi.ibxLabel", $.ibi.ibxFlexBox,
 		this.element.addClass("icon-" + options.iconPosition);
 		this.options.forId ? this._text.attr("for", this.options.forId) : this._text.removeAttr("for");
 		this.options.forId ? this._glyph.attr("for", this.options.forId) : this._glyph.removeAttr("for");
-		this._super();
 
 		//don't bloat the DOM...just add what's needed...use prepend so that these are the first children.
 		this._glyph.detach();
@@ -116,6 +118,7 @@ $.widget("ibi.ibxLabel", $.ibi.ibxFlexBox,
 
 		//save the current option values...this is to optimize the next refresh
 		this._lastOptions = $.extend({}, options);
+		this._super();
 	}
 });
 $.ibi.ibxLabel.statics = 

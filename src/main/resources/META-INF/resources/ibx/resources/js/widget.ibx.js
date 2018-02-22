@@ -11,11 +11,14 @@ $.widget("ibi.ibxWidget", $.Widget,
 		"userValue":null,
 		"dragScrolling":false,
 		"wantResize":false,
-		"defaultFocused":false,						//for popup...should this be focused on open
 		"opaque":false,								//add iframe behind to stop pdf from bleading through.
-		"focusRoot":false,							//for circular tabbing management...like in a dialog.
+
+		//for keyboard naviation (tab keys - think dialogs)
+		"focusRoot":false,							//this control should manage activating its children when tabbing.
+		"focusCircular":false,						//NOT CURRENTLY USED tab within this control, like a dialog...otherwise, just move 
+		"defaultFocused":false,						//for focusRoot parents...should this be focused when parent activated
 		
-		//for keyboard navigation (mostly composite widgets like menus/selects/etc...508)
+		//for keyboard navigation (arrow keys - mostly composite widgets like menus/selects/etc...508)
 		"navKeyRoot":false,							//start key nav here
 		"navKeyDir":"horizontal",					//horizontal = left/right, vertical = up/down, or both
 		"navKeyResetFocusOnBlur":true,				//when widget loses focus, reset the current active navKey child.
@@ -101,8 +104,6 @@ $.widget("ibi.ibxWidget", $.Widget,
 		accessible ? this.element.ibxAriaId().attr("role", aria.role) : this.element.removeIbxAriaId().removeAttr("role", aria.role);
 
 		aria = this._setAccessibility(accessible, aria);
-		aria.labelledby = aria.label ? null : aria.labelledby; //can't have aria-label and aria-labelledby at same time...label wins.
-
 		for(var key in aria)
 		{
 			if(this.ARIA_PROPS_IGNORE[key])
@@ -265,11 +266,14 @@ $.widget("ibi.ibxWidget", $.Widget,
 			var target = null;
 			var firstKid = tabKids.first();
 			var lastKid = tabKids.last();
-			if((firstKid.is(e.target) || $.contains(firstKid[0], e.target)) && e.shiftKey)
-				target = tabKids.last();
-			else
-			if((lastKid.is(e.target) || $.contains(lastKid[0], e.target)) && !e.shiftKey)
-				target = tabKids.first();
+			if(firstKid.length && lastKid.length)
+			{
+				if((firstKid.is(e.target) || $.contains(firstKid[0], e.target)) && e.shiftKey)
+					target = tabKids.last();
+				else
+				if((lastKid.is(e.target) || $.contains(lastKid[0], e.target)) && !e.shiftKey)
+					target = tabKids.first();
+			}
 
 			//target means first/last item and need to loop...or no kids, so do nothing.
 			if(target || !tabKids.length)
@@ -444,7 +448,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 			if(!disabled)
 				el.prop("tabIndex", el.data("ibxDisabledTabIndex")).removeData("ibxDisabledTabIndex");
 			else
-				el.data("ibxDisabledTabIndex", el.prop("tabIndex")).prop("tabIndex", "").removeAttr("tabindex");
+				el.data("ibxDisabledTabIndex", el.prop("tabIndex")).prop("tabIndex", -1);
 		}.bind(this, value));
 	},
 	refresh:function()

@@ -24,6 +24,7 @@
 			{
 				$("#cmdClear").on("ibx_triggered", function(e)
 				{
+					debugger;
 					console.clear();
 				});
 				Ibfs.load().done(function()
@@ -53,10 +54,10 @@
 		</style>
 	</head>
 	<body class="ibx-root">
-		<div id="cmdClear" data-ibx-type="ibxCommand" data-ibxp-shortcut="CTRL+C"></div>
-		<div class="test-tree" data-ibx-type="ibxTree">
-			<div class="test-row" data-ibx-type="ibxTreeRow">
-				<div data-ibx-type="ibx-tree-cell">Tree Root</div>
+		<div id="cmdClear" data-ibxp-id="cmdClear" data-ibx-type="ibxCommand" data-ibxp-shortcut="CTRL+C"></div>
+		<div data-ibx-type="ibxMenuButton">Menu
+			<div data-ibx-type="ibxMenu">
+				<div data-ibx-type="ibxMenuItem" data-ibxp-command="cmdClear">Menu Item</div>
 			</div>
 		</div>
 	</body>

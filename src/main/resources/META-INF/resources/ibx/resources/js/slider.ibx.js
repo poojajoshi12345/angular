@@ -27,12 +27,10 @@ $.widget("ibi.ibxSlider", $.ibi.ibxGrid,
 		"align": "stretch",
 		"wantResize": true,
 
-		"navKeyRoot":true,
-		"navKeyAutoFocus":true,
-
 		"aria":
 		{
-			"role":"",
+			"role":"region",
+			"label": ibx.resourceMgr.getString("IBX_STR_SLIDER")
 		}
 	},
 	_widgetClass: "ibx-slider",
@@ -47,7 +45,7 @@ $.widget("ibi.ibxSlider", $.ibi.ibxGrid,
 
 		this._sliderBody = $('<div class="ibx-slider-body">');
 		this._sliderWrapper.append(this._sliderBody);
-		this._slider = $('<div tabindex="-1" class="ibx-slider-marker ibx-slider-marker-one">');
+		this._slider = $('<div class="ibx-slider-marker ibx-slider-marker-one">');
 		this._slider.hide();
 		this._sliderWrapper.append(this._slider);
 		this.element.append(this._sliderWrapper);
@@ -71,7 +69,7 @@ $.widget("ibi.ibxSlider", $.ibi.ibxGrid,
 			"aria-valuemax":options.max,
 			"aria-valuenow":options.value,
 			"aria-labelledby":aria.labelledby,
-			"aria-label":aria.label || sformat(ibx.resourceMgr.getString("IBX_STR_SLIDER_DEF_LABEL"), options.min, options.max)
+			"aria-label":sformat(ibx.resourceMgr.getString("IBX_STR_SLIDER_DEF_LABEL"), options.min, options.max)
 		}
 		accessible ? this._slider.attr(attrs) : this._slider.removeAttr("aria-valuemin aria-valuemax aria-valuenow aria-valuetext role");
 
@@ -326,6 +324,9 @@ $.widget("ibi.ibxSlider", $.ibi.ibxGrid,
 	},
 	_refresh: function ()
 	{
+		var tabIndex = this.element.prop("tabindex");
+		this._slider.prop("tabindex", tabIndex);
+
 		this._labelMin.ibxWidget('option', 'text', this._getFormattedText("min"));
 		this._labelMax.ibxWidget('option', 'text', this._getFormattedText("max"));
 		this._labelValue.ibxWidget('option', 'text', this._getFormattedText("value"));
@@ -535,7 +536,11 @@ $.widget("ibi.ibxRange", $.ibi.ibxSlider,
 		"value2": 0,
 		"lock2": false,
 		"markerShape2": "",
-		"aria":{"orientation":"horizontal"},
+		"aria":
+		{
+			"orientation":"horizontal",
+			"label": ibx.resourceMgr.getString("IBX_STR_SLIDER_RANGE")
+		},
 
 		"navKeyKeys":
 		{
@@ -580,10 +585,9 @@ $.widget("ibi.ibxRange", $.ibi.ibxSlider,
 			"aria-valuemin":options.min,
 			"aria-valuemax":options.max,
 			"aria-valuenow":options.value2,
-			"aria-valuetext": sformat(ibx.resourceMgr.getString("IBX_STR_SLIDER_RANGE_VAL_HIGH"), options.value2),
-			"aria-label":aria.label || sformat(ibx.resourceMgr.getString("IBX_STR_SLIDER_RANGE_DEF_LABEL"), options.min, options.max)
+			"aria-valuetext":sformat(ibx.resourceMgr.getString("IBX_STR_SLIDER_RANGE_VAL_HIGH"), options.value2),
+			"aria-label":sformat(ibx.resourceMgr.getString("IBX_STR_SLIDER_RANGE_DEF_LABEL"), options.min, options.max)
 		}
-
 		accessible ? this._slider.attr("aria-label", sformat(ibx.resourceMgr.getString("IBX_STR_SLIDER_RANGE_DEF_LABEL"), options.min, options.max)) : null;
 		accessible ? this._slider.attr("aria-valuetext", sformat(ibx.resourceMgr.getString("IBX_STR_SLIDER_RANGE_VAL_LOW"), options.value)) : null;
 		accessible ? this._slider2.attr(attrs) : this._slider2.removeAttr("aria-valuemin aria-valuemax aria-valuenow aria-valuetext role");
@@ -757,6 +761,9 @@ $.widget("ibi.ibxRange", $.ibi.ibxSlider,
 
 		var info = this.info();
 		var flipLayout = this.options.flipLayout;
+
+		var tabIndex = this.element.prop("tabindex");
+		this._slider2.prop("tabindex", tabIndex);
 
 		this._slider2.css('left', '').css('right', '').css('top', '').css('bottom', '');
 		this._sliderRangeBody.css('top', '').css('bottom', '').css('left', '').css('right', '').css('width', '').css('height', '');
