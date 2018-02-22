@@ -59,6 +59,8 @@ iframe.ibx-popup-disabled-iframe
 /*visiual effects*/
 .pop-closed:not(.pop-closing)
 {
+	left:-1000000px;
+	top:-1000000px;
 	visibility:hidden;
 }
 
