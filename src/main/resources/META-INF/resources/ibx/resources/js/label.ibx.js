@@ -52,7 +52,7 @@ $.widget("ibi.ibxLabel", $.ibi.ibxFlexBox,
 		(accessible) ? this._text.ibxAriaId() : this._text.removeIbxAriaId();
 		
 		var textLabel = this._text.parent().length ? this._text.prop("id") : null;
-		aria.labelledBy = aria.labelledBy || textLabel;
+		aria.labelledby = aria.labelledby || textLabel;
 		return aria;
 	},
 	_destroy:function()
