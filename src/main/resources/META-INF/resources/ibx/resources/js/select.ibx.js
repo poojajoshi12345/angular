@@ -1420,7 +1420,8 @@ $.widget("ibi.ibxSelectItemListPaged", $.ibi.ibxVBox,
 		{
 			var options = this.options;
 			this._enablePaging = values.length >= this.options.enablePagingTrigger;
-			this._values = values;
+			// make a shallow copy of the array
+			this._values = values.slice();
 			this._extractFiltered();
 			this._setPage(0);
 			return this;
