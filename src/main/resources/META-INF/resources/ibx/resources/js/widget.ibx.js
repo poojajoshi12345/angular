@@ -11,19 +11,22 @@ $.widget("ibi.ibxWidget", $.Widget,
 		"userValue":null,
 		"dragScrolling":false,
 		"wantResize":false,
-		"opaque":false,								//add iframe behind to stop pdf from bleading through.
+		"opaque":false,					//add iframe behind to stop pdf from bleading through.
 
 		//for keyboard naviation (tab keys - think dialogs)
-		"focusRoot":false,							//this control should manage activating its children when tabbing.
-		"focusCircular":false,						//NOT CURRENTLY USED tab within this control, like a dialog...otherwise, just move 
-		"defaultFocused":false,						//for focusRoot parents...should this be focused when parent activated
-		
+		"focusRoot":false,				//keep tabbing to this container (like dialogs).
+		"focusDefault":false,			//focus the first item in root. (can be a select pattern).
+
+		//DEPRECATED: You should just add the class/id to the element you want to focus by default,
+		//and then set the focusDefault option on the parent to select that pattern.
+		"defaultFocused":false,
+
+
 		//for keyboard navigation (arrow keys - mostly composite widgets like menus/selects/etc...508)
-		"navKeyRoot":false,							//start key nav here
-		"navKeyDir":"horizontal",					//horizontal = left/right, vertical = up/down, or both
-		"navKeyResetFocusOnBlur":true,				//when widget loses focus, reset the current active navKey child.
-		"navKeyAutoFocus":false,					//auto focus the first nav item.
-		"navKeyKeys":								//keys for various nav key events
+		"navKeyRoot":false,				//keep keyboard navigation to this container (not tabbing, more like arrows in trees/lists/etc.).
+		"navKeyDir":"horizontal",		//horizontal = left/right, vertical = up/down, or both
+		"navKeyResetFocusOnBlur":true,	//when widget loses focus, reset the current active navKey child.
+		"navKeyKeys":					//keys for various nav key events
 		{
 			"activate":"ENTER",
 			"cancel":"ESCAPE",
@@ -206,29 +209,37 @@ $.widget("ibi.ibxWidget", $.Widget,
 				this.element.dispatchEvent("ibx_widgetfocus", e.originalEvent, false, false, e.relatedTarget);
 			}
 
-			if(options.navKeyRoot)
+			//do the default focusing.
+			if((options.focusDefault !== false) && isTarget && !ownsRelTarget)
 			{
-				if(options.navKeyAutoFocus && isTarget)
+				if(options.navKeyRoot)
 					this.element.dispatchEvent("keydown", "NAV_KEY_ACTIVATE");
 				else
-				if(!isTarget)
 				{
-					//if we own the target, we are now nav active.
-					this.element.addClass("ibx-nav-key-active");
-
-					//take the element out of the tab order so shift+tab will work when auto focusing first nav item.
-					if(this.element.data("navKeyRootTabIndex") === undefined)
-						this.element.data("navKeyRootTabIndex", this.element.prop("tabindex")).prop("tabindex", -1);
-
-					//de-activate all children, and activate the direct child that is/owns the target.
-					this.navKeyChildren().each(function(target, idx, el)
-					{
-						var navKid = $(el);
-						navKid.removeClass("ibx-nav-item-active ibx-ie-pseudo-focus").removeAttr("aria-activedescendant");
-						if(navKid.is(target) || $.contains(navKid[0], target))
-							navKid.addClass("ibx-nav-item-active").toggleClass("ibx-ie-pseudo-focus", ibxPlatformCheck.isIE).attr("aria-activedescendant", true);
-					}.bind(this, e.target));
+					//focus default item...otherwise find first focusable item (ARIA needs SOMETHING to be focused on the popup)
+					var defItem = this.element.find(options.focusDefault);
+					defItem = defItem.length ? defItem : this.element.find(":ibxFocusable").first();
+					defItem.focus();
 				}
+			}
+
+			if(options.navKeyRoot && !isTarget)
+			{
+				//if we own the target, we are now nav active.
+				this.element.addClass("ibx-nav-key-active");
+
+				//take the element out of the tab order so shift+tab will work when auto focusing first nav item.
+				if(this.element.data("navKeyRootTabIndex") === undefined)
+					this.element.data("navKeyRootTabIndex", this.element.prop("tabindex")).prop("tabindex", -1);
+
+				//de-activate all children, and activate the direct child that is/owns the target.
+				this.navKeyChildren().each(function(target, idx, el)
+				{
+					var navKid = $(el);
+					navKid.removeClass("ibx-nav-item-active ibx-ie-pseudo-focus").removeAttr("aria-activedescendant");
+					if(navKid.is(target) || $.contains(navKid[0], target))
+						navKid.addClass("ibx-nav-item-active").toggleClass("ibx-ie-pseudo-focus", ibxPlatformCheck.isIE).attr("aria-activedescendant", true);
+				}.bind(this, e.target));
 			}
 		}
 
@@ -305,7 +316,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 				current = null;//[HOME-921]this allows activation to focus child, but not key events when child is already active. (think text arrow keys!)
 			}
 			else
-			if(isNavActive && !options.navKeyAutoFocus && eventMatchesShortcut(options.navKeyKeys.cancel, e))//you can't escape out of a navKeyAutoFocus.
+			if(isNavActive && !options.focusDefault && eventMatchesShortcut(options.navKeyKeys.cancel, e))//you can't escape out of a navKeyAutoFocus.
 				active = this.element;
 			else
 			if(isNavActive)
@@ -465,8 +476,14 @@ $.widget("ibi.ibxWidget", $.Widget,
 		this.element.addClass(options.class);
 		this.element.toggleClass("ibx-focus-root", options.focusRoot);
 		this.element.toggleClass("ibx-nav-key-root", options.navKeyRoot);
+		this.element.toggleClass("ibx-focus-default", options.focusDefault);
+
+		//should NOT BE USING defaultFocused on children of focusRoot/navKeyRoot.
+		if(options.defaultFocused)
+			console.warn("[ibx Deprecation] defaultFocused option should not be used.  Instead set the focusDefault option on parent with selector that specifies this element =>", this.element);
 		this.element.toggleClass("ibx-default-focused", options.defaultFocused);
-		this.element.toggleClass("ibx-nav-key-auto-focus", options.navKeyAutoFocus);
+
+		//now config accessibility
 		this.setAccessibility();
 
 		//associate widget with the command

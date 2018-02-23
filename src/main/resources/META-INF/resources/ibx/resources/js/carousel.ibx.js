@@ -10,6 +10,7 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 	{
 		wantResize:true,
 		nameRoot:true,
+		focusDefault:true,
 		align:"stretch",
 		showPageMarkers:true,
 		pageMarkersPos:"end",
@@ -354,12 +355,11 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 	_refresh:function()
 	{
 		this._super();
-		var tabIndex = this.element.attr("tabindex");
 		var options = this.options;
 		this._itemsBox.ibxDragScrolling("option", "disabled", !options.allowDragScrolling);
-		this._itemsBox.ibxWidget("option", "align", options.alignChildren).attr("tabindex", tabIndex);
-		this._prevBtn.css("display", options.showPrevButton ? "" : "none").attr("tabindex", tabIndex);
-		this._nextBtn.css("display", options.showNextButton ? "" : "none").attr("tabindex", tabIndex);
+		this._itemsBox.ibxWidget("option", "align", options.alignChildren);
+		this._prevBtn.css("display", options.showPrevButton ? "" : "none");
+		this._nextBtn.css("display", options.showNextButton ? "" : "none");
 
 		//floated buttons force position to either end of the carousel
 		this._prevBtn.toggleClass("csl-btn-float", options.floatButtons);	
@@ -385,7 +385,7 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 		else
 			this._adjustPageMarkers();
 	
-	this._pageMarkers.css("display", options.showPageMarkers ? "" : "none").attr("tabindex", tabIndex);
+	this._pageMarkers.css("display", options.showPageMarkers ? "" : "none");
 		(options.pageMarkersPos == "start")
 			? this._pageMarkers.insertBefore(this._itemsContainer)
 			: this._pageMarkers.insertAfter(this._itemsContainer);

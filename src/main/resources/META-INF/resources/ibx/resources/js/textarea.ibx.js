@@ -27,7 +27,7 @@ $.widget("ibi.ibxTextArea", $.ibi.ibxFlexBox,
 		"align": "stretch",
 
 		"navKeyRoot":true,
-		"navKeyAutoFocus":true,
+		"focusDefault":true,
 
 		"aria":
 		{

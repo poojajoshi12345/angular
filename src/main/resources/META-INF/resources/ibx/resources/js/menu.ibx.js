@@ -9,9 +9,9 @@ $.widget("ibi.ibxMenu", $.ibi.ibxPopup,
 	options:
 	{
 		"focusRoot":false,
+		"focusDefault":true,
 		"navKeyRoot":true,
 		"navKeyDir":"vertical",
-		"navKeyAutoFocus":true,
 		"modal":false,
 		"destroyOnClose":false,
 		"multiSelect":false, //user can select multiple items without closing menu (checkboxes, etc.)
@@ -366,7 +366,7 @@ $.widget("ibi.ibxMenuBar", $.ibi.ibxHBox,
 	"options":
 	{
 		"navKeyRoot":true,
-		"navKeyAutoFocus":true,
+		"focusDefault":true,
 		"direction":"row",
 		"align":"stretch",
 		"aria":

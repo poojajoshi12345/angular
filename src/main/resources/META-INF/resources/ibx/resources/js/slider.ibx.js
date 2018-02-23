@@ -26,6 +26,7 @@ $.widget("ibi.ibxSlider", $.ibi.ibxGrid,
 		"rows": "auto 1fr auto",
 		"align": "stretch",
 		"wantResize": true,
+		"focusDefault":true,
 
 		"aria":
 		{

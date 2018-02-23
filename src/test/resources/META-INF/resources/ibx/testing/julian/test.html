@@ -15,13 +15,38 @@
 		<script type="text/javascript">
 			ibx(function(e)
 			{
-				$("body").append(sformat("ibx loaded in {1}ms", (new Date())-startDate));
+				document.title = sformat("ibx loaded in {1}ms", (new Date())-startDate);
+
+				$(".item").each(function(idx, el)
+				{
+					el = $(el);
+					el.text(sformat("tabIndex = {1}", el.prop("tabindex")));
+				});
 			}, true);
 		</script>
 		<style type="text/css">
+			.item-container
+			{
+				border:1px solid red;
+			}
+			.item
+			{
+				display:inline-block;
+				width:100px;
+				height:100px;
+				border:1px solid #aaa;
+				margin:5px;
+			}
 		</style>
 	</head>
 	<body class="ibx-root">
+		<div tabindex="0" class="item">Item Out of Box</div>
+		<div tabindex="0" class="item-container" data-ibx-type="ibxCarousel" data-ibxp-inline="true" data-ibxp-focus-default="true">
+			<div tabindex="0" class="item">Item</div>
+			<div tabindex="0" class="item">Item</div>
+			<div tabindex="0" class="item">Item</div>
+		</div>
+		<div tabindex="0" class="item">Item Out of Box</div>
 	</body>
 </html>
 

@@ -7,7 +7,7 @@ $.widget("ibi.ibxRadioGroup", $.ibi.ibxFlexBox,
 		{
 			"inline":true,
 			"navKeyRoot":true,
-			"navKeyAutoFocus":true,
+			"focusDefault":true,
 			"name": "",
 			"form": "",
 			"aria":{"role":"radiogroup"}

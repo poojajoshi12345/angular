@@ -9,7 +9,7 @@ $.widget("ibi.ibxTabPane", $.ibi.ibxFlexBox,
 	options:
 	{
 		navKeyRoot:true,
-		navKeyAutoFocus:true,
+		focusDefault:true,
 		position: "top",
 		direction: "column",
 		align: "stretch",

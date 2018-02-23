@@ -7,6 +7,7 @@ $.widget("ibi.ibxPopup", $.ibi.ibxWidget,
 	options:
 	{
 		"focusRoot":true,
+		"focusDefault":".ibx-default-focused",
 		"modal":false,
 		"autoClose":true,
 		"movable":false,
@@ -16,7 +17,6 @@ $.widget("ibi.ibxPopup", $.ibi.ibxWidget,
 		"resizeHandles":null,
 		"escapeToClose":true,
 		"destroyOnClose":true,
-		"autoFocus":true,
 		"effect":"none",
 		"closeOnTimer":-1,
 		"refocusLastActiveOnClose":true,
@@ -100,17 +100,8 @@ $.widget("ibi.ibxPopup", $.ibi.ibxWidget,
 			this.element.addClass("pop-opening");
 			this._trigger("popup_mgr_open", null, this.element);
 
-			//for autofocus, and navKeyRoots, we need to focus the popup so it can manage child focusing.
-			if(options.autoFocus || (options.navKeyRoot && options.navKeyAutoFocus))
-			{
-				//focus the popup first.				
-				this.element.focus();
-
-				//focus default item...otherwise find first focusable item (ARIA needs SOMETHING to be focused on the popup)
-				var defItem = this.element.find(".ibx-default-focused");
-				defItem = defItem.length ? defItem : this.element.find(":ibxFocusable").first();
-				defItem.focus();
-			}
+			//we're visible so focus...auto-focusing of children now happens in ibxWidget.
+			this.element.focus();
 
 			//let people know we are fully open
 			this._trigger("open");
@@ -155,7 +146,7 @@ $.widget("ibi.ibxPopup", $.ibi.ibxWidget,
 
 		//WRONG OPTION!
 		if(options.moveable)
-			console.warn("incorrect option 'moveable', use 'movable' instead! =>", this.element);
+			console.warn("[ibx Deprecation] option 'moveable' is deprecated because it's spelled wrong. Use 'movable' instead! =>", this.element);
 
 		//turn draggable on/off
 		if(options.movable || options.moveable)
