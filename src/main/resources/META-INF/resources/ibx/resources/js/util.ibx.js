@@ -73,7 +73,7 @@ jQuery.expr[":"]["ibxFocusable"] = function(elem, idx, meta, stack)
 	tMax = isNaN(tMax) ? Infinity : tMax;
 
 	var tabIndex = parseInt(el.attr("tabIndex"), 10);
-	var visible = (el.css("visibility") != "hidden" && el.css("display") != "none");
+	var visible = (el.css("visibility") != "hidden" && el.is(":visible"));
 	var ret = (tabIndex >= tMin && tabIndex <= tMax && visible);
 	return ret;
 };
