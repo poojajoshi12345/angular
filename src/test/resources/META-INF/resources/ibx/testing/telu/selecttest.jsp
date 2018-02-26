@@ -84,7 +84,7 @@
 	<div class="cmd-focus" data-ibx-type="ibxCommand" data-ibxp-id="commandFocus" data-ibxp-shortcut="Ctrl+C"></div>
 
 	<div data-ibx-type="ibxHBox">
-			<div class="select first-list" tabindex="0" data-ibx-type="ibxSelectPaged" data-ibxp-popup="true" data-ibxp-multi-select="true" data-ibxp-enable-paging="true" data-ibxp-search="true" data-ibxp-selection-controls="true" data-ibxp-enable-paging-trigger="1" data-ibxp-page-size="3">
+			<div class="select first-list" tabindex="0" data-ibx-type="ibxSelectPaged" data-ibxp-popup="true" data-ibxp-multi-select="true" data-ibxp-enable-paging="true" data-ibxp-search="false" data-ibxp-selection-controls="false" data-ibxp-enable-paging-trigger="200" data-ibxp-page-size="3">
 				<div data-ibx-type="ibxSelectItem" data-ibxp-user-value="one">One</div>
 				<div data-ibx-type="ibxSelectItem" data-ibxp-user-value="two">Two</div>
 				<div data-ibx-type="ibxSelectItem" data-ibxp-user-value="three">Three</div>
