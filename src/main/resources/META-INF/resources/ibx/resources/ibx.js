@@ -293,8 +293,8 @@ ibx.getIbxMarkupOptions = function(el)
 	el = $(el);
 
 	//first get the ibx-options value and convert that to individual options.
-	var ibxOptions = el.attr("data-ibx-options") || "{}";
-	var options = this.parseOptions(ibxOptions);
+	var ibxOptions = el.attr("data-ibx-options");
+	var options = ibxOptions ? this.parseOptions(ibxOptions) : {};
 
 	//then overlay any specific options on top.
 	var attrs = el.prop("attributes");
