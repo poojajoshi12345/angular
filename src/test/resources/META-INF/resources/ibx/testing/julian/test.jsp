@@ -62,7 +62,7 @@
 			}
 			.item-box-label
 			{
-				flex:1 1 90%;
+				flex:1 1 99%;
 			}
 			.item
 			{
@@ -78,11 +78,27 @@
 		<div class="item" tabindex="0" data-ibx-type="ibxWidget">Item</div>
 		<div tabindex="0" class="item-box" data-ibx-type="ibxFlexBox" data-ibxp-inline="true" data-ibxp-focus-root="false" data-ibxp-focus-default="true">
 			<div class="item-box-label" tabindex="-1" data-ibx-type="ibxWidget">Item</div>
-			<div class="item" tabindex="-1" data-ibx-type="ibxWidget">Item</div>
-			<div class="item" tabindex="-1" data-ibx-type="ibxWidget">Item</div>
-			<div class="item" tabindex="-1" data-ibx-type="ibxWidget">Item</div>
-			<div class="item" tabindex="-1" data-ibx-type="ibxWidget">Item</div>
-			<div class="item" tabindex="-1" data-ibx-type="ibxWidget">Item</div>
+			<div class="item" tabindex="-0 data-ibx-type="ibxWidget">Item</div>
+			<div class="item" tabindex="0" data-ibx-type="ibxWidget">Item</div>
+			<div class="item" tabindex="0" data-ibx-type="ibxWidget">Item</div>
+			<div class="item" tabindex="0" data-ibx-type="ibxWidget">Item</div>
+			<div class="item" tabindex="0" data-ibx-type="ibxWidget">Item</div>
+			<div tabindex="0" class="item-box" data-ibx-type="ibxFlexBox" data-ibxp-inline="true" data-ibxp-focus-root="false" data-ibxp-focus-default="true">
+				<div class="item-box-label" tabindex="-1" data-ibx-type="ibxWidget">Item</div>
+				<div class="item" tabindex="0" data-ibx-type="ibxWidget">Item</div>
+				<div class="item" tabindex="0" data-ibx-type="ibxWidget">Item</div>
+				<div class="item" tabindex="0" data-ibx-type="ibxWidget">Item</div>
+				<div class="item" tabindex="0" data-ibx-type="ibxWidget">Item</div>
+				<div class="item" tabindex="0" data-ibx-type="ibxWidget">Item</div>
+				<div tabindex="0" class="item-box" data-ibx-type="ibxFlexBox" data-ibxp-inline="true" data-ibxp-focus-root="false" data-ibxp-focus-default="true">
+					<div class="item-box-label" tabindex="-1" data-ibx-type="ibxWidget">Item</div>
+					<div class="item" tabindex="0" data-ibx-type="ibxWidget">Item</div>
+					<div class="item" tabindex="0" data-ibx-type="ibxWidget">Item</div>
+					<div class="item" tabindex="0" data-ibx-type="ibxWidget">Item</div>
+					<div class="item" tabindex="0" data-ibx-type="ibxWidget">Item</div>
+					<div class="item" tabindex="0" data-ibx-type="ibxWidget">Item</div>
+				</div>
+			</div>
 		</div>
 		<div class="item" tabindex="0" data-ibx-type="ibxWidget">Item</div>
 	</body>
