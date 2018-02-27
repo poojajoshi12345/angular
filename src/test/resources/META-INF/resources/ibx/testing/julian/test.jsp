@@ -38,10 +38,13 @@
 				{
 					var itemBoxLabel = $(".item-box-label");
 					itemBoxLabel.text(sformat("tabIndex = {1}", $(".item-box").prop("tabindex")));
-					$(".item").each(function(idx, el)
+					$(".item, .item-box").each(function(idx, el)
 					{
 						el = $(el);
-						el.text(sformat("tabIndex = {1}", el.prop("tabindex")));
+						if(el.is(".item-box"))
+							el.find(".item-box-label").text(sformat("tabIndex = {1}", el.prop("tabindex")));
+						else
+							el.text(sformat("tabIndex = {1}", el.prop("tabindex")));
 					});
 				}, 100);
 
@@ -76,7 +79,7 @@
 	</head>
 	<body class="ibx-root">
 		<div class="item" tabindex="0" data-ibx-type="ibxWidget">Item</div>
-		<div tabindex="0" class="item-box" data-ibx-type="ibxFlexBox" data-ibxp-inline="true" data-ibxp-focus-root="false" data-ibxp-focus-default="true">
+		<div tabindex="0" class="item-box" data-ibx-type="ibxFlexBox" data-ibxp-inline="true" data-ibxp-focus-root="false" data-ibxp-focus-default="false">
 			<div class="item-box-label" tabindex="-1" data-ibx-type="ibxWidget">Item</div>
 			<div class="item" tabindex="-0 data-ibx-type="ibxWidget">Item</div>
 			<div class="item" tabindex="0" data-ibx-type="ibxWidget">Item</div>
