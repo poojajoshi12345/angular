@@ -13,6 +13,7 @@ function ibxEventManager()
 }
 ibxEventManager.noBrowserCtxMenu = true;
 ibxEventManager.noBackspaceNavigate = true;
+ibxEventManager.noSpaceScroll = true;
 ibxEventManager.noIOSBodyScroll = false;
 ibxEventManager.msDblClick = 300;
 ibxEventManager.msCtxMenu = 500;
@@ -173,7 +174,10 @@ ibxEventManager._onKeyDown = function(event)
 			event.preventDefault();
 			return false;
 		}
-	};
+	}
+	else
+	if(ibxEventManager.noSpaceScroll && (event.keyCode === $.ui.keyCode.SPACE))
+		event.preventDefault();
 };
 
 //ios has an annoying habit of attempting to scroll the body element even when it has nothing to scroll.  This stops that!
