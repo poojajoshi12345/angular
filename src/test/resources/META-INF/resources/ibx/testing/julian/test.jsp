@@ -33,6 +33,18 @@
 						console.log("ibfs logged in.");
 					});
 				});
+
+				window.setInterval(function()
+				{
+					var itemBoxLabel = $(".item-box-label");
+					itemBoxLabel.text(sformat("tabIndex = {1}", $(".item-box").prop("tabindex")));
+					$(".item").each(function(idx, el)
+					{
+						el = $(el);
+						el.text(sformat("tabIndex = {1}", el.prop("tabindex")));
+					});
+				}, 100);
+
 			}, [{src:"./test_res_bundle.xml", loadContext:"app"}], true);
 		</script>
 		<style type="text/css">
@@ -48,9 +60,13 @@
 				border:1px solid black;
 				margin:10px;
 			}
+			.item-box-label
+			{
+				flex:1 1 90%;
+			}
 			.item
 			{
-				width:25px;
+				xwidth:25px;
 				height:25px;
 				border:1px solid black;
 				margin:5px;
@@ -59,12 +75,15 @@
 		</style>
 	</head>
 	<body class="ibx-root">
-		<div tabindex="0" class="item-box" data-ibx-type="ibxFlexBox" data-ibxp-inline="true" data-ibxp-focus-root="true" data-ibxp-auto-focus="true">
-			<div class="item" tabindex="0">Item</div>
-			<div class="item" tabindex="0">Item</div>
-			<div class="item" tabindex="0">Item</div>
-			<div class="item" tabindex="0">Item</div>
-			<div class="item" tabindex="0">Item</div>
+		<div class="item" tabindex="0" data-ibx-type="ibxWidget">Item</div>
+		<div tabindex="0" class="item-box" data-ibx-type="ibxFlexBox" data-ibxp-inline="true" data-ibxp-focus-root="false" data-ibxp-focus-default="true">
+			<div class="item-box-label" tabindex="-1" data-ibx-type="ibxWidget">Item</div>
+			<div class="item" tabindex="-1" data-ibx-type="ibxWidget">Item</div>
+			<div class="item" tabindex="-1" data-ibx-type="ibxWidget">Item</div>
+			<div class="item" tabindex="-1" data-ibx-type="ibxWidget">Item</div>
+			<div class="item" tabindex="-1" data-ibx-type="ibxWidget">Item</div>
+			<div class="item" tabindex="-1" data-ibx-type="ibxWidget">Item</div>
 		</div>
+		<div class="item" tabindex="0" data-ibx-type="ibxWidget">Item</div>
 	</body>
 </html>

@@ -210,11 +210,17 @@ $.widget("ibi.ibxWidget", $.Widget,
 			}
 
 			//do the default focusing.
-			if((options.focusDefault !== false) && isTarget && !ownsRelTarget)
+			if((options.focusDefault !== false))
 			{
+				//take the element out of the tab order so shift+tab will work and not focus this container.
+				if(this.element.data("navKeyRootTabIndex") === undefined)
+					this.element.data("navKeyRootTabIndex", this.element.prop("tabindex")).prop("tabindex", -1);
+
+				//now manage focusing the first valid child.
 				if(options.navKeyRoot)
 					this.element.dispatchEvent("keydown", "NAV_KEY_ACTIVATE");
 				else
+				if(isTarget && !ownsRelTarget)
 				{
 					//focus default item...otherwise find first focusable item (ARIA needs SOMETHING to be focused on the popup)
 					var defItem = this.element.find(options.focusDefault);
@@ -228,10 +234,6 @@ $.widget("ibi.ibxWidget", $.Widget,
 				//if we own the target, we are now nav active.
 				this.element.addClass("ibx-nav-key-active");
 
-				//take the element out of the tab order so shift+tab will work when auto focusing first nav item.
-				if(this.element.data("navKeyRootTabIndex") === undefined)
-					this.element.data("navKeyRootTabIndex", this.element.prop("tabindex")).prop("tabindex", -1);
-
 				//de-activate all children, and activate the direct child that is/owns the target.
 				this.navKeyChildren().each(function(target, idx, el)
 				{
@@ -242,11 +244,16 @@ $.widget("ibi.ibxWidget", $.Widget,
 				}.bind(this, e.target));
 			}
 		}
-
+		
 		if(e.type == "focusout" && this._widgetFocused && !ownsRelTarget)
 		{
 			this._widgetFocused = false;
 			this.element.dispatchEvent("ibx_widgetblur", e, false, false, e.relatedTarget);
+
+			//put this element back in the tab order...so that next tab into will will do auto-focus.
+			if(this.element.data("navKeyRootTabIndex") !== undefined)
+				this.element.prop("tabIndex", this.element.data("navKeyRootTabIndex")).removeData("navKeyRootTabIndex");
+
 
 			var children = this.navKeyChildren("*");//all nav kids not just focusable...menus are hidden at this point.
 			children.removeClass("ibx-ie-pseudo-focus");
@@ -256,10 +263,6 @@ $.widget("ibi.ibxWidget", $.Widget,
 			{
 				//no longer navActive
 				this.element.removeClass("ibx-nav-key-active");
-
-				//put this element back in the tab order...so that next tab into will will do auto-focus.
-				if(this.element.data("navKeyRootTabIndex") !== undefined)
-					this.element.prop("tabIndex", this.element.data("navKeyRootTabIndex")).removeData("navKeyRootTabIndex");
 
 				//remove active so next focus goes to first item.
 				if(options.navKeyResetFocusOnBlur)
