@@ -35,6 +35,31 @@ $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame,
 			this.element.removeData("createContent");
 		}
 	},
+	execCommand:function(cmd, withUI, value)
+	{
+		this.contentDocument().execCommand(cmd, withUI, value);
+	},
+	cut:function(){this.execCommand("Cut");},
+	copy:function(){this.execCommand("Copy");},
+	paste:function(){this.execCommand("Paste");},
+	del:function(){this.execCommand("Delete");},
+
+	bold:function(){this.execCommand("Bold");},
+	italic:function(){this.execCommand("Italic");},
+	underline:function(){this.execCommand("Underline");},
+
+
+	/*
+	backColor:function(color){this.execCommand("backColor", false, color);},
+	bold:function(){this.execCommand("bold");},
+	fontName:function(font){this.execCommand("fontName", false, font);},
+
+	fontSize:function(increase){increase ? this.execCommand("increaseFontSize") : this.execCommand("decreaseFontSize");},//suspicious (ff only?)
+	paragraphSeparator:function(sep){this.execCommand("defaultParagraphSeparator", null, sep);},//suspicious (chrome/ff only?)
+	createLink:function(uri){this.execCommand("creatLink", null, uri);},//suspicious (none?)
+	*/
+
+
 	_refresh:function()
 	{
 		var options = this.options;
@@ -42,5 +67,5 @@ $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame,
 	}
 });
 
-//# sourceURL=richtext.ibx.js
+//# sourceURL=richedit.ibx.js
 

@@ -42,6 +42,14 @@ $.widget("ibi.ibxIFrame", $.ibi.ibxWidget,
 	{
 		return this._iFrame.prop("contentWindow");
 	},
+	text:function(txt)
+	{
+		this.contentDocument().body.innerText = txt;
+	},
+	html:function(html)
+	{
+		this.contentDocument().body.innerHTML = html;
+	},
 	_refresh:function()
 	{
 		this._super();
