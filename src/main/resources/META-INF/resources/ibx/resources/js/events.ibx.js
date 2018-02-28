@@ -175,9 +175,9 @@ ibxEventManager._onKeyDown = function(event)
 			return false;
 		}
 	}
-	else
-	if(ibxEventManager.noSpaceScroll && (event.keyCode === $.ui.keyCode.SPACE))
-		event.preventDefault();
+	//else
+	//if(ibxEventManager.noSpaceScroll && (event.keyCode === $.ui.keyCode.SPACE))
+	//	event.preventDefault();
 };
 
 //ios has an annoying habit of attempting to scroll the body element even when it has nothing to scroll.  This stops that!
