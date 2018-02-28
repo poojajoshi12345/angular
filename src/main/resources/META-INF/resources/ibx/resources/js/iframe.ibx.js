@@ -21,7 +21,6 @@ $.widget("ibi.ibxIFrame", $.ibi.ibxWidget,
 		var frame = this._iFrame = $("<iframe>").addClass("ibx-iframe-frame");
 		frame.on("DOMContentLoaded readystatechange load beforeunload unload", this._onIFrameEvent.bind(this));
 		this.element.append(frame);
-
 	},
 	_destroy:function()
 	{
@@ -48,7 +47,7 @@ $.widget("ibi.ibxIFrame", $.ibi.ibxWidget,
 		this._super();
 		var options = this.options;
 		var frmOptions = {};
-		var curSrc = this._iFrame.attr("src");
+		var curSrc = this._iFrame.attr("src") || "";
 		var curName = this._iFrame.prop("name");
 		if(curSrc != options.src)
 			frmOptions.src = options.src;

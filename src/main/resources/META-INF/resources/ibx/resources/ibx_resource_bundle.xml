@@ -88,6 +88,7 @@ $Revision$:-->
 		<style-file src="./css/widget.ibx.css"/>
 		<style-file src="./css/collapsible.ibx.css"/>
 		<style-file src="./css/flexbox.ibx.css"/>
+		<style-file src="./css/iframe.ibx.css"/>
 		<style-file src="./css/grid.ibx.css"/>
 		<style-file src="./css/tree.ibx.css"/>
 		<style-file src="./css/splitter.ibx.css"/>
@@ -95,6 +96,7 @@ $Revision$:-->
 		<style-file src="./css/progress.ibx.css"/>
 		<style-file src="./css/text.ibx.css"/>
 		<style-file src="./css/textarea.ibx.css"/>
+		<style-file src="./css/richedit.ibx.css"/>
 		<style-file src="./css/spinner.ibx.css"/>
 		<style-file src="./css/button.ibx.css"/>
 		<style-file src="./css/slider.ibx.css"/>
@@ -107,7 +109,6 @@ $Revision$:-->
 		<style-file src="./css/groupbox.ibx.css"/>
 		<style-file src="./css/gridstack.ibx.css"/>
 		<style-file src="./css/select.ibx.css"/>
-		<style-file src="./css/iframe.ibx.css"/>
 		<style-file src="./css/carousel.ibx.css"/>
 		<style-file src="./css/datepicker.ibx.css"/>
 	</styles>
@@ -159,6 +160,7 @@ $Revision$:-->
 		<script-file src="./js/commands.ibx.js"/>
 		<script-file src="./js/draggable.ibx.js"/>
 		<script-file src="./js/collapsible.ibx.js"/>
+		<script-file src="./js/iframe.ibx.js"/>
 		<script-file src="./js/flexbox.ibx.js"/>
 		<script-file src="./js/grid.ibx.js"/>
 		<script-file src="./js/tree.ibx.js"/>
@@ -167,6 +169,7 @@ $Revision$:-->
 		<script-file src="./js/progress.ibx.js"/>
 		<script-file src="./js/text.ibx.js"/>
 		<script-file src="./js/textarea.ibx.js"/>
+		<script-file src="./js/richedit.ibx.js"/>
 		<script-file src="./js/spinner.ibx.js"/>
 		<script-file src="./js/button.ibx.js"/>
 		<script-file src="./js/slider.ibx.js"/>
@@ -179,7 +182,6 @@ $Revision$:-->
 		<script-file src="./js/groupbox.ibx.js"/>
 		<script-file src="./js/gridstack.ibx.js"/>
 		<script-file src="./js/select.ibx.js"/>
-		<script-file src="./js/iframe.ibx.js"/>
 		<script-file src="./js/carousel.ibx.js"/>
 		<script-file src="./js/tabs.ibx.js"/>
 		<script-file src="./js/datepicker.ibx.js"/>
