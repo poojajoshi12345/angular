@@ -144,7 +144,7 @@ ibxEventManager._onContextMenu = function(e)
 //see: https://stackoverflow.com/questions/1495219/how-can-i-prevent-the-backspace-key-from-navigating-back
 ibxEventManager._onKeyDown = function(event)
 {
-	if(ibxEventManager.noBackspaceNavigate && (event.keyCode === 8))
+	if((ibxEventManager.noBackspaceNavigate && (event.keyCode === $.ui.keyCode.BACKSPACE)) || (ibxEventManager.noSpaceScroll && (event.keyCode === $.ui.keyCode.SPACE)))
 	{
 		var doPrevent = true;
 		var types = ["text", "password", "file", "search", "email", "number", "date", "color", "datetime", "datetime-local", "month", "range", "search", "tel", "time", "url", "week"];
@@ -175,9 +175,6 @@ ibxEventManager._onKeyDown = function(event)
 			return false;
 		}
 	}
-	//else
-	//if(ibxEventManager.noSpaceScroll && (event.keyCode === $.ui.keyCode.SPACE))
-	//	event.preventDefault();
 };
 
 //ios has an annoying habit of attempting to scroll the body element even when it has nothing to scroll.  This stops that!
