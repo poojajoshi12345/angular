@@ -410,6 +410,7 @@ $.widget("ibi.ibxSelectItemList", $.ibi.ibxVBox,
 		el = $(el).filter(".ibx-select-group, .ibx-select-item");
 		this._super(el, sibling, before, false);
 
+		var selChildren = [];
 		el.each(function(idx, el)
 		{
 			el = $(el);
@@ -422,17 +423,17 @@ $.widget("ibi.ibxSelectItemList", $.ibi.ibxVBox,
 				children.each(function (index, el)
 				{
 					if ($(el).ibxWidget("option", "selected") || this.options.userValue && this.options.userValue == $(el).ibxWidget("option", "userValue"))
-					{
-						this._setSelection($(el), true);
-						return true;
-					}
+						selChildren.push($(el));
 				}.bind(this));
 			}
 			else
 			{
 				if (el.ibxWidget("option", "selected") || this.options.userValue && this.options.userValue == el.ibxWidget("option", "userValue"))
-					this._setSelection(el, true);
+					selChildren.push($(el));
 			}
+		}.bind(this));
+		selChildren.forEach(function(el){
+			this._setSelection(el, true);
 		}.bind(this));
 	},
 	_sortType: true,
