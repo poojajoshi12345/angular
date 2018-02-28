@@ -476,7 +476,7 @@ $.widget("ibi.ibxSelectItemList", $.ibi.ibxVBox,
 
 		var bKeepAnchor = false;
 		var bSynthetic = false;
-		if (event.shiftKey)
+		if (this.options.multiSelect && event.shiftKey)
 		{
 			bKeepAnchor = true;
 			// select block - select between current anchor and current item.
@@ -518,7 +518,7 @@ $.widget("ibi.ibxSelectItemList", $.ibi.ibxVBox,
 				this._setSelection(selItem, true, bKeepAnchor);
 			}
 		}
-		else if (event.ctrlKey)
+		else if (this.options.multiSelect && event.ctrlKey)
 		{
 			// multi select
 			if ($(selItem).hasClass("sel-selected"))
