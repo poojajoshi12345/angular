@@ -2,15 +2,11 @@ $.widget("ibi.mdTree", $.ibi.ibxWidget,
 {
 	options:
 	{
-		"expandedIcon":"ibx-icons ibx-glyph-minus-small",
-		"collapsedIcon":"ibx-icons ibx-glyph-plus-small"		
 	},	
 	_widgetClass: "md-tree",
 	_create: function ()
 	{
 		this._super();
-		$.ibi.mdTreeNode.statics.expandedIcon =  this.options.expandedIcon;
-		$.ibi.mdTreeNode.statics.collapsedIcon =  this.options.collapsedIcon;		
 	},
 	load: function(xmlObj)
 	{
@@ -21,8 +17,16 @@ $.widget("ibi.mdTree", $.ibi.ibxWidget,
 	_buildTree: function(parent, xmlNode)
 	{
 		var xmlNode = $(xmlNode);
-		var node = $("<div>").mdTreeNode({"text" : xmlNode.attr("label"), "isFolder": xmlNode.children().length > 0});
-		parent.ibxWidget("add", node);		
+		var isFolder = xmlNode.children().length > 0;
+		var type;
+		if (isFolder)
+			type = "folder";
+		else if (xmlNode.attr("isMeasure") == "true")
+			type = "measure";
+		else
+			type = "dimension";
+		var node = $("<div>").mdTreeNode({"text" : xmlNode.attr("label"), "isFolder": isFolder, "fieldType": type});
+		parent.ibxWidget("add", node);
 		xmlNode.children().each(function(node,i, el) {
 			this._buildTree(node, el);
 		}.bind(this, node));
@@ -31,18 +35,19 @@ $.widget("ibi.mdTree", $.ibi.ibxWidget,
 	}
 });
 
-
-$.widget("ibi.mdTreeNode", $.ibi.ibxVBox,
+$.widget("ibi.genericTreeNode", $.ibi.ibxVBox,
 {
 	options:
 	{
+		"collapsedIcon": "ibx-icons ibx-glyph-plus-small",
+		"expandedIcon" :"ibx-icons ibx-glyph-minus-small",
 		"icons":"",
 		"startExanded": true,
 		"text":"",
 		"glyphClasses":"",
 		"isFolder": false
 	},
-	_widgetClass: "md-tree-node",
+	_widgetClass: "generic-tree-node",
 	_create: function ()
 	{
 		this._super();
@@ -66,7 +71,7 @@ $.widget("ibi.mdTreeNode", $.ibi.ibxVBox,
 				this.toggle();
 			}.bind(this));
 		}
-		this.element.children(".md-tree-node").each(function(idx, el)
+		this.element.children(".generic-tree-node").each(function(idx, el)
 		{
 			this.add(el);
 		}.bind(this));
@@ -79,7 +84,7 @@ $.widget("ibi.mdTreeNode", $.ibi.ibxVBox,
 	},
 	hasChildren: function()
 	{
-		return this.element.children(".md-tree-node").length > 0; 
+		return this.element.children(".generic-tree-node").length > 0; 
 	},
 	_onDoubleClick: function(e)
 	{
@@ -112,23 +117,47 @@ $.widget("ibi.mdTreeNode", $.ibi.ibxVBox,
 		{
 			if (!this.expanderIcon)
 			{
-				this.expanderIcon = $("<div>").ibxLabel({"glyphClasses": this._isOpen ? $.ibi.mdTreeNode.statics.expandedIcon : $.ibi.mdTreeNode.statics.collapsedIcon}).addClass("folder-icon");
+				this.expanderIcon = $("<div>").ibxLabel({"glyphClasses": this._isOpen ? this.options.expandedIcon : this.options.collapsedIcon}).addClass("folder-icon");
 				var beforeEl = this.nodeIcon ? this.nodeIcon : this.nodeLabel;
 				this.expanderIcon.insertBefore(this._wrapper);
 			}
 			else
-				this.expanderIcon.ibxWidget("option", "glyphClasses", this._isOpen ? $.ibi.mdTreeNode.statics.expandedIcon : $.ibi.mdTreeNode.statics.collapsedIcon);
+				this.expanderIcon.ibxWidget("option", "glyphClasses", this._isOpen ? this.options.expandedIcon : this.options.collapsedIcon);
 		}
 		
-		this.element.children(".md-tree-node").each(function(idx, el)
+		this.element.children(".generic-tree-node").each(function(idx, el)
 		{
 			this._isOpen ? $(el).show() : $(el).hide();
 		}.bind(this));		
 	}
 	
 });
-$.ibi.mdTreeNode.statics = {};
-$.ibi.mdTreeNode.statics.expandedIcon = "ibx-icons ibx-glyph-minus-small";
-$.ibi.mdTreeNode.statics.collapsedIcon = "ibx-icons ibx-glyph-plus-small";
+
+$.widget("ibi.mdTreeNode", $.ibi.genericTreeNode,
+{
+	options:
+	{
+		"fieldType": ""
+	},
+	_create: function ()
+	{
+		this._super();
+		this.options.glyphClasses = "ibx-icons " + $.ibi.mdTreeNode.statics.ICONS[this.options.fieldType];
+	}
+});
+
+$.ibi.mdTreeNode.statics = {
+		
+		ICONS:
+		{
+			"measure": "ibx-glyph-measure",
+			"dimension": "ibx-glyph-dimension",
+			"folder": "ibx-glyph-folder"
+		}
+
+};
+
+
+
 
 //# sourceURL=mdTree.js
