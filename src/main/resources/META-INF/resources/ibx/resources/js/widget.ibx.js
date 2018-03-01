@@ -210,8 +210,9 @@ $.widget("ibi.ibxWidget", $.Widget,
 			}
 
 			//do the default focusing.
-			if((options.focusDefault !== false))
+			if((options.focusDefault !== false) && !ownsTarget)
 			{
+
 				//take the element out of the tab order so shift+tab will work and not focus this container.
 				if(this.element.data("navKeyRootTabIndex") === undefined)
 					this.element.data("navKeyRootTabIndex", this.element.prop("tabindex")).prop("tabindex", -1);
@@ -220,7 +221,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 				if(options.navKeyRoot)
 					this.element.dispatchEvent("keydown", "NAV_KEY_ACTIVATE");
 				else
-				if(isTarget && !ownsRelTarget)
+				if(isTarget)
 				{
 					//focus default item...otherwise find first focusable item (ARIA needs SOMETHING to be focused on the popup)
 					var defItem = this.element.find(options.focusDefault);
@@ -232,15 +233,15 @@ $.widget("ibi.ibxWidget", $.Widget,
 			if(options.navKeyRoot && !isTarget)
 			{
 				//if we own the target, we are now nav active.
-				this.element.addClass("ibx-nav-key-active");
+				this.element.addClass("ibx-nav-key-root-active");
 
 				//de-activate all children, and activate the direct child that is/owns the target.
 				this.navKeyChildren().each(function(target, idx, el)
 				{
 					var navKid = $(el);
-					navKid.removeClass("ibx-nav-item-active ibx-ie-pseudo-focus").removeAttr("aria-activedescendant");
+					navKid.removeClass("ibx-nav-key-item-active ibx-ie-pseudo-focus").removeAttr("aria-activedescendant");
 					if(navKid.is(target) || $.contains(navKid[0], target))
-						navKid.addClass("ibx-nav-item-active").toggleClass("ibx-ie-pseudo-focus", ibxPlatformCheck.isIE).attr("aria-activedescendant", true);
+						navKid.addClass("ibx-nav-key-item-active").toggleClass("ibx-ie-pseudo-focus", ibxPlatformCheck.isIE).attr("aria-activedescendant", true);
 				}.bind(this, e.target));
 			}
 		}
@@ -262,11 +263,11 @@ $.widget("ibi.ibxWidget", $.Widget,
 			if(options.navKeyRoot)
 			{
 				//no longer navActive
-				this.element.removeClass("ibx-nav-key-active");
+				this.element.removeClass("ibx-nav-key-root-active");
 
 				//remove active so next focus goes to first item.
 				if(options.navKeyResetFocusOnBlur)
-					children.removeClass("ibx-nav-item-active").removeAttr("aria-activedescendant");
+					children.removeClass("ibx-nav-key-item-active").removeAttr("aria-activedescendant");
 			}
 		}
 	},
@@ -278,7 +279,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 		var options = this.options;
 		if(options.focusRoot && e.keyCode == $.ui.keyCode.TAB)
 		{
-			var tabKids = this.element.find(":ibxFocusable, .ibx-nav-key-active");
+			var tabKids = this.element.find(":ibxFocusable, .ibx-nav-key-root-active");
 			var target = null;
 			var firstKid = tabKids.first();
 			var lastKid = tabKids.last();
@@ -309,7 +310,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 			var isNavActive = this.navKeyActive();
 			var navKids = this.navKeyChildren();
 			var active = $();
-			var current = navKids.filter(".ibx-nav-item-active");
+			var current = navKids.filter(".ibx-nav-key-item-active");
 
 			//[IBX-83]
 			if(!isNavActive && this.element.is(e.target) && (e.data == "NAV_KEY_ACTIVATE" || eventMatchesShortcut(options.navKeyKeys.activate, e)))
@@ -412,7 +413,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 	},
 	navKeyActive:function()
 	{
-		return this.element.hasClass("ibx-nav-key-active");
+		return this.element.hasClass("ibx-nav-key-root-active");
 	},
 	add:function(el, elSibling, before, refresh)
 	{

@@ -245,7 +245,7 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 			{
 				//if the current active item is not in the viewport, then focus the first child that is.
 				var visChildren = this.children(":inViewport(true)");
-				if(!visChildren.filter(".ibx-nav-item-active").length)
+				if(!visChildren.filter(".ibx-nav-key-item-active").length)
 					visChildren.first().focus();
 			}
 		}

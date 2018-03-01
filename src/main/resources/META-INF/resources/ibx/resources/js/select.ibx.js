@@ -385,6 +385,7 @@ $.widget("ibi.ibxSelectItemList", $.ibi.ibxVBox,
 		"align": "stretch",
 		"navKeyRoot":true,
 		"navKeyDir":"vertical",
+		"navKeyResetFocusOnBlur":false,
 		"navKeyKeys":
 		{
 			"cancel":"",
