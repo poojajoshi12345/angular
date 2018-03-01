@@ -5,6 +5,7 @@ $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame,
 {
 	options:
 	{
+		"focusDefault":true,
 		"src":"",
 		"aria":
 		{
@@ -17,6 +18,7 @@ $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame,
 		this.element.data("createContent", this.element.html());
 		this.element.empty();
 		this._super();
+		this._iFrame.prop("tabindex", 0).on("focus", this._onIFrameEvent.bind(this));
 	},
 	_destroy:function()
 	{
@@ -28,11 +30,22 @@ $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame,
 		if(e.type == "load")
 		{
 			var cd = this.contentDocument();
-			var cw = this.contentWindow();
 			cd.designMode = "On";
 			cd.body.contentEditable = true;
 			cd.body.innerHTML = this.element.data("createContent");
 			this.element.removeData("createContent");
+
+			var cw = $(this.contentWindow());
+			cw.on("contextmenu", function(e)
+			{
+				this.element.trigger(e);
+			}.bind(this));
+		}
+		else
+		if(e.type == "focus")
+		{
+			this.contentDocument().body.focus();
+			console.log(this.contentDocument().activeElement, e);
 		}
 	},
 	execCommand:function(cmd, withUI, value)
