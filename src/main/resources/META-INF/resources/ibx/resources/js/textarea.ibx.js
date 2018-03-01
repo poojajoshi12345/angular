@@ -98,6 +98,10 @@ $.widget("ibi.ibxTextArea", $.ibi.ibxFlexBox,
 	{
 		if(!$.ibi.ibxWidget.isNavKey(e))
 			this._trigger("textchanging", e, {"text": this.options.text});
+		
+		//[HOME-1050]Stop enter from closing dialog...put it here because I can't see why this would ever propagate.
+		if(e.keyCode == $.ui.keyCode.ENTER)
+			e.stopPropagation();
 	},
 	_onTextAreaInput: function (e)
 	{
