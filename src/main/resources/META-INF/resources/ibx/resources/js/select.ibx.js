@@ -1031,7 +1031,7 @@ $.widget("ibi.ibxSelectPaged", $.ibi.ibxSelectBase, {
 	},
 	_getText: function ()
 	{
-		var values = this._control.ibxWidget("getSelected");
+		var values = this._control.ibxWidget("selected");
 		var allValues = this._control.ibxWidget("values");
 		var count = allValues.length; 
 		var selValues = [];
@@ -1053,7 +1053,7 @@ $.widget("ibi.ibxSelectPaged", $.ibi.ibxSelectBase, {
 		this._super(value);
 		if (typeof(value) == "undefined")
 		{
-			var values = this._control.ibxWidget("getSelected");
+			var values = this._control.ibxWidget("selected");
 			if (this._control.ibxWidget("option", "multiSelect"))
 			{
 				var ret = [];
@@ -1431,14 +1431,23 @@ $.widget("ibi.ibxSelectItemListPaged", $.ibi.ibxVBox,
 			return this;
 		}
 	},
-	getSelected: function ()
+	selected: function (element)
 	{
-		var sel = [];
-		this._values.forEach(function (value){
-			if (value.checked)
-				sel.push(value);
-		});
-		return sel;
+		if (typeof (element) == "undefined")
+		{
+			var sel = [];
+			this._values.forEach(function (value){
+				if (value.checked)
+					sel.push(value);
+			});
+			return sel;
+		}
+		else
+		{
+			this.selectItems(element)
+			return this;
+		}
+		
 	},
 	selectItems: function (elems)
 	{
