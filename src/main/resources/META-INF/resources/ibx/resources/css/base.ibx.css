@@ -65,12 +65,14 @@ input
   padding:0px;
 }
 /*chrome turns off the focus outline when readonly...not sure why, but this is better.*/
+/*[PD-762] they don't want this behavior.
 input:read-only:focus
 {
 	outline:auto;
 	outline-color:-webkit-focus-ring-color;
 	opacity:.5;
 }
+*/
 
 textarea {
     font: inherit;
