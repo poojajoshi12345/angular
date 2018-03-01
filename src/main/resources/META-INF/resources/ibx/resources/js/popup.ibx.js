@@ -132,7 +132,8 @@ $.widget("ibi.ibxPopup", $.ibi.ibxWidget,
 			this._trigger("popup_mgr_close", null, this.element);
 			this._trigger("close", null, closeInfo);
 
-			if(this.options.refocusLastActiveOnClose && this._elPrevActive)
+			//[IBX-87] Don't refocus if close is from a mouse event...let browser focus wherever was clicked on.
+			if(!(closeInfo instanceof MouseEvent) && this.options.refocusLastActiveOnClose && this._elPrevActive)
 				this._elPrevActive.focus();
 			delete this._elPrevActive;
 		}
@@ -252,7 +253,7 @@ ibxPopupManager.onWindowEvent = function(e)
 				return;
 			}
 
-			//otherwise, if any modals are open, then attempt to close any popups abover the top modal, or
+			//otherwise, if any modals are open, then attempt to close any popups above the top modal, or
 			//the modal itself if it's autoClose
 			var modal = ibxPopupManager.getOpenPopups(":openModalPopup").first();
 			if(modal.length)
