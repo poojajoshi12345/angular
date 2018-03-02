@@ -143,6 +143,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 				this.element.removeData(key);
 		}.bind(this));
 		
+		this.off();
 		this.element.removeAttr("data-ibx-type");
 		this.element.removeClass(this.options.class);
 		this._adjustWidgetClasses(false);
