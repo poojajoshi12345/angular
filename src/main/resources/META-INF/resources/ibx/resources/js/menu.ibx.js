@@ -344,6 +344,7 @@ $.widget("ibi.ibxRadioMenuItem", $.ibi.ibxCheckMenuItem,
 		var options = this.options;
 		this._startMarker.removeClass("ibx-marker-radio-uncheck ibx-marker-radio-check");
 		this._startMarker.addClass(options.checked ? "ibx-marker-radio-check" : "ibx-marker-radio-uncheck");
+		this.element.addClass(options.group ? "ibx-radio-group-" + options.group : "");
 		this._super();
 	}
 });
