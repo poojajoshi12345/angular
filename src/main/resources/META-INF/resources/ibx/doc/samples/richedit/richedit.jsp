@@ -53,12 +53,14 @@
 			}
 			.main-box
 			{
+				padding:3px;
 				width:100%;
 				height:100%;
 				box-sizing:border-box;
 			}
 			.rich-edit
-			{
+			{	
+				margin-top:1px;
 				flex:1 1 auto;
 				border:1px solid #ccc;
 			}
@@ -67,8 +69,6 @@
 				font-size:18px;
 				margin:2px;
 				padding:2px;
-				xborder:1px solid #ccc;
-				xborder-radius:5px;
 			}
 			.tb-separator
 			{
@@ -81,19 +81,25 @@
 	<body class="ibx-root">
 		<div class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
 			<div class="tb-main" data-ibx-type="ibxHBox">
-				<div class="tb-button" title="Cut" data-ibx-type="ibxButtonSimple" data-ibxp-command="cmdCut" data-ibxp-glyph="content_cut" data-ibxp-glyph-classes="material-icons"></div>
-				<div class="tb-button" title="Copy" data-ibx-type="ibxButtonSimple" data-ibxp-command="cmdCopy" data-ibxp-glyph="content_copy" data-ibxp-glyph-classes="material-icons"></div>
-				<div class="tb-button" title="Paste" data-ibx-type="ibxButtonSimple" data-ibxp-command="cmdPaste" data-ibxp-glyph="content_paste" data-ibxp-glyph-classes="material-icons"></div>
-				<div class="tb-button" title="Clear" data-ibx-type="ibxButtonSimple" data-ibxp-command="cmdDelete" data-ibxp-glyph="delete" data-ibxp-glyph-classes="material-icons"></div>
-				<div class="tb-separator"></div>
-				<div class="tb-button" title="Bold" data-ibx-type="ibxCheckBox" data-ibxp-command="cmdBold" data-ibxp-glyph="format_bold" data-ibxp-glyph-classes="material-icons"></div>
-				<div class="tb-button" title="Italic" data-ibx-type="ibxCheckBox" data-ibxp-command="cmdItalic" data-ibxp-glyph="format_italic" data-ibxp-glyph-classes="material-icons"></div>
-				<div class="tb-button" title="Underline" data-ibx-type="ibxCheckBox" data-ibxp-command="cmdUnderline" data-ibxp-glyph="format_underlined" data-ibxp-glyph-classes="material-icons"></div>
-				<div class="tb-separator"></div>
-				<div class="tb-button" title="Left Justify" data-ibx-type="ibxRadioButton" data-ibxp-group="rgAlign" data-ibxp-command="cmdLeft" data-ibxp-glyph="format_align_left" data-ibxp-glyph-classes="material-icons"></div>
-				<div class="tb-button" title="Center Justify" data-ibx-type="ibxRadioButton" data-ibxp-group="rgAlign" data-ibxp-command="cmdCenter" data-ibxp-glyph="format_align_center" data-ibxp-glyph-classes="material-icons"></div>
-				<div class="tb-button" title="Right Justify" data-ibx-type="ibxRadioButton" data-ibxp-group="rgAlign" data-ibxp-command="cmdRight" data-ibxp-glyph="format_align_right" data-ibxp-glyph-classes="material-icons"></div>
-				<div class="tb-button" title="Justify" data-ibx-type="ibxRadioButton" data-ibxp-group="rgAlign" data-ibxp-command="cmdJustify" data-ibxp-glyph="format_align_justify" data-ibxp-glyph-classes="material-icons"></div>
+				<div tabindex="0" class="tb-button" title="Undo" data-ibx-type="ibxButtonSimple" data-ibxp-command="cmdUndo" data-ibxp-glyph="undo" data-ibxp-glyph-classes="material-icons"></div>
+				<div tabindex="0" class="tb-button" title="Redo" data-ibx-type="ibxButtonSimple" data-ibxp-command="cmdRedo" data-ibxp-glyph="redo" data-ibxp-glyph-classes="material-icons"></div>
+				<div tabindex="0" class="tb-separator"></div>
+				<div tabindex="0" class="tb-button" title="Select All" data-ibx-type="ibxButtonSimple" data-ibxp-command="cmdSelectAll" data-ibxp-glyph="select_all" data-ibxp-glyph-classes="material-icons"></div>
+				<div tabindex="0" class="tb-separator"></div>
+				<div tabindex="0" class="tb-button" title="Cut" data-ibx-type="ibxButtonSimple" data-ibxp-command="cmdCut" data-ibxp-glyph="content_cut" data-ibxp-glyph-classes="material-icons"></div>
+				<div tabindex="0" class="tb-button" title="Copy" data-ibx-type="ibxButtonSimple" data-ibxp-command="cmdCopy" data-ibxp-glyph="content_copy" data-ibxp-glyph-classes="material-icons"></div>
+				<div tabindex="0" class="tb-button" title="Paste" data-ibx-type="ibxButtonSimple" data-ibxp-command="cmdPaste" data-ibxp-glyph="content_paste" data-ibxp-glyph-classes="material-icons"></div>
+				<div tabindex="0" class="tb-button" title="Clear" data-ibx-type="ibxButtonSimple" data-ibxp-command="cmdDelete" data-ibxp-glyph="delete" data-ibxp-glyph-classes="material-icons"></div>
+				<div tabindex="0" class="tb-separator"></div>
+				<div tabindex="0" class="tb-button" title="Bold" data-ibx-type="ibxCheckBox" data-ibxp-command="cmdBold" data-ibxp-glyph="format_bold" data-ibxp-glyph-classes="material-icons"></div>
+				<div tabindex="0" class="tb-button" title="Italic" data-ibx-type="ibxCheckBox" data-ibxp-command="cmdItalic" data-ibxp-glyph="format_italic" data-ibxp-glyph-classes="material-icons"></div>
+				<div tabindex="0" class="tb-button" title="Underline" data-ibx-type="ibxCheckBox" data-ibxp-command="cmdUnderline" data-ibxp-glyph="format_underlined" data-ibxp-glyph-classes="material-icons"></div>
+				<div tabindex="0" class="tb-button" title="Strikethrough" data-ibx-type="ibxCheckBox" data-ibxp-command="cmdStrikeThrough" data-ibxp-glyph="format_strikethrough" data-ibxp-glyph-classes="material-icons"></div>
+				<div tabindex="0" class="tb-separator"></div>
+				<div tabindex="0" class="tb-button" title="Left Justify" data-ibx-type="ibxRadioButton" data-ibxp-group="rgAlign" data-ibxp-command="cmdLeft" data-ibxp-glyph="format_align_left" data-ibxp-glyph-classes="material-icons"></div>
+				<div tabindex="0" class="tb-button" title="Center Justify" data-ibx-type="ibxRadioButton" data-ibxp-group="rgAlign" data-ibxp-command="cmdCenter" data-ibxp-glyph="format_align_center" data-ibxp-glyph-classes="material-icons"></div>
+				<div tabindex="0" class="tb-button" title="Right Justify" data-ibx-type="ibxRadioButton" data-ibxp-group="rgAlign" data-ibxp-command="cmdRight" data-ibxp-glyph="format_align_right" data-ibxp-glyph-classes="material-icons"></div>
+				<div tabindex="0" class="tb-button" title="Justify" data-ibx-type="ibxRadioButton" data-ibxp-group="rgAlign" data-ibxp-command="cmdJustify" data-ibxp-glyph="format_align_justify" data-ibxp-glyph-classes="material-icons"></div>
 			</div>
 			<div tabindex="0" class="rich-edit" data-ibx-type="ibxRichEdit" data-ibxp-ctx-menu=".re-ctx-menu"></div>
 		</div>
@@ -115,16 +121,23 @@
 		</div>
 
 		<div data-ibx-type="ibxRadioGroup" data-ibxp-name="rgAlign"></div>
+		<div class="re-cmd" data-ibx-type="ibxCommand" data-ibxp-id="cmdUndo" data-ibxp-user-value="undo"></div>
+		<div class="re-cmd" data-ibx-type="ibxCommand" data-ibxp-id="cmdRedo" data-ibxp-user-value="redo"></div>
+		<div class="re-cmd" data-ibx-type="ibxCommand" data-ibxp-id="cmdSelectAll" data-ibxp-user-value="selectAll"></div>
+
 		<div class="re-cmd" data-ibx-type="ibxCommand" data-ibxp-id="cmdCut" data-ibxp-user-value="cut"></div>
 		<div class="re-cmd" data-ibx-type="ibxCommand" data-ibxp-id="cmdCopy" data-ibxp-user-value="copy"></div>
 		<div class="re-cmd" data-ibx-type="ibxCommand" data-ibxp-id="cmdPaste" data-ibxp-user-value="paste"></div>
 		<div class="re-cmd" data-ibx-type="ibxCommand" data-ibxp-id="cmdDelete" data-ibxp-user-value="del"></div>
+		
 		<div class="re-cmd" data-ibx-type="ibxCommand" data-ibxp-id="cmdBold" data-ibxp-user-value="bold"></div>
 		<div class="re-cmd" data-ibx-type="ibxCommand" data-ibxp-id="cmdItalic" data-ibxp-user-value="italic"></div>
 		<div class="re-cmd" data-ibx-type="ibxCommand" data-ibxp-id="cmdUnderline" data-ibxp-user-value="underline"></div>
-		<div class="re-cmd" data-ibx-type="ibxCommand" data-ibxp-id="cmdLeft" data-ibxp-user-value="left"></div>
-		<div class="re-cmd" data-ibx-type="ibxCommand" data-ibxp-id="cmdCenter" data-ibxp-user-value="center"></div>
-		<div class="re-cmd" data-ibx-type="ibxCommand" data-ibxp-id="cmdRight" data-ibxp-user-value="right"></div>
-		<div class="re-cmd" data-ibx-type="ibxCommand" data-ibxp-id="cmdJustify" data-ibxp-user-value="justify"></div>
+		<div class="re-cmd" data-ibx-type="ibxCommand" data-ibxp-id="cmdStrikeThrough" data-ibxp-user-value="strikeThrough"></div>
+
+		<div class="re-cmd" data-ibx-type="ibxCommand" data-ibxp-id="cmdLeft" data-ibxp-user-value="justifyLeft"></div>
+		<div class="re-cmd" data-ibx-type="ibxCommand" data-ibxp-id="cmdCenter" data-ibxp-user-value="justifyCenter"></div>
+		<div class="re-cmd" data-ibx-type="ibxCommand" data-ibxp-id="cmdRight" data-ibxp-user-value="justifyRight"></div>
+		<div class="re-cmd" data-ibx-type="ibxCommand" data-ibxp-id="cmdJustify" data-ibxp-user-value="justifyFull"></div>
 	</body>
 </html>

@@ -47,6 +47,11 @@ $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame,
 	{
 		this.contentDocument().execCommand(cmd, withUI, value);
 	},
+
+	undo:function(){this.execCommand("undo");},
+	redo:function(){this.execCommand("redo");},
+	selectAll:function(){this.execCommand("selectAll");},
+
 	cut:function(){this.execCommand("Cut");},
 	copy:function(){this.execCommand("Copy");},
 	paste:function(){this.execCommand("Paste");},
@@ -55,6 +60,13 @@ $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame,
 	bold:function(){this.execCommand("Bold");},
 	italic:function(){this.execCommand("Italic");},
 	underline:function(){this.execCommand("Underline");},
+	strikeThrough:function(){this.execCommand("strikeThrough");},
+
+	justifyLeft:function(){this.execCommand("justifyLeft");},
+	justifyCenter:function(){this.execCommand("justifyCenter");},
+	justifyRight:function(){this.execCommand("justifyRight");},
+	justifyFull:function(){this.execCommand("justifyFull");},
+
 
 
 	/*
