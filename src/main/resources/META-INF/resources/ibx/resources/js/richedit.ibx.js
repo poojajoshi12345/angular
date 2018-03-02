@@ -12,7 +12,7 @@ $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame,
 			"role":"region",
 		}
 	},
-	_widgetClass:"ibx-rich-text",
+	_widgetClass:"ibx-rich-edit",
 	_create:function()
 	{
 		this._readyPromise = new $.Deferred();
@@ -62,12 +62,8 @@ $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame,
 	underline:function(){this.execCommand("Underline");},
 	strikeThrough:function(){this.execCommand("strikeThrough");},
 
-	justifyLeft:function(){this.execCommand("justifyLeft");},
-	justifyCenter:function(){this.execCommand("justifyCenter");},
-	justifyRight:function(){this.execCommand("justifyRight");},
-	justifyFull:function(){this.execCommand("justifyFull");},
-
-
+	fontSize:function(size){if(typeof(size) === "string")size = $.ibi.ibxRichEdit.fontSize[size];this.execCommand("fontSize", null, size)},
+	justify:function(justify){if(typeof(justify) === "string")justify = $.ibi.ibxRichEdit.justify[justify];this.execCommand(justify)},
 
 	/*
 	backColor:function(color){this.execCommand("backColor", false, color);},
@@ -86,6 +82,24 @@ $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame,
 		this._super();
 	}
 });
+
+$.ibi.ibxRichEdit.fontSize = 
+{
+	"8":1,
+	"10":2,
+	"12":3,
+	"14":4,
+	"18":5,
+	"24":6,
+	"36":7
+}
+$.ibi.ibxRichEdit.justify = 
+{
+	"left":"justifyLeft",
+	"center":"justifyCenter",
+	"right":"justifyRight",
+	"justify":"justify"
+}
 
 //# sourceURL=richedit.ibx.js
 
