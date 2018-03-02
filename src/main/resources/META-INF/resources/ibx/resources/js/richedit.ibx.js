@@ -5,8 +5,8 @@ $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame,
 {
 	options:
 	{
+		"navKeyRoot":true,
 		"focusDefault":true,
-		"src":"",
 		"aria":
 		{
 			"role":"region",
@@ -15,10 +15,11 @@ $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame,
 	_widgetClass:"ibx-rich-text",
 	_create:function()
 	{
+		this._readyPromise = new $.Deferred();
 		this.element.data("createContent", this.element.html());
 		this.element.empty();
 		this._super();
-		this._iFrame.prop("tabindex", 0).on("focus", this._onIFrameEvent.bind(this));
+		this._iFrame.prop("tabindex", -1);
 	},
 	_destroy:function()
 	{
@@ -32,21 +33,15 @@ $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame,
 			var cd = this.contentDocument();
 			cd.designMode = "On";
 			cd.body.contentEditable = true;
+			cd.body.spellcheck = false;
 			cd.body.innerHTML = this.element.data("createContent");
 			this.element.removeData("createContent");
-
-			var cw = $(this.contentWindow());
-			cw.on("contextmenu", function(e)
-			{
-				this.element.trigger(e);
-			}.bind(this));
+			this._readyPromise.resolve(this.element);
 		}
-		else
-		if(e.type == "focus")
-		{
-			this.contentDocument().body.focus();
-			console.log(this.contentDocument().activeElement, e);
-		}
+	},
+	ready:function(fnReady)
+	{
+		this._readyPromise.then(fnReady);
 	},
 	execCommand:function(cmd, withUI, value)
 	{

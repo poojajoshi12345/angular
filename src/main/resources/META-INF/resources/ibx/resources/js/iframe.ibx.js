@@ -11,8 +11,8 @@ $.widget("ibi.ibxIFrame", $.ibi.ibxWidget,
 {
 	options:
 	{
-		name:"",
-		src:"about:blank",
+		"name":"",
+		"src":""
 	},
 	_widgetClass:"ibx-iframe",
 	_create:function()
@@ -21,6 +21,9 @@ $.widget("ibi.ibxIFrame", $.ibi.ibxWidget,
 		var frame = this._iFrame = $("<iframe>").addClass("ibx-iframe-frame");
 		frame.on("DOMContentLoaded readystatechange load beforeunload unload", this._onIFrameEvent.bind(this));
 		this.element.append(frame);
+
+		var cw = $(this.contentWindow());
+		cw.on("keydown keyup keypress mousedown mouseup contextmenu", this._onIFrameEvent.bind(this));
 	},
 	_destroy:function()
 	{
@@ -32,7 +35,12 @@ $.widget("ibi.ibxIFrame", $.ibi.ibxWidget,
 	},
 	_onIFrameEvent:function(e)
 	{
-		this.element.dispatchEvent(e.originalEvent);
+		if(e.type == "load" && this._loadPromise)
+			this._loadPromise.resolve(this.element);
+
+		var proxyEvent = $.Event(e.originalEvent);
+		if(!this.element.trigger(proxyEvent))
+			e.preventDefault;
 	},
 	contentDocument:function()
 	{

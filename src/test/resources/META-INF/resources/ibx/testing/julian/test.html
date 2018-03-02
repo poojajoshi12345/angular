@@ -12,16 +12,23 @@
 		<script type="text/javascript">
 			ibx(function(e)
 			{
-				var strSample = ibx.resourceMgr.getString("IBX_STR_SAMPLE");
-				$(".rich-text-editor").ibxWidget("html",  sformat("Start Text<p/>{1}<p/>{1}<p/>{1}<p/>End Text<p/>", strSample));
+				$(".rich-edit").ibxWidget("ready", function(richEdit)
+				{
+					var strSample = ibx.resourceMgr.getString("IBX_STR_SAMPLE");
+					richEdit.ibxWidget("html",  sformat("Start Text<p/>{1}<p/>{1}<p/>{1}<p/>End Text<p/>", strSample));
+				}).on("contextmenu", function(e)
+				{
+					e.preventDefault();
+				});
 
 				$(".re-cmd").on("ibx_triggered", function(e)
 				{
-					var re = $(".rich-text-editor");
+					var re = $(".rich-edit");
 					var cmd = $(e.currentTarget);
 					var reCmd = cmd.ibxWidget("userValue");
 					re.ibxWidget(reCmd);
-				});
+				})
+
 			}, true);
 		</script>
 		<style type="text/css">
@@ -31,13 +38,17 @@
 				height:100%;
 				margin:0px;
 			}
+			.ibx-menu
+			{
+				font-size:10pt;
+			}
 			.main-box
 			{
 				width:100%;
 				height:100%;
 				box-sizing:border-box;
 			}
-			.rich-text-editor
+			.rich-edit
 			{
 				flex:1 1 auto;
 				border:1px solid #ccc;
@@ -62,24 +73,24 @@
 				<div class="tb-button" data-ibx-type="ibxCheckBoxSimple" data-ibxp-command="cmdItalic">Italic</div>
 				<div class="tb-button" data-ibx-type="ibxCheckBoxSimple" data-ibxp-command="cmdUnderline">Underline</div>
 			</div>
-			<div tabindex="0" class="rich-text-editor" data-ibx-type="ibxRichEdit" data-ibxp-ctx-menu=".re-ctx-menu"></div>
+			<div tabindex="0" class="rich-edit" data-ibx-type="ibxRichEdit" data-ibxp-ctx-menu=".re-ctx-menu"></div>
 		</div>
 
 		<div class="re-ctx-menu" data-ibx-type="ibxMenu" data-ibxp-refocus-last-active-on-close="true">
-			<div data-ibx-type="ibxMenuItem" data-ibxp-command="cmdCut" data-ibxp-label-options='{"glyph":"content_cut", "glyphClasses":"material-icons md-18"}'>Cut</div>
-			<div data-ibx-type="ibxMenuItem" data-ibxp-command="cmdCopy" data-ibxp-label-options='{"glyph":"content_copy", "glyphClasses":"material-icons md-18"}'>Copy</div>
-			<div data-ibx-type="ibxMenuItem" data-ibxp-command="cmdPaste" data-ibxp-label-options='{"glyph":"content_paste", "glyphClasses":"material-icons md-18"}'>Paste</div>
-			<div data-ibx-type="ibxMenuItem" data-ibxp-command="cmdDelete" data-ibxp-label-options='{"glyph":"delete", "glyphClasses":"material-icons md-18"}'>Delete</div>
+			<div data-ibx-type="ibxMenuItem" data-ibxp-command="cmdCut" data-ibxp-label-options='{"glyph":"content_cut", "glyphClasses":"material-icons"}'>Cut</div>
+			<div data-ibx-type="ibxMenuItem" data-ibxp-command="cmdCopy" data-ibxp-label-options='{"glyph":"content_copy", "glyphClasses":"material-icons"}'>Copy</div>
+			<div data-ibx-type="ibxMenuItem" data-ibxp-command="cmdPaste" data-ibxp-label-options='{"glyph":"content_paste", "glyphClasses":"material-icons"}'>Paste</div>
+			<div data-ibx-type="ibxMenuItem" data-ibxp-command="cmdDelete" data-ibxp-label-options='{"glyph":"delete", "glyphClasses":"material-icons"}'>Delete</div>
 			<div data-ibx-type="ibxMenuSeparator"></div>
-			<div data-ibx-type="ibxCheckMenuItem" data-ibxp-command="cmdBold" data-ibxp-label-options='{"glyph":"format_bold", "glyphClasses":"material-icons md-18"}'>Bold</div>
-			<div data-ibx-type="ibxCheckMenuItem" data-ibxp-command="cmdItalic" data-ibxp-label-options='{"glyph":"format_italic", "glyphClasses":"material-icons md-18"}'>Italic</div>
-			<div data-ibx-type="ibxCheckMenuItem" data-ibxp-command="cmdUnderline" data-ibxp-label-options='{"glyph":"format_underlined", "glyphClasses":"material-icons md-18"}'>Underline</div>
+			<div data-ibx-type="ibxCheckMenuItem" data-ibxp-command="cmdBold" data-ibxp-label-options='{"glyph":"format_bold", "glyphClasses":"material-icons"}'>Bold</div>
+			<div data-ibx-type="ibxCheckMenuItem" data-ibxp-command="cmdItalic" data-ibxp-label-options='{"glyph":"format_italic", "glyphClasses":"material-icons"}'>Italic</div>
+			<div data-ibx-type="ibxCheckMenuItem" data-ibxp-command="cmdUnderline" data-ibxp-label-options='{"glyph":"format_underlined", "glyphClasses":"material-icons"}'>Underline</div>
 			<div data-ibx-type="ibxMenuSeparator"></div>
 			<div data-ibx-type="ibxRadioGroup" data-ibxp-name="rgAlign"></div>
-			<div data-ibx-type="ibxRadioMenuItem" data-ibxp-group="rgAlign" data-ibxp-command="cmdLeft" data-ibxp-label-options='{"glyph":"format_align_left", "glyphClasses":"material-icons md-18"}' data-ibxp-checked="true">Justify Left</div>
-			<div data-ibx-type="ibxRadioMenuItem" data-ibxp-group="rgAlign" data-ibxp-command="cmdCenter" data-ibxp-label-options='{"glyph":"format_align_center", "glyphClasses":"material-icons md-18"}'>Center Justify</div>
-			<div data-ibx-type="ibxRadioMenuItem" data-ibxp-group="rgAlign" data-ibxp-command="cmdRight" data-ibxp-label-options='{"glyph":"format_align_right", "glyphClasses":"material-icons md-18"}'>Right Justify</div>
-			<div data-ibx-type="ibxRadioMenuItem" data-ibxp-group="rgAlign" data-ibxp-command="cmdJustify" data-ibxp-label-options='{"glyph":"format_align_justify", "glyphClasses":"material-icons md-18"}'>Justify</div>
+			<div data-ibx-type="ibxRadioMenuItem" data-ibxp-group="rgAlign" data-ibxp-command="cmdLeft" data-ibxp-label-options='{"glyph":"format_align_left", "glyphClasses":"material-icons"}' data-ibxp-checked="true">Justify Left</div>
+			<div data-ibx-type="ibxRadioMenuItem" data-ibxp-group="rgAlign" data-ibxp-command="cmdCenter" data-ibxp-label-options='{"glyph":"format_align_center", "glyphClasses":"material-icons"}'>Center Justify</div>
+			<div data-ibx-type="ibxRadioMenuItem" data-ibxp-group="rgAlign" data-ibxp-command="cmdRight" data-ibxp-label-options='{"glyph":"format_align_right", "glyphClasses":"material-icons"}'>Right Justify</div>
+			<div data-ibx-type="ibxRadioMenuItem" data-ibxp-group="rgAlign" data-ibxp-command="cmdJustify" data-ibxp-label-options='{"glyph":"format_align_justify", "glyphClasses":"material-icons"}'>Justify</div>
 		</div>
 		<div class="re-cmd" data-ibx-type="ibxCommand" data-ibxp-id="cmdCut" data-ibxp-user-value="cut"></div>
 		<div class="re-cmd" data-ibx-type="ibxCommand" data-ibxp-id="cmdCopy" data-ibxp-user-value="copy"></div>
