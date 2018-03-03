@@ -36,7 +36,21 @@
 					var re = $(".rich-edit");
 					var cmd = $(e.currentTarget);
 					var reCmd = cmd.ibxWidget("userValue");
-					re.ibxWidget(reCmd);
+					var val = "";
+					var relTarget = $(e.relatedTarget);
+					if(relTarget.is(".rg-justify"))
+					{
+						val = reCmd;
+						reCmd = "justify";
+					}
+					else
+					if(relTarget.is(".rg-font-size"))
+					{
+						val = reCmd.toString();
+						reCmd = "fontSize";
+					}
+					
+					re.ibxWidget(reCmd, val);
 				})
 			}, true);
 		</script>
@@ -97,10 +111,10 @@
 				<div tabindex="0" class="tb-button" title="Underline" data-ibx-type="ibxCheckBox" data-ibxp-command="cmdUnderline" data-ibxp-glyph="format_underlined" data-ibxp-glyph-classes="material-icons"></div>
 				<div tabindex="0" class="tb-button" title="Strikethrough" data-ibx-type="ibxCheckBox" data-ibxp-command="cmdStrikeThrough" data-ibxp-glyph="format_strikethrough" data-ibxp-glyph-classes="material-icons"></div>
 				<div tabindex="0" class="tb-separator"></div>
-				<div tabindex="0" class="tb-button" title="Left Justify" data-ibx-type="ibxRadioButton" data-ibxp-group="rgAlign" data-ibxp-user-value="justifyLeft" data-ibxp-glyph="format_align_left" data-ibxp-glyph-classes="material-icons"></div>
-				<div tabindex="0" class="tb-button" title="Center Justify" data-ibx-type="ibxRadioButton" data-ibxp-group="rgAlign" data-ibxp-user-value="justifyCenter" data-ibxp-glyph="format_align_center" data-ibxp-glyph-classes="material-icons"></div>
-				<div tabindex="0" class="tb-button" title="Right Justify" data-ibx-type="ibxRadioButton" data-ibxp-group="rgAlign" data-ibxp-user-value="justifyRight" data-ibxp-glyph="format_align_right" data-ibxp-glyph-classes="material-icons"></div>
-				<div tabindex="0" class="tb-button" title="Justify" data-ibx-type="ibxRadioButton" data-ibxp-group="rgAlign" data-ibxp-user-value="justifyFull" data-ibxp-glyph="format_align_justify" data-ibxp-glyph-classes="material-icons"></div>
+				<div tabindex="0" class="tb-button" title="Left Justify" data-ibx-type="ibxRadioButton" data-ibxp-group="rgAlign" data-ibxp-user-value="left" data-ibxp-glyph="format_align_left" data-ibxp-glyph-classes="material-icons"></div>
+				<div tabindex="0" class="tb-button" title="Center Justify" data-ibx-type="ibxRadioButton" data-ibxp-group="rgAlign" data-ibxp-user-value="center" data-ibxp-glyph="format_align_center" data-ibxp-glyph-classes="material-icons"></div>
+				<div tabindex="0" class="tb-button" title="Right Justify" data-ibx-type="ibxRadioButton" data-ibxp-group="rgAlign" data-ibxp-user-value="right" data-ibxp-glyph="format_align_right" data-ibxp-glyph-classes="material-icons"></div>
+				<div tabindex="0" class="tb-button" title="Justify" data-ibx-type="ibxRadioButton" data-ibxp-group="rgAlign" data-ibxp-user-value="full" data-ibxp-glyph="format_align_justify" data-ibxp-glyph-classes="material-icons"></div>
 			</div>
 			<div tabindex="0" class="rich-edit" data-ibx-type="ibxRichEdit" data-ibxp-ctx-menu=".re-ctx-menu"></div>
 		</div>
@@ -126,12 +140,12 @@
 				</div>
 			</div>
 			<div data-ibx-type="ibxMenuSeparator"></div>
-			<div data-ibx-type="ibxMenuItem">Align
+			<div data-ibx-type="ibxMenuItem">Justify
 				<div data-ibx-type="ibxMenu">
-					<div data-ibx-type="ibxRadioMenuItem" data-ibxp-group="rgAlign" data-ibxp-user-value="justifyLeft" data-ibxp-label-options='{"glyph":"format_align_left", "glyphClasses":"material-icons"}' data-ibxp-checked="true">Justify Left</div>
-					<div data-ibx-type="ibxRadioMenuItem" data-ibxp-group="rgAlign" data-ibxp-user-value="justifyCenter" data-ibxp-label-options='{"glyph":"format_align_center", "glyphClasses":"material-icons"}'>Center Justify</div>
-					<div data-ibx-type="ibxRadioMenuItem" data-ibxp-group="rgAlign" data-ibxp-user-value="justifyRight" data-ibxp-label-options='{"glyph":"format_align_right", "glyphClasses":"material-icons"}'>Right Justify</div>
-					<div data-ibx-type="ibxRadioMenuItem" data-ibxp-group="rgAlign" data-ibxp-user-value="justifyFull" data-ibxp-label-options='{"glyph":"format_align_justify", "glyphClasses":"material-icons"}'>Justify</div>
+					<div data-ibx-type="ibxRadioMenuItem" data-ibxp-group="rgAlign" data-ibxp-user-value="left" data-ibxp-label-options='{"glyph":"format_align_left", "glyphClasses":"material-icons"}' data-ibxp-checked="true">Left</div>
+					<div data-ibx-type="ibxRadioMenuItem" data-ibxp-group="rgAlign" data-ibxp-user-value="center" data-ibxp-label-options='{"glyph":"format_align_center", "glyphClasses":"material-icons"}'>Center</div>
+					<div data-ibx-type="ibxRadioMenuItem" data-ibxp-group="rgAlign" data-ibxp-user-value="right" data-ibxp-label-options='{"glyph":"format_align_right", "glyphClasses":"material-icons"}'>Right</div>
+					<div data-ibx-type="ibxRadioMenuItem" data-ibxp-group="rgAlign" data-ibxp-user-value="full" data-ibxp-label-options='{"glyph":"format_align_justify", "glyphClasses":"material-icons"}'>Full</div>
 				</div>
 			</div>
 			<div data-ibx-type="ibxMenuSeparator"></div>
@@ -143,7 +157,7 @@
 					<div data-ibx-type="ibxRadioMenuItem" data-ibxp-group="rgFontSize" data-ibxp-user-value="14">14</div>
 					<div data-ibx-type="ibxRadioMenuItem" data-ibxp-group="rgFontSize" data-ibxp-user-value="18">18</div>
 					<div data-ibx-type="ibxRadioMenuItem" data-ibxp-group="rgFontSize" data-ibxp-user-value="24">24</div>
-					<div data-ibx-type="ibxRadioMenuItem" data-ibxp-group="rgFontSize" data-ibxp-user-value="26">26</div>
+					<div data-ibx-type="ibxRadioMenuItem" data-ibxp-group="rgFontSize" data-ibxp-user-value="36">36</div>
 				</div>
 			</div>
 		</div>
@@ -162,10 +176,10 @@
 		<div class="re-cmd" data-ibx-type="ibxCommand" data-ibxp-id="cmdUnderline" data-ibxp-user-value="underline"></div>
 		<div class="re-cmd" data-ibx-type="ibxCommand" data-ibxp-id="cmdStrikeThrough" data-ibxp-user-value="strikeThrough"></div>
 
-		<div data-ibx-type="ibxRadioGroup" data-ibxp-name="rgAlign" data-ibxp-command="cmdAlign"></div>
-		<div class="re-cmd" data-ibx-type="ibxCommand" data-ibxp-id="cmdAlign" data-ibxp-user-value="justifyLeft"></div>
+		<div class="rg-justify" data-ibx-type="ibxRadioGroup" data-ibxp-name="rgAlign" data-ibxp-command="cmdAlign"></div>
+		<div class="re-cmd" data-ibx-type="ibxCommand" data-ibxp-id="cmdAlign" data-ibxp-user-value="justify"></div>
 
-		<div data-ibx-type="ibxRadioGroup" data-ibxp-name="rgFontSize" data-ibxp-command="cmdFontSize"></div>
+		<div class="rg-font-size" data-ibx-type="ibxRadioGroup" data-ibxp-name="rgFontSize" data-ibxp-command="cmdFontSize"></div>
 		<div class="re-cmd" data-ibx-type="ibxCommand" data-ibxp-id="cmdFontSize" data-ibxp-user-value="fontSize"></div>
 
 	</body>
