@@ -1,0 +1,7 @@
+<FindBugsFilter>
+
+   <Match><Package name="org.apache.jsp.ibx.doc.*" /></Match>
+   <Match><Package name="org.apache.jsp.ibx.testing.*" /></Match>
+
+
+</FindBugsFilter>
