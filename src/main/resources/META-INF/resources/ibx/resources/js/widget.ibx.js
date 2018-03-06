@@ -497,13 +497,16 @@ $.widget("ibi.ibxWidget", $.Widget,
 		//[PD-198] pdf files in ie bleed through divs above.  This stops that!
 		if(options.opaque)
 		{
-			var path = sformat("{1}/{2}", ibx.getPath(), "markup/blank.html");
-			var iframe = $("<iframe class='ibx-opaque-frame' allowTransparency='false'>").prop("src", path);
-			this.element.addClass("ibx-opaque").append(iframe);
+			if(!this.element.children(".ibx-opaque-frame").length)
+			{
+				var path = sformat("{1}/{2}", ibx.getPath(), "markup/blank.html");
+				var iframe = $("<iframe class='ibx-opaque-frame' allowTransparency='false'>").prop("src", path);
+				this.element.addClass("ibx-opaque").append(iframe);
+			}
 		}
 		else
 		{
-			this.element.children(".ibx-opacity-frame").remove();
+			this.element.children(".ibx-opaque-frame").remove();
 			this.element.removeClass("ibx-opaque");
 		}
 
