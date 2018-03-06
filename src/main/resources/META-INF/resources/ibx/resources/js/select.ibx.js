@@ -308,7 +308,7 @@ $.widget("ibi.ibxSelect", $.ibi.ibxSelectBase,
 	},
 	_onPopupClose: function ()
 	{
-		this._control.ibxWidget("resetHighlight");
+		window.setTimeout(function (){this._control.ibxWidget("resetHighlight");}.bind(this), 10);
 	},
 	_onTextChanged: function (e)
 	{
