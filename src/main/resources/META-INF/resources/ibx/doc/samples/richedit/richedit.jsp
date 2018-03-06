@@ -49,9 +49,58 @@
 						val = reCmd.toString();
 						reCmd = "fontSize";
 					}
+					else
+					if(cmd.is(".cmd-fore-color, .cmd-back-color"))
+					{
+						val = cmd.ibxWidget("userValue");
+						reCmd = cmd.is(".cmd-fore-color") ? "foreColor" : "backColor";
+					}
 					
 					re.ibxWidget(reCmd, val);
 				})
+
+				$(".tb-color-select").ibxWidget("option", "menu", makeColorSelect($(".cmd-fore-color")));
+				$(".tb-back-color-select").ibxWidget("option", "menu", makeColorSelect($(".cmd-back-color")));
+
+				function makeColorSelect(cmd)
+				{
+					var menu = $("<div>").ibxPopup({"destroyOnClose":false});
+					var ctrl = $("<div tabindex='0'>").ibxVBox({"navKeyRoot":true, "navKeyDir":"vertical", "focusDefault":true, "align":"stretch"});
+					var colors = 
+					{
+						"black":"black",
+						"white":"white",
+						"maroon":"maroon",
+						"red":"red",
+						"orange":"orange",
+						"yellow":"yellow",
+						"green":"green",
+						"cyan":"cyan",
+						"lightblue":"lightblue",
+						"blue":"blue",
+						"purple":"purple",
+						"magenta":"magenta"
+					}
+
+					for(var key in colors)
+					{
+						var color = colors[key];
+						var selItem = $(sformat("<div tabindex='-1' class='color-select-item' style='background-color:{1}' data-color='{1}'></div>", color)).data("cmd", cmd);
+						selItem.on("click keydown", function(e)
+						{
+							if(e.type == "keydown" && (e.keyCode != $.ui.keyCode.ENTER && e.keyCode != $.ui.keyCode.SPACE))
+								return;
+
+							var selItem = $(e.currentTarget);
+							var cmd = selItem.data("cmd");
+							cmd.ibxWidget("userValue", selItem.data("color"));
+							selItem.closest(".ibx-popup").ibxWidget("close");
+						});
+						ctrl.append(selItem);
+					}
+					menu.append(ctrl);
+					return menu;
+				}
 			}, true);
 		</script>
 		<style type="text/css">
@@ -91,6 +140,18 @@
 				border-left:1px solid #ccc;
 				margin:2px 8px 2px 8px;
 			}
+			.color-select-item
+			{
+				flex:0 0 auto;
+				width:100px;
+				height:15px;
+				margin:3px;
+				border:1px solid #ddd;
+			}
+			.color-select-item:hover
+			{
+				outline:2px solid black;
+			}
 		</style>
 	</head>
 	<body class="ibx-root">
@@ -100,21 +161,24 @@
 				<div tabindex="0" class="tb-button" title="Redo" data-ibx-type="ibxButtonSimple" data-ibxp-command="cmdRedo" data-ibxp-glyph="redo" data-ibxp-glyph-classes="material-icons"></div>
 				<div tabindex="0" class="tb-separator"></div>
 				<div tabindex="0" class="tb-button" title="Select All" data-ibx-type="ibxButtonSimple" data-ibxp-command="cmdSelectAll" data-ibxp-glyph="select_all" data-ibxp-glyph-classes="material-icons"></div>
-				<div tabindex="0" class="tb-separator"></div>
+				<div class="tb-separator"></div>
 				<div tabindex="0" class="tb-button" title="Cut" data-ibx-type="ibxButtonSimple" data-ibxp-command="cmdCut" data-ibxp-glyph="content_cut" data-ibxp-glyph-classes="material-icons"></div>
 				<div tabindex="0" class="tb-button" title="Copy" data-ibx-type="ibxButtonSimple" data-ibxp-command="cmdCopy" data-ibxp-glyph="content_copy" data-ibxp-glyph-classes="material-icons"></div>
 				<div tabindex="0" class="tb-button" title="Paste" data-ibx-type="ibxButtonSimple" data-ibxp-command="cmdPaste" data-ibxp-glyph="content_paste" data-ibxp-glyph-classes="material-icons"></div>
 				<div tabindex="0" class="tb-button" title="Clear" data-ibx-type="ibxButtonSimple" data-ibxp-command="cmdDelete" data-ibxp-glyph="delete" data-ibxp-glyph-classes="material-icons"></div>
-				<div tabindex="0" class="tb-separator"></div>
+				<div class="tb-separator"></div>
 				<div tabindex="0" class="tb-button" title="Bold" data-ibx-type="ibxCheckBox" data-ibxp-command="cmdBold" data-ibxp-glyph="format_bold" data-ibxp-glyph-classes="material-icons"></div>
 				<div tabindex="0" class="tb-button" title="Italic" data-ibx-type="ibxCheckBox" data-ibxp-command="cmdItalic" data-ibxp-glyph="format_italic" data-ibxp-glyph-classes="material-icons"></div>
 				<div tabindex="0" class="tb-button" title="Underline" data-ibx-type="ibxCheckBox" data-ibxp-command="cmdUnderline" data-ibxp-glyph="format_underlined" data-ibxp-glyph-classes="material-icons"></div>
 				<div tabindex="0" class="tb-button" title="Strikethrough" data-ibx-type="ibxCheckBox" data-ibxp-command="cmdStrikeThrough" data-ibxp-glyph="format_strikethrough" data-ibxp-glyph-classes="material-icons"></div>
-				<div tabindex="0" class="tb-separator"></div>
+				<div class="tb-separator"></div>
 				<div tabindex="0" class="tb-button" title="Left Justify" data-ibx-type="ibxRadioButton" data-ibxp-group="rgAlign" data-ibxp-user-value="left" data-ibxp-glyph="format_align_left" data-ibxp-glyph-classes="material-icons"></div>
 				<div tabindex="0" class="tb-button" title="Center Justify" data-ibx-type="ibxRadioButton" data-ibxp-group="rgAlign" data-ibxp-user-value="center" data-ibxp-glyph="format_align_center" data-ibxp-glyph-classes="material-icons"></div>
 				<div tabindex="0" class="tb-button" title="Right Justify" data-ibx-type="ibxRadioButton" data-ibxp-group="rgAlign" data-ibxp-user-value="right" data-ibxp-glyph="format_align_right" data-ibxp-glyph-classes="material-icons"></div>
 				<div tabindex="0" class="tb-button" title="Justify" data-ibx-type="ibxRadioButton" data-ibxp-group="rgAlign" data-ibxp-user-value="full" data-ibxp-glyph="format_align_justify" data-ibxp-glyph-classes="material-icons"></div>
+				<div class="tb-separator"></div>
+				<div tabindex="0" class="tb-button tb-color-select" title="Color" data-ibx-type="ibxMenuButton" data-ibxp-glyph="format_color_text" data-ibxp-glyph-classes="material-icons"></div>
+				<div tabindex="0" class="tb-button tb-back-color-select" title="Background Color" data-ibx-type="ibxMenuButton" data-ibxp-glyph="format_color_fill" data-ibxp-glyph-classes="material-icons"></div>
 			</div>
 			<div tabindex="0" class="rich-edit" data-ibx-type="ibxRichEdit" data-ibxp-ctx-menu=".re-ctx-menu"></div>
 		</div>
@@ -182,5 +246,7 @@
 		<div class="rg-font-size" data-ibx-type="ibxRadioGroup" data-ibxp-name="rgFontSize" data-ibxp-command="cmdFontSize"></div>
 		<div class="re-cmd" data-ibx-type="ibxCommand" data-ibxp-id="cmdFontSize" data-ibxp-user-value="fontSize"></div>
 
+		<div class="re-cmd cmd-fore-color" data-ibx-type="ibxCommand" data-ibxp-id="cmdForeColor" data-ibxp-user-value="foreColor"></div>
+		<div class="re-cmd cmd-back-color" data-ibx-type="ibxCommand" data-ibxp-id="cmdBackColor" data-ibxp-user-value="backColor"></div>
 	</body>
 </html>

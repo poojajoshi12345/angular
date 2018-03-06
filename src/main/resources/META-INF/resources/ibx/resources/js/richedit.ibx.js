@@ -74,9 +74,10 @@ $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame,
 			justify = $.ibi.ibxRichEdit.justify[justify];
 		this.execCommand(justify)
 	},
+	foreColor:function(color){this.execCommand("foreColor", false, color);},
+	backColor:function(color){this.execCommand("backColor", false, color);},
 
 	/*
-	backColor:function(color){this.execCommand("backColor", false, color);},
 	bold:function(){this.execCommand("bold");},
 	fontName:function(font){this.execCommand("fontName", false, font);},
 
