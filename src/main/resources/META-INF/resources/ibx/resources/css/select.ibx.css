@@ -17,6 +17,11 @@
     width: unset;
 }
 
+.ibx-select-open-btn
+{
+    flex: 0 0 auto;
+}
+
 .ibx-select-open-btn::before {
 	font-family:"FontAwesome";
 	content:"\f0d7";
@@ -74,11 +79,6 @@
 .ibx-select-base input {
 	margin-right:3px;
     width: unset;
-}
-
-.ibx-select-open-btn::before {
-	font-family:"FontAwesome";
-	content:"\f0d7";
 }
 
 .ibx-select-base > input {
