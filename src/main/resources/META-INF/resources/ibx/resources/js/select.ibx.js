@@ -188,7 +188,7 @@ $.widget("ibi.ibxSelectBase", $.ibi.ibxTextField,
 	},
 	_onTextClick: function (e)
 	{
-		this._dontFocusText = true;
+		this._dontFocusText = false;
 		this._openPopup();
 	},
 	_onButtonClick: function (e)
@@ -197,7 +197,7 @@ $.widget("ibi.ibxSelectBase", $.ibi.ibxTextField,
 			this._popup.ibxWidget("close");
 		else
 		{
-			this._dontFocusText = true;
+			this._dontFocusText = false;
 			this._openPopup();
 		}
 	},
