@@ -35,8 +35,30 @@ $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame,
 			cd.body.contentEditable = true;
 			cd.body.spellcheck = false;
 			cd.body.innerHTML = this.element.data("createContent");
+			$(cd).on("focusin focusout", this._onRichEditDocEvent.bind(this));
+			
 			this.element.removeData("createContent");
 			this._readyPromise.resolve(this.element);
+		}
+	},
+	_onRichEditDocEvent:function(e)
+	{
+		if(e.type == "focusout")
+		{
+			var cw = this.contentWindow();
+			var sel = cw.getSelection();
+			var range = sel.rangeCount ? sel.getRangeAt(0) : null;
+			this.element.data("selInfo", {"sel":sel, "range":range});
+		}
+		else
+		if(e.type == "focusin")
+		{
+			var selInfo = this.element.data("selInfo");
+			if(selInfo && selInfo.range)
+			{
+				selInfo.sel.removeAllRanges();
+				selInfo.sel.addRange(selInfo.range);
+			}
 		}
 	},
 	ready:function(fnReady)
@@ -45,7 +67,9 @@ $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame,
 	},
 	execCommand:function(cmd, withUI, value)
 	{
-		this.contentDocument().execCommand(cmd, withUI, value);
+		var cd = this.contentDocument();
+		cd.body.focus();
+		cd.execCommand(cmd, withUI, value);
 	},
 
 	undo:function(){this.execCommand("undo");},

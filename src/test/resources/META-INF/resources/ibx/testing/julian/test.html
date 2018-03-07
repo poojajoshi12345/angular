@@ -30,8 +30,12 @@
 					else
 					if(e.type == "focusin")
 					{
-						 var selInfo = body.data("selInfo");
-						 console.dir(selInfo);
+						var selInfo = body.data("selInfo");
+						if(selInfo)
+						{
+							selInfo.sel.removeAllRanges();
+							selInfo.sel.addRange(selInfo.range);
+						}
 					}
 				});
 
