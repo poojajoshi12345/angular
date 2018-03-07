@@ -96,10 +96,18 @@ $.widget("ibi.ibxRadioGroup", $.ibi.ibxFlexBox,
 		el.on("ibx_change", null, null, this._onChangeBind).on('ibx_beforechange', null, null, this._onBeforeChangeBind);
 		el.each(function (index, el)
 		{
-			var _el = $(el);
-			var checked = _el.ibxWidget('checked');
-			var elUserValue = this._getItemUserValue(_el);
-			if (checked || this.options.userValue && this.options.userValue == elUserValue)
+			el = $(el);
+
+			//all items must have user values...if not set by user, then we create one.
+			var value = this._getItemUserValue(el);
+			if(!value)
+			{
+				value =  "autoUserValue" + $.ibi.ibxRadioGroup.uniqueUserVal++;
+				el.ibxWidget("option", "userValue", value).attr("data-autouservalue", value);
+			}
+
+			var checked = el.ibxWidget('checked');
+			if (checked || this.options.userValue && this.options.userValue == value)
 			{
 				this._setSelected(el);
 				return true;
@@ -165,13 +173,8 @@ $.widget("ibi.ibxRadioGroup", $.ibi.ibxFlexBox,
 	_setSelected: function (el)
 	{
 		var el = $(el);
-		$(".ibx-radio-group-" + this.options.name).not(el).removeClass('radio-group-checked').ibxWidget('checked', false);
-		el.addClass('radio-group-checked');
-			
-		var val = el.ibxWidget("option", "userValue");
-		if(val)
-			this.option("userValue", val);
-			
+		var val = this._getItemUserValue(el);
+		this.option("userValue", val);
 		this._trigger("change", null, el);
 	},
 	selected: function (element)
@@ -201,15 +204,15 @@ $.widget("ibi.ibxRadioGroup", $.ibi.ibxFlexBox,
 
 		if(key == "userValue" && changed)
 		{
-			$(".ibx-radio-group-" + this.options.name).each(function (index, el)
+			$(".ibx-radio-group-" + this.options.name).removeClass('radio-group-checked').ibxWidget('checked', false).each(function (value, index, el)
 			{
 				var itemUserValue = this._getItemUserValue(el);
 				if (itemUserValue == value)
 				{
-					$(el).ibxWidget('checked', true);
+					$(el).ibxWidget('checked', true).addClass('radio-group-checked');
 					return true;
 				}
-			}.bind(this));
+			}.bind(this, value));
 			this.doCommandAction("uservalue", value);
 		}
 	},
@@ -220,6 +223,7 @@ $.widget("ibi.ibxRadioGroup", $.ibi.ibxFlexBox,
 		this._super();
 	}
 });
+$.ibi.ibxRadioGroup.uniqueUserVal = 0;
 $.widget("ibi.ibxHRadioGroup", $.ibi.ibxRadioGroup, {options:{direction:"row"}});
 $.widget("ibi.ibxVRadioGroup", $.ibi.ibxRadioGroup, {options:{direction:"column"}});
 
