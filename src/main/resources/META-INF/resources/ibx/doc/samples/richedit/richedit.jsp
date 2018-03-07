@@ -5,7 +5,7 @@
 	response.addHeader("Cache-Control", "no-cache");
 %>
 <!DOCTYPE html>
-<html lang="en">
+<html class="top" lang="en">
 	<head>
 		<title>ibx richedit sample</title>
 		<meta http-equiv="X-UA-Compatible" content="IE=11" >
@@ -104,7 +104,7 @@
 			}, true);
 		</script>
 		<style type="text/css">
-			html, body
+			html.top, .top > body
 			{
 				width:100%;
 				height:100%;
