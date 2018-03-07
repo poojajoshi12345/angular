@@ -42,13 +42,16 @@ $.widget("ibi.ibxAccordionPane", $.ibi.ibxFlexBox,
 	},
 	remove:function(el, destroy, refresh)
 	{
-		el = $(el);
-		el.filter(".ibx-accordion-page").each(function(idx, el)
+		var options = this.options;
+		el = this.element.children(el).not(this._group);
+		el.filter(".ibx-accordion-page").each(function(options, idx, el)
 		{
 			el = $(el);
 			el.ibxWidget("option", "groupName", "");
 			this._group.ibxRadioGroup("removeControl", el);
-		}.bind(this));
+			if(el.is(options.selected))
+				options.selected = null;
+		}.bind(this, options));
 		this._super(el, destroy, refresh);
 	},
 	group:function(){return this._group;},
