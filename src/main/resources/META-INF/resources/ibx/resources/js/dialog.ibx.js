@@ -53,6 +53,18 @@ $.widget("ibi.ibxDialog", $.ibi.ibxPopup,
 			aria.labelledby = this.caption.prop("id");
 		return aria;
 	},
+	_destroy:function()
+	{
+		this._super();
+		var options = this.options;
+		this.element.removeClass("dlg-auto-size");
+		this.element.removeClass(options.type);
+
+		var children = this.children();
+		children.detach();
+		this.element.empty();
+		this.element.append(children);
+	},
 	_init:function()
 	{
 		this._super();

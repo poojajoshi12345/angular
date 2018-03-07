@@ -38,13 +38,22 @@ $.widget("ibi.ibxPopup", $.ibi.ibxWidget,
 	{
 		var options = this.options;
 		this.element.addClass("pop-closed").prop("tabIndex", -1).css("position", "absolute").on("keydown", this._onPopupKeyEvent.bind(this));
-		$(window).resize(this._onPopupWindowResize.bind(this));
+		this._onPopupWindowResizeBound = this._onPopupWindowResize.bind(this);
+		$(window).on("resize", this._onPopupWindowResizeBound);
 		this._super();
 	},
 	_destroy:function()
 	{
 		this._super();
-		this.element.removeClass("pop-closed").off("mousedown");
+		var options = this.options;
+		this.element.removeClass("pop-closed pop-modal pop-top").off("mousedown");
+		this.element.removeClass($.ibi.ibxPopup.statics.effect[options.effect]);
+		if(options.movable)
+			this.element.draggable("destroy");
+		if(options.resizable)
+			this.element.resizable("destroy");
+
+		$(window).off("resize", this._onPopupWindowResizeBound);
 	},
 	_onPopupKeyEvent:function(e)
 	{
