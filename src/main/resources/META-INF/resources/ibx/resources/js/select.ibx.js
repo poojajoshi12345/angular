@@ -69,9 +69,12 @@ $.widget("ibi.ibxSelectBase", $.ibi.ibxTextField,
 	// overridables in derived functions
 	_createControl: function ()
 	{
+		// return the control in derived
+		return null;
 	},
 	_initControl: function ()
 	{
+		// init the control in derived
 	},
 	_onControlChange: function (e, data)
 	{
@@ -99,6 +102,14 @@ $.widget("ibi.ibxSelectBase", $.ibi.ibxTextField,
 			this._openPopup();
 		}
 	},
+	_boundPopupPosition: null,
+	_popupPosition: function (pos, info)
+	{
+		// fine-tune the position and size of the popup
+		if (this.options.popup)
+			this._popup.css(pos);	
+
+	},	
 	// end overridables
 
 	_bindControl: function ()
@@ -109,12 +120,13 @@ $.widget("ibi.ibxSelectBase", $.ibi.ibxTextField,
 		
 		if (this.options.popup)
 		{
+			this._boundPopupPosition = this._popupPosition.bind(this);
 			this._popup = $("<div class='ibx-select-popup'>").ibxPopup(
 			{
 				"modal":false,
 				"destroyOnClose":false,
 				"effect":"fade",
-				"position":{ my: "left top", at: "left bottom+1px", of: this.element, collision: "none" },
+				"position":{ my: "left top", at: "left bottom+1px", of: this.element, collision: "none", using: this._boundPopupPosition },
 			});
 			this._popup.on("ibx_open ibx_close", function(e)
 			{
@@ -216,7 +228,6 @@ $.widget("ibi.ibxSelectBase", $.ibi.ibxTextField,
 			if(!this._popup.ibxWidget("isOpen"))
 			{
 				this._popup.ibxWidget("open");
-				this._popup.css("min-width", this.element.innerWidth() + "px");
 				this._control.ibxWidget("refresh");
 			}
 		}
@@ -269,14 +280,6 @@ $.widget("ibi.ibxSelect", $.ibi.ibxSelectBase,
 	_initControl: function ()
 	{
 		this._control.ibxWidget("add", this.element.children(".ibx-select-item, .ibx-select-group"));
-        $(window).on("resize", this._onWindowResize.bind(this));
-        if (this._popup)
-        {
-            this._popup.on("ibx_open", function (e)
-            {
-				this._setMaxHeight();
-            }.bind(this));
-		}
 	},
 	_setValue: function (value, bFormat, extra)
 	{
@@ -351,24 +354,31 @@ $.widget("ibi.ibxSelect", $.ibi.ibxSelectBase,
 	{
 		return this._control.ibxWidget("userValue", value);
 	},
-    _onWindowResize: function ()
-    {
-        if (this._popup)
-        {
-            this._setMaxHeight();
-            window.setTimeout(function (){
-				this._popup.css("min-width", this.element.innerWidth() + "px");
-			}.bind(this), 10);
-        }
-	},
-	_setMaxHeight: function ()
+	_popupPosition: function (pos, info)
 	{
-		if (this.options.autoHeight)
+		if (this.options.popup)
 		{
-			var popupTop = this._control.offset().top;
-			this._control.css("max-height", Math.max(50,$(window).outerHeight() - popupTop - this.options.autoHeightGap) + "px");
+			if (this.options.autoHeight)
+			{
+				var maxHeight = $(window).height() + $(window).scrollTop() - info.target.top - info.target.height - this.options.autoHeightGap;
+				if (maxHeight < 100)
+				{
+					/*
+					maxHeight = info.target.top - $(window).scrollTop() - this.options.autoHeightGap;
+					if (maxHeight > 100)
+					{
+						pos.top = info.target.top - maxHeight;
+					}
+					else
+					*/
+						maxHeight = 100;	
+				}	
+				this._control.css("max-height", maxHeight + "px");
+			}	
+			this._control.css("min-width", info.target.width + "px");
+			this._popup.css(pos);
 		}
-	},
+	},	
 	_refresh: function ()
 	{
 		this._super();
@@ -972,13 +982,8 @@ $.widget("ibi.ibxSelectPaged", $.ibi.ibxSelectBase, {
 		});
 		this.values(values);
 
-        $(window).on("resize", this._onWindowResize.bind(this));
         if (this._popup)
         {
-            this._popup.on("ibx_open", function (e)
-            {
-				this._setMaxHeight();
-            }.bind(this));
             this._popup.on("ibx_close", function (e)
             {
 				this._control.ibxWidget("resetSearch", true);
@@ -1121,22 +1126,29 @@ $.widget("ibi.ibxSelectPaged", $.ibi.ibxSelectBase, {
 	{
 		return this._control.ibxWidget("inSetPage");
 	},
-    _onWindowResize: function ()
-    {
-        if (this._popup)
-        {
-            this._setMaxHeight();
-            window.setTimeout(function (){
-				this._popup.css("min-width", this.element.innerWidth() + "px");
-			}.bind(this), 10);
-        }
-	},
-	_setMaxHeight: function ()
+	_popupPosition: function (pos, info)
 	{
-		if (this.options.autoHeight)
+		if (this.options.popup)
 		{
-			var popupTop = this._control.offset().top;
-			this._control.ibxWidget('listControl').css("max-height", Math.max(50,$(window).outerHeight() - popupTop - this.options.autoHeightGap) + "px");
+			if (this.options.autoHeight)
+			{
+				var maxHeight = $(window).height() + $(window).scrollTop() - info.target.top - info.target.height - this.options.autoHeightGap;
+				if (maxHeight < 100)
+				{
+					/*
+					maxHeight = info.target.top - $(window).scrollTop() - this.options.autoHeightGap;
+					if (maxHeight > 100)
+					{
+						pos.top = info.target.top - maxHeight;
+					}
+					else
+					*/
+					maxHeight = 100;
+				}
+				this._control.ibxWidget("listControl").css("max-height", maxHeight + "px");
+			}
+			this._control.ibxWidget("listControl").css("min-width", info.target.width + "px");
+			this._popup.css(pos);
 		}
 	},
 	_refresh: function ()
