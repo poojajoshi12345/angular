@@ -19,6 +19,13 @@
 		<Script src="<%=request.getContextPath()%>/ibx/resources/ibx.js" type="text/javascript"></script>
 		<script type="text/javascript">
 			<jsp:include page="/WEB-INF/jsp/global/wf_globals.jsp" flush="false" />
+
+					window.onkeydown = function(e) 
+					{
+						if (e.keyCode == 32) {
+							e.preventDefault();
+						}
+					};						
 			
 			ibx(function()
 			{
@@ -70,6 +77,10 @@
 					$('.pop-top').focus();
 				});
 
+				$(".mygroup").ibxWidget('addControl', $('.rbutton1'));
+				$(".mygroup").ibxWidget('addControl', $('.rbutton2'));
+				$(".mygroup").ibxWidget('addControl', $('.rbutton3'));
+
 			}, true);
 		</script>
 
@@ -77,11 +88,26 @@
 			.select, .list { margin: 10px; border: 1px solid red; padding: 10px;}
 			.list2 { height: 300px; width:200px;}
 			.list3 { height: 200px;}
+			.middle-box{padding-top: 400px;}
 		</style>
 	</head>
 	<body class="ibx-root">
 
+		<div data-ibx-type="ibxButtonGroup" data-ibxp-group-selection="true">
+			<div data-ibx-type="ibxRadioButton">One</div>
+			<div data-ibx-type="ibxRadioButton">Two</div>
+			<div data-ibx-type="ibxRadioButton">Three</div>
+		</div>
+
 	<div class="cmd-focus" data-ibx-type="ibxCommand" data-ibxp-id="commandFocus" data-ibxp-shortcut="Ctrl+C"></div>
+
+		<div class="mygroup" data-ibx-type="ibxRadioGroup" data-ibxp-name="mygroup"></div>
+
+		<div data-ibx-type="ibxHBox">
+			<div class="rbutton1" data-ibx-type="ibxRadioButton" data-ibxp-user-value="one" data-ibxp-checked="true">One</div>
+			<div class="rbutton2" data-ibx-type="ibxRadioButton" data-ibxp-user-value="two" >Two</div>
+			<div class="rbutton3" data-ibx-type="ibxRadioButton" data-ibxp-user-value="three" >Three</div>
+		</div>
 
 	<div data-ibx-type="ibxHBox">
 			<div class="select first-list" tabindex="0" data-ibx-type="ibxSelectPaged" data-ibxp-popup="true" data-ibxp-multi-select="true" data-ibxp-enable-paging="true" data-ibxp-search="false" data-ibxp-selection-controls="false" data-ibxp-enable-paging-trigger="200" data-ibxp-page-size="3">
@@ -152,6 +178,17 @@
 				<div data-ibx-type="ibxSelectItem" data-ibxp-user-value="eight">28</div>
 				<div data-ibx-type="ibxSelectItem" data-ibxp-user-value="nine">29</div>
 				<div data-ibx-type="ibxSelectItem" data-ibxp-user-value="ten">30</div>
+				<div data-ibx-type="ibxSelectItem" data-ibxp-user-value="ten">120</div>
+				<div data-ibx-type="ibxSelectItem" data-ibxp-user-value="one">121</div>
+				<div data-ibx-type="ibxSelectItem" data-ibxp-user-value="two">122</div>
+				<div data-ibx-type="ibxSelectItem" data-ibxp-user-value="three">123</div>
+				<div data-ibx-type="ibxSelectItem" data-ibxp-user-value="four">124</div>
+				<div data-ibx-type="ibxSelectItem" data-ibxp-user-value="five">125</div>
+				<div data-ibx-type="ibxSelectItem" data-ibxp-user-value="six">126</div>
+				<div data-ibx-type="ibxSelectItem" data-ibxp-user-value="seven">127</div>
+				<div data-ibx-type="ibxSelectItem" data-ibxp-user-value="eight">128</div>
+				<div data-ibx-type="ibxSelectItem" data-ibxp-user-value="nine">129</div>
+				<div data-ibx-type="ibxSelectItem" data-ibxp-user-value="ten">130</div>
 			</div>
 			
 			<div class="list list2" tabindex="0" data-ibx-type="ibxSelectItemListPaged" data-ibxp-multi-select="true" data-ibxp-search="true" data-ibxp-selection-controls="true" data-ibxp-enable-paging-trigger="1" data-ibxp-page-size="3">
@@ -169,7 +206,7 @@
 
 		</div>
 
-		<div data-ibx-type="ibxHBox">
+		<div class="middle-box" data-ibx-type="ibxHBox">
 
 
 			<div class="select" data-ibx-type="ibxSelect" data-ibxp-popup="true" data-ibxp-multi-select="false" data-ibxp-readonly="true">
