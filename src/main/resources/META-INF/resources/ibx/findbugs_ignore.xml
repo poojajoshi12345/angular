@@ -1,7 +1,8 @@
 <FindBugsFilter>
 
-   <Match><Package name="org.apache.jsp.ibx.doc.*" /></Match>
-   <Match><Package name="org.apache.jsp.ibx.testing.*" /></Match>
+   <Match><Package name="~.*\.apache\.jsp\.ibx\.doc.*" /></Match>
+   <Match><Package name="~.*\.apache\.jsp\.ibx\.testing.*" /></Match>
 
+name="~.*\.groovy" />
 
 </FindBugsFilter>
