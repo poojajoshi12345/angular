@@ -118,7 +118,7 @@ $.widget("ibi.ibxPopup", $.ibi.ibxWidget,
 	},
 	close:function(closeInfo)
 	{
-		if(this.isOpen() && !this.isOpening() && this._trigger("beforeclose", null, closeInfo))
+		if(this.isOpen() && this._trigger("beforeclose", null, closeInfo))
 		{
 			//we are fully closed...no longer interested in transition events.
 			this.element.on("transitionend", function(e)
@@ -245,6 +245,7 @@ ibxPopupManager.onWindowEvent = function(e)
 	{
 		if(e.type == "mousedown")
 		{
+	
 			//if we clicked on a popup, then close all higher zIndex popups
 			var popup = $(e.target).closest(".ibx-popup");
 			if(popup.length)
