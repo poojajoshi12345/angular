@@ -589,7 +589,9 @@ $.ibi.ibxWidget.isNavKey = function(keyCode)
 		_create:function()
 		{
 			this._onDragMouseEventBound = this._onDragMouseEvent.bind(this);
-			this._onDragKeyEventBound = this._onDragKeyEvent.bind(this);
+			this._onDragKeyEventBound = this._onDragKeyEvent.bind(this); 
+			this.element.on("mousedown dragover drop", this._onDragMouseEventBound);
+			this.element.on("keydown", this._onDragKeyEventBound);
 			this._createOrig.apply(this, arguments);
 		},
 		_destroyOrig:$.ibi.ibxWidget.prototype._destroy,
@@ -636,12 +638,21 @@ $.ibi.ibxWidget.isNavKey = function(keyCode)
 		},
 		_onDragKeyEvent:function(e)
 		{
-			if(e.keyCode == 27)
+			if(this.options.draggable && this.isDragging() && e.keyCode == $.ui.keyCode.ESCAPE)
+			{
 				this.endDrag("ibx_dragcancel", e);
+				e.stopPropagation();
+			}
 		},
 		_onDragMouseEvent:function(e)
 		{
 			var options = this.options;
+			if(!options.draggable)
+				return;
+
+			//stop proagation...bubbling will mess up draggable within draggable.
+			e.stopPropagation();
+
 			var eType = e.type;
 			switch(eType)
 			{
@@ -768,7 +779,6 @@ $.ibi.ibxWidget.isNavKey = function(keyCode)
 						this._dispatchDragEvent(e.originalEvent, "ibx_filesuploading", this.element, deferred);
 					}
 					e.preventDefault();
-					e.stopPropagation();
 					break;
 			}
 		},
@@ -777,10 +787,6 @@ $.ibi.ibxWidget.isNavKey = function(keyCode)
 		{
 			this._refreshOrig.apply(this, arguments);
 			var options = this.options;
-			(options.draggable) ? this.element.on("mousedown", this._onDragMouseEventBound) : this.element.off("mousedown", this._onDragMouseEventBound);
-			(options.draggable) ? this.element.on("keydown", this._onDragKeyEventBound) : this.element.off("keydown", this._onDragKeyEventBound);
-			(options.nativeFileDropTarget) ? this.element.on("dragover drop", this._onDragMouseEventBound) : this.element.off("dragover drop", this._onDragMouseEventBound);
-
 			this.element.toggleClass("ibx-draggable", !!options.draggable);
 		}
 	};
