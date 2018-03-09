@@ -18,7 +18,7 @@
 		{name:"Form (standard controls)", url:"./samples/forms/forms.jsp"},
 		{name:"iFrame", url:"./samples/iframe/iframe.jsp"},
 		{name:"Carousel", url:"./samples/carousel/carousel.jsp"},
-		{name:"Text Editor", url:"./samples/texteditor/texteditor.jsp"},
+		{name:"Text Editor", url:"./samples/texteditor/texteditor.jsp", hidden:true},
 		{name:"Labels & Fonts", url:"./samples/labels/labels.jsp"},
 		{name:"Sliders & Ranges", url:"./samples/slider/slider.jsp"},
 		{name:"Progress", url:"./samples/progress/progress.jsp"},
@@ -47,6 +47,9 @@
 	var sampleSelect = $(".select-sample")
 	$(samples).each(function(idx, item)
 	{
+		if(item.hidden)
+			return false;
+
 		var option = $(sformat("<option value='{1}'>{2}</option>", item.url, item.name));
 		option.data("sampleInfo", item);
 		sampleSelect.append(option);

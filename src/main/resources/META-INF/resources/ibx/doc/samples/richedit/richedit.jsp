@@ -22,6 +22,13 @@
 
 			ibx(function()
 			{
+				var cmdClear = $("<div class='cmd-clear'>").ibxCommand({id:"cmdClear", "shortcut":"CTRL+C"});
+				cmdClear.on("ibx_triggered", function(e)
+				{
+					console.clear();
+					$(".tb-button").focus();
+				});
+
 				$(".rich-edit").ibxWidget("ready", function(richEdit)
 				{
 					var strSample = ibx.resourceMgr.getString("IBX_STR_SAMPLE");
@@ -160,7 +167,8 @@
 	</head>
 	<body class="ibx-root">
 		<div class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
-			<div class="tb-main" data-ibx-type="ibxHBox" data-ibxp-wrap="true">
+			<div class="tb-main" data-ibx-type="ibxHBox" data-ibxp-wrap="true" data-ibxp-align="center">
+				<input type="text" value="Julian"/>
 				<div tabindex="0" class="tb-button" title="Undo" data-ibx-type="ibxButtonSimple" data-ibxp-command="cmdUndo" data-ibxp-glyph="undo" data-ibxp-glyph-classes="material-icons"></div>
 				<div tabindex="0" class="tb-button" title="Redo" data-ibx-type="ibxButtonSimple" data-ibxp-command="cmdRedo" data-ibxp-glyph="redo" data-ibxp-glyph-classes="material-icons"></div>
 				<div tabindex="0" class="tb-separator"></div>
