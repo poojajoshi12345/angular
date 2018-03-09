@@ -26,6 +26,20 @@
 				{
 					console.clear();
 				});
+
+				$(".test-menu").on("ibx_open", function(e)
+				{
+					var menu = $(this);
+					var menuItem = $("<div>").ibxMenuItem();
+					menuItem.ibxWidget("option", "labelOptions.text", "Julian");
+					menuItem.on("click", function(e)
+					{
+						alert("allo");
+					});
+					menu.ibxWidget("add", menuItem);
+				});
+
+
 			}, [{src:"./test_res_bundle.xml", loadContext:"app"}], true);
 		</script>
 		<style type="text/css">
@@ -48,11 +62,8 @@
 	</head>
 	<body class="ibx-root">
 		<div tabindex="0" class="main-box" data-ibx-type="ibxFlexBox" data-ibxp-inline="true" data-ibxp-align="center" data-ibxp-justify="center">
-			<div data-ibx-type="ibxButtonGroup" data-ibxp-group-selection="true">
-				<div tabindex="0" data-ibx-type="ibxRadioButton">Radio 1</div>
-				<div tabindex="0" data-ibx-type="ibxRadioButton">Radio 2</div>
-				<div tabindex="0" data-ibx-type="ibxRadioButton">Radio 3</div>
-			</div>
+			<div data-ibx-type="ibxLabel" data-ibxp-ctx-menu=".test-menu">click here</div>
+			<div class="test-menu" data-ibx-type ="ibxMenu"><div>
 		</div>
 	</body>
 </html>

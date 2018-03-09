@@ -41,51 +41,41 @@ $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame,
 			this._readyPromise.resolve(this.element);
 		}
 	},
+	_curSelRange:null,
+	_capturingSelRange:null,
 	_onRichEditDocEvent:function(e)
 	{
-		if(e.type == "focusout")
+		console.dir(e.type, e.originalEvent);
+		var doc = this.contentDocument();
+		if(e.type == "focusin" && this._curSelRange)
 		{
-			var cw = this.contentWindow();
-			var sel = cw.getSelection();
-			var range = sel.rangeCount ? sel.getRangeAt(0) : null;
-			this.element.data("selInfo", {"sel":sel, "range":range});
+			var sel = doc.getSelection();
+			sel.removeAllRanges();
+			sel.addRange(this._curSelRange);
 		}
 		else
-		if(e.type == "focusin")
+		if(e.type == "focusout")
 		{
-			var selInfo = this.element.data("selInfo");
-			if(selInfo && selInfo.range)
-			{
-				selInfo.sel.removeAllRanges();
-				selInfo.sel.addRange(selInfo.range);
-			}
+			var sel = doc.getSelection();
+			this._curSelRange = sel.rangeCount ? doc.getSelection().getRangeAt(0) : null;
 		}
-	},
-	ready:function(fnReady)
-	{
-		this._readyPromise.then(fnReady);
 	},
 	execCommand:function(cmd, withUI, value)
 	{
-		var cd = this.contentDocument();
-		cd.body.focus();
-		cd.execCommand(cmd, withUI, value);
+		this.contentDocument().body.focus();
+		this.contentDocument().execCommand(cmd, withUI, value);
 	},
-
 	undo:function(){this.execCommand("undo");},
 	redo:function(){this.execCommand("redo");},
 	selectAll:function(){this.execCommand("selectAll");},
-
 	cut:function(){this.execCommand("Cut");},
 	copy:function(){this.execCommand("Copy");},
 	paste:function(){this.execCommand("Paste");},
 	del:function(){this.execCommand("Delete");},
-
 	bold:function(){this.execCommand("Bold");},
 	italic:function(){this.execCommand("Italic");},
 	underline:function(){this.execCommand("Underline");},
 	strikeThrough:function(){this.execCommand("strikeThrough");},
-
 	fontSize:function(size)
 	{
 		if(typeof(size) === "string")
@@ -110,7 +100,10 @@ $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame,
 	createLink:function(uri){this.execCommand("creatLink", null, uri);},//suspicious (none?)
 	*/
 
-
+	ready:function(fnReady)
+	{
+		this._readyPromise.then(fnReady);
+	},
 	_refresh:function()
 	{
 		var options = this.options;
