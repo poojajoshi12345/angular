@@ -559,8 +559,8 @@ $.ibi.ibxWidget.isNavKey = function(keyCode)
 	_p.setData = function(type, data){this.items[type] = data;};
 	_p.clearData = function(type){delete this.items[type];};
 	_p._dragImage = null;
-	_p.dragXOffset = 0;
-	_p.dragYOffset = 0;
+	_p.dragXOffset = 8;
+	_p.dragYOffset = 8;
 	_p.setDragImage = function(img, xOffset, yOffset)
 	{
 		this._dragImage = img ? $(img) : this._dragImage;
@@ -726,8 +726,8 @@ $.ibi.ibxWidget.isNavKey = function(keyCode)
 						if(this._dataTransfer._dragImage)
 						{
 							var dragImage = this._dataTransfer._dragImage;
-							var xOffset = (this._dataTransfer.dragXOffset == "center") ? -(dragImage.width()/2) : dragImage.width();
-							var yOffset = (this._dataTransfer.dragYOffset == "center") ? -(dragImage.height()/2) : dragImage.height();
+							var xOffset = (this._dataTransfer.dragXOffset == "center") ? -(dragImage.width()/2) : this._dataTransfer.dragXOffset;
+							var yOffset = (this._dataTransfer.dragYOffset == "center") ? -(dragImage.height()/2) : this._dataTransfer.dragYOffset;
 							$(this._dataTransfer._dragImage).css(
 							{
 								"left":e.clientX + xOffset + "px",
