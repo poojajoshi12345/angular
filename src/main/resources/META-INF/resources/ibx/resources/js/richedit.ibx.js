@@ -35,7 +35,7 @@ $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame,
 			cd.body.contentEditable = true;
 			cd.body.spellcheck = false;
 			cd.body.innerHTML = this.element.data("createContent");
-			$(cd).on("focusin focusout", this._onRichEditDocEvent.bind(this));
+			$(cd).on("focusin focusout selectionchange", this._onRichEditDocEvent.bind(this));
 			
 			this.element.removeData("createContent");
 			this._readyPromise.resolve(this.element);
@@ -45,7 +45,6 @@ $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame,
 	_capturingSelRange:null,
 	_onRichEditDocEvent:function(e)
 	{
-		console.dir(e.type, e.originalEvent);
 		var doc = this.contentDocument();
 		if(e.type == "focusin" && this._curSelRange)
 		{
@@ -59,6 +58,33 @@ $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame,
 			var sel = doc.getSelection();
 			this._curSelRange = sel.rangeCount ? doc.getSelection().getRangeAt(0) : null;
 		}
+		else
+		if(e.type == "selectionchange")
+			this.element.dispatchEvent(e.originalEvent);
+	},
+	commandEnabled:function(cmd){return this.contentDocument().queryCommandEnabled(cmd);},
+	commandState:function(cmd){return this.contentDocument().queryCommandState(cmd);},
+	commandValue:function(cmd){return this.contentDocument().queryCommandValue(cmd);},
+	cmdStates:function()
+	{
+		var state = {};
+		state.undo = this.commandEnabled("undo");
+		state.redo = this.commandEnabled("redo");
+		state.selectAll = this.commandEnabled("selectAll");
+		state.cut = this.commandEnabled("cut");
+		state.copy = this.commandEnabled("copy");
+		state.paste = this.commandEnabled("paste");
+		state.bold = this.commandState("bold");
+		state.italic = this.commandState("italic");
+		state.underline = this.commandState("underline");
+		state.strikethrough = this.commandState("strikethrough");
+
+		state.justify = "";
+		state.justify = ibx.coercePropVal(this.commandValue("justifyLeft")) ? "left" : state.justify;
+		state.justify = ibx.coercePropVal(this.commandValue("justifyCenter")) ? "center" : state.justify;
+		state.justify = ibx.coercePropVal(this.commandValue("justifyRight")) ? "right" : state.justify;
+		state.justify = ibx.coercePropVal(this.commandValue("justifyFull")) ? "full" : state.justify;
+		return state;
 	},
 	execCommand:function(cmd, withUI, value)
 	{
@@ -126,7 +152,7 @@ $.ibi.ibxRichEdit.justify =
 	"left":"justifyLeft",
 	"center":"justifyCenter",
 	"right":"justifyRight",
-	"full":"justify"
+	"full":"justifyFull"
 }
 
 //# sourceURL=richedit.ibx.js

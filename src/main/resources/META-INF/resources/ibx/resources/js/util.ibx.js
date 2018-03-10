@@ -239,9 +239,9 @@ function createNativeEvent(type, data, canBubble, cancelable, relatedTarget)
 }
 
 //let jQuery dispatch custom native events
-jQuery.fn.dispatchEvent = function(type, data, canBubble, cancelable, relatedTarget)
+jQuery.fn.dispatchEvent = function(eType, data, canBubble, cancelable, relatedTarget)
 {
-	var e = (type instanceof Event) ? createNativeEvent(type.type, type, type.canBubble, type.cancelable, type.relatedTarget) : createNativeEvent(type, data, canBubble, cancelable, relatedTarget);
+	var e = (typeof(eType) == "object") ? createNativeEvent(eType.type, eType, eType.canBubble, eType.cancelable, eType.relatedTarget) : createNativeEvent(eType, data, canBubble, cancelable, relatedTarget);
 	this.each(function(e, idx, el)
 	{
 		el.dispatchEvent(e);
