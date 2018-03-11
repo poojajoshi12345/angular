@@ -84,6 +84,9 @@ $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame,
 		state.justify = ibx.coercePropVal(this.commandValue("justifyCenter")) ? "center" : state.justify;
 		state.justify = ibx.coercePropVal(this.commandValue("justifyRight")) ? "right" : state.justify;
 		state.justify = ibx.coercePropVal(this.commandValue("justifyFull")) ? "full" : state.justify;
+		
+		state.foreColor = this.commandValue("foreColor");
+		state.backColor = this.commandValue("backColor");
 		return state;
 	},
 	execCommand:function(cmd, withUI, value)

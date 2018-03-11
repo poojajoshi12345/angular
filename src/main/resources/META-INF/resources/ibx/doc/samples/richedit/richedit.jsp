@@ -48,6 +48,9 @@
 					$(".cmd-underline").ibxWidget("option", "checked", state.underline);
 					$(".cmd-strikethrough").ibxWidget("option", "checked", state.strikethrough);
 					$(".rg-justify").ibxWidget("userValue", state.justify);
+
+					$(".tb-fore-color").css("border", sformat("2px solid {1}", state.foreColor));
+					$(".tb-back-color").css("border", sformat("2px solid {1}", state.backColor));
 				}).on("contextmenu", function(e)
 				{
 					e.preventDefault();
@@ -90,18 +93,18 @@
 					var ctrl = $("<div tabindex='0'>").ibxVBox({"navKeyRoot":true, "navKeyDir":"vertical", "focusDefault":true, "align":"stretch"});
 					var colors = 
 					{
-						"black":"black",
-						"white":"white",
-						"maroon":"maroon",
-						"red":"red",
-						"orange":"orange",
-						"yellow":"yellow",
-						"green":"green",
-						"cyan":"cyan",
-						"lightblue":"lightblue",
-						"blue":"blue",
-						"purple":"purple",
-						"magenta":"magenta"
+						"black":"rgb(0 ,0, 0)",
+						"white":"rgb(255, 255, 255)",
+						"maroon":"rgb(128, 0, 0)",
+						"red":"rgb(255, 0, 0)",
+						"orange":"rgb(255, 165, 0)",
+						"yellow":"rgb(255, 255, 0)",
+						"green":"rgb(0, 255, 0)",
+						"cyan":"rgb(0, 255, 255)",
+						"lightblue":"rgb(173, 216, 230)",
+						"blue":"rgb(0, 0, 255)",
+						"purple":"rgb(128, 0, 128)",
+						"magenta":"rgb(255, 0, 255)"
 					}
 
 					for(var key in colors)
@@ -162,6 +165,11 @@
 				border-left:1px solid #ccc;
 				margin:2px 8px 2px 8px;
 			}
+			.tb-fore-color, .tb-back-color
+			{
+				border-radius:5px;
+				border-color:black;
+			}
 			.color-select-item
 			{
 				flex:0 0 auto;
@@ -178,6 +186,7 @@
 			{
 				width:50px;
 			}
+
 		</style>
 	</head>
 	<body class="ibx-root">
@@ -206,7 +215,7 @@
 				<div tabindex="0" class="tb-button tb-fore-color" title="Color" data-ibx-type="ibxMenuButton" data-ibxp-glyph="format_color_text" data-ibxp-glyph-classes="material-icons"></div>
 				<div tabindex="0" class="tb-button tb-back-color" title="Background Color" data-ibx-type="ibxMenuButton" data-ibxp-glyph="format_color_fill" data-ibxp-glyph-classes="material-icons"></div>
 				<div class="tb-separator"></div>
-				<div tabindex="0" class="tb-select-font-size" title="Font Size" data-ibx-type="ibxSelect" data-ibxp-group="rgFontSize" data-ibxp-readonly="true">
+				<div tabindex="0" class="tb-select-font-size" data-ibxp-group="rgFontSize" title="Font Size" data-ibx-type="ibxSelect" data-ibxp-group="rgFontSize" data-ibxp-readonly="true">
 					<div class="select-size" class="size-select-item" data-ibx-type="ibxSelectRadioItem" data-ibxp-group="rgFontSize" data-ibxp-user-value="8">8</div>
 					<div class="select-size" class="size-select-item" data-ibx-type="ibxSelectRadioItem" data-ibxp-group="rgFontSize" data-ibxp-user-value="10">10</div>
 					<div class="select-size" class="size-select-item" data-ibx-type="ibxSelectRadioItem" data-ibxp-group="rgFontSize" data-ibxp-user-value="12">12</div>
