@@ -49,8 +49,8 @@
 					$(".cmd-strikethrough").ibxWidget("option", "checked", state.strikethrough);
 					$(".cmd-font-size").ibxWidget("userValue", state.fontSizePx);
 					$(".rg-justify").ibxWidget("userValue", state.justify);
-					$(".tb-fore-color").css("border", sformat("2px solid {1}", state.foreColor));
-					$(".tb-back-color").css("border", sformat("2px solid {1}", state.backColor));
+					//$(".tb-fore-color").css("border", sformat("2px solid {1}", state.foreColor));
+					//$(".tb-back-color").css("border", sformat("2px solid {1}", state.backColor));
 				}).on("contextmenu", function(e)
 				{
 					e.preventDefault();
@@ -80,7 +80,8 @@
 						val = cmd.ibxWidget("userValue");
 						reCmd = cmd.is(".cmd-fore-color") ? "foreColor" : "backColor";
 					}
-					
+					if(cmd.is(".cmd-insert-ordered-list"))
+						val = "true";
 					re.ibxWidget(reCmd, val);
 				})
 
@@ -167,8 +168,6 @@
 			}
 			.tb-fore-color, .tb-back-color
 			{
-				border-radius:5px;
-				border-color:black;
 			}
 			.color-select-item
 			{
@@ -202,19 +201,6 @@
 				<div tabindex="0" class="tb-button" title="Paste" data-ibx-type="ibxButtonSimple" data-ibxp-command="cmdPaste" data-ibxp-glyph="content_paste" data-ibxp-glyph-classes="material-icons"></div>
 				<div tabindex="0" class="tb-button" title="Clear" data-ibx-type="ibxButtonSimple" data-ibxp-command="cmdDelete" data-ibxp-glyph="delete" data-ibxp-glyph-classes="material-icons"></div>
 				<div class="tb-separator"></div>
-				<div tabindex="0" class="tb-button" title="Bold" data-ibx-type="ibxCheckBox" data-ibxp-command="cmdBold" data-ibxp-glyph="format_bold" data-ibxp-glyph-classes="material-icons"></div>
-				<div tabindex="0" class="tb-button" title="Italic" data-ibx-type="ibxCheckBox" data-ibxp-command="cmdItalic" data-ibxp-glyph="format_italic" data-ibxp-glyph-classes="material-icons"></div>
-				<div tabindex="0" class="tb-button" title="Underline" data-ibx-type="ibxCheckBox" data-ibxp-command="cmdUnderline" data-ibxp-glyph="format_underlined" data-ibxp-glyph-classes="material-icons"></div>
-				<div tabindex="0" class="tb-button" title="Strikethrough" data-ibx-type="ibxCheckBox" data-ibxp-command="cmdStrikeThrough" data-ibxp-glyph="format_strikethrough" data-ibxp-glyph-classes="material-icons"></div>
-				<div class="tb-separator"></div>
-				<div tabindex="0" class="tb-button" title="Left Justify" data-ibx-type="ibxRadioButton" data-ibxp-group="rgAlign" data-ibxp-user-value="left" data-ibxp-glyph="format_align_left" data-ibxp-glyph-classes="material-icons"></div>
-				<div tabindex="0" class="tb-button" title="Center Justify" data-ibx-type="ibxRadioButton" data-ibxp-group="rgAlign" data-ibxp-user-value="center" data-ibxp-glyph="format_align_center" data-ibxp-glyph-classes="material-icons"></div>
-				<div tabindex="0" class="tb-button" title="Right Justify" data-ibx-type="ibxRadioButton" data-ibxp-group="rgAlign" data-ibxp-user-value="right" data-ibxp-glyph="format_align_right" data-ibxp-glyph-classes="material-icons"></div>
-				<div tabindex="0" class="tb-button" title="Justify" data-ibx-type="ibxRadioButton" data-ibxp-group="rgAlign" data-ibxp-user-value="full" data-ibxp-glyph="format_align_justify" data-ibxp-glyph-classes="material-icons"></div>
-				<div class="tb-separator"></div>
-				<div tabindex="0" class="tb-button tb-fore-color" title="Color" data-ibx-type="ibxMenuButton" data-ibxp-glyph="format_color_text" data-ibxp-glyph-classes="material-icons"></div>
-				<div tabindex="0" class="tb-button tb-back-color" title="Background Color" data-ibx-type="ibxMenuButton" data-ibxp-glyph="format_color_fill" data-ibxp-glyph-classes="material-icons"></div>
-				<div class="tb-separator"></div>
 				<div tabindex="0" class="tb-select-font-size" data-ibxp-group="rgFontSize" title="Font Size" data-ibx-type="ibxSelect" data-ibxp-command="cmdFontSize" data-ibxp-readonly="true">
 					<div class="select-size" class="size-select-item" data-ibx-type="ibxSelectRadioItem" data-ibxp-group="rgFontSize" data-ibxp-user-value="8">8px</div>
 					<div class="select-size" class="size-select-item" data-ibx-type="ibxSelectRadioItem" data-ibxp-group="rgFontSize" data-ibxp-user-value="10">10px</div>
@@ -224,6 +210,25 @@
 					<div class="select-size" class="size-select-item" data-ibx-type="ibxSelectRadioItem" data-ibxp-group="rgFontSize" data-ibxp-user-value="24">24px</div>
 					<div class="select-size" class="size-select-item" data-ibx-type="ibxSelectRadioItem" data-ibxp-group="rgFontSize" data-ibxp-user-value="36">36px</div>
 				</div>
+				<div class="tb-separator"></div>
+				<div tabindex="0" class="tb-button" title="Bold" data-ibx-type="ibxCheckBox" data-ibxp-command="cmdBold" data-ibxp-glyph="format_bold" data-ibxp-glyph-classes="material-icons"></div>
+				<div tabindex="0" class="tb-button" title="Italic" data-ibx-type="ibxCheckBox" data-ibxp-command="cmdItalic" data-ibxp-glyph="format_italic" data-ibxp-glyph-classes="material-icons"></div>
+				<div tabindex="0" class="tb-button" title="Underline" data-ibx-type="ibxCheckBox" data-ibxp-command="cmdUnderline" data-ibxp-glyph="format_underlined" data-ibxp-glyph-classes="material-icons"></div>
+				<div tabindex="0" class="tb-button" title="Strikethrough" data-ibx-type="ibxCheckBox" data-ibxp-command="cmdStrikeThrough" data-ibxp-glyph="format_strikethrough" data-ibxp-glyph-classes="material-icons"></div>
+				<div class="tb-separator"></div>
+				<div tabindex="0" class="tb-button tb-fore-color" title="Color" data-ibx-type="ibxMenuButton" data-ibxp-glyph="format_color_text" data-ibxp-glyph-classes="material-icons"></div>
+				<div tabindex="0" class="tb-button tb-back-color" title="Background Color" data-ibx-type="ibxMenuButton" data-ibxp-glyph="format_color_fill" data-ibxp-glyph-classes="material-icons"></div>
+				<div class="tb-separator"></div>
+				<div tabindex="0" class="tb-button" title="Left Justify" data-ibx-type="ibxRadioButton" data-ibxp-group="rgAlign" data-ibxp-user-value="left" data-ibxp-glyph="format_align_left" data-ibxp-glyph-classes="material-icons"></div>
+				<div tabindex="0" class="tb-button" title="Center Justify" data-ibx-type="ibxRadioButton" data-ibxp-group="rgAlign" data-ibxp-user-value="center" data-ibxp-glyph="format_align_center" data-ibxp-glyph-classes="material-icons"></div>
+				<div tabindex="0" class="tb-button" title="Right Justify" data-ibx-type="ibxRadioButton" data-ibxp-group="rgAlign" data-ibxp-user-value="right" data-ibxp-glyph="format_align_right" data-ibxp-glyph-classes="material-icons"></div>
+				<div tabindex="0" class="tb-button" title="Justify" data-ibx-type="ibxRadioButton" data-ibxp-group="rgAlign" data-ibxp-user-value="full" data-ibxp-glyph="format_align_justify" data-ibxp-glyph-classes="material-icons"></div>
+				<div class="tb-separator"></div>
+				<div tabindex="0" class="tb-button" title="Outdent" data-ibx-type="ibxButton" data-ibxp-command="cmdOutdent" data-ibxp-glyph="format_indent_decrease" data-ibxp-glyph-classes="material-icons"></div>
+				<div tabindex="0" class="tb-button" title="Indent" data-ibx-type="ibxButton" data-ibxp-command="cmdIndent" data-ibxp-glyph="format_indent_increase" data-ibxp-glyph-classes="material-icons"></div>
+				<div class="tb-separator"></div>
+				<div tabindex="0" class="tb-button" title="Insert Ordered List" data-ibx-type="ibxButton" data-ibxp-command="cmdOrderedList" data-ibxp-glyph="format_list_numbered" data-ibxp-glyph-classes="material-icons"></div>
+				<div tabindex="0" class="tb-button" title="Insert Unordered List" data-ibx-type="ibxButton" data-ibxp-command="cmdUnorderedList" data-ibxp-glyph="format_list_bulleted" data-ibxp-glyph-classes="material-icons"></div>
 			</div>
 			<div tabindex="0" class="rich-edit" data-ibx-type="ibxRichEdit" data-ibxp-ctx-menu=".re-ctx-menu"></div>
 		</div>
@@ -283,6 +288,10 @@
 		<div class="re-cmd cmd-italic" data-ibx-type="ibxCommand" data-ibxp-id="cmdItalic" data-ibxp-user-value="italic"></div>
 		<div class="re-cmd cmd-underline" data-ibx-type="ibxCommand" data-ibxp-id="cmdUnderline" data-ibxp-user-value="underline"></div>
 		<div class="re-cmd cmd-strikethrough" data-ibx-type="ibxCommand" data-ibxp-id="cmdStrikeThrough" data-ibxp-user-value="strikeThrough"></div>
+		<div class="re-cmd cmd-indent" data-ibx-type="ibxCommand" data-ibxp-id="cmdIndent" data-ibxp-user-value="indent"></div>
+		<div class="re-cmd cmd-outdent" data-ibx-type="ibxCommand" data-ibxp-id="cmdOutdent" data-ibxp-user-value="outdent"></div>
+		<div class="re-cmd cmd-insert-ordered-list" data-ibx-type="ibxCommand" data-ibxp-id="cmdOrderedList" data-ibxp-user-value="insertList"></div>
+		<div class="re-cmd cmd-insert-unordered-list" data-ibx-type="ibxCommand" data-ibxp-id="cmdUnorderedList" data-ibxp-user-value="insertList"></div>
 
 		<div class="rg-justify" data-ibx-type="ibxRadioGroup" data-ibxp-name="rgAlign" data-ibxp-command="cmdAlign"></div>
 		<div class="re-cmd cmd-justify" data-ibx-type="ibxCommand" data-ibxp-id="cmdAlign" data-ibxp-user-value="justify"></div>

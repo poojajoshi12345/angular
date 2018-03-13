@@ -119,15 +119,9 @@ $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame,
 	},
 	foreColor:function(color){this.execCommand("foreColor", false, color);},
 	backColor:function(color){this.execCommand("backColor", false, color);},
-
-	/*
-	bold:function(){this.execCommand("bold");},
-	fontName:function(font){this.execCommand("fontName", false, font);},
-
-	fontSize:function(increase){increase ? this.execCommand("increaseFontSize") : this.execCommand("decreaseFontSize");},//suspicious (ff only?)
-	paragraphSeparator:function(sep){this.execCommand("defaultParagraphSeparator", null, sep);},//suspicious (chrome/ff only?)
-	createLink:function(uri){this.execCommand("creatLink", null, uri);},//suspicious (none?)
-	*/
+	indent:function(){this.execCommand("indent");},
+	outdent:function(){this.execCommand("outdent");},
+	insertList:function(ordered){this.execCommand(ordered ? "insertOrderedList" : "insertUnorderedList");},
 
 	ready:function(fnReady)
 	{
