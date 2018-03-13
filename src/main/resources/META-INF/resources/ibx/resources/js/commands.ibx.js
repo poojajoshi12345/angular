@@ -33,10 +33,10 @@ $.widget("ibi.ibxCommand", $.ibi.ibxWidget,
 		var ret = true;
 		this._relTarget = src;
 		if(action == "trigger" && !this.options.disabled)
-		{
 			event = this.element.dispatchEvent("ibx_triggered", data, false, false, src);
-			ret = !event.defaultPrevented;
-		}
+		else
+		if(action == "disable")
+			this.option("disabled", data);
 		else
 		if(action == "checked")
 			this.option("checked", data);
@@ -44,15 +44,11 @@ $.widget("ibi.ibxCommand", $.ibi.ibxWidget,
 		if(action == "uservalue")
 			this.option("userValue", data);
 		this._relTarget = null;
-		return ret;
 	},
 	_onCommandKeyEvent:function(e)
 	{
 		if(eventMatchesShortcut(this.options.shortcut, e))
-		{
-			if(!this.doAction("trigger", null, e.target))
-				e.preventDefault();
-		}
+			this.doAction("trigger", null, e.target);
 	},
 	_setOptionDisabled:function(value)
 	{
