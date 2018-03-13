@@ -47,8 +47,8 @@
 					$(".cmd-italic").ibxWidget("option", "checked", state.italic);
 					$(".cmd-underline").ibxWidget("option", "checked", state.underline);
 					$(".cmd-strikethrough").ibxWidget("option", "checked", state.strikethrough);
+					$(".cmd-font-size").ibxWidget("userValue", state.fontSizePx);
 					$(".rg-justify").ibxWidget("userValue", state.justify);
-
 					$(".tb-fore-color").css("border", sformat("2px solid {1}", state.foreColor));
 					$(".tb-back-color").css("border", sformat("2px solid {1}", state.backColor));
 				}).on("contextmenu", function(e)
@@ -60,16 +60,16 @@
 				{
 					var re = $(".rich-edit");
 					var cmd = $(e.currentTarget);
-					var reCmd = cmd.ibxWidget("userValue");
+					var	reCmd = cmd.ibxWidget("userValue");
 					var val = "";
-					var relTarget = $(e.relatedTarget);
-					if(relTarget.is(".rg-justify"))
+
+					if(cmd.is(".cmd-justify"))
 					{
 						val = reCmd;
 						reCmd = "justify";
 					}
 					else
-					if(relTarget.is(".rg-font-size"))
+					if(cmd.is(".cmd-font-size"))
 					{
 						val = reCmd.toString();
 						reCmd = "fontSize";
@@ -184,7 +184,7 @@
 			}
 			.tb-select-font-size
 			{
-				width:50px;
+				width:60px;
 			}
 
 		</style>
@@ -215,14 +215,14 @@
 				<div tabindex="0" class="tb-button tb-fore-color" title="Color" data-ibx-type="ibxMenuButton" data-ibxp-glyph="format_color_text" data-ibxp-glyph-classes="material-icons"></div>
 				<div tabindex="0" class="tb-button tb-back-color" title="Background Color" data-ibx-type="ibxMenuButton" data-ibxp-glyph="format_color_fill" data-ibxp-glyph-classes="material-icons"></div>
 				<div class="tb-separator"></div>
-				<div tabindex="0" class="tb-select-font-size" data-ibxp-group="rgFontSize" title="Font Size" data-ibx-type="ibxSelect" data-ibxp-group="rgFontSize" data-ibxp-readonly="true">
-					<div class="select-size" class="size-select-item" data-ibx-type="ibxSelectRadioItem" data-ibxp-group="rgFontSize" data-ibxp-user-value="8">8</div>
-					<div class="select-size" class="size-select-item" data-ibx-type="ibxSelectRadioItem" data-ibxp-group="rgFontSize" data-ibxp-user-value="10">10</div>
-					<div class="select-size" class="size-select-item" data-ibx-type="ibxSelectRadioItem" data-ibxp-group="rgFontSize" data-ibxp-user-value="12">12</div>
-					<div class="select-size" class="size-select-item" data-ibx-type="ibxSelectRadioItem" data-ibxp-group="rgFontSize" data-ibxp-user-value="14">14</div>
-					<div class="select-size" class="size-select-item" data-ibx-type="ibxSelectRadioItem" data-ibxp-group="rgFontSize" data-ibxp-user-value="18">18</div>
-					<div class="select-size" class="size-select-item" data-ibx-type="ibxSelectRadioItem" data-ibxp-group="rgFontSize" data-ibxp-user-value="24">24</div>
-					<div class="select-size" class="size-select-item" data-ibx-type="ibxSelectRadioItem" data-ibxp-group="rgFontSize" data-ibxp-user-value="36">36</div>
+				<div tabindex="0" class="tb-select-font-size" data-ibxp-group="rgFontSize" title="Font Size" data-ibx-type="ibxSelect" data-ibxp-command="cmdFontSize" data-ibxp-readonly="true">
+					<div class="select-size" class="size-select-item" data-ibx-type="ibxSelectRadioItem" data-ibxp-group="rgFontSize" data-ibxp-user-value="8">8px</div>
+					<div class="select-size" class="size-select-item" data-ibx-type="ibxSelectRadioItem" data-ibxp-group="rgFontSize" data-ibxp-user-value="10">10px</div>
+					<div class="select-size" class="size-select-item" data-ibx-type="ibxSelectRadioItem" data-ibxp-group="rgFontSize" data-ibxp-user-value="12">12px</div>
+					<div class="select-size" class="size-select-item" data-ibx-type="ibxSelectRadioItem" data-ibxp-group="rgFontSize" data-ibxp-user-value="14">14px</div>
+					<div class="select-size" class="size-select-item" data-ibx-type="ibxSelectRadioItem" data-ibxp-group="rgFontSize" data-ibxp-user-value="18">18px</div>
+					<div class="select-size" class="size-select-item" data-ibx-type="ibxSelectRadioItem" data-ibxp-group="rgFontSize" data-ibxp-user-value="24">24px</div>
+					<div class="select-size" class="size-select-item" data-ibx-type="ibxSelectRadioItem" data-ibxp-group="rgFontSize" data-ibxp-user-value="36">36px</div>
 				</div>
 			</div>
 			<div tabindex="0" class="rich-edit" data-ibx-type="ibxRichEdit" data-ibxp-ctx-menu=".re-ctx-menu"></div>
@@ -259,13 +259,13 @@
 			<div data-ibx-type="ibxMenuSeparator"></div>
 			<div data-ibx-type="ibxMenuItem">Size
 				<div data-ibx-type="ibxMenu">
-					<div class="menu-size" data-ibx-type="ibxRadioMenuItem" data-ibxp-group="rgFontSize" data-ibxp-user-value="8">8</div>
-					<div class="menu-size" data-ibx-type="ibxRadioMenuItem" data-ibxp-group="rgFontSize" data-ibxp-user-value="10">10</div>
-					<div class="menu-size" data-ibx-type="ibxRadioMenuItem" data-ibxp-group="rgFontSize" data-ibxp-user-value="12">12</div>
-					<div class="menu-size" data-ibx-type="ibxRadioMenuItem" data-ibxp-group="rgFontSize" data-ibxp-user-value="14">14</div>
-					<div class="menu-size" data-ibx-type="ibxRadioMenuItem" data-ibxp-group="rgFontSize" data-ibxp-user-value="18">18</div>
-					<div class="menu-size" data-ibx-type="ibxRadioMenuItem" data-ibxp-group="rgFontSize" data-ibxp-user-value="24">24</div>
-					<div class="menu-size" data-ibx-type="ibxRadioMenuItem" data-ibxp-group="rgFontSize" data-ibxp-user-value="36">36</div>
+					<div class="menu-size" data-ibx-type="ibxRadioMenuItem" data-ibxp-group="rgFontSize" data-ibxp-user-value="8">8px</div>
+					<div class="menu-size" data-ibx-type="ibxRadioMenuItem" data-ibxp-group="rgFontSize" data-ibxp-user-value="10">10px</div>
+					<div class="menu-size" data-ibx-type="ibxRadioMenuItem" data-ibxp-group="rgFontSize" data-ibxp-user-value="12">12px</div>
+					<div class="menu-size" data-ibx-type="ibxRadioMenuItem" data-ibxp-group="rgFontSize" data-ibxp-user-value="14">14px</div>
+					<div class="menu-size" data-ibx-type="ibxRadioMenuItem" data-ibxp-group="rgFontSize" data-ibxp-user-value="18">18px</div>
+					<div class="menu-size" data-ibx-type="ibxRadioMenuItem" data-ibxp-group="rgFontSize" data-ibxp-user-value="24">24px</div>
+					<div class="menu-size" data-ibx-type="ibxRadioMenuItem" data-ibxp-group="rgFontSize" data-ibxp-user-value="36">36px</div>
 				</div>
 			</div>
 		</div>

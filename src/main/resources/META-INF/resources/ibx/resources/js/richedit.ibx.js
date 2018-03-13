@@ -78,13 +78,13 @@ $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame,
 		state.italic = this.commandState("italic");
 		state.underline = this.commandState("underline");
 		state.strikethrough = this.commandState("strikethrough");
-
+		state.fontSize = this.commandValue("fontSize");
+		state.fontSizePx = $.ibi.ibxRichEdit.fontSize[state.fontSize];
 		state.justify = "";
 		state.justify = ibx.coercePropVal(this.commandValue("justifyLeft")) ? "left" : state.justify;
 		state.justify = ibx.coercePropVal(this.commandValue("justifyCenter")) ? "center" : state.justify;
 		state.justify = ibx.coercePropVal(this.commandValue("justifyRight")) ? "right" : state.justify;
 		state.justify = ibx.coercePropVal(this.commandValue("justifyFull")) ? "full" : state.justify;
-		
 		state.foreColor = this.commandValue("foreColor");
 		state.backColor = this.commandValue("backColor");
 		return state;
@@ -142,6 +142,14 @@ $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame,
 
 $.ibi.ibxRichEdit.fontSize = 
 {
+	1:"8",
+	2:"10",
+	3:"12",
+	4:"14",
+	5:"18",
+	6:"24",
+	7:"36",
+
 	"8":1,
 	"10":2,
 	"12":3,
