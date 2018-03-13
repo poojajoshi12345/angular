@@ -35,7 +35,7 @@ $.widget("ibi.ibxCommand", $.ibi.ibxWidget,
 		if(action == "trigger" && !this.options.disabled)
 			event = this.element.dispatchEvent("ibx_triggered", data, false, false, src);
 		else
-		if(action == "disable")
+		if(action == "disabled")
 			this.option("disabled", data);
 		else
 		if(action == "checked")
