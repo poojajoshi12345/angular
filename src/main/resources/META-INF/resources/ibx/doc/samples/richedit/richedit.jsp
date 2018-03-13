@@ -35,6 +35,7 @@
 					richEdit.ibxWidget("html",  sformat("Start Text<p/>{1}<p/>{1}<p/>{1}<p/>End Text<p/>", strSample));
 				}).on("selectionchange", function(e)
 				{
+					window._updatingUI = true;
 					var re = $(".rich-edit").ibxWidget("instance");
 					var state = re.cmdStates();
 					$(".cmd-undo").ibxWidget("option", "disabled", !state.undo);
@@ -49,8 +50,9 @@
 					$(".cmd-strikethrough").ibxWidget("option", "checked", state.strikethrough);
 					$(".cmd-font-size").ibxWidget("userValue", state.fontSizePx);
 					$(".rg-justify").ibxWidget("userValue", state.justify);
-					//$(".tb-fore-color").css("border", sformat("2px solid {1}", state.foreColor));
-					//$(".tb-back-color").css("border", sformat("2px solid {1}", state.backColor));
+					$(".tb-fore-color").css("border", sformat("2px solid {1}", state.foreColor));
+					$(".tb-back-color").css("border", sformat("2px solid {1}", state.backColor));
+					window._updatingUI = false;
 				}).on("contextmenu", function(e)
 				{
 					e.preventDefault();
@@ -58,6 +60,9 @@
 
 				$(".re-cmd").on("ibx_triggered ibx_uservaluechanged", function(e)
 				{
+					if(window._updatingUI)
+						return;
+
 					var re = $(".rich-edit");
 					var cmd = $(e.currentTarget);
 					var	reCmd = cmd.ibxWidget("userValue");
@@ -82,6 +87,7 @@
 					}
 					if(cmd.is(".cmd-insert-ordered-list"))
 						val = "true";
+					
 					re.ibxWidget(reCmd, val);
 				})
 
@@ -168,6 +174,7 @@
 			}
 			.tb-fore-color, .tb-back-color
 			{
+				border-radius:5px;
 			}
 			.color-select-item
 			{
@@ -201,6 +208,9 @@
 				<div tabindex="0" class="tb-button" title="Paste" data-ibx-type="ibxButtonSimple" data-ibxp-command="cmdPaste" data-ibxp-glyph="content_paste" data-ibxp-glyph-classes="material-icons"></div>
 				<div tabindex="0" class="tb-button" title="Clear" data-ibx-type="ibxButtonSimple" data-ibxp-command="cmdDelete" data-ibxp-glyph="delete" data-ibxp-glyph-classes="material-icons"></div>
 				<div class="tb-separator"></div>
+				<div tabindex="0" class="tb-select-font-size" data-ibxp-group="rgFontName" title="Font Size" data-ibx-type="ibxSelect" data-ibxp-command="cmdFontName" data-ibxp-readonly="true">
+					<div class="select-size" class="size-select-item" data-ibx-type="ibxSelectRadioItem" data-ibxp-group="rgFontName" data-ibxp-user-value="8">8px</div>
+				</div>
 				<div tabindex="0" class="tb-select-font-size" data-ibxp-group="rgFontSize" title="Font Size" data-ibx-type="ibxSelect" data-ibxp-command="cmdFontSize" data-ibxp-readonly="true">
 					<div class="select-size" class="size-select-item" data-ibx-type="ibxSelectRadioItem" data-ibxp-group="rgFontSize" data-ibxp-user-value="8">8px</div>
 					<div class="select-size" class="size-select-item" data-ibx-type="ibxSelectRadioItem" data-ibxp-group="rgFontSize" data-ibxp-user-value="10">10px</div>
@@ -229,6 +239,8 @@
 				<div class="tb-separator"></div>
 				<div tabindex="0" class="tb-button" title="Insert Ordered List" data-ibx-type="ibxButton" data-ibxp-command="cmdOrderedList" data-ibxp-glyph="format_list_numbered" data-ibxp-glyph-classes="material-icons"></div>
 				<div tabindex="0" class="tb-button" title="Insert Unordered List" data-ibx-type="ibxButton" data-ibxp-command="cmdUnorderedList" data-ibxp-glyph="format_list_bulleted" data-ibxp-glyph-classes="material-icons"></div>
+				<div class="tb-separator"></div>
+				<div tabindex="0" class="tb-button" title="Remove All Formatting" data-ibx-type="ibxButton" data-ibxp-command="cmdRemoveFormat" data-ibxp-glyph="format_clear" data-ibxp-glyph-classes="material-icons"></div>
 			</div>
 			<div tabindex="0" class="rich-edit" data-ibx-type="ibxRichEdit" data-ibxp-ctx-menu=".re-ctx-menu"></div>
 		</div>
@@ -275,6 +287,7 @@
 			</div>
 		</div>
 
+		<div class="re-cmd cmd-remove-format" data-ibx-type="ibxCommand" data-ibxp-id="cmdRemoveFormat" data-ibxp-user-value="removeFormat"></div>
 		<div class="re-cmd cmd-undo" data-ibx-type="ibxCommand" data-ibxp-id="cmdUndo" data-ibxp-user-value="undo"></div>
 		<div class="re-cmd cmd-redo" data-ibx-type="ibxCommand" data-ibxp-id="cmdRedo" data-ibxp-user-value="redo"></div>
 		<div class="re-cmd cmd-select-all" data-ibx-type="ibxCommand" data-ibxp-id="cmdSelectAll" data-ibxp-user-value="selectAll"></div>
@@ -298,6 +311,9 @@
 
 		<div class="rg-font-size" data-ibx-type="ibxRadioGroup" data-ibxp-name="rgFontSize" data-ibxp-command="cmdFontSize"></div>
 		<div class="re-cmd cmd-font-size" data-ibx-type="ibxCommand" data-ibxp-id="cmdFontSize" data-ibxp-user-value="fontSize"></div>
+
+		<div class="rg-font-size" data-ibx-type="ibxRadioGroup" data-ibxp-name="rgFontName" data-ibxp-command="cmdFontName"></div>
+		<div class="re-cmd cmd-font-size" data-ibx-type="ibxCommand" data-ibxp-id="cmdFontName" data-ibxp-user-value="fontName"></div>
 
 		<div class="re-cmd cmd-fore-color" data-ibx-type="ibxCommand" data-ibxp-id="cmdForeColor" data-ibxp-user-value="foreColor"></div>
 		<div class="re-cmd cmd-back-color" data-ibx-type="ibxCommand" data-ibxp-id="cmdBackColor" data-ibxp-user-value="backColor"></div>

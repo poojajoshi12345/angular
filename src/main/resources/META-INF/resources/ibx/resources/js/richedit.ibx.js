@@ -36,7 +36,8 @@ $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame,
 			cd.body.spellcheck = false;
 			cd.body.innerHTML = this.element.data("createContent");
 			$(cd).on("focusin focusout selectionchange", this._onRichEditDocEvent.bind(this));
-			
+
+			this.styleWithCSS(true);//by default make editor use css for styling.
 			this.element.removeData("createContent");
 			this._readyPromise.resolve(this.element);
 		}
@@ -78,7 +79,8 @@ $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame,
 		state.italic = this.commandState("italic");
 		state.underline = this.commandState("underline");
 		state.strikethrough = this.commandState("strikethrough");
-		state.fontSize = this.commandValue("fontSize");
+		state.fontName = this.commandValue("fontName");
+		state.fontSize = this.commandValue("fontSize") || 3;
 		state.fontSizePx = $.ibi.ibxRichEdit.fontSize[state.fontSize];
 		state.justify = "";
 		state.justify = ibx.coercePropVal(this.commandValue("justifyLeft")) ? "left" : state.justify;
@@ -94,6 +96,8 @@ $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame,
 		this.contentDocument().body.focus();
 		this.contentDocument().execCommand(cmd, withUI, value);
 	},
+	styleWithCSS:function(css){this.execCommand("styleWithCSS", false, css);},
+	removeFormat:function(){this.execCommand("removeFormat");},
 	undo:function(){this.execCommand("undo");},
 	redo:function(){this.execCommand("redo");},
 	selectAll:function(){this.execCommand("selectAll");},
