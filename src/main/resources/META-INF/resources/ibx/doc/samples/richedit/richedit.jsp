@@ -48,6 +48,7 @@
 					$(".cmd-italic").ibxWidget("option", "checked", state.italic);
 					$(".cmd-underline").ibxWidget("option", "checked", state.underline);
 					$(".cmd-strikethrough").ibxWidget("option", "checked", state.strikethrough);
+					$(".cmd-font-name").ibxWidget("userValue", state.fontName.toLowerCase().replace(/\"/g, ""));
 					$(".cmd-font-size").ibxWidget("userValue", state.fontSizePx);
 					$(".rg-justify").ibxWidget("userValue", state.justify);
 					$(".tb-fore-color").css("border", sformat("2px solid {1}", state.foreColor));
@@ -72,6 +73,12 @@
 					{
 						val = reCmd;
 						reCmd = "justify";
+					}
+					else
+					if(cmd.is(".cmd-font-name"))
+					{
+						val = reCmd;
+						reCmd = "fontName";
 					}
 					else
 					if(cmd.is(".cmd-font-size"))
@@ -192,7 +199,10 @@
 			{
 				width:60px;
 			}
-
+			.tb-select-font-name
+			{
+				width:150px;
+			}
 		</style>
 	</head>
 	<body class="ibx-root">
@@ -208,17 +218,30 @@
 				<div tabindex="0" class="tb-button" title="Paste" data-ibx-type="ibxButtonSimple" data-ibxp-command="cmdPaste" data-ibxp-glyph="content_paste" data-ibxp-glyph-classes="material-icons"></div>
 				<div tabindex="0" class="tb-button" title="Clear" data-ibx-type="ibxButtonSimple" data-ibxp-command="cmdDelete" data-ibxp-glyph="delete" data-ibxp-glyph-classes="material-icons"></div>
 				<div class="tb-separator"></div>
-				<div tabindex="0" class="tb-select-font-size" data-ibxp-group="rgFontName" title="Font Size" data-ibx-type="ibxSelect" data-ibxp-command="cmdFontName" data-ibxp-readonly="true">
-					<div class="select-size" class="size-select-item" data-ibx-type="ibxSelectRadioItem" data-ibxp-group="rgFontName" data-ibxp-user-value="8">8px</div>
+				<div tabindex="0" class="tb-select-font-name" data-ibxp-group="rgFontName" title="Font Size" data-ibx-type="ibxSelect" data-ibxp-command="cmdFontName" data-ibxp-readonly="true">
+					<div class="select-font-name" data-ibx-type="ibxSelectRadioItem" data-ibxp-group="rgFontName" data-ibxp-user-value="arial">Arial</div>
+					<div class="select-font-name" data-ibx-type="ibxSelectRadioItem" data-ibxp-group="rgFontName" data-ibxp-user-value="arial black">Arial Black</div>
+					<div class="select-font-name" data-ibx-type="ibxSelectRadioItem" data-ibxp-group="rgFontName" data-ibxp-user-value="bookman">Bookman</div>
+					<div class="select-font-name" data-ibx-type="ibxSelectRadioItem" data-ibxp-group="rgFontName" data-ibxp-user-value="comic sans ms">Comic Sans</div>
+					<div class="select-font-name" data-ibx-type="ibxSelectRadioItem" data-ibxp-group="rgFontName" data-ibxp-user-value="courier">Courier</div>
+					<div class="select-font-name" data-ibx-type="ibxSelectRadioItem" data-ibxp-group="rgFontName" data-ibxp-user-value="courier new">Courier New</div>
+					<div class="select-font-name" data-ibx-type="ibxSelectRadioItem" data-ibxp-group="rgFontName" data-ibxp-user-value="georia">Georgia</div>
+					<div class="select-font-name" data-ibx-type="ibxSelectRadioItem" data-ibxp-group="rgFontName" data-ibxp-user-value="garamond">Garamond</div>
+					<div class="select-font-name" data-ibx-type="ibxSelectRadioItem" data-ibxp-group="rgFontName" data-ibxp-user-value="helvetica">Helvetica</div>
+					<div class="select-font-name" data-ibx-type="ibxSelectRadioItem" data-ibxp-group="rgFontName" data-ibxp-user-value="palatino">Palatino</div>
+					<div class="select-font-name" data-ibx-type="ibxSelectRadioItem" data-ibxp-group="rgFontName" data-ibxp-user-value="times">Times</div>
+					<div class="select-font-name" data-ibx-type="ibxSelectRadioItem" data-ibxp-group="rgFontName" data-ibxp-user-value="times new roman">Times New Roman</div>
+					<div class="select-font-name" data-ibx-type="ibxSelectRadioItem" data-ibxp-group="rgFontName" data-ibxp-user-value="trebuchet ms">Trebuchet</div>
+					<div class="select-font-name" data-ibx-type="ibxSelectRadioItem" data-ibxp-group="rgFontName" data-ibxp-user-value="verdana">Verdana</div>
 				</div>
 				<div tabindex="0" class="tb-select-font-size" data-ibxp-group="rgFontSize" title="Font Size" data-ibx-type="ibxSelect" data-ibxp-command="cmdFontSize" data-ibxp-readonly="true">
-					<div class="select-size" class="size-select-item" data-ibx-type="ibxSelectRadioItem" data-ibxp-group="rgFontSize" data-ibxp-user-value="8">8px</div>
-					<div class="select-size" class="size-select-item" data-ibx-type="ibxSelectRadioItem" data-ibxp-group="rgFontSize" data-ibxp-user-value="10">10px</div>
-					<div class="select-size" class="size-select-item" data-ibx-type="ibxSelectRadioItem" data-ibxp-group="rgFontSize" data-ibxp-user-value="12">12px</div>
-					<div class="select-size" class="size-select-item" data-ibx-type="ibxSelectRadioItem" data-ibxp-group="rgFontSize" data-ibxp-user-value="14">14px</div>
-					<div class="select-size" class="size-select-item" data-ibx-type="ibxSelectRadioItem" data-ibxp-group="rgFontSize" data-ibxp-user-value="18">18px</div>
-					<div class="select-size" class="size-select-item" data-ibx-type="ibxSelectRadioItem" data-ibxp-group="rgFontSize" data-ibxp-user-value="24">24px</div>
-					<div class="select-size" class="size-select-item" data-ibx-type="ibxSelectRadioItem" data-ibxp-group="rgFontSize" data-ibxp-user-value="36">36px</div>
+					<div class="size-select-item" data-ibx-type="ibxSelectRadioItem" data-ibxp-group="rgFontSize" data-ibxp-user-value="8">8px</div>
+					<div class="size-select-item" data-ibx-type="ibxSelectRadioItem" data-ibxp-group="rgFontSize" data-ibxp-user-value="10">10px</div>
+					<div class="size-select-item" data-ibx-type="ibxSelectRadioItem" data-ibxp-group="rgFontSize" data-ibxp-user-value="12">12px</div>
+					<div class="size-select-item" data-ibx-type="ibxSelectRadioItem" data-ibxp-group="rgFontSize" data-ibxp-user-value="14">14px</div>
+					<div class="size-select-item" data-ibx-type="ibxSelectRadioItem" data-ibxp-group="rgFontSize" data-ibxp-user-value="18">18px</div>
+					<div class="size-select-item" data-ibx-type="ibxSelectRadioItem" data-ibxp-group="rgFontSize" data-ibxp-user-value="24">24px</div>
+					<div class="size-select-item" data-ibx-type="ibxSelectRadioItem" data-ibxp-group="rgFontSize" data-ibxp-user-value="36">36px</div>
 				</div>
 				<div class="tb-separator"></div>
 				<div tabindex="0" class="tb-button" title="Bold" data-ibx-type="ibxCheckBox" data-ibxp-command="cmdBold" data-ibxp-glyph="format_bold" data-ibxp-glyph-classes="material-icons"></div>
@@ -320,8 +343,8 @@
 		<div class="rg-font-size" data-ibx-type="ibxRadioGroup" data-ibxp-name="rgFontSize" data-ibxp-command="cmdFontSize"></div>
 		<div class="re-cmd cmd-font-size" data-ibx-type="ibxCommand" data-ibxp-id="cmdFontSize" data-ibxp-user-value="fontSize"></div>
 
-		<div class="rg-font-size" data-ibx-type="ibxRadioGroup" data-ibxp-name="rgFontName" data-ibxp-command="cmdFontName"></div>
-		<div class="re-cmd cmd-font-size" data-ibx-type="ibxCommand" data-ibxp-id="cmdFontName" data-ibxp-user-value="fontName"></div>
+		<div class="rg-font-name" data-ibx-type="ibxRadioGroup" data-ibxp-name="rgFontName" data-ibxp-command="cmdFontName"></div>
+		<div class="re-cmd cmd-font-name" data-ibx-type="ibxCommand" data-ibxp-id="cmdFontName" data-ibxp-user-value="fontName"></div>
 
 		<div class="re-cmd cmd-fore-color" data-ibx-type="ibxCommand" data-ibxp-id="cmdForeColor" data-ibxp-user-value="foreColor"></div>
 		<div class="re-cmd cmd-back-color" data-ibx-type="ibxCommand" data-ibxp-id="cmdBackColor" data-ibxp-user-value="backColor"></div>

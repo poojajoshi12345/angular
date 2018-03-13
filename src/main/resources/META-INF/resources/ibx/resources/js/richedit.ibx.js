@@ -44,6 +44,7 @@ $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame,
 	},
 	_curSelRange:null,
 	_capturingSelRange:null,
+	selection:function(){return this._curSelRange;},
 	_onRichEditDocEvent:function(e)
 	{
 		var doc = this.contentDocument();
@@ -109,6 +110,7 @@ $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame,
 	italic:function(){this.execCommand("Italic");},
 	underline:function(){this.execCommand("Underline");},
 	strikeThrough:function(){this.execCommand("strikeThrough");},
+	fontName:function(name){this.execCommand("fontName", false, name);},
 	fontSize:function(size)
 	{
 		if(typeof(size) === "string")
