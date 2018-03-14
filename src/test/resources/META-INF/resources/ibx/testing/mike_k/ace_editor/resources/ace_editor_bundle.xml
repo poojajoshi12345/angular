@@ -17,7 +17,7 @@
 	</styles>	
 	<scripts>
 		<script-file src="./js/ace_editor.js" loadContext="bundle"/>
-		<script src="{context}/src/ace.js" type="text/javascript" charset="utf-8"></script>		
+		<script src="{context}/3rdparty_resources/ace-1.3.1/src/ace.js" type="text/javascript" charset="utf-8"></script>		
 		<script-file src="{context}/ibxtools/shared_resources/js/serveraccess.js" loadContext="bundle"/>
 		<script-file src="{context}/tools/shared_resources/source/shared_constants.js" loadContext="bundle"/>	
 	</scripts>
