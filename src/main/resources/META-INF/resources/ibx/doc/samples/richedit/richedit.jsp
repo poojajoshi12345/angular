@@ -48,6 +48,8 @@
 					$(".cmd-italic").ibxWidget("option", "checked", state.italic);
 					$(".cmd-underline").ibxWidget("option", "checked", state.underline);
 					$(".cmd-strikethrough").ibxWidget("option", "checked", state.strikethrough);
+					$(".cmd-subscript").ibxWidget("option", "checked", state.subscript);
+					$(".cmd-superscript").ibxWidget("option", "checked", state.superscript);
 					$(".cmd-font-name").ibxWidget("userValue", state.fontName.toLowerCase().replace(/\"/g, ""));
 					$(".cmd-font-size").ibxWidget("userValue", state.fontSizePx);
 					$(".rg-justify").ibxWidget("userValue", state.justify);
@@ -248,6 +250,8 @@
 				<div tabindex="0" class="tb-button" title="Italic" data-ibx-type="ibxCheckBox" data-ibxp-command="cmdItalic" data-ibxp-glyph="format_italic" data-ibxp-glyph-classes="material-icons"></div>
 				<div tabindex="0" class="tb-button" title="Underline" data-ibx-type="ibxCheckBox" data-ibxp-command="cmdUnderline" data-ibxp-glyph="format_underlined" data-ibxp-glyph-classes="material-icons"></div>
 				<div tabindex="0" class="tb-button" title="Strikethrough" data-ibx-type="ibxCheckBox" data-ibxp-command="cmdStrikeThrough" data-ibxp-glyph="format_strikethrough" data-ibxp-glyph-classes="material-icons"></div>
+				<div tabindex="0" class="tb-button" title="Subscript" data-ibx-type="ibxCheckBox" data-ibxp-command="cmdSubscript" data-ibxp-glyph-classes="fa fa-subscript"></div>
+				<div tabindex="0" class="tb-button" title="Superscript" data-ibx-type="ibxCheckBox" data-ibxp-command="cmdSuperscript" data-ibxp-glyph-classes="fa fa-superscript"></div>
 				<div class="tb-separator"></div>
 				<div tabindex="0" class="tb-button tb-fore-color" title="Color" data-ibx-type="ibxMenuButton" data-ibxp-glyph="format_color_text" data-ibxp-glyph-classes="material-icons"></div>
 				<div tabindex="0" class="tb-button tb-back-color" title="Background Color" data-ibx-type="ibxMenuButton" data-ibxp-glyph="format_color_fill" data-ibxp-glyph-classes="material-icons"></div>
@@ -332,6 +336,8 @@
 		<div class="re-cmd cmd-italic" data-ibx-type="ibxCommand" data-ibxp-id="cmdItalic" data-ibxp-user-value="italic"></div>
 		<div class="re-cmd cmd-underline" data-ibx-type="ibxCommand" data-ibxp-id="cmdUnderline" data-ibxp-user-value="underline"></div>
 		<div class="re-cmd cmd-strikethrough" data-ibx-type="ibxCommand" data-ibxp-id="cmdStrikeThrough" data-ibxp-user-value="strikeThrough"></div>
+		<div class="re-cmd cmd-subscript" data-ibx-type="ibxCommand" data-ibxp-id="cmdSubscript" data-ibxp-user-value="subscript"></div>
+		<div class="re-cmd cmd-superscript" data-ibx-type="ibxCommand" data-ibxp-id="cmdSuperscript" data-ibxp-user-value="superscript"></div>
 		<div class="re-cmd cmd-indent" data-ibx-type="ibxCommand" data-ibxp-id="cmdIndent" data-ibxp-user-value="indent"></div>
 		<div class="re-cmd cmd-outdent" data-ibx-type="ibxCommand" data-ibxp-id="cmdOutdent" data-ibxp-user-value="outdent"></div>
 		<div class="re-cmd cmd-insert-ordered-list" data-ibx-type="ibxCommand" data-ibxp-id="cmdOrderedList" data-ibxp-user-value="insertList"></div>

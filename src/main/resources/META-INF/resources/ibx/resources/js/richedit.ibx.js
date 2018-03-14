@@ -80,6 +80,8 @@ $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame,
 		state.italic = this.commandState("italic");
 		state.underline = this.commandState("underline");
 		state.strikethrough = this.commandState("strikethrough");
+		state.superscript = this.commandState("superscript");
+		state.subscript = this.commandState("subscript");
 		state.fontName = this.commandValue("fontName");
 		state.fontSize = this.commandValue("fontSize") || 3;
 		state.fontSizePx = $.ibi.ibxRichEdit.fontSize[state.fontSize];
@@ -110,6 +112,8 @@ $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame,
 	italic:function(){this.execCommand("Italic");},
 	underline:function(){this.execCommand("Underline");},
 	strikeThrough:function(){this.execCommand("strikeThrough");},
+	subscript:function(doIt){this.execCommand("subscript");},
+	superscript:function(doIt){this.execCommand("superscript");},
 	fontName:function(name){this.execCommand("fontName", false, name);},
 	fontSize:function(size)
 	{
