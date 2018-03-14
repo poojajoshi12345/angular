@@ -183,6 +183,7 @@
 			}
 			.tb-fore-color, .tb-back-color
 			{
+				border:2px solid transparent;
 				border-radius:5px;
 			}
 			.color-select-item
@@ -218,7 +219,7 @@
 				<div tabindex="0" class="tb-button" title="Cut" data-ibx-type="ibxButtonSimple" data-ibxp-command="cmdCut" data-ibxp-glyph="content_cut" data-ibxp-glyph-classes="material-icons"></div>
 				<div tabindex="0" class="tb-button" title="Copy" data-ibx-type="ibxButtonSimple" data-ibxp-command="cmdCopy" data-ibxp-glyph="content_copy" data-ibxp-glyph-classes="material-icons"></div>
 				<div tabindex="0" class="tb-button" title="Paste" data-ibx-type="ibxButtonSimple" data-ibxp-command="cmdPaste" data-ibxp-glyph="content_paste" data-ibxp-glyph-classes="material-icons"></div>
-				<div tabindex="0" class="tb-button" title="Clear" data-ibx-type="ibxButtonSimple" data-ibxp-command="cmdDelete" data-ibxp-glyph="delete" data-ibxp-glyph-classes="material-icons"></div>
+				<div tabindex="0" class="tb-button" title="Clear" data-ibx-type="ibxButtonSimple" data-ibxp-command="cmdDelete" data-ibxp-glyph="clear" data-ibxp-glyph-classes="material-icons"></div>
 				<div class="tb-separator"></div>
 				<div tabindex="0" class="tb-select-font-name" data-ibxp-group="rgFontName" title="Font Size" data-ibx-type="ibxSelect" data-ibxp-command="cmdFontName" data-ibxp-readonly="true">
 					<div class="select-font-name" data-ibx-type="ibxSelectRadioItem" data-ibxp-group="rgFontName" data-ibxp-user-value="arial">Arial</div>

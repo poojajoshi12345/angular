@@ -55,7 +55,7 @@ $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame,
 			sel.addRange(this._curSelRange);
 		}
 		else
-		if(e.type == "focusout")
+		if(e.type == "focusout" && ibxPlatformCheck.isIE)
 		{
 			var sel = doc.getSelection();
 			this._curSelRange = sel.rangeCount ? doc.getSelection().getRangeAt(0) : null;
@@ -96,7 +96,8 @@ $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame,
 	},
 	execCommand:function(cmd, withUI, value)
 	{
-		this.contentDocument().body.focus();
+		if(ibxPlatformCheck.isIE)
+			this.contentDocument().body.focus();
 		this.contentDocument().execCommand(cmd, withUI, value);
 	},
 	styleWithCSS:function(css){this.execCommand("styleWithCSS", false, css);},
@@ -112,8 +113,8 @@ $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame,
 	italic:function(){this.execCommand("Italic");},
 	underline:function(){this.execCommand("Underline");},
 	strikeThrough:function(){this.execCommand("strikeThrough");},
-	subscript:function(doIt){this.execCommand("subscript");},
-	superscript:function(doIt){this.execCommand("superscript");},
+	subscript:function(){this.execCommand("subscript");},
+	superscript:function(){this.execCommand("superscript");},
 	fontName:function(name){this.execCommand("fontName", false, name);},
 	fontSize:function(size)
 	{
