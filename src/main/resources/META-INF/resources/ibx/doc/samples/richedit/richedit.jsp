@@ -37,7 +37,7 @@
 				{
 					window._updatingUI = true;
 					var re = $(".rich-edit").ibxWidget("instance");
-					var state = re.cmdStates();
+					var state = re.selState();
 					$(".cmd-undo").ibxWidget("option", "disabled", !state.undo);
 					$(".cmd-redo").ibxWidget("option", "disabled", !state.redo);
 					$(".cmd-select-all").ibxWidget("option", "disabled", !state.selectAll);
@@ -53,8 +53,8 @@
 					$(".cmd-font-name").ibxWidget("userValue", state.fontName.toLowerCase().replace(/\"/g, ""));
 					$(".cmd-font-size").ibxWidget("userValue", state.fontSizePx);
 					$(".rg-justify").ibxWidget("userValue", state.justify);
-					$(".tb-fore-color").css("border", sformat("2px solid {1}", state.foreColor));
-					$(".tb-back-color").css("border", sformat("2px solid {1}", state.backColor));
+					$(".tb-fore-color").css("borderColor", state.foreColor);
+					$(".tb-back-color").css("borderColor", state.backColor);
 					window._updatingUI = false;
 				}).on("contextmenu", function(e)
 				{
@@ -198,12 +198,18 @@
 			{
 				outline:2px solid black;
 			}
+			.tb-select
+			{
+				margin:2px;
+			}
 			.tb-select-font-size
 			{
+				margin:2px;
 				width:60px;
 			}
 			.tb-select-font-name
 			{
+				margin:2px;
 				width:150px;
 			}
 		</style>
@@ -221,7 +227,7 @@
 				<div tabindex="0" class="tb-button" title="Paste" data-ibx-type="ibxButtonSimple" data-ibxp-command="cmdPaste" data-ibxp-glyph="content_paste" data-ibxp-glyph-classes="material-icons"></div>
 				<div tabindex="0" class="tb-button" title="Clear" data-ibx-type="ibxButtonSimple" data-ibxp-command="cmdDelete" data-ibxp-glyph="clear" data-ibxp-glyph-classes="material-icons"></div>
 				<div class="tb-separator"></div>
-				<div tabindex="0" class="tb-select-font-name" data-ibxp-group="rgFontName" title="Font Size" data-ibx-type="ibxSelect" data-ibxp-command="cmdFontName" data-ibxp-readonly="true">
+				<div tabindex="0" class="tb-select tb-select-font-name" data-ibxp-group="rgFontName" title="Font Size" data-ibx-type="ibxSelect" data-ibxp-command="cmdFontName" data-ibxp-readonly="true">
 					<div class="select-font-name" data-ibx-type="ibxSelectRadioItem" data-ibxp-group="rgFontName" data-ibxp-user-value="arial">Arial</div>
 					<div class="select-font-name" data-ibx-type="ibxSelectRadioItem" data-ibxp-group="rgFontName" data-ibxp-user-value="arial black">Arial Black</div>
 					<div class="select-font-name" data-ibx-type="ibxSelectRadioItem" data-ibxp-group="rgFontName" data-ibxp-user-value="bookman">Bookman</div>
@@ -237,7 +243,7 @@
 					<div class="select-font-name" data-ibx-type="ibxSelectRadioItem" data-ibxp-group="rgFontName" data-ibxp-user-value="trebuchet ms">Trebuchet</div>
 					<div class="select-font-name" data-ibx-type="ibxSelectRadioItem" data-ibxp-group="rgFontName" data-ibxp-user-value="verdana">Verdana</div>
 				</div>
-				<div tabindex="0" class="tb-select-font-size" data-ibxp-group="rgFontSize" title="Font Size" data-ibx-type="ibxSelect" data-ibxp-command="cmdFontSize" data-ibxp-readonly="true">
+				<div tabindex="0" class="tb-select tb-select-font-size" data-ibxp-group="rgFontSize" title="Font Size" data-ibx-type="ibxSelect" data-ibxp-command="cmdFontSize" data-ibxp-readonly="true">
 					<div class="size-select-item" data-ibx-type="ibxSelectRadioItem" data-ibxp-group="rgFontSize" data-ibxp-user-value="8">8px</div>
 					<div class="size-select-item" data-ibx-type="ibxSelectRadioItem" data-ibxp-group="rgFontSize" data-ibxp-user-value="10">10px</div>
 					<div class="size-select-item" data-ibx-type="ibxSelectRadioItem" data-ibxp-group="rgFontSize" data-ibxp-user-value="12">12px</div>

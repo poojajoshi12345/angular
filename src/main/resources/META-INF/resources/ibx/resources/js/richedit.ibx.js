@@ -42,6 +42,10 @@ $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame,
 			this._readyPromise.resolve(this.element);
 		}
 	},
+	ready:function(fnReady)
+	{
+		this._readyPromise.then(fnReady);
+	},
 	_curSelRange:null,
 	_capturingSelRange:null,
 	selection:function(){return this._curSelRange;},
@@ -67,7 +71,7 @@ $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame,
 	commandEnabled:function(cmd){return this.contentDocument().queryCommandEnabled(cmd);},
 	commandState:function(cmd){return this.contentDocument().queryCommandState(cmd);},
 	commandValue:function(cmd){return this.contentDocument().queryCommandValue(cmd);},
-	cmdStates:function()
+	selState:function()
 	{
 		var state = {};
 		state.undo = this.commandEnabled("undo");
@@ -79,7 +83,7 @@ $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame,
 		state.bold = this.commandState("bold");
 		state.italic = this.commandState("italic");
 		state.underline = this.commandState("underline");
-		state.strikethrough = this.commandState("strikethrough");
+		state.strikethrough	= this.commandState("strikethrough");
 		state.superscript = this.commandState("superscript");
 		state.subscript = this.commandState("subscript");
 		state.fontName = this.commandValue("fontName");
@@ -115,6 +119,15 @@ $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame,
 	strikeThrough:function(){this.execCommand("strikeThrough");},
 	subscript:function(){this.execCommand("subscript");},
 	superscript:function(){this.execCommand("superscript");},
+	foreColor:function(color){this.execCommand("foreColor", false, color);},
+	backColor:function(color){this.execCommand("backColor", false, color);},
+	indent:function(){this.execCommand("indent");},
+	outdent:function(){this.execCommand("outdent");},
+	insertList:function(ordered){this.execCommand(ordered ? "insertOrderedList" : "insertUnorderedList");},
+	insertHTML:function(html){this.execCommand("insertHTML", false, html);},
+	insertText:function(text){this.execCommand("insertText", false, text);},
+	createLink:function(href){this.execCommand("createLink", false, href);},
+	unlink:function(href){this.execCommand("unlink", false, href);},
 	fontName:function(name){this.execCommand("fontName", false, name);},
 	fontSize:function(size)
 	{
@@ -128,16 +141,7 @@ $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame,
 			justify = $.ibi.ibxRichEdit.justify[justify];
 		this.execCommand(justify)
 	},
-	foreColor:function(color){this.execCommand("foreColor", false, color);},
-	backColor:function(color){this.execCommand("backColor", false, color);},
-	indent:function(){this.execCommand("indent");},
-	outdent:function(){this.execCommand("outdent");},
-	insertList:function(ordered){this.execCommand(ordered ? "insertOrderedList" : "insertUnorderedList");},
 
-	ready:function(fnReady)
-	{
-		this._readyPromise.then(fnReady);
-	},
 	_refresh:function()
 	{
 		var options = this.options;
