@@ -22,6 +22,7 @@
 {
 	font-size:inherit; /*because material-icons defines a default font size as 24px.*/
 	position:relative;
+	text-align:center;
 }
 
 .ibx-label-icon
