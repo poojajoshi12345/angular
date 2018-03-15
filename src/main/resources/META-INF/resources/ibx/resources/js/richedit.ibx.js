@@ -52,52 +52,26 @@ $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame,
 	_onRichEditDocEvent:function(e)
 	{
 		var doc = this.contentDocument();
-		if(e.type == "focusin" && this._curSelRange)
+		if(e.type == "focusin" && ibxPlatformCheck.isIE && this._curSelRange)
 		{
 			var sel = doc.getSelection();
 			sel.removeAllRanges();
 			sel.addRange(this._curSelRange);
 		}
 		else
-		if(e.type == "focusout" && ibxPlatformCheck.isIE)
+		if(e.type == "focusout")
+			;//does nothing now
+		else
+		if(e.type == "selectionchange" && this._iFrame.is(document.activeElement))
 		{
 			var sel = doc.getSelection();
-			this._curSelRange = sel.rangeCount ? doc.getSelection().getRangeAt(0) : null;
-		}
-		else
-		if(e.type == "selectionchange")
+			this._curSelRange = sel.rangeCount ? sel.getRangeAt(0) : null;
 			this.element.dispatchEvent(e.originalEvent);
+		}
 	},
 	commandEnabled:function(cmd){return this.contentDocument().queryCommandEnabled(cmd);},
 	commandState:function(cmd){return this.contentDocument().queryCommandState(cmd);},
 	commandValue:function(cmd){return this.contentDocument().queryCommandValue(cmd);},
-	selState:function()
-	{
-		var state = {};
-		state.undo = this.commandEnabled("undo");
-		state.redo = this.commandEnabled("redo");
-		state.selectAll = this.commandEnabled("selectAll");
-		state.cut = this.commandEnabled("cut");
-		state.copy = this.commandEnabled("copy");
-		state.paste = this.commandEnabled("paste");
-		state.bold = this.commandState("bold");
-		state.italic = this.commandState("italic");
-		state.underline = this.commandState("underline");
-		state.strikethrough	= this.commandState("strikethrough");
-		state.superscript = this.commandState("superscript");
-		state.subscript = this.commandState("subscript");
-		state.fontName = this.commandValue("fontName");
-		state.fontSize = this.commandValue("fontSize") || 3;
-		state.fontSizePx = $.ibi.ibxRichEdit.fontSize[state.fontSize];
-		state.justify = "";
-		state.justify = ibx.coercePropVal(this.commandValue("justifyLeft")) ? "left" : state.justify;
-		state.justify = ibx.coercePropVal(this.commandValue("justifyCenter")) ? "center" : state.justify;
-		state.justify = ibx.coercePropVal(this.commandValue("justifyRight")) ? "right" : state.justify;
-		state.justify = ibx.coercePropVal(this.commandValue("justifyFull")) ? "full" : state.justify;
-		state.foreColor = this.commandValue("foreColor");
-		state.backColor = this.commandValue("backColor");
-		return state;
-	},
 	execCommand:function(cmd, withUI, value)
 	{
 		if(ibxPlatformCheck.isIE)
@@ -128,20 +102,40 @@ $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame,
 	insertText:function(text){this.execCommand("insertText", false, text);},
 	createLink:function(href){this.execCommand("createLink", false, href);},
 	unlink:function(href){this.execCommand("unlink", false, href);},
+	justify:function(justify){this.execCommand($.ibi.ibxRichEdit.justify[justify])},
 	fontName:function(name){this.execCommand("fontName", false, name);},
 	fontSize:function(size)
 	{
-		if(typeof(size) === "string")
+		if(isNaN(parseInt(size)))
 			size = $.ibi.ibxRichEdit.fontSize[size];
 		this.execCommand("fontSize", null, size)
 	},
-	justify:function(justify)
+	selState:function()
 	{
-		if(typeof(justify) === "string")
-			justify = $.ibi.ibxRichEdit.justify[justify];
-		this.execCommand(justify)
+		var state = {};
+		state.undo = this.commandEnabled("undo");
+		state.redo = this.commandEnabled("redo");
+		state.selectAll = this.commandEnabled("selectAll");
+		state.cut = this.commandEnabled("cut");
+		state.copy = this.commandEnabled("copy");
+		state.paste = this.commandEnabled("paste");
+		state.bold = this.commandState("bold");
+		state.italic = this.commandState("italic");
+		state.underline = this.commandState("underline");
+		state.strikethrough	= this.commandState("strikethrough");
+		state.superscript = this.commandState("superscript");
+		state.subscript = this.commandState("subscript");
+		state.fontName = this.commandValue("fontName");
+		state.fontSize = this.commandValue("fontSize") || 3;
+		state.justify = "";
+		state.justify = ibx.coercePropVal(this.commandValue("justifyLeft")) ? "left" : state.justify;
+		state.justify = ibx.coercePropVal(this.commandValue("justifyCenter")) ? "center" : state.justify;
+		state.justify = ibx.coercePropVal(this.commandValue("justifyRight")) ? "right" : state.justify;
+		state.justify = ibx.coercePropVal(this.commandValue("justifyFull")) ? "full" : state.justify;
+		state.foreColor = this.commandValue("foreColor");
+		state.backColor = this.commandValue("backColor");
+		return state;
 	},
-
 	_refresh:function()
 	{
 		var options = this.options;
@@ -151,21 +145,13 @@ $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame,
 
 $.ibi.ibxRichEdit.fontSize = 
 {
-	1:"8",
-	2:"10",
-	3:"12",
-	4:"14",
-	5:"18",
-	6:"24",
-	7:"36",
-
-	"8":1,
-	"10":2,
-	"12":3,
-	"14":4,
-	"18":5,
-	"24":6,
-	"36":7
+	"xx-small":1,
+	"x-small":2,
+	"small":3,
+	"medium":4,
+	"large":5,
+	"x-large":6,
+	"xx-large":7
 }
 $.ibi.ibxRichEdit.justify = 
 {
