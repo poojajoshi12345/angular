@@ -1,66 +1,83 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-	<title>HTML Test File</title>
-	<meta http-equiv="X-UA-Compatible" content="IE=11">
-	<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-	<meta http-equiv="Pragma" content="no-cache" />
-	<meta http-equiv="Expires" content="0" />
-	<meta name="google" value="notranslate">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<script type="text/javascript" src="../../resources/ibx.js"></script>
-	<script type="text/javascript">
-		ibx(function(e)
-		{
-			$(".btn-test").on("click", function(e)
+	<head>
+		<title>HTML Test File</title>
+		<meta http-equiv="X-UA-Compatible" content="IE=11">
+		<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+		<meta http-equiv="Pragma" content="no-cache" />
+		<meta http-equiv="Expires" content="0" />
+		<meta name="google" value="notranslate">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<script type="text/javascript" src="../../resources/ibx.js"></script>
+		<script type="text/javascript">
+			ibx(function(e)
 			{
-				var strSearch = "sed do eiusmod tempor";
-				var text = document.body.outerText;
-				var start = strSearch.search(strSearch);
-				var end = start + strSearch.length;
+				$.ibi.ibxCommand.cmds.cmdTest.on("ibx_triggered", function(e)
+				{
+				});
+			},true);
+		</script>
+		<style type="text/css">
+			html, body
+			{
+				width: 100%;
+				height: 100%;
+				margin: 0px;
+			}
 
-				var range = document.createRange();
-				range.setStart(document.body.firstChild, start);
-				range.setEnd(document.body.lastChild, end);
+			.main-box
+			{
+				width: 100%;
+				height: 100%;
+				box-sizing: border-box;
+			}
 
-				var selection = document.getSelection();
-				selection.removeAllRanges();
-				selection.addRange(range);
-			});
-		},true);
-	</script>
-	<style type="text/css">
-		html, body
-		{
-			width: 100%;
-			height: 100%;
-			margin: 0px;
-		}
+			.select
+			{
+				margin:5px;
+			}
+		</style>
+	</head>
+	<body class="ibx-root">
 
-		.main-box
-		{
-			width: 100%;
-			height: 100%;
-			box-sizing: border-box;
-		}
+		<div data-ibx-type="ibxLabel" data-ibxp-for-id="name">Label</div>
+		<div tabindex="0" data-ibx-type="ibxTextField" data-ibxp-for-id="name" style="width:200px;">Julian</div>
 
-		.test-frame
-		{
-			width: 500px;
-			height: 150px;
-			border: 1px solid black;
-			margin: 10px;
-		}
-	</style>
-</head>
-<body class="ibx-root">
-	<div class="btn-test" data-ibx-type="ibxButton">Set Range</div>
-	<p>Start Text</p>
-	<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-	<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-	<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-	<p>End Text</p>
-	<p></p>
-</body>
+		<!--
+		<div tabindex="0" id="label" data-ibx-type="ibxLabel">IBX Label</div>
+		<div tabindex="0" id="spinner" data-ibx-type="ibxSpinner"></div>
+		<div tabindex="0" id="btn" data-ibx-type="ibxButton">IBX button</div>
+		<div tabindex="0" id="btnCheck" data-ibx-type="ibxCheckBox">IBX Checkbox</div>
+		<div tabindex="0" id="btnRadio" data-ibx-type="ibxRadioButton">IBX Radiobutton</div>
+
+		<div tabindex="0" id="btnNull" role="button">test</div>
+		<div class="main-box" data-ibx-type="ibxHBox" data-ibxp-align="start" data-ibxp-justify="center">
+			<div tabindex="0" class="menu-btn-file" data-ibx-type="ibxMenuButton" data-ibxp-text="File">
+				<div class="file-menu" data-ibx-type="ibxMenu">
+					<div data-ibx-type="ibxMenuItem" data-ibxp-label-options='{"glyph":"fiber_new", "glyphClasses":"material-icons"}'>New</div>
+					<div data-ibx-type="ibxMenuItem" data-ibxp-label-options='{"glyph":"open_in_new", "glyphClasses":"material-icons"}'>Open...</div>
+					<div data-ibx-type="ibxMenuSeparator"></div>
+					<div data-ibx-type="ibxMenuItem" data-ibxp-label-options='{"glyph":"save", "glyphClasses":"material-icons"}'>Save</div>
+					<div data-ibx-type="ibxMenuItem">Save As...</div>
+					<div data-ibx-type="ibxMenuSeparator"></div>
+					<div data-ibx-type="ibxMenuItem" data-ibxp-label-options='{"glyph":"exit_to_app", "glyphClasses":"material-icons"}'>Exit</div>
+				</div>
+			</div>
+			<div tabindex="0" class="text-label" data-ibx-type="ibxLabel" data-ibxp-glyph="search" data-ibxp-glyph-classes="material-icons">Test Label</div>
+			<select tabindex="0" class="select select-native">
+				<option>Option 1</option>
+				<option>Option 2</option>
+				<option>Option 3</option>
+			</select>
+			<div tabindex="0" class="select select-ibx" data-ibx-type="ibxSelect">
+				<div class="test-select-item" data-ibx-type="ibxSelectItem" data-ibxp-selected="true">Item 1</div>
+				<div class="test-select-item" data-ibx-type="ibxSelectItem">Item 2</div>
+				<div class="test-select-item" data-ibx-type="ibxSelectItem">Item 3</div>
+			</div>	
+		<div>
+		-->
+	
+		<div data-ibx-type="ibxCommand" data-ibxp-id="cmdTest" data-ibxp-shortcut="CTRL+C"></div>
+	</body>
 </html>
 

@@ -41,7 +41,6 @@ $.widget("ibi.ibxProgressBar", $.ibi.ibxHBox,
 		aria = this._super(accessible, aria);
 		var options = this.options;
 
-		accessible ? this.progText.ibxAriaId() : this.progText.removeIbxAriaId();
 		aria.valuemin = options.minVal;
 		aria.valuemax = options.maxVal;
 		aria.valuenow = options.curVal;
@@ -55,6 +54,8 @@ $.widget("ibi.ibxProgressBar", $.ibi.ibxHBox,
 	_destroy:function()
 	{
 		this._super();
+		this.progText.ibxWidget("destroy").removeClass("ibx-progress-label");
+		this.progMarker.ibxWidget("destroy").removeClass("ibx-progress-marker");
 	},
 	inProgress:function()
 	{

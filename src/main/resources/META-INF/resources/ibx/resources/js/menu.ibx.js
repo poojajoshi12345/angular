@@ -143,7 +143,6 @@ $.widget("ibi.ibxMenuItem", $.ibi.ibxHBox,
 	_setAccessibility:function(accessible, aria)
 	{
 		aria = this._super(accessible, aria);
-		aria.labelledby = aria.labelledby || this._label.prop("id");
 
 		var subMenu = this.subMenu();
 		aria.haspopup = !!subMenu;
@@ -152,6 +151,13 @@ $.widget("ibi.ibxMenuItem", $.ibi.ibxHBox,
 		(accessible) ? this._startMarker.attr("aria-hidden", true) : this._startMarker.removeAttr("aria-hidden");
 		(accessible) ? this._endMarker.attr("aria-hidden", true) : this._endMarker.removeAttr("aria-hidden");
 		return aria;
+	},
+	_destroy:function()
+	{
+		this._startMarker.remove();
+		this._endMarker.remove();
+		this._label.remove();
+		this._super();
 	},
 	_onMenuItemKeyEvent:function(e)
 	{
@@ -356,7 +362,7 @@ $.ibi.ibxRadioMenuItem.statics =
 	ibxMenuSeparator
 	Just a utility widget for handling a menu separator...really just sets the class on the div.
 ******************************************************************************/
-$.widget("ibi.ibxMenuSeparator", $.ibi.ibxWidget,{options:{"aria":{"role":"separator"}},_widgetClass: "ibx-menu-separator",});
+$.widget("ibi.ibxMenuSeparator", $.ibi.ibxWidget,{options:{"aria":{"role":"separator", "hidden":true}},_widgetClass: "ibx-menu-separator",});
 
 /******************************************************************************
 	ibxMenuBar
@@ -412,8 +418,7 @@ $.widget("ibi.ibxMenuButton", $.ibi.ibxButtonSimple,
 		},
 		"aria":
 		{
-			"role":"menuitem",
-			"haspopup":false
+			"role":"menuitem"
 		}
 	},
 	_widgetClass: "ibx-menu-button",
@@ -422,13 +427,14 @@ $.widget("ibi.ibxMenuButton", $.ibi.ibxButtonSimple,
 		this._super();
 		this.options.position.of = this.element[0];
 		this.element.on({"click": this._onMenuButtonMouseEvent.bind(this), "keyup": this._onMenuButtonKeyEvent.bind(this)});
-		this.options.menu = this.element.children(".ibx-menu");
+		this.options.menu = this.element.children(".ibx-menu").ibxAriaId();
 	},
 	_setAccessibility:function(accessible, aria)
 	{
 		aria = this._super(accessible, aria);
 		aria.haspopup = !!this.options.menu.length;
 		aria.expanded = this.options.menuOpen;
+		aria.controls = this.options.menu.prop("id");
 		return aria;
 	},
 	_onMenuButtonMouseEvent:function(e)
@@ -551,7 +557,7 @@ $.widget("ibi.ibxHSplitMenuButton", $.ibi.ibxSplitMenuButton,{options:{},_widget
 $.widget("ibi.ibxVSplitMenuButton", $.ibi.ibxSplitMenuButton,{options:{menuOptions:{position:{my:"left top", at:"right top"}}},_widgetClass: "ibx-vsplit-menu-button"});
 
 //separator between menu buttons
-$.widget("ibi.ibxMenuButtonSeparator", $.ibi.ibxWidget,{options:{"aria":{"role":"separator"}},_widgetClass: "ibx-menu-button-separator",});
+$.widget("ibi.ibxMenuButtonSeparator", $.ibi.ibxWidget,{options:{"aria":{"role":"separator", "hidden":true}},_widgetClass: "ibx-menu-button-separator",});
 
 
 //# sourceURL=menu.ibx.js

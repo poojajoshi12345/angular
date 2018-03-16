@@ -42,6 +42,12 @@ $.widget("ibi.ibxPopup", $.ibi.ibxWidget,
 		$(window).on("resize", this._onPopupWindowResizeBound);
 		this._super();
 	},
+	_setAccessibility:function(accessible, aria)
+	{
+		aria = this._super(accessible, aria);
+		aria.hidden = this.isOpen() ? false : true;
+		return aria
+	},
 	_destroy:function()
 	{
 		this._super();
@@ -110,6 +116,7 @@ $.widget("ibi.ibxPopup", $.ibi.ibxWidget,
 			this._trigger("popup_mgr_open", null, this.element);
 
 			//we're visible so focus...auto-focusing of children now happens in ibxWidget.
+			this.setAccessibility();
 			this.element.focus();
 
 			//let people know we are fully open
@@ -140,6 +147,7 @@ $.widget("ibi.ibxPopup", $.ibi.ibxWidget,
 			this.element.addClass("pop-closing");
 			this._trigger("popup_mgr_close", null, this.element);
 			this._trigger("close", null, closeInfo);
+			this.setAccessibility();
 
 			//[IBX-87] Don't refocus if close is from a mouse event...let browser focus wherever was clicked on.
 			if(!(closeInfo instanceof MouseEvent) && this.options.refocusLastActiveOnClose && this._elPrevActive)

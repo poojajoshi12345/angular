@@ -41,7 +41,6 @@ $.widget("ibi.ibxSpinner", $.ibi.ibxTextField,
 	{
 		var options = this.options;
 		aria = this._super(accessible, aria);
-		accessible ? this._textInput.ibxAriaId() : this._textInput.removeIbxAriaId();
 		var attr = 
 		{
 			"role":"spinbutton",
@@ -68,6 +67,7 @@ $.widget("ibi.ibxSpinner", $.ibi.ibxTextField,
 	},
 	_destroy: function ()
 	{
+		this._btnBox.remove();
 		this._super();
 	},
 	_intervalId: null,

@@ -104,11 +104,21 @@ $.widget("ibi.ibxWidget", $.Widget,
 		var aria = $.extend(true, {}, this.options.aria);
 		aria.disabled = this.options.disabled;
 		aria.accessible = accessible = (accessible === undefined) ? aria.accessible : accessible;
-		accessible ? this.element.ibxAriaId().attr("role", aria.role) : this.element.removeIbxAriaId().removeAttr("role", aria.role);
 
+		//NEVER reset the role unless you have to, as it will cause the reader to completely re-read the element!
+		if(accessible &&  (this.element.attr("role") != aria.role))
+			this.element.attr("role", aria.role)
+		else
+		if(!accessible)
+			this.element.removeAttr("role")
+			
+		accessible ? this.element.ibxAriaId() : this.element.removeIbxAriaId();
+
+		//let derived adjust their attributes, and adjust labelledby
 		aria = this._setAccessibility(accessible, aria);
 		aria.labelledby = aria.label ? null : aria.labelledby; //can't have aria-label and aria-labelledby at same time...label wins.
 
+		//now set the aria- attributes.
 		for(var key in aria)
 		{
 			if(this.ARIA_PROPS_IGNORE[key])
@@ -241,10 +251,16 @@ $.widget("ibi.ibxWidget", $.Widget,
 				this.navKeyChildren().each(function(target, idx, el)
 				{
 					var navKid = $(el);
-					navKid.removeClass("ibx-nav-key-item-active ibx-ie-pseudo-focus").removeAttr("aria-activedescendant");
+					navKid.removeClass("ibx-nav-key-item-active ibx-ie-pseudo-focus");
 					if(navKid.is(target) || $.contains(navKid[0], target))
-						navKid.addClass("ibx-nav-key-item-active").toggleClass("ibx-ie-pseudo-focus", ibxPlatformCheck.isIE).attr("aria-activedescendant", true);
+					{
+						navKid.addClass("ibx-nav-key-item-active").toggleClass("ibx-ie-pseudo-focus", ibxPlatformCheck.isIE);
+						options.aria.activedescendant = navKid.prop("id");
+					}
 				}.bind(this, e.target));
+
+				//config active descendant.
+				this.setAccessibility();
 			}
 		}
 		
@@ -269,7 +285,13 @@ $.widget("ibi.ibxWidget", $.Widget,
 
 				//remove active so next focus goes to first item.
 				if(options.navKeyResetFocusOnBlur)
-					children.removeClass("ibx-nav-key-item-active").removeAttr("aria-activedescendant");
+				{
+					children.removeClass("ibx-nav-key-item-active");
+					delete options.aria.activedescendant;
+				}
+
+				//config active descendant.
+				this.setAccessibility();
 			}
 		}
 	},

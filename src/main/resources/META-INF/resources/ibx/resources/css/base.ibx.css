@@ -55,7 +55,7 @@ body
 /*any ibx root nodes will no longer be explicitly hidden*/
 .ibx-root.ibx-visible
 {
-	visibility:inherit;
+	visibility:visible;
 }
 
 input

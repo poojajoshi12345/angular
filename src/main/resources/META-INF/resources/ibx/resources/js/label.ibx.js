@@ -17,7 +17,6 @@ $.widget("ibi.ibxLabel", $.ibi.ibxFlexBox,
 		"glyphClasses":"",
 		"glyphElClass":"ibx-label-glyph",
 		"glyphElSpacerClass":"ibx-glyph-spacer",
-		"forId":"",
 
 		/*label overlays...array of objects: {"position":"xx", "glyph":"xx", "glyphClasses":"xx", "icon":"xx", "iconClasses":"xx"}*/
 		"overlays":[],
@@ -47,12 +46,7 @@ $.widget("ibi.ibxLabel", $.ibi.ibxFlexBox,
 	_setAccessibility:function(accessible, aria)
 	{
 		aria = this._super(accessible, aria);
-		(accessible) ? this._glyph.attr("aria-hidden", true) : this._glyph.removeAttr("aria-hidden");
-		(accessible) ? this._text.attr("aria-hidden", true) : this_text.removeAttr("aria-hidden");
-		(accessible) ? this._text.ibxAriaId() : this._text.removeIbxAriaId();
-		
-		var textLabel = this._text.parent().length ? this._text.prop("id") : null;
-		aria.labelledby = aria.labelledby || textLabel;
+		accessible ? this._glyph.attr("aria-hidden", true) : this._glyph.removeAttr("aria-hidden");
 		return aria;
 	},
 	_destroy:function()
@@ -89,8 +83,6 @@ $.widget("ibi.ibxLabel", $.ibi.ibxFlexBox,
 		//general options maintenance
 		this.element.removeClass("icon-left icon-top icon-right icon-bottom")
 		this.element.addClass("icon-" + options.iconPosition);
-		this.options.forId ? this._text.attr("for", this.options.forId) : this._text.removeAttr("for");
-		this.options.forId ? this._glyph.attr("for", this.options.forId) : this._glyph.removeAttr("for");
 
 		//don't bloat the DOM...just add what's needed...use prepend so that these are the first children.
 		this._glyph.detach();
