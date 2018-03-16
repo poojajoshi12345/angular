@@ -106,10 +106,10 @@ $.widget("ibi.ibxWidget", $.Widget,
 		aria.accessible = accessible = (accessible === undefined) ? aria.accessible : accessible;
 
 		//NEVER reset the role unless you have to, as it will cause the reader to completely re-read the element!
-		if(accessible &&  (this.element.attr("role") != aria.role))
+		if(accessible &&  aria.role && (this.element.attr("role") != aria.role))
 			this.element.attr("role", aria.role)
 		else
-		if(!accessible)
+		if(!accessible || !aria.role)
 			this.element.removeAttr("role")
 			
 		accessible ? this.element.ibxAriaId() : this.element.removeIbxAriaId();

@@ -17,7 +17,6 @@ $.widget("ibi.ibxTextField", $.ibi.ibxFlexBox,
 			"placeholder": "",
 			"required": false,
 			"ctrlType": "text",
-			"forId": "",
 			"fnFormat": null,
 			"textAlign": "",
 			"textOverflow": "",
@@ -56,7 +55,7 @@ $.widget("ibi.ibxTextField", $.ibi.ibxFlexBox,
 	_setAccessibility:function(accessible, aria)
 	{
 		aria = this._super(accessible, aria);
-		accessible ? this._textInput.attr("role", "textbox") : this._textInput.removeAttr("role");
+		accessible ? this._textInput.attr("role", "textbox").ibxAriaId() : this._textInput.removeAttr("role").removeIbxAriaId();
 		accessible ? this._textInput.attr("aria-labelledby", aria.labelledby) : this._textInput.removeAttr("aria-labelledby");
 		return aria;
 	},
@@ -153,11 +152,6 @@ $.widget("ibi.ibxTextField", $.ibi.ibxFlexBox,
 		this._super();
 
 		this._textInput.attr("type", this.options.ctrlType);
-		if (this.options.forId)
-			this._textInput.attr("id", this.options.forId);
-		else
-			this._textInput.removeAttr("id");
-
 		this._textInput.val(this.options.text);
 		this._textInput.prop("readonly", this.options.readonly ? 'true' : '');
 		if (this.options.size != 0)

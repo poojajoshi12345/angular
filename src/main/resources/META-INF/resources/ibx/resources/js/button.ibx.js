@@ -110,7 +110,6 @@ $.widget("ibi.ibxCheckBox", $.ibi.ibxLabel,
 			"checked": false,
 			"hideCheck": true,
 			"group": "",
-			"forId": "",
 			"aria":
 			{
 				"role":"checkbox",
@@ -210,7 +209,6 @@ $.widget("ibi.ibxCheckBox", $.ibi.ibxLabel,
 		this._check.prop('checked', this.options.checked);
 		this.element.toggleClass("checked", this.options.checked);
 
-		(this.options.forId) ? this._check.attr("id", this.options.forId) : this._check.removeAttr("id");
 		(this.options.disabled) ? this._check.prop("disabled", true) : this._check.removeProp("disabled");
 
 		this._text.removeAttr("for");

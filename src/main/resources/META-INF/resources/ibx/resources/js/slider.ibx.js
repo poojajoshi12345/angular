@@ -46,7 +46,7 @@ $.widget("ibi.ibxSlider", $.ibi.ibxGrid,
 
 		this._sliderBody = $('<div class="ibx-slider-body">');
 		this._sliderWrapper.append(this._sliderBody);
-		this._slider = $('<div class="ibx-slider-marker ibx-slider-marker-one">');
+		this._slider = $('<div tabindex="0" class="ibx-slider-marker ibx-slider-marker-one">');
 		this._slider.hide();
 		this._sliderWrapper.append(this._slider);
 		this.element.append(this._sliderWrapper);
@@ -325,9 +325,6 @@ $.widget("ibi.ibxSlider", $.ibi.ibxGrid,
 	},
 	_refresh: function ()
 	{
-		var tabIndex = this.element.prop("tabindex");
-		this._slider.prop("tabindex", tabIndex);
-
 		this._labelMin.ibxWidget('option', 'text', this._getFormattedText("min"));
 		this._labelMax.ibxWidget('option', 'text', this._getFormattedText("max"));
 		this._labelValue.ibxWidget('option', 'text', this._getFormattedText("value"));
@@ -557,7 +554,7 @@ $.widget("ibi.ibxRange", $.ibi.ibxSlider,
 		this._super();
 		this._sliderRangeBody = $('<div class="ibx-slider-range-body">');
 		this._sliderRangeBody.insertBefore(this._slider);
-		this._slider2 = $('<div tabindex="-1" class="ibx-slider-marker ibx-slider-marker-two">');
+		this._slider2 = $('<div tabindex="0" class="ibx-slider-marker ibx-slider-marker-two">');
 		this._slider2.hide();
 		this._sliderWrapper.append(this._slider2);
 		this._slider2.on("keydown", this._onSliderKeyDown.bind(this));
@@ -762,9 +759,6 @@ $.widget("ibi.ibxRange", $.ibi.ibxSlider,
 
 		var info = this.info();
 		var flipLayout = this.options.flipLayout;
-
-		var tabIndex = this.element.prop("tabindex");
-		this._slider2.prop("tabindex", tabIndex);
 
 		this._slider2.css('left', '').css('right', '').css('top', '').css('bottom', '');
 		this._sliderRangeBody.css('top', '').css('bottom', '').css('left', '').css('right', '').css('width', '').css('height', '');

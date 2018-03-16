@@ -16,7 +16,6 @@ $.widget("ibi.ibxTextArea", $.ibi.ibxFlexBox,
 		"spellCheck": "off",
 		"placeholder": "",
 		"required": "",
-		"forId": "",
 		"fnFormat": null,
 		"textWrap": "",
 		"textAlign": "",
@@ -144,10 +143,7 @@ $.widget("ibi.ibxTextArea", $.ibi.ibxFlexBox,
 			this._textArea.attr("maxlength", this.options.maxlength);
 		else
 			this._textArea.removeAttr("maxlength");
-		if (this.options.forId)
-			this._textArea.attr("id", this.options.forId);
-		else
-			this._textArea.removeAttr("id");
+
 		this._textArea.val(this.options.text);
 		this._textArea.prop("readonly", this.options.readonly ? 'true' : '');
 		if (this.options.maxLength)

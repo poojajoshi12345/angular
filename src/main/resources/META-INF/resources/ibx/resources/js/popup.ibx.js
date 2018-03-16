@@ -31,7 +31,9 @@ $.widget("ibi.ibxPopup", $.ibi.ibxWidget,
 			"using":null,
 			"within":null,
 		},
-		"aria":{"role":"alert"}
+		"aria":
+		{
+		}
 	},
 	_widgetClass:"ibx-popup",
 	_create:function()
