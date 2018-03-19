@@ -14,7 +14,7 @@
 
 .ibx-select input {
     margin-right:3px;
-    width: unset;
+    width: inherit;
 }
 
 .ibx-select-open-btn
@@ -78,7 +78,7 @@
 
 .ibx-select-base input {
 	margin-right:3px;
-    width: unset;
+    width: inherit;
 }
 
 .ibx-select-base > input {
