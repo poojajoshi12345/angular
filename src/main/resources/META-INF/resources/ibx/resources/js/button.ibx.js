@@ -160,7 +160,8 @@ $.widget("ibi.ibxCheckBox", $.ibi.ibxLabel,
 	{
 		if (typeof (value) == "undefined")
 			return this.options.checked;
-		this.option("checked", value)
+		this.option("checked", value);
+		return this;
 	},
 	_setOption: function (key, value)
 	{
@@ -395,13 +396,8 @@ $.widget("ibi.ibxButtonGroup", $.ibi.ibxFlexBox,
 			el.each(function(idx, el)
 			{
 				el = $(el);
-				//el.on("ibx_change", this._onSelectedBound)
 				el.addClass("ibx-button-group-member");
 				this._group.ibxWidget("addControl", el);
-				window.setTimeout(function (el, groupName) { 
-					if (el.data('ibxWidget'))
-						el.ibxWidget('option', 'group', groupName) 
-				}.bind(null, el, this.options.name), 1);
 			}.bind(this));
 			this.refresh();
 		}
