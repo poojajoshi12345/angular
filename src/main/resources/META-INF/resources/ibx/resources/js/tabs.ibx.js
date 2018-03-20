@@ -198,7 +198,7 @@ $.widget("ibi.ibxTabPane", $.ibi.ibxFlexBox,
 					return null;
 			}
 			else
-				return this._group.ibxWidget('selected', element);
+				return this._group.ibxWidget('selected', element.ibxWidget('button'));
 
 		}
 		else
