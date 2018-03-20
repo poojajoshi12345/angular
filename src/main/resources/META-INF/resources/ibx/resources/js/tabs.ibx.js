@@ -45,7 +45,8 @@ $.widget("ibi.ibxTabPane", $.ibi.ibxFlexBox,
 		this._super();
 		this._createTabBar();
 		this.add(this.element.children(".ibx-tab-page"));
-		this._group.ibxWidget("userValue", this.options.userValue);
+		if (this.options.userValue)
+			this._group.ibxWidget("userValue", this.options.userValue);
 	},
 	children:function(selector)
 	{
@@ -284,7 +285,8 @@ $.widget("ibi.ibxTabPage", $.ibi.ibxWidget,
 		this._super();
 		this.options.tabOptions.checked = this.options.selected;
 		this._tabButton.ibxTabButton(this.options.tabOptions);
-		this._tabButton.ibxTabButton("userValue", this.options.userValue);
+		if (this.options.userValue)
+			this._tabButton.ibxTabButton("userValue", this.options.userValue);
 	}
 });
 $.ibi.ibxTabPage.statics = 
