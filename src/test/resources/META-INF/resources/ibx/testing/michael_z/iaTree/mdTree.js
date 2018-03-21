@@ -31,25 +31,19 @@ $.widget("ibi.mdTree", $.ibi.ibxWidget,
 	level:"",
 	_buildTreeFromJson: function (parent, obj)
 	{
-		var isFolder = obj.branch != undefined;
+		var isFolder = obj.branch != undefined || obj.leaf != undefined;
 		var typeAttr = obj.nodeType;
 		var type = typeAttr ? typeAttr.toLowerCase() : "folder"; 
 		var title = obj.title || obj.label;
 		var node = $("<div>").mdTreeNode({"text" : title, "isFolder": isFolder, "fieldType": type});
-		parent.ibxWidget("add", node);  
-		var numberOfLeaves = obj.leaf ? obj.leaf.length : 0;  
+		parent.ibxWidget("add", node);
+		
+		var children = obj.leaf ? (obj.branch ? obj.leaf.concat(obj.branch) : obj.leaf) : obj.branch;
+		var numberOfLeaves = children ? children.length : 0;  
 		for (var i=0;i<numberOfLeaves;++i)
 		{
-			this._buildTreeFromJson(node, obj.leaf[i]);
+			this._buildTreeFromJson(node, children[i]);
 		}
-		
-		var numberOfBranches = obj.branch ? obj.branch.length : 0;
-		for (var i=0;i<numberOfBranches;++i)
-		{
-			this._buildTreeFromJson(node, obj.branch[i]);
-		}
-		
-				
 		return node;
 	},
 	_buildTreeFromDom: function(parent, xmlNode)
