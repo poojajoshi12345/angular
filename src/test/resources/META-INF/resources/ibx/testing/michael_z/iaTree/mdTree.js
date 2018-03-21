@@ -8,31 +8,65 @@ $.widget("ibi.mdTree", $.ibi.ibxWidget,
 	{
 		this._super();
 	},
-	load: function(xmlObj)
+	load: function(obj)
 	{
-		var root = $(xmlObj).find("Master_DimensionTree");
-		var node = this._buildTree(this.element, root);	
+		if (obj instanceof Document)
+		{
+			var root = $(obj).find("[dataSourceId]");
+			this._buildTreeFromDom(this.element, root);
+		}
+		else //json
+		{
+			for (var key in obj) 
+			{
+				if (obj.hasOwnProperty(key))
+				{
+					var root = obj[key];
+					this._buildTreeFromJson(this.element, root);
+					break;
+				}
+			}						
+		}
 	},
 	level:"",
-	_buildTree: function(parent, xmlNode)
+	_buildTreeFromJson: function (parent, obj)
+	{
+		var isFolder = obj.branch != undefined;
+		var typeAttr = obj.nodeType;
+		var type = typeAttr ? typeAttr.toLowerCase() : "folder"; 
+		var title = obj.title || obj.label;
+		var node = $("<div>").mdTreeNode({"text" : title, "isFolder": isFolder, "fieldType": type});
+		parent.ibxWidget("add", node);  
+		var numberOfLeaves = obj.leaf ? obj.leaf.length : 0;  
+		for (var i=0;i<numberOfLeaves;++i)
+		{
+			this._buildTreeFromJson(node, obj.leaf[i]);
+		}
+		
+		var numberOfBranches = obj.branch ? obj.branch.length : 0;
+		for (var i=0;i<numberOfBranches;++i)
+		{
+			this._buildTreeFromJson(node, obj.branch[i]);
+		}
+		
+				
+		return node;
+	},
+	_buildTreeFromDom: function(parent, xmlNode)
 	{
 		var xmlNode = $(xmlNode);
 		var isFolder = xmlNode.children().length > 0;
-		var type;
-		if (isFolder)
-			type = "folder";
-		else if (xmlNode.attr("isMeasure") == "true")
-			type = "measure";
-		else
-			type = "dimension";
-		var node = $("<div>").mdTreeNode({"text" : xmlNode.attr("label"), "isFolder": isFolder, "fieldType": type});
+		var typeAttr = xmlNode.attr("nodeType");
+		var type = typeAttr ? typeAttr.toLowerCase() : "folder";
+		var title = xmlNode.attr("title") || xmlNode.attr("label"); 
+		var node = $("<div>").mdTreeNode({"text" : title, "isFolder": isFolder, "fieldType": type});
 		parent.ibxWidget("add", node);
 		xmlNode.children().each(function(node,i, el) {
-			this._buildTree(node, el);
+			this._buildTreeFromDom(node, el);
 		}.bind(this, node));
 
 		return node;
-	}
+	},
 });
 
 $.widget("ibi.genericTreeNode", $.ibi.ibxVBox,
@@ -152,7 +186,11 @@ $.ibi.mdTreeNode.statics = {
 		{
 			"measure": "ibx-glyph-measure",
 			"dimension": "ibx-glyph-dimension",
-			"folder": "ibx-glyph-folder"
+			"folder": "ibx-glyph-folder-o",
+			"hierarchy": "ibx-glyph-hierarchy",
+			"date": "ibx-glyph-date",
+			"georole": "ibx-glyph-geo",
+			"filter": "ibx-glyph-filter"
 		}
 
 };

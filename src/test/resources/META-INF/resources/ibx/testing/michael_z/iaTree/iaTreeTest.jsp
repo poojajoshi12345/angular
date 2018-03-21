@@ -22,23 +22,41 @@
 			
 			ibx(function()
 			{
-					var xmlhttp = new XMLHttpRequest();
-				  	xmlhttp.onreadystatechange = function() {
-				    	if (this.readyState == 4 && this.status == 200) {
-				    		  myFunction(this);
-				  		}
-				  	};
-				  	xmlhttp.open("GET", "car.xml" , true);
-				  	xmlhttp.send();
+					function loadTree(file, asJson)
+					{
+						var xmlhttp = new XMLHttpRequest();
+					  	xmlhttp.onreadystatechange = function() {
+					    	if (this.readyState == 4 && this.status == 200) {
+					    		  if (asJson)
+					    		  	loadJSONTree(this);
+					    		  else
+					    		  	loadXMLTree(this);
+					  		}
+					  	};
+					  	xmlhttp.open("GET", file , true);
+					  	xmlhttp.send();					  	
+				  	}
 				  	
-				  	function myFunction(xmlObject)
+				  	function loadXMLTree(ajaxObject)
 				  	{
 				  		var parser = new DOMParser();
-						var xmlDoc = parser.parseFromString(xmlObject.response,"text/xml");
-				  		var str = new XMLSerializer().serializeToString(xmlDoc);
-				  		console.log(str);
+						var xmlDoc = parser.parseFromString(ajaxObject.response,"text/xml");
+				  		//var str = new XMLSerializer().serializeToString(xmlDoc);
+				  		//console.log(str);
 				  		$(".metadata-tree").ibxWidget("load", xmlDoc);
 				  	}
+				  	
+				  	function loadJSONTree(ajaxObject)
+				  	{
+				  		var metadata = JSON.parse(ajaxObject.response);
+				  		//console.log(metadata);
+				  		$(".metadata-tree").ibxWidget("load", metadata);
+				  	}				  	
+				  	
+				  	//loadTree("retail_lite.xml");
+				  	loadTree("retail_lite.json", true);
+				  	
+				  	
 
 			}, ["/ibi_apps/ibx/testing/michael_z/iaTree/mdTree-res.xml"], true);
 		</script>
