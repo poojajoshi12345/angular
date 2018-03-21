@@ -233,16 +233,9 @@ ibx.getAppParms = function(){return ibx._appParms;};
 //attach ibxWidgets to dom elements
 ibx.bindElements = function(elements)
 {
-	//get elements that represent placeholders for resource bundle markup.  Then substitue the placeholder markup
-	//with the resource markup.
-	var elEmbed = $("[data-ibx-resource]");
-	elEmbed.each(function(idx, el)
-	{
-		el = $(el);
-		var resId = el.attr("data-ibx-resource");
-		var res = ibx.resourceMgr.getResource(resId, false, true);
-		el.replaceWith(res);
-	}.bind(this));
+	//get elements that represent placeholders for resource bundle markup, and process them.
+	var elPlaceholders = elements ? $(elements).find("[data-ibx-resource]") : $("[data-ibx-resource]");
+	ibx.resourceMgr.processPlaceholders(elPlaceholders);
 	
 	//get elements to bind
 	var elBind = elements ? $(elements) : $("[data-ibx-type]");

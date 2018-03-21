@@ -345,6 +345,9 @@ _p.getResource = function(selector, ibxBind, forceCreate)
 		throw(sformat("ibx.resourceMgr failed to load resource: {1}", selector));
 	markup = $(markup);
 
+	//replace the data-ibx-resource placeholders with the actual resources.
+	this.processPlaceholders(markup.find("[data-ibx-resource]"));
+
 	//will autobind if element is an ibx type thing, and user didn't explicitly say NO!
 	ibxBind = ((markup.is("[data-ibx-type]") || markup.find("[data-ibx-type]").length) && (typeof(ibxBind) === "undefined")) ? true : ibxBind;
 	if(ibxBind)
@@ -355,6 +358,18 @@ _p.getResource = function(selector, ibxBind, forceCreate)
 		bindingDiv.detach();
 	}
 	return markup;
+};
+
+_p.processPlaceholders = function(resource)
+{
+	resource.each(function(idx, el)
+	{
+		el = $(el);
+		var resId = el.attr("data-ibx-resource");
+		var res = ibx.resourceMgr.getResource(resId, false, true).addClass(el.prop("className"));
+		el.replaceWith(res);
+	}.bind(this));
+	return resource;
 };
 
 _p.preProcessResource = function(resource, language)
@@ -389,5 +404,4 @@ _p.preProcessResource = function(resource, language)
 
 	return resource;
 };
-
 //# sourceURL=resources.ibx.js
