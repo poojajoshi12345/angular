@@ -309,6 +309,12 @@ $.widget("ibi.ibxTabButton", $.ibi.ibxRadioButton,
 		this.element.attr('tabindex', -1);
 		this._super();
 	},
+	checked:function(value)
+	{
+		this._super(value);
+		var tabPage = this.options.tabPage || $();
+		tabPage.data("ibxWidget")._trigger(value ? "pagevisible" : "pagehidden");
+	},
 	_refresh: function ()
 	{
 		this._super();
