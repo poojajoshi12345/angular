@@ -116,6 +116,7 @@ $.widget("ibi.ibxTextField", $.ibi.ibxFlexBox,
 			this._focusVal = newVal;
 			this._setValue(newVal, true);
 			this._trigger("action", e, {"text": this.options.text});
+			this.doCommandAction("trigger");
 			e.preventDefault();
 		}
 		else
