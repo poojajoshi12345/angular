@@ -464,8 +464,8 @@ $.widget("ibi.ibxWidget", $.Widget,
 		var bRefresh = (typeof(key) == "object") || (value !== undefined && (options[key] != value));
 
 		//[IBX-102] will extend current object with new object's fields.  Replace will clober the object and replace it entirely.
-		if(!replace && !(value instanceof Array) && typeof(value) == "object" && typeof(options[key]) == "object")
-			value = $.extend({}, options[key], value);
+		//if(!replace && !(value instanceof Array) && typeof(value) == "object" && typeof(options[key]) == "object")
+		//	value = $.extend({}, options[key], value);
 
 		var ret = this._superApply(arguments);
 		if(bRefresh)
