@@ -12,14 +12,7 @@
 		<script type="text/javascript">
 			ibx(function(e)
 			{
-				$.ibi.ibxCommand.cmds.cmdTest.on("ibx_triggered", function(e)
-				{
-				});
-
-				var arOverlays = [{'position':'br', 'glyph':'accessible', 'glyphClasses':'material-icons'}];
-				$(".test-label").ibxWidget("option", "overlays", arOverlays);
-
-			},true);
+			}, true);
 		</script>
 		<style type="text/css">
 			html, body
@@ -47,42 +40,10 @@
 		</style>
 	</head>
 	<body class="ibx-root">
-		<div class="test-label" data-ibx-type="ibxLabel" data-ibxp-glyph="face" data-ibxp-glyph-classes="material-icons">Julian</div>
-		<!--
-		<div tabindex="0" id="label" data-ibx-type="ibxLabel">IBX Label</div>
-		<div tabindex="0" id="spinner" data-ibx-type="ibxSpinner"></div>
-		<div tabindex="0" id="btn" data-ibx-type="ibxButton">IBX button</div>
-		<div tabindex="0" id="btnCheck" data-ibx-type="ibxCheckBox">IBX Checkbox</div>
-		<div tabindex="0" id="btnRadio" data-ibx-type="ibxRadioButton">IBX Radiobutton</div>
-
-		<div tabindex="0" id="btnNull" role="button">test</div>
-		<div class="main-box" data-ibx-type="ibxHBox" data-ibxp-align="start" data-ibxp-justify="center">
-			<div tabindex="0" class="menu-btn-file" data-ibx-type="ibxMenuButton" data-ibxp-text="File">
-				<div class="file-menu" data-ibx-type="ibxMenu">
-					<div data-ibx-type="ibxMenuItem" data-ibxp-label-options='{"glyph":"fiber_new", "glyphClasses":"material-icons"}'>New</div>
-					<div data-ibx-type="ibxMenuItem" data-ibxp-label-options='{"glyph":"open_in_new", "glyphClasses":"material-icons"}'>Open...</div>
-					<div data-ibx-type="ibxMenuSeparator"></div>
-					<div data-ibx-type="ibxMenuItem" data-ibxp-label-options='{"glyph":"save", "glyphClasses":"material-icons"}'>Save</div>
-					<div data-ibx-type="ibxMenuItem">Save As...</div>
-					<div data-ibx-type="ibxMenuSeparator"></div>
-					<div data-ibx-type="ibxMenuItem" data-ibxp-label-options='{"glyph":"exit_to_app", "glyphClasses":"material-icons"}'>Exit</div>
-				</div>
-			</div>
-			<div tabindex="0" class="text-label" data-ibx-type="ibxLabel" data-ibxp-glyph="search" data-ibxp-glyph-classes="material-icons">Test Label</div>
-			<select tabindex="0" class="select select-native">
-				<option>Option 1</option>
-				<option>Option 2</option>
-				<option>Option 3</option>
-			</select>
-			<div tabindex="0" class="select select-ibx" data-ibx-type="ibxSelect">
-				<div class="test-select-item" data-ibx-type="ibxSelectItem" data-ibxp-selected="true">Item 1</div>
-				<div class="test-select-item" data-ibx-type="ibxSelectItem">Item 2</div>
-				<div class="test-select-item" data-ibx-type="ibxSelectItem">Item 3</div>
-			</div>	
-		<div>
-		-->
-	
-		<div data-ibx-type="ibxCommand" data-ibxp-id="cmdTest" data-ibxp-shortcut="CTRL+C"></div>
+		<div class="test-label" data-ibx-type="ibxLabel" data-ibxp-glyph="face" data-ibxp-glyph-classes="material-icons" data-ibxp-native-file-drop-target="true"
+		data-ibxp-overlays="[{'position':'br', 'glyph':'accessible', 'glyphClasses':'material-icons'}]">Julian</div>
+		<div class="item-holder">
+		</div>
 	</body>
 </html>
 
