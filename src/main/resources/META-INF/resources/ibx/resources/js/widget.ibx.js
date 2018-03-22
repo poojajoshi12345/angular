@@ -620,6 +620,7 @@ $.ibi.ibxWidget.isNavKey = function(keyCode)
 			this._onDragKeyEventBound = this._onDragKeyEvent.bind(this); 
 			this.element.on("mousedown dragover drop", this._onDragMouseEventBound);
 			this.element.on("keydown", this._onDragKeyEventBound);
+			this.element.on("dragover drop", this._onNativeDragEvent.bind(this))
 			this._createOrig.apply(this, arguments);
 		},
 		_destroyOrig:$.ibi.ibxWidget.prototype._destroy,
@@ -775,39 +776,45 @@ $.ibi.ibxWidget.isNavKey = function(keyCode)
 						}
 					}
 					break;
+			}
+		},
+		_onNativeDragEvent:function(e)
+		{
+			var options = this.options;
+			if(!options.nativeFileDropTarget)
+				return;
 
-				/*file drop target native drag/drop event handling*/
-				case "dragover":
-					if(options.nativeFileDropTarget)
-						e.preventDefault();
-					break;
-				case "drop":
-					var dt = e.originalEvent.dataTransfer;
-					if(options.nativeFileDropTarget && dt.files.length)
+			var eType = e.type;
+			if(eType == "dragover")
+				e.preventDefault();
+			else
+			if(eType == "drop")
+			{
+				var dt = e.originalEvent.dataTransfer;
+				if(dt.files.length)
+				{
+					var formData = new FormData();
+					$.each(dt.files, function(idx, file)
 					{
-						var formData = new FormData();
-						$.each(dt.files, function(idx, file)
-						{
-							formData.append(file.name, file);
-						});
-						var ajaxOptions = $.extend(true,
-						{
-							"method":"POST",
-							"contentType":false,
-							"processData":false,
-							"data":formData,
-							"url":"",
-							"dataTransfer":dt
-						}, options.fileUploadAjaxOptions);
+						formData.append(file.name, file);
+					});
+					var ajaxOptions = $.extend(true,
+					{
+						"method":"POST",
+						"contentType":false,
+						"processData":false,
+						"data":formData,
+						"url":"",
+						"dataTransfer":dt
+					}, options.fileUploadAjaxOptions);
 
-						if(this._dispatchDragEvent(e.originalEvent, "ibx_beforefilesupload", this.element, ajaxOptions).isDefaultPrevented())
-							return;
+					if(this._dispatchDragEvent(e.originalEvent, "ibx_beforefilesupload", this.element, ajaxOptions).isDefaultPrevented())
+						return;
 
-						var deferred = $.ajax(ajaxOptions);
-						this._dispatchDragEvent(e.originalEvent, "ibx_filesuploading", this.element, deferred);
-					}
-					e.preventDefault();
-					break;
+					var deferred = $.ajax(ajaxOptions);
+					this._dispatchDragEvent(e.originalEvent, "ibx_filesuploading", this.element, deferred);
+				}
+				e.preventDefault();
 			}
 		},
 		_refreshOrig:$.ibi.ibxWidget.prototype._refresh,
