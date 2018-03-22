@@ -100,18 +100,7 @@ $.widget("ibi.genericTreeNode", $.ibi.ibxVBox,
 		this._wrapper.on("dblclick", this._onDoubleClick.bind(this));
 		this._wrapper.on("click", this._onClick.bind(this));
 		
-		this.element.on("ibx_dragstart", function(e)
-		{
-			var target = $(e.currentTarget);
-			var dt = e.dataTransfer;
-			if(e.type == "ibx_dragstart")
-			{
-				console.log(this.options.text);
-				dt.setData("dragItem", this._data);
-				dt.setDragImage(null, "center", "center");
-			}			
-			e.stopPropagation();
-		}.bind(this));				
+		this.element.on("ibx_dragstart", this.onDragEvent.bind(this)); 
 	},
 	_init: function ()
 	{
@@ -156,6 +145,18 @@ $.widget("ibi.genericTreeNode", $.ibi.ibxVBox,
 		if (!add)
 			$(".node-selected").removeClass("node-selected");		
 		this._wrapper.addClass("node-selected");
+	},
+	onDragEvent: function(e) 
+	{
+		if (!this.options.draggable)
+			return;
+		var target = $(e.currentTarget);
+		var dt = e.dataTransfer;
+		if(e.type == "ibx_dragstart")
+		{
+			console.log(this.options.text);
+			dt.setData("dragItem", this._data);
+		}
 	},
 	refresh: function()
 	{
