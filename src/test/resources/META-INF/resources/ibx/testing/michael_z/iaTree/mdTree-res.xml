@@ -6,6 +6,7 @@
 	</styles>
 	<scripts>
 		<script-file src="mdTree.js" />
+		<script-file src="idMdTree.js" />
 		<script-file src="../../../../ibxtools/dm/dmlink.js" />
 	</scripts>
 </ibx-res-bundle>

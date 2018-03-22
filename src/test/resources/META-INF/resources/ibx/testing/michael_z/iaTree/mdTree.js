@@ -12,11 +12,13 @@ $.widget("ibi.mdTree", $.ibi.ibxWidget,
 	{
 		if (obj instanceof Document)
 		{
+			this._isFromXMLSource = true;
 			var root = $(obj).find("[dataSourceId]");
 			this._buildTreeFromDom(this.element, root);
 		}
 		else //json
 		{
+			this._isFromXMLSource = false;
 			for (var key in obj) 
 			{
 				if (obj.hasOwnProperty(key))
@@ -36,6 +38,8 @@ $.widget("ibi.mdTree", $.ibi.ibxWidget,
 		var type = typeAttr ? typeAttr.toLowerCase() : "folder"; 
 		var title = obj.title || obj.label;
 		var node = $("<div>").mdTreeNode({"text" : title, "isFolder": isFolder, "fieldType": type});
+		node.ibxWidget("setData", {"qualifiedName": obj.qualifiedName});
+		node.ibxWidget("option", "draggable", this.allowDraggable(obj));
 		parent.ibxWidget("add", node);
 		
 		var children = obj.leaf ? (obj.branch ? obj.leaf.concat(obj.branch) : obj.leaf) : obj.branch;
@@ -54,6 +58,8 @@ $.widget("ibi.mdTree", $.ibi.ibxWidget,
 		var type = typeAttr ? typeAttr.toLowerCase() : "folder";
 		var title = xmlNode.attr("title") || xmlNode.attr("label"); 
 		var node = $("<div>").mdTreeNode({"text" : title, "isFolder": isFolder, "fieldType": type});
+		node.ibxWidget("setData", {"qualifiedName": xmlNode.attr("qualifiedName")});
+		node.ibxWidget("option", "draggable", this.allowDraggable(xmlNode));
 		parent.ibxWidget("add", node);
 		xmlNode.children().each(function(node,i, el) {
 			this._buildTreeFromDom(node, el);
@@ -61,6 +67,10 @@ $.widget("ibi.mdTree", $.ibi.ibxWidget,
 
 		return node;
 	},
+	allowDraggable: function()
+	{
+		return true;
+	}
 });
 
 $.widget("ibi.genericTreeNode", $.ibi.ibxVBox,
@@ -73,7 +83,8 @@ $.widget("ibi.genericTreeNode", $.ibi.ibxVBox,
 		"startExanded": true,
 		"text":"",
 		"glyphClasses":"",
-		"isFolder": false
+		"isFolder": false,
+		"draggable": false
 	},
 	_widgetClass: "generic-tree-node",
 	_create: function ()
@@ -88,6 +99,19 @@ $.widget("ibi.genericTreeNode", $.ibi.ibxVBox,
 		this.add(this._lineWrapper);
 		this._wrapper.on("dblclick", this._onDoubleClick.bind(this));
 		this._wrapper.on("click", this._onClick.bind(this));
+		
+		this.element.on("ibx_dragstart", function(e)
+		{
+			var target = $(e.currentTarget);
+			var dt = e.dataTransfer;
+			if(e.type == "ibx_dragstart")
+			{
+				console.log(this.options.text);
+				dt.setData("dragItem", this._data);
+				dt.setDragImage(null, "center", "center");
+			}			
+			e.stopPropagation();
+		}.bind(this));				
 	},
 	_init: function ()
 	{
@@ -122,6 +146,10 @@ $.widget("ibi.genericTreeNode", $.ibi.ibxVBox,
 	_onClick: function(e)
 	{
 		this.select();
+	},
+	setData: function(data)
+	{
+		this._data = data;
 	},
 	select: function(add)
 	{

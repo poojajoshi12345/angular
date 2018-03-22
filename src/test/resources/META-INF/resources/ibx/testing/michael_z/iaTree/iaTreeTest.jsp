@@ -56,18 +56,39 @@
 				  	//loadTree("retail_lite.xml");
 				  	loadTree("retail_lite.json", true);
 				  	
-				  	
+				  	//$(".drop-box").on("ibx_drop", function(e)
+				  	$(".drop-box").on("ibx_dragstart ibx_dragover ibx_dragleave ibx_drop", function(e)
+				  	{
+				  		console.log(e.type);
+						var target = $(e.currentTarget);
+						var dt = e.dataTransfer;
+						if(e.type == "ibx_dragover")
+						{
+							e.preventDefault();
+						}
+						else if(e.type == "ibx_drop")
+						{
+							//debugger;
+							var name = dt.getData("dragItem").qualifiedName;
+							var label = $("<div>").ibxLabel({"text": name});
+							target.append(label);
+							
+						}
+				  	});
 
 			}, ["/ibi_apps/ibx/testing/michael_z/iaTree/mdTree-res.xml"], true);
 		</script>
 
 		<style type="text/css">
-			.select, .list { margin: 10px; border: 1px solid red; padding: 10px;}
+			.drop-box { margin: 100px; border: 1px solid red; padding: 10px; width: 500px; height: 100px}
 		</style>
 	</head>
 	
 	<body class="ibx-root">
-		<div data-ibx-type="mdTree" class="metadata-tree"></div>
+		<div data-ibx-type="ibxHBox">
+			<div data-ibx-type="idMdTree" class="metadata-tree"></div>
+			<div data-ibx-type="ibxVBox" class="drop-box" data-ibxp-draggable="true"></div>
+		</div>
 	</body>
 </html>
 
