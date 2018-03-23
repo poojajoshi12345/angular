@@ -172,10 +172,15 @@ $.widget("ibi.ibxRadioGroup", $.ibi.ibxFlexBox,
 	},
 	_setSelected: function (el)
 	{
-		var el = $(el);
-		var val = this._getItemUserValue(el);
-		this.option("userValue", val);
-		this._trigger("change", null, el);
+		if (!this._bInSetSelected)
+		{
+			this._bInSetSelected = true;
+			var el = $(el);
+			var val = this._getItemUserValue(el);
+			this.option("userValue", val);
+			this._trigger("change", null, el);
+			this._bInSetSelected = false;
+		}
 	},
 	selected: function (element)
 	{
@@ -188,7 +193,6 @@ $.widget("ibi.ibxRadioGroup", $.ibi.ibxFlexBox,
 		{
 			//YOU WERE FIGURING OUT HOW TO SET THE USER VALUE TO NULL AND DESELECT ALL ITEMS.
 			element.ibxWidget("checked", true);
-			this._setSelected(element);
 			return this;
 		}
 	},
