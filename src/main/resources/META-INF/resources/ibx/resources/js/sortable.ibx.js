@@ -5,60 +5,72 @@ $.widget("ibi.ibxSortable", $.Widget,
 {
 	options:
 	{
-		"direction":"column",
+		"direction":"",
 	},
 	_widgetClass:"ibx-sortable",
 	_create:function()
 	{
 		this._super();
-		this.element.on("focusin", this._onDragEvent.bind(this));
-
+		this.element.addClass(this._widgetClass);
 		var el = this.element[0];
-		el.addEventListener("mousedown", this._onDragEvent, true);
-		el.addEventListener("mouseup", this._onDragEvent, true);
-		el.addEventListener("mousemove", this._onDragEvent, true);
+		el.addEventListener("mousedown", this._onDragEvent.bind(this), true);
+		el.addEventListener("mouseup", this._onDragEvent.bind(this), true);
+		el.addEventListener("mousemove", this._onDragEvent.bind(this), true);
 	},
 	_destroy:function()
 	{
 		this._super();
 	},
+	_dragElement:$(),
+	_placeholder:$(),
 	_onDragEvent:function(e)
 	{
 		var eType = e.type;
 		if(eType == "mousedown")
 		{
+			this._stopDrag();//kill any left over drag (you dragged out of bounds and confused the world).
+
 			this._inDrag = true;
-			this._eLast = e;
 			var de = this._dragElement = $(e.target);
-			var ph = this._placeholder = de.clone().css("visibility", "hidden");
+			var ph = this._placeholder = de.clone().addClass("ibx-sortable-placeholder").css("visibility", "hidden");
 			var width = de.width();
 			var height = de.height();
 			var pos = de.position();
-			de.css({"pointerEvents":"none", "position":"absolute", "left":pos.left, "top":pos.top, "width":width, "height":height});
+			de.css({"pointerEvents":"none", "position":"absolute", "left":pos.left, "top":pos.top, "width":width, "height":height}).addClass("ibx-sortable-dragging");
 			ph.insertAfter(de);
 		}
 		else
 		if(eType == "mouseup")
-		{
-			this._dragElement.css({"pointerEvents":"", "position":"", "width":"", "height":"", "left":"", "top":""});
-			this._placeholder.remove();
-			delete this._placeholder;
-			delete this._eLast;
-			this._inDrag = false;
-		}
+			this._stopDrag();
 		else
 		if(eType == "mousemove")
 		{
-			var eLast = this._eLast
-			if(this._inDrag && eLast)
+			if(this._inDrag && this._eLast)
 			{
+				var eLast = this._eLast
 				var dx = e.clientX - eLast.clientX;
 				var dy = e.clientY - eLast.clientY
 				var pos = this._dragElement.position();
 				this._dragElement.css({"left": pos.left + dx, "top": pos.top + dy});
-				this._eLast = e;
+
+				var target = $(e.target);
+				if(!this.element.is(target) && !this._placeholder.is(target))
+				{	
+					//working on this, and also TARGET AND DRAGE MUST BE A DIRECT CHILD!
+					this._placeholder.insertAfter(target);
+				}
 			}
+			this._eLast = e;
 		}
+	},
+	_stopDrag:function()
+	{
+		this._dragElement.css({"pointerEvents":"", "position":"", "width":"", "height":"", "left":"", "top":""}).removeClass("ibx-sortable-dragging");
+		delete this._dragElement;
+		this._placeholder.remove();
+		delete this._placeholder;
+		delete this._eLast;
+		this._inDrag = false;
 	},
 	_refresh:function()
 	{
@@ -66,6 +78,8 @@ $.widget("ibi.ibxSortable", $.Widget,
 		this._super();
 	}
 });
+$.widget("ibi.ibxHSortable", $.ibi.ibxSortable, {options:{direction:"horizontal"}}); 
+$.widget("ibi.ibxVSortable", $.ibi.ibxSortable, {options:{direction:"vertical"}}); 
 
 //# sourceURL=sortable.ibx.js
 

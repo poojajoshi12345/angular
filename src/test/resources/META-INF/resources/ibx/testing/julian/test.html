@@ -25,6 +25,8 @@
 			{
 				border:1px solid red;
 				user-select:none;
+				-moz-user-select:none;
+				-ms-user-select:none;
 			}
 			.sort-item
 			{
@@ -35,10 +37,10 @@
 		</style>
 	</head>
 	<body class="ibx-root">
-		<div class="sort-parent" data-ibx-type="ibxSortable">
-			<div class="1 sort-item" onmousedown="console.log('item mousedown');">Item</div>
-			<div class="2 sort-item">Item</div>
-			<div class="3 sort-item">Item</div>
+		<div class="sort-parent" data-ibx-type="ibxVSortable">
+			<div class="1 sort-item">Item 1</div>
+			<div class="2 sort-item">Item 2</div>
+			<div class="3 sort-item">Item 3</div>
 		</div>
 	</body>
 </html>
