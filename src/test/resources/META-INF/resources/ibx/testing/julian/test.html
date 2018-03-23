@@ -29,20 +29,26 @@
 				box-sizing: border-box;
 			}
 
-			.select
+			.outer-box
 			{
-				margin:5px;
+				width:200px;
+				height:200px;
+				border:1px solid black;
+				padding:2px;
 			}
-			.test-label
+			.inner-box
 			{
-				font-size:96px;	
+				position:relative;
+				xwidth:100%;
+				xheight:100%;
+				box-sizing:border-box;
+				border:1px solid red;
 			}
 		</style>
 	</head>
 	<body class="ibx-root">
-		<div class="test-label" data-ibx-type="ibxLabel" data-ibxp-glyph="face" data-ibxp-glyph-classes="material-icons" data-ibxp-native-file-drop-target="true"
-		data-ibxp-overlays="[{'position':'br', 'glyph':'accessible', 'glyphClasses':'material-icons'}]">Julian</div>
-		<div class="item-holder">
+		<div class="outer-box">
+			<div class="inner-box"></div>
 		</div>
 	</body>
 </html>
