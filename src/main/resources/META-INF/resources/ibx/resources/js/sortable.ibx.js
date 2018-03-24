@@ -25,13 +25,19 @@ $.widget("ibi.ibxSortable", $.Widget,
 	_placeholder:$(),
 	_onDragEvent:function(e)
 	{
+		var target = $(e.target);
+
 		var eType = e.type;
 		if(eType == "mousedown")
 		{
+			//can only sort direct children
+			if(!target.parent().is(this.element))
+				return;
+			
 			this._stopDrag();//kill any left over drag (you dragged out of bounds and confused the world).
 
 			this._inDrag = true;
-			var de = this._dragElement = $(e.target);
+			var de = this._dragElement = target;
 			var ph = this._placeholder = de.clone().addClass("ibx-sortable-placeholder").css("visibility", "hidden");
 			var width = de.width();
 			var height = de.height();
@@ -53,10 +59,9 @@ $.widget("ibi.ibxSortable", $.Widget,
 				var pos = this._dragElement.position();
 				this._dragElement.css({"left": pos.left + dx, "top": pos.top + dy});
 
-				var target = $(e.target);
 				if(!this.element.is(target) && !this._placeholder.is(target))
 				{	
-					//working on this, and also TARGET AND DRAGE MUST BE A DIRECT CHILD!
+					console.log(e.target);
 					this._placeholder.insertAfter(target);
 				}
 			}
