@@ -5,7 +5,7 @@ $.widget("ibi.ibxSortable", $.Widget,
 {
 	options:
 	{
-		"direction":"",
+		"direction":"all",
 	},
 	_widgetClass:"ibx-sortable",
 	_create:function()
