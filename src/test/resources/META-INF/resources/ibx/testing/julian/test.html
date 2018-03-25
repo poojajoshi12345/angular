@@ -12,6 +12,18 @@
 		<script type="text/javascript">
 			ibx(function(e)
 			{
+				var sortContainer = $(".sort-parent").ibxSortable();
+				for(var i = 0; i < 10; i++)
+				{
+					var options = 
+					{
+						"text": "SortItem " + i,
+						"glyph":"face",
+						"glyphClasses":"material-icons",
+					};
+					var item = $("<div class='sort-item'>").ibxLabel(options);
+					sortContainer.ibxWidget("add", item);
+				}
 			}, true);
 		</script>
 		<style type="text/css">
@@ -30,20 +42,15 @@
 			}
 			.sort-item
 			{
-				height:50px;
+				height:25px;
 				margin:2px;
+				padding:5px;
 				border:1px solid black;
 			}
 		</style>
 	</head>
 	<body class="ibx-root">
-		<div class="sort-parent" data-ibx-type="ibxVSortable">
-			<div class="1 sort-item" data-ibx-type="ibxLabel" data-ibxp-inline="false" data-ibxp-glyph="face" data-ibxp-glyph-classes="material-icons">Item</div>
-			<div class="2 sort-item" data-ibx-type="ibxLabel" data-ibxp-inline="false" data-ibxp-glyph="face" data-ibxp-glyph-classes="material-icons">Item</div>
-			<div class="3 sort-item" data-ibx-type="ibxLabel" data-ibxp-inline="false" data-ibxp-glyph="face" data-ibxp-glyph-classes="material-icons">Item</div>
-			<div class="4 sort-item" data-ibx-type="ibxLabel" data-ibxp-inline="false" data-ibxp-glyph="face" data-ibxp-glyph-classes="material-icons">Item</div>
-			<div class="5 sort-item" data-ibx-type="ibxLabel" data-ibxp-inline="false" data-ibxp-glyph="face" data-ibxp-glyph-classes="material-icons">Item</div>
-		</div>
+		<div class="sort-parent" data-ibx-type="ibxVBox" data-ibxp-align="stretch"></div>
 	</body>
 </html>
 

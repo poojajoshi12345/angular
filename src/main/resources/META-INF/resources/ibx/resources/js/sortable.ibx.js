@@ -23,6 +23,7 @@ $.widget("ibi.ibxSortable", $.Widget,
 	},
 	_dragElement:$(),
 	_placeholder:$(),
+	_inDrag: false,
 	_onDragEvent:function(e)
 	{
 		var target = $(e.target);
@@ -31,13 +32,10 @@ $.widget("ibi.ibxSortable", $.Widget,
 		if(eType == "mousedown")
 		{
 			//can only sort direct children
-			if(!target.parent().is(this.element))
-				return;
-			
 			this._stopDrag();//kill any left over drag (you dragged out of bounds and confused the world).
 
 			this._inDrag = true;
-			var de = this._dragElement = target;
+			var de = this._dragElement = $(this.element.directChild(e.target));
 			var ph = this._placeholder = de.clone().addClass("ibx-sortable-placeholder").css("visibility", "hidden");
 			var width = de.width();
 			var height = de.height();
@@ -47,7 +45,11 @@ $.widget("ibi.ibxSortable", $.Widget,
 		}
 		else
 		if(eType == "mouseup")
+		{
+			if(this._dragElement)
+				this._dragElement.insertAfter(this._placeholder);
 			this._stopDrag();
+		}
 		else
 		if(eType == "mousemove")
 		{
@@ -60,9 +62,15 @@ $.widget("ibi.ibxSortable", $.Widget,
 				this._dragElement.css({"left": pos.left + dx, "top": pos.top + dy});
 
 				if(!this.element.is(target) && !this._placeholder.is(target))
-				{	
-					console.log(e.target);
-					this._placeholder.insertAfter(target);
+				{
+					//can only sort direct children
+					var target = $(this.element.directChild(e.target));
+					var tBounds = target.bounds();
+					console.log(tBounds);
+					if(e.clientY > (tBounds.top + tBounds.height / 2))
+						this._placeholder.insertAfter(target);
+					else
+						this._placeholder.insertBefore(target);
 				}
 			}
 			this._eLast = e;

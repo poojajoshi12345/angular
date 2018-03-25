@@ -207,6 +207,24 @@ jQuery.fn.textNodes = function()
 	return $(ret);
 };
 
+jQuery.fn.bounds = function(outer)
+{
+	var bounds = this.position()
+	bounds.width = outer ? this.outerWidth() : this.width();
+	bounds.height = outer ? this.outerHeight() : this.height();
+	return bounds;
+};
+
+jQuery.fn.directChild = function(el)
+{
+	var child = $(el);
+	while(!child.parent().is(this))
+	{
+		child = child.parent();
+	}
+	return child[0];
+};
+
 //force redraw/repaint element...I'm dubious about whether this actually works...got from:
 //https://stackoverflow.com/questions/3485365/how-can-i-force-webkit-to-redraw-repaint-to-propagate-style-changes
 jQuery.fn.redraw = function()
