@@ -158,6 +158,7 @@ $Revision$:-->
 		<script-file src="./js/mutationobserver.ibx.js"/>
 		<script-file src="./js/widget.ibx.js"/>
 		<script-file src="./js/commands.ibx.js"/>
+		<script-file src="./js/autoscroll.ibx.js"/>
 		<script-file src="./js/draggable.ibx.js"/>
 		<script-file src="./js/sortable.ibx.js"/>
 		<script-file src="./js/collapsible.ibx.js"/>

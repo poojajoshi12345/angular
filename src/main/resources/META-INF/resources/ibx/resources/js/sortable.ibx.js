@@ -6,6 +6,8 @@ $.widget("ibi.ibxSortable", $.Widget,
 	options:
 	{
 		"direction":"all",
+		"scrollMargin":10,
+		"scrollStep":10,
 	},
 	_widgetClass:"ibx-sortable",
 	_create:function()
@@ -55,6 +57,19 @@ $.widget("ibi.ibxSortable", $.Widget,
 		{
 			if(this._inDrag && this._eLast)
 			{
+				var options = this.options;
+				var curScroll = this.element.scrollTop();
+				if(e.clientY <= options.scrollMargin && curScroll != 0)
+					this.element.scrollTop(curScroll - options.scrollStep);
+				if(e.clientY >= (this.element.height() - options.scrollMargin))
+					this.element.scrollTop(curScroll + options.scrollStep);
+
+				var curScroll = this.element.scrollLeft();
+				if(e.clientX <= options.scrollMargin && curScroll != 0)
+					this.element.scrollLeft(curScroll - options.scrollStep);
+				if(e.clientX >= (this.element.width() - options.scrollMargin))
+					this.element.scrollLeft(curScroll + options.scrollStep);
+
 				var eLast = this._eLast
 				var dx = e.clientX - eLast.clientX;
 				var dy = e.clientY - eLast.clientY
@@ -66,7 +81,6 @@ $.widget("ibi.ibxSortable", $.Widget,
 					//can only sort direct children
 					var target = $(this.element.directChild(e.target));
 					var tBounds = target.bounds();
-					console.log(tBounds);
 					if(e.clientY > (tBounds.top + tBounds.height / 2))
 						this._placeholder.insertAfter(target);
 					else
@@ -85,14 +99,8 @@ $.widget("ibi.ibxSortable", $.Widget,
 		delete this._eLast;
 		this._inDrag = false;
 	},
-	_refresh:function()
-	{
-		var options = this.options;
-		this._super();
-	}
 });
 $.widget("ibi.ibxHSortable", $.ibi.ibxSortable, {options:{direction:"horizontal"}}); 
 $.widget("ibi.ibxVSortable", $.ibi.ibxSortable, {options:{direction:"vertical"}}); 
-
 //# sourceURL=sortable.ibx.js
 

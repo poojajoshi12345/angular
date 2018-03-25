@@ -13,7 +13,9 @@
 			ibx(function(e)
 			{
 				var sortContainer = $(".sort-parent").ibxSortable();
-				for(var i = 0; i < 10; i++)
+				sortContainer.ibxAutoScroll();
+
+				for(var i = 0; i < 100; i++)
 				{
 					var options = 
 					{
@@ -35,6 +37,9 @@
 			}
 			.sort-parent
 			{
+				height:200px;
+				width:300px;
+				overflow:auto;
 				border:1px solid red;
 				user-select:none;
 				-moz-user-select:none;
@@ -42,6 +47,8 @@
 			}
 			.sort-item
 			{
+				flex:0 0 auto;
+				width:500px;
 				height:25px;
 				margin:2px;
 				padding:5px;
