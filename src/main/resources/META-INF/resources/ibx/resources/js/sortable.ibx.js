@@ -6,8 +6,6 @@ $.widget("ibi.ibxSortable", $.Widget,
 	options:
 	{
 		"direction":"all",
-		"scrollMargin":10,
-		"scrollStep":10,
 	},
 	_widgetClass:"ibx-sortable",
 	_create:function()
@@ -22,6 +20,7 @@ $.widget("ibi.ibxSortable", $.Widget,
 	_destroy:function()
 	{
 		this._super();
+		this.removeClass(this._widgetClass);
 	},
 	_dragElement:$(),
 	_placeholder:$(),
@@ -57,19 +56,6 @@ $.widget("ibi.ibxSortable", $.Widget,
 		{
 			if(this._inDrag && this._eLast)
 			{
-				var options = this.options;
-				var curScroll = this.element.scrollTop();
-				if(e.clientY <= options.scrollMargin && curScroll != 0)
-					this.element.scrollTop(curScroll - options.scrollStep);
-				if(e.clientY >= (this.element.height() - options.scrollMargin))
-					this.element.scrollTop(curScroll + options.scrollStep);
-
-				var curScroll = this.element.scrollLeft();
-				if(e.clientX <= options.scrollMargin && curScroll != 0)
-					this.element.scrollLeft(curScroll - options.scrollStep);
-				if(e.clientX >= (this.element.width() - options.scrollMargin))
-					this.element.scrollLeft(curScroll + options.scrollStep);
-
 				var eLast = this._eLast
 				var dx = e.clientX - eLast.clientX;
 				var dy = e.clientY - eLast.clientY

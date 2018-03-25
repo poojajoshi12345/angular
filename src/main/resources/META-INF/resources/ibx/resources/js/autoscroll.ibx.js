@@ -15,7 +15,7 @@ $.widget("ibi.ibxAutoScroll", $.Widget,
 		"stepRight":10,
 		"stepBottom":10,
 	},
-	_widgetClass:"ibx-sortable",
+	_widgetClass:"ibx-auto-scroll",
 	_timer:null,
 	_lastMouseMove:null,
 	_create:function()
@@ -23,14 +23,15 @@ $.widget("ibi.ibxAutoScroll", $.Widget,
 		this._super();
 		this.element.addClass(this._widgetClass);
 		var el = this.element[0];
-		el.addEventListener("mousemove mouseenter mouseleave", this._onDragEvent.bind(this), true);
-		this.enable();
+		el.addEventListener("mousemove mouseenter mouseleave", this._onMouseEvent.bind(this), true);
 	},
 	_destroy:function()
 	{
 		this._super();
+		this.disable();
+		this.removeClass(this._widgetClass);
 	},
-	_onDragEvent: function(e)
+	_onMouseEvent: function(e)
 	{
 		var options = this.options;
 		if(options.autoActivate)
