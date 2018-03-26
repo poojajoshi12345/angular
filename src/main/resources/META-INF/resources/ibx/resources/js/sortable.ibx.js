@@ -67,7 +67,7 @@ $.widget("ibi.ibxSortable", $.Widget,
 					//can only sort direct children
 					var target = $(this.element.directChild(e.target));
 					var tBounds = target.bounds();
-					if(e.clientY > (tBounds.top + tBounds.height / 2))
+					if(e.clientY > (tBounds.top + (tBounds.height / 2)))
 						this._placeholder.insertAfter(target);
 					else
 						this._placeholder.insertBefore(target);
