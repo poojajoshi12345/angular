@@ -188,7 +188,7 @@ $.widget("ibi.ibxRadioGroup", $.ibi.ibxFlexBox,
 		if(this.element.hasClass("ibx-widget-disabled"))
 			return this;
 		if(!element.length)
-			return $(".checked.ibx-radio-group-" + this.options.name);
+			return $(".radio-group-checked.ibx-radio-group-" + this.options.name);
 		else
 		{
 			//YOU WERE FIGURING OUT HOW TO SET THE USER VALUE TO NULL AND DESELECT ALL ITEMS.

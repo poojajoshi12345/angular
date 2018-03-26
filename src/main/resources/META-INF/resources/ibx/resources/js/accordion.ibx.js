@@ -23,6 +23,14 @@ $.widget("ibi.ibxAccordionPane", $.ibi.ibxFlexBox,
 		this._group.ibxRadioGroup({name:this._group.prop("id")}).on("ibx_change", this._onPageChange.bind(this));
 		this.add(this.element.children(".ibx-accordion-page"));
 	},
+	_init: function()
+	{
+		this._super();
+		if (this.options.userValue)
+			this._group.ibxWidget("userValue", this.options.userValue);
+		if (this.options.selected)
+			this.selected(this.options.selected);
+	},
 	children:function(selector)
 	{
 		return this._super(selector || ".ibx-accordion-page");
@@ -42,6 +50,7 @@ $.widget("ibi.ibxAccordionPane", $.ibi.ibxFlexBox,
 	},
 	remove:function(el, destroy, refresh)
 	{
+		var selIndex = this.selectedIndex();
 		var options = this.options;
 		el = this.element.children(el).not(this._group);
 		el.filter(".ibx-accordion-page").each(function(options, idx, el)
@@ -53,6 +62,18 @@ $.widget("ibi.ibxAccordionPane", $.ibi.ibxFlexBox,
 				options.selected = null;
 		}.bind(this, options));
 		this._super(el, destroy, refresh);
+
+		// If selected node was removed, select next / previous page, if available
+		var newSelIndex = this.selectedIndex();
+		if (newSelIndex < 0)
+		{
+			var pages = this.element.children(".ibx-accordion-page");
+			if (pages.length > 0 && selIndex >= 0)
+			{
+				selIndex = Math.max(0, Math.min(selIndex, pages.length -1));
+				this.selectedIndex(selIndex);
+			}
+		}
 	},
 	group:function(){return this._group;},
 	next:function()
@@ -62,6 +83,42 @@ $.widget("ibi.ibxAccordionPane", $.ibi.ibxFlexBox,
 	previous:function()
 	{
 		this._group.ibxRadioGroup("selectPrevious")
+	},
+	userValue:function(value)
+	{
+		return this._group.ibxWidget("userValue", value);
+	},
+	selectedIndex: function (index)
+	{
+		if (index === undefined)
+		{
+			var page = this._group.ibxWidget("selected");
+			if (page.length)
+				return this.element.children(".ibx-accordion-page").index(page);
+			else
+				return -1;
+		}
+		else
+		{
+			var pages = this.element.children(".ibx-accordion-page");
+			if (index >= 0 && index < pages.length)
+				this._group.ibxWidget("selected", $(pages[index]));
+			return this.element;
+		}
+	},
+	selected: function (element)
+	{
+		if (element === undefined)
+		{
+			return this._group.ibxWidget("selected");
+		}
+		else
+		{
+			element = $(element);
+			if (element.length > 0 && element.data("ibiIbxAccordionPage"))
+				this._group.ibxWidget("selected", element);
+			return this.element;
+		}
 	},
 	_onPageChange:function(e, page)
 	{
