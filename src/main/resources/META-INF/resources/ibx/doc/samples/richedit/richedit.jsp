@@ -22,11 +22,9 @@
 
 			ibx(function()
 			{
-				var cmdClear = $("<div class='cmd-clear'>").ibxCommand({id:"cmdClear", "shortcut":"CTRL+C"});
+				var cmdClear = $("<div class='cmd-clear'>").ibxCommand({id:"cmdClear", "shortcut":"ALT+C"}).appendTo("body");
 				cmdClear.on("ibx_triggered", function(e)
 				{
-					console.clear();
-					$(".tb-button").focus();
 				});
 
 				$(".rich-edit").ibxWidget("ready", function(richEdit)

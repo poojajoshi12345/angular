@@ -40,7 +40,7 @@ $.widget("ibi.ibxSortable", $.Widget,
 			{
 				this._inDrag = true;
 				var de = this._dragElement = $(this.element.directChild(e.target));
-				var ph = this._placeholder = de.clone().addClass("ibx-sortable-placeholder").css("visibility", "hidden");
+				var ph = this._placeholder = de.clone().addClass("ibx-sortable-placeholder").css({"visibility":"hidden", "pointerEvents":"none"});
 				var width = de.width();
 				var height = de.height();
 				var pos = de.position();

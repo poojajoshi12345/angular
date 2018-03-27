@@ -6,14 +6,14 @@ $.widget("ibi.ibxAutoScroll", $.Widget,
 	options:
 	{
 		"autoActivate":true,
-		"leftMargin":10,
-		"topMargin":10,
-		"rightMargin":10,
-		"bottomMargin":10,
-		"stepLeft":10,
-		"stepTop":10,
-		"stepRight":10,
-		"stepBottom":10,
+		"marginLeft":20,
+		"marginTop":20,
+		"marginRight":20,
+		"marginBottom":20,
+		"stepLeft":20,
+		"stepTop":20,
+		"stepRight":20,
+		"stepBottom":20,
 	},
 	_widgetClass:"ibx-auto-scroll",
 	_timer:null,
@@ -40,19 +40,19 @@ $.widget("ibi.ibxAutoScroll", $.Widget,
 		{
 			var eType = e.type;
 			if(eType == "mouseenter")
-				this.enable();
+				this.start();
 			else
 			if(eType == "mouseleave")
-				this.disable();
+				this.stop();
 		}
 		this._lastMouseMove = e;
 	},
-	enable:function()
+	start:function()
 	{
 		if(!this._timer)
 			this._timer = window.setInterval(this._onManageScroll.bind(this), 10);
 	},
-	disable:function()
+	stop:function()
 	{
 		window.clearInterval(this._timer);
 		this._timer = null;
@@ -61,10 +61,9 @@ $.widget("ibi.ibxAutoScroll", $.Widget,
 	{
 		if(this._lastMouseMove)
 		{
-			//console.log(this._lastMouseMove);
-
 			var options = this.options;
 			var e = this._lastMouseMove;
+			
 			var curScroll = this.element.scrollTop();
 			if(e.clientY <= options.marginTop && curScroll != 0)
 				this.element.scrollTop(curScroll - options.stepTop);
@@ -77,6 +76,16 @@ $.widget("ibi.ibxAutoScroll", $.Widget,
 			if(e.clientX >= (this.element.width() - options.marginRight))
 				this.element.scrollLeft(curScroll + options.stepRight);
 		}
+	},
+	_setOption:function(key, value)
+	{
+		this._super(key, value);
+		var options = this.options;
+		if(key == "margin")
+			options.marginLeft = options.marginTop = options.marginRight = options.marginBottom = value;
+		else
+		if(key == "step")
+			options.stepLeft = options.stepTop = options.stepRight = options.stepBottom = value;
 	}
 });
 
