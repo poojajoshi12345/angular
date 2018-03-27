@@ -65,7 +65,13 @@ function ibx()
 			for(var i = 0; i < parms.length; ++i)
 			{
 				parm = parms[i].split("=");
-				ibx._appParms[decodeURIComponent(parm[0])] = decodeURIComponent(parm[1]);
+				try {   /* We are not able to decode non UTF8 data by decodeURIComponent(). */
+						/* As you know, javascript only has decode routine for Latin-1 and UTF8. */
+						/* If value encoded is not one of them, we only have a way that set original data. */
+					ibx._appParms[decodeURIComponent(parm[0])] = decodeURIComponent(parm[1]);
+				} catch (e) {
+					ibx._appParms[parm[0]] = parm[1];
+				}
 			};
 		}
 
