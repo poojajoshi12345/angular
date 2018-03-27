@@ -107,7 +107,12 @@ $.widget("ibi.ibxPopup", $.ibi.ibxWidget,
 			var options = this.options;
 
 			//save currently active element for refocusing on close.
-			this._elPrevActive = document.activeElement;
+			//[IA-8479] IE11 (some installs) have a problem with activeElement in iframe documents.  So, the if check will basically
+			//just force the activeElement to document.body if document.activeElement is not correct.
+			if(document.activeElement instanceof HTMLElement)
+				this._elPrevActive = document.activeElement;
+			else
+				this._elPrevActive = document.body;
 
 			//move the popup to the body so it can be top level...and position it correctly.
 			this.element.data("ibxPopupParent", this.element.parent()).appendTo(document.body);
