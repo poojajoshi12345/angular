@@ -23,7 +23,7 @@
 						"glyph":"face",
 						"glyphClasses":"material-icons",
 					};
-					var item = $("<div class='sort-item'>").ibxLabel(options);
+					var item = $(sformat("<div class='sort-item item-{1}'>", i)).ibxLabel(options);
 					sortContainer.ibxWidget("add", item);
 				}
 			}, true);

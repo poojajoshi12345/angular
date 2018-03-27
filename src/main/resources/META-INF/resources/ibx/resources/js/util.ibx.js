@@ -207,18 +207,18 @@ jQuery.fn.textNodes = function()
 	return $(ret);
 };
 
-jQuery.fn.bounds = function(outer)
+jQuery.fn.bounds = function(inner)
 {
 	var bounds = this.position()
-	bounds.width = outer ? this.outerWidth() : this.width();
-	bounds.height = outer ? this.outerHeight() : this.height();
+	bounds.width = inner ? this.width() : this.outerWidth();
+	bounds.height = inner ? this.height() : this.outerHeight();
 	return bounds;
 };
 
 jQuery.fn.directChild = function(el)
 {
 	var child = $(el);
-	while(!child.parent().is(this))
+	while(child.length && !child.parent().is(this))
 	{
 		child = child.parent();
 	}

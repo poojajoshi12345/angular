@@ -35,14 +35,17 @@ $.widget("ibi.ibxSortable", $.Widget,
 			//can only sort direct children
 			this._stopDrag();//kill any left over drag (you dragged out of bounds and confused the world).
 
-			this._inDrag = true;
-			var de = this._dragElement = $(this.element.directChild(e.target));
-			var ph = this._placeholder = de.clone().addClass("ibx-sortable-placeholder").css("visibility", "hidden");
-			var width = de.width();
-			var height = de.height();
-			var pos = de.position();
-			de.css({"pointerEvents":"none", "position":"absolute", "left":pos.left, "top":pos.top, "width":width, "height":height}).addClass("ibx-sortable-dragging");
-			ph.insertAfter(de);
+			if(!target.is(this.element))
+			{
+				this._inDrag = true;
+				var de = this._dragElement = $(this.element.directChild(e.target));
+				var ph = this._placeholder = de.clone().addClass("ibx-sortable-placeholder").css("visibility", "hidden");
+				var width = de.width();
+				var height = de.height();
+				var pos = de.position();
+				de.css({"pointerEvents":"none", "position":"absolute", "left":pos.left, "top":pos.top, "width":width, "height":height}).addClass("ibx-sortable-dragging");
+				ph.insertAfter(de);
+			}
 		}
 		else
 		if(eType == "mouseup")
