@@ -185,8 +185,6 @@ $.widget("ibi.ibxRadioGroup", $.ibi.ibxFlexBox,
 	selected: function (element)
 	{
 		element = $(element);
-		if(this.element.hasClass("ibx-widget-disabled"))
-			return this;
 		if(!element.length)
 			return $(".radio-group-checked.ibx-radio-group-" + this.options.name);
 		else
