@@ -5,7 +5,8 @@ $.widget("ibi.ibxSortable", $.Widget,
 {
 	options:
 	{
-		"direction":"all",
+		"direction":"vertical",
+		"lockDragAxis":false,
 	},
 	_widgetClass:"ibx-sortable",
 	_create:function()
@@ -50,7 +51,9 @@ $.widget("ibi.ibxSortable", $.Widget,
 		else
 		if(eType == "mouseup")
 		{
-			if(this._dragElement)
+			
+			var e = this.element.dispatchEvent("ibx_sortend", {"sortElement":this._dragElement, "beforeElement":this._placeholder.prev(), "afterElement":this._placeholder.next(), "originalEvent":e}, false);
+			if(this._dragElement && !e.defaultPrevented)
 				this._dragElement.insertAfter(this._placeholder);
 			this._stopDrag();
 		}
@@ -59,18 +62,34 @@ $.widget("ibi.ibxSortable", $.Widget,
 		{
 			if(this._inDrag && this._eLast)
 			{
+				var options = this.options;
 				var eLast = this._eLast
 				var dx = e.clientX - eLast.clientX;
 				var dy = e.clientY - eLast.clientY
 				var pos = this._dragElement.position();
-				this._dragElement.css({"left": pos.left + dx, "top": pos.top + dy});
+				var vert = this.options.direction == "vertical";
+
+				//move within axis only if specified
+				if(options.lockDragAxis)
+					this._dragElement.css({"left": (!vert) ? pos.left + dx : 0, "top":  vert ? pos.top + dy : 0});
+				else
+					this._dragElement.css({"left": pos.left + dx, "top":  pos.top + dy});
 
 				if(!this.element.is(target) && !this._placeholder.is(target))
 				{
 					//can only sort direct children
 					var target = $(this.element.directChild(e.target));
 					var tBounds = target.bounds();
-					if(e.clientY > (tBounds.top + (tBounds.height / 2)))
+					var after = false;
+					
+					if(vert)
+						after = e.clientY > (tBounds.top + (tBounds.height / 2));
+					else
+						after = e.clientX > (tBounds.left + (tBounds.width / 2));
+
+					this.element.dispatchEvent("ibx_sortmove", {"sortElement":this._dragElement, "targetElement":target, "tBounds":tBounds, "after":after, "originalEvent":e}, false);
+
+					if(after)
 						this._placeholder.insertAfter(target);
 					else
 						this._placeholder.insertBefore(target);
@@ -89,7 +108,7 @@ $.widget("ibi.ibxSortable", $.Widget,
 		this._inDrag = false;
 	},
 });
+$.widget("ibi.ibxVSortable", $.ibi.ibxSortable, {}); 
 $.widget("ibi.ibxHSortable", $.ibi.ibxSortable, {options:{direction:"horizontal"}}); 
-$.widget("ibi.ibxVSortable", $.ibi.ibxSortable, {options:{direction:"vertical"}}); 
 //# sourceURL=sortable.ibx.js
 

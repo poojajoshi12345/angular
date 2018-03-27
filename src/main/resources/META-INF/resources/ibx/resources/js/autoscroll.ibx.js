@@ -23,7 +23,9 @@ $.widget("ibi.ibxAutoScroll", $.Widget,
 		this._super();
 		this.element.addClass(this._widgetClass);
 		var el = this.element[0];
-		el.addEventListener("mousemove mouseenter mouseleave", this._onMouseEvent.bind(this), true);
+		el.addEventListener("mousemove", this._onMouseEvent.bind(this), true);
+		el.addEventListener("mouseenter", this._onMouseEvent.bind(this), true);
+		el.addEventListener("mouseleave", this._onMouseEvent.bind(this), true);
 	},
 	_destroy:function()
 	{
@@ -59,7 +61,7 @@ $.widget("ibi.ibxAutoScroll", $.Widget,
 	{
 		if(this._lastMouseMove)
 		{
-			console.log(this._lastMouseMove);
+			//console.log(this._lastMouseMove);
 
 			var options = this.options;
 			var e = this._lastMouseMove;
