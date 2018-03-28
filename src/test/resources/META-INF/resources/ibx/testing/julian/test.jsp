@@ -17,20 +17,36 @@
 
 		<!--include this script...will boot ibx into the running state-->
 		<Script src="<%=request.getContextPath()%>/ibx/resources/ibx.js" type="text/javascript"></script>
-		<Script src="./ace/ace-builds-master/src/ace.js" type="text/javascript"></script>
 		<script type="text/javascript">
 			<jsp:include page="/WEB-INF/jsp/global/wf_globals.jsp" flush="false" />
 
 			ibx(function()
 			{
-				$(".show-dlg1").on("click", function(e)
+				Ibfs.load().done(function(ibfs)
 				{
-					$(".dlg1").ibxWidget("open");	
+					ibfs.login("admin", "admin");
+
+					var itemList = $(".item-list");
+					var users = ibfs.listItems("IBFS:/SSYS/USERS", 1, 0, {async:false}).result;
+					for(var i = 0; i < users.length; ++i)
+					{
+						var item = new userGroupItem(users[i]);
+						itemList.append(item.element.addClass("item-" + i));
+					}
 				});
-				$(".show-dlg2").on("click", function(e)
+
+				var template = $(".item-template");
+				function userGroupItem(ibfsItem)
 				{
-					$(".dlg2").ibxWidget("open");	
-				});
+					this._ibfsItem = ibfsItem;
+					this.element = template.clone().removeClass("item-template");
+					this.element.find(".item-desc").text(ibfsItem.getAttribute("description"));
+					this.element.find(".item-name").text(ibfsItem.getAttribute("name"));
+					var type = ibfsItem.getAttribute("type").toLowerCase();
+					this._type = type;
+					this.element.find(".item-icon").addClass((type == "user") ? "item-user" : "item-group");
+				};
+
 			}, [{src:"./test_res_bundle.xml", loadContext:"app"}], true);
 		</script>
 		<style type="text/css">
@@ -55,33 +71,63 @@
 				height:100%;
 				box-sizing:border-box;
 			}
-			.ibx-dialog .ibx-menu-button
+			.item-list
 			{
-				border:1px solid black;
-				margin:2px;
+				height:200px;
+				width:400px;
+				overflow:auto;
+				border:1px solid #ccc;
+			}
+
+			.item-template.item-user-group
+			{
+				display:none !important;
+			}
+			.item-user-group
+			{
+				font-size:14px;
+				flex:0 0 auto;
+				padding:7px;
+				border-bottom:1px solid #ccc;
+			}
+			
+			.item-icon
+			{
+				margin-right:10px;
+			}
+			.item-user::after
+			{
+				font-size:1.25em;
+				content:"\f007";
+			}
+			.item-group::after
+			{
+				content:"\f0c0";
+			}
+
+			.item-user-group .item-desc,.item-template .item-name
+			{
+				flex:0 0 auto;
+			}
+			.item-user-group .item-desc
+			{
+				margin-bottom:3px;
+				font-weight:bold;
 			}
 		</style>
 	</head>
 	<body class="ibx-root">
-		<div class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
-			<div class="show-dlg1" data-ibx-type="ibxButton">Dialog...</div>
-		</div>
-
-		<div class="dlg1" data-ibx-type="ibxDialog" data-ibxp-destroy-on-close="false">
-			<div data-ibx-type="ibxMenuButton">Show Menu
-				<div data-ibx-type="ibxMenu">
-					<div data-ibx-type="ibxMenuItem">Menu Item</div>
-				</div>
-			</div>
-			<div class="show-dlg2" data-ibx-type="ibxButton">Second Dialog...</div>
-		</div>
-
-		<div class="dlg2" data-ibx-type="ibxDialog" data-ibxp-destroy-on-close="false">
-			<div data-ibx-type="ibxMenuButton">Show Menu
-				<div data-ibx-type="ibxMenu">
-					<div data-ibx-type="ibxMenuItem">Menu Item</div>
-				</div>
-			</div>
+		<div class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="center" data-ibxp-justify="center">
+			<div class="item-list" data-ibx-type="ibxVBox" data-ibxp-align="stretch"></div>
 		</div>
 	</body>
+
+	<div class="item-template item-user-group" data-ibx-type="ibxHBox" data-ibxp-align="center">
+		<div class="fa item-icon"></div>
+		<div class="item-info" data-ibx-type="ibxVBox" data-ibx-align="stretch">
+			<div class="item-desc"></div>
+			<div class="item-name"></div>
+		</div>
+	<div>
+
 </html>

@@ -12,10 +12,12 @@
 		<script type="text/javascript">
 			ibx(function(e)
 			{
-				var sortContainer = $(".sort-parent").css("overflow", "auto").ibxVSortable();
-				sortContainer.on("ibx_sortend", function(e)
+				var sortContainer = $(".sort-parent").css("overflow", "auto").ibxVSortable({"placeholderClasses":"sort-placeholder"});
+				sortContainer.on("ibx_createplaceholder", function(e)
 				{
+					e.originalEvent.data.css({"display":"block", "border":"1px solid red"})
 				});
+
 				for(var i = 0; i < 100; i++)
 				{
 					var options = 
@@ -40,7 +42,7 @@
 			{
 				height:300px;
 				width:200px;
-				padding:10px;
+				padding:3px;
 				overflow:auto;
 				border:1px solid red;
 				user-select:none;
@@ -52,9 +54,13 @@
 				flex:0 0 auto;
 				width:500px;
 				height:25px;
-				margin:2px;
+				margin:3px;
 				padding:5px;
 				border:1px solid black;
+			}
+			.sort-placeholder
+			{
+				border:2px solid red;
 			}
 		</style>
 	</head>

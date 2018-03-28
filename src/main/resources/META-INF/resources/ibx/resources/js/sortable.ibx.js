@@ -7,6 +7,7 @@ $.widget("ibi.ibxSortable", $.Widget,
 	{
 		"direction":"vertical",
 		"lockDragAxis":false,
+		"placeholderClasses":""
 	},
 	_widgetClass:"ibx-sortable",
 	_create:function()
@@ -23,6 +24,13 @@ $.widget("ibi.ibxSortable", $.Widget,
 	{
 		this._super();
 		this.removeClass(this._widgetClass);
+	},
+	_createPlaceholder:function(dragElement)
+	{
+		var ph = dragElement.clone().addClass("ibx-sortable-placeholder " + this.options.placeholderClasses).css({"visibility":"hidden", "pointerEvents":"none"});
+		var e = this.element.dispatchEvent("ibx_createplaceholder", ph, false);
+		ph = e.data;
+		return ph;
 	},
 	_dragElement:$(),
 	_placeholder:$(),
@@ -41,7 +49,7 @@ $.widget("ibi.ibxSortable", $.Widget,
 			{
 				this._inDrag = true;
 				var de = this._dragElement = $(this.element.directChild(e.target));
-				var ph = this._placeholder = de.clone().addClass("ibx-sortable-placeholder").css({"visibility":"hidden", "pointerEvents":"none"});
+				var ph = this._placeholder = this._createPlaceholder(de);
 				var width = de.width();
 				var height = de.height();
 				var pos = de.position();
