@@ -25,15 +25,23 @@
 				Ibfs.load().done(function(ibfs)
 				{
 					ibfs.login("admin", "admin");
+				});
 
+				$.get("./test.xml").done(function(doc, status, xhr)
+				{
+					var date = new Date();
 					var itemList = $(".item-list");
-					var users = ibfs.listItems("IBFS:/SSYS/USERS", 1, 0, {async:false}).result;
+					var users = doc.documentElement.querySelectorAll("rootObject > item");
 					for(var i = 0; i < users.length; ++i)
 					{
 						var item = new userGroupItem(users[i]);
 						itemList.append(item.element.addClass("item-" + i));
 					}
+
+
+					console.log(users.length, (new Date()) - date);
 				});
+
 
 				var template = $(".item-template");
 				function userGroupItem(ibfsItem)
