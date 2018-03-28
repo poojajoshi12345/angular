@@ -12,7 +12,7 @@
 		<script type="text/javascript">
 			ibx(function(e)
 			{
-				var sortContainer = $(".sort-parent").css("overflow", "auto").ibxVSortable().ibxAutoScroll({"disabled":true});
+				var sortContainer = $(".sort-parent").css("overflow", "auto").ibxVSortable();
 				sortContainer.on("ibx_sortend", function(e)
 				{
 				});
@@ -40,6 +40,7 @@
 			{
 				height:300px;
 				width:200px;
+				padding:10px;
 				overflow:auto;
 				border:1px solid red;
 				user-select:none;

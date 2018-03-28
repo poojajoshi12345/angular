@@ -5,15 +5,16 @@ $.widget("ibi.ibxAutoScroll", $.Widget,
 {
 	options:
 	{
-		"autoActivate":true,
+		"autoActivate":false,
+		"direction":"all",
 		"marginLeft":20,
 		"marginTop":20,
 		"marginRight":20,
 		"marginBottom":20,
-		"stepLeft":20,
-		"stepTop":20,
-		"stepRight":20,
-		"stepBottom":20,
+		"stepLeft":5,
+		"stepTop":5,
+		"stepRight":5,
+		"stepBottom":5,
 	},
 	_widgetClass:"ibx-auto-scroll",
 	_timer:null,
@@ -24,8 +25,8 @@ $.widget("ibi.ibxAutoScroll", $.Widget,
 		this.element.addClass(this._widgetClass);
 		var el = this.element[0];
 		el.addEventListener("mousemove", this._onMouseEvent.bind(this), true);
-		el.addEventListener("mouseenter", this._onMouseEvent.bind(this), true);
-		el.addEventListener("mouseleave", this._onMouseEvent.bind(this), true);
+		el.addEventListener("mouseover", this._onMouseEvent.bind(this), true);
+		el.addEventListener("mouseout", this._onMouseEvent.bind(this), true);
 	},
 	_destroy:function()
 	{
@@ -39,23 +40,26 @@ $.widget("ibi.ibxAutoScroll", $.Widget,
 		if(options.autoActivate)
 		{
 			var eType = e.type;
-			if(eType == "mouseenter")
+			if(eType == "mouseover")
 				this.start();
 			else
-			if(eType == "mouseleave")
+			if(eType == "mouseout")
 				this.stop();
 		}
 		this._lastMouseMove = e;
 	},
+	_started:false,
 	start:function()
 	{
 		if(!this._timer)
 			this._timer = window.setInterval(this._onManageScroll.bind(this), 10);
+		this.options.disabled = false;
 	},
 	stop:function()
 	{
 		window.clearInterval(this._timer);
 		this._timer = null;
+		this.options.disabled = true;
 	},
 	_onManageScroll:function()
 	{
@@ -64,17 +68,23 @@ $.widget("ibi.ibxAutoScroll", $.Widget,
 			var options = this.options;
 			var e = this._lastMouseMove;
 			
-			var curScroll = this.element.scrollTop();
-			if(e.clientY <= options.marginTop && curScroll != 0)
-				this.element.scrollTop(curScroll - options.stepTop);
-			if(e.clientY >= (this.element.height() - options.marginBottom))
-				this.element.scrollTop(curScroll + options.stepBottom);
+			if(options.direction.search(/^all|^horizontal/) == 0)
+			{
+				var curScroll = this.element.scrollLeft();
+				if(e.clientX <= options.marginLeft && curScroll != 0)
+					this.element.scrollLeft(curScroll - options.stepLeft);
+				if(e.clientX >= (this.element.width() - options.marginRight))
+					this.element.scrollLeft(curScroll + options.stepRight);
+			}
 
-			var curScroll = this.element.scrollLeft();
-			if(e.clientX <= options.marginLeft && curScroll != 0)
-				this.element.scrollLeft(curScroll - options.stepLeft);
-			if(e.clientX >= (this.element.width() - options.marginRight))
-				this.element.scrollLeft(curScroll + options.stepRight);
+			if(options.direction.search(/^all|^vertical/) == 0)
+			{
+				var curScroll = this.element.scrollTop();
+				if(e.clientY <= options.marginTop && curScroll != 0)
+					this.element.scrollTop(curScroll - options.stepTop);
+				if(e.clientY >= (this.element.height() - options.marginBottom))
+					this.element.scrollTop(curScroll + options.stepBottom);
+			}
 		}
 	},
 	_setOption:function(key, value)
@@ -86,6 +96,9 @@ $.widget("ibi.ibxAutoScroll", $.Widget,
 		else
 		if(key == "step")
 			options.stepLeft = options.stepTop = options.stepRight = options.stepBottom = value;
+		else
+		if(key == "disabled" && value)
+			this.stop();
 	}
 });
 

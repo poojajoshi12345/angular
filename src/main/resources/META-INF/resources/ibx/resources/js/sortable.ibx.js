@@ -12,7 +12,8 @@ $.widget("ibi.ibxSortable", $.Widget,
 	_create:function()
 	{
 		this._super();
-		this.element.addClass(this._widgetClass);
+		var options = this.options;
+		this.element.addClass(this._widgetClass).ibxAutoScroll({"direction":options.direction});
 		var el = this.element[0];
 		el.addEventListener("mousedown", this._onDragEvent.bind(this), true);
 		el.addEventListener("mouseup", this._onDragEvent.bind(this), true);
@@ -46,6 +47,7 @@ $.widget("ibi.ibxSortable", $.Widget,
 				var pos = de.position();
 				de.css({"pointerEvents":"none", "position":"absolute", "left":pos.left, "top":pos.top, "width":width, "height":height}).addClass("ibx-sortable-dragging");
 				ph.insertAfter(de);
+				this.element.ibxAutoScroll("start");
 			}
 		}
 		else
@@ -100,6 +102,7 @@ $.widget("ibi.ibxSortable", $.Widget,
 	},
 	_stopDrag:function()
 	{
+		this.element.ibxAutoScroll("stop");
 		this._dragElement.css({"pointerEvents":"", "position":"", "width":"", "height":"", "left":"", "top":""}).removeClass("ibx-sortable-dragging");
 		delete this._dragElement;
 		this._placeholder.remove();
