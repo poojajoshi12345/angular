@@ -2,7 +2,8 @@ $.widget("ibi.mdTree", $.ibi.ibxWidget,
 {
 	options:
 	{
-		"root": "dataSourceId"
+		"root": "dataSourceId",
+		"expansionLevels": -1
 	},	
 	_widgetClass: "md-tree",
 	_create: function ()
@@ -20,7 +21,9 @@ $.widget("ibi.mdTree", $.ibi.ibxWidget,
 		{
 			this._isFromXMLSource = true;
 			var root = this._getRoot(obj);
-			this._buildTreeFromDom(this.element, root);
+			$.each(root, function(i, el) {
+				this._buildTreeFromDom(this.element, el, 1);
+			}.bind(this));			
 		}
 		else //json
 		{
@@ -56,19 +59,22 @@ $.widget("ibi.mdTree", $.ibi.ibxWidget,
 		}
 		return node;
 	},
-	_buildTreeFromDom: function(parent, xmlNode)
+	_buildTreeFromDom: function(parent, xmlNode, nLevel)
 	{
 		var xmlNode = $(xmlNode);
 		var isFolder = xmlNode.children().length > 0;
 		var typeAttr = xmlNode.attr("nodeType");
 		var type = typeAttr ? typeAttr.toLowerCase() : "folder";
-		var title = xmlNode.attr("title") || xmlNode.attr("label"); 
-		var node = $("<div>").mdTreeNode({"text" : title, "isFolder": isFolder, "fieldType": type});
+		var title = xmlNode.attr("title") || xmlNode.attr("label");
+		var startExpanded = this.options.expansionLevels == -1 ? true : nLevel <= this.options.expansionLevels; 
+		var node = $("<div>").mdTreeNode({"text" : title, "isFolder": isFolder, "fieldType": type, "startExpanded": startExpanded});
 		node.ibxWidget("setData", {"qualifiedName": xmlNode.attr("qualifiedName")});
 		node.ibxWidget("option", "draggable", this.allowDraggable(xmlNode));
 		parent.ibxWidget("add", node);
+		node.ibxWidget("refresh");
+		++nLevel;
 		xmlNode.children().each(function(node,i, el) {
-			this._buildTreeFromDom(node, el);
+			this._buildTreeFromDom(node, el, nLevel);
 		}.bind(this, node));
 
 		return node;
@@ -86,7 +92,7 @@ $.widget("ibi.genericTreeNode", $.ibi.ibxVBox,
 		"collapsedIcon": "ibx-icons ibx-glyph-plus-small",
 		"expandedIcon" :"ibx-icons ibx-glyph-minus-small",
 		"icons":"",
-		"startExanded": true,
+		"startExpanded": true,
 		"text":"",
 		"glyphClasses":"",
 		"isFolder": false,
@@ -96,7 +102,7 @@ $.widget("ibi.genericTreeNode", $.ibi.ibxVBox,
 	_create: function ()
 	{
 		this._super();
-		this._isOpen = this.options.startExanded;
+		this._isOpen = this.options.startExpanded;
 		this._lineWrapper = $("<div>").ibxHBox().addClass("line-wrapper");
 		this._wrapper = $("<div>").ibxHBox().addClass("node-wrapper");
 		this._lineWrapper.ibxWidget("add", this._wrapper);
@@ -111,7 +117,7 @@ $.widget("ibi.genericTreeNode", $.ibi.ibxVBox,
 	_init: function ()
 	{
 		this._super();
-		this._isOpen = this.options.startExanded;
+		this._isOpen = this.options.startExpanded;
 		if (this.expanderIcon)
 		{
 			this.expanderIcon.on("click", function(e) {
@@ -187,6 +193,13 @@ $.widget("ibi.genericTreeNode", $.ibi.ibxVBox,
 			else
 				this.expanderIcon.ibxWidget("option", "glyphClasses", this._isOpen ? this.options.expandedIcon : this.options.collapsedIcon);
 		}
+		
+		this.element.toggleClass("node-open", this._isOpen);			
+		if (this.element.parent(".generic-tree-node").length > 0)
+		{
+			if (!($(this.element.parent(".generic-tree-node")).hasClass("node-open")))
+				this.element.hide();
+		}		
 		
 		this.element.children(".generic-tree-node").each(function(idx, el)
 		{

@@ -4,7 +4,9 @@ $.widget("ibi.idMdTree", $.ibi.mdTree,
 	{
 		"measuresOnly" : false,
 		"dimensionsOnly": false,
-		"filtersOnly" : false
+		"filtersOnly" : false,
+		"showTopLevel" : false,
+		"expansionLevels" : 1
 	},	
 	_widgetClass: "id-md-tree",
 	_create: function ()
@@ -20,14 +22,19 @@ $.widget("ibi.idMdTree", $.ibi.mdTree,
 	},
 	_getRoot: function(obj)
 	{
+		var root;
 		if (this.options.measuresOnly)
-			return $(obj).find("[branchType='MEASURES']");
+			root = $(obj).find("[branchType='MEASURES']");
 		else if (this.options.dimensionsOnly)
-			return $(obj).find("[branchType='DIMENSIONS']");
+			root = $(obj).find("[branchType='DIMENSIONS']");
 		else if (this.options.filtersOnly)
-			return $(obj).find("[branchType='FILTERS']");
+			root = $(obj).find("[branchType='FILTERS']");
 		else
-			return this._super(obj);
+			root = this._super(obj);
+		if (!this.options.showTopLevel)
+			return root.children();
+		else
+			return root;
 	}	
 });
 

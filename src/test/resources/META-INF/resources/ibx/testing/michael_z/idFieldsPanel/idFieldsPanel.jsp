@@ -22,73 +22,44 @@
 			
 			ibx(function()
 			{
-					function loadTree(file, asJson)
+				console.log("in ibx");
+					function loadTree(file)
 					{
 						var xmlhttp = new XMLHttpRequest();
 					  	xmlhttp.onreadystatechange = function() {
 					    	if (this.readyState == 4 && this.status == 200) {
-					    		  if (asJson)
-					    		  	loadJSONTree(this);
-					    		  else
-					    		  	loadXMLTree(this);
+					    		  	loadXMLTrees(this);
 					  		}
 					  	};
 					  	xmlhttp.open("GET", file , true);
 					  	xmlhttp.send();					  	
 				  	}
 				  	
-				  	function loadXMLTree(ajaxObject)
+				  	function loadXMLTrees(ajaxObject)
 				  	{
 				  		var parser = new DOMParser();
 						var xmlDoc = parser.parseFromString(ajaxObject.response,"text/xml");
 				  		//var str = new XMLSerializer().serializeToString(xmlDoc);
 				  		//console.log(str);
-				  		$(".metadata-tree").ibxWidget("load", xmlDoc);
+				  		$(".dimension-tree").ibxWidget("load", xmlDoc);
+				  		$(".measure-tree").ibxWidget("load", xmlDoc);
 				  	}
-				  	
-				  	function loadJSONTree(ajaxObject)
-				  	{
-				  		var metadata = JSON.parse(ajaxObject.response);
-				  		//console.log(metadata);
-				  		$(".metadata-tree").ibxWidget("load", metadata);
-				  	}				  	
-				  	
-				  	loadTree("retail_lite.xml");
-				  	//loadTree("retail_lite.json", true);
-				  	
-				  	//$(".drop-box").on("ibx_drop", function(e)
-				  	$(".drop-box").on("ibx_dragstart ibx_dragover ibx_dragleave ibx_drop", function(e)
-				  	{
-				  		console.log(e.type);
-						var target = $(e.currentTarget);
-						var dt = e.dataTransfer;
-						if(e.type == "ibx_dragover")
-						{
-							e.preventDefault();
-						}
-						else if(e.type == "ibx_drop")
-						{
-							//debugger;
-							var name = dt.getData("dragItem").qualifiedName;
-							var label = $("<div>").ibxLabel({"text": name});
-							target.append(label);
-							
-						}
-				  	});
-
-			}, ["/ibi_apps/ibx/testing/michael_z/iaTree/mdTree-res.xml"], true);
+				  	var fieldsPanel = $("<div>").idFieldsPanel();
+				  	$(".main-box").append(fieldsPanel);
+				  	loadTree("retail_lite.xml");			
+			
+			}, ["/ibi_apps/ibx/testing/michael_z/idFieldsPanel/idFieldsPanelRes.xml"], true);
 		</script>
 
 		<style type="text/css">
-			.drop-box { margin: 100px; border: 1px solid red; padding: 10px; width: 500px; height: 100px}
+			.xmain-box { border: 1px solid black;}
 		</style>
 	</head>
 	
 	<body class="ibx-root">
-		<div data-ibx-type="ibxHBox">
-			<div data-ibx-type="idMdTree" data-ibxp-dimensions-only="true" class="metadata-tree"></div>
-			<div data-ibx-type="ibxVBox" class="drop-box" data-ibxp-draggable="true"></div>
+		<div data-ibx-type="ibxHBox" class='main-box'>
 		</div>
 	</body>
 </html>
 
+			
