@@ -2,18 +2,24 @@ $.widget("ibi.mdTree", $.ibi.ibxWidget,
 {
 	options:
 	{
+		"root": "dataSourceId"
 	},	
 	_widgetClass: "md-tree",
 	_create: function ()
 	{
 		this._super();
 	},
+	_getRoot: function(obj)
+	{
+		var root = $(obj).find("[dataSourceId]");
+		return root;
+	},
 	load: function(obj)
 	{
 		if (obj instanceof Document)
 		{
 			this._isFromXMLSource = true;
-			var root = $(obj).find("[dataSourceId]");
+			var root = this._getRoot(obj);
 			this._buildTreeFromDom(this.element, root);
 		}
 		else //json
