@@ -27,31 +27,57 @@
 					ibfs.login("admin", "admin");
 				});
 
-				$.get("./test.xml").done(function(doc, status, xhr)
+				$(".item-load").on("click", function(e)
 				{
-					var date = new Date();
-					var itemList = $(".item-list");
-					var users = doc.documentElement.querySelectorAll("rootObject > item");
-					for(var i = 0; i < users.length; ++i)
+					ibx.waitStart($(".item-list"));
+					$.get("./test.xml").done(function(doc, status, xhr)
 					{
-						var item = new userGroupItem(users[i]);
-						itemList.append(item.element.addClass("item-" + i));
-					}
-
-
-					console.log(users.length, (new Date()) - date);
+						var date = new Date();
+						var itemList = $(".item-list");
+						var users = doc.documentElement.querySelectorAll("rootObject > item");
+						for(var i = 0; i < users.length/1000; ++i)
+						{
+							var item = new userGroupItem(users[i]);
+							if(item.name || item.description)
+								itemList.append(item.element.addClass("item-" + i));
+						}
+						$(".item-template").remove();
+						console.log(users.length, (new Date()) - date);
+						ibx.waitStop($(".item-list"));
+					});
 				});
 
+				$(".item-search").on("ibx_action ibx_textchanged", function(e, info)
+				{
+					var searchOnKey = $(".item-search-on-key").ibxWidget("checked");
+					if(e.type == "ibx_textchanged" && !searchOnKey)
+						return;
+
+					var regx = new RegExp(info.text, "gi");
+					var items = $(".item-user-group");
+					items.each(function(text, regx, idx, el)
+					{
+						var item = el._userGroupItem;
+						if(!item)
+							return;
+						var passed = regx.test(item.description);
+						passed = passed || regx.test(item.name); 
+						el.style.display = passed ? "" : "none";
+					}.bind(this, info.text, regx));
+				});
 
 				var template = $(".item-template");
 				function userGroupItem(ibfsItem)
 				{
-					this._ibfsItem = ibfsItem;
+					this.ibfsItem = ibfsItem;
+					var name = this.name = ibfsItem.getAttribute("name");
+					var description = this.description = ibfsItem.getAttribute("description");
+					var type = this.type = ibfsItem.getAttribute("type").toLowerCase();
+
 					this.element = template.clone().removeClass("item-template");
-					this.element.find(".item-desc").text(ibfsItem.getAttribute("description"));
-					this.element.find(".item-name").text(ibfsItem.getAttribute("name"));
-					var type = ibfsItem.getAttribute("type").toLowerCase();
-					this._type = type;
+					this.element[0]._userGroupItem = this;
+					this.element.find(".item-desc").text(description);
+					this.element.find(".item-name").text(name);
 					this.element.find(".item-icon").addClass((type == "user") ? "item-user" : "item-group");
 				};
 
@@ -79,17 +105,29 @@
 				height:100%;
 				box-sizing:border-box;
 			}
+
+			.item-load
+			{
+				margin-bottom:15px;
+			}
+			.item-search-box
+			{
+				margin-bottom:15px;
+			}
+			.item-search
+			{
+				width:300px;
+				margin-right:5px;
+			}
+			.item-search-on-key
+			{
+			}
 			.item-list
 			{
 				height:200px;
 				width:400px;
 				overflow:auto;
 				border:1px solid #ccc;
-			}
-
-			.item-template.item-user-group
-			{
-				display:none !important;
 			}
 			.item-user-group
 			{
@@ -98,7 +136,6 @@
 				padding:7px;
 				border-bottom:1px solid #ccc;
 			}
-			
 			.item-icon
 			{
 				margin-right:10px;
@@ -112,7 +149,6 @@
 			{
 				content:"\f0c0";
 			}
-
 			.item-user-group .item-desc,.item-template .item-name
 			{
 				flex:0 0 auto;
@@ -126,6 +162,11 @@
 	</head>
 	<body class="ibx-root">
 		<div class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="center" data-ibxp-justify="center">
+			<div class="item-load" data-ibx-type="ibxButton">Load</div>
+			<div class="item-search-box" data-ibx-type="ibxHBox" data-ibxp-align="center">
+				<div class="item-search" data-ibx-type="ibxTextField" data-ibxp-placeholder="Search for User/Group..."></div>
+				<div class="item-search-on-key" data-ibx-type="ibxCheckBoxSimple" data-ibxp-checked="true">Every Key</div>
+			</div>
 			<div class="item-list" data-ibx-type="ibxVBox" data-ibxp-align="stretch"></div>
 		</div>
 	</body>
