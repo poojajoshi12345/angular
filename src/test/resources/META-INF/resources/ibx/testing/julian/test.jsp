@@ -35,7 +35,7 @@
 						var date = new Date();
 						var itemList = $(".item-list");
 						var users = doc.documentElement.querySelectorAll("rootObject > item");
-						for(var i = 0; i < users.length/1; ++i)
+						for(var i = 0; i < users.length/1000; ++i)
 						{
 							var item = new userGroupItem(users[i]);
 							if(item.name || item.description)
@@ -53,6 +53,7 @@
 					if(e.type == "ibx_textchanged" && !searchOnKey)
 						return;
 
+					var nItems = 0;
 					var regx = new RegExp(info.text, "gi");
 					var items = $(".item-user-group");
 					items.each(function(text, regx, idx, el)
@@ -63,7 +64,9 @@
 						var passed = regx.test(item.description);
 						passed = passed || regx.test(item.name); 
 						el.style.display = passed ? "" : "none";
+						passed ? ++nItems : null;
 					}.bind(this, info.text, regx));
+					$(".item-hits").text(sformat("Found {1} items", nItems));
 				});
 
 				var template = $(".item-template");
@@ -121,18 +124,20 @@
 			}
 			.item-search-on-key
 			{
+				margin-right:5px;
 			}
 			.item-list
 			{
 				height:200px;
 				width:400px;
-				margin-bottom:15px;
+				margin-bottom:5px;
 				overflow:auto;
 				border:1px solid #ccc;
 			}
-			.item-count
+			.item-count, .item-hits
 			{
 				color:#aaa;
+				margin-bottom:3px;
 			}
 			.item-user-group
 			{
@@ -173,13 +178,14 @@
 				<div class="item-search-on-key" data-ibx-type="ibxCheckBoxSimple" data-ibxp-checked="true">Every Key</div>
 			</div>
 			<div class="item-list" data-ibx-type="ibxVBox" data-ibxp-align="stretch"></div>
+			<div class="item-hits" data-ibx-type="ibxLabel"></div>
 			<div class="item-count" data-ibx-type="ibxLabel"></div>
 		</div>
 	</body>
 
-	<div class="item-template item-user-group" data-ibx-type="ibxHBox" data-ibxp-align="center">
+	<div class="item-template item-user-group ibx-flexbox fbx-block fbx-row fbx-align-items-center fbx-align-content-center">
 		<div class="fa item-icon"></div>
-		<div class="item-info" data-ibx-type="ibxVBox" data-ibx-align="stretch">
+		<div class="item-info ibx-flexbox fbx-block fbx-column fbx-align-items-stretch fbx-align-content-stretch">
 			<div class="item-desc"></div>
 			<div class="item-name"></div>
 		</div>
