@@ -119,7 +119,7 @@ $.widget("ibi.ibxCheckBox", $.ibi.ibxLabel,
 	_widgetClass: "ibx-check-box",
 	_create: function ()
 	{
-		this._check = $('<input type="checkbox" class="ibx-native-input"></input>');
+		this._check = $("<input type='checkbox' class='ibx-native-input'></input>");
 		this.add(this._check, this.children()[0], true);
 		this.element.on("click", this._onClick.bind(this));
 		this.element.on("keyup", this._onKeyEvent.bind(this)).addClass("ibx-can-toggle");
@@ -175,28 +175,27 @@ $.widget("ibi.ibxCheckBox", $.ibi.ibxLabel,
 			this._trigger("change");
 			this.doCommandAction("checked", value);
 		}
-		else
+		else if (key == "group")
 		{
-			this._super(key, value);
-			if (key == "group")
+			if (this.options.group)
 			{
-				if (this.options.group)
-				{
-					this.element.removeClass('ibx-radio-group-' + this.options.group);
-					var group = $(".ibx-radio-group-control-" + this.options.group);
-					if (group.length > 0)
-						group.data("ibiIbxWidget").removeControl(this.element);
-				}
+				this.element.removeClass("ibx-radio-group-" + this.options.group);
+				var group = $(".ibx-radio-group-control-" + this.options.group);
+				if (group.length > 0)
+					group.data("ibiIbxWidget").removeControl(this.element);
+			}
+			this._super(key, value);
 
-				if(value)
-				{
-					this.element.addClass('ibx-radio-group-' + value);
-					var group = $(".ibx-radio-group-control-" + value);
-					if (group.length > 0)
-						group.data("ibiIbxWidget").addControl(this.element);
-				}
+			if(value && !this.element.hasClass("ibx-radio-group-" + value))
+			{
+				this.element.addClass("ibx-radio-group-" + value);
+				var group = $(".ibx-radio-group-control-" + value);
+				if (group.length > 0)
+					group.data("ibiIbxWidget").addControl(this.element);
 			}
 		}
+		else
+			this._super(key, value);
 	},
 	_refresh: function ()
 	{
@@ -328,8 +327,8 @@ $.widget("ibi.ibxSwitch", $.ibi.ibxCheckBox,
 	_widgetClass: "ibx-switch",
 	_create: function ()
 	{
-		this._spacer = $('<div>').addClass(this.options.spacerElClass);
-		this._switch = $('<div><div class="ibx-switch-slider round"></div></div>').addClass(this.options.switchElClass);
+		this._spacer = $("<div>").addClass(this.options.spacerElClass);
+		this._switch = $("<div><div class='ibx-switch-slider round'></div></div>").addClass(this.options.switchElClass);
 		this._super();
 		this.add(this._spacer, this.children()[0], true);
 		this.add(this._switch, this.children()[0], true);
@@ -413,7 +412,7 @@ $.widget("ibi.ibxButtonGroup", $.ibi.ibxFlexBox,
 				el = $(el);
 				//el.off("ibx_change", this._onSelectedBound)
 				el.removeClass("ibx-button-group-member");
-				this._group.ibxWidget('removeControl', el);
+				this._group.ibxWidget("removeControl", el);
 			}.bind(this));
 			this.refresh();
 		}
@@ -450,17 +449,17 @@ $.widget("ibi.ibxButtonGroup", $.ibi.ibxFlexBox,
 	selectNext: function ()
 	{
 		if (this._group)
-			this._group.ibxWidget('selectNext');
+			this._group.ibxWidget("selectNext");
 	},
 	selectPrevious: function ()
 	{
 		if (this._group)
-			this._group.ibxWidget('selectPrevious');
+			this._group.ibxWidget("selectPrevious");
 	},
 	selected: function (element)
 	{
 		if (this._group)
-			return this._group.ibxWidget('selected', element);
+			return this._group.ibxWidget("selected", element);
 		else
 			return null;
 	},
@@ -471,7 +470,7 @@ $.widget("ibi.ibxButtonGroup", $.ibi.ibxFlexBox,
 	_fixFirstLast: function ()
 	{
 		var all = this.element.children(".ibx-widget:not(:displayNone)").not(this._group);
-		all.removeClass('ibx-button-group-first ibx-button-group-last');
+		all.removeClass("ibx-button-group-first ibx-button-group-last");
 		all.first().addClass("ibx-button-group-first");
 		all.last().addClass("ibx-button-group-last");
 	},

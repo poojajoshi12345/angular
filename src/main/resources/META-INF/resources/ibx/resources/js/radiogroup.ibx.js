@@ -106,12 +106,11 @@ $.widget("ibi.ibxRadioGroup", $.ibi.ibxFlexBox,
 				el.ibxWidget("option", "userValue", value).attr("data-autouservalue", value);
 			}
 
+			if (el.ibxWidget('option', 'group') != this.options.name)
+				el.ibxWidget('option', 'group', this.options.name);
 			var checked = el.ibxWidget('checked');
 			if (checked || this.options.userValue && this.options.userValue == value)
-			{
 				this._setSelected(el);
-				return true;
-			}
 		}.bind(this));
 		this.refresh();
 	},
@@ -204,16 +203,13 @@ $.widget("ibi.ibxRadioGroup", $.ibi.ibxFlexBox,
 		var changed = this.options[key] != value;
 		this._super(key, value);
 
-		if(key == "userValue" && changed)
+		if(key == "userValue")
 		{
 			$(".ibx-radio-group-" + this.options.name).removeClass('radio-group-checked').ibxWidget('checked', false).each(function (value, index, el)
 			{
 				var itemUserValue = this._getItemUserValue(el);
 				if (itemUserValue == value)
-				{
 					$(el).ibxWidget('checked', true).addClass('radio-group-checked');
-					return true;
-				}
 			}.bind(this, value));
 			this.doCommandAction("uservalue", value);
 		}
