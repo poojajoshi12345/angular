@@ -52,11 +52,18 @@
 				width:100%;
 				height:100%;
 			}
+			.label
+			{
+				margin-top:5px;
+				font-size:18px;
+				font-weight:bold;
+				color:#aaa;
+			}
 			.sort-parent-h
 			{
 				width:75%;
 				padding:3px;
-				margin:10px;
+				margin:5px;
 				overflow:auto;
 				border:1px solid #ccc;
 				box-sizing:border-box;
@@ -77,6 +84,7 @@
 			{
 				height:75%;
 				padding:3px;
+				margin:5px;
 				overflow:auto;
 				border:1px solid #ccc;
 				box-sizing:border-box;
@@ -101,7 +109,9 @@
 	</head>
 	<body class="ibx-root">
 		<div class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="center" data-ibxp-justify="center">
+			<div class="label">Horizontal</div>
 			<div class="sort-parent-h" data-ibx-type="ibxHBox" data-ibxp-align="stretch" data-ibxp-wrap="false"></div>
+			<div class="label">Vertical</div>
 			<div class="sort-parent-v" data-ibx-type="ibxVBox" data-ibxp-align="stretch" data-ibxp-wrap="false"></div>
 		</div>
 	</body>
