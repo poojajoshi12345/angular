@@ -29,6 +29,7 @@
 
 				$(".item-load").on("click", function(e)
 				{
+					$(".item-list").empty();
 					ibx.waitStart($(".item-list"));
 					$.get("./test.xml").done(function(doc, status, xhr)
 					{
@@ -43,6 +44,7 @@
 							var item = new userGroupItem(users[i]);
 							itemList.append(item.element.addClass("item-" + i));
 						}
+
 						$(".item-template").remove();
 						$(".item-count").text(sformat("Item Count: {1}, Load Time: {2}ms", $(".item-user-group").length, (new Date()) - date)); 
 						ibx.waitStop($(".item-list"));
