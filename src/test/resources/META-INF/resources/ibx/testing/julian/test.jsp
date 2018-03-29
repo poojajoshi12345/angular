@@ -35,14 +35,14 @@
 						var date = new Date();
 						var itemList = $(".item-list");
 						var users = doc.documentElement.querySelectorAll("rootObject > item");
-						for(var i = 0; i < users.length/1000; ++i)
+						for(var i = 0; i < users.length/1; ++i)
 						{
 							var item = new userGroupItem(users[i]);
 							if(item.name || item.description)
 								itemList.append(item.element.addClass("item-" + i));
 						}
 						$(".item-template").remove();
-						console.log(users.length, (new Date()) - date);
+						$(".item-count").text(sformat("Item Count: {1}, Load Time (ms): {2}", $(".item-user-group").length, (new Date()) - date)); 
 						ibx.waitStop($(".item-list"));
 					});
 				});
@@ -126,8 +126,13 @@
 			{
 				height:200px;
 				width:400px;
+				margin-bottom:15px;
 				overflow:auto;
 				border:1px solid #ccc;
+			}
+			.item-count
+			{
+				color:#aaa;
 			}
 			.item-user-group
 			{
@@ -168,6 +173,7 @@
 				<div class="item-search-on-key" data-ibx-type="ibxCheckBoxSimple" data-ibxp-checked="true">Every Key</div>
 			</div>
 			<div class="item-list" data-ibx-type="ibxVBox" data-ibxp-align="stretch"></div>
+			<div class="item-count" data-ibx-type="ibxLabel"></div>
 		</div>
 	</body>
 
