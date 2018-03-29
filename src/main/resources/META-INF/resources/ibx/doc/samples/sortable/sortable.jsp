@@ -7,7 +7,7 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-		<title>test</title>
+		<title>ibx sortable sample</title>
 		<meta http-equiv="X-UA-Compatible" content="IE=11" >
 		<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
 		<meta http-equiv="Pragma" content="no-cache" />
