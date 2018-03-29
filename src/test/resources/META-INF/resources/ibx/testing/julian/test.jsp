@@ -32,17 +32,19 @@
 					ibx.waitStart($(".item-list"));
 					$.get("./test.xml").done(function(doc, status, xhr)
 					{
+						var loadCount = parseInt($(".item-load-count").ibxWidget("value"), 10);
+						loadCount = isNaN(loadCount) ? users.length : loadCount;
+
 						var date = new Date();
 						var itemList = $(".item-list");
-						var users = doc.documentElement.querySelectorAll("rootObject > item");
-						for(var i = 0; i < users.length/1000; ++i)
+						var users = doc.documentElement.querySelectorAll("rootObject > item[name][description]");
+						for(var i = 0; i < loadCount; ++i)
 						{
 							var item = new userGroupItem(users[i]);
-							if(item.name || item.description)
-								itemList.append(item.element.addClass("item-" + i));
+							itemList.append(item.element.addClass("item-" + i));
 						}
 						$(".item-template").remove();
-						$(".item-count").text(sformat("Item Count: {1}, Load Time (ms): {2}", $(".item-user-group").length, (new Date()) - date)); 
+						$(".item-count").text(sformat("Item Count: {1}, Load Time: {2}ms", $(".item-user-group").length, (new Date()) - date)); 
 						ibx.waitStop($(".item-list"));
 					});
 				});
@@ -53,6 +55,7 @@
 					if(e.type == "ibx_textchanged" && !searchOnKey)
 						return;
 
+					var date = new Date();
 					var nItems = 0;
 					var regx = new RegExp(info.text, "gi");
 					var items = $(".item-user-group");
@@ -66,7 +69,7 @@
 						el.style.display = passed ? "" : "none";
 						passed ? ++nItems : null;
 					}.bind(this, info.text, regx));
-					$(".item-hits").text(sformat("Found {1} items", nItems));
+					$(".item-hits").text(sformat("Found {1} items in {2}ms", nItems, (new Date())-date));
 				});
 
 				var template = $(".item-template");
@@ -108,14 +111,18 @@
 				height:100%;
 				box-sizing:border-box;
 			}
+			.item-search-box, .item-load-box
+			{
+				margin-bottom:10px;
+			}
 
 			.item-load
 			{
-				margin-bottom:15px;
+				margin-right:5px;
 			}
-			.item-search-box
+			.item-load-count
 			{
-				margin-bottom:15px;
+				width:50px;
 			}
 			.item-search
 			{
@@ -172,7 +179,10 @@
 	</head>
 	<body class="ibx-root">
 		<div class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="center" data-ibxp-justify="center">
-			<div class="item-load" data-ibx-type="ibxButton">Load</div>
+			<div class="item-load-box" data-ibx-type="ibxHBox" data-ibxp-align="center">
+				<div class="item-load" data-ibx-type="ibxButton">Load</div>
+				<div class="item-load-count" data-ibx-type="ibxTextField" data-ibxp-placeholder="all"></div>
+			</div>
 			<div class="item-search-box" data-ibx-type="ibxHBox" data-ibxp-align="center">
 				<div class="item-search" data-ibx-type="ibxTextField" data-ibxp-placeholder="Search for User/Group..."></div>
 				<div class="item-search-on-key" data-ibx-type="ibxCheckBoxSimple" data-ibxp-checked="true">Every Key</div>
