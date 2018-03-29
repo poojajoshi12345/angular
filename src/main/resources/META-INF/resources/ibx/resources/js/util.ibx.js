@@ -212,6 +212,8 @@ jQuery.fn.bounds = function(inner)
 	var bounds = this.position()
 	bounds.width = inner ? this.width() : this.outerWidth();
 	bounds.height = inner ? this.height() : this.outerHeight();
+	bounds.right = bounds.left + bounds.width;
+	bounds.bottom = bounds.top + bounds.height;
 	return bounds;
 };
 
