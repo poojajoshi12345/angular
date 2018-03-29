@@ -22,7 +22,8 @@
 
 			ibx(function()
 			{
-				var sortContainer = $(".sort-parent").css("overflow", "auto").ibxVSortable({"placeholderClasses":"sort-placeholder"});
+				var sortContainerH = $(".sort-parent-h").css("overflow", "auto").ibxHSortable({"lockDragAxis":true, "placeholderClasses":"sort-placeholder"});
+				var sortContainerV = $(".sort-parent-v").css("overflow", "auto").ibxVSortable({"lockDragAxis":true, "placeholderClasses":"sort-placeholder"});
 				for(var i = 0; i < 100; i++)
 				{
 					var options = 
@@ -31,8 +32,11 @@
 						"glyph":"face",
 						"glyphClasses":"material-icons",
 					};
-					var item = $(sformat("<div class='sort-item item-{1}'>", i)).ibxLabel(options);
-					sortContainer.ibxWidget("add", item);
+					var item = $(sformat("<div class='sort-item-h item-{1}'>", i)).ibxLabel(options);
+					sortContainerH.ibxWidget("add", item);
+
+					var item = $(sformat("<div class='sort-item-v item-{1}'>", i)).ibxLabel(options);
+					sortContainerV.ibxWidget("add", item);
 				}
 			}, true);
 		</script>
@@ -48,7 +52,28 @@
 				width:100%;
 				height:100%;
 			}
-			.sort-parent
+			.sort-parent-h
+			{
+				width:75%;
+				padding:3px;
+				margin:10px;
+				overflow:auto;
+				border:1px solid #ccc;
+				box-sizing:border-box;
+				user-select:none;
+				-moz-user-select:none;
+				-ms-user-select:none;
+			}
+			.sort-item-h
+			{
+				flex:0 0 auto;
+				width:100px;
+				height:25px;
+				margin:3px;
+				padding:5px;
+				border:1px solid black;
+			}
+			.sort-parent-v
 			{
 				height:75%;
 				padding:3px;
@@ -59,7 +84,7 @@
 				-moz-user-select:none;
 				-ms-user-select:none;
 			}
-			.sort-item
+			.sort-item-v
 			{
 				flex:0 0 auto;
 				width:300px;
@@ -76,7 +101,8 @@
 	</head>
 	<body class="ibx-root">
 		<div class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="center" data-ibxp-justify="center">
-			<div class="sort-parent" data-ibx-type="ibxVBox" data-ibxp-align="stretch" data-ibxp-wrap="false"></div>
+			<div class="sort-parent-h" data-ibx-type="ibxHBox" data-ibxp-align="stretch" data-ibxp-wrap="false"></div>
+			<div class="sort-parent-v" data-ibx-type="ibxVBox" data-ibxp-align="stretch" data-ibxp-wrap="false"></div>
 		</div>
 	</body>
 </html>

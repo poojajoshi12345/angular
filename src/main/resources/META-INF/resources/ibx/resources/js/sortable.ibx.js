@@ -7,6 +7,8 @@ $.widget("ibi.ibxSortable", $.Widget,
 	{
 		"direction":"vertical",
 		"lockDragAxis":false,
+		"startDragDistanceX":5,
+		"startDragDistanceY":5,
 		"placeholderClasses":""
 	},
 	_widgetClass:"ibx-sortable",
@@ -14,6 +16,7 @@ $.widget("ibi.ibxSortable", $.Widget,
 	{
 		this._super();
 		var options = this.options;
+		var curPos = this.element.css("position");
 		this.element.addClass(this._widgetClass).ibxAutoScroll({"direction":options.direction});
 		var el = this.element[0];
 		el.addEventListener("mousedown", this._onDragEvent.bind(this), true);
@@ -44,19 +47,7 @@ $.widget("ibi.ibxSortable", $.Widget,
 		{
 			//can only sort direct children
 			this._stopDrag();//kill any left over drag (you dragged out of bounds and confused the world).
-
-			if(!target.is(this.element))
-			{
-				this._inDrag = true;
-				var de = this._dragElement = $(this.element.directChild(e.target));
-				var ph = this._placeholder = this._createPlaceholder(de);
-				var width = de.width();
-				var height = de.height();
-				var pos = de.position();
-				de.css({"pointerEvents":"none", "position":"absolute", "left":pos.left, "top":pos.top, "width":width, "height":height}).addClass("ibx-sortable-dragging");
-				ph.insertAfter(de);
-				this.element.ibxAutoScroll("start");
-			}
+			this._eMouseDown = e;
 		}
 		else
 		if(eType == "mouseup")
@@ -70,9 +61,31 @@ $.widget("ibi.ibxSortable", $.Widget,
 		else
 		if(eType == "mousemove")
 		{
+			var options = this.options;
+			if(!this._inDrag && this._eMouseDown)
+			{
+				var vert = this.options.direction == "vertical";
+				var dx = Math.abs(e.clientX - this._eMouseDown.clientX);
+				var dy = Math.abs(e.clientY - this._eMouseDown.clientY);
+				if(!target.is(this.element))
+				{
+					if(!vert && dx >= options.startDragDistanceX || vert && dy >= options.startDragDistanceY)
+					{
+						this._inDrag = true;
+						var de = this._dragElement = $(this.element.directChild(e.target));
+						var ph = this._placeholder = this._createPlaceholder(de);
+						var width = de.width();
+						var height = de.height();
+						var pos = de.position();
+						de.css({"pointerEvents":"none", "position":"absolute", "left":pos.left, "top":pos.top, "width":width, "height":height}).addClass("ibx-sortable-dragging");
+						ph.insertAfter(de);
+						this.element.ibxAutoScroll("start");
+					}
+				}
+			}
+			else
 			if(this._inDrag && this._eLast)
 			{
-				var options = this.options;
 				var eLast = this._eLast
 				var dx = e.clientX - eLast.clientX;
 				var dy = e.clientY - eLast.clientY
@@ -81,7 +94,7 @@ $.widget("ibi.ibxSortable", $.Widget,
 
 				//move within axis only if specified
 				if(options.lockDragAxis)
-					this._dragElement.css({"left": (!vert) ? pos.left + dx : 0, "top":  vert ? pos.top + dy : 0});
+					this._dragElement.css({"left": pos.left + (!vert ? dx : 0), "top": pos.top + (vert ? dy : 0)});
 				else
 					this._dragElement.css({"left": pos.left + dx, "top":  pos.top + dy});
 
@@ -116,6 +129,7 @@ $.widget("ibi.ibxSortable", $.Widget,
 		this._placeholder.remove();
 		delete this._placeholder;
 		delete this._eLast;
+		delete this._eMouseDown;
 		this._inDrag = false;
 	},
 });
