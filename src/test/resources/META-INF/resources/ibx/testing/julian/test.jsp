@@ -32,12 +32,12 @@
 					ibx.waitStart($(".item-list"));
 					$.get("./test.xml").done(function(doc, status, xhr)
 					{
-						var loadCount = parseInt($(".item-load-count").ibxWidget("value"), 10);
-						loadCount = isNaN(loadCount) ? users.length : loadCount;
-
 						var date = new Date();
 						var itemList = $(".item-list");
 						var users = doc.documentElement.querySelectorAll("rootObject > item[name][description]");
+						var loadCount = parseInt($(".item-load-count").ibxWidget("value"), 10);
+						loadCount = isNaN(loadCount) ? users.length : loadCount;
+
 						for(var i = 0; i < loadCount; ++i)
 						{
 							var item = new userGroupItem(users[i]);
