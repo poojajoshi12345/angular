@@ -3,7 +3,4 @@
    <Match><Package name="~.*\.apache\.jsp\.ibx\.doc.*" /></Match>
    <Match><Package name="~.*\.apache\.jsp\.ibx\.testing.*" /></Match>
 
-name="~.*\.groovy" /> 
-
-
 </FindBugsFilter>
