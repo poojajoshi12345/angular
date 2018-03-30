@@ -64,7 +64,6 @@ $.widget("ibi.ibxTabPane", $.ibi.ibxFlexBox,
 			el = $(el);
 			el.addClass("tpg-hidden").on("keydown", this._onTabPaneKeyDown.bind(this));
 			var button = el.ibxWidget("button");
-			var groupName = this._group.ibxWidget("option", "name");
 			var nextPage = el.next(".ibx-tab-page");
 			if (nextPage.length > 0)
 			{
@@ -76,7 +75,8 @@ $.widget("ibi.ibxTabPane", $.ibi.ibxFlexBox,
 			}
 			else
 				this._tabBar.ibxWidget("add", button, null, null, true);
-			button.ibxWidget("option", "group", groupName);
+			button.ibxWidget("option", "group", this._group.ibxWidget("option", "name"));
+			this._group.ibxWidget("addControl", button);
 		}.bind(this));
 		this.refresh();
 	},
