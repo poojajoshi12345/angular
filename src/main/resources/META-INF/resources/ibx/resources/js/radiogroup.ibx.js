@@ -175,6 +175,7 @@ $.widget("ibi.ibxRadioGroup", $.ibi.ibxFlexBox,
 		{
 			this._bInSetSelected = true;
 			var el = $(el);
+			el.addClass('radio-group-checked')
 			var val = this._getItemUserValue(el);
 			this.option("userValue", val);
 			this._trigger("change", null, el);
