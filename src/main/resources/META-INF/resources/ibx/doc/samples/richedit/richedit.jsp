@@ -290,13 +290,13 @@
 			<div data-ibx-type="ibxMenuSeparator"></div>
 			<div data-ibx-type="ibxMenuItem">Size
 				<div data-ibx-type="ibxMenu">
-					<div class="menu-size" data-ibx-type="ibxRadioMenuItem" data-ibxp-group="rgFontSize" data-ibxp-user-value="8">8px</div>
-					<div class="menu-size" data-ibx-type="ibxRadioMenuItem" data-ibxp-group="rgFontSize" data-ibxp-user-value="10">10px</div>
-					<div class="menu-size" data-ibx-type="ibxRadioMenuItem" data-ibxp-group="rgFontSize" data-ibxp-user-value="12">12px</div>
-					<div class="menu-size" data-ibx-type="ibxRadioMenuItem" data-ibxp-group="rgFontSize" data-ibxp-user-value="14">14px</div>
-					<div class="menu-size" data-ibx-type="ibxRadioMenuItem" data-ibxp-group="rgFontSize" data-ibxp-user-value="18">18px</div>
-					<div class="menu-size" data-ibx-type="ibxRadioMenuItem" data-ibxp-group="rgFontSize" data-ibxp-user-value="24">24px</div>
-					<div class="menu-size" data-ibx-type="ibxRadioMenuItem" data-ibxp-group="rgFontSize" data-ibxp-user-value="36">36px</div>
+					<div class="menu-size" data-ibx-type="ibxRadioMenuItem" data-ibxp-group="rgFontSize" data-ibxp-user-value="1">xx-small</div>
+					<div class="menu-size" data-ibx-type="ibxRadioMenuItem" data-ibxp-group="rgFontSize" data-ibxp-user-value="2">x-small</div>
+					<div class="menu-size" data-ibx-type="ibxRadioMenuItem" data-ibxp-group="rgFontSize" data-ibxp-user-value="3">small</div>
+					<div class="menu-size" data-ibx-type="ibxRadioMenuItem" data-ibxp-group="rgFontSize" data-ibxp-user-value="4">medium</div>
+					<div class="menu-size" data-ibx-type="ibxRadioMenuItem" data-ibxp-group="rgFontSize" data-ibxp-user-value="5">large</div>
+					<div class="menu-size" data-ibx-type="ibxRadioMenuItem" data-ibxp-group="rgFontSize" data-ibxp-user-value="6">x-large</div>
+					<div class="menu-size" data-ibx-type="ibxRadioMenuItem" data-ibxp-group="rgFontSize" data-ibxp-user-value="7">xx-large</div>
 				</div>
 			</div>
 			<div data-ibx-type="ibxMenuSeparator"></div>
