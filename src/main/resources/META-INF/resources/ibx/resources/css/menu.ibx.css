@@ -117,20 +117,20 @@
 
 .ibx-marker-uncheck::before
 {
-	content:"\e835";
+	content:"";
 }
 .ibx-marker-check::before
 {
-	content:"\e834";
+	content:"\e5ca";
 }
 
 .ibx-marker-radio-uncheck::before
 {
-	content:"\e836";
+	content:"";
 }
 .ibx-marker-radio-check::before
 {
-	content:"\e837";
+	content:"\e86c";
 }
 
 /*marker for when there is a submenu*/
