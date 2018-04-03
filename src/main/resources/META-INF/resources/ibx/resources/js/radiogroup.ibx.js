@@ -1,230 +1,229 @@
 /*Copyright 1996-2016 Information Builders, Inc. All rights reserved.*/
 // $Revision$:
 
-$.widget("ibi.ibxRadioGroup", $.ibi.ibxFlexBox,
+$.widget("ibi.ibxRadioGroup",$.ibi.ibxFlexBox,
 {
 	options:
 		{
-			"inline":true,
-			"navKeyRoot":true,
-			"focusDefault":true,
+			"inline": true,
+			"navKeyRoot": true,
+			"focusDefault": true,
 			"name": "",
 			"form": "",
-			"aria":{"role":"radiogroup"}
+			"aria": { "role": "radiogroup" }
 		},
 	_widgetClass: "ibx-radio-group",
 	_onChangeBind: null,
 	_onBeforeChangeBind: null,
-	_create: function ()
+	_create: function()
 	{
+		this._controls = [];
 		this._onChangeBind = this._onChange.bind(this);
 		this._onBeforeChangeBind = this._onBeforeChange.bind(this);
+		this.options.name = this.options.name || ("autoGroupName" + $.ibi.ibxRadioGroup.uniqueName++);
 		this._super();
 	},
-	_setAccessibility:function(accessible, aria)
+	_setAccessibility: function(accessible,aria)
 	{
-		aria = this._super(accessible, aria);
-		var btnIds = "";
-		$(".ibx-radio-group-" + this.options.name).each(function(members, idx, el)
+		aria=this._super(accessible,aria);
+		var btnIds="";
+		$(this._controls).each(function(members, idx, el)
 		{
-			btnIds += " " + el.id;	
-		}.bind(this, btnIds));
-		aria.controls = btnIds;
+			btnIds+=" "+el.id;
+		}.bind(this,btnIds));
+		aria.controls=btnIds;
 		return aria;
 	},
-	_destroy:function()
+	_destroy: function()
 	{
-		this._super();
-	},
-	_init:function()
-	{
-		this._super();
-		this.add(this.element.children(".ibx-can-toggle").detach());//add children to this group.
-		this.addControl(".ibx-radio-group-" + this.options.name);//any buttons specified for this group.
-	},
-	_onBeforeChange: function (e, el)
-	{
-		if (!$(e.currentTarget).ibxWidget('checked'))
+		$(this._controls).each(function(idx, el)
 		{
-			if (!this._trigger('beforechange', null, el))
+			this.removeControl(el);
+		}.bind(this));
+		this._super();
+	},
+	_init: function()
+	{
+		this._super();
+
+		//add all the precreated controls that want to be a member of this group...then replace them with this.
+		var options = this.options;
+		var grps = $.ibi.ibxRadioGroup.grps;
+		var grp = grps[options.name];
+		if(grp instanceof Array)
+			this.addControl(grp);
+		grps[options.name] = this.element[0];
+
+		this.add(this.element.children(".ibx-can-toggle").detach());//add children to this group.
+	},
+	_onBeforeChange: function(e,el)
+	{
+		if(!$(e.currentTarget).ibxWidget('checked'))
+		{
+			if(!this._trigger('beforechange',null,el))
 				e.preventDefault();
 		}
 	},
-	_onChange: function (e)
+	_onChange: function(e)
 	{
 		if(!this._bInUpdating)
 		{
-			this._bInUpdating = true;
-			if ($(e.currentTarget).ibxWidget('checked'))
+			this._bInUpdating=true;
+			if($(e.currentTarget).ibxWidget('checked'))
 				this._setSelected(e.currentTarget);
-			this._bInUpdating = false;
+			this._bInUpdating=false;
 		}
 	},
-	_getItemUserValue: function (el)
+	_getItemUserValue: function(el)
 	{
-		if ($(el).data('ibxWidget') && $(el).data('ibxWidget').userValue)
-			return $(el).data('ibxWidget').userValue();
+		el = $(el);
+		if(el.is(":ibxWidget"))
+			return el.ibxWidget("userValue");
 		else
-			return "";
+			return null;
 	},
-	userValue: function (value)
+	add: function(el, elSibling, before, refresh)
 	{
-		if(typeof(value) == "undefined")
-			return this._getItemUserValue($(".radio-group-checked.ibx-radio-group-" + this.options.name));
-		this._super(value);
-	},
-	add:function(el, elSibling, before, refresh)
-	{
+		this._super(el,elSibling,before,refresh);
 		$(el).each(function(idx, el)
 		{
 			el = $(el)
 			if(!el.attr("tabIndex"))
-				el.attr("tabIndex", -1);
+				el.attr("tabIndex",-1);
 			this.addControl(el);
 		}.bind(this));
-		this._super(el, elSibling, before, refresh);
 	},
-	remove:function(el, destroy, refresh)
+	remove: function(el,destroy,refresh)
 	{
 		this.removeControl(el);
-		this._super(el, destroy, refresh);
+		this._super(el,destroy,refresh);
 	},
-	addControl: function (element)
+	_controls:null,
+	controls: function()
 	{
-		var el = $(element);
-		el.addClass("ibx-radio-group-" + this.options.name);
-		el.on("ibx_change", null, null, this._onChangeBind).on('ibx_beforechange', null, null, this._onBeforeChangeBind);
-		el.each(function (index, el)
+		return this._controls.slice(0);
+	},
+	hasControl: function(element)
+	{
+		return (this._controls.indexOf(element)!=-1)
+	},
+	addControl: function(el)
+	{
+		var el=$(el);
+		el.each(function(index, el)
 		{
-			el = $(el);
+			//add to internal controls if not already part of group.
+			if(this.hasControl(el))
+				return;
+			this._controls.push(el);
+
+			var ctrl = $(el).on("ibx_change", this._onChangeBind).on('ibx_beforechange', this._onBeforeChangeBind).data("ibxWidget");
+			ctrl.option("group", this.options.name);
 
 			//all items must have user values...if not set by user, then we create one.
-			var value = this._getItemUserValue(el);
+			var value=this._getItemUserValue(el);
 			if(!value)
 			{
-				value =  "autoUserValue" + $.ibi.ibxRadioGroup.uniqueUserVal++;
-				el.ibxWidget("option", "userValue", value).attr("data-autouservalue", value);
+				value = "autoUserValue" + $.ibi.ibxRadioGroup.uniqueUserVal++;
+				ctrl.option("userValue", value);
 			}
-
-			if (el.ibxWidget('option', 'group') != this.options.name)
-				el.ibxWidget('option', 'group', this.options.name);
-			var checked = el.ibxWidget('checked');
-			if (checked || this.options.userValue && this.options.userValue == value)
+			
+			var checked = ctrl.checked();
+			if(checked || this.options.userValue == value)
 				this._setSelected(el);
 		}.bind(this));
 		this.refresh();
 	},
-	removeControl: function (element)
+	removeControl: function(el)
 	{
-		$(element).removeClass("radio-group-checked ibx-radio-group-" + this.options.name);
-		$(element).off("ibx_change", null, this._onChangeBind).off('ibx_beforechange', null, this._onBeforeChange);
-		this.refresh();
-	},
-	selectNext: function ()
-	{
-		this._selectSibling(true);
-	},
-	selectPrevious: function ()
-	{
-		this._selectSibling(false);
-	},
-	_selectSibling: function (next)
-	{
-		if (this.element.hasClass("ibx-widget-disabled"))
-			return;
-		var current = $(".radio-group-checked.ibx-radio-group-" + this.options.name);
-		var all = $(".ibx-radio-group-" + this.options.name);
-		if (current.length == 0)
+		if(this.hasControl(el))
 		{
-			if (all.length > 0)
-			{
-				$(all[0]).ibxWidget('checked', true);
-				this._setSelected(all[0]);
-			}
-			return;
-		}
-
-		$(all).ibxWidget('checked', false);
-
-		for (var i = 0; i < all.length; i++)
-		{
-			if (current[0] == all[i])
-			{
-				if (next && i < all.length - 1)
-				{
-					$(all[i + 1]).ibxWidget('checked', true);
-					this._setSelected(all[i + 1]);
-				}
-				else if (!next && i > 0)
-				{
-					$(all[i - 1]).ibxWidget('checked', true);
-					this._setSelected(all[i - 1]);
-				}
-				else
-				{
-					$(current).ibxWidget('checked', true);
-					this._setSelected(current[0]);
-				}
-				break;
-			}
+			this._controls.splice(this._controls.indexOf(el), 1);
+			
+			el = $(el);
+			el.removeClass("radio-group-checked" + this.options.name);
+			el.off("ibx_change", null, this._onChangeBind).off('ibx_beforechange', null, this._onBeforeChange);
+			this.refresh();
 		}
 	},
-	_setSelected: function (el)
+	_setSelected: function(el)
 	{
-		if (!this._bInSetSelected)
-		{
-			this._bInSetSelected = true;
-			var el = $(el);
-			el.addClass('radio-group-checked')
-			var val = this._getItemUserValue(el);
-			this.option("userValue", val);
-			this._trigger("change", null, el);
-			this._bInSetSelected = false;
-		}
+		var val = this._getItemUserValue(el);
+		this.userValue(val);
 	},
-	selected: function (element)
+	selected: function(el)
 	{
-		element = $(element);
-		if(!element.length)
-			return $(".radio-group-checked.ibx-radio-group-" + this.options.name);
+		el = $(el);
+		if(!el.length)
+			return $(this._controls).filter(".radio-group-checked");
 		else
 		{
 			//YOU WERE FIGURING OUT HOW TO SET THE USER VALUE TO NULL AND DESELECT ALL ITEMS.
-			element.ibxWidget("checked", true);
+			el.ibxWidget("checked", true);
 			return this;
 		}
 	},
-	_setOptionDisabled: function (value)
+	_setOptionDisabled: function(value)
 	{
-		var disabled = !!value;
-		$(".ibx-radio-group-" + this.options.name).ibxWidget('option', 'disabled', disabled);
+		$(this._controls).ibxWidget('option', 'disabled', value);
 	},
-	_setOption:function(key, value)
+	_setOption: function(key,value)
 	{
+		if(this._settingOption)
+			return;
+		this._settingOption = true;
+
 		var changed = this.options[key] != value;
-		this._super(key, value);
+		this._super(key,value);
 
 		if(key == "userValue")
 		{
-			$(".ibx-radio-group-" + this.options.name).removeClass('radio-group-checked').ibxWidget('checked', false).each(function (value, index, el)
+			$(this._controls).each(function(value, index, el)
 			{
+				el = $(el);
+				el.removeClass('radio-group-checked').ibxWidget('checked',false)
 				var itemUserValue = this._getItemUserValue(el);
-				if (itemUserValue == value)
-					$(el).ibxWidget('checked', true).addClass('radio-group-checked');
+				if(itemUserValue == value)
+					el.ibxWidget('checked', true).addClass('radio-group-checked');
 			}.bind(this, value));
+
+			this.element.dispatchEvent("ibx_change", null, false);
 			this.doCommandAction("uservalue", value);
 		}
+
+		this._settingOption = false;
 	},
-	_refresh: function ()
+	_refresh: function()
 	{
-		this.element.addClass('ibx-radio-group-control-' + this.options.name);
-		(!this.element.children(":not(.ibx-form-control)").length) ? this.element.css("display", "none") : this.element.css("display", "");
+		var options = this.options;
+		(!this.element.children(".ibx-can-toggle").length) ? this.element.css("display","none") : this.element.css("display","");
 		this._super();
 	}
 });
+$.ibi.ibxRadioGroup.uniqueName = 0;
 $.ibi.ibxRadioGroup.uniqueUserVal = 0;
-$.widget("ibi.ibxHRadioGroup", $.ibi.ibxRadioGroup, {options:{direction:"row"}});
-$.widget("ibi.ibxVRadioGroup", $.ibi.ibxRadioGroup, {options:{direction:"column"}});
+$.ibi.ibxRadioGroup.grps={};
+$.ibi.ibxRadioGroup.addControl=function(grpName, ctrl)
+{
+	var grp = this.grps[grpName];
+	if(!grp)
+		grp = this.grps[grpName] = [];
+
+	if(grp instanceof Array)
+		grp.push(ctrl);
+	else
+	if(grp)
+		$(grp).ibxRadioGroup("addControl", ctrl)
+}
+$.ibi.ibxRadioGroup.removeControl=function(grpName, ctrl)
+{
+	var grp = this.grps[grpName];
+	if(grp)
+		$(grp).ibxRadioGroup("removeControl", ctrl)
+}
+
+$.widget("ibi.ibxHRadioGroup",$.ibi.ibxRadioGroup,{ options: { direction: "row" } });
+$.widget("ibi.ibxVRadioGroup",$.ibi.ibxRadioGroup,{ options: { direction: "column" } });
 
 //# sourceURL=radiogroup.ibx.js
 

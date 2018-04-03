@@ -131,6 +131,12 @@ $.widget("ibi.ibxCheckBox", $.ibi.ibxLabel,
 		aria.checked = this.options.checked;
 		return aria;
 	},
+	_destroy:function()
+	{
+		$.ibi.ibxRadioGroup.removeControl(this.options.group, this.element[0]);
+		this._check.remove();
+		this._super();
+},
 	_init: function ()
 	{
 		this._super();
@@ -151,11 +157,6 @@ $.widget("ibi.ibxCheckBox", $.ibi.ibxLabel,
 		this.checked((this.options.group) ? true : !this.options.checked);
 		this.doCommandAction("trigger");
 	},
-	_destroy: function ()
-	{
-		this._super();
-		this._check.remove();
-	},
 	checked: function (value)
 	{
 		if (typeof (value) == "undefined")
@@ -175,24 +176,14 @@ $.widget("ibi.ibxCheckBox", $.ibi.ibxLabel,
 			this._trigger("change");
 			this.doCommandAction("checked", value);
 		}
-		else if (key == "group")
+		else
+		if(key == "group")
 		{
-			if (this.options.group)
-			{
-				this.element.removeClass("ibx-radio-group-" + this.options.group);
-				var group = $(".ibx-radio-group-control-" + this.options.group);
-				if (group.length > 0)
-					group.data("ibiIbxWidget").removeControl(this.element);
-			}
+			if(this.options.group != value)
+				$.ibi.ibxRadioGroup.removeControl(this.options.group, this.element[0]);
 			this._super(key, value);
-
-			if(value && !this.element.hasClass("ibx-radio-group-" + value))
-			{
-				this.element.addClass("ibx-radio-group-" + value);
-				var group = $(".ibx-radio-group-control-" + value);
-				if (group.length > 0)
-					group.data("ibiIbxWidget").addControl(this.element);
-			}
+			if(value)
+				$.ibi.ibxRadioGroup.addControl(value, this.element[0]);
 		}
 		else
 			this._super(key, value);
@@ -365,7 +356,6 @@ $.widget("ibi.ibxButtonGroup", $.ibi.ibxFlexBox,
 	_group: null,
 	_create: function ()
 	{
-		//this._onSelectedBound = this._onSelected.bind(this);
 		this._onGroupChangeBound = this._onGroupChange.bind(this);
 		this._super();
 	},
@@ -397,7 +387,7 @@ $.widget("ibi.ibxButtonGroup", $.ibi.ibxFlexBox,
 				el = $(el);
 				el.addClass("ibx-button-group-member");
 				el.ibxWidget("option", "group", this._group.ibxWidget("option", "name"));
-				this._group.ibxWidget("addControl", el);
+				this._group.ibxWidget("addControl", el[0]);
 			}.bind(this));
 			this.refresh();
 		}
@@ -410,9 +400,8 @@ $.widget("ibi.ibxButtonGroup", $.ibi.ibxFlexBox,
 			el.each(function(idx, el)
 			{
 				el = $(el);
-				//el.off("ibx_change", this._onSelectedBound)
 				el.removeClass("ibx-button-group-member");
-				this._group.ibxWidget("removeControl", el);
+				this._group.ibxWidget("removeControl", el[0]);
 			}.bind(this));
 			this.refresh();
 		}

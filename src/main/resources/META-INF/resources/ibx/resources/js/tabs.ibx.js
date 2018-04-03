@@ -76,7 +76,7 @@ $.widget("ibi.ibxTabPane", $.ibi.ibxFlexBox,
 			else
 				this._tabBar.ibxWidget("add", button, null, null, true);
 			button.ibxWidget("option", "group", this._group.ibxWidget("option", "name"));
-			this._group.ibxWidget("addControl", button);
+			this._group.ibxRadioGroup("addControl", button[0]);
 		}.bind(this));
 		this.refresh();
 	},
@@ -89,7 +89,7 @@ $.widget("ibi.ibxTabPane", $.ibi.ibxFlexBox,
 			var button = $(el).ibxWidget("button");
 			button.css("flex", "").removeClass("tpg-hidden").detach();
 			button.ibxWidget("option", "group", "");
-			this._group.ibxRadioGroup("removeControl", button);
+			this._group.ibxRadioGroup("removeControl", button[0]);
 		}.bind(this));
 		this._super(el, destroy, refresh);
 
@@ -148,9 +148,9 @@ $.widget("ibi.ibxTabPane", $.ibi.ibxFlexBox,
 		if(e.keyCode == $.ui.keyCode.ESCAPE)
 			;
 	},
-	_onTabChange: function (e, button)
+	_onTabChange: function (e)
 	{
-		var tabButton = $(button);
+		var tabButton = $(e.target).ibxWidget("selected");
 		var selected = tabButton.ibxWidget("option", "tabPage");
 		this.element.children(".ibx-tab-page").not(selected).addClass("tpg-hidden").removeClass("tpg-selected");
 		selected.removeClass("tpg-hidden").addClass("tpg-selected");

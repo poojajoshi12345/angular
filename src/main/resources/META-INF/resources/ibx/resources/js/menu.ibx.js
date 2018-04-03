@@ -338,11 +338,15 @@ $.widget("ibi.ibxRadioMenuItem", $.ibi.ibxCheckMenuItem,
 	{
 		this._super();
 	},
+	_destroy:function()
+	{
+		$.ibi.ibxRadioGroup.removeControl(this.options.group, this.element[0]);
+		this._super();
+	},
 	_init:function()
 	{
 		this._super();
-		var groups = $(sformat(":ibxRadioGroup({1})", this.options.group));
-		groups.ibxRadioGroup("addControl", this.element);
+		$.ibi.ibxRadioGroup.addControl(this.options.group, this.element[0]);
 	},
 	getValue:$.noop,
 	_refresh:function()
@@ -350,7 +354,6 @@ $.widget("ibi.ibxRadioMenuItem", $.ibi.ibxCheckMenuItem,
 		var options = this.options;
 		this._startMarker.removeClass("ibx-marker-radio-uncheck ibx-marker-radio-check");
 		this._startMarker.addClass(options.checked ? "ibx-marker-radio-check" : "ibx-marker-radio-uncheck");
-		this.element.addClass(options.group ? "ibx-radio-group-" + options.group : "");
 		this._super();
 	}
 });

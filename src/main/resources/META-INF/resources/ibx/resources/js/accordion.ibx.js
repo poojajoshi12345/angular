@@ -40,9 +40,6 @@ $.widget("ibi.ibxAccordionPane", $.ibi.ibxFlexBox,
 		el = $(el);
 		el.filter(".ibx-accordion-page").each(function (idx, el)
 		{
-			el = $(el);
-			var groupName = this._group.ibxWidget("option", "name");
-			el.ibxWidget("option", "groupName", groupName);
 			this._group.ibxRadioGroup("addControl", el);
 		}.bind(this));
 
@@ -56,8 +53,7 @@ $.widget("ibi.ibxAccordionPane", $.ibi.ibxFlexBox,
 		el.filter(".ibx-accordion-page").each(function(options, idx, el)
 		{
 			el = $(el);
-			el.ibxWidget("option", "groupName", "");
-			this._group.ibxRadioGroup("removeControl", el);
+			this._group.ibxRadioGroup("removeControl", el[0]);
 			if(el.is(options.selected))
 				options.selected = null;
 		}.bind(this, options));
@@ -150,7 +146,7 @@ $.widget("ibi.ibxAccordionPage", $.ibi.ibxFlexBox,
 	{
 		focusRoot:false,
 		autoClose:true,
-		groupName:"",
+		group:"",
 		direction:"column",
 		align:"stretch",
 		wrap:false,
@@ -198,6 +194,7 @@ $.widget("ibi.ibxAccordionPage", $.ibi.ibxFlexBox,
 	},
 	_destroy:function()
 	{
+		$.ibi.ibxRadioGroup.removeControl(this.options.group, this.element[0]);
 		this.element.append(this._content.children());
 		this._button.ibxWidget("destroy");
 		this._content.ibxWidget("destroy");
