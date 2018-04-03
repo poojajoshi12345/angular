@@ -151,15 +151,16 @@ $.widget("ibi.ibxPopup", $.ibi.ibxWidget,
 				}
 			}.bind(this));
 
+			//[IBX-87] Don't refocus if close is from a mouse event...let browser focus wherever was clicked on.
+			//ALSO, check for pop-top, because if we aren't the topmost popup, then we shouldn't be resetting focus.  Think menu item opening dialog.
+			if(!(closeInfo instanceof MouseEvent) && this.element.is(".pop-top") && this.options.refocusLastActiveOnClose && this._elPrevActive)
+				this._elPrevActive.focus();
+			delete this._elPrevActive;
+
 			this.element.addClass("pop-closing");
 			this._trigger("popup_mgr_close", null, this.element);
 			this._trigger("close", null, closeInfo);
 			this.setAccessibility();
-
-			//[IBX-87] Don't refocus if close is from a mouse event...let browser focus wherever was clicked on.
-			if(!(closeInfo instanceof MouseEvent) && this.options.refocusLastActiveOnClose && this._elPrevActive)
-				this._elPrevActive.focus();
-			delete this._elPrevActive;
 		}
 	},
 	_refresh:function()
