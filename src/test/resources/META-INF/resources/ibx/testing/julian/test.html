@@ -12,23 +12,22 @@
 		<script type="text/javascript">
 			ibx(function(e)
 			{
-				var sortContainer = $(".sort-parent").css("overflow", "auto").ibxVSortable({"placeholderClasses":"sort-placeholder"});
-				sortContainer.on("ibx_createplaceholder", function(e)
-				{
-					e.originalEvent.data.css({"display":"block", "border":"1px solid red"})
-				});
+				/*
+				var tabPage1 = $("<div>").ibxTabPage({tabOptions:{text:"Page1"}});
+				var tabPage2 = $("<div>").ibxTabPage({tabOptions:{text:"Page2"}});
+				var tabPage3 = $("<div>").ibxTabPage({tabOptions:{text:"Page3"}});
 
-				for(var i = 0; i < 100; i++)
-				{
-					var options = 
-					{
-						"text": "SortItem " + i,
-						"glyph":"face",
-						"glyphClasses":"material-icons",
-					};
-					var item = $(sformat("<div class='sort-item item-{1}'>", i)).ibxLabel(options);
-					sortContainer.ibxWidget("add", item);
-				}
+				var tabPane = $("<div class='tab-test'>").ibxTabPane();
+				tabPane.ibxWidget("add", [tabPage1[0], tabPage2[0], tabPage3[0]]);
+
+				$(".main-box").ibxWidget("add", tabPane);
+				*/
+
+				var rb = $("<div id='rb4' tabindex='0' class='rb'>Item 4</div>").ibxRadioButtonSimple({userValue:"item4", checked:true});
+				$("#rgGroup").ibxWidget("add", rb);
+
+				var mb = $("<div id='mb4'>Item 4</div>").ibxRadioMenuItem({userValue:"item4", "group":"rgGroup", checked:true});
+				$("#menu").ibxWidget("add", mb);
 			}, true);
 		</script>
 		<style type="text/css">
@@ -38,34 +37,65 @@
 				height: 100%;
 				margin: 0px;
 			}
-			.sort-parent
+			.main-box
+			{
+				width:100%;
+				height:100%;
+				box-sizing:border-box;
+			}
+			.test-tab-pane
 			{
 				height:300px;
-				width:200px;
-				padding:3px;
-				overflow:auto;
-				border:1px solid red;
+				width:300px;
+				margin:15px;
+				border:1px solid #ccc;
 				user-select:none;
-				-moz-user-select:none;
-				-ms-user-select:none;
 			}
-			.sort-item
+			.rg-menu
 			{
-				flex:0 0 auto;
-				width:500px;
-				height:25px;
-				margin:3px;
-				padding:5px;
-				border:1px solid black;
+				margin-bottom:5px;
 			}
-			.sort-placeholder
+			#rgGroup > .ibx-radio-button-simple
 			{
-				border:2px solid red;
+				margin-right:5px;
 			}
 		</style>
 	</head>
 	<body class="ibx-root">
-		<div class="sort-parent" data-ibx-type="ibxVBox" data-ibxp-align="stretch" data-ibxp-wrap="false"></div>
+		<div id="cmdTest" data-ibx-type="ibxCommand" data-ibxp-id="cmdTest" data-ibxp-shortcut="CTRL+Q"></div>
+
+		<div class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="center" data-ibxp-justify="center">
+			<div class="test-tab-pane" tabIndex="0" data-ibx-type="ibxTabPane" data-ibxp-inline="true" data-ibxp-aria.label="Tabs">
+				<div data-ibx-type="ibxTabPage">Page 1
+					<div class="tab-content" data-ibx-type="ibxVBox" data-ibxp-align="start" data-ibxp-justify="start">
+						<div>
+							<div tabIndex="0" data-ibx-type="ibxButton">Button1</div>
+							<div tabIndex="0" data-ibx-type="ibxButton">Button2</div>
+							<div tabIndex="0" data-ibx-type="ibxButton">Button3</div>
+						</div>
+					</div>
+				</div>
+				<div data-ibx-type="ibxTabPage">Page 2
+					<div class="test-tab-content" data-ibx-type="ibxVBox" data-ibxp-align="center" data-ibxp-justify="center">
+						<div data-ibx-type="ibxLabel">Tab Page</div>
+					</div>
+				</div>
+			</div>
+			<div id="rgGroup" class="rg-test" data-ibx-type="ibxRadioGroup" data-ibxp-name="rgGroup" data-ibxp-command="cmdTest">
+				<div id="rb1" tabindex="0" data-ibx-type="ibxRadioButtonSimple" data-ibxp-user-value="item1">Item 1</div>
+				<div id="rb2" tabindex="0" data-ibx-type="ibxRadioButtonSimple" data-ibxp-user-value="item2" data-ibxp-checked="true">Item 2</div>
+				<div id="rb3" tabindex="0" data-ibx-type="ibxRadioButtonSimple" data-ibxp-user-value="item3">Item 3</div>
+			</div>
+
+			<div class="rg-menu" data-ibx-type="ibxMenuButton">Menu
+				<div id="rgMenu" data-ibx-type="ibxRadioGroup" data-ibxp-name="rgMenu" data-ibxp-user-value="item3"></div>
+				<div id="menu" data-ibx-type="ibxMenu">
+					<div id="mb1" data-ibx-type="ibxRadioMenuItem" data-ibxp-group="rgGroup" data-ibxp-user-value="item1">Item 1</div>
+					<div id="mb2" data-ibx-type="ibxRadioMenuItem" data-ibxp-group="rgGroup" data-ibxp-user-value="item2">Item 2</div>
+					<div id="mb3" data-ibx-type="ibxRadioMenuItem" data-ibxp-group="rgGroup" data-ibxp-user-value="item3">Item 3</div>
+				</div>
+			</div>
+		</div>
 	</body>
 </html>
 

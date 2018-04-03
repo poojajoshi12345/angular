@@ -45,6 +45,12 @@
 			<div class="test-res-label" data-ibx-type="ibxLabel">@ibxString(A_TEST_STRING_INLINE)</div>
 			<div class="test-res-label" data-ibx-type="ibxLabel" data-ibxp-text="@ibxStringXml(A_TEST_STRING_XML)"></div>
 			<div class="test-res-label" data-ibx-type="ibxLabel" data-ibx-options='{text:"@ibxStringJson(A_TEST_STRING_JSON)"}'></div>
+
+
+			<div class="test-dialog" data-ibx-type="testDialog" data-ibxp-caption-options.text="Test Dialog">
+				<div data-ibx-type="ibxLabel">Test Label</div>
+			</div>
+
 		</markup-block>
 	</markup>
 
@@ -54,12 +60,12 @@
 		<script-file src="./test_res_script.js"/>
 		<script-block>
 			<![CDATA[
-			$.widget("ibi.testWidget", $.ibi.ibxVBox, 
+			$.widget("ibi.testDialog", $.ibi.ibxDialog, 
 			{
 				options:
 				{
 				},
-				_widgetClass:"test-widget",
+				_widgetClass:"test-dialog",
 				_create:function()
 				{
 					this._super();
