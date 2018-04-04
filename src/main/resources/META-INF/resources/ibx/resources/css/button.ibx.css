@@ -81,6 +81,7 @@
 	font-family:"Material Icons";
 	font-size:1em;
 	color:#888;
+    width: 1em;
 }
 
 .icon-left > .ibx-check-box-simple-marker
@@ -122,7 +123,8 @@
 {
 	font-family:"Material Icons";
 	font-size:1em;
-	color:#888;
+    color:#888;
+    width: 1em;
 }
 
 .icon-left > .ibx-radio-button-simple-marker

@@ -59,6 +59,25 @@
 	background-color:#ddd;
 }
 
+.ibx-select-check-item > .ibx-check-box-simple-marker-uncheck::before
+{
+	content:"";
+}
+.ibx-select-check-item > .ibx-check-box-simple-marker-check::before
+{
+	content:"\e5ca";
+}
+
+.ibx-select-radio-item > .ibx-radio-button-simple-marker-uncheck::before
+{
+	content:"";
+}
+.ibx-select-radio-item > .ibx-radio-button-simple-marker-check::before
+{
+	content:"\e86c";
+}
+
+
 .ibx-select-group {
     font-weight: bold;
 }
