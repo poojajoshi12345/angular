@@ -116,9 +116,9 @@ $.widget("ibi.ibxAccordionPane", $.ibi.ibxFlexBox,
 			return this.element;
 		}
 	},
-	_onPageChange:function(e, page)
+	_onPageChange:function(e)
 	{
-		this.options.selected = page;
+		this.options.selected = $(e.target).ibxWidget("selected");
 		this._trigger("change");
 	},
 	_refresh:function()
