@@ -20,9 +20,48 @@
 		<script type="text/javascript">
 			<jsp:include page="/WEB-INF/jsp/global/wf_globals.jsp" flush="false" />
 			
+			var packages=
+			[
+				{src: "../testing/telu/test_res.xml"},
+			];
+			
 			ibx(function()
 			{
 				jQuery.event.special['ibx_change'] = { noBubble: true };
+
+
+				$(".open-dlg").on("click", function (){
+					var warnDlg = ibx.resourceMgr.getResource('.pd-warning-dirty');
+					var yes = warnDlg.find(".pd-warning-dirty-yes").on("click", function (){warnDlg.ibxWidget("close");});
+					warnDlg.ibxWidget("open");
+					warnDlg.focus();
+				});
+
+
+				
+
+				//var radio3 = $("<div>").ibxRadioButton({"text": "Radio3", "group": "group1"});
+				//$("body").append(radio3);
+				//$(".radio-group").ibxWidget("addControl", radio3);
+				/*
+				$(".radio-group").on("ibx_change", function (e, data){
+					console.log("change");
+				});
+
+
+				var radiogroup = $("<div>").ibxRadioGroup({"name": "group3"});
+				var radio1 = $("<div>").ibxRadioButton({"text": "Radio1", "group": "group3"});
+				var radio2 = $("<div>").ibxRadioButton({"text": "Radio2", "group": "group3", "checked": true});
+
+				var wrapper = $("<div>").ibxHBox();
+				wrapper.append(radio1);
+				wrapper.append(radio2);
+				wrapper.append(radiogroup);
+				*/
+				//radiogroup.ibxWidget("addControl", radio1);
+				//radiogroup.ibxWidget("addControl", radio2);
+				//$("body").append(wrapper);
+
 				//jQuery.event.special['ibx_beforechange'] = { noBubble: true };
 
 				/*
@@ -84,7 +123,7 @@
 				//alert($(".mytabpane").ibxWidget('selectedIndex'));
 				//$(".mytabpane").ibxWidget('selectedIndex', 1);
 				//alert($(".mytabpane").ibxWidget('selected').ibxWidget('button').ibxWidget('option', 'text'));
-			}, true);
+			}, packages, true);
 		</script>
 
 		<style type="text/css">
@@ -98,14 +137,21 @@
 	</head>
 	<body class="ibx-root">
 
-		<div class="mytabpane" data-ibx-type="ibxTabPane">
-			<div class="firstpage" data-ibx-type="ibxTabPage">Page1<div data-ibx-type="ibxLabel">Label1</div></div>
-			<div class="secondpage" data-ibx-type="ibxTabPage">Page2<div data-ibx-type="ibxLabel">Label2</div></div>
-			<div class="thirdpage" data-ibx-type="ibxTabPage" data-ibxp-selected="true">Page3<div data-ibx-type="ibxLabel">Label3</div></div>
-			<div class="fourthpage" data-ibx-type="ibxTabPage">Page4<div data-ibx-type="ibxLabel">Label4</div></div>
-		</div>
+		<div class="open-dlg" data-ibx-type="ibxButton">Open</div>
 
 		<!--
+		<div class="radio-group" data-ibx-type="ibxRadioGroup" data-ibxp-name="group1">
+			<div class="radio-button" data-ibx-type="ibxRadioButton" data-ibxp-checked="true">Radio1</div>
+			<div class="radio-button" data-ibx-type="ibxRadioButton">Radio2</div>
+		</div>
+
+		<div class="button-group" data-ibx-type="ibxButtonGroup" data-ibxp-group-selection="true">
+			<div data-ibx-type="ibxRadioButton">Radio1</div>
+			<div data-ibx-type="ibxRadioButton" data-ibxp-checked="true">Radio2</div>
+			<div data-ibx-type="ibxCheckBox">Check1</div>
+			<div data-ibx-type="ibxCheckBox" data-ibxp-checked="true">Check2</div>
+		</div>
+
 		<div class="add-page" data-ibx-type="ibxButton">Add Page</div>
 
 
