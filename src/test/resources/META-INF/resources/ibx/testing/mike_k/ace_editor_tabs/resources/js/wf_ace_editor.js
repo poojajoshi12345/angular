@@ -3,11 +3,161 @@
 
 jQuery.event.special['ibx_change'] = { noBubble: true };
 
+
+$.widget("ibi.ibiAceWidget", $.ibi.ibxWidget, 
+{
+	options:
+	{
+		"mode":"",
+	},
+	
+	_widgetClass:"wf-ace-text-editor",
+	
+	_create:function()
+	{
+		this._super();
+		
+		this._insertKeyStatus = false;
+		
+		this._ace_editor = ace.edit(this.element[0]);
+		
+		this._ace_editor.getSession().selection.on('changeCursor', this._onEditorAreaChangeCursorEvent.bind(this));				
+//		this._ace_editor.textInput.getElement().addEventListener("keyup", this._onEditorAreaKeyUp.bind(this), false);
+		this._ace_editor.textInput.getElement().addEventListener("keydown", this._onInsertKeyDown.bind(this), false);
+	},
+	_destroy:function()
+	{
+		this._super();
+	},
+	editor:function()
+	{
+		return this._ace_editor;
+	},
+
+	_onEditorAreaChangeCursorEvent:function (e)
+	{	
+		this.setCursorPositionInfo(e);//this._setCursorPositionInfo(e);
+	},	
+	
+	_onEditorAreaKeyUp:function (e)
+	{		
+		//this._setEditorChanged(true);
+	},
+	
+	_onInsertKeyDown:function(evt) 
+	{				
+		var charCode = (evt.which) ? evt.which : event.keyCode;
+				
+		if(charCode==45)
+		{
+			if(this._insertKeyStatus)
+			{
+				this._insertKeyStatus = false;
+			}
+			else
+			{
+				this._insertKeyStatus = true;
+			}
+			
+			this.setInsertStatusLabel();
+		}
+	},
+	
+	selectionToUpperCase:function(e)
+	{
+		this._ace_editor.toUpperCase();			
+		//this._setEditorChanged(true);
+	},
+	
+	selectionToLowerCase:function(e)
+	{
+		this._ace_editor.toLowerCase();			
+		//this._setEditorChanged(true);
+	},
+
+	selectionCommentAdd:function(e)
+	{
+		//this._ace_editor.commentAdd();			
+		//this._setEditorChanged(true);
+	},
+	
+	selectionCommentRemove:function(e)
+	{
+		//this._ace_editor.commentRemove();			
+		//this._setEditorChanged(true);
+	},
+	
+	selectAll:function(e)
+	{
+		this._ace_editor.focus();		
+		this._ace_editor.selection.selectAll();		
+	},
+	
+	deleteSelectedText:function(e)
+	{
+		var selectedRange = this._ace_editor.selection.getRange();		
+		this._ace_editor.getSession().getDocument().remove(selectedRange);		
+		//this._setEditorChanged(true);
+	},
+	
+	editorRedo:function(e)
+	{
+		if(this._ace_editor.getSession().getUndoManager().hasRedo())
+		{			
+			this._ace_editor.getSession().getUndoManager().redo();
+		}
+	},
+	
+	editorUndo:function(e)
+	{
+		if(this._ace_editor.getSession().getUndoManager().hasUndo())
+		{
+			this._ace_editor.getSession().getUndoManager().undo();
+		}
+	},
+	
+	setInsertStatusLabel:function()
+	{
+		var keyStatus = this._insertKeyStatus ? ibx.resourceMgr.getString("bid_insert_on") : ibx.resourceMgr.getString("bid_insert_off");
+		var data = {"insertKeyStatus":keyStatus};		
+		$(document).trigger("SET_STATUS_BAR_INSERT_KEY_METADATA", data);
+	},
+	
+	setCursorPositionInfo:function()
+	{		
+		var contentLength =  this._ace_editor.session.getValue().length;		
+		var lineCount = this._ace_editor.session.getLength();
+		var cursor = this._ace_editor.selection.getCursor();		
+		var linePosition = cursor.row +1;		
+		var columnPosition = cursor.column +1;
+	
+		//this._editorEnvironment.element.ibxWidget("member", "_lengthLbl").ibxWidget("option", "text", contentLength);
+		var data = {"contentLength":contentLength, "lineCount":lineCount,"linePosition":linePosition, "columnPosition":columnPosition};
+		$(document).trigger("SET_STATUS_BAR_CURSOR_METADATA", data);
+	},
+	
+	_refresh:function()
+	{
+		var options = this.options;
+		this._super();
+
+		if(this._ace_editor)
+		{
+			//this._ace_editor.session.setMode("ace/mode/" + options.mode);
+			this._ace_editor.resize();
+		}
+	}
+});
+
+//--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 $.widget("ibi.textEditorTabPage", $.ibi.ibxTabPage, 
 {
 	options:
 	{
-		nameRoot:true,
+		nameRoot : true,
 		selected : true
 	},
 	
@@ -18,6 +168,7 @@ $.widget("ibi.textEditorTabPage", $.ibi.ibxTabPage,
 		this._super();
 
 	    this.ace_editor = null;
+	    this._editorWidget = null;
 		this._editorEnvironment = null;
 		this._editorMode = "";
 		
@@ -35,6 +186,7 @@ $.widget("ibi.textEditorTabPage", $.ibi.ibxTabPage,
 		this.defaultFolderPath = "";
 		this.tool = "";
 		this.type = "";
+		this.mode = "";
 		this._callbackFunc = null;
 		
 		this.fullName = "";
@@ -67,14 +219,32 @@ $.widget("ibi.textEditorTabPage", $.ibi.ibxTabPage,
 		this.canchangeserverprops = true;
 		this._insertKeyStatus = false;
 		
-		this.editorId = "te_"+new Date().getTime();
-
+		var mybutton = $("<div class='text-editor-tab-page-close-button'>").ibxButtonSimple({'glyphClasses':'ibx-icons ibx-glyph-close'});
+        this._tabButton.ibxWidget("add", mybutton);
+        mybutton.on("click", this._onTabCloseButton.bind(this));        
+		
 		this._searchPanel = ibx.resourceMgr.getResource('.te-search-panel', false);
 		this.element.append(this._searchPanel);
-		ibx.bindElements(this._searchPanel);
+		ibx.bindElements(this._searchPanel);	
+
+		this._editorWidget = $("<div class=\"wf-ace-text-editor\" data-ibx-type=\"ibiAceWidget\"></div>");
+		this.element.append(this._editorWidget);
+		ibx.bindElements(this._editorWidget);
 		
-		this.editorDiv = $("<div id=\""+this.editorId+"\" class=\"wf_editor\"></div>");
-		this.element.append(this.editorDiv);		
+		var contextMenu = ibx.resourceMgr.getResource(".te-edit-menu");
+		this._editorWidget.ibxWidget("option", "ctxMenu", contextMenu);
+		
+		contextMenu.find(".menu-edit-selectall").on("ibx_menu_item_click", this._onMenuEditSelectAll.bind(this));
+		contextMenu.find(".menu-edit-clear").on("ibx_menu_item_click", this._onMenuEditClear.bind(this));
+		contextMenu.find(".menu-edit-uppercase").on("ibx_menu_item_click", this._onMenuEditUpperCase.bind(this));
+		contextMenu.find(".menu-edit-lowercase").on("ibx_menu_item_click", this._onMenuEditLowerCase.bind(this));
+		
+		contextMenu.find(".menu-edit-undo").on("ibx_menu_item_click", this._onMenuEditUndo.bind(this));
+		contextMenu.find(".menu-edit-redo").on("ibx_menu_item_click", this._onMenuEditRedo.bind(this));
+		
+		//contextMenu.find(".menu-edit-comment-add").on("ibx_menu_item_click", this._onMenuEditCommentAdd.bind(this));
+		//contextMenu.find(".menu-edit-comment-remove").on("ibx_menu_item_click", this._onMenuEditCommentRemove.bind(this));
+
 	},
 	
 	_init:function()
@@ -90,14 +260,15 @@ $.widget("ibi.textEditorTabPage", $.ibi.ibxTabPage,
 	_refresh:function()
 	{
 		this._super();
-		if(this.ace_edito)
+		if(this.ace_editor)
 			this.ace_editor.resize();
 	},
 	
-	initEditor:function(editorEnvironment, folderPath, itemName)
+	initEditor:function(editorEnvironment, folderPath, itemName, mode)
 	{
 		this._editorEnvironment = editorEnvironment;
-	    this.ace_editor = ace.edit(this.editorDiv[0]);	    
+	   // this.ace_editor = ace.edit(this.editorDiv[0]);	
+		this.ace_editor = this._editorWidget.ibxWidget("editor");
 	    this.ace_editor.setTheme("ace/theme/" + this._editorEnvironment.defaultTheme);	    
 
 	   // this.ace_editor.setShowPrintMargin(false);
@@ -105,11 +276,12 @@ $.widget("ibi.textEditorTabPage", $.ibi.ibxTabPage,
 	   // this.ace_editor.renderer.setOption('showLineNumbers', true);	    
 	    //this.ace_editor.renderer.setOption('highlightActiveLine', false); 
 	    //this.ace_editor.renderer.setOption('readOnly', false); 
-	    		
-		this.ace_editor.getSession().selection.on('changeSelection', this._onEditorChangeSelection.bind(this), false);		
-		this.ace_editor.getSession().selection.on('changeCursor', this._onEditorAreaChangeCursorEvent.bind(this));				
-		this.ace_editor.textInput.getElement().addEventListener("keyup", this._onEditorAreaKeyUp.bind(this), false);
-		this.ace_editor.textInput.getElement().addEventListener("keydown", this._onInsertKeyDown.bind(this), false);
+	    
+	    
+//		this.ace_editor.getSession().selection.on('changeCursor', this._onEditorAreaChangeCursorEvent.bind(this));				
+//		this.ace_editor.textInput.getElement().addEventListener("keyup", this._onEditorAreaKeyUp.bind(this), false);   
+//		this.ace_editor.getSession().selection.on('changeSelection', this._onEditorChangeSelection.bind(this), false);	  
+//		this.ace_editor.textInput.getElement().addEventListener("keydown", this._onInsertKeyDown.bind(this), false);
 		
 /*		
 		this.ace_editor.on("cut", function(e){
@@ -118,13 +290,14 @@ $.widget("ibi.textEditorTabPage", $.ibi.ibxTabPage,
 */		
 		
 	    this._setEditorMode();
-	    
+		
+/*	    
 	    this.ace_editor.setOptions({
 	        enableBasicAutocompletion: true,
 	        enableLiveAutocompletion: false,
 	        enableSnippets: true
 	    });
-	    
+*/	    
 	    if(folderPath && itemName)
 	    {
 	    	this._getEditorContent (folderPath, itemName);	    	
@@ -144,10 +317,10 @@ $.widget("ibi.textEditorTabPage", $.ibi.ibxTabPage,
 		this._btnReplaceNext.on("click", this._onReplaceNext.bind(this));	
 		this._btnReplaceAll.on("click", this._onReplaceAll.bind(this));
 	    
-		this._setCursorPositionInfo();
-
-	    this._setInsertStatusLabel();
-	    	    
+		//this._setCursorPositionInfo();
+	    //this._setInsertStatusLabel();
+	    this.getStatusBarInfo();
+	    
 	    this.ace_editor.resize();
 	    
 	    this.ace_editor.focus();
@@ -162,38 +335,41 @@ $.widget("ibi.textEditorTabPage", $.ibi.ibxTabPage,
 	{
 		return this.fullItemPath;
 	},
+		
 	
-	// ACE Editor Area
+	_onTabCloseButton:function(e)
+	{
+		this.closeFile(e);
+	},	
+	
+	
+	_onMenuEditClear:function(e)
+	{
+		this._editorWidget.ibxWidget("deleteSelectedText");
+	},
+	
+	_onMenuEditSelectAll:function(e)
+	{
+		this._editorWidget.ibxWidget("selectAll");
+	},
+	
+	_onMenuEditUpperCase:function(e)
+	{
+		this._editorWidget.ibxWidget("selectionToUpperCase");
+	},
 
-	_onEditorChangeSelection:function (e)
-	{		
-		this._setEditorChanged(true);
+	_onMenuEditLowerCase:function(e)
+	{
+		this._editorWidget.ibxWidget("selectionToLowerCase");
 	},
-	_onEditorAreaChangeCursorEvent:function (e)
-	{	
-		this._setCursorPositionInfo(e);
-	},		
-	_onEditorAreaKeyUp:function (e)
-	{		
-		this._setEditorChanged(true);
+	
+	_onMenuEditUndo:function(e)
+	{
+		this._editorWidget.ibxWidget("editorUndo");
 	},
-	_onInsertKeyDown:function(evt) 
-	{				
-		var charCode = (evt.which) ? evt.which : event.keyCode;
-				
-		if(charCode==45)
-		{
-			if(this._insertKeyStatus)
-			{
-				this._insertKeyStatus = false;
-			}
-			else
-			{
-				this._insertKeyStatus = true;
-			}
-			
-			this._setInsertStatusLabel();
-		}
+	_onMenuEditRedo:function(e)
+	{
+		this._editorWidget.ibxWidget("editorRedo");
 	},
 	
 	_onFindNext:function(e)
@@ -313,7 +489,7 @@ $.widget("ibi.textEditorTabPage", $.ibi.ibxTabPage,
 				
 //				this.element.ibxWidget("option", "captionOptions", {text: this.folderPath + "/" + this.itemDescription});
 				this.element.ibxWidget("option", {"tabOptions": {"text": this.itemDescription}});
-	 			this._setCursorPositionInfo();
+				this._editorWidget.ibxWidget("setCursorPositionInfo");//this._setCursorPositionInfo();
 	 			this.ace_editor.focus();
 	 			
 	 			this._setEditorChanged(false);
@@ -769,7 +945,7 @@ $.widget("ibi.textEditorTabPage", $.ibi.ibxTabPage,
 			this._clearEditorEnvironment();
 			this.newDoc = true;
 			this.ace_editor.focus();
-			this._setCursorPositionInfo();
+			this._editorWidget.ibxWidget("setCursorPositionInfo");//this._setCursorPositionInfo();
 		}
 		else if(this.currentAction == 2)
 		{
@@ -781,7 +957,7 @@ $.widget("ibi.textEditorTabPage", $.ibi.ibxTabPage,
 			this.currentAction = 0;
 			this._clearEditorEnvironment();
 			this.ace_editor.focus();
-			this._setCursorPositionInfo();
+			this._editorWidget.ibxWidget("setCursorPositionInfo");//this._setCursorPositionInfo();
 		}
 		else if(this.currentAction == 4)
 		{
@@ -850,18 +1026,12 @@ $.widget("ibi.textEditorTabPage", $.ibi.ibxTabPage,
 	
 	editorRedo:function(e)
 	{
-		if(this.ace_editor.getSession().getUndoManager().hasRedo())
-		{			
-			this.ace_editor.getSession().getUndoManager().redo();
-		}
+		this._editorWidget.ibxWidget("editorRedo");
 	},
 	
 	editorUndo:function(e)
 	{
-		if(this.ace_editor.getSession().getUndoManager().hasUndo())
-		{
-			this.ace_editor.getSession().getUndoManager().undo();
-		}
+		this._editorWidget.ibxWidget("editorUndo");
 	},
 	
 	editorCut:function(e)
@@ -907,17 +1077,16 @@ $.widget("ibi.textEditorTabPage", $.ibi.ibxTabPage,
 		
 		var options =
 		{
-		        "action":action,
-		        "fields":
-		        {
-		        	"BIP_REQUEST_TYPE": "BIP_RUN_ADHOC",
-		        	"BIP_folder":this.folderPath,
-					"BIP_fexText":fexText,
-					"BIP_paramPrompt":false,
-					"BIP_server":"EDASERVE",
-					"BIP_appPath":"",
-					
-		        }
+	        "action":action,
+	        "fields":
+	        {
+	        	"BIP_REQUEST_TYPE": "BIP_RUN_ADHOC",
+	        	"BIP_folder":this.folderPath,
+				"BIP_fexText":fexText,
+				"BIP_paramPrompt":false,
+				"BIP_server":"EDASERVE",
+				"BIP_appPath":"",
+	        }
 		};
 		
 		options.fields[WFGlobals.getSesAuthParm()]=WFGlobals.getSesAuthVal();
@@ -934,7 +1103,6 @@ $.widget("ibi.textEditorTabPage", $.ibi.ibxTabPage,
 	
 	toggleSearchPanel:function(e)
 	{
-		//this.ace_editor.execCommand("find");		
 		var isVisible = this._searchPanel.is(":visible");
 		
 		if (isVisible)
@@ -997,7 +1165,7 @@ $.widget("ibi.textEditorTabPage", $.ibi.ibxTabPage,
 	{
 		this._defaultSearchOptions.wrap = this._cbWrapAround.ibxWidget("checked");
 	},
-	
+/*	
 	_setInsertStatusLabel:function()
 	{
 		var keyStatus = this._insertKeyStatus ? ibx.resourceMgr.getString("bid_insert_on") : ibx.resourceMgr.getString("bid_insert_off");
@@ -1017,11 +1185,14 @@ $.widget("ibi.textEditorTabPage", $.ibi.ibxTabPage,
 		var data = {"contentLength":contentLength, "lineCount":lineCount,"linePosition":linePosition, "columnPosition":columnPosition};
 		$(document).trigger("SET_STATUS_BAR_CURSOR_METADATA", data);
 	},
-	
+*/	
 	getStatusBarInfo:function()
 	{		
-		this._setInsertStatusLabel();
-		this._setCursorPositionInfo();
+		//this._setInsertStatusLabel();
+		//this._setCursorPositionInfo();
+		
+		this._editorWidget.ibxWidget("setInsertStatusLabel");
+		this._editorWidget.ibxWidget("setCursorPositionInfo");
 	},
 	
 	_setEditorChanged:function(status)
@@ -1076,28 +1247,13 @@ $.widget("ibi.textEditorTabPage", $.ibi.ibxTabPage,
 		this._editorEnvironment._menuOptions.show();
 		this._setEditorMode();
 		
-	    this.editor_options = {
-				"fType":"",
-				"newDoc":true,
-				"servers":[],
-				"srvChk":false, 
-			  	"server":"",
-			  	"appChk":false,
-			  	"appPath":"",
-			  	"myReport":false,
-			  	"paramPrompt":true,
-			  	"roPath":"" 
-			  };
-		
 	    this.element.ibxWidget("option", {"tabOptions": {"text": ibx.resourceMgr.getString("BT_UNTITLED")}});
 	},
 	
 	_decodeCDATAEncoding:function (text)
 	{
-		
 		text = text.replace(/IBI_CDATA_START_PATTERN/g, "<![CDATA");
 		text = text.replace(/IBI_CDATA_END_PATTERN/g, "]]>");	
-		
 		return text;
 	}
 });
@@ -1105,7 +1261,6 @@ $.widget("ibi.textEditorTabPage", $.ibi.ibxTabPage,
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
 
 $.widget("ibi.textEditor", $.ibi.ibxWidget, 
 {
@@ -1187,10 +1342,48 @@ $.widget("ibi.textEditor", $.ibi.ibxWidget,
 		})
 */	
 		$(document).on("SET_STATUS_BAR_CURSOR_METADATA", this._onSetStatusBarCursorMetadata.bind(this));
-		$(document).on("SET_STATUS_BAR_INSERT_KEY_METADATA", this._onSetStatusBarInsertKeyMetadata.bind(this));
+		$(document).on("SET_STATUS_BAR_INSERT_KEY_METADATA", this._onSetStatusBarInsertKeyMetadata.bind(this));     
 
 
-		this._fileNew.on("ibx_menu_item_click", this._onMenuFileNew.bind(this));
+		//this._fileNew.on("ibx_menu_item_click", this._onMenuFileNew.bind(this));
+		
+		this._fileNewR = $("<div class='te-menu-item'>").ibxMenuItem({'labelOptions':{'text': ibx.resourceMgr.getString(this._getEditorFormatName("r"))}, 'userValue': "r"});
+		this._fileNewPY = $("<div class='te-menu-item'>").ibxMenuItem({'labelOptions':{'text': ibx.resourceMgr.getString(this._getEditorFormatName("py"))}, 'userValue': "py"});
+		this._fileNewTXT = $("<div class='te-menu-item'>").ibxMenuItem({'labelOptions':{'text': ibx.resourceMgr.getString(this._getEditorFormatName("txt"))}, 'userValue': "txt"});
+		this._fileNewMAS = $("<div class='te-menu-item'>").ibxMenuItem({'labelOptions':{'text': ibx.resourceMgr.getString(this._getEditorFormatName("mas"))}, 'userValue': "mas"});
+		this._fileNewFEX = $("<div class='te-menu-item'>").ibxMenuItem({'labelOptions':{'text': ibx.resourceMgr.getString(this._getEditorFormatName("fex"))}, 'userValue': "fex"});
+		this._fileNewHTM = $("<div class='te-menu-item'>").ibxMenuItem({'labelOptions':{'text': ibx.resourceMgr.getString(this._getEditorFormatName("htm"))}, 'userValue': "htm"});
+		this._fileNewSTY = $("<div class='te-menu-item'>").ibxMenuItem({'labelOptions':{'text': ibx.resourceMgr.getString(this._getEditorFormatName("sty"))}, 'userValue': "sty"});
+		this._fileNewCSS = $("<div class='te-menu-item'>").ibxMenuItem({'labelOptions':{'text': ibx.resourceMgr.getString(this._getEditorFormatName("css"))}, 'userValue': "css"});
+		this._fileNewSQL = $("<div class='te-menu-item'>").ibxMenuItem({'labelOptions':{'text': ibx.resourceMgr.getString(this._getEditorFormatName("sql"))}, 'userValue': "sql"});
+		this._fileNewJS = $("<div class='te-menu-item'>").ibxMenuItem({'labelOptions':{'text': ibx.resourceMgr.getString(this._getEditorFormatName("js"))}, 'userValue': "js"});
+
+		this._fileNewR.on("click", this._onMenuFileNew.bind(this));
+		this._fileNewPY.on("click", this._onMenuFileNew.bind(this)); 
+		this._fileNewTXT.on("click", this._onMenuFileNew.bind(this)); 
+		this._fileNewMAS.on("click", this._onMenuFileNew.bind(this)); 
+		this._fileNewFEX.on("click", this._onMenuFileNew.bind(this)); 
+		this._fileNewHTM.on("click", this._onMenuFileNew.bind(this)); 
+		this._fileNewSTY.on("click", this._onMenuFileNew.bind(this)); 
+		this._fileNewCSS.on("click", this._onMenuFileNew.bind(this));
+		this._fileNewSQL.on("click", this._onMenuFileNew.bind(this));
+		this._fileNewJS.on("click", this._onMenuFileNew.bind(this));
+
+        
+        this._fileNewSubmenu.ibxWidget("add", this._fileNewR);
+        this._fileNewSubmenu.ibxWidget("add", this._fileNewPY);
+        this._fileNewSubmenu.ibxWidget("add", this._fileNewTXT);
+        this._fileNewSubmenu.ibxWidget("add", this._fileNewMAS);
+        this._fileNewSubmenu.ibxWidget("add", this._fileNewFEX);
+        this._fileNewSubmenu.ibxWidget("add", this._fileNewHTM);
+        this._fileNewSubmenu.ibxWidget("add", this._fileNewSTY);
+        this._fileNewSubmenu.ibxWidget("add", this._fileNewCSS);
+        this._fileNewSubmenu.ibxWidget("add", this._fileNewSQL);
+        this._fileNewSubmenu.ibxWidget("add", this._fileNewJS);		
+		
+		
+		
+        
 		this._fileOpen.on("ibx_menu_item_click", this._onMenuFileOpen.bind(this));
 		this._fileSave.on("ibx_menu_item_click", this._onMenuFileSave.bind(this));
 		this._fileSaveAs.on("ibx_menu_item_click", this._onMenuFileSaveAs.bind(this));
@@ -1213,13 +1406,7 @@ $.widget("ibi.textEditor", $.ibi.ibxWidget,
 		
 		this._menuHelp.on("click", this._onMenuButtonHelp.bind(this));
 		
-		/*
-		//this._editDelete.on("ibx_menu_item_click", this._onMenuEditDelete.bind(this));
-		//this._editSelectAll.on("ibx_menu_item_click", this._onMenuEditSelectAll.bind(this));
-		//this._editUpperCase.on("ibx_menu_item_click", this._onMenuEditUpperCase.bind(this));
-		//this._editLowerCase.on("ibx_menu_item_click", this._onMenuEditLowerCase.bind(this));
-
-		
+		/*		
 		this._searchGoTo.on("ibx_menu_item_click", this._onMenuSearchGoTo.bind(this));
 		
 		this._menuOptions.on("click", this._onMenuButtonOptions.bind(this));
@@ -1327,36 +1514,9 @@ $.widget("ibi.textEditor", $.ibi.ibxWidget,
 	{
 		this._onEditorPasteFunction(e);		
 	},
-/*	
-	_onMenuEditDelete:function(e)
-	{
-		alert("_onMenuEditDelete");
-
-		//this._deleteSelectedText(e);
-	},
 	
-	_onMenuEditSelectAll:function(e)
-	{
-		alert("_onMenuEditSelectAll");
 
-		//this._selectAll(e);
-	},
 	
-	_onMenuEditUpperCase:function(e)
-	{
-		alert("_onMenuEditUpperCase");
-
-    	//this._selectionToUpperCase(e);
-	},
-
-	_onMenuEditLowerCase:function(e)
-	{
-		
-		alert("_onMenuEditLowerCase");
-
-    	//this._selectionToLowerCase(e);
-	},
-*/
 	_onMenuButtonSave:function(e)
 	{
     	this._onSaveFileFunction(e);
@@ -1431,7 +1591,7 @@ $.widget("ibi.textEditor", $.ibi.ibxWidget,
 	//---------------------------------------------------------------------------------------------------------
 	_onEditorOpen:function()
 	{
-		this._setCursorPositionInfo();
+		this._editorWidget.ibxWidget("setCursorPositionInfo");//this._setCursorPositionInfo();
 		this.ace_editor.focus();
 	},
 	
@@ -1440,7 +1600,7 @@ $.widget("ibi.textEditor", $.ibi.ibxWidget,
 		if(this.currentAction != -1)
 		{
 			e.preventDefault();
-			this._setCursorPositionInfo();
+			this._editorWidget.ibxWidget("setCursorPositionInfo");//this._setCursorPositionInfo();
 			this._onExit();
 		}
 	},
@@ -1450,7 +1610,7 @@ $.widget("ibi.textEditor", $.ibi.ibxWidget,
 		this._callbackFunc = f;
 	},
 	
-	openEditorTab:function(rootPath, folderPath, fileName) // Public method to open Editor Tab.
+	openEditorTab:function(rootPath, folderPath, fileName, mode) // Public method to open Editor Tab.
 	{		
 		this.rootPath = this._checkPath(rootPath);
 		
@@ -1490,8 +1650,11 @@ $.widget("ibi.textEditor", $.ibi.ibxWidget,
 	}, 
 	
 	_onNewFunction:function(e)
-	{	
-		this.openEditorTab(this.rootPath, this.rootPath);
+	{			
+		var extensionValue = $(e.currentTarget).ibxWidget("option", "userValue");
+		var mode = this._getEditorFormatName(extensionValue);
+		
+		this.openEditorTab(this.rootPath, this.rootPath, "" , mode);
 	},
 	
 	_onFileOpen:function(e)
@@ -1749,33 +1912,7 @@ $.widget("ibi.textEditor", $.ibi.ibxWidget,
 		}
 	},
 	
-	_selectionToUpperCase:function(e)
-	{
-		this.ace_editor.toUpperCase();			
-		this._setEditorChanged(true);
-		this._setCursorPositionInfo(e);
-	},
-	
-	_selectionToLowerCase:function(e)
-	{
-		this.ace_editor.toLowerCase();			
-		this._setEditorChanged(true);
-		this._setCursorPositionInfo(e);
-	},
-	
-	_selectAll:function(e)
-	{
-		this.ace_editor.focus();		
-		this.ace_editor.selection.selectAll();		
-	},
-	
-	_deleteSelectedText:function(e)
-	{
-		var selectedRange = this.ace_editor.selection.getRange();		
-		this.ace_editor.getSession().getDocument().remove(selectedRange);		
-		this._setEditorChanged(true);
-		this._setCursorPositionInfo(e);
-	},
+
 	
 	_setEditorChanged:function(status)
 	{
@@ -1818,21 +1955,6 @@ $.widget("ibi.textEditor", $.ibi.ibxWidget,
 		this._menuOptions.show();
 		this._setEditorMode();
 		
-	    this.editor_options = {
-				"fType":"",
-				"newDoc":true,
-				"servers":[],
-				"srvChk":false, 
-			  	"server":"",
-			  	"appChk":false,
-			  	"appPath":"",
-			  	"myReport":false,
-			  	"paramPrompt":true,
-			  	"roPath":"" 
-			  };
-
-		//this.unDoText = [];
-		
 		this.element.ibxWidget("option", "captionOptions", {text: ibx.resourceMgr.getString("BT_UNTITLED")});
 	},
 	
@@ -1860,7 +1982,15 @@ $.widget("ibi.textEditor", $.ibi.ibxWidget,
 	
 	_toggleGoToLine:function(e)
 	{
-		this.ace_editor.execCommand("gotoline");
+		//this.ace_editor.execCommand("gotoline");
+		
+		var tabPage = this._editorTabPane.ibxWidget("selected"); 
+		
+		if(!tabPage)
+			return;
+		/*
+		tabPage.ibxWidget("toggleSearchPanel");	
+		 */
 		/*
 		var isVisible = this._goToLine.is(":visible");
 		
@@ -1908,7 +2038,7 @@ $.widget("ibi.textEditor", $.ibi.ibxWidget,
 		this.ace_editor.gotoLine(lineNumber);
 		
 		this._toggleGoToLine(e);
-		this._setCursorPositionInfo(e);
+		this._editorWidget.ibxWidget("setCursorPositionInfo");//this._setCursorPositionInfo(e);
 	},
 	
 	_toggleSearchPanel:function(e)
@@ -1919,658 +2049,6 @@ $.widget("ibi.textEditor", $.ibi.ibxWidget,
 			return;
 		
 		tabPage.ibxWidget("toggleSearchPanel");		
-	},
-	
-	_tchange:function(e)
-	{
-		var text = this._findText.ibxWidget("option", "text");
-
-		if (text.length == 0)
-		{
-			this._btnFind.ibxWidget("option", "disabled", true);
-			this._btnFindPrevious.ibxWidget("option", "disabled", true);
-			this._btnReplace.ibxWidget("option", "disabled", true);
-			this._btnReplaceAll.ibxWidget("option", "disabled", true);
-		}
-		else
-		{
-			this._btnFind.ibxWidget("option", "disabled", false);
-			this._btnFindPrevious.ibxWidget("option", "disabled", false);
-			this._btnReplace.ibxWidget("option", "disabled", false);
-			this._btnReplaceAll.ibxWidget("option", "disabled", false);
-		}
-	},
-	
-	_find:function(e)
-	{		
-		/*
-		var dlg;
-		var idx;
-		
-		var ea = this._txtArea[0].firstChild;
-		var cs = this._cbMatchCase.ibxWidget("checked");
-		var eaValLC = cs? ea.value : ea.value.toLowerCase();
-		
-		var ft = cs ? this._findText.ibxWidget("option", "text") : this._findText.ibxWidget("option", "text").toLowerCase();
-		
-		var ftLen = ft.length;
-		var eaValLCLen = eaValLC.length;
-		
-		var selStart = ea.selectionStart;
-		var selEnd = ea.selectionEnd;
-			
-		if(selStart != selEnd) // selection found
-		{
-			selStart ++; // search ONE charachter forward
-			// selStart += ftLen; // search after ENTIRE previously found result
-		}
-		
-		if(selStart == eaValLCLen || selStart > eaValLCLen) // wrap around
-		{ 
-			selStart = 0;
-		}
-
-		idx = eaValLC.indexOf(ft, selStart);
-		
-		if (idx == -1)
-		{
-			idx = eaValLC.indexOf(ft, 0);
-		}
-			
-		if (idx != -1)
-		{	
-			
-			ea.setSelectionRange(idx, idx + ftLen);
-			ea.focus();								// need this for FF
-			//ea.setFocused(true);	// need this for Chrome				
-
-			
-			this._setCursorPositionInfo(e);
-					
-			if(isChrome) //hack for chrome scrolling
-			{			
-				var rowHeight = 15;
-				//var linePosition = this.linePosLbl.getText();
-				var linePosition = this._linePosLbl.ibxWidget("option", "text");
-				
-				if(linePosition > 0)
-					linePosition -= 1;
-				
-				var scrollPosition = rowHeight * linePosition;
-				
-				ea.scrollTop = scrollPosition;
-			}
-			
-			this._btnFind.ibxWidget("option", "disabled", false);
-			this._btnFindPrevious.ibxWidget("option", "disabled", false);
-			this._btnReplace.ibxWidget("option", "disabled", false);
-			this._btnReplaceAll.ibxWidget("option", "disabled", false);
-		}
-		else
-		{
-			this._btnFind.ibxWidget("option", "disabled", true);
-			this._btnFindPrevious.ibxWidget("option", "disabled", true);
-			this._btnReplace.ibxWidget("option", "disabled", true);
-			this._btnReplaceAll.ibxWidget("option", "disabled", true);
-
-			var options = 
-			{
-				type:"std error",
-				caption: ibx.resourceMgr.getString("BT_ERROR"),
-				buttons:"ok",
-				messageOptions:
-				{
-					text:sformat(ibx.resourceMgr.getString("bid_textNotFound2"), ft)
-				}
-			};
-			var dlg = $.ibi.ibxDialog.createMessageDialog(options);
-			dlg.ibxDialog("open");			
-		}
-		*/
-	},
-
-	_findPrev:function(e)
-	{	
-		/*
-		var dlg;
-		var idx;
-		
-		var ea = this._txtArea[0].firstChild;
-		var cs = this._cbMatchCase.ibxWidget("checked");
-		var eaValLC = cs? ea.value : ea.value.toLowerCase();
-		var ft = cs ? this._findText.ibxWidget("option", "text") : this._findText.ibxWidget("option", "text").toLowerCase();
-		
-		var ftLen = ft.length;
-		var eaValLCLen = eaValLC.length;
-		var selStart = ea.selectionStart;
-		var selEnd = ea.selectionEnd;
-
-		if(selStart == 0) // wrap around
-		{ 
-			selStart = eaValLCLen;
-		}
-		
-		if(selStart == selEnd) // no selection
-		{
-			if(selStart-ftLen < 0) // lastIndexOf(string, x) search inclusive position x
-			{
-				selStart = eaValLCLen;
-			}
-			else
-			{
-				selStart -= ftLen; //  search for result that located ENTIRELY BEFORE CURSOR
-			}
-		}
-		else // selection found, the result CAN be located ONE character BEFORE SELECTION.
-		{
-			if(selStart > 0) // lastIndexOf(string, x) search inclusive position x
-			{
-				selStart --;  // search ONE charachter backward
-			}
-			
-//			if(selStart > ftLen) // lastIndexOf(string, x) search inclusive position x
-//			{
-//				selStart -= ftLen; // search for result that located ENTIRELY BEFORE SELECTION.
-//			}
-
-		}
-		
-		idx = eaValLC.lastIndexOf(ft, selStart);
-		
-		if (idx == -1) // wrap around to search the remainder of text
-		{
-			idx = eaValLC.lastIndexOf(ft, eaValLCLen);
-		}
-		
-		if (idx != -1)
-		{
-	
-			ea.setSelectionRange(idx, idx + ftLen);
-			ea.focus();								// need this for FF
-			//ea.setFocused(true);	// need this for Chrome		
-			
-			this._setCursorPositionInfo(e);
-			
-			if(isChrome) //hack for chrome scrolling
-			{			
-				var rowHeight = 15;
-				var linePosition = this._linePosLbl.ibxWidget("option", "text");
-				
-				if(linePosition > 1)
-					linePosition -= 1;
-				
-				var scrollPosition = (rowHeight * linePosition) - rowHeight;
-				
-				ea.scrollTop = scrollPosition;
-			}
-			
-			this._btnFind.ibxWidget("option", "disabled", false);
-			this._btnFindPrevious.ibxWidget("option", "disabled", false);
-			this._btnReplace.ibxWidget("option", "disabled", false);
-			this._btnReplaceAll.ibxWidget("option", "disabled", false);
-
-		}
-		else
-		{
-			this._btnFind.ibxWidget("option", "disabled", true);
-			this._btnFindPrevious.ibxWidget("option", "disabled", true);
-			this._btnReplace.ibxWidget("option", "disabled", true);
-			this._btnReplaceAll.ibxWidget("option", "disabled", true);
-
-			var options = 
-			{
-				type:"std information",
-				caption:ibx.resourceMgr.getString("BT_MESSAGE"),
-				buttons:"ok",
-				messageOptions:
-				{
-					text:sformat(ibx.resourceMgr.getString("bid_textNotFound2"), ft)
-				}
-			};
-			var dlg = $.ibi.ibxDialog.createMessageDialog(options);
-			dlg.ibxDialog("open");	
-			
-		}
-*/		
-	},
-
-	_replace:function(e)
-	{
-		/*
-		this.unDoText.push(this._txtArea.ibxWidget("option", "text"));
-		this._btnUndo.ibxWidget("option", "disabled", false);
-		
-		var ea = this._txtArea[0].firstChild;
-		var ft = this._findText.ibxWidget("option", "text");
-		var replText = this._replaceText.ibxWidget("option", "text");
-		var ftLen = ft.length;
-		this._setEditorChanged(true);
-		
-		if (document.selection)
-		{
-			this.textRange.text = replText;
-//			this.textRange = ea.createTextRange();
-		}
-		else
-		{
-			var val = ea.value; 
-		    var selStart = ea.selectionStart;
-		    ea.value = val.slice(0, selStart) + replText + val.slice(ea.selectionEnd);        
-		    ea.selectionEnd = selStart + replText.length;
-		}
-		this._btnReplace.ibxWidget("option", "disabled", true);
-		*/
-	},
-
-	_replaceFind:function(e)
-	{
-		this._replace(e);
-		//this.find(e);
-	},
-
-	_replaceAll:function(e)
-	{
-		/*
-		this.unDoText.push(this._txtArea.ibxWidget("option", "text"));
-		this._btnUndo.ibxWidget("option", "disabled", false);
-		
-		this._setEditorChanged(true);
-		
-		var cs = this._cbMatchCase.ibxWidget("checked");		
-		var ft = this._findText.ibxWidget("option", "text");
-		var replText = this._replaceText.ibxWidget("option", "text");
-		
-		var text = this._txtArea.ibxWidget("option", "text");
-		var text2 = "";
-		
-		if(cs)
-		{
-			text2 = text.replace(new RegExp(ft, 'g'), replText);
-		}
-		else
-		{
-			text2 = text.replace(new RegExp(ft, "ig"), replText);
-		}
-			
-		if (text2 != text)
-		{
-			this._txtArea.ibxWidget("option", "text", text2);
-		}
-		*/
-	},
-
-	_onOptions:function(e)
-	{	
-		
-		this._editorOptionsDlg = ibx.resourceMgr.getResource('.text-editor-options', true);
-		
-		this._editorOptionsDlg.ibxWidget("option", "captionOptions", {text: ibx.resourceMgr.getString("bid_editor_options")});
-		this._editorOptionsDlg.ibxWidget({buttons:"okcancelapply"});
-		
-		this._editorOptionsDlg.ibxWidget("member", "btnOK").ibxWidget("option", "text", ibx.resourceMgr.getString("bid_OK"));
-		this._editorOptionsDlg.ibxWidget("member", "btnApply").ibxWidget("option", "text", ibx.resourceMgr.getString("bid_reset"));
-		this._editorOptionsDlg.ibxWidget("member", "btnCancel").ibxWidget("option", "text", ibx.resourceMgr.getString("bid_cancel"));
-		
-		this._editorOptionsDlg.ibxWidget('open');		
-		
-		this._initOptions();		
-		
-		this._editorOptionsDlg.on("ibx_apply", function(e, closeData)
-		{
-			// RESET			
-			this._resetOptions();
-			
-		}.bind(this)).on("ibx_beforeclose", function (e, closeData)
-		{						
-			if(closeData == "ok")
-			{
-				this._gatherOptions(this._editorOptionsDlg);
-				this.ace_editor.focus();
-			}	
-			else
-			{
-				// Cancel
-				this.ace_editor.focus();
-			}
-		}.bind(this));
-	},
-	
-	_initOptions:function()
-	{	
-		var servers = this.editor_options.servers;
-		var defServer = this.editor_options.server;
-		
-		var srvList = this._editorOptionsDlg.ibxWidget("member", "_srvList");
-		srvList.ibxWidget("remove", ".ibx-select-item", true);
-		
-	 	function sortServers(name1, name2)
-	 	{
-	 		return (name1 < name2 ? -1 : (name1 > name2 ? 1 : 0));
-	 	}
-	 	
-	 	servers = servers.sort(sortServers);
-
-		for (var i = 0; i < servers.length; i++)
-		{
-			var srv = servers[i];
-			var selected = (defServer && srv == defServer);
-
-			var selItem = $("<div>").ibxSelectItem({text: srv, userValue: srv, selected: selected});
-			srvList.ibxSelect("addControlItem", selItem);
-		}
-		
-		this._editorOptionsDlg.ibxWidget("member", "_srvChk").ibxWidget("checked", this.editor_options.srvChk);
-
-		if (this.editor_options.srvChk)
-		{
-			srvList.ibxWidget("option", "disabled", false);
-		}
-
-		this._editorOptionsDlg.ibxWidget("member", "_appChk").ibxWidget("checked", this.editor_options.appChk);
-
-
-		if (this.editor_options.appChk)
-		{
-			this._editorOptionsDlg.ibxWidget("member", "_avlAppList").ibxWidget("option", "disabled", false);
-			this._editorOptionsDlg.ibxWidget("member", "_selAppList").ibxWidget("option", "disabled", false);
-		}
-		else
-		{
-			this._editorOptionsDlg.ibxWidget("member", "_avlAppList").ibxWidget("option", "disabled", true);
-			this._editorOptionsDlg.ibxWidget("member", "_selAppList").ibxWidget("option", "disabled", true);
-		}
-		
-		var defApp = this.editor_options.appPath;
-		
-		var appParts = defApp.split(" ");
-		
-		var selAppList = this._editorOptionsDlg.ibxWidget("member", "_selAppList");
-		selAppList.ibxWidget("remove", ".ibx-select-item", true);
-		
-		for (var k = 0; k < appParts.length; k++)
-		{
-			var selApp = appParts[k];
-
-			//selApp = decodeHtmlEncoding(selApp); //:TODO
-			
-			if (selApp.length > 0)
-			{
-				var selItem = $("<div>").ibxSelectItem({text: selApp, userValue: selApp});
-				selAppList.ibxSelectItemList("add", selItem);
-			}
-		}
-		
-		this._editorOptionsDlg.ibxWidget("member", "_paramPrompt").ibxWidget("checked", this.editor_options.paramPrompt);
-
-		this._editorOptionsDlg.ibxWidget("member", "_srvChk").on("click", this._srvChkChange.bind(this));
-		this._editorOptionsDlg.ibxWidget("member", "_appChk").on("click", this._appChkChange.bind(this));
-		this._editorOptionsDlg.ibxWidget("member", "_srvList").on("ibx_change", this._srvListChange.bind(this));
-		
-		this._editorOptionsDlg.ibxWidget("member", "_appBtn").on("click", this._getAppsServerAccess.bind(this));
-		this._editorOptionsDlg.ibxWidget("member", "_selAppBtn").on("click", this._addApp.bind(this));		
-		this._editorOptionsDlg.ibxWidget("member", "_delAppBtn").on("click", this._delApp.bind(this));
-		
-		this._editorOptionsDlg.ibxWidget("member", "_avlAppList").on("dblclick", this._addApp.bind(this));
-		this._editorOptionsDlg.ibxWidget("member", "_selAppList").on("dblclick", this._delApp.bind(this));
-		
-		this._editorOptionsDlg.ibxWidget("member", "_appUp").on("click", this._upApp.bind(this));
-		this._editorOptionsDlg.ibxWidget("member", "_appDown").on("click", this._dwnApp.bind(this));
-	},
-	
-	_getAppsServerAccess:function()
-	{		
-		var sa = new ServerAccess();
-		var currentServer = this._editorOptionsDlg.ibxWidget("member", "_srvList").ibxWidget("userValue");
-		sa.checkCredentials(currentServer, this._getApps.bind(this), "", false);
-	},
-	
-	_resetOptions:function()
-	{
-		this._optionsChanged = false;
-		
-		var path = this.options.newDoc ? this.folderPath : this.folderPath + "/" + this.fullName; 
-
-		this._getEditorServerEnv(path);
-		
-		var srvList = this._editorOptionsDlg.ibxWidget("member", "_srvList");
-		srvList.ibxWidget("remove", ".ibx-select-item", true);
-		
-		var avlAppList = this._editorOptionsDlg.ibxWidget("member", "_avlAppList");
-		avlAppList.ibxWidget("remove", ".ibx-select-item", true);
-		
-		var selAppList = this._editorOptionsDlg.ibxWidget("member", "_selAppList");
-		selAppList.ibxWidget("remove", ".ibx-select-item", true);
-
-		this._editorOptionsDlg.ibxWidget("member", "_appChk").ibxWidget("checked", false);
-
-		this._initOptions();
-	},
-	
-	_gatherOptions:function(optionsDlg)
-	{		
-		if (!optionsDlg)
-		{
-			return;
-		}
-		else 
-		{
-			this.optionsChanged = true;
-			this.editor_options.paramPrompt = this._editorOptionsDlg.ibxWidget("member", "_paramPrompt").ibxWidget("checked");
-			this.editor_options.srvChk = this._editorOptionsDlg.ibxWidget("member", "_srvChk").ibxWidget("checked");
-			this.editor_options.appChk = this._editorOptionsDlg.ibxWidget("member", "_appChk").ibxWidget("checked");
-					
-			this.editor_options.server = this._editorOptionsDlg.ibxWidget("member", "_srvList").ibxWidget("userValue");
-
-			this.editor_options.appPath = "";
-						
-			var ch = this._editorOptionsDlg.ibxWidget("member", "_selAppList").ibxWidget("children");
-			
-			var appPathValue = "";
-			
-			for (var i = 0; i < ch.length; i++)
-			{
-				var aP = ch[i];
-				var aPText = $(aP).ibxWidget("userValue");
-
-				if (i == 0)
-				{
-					appPathValue = aPText;
-				}
-				else
-				{
-					appPathValue += (" " + aPText);
-				}
-			}
-			
-			this.editor_options.appPath = appPathValue;
-		}
-
-	},	
-
-	_upApp:function(e)
-	{		
-		var selAppList = this._editorOptionsDlg.ibxWidget("member", "_selAppList");
-		var selApp = selAppList.ibxWidget("selected");
-
-		if(!selApp || selApp.length != 1)
-			return;
-		
-		var prevSibling = selApp.prev();
-		
-	    if(prevSibling.length == 1) 
-		{		
-	    	selAppList.ibxWidget("add", selApp, prevSibling, true);
-		}
-	},
-
-	_dwnApp:function(e)
-	{
-		var selAppList = this._editorOptionsDlg.ibxWidget("member", "_selAppList");
-		var selApp = selAppList.ibxWidget("selected");
-
-		if(!selApp || selApp.length != 1)
-			return;
-		
-		var nextSibling = selApp.next();
-		
-	    if(nextSibling.length == 1) 
-		{		
-	    	selAppList.ibxWidget("add", selApp, nextSibling);
-		}
-	},
-
-	_addApp:function(e)
-	{		
-		var avlAppList = this._editorOptionsDlg.ibxWidget("member", "_avlAppList");
-		var avlSelApp = avlAppList.ibxWidget("selected");
-
-		if(!avlSelApp)
-			return;
-		
-		var selAppList = this._editorOptionsDlg.ibxWidget("member", "_selAppList");
-		var al = avlSelApp.length;
-		
-		for(var i = 0; i < al; i++)
-		{
-	    	selAppList.ibxWidget("removeSelection");
-	    	selAppList.ibxWidget("add", avlSelApp[i]);
-		}
-	},
-	
-	_delApp:function(e)
-	{
-		var selAppList = this._editorOptionsDlg.ibxWidget("member", "_selAppList");
-		var selSelApp = selAppList.ibxWidget("selected");
-		
-		if(!selSelApp)
-			return;
-		
-		var avlAppList = this._editorOptionsDlg.ibxWidget("member", "_avlAppList");
-
-		var sl = selSelApp.length;
-		
-		for(var i = 0; i < sl; i++)
-		{
-			avlAppList.ibxWidget("removeSelection");
-			avlAppList.ibxWidget("add", selSelApp[i]);
-		}
-		
-		avlAppList.ibxWidget("sort");
-	},
-	
-	_getApps:function() 
-	{ 
-		var server = this._editorOptionsDlg.ibxWidget("member", "_srvList").ibxWidget("userValue");
-		if (!server)
-		{
-			return;
-		}
-
-		var uriExec = sformat("{1}"+this.editorActionHandler, applicationContext);
-		var randomnum = Math.floor(Math.random() * 100000);	
-		var argument=
-	 	{
-	 		BIP_REQUEST_TYPE: "BIP_GET_APPS",		
-	 		server: server,
-	 		IBI_random: randomnum				 		
-	 	};
- 	
-		$.get({	"url": uriExec,	"context": this,"data": argument})
-			.done(function( data ) 
-			{				
-				this._gotApps(data);
-			});
-	},
-	
-	_gotApps:function(data)
-	{
-		var avlAppList = this._editorOptionsDlg.ibxWidget("member", "_avlAppList");		
-		avlAppList.ibxWidget("remove", ".ibx-select-item", true);
-		
-		var status =  $("status", data);
-		el = $(status);
-		var result =  el.attr("result");
-
-		if(result != "success")
-		{
-			if (result != "n/a")
-			{
-				var message = el.attr("message");
-				
-				var options = 
-				{
-					type:"std error",
-					caption:ibx.resourceMgr.getString("BT_ERROR"),
-					buttons:"ok",
-					messageOptions:
-					{
-						text:sformat(ibx.resourceMgr.getString("BT_EDA_ERROR2"), message)
-					}
-				};
-				var dlg = $.ibi.ibxDialog.createMessageDialog(options);
-				dlg.ibxDialog("open");	
-			}
-			return;
-		}
-		else
-		{
-			var ch = this._editorOptionsDlg.ibxWidget("member", "_selAppList").ibxWidget("children");
-			
-			var selApps = [];
-			
-			for (var i = 0; i < ch.length; i++)
-			{
-				var aP = ch[i];
-				selApps.push( $(aP).ibxWidget("userValue") );
-			}
-
-			var apps = $("app", data);
-			
-			apps.each(function(idx, el)
-			{				
-				el = $(el);
-				
-				var appName = el.attr("name");	
-				var selected = false;
-
-				for(var j = 0; j < selApps.length; j++ )
-				{
-					if(appName == selApps[j])
-					{
-						selected = true;
-						break;
-					}
-				}
-				
-				if(!selected)
-				{
-					var selItem = $("<div>").ibxSelectItem({text: appName, userValue: appName});
-					avlAppList.ibxSelectItemList("add", selItem);
-				}
-				
-			}.bind(this));			
-		} 
-		
-		avlAppList.ibxWidget("sort");
-	},
-	
-	_srvListChange:function(e)
-	{		
-		this._editorOptionsDlg.ibxWidget("member", "_avlAppList").ibxWidget("remove", ".ibx-select-item", true);
-		this._editorOptionsDlg.ibxWidget("member", "_selAppList").ibxWidget("remove", ".ibx-select-item", true);
-	},
-	
-	_srvChkChange:function(e)
-	{
-		var isSrvChecked = this._editorOptionsDlg.ibxWidget("member", "_srvChk").ibxWidget("checked");
-		this._editorOptionsDlg.ibxWidget("member", "_srvList").ibxWidget("option", "disabled", !isSrvChecked);
-	},
-	
-	_appChkChange:function(e)
-	{
-		var isAppChecked = this._editorOptionsDlg.ibxWidget("member", "_appChk").ibxWidget("checked");		
-		this._editorOptionsDlg.ibxWidget("member", "_avlAppList").ibxWidget("option", "disabled", !isAppChecked);
-		this._editorOptionsDlg.ibxWidget("member", "_selAppList").ibxWidget("option", "disabled", !isAppChecked);
 	},
 	
 	_getEditorFormatName:function(ext)

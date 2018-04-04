@@ -50,8 +50,24 @@
 			</div>
 					
 			<div class="editor-misc-resources">
-				<div class="editor-ctx-menu" data-ibx-resource=".editor-menu-edit"></div>
-				<div class="editor-cmds">
+				<div class="te-edit-menu te-menu" data-ibx-type="ibxMenu">
+					<div data-ibx-type="ibxMenuItem" class="menu-edit-selectall" data-ibx-name="_editSelectAll">@ibxString('bid_menu_edit_selectall')</div>
+					<div data-ibx-type="ibxMenuItem" class="menu-edit-clear" data-ibx-name="_editClear">@ibxString('bid_menu_edit_clear')</div>
+					<div data-ibx-type="ibxMenuSeparator"></div>
+					<div data-ibx-type="ibxMenuItem" class="menu-edit-undo" data-ibx-name="_editUndo" data-ibxp-label-options='{"glyphClasses":"ibx-icons ibx-glyph-arrow-right"}'>@ibxString('bid_menu_edit_undo')</div>
+					<div data-ibx-type="ibxMenuItem" class="menu-edit-redo" data-ibx-name="_editRedo" data-ibxp-label-options='{"glyphClasses":"ibx-icons ibx-glyph-arrow-left"}'>@ibxString('bid_menu_edit_redo')</div>					
+					<div data-ibx-type="ibxMenuSeparator"></div>
+					<div data-ibx-type="ibxMenuItem" class="menu-edit-uppercase" data-ibx-name="_editUpperCase">@ibxString('bid_menu_edit_uppercase')</div>
+					<div data-ibx-type="ibxMenuItem" class="menu-edit-lowercase" data-ibx-name="_editLowerCase">@ibxString('bid_menu_edit_lowercase')</div>
+					<div data-ibx-type="ibxMenuItem" class="menu-edit-comment" data-ibx-name="_editComment">@ibxString('bid_menu_edit_comment')</div>
+					<div data-ibx-type="ibxMenuSeparator"></div>													
+					<div data-ibx-type="ibxMenuItem" class="menu-edit-lookup-help" data-ibx-name="_editLookupHelp">@ibxString('bid_menu_edit_lookuphelp')</div>
+					<div data-ibx-type="ibxMenuSeparator"></div>													
+					<div data-ibx-type="ibxMenuItem" class="menu-edit-run" data-ibx-name="_editRun" data-ibxp-label-options='{"glyph":"play_arrow", "glyphClasses":"material-icons"}'>@ibxString('bid_menu_edit_run')</div>					
+				</div>				
+
+				<div class="editor-ctx-menu" data-ibx-resource=".te-file-menu"></div>
+				<!-- div class="editor-cmds">
 					<div class="re-cmd cmd-new" data-ibx-type="ibxCommand" data-ibxp-id="cmdNew" data-ibxp-user-value="new"></div>
 					<div class="re-cmd cmd-open" data-ibx-type="ibxCommand" data-ibxp-id="cmdOpen" data-ibxp-user-value="open"></div>
 					<div class="re-cmd cmd-save" data-ibx-type="ibxCommand" data-ibxp-id="cmdSave" data-ibxp-user-value="save"></div>
@@ -68,61 +84,48 @@
 					<div class="re-cmd cmd-paste" data-ibx-type="ibxCommand" data-ibxp-id="cmdPaste" data-ibxp-user-value="paste"></div>
 					<div class="re-cmd cmd-find" data-ibx-type="ibxCommand" data-ibxp-id="cmdFind" data-ibxp-user-value="find"></div>
 					<div class="re-cmd cmd-del" data-ibx-type="ibxCommand" data-ibxp-id="cmdDelete" data-ibxp-user-value="del"></div>
-				</div>
+				</div-->
 				
 			</div>
 					
 			<div class="text-editor-resources" data-ibx-type="textEditor" data-ibx-name="_textEditor" data-ibx-name-root="true">
 	  		  <div class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
 					<div class="te-menu-bar" data-ibx-type="ibxMenuBar" data-ibxp-justify="stretch" data-ibxp-align="stretch">
-						<div class="te-menu-button" data-ibx-type="ibxMenuButton" data-ibx-name="_menuFile" data-ibxp-glyph="menu" data-ibxp-glyph-classes="material-icons md-18">
+						<div class="te-menu-button te-menu-file" data-ibx-type="ibxMenuButton" data-ibx-name="_menuFile" data-ibxp-icon="./resources/img/app-logo-ted.png">
 							<div class="te-file-menu ibx-menu-no-icons te-menu" data-ibx-type="ibxMenu">
-								<div data-ibx-type="ibxMenuItem" data-ibx-name="_fileNew" data-menu-cmd="fileNew">@ibxString('bid_menu_file_new')</div>
-								<div data-ibx-type="ibxMenuItem" data-ibx-name="_fileOpen" data-menu-cmd="fileOpen">@ibxString('bid_menu_file_open')</div>
-								<div data-ibx-type="ibxMenuItem" data-ibx-name="_fileSave" data-menu-cmd="fileSave">@ibxString('bid_menu_file_save')</div>
-								<div data-ibx-type="ibxMenuItem" data-ibx-name="_fileSaveAs" data-menu-cmd="fileSaveAs">@ibxString('bid_menu_file_saveas')</div>
-								<div data-ibx-type="ibxMenuItem" data-ibx-name="_filePreferences" data-menu-cmd="filePreferences">@ibxString('bid_menu_file_preferences')</div>
-								<div data-ibx-type="ibxMenuItem" data-ibx-name="_fileClose" data-menu-cmd="fileClose">@ibxString('bid_menu_file_close')</div>
-								<div data-ibx-type="ibxMenuItem" data-ibx-name="_fileExit" data-menu-cmd="fileExit">@ibxString('bid_menu_file_exit')</div>
+								<div data-ibx-type="ibxMenuItem" data-ibx-name="_fileNew">@ibxString('bid_menu_file_new')
+								
+									<div class="te-file-menu sub-menu ibx-menu-no-icons te-menu" data-ibx-type="ibxMenu" data-ibx-name="_fileNewSubmenu">
+				   						<!-- div class="te-menu-item" data-ibx-type="ibxMenuItem" data-ibx-name="_fileNewText">@ibxString('str_rules')</div>
+										<div class="te-menu-item" data-ibx-type="ibxMenuItem" data-ibx-name="_fileNewJavaScript">@ibxString('str_rules_on')</div>
+										<div class="te-menu-item" data-ibx-type="ibxMenuItem" data-ibx-name="_fileNewCSS">@ibxString('str_effective_policy')</div>
+										<div class="te-menu-item" data-ibx-type="ibxMenuItem" data-ibx-name="_fileNewHTML">@ibxString('str_owner')</div-->
+									</div>
+								</div>
+								<div class="te-menu-item" data-ibx-type="ibxMenuItem" data-ibx-name="_fileOpen">@ibxString('bid_menu_file_open')</div>
+								<div class="te-menu-item" data-ibx-type="ibxMenuItem" data-ibx-name="_fileSave">@ibxString('bid_menu_file_save')</div>
+								<div class="te-menu-item" data-ibx-type="ibxMenuItem" data-ibx-name="_fileSaveAs">@ibxString('bid_menu_file_saveas')</div>
+								<div class="te-menu-item" data-ibx-type="ibxMenuItem" data-ibx-name="_filePreferences">@ibxString('bid_menu_file_preferences')</div>
+								<div class="te-menu-item" data-ibx-type="ibxMenuItem" data-ibx-name="_fileClose">@ibxString('bid_menu_file_close')</div>
+								<div class="te-menu-item" data-ibx-type="ibxMenuItem" data-ibx-name="_fileExit">@ibxString('bid_menu_file_exit')</div>
 							</div>
 						</div>
-						
 						<div class="te-menu-button" data-ibx-type="ibxMenuButton" data-ibx-name="_menuSave" data-ibxp-glyph-classes="ibx-icons ibx-glyph-floppy"></div>
-						<div class="te-menu-button" data-ibx-type="ibxMenuButton" data-ibx-name="_menuClose" data-menu-cmd="menuClose" data-ibxp-glyph="close" data-ibxp-glyph-classes="material-icons md-18"></div>
-						
-						<!-- div class="te-menu-button" data-ibx-type="ibxMenuButton" data-ibx-name="_menuEdit"  data-ibxp-glyph="edit" data-ibxp-glyph-classes="material-icons md-18">
-							<div class="te-edit-menu ibx-menu-no-icons te-menu" data-ibx-type="ibxMenu">
-								<div data-ibx-type="ibxMenuItem" data-ibx-name="_editRedo" data-menu-cmd="editRedo">@ibxString('bid_menu_edit_redo')</div>
-								<div data-ibx-type="ibxMenuItem" data-ibx-name="_editUndo" data-menu-cmd="editUndo">@ibxString('bid_menu_edit_undo')</div>									
-								<div data-ibx-type="ibxMenuItem" data-ibx-name="_editCopy" data-menu-cmd="editCopy">@ibxString('bid_menu_edit_copy')</div>
-								<div data-ibx-type="ibxMenuItem" data-ibx-name="_editCut" data-menu-cmd="editCut">@ibxString('bid_menu_edit_cut')</div>
-								<div data-ibx-type="ibxMenuItem" data-ibx-name="_editPaste" data-menu-cmd="editPaste">@ibxString('bid_menu_edit_paste')</div>
-							</div>
-						</div-->
-												
+						<div class="te-menu-button" data-ibx-type="ibxMenuButton" data-ibx-name="_menuClose" data-menu-cmd="menuClose" data-ibxp-glyph="close" data-ibxp-glyph-classes="material-icons md-18"></div>								
 						<div class="editor-tb-separator"></div>
-						
 						<div class="te-menu-button" data-ibx-type="ibxMenuButton" data-ibx-name="_menuRedo" data-menu-cmd="menuRedo" data-ibxp-glyph-classes="ibx-icons ibx-glyph-arrow-right"></div>
 						<div class="te-menu-button" data-ibx-type="ibxMenuButton" data-ibx-name="_menuUndo" data-menu-cmd="menuUndo" data-ibxp-glyph-classes="ibx-icons ibx-glyph-arrow-left"></div>
-						
 						<div class="editor-tb-separator"></div>
-						
 						<div class="te-menu-button" data-ibx-type="ibxMenuButton" data-ibx-name="_menuCopy" data-menu-cmd="menuCopy" data-ibxp-glyph-classes="fa fa-copy"></div>
-						<div class="te-menu-button" data-ibx-type="ibxMenuButton" data-ibx-name="_menuCut" data-menu-cmd="menuCut" data-ibxp-glyph-classes="fa fa-cut"></div>						
-						<div class="te-menu-button" data-ibx-type="ibxMenuButton" data-ibx-name="_menuPaste" data-menu-cmd="menuPaste" data-ibxp-glyph-classes="fa fa-paste"></div>					
-						
+						<div class="te-menu-button" data-ibx-type="ibxMenuButton" data-ibx-name="_menuCut" data-menu-cmd="menuCut" data-ibxp-glyph-classes="fa fa-cut"></div>
+						<div class="te-menu-button" data-ibx-type="ibxMenuButton" data-ibx-name="_menuPaste" data-menu-cmd="menuPaste" data-ibxp-glyph-classes="fa fa-paste"></div>
 						<div class="editor-tb-separator"></div>
-						
 						<div class="te-menu-button" data-ibx-type="ibxMenuButton" data-ibx-name="_menuRun" data-menu-cmd="menuRun" data-ibxp-glyph-classes="ibx-icons ibx-glyph-preview"></div>
-						
 						<div class="editor-tb-separator"></div>
-						
 						<div class="te-menu-button" data-ibx-type="ibxMenuButton" data-ibx-name="_menuSearch" data-menu-cmd="menuSearch" data-ibxp-glyph-classes="fa fa-search"></div>
 						<div class="te-menu-button" data-ibx-type="ibxMenuButton" data-ibx-name="_menuOptions" data-menu-cmd="menuOptions" data-ibxp-glyph-classes="ibx-icons ibx-glyph-layout"></div>
 						<div class="te-menu-button" data-ibx-type="ibxMenuButton" data-ibx-name="_menuMore" data-menu-cmd="menuMore" data-ibxp-glyph-classes="fa fa-ellipsis-v"></div>
-						
 						<div class="te-menu-separator4" data-ibx-type="ibxLabel" data-ibxp-justify="center" data-ibxp-align="stretch"></div>
-						
 						<div class="te-menu-button-help" data-ibx-type="ibxMenuButton" data-ibx-name="_menuHelp" data-menu-cmd="menuHelp" data-ibxp-glyph-classes="fa fa-question"></div>
 					</div>
 					

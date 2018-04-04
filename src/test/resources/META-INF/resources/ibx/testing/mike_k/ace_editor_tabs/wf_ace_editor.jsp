@@ -24,27 +24,35 @@ page import="org.owasp.esapi.*,
 	com.ibi.resourceutil.IbiResourceBundle res =  com.ibi.resourceutil.BindowsResourceBundleBean.GetResourceBundle(application,request,"com.ibi.intl.bip_editor.bip_editor");
 	String context = request.getContextPath();
 	
-	String rootFolderPath = null;
-	String folderPath = null;
-	String itemName = null;
+	String rootFolderPath = "";
+	String folderPath = "";
+	String itemName = "";
+	String mode = "";
 	
 	try
 	{
-		rootFolderPath = StringEscapeUtils.escapeJavaScript(request.getParameter("rootFolderPath"));
+		rootFolderPath = request.getParameter("rootFolderPath") == null ? "" : StringEscapeUtils.escapeJavaScript(request.getParameter("rootFolderPath"));
 	}
 	catch(Exception e)
 	{}
 	
 	try
 	{
-		folderPath = StringEscapeUtils.escapeJavaScript(request.getParameter("folderPath"));
+		folderPath = request.getParameter("folderPath") == null ? "" : StringEscapeUtils.escapeJavaScript(request.getParameter("folderPath"));
 	}
 	catch(Exception e)
 	{}
 	
 	try
 	{
-		itemName = StringEscapeUtils.escapeJavaScript(request.getParameter("itemName"));
+		itemName = request.getParameter("itemName") == null ? "" : StringEscapeUtils.escapeJavaScript(request.getParameter("itemName"));
+	}
+	catch(Exception e)
+	{}
+	
+	try
+	{
+		mode = request.getParameter("mode") == null ? "" : StringEscapeUtils.escapeJavaScript(request.getParameter("mode"));
 	}
 	catch(Exception e)
 	{}
@@ -58,7 +66,7 @@ page import="org.owasp.esapi.*,
 		<meta http-equiv="Expires" content="0" />
 		<meta name="google" value="notranslate">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<link rel="shortcut icon" type="image/x-icon" href="<%=context%>/ibx/testing/mike_k/ace_editor_tabs/resources/img/app-logo-ted.png" />
+		<!-- link rel="shortcut icon" type="image/x-icon" href="<%=context%>/ibx/testing/mike_k/ace_editor_tabs/resources/img/app-logo-ted.png" / -->
 
 		<!--include this script...will boot ibx into the running state-->
 		<Script src="<%=context%>/ibx/resources/ibx.js" type="text/javascript"></script>
@@ -75,25 +83,16 @@ page import="org.owasp.esapi.*,
 				var rootFolderPath = decodeURIComponent("<%=rootFolderPath%>");
 				var folderPath = decodeURIComponent("<%=folderPath%>");			
 				var itemName = decodeURIComponent("<%=itemName%>");
+				var mode = decodeURIComponent("<%=mode%>");
 				
-				if(rootFolderPath == "null")
-					rootFolderPath = null;
-				if(folderPath == "null")
-					folderPath = null;
-				if(itemName == "null")
-					itemName = null;
-				
-				if(rootFolderPath && folderPath)
-				{
-					openDocument(rootFolderPath, folderPath, itemName);
-				}
+				openDocument(rootFolderPath, folderPath, itemName, mode);
 				
 			}, ["<%=context%>/ibx/testing/mike_k/ace_editor_tabs/resources/wf_ace_editor_bundle.xml"], true);
 				
 
-			function openDocument(rp, fp, fn)
+			function openDocument(rp, fp, fn, m)
 			{
-				$('.text-editor').ibxWidget("openEditorTab", rp, fp, fn);
+				$('.text-editor').ibxWidget("openEditorTab", rp, fp, fn, m);
 			};
 			
 			function _onBeforeUnload()
