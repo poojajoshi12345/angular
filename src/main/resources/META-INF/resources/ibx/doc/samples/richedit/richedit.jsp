@@ -27,15 +27,11 @@
 				{
 				});
 
-				$(".rich-edit").ibxWidget("ready", function(richEdit)
+				function updateUI()
 				{
-					var strSample = ibx.resourceMgr.getString("IBX_STR_SAMPLE");
-					richEdit.ibxWidget("html",  sformat("Start Text<p/>{1}<p/>{1}<p/>{1}<p/>End Text<p/>", strSample));
-				}).on("selectionchange", function(e)
-				{
-					window._updatingUI = true;
 					var re = $(".rich-edit").ibxWidget("instance");
-					var state = re.selState();
+					var state = re.cmdState();
+
 					$(".cmd-undo").ibxWidget("option", "disabled", !state.undo);
 					$(".cmd-redo").ibxWidget("option", "disabled", !state.redo);
 					$(".cmd-select-all").ibxWidget("option", "disabled", !state.selectAll);
@@ -53,12 +49,31 @@
 					$(".rg-justify").ibxWidget("userValue", state.justify);
 					$(".tb-fore-color").css("borderColor", state.foreColor);
 					$(".tb-back-color").css("borderColor", state.backColor);
-					window._updatingUI = false;
-				}).on("contextmenu", function(e)
+					return state;
+				}
+				updateUI();
+
+				var inTest = false;
+				$(".tb-main").on("keydown", function(e)
 				{
-					e.preventDefault();
+					if(inTest)
+						return
+					inTest = true;
+					var evt = $(this).dispatchEvent(e.originalEvent, "from tb-main");
+					console.log(e, evt);
+					inTest = false;
 				});
 
+				$(".rich-edit").ibxWidget("ready", function(richEdit)
+				{
+					var strSample = ibx.resourceMgr.getString("IBX_STR_SAMPLE");
+					richEdit.ibxWidget("html",  sformat("Start Text<p/>{1}<p/>{1}<p/>{1}<p/>End Text<p/>", strSample));
+				}).on("selectionchange", function(e)
+				{
+					var state = updateUI();
+					//console.log("ibxSample", e.type, state);
+				});
+				
 				$(".re-cmd").on("ibx_triggered ibx_uservaluechanged", function(e)
 				{
 					if(window._updatingUI)
@@ -286,7 +301,7 @@
 			<div data-ibx-type="ibxMenuItem" data-ibxp-command="cmdCut" data-ibxp-label-options='{"glyph":"content_cut", "glyphClasses":"material-icons"}'>Cut</div>
 			<div data-ibx-type="ibxMenuItem" data-ibxp-command="cmdCopy" data-ibxp-label-options='{"glyph":"content_copy", "glyphClasses":"material-icons"}'>Copy</div>
 			<div data-ibx-type="ibxMenuItem" data-ibxp-command="cmdPaste" data-ibxp-label-options='{"glyph":"content_paste", "glyphClasses":"material-icons"}'>Paste</div>
-			<div data-ibx-type="ibxMenuItem" data-ibxp-command="cmdDelete" data-ibxp-label-options='{"glyph":"delete", "glyphClasses":"material-icons"}'>Clear</div>
+			<div data-ibx-type="ibxMenuItem" data-ibxp-command="cmdDelete" data-ibxp-label-options='{"glyph":"clear", "glyphClasses":"material-icons"}'>Clear</div>
 			<div data-ibx-type="ibxMenuSeparator"></div>
 			<div data-ibx-type="ibxMenuItem">Size
 				<div data-ibx-type="ibxMenu">

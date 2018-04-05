@@ -56,11 +56,11 @@ $.widget("ibi.ibxRadioGroup",$.ibi.ibxFlexBox,
 
 		this.add(this.element.children(".ibx-can-toggle").detach());//add children to this group.
 	},
-	_onBeforeChange: function(e,el)
+	_onBeforeChange: function(e)
 	{
 		if(!$(e.currentTarget).ibxWidget('checked'))
 		{
-			if(!this._trigger('beforechange',null,el))
+			if(!this._trigger('beforechange'))
 				e.preventDefault();
 		}
 	},
@@ -142,7 +142,7 @@ $.widget("ibi.ibxRadioGroup",$.ibi.ibxFlexBox,
 			
 			el = $(el);
 			el.removeClass("radio-group-checked" + this.options.name);
-			el.off("ibx_change", null, this._onChangeBind).off('ibx_beforechange', null, this._onBeforeChange);
+			el.off("ibx_change", null, this._onChangeBind).off('ibx_beforechange', this._onBeforeChangeBind);
 			this.refresh();
 		}
 	},

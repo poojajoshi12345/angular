@@ -22,12 +22,6 @@
 
 				$(".main-box").ibxWidget("add", tabPane);
 				*/
-
-				var rb = $("<div id='rb4' tabindex='0' class='rb'>Item 4</div>").ibxRadioButtonSimple({userValue:"item4", checked:true});
-				$("#rgGroup").ibxWidget("add", rb);
-
-				var mb = $("<div id='mb4'>Item 4</div>").ibxRadioMenuItem({userValue:"item4", "group":"rgGroup", checked:true});
-				$("#menu").ibxWidget("add", mb);
 			}, true);
 		</script>
 		<style type="text/css">
@@ -66,7 +60,7 @@
 
 		<div class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="center" data-ibxp-justify="center">
 			<div class="test-tab-pane" tabIndex="0" data-ibx-type="ibxTabPane" data-ibxp-inline="true" data-ibxp-aria.label="Tabs">
-				<div data-ibx-type="ibxTabPage">Page 1
+				<div data-ibx-type="ibxTabPage" data-ibxp-ctx-menu=".ctx-menu">Page 1
 					<div class="tab-content" data-ibx-type="ibxVBox" data-ibxp-align="start" data-ibxp-justify="start">
 						<div>
 							<div tabIndex="0" data-ibx-type="ibxButton">Button1</div>
@@ -90,9 +84,9 @@
 			<div class="rg-menu" data-ibx-type="ibxMenuButton">Menu
 				<div id="rgMenu" data-ibx-type="ibxRadioGroup" data-ibxp-name="rgMenu" data-ibxp-user-value="item3"></div>
 				<div id="menu" data-ibx-type="ibxMenu">
-					<div id="mb1" data-ibx-type="ibxRadioMenuItem" data-ibxp-group="rgGroup" data-ibxp-user-value="item1">Item 1</div>
-					<div id="mb2" data-ibx-type="ibxRadioMenuItem" data-ibxp-group="rgGroup" data-ibxp-user-value="item2">Item 2</div>
-					<div id="mb3" data-ibx-type="ibxRadioMenuItem" data-ibxp-group="rgGroup" data-ibxp-user-value="item3">Item 3</div>
+					<div id="mb1" data-ibx-type="ibxRadioMenuItem" data-ibxp-group="rgMenu" data-ibxp-user-value="item1">Item 1</div>
+					<div id="mb2" data-ibx-type="ibxRadioMenuItem" data-ibxp-group="rgMenu" data-ibxp-user-value="item2">Item 2</div>
+					<div id="mb3" data-ibx-type="ibxRadioMenuItem" data-ibxp-group="rgMenu" data-ibxp-user-value="item3">Item 3</div>
 				</div>
 			</div>
 		</div>

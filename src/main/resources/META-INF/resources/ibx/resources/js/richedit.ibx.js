@@ -59,25 +59,24 @@ $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame,
 			sel.addRange(this._curSelRange);
 		}
 		else
-		if(e.type == "focusout")
-			;//does nothing now
-		else
-		if(e.type == "selectionchange" && this._iFrame.is(document.activeElement))
+		if(e.type == "focusout" && ibxPlatformCheck.isIE)
 		{
 			var sel = doc.getSelection();
 			this._curSelRange = sel.rangeCount ? sel.getRangeAt(0) : null;
-			this.element.dispatchEvent(e.originalEvent);
 		}
+		else
+		if(e.type == "selectionchange" && this._iFrame.is(document.activeElement))
+			this.element.dispatchEvent(e.originalEvent);
 	},
-	commandEnabled:function(cmd){return this.contentDocument().queryCommandEnabled(cmd);},
-	commandState:function(cmd){return this.contentDocument().queryCommandState(cmd);},
-	commandValue:function(cmd){return this.contentDocument().queryCommandValue(cmd);},
 	execCommand:function(cmd, withUI, value)
 	{
 		if(ibxPlatformCheck.isIE)
 			this.contentDocument().body.focus();
 		this.contentDocument().execCommand(cmd, withUI, value);
 	},
+	commandEnabled:function(cmd){return this.contentDocument().queryCommandEnabled(cmd);},
+	commandState:function(cmd){return this.contentDocument().queryCommandState(cmd);},
+	commandValue:function(cmd){return this.contentDocument().queryCommandValue(cmd);},
 	styleWithCSS:function(css){this.execCommand("styleWithCSS", false, css);},
 	removeFormat:function(){this.execCommand("removeFormat");},
 	undo:function(){this.execCommand("undo");},
@@ -110,7 +109,7 @@ $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame,
 			size = $.ibi.ibxRichEdit.fontSize[size];
 		this.execCommand("fontSize", null, size)
 	},
-	selState:function()
+	cmdState:function()
 	{
 		var state = {};
 		state.undo = this.commandEnabled("undo");
@@ -119,6 +118,7 @@ $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame,
 		state.cut = this.commandEnabled("cut");
 		state.copy = this.commandEnabled("copy");
 		state.paste = this.commandEnabled("paste");
+		state.delete = this.commandEnabled("delete");
 		state.bold = this.commandState("bold");
 		state.italic = this.commandState("italic");
 		state.underline = this.commandState("underline");
