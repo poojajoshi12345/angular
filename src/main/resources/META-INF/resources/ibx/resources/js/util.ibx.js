@@ -261,12 +261,23 @@ function createNativeEvent(type, data, canBubble, cancelable, relatedTarget)
 //let jQuery dispatch custom native events
 jQuery.fn.dispatchEvent = function(eType, data, canBubble, cancelable, relatedTarget)
 {
-	var e = (typeof(eType) == "object") ? createNativeEvent(eType.type, eType, eType.canBubble, eType.cancelable, eType.relatedTarget) : createNativeEvent(eType, data, canBubble, cancelable, relatedTarget);
-	this.each(function(e, idx, el)
+	var evt = (typeof(eType) == "object") ? createNativeEvent(eType.type, data) : createNativeEvent(eType, data, canBubble, cancelable, relatedTarget);
+	if(typeof(eType) == "object")
 	{
-		el.dispatchEvent(e);
-	}.bind(this, e));
-	return e;
+		for(var key in eType)
+		{
+			var prop = eType[key];
+			if(prop instanceof Function)
+				continue;
+			evt[key] = eType[key];
+		}
+	}
+
+	this.each(function(evt, idx, el)
+	{
+		el.dispatchEvent(evt);
+	}.bind(this, evt));
+	return evt;
 };
 
 //For accessibility we need to create ibx specific aria ids
