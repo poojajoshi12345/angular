@@ -45,10 +45,6 @@ $.widget("ibi.ibxTabPane", $.ibi.ibxFlexBox,
 		this._super();
 		this._createTabBar();
 		this.add(this.element.children(".ibx-tab-page"));
-		if (this.options.userValue)
-			this._group.ibxWidget("userValue", this.options.userValue);
-		if (this.options.selected)
-			this.selected(this.options.selected);
 	},
 	children:function(selector)
 	{
@@ -154,6 +150,7 @@ $.widget("ibi.ibxTabPane", $.ibi.ibxFlexBox,
 		var selected = tabButton.ibxWidget("option", "tabPage");
 		this.element.children(".ibx-tab-page").not(selected).addClass("tpg-hidden").removeClass("tpg-selected");
 		selected.removeClass("tpg-hidden").addClass("tpg-selected");
+		this.options.selected = selected;
 		this._trigger("change", e, selected);
 	},
 	next: function ()
@@ -204,6 +201,20 @@ $.widget("ibi.ibxTabPane", $.ibi.ibxFlexBox,
 			if (element.length > 0 && element.data("ibiIbxTabPage"))
 				this._group.ibxWidget("selected", element.ibxWidget("button"));
 			return this.element;
+		}
+	},
+	_setOption: function (key, value)
+	{
+		this._super(key, value);
+		if(key == "selected")
+		{
+			if (this.options.selected)
+				this.selected(this.options.selected);
+		}
+		else if (key == "userValue")
+		{		
+			if (this.options.userValue)
+				this.userValue(this.options.userValue);
 		}
 	},
 	_refresh: function ()
@@ -258,12 +269,6 @@ $.widget("ibi.ibxTabPage", $.ibi.ibxWidget,
 		this.element.append(this._tabButton);
 
 	},
-	_init: function ()
-	{
-		this._super();
-		if (this.options.selected)
-			this._tabButton.ibxWidget("option", "checked", this.options.selected);
-	},
 	_setAccessible:function(accessible)
 	{
 		this._super(accessible);
@@ -300,16 +305,28 @@ $.widget("ibi.ibxTabPage", $.ibi.ibxWidget,
 		{
 			if (!value)
 				throw("Parameter cannot be false");
-			this.element.closest(".ibx-tab-pane").ibxWidget("selected", this.element);
+			this._tabButton.ibxWidget("option", "checked", true);
 			return this.element;
+		}
+	},
+	_setOption: function (key, value)
+	{
+		this._super(key, value);
+		if(key == "selected")
+		{
+			if (this.options.selected)
+				this.selected(this.options.selected);
+		}
+		else if (key == "userValue")
+		{		
+			if (this.options.userValue)
+				this._tabButton.ibxWidget("userValue", this.options.userValue);
 		}
 	},
 	_refresh: function ()
 	{
 		this._super();
 		this._tabButton.ibxWidget("option", this.options.tabOptions);
-		if (this.options.userValue)
-			this._tabButton.ibxWidget("userValue", this.options.userValue);
 	}
 });
 $.ibi.ibxTabPage.statics = 

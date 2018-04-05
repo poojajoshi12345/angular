@@ -23,14 +23,6 @@ $.widget("ibi.ibxAccordionPane", $.ibi.ibxFlexBox,
 		this._group.ibxRadioGroup({name:this._group.prop("id")}).on("ibx_change", this._onPageChange.bind(this));
 		this.add(this.element.children(".ibx-accordion-page"));
 	},
-	_init: function()
-	{
-		this._super();
-		if (this.options.userValue)
-			this._group.ibxWidget("userValue", this.options.userValue);
-		if (this.options.selected)
-			this.selected(this.options.selected);
-	},
 	children:function(selector)
 	{
 		return this._super(selector || ".ibx-accordion-page");
@@ -121,6 +113,20 @@ $.widget("ibi.ibxAccordionPane", $.ibi.ibxFlexBox,
 		this.options.selected = $(e.target).ibxWidget("selected");
 		this._trigger("change");
 	},
+	_setOption: function (key, value)
+	{
+		this._super(key, value);
+		if(key == "selected")
+		{
+			if (this.options.selected)
+				this.selected(this.options.selected);
+		}
+		else if (key == "userValue")
+		{		
+			if (this.options.userValue)
+				this.userValue(this.options.userValue);
+		}
+	},
 	_refresh:function()
 	{
 		this._super();
@@ -128,7 +134,6 @@ $.widget("ibi.ibxAccordionPane", $.ibi.ibxFlexBox,
 			this.element.children(".ibx-accordion-page").addClass("acc-pg-stretch");
 		else
 			this.element.children(".ibx-accordion-page").removeClass("acc-pg-stretch");
-		this._group.ibxRadioGroup("selected", this.options.selected);
 	}
 });
 $.widget("ibi.ibxHAccordionPane", $.ibi.ibxAccordionPane, {options:{direction:"row"}, _widgetClass:"ibx-accordion-pane-horizontal"});
@@ -272,6 +277,13 @@ $.widget("ibi.ibxAccordionPage", $.ibi.ibxFlexBox,
 			// max-height is really used just for animation when page closed/opened.
 			this._content.css("max-height", "");
 		}
+	},
+	_setOption: function (key, value)
+	{
+		if(key == "selected")
+			this.selected(value);
+		else
+			this._super(key, value);
 	},
 	_refresh:function()
 	{
