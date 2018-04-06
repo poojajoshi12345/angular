@@ -22,11 +22,45 @@
 
 			ibx(function()
 			{
-				$(".test-button").on("click", function(e)
+				$(".cmd-test").on("ibx_triggered", function(e)
 				{
-					var dlg = ibx.resourceMgr.getResource(".test-dialog");
-					dlg.ibxWidget("open");
+					console.clear();
+
+					var el = $(".nav-list")[0];
+					el.style.boxSizing = "";
+					console.log("list", GetElementInfo(el));
+					console.log(sformat("list ContentBox => cl:{1}, ct:{2}, cw:{3}, ch:{4}...ol:{5}, ot:{6}, ow:{7}, oh:{8}",
+						el.clientLeft, el.clientTop, el.clientWidth, el.clientHeight,
+						el.offsetLeft, el.offsetTop, el.offsetWidth, el.offsetHeight));
+					el.style.boxSizing = "";
+
+					var el = $(".item-15")[0];
+					el.style.boxSizing = "";
+					console.log("item", GetElementInfo(el));
+					console.log(sformat("item ContentBox => cl:{1}, ct:{2}, cw:{3}, ch:{4}...ol:{5}, ot:{6}, ow:{7}, oh:{8}",
+						el.clientLeft, el.clientTop, el.clientWidth, el.clientHeight,
+						el.offsetLeft, el.offsetTop, el.offsetWidth, el.offsetHeight));
+					el.style.boxSizing = "";
 				});
+
+				var navList = $(".nav-list").on("click", function(e)
+				{
+					$(".nav-list-item").each(function(idx, el)
+					{
+						$(el).removeClass("selected");
+					});
+					
+					$(e.target).addClass("selected");
+				});
+
+				var selItem = 15;
+				for(var i = 0; i < 25; ++i)
+				{
+					var item = $(sformat("<div tabindex='-1' class='nav-list-item item-{1}'>Nav List Item {1}</div>", i));
+					navList.append(item);
+					if(i == selItem)
+						item.addClass("selected ibx-nav-key-item-active");
+				}
 			}, [{src:"./test_res_bundle.xml", loadContext:"app"}], true);
 		</script>
 		<style type="text/css">
@@ -41,14 +75,44 @@
 			{
 				width:100%;
 				height:100%;
-				padding:5px;
 				box-sizing:border-box;
+			}
+			.nav-list
+			{
+				xposition:relative;
+				margin-top:20px;
+				width:200px;
+				height:200px;
+				overflow:auto;
+				border:1px solid black;
+			}
+			.nav-list-item
+			{
+				flex:0 0 auto;
+				margin:2px;
+				border:1px solid #ccc;
+			}
+			.selected
+			{
+				background-color:thistle;
 			}
 		</style>
 	</head>
 	<body class="ibx-root">
-		<div class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="center" data-ibxp-justify="center">
-			<div class="test-button" data-ibx-type="ibxButtonSimple">click me</div>
+		<div class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="center" data-ibxp-justify="start">
+			<div tabindex="0" class="nav-list" data-ibx-type="ibxVBox" data-ibxp-align="stretch" data-ibxp-nav-key-root="true" data-ibxp-nav-key-reset-focus-on-blur="false" data-ibxp-nav-key-dir="vertical" data-ibxp-focus-default="true">
+			</div>
 		</div>
+		<div class="cmd-test" data-ibx-type="ibxCommand" data-ibxp-shortcut="CTRL+C"></div>
+
+<!--
+			<div data-ibx-type="ibxMenuButton">My Menu Button
+				<div data-ibx-type="ibxMenu">
+					<div data-ibx-type="ibxMenuItem">Menu Item 1</div>
+					<div data-ibx-type="ibxMenuItem">Menu Item 2</div>
+					<div data-ibx-type="ibxMenuItem">Menu Item 3</div>
+				</div>
+			</div>
+-->
 	</body>
 </html>

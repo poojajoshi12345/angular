@@ -220,7 +220,7 @@
 					<div data-ibx-type="ibxRadioButton" data-ibxp-group="rgPnBtnPos" data-ibxp-user-value="start">Start</div>
 					<div data-ibx-type="ibxRadioButton" data-ibxp-group="rgPnBtnPos" data-ibxp-user-value="end">End</div>
 				</div>
-				<div class="tb-ctrl float-pnbtn" data-ibx-type="ibxCheckBoxSimple" data-ibxp-checked="true" style="margin-right:10px">Float Buttons (only ends)</div>
+				<div class="tb-ctrl float-pnbtn" data-ibx-type="ibxCheckBoxSimple" data-ibxp-checked="false" style="margin-right:10px">Float Buttons (only ends)</div>
 			</div>
 			
 			<div class="csl-box-main" data-ibx-type="ibxHBox" data-ibxp-align="stretch" data-ibxp-justify="start">

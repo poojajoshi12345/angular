@@ -85,7 +85,7 @@ jQuery.expr[":"]["ibxNavFocusable"] = function(elem, idx, meta, stack)
 jQuery.expr[":"]["inViewport"] = function(elem, idx, meta, stack)
 {
 	var elInfo = GetElementInfo(elem);
-	var pInfo = GetElementInfo(elem.offsetParent);
+	var pInfo = GetElementInfo(elem.parentNode);
 	var ret = false;
 
 	var lVis = (elInfo.left > pInfo.viewPort.left && elInfo.left < pInfo.viewPort.right);
@@ -391,6 +391,7 @@ function GetRandomInt(min, max)
 function GetElementInfo(el, withMargin)
 {
 	el = $(el);
+	var positioned = (el.css("position") != "static");
 	var elInfo = el.position() || {};
 	elInfo.el = el[0];
 	elInfo.left = el.prop("offsetLeft");
@@ -401,8 +402,8 @@ function GetElementInfo(el, withMargin)
 	elInfo.bottom = elInfo.top + elInfo.height;
 	elInfo.viewPort = 
 	{
-		"left": el.prop("scrollLeft"),
-		"top": el.prop("scrollTop")
+		"left": el.prop("scrollLeft") + (positioned ? 0 : elInfo.left),
+		"top": el.prop("scrollTop") + (positioned ? 0 : elInfo.top)
 	}
 	elInfo.viewPort.right = elInfo.viewPort.left + el.innerWidth();
 	elInfo.viewPort.bottom = elInfo.viewPort.top + el.innerHeight();
