@@ -43,8 +43,11 @@
 					el.style.boxSizing = "";
 				});
 
-				var navList = $(".nav-list").on("click", function(e)
+				var navList = $(".nav-list").on("click keydown", function(e)
 				{
+					if(e.target == this || (e.type == "keydown" && e.keyCode != $.ui.keyCode.ENTER))
+						return;
+
 					$(".nav-list-item").each(function(idx, el)
 					{
 						$(el).removeClass("selected");
@@ -79,10 +82,8 @@
 			}
 			.nav-list
 			{
-				xposition:relative;
 				margin:10px;
-				width:300px
-				height:200px;
+				width:300px;
 				overflow:auto;
 				border:1px solid black;
 			}
@@ -91,7 +92,6 @@
 				flex:0 0 auto;
 				margin:2px;
 				border:1px solid #ccc;
-				width:100px;
 			}
 			.selected
 			{
@@ -101,7 +101,7 @@
 	</head>
 	<body class="ibx-root">
 		<div class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="center" data-ibxp-justify="start">
-			<div tabindex="0" class="nav-list" data-ibx-type="ibxVBox" data-ibxp-align="stretch" data-ibxp-nav-key-root="true" data-ibxp-focus-default="false" data-ibxp-nav-key-reset-focus-on-blur="false" data-ibxp-nav-key-dir="vertical">
+			<div tabindex="0" class="nav-list" data-ibx-type="ibxVBox" data-ibxp-inline="true" data-ibxp-align="stretch" data-ibxp-nav-key-root="true" data-ibxp-focus-default="false" data-ibxp-nav-key-reset-focus-on-blur="false" data-ibxp-nav-key-dir="vertical">
 			</div>
 		</div>
 		<div class="cmd-test" data-ibx-type="ibxCommand" data-ibxp-shortcut="CTRL+C"></div>
