@@ -87,10 +87,15 @@ jQuery.expr[":"]["inViewport"] = function(elem, idx, meta, stack)
 	var elInfo = GetElementInfo(elem);
 	var pInfo = GetElementInfo(elem.offsetParent);
 	var ret = false;
-	if(meta[3] == "true")//is partially visible
-		ret = !(elInfo.left > pInfo.viewPort.right || elInfo.right < pInfo.viewPort.left || elInfo.top > pInfo.viewPort.bottom ||elInfo.bottom < pInfo.viewPort.top);
+
+	var lVis = (elInfo.left > pInfo.viewPort.left && elInfo.left < pInfo.viewPort.right);
+	var rVis = (elInfo.right > pInfo.viewPort.left && elInfo.right < pInfo.viewPort.right);
+	var tVis = (elInfo.top > pInfo.viewPort.top && elInfo.top < pInfo.viewPort.bottom );
+	var bVis = (elInfo.bottom > pInfo.viewPort.top && elInfo.bottom < pInfo.viewPort.bottom);
+	if(meta[3] == "true")
+		ret = (lVis && rVis && tVis && bVis);	//fully visible
 	else
-		ret = elInfo.left >= pInfo.viewPort.left && elInfo.top >= pInfo.viewPort.top && elInfo.right <= pInfo.viewPort.right && elInfo.bottom <= pInfo.viewPort.bottom;
+		ret = (lVis || rVis) && (tVis || bVis);	//partial visible
 	return ret;
 };
 jQuery.expr[":"]["openPopup"] = function(elem, idx, meta, stack)
@@ -387,7 +392,7 @@ function GetElementInfo(el, withMargin)
 {
 	el = $(el);
 	var elInfo = el.position() || {};
-	elInfo.el = el;
+	elInfo.el = el[0];
 	elInfo.left = el.prop("offsetLeft");
 	elInfo.top = el.prop("offsetTop");
 	elInfo.width = el.outerWidth(!!withMargin);
@@ -396,8 +401,8 @@ function GetElementInfo(el, withMargin)
 	elInfo.bottom = elInfo.top + elInfo.height;
 	elInfo.viewPort = 
 	{
-		"left":el.prop("scrollLeft"),
-		"top":el.prop("scrollTop")
+		"left": el.prop("scrollLeft"),
+		"top": el.prop("scrollTop")
 	}
 	elInfo.viewPort.right = elInfo.viewPort.left + el.innerWidth();
 	elInfo.viewPort.bottom = elInfo.viewPort.top + el.innerHeight();
