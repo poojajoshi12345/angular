@@ -1,6 +1,10 @@
 /*Copyright 1996-2018 Information Builders, Inc. All rights reserved.*/
 // $Revision$:
 
+
+//--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 jQuery.event.special['ibx_change'] = { noBubble: true };
 
 
@@ -8,32 +12,52 @@ $.widget("ibi.ibiAceWidget", $.ibi.ibxWidget,
 {
 	options:
 	{
-		"mode":"",
+		config:
+		{
+			"mode":"text",
+			showPrintMargin:false,
+			showLineNumbers:true,
+			theme:"textmate",
+			highlightActiveLine:true,
+			readOnly:false	
+		}
 	},
-	
 	_widgetClass:"wf-ace-text-editor",
 	
 	_create:function()
 	{
 		this._super();
-		
+		this.changed = false;
 		this._insertKeyStatus = false;
 		
 		this._ace_editor = ace.edit(this.element[0]);
-		
 		this._ace_editor.getSession().selection.on('changeCursor', this._onEditorAreaChangeCursorEvent.bind(this));				
 //		this._ace_editor.textInput.getElement().addEventListener("keyup", this._onEditorAreaKeyUp.bind(this), false);
 		this._ace_editor.textInput.getElement().addEventListener("keydown", this._onInsertKeyDown.bind(this), false);
 	},
+	
 	_destroy:function()
 	{
 		this._super();
-	},
-	editor:function()
+	},	
+	
+	_refresh:function()
 	{
-		return this._ace_editor;
-	},
+		var options = this.options;
+		this._super();
 
+		if(this._ace_editor)
+		{
+			//this._ace_editor.session.setMode("ace/mode/" + options.mode);
+			//this._ace_editor.setTheme("ace/theme/" + options.theme);
+			
+			//this._ace_editor.setOption("mode","text");
+			this._ace_editor.setOptions(this.options.config);
+			
+			this._ace_editor.resize();
+		}
+	},
+	
 	_onEditorAreaChangeCursorEvent:function (e)
 	{	
 		this.setCursorPositionInfo(e);//this._setCursorPositionInfo(e);
@@ -61,6 +85,11 @@ $.widget("ibi.ibiAceWidget", $.ibi.ibxWidget,
 			
 			this.setInsertStatusLabel();
 		}
+	},
+	
+	editor:function()
+	{
+		return this._ace_editor;
 	},
 	
 	selectionToUpperCase:function(e)
@@ -116,6 +145,11 @@ $.widget("ibi.ibiAceWidget", $.ibi.ibxWidget,
 		}
 	},
 	
+	_editorChanged()
+	{
+		return this._ace_editor.getSession().getUndoManager().hasUndo();
+	},
+	
 	setInsertStatusLabel:function()
 	{
 		var keyStatus = this._insertKeyStatus ? ibx.resourceMgr.getString("bid_insert_on") : ibx.resourceMgr.getString("bid_insert_off");
@@ -136,16 +170,60 @@ $.widget("ibi.ibiAceWidget", $.ibi.ibxWidget,
 		$(document).trigger("SET_STATUS_BAR_CURSOR_METADATA", data);
 	},
 	
-	_refresh:function()
+	mode:function(mode)
 	{
-		var options = this.options;
-		this._super();
-
-		if(this._ace_editor)
+		if(mode)
 		{
-			//this._ace_editor.session.setMode("ace/mode/" + options.mode);
-			this._ace_editor.resize();
+			this.options.mode = mode;
+			//this._ace_editor.session.setMode("ace/mode/" + this.options.mode);
+			this._refresh();
 		}
+		else
+			return this.options.mode;
+	},
+	
+	theme:function(theme)
+	{
+		if(theme)
+		{
+			this.options.theme = theme;
+			this._ace_editor.setTheme("ace/theme/" + this.options.theme);
+		}
+		else
+			return this.options.theme;
+	},
+	
+	content:function(content)
+	{
+		if(content)
+		{
+			this.ace_editor.setValue(content, -1);
+		}
+		else
+		{
+			return this.ace_editor.getValue();
+		}
+	},
+	_setEditorChanged:function(status)
+	{
+		this.changed = status;
+		
+		if(status)
+		{
+			//this._editUndo.ibxWidget("option", "disabled", false);
+		}
+		else
+		{
+			this._resetUndoManager();
+		}
+	},
+	
+	_resetUndoManager:function()
+	{
+		this.ace_editor.getSession().getUndoManager().reset();
+		
+		//this._editUndo.ibxWidget("option", "disabled", true);
+		//this._editRedo.ibxWidget("option", "disabled", true);
 	}
 });
 
@@ -167,10 +245,10 @@ $.widget("ibi.textEditorTabPage", $.ibi.ibxTabPage,
 	{
 		this._super();
 
-	    this.ace_editor = null;
+	    //this.ace_editor = null;
 	    this._editorWidget = null;
 		this._editorEnvironment = null;
-		this._editorMode = "";
+		//this._editorMode = "";
 		
 		this._defaultSearchOptions = {
 		    backwards: false,
@@ -193,6 +271,7 @@ $.widget("ibi.textEditorTabPage", $.ibi.ibxTabPage,
 		this.itemName = "";
 		this.extension = "";
 		this.itemDescription = "";			
+		this.rootPath = "";
 		this.folderPath = "";
 		this.fullItemPath = "";
 		this.newDoc = true;
@@ -260,16 +339,16 @@ $.widget("ibi.textEditorTabPage", $.ibi.ibxTabPage,
 	_refresh:function()
 	{
 		this._super();
-		if(this.ace_editor)
-			this.ace_editor.resize();
 	},
 	
-	initEditor:function(editorEnvironment, folderPath, itemName, mode)
+	initEditor:function(editorEnvironment, rootPath, folderPath, itemName, mode)
 	{
 		this._editorEnvironment = editorEnvironment;
+		this.rootPath = rootPath;
 	   // this.ace_editor = ace.edit(this.editorDiv[0]);	
+		
 		this.ace_editor = this._editorWidget.ibxWidget("editor");
-	    this.ace_editor.setTheme("ace/theme/" + this._editorEnvironment.defaultTheme);	    
+	    this.ace_editor.setTheme("ace/theme/" + this._editorEnvironment.defaultTheme);
 
 	   // this.ace_editor.setShowPrintMargin(false);
 	   // this.ace_editor.renderer.setShowGutter(true); // Turn ON/OFF line numbering and code folding. 
@@ -289,7 +368,7 @@ $.widget("ibi.textEditorTabPage", $.ibi.ibxTabPage,
 	    });
 */		
 		
-	    this._setEditorMode();
+	    //this._setEditorMode();
 		
 /*	    
 	    this.ace_editor.setOptions({
@@ -298,6 +377,43 @@ $.widget("ibi.textEditorTabPage", $.ibi.ibxTabPage,
 	        enableSnippets: true
 	    });
 */	    
+	    
+	    
+	    /*
+		this._supportedModes = 
+		{
+				"txt":["text"],
+				"fex":["focexec"],
+				"mas":["masterfile"],
+				"prop":["text"],
+				"man":["text"],
+				"js":["javascript"],
+				"htm":["html"],
+				"html":["html"],
+				"css":["css"],
+				"sty":["css"],
+				"r":["r"],
+				"py":["python"],
+				"sql":["sql"]
+		};
+	     */
+	    if(mode)
+	    	this._editorWidget.ibxWidget("mode", mode);
+	    else
+	    {
+	    	if(itemName && itemName.length > 0)
+	    	{
+	    		var extSeparatorIdx = itemName.lastIndexOf(".");
+	    	        
+	    		var extension = itemName.substring(extSeparatorIdx + 1);   
+	    		
+	    		mode = this._editorEnvironment._supportedModes[extension];
+	    		
+	    		if(mode)
+	    			this._editorWidget.ibxWidget("mode", mode);
+	    	}
+	    }
+		
 	    if(folderPath && itemName)
 	    {
 	    	this._getEditorContent (folderPath, itemName);	    	
@@ -419,7 +535,7 @@ $.widget("ibi.textEditorTabPage", $.ibi.ibxTabPage,
 	        this.itemName = fileName.substring(0, extSeparatorIdx);
 	        this.extension = fileName.substring(extSeparatorIdx + 1);   // do not include '.'
 	        
-	        this._setEditorMode();
+	        //this._setEditorMode();
 		}
 		
 		if(this.folderPath.length > 0 && this.itemName.length > 0)
@@ -937,7 +1053,7 @@ $.widget("ibi.textEditorTabPage", $.ibi.ibxTabPage,
 		this._setEditorChanged(false);
 		this.optionsChanged = false;
 		
-		this._setEditorMode();
+		//this._setEditorMode();
 		
 		if(this.currentAction == 1)
 		{
@@ -965,6 +1081,11 @@ $.widget("ibi.textEditorTabPage", $.ibi.ibxTabPage,
 			this.currentAction = -1;
 			this.close();      
 		}
+	},
+	
+	clearSelected:function(e)
+	{
+		this._editorWidget.ibxWidget("deleteSelectedText");
 	},
 	
 	closeFile:function(e)
@@ -1165,32 +1286,9 @@ $.widget("ibi.textEditorTabPage", $.ibi.ibxTabPage,
 	{
 		this._defaultSearchOptions.wrap = this._cbWrapAround.ibxWidget("checked");
 	},
-/*	
-	_setInsertStatusLabel:function()
-	{
-		var keyStatus = this._insertKeyStatus ? ibx.resourceMgr.getString("bid_insert_on") : ibx.resourceMgr.getString("bid_insert_off");
-		var data = {"insertKeyStatus":keyStatus};		
-		$(document).trigger("SET_STATUS_BAR_INSERT_KEY_METADATA", data);
-	},
 	
-	_setCursorPositionInfo:function()
-	{		
-		var contentLength =  this.ace_editor.session.getValue().length;		
-		var lineCount = this.ace_editor.session.getLength();
-		var cursor = this.ace_editor.selection.getCursor();		
-		var linePosition = cursor.row +1;		
-		var columnPosition = cursor.column +1;
-	
-		//this._editorEnvironment.element.ibxWidget("member", "_lengthLbl").ibxWidget("option", "text", contentLength);
-		var data = {"contentLength":contentLength, "lineCount":lineCount,"linePosition":linePosition, "columnPosition":columnPosition};
-		$(document).trigger("SET_STATUS_BAR_CURSOR_METADATA", data);
-	},
-*/	
 	getStatusBarInfo:function()
 	{		
-		//this._setInsertStatusLabel();
-		//this._setCursorPositionInfo();
-		
 		this._editorWidget.ibxWidget("setInsertStatusLabel");
 		this._editorWidget.ibxWidget("setCursorPositionInfo");
 	},
@@ -1216,7 +1314,7 @@ $.widget("ibi.textEditorTabPage", $.ibi.ibxTabPage,
 		this._editorEnvironment.element.ibxWidget("member", "_editUndo").ibxWidget("option", "disabled", true);
 		this._editorEnvironment.element.ibxWidget("member", "_editRedo").ibxWidget("option", "disabled", true);
 	},
-	
+/*	
 	_setEditorMode:function()
 	{		
 	    var mode = this._editorEnvironment._supportedModes[this.extension];
@@ -1227,7 +1325,7 @@ $.widget("ibi.textEditorTabPage", $.ibi.ibxTabPage,
 	    this.ace_editor.session.setMode("ace/mode/"+mode);
 		this._editorMode = mode;	    
 	},
-	
+*/	
 	_clearEditorEnvironment:function(e)
 	{
 		this.currentAction = 0;
@@ -1245,7 +1343,7 @@ $.widget("ibi.textEditorTabPage", $.ibi.ibxTabPage,
 	    this.fromClose = false;
 		this.canchangeserverprops = true;
 		this._editorEnvironment._menuOptions.show();
-		this._setEditorMode();
+		//this._setEditorMode();
 		
 	    this.element.ibxWidget("option", {"tabOptions": {"text": ibx.resourceMgr.getString("BT_UNTITLED")}});
 	},
@@ -1261,6 +1359,7 @@ $.widget("ibi.textEditorTabPage", $.ibi.ibxTabPage,
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 
 $.widget("ibi.textEditor", $.ibi.ibxWidget, 
 {
@@ -1326,7 +1425,6 @@ $.widget("ibi.textEditor", $.ibi.ibxWidget,
 		this.defaultTheme = "textmate";//"github"
 		this.rootPath = "";
 		this.folderPath = "";
-	    this.editorDefaultMode = "text";
 	    
 		this.bipActionHandler = "/views.bip";
 		this.editorActionHandler = "/editor.bip";
@@ -1392,7 +1490,7 @@ $.widget("ibi.textEditor", $.ibi.ibxWidget,
 		this._fileExit.on("ibx_menu_item_click", this._onMenuFileExit.bind(this));
 		
 		this._menuSave.on("click", this._onMenuButtonSave.bind(this));
-		this._menuClose.on("click", this._onMenuButtonClose.bind(this));
+		this._menuClearSelected.on("click", this._onMenuButtonClearSelected.bind(this));
 		
 		this._menuUndo.on("click", this._onMenuButtonUndo.bind(this));
 		this._menuRedo.on("click", this._onMenuButtonRedo.bind(this));
@@ -1527,9 +1625,9 @@ $.widget("ibi.textEditor", $.ibi.ibxWidget,
     	this._onRunFunction(e);
 	},
 	
-	_onMenuButtonClose:function(e)
+	_onMenuButtonClearSelected:function(e)
 	{
-		this._onCloseFile(e);
+		this._onClearSelected(e);
 	},
 	
 	_onMenuSearch:function(e)
@@ -1537,9 +1635,9 @@ $.widget("ibi.textEditor", $.ibi.ibxWidget,
     	this._toggleSearchPanel(e);
 	},
 	
-	_onMenuSearchGoTo:function(e)
+	_onMenuGoToLine:function(e)
 	{
-		alert("_onMenuSearchGoTo");
+		alert("_onMenuhGoToLine");
 
     	//this._toggleGoToLine(e);
 	},	
@@ -1591,7 +1689,7 @@ $.widget("ibi.textEditor", $.ibi.ibxWidget,
 	//---------------------------------------------------------------------------------------------------------
 	_onEditorOpen:function()
 	{
-		this._editorWidget.ibxWidget("setCursorPositionInfo");//this._setCursorPositionInfo();
+		this._editorWidget.ibxWidget("setCursorPositionInfo");
 		this.ace_editor.focus();
 	},
 	
@@ -1600,7 +1698,7 @@ $.widget("ibi.textEditor", $.ibi.ibxWidget,
 		if(this.currentAction != -1)
 		{
 			e.preventDefault();
-			this._editorWidget.ibxWidget("setCursorPositionInfo");//this._setCursorPositionInfo();
+			this._editorWidget.ibxWidget("setCursorPositionInfo");
 			this._onExit();
 		}
 	},
@@ -1633,7 +1731,7 @@ $.widget("ibi.textEditor", $.ibi.ibxWidget,
 		
 		var newTab = $("<div class='text-editor-tab-page'>").textEditorTabPage({ tabOptions:  { 'text': ibx.resourceMgr.getString("BT_UNTITLED"), 'glyph': '', 'glyphClasses': '' } });
 				
-		newTab.ibxWidget("initEditor", this, folderPath, fileName);
+		newTab.ibxWidget("initEditor", this, this.rootPath, folderPath, fileName, mode);
 		
 		this._editorTabPane.ibxWidget("add", newTab);
 	},
@@ -1650,9 +1748,9 @@ $.widget("ibi.textEditor", $.ibi.ibxWidget,
 	}, 
 	
 	_onNewFunction:function(e)
-	{			
+	{		
 		var extensionValue = $(e.currentTarget).ibxWidget("option", "userValue");
-		var mode = this._getEditorFormatName(extensionValue);
+		var mode = this._supportedModes[extensionValue];
 		
 		this.openEditorTab(this.rootPath, this.rootPath, "" , mode);
 	},
@@ -1830,6 +1928,16 @@ $.widget("ibi.textEditor", $.ibi.ibxWidget,
 		tabPage.ibxWidget("closeFile");
 	},
 	
+	_onClearSelected:function(e)
+	{
+		var tabPage = this._editorTabPane.ibxWidget("selected"); 
+		
+		if(!tabPage)
+			return;
+		
+		tabPage.ibxWidget("clearSelected");
+	},
+	
 	removeTabPage:function(tabPage)
 	{		
 		this._editorTabPane.ibxWidget("remove", tabPage.element, true, true);
@@ -1873,7 +1981,6 @@ $.widget("ibi.textEditor", $.ibi.ibxWidget,
 					{
 						// NO				
 						dlg.ibxWidget("close");
-						this._clearEditorEnvironment(e);
 						this.currentAction = -1;
 						this.close();
 						
@@ -1886,7 +1993,6 @@ $.widget("ibi.textEditor", $.ibi.ibxWidget,
 		}
 		else
 		{			
-			this._clearEditorEnvironment(e);
 			this.currentAction = -1;
 			this.close();
 		}
@@ -1901,7 +2007,6 @@ $.widget("ibi.textEditor", $.ibi.ibxWidget,
             this.closing = true;							
 			this.fexText = this.ace_editor.getValue(); 
 			this._onSaveFile();		
-			this._clearEditorEnvironment();
 			this.currentAction = -1;
 			this.close();
         }				
@@ -1913,7 +2018,7 @@ $.widget("ibi.textEditor", $.ibi.ibxWidget,
 	},
 	
 
-	
+/*	
 	_setEditorChanged:function(status)
 	{
 		this.changed = status;
@@ -1935,28 +2040,7 @@ $.widget("ibi.textEditor", $.ibi.ibxWidget,
 		this._editUndo.ibxWidget("option", "disabled", true);
 		this._editRedo.ibxWidget("option", "disabled", true);
 	},
-	
-	_clearEditorEnvironment:function(e)
-	{
-		this.currentAction = 0;
-		this.fullItemPath = "";
-		this.ace_editor.setValue("", -1);//this._txtArea.ibxWidget("option", "text", "");
-		
-		this.folderPath = this.defaultFolderPath;
-		this.fullName = "";
-		var parts = [];
-		this.itemName = "";
-		this.extension = "";
-		this.itemDescription = "";
-		this._setEditorChanged(false);
-		this.optionsChanged = false;
-	    this.fromClose = false;
-		this.canchangeserverprops = true;
-		this._menuOptions.show();
-		this._setEditorMode();
-		
-		this.element.ibxWidget("option", "captionOptions", {text: ibx.resourceMgr.getString("BT_UNTITLED")});
-	},
+*/	
 	
 	_resetStatusBarInfo:function(e)
 	{	
@@ -2050,6 +2134,19 @@ $.widget("ibi.textEditor", $.ibi.ibxWidget,
 		
 		tabPage.ibxWidget("toggleSearchPanel");		
 	},
+
+	_toggleStatusBar:function(e)
+	{
+		var isVisible = this._statusBar.is(":visible");
+		
+		if (isVisible)
+		{
+			this._statusBar.hide();
+			return;
+		}
+		
+		this._statusBar.show();
+	},
 	
 	_getEditorFormatName:function(ext)
 	{		
@@ -2077,4 +2174,5 @@ $.widget("ibi.textEditor", $.ibi.ibxWidget,
 		this._super();
 	}
 });
+
 //# sourceURL=wf_ace_editor.js
