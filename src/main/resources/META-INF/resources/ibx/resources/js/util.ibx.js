@@ -84,19 +84,8 @@ jQuery.expr[":"]["ibxNavFocusable"] = function(elem, idx, meta, stack)
 };
 jQuery.expr[":"]["inViewport"] = function(elem, idx, meta, stack)
 {
-	var elInfo = GetElementInfo(elem);
-	var pInfo = GetElementInfo(elem.parentNode);
-	var ret = false;
-
-	var lVis = (elInfo.left > pInfo.viewPort.left && elInfo.left < pInfo.viewPort.right);
-	var rVis = (elInfo.right > pInfo.viewPort.left && elInfo.right < pInfo.viewPort.right);
-	var tVis = (elInfo.top > pInfo.viewPort.top && elInfo.top < pInfo.viewPort.bottom );
-	var bVis = (elInfo.bottom > pInfo.viewPort.top && elInfo.bottom < pInfo.viewPort.bottom);
-	if(meta[3] == "true")
-		ret = (lVis && rVis && tVis && bVis);	//fully visible
-	else
-		ret = (lVis || rVis) && (tVis || bVis);	//partial visible
-	return ret;
+	var info = GetVisibilty(elem);
+	return (meta[3] == "true") ? info.total : info.partial;
 };
 jQuery.expr[":"]["openPopup"] = function(elem, idx, meta, stack)
 {
@@ -388,26 +377,44 @@ function GetRandomInt(min, max)
 }
 
 //just returns metrics/info for an element.
-function GetElementInfo(el, withMargin)
+function GetElementInfo(element, withMargin)
 {
-	el = $(el);
+	withMargin = !!withMargin;
+	el = $(element);
+	var style = window.getComputedStyle(element);
 	var positioned = (el.css("position") != "static");
 	var elInfo = el.position() || {};
-	elInfo.el = el[0];
-	elInfo.left = el.prop("offsetLeft");
-	elInfo.top = el.prop("offsetTop");
-	elInfo.width = el.outerWidth(!!withMargin);
-	elInfo.height = el.outerHeight(!!withMargin);
+	elInfo.el = element;
+	elInfo.left = element.offsetLeft - (withMargin ? parseFloat(style.marginLeft) : 0);
+	elInfo.top = element.offsetTop - (withMargin ? parseFloat(style.marginTop) : 0);
+	elInfo.width = el.outerWidth(withMargin);
+	elInfo.height = el.outerHeight(withMargin);
 	elInfo.right = elInfo.left + elInfo.width;
 	elInfo.bottom = elInfo.top + elInfo.height;
 	elInfo.viewPort = 
 	{
-		"left": el.prop("scrollLeft") + (positioned ? 0 : elInfo.left),
-		"top": el.prop("scrollTop") + (positioned ? 0 : elInfo.top)
+		"left": element.scrollLeft + element.clientLeft + parseFloat(style.paddingLeft) + (positioned ? 0 : element.offsetLeft),
+		"top": element.scrollTop + element.clientTop + parseFloat(style.paddingTop) + (positioned ? 0 : element.offsetLeft)
 	}
-	elInfo.viewPort.right = elInfo.viewPort.left + el.innerWidth();
-	elInfo.viewPort.bottom = elInfo.viewPort.top + el.innerHeight();
+	elInfo.viewPort.right = elInfo.viewPort.left + element.clientWidth - parseFloat(style.paddingRight);
+	elInfo.viewPort.bottom = elInfo.viewPort.top + element.clientHeight - parseFloat(style.paddingBottom);
 	return elInfo;
+}
+
+function GetVisibilty(element, withMargin)
+{
+	var elInfo = GetElementInfo(element, withMargin);
+	var pInfo = GetElementInfo(element.parentNode);
+	var ret = 
+	{
+		"lVis": (elInfo.left >= pInfo.viewPort.left && elInfo.left <= pInfo.viewPort.right),
+		"rVis": (elInfo.right >= pInfo.viewPort.left && elInfo.right <= pInfo.viewPort.right),
+		"tVis": (elInfo.top >= pInfo.viewPort.top && elInfo.top <= pInfo.viewPort.bottom ),
+		"bVis": (elInfo.bottom >= pInfo.viewPort.top && elInfo.bottom <= pInfo.viewPort.bottom)
+	}
+	ret.total = (ret.lVis && ret.rVis && ret.tVis && ret.bVis);
+	ret.partial = (ret.lVis || ret.rVis) && (ret.tVis || ret.bVis);
+	return ret;
 }
 
 //search currently loaded stylesheets for defined rules of selector.

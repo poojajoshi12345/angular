@@ -43,6 +43,7 @@
 					el.style.boxSizing = "";
 				});
 
+				var selItem = 15;
 				var navList = $(".nav-list").on("click keydown", function(e)
 				{
 					if(e.target == this || (e.type == "keydown" && e.keyCode != $.ui.keyCode.ENTER))
@@ -56,7 +57,13 @@
 					$(e.target).addClass("selected");
 				});
 
-				var selItem = 15;
+				navList.on("scroll", function(e)
+				{
+					var item = $(".selected");
+					var vpInfo = GetVisibilty(item[0]);
+					console.log(vpInfo);		
+				});
+
 				for(var i = 0; i < 25; ++i)
 				{
 					var item = $(sformat("<div tabindex='-1' class='nav-list-item item-{1}'>Nav List Item {1}</div>", i));
@@ -82,15 +89,18 @@
 			}
 			.nav-list
 			{
+				font-size: 16px;
 				margin:10px;
+				padding:10px;
 				width:300px;
-				overflow:auto;
 				border:1px solid black;
+				overflow:auto;
 			}
 			.nav-list-item
 			{
 				flex:0 0 auto;
-				margin:2px;
+				xwidth:500px;
+				margin:0px;
 				border:1px solid #ccc;
 			}
 			.selected
@@ -100,7 +110,7 @@
 		</style>
 	</head>
 	<body class="ibx-root">
-		<div class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="center" data-ibxp-justify="start">
+		<div class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="start" data-ibxp-justify="start">
 			<div tabindex="0" class="nav-list" data-ibx-type="ibxVBox" data-ibxp-inline="true" data-ibxp-align="stretch" data-ibxp-nav-key-root="true" data-ibxp-focus-default="false" data-ibxp-nav-key-reset-focus-on-blur="false" data-ibxp-nav-key-dir="vertical">
 			</div>
 		</div>
