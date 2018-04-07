@@ -317,16 +317,19 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 		 var children = this.children(); 
 		 for(var i = 0; i < children.length; ++i) 
 		 { 
-			  var child = children[i]; 
-			  var info = GetElementInfo(child); 
-			  if((forward === true) && (Math.floor(info.right) > pageInfo.scrollRight)) 
-				   childInfo = info; 
-			  else 
-			  if((forward === false) && (Math.floor(info.left) >= pageInfo.scrollLeft)) 
-				   childInfo = GetElementInfo(child.previousSibling); 
+			var child = children[i]; 
+			var info = GetElementInfo(child); 
+			if(info)
+			{
+				if((forward === true) && (Math.floor(info.right) > pageInfo.scrollRight)) 
+					childInfo = info; 
+				else 
+				if((forward === false) && (Math.floor(info.left) >= pageInfo.scrollLeft) && child.previousSibling) 
+					childInfo = GetElementInfo(child.previousSibling); 
 
-			  if(childInfo) 
-				   break; 
+				if(childInfo) 
+					break;
+			}
 		 } 
 		 return childInfo; 
 	},  

@@ -381,6 +381,7 @@ function GetElementInfo(element, withMargin)
 {
 	withMargin = !!withMargin;
 	el = $(element);
+
 	var style = window.getComputedStyle(element);
 	var positioned = (el.css("position") != "static");
 	var elInfo = el.position() || {};
