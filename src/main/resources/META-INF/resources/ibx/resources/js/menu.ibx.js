@@ -428,9 +428,11 @@ $.widget("ibi.ibxMenuButton", $.ibi.ibxButtonSimple,
 	_create:function()
 	{
 		this._super();
-		this.options.position.of = this.element[0];
+		var options = this.options;
+		options.position.of = this.element[0];
 		this.element.on({"click": this._onMenuButtonMouseEvent.bind(this), "keyup": this._onMenuButtonKeyEvent.bind(this)});
-		this.options.menu = this.element.children(".ibx-menu").ibxAriaId();
+		options.menu = options.menu ||  this.element.children(".ibx-menu");
+		options.menu.ibxAriaId();
 	},
 	_setAccessibility:function(accessible, aria)
 	{

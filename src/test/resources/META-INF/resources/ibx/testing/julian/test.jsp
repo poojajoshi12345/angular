@@ -22,6 +22,8 @@
 
 			ibx(function()
 			{
+				$(".main-box").css("display", "none")
+
 				$(".cmd-test").on("ibx_triggered", function(e)
 				{
 					console.clear();
