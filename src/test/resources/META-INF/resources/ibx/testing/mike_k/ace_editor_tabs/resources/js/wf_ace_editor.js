@@ -1656,11 +1656,11 @@ $.widget("ibi.textEditor", $.ibi.ibxWidget,
 		this._editorTabPane.ibxWidget("add", newTab);
 	},
 	
-	_getEditorModeByExtension(extension)
+	_getEditorModeByExtension:function(extension)
 	{
 		return this._getEditorModeByPath("/myfile."+extension);
 	},
-	_getEditorModeByPath(p)
+	_getEditorModeByPath:function(p)
 	{
 	    var modelist = ace.require("ace/ext/modelist");
 	    return modelist.getModeForPath(p).mode;
