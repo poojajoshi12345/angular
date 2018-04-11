@@ -36,7 +36,6 @@ page import="org.owasp.esapi.*,
 
 		<!--include this script...will boot ibx into the running state-->
 		<Script src="<%=context%>/ibx/resources/ibx.js" type="text/javascript"></script>
-		<script src="<%=context%>/3rdparty_resources/ace-1.3.1/src/ace.js" type="text/javascript" charset="utf-8"></script>
 		<script type="text/javascript">
 			<jsp:include page="/WEB-INF/jsp/global/wf_globals.jsp" flush="false" />
 			<jsp:include page="/WEB-INF/jsp/ibx/ibxInit.jsp" flush="false" />
@@ -128,6 +127,7 @@ page import="org.owasp.esapi.*,
 						editorWindow = window.open(uriExec, "_blank", "location=no,status=no,toolbar=no,titlebar=no,width=1200,height=800");
 					}
 				});	
+				
 				$(".btn-show-text-editor5").on("click", function()
 				{					
 					if(editorWindow)
@@ -142,6 +142,7 @@ page import="org.owasp.esapi.*,
 						editorWindow = window.open(uriExec, "_blank", "location=no,status=no,toolbar=no,titlebar=no,width=1200,height=800");
 					}
 				});			
+				
 				$(".btn-show-text-editor6").on("click", function()
 				{					
 					if(editorWindow)
@@ -171,6 +172,7 @@ page import="org.owasp.esapi.*,
 						editorWindow = window.open(uriExec, "_blank", "location=no,status=no,toolbar=no,titlebar=no,width=1200,height=800");
 					}
 				});			
+				
 				$(".btn-show-text-editor8").on("click", function()
 				{					
 					if(editorWindow)
@@ -185,6 +187,7 @@ page import="org.owasp.esapi.*,
 						editorWindow = window.open(uriExec, "_blank", "location=no,status=no,toolbar=no,titlebar=no,width=1200,height=800");
 					}
 				});		
+				
 				$(".btn-show-text-editor9").on("click", function()
 				{					
 					if(editorWindow)

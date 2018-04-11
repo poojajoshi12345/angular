@@ -20,15 +20,6 @@ html, body
 	/* border: 3px solid green; */
 }
 
-.wf_editor.ace_editor
-{
-	width:100%;
-	height:100%;
-    position: absolute;
-    box-sizing:border-box;
-	/* border: 1px solid blue; */
-}
-
 .text-editor
 {
 	box-sizing:border-box;
@@ -43,15 +34,15 @@ html, body
 .wf-ace-text-editor.ace_editor
 {
 	width:100%;
-	height:100%;
-    position: absolute;
-    box-sizing:border-box;
+	position:relative;
+	box-sizing:border-box;
+    flex: 1 1 auto;
 	/* border: 1px solid blue; */
 }
 
 .te-tab-pane 
 {
-	flex: 1 1 auto;
+	flex: 1 0 auto;
 	box-sizing:border-box;
 	
 	/* border: 1px solid yellow; */
@@ -59,7 +50,10 @@ html, body
 
 .text-editor-tab-page
 {
-	 box-sizing:border-box;
+	display:flex;
+	flex-direction:column;
+	box-sizing:border-box;
+	position:relative;
 /* border: 5px solid magenta;  */
 }
 
@@ -76,13 +70,13 @@ html, body
 
 .te-menu-bar
 {
-
+	/* background-color : #000000; */
 }
 
 .te-menu-button
 {
 	/* margin-right:10px; */
-		flex:0 0 auto;
+	flex:0 0 auto;
 	font-size:18px;
 	margin:2px;
 	padding:2px;
@@ -102,58 +96,56 @@ html, body
 	
 }
 
-.te-search-go-to-line
-{
-	margin-top:10px;
-}
-.txtGoToLine
-{
-	width:50px;
-	margin-right:10px;
-}
-.btnGoToLine
-{			
-
-}
-.btnCloseGoToLine
-{				
-
-}
-
 .te-search-panel
 {
+	position:relative;
+	flex:0 1 auto;
 	padding:5px;
 	/* background-color:gray; */
-}			
-.te-options-app-hbox
-{
-	margin-top:20px;
 }
+
 .findLbl
 {
 	margin-left:15px;
+	margin-right:5px;
 }
 .findText
 {
 	width:200px;
 }
+
 .replaceLbl
 {
 	margin-left:20px;
+	margin-right:5px;
 }
 .replaceText
 {
 	width:200px;
 }
 
+.cbMatchCase
+{
+	margin-left:15px;
+}
+.cbMatchWholeWord
+{
+	margin-top:10px;
+	margin-left:15px;
+	margin-bottom:10px;
+}
+.cbWrapAround
+{
+	margin-left:15px;
+}
 
 .btnFindNext
 {
 	width:100px;
-	margin-bottom:5px;
 }
 .btnReplaceNext
 {
+	margin-top:5px;
 	width:100px;
 	margin-bottom:5px;	
 }
@@ -161,21 +153,6 @@ html, body
 {
 	width:100px;
 }
-
-
-.cbMatchCase
-{
-	margin-left:10px;
-}
-.cbMatchWholeWord
-{
-	margin-left:10px;
-}
-.cbWrapAround
-{
-	margin-left:10px;
-}
-
 
 .te-status-bar
 {
@@ -225,12 +202,7 @@ html, body
 .te-sb-insert-marker-value
 {
 	margin-left:5px;
-}
-
-.text-editor-options
-{
-	width:400px;
-}			
+}		
 
 .te-menu-separator4
 {

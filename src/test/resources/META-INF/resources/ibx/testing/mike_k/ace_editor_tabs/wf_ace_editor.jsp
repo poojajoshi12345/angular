@@ -59,7 +59,7 @@ page import="org.owasp.esapi.*,
 %>
 <html lang="<%=browser.getLanguageTag() %>">
 	<head>
-		<title>ibx text editor sample</title>
+		<title>WebFocus IBX / ACE Text Editor Demo</title>
 		<meta http-equiv="X-UA-Compatible" content="IE=EDGE" >
 		<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
 		<meta http-equiv="Pragma" content="no-cache" />
@@ -71,6 +71,7 @@ page import="org.owasp.esapi.*,
 		<!--include this script...will boot ibx into the running state-->
 		<Script src="<%=context%>/ibx/resources/ibx.js" type="text/javascript"></script>
 		<script src="<%=context%>/3rdparty_resources/ace-1.3.1/src/ace.js" type="text/javascript" charset="utf-8"></script>
+		<!-- script src="<%=context%>/3rdparty_resources/ace-1.3.1/src/ext-modelist.js" type="text/javascript" charset="utf-8"></script -->
 		<script type="text/javascript">
 			<jsp:include page="/WEB-INF/jsp/global/wf_globals.jsp" flush="false" />
 			<jsp:include page="/WEB-INF/jsp/ibx/ibxInit.jsp" flush="false" />
