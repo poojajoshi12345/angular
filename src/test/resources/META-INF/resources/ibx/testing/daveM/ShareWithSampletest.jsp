@@ -159,6 +159,11 @@
 			{
 				margin-right:10px;
 			}
+			.item-close-icon
+			{
+				margin-right:10px;
+				font-size:1.25em;			
+			}
 			.item-user::after
 			{
 				font-size:1.25em;
@@ -176,6 +181,14 @@
 			{
 				margin-bottom:3px;
 				font-weight:bold;
+			}
+			.sw-close-button {
+ 			   flex: 0 0 auto;
+    			margin: 0 5px;
+			}
+			.sd-toolbar-spacer
+			{
+				flex:1 1 auto;
 			}
 		</style>
 	</head>
@@ -201,6 +214,10 @@
 			<div class="item-desc"></div>
 			<div class="item-name"></div>
 		</div>
+		<div class="sd-toolbar-spacer"/>
+			<div class="sw-close-button ibx-widget ibx-flexbox ibx-label icon-left fbx-inline fbx-row fbx-nowrap fbx-justify-content-start fbx-justify-items-start fbx-align-items-center fbx-align-content-center fbx-child-sizing-content-box">
+				<div class="item-close-icon fa fa-close "></div>
+			</div>
 	<div>
 
 </html>
