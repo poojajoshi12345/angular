@@ -9,7 +9,8 @@ $.widget("ibi.ibxSortable", $.Widget,
 		"lockDragAxis":false,
 		"startDragDistanceX":5,
 		"startDragDistanceY":5,
-		"placeholderClasses":""
+		"placeholderClasses":"",
+		"sortableItems":"*",
 	},
 	_widgetClass:"ibx-sortable",
 	_create:function()
@@ -47,7 +48,8 @@ $.widget("ibi.ibxSortable", $.Widget,
 		{
 			//can only sort direct children
 			this._stopDrag();//kill any left over drag (you dragged out of bounds and confused the world).
-			this._eMouseDown = e;
+			if(target.is(this.options.sortableItems))
+				this._eMouseDown = e;
 		}
 		else
 		if(eType == "mouseup")
@@ -133,7 +135,7 @@ $.widget("ibi.ibxSortable", $.Widget,
 		this._inDrag = false;
 	},
 });
-$.widget("ibi.ibxVSortable", $.ibi.ibxSortable, {}); 
-$.widget("ibi.ibxHSortable", $.ibi.ibxSortable, {options:{direction:"horizontal"}}); 
+$.widget("ibi.ibxVSortable", $.ibi.ibxSortable, {options:{direction:"vertical", lockDragAxis:true}}); 
+$.widget("ibi.ibxHSortable", $.ibi.ibxSortable, {options:{direction:"horizontal", lockDragAxis:true}}); 
 //# sourceURL=sortable.ibx.js
 
