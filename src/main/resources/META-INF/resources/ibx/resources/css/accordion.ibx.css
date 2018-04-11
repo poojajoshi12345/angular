@@ -11,14 +11,10 @@
 
 .ibx-accordion-page
 {
-	flex:0 1 auto;
+	flex:0 0 auto;
 	border:1px solid silver;
 	border-top:none;
 	overflow:hidden;
-}
-.ibx-accordion-page.acc-pg-closed/*stop closed pages from getting squished when pane is really small*/
-{
-	flex-shrink:0;
 }
 .ibx-accordion-page.acc-pg-stretch:not(.acc-pg-closed)/*stretch open pages to fill all available space*/
 {
@@ -41,6 +37,7 @@
 
 .ibx-accordion-page-content
 {
+	position: relative;
 	flex: 1 1 auto;
 	overflow:hidden;
 	opacity:1;
