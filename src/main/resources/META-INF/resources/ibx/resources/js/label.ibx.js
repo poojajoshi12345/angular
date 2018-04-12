@@ -46,6 +46,7 @@ $.widget("ibi.ibxLabel", $.ibi.ibxFlexBox,
 		//add the sub-elements
 		this._glyph = $("<div>").addClass(options.glyphElClass);
 		this._text = $("<div>").addClass(options.textElClass);
+		this.element.append(this._glyph, this._text);
 	},
 	_setAccessibility:function(accessible, aria)
 	{
@@ -81,7 +82,8 @@ $.widget("ibi.ibxLabel", $.ibi.ibxFlexBox,
 		if(options.glyph != lastOptions.glyph || options.glyphClasses != lastOptions.glyphClasses)
 			this._glyph.html(options.glyph);	
 		this._glyph.removeClass(lastOptions.glyphClasses).addClass(options.glyphClasses).addClass(options.glyphElClass);
-		
+		this._glyph.css("display", (!glyphVisible && !options.icon) ? "none" : "");
+
 		//only update if changed
 		if(options.text != lastOptions.text)
 			options.textIsHtml ? this._text.html(options.text) : this._text.text(options.text);
@@ -93,11 +95,6 @@ $.widget("ibi.ibxLabel", $.ibi.ibxFlexBox,
 		//general options maintenance
 		this.element.removeClass("icon-left icon-top icon-right icon-bottom")
 		this.element.addClass("icon-" + options.iconPosition);
-
-		//don't bloat the DOM...just add what's needed...use prepend so that these are the first children.
-		this._glyph.detach();
-		this._text.detach();
-		this.element.prepend((options.icon || glyphVisible) ? this._glyph : null, options.text ? this._text : null);
 		this.element.toggleClass("ibx-label-no-icon", !glyphVisible && !options.icon).toggleClass("ibx-icon-only", !glyphVisible && !options.text);
 
 		//handle overlays
