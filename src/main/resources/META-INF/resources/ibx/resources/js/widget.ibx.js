@@ -264,7 +264,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 			}
 		}
 		
-		if(e.type == "focusout" && this._widgetFocused && !ownsRelTarget)
+		if(e.type == "focusout" && this._widgetFocused && !isRelTarget && !ownsRelTarget)
 		{
 			this._widgetFocused = false;
 			this.element.dispatchEvent("ibx_widgetblur", e, false, false, e.relatedTarget);
