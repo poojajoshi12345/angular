@@ -469,27 +469,25 @@
 			    success: function(json) 
 			    {
 			    	if (json.length > 0)		    		
-			    	{
-				    	
-						var itemList = $('#shareWithDropdown');
-
+			    	{				    	
 				    	this.currentSearchArray = json;
 						// Show the popup window
 						this.searchDialog.ibxWidget("open").position({my:"left top", at:"left-5px bottom+6px", of: form.find(".share-with-btn-search")});
 						// Add a text Showing first {1} entries
 						$(".share-with-txt-search").focus();				
-
-				    	$.each(json, function(index, object)
+						var itemList = $('#shareWithDropdown');
+						
+						for (var i = 0; i < json.length; i++)
 				    	{			    		
 							var userdata = {}; // init
-							userdata.type = object.type;
-							userdata.name = object.name;
+							userdata.type = json[i].type;
+							userdata.name = json[i].name;
 	
-							var item = new userGroupItem(object,true);
+							var item = new userGroupItem(json[i],true);
 							
-							if (object.type == "u")
+							if (json[i].type == "u")
 							{
-								if (this.currentUserArrayStr.indexOf("," + object.name + ",") == -1)
+								if (this.currentUserArrayStr.indexOf("," + json[i].name + ",") == -1)
 									{
 										item.element.addClass("share-with-item");
 										userdata.disabled = false;						
@@ -502,7 +500,7 @@
 							}
 							else
 							{
-								if (this.currentGroupArrayStr.indexOf("," + object.name + ",") == -1)
+								if (this.currentGroupArrayStr.indexOf("," + json[i].name + ",") == -1)
 								{
 									item.element.addClass("share-with-item");
 									userdata.disabled = false;
@@ -514,8 +512,8 @@
 								}
 							}
 							item.element.data("userData",userdata);
-							$('#shareWithDropdown').append(item.element);
-				    	}.bind(this));
+							itemList.append(item.element);
+				    	}
 				    	
 						$(this.searchDialog).find(".share-with-item").on( "click", function( e ) 
 								{
