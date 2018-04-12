@@ -71,7 +71,7 @@ page import="org.owasp.esapi.*,
 		<!--include this script...will boot ibx into the running state-->
 		<Script src="<%=context%>/ibx/resources/ibx.js" type="text/javascript"></script>
 		<script src="<%=context%>/3rdparty_resources/ace-1.3.1/src/ace.js" type="text/javascript" charset="utf-8"></script>
-		<!-- script src="<%=context%>/3rdparty_resources/ace-1.3.1/src/ext-modelist.js" type="text/javascript" charset="utf-8"></script -->
+		<script src="<%=context%>/3rdparty_resources/ace-1.3.1/src/ext-modelist.js" type="text/javascript" charset="utf-8"></script>
 		<script type="text/javascript">
 			<jsp:include page="/WEB-INF/jsp/global/wf_globals.jsp" flush="false" />
 			<jsp:include page="/WEB-INF/jsp/ibx/ibxInit.jsp" flush="false" />
