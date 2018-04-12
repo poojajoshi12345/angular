@@ -39,7 +39,7 @@
 						el = $(el);
 						var fullPath = el.attr("fullPath");
 						var name = el.attr("name");
-						var childName = "user";
+						var type = "u";
 						var email = "";
 						if (fullPath.lastIndexOf("USERS/") != -1)
 						{
@@ -51,19 +51,19 @@
 						{
 							this.currentGroupArrayStr += name + ",";
 							this.currentGroupArray.push(name);
-							childName = "group";
+							type = "g";
 						}
 						this.shareWithlist.push({
 					        name: name,
-					        desc: el.attr("description"),
+					        description: el.attr("description"),
 						    email: email,
-						    child: childName
+						    type: type
 						});
 						
 					}.bind(this));
 					
 					this.shareWithlist.sort(function (a, b) {
-						return (a.desc < b.desc ? -1 : (a.desc > b.desc ? 1 : 0));
+						return (a.description < b.description ? -1 : (a.description > b.description ? 1 : 0));
 					});
 
 					$(".Share-with-others-menu").on("ibx_select", this._onMenuItemSelect.bind(this));
@@ -92,10 +92,10 @@
 				if (type == "all" || this.shareWithlist[i].child == type)
 				{
 					var userdata = {}; // init
-					userdata.user = this.shareWithlist[i].child;
+					userdata.type = this.shareWithlist[i].type;
 					userdata.name = this.shareWithlist[i].name;
 	
-					var item = new userGroupItem(this.shareWithlist[i]);
+					var item = new userGroupItem(this.shareWithlist[i],false);
 					item.element.addClass("share-with-item-user");
 					item.element.data("userData",userdata);
 					itemList.append(item.element);
@@ -108,7 +108,7 @@
 					return; // do nothing
 
 				var userData = $(e.currentTarget.parentElement).data("userData");
-				if (userData.user == "user")
+				if (userData.type == "u")
 				{
 					if (this.currentUserArrayStr.indexOf("," + userData.name + ",") != -1)
 					{
@@ -128,7 +128,7 @@
 				}
 				for (var i=0; i < this.shareWithlist.length; i++)
 				{ // remove object that got deleted
-					if (this.shareWithlist[i].child == userData.user && this.shareWithlist[i].name == userData.name)
+					if (this.shareWithlist[i].type == userData.type && this.shareWithlist[i].name == userData.name)
 						this.shareWithlist.splice(i, 1);						
 				}
 				this._refreshShareWithItems();
@@ -302,7 +302,8 @@
 		{
 			this._super();
 			this.shareWithlist = [];
-					
+			this.currentSearchArray = [];
+			
 			this.userArray = [];
 			this.groupArray = [];
 			this.combinedArray = [];
@@ -316,6 +317,7 @@
 			this.isDropdownOpen = false;
 			this.searchDialog = null;
 			this.maxRows = 500;
+			this.typingTimer;
 			
 			form = ibx.resourceMgr.getResource('.share-with-others-dialog');
 			this.searchDialog = ibx.resourceMgr.getResource('.share-with-container-dialog', true);
@@ -335,6 +337,7 @@
 
 			$(form).find(".share-with-txt-search").on('ibx_action ibx_textchanged', function (e, info)
 			{
+				clearTimeout(this.typingTimer);
 				var str = $(form).find(".share-with-txt-search").ibxWidget("option", "text");
 				if (str.length == 0)
 				{
@@ -342,7 +345,7 @@
 					this.searchDialog.ibxWidget("close");
 				}									
 				else
-					this.myTimer = setTimeout(function() { this._AddItemstoDropDownFromSearch(); }, 250);
+					this.typingTimer = setTimeout(function() { this._DropDownList();}.bind(this), 250);
 			}.bind(this));
 			
 			$(form).find(".ibx-dialog-cancel-button").on('click', function (e)
@@ -390,36 +393,6 @@
 				
 			}.bind(this));
 		},	
-		
-		_startProgress:function()
-		{	
-			var settings = 
-			{
-				customImage:true
-			};
-
-			var options = 
-			{
-				text: "",
-				showProgress: true,
-				curVal: 0,
-			};
-			
-			if(settings.customImage)
-				options.glyphClasses = "fa fa-circle-o-notch";
-
-			var waiting = ibx.waitStart().css("font-size", "3em");
-			settings._startDate = new Date();
-			settings._interval = window.setInterval(function(waiting, options, settings)
-			{
-				waiting.ibxWidget("option", options);
-			}, 900, waiting, options, settings);
-		},		
-
-		_stopProgress:function()
-		{
-			ibx.waitStop();
-		},
 		
 		_onMenuItemSelect:function(e, menuItem)
 		{
@@ -479,12 +452,114 @@
 			}			
 		},
 		
-		_AddItemstoDropDownFromSearch: function()
+		_DropDownList: function()
 		{ // show drop down dialog
-
-			this._startProgress();
+			console.log($(form).find(".share-with-txt-search").ibxWidget("option", "text"));
 			$('#shareWithDropdown').empty();
+	
+			var searchPath = "*" + $(form).find(".share-with-txt-search").ibxWidget("option", "text") + "*";
+	//		this._startProgress();
+			$.ajax({
+			    type: "POST",
+				contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+				url: sformat("{1}/usergrouplist", applicationContext),
+				data: {"searchPath":searchPath,"searchRows": 500},		
+				dataType: "json",
+				context: this,
+			    success: function(json) 
+			    {
+			    	if (json.length > 0)		    		
+			    	{
+				    	
+						var itemList = $('#shareWithDropdown');
 
+				    	this.currentSearchArray = json;
+						// Show the popup window
+						this.searchDialog.ibxWidget("open").position({my:"left top", at:"left-5px bottom+6px", of: form.find(".share-with-btn-search")});
+						// Add a text Showing first {1} entries
+						$(".share-with-txt-search").focus();				
+
+				    	$.each(json, function(index, object)
+				    	{			    		
+							var userdata = {}; // init
+							userdata.type = object.type;
+							userdata.name = object.name;
+	
+							var item = new userGroupItem(object,true);
+							
+							if (object.type == "u")
+							{
+								if (this.currentUserArrayStr.indexOf("," + object.name + ",") == -1)
+									{
+										item.element.addClass("share-with-item");
+										userdata.disabled = false;						
+									}
+									else
+									{
+										item.element.addClass("share-with-item share-with-item-disabled");
+										userdata.disabled = true;						
+									}						
+							}
+							else
+							{
+								if (this.currentGroupArrayStr.indexOf("," + object.name + ",") == -1)
+								{
+									item.element.addClass("share-with-item");
+									userdata.disabled = false;
+								}
+								else
+								{
+									item.element.addClass("share-with-item share-with-item-disabled");
+									userdata.disabled = true;
+								}
+							}
+							item.element.data("userData",userdata);
+							$('#shareWithDropdown').append(item.element);
+				    	}.bind(this));
+				    	
+						$(this.searchDialog).find(".share-with-item").on( "click", function( e ) 
+								{
+									var userdata = $(e.currentTarget).data("userData");
+
+									if (userdata.disabled) // user click on disable item
+										return;
+									
+									$(form).find(".ibx-dialog-ok-button").ibxWidget('option','disabled', false);
+
+									if (userdata.type == "g")
+									{
+										this.currentGroupArrayStr += userdata.name + ",";
+										this.currentGroupArray.push(userdata.name);
+									}
+									else
+									{
+										this.currentUserArrayStr += userdata.name + ",";					
+										this.currentUserArray.push(userdata.name);
+									}
+									this.isDropdownOpen = false;				
+									this._restParameters(); // reset parameters			
+									this._SWdisplayList();
+									this.searchDialog.ibxWidget("close");
+									$(form).find(".share-with-txt-search").ibxWidget('option', 'text', ""); // reset
+						
+									$(".share-with-txt-search").focus();				
+								}.bind(this));	
+
+			//	    	this._stopProgress();
+			    	}
+					else
+					{
+		//				this._stopProgress();
+						this.searchDialog.ibxWidget("close");
+					}			
+		        },
+		        error: function() 
+		        {   
+		        	alert("usergrouplist failed")
+		        }
+			});
+			
+	/*		
 			switch (this.showOption)
 			{
 				case "user":
@@ -498,40 +573,15 @@
 					this._showDropDownAll();
 					break;
 			}	
-			
-			$(this.searchDialog).find(".share-with-item").on( "click", function( e ) 
-			{
-				var userdata = $(e.currentTarget).data("userData");
-
-				if (userdata.disabled) // user click on disable item
-					return;
-				
-				$(form).find(".ibx-dialog-ok-button").ibxWidget('option','disabled', false);
-
-				if (userdata.user == "group")
-				{
-					this.currentGroupArrayStr += userdata.name + ",";
-					this.currentGroupArray.push(userdata.name);
-				}
-				else
-				{
-					this.currentUserArrayStr += userdata.name + ",";					
-					this.currentUserArray.push(userdata.name);
-				}
-				this.isDropdownOpen = false;				
-				this._restParameters(); // reset parameters			
-				this._SWdisplayList();
-				this.searchDialog.ibxWidget("close");
-				$(form).find(".share-with-txt-search").ibxWidget('option', 'text', ""); // reset
-	
-				$(".share-with-txt-search").focus();				
-			}.bind(this));	
+			*/
 		},
 		
 		_showDropDownAll: function()
-		{
-			var lowerCaseStr = $(form).find(".share-with-txt-search").ibxWidget("option", "text").toLowerCase();
+		{		
+			var currentStr = $(form).find(".share-with-txt-search").ibxWidget("option", "text");
+
 			this.combinedListArray = [];
+
 			var count=0;
 
 			for (var i=0; i < this.combinedArray.length && count < this.maxRows; i++)
@@ -741,7 +791,37 @@
 	    	});
 	    					
 	    },
-	    
+
+		_startProgress:function()
+		{	
+			var settings = 
+			{
+				customImage:true
+			};
+
+			var options = 
+			{
+				text: "",
+				showProgress: true,
+				curVal: 0,
+			};
+			
+			if(settings.customImage)
+				options.glyphClasses = "fa fa-circle-o-notch";
+
+			var waiting = ibx.waitStart().css("font-size", "3em");
+			settings._startDate = new Date();
+			settings._interval = window.setInterval(function(waiting, options, settings)
+			{
+				waiting.ibxWidget("option", options);
+			}, 900, waiting, options, settings);
+		},		
+
+		_stopProgress:function()
+		{
+			ibx.waitStop();
+		},
+		
 		_destroy: function ()
 		{
 			this._super();
@@ -749,23 +829,21 @@
 	});
 	
 	var template = ibx.resourceMgr.getResource('.sw-item-template', true);
-	function userGroupItem(ibfsItem)
+	function userGroupItem(ibfsItem,IsClose)
 	{
 		this.ibfsItem = ibfsItem;
 		
-		var description = this.description = ibfsItem.desc;
-		var type = this.type = ibfsItem.child;
-		var name = this.name = ibfsItem.name;
-		var userName = ibfsItem.name;
-		if (type == "user")
-		{
-			if (ibfsItem.email != "" && name != ibfsItem.email)
-				userName += "(" + ibfsItem.email + ")";						
-		}
-		var name = this.name = userName;
+		var description  = ibfsItem.description;
+		var type = ibfsItem.type;
+		var name = ibfsItem.name;
+
+		if (type == "u" && ibfsItem.email != "" && name != ibfsItem.email)
+			name += "(" + ibfsItem.email + ")";						
 		
 		this.element = template.clone().removeClass("sw-item-template");
-		this.element[0]._userGroupItem = this;
+		if (IsClose)
+			this.element.find(".item-close-icon").hide();
+
 		this.element.find(".sw-item-desc").text(description);
 		this.element.find(".sw-item-name").text(name);
 		this.element.find(".sw-item-icon").addClass((type == "user") ? "sw-item-user" : "sw-item-group");
