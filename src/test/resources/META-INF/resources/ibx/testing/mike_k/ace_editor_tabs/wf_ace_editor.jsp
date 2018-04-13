@@ -97,17 +97,10 @@ page import="org.owasp.esapi.*,
 			{
 				$('.text-editor').ibxWidget("openEditorTab", rp, fp, fn, m);
 			};
-			
-			function _onBeforeUnload()
-			{
-				if(window.opener)
-				{
-					window.opener.editorWindow = null;
-				}
-			}
+
 			//# sourceURL=ace_editor.jsp
 		</script>
 	</head>
-	<body class="ibx-root" onbeforeunload="return _onBeforeUnload()"></body>
+	<body class="ibx-root"></body>
 </html>
 

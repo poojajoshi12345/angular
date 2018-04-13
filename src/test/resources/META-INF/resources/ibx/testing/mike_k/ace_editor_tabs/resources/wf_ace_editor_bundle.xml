@@ -99,10 +99,11 @@
 						<div class="te-menu-button" data-ibx-type="ibxMenuButton" data-ibx-name="_menuOptions" data-menu-cmd="menuOptions" data-ibxp-glyph-classes="ibx-icons ibx-glyph-layout">
 							<div class="te-options-menu ibx-menu-no-icons te-menu" data-ibx-type="ibxMenu">
 								<div class="te-menu-item" data-ibx-type="ibxCheckMenuItem" data-ibx-name="_optionsLineNumbering" data-ibxp-checked="true">@ibxString('bid_menu_options_line_numbering')</div>
+								<div class="te-menu-item" data-ibx-type="ibxCheckMenuItem" data-ibx-name="_optionsAutocomplete" data-ibxp-checked="true">@ibxString('bid_menu_options_autocomplete')</div>
 								<div class="te-menu-item" data-ibx-type="ibxCheckMenuItem" data-ibx-name="_optionsStatusBar" data-ibxp-checked="true">@ibxString('bid_menu_options_status_bar')</div>
 							</div>						
 						</div>
-						<div class="te-menu-button" data-ibx-type="ibxMenuButton" data-ibx-name="_menuMore" data-menu-cmd="menuMore" data-ibxp-glyph-classes="fa fa-ellipsis-v"></div>
+						<!-- div class="te-menu-button" data-ibx-type="ibxMenuButton" data-ibx-name="_menuMore" data-menu-cmd="menuMore" data-ibxp-glyph-classes="fa fa-ellipsis-v"></div -->
 						<div class="te-menu-separator4" data-ibx-type="ibxLabel" data-ibxp-justify="center" data-ibxp-align="stretch"></div>
 						<div class="te-menu-button-help" data-ibx-type="ibxMenuButton" data-ibx-name="_menuHelp" data-menu-cmd="menuHelp" data-ibxp-glyph-classes="fa fa-question"></div>
 					</div>

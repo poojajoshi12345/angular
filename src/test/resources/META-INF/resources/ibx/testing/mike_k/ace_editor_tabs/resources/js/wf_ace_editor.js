@@ -3,6 +3,8 @@
 
 jQuery.event.special['ibx_change'] = { noBubble: true };
 
+var editorActionHandler = "/editor.bip";
+
 $.widget("ibi.ibiAceWidget", $.ibi.ibxWidget, 
 {
 	options:
@@ -107,40 +109,32 @@ $.widget("ibi.ibiAceWidget", $.ibi.ibxWidget,
 	selectionToUpperCase:function(e)
 	{
 		this._ace_editor.execCommand("touppercase");
-		//this._ace_editor.toUpperCase();			
-		//this._setEditorChanged(true);
 	},
 	
 	selectionToLowerCase:function(e)
 	{
 		this._ace_editor.execCommand("tolowercase");
-		//this._ace_editor.toLowerCase();			
-		//this._setEditorChanged(true);
 	},
 
 	editorComment:function(e)
 	{
 		this._ace_editor.execCommand("togglecomment");
-		//this._setEditorChanged(true);
 	},
 	
 	editorCommentBlock:function(e)
 	{
 		this._ace_editor.execCommand("toggleBlockComment");
-		//this._setEditorChanged(true);
 	},
 	
 	selectAll:function(e)
 	{
-		this._ace_editor.execCommand("selectall");
-		//this._ace_editor.selection.selectAll();		
+		this._ace_editor.execCommand("selectall");		
 	},
 	
 	deleteSelectedText:function(e)
 	{
 		var selectedRange = this._ace_editor.selection.getRange();		
 		this._ace_editor.getSession().getDocument().remove(selectedRange);		
-		//this._setEditorChanged(true);
 	},
 	
 	editorRedo:function(e)
@@ -182,25 +176,34 @@ $.widget("ibi.ibiAceWidget", $.ibi.ibxWidget,
 		this._ace_editor.insert(editorClipboardData);
 		this._ace_editor.focus();
 	},
-/*	
-	_editorChanged:function()
-	{
-		return this._ace_editor.getSession().getUndoManager().hasUndo();
-	},
-*/
+
 	setToggleLineNumberingState:function(e)
 	{
 		var showLineNumbersStatus = this.options.config.showLineNumbers;
 		
 		var data = {"showLineNumbers":showLineNumbersStatus};		
 		$(document).trigger("SET_LINE_NUMBERING_STATUS_METADATA", data);
+		
+		this._ace_editor.focus();
 	},
+	
+	setToggleAutocompleteState:function(e)
+	{		
+		var showAutocompleteStatus = this.options.config.showLineNumbers;
+		
+		var data = {"showAutocomplete":showAutocompleteStatus};		
+		$(document).trigger("SET_AUTOCOMPLETE_STATUS_METADATA", data);
+		
+		this._ace_editor.focus();
+	},
+	
 	setInsertStatusLabel:function()
 	{
 		var keyStatus = this._insertKeyStatus ? ibx.resourceMgr.getString("bid_insert_on") : ibx.resourceMgr.getString("bid_insert_off");
 		var data = {"insertKeyStatus":keyStatus};		
 		$(document).trigger("SET_STATUS_BAR_INSERT_KEY_METADATA", data);
 	},
+	
 	setCursorPositionInfo:function()
 	{		
 		var contentLength =  this._ace_editor.session.getValue().length;		
@@ -213,6 +216,7 @@ $.widget("ibi.ibiAceWidget", $.ibi.ibxWidget,
 		var data = {"contentLength":contentLength, "lineCount":lineCount,"linePosition":linePosition, "columnPosition":columnPosition};
 		$(document).trigger("SET_STATUS_BAR_CURSOR_METADATA", data);
 	},
+	
 	content:function(content)
 	{
 		if(content)
@@ -223,24 +227,7 @@ $.widget("ibi.ibiAceWidget", $.ibi.ibxWidget,
 		{
 			return this._ace_editor.getValue();
 		}
-	},
-/*	
-	_setEditorChanged:function(status)
-	{
-		this.changed = status;
-		
-		if(status)
-		{
-			//this._editUndo.ibxWidget("option", "disabled", false);
-		}
-		else
-		{
-			this.resetUndoManager();
-		}
-	}
-*/	
-
-	
+	}	
 });
 
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -262,7 +249,6 @@ $.widget("ibi.textEditorTabPage", $.ibi.ibxTabPage,
 		this._super();
 
 	    this._editorWidget = null;
-		this._editorEnvironment = null;
 		
 		this._defaultSearchOptions = {
 		    backwards: false,
@@ -356,9 +342,8 @@ $.widget("ibi.textEditorTabPage", $.ibi.ibxTabPage,
 		this._super();
 	},
 	
-	initEditor:function(editorEnvironment, rootPath, folderPath, itemName, mode)
+	initEditor:function(rootPath, folderPath, itemName, mode)
 	{
-		this._editorEnvironment = editorEnvironment;
 		this.rootPath = rootPath;
 		
 		if(folderPath && folderPath.length > 0)
@@ -367,26 +352,11 @@ $.widget("ibi.textEditorTabPage", $.ibi.ibxTabPage,
 			this.folderPath = rootPath;
 		
 		this.ace_editor = this._editorWidget.ibxWidget("editor");
-	    //this.ace_editor.setTheme("ace/theme/" + this._editorEnvironment.defaultTheme);
-	
-/*	    
-	    this.ace_editor.setOptions({
-	        enableBasicAutocompletion: true,
-	        enableLiveAutocompletion: false,
-	        enableSnippets: true
-	    });
-*/	    
 /*		
 		this.ace_editor.on("cut", function(e){
 	        alert('Cut Detected');
 	    });
 */
-/*		
-		this.ace_editor.on("find", function(e){
-	        alert('Search Detected');
-	        e.stopPropagation();
-	    });
-*/		
 		if(mode)
 		{
 			var editorConfig = this._editorWidget.ibxWidget("option", "config");
@@ -432,7 +402,13 @@ $.widget("ibi.textEditorTabPage", $.ibi.ibxTabPage,
 	{
 		return this.fullItemPath;
 	},
-		
+	
+	_getEditorFormatName:function(name)
+	{
+		var data = {"_format":name};
+		$(document).trigger("GET_EDITOR_FORMAT_BY_EXTENSION_EVENT", data);		
+		return data._format;
+	},
 	
 	_onTabCloseButton:function(e)
 	{
@@ -519,11 +495,8 @@ $.widget("ibi.textEditorTabPage", $.ibi.ibxTabPage,
 		this._setWrapAround(e);
 	},
 	
-	
 	_getEditorContent:function(folderPath, fileName)
-	{
-		//this._clearEditorEnvironment();
-		
+	{		
 		this.newDoc = !fileName || fileName.length == 0;
 
 		if(folderPath && folderPath.length > 0)
@@ -558,7 +531,7 @@ $.widget("ibi.textEditorTabPage", $.ibi.ibxTabPage,
 	
 	_getItemSummary:function(ibfsPath)
 	{			
-		var uriExec = sformat("{1}"+this._editorEnvironment.editorActionHandler, applicationContext);
+		var uriExec = sformat("{1}"+editorActionHandler, applicationContext);
 		var randomnum = Math.floor(Math.random() * 100000);	
 		var argument=
 	 	{
@@ -610,14 +583,12 @@ $.widget("ibi.textEditorTabPage", $.ibi.ibxTabPage,
 				this.element.ibxWidget("option", {"tabOptions": {"text": this.itemDescription}});
 				this._editorWidget.ibxWidget("setCursorPositionInfo");
 				this.setEditorFocus();
-	 			
-	 			//this._setEditorChanged(false);
 			});
 	},
 	
 	_getEditorServerEnv:function(ibfsPath)
 	{			
-		var uriExec = sformat("{1}"+this._editorEnvironment.editorActionHandler, applicationContext);
+		var uriExec = sformat("{1}"+editorActionHandler, applicationContext);
 		var randomnum = Math.floor(Math.random() * 100000);	
 		var argument=
 	 	{
@@ -706,42 +677,42 @@ $.widget("ibi.textEditorTabPage", $.ibi.ibxTabPage,
 				}           		
 				
 			}.bind(this));
-	},	
+	},
 	
 	saveFileAs:function(e)
 	{		           
-		var saveFileTypes = [[ibx.resourceMgr.getString(this._editorEnvironment._getEditorFormatName("txt")), "txt"],
-					         [ibx.resourceMgr.getString(this._editorEnvironment._getEditorFormatName("r")), "r"],
-					         [ibx.resourceMgr.getString(this._editorEnvironment._getEditorFormatName("py")), "py"],	
-		                     [ibx.resourceMgr.getString(this._editorEnvironment._getEditorFormatName("fex")), "fex"],
-			                 [ibx.resourceMgr.getString(this._editorEnvironment._getEditorFormatName("mas")), "mas"],			                 		                     
-		                     [ibx.resourceMgr.getString(this._editorEnvironment._getEditorFormatName("htm")), "htm"],
-		                     [ibx.resourceMgr.getString(this._editorEnvironment._getEditorFormatName("sty")), "sty"],
-		                     [ibx.resourceMgr.getString(this._editorEnvironment._getEditorFormatName("css")), "css"],
-		                     [ibx.resourceMgr.getString(this._editorEnvironment._getEditorFormatName("txt")), "txt"],		
-					         [ibx.resourceMgr.getString(this._editorEnvironment._getEditorFormatName("sql")), "sql"],
-							 [ibx.resourceMgr.getString(this._editorEnvironment._getEditorFormatName("js")), "js"]];
+		var saveFileTypes = [[ibx.resourceMgr.getString(this._getEditorFormatName("txt")), "txt"],
+					         [ibx.resourceMgr.getString(this._getEditorFormatName("r")), "r"],
+					         [ibx.resourceMgr.getString(this._getEditorFormatName("py")), "py"],	
+		                     [ibx.resourceMgr.getString(this._getEditorFormatName("fex")), "fex"],
+			                 [ibx.resourceMgr.getString(this._getEditorFormatName("mas")), "mas"],			                 		                     
+		                     [ibx.resourceMgr.getString(this._getEditorFormatName("htm")), "htm"],
+		                     [ibx.resourceMgr.getString(this._getEditorFormatName("sty")), "sty"],
+		                     [ibx.resourceMgr.getString(this._getEditorFormatName("css")), "css"],
+		                     [ibx.resourceMgr.getString(this._getEditorFormatName("txt")), "txt"],		
+					         [ibx.resourceMgr.getString(this._getEditorFormatName("sql")), "sql"],
+							 [ibx.resourceMgr.getString(this._getEditorFormatName("js")), "js"]];
 			
 		if(this.folderPath.indexOf("/WFC/") < 0)
-			saveFileTypes = [[ibx.resourceMgr.getString(this._editorEnvironment._getEditorFormatName("txt")), "txt"],
-					         [ibx.resourceMgr.getString(this._editorEnvironment._getEditorFormatName("r")), "r"],
-					         [ibx.resourceMgr.getString(this._editorEnvironment._getEditorFormatName("py")), "py"],	
-			                 [ibx.resourceMgr.getString(this._editorEnvironment._getEditorFormatName("fex")), "fex"],
-			                 [ibx.resourceMgr.getString(this._editorEnvironment._getEditorFormatName("mas")), "mas"],			                 
-		                     [ibx.resourceMgr.getString(this._editorEnvironment._getEditorFormatName("htm")), "htm"],
-		                     [ibx.resourceMgr.getString(this._editorEnvironment._getEditorFormatName("sty")), "sty"],
-		                     [ibx.resourceMgr.getString(this._editorEnvironment._getEditorFormatName("css")), "css"],
-		                     [ibx.resourceMgr.getString(this._editorEnvironment._getEditorFormatName("txt")), "txt"],	
-					         [ibx.resourceMgr.getString(this._editorEnvironment._getEditorFormatName("sql")), "sql"],		                     
-							 [ibx.resourceMgr.getString(this._editorEnvironment._getEditorFormatName("js")), "js"]];
+			saveFileTypes = [[ibx.resourceMgr.getString(this._getEditorFormatName("txt")), "txt"],
+					         [ibx.resourceMgr.getString(this._getEditorFormatName("r")), "r"],
+					         [ibx.resourceMgr.getString(this._getEditorFormatName("py")), "py"],	
+			                 [ibx.resourceMgr.getString(this._getEditorFormatName("fex")), "fex"],
+			                 [ibx.resourceMgr.getString(this._getEditorFormatName("mas")), "mas"],			                 
+		                     [ibx.resourceMgr.getString(this._getEditorFormatName("htm")), "htm"],
+		                     [ibx.resourceMgr.getString(this._getEditorFormatName("sty")), "sty"],
+		                     [ibx.resourceMgr.getString(this._getEditorFormatName("css")), "css"],
+		                     [ibx.resourceMgr.getString(this._getEditorFormatName("txt")), "txt"],	
+					         [ibx.resourceMgr.getString(this._getEditorFormatName("sql")), "sql"],		                     
+							 [ibx.resourceMgr.getString(this._getEditorFormatName("js")), "js"]];
 
 		if (this.folderPath.indexOf("/WFC/") != -1) 			    
 		{			    	
 			if (WFGlobals.isFeatureEnabled("ApplicationProperties") || WFGlobals.isFeatureEnabled("IBXPage"))			    		
-				saveFileTypes.push([ibx.resourceMgr.getString(this._editorEnvironment._getEditorFormatName("prop")), "prop"]);
+				saveFileTypes.push([ibx.resourceMgr.getString(this._getEditorFormatName("prop")), "prop"]);
 			    	
 			if (WFGlobals.isFeatureEnabled("EditManifest") )			    		
-				saveFileTypes.push([ibx.resourceMgr.getString(this._editorEnvironment._getEditorFormatName("man")), "man"]);		    	
+				saveFileTypes.push([ibx.resourceMgr.getString(this._getEditorFormatName("man")), "man"]);		    	
 		}	
 		
 		var saveDlg = ibx.resourceMgr.getResource('.open-dialog-resources', true);
@@ -777,37 +748,37 @@ $.widget("ibi.textEditorTabPage", $.ibi.ibxTabPage,
 		
 		if (this.newDoc)
 		{			
-			var saveFileTypes = [[ibx.resourceMgr.getString(this._editorEnvironment._getEditorFormatName("fex")), "fex"],
-						         [ibx.resourceMgr.getString(this._editorEnvironment._getEditorFormatName("r")), "r"],
-						         [ibx.resourceMgr.getString(this._editorEnvironment._getEditorFormatName("py")), "py"],
-				                 [ibx.resourceMgr.getString(this._editorEnvironment._getEditorFormatName("mas")), "mas"],			                 						         
-			                     [ibx.resourceMgr.getString(this._editorEnvironment._getEditorFormatName("htm")), "htm"],
-			                     [ibx.resourceMgr.getString(this._editorEnvironment._getEditorFormatName("sty")), "sty"],
-			                     [ibx.resourceMgr.getString(this._editorEnvironment._getEditorFormatName("css")), "css"],
-			                     [ibx.resourceMgr.getString(this._editorEnvironment._getEditorFormatName("txt")), "txt"],
-						         [ibx.resourceMgr.getString(this._editorEnvironment._getEditorFormatName("sql")), "sql"],			                     
-								 [ibx.resourceMgr.getString(this._editorEnvironment._getEditorFormatName("js")), "js"]];
+			var saveFileTypes = [[ibx.resourceMgr.getString(this._getEditorFormatName("fex")), "fex"],
+						         [ibx.resourceMgr.getString(this._getEditorFormatName("r")), "r"],
+						         [ibx.resourceMgr.getString(this._getEditorFormatName("py")), "py"],
+				                 [ibx.resourceMgr.getString(this._getEditorFormatName("mas")), "mas"],			                 						         
+			                     [ibx.resourceMgr.getString(this._getEditorFormatName("htm")), "htm"],
+			                     [ibx.resourceMgr.getString(this._getEditorFormatName("sty")), "sty"],
+			                     [ibx.resourceMgr.getString(this._getEditorFormatName("css")), "css"],
+			                     [ibx.resourceMgr.getString(this._getEditorFormatName("txt")), "txt"],
+						         [ibx.resourceMgr.getString(this._getEditorFormatName("sql")), "sql"],			                     
+								 [ibx.resourceMgr.getString(this._getEditorFormatName("js")), "js"]];
 
 				
 			if(this.folderPath.indexOf("/WFC/") < 0)
-				saveFileTypes = [[ibx.resourceMgr.getString(this._editorEnvironment._getEditorFormatName("fex")), "fex"],
-						         [ibx.resourceMgr.getString(this._editorEnvironment._getEditorFormatName("r")), "r"],
-						         [ibx.resourceMgr.getString(this._editorEnvironment._getEditorFormatName("py")), "py"],	
-				                 [ibx.resourceMgr.getString(this._editorEnvironment._getEditorFormatName("mas")), "mas"],
-			                     [ibx.resourceMgr.getString(this._editorEnvironment._getEditorFormatName("htm")), "htm"],
-			                     [ibx.resourceMgr.getString(this._editorEnvironment._getEditorFormatName("sty")), "sty"],
-			                     [ibx.resourceMgr.getString(this._editorEnvironment._getEditorFormatName("css")), "css"],
-			                     [ibx.resourceMgr.getString(this._editorEnvironment._getEditorFormatName("txt")), "txt"],	
-						         [ibx.resourceMgr.getString(this._editorEnvironment._getEditorFormatName("sql")), "sql"],			                     
-								 [ibx.resourceMgr.getString(this._editorEnvironment._getEditorFormatName("js")), "js"]];
+				saveFileTypes = [[ibx.resourceMgr.getString(this._getEditorFormatName("fex")), "fex"],
+						         [ibx.resourceMgr.getString(this._getEditorFormatName("r")), "r"],
+						         [ibx.resourceMgr.getString(this._getEditorFormatName("py")), "py"],	
+				                 [ibx.resourceMgr.getString(this._getEditorFormatName("mas")), "mas"],
+			                     [ibx.resourceMgr.getString(this._getEditorFormatName("htm")), "htm"],
+			                     [ibx.resourceMgr.getString(this._getEditorFormatName("sty")), "sty"],
+			                     [ibx.resourceMgr.getString(this._getEditorFormatName("css")), "css"],
+			                     [ibx.resourceMgr.getString(this._getEditorFormatName("txt")), "txt"],	
+						         [ibx.resourceMgr.getString(this._getEditorFormatName("sql")), "sql"],			                     
+								 [ibx.resourceMgr.getString(this._getEditorFormatName("js")), "js"]];
 
 			if (this.folderPath.indexOf("/WFC/") != -1) 			    
 			{			    	
 				if (WFGlobals.isFeatureEnabled("ApplicationProperties") || WFGlobals.isFeatureEnabled("IBXPage"))			    		
-					saveFileTypes.push([ibx.resourceMgr.getString(this._editorEnvironment._getEditorFormatName("prop")), "prop"]);
+					saveFileTypes.push([ibx.resourceMgr.getString(this._getEditorFormatName("prop")), "prop"]);
 				    	
 				if (WFGlobals.isFeatureEnabled("EditManifest") )			    		
-					saveFileTypes.push([ibx.resourceMgr.getString(this._editorEnvironment._getEditorFormatName("man")), "man"]);		    	
+					saveFileTypes.push([ibx.resourceMgr.getString(this._getEditorFormatName("man")), "man"]);		    	
 			}		
 			
 			var saveDlg = ibx.resourceMgr.getResource('.open-dialog-resources', true);
@@ -841,7 +812,7 @@ $.widget("ibi.textEditorTabPage", $.ibi.ibxTabPage,
 			return;
 		
 		var fexText = this._editorWidget.ibxWidget("content");
-	 	var uriExec = sformat("{1}"+this._editorEnvironment.editorActionHandler, applicationContext);
+	 	var uriExec = sformat("{1}"+editorActionHandler, applicationContext);
 	 	var randomnum = Math.floor(Math.random() * 100000);	
 	 	var argument = {};
 	 	
@@ -884,7 +855,7 @@ $.widget("ibi.textEditorTabPage", $.ibi.ibxTabPage,
 		if ((!this.newDoc || mode=="saveas") && this.tool &&  (this.tool != "editor" && this.tool != "htmlcanvas"))		
 		{
 
-			var uriExec = sformat("{1}"+this._editorEnvironment.editorActionHandler, applicationContext);
+			var uriExec = sformat("{1}"+editorActionHandler, applicationContext);
 			var randomnum = Math.floor(Math.random() * 100000);	
 			var argument=
 		 	{
@@ -952,8 +923,13 @@ $.widget("ibi.textEditorTabPage", $.ibi.ibxTabPage,
 			
 			var fileName = saveDlg.ibxWidget('fileName');	
 			var fileTitle = saveDlg.ibxWidget('fileTitle');				
-			var path = this._editorEnvironment._checkPath( saveDlg.ibxWidget('path') );
+			var path = saveDlg.ibxWidget('path');
 			var fileExists = saveDlg.ibxWidget('fileExists');
+			
+			var data = {"_path":path};
+			$(document).trigger("CHECK_PATH_EVENT", data);
+			
+			path = data._path;
 
 			if (mode == "saveas")
 			{	   
@@ -1063,8 +1039,6 @@ $.widget("ibi.textEditorTabPage", $.ibi.ibxTabPage,
 		
 		this.newDoc = false;
 		this._editorWidget.ibxWidget("setClean"); // remove editor "dirty" state but preserving UndoManager history
-
-		//this._setEditorMode();
 		
 		if(this.currentAction == 1)
 		{
@@ -1084,7 +1058,6 @@ $.widget("ibi.textEditorTabPage", $.ibi.ibxTabPage,
 		}
 		else if(this.currentAction == 4)
 		{
-			//this._clearEditorEnvironment();
 			this.currentAction = -1;
 			this.close();      
 		}
@@ -1206,7 +1179,7 @@ $.widget("ibi.textEditorTabPage", $.ibi.ibxTabPage,
 		var top = (screen.height-height)/2;
 		var left = (screen.width-width)/2; 	 		
 		
-		var action = this._editorEnvironment.postFormActionHandler;
+		var action = location.protocol + applicationContext + editorActionHandler;
 
 		var win = window.open("", "_blank", "status=yes," + "width=" + width + ", height=" + height + ", top=" + top + ", left=" + left + ", resizable=yes, scrollbars=yes");
 		var doc = win.document;
@@ -1319,6 +1292,11 @@ $.widget("ibi.textEditorTabPage", $.ibi.ibxTabPage,
 		this._defaultSearchOptions.wrap = this._cbWrapAround.ibxWidget("checked");
 	},
 	
+	isClean:function()
+	{
+		return this._editorWidget.ibxWidget("isClean");
+	},
+	
 	toggleLineNumbering:function()
 	{				
 		var editorConfig = this._editorWidget.ibxWidget("option", "config");
@@ -1335,6 +1313,34 @@ $.widget("ibi.textEditorTabPage", $.ibi.ibxTabPage,
 		this._editorWidget.ibxWidget("refresh");
 	},
 	
+	toggleAutocomplete:function()
+	{						
+		var editorConfig = this._editorWidget.ibxWidget("option", "config");
+
+		var enableBasicAutocompletion = editorConfig.enableBasicAutocompletion;
+		var enableSnippets = editorConfig.enableSnippets;
+		var enableLiveAutocompletion = editorConfig.enableLiveAutocompletion;
+
+		if(enableBasicAutocompletion)
+			editorConfig.enableBasicAutocompletion = false;
+		else
+			editorConfig.enableBasicAutocompletion = true;
+		
+		if(enableSnippets)
+			editorConfig.enableSnippets = false;
+		else
+			editorConfig.enableSnippets = true;
+		
+		if(enableLiveAutocompletion)
+			editorConfig.enableLiveAutocompletion = false;
+		else
+			editorConfig.enableLiveAutocompletion = true;		
+		
+		this._editorWidget.ibxWidget("option", "config", editorConfig);
+
+		this._editorWidget.ibxWidget("refresh");
+	},
+	
 	getStatusBarInfo:function()
 	{		
 		this._editorWidget.ibxWidget("setInsertStatusLabel");
@@ -1345,7 +1351,10 @@ $.widget("ibi.textEditorTabPage", $.ibi.ibxTabPage,
 	{		
 		this._editorWidget.ibxWidget("setToggleLineNumberingState");
 	},
-	
+	getAutocompleteInfo:function()
+	{		
+		this._editorWidget.ibxWidget("setToggleAutocompleteState");
+	},	
 	_decodeCDATAEncoding:function (text)
 	{
 		text = text.replace(/IBI_CDATA_START_PATTERN/g, "<![CDATA");
@@ -1363,12 +1372,7 @@ $.widget("ibi.textEditor", $.ibi.ibxWidget,
 {
 	options:
 	{
-		/*
-		captionLabelOptions:
-		{
-			text:ibx.resourceMgr.getString("BT_UNTITLED")
-		}
-		*/
+
 	},
 	
 	_widgetClass:"text-editor",
@@ -1420,9 +1424,7 @@ $.widget("ibi.textEditor", $.ibi.ibxWidget,
 		this.folderPath = "";
 	    
 		this.bipActionHandler = "/views.bip";
-		this.editorActionHandler = "/editor.bip";
 		this.checkServerAccessHandler = "/chksrvacc.bip";		
-		this.postFormActionHandler = location.protocol + applicationContext + this.editorActionHandler;
 		this.resourceContext = applicationContext;
 /*		
 		this.ace_editor.commands.addCommand({
@@ -1431,16 +1433,23 @@ $.widget("ibi.textEditor", $.ibi.ibxWidget,
 		    bindKey: {mac: "Insert", win: "Insert"}
 		})
 */	
+		
+		$(window).on('beforeunload', this._onBeforeUnload.bind(this));
+		$(window).on('unload', this._onUnload.bind(this));
+		
 		$(document).on("SET_STATUS_BAR_CURSOR_METADATA", this._onSetStatusBarCursorMetadata.bind(this));
 		$(document).on("SET_STATUS_BAR_INSERT_KEY_METADATA", this._onSetStatusBarInsertKeyMetadata.bind(this));     
-		$(document).on("SET_LINE_NUMBERING_STATUS_METADATA", this._onSetLineNumberingStatusMetadata.bind(this));     
+		$(document).on("SET_LINE_NUMBERING_STATUS_METADATA", this._onSetLineNumberingStatusMetadata.bind(this)); 
+		$(document).on("SET_AUTOCOMPLETE_STATUS_METADATA", this._onSetAutocompleteStatusMetadata.bind(this)); 
 		$(document).on("SET_EDITOR_CLIPBOARD_METADATA", this._onSetEditorClipdoardMetadata.bind(this));     
 		$(document).on("PASTE_EDITOR_CLIPBOARD_METADATA", this._onMenuButtonPaste.bind(this));    // use Toolbar Button Paste 
 		$(document).on("SET_EDITOR_CLIPBOARD_METADATA", this._onSetEditorClipdoardMetadata.bind(this));     
 		$(document).on("REMOVE_TAB_PAGE_EVENT", this._removeTabPage.bind(this));    // Remove Tab Page 
 		
+		$(document).on("GET_EDITOR_FORMAT_BY_EXTENSION_EVENT", this._getEditorFormatByExtensionEventHandler.bind(this));
 		$(document).on("GET_EDITOR_MODE_BY_EXTENSION_EVENT", this._getEditorModeByExtensionEventHandler.bind(this));
-		
+		$(document).on("CHECK_PATH_EVENT", this._checkPathEventHandler.bind(this));
+
 		//this._fileNew.on("ibx_menu_item_click", this._onMenuFileNew.bind(this));
 		
 		this._fileNewR = $("<div class='te-menu-item'>").ibxMenuItem({'labelOptions':{'text': ibx.resourceMgr.getString(this._getEditorFormatName("r"))}, 'userValue': "r"});
@@ -1492,12 +1501,37 @@ $.widget("ibi.textEditor", $.ibi.ibxWidget,
 		this._menuRun.on("click", this._onMenuButtonRun.bind(this));
 		this._menuSearch.on("click", this._onMenuSearch.bind(this));
 		this._optionsLineNumbering.on("click", this._onMenuOptionsLineNumbering.bind(this));
+		this._optionsAutocomplete.on("click", this._onMenuOptionsAutocomplete.bind(this));
 		this._optionsStatusBar.on("click", this._onMenuOptionsStatusBar.bind(this));
 		this._menuHelp.on("click", this._onMenuButtonHelp.bind(this));		
 		this._editorTabPane.on("ibx_change", this._editorTabPaneChanged.bind(this));
 	},
+	// window event handlers
+	_onBeforeUnload:function(e)
+	{				
+		if(this.isDirty())
+		{
+	      return "prompt";
+		}
+		else 
+		{
+			if(window.opener && window.opener.editorWindow)
+			{
+				window.opener.editorWindow = null;
+			}
+			
+			return undefined;
+		}
+	},
 	
-	// Menu Items
+	_onUnload:function(e)
+	{		
+		if(window.opener && window.opener.editorWindow)
+		{
+			window.opener.editorWindow = null;
+		}
+	},
+	// menu items event handlers
 	_onMenuFileNew:function(e)
 	{
 		this.currentAction = 1;
@@ -1589,6 +1623,10 @@ $.widget("ibi.textEditor", $.ibi.ibxWidget,
 	{		
 		this._toggleLineNumbering(e);
 	},
+	_onMenuOptionsAutocomplete:function(e)
+	{		
+		this._toggleAutocomplete(e);
+	},
 	_onMenuOptionsStatusBar:function(e)
 	{
 		this._toggleStatusBar(e);
@@ -1656,10 +1694,19 @@ $.widget("ibi.textEditor", $.ibi.ibxWidget,
 	    }
 		
 		var newTab = $("<div class='text-editor-tab-page'>").textEditorTabPage({ tabOptions:  { 'text': ibx.resourceMgr.getString("BT_UNTITLED"), 'glyph': '', 'glyphClasses': '' } });				
-		newTab.ibxWidget("initEditor", this, this.rootPath, folderPath, fileName, mode);		
+		newTab.ibxWidget("initEditor", this.rootPath, folderPath, fileName, mode);		
 		this._editorTabPane.ibxWidget("add", newTab);
 	},
 
+	_checkPathEventHandler:function(e, data)
+	{
+		data._path = this._checkPath(data._path);
+	},
+	
+	_getEditorFormatByExtensionEventHandler:function(e, data)
+	{
+		data._format = this._getEditorFormatByExtension(data._extension);
+	},
 	_getEditorModeByExtensionEventHandler:function(e, data)
 	{
 		data._mode = this._getEditorModeByExtension(data._extension);
@@ -1683,6 +1730,7 @@ $.widget("ibi.textEditor", $.ibi.ibxWidget,
 
 		tabPage.ibxWidget("getStatusBarInfo");
 		tabPage.ibxWidget("getLineNumberingInfo");
+		tabPage.ibxWidget("getAutocompleteInfo");
 		tabPage.ibxWidget("setEditorFocus");
 	}, 
 	
@@ -1830,7 +1878,7 @@ $.widget("ibi.textEditor", $.ibi.ibxWidget,
 	
 	_onExitFunction:function(e)
 	{
-		this._onExit(e);
+		this._onExit();
 	},	
 	
 	_onHelp:function(e)
@@ -1883,13 +1931,31 @@ $.widget("ibi.textEditor", $.ibi.ibxWidget,
 			this._resetStatusBarInfo();
 	},
 
-	_onExit:function(e)
+	isDirty:function(e)
 	{
+        var tabBar = this._editorTabPane.ibxWidget("tabBar");        
+        var tabBtns = tabBar.ibxWidget("children");
+        
+        for (var i = 0; i < tabBtns.length; i++)
+        {
+        	var tabBtn = $(tabBtns.get(i));
+        	var tabPg = tabBtn.ibxWidget("option", "tabPage");
+               
+        	if (!tabPg.ibxWidget("isClean"))
+        		return true;
+        }
+        
+        return false;
+	},
+	
+	_onExit:function()
+	{
+		/*
 		var opener = window.opener;
 		
-		if(opener)
+		if(opener && opener.editorWindow)
 			opener.editorWindow = null;
-		
+		*/
 		window.close();
 		/*
 		if (this.changed)
@@ -1979,6 +2045,11 @@ $.widget("ibi.textEditor", $.ibi.ibxWidget,
 		this._optionsLineNumbering.ibxWidget("option", "checked", data.showLineNumbers);
 	},
 	
+	_onSetAutocompleteStatusMetadata:function(e, data)
+	{
+		this._optionsAutocomplete.ibxWidget("option", "checked", data.showAutocomplete);
+	},
+	
 	_toggleSearchPanel:function(e)
 	{
 		var tabPage = this._editorTabPane.ibxWidget("selected"); 
@@ -2011,11 +2082,18 @@ $.widget("ibi.textEditor", $.ibi.ibxWidget,
 		
 		tabPage.ibxWidget("toggleLineNumbering");		
 	},
-	
+	_toggleAutocomplete:function(e)
+	{		
+		var tabPage = this._editorTabPane.ibxWidget("selected"); 
+		
+		if(!tabPage)
+			return;
+		
+		tabPage.ibxWidget("toggleAutocomplete");		
+	},
 	_getEditorFormatName:function(ext)
 	{		
 	    var formatName = this._supportedFormats[ext];
-	    
 	    return formatName;
 	},
 
