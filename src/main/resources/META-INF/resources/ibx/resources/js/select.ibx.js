@@ -858,13 +858,13 @@ $.widget("ibi.ibxSelectItem", $.ibi.ibxButtonSimple,
 		selected: false,
 		userValue: "",
 		aria: {
-			role: "listitem"
+			role: "option"
 		}
 	},
 	_widgetClass: "ibx-select-item",
 	_create: function ()
 	{
-		this.element.attr("tabIndex", -1)
+		this.element.attr("tabIndex", -1);
 		this._super();
 	},
 });
