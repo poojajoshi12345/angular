@@ -857,6 +857,9 @@ $.widget("ibi.ibxSelectItem", $.ibi.ibxButtonSimple,
 	{
 		selected: false,
 		userValue: "",
+		aria: {
+			role: "listitem"
+		}
 	},
 	_widgetClass: "ibx-select-item",
 	_create: function ()
