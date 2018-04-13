@@ -17,6 +17,9 @@ $.widget("ibi.ibiAceWidget", $.ibi.ibxWidget,
 			"showGutter":true,
 			"highlightActiveLine":true,
 			"readOnly":false,
+			"enableBasicAutocompletion": true,
+	        "enableSnippets": true,
+	        "enableLiveAutocompletion": true			
 		},
 		"commentString":"",
 	},
@@ -160,6 +163,7 @@ $.widget("ibi.ibiAceWidget", $.ibi.ibxWidget,
 	{
 		this.editorCopy(e);	
 		this.deleteSelectedText(e);
+		this._ace_editor.focus();
 	},
 	
 	editorCopy:function(e)
@@ -170,18 +174,20 @@ $.widget("ibi.ibiAceWidget", $.ibi.ibxWidget,
 			var data = {"_editorClipboardData":selection};		
 			$(document).trigger("SET_EDITOR_CLIPBOARD_METADATA", data);
 		}
+		this._ace_editor.focus();
 	},
 	
 	editorPaste:function(editorClipboardData)
 	{
 		this._ace_editor.insert(editorClipboardData);
+		this._ace_editor.focus();
 	},
-	
+/*	
 	_editorChanged:function()
 	{
 		return this._ace_editor.getSession().getUndoManager().hasUndo();
 	},
-
+*/
 	setToggleLineNumberingState:function(e)
 	{
 		var showLineNumbersStatus = this.options.config.showLineNumbers;
@@ -1091,8 +1097,6 @@ $.widget("ibi.textEditorTabPage", $.ibi.ibxTabPage,
 	
 	closeFile:function(e)
 	{
-alert("this._editorWidget.ibxWidget(\"isClean\"="+this._editorWidget.ibxWidget("isClean"));
-
 		if( !this._editorWidget.ibxWidget("isClean"))
 		{
 			var options = 
