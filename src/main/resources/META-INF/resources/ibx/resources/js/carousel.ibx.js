@@ -312,26 +312,26 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 	},
 	getScrollChild:function(forward) 
 	{ 
-		 var childInfo = null; 
+		 var childBox = null; 
 		 var pageInfo = this.getPageInfo(); 
 		 var children = this.children(); 
 		 for(var i = 0; i < children.length; ++i) 
 		 { 
-			var child = children[i]; 
-			var info = GetElementInfo(child); 
-			if(info)
+			var child = $(children[i]);
+			var box = child.metrics().borderBox; 
+			if(box)
 			{
-				if((forward === true) && (Math.floor(info.right) > pageInfo.scrollRight)) 
-					childInfo = info; 
+				if((forward === true) && (Math.floor(box.right) > pageInfo.scrollRight)) 
+					childBox = box; 
 				else 
-				if((forward === false) && (Math.floor(info.left) >= pageInfo.scrollLeft) && child.previousSibling) 
-					childInfo = GetElementInfo(child.previousSibling); 
+				if((forward === false) && (Math.floor(box.left) >= pageInfo.scrollLeft) && child.prev().length) 
+					childBox = child.prev().metrics().borderBox; 
 
-				if(childInfo) 
+				if(childBox) 
 					break;
 			}
 		 } 
-		 return childInfo; 
+		 return childBox; 
 	},  
 	getPageInfo:function()
 	{
@@ -435,24 +435,26 @@ $.widget("ibi.ibxVCarousel", $.ibi.ibxCarousel,
 	},
 	getScrollChild:function(forward)
 	{
-		var childInfo = null;
+		var childBox = null;
 		var pageInfo = this.getPageInfo();
 		var children = this.children();
 		for(var i = 0; i < children.length; ++i)
 		{
-			var child = children[i];
-			var info = GetElementInfo(child);
-			
-			if((forward === true) && (Math.floor(info.bottom) > pageInfo.scrollBottom)) 
-				childInfo = info; 
-			else 
-			if((forward === false) && (Math.floor(info.top) >= pageInfo.scrollTop)) 
-				childInfo = GetElementInfo(child.previousSibling); 
+			var child = $(children[i]);
+			var box = child.metrics().borderBox; 
+			if(box)
+			{
+				if((forward === true) && (Math.floor(box.bottom) > pageInfo.scrollBottom)) 
+					childBox = box; 
+				else 
+				if((forward === false) && (Math.floor(box.top) >= pageInfo.scrollTop) && child.prev().length) 
+					childBox = child.prev().metrics().borderBox; 
 
-			if(childInfo)
-				break;
+				if(childBox) 
+					break;
+			}
 		}
-		return childInfo;
+		return childBox;
 	},
 	getPageInfo:function(metrics)
 	{

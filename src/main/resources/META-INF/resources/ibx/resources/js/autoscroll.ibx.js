@@ -66,24 +66,24 @@ $.widget("ibi.ibxAutoScroll", $.Widget,
 		if(this._lastMouseMove)
 		{
 			var options = this.options;
-			var bounds = this.element.bounds();
+			var borderBox = this.element.metrics().borderBox;
 			var e = this._lastMouseMove;
 			
 			if(options.direction.search(/^all|^horizontal/) == 0)
 			{
 				var curScroll = this.element.scrollLeft();
-				if(e.clientX <= (bounds.left + options.marginLeft) && curScroll != 0)
+				if(e.clientX <= (borderBox.left + options.marginLeft) && curScroll != 0)
 					this.element.scrollLeft(curScroll - options.stepLeft);
-				if(e.clientX >= (bounds.right - options.marginRight))
+				if(e.clientX >= (borderBox.right - options.marginRight))
 					this.element.scrollLeft(curScroll + options.stepRight);
 			}
 
 			if(options.direction.search(/^all|^vertical/) == 0)
 			{
 				var curScroll = this.element.scrollTop();
-				if(e.clientY <= (bounds.top + options.marginTop) && curScroll != 0)
+				if(e.clientY <= (borderBox.top + options.marginTop) && curScroll != 0)
 					this.element.scrollTop(curScroll - options.stepTop);
-				if(e.clientY >= (bounds.bottom - options.marginBottom))
+				if(e.clientY >= (borderBox.bottom - options.marginBottom))
 					this.element.scrollTop(curScroll + options.stepBottom);
 			}
 		}

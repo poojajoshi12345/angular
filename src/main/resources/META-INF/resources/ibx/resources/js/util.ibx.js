@@ -274,6 +274,88 @@ jQuery.fn.dispatchEvent = function(eType, data, canBubble, cancelable, relatedTa
 	return evt;
 };
 
+//just returns metrics/info for an element.
+jQuery.fn.metrics = function()
+{
+	element = this[0];
+	if(!element)
+		return;
+
+	var style = window.getComputedStyle(element);
+	var elInfo = {el:element};
+	var clientBox = elInfo.clientBox = element.getBoundingClientRect();
+	
+	var marginBox = elInfo.marginBox = 
+    {
+    	left: element.offsetLeft - parseFloat(style.marginLeft),
+    	top: element.offsetTop - parseFloat(style.marginTop),
+    }
+	marginBox.right = element.offsetLeft + element.offsetWidth + parseFloat(style.marginRight);
+	marginBox.bottom = element.offsetTop + element.offsetHeight + parseFloat(style.marginBottom);
+	marginBox.width = marginBox.right - marginBox.left;
+	marginBox.height = marginBox.bottom - marginBox.top;
+
+	var borderBox = elInfo.borderBox = 
+    {
+    	left: element.offsetLeft,
+    	top: element.offsetTop,
+    }
+	borderBox.right = element.offsetLeft + element.offsetWidth;
+	borderBox.bottom = element.offsetTop + element.offsetHeight;
+	borderBox.width = element.offsetWidth;
+	borderBox.height = element.offsetHeight;
+
+	var contentBox = elInfo.contentBox = 
+    {
+    	left: borderBox.left + parseFloat(style.borderLeft),
+    	top: borderBox.top + parseFloat(style.borderTop),
+    }
+	contentBox.right = borderBox.right - parseFloat(style.borderRight);
+	contentBox.bottom = borderBox.bottom - parseFloat(style.borderBottom);
+	contentBox.width = contentBox.right - contentBox.left;
+	contentBox.height = contentBox.bottom - contentBox.top;
+
+	var innerBox = elInfo.innerBox = 
+    {
+    	left: contentBox.left + parseFloat(style.paddingLeft),
+    	top: contentBox.top + parseFloat(style.paddingTop),
+    }
+	innerBox.right = contentBox.right - parseFloat(style.paddingRight);
+	innerBox.bottom = contentBox.bottom - parseFloat(style.paddingBottom);
+	innerBox.width = innerBox.right - innerBox.left;
+	innerBox.height = innerBox.bottom - innerBox.top;
+
+	var positioned = (style.position != "static");
+	var viewportBox = elInfo.viewportBox = 
+    {
+    	left: positioned ? element.scrollLeft : contentBox.left + element.scrollLeft,
+    	top: positioned ? element.scrollTop : contentBox.top + element.scrollTop
+    }
+	viewportBox.right = viewportBox.left + contentBox.width;
+	viewportBox.bottom = viewportBox.top + contentBox.height;
+	viewportBox.width = viewportBox.right - viewportBox.left;
+	viewportBox.height = viewportBox.bottom - viewportBox.top;
+
+	return elInfo;
+}
+
+jQuery.fn.visInfo = function(box)
+{
+	var elMetrics = this.metrics();
+	var elBox = elMetrics[box || "borderBox"];
+	var pBox = this.parent().metrics().viewportBox;
+	var ret = 
+	{
+		"lVis": (elBox.left > pBox.left && elBox.left < pBox.right),
+		"rVis": (elBox.right > pBox.left && elBox.right < pBox.right),
+		"tVis": (elBox.top > pBox.top && elBox.top < pBox.bottom ),
+		"bVis": (elBox.bottom > pBox.top && elBox.bottom < pBox.bottom)
+	}
+	ret.total = (ret.lVis && ret.rVis && ret.tVis && ret.bVis);
+	ret.partial = (ret.lVis || ret.rVis) && (ret.tVis || ret.bVis);
+	return ret;
+}
+
 //For accessibility we need to create ibx specific aria ids
 jQuery.fn.extend( {
 	ibxAriaId: ( function() {
@@ -374,48 +456,6 @@ function GetRandomInt(min, max)
 	min = Math.ceil(min);
 	max = Math.floor(max);
 	return Math.floor(Math.random() * (max - min)) + min; //The maximum is exclusive and the minimum is inclusive
-}
-
-//just returns metrics/info for an element.
-function GetElementInfo(element, withMargin)
-{
-	withMargin = !!withMargin;
-	el = $(element);
-
-	var style = window.getComputedStyle(element);
-	var positioned = (el.css("position") != "static");
-	var elInfo = el.position() || {};
-	elInfo.el = element;
-	elInfo.left = element.offsetLeft - (withMargin ? parseFloat(style.marginLeft) : 0);
-	elInfo.top = element.offsetTop - (withMargin ? parseFloat(style.marginTop) : 0);
-	elInfo.width = el.outerWidth(withMargin);
-	elInfo.height = el.outerHeight(withMargin);
-	elInfo.right = elInfo.left + elInfo.width;
-	elInfo.bottom = elInfo.top + elInfo.height;
-	elInfo.viewPort = 
-	{
-		"left": element.scrollLeft + element.clientLeft + parseFloat(style.paddingLeft) + (positioned ? 0 : element.offsetLeft),
-		"top": element.scrollTop + element.clientTop + parseFloat(style.paddingTop) + (positioned ? 0 : element.offsetLeft)
-	}
-	elInfo.viewPort.right = elInfo.viewPort.left + element.clientWidth - parseFloat(style.paddingRight);
-	elInfo.viewPort.bottom = elInfo.viewPort.top + element.clientHeight - parseFloat(style.paddingBottom);
-	return elInfo;
-}
-
-function GetVisibilty(element, withMargin)
-{
-	var elInfo = GetElementInfo(element, withMargin);
-	var pInfo = GetElementInfo(element.parentNode);
-	var ret = 
-	{
-		"lVis": (elInfo.left >= pInfo.viewPort.left && elInfo.left <= pInfo.viewPort.right),
-		"rVis": (elInfo.right >= pInfo.viewPort.left && elInfo.right <= pInfo.viewPort.right),
-		"tVis": (elInfo.top >= pInfo.viewPort.top && elInfo.top <= pInfo.viewPort.bottom ),
-		"bVis": (elInfo.bottom >= pInfo.viewPort.top && elInfo.bottom <= pInfo.viewPort.bottom)
-	}
-	ret.total = (ret.lVis && ret.rVis && ret.tVis && ret.bVis);
-	ret.partial = (ret.lVis || ret.rVis) && (ret.tVis || ret.bVis);
-	return ret;
 }
 
 //search currently loaded stylesheets for defined rules of selector.

@@ -9,6 +9,7 @@ $.widget("ibi.ibxSortable", $.Widget,
 		"lockDragAxis":false,
 		"startDragDistanceX":5,
 		"startDragDistanceY":5,
+		"sortItemClasses":"",
 		"placeholderClasses":"",
 		"sortableItems":"*",
 	},
@@ -31,55 +32,62 @@ $.widget("ibi.ibxSortable", $.Widget,
 	},
 	_createPlaceholder:function(dragElement)
 	{
-		var ph = dragElement.clone().addClass("ibx-sortable-placeholder " + this.options.placeholderClasses).css({"visibility":"hidden", "pointerEvents":"none"});
+		var ph = dragElement.clone().addClass("ibx-sortable-placeholder " + this.options.placeholderClasses);
 		var e = this.element.dispatchEvent("ibx_createplaceholder", ph, false);
 		ph = e.data;
 		return ph;
 	},
-	_dragElement:$(),
-	_placeholder:$(),
+	_dragElement:null,
+	_placeholder:null,
 	_inDrag: false,
 	_onDragEvent:function(e)
 	{
 		var target = $(e.target);
-
 		var eType = e.type;
 		if(eType == "mousedown")
 		{
 			//can only sort direct children
 			this._stopDrag();//kill any left over drag (you dragged out of bounds and confused the world).
-			if(target.is(this.options.sortableItems))
+			var directChild = $(this.element.directChild(e.target));
+			if(directChild.is(this.options.sortableItems))
+			{
+				this._dragElement = directChild;
 				this._eMouseDown = e;
+			}
 		}
 		else
 		if(eType == "mouseup")
 		{
-			
-			var e = this.element.dispatchEvent("ibx_sortend", {"sortElement":this._dragElement, "beforeElement":this._placeholder.prev(), "afterElement":this._placeholder.next(), "originalEvent":e}, false);
-			if(this._dragElement && !e.defaultPrevented)
-				this._dragElement.insertAfter(this._placeholder);
+			if(this._inDrag && this._dragElement)
+			{							
+				var evt = this.element.dispatchEvent("ibx_sortend", {"sortElement":this._dragElement, "beforeElement":this._placeholder.prev(), "afterElement":this._placeholder.next(), "originalEvent":e}, false);
+				if(!evt.defaultPrevented)
+					this._dragElement.insertAfter(this._placeholder);
+			}
 			this._stopDrag();
 		}
 		else
 		if(eType == "mousemove")
 		{
 			var options = this.options;
-			if(!this._inDrag && this._eMouseDown)
+			if(!this._inDrag && this._dragElement)
 			{
 				var vert = this.options.direction == "vertical";
 				var dx = Math.abs(e.clientX - this._eMouseDown.clientX);
 				var dy = Math.abs(e.clientY - this._eMouseDown.clientY);
-				if(!target.is(this.element))
+				if(!vert && dx >= options.startDragDistanceX || vert && dy >= options.startDragDistanceY)
 				{
-					if(!vert && dx >= options.startDragDistanceX || vert && dy >= options.startDragDistanceY)
+					var evt = this.element.dispatchEvent("ibx_beforesort", this._dragElement, false);
+					if(!evt.defaultPrevented)
 					{
 						this._inDrag = true;
-						var de = this._dragElement = $(this.element.directChild(e.target));
+						var de = this._dragElement;
 						var ph = this._placeholder = this._createPlaceholder(de);
 						var width = de.width();
 						var height = de.height();
 						var pos = de.position();
-						de.css({"pointerEvents":"none", "position":"absolute", "left":pos.left, "top":pos.top, "width":width, "height":height}).addClass("ibx-sortable-dragging");
+						de.css({"zindex":100000, "pointerEvents":"none", "position":"absolute", "left":pos.left, "top":pos.top, "width":width, "height":height});
+						de.addClass("ibx-sortable-dragging " + options.sortItemClasses);
 						ph.insertAfter(de);
 						this.element.ibxAutoScroll("start");
 					}
@@ -91,33 +99,37 @@ $.widget("ibi.ibxSortable", $.Widget,
 				var eLast = this._eLast
 				var dx = e.clientX - eLast.clientX;
 				var dy = e.clientY - eLast.clientY
-				var pos = this._dragElement.position();
+				var dragPos = this._dragElement.position()
 				var vert = this.options.direction == "vertical";
 
 				//move within axis only if specified
 				if(options.lockDragAxis)
-					this._dragElement.css({"left": pos.left + (!vert ? dx : 0), "top": pos.top + (vert ? dy : 0)});
+					this._dragElement.css({"left": dragPos.left + (!vert ? dx : 0), "top": dragPos.top + (vert ? dy : 0)});
 				else
-					this._dragElement.css({"left": pos.left + dx, "top":  pos.top + dy});
+					this._dragElement.css({"left": dragPos.left + dx, "top":  dragPos.top + dy});
 
 				if(!this.element.is(target) && !this._placeholder.is(target))
 				{
 					//can only sort direct children
 					var target = $(this.element.directChild(e.target));
-					var tBounds = target.bounds();
-					var after = false;
+					if(target.is(options.sortableItems))
+					{
+						var tBounds = target[0].getBoundingClientRect();
+						var after = false;
 					
-					if(vert)
-						after = e.clientY > (tBounds.top + (tBounds.height / 2));
-					else
-						after = e.clientX > (tBounds.left + (tBounds.width / 2));
+						if(vert)
+							after = e.clientY > (tBounds.top + (tBounds.height / 2));
+						else
+							after = e.clientX > (tBounds.left + (tBounds.width / 2));
 
-					this.element.dispatchEvent("ibx_sortmove", {"sortElement":this._dragElement, "targetElement":target, "tBounds":tBounds, "after":after, "originalEvent":e}, false);
+						//let the world know we are doing a sort move...can't cancel
+						this.element.dispatchEvent("ibx_sortmove", {"sortElement":this._dragElement, "targetElement":target, "tBounds":tBounds, "after":after, "originalEvent":e}, false, false);
 
-					if(after)
-						this._placeholder.insertAfter(target);
-					else
-						this._placeholder.insertBefore(target);
+						if(after)
+							this._placeholder.insertAfter(target);
+						else
+							this._placeholder.insertBefore(target);
+					}
 				}
 			}
 			this._eLast = e;
@@ -126,9 +138,11 @@ $.widget("ibi.ibxSortable", $.Widget,
 	_stopDrag:function()
 	{
 		this.element.ibxAutoScroll("stop");
-		this._dragElement.css({"pointerEvents":"", "position":"", "width":"", "height":"", "left":"", "top":""}).removeClass("ibx-sortable-dragging");
+		if(this._dragElement)
+			this._dragElement.css({"zIndex":"", "pointerEvents":"", "position":"", "width":"", "height":"", "left":"", "top":""}).removeClass("ibx-sortable-dragging " + this.options.sortItemClasses);
 		delete this._dragElement;
-		this._placeholder.remove();
+		if(this._placeholder)
+			this._placeholder.remove();
 		delete this._placeholder;
 		delete this._eLast;
 		delete this._eMouseDown;
