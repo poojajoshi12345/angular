@@ -6,13 +6,15 @@
 ****/
 intellisense.addEventListener("statementcompletion", function(e)
 {
+	//intellisense.logMessage("statementcompletion");
 });
 
 intellisense.addEventListener("statementcompletionhint", function(e)
 {
-
+	//intellisense.logMessage("statementcompletionhint");
 });
 
 intellisense.addEventListener("signaturehelp", function(e)
 {
+	//intellisense.logMessage("signaturehelp");
 });
