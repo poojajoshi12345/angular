@@ -283,15 +283,25 @@ jQuery.fn.metrics = function()
 
 	var style = window.getComputedStyle(element);
 	var elInfo = {el:element};
-	var clientBox = elInfo.clientBox = element.getBoundingClientRect();
-	
+
+	var viewportBox = elInfo.pageViewportBox = element.getBoundingClientRect();
+	var pageBox = elInfo.pageBox = 
+	{
+		left: viewportBox.left + window.scrollX,
+		top: viewportBox.top + window.scrollY,
+		right:viewportBox.left + viewportBox.width,
+		bottom: viewportBox.top + viewportBox.height,
+		width: viewportBox.width,
+		height: viewportBox.height
+	};
+
 	var marginBox = elInfo.marginBox = 
     {
     	left: element.offsetLeft - parseFloat(style.marginLeft),
     	top: element.offsetTop - parseFloat(style.marginTop),
     }
-	marginBox.right = element.offsetLeft + element.offsetWidth + parseFloat(style.marginRight);
-	marginBox.bottom = element.offsetTop + element.offsetHeight + parseFloat(style.marginBottom);
+	marginBox.right = element.offsetLeft + element.offsetWidth + parseFloat(style.marginRight || 0);
+	marginBox.bottom = element.offsetTop + element.offsetHeight + parseFloat(style.marginBottom || 0);
 	marginBox.width = marginBox.right - marginBox.left;
 	marginBox.height = marginBox.bottom - marginBox.top;
 
@@ -307,21 +317,21 @@ jQuery.fn.metrics = function()
 
 	var contentBox = elInfo.contentBox = 
     {
-    	left: borderBox.left + parseFloat(style.borderLeft),
-    	top: borderBox.top + parseFloat(style.borderTop),
+    	left: borderBox.left + parseFloat(style.borderLeft || 0),
+    	top: borderBox.top + parseFloat(style.borderTop || 0),
     }
-	contentBox.right = borderBox.right - parseFloat(style.borderRight);
-	contentBox.bottom = borderBox.bottom - parseFloat(style.borderBottom);
+	contentBox.right = borderBox.right - parseFloat(style.borderRight || 0);
+	contentBox.bottom = borderBox.bottom - parseFloat(style.borderBottom || 0);
 	contentBox.width = contentBox.right - contentBox.left;
 	contentBox.height = contentBox.bottom - contentBox.top;
 
 	var innerBox = elInfo.innerBox = 
     {
-    	left: contentBox.left + parseFloat(style.paddingLeft),
-    	top: contentBox.top + parseFloat(style.paddingTop),
+    	left: contentBox.left + parseFloat(style.paddingLeft || 0),
+    	top: contentBox.top + parseFloat(style.paddingTop || 0),
     }
-	innerBox.right = contentBox.right - parseFloat(style.paddingRight);
-	innerBox.bottom = contentBox.bottom - parseFloat(style.paddingBottom);
+	innerBox.right = contentBox.right - parseFloat(style.paddingRight || 0);
+	innerBox.bottom = contentBox.bottom - parseFloat(style.paddingBottom || 0);
 	innerBox.width = innerBox.right - innerBox.left;
 	innerBox.height = innerBox.bottom - innerBox.top;
 

@@ -14,14 +14,20 @@
 			{
 				$("#cmdTest").on("ibx_triggered", function(e)
 				{
-					//console.log("widthjq", sp.width(), "width", cs.width, "offsetWidth", el.offsetWidth);
-					console.clear();
+					//console.clear();
+					var cont = $(".container");
+					var el = cont[0];
+					var metrics = cont.metrics();
+					var style = window.getComputedStyle(el);
+					console.log("widthjq", cont.width(), "width", style.width, "offsetWidth", el.offsetWidth, metrics);
 				});
 
-				$("#fileList, #fileItem, #propPage, #radioButton1, #radioButton2").on("ibx_widgetfocus ibx_widgetblur", function(e)
+				var container = $(".container");
+				for(var i = 0; i < 20; ++i)
 				{
-					console.log(e.type, "target", e.target.id, "relatedTarget", e.relatedTarget ? e.relatedTarget.id : "null");
-				});
+					var item = $("<div>").ibxLabel({text:"Item " + i, "class":"item"});
+					container.append(item);
+				}
 			}, true);
 		</script>
 		<style type="text/css">
@@ -37,34 +43,30 @@
 				height:100%;
 				box-sizing:border-box;
 			}
-
-			#fileList, #propPage
+			.container
 			{
 				width:200px;
-				height:200px;
-				margin:5px;
-				border:2px solid black;
+				height:2000px;
+				overflow:auto;
+				border:1px solid black;
+				padding:2px;
+				box-sizing:border-box;
 			}
-
-			#fileItem, #radioButton1, #radioButton2
+			.item
 			{
-				margin:5px;
-				padding:5px;
-				border:1px solid #aaa;
+				flex:0 0 auto;
+				width:300px;
+				font-size:24px;
+				margin:2px;
+				background-color:thistle;
+				border:1px solid #888;
 			}
 		</style>
 	</head>
 	<body class="ibx-root">
 		<div id="cmdTest" data-ibx-type="ibxCommand" data-ibxp-id="cmdTest" data-ibxp-shortcut="CTRL+C"></div>
-		<div class="main-box" data-ibx-type="ibxHBox" data-ibxp-align="center" data-ibxp-justify="center">
-			<div id="fileList" tabindex="-1" data-ibx-type="ibxVBox" data-ibxp-align="center" data-ibxp-justify="center">
-				<div id="fileItem" class="file-item" tabindex="-1" data-ibx-type="ibxLabel">File Item</div>
-			</div>
-
-			<div id="propPage" tabindex="-1" data-ibx-type="ibxVBox" data-ibxp-align="center" data-ibxp-justify="center">
-				<div id="rgTest" data-ibx-type="ibxRadioGroup" data-ibxp-name="rgTest"></div>
-				<div id="radioButton1" tabindex="-1" data-ibx-type="ibxRadioButtonSimple" data-ibxp-group="rgTest" data-ibxp-checked="true">Radio Button 1</div>
-				<div id="radioButton2" tabindex="" data-ibx-type="ibxRadioButtonSimple" data-ibxp-group="rgTest">Radio Button 2</div>
+		<div class="main-box" data-ibx-type="ibxHBox" data-ibxp-align="start" data-ibxp-justify="start">
+			<div class="container" data-ibx-type="ibxVBox">
 			</div>
 		</div>
 	</body>
