@@ -86,7 +86,7 @@ $.widget("ibi.ibxSortable", $.Widget,
 						var width = de.width();
 						var height = de.height();
 						var pos = de.position();
-						de.css({"zindex":100000, "pointerEvents":"none", "position":"absolute", "left":pos.left, "top":pos.top, "width":width, "height":height});
+						de.css({"zIndex":100000, "pointerEvents":"none", "position":"absolute", "left":pos.left, "top":pos.top, "width":width, "height":height});
 						de.addClass("ibx-sortable-dragging " + options.sortItemClasses);
 						ph.insertAfter(de);
 						this.element.ibxAutoScroll("start");

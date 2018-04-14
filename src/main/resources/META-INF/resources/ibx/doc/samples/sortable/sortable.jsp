@@ -67,9 +67,6 @@
 				overflow:auto;
 				border:1px solid #ccc;
 				box-sizing:border-box;
-				user-select:none;
-				-moz-user-select:none;
-				-ms-user-select:none;
 			}
 			.sort-item-h
 			{
@@ -79,6 +76,7 @@
 				margin:3px;
 				padding:5px;
 				border:1px solid black;
+				background-color:#ddd;
 			}
 			.sort-parent-v
 			{
@@ -88,9 +86,6 @@
 				overflow:auto;
 				border:1px solid #ccc;
 				box-sizing:border-box;
-				user-select:none;
-				-moz-user-select:none;
-				-ms-user-select:none;
 			}
 			.sort-item-v
 			{
@@ -100,10 +95,12 @@
 				margin:3px;
 				padding:5px;
 				border:1px solid black;
+				background-color:#ddd;
 			}
 			.sort-placeholder
 			{
-				border:2px solid red;
+				visibility:visible;
+				opacity:.15;
 			}
 		</style>
 	</head>
