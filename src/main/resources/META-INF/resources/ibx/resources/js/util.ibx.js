@@ -282,7 +282,7 @@ jQuery.fn.metrics = function()
 		return;
 
 	var style = window.getComputedStyle(element);
-	var elInfo = {el:element};
+	var elInfo = {el:element, "style":style};
 
 	var viewportBox = elInfo.pageViewportBox = element.getBoundingClientRect();
 	var pageBox = elInfo.pageBox = 

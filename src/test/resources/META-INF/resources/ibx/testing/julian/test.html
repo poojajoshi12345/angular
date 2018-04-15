@@ -19,7 +19,7 @@
 					var el = cont[0];
 					var metrics = cont.metrics();
 					var style = window.getComputedStyle(el);
-					console.log("widthjq", cont.width(), "width", style.width, "offsetWidth", el.offsetWidth, metrics);
+					console.log("jqwidth", cont.width(), "width", parseFloat(style.width), "offsetWidth", el.offsetWidth, metrics);
 				});
 
 				var container = $(".container");
@@ -46,10 +46,10 @@
 			.container
 			{
 				width:200px;
-				height:2000px;
+				height:100px;
 				overflow:auto;
 				border:1px solid black;
-				padding:2px;
+				padding:20px;
 				box-sizing:border-box;
 			}
 			.item
