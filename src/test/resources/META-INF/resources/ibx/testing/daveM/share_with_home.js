@@ -44,7 +44,6 @@
 						if (fullPath.lastIndexOf("USERS/") != -1)
 						{
 							this.currentUserArrayStr += name + ",";
-							this.currentUserArray.push(name);
 							email = el.attr("email");
 						}
 						else
@@ -69,11 +68,11 @@
 					$(".Share-with-others-menu").on("ibx_select", this._onMenuItemSelect.bind(this));
 
 					this._stopProgress();
-
-					if (this.shareWithlist.length > 0)
-						this._ShareWithList(this.options.show); // Show current Group and Users list shared							
 					
-					$(".share-with-txt-search").focus();
+					if (this.shareWithlist.length > 0)
+						this._ShareWithList(this.options.show); // Show current Group and Users list shared
+					else
+						$(".share-with-txt-search").focus();
 				}
 				else
 					alert("listShares failed");				
@@ -83,13 +82,13 @@
 		_ShareWithList: function(type)
 		{ // user, group, all
 			this._startProgress();
-			
-			this._showContainerTitle(); // show title
+			$(form).find(".share-with-container").children().remove();
+			this._showContainerTitle(); // depend on the type
 			var itemList = $(".share-with-container");
 
 			for (var i=0; i < this.shareWithlist.length; i++)
 			{
-				if (type == "all" || this.shareWithlist[i].child == type)
+				if (type == "all" || this.shareWithlist[i].type == type)
 				{
 					var userdata = {}; // init
 					userdata.type = this.shareWithlist[i].type;
@@ -108,196 +107,166 @@
 					return; // do nothing
 
 				var userData = $(e.currentTarget.parentElement).data("userData");
-				if (userData.type == "u")
-				{
-					if (this.currentUserArrayStr.indexOf("," + userData.name + ",") != -1)
-					{
-						this.currentUserArrayStr=",";
-						for (i=0; i < this.shareWithlist.length; i++)
-							this.currentUserArrayStr += this.currentUserArray[i] + ",";
-					}
-				}
-				else
-				{
-					if (this.currentGroupArrayStr.indexOf("," + userData.name + ",") != -1)
-					{
-						this.currentGroupArrayStr=",";
-						for (i=0; i < this.shareWithlist.length; i++)
-							this.currentGroupArrayStr += this.currentGroupArray[i] + ",";
-					}					
-				}
+				
+				this.currentUserArrayStr=",";
+				this.currentGroupArrayStr=",";
+				
 				for (var i=0; i < this.shareWithlist.length; i++)
 				{ // remove object that got deleted
 					if (this.shareWithlist[i].type == userData.type && this.shareWithlist[i].name == userData.name)
 						this.shareWithlist.splice(i, 1);						
 				}
-				this._refreshShareWithItems();
+				
+				for (var i=0; i < this.shareWithlist.length; i++)
+				{
+					if (this.shareWithlist[i].type == "u")
+						this.currentUserArrayStr += this.shareWithlist[i].name + ",";
+					else
+						this.currentGroupArrayStr += this.shareWithlist[i].name + ",";
+				}						
+				
+				$(e.currentTarget.parentElement).remove();
+				this._showContainerTitle();
+				$(form).find(".ibx-dialog-ok-button").ibxWidget('option','disabled', false);
+
 			}.bind(this));
 			
 			this._stopProgress();
+			$(".share-with-txt-search").focus(); // give back the focus
 		},
 
-		_refreshShareWithItems: function()
-		{
-			this._SWdisplayList();
-			$(form).find(".ibx-dialog-ok-button").ibxWidget('option','disabled', false);
-			$(".share-with-txt-search").focus();							
-		},
-
-		_SWdisplayList: function()
-		{ // show the dialog				
-			this._restParameters(); // reset parameters			
-			$(form).find(".share-with-popup").ibxWidget("open");
-		},
-		
-		_restParameters: function()
-		{ 
-			this.listSelectedArray = []; // reset
-			$('#shareWithDropdown').children().remove();
-			$(form).find(".share-with-container").children().remove();	
-			this._initcontainer(); 
-		},		
-		
-		_initcontainer: function()
-		{ 
+		_DropDownList: function()
+		{ // show drop down dialog
+			clearTimeout(this.typingTimer);
+			
+			console.log($(form).find(".share-with-txt-search").ibxWidget("option", "text"));
+			$('#shareWithDropdown').empty();
+	
+			var searchPath = "*" + $(form).find(".share-with-txt-search").ibxWidget("option", "text") + "*";
+			this._startProgress();
+			
+			var url;
 			switch (this.showOption)
 			{
-				case "user":
-					if (this.isDropdownOpen)
-						this._showDropDownUsers();
-					else
-						this._ShareWithList(this.showOption); // Show current Users list shared
+				case "u":
+					url = sformat("{1}/userlist", applicationContext)
 					break;
-				case "group":
-					if (this.isDropdownOpen)
-						this._showDropDownGroup();
-					else
-						this._ShareWithList(this.showOption); // Show current Group list shared
+				case "g":
+					url = sformat("{1}/grouplist ", applicationContext)
 					break;
 				case "all":
 				default:
-					if (this.isDropdownOpen)
-						this._showDropDownAll();
-					else
-						this._ShareWithList("all"); // Show current Group and Users list shared
+					url = sformat("{1}/usergrouplist", applicationContext)
 					break;
 			}
-		},		
 
-		
-		
-		
-		
-		_getIBFSUserlistItems: function()
-		{ // get IBFS User list Items
-			var uriExec = sformat("{1}/wfirs", applicationContext);
-			var argument=
-			{
-				IBFS_service: "ibfs",		
-				IBIVAL_returnmode: "XMLENFORCE",
-				IBFS_action: "list",
-				IBFS_path: "IBFS:/SSYS/USERS",
-				IBFS_flatten: "false",
-				IBFS_recursionDepth: "1"	
-			 };	
-			argument[IBI_random] = Math.floor(Math.random() * 100000);
-	   		argument[home_globals.SesAuthParm] = home_globals.SesAuthParmVal;
+			$.ajax({
+			    type: "POST",
+				contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+				url: url,
+				data: {"searchPath":searchPath,"searchRows": 500},		
+				dataType: "json",
+				context: this,
+			    success: function(json) 
+			    {
+			    	if (json.length > 0)		    		
+			    	{				    	
+				    	this.currentSearchArray = json;
+						// Show the popup window
+						this.searchDialog.ibxWidget("open").position({my:"left top", at:"left-5px bottom+6px", of: form.find(".share-with-btn-search")});
+						// Add a text Showing first {1} entries
+						json.length < this.maxRows ? $(this.searchDialog).find(".share-with-dropdown-label").hide() : $(this.searchDialog).find(".share-with-dropdown-label").show();
 
-	   		$.post(uriExec, argument , function(data, status) 
-				{
-					if (status=="success") 
-					{
-						var items = $("item", data);
-						items.each(function(idx, el)
-						{
-							el = $(el);
-							var fullPath = el.attr("fullPath");
-							var description = el.attr("description");
-							var n = fullPath.lastIndexOf("USERS/");
-							if (n != -1)
-							{ 							
-								this.userArray.push({
-							        name: fullPath.substr(n+6,fullPath.length),
-							        desc: description.length > 0 ? description : fullPath.substr(n+6,fullPath.length),
-								    email: el.attr("email"),
-								    child: "user"
-								});
-							}
-						}.bind(this));
-						this.userArray.sort(function (a, b) {
-							return (a.desc < b.desc ? -1 : (a.desc > b.desc ? 1 : 0));
-						});
-						
-						this._getIBFSGroupslistItems();
-					}
-					else
-						alert("getIBFSUserlistItems failed");
-				}.bind(this));
-		},
-		
-		_getIBFSGroupslistItems: function()
-		{	// get IBFS Groups list Items
-			var uriExec = sformat("{1}/wfirs", applicationContext);
-			var argument=
-			{
-				IBFS_service: "ibfs",		
-				IBIVAL_returnmode: "XMLENFORCE",
-				IBFS_action: "list",
-				IBFS_path: "IBFS:/SSYS/GROUPS",
-				IBFS_flatten: "true",
-				IBFS_recursionDepth: "-1"	
-			 };	
-			argument[IBI_random] = Math.floor(Math.random() * 100000);
-	   		argument[home_globals.SesAuthParm] = home_globals.SesAuthParmVal;
+						$(".share-with-txt-search").focus();				
 
-	   		$.post(uriExec, argument , function(data, status) 
-					{
-						if (status=="success") 
-						{
-							var items = $("item", data);
-							items.each(function(idx, el)
+						var itemList = $('#shareWithDropdown');						
+						for (var i = 0; i < json.length; i++)
+				    	{			    		
+							var userdata = json[i]; // init
+	
+							var item = new userGroupItem(json[i],true);
+							
+							if (json[i].type == "u")
 							{
-								el = $(el);
-								var fullPath = el.attr("fullPath");
-								var description = el.attr("description");
-								var n = fullPath.lastIndexOf("GROUPS/");
-								if (n != -1)
-								{ 
-									this.groupArray.push({
-								        name: fullPath.substr(n+7,fullPath.length),
-								        desc: description.length > 0 ? description : fullPath.substr(n+7,fullPath.length),
-									    email: "",
-									    child: "group"
-									});
+								if (this.currentUserArrayStr.indexOf("," + json[i].name + ",") == -1)
+									{
+										item.element.addClass("share-with-item");
+										userdata.disabled = false;						
+									}
+									else
+									{
+										item.element.addClass("share-with-item share-with-item-disabled");
+										userdata.disabled = true;						
+									}						
+							}
+							else
+							{
+								if (this.currentGroupArrayStr.indexOf("," + json[i].name + ",") == -1)
+								{
+									item.element.addClass("share-with-item");
+									userdata.disabled = false;
 								}
-							}.bind(this));
+								else
+								{
+									item.element.addClass("share-with-item share-with-item-disabled");
+									userdata.disabled = true;
+								}
+							}
 							
-							this.groupArray.sort(function (a, b) {
-								return (a.desc < b.desc ? -1 : (a.desc > b.desc ? 1 : 0));
-							});
+							item.element.data("userData",userdata);
+							itemList.append(item.element);
+				    	}
+				    	
+						$(this.searchDialog).find(".share-with-item").on( "click", function( e ) 
+						{
+							var userdata = $(e.currentTarget).data("userData");
 
-							this.combinedArray = this.userArray.concat(this.groupArray);
-						
-							this.combinedArray.sort(function (a, b) {
-								return (a.desc < b.desc ? -1 : (a.desc > b.desc ? 1 : 0));
-							});
-
-//							form.ibxWidget('open');		
-							$(".Share-with-others-menu").on("ibx_select", this._onMenuItemSelect.bind(this));
-
-							this._SWdisplayListAll();
+							if (userdata.disabled) // user click on disable item
+								return;
 									
-							this._stopProgress();
-							
-							this._showContainerTitle();
-							$(".share-with-txt-search").focus();
+							$(form).find(".ibx-dialog-ok-button").ibxWidget('option','disabled', false);
 
-						}
-						else
-							alert("getIBFSGroupslistItems failed");
-					}.bind(this));
+							if (userdata.type == "g")
+								this.currentGroupArrayStr += userdata.name + ",";
+							else
+								this.currentUserArrayStr += userdata.name + ",";
+							
+							this.isDropdownOpen = false;
+							
+							this.shareWithlist.push({
+								name: userdata.name,
+								description: userdata.description,
+								email: userdata.email,
+								type: userdata.type
+							});
+							
+							this.shareWithlist.sort(function (a, b) {
+								return (a.description < b.description ? -1 : (a.description > b.description ? 1 : 0));
+							});
+							
+							this._ShareWithList(this.showOption); // Show current Group and Users list shared
+							this.searchDialog.ibxWidget("close");
+							$(form).find(".share-with-txt-search").ibxWidget('option', 'text', ""); // reset	
+						}.bind(this));	
+
+				    	this._stopProgress();
+						$(".share-with-txt-search").focus();
+			    	}
+					else
+					{
+						this._stopProgress();
+						this.searchDialog.ibxWidget("close");
+						$(".share-with-txt-search").focus();
+
+					}			
+		        },
+		        error: function() 
+		        {   
+		        	alert("usergrouplist failed")
+		        }
+			});
 		},
-			
+		
 		_create: function ()
 		{
 			this._super();
@@ -311,7 +280,6 @@
 			this.currentUserArrayStr = ",";
 			this.currentGroupArray = [];
 			this.currentGroupArrayStr = ",";
-			this.listSelectedArray = [];
 			this.listSelectItemsArray = [];
 			this.showOption = this.options.show;
 			this.isDropdownOpen = false;
@@ -357,12 +325,14 @@
 			{ 
 				var i;
 				var arShareIds = [];
-				for (i=0; i < this.currentUserArray.length; i++)
-					arShareIds.push("IBFS:/SSYS/USERS/"+this.currentUserArray[i]);
-				
-				for (i=0; i < this.currentGroupArray.length; i++)
-					arShareIds.push("IBFS:/SSYS/GROUPS/"+this.currentGroupArray[i]);
-
+				for (var i=0; i < this.shareWithlist.length; i++)
+				{
+					if (this.shareWithlist[i].type == "u")
+						arShareIds.push("IBFS:/SSYS/USERS/"+this.shareWithlist[i].name);
+					else
+						arShareIds.push("IBFS:/SSYS/GROUPS/"+this.shareWithlist[i].name);
+						
+				}
 				home_globals.ibfs.setShares(this.options.path, arShareIds, { asJSON: true, eError: 'fatal_error' }).done(function (exInfo)		
 				{		
 					if (exInfo.result.length == 0)
@@ -403,24 +373,24 @@
 			
 			if (this.isDropdownOpen)
 			{ // you must close the menu if it is open
-				$(form).find(".share-with-txt-search").ibxWidget('option', 'text', ""); // reset
+	//			$(form).find(".share-with-txt-search").ibxWidget('option', 'text', ""); // reset
 				this.isDropdownOpen = false;
-				this.searchDialog.ibxWidget("close");
+	//			this.searchDialog.ibxWidget("close");
 			}
-			this._SWdisplayList();
+//			this._ShareWithList(this.showOption); // Show current list shared
 		},
 		
 		_setmenuItem: function(show)
 		{	
 			switch (show)
 			{
-				case "user":
+				case "u":
 					$(form).find(".share-with-txt-search").ibxWidget('option', 'placeholder', ibx.resourceMgr.getString("home_enter_users"));
 					$(".Share-with-others-menu").find("[data-ibx-name='miModeGroup']").ibxWidget("option", "checked", false);
 					$(".Share-with-others-menu").find("[data-ibx-name='miModeUserGroup']").ibxWidget("option", "checked", false);
 					$(".Share-with-others-menu").find("[data-ibx-name='miModeUser']").ibxWidget("option", "checked", true);					
 					break;
-				case "group":
+				case "g":
 					$(form).find(".share-with-txt-search").ibxWidget('option', 'placeholder', ibx.resourceMgr.getString("home_enter_groups"));
 					$(".Share-with-others-menu").find("[data-ibx-name='miModeUserGroup']").ibxWidget("option", "checked", false);
 					$(".Share-with-others-menu").find("[data-ibx-name='miModeUser']").ibxWidget("option", "checked", false);										
@@ -434,6 +404,7 @@
 					$(".Share-with-others-menu").find("[data-ibx-name='miModeUserGroup']").ibxWidget("option", "checked", true);
 					break;
 			}
+			this._ShareWithList(show); // Show current list shared
 		},
 		
 		_showContainerTitle: function()
@@ -441,323 +412,17 @@
 			switch (this.showOption)
 			{
 				case "user":
-					this.currentUserArray.length == 0 ? $(form).find(".share-with-title").hide() : $(form).find(".share-with-title").show();
+					this.currentUserArrayStr.length == 1 ? $(form).find(".share-with-title").hide() : $(form).find(".share-with-title").show();
 					break;
 				case "group":
-					this.currentGroupArray.length == 0 ? $(form).find(".share-with-title").hide() : $(form).find(".share-with-title").show();
+					this.currentGroupArrayStr.length == 1 ? $(form).find(".share-with-title").hide() : $(form).find(".share-with-title").show();
 					break;
 				default:
-					this.currentUserArray.length == 0 && this.currentGroupArray.length == 0 ? $(form).find(".share-with-title").hide() : $(form).find(".share-with-title").show();
+					this.currentGroupArrayStr.length == 1 || this.currentGroupArrayStr.length == 1 ? $(form).find(".share-with-title").hide() : $(form).find(".share-with-title").show();
 					break;
 			}			
 		},
-		
-		_DropDownList: function()
-		{ // show drop down dialog
-			console.log($(form).find(".share-with-txt-search").ibxWidget("option", "text"));
-			$('#shareWithDropdown').empty();
-	
-			var searchPath = "*" + $(form).find(".share-with-txt-search").ibxWidget("option", "text") + "*";
-	//		this._startProgress();
-			$.ajax({
-			    type: "POST",
-				contentType: "application/x-www-form-urlencoded; charset=UTF-8",
-				url: sformat("{1}/usergrouplist", applicationContext),
-				data: {"searchPath":searchPath,"searchRows": 500},		
-				dataType: "json",
-				context: this,
-			    success: function(json) 
-			    {
-			    	if (json.length > 0)		    		
-			    	{				    	
-				    	this.currentSearchArray = json;
-						// Show the popup window
-						this.searchDialog.ibxWidget("open").position({my:"left top", at:"left-5px bottom+6px", of: form.find(".share-with-btn-search")});
-						// Add a text Showing first {1} entries
-						$(".share-with-txt-search").focus();				
-						var itemList = $('#shareWithDropdown');
-						
-						for (var i = 0; i < json.length; i++)
-				    	{			    		
-							var userdata = {}; // init
-							userdata.type = json[i].type;
-							userdata.name = json[i].name;
-	
-							var item = new userGroupItem(json[i],true);
-							
-							if (json[i].type == "u")
-							{
-								if (this.currentUserArrayStr.indexOf("," + json[i].name + ",") == -1)
-									{
-										item.element.addClass("share-with-item");
-										userdata.disabled = false;						
-									}
-									else
-									{
-										item.element.addClass("share-with-item share-with-item-disabled");
-										userdata.disabled = true;						
-									}						
-							}
-							else
-							{
-								if (this.currentGroupArrayStr.indexOf("," + json[i].name + ",") == -1)
-								{
-									item.element.addClass("share-with-item");
-									userdata.disabled = false;
-								}
-								else
-								{
-									item.element.addClass("share-with-item share-with-item-disabled");
-									userdata.disabled = true;
-								}
-							}
-							item.element.data("userData",userdata);
-							itemList.append(item.element);
-				    	}
-				    	
-						$(this.searchDialog).find(".share-with-item").on( "click", function( e ) 
-								{
-									var userdata = $(e.currentTarget).data("userData");
-
-									if (userdata.disabled) // user click on disable item
-										return;
-									
-									$(form).find(".ibx-dialog-ok-button").ibxWidget('option','disabled', false);
-
-									if (userdata.type == "g")
-									{
-										this.currentGroupArrayStr += userdata.name + ",";
-										this.currentGroupArray.push(userdata.name);
-									}
-									else
-									{
-										this.currentUserArrayStr += userdata.name + ",";					
-										this.currentUserArray.push(userdata.name);
-									}
-									this.isDropdownOpen = false;				
-									this._restParameters(); // reset parameters			
-									this._SWdisplayList();
-									this.searchDialog.ibxWidget("close");
-									$(form).find(".share-with-txt-search").ibxWidget('option', 'text', ""); // reset
-						
-									$(".share-with-txt-search").focus();				
-								}.bind(this));	
-
-			//	    	this._stopProgress();
-			    	}
-					else
-					{
-		//				this._stopProgress();
-						this.searchDialog.ibxWidget("close");
-					}			
-		        },
-		        error: function() 
-		        {   
-		        	alert("usergrouplist failed")
-		        }
-			});
-			
-	/*		
-			switch (this.showOption)
-			{
-				case "user":
-					this._showDropDownUsers();
-					break;
-				case "group":
-					this._showDropDownGroup();
-					break;
-				case "all":
-				default:
-					this._showDropDownAll();
-					break;
-			}	
-			*/
-		},
-		
-		_showDropDownAll: function()
-		{		
-			var currentStr = $(form).find(".share-with-txt-search").ibxWidget("option", "text");
-
-			this.combinedListArray = [];
-
-			var count=0;
-
-			for (var i=0; i < this.combinedArray.length && count < this.maxRows; i++)
-			{ // create a matching array
-				if (this.combinedArray[i].desc.toLowerCase().indexOf(lowerCaseStr) != -1 ||
-					this.combinedArray[i].name.toLowerCase().indexOf(lowerCaseStr) != -1 ||	
-					this.combinedArray[i].email.toLowerCase().indexOf(lowerCaseStr) != -1)			
-				{
-					this.combinedListArray[count++] = this.combinedArray[i];
-				}
-			}
-
-			if (this.combinedListArray.length > 0) // getting the first this.maxRows 
-			{
-				// Show the popup window
-				this.searchDialog.ibxWidget("open").position({my:"left top", at:"left-5px bottom+6px", of: form.find(".share-with-btn-search")});
-				// Add a text Showing first {1} entries
-				this.combinedListArray.length < this.maxRows ? $(this.searchDialog).find(".share-with-dropdown-label").hide() : $(this.searchDialog).find(".share-with-dropdown-label").show();
-
-				$(".share-with-txt-search").focus();				
-
-				for (var i=0; i < this.combinedListArray.length; i++)
-				{
-					var userdata = {}; // init
-					userdata.user = this.combinedListArray[i].child;
-					userdata.name = this.combinedListArray[i].name;
-
-					var item = new userGroupItem(this.combinedListArray[i]);
-					
-					if (this.combinedListArray[i].child == "user")
-					{
-						if (this.currentUserArrayStr.indexOf("," + this.combinedListArray[i].name + ",") == -1)
-							{
-								item.element.addClass("share-with-item");
-								userdata.disabled = false;						
-							}
-							else
-							{
-								item.element.addClass("share-with-item share-with-item-disabled");
-								userdata.disabled = true;						
-							}						
-					}
-					else
-					{
-						if (this.currentGroupArrayStr.indexOf("," + this.combinedListArray[i].name + ",") == -1)
-						{
-							item.element.addClass("share-with-item");
-							userdata.disabled = false;
-						}
-						else
-						{
-							item.element.addClass("share-with-item share-with-item-disabled");
-							userdata.disabled = true;
-						}
-					}
-					item.element.data("userData",userdata);
-					$('#shareWithDropdown').append(item.element);
-				}
-				this._stopProgress();
-			}
-			else
-			{
-				this._stopProgress();
-				this.searchDialog.ibxWidget("close");
-			}			
-		},				
-		_showDropDownGroup: function()
-		{
-			var dropdownGroup = false;
-			var lowerCaseStr = $(form).find(".share-with-txt-search").ibxWidget("option", "text").toLowerCase();
-			this.groupListArray = [];
-			var count=0;
-
-			for (var i=0; i < this.groupArray.length && count < this.maxRows; i++)
-			{ // create a matching array
-				if (this.groupArray[i].desc.toLowerCase().indexOf(lowerCaseStr) != -1 ||
-					this.groupArray[i].name.toLowerCase().indexOf(lowerCaseStr) != -1)			
-				{
-					this.groupListArray[count++] = this.groupArray[i];
-				}
-			}
-
-			if (this.groupListArray.length > 0)
-			{
-				if (!this.searchDialog.ibxWidget("isOpen"))
-					this.searchDialog.ibxWidget("open").position({my:"left top", at:"left-5px bottom+6px", of: form.find(".share-with-btn-search")});
-				// Add a text Showing first {1} entries
-				this.groupListArray.length < this.maxRows ? $(this.searchDialog).find(".share-with-dropdown-label").hide() : $(this.searchDialog).find(".share-with-dropdown-label").show();
-
-				$(".share-with-txt-search").focus();
-				for (var i=0; i < this.groupListArray.length; i++)
-				{					
-					var userdata = {}; // init
-					userdata.user = this.groupListArray[i].child;
-					userdata.name = this.groupListArray[i].name;
-
-					var item = new userGroupItem(this.groupListArray[i]);
-
-					if (this.currentGroupArrayStr.indexOf("," + this.groupListArray[i].name + ",") == -1)
-					{
-						item.element.addClass("share-with-item");
-						userdata.disabled = false;
-					}
-					else
-					{
-						item.element.addClass("share-with-item share-with-item-disabled");
-						userdata.disabled = true;
-					}
-					item.element.data("userData",userdata);
-					$('#shareWithDropdown').append(item.element);
-					dropdownGroup = true;
-				}
-				this._stopProgress();
-			}
-			else
-			{
-				this._stopProgress();
-				this.searchDialog.ibxWidget("close");
-			}			
-		},
-
-		_showDropDownUsers: function()
-		{
-			var dropdownUsers = false;
-			var dropdownUser = [];
-			var lowerCaseStr = $(form).find(".share-with-txt-search").ibxWidget("option", "text").toLowerCase();
-			this.UsersListArray = [];
-			var count=0;
-			
-			for (var i=0; i < this.userArray.length && count < this.maxRows; i++)
-			{ // create a matching array
-				if (this.userArray[i].desc.toLowerCase().indexOf(lowerCaseStr) != -1 ||
-						this.userArray[i].name.toLowerCase().indexOf(lowerCaseStr) != -1 ||	
-						this.userArray[i].email.toLowerCase().indexOf(lowerCaseStr) != -1)			
-				{
-					this.UsersListArray[count++] = this.userArray[i];
-				}
-			}
-
-			if (this.UsersListArray.length > 0)
-			{
-				if (!this.searchDialog.ibxWidget("isOpen"))
-					this.searchDialog.ibxWidget("open").position({my:"left top", at:"left-5px bottom+6px", of: form.find(".share-with-btn-search")});
-				// Add a text Showing first {1} entries
-				this.UsersListArray.length < this.maxRows ? $(this.searchDialog).find(".share-with-dropdown-label").hide() : $(this.searchDialog).find(".share-with-dropdown-label").show();
-
-				$(".share-with-txt-search").focus();
-				for (var i=0; i < this.UsersListArray.length; i++)
-				{
-					var userdata = {}; // init
-					userdata.user = this.UsersListArray[i].child;
-					userdata.name = this.UsersListArray[i].name;
-
-					var item = new userGroupItem(this.UsersListArray[i]);
-					
-					if (this.currentUserArrayStr.indexOf("," + this.UsersListArray[i].name + ",") == -1)
-					{
-						item.element.addClass("share-with-item");
-						userdata.disabled = false;						
-					}
-					else
-					{
-						item.element.addClass("share-with-item share-with-item-disabled");
-						userdata.disabled = true;						
-					}						
-					item.element.data("userData",userdata);
-					$('#shareWithDropdown').append(item.element);
-					dropdownUsers = true;
-				}
-				this._stopProgress();
-			}
-			else
-			{
-				this._stopProgress();
-				this.searchDialog.ibxWidget("close");
-			}			
-		},
-		
+				
 	    _checkForError: function(exInfo)
 	    {	    	
 	    	//check for error
@@ -789,9 +454,10 @@
 	    	});
 	    					
 	    },
-
+				    
 		_startProgress:function()
 		{	
+			console.log("_startProgress");
 			var settings = 
 			{
 				customImage:true
@@ -817,6 +483,7 @@
 
 		_stopProgress:function()
 		{
+			console.log("_stopProgress");
 			ibx.waitStop();
 		},
 		
@@ -844,7 +511,7 @@
 
 		this.element.find(".sw-item-desc").text(description);
 		this.element.find(".sw-item-name").text(name);
-		this.element.find(".sw-item-icon").addClass((type == "user") ? "sw-item-user" : "sw-item-group");
+		this.element.find(".sw-item-icon").addClass((type == "u") ? "sw-item-user" : "sw-item-group");
 	};
 
 
