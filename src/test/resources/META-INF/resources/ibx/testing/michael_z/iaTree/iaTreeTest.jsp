@@ -53,8 +53,8 @@
 				  		$(".metadata-tree").ibxWidget("load", metadata);
 				  	}				  	
 				  	
-				  	loadTree("retail_lite.xml");
-				  	//loadTree("retail_lite.json", true);
+				 	//loadTree("retail_lite.xml");
+				  	loadTree("retail_lite.json", true);
 				  	
 				  	//$(".drop-box").on("ibx_drop", function(e)
 				  	$(".drop-box").on("ibx_dragstart ibx_dragover ibx_dragleave ibx_drop", function(e)

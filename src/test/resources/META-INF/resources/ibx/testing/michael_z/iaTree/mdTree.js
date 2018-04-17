@@ -12,7 +12,31 @@ $.widget("ibi.mdTree", $.ibi.ibxWidget,
 	},
 	_getRoot: function(obj)
 	{
-		var root = $(obj).find("[dataSourceId]");
+		var root;
+		if (obj instanceof Document)
+		{
+			root = $(obj).find("[dataSourceId]");
+		}
+		else
+		{
+			var root = walk(obj);
+			if (root == null)
+				console.error("Could not find root");
+			return root;
+			function walk(obj)
+			{
+				for (var key in obj) 
+				{
+					if (obj.hasOwnProperty(key))
+					{
+						if (key == "dataSourceId")
+							return obj;
+						if (typeof obj[key] == 'object')
+							return walk(obj[key]);
+					}
+				}
+			}				
+		}
 		return root;
 	},
 	load: function(obj)
@@ -28,35 +52,41 @@ $.widget("ibi.mdTree", $.ibi.ibxWidget,
 		else //json
 		{
 			this._isFromXMLSource = false;
-			for (var key in obj) 
+			var root = this._getRoot(obj);
+			if (Array.isArray(root))
 			{
-				if (obj.hasOwnProperty(key))
-				{
-					var root = obj[key];
-					this._buildTreeFromJson(this.element, root);
-					break;
-				}
-			}						
+				$.each(root, function(i, el) {
+					this._buildTreeFromJson(this.element, el, 1);
+				}.bind(this));
+			}
+			else
+				this._buildTreeFromJson(this.element, root, 1);
 		}
 	},
 	level:"",
-	_buildTreeFromJson: function (parent, obj)
+	_buildTreeFromJson: function (parent, obj, nLevel)
 	{
 		var isFolder = obj.branch != undefined || obj.leaf != undefined;
 		var typeAttr = obj.nodeType;
 		var type = typeAttr ? typeAttr.toLowerCase() : "folder"; 
 		var title = obj.title || obj.label;
-		var node = $("<div>").mdTreeNode({"text" : title, "isFolder": isFolder, "fieldType": type});
+		var startExpanded = this.options.expansionLevels == -1 ? true : nLevel <= this.options.expansionLevels;
+		var node = $("<div>").mdTreeNode({"text" : title, "isFolder": isFolder, "fieldType": type, "startExpanded": startExpanded});
 		node.ibxWidget("setData", {"qualifiedName": obj.qualifiedName});
 		node.ibxWidget("option", "draggable", this.allowDraggable(obj));
 		parent.ibxWidget("add", node);
-		
-		var children = obj.leaf ? (obj.branch ? obj.leaf.concat(obj.branch) : obj.leaf) : obj.branch;
-		var numberOfLeaves = children ? children.length : 0;  
-		for (var i=0;i<numberOfLeaves;++i)
+		node.ibxWidget("refresh");
+		++nLevel;		
+		var children = obj.leaf ? (obj.branch ? obj.leaf.concat(obj.branch) : obj.leaf) : obj.branch;		
+		if (Array.isArray(children))
 		{
-			this._buildTreeFromJson(node, children[i]);
+			$.each(children, function(i, child) {
+				this._buildTreeFromJson(node, child, nLevel);
+			}.bind(this));
 		}
+		else if (children)
+			this._buildTreeFromJson(node, children, nLevel);
+				
 		return node;
 	},
 	_buildTreeFromDom: function(parent, xmlNode, nLevel)
