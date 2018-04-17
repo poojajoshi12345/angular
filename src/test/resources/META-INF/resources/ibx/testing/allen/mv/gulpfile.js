@@ -10,11 +10,11 @@ var rename = require('gulp-rename');
 gulp.task('inline', function ()
 {
    return gulp.src('./src/index.html')
-              .pipe(inline({
-                 base: 'src/',
-                 // js: uglify, /*uncomment to minify the js*/
-                 css: minifyCss
-              }))
+              // .pipe(inline({
+              //    base: 'src/',
+              //    // js: uglify, /*uncomment to minify the js*/
+              //    css: minifyCss
+              // }))
               .pipe(replace("<!--JSPHEAD-->", fs.readFileSync('./src/templates/head.jsp', 'utf8')))
               .pipe(rename('slp.jsp'))
               .pipe(gulp.dest('./build'))

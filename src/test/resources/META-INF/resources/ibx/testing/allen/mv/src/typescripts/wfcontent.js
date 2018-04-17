@@ -15,7 +15,6 @@ var WFContent = (function () {
     ;
     WFContent.prototype.loadContent = function () {
         var deferred = $.Deferred();
-        console.log(this.restWFUrl);
         $.ajax({
             url: this.restWFUrl,
             headers: {
@@ -30,7 +29,8 @@ var WFContent = (function () {
             if (typeof $res.find("ibfsrpc") !== 'undefined') {
                 signedIn = ($res.find("ibfsrpc").attr("name") === "signOn");
             }
-            if ((signedIn && this.isFirstTime) ||
+            console.log(signedIn);
+            if ((!signedIn && this.isFirstTime) ||
                 (temp !== undefined && temp !== null && temp.length > 0)) {
                 alert("would shouw the login window");
                 return [];
@@ -42,6 +42,15 @@ var WFContent = (function () {
             deferred.resolve(textStatus);
         }.bind(this));
         return deferred.promise();
+    };
+    WFContent.prototype.refreshIframe = function (iframeUrl) {
+        var _randTime = ("&RND=" + (new Date()).getTime());
+        if (iframeUrl.indexOf("&RND=") > -1) {
+            return iframeUrl.replace(/&RND=\d*/, _randTime);
+        }
+        else {
+            return iframeUrl + _randTime;
+        }
     };
     WFContent.prototype._signInCallback = function () {
     };

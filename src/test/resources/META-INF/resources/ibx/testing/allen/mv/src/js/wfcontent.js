@@ -134,7 +134,6 @@ var WFContent = (function () {
     
     WFContent.prototype.loadContent = function () {
         var deferred = $.Deferred();
-        console.log(this.restWFUrl);
         $.ajax({
             url: this.restWFUrl,
             headers: {
@@ -161,6 +160,15 @@ var WFContent = (function () {
             deferred.resolve(textStatus);
         }.bind(this));
         return deferred.promise();
+    };
+    WFContent.prototype.refreshIframe = function (iframeUrl) {
+        var _randTime = ("&RND=" + (new Date()).getTime());
+        if (iframeUrl.indexOf("&RND=") > -1) {
+            return iframeUrl.replace(/&RND=\d*/, _randTime);
+        }
+        else {
+            return iframeUrl + _randTime;
+        }
     };
     WFContent.prototype._signInCallback = function () {
     };

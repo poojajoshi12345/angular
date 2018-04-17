@@ -5,7 +5,6 @@
   "description": "",
   "author": "Information Builders (PMF Team)",
   "devDependencies": {
-    "@types/jquery": "^3.2.16",
     "fs": "0.0.1-security",
     "gulp": "^3.9.1",
     "gulp-inline": "^0.1.3",

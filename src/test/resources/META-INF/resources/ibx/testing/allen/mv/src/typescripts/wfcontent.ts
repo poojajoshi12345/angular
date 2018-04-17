@@ -4,8 +4,6 @@ import { Utils } from './utils'
 class WFContent {
     restWFUrl:string;
     isFirstTime:boolean = true;
-    route:string;
-    prefix:string;
     alias:string;
     localStorageModel:any = {};
     currentStyle:any = {};
@@ -13,14 +11,14 @@ class WFContent {
     tabs:Array<any> = [];
     swatches:Array<any> = [];
 
+    route:string = "/wfirs";
+    prefix:string = "IBFS";
+
     /*******************/
     /* PUBLIC METHODS  */
     /*******************/
     public constructor(contextPath, WFRel) {
-        this.route = "/wfirs";
-        this.prefix = "IBFS";
         this.alias = (contextPath !== "") ? contextPath : "/ibi_apps";
-
         /* overwrite the route and prefix if the wf version is greater that 8.2*/
         //if (WFRel !== undefined)
         //{
@@ -36,9 +34,8 @@ class WFContent {
     //    console.log("signing in");
     //}
 
-    public loadContent() {
-        var deferred = $.Deferred();
-        console.log( this.restWFUrl)
+    public loadContent(): JQueryPromise <any> {
+        var deferred: JQueryDeferred<any> = $.Deferred();
         $.ajax({
             url: this.restWFUrl,
             headers: {
@@ -54,7 +51,8 @@ class WFContent {
             {
                 signedIn = ($res.find("ibfsrpc").attr("name") === "signOn");
             }
-            if ((signedIn && this.isFirstTime) ||
+            console.log(signedIn)
+            if ((!signedIn && this.isFirstTime) ||
                 (temp !== undefined && temp !== null && temp.length > 0))
             {
                 alert("would shouw the login window")
@@ -72,6 +70,16 @@ class WFContent {
         return deferred.promise();
     }
 
+    public refreshIframe(iframeUrl: string): string{
+        var _randTime = ("&RND=" + (new Date()).getTime());
+        if(iframeUrl.indexOf("&RND=") > -1){
+            /* replace the iframe url */
+            return iframeUrl.replace(/&RND=\d*/, _randTime);
+        } else {
+            return iframeUrl + _randTime;
+        }
+
+    }
     /*******************/
     /* PRIVATE METHODS */
     /*******************/
@@ -105,10 +113,6 @@ class WFContent {
      * @param contentUrl
      * @private
      */
-
-
-
-
     private _getWFPolicy(data:any):boolean {
         /* TODO: implement this._getWFPolicy() */
         /*
@@ -136,7 +140,6 @@ class WFContent {
         }).done(function (response) {
             // NOTE: add funcatiolity for notifying the user about the results
         }).fail(function (err, msg) {
-            //console.log(msg)
         })
 
         //}
