@@ -23,11 +23,14 @@
 			ibx(function()
 			{
 				console.log("in ibx");
-					function loadTree(file)
+					function loadTree(file, asJson)
 					{
 						var xmlhttp = new XMLHttpRequest();
 					  	xmlhttp.onreadystatechange = function() {
 					    	if (this.readyState == 4 && this.status == 200) {
+					    		  if (asJson)
+					    		  	loadJSONTrees(this);
+					    		  else					    	
 					    		  	loadXMLTrees(this);
 					  		}
 					  	};
@@ -39,20 +42,39 @@
 				  	{
 				  		var parser = new DOMParser();
 						var xmlDoc = parser.parseFromString(ajaxObject.response,"text/xml");
+						loadTrees(xmlDoc)
 				  		//var str = new XMLSerializer().serializeToString(xmlDoc);
 				  		//console.log(str);
-				  		$(".dimension-tree").ibxWidget("load", xmlDoc);
-				  		$(".measure-tree").ibxWidget("load", xmlDoc);
 				  	}
-				  	var fieldsPanel = $("<div>").idFieldsPanel();
+				  	
+					function loadJSONTree(ajaxObject)
+				  	{
+				  		var metadata = JSON.parse(ajaxObject.response);
+				  		//console.log(metadata);
+				  		$(".metadata-tree").ibxWidget("load", metadata);
+				  	}				  	
+				  	
+				  	function loadTrees(obj)
+				  	{
+				  		$(".dimension-tree").ibxWidget("load", obj);
+				  		$(".measure-tree").ibxWidget("load", obj);
+				  		$(".fields-panel").ibxWidget("sizeAfterLoad");				  						  						 
+				  	}
+				  	
+				  	
+				  	var fieldsPanel = $("<div>").idFieldsPanel().addClass("fields-panel");
 				  	$(".main-box").append(fieldsPanel);
-				  	loadTree("retail_lite.xml");			
+				  	var maxHeight = $(window).height();
+				  	$(".main-box").css("max-height", "maxHeight");
+				  	//loadTree("retail_lite.xml");
+				  	loadTree("retail_lite.json", true);
+				  	
 			
 			}, ["/ibi_apps/ibx/testing/michael_z/idFieldsPanel/idFieldsPanelRes.xml"], true);
 		</script>
 
 		<style type="text/css">
-			.xmain-box { border: 1px solid black;}
+			.main-box { height: 500px;}
 		</style>
 	</head>
 	

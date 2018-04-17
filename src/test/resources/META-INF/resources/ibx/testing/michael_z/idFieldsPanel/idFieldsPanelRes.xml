@@ -15,14 +15,14 @@
 	<markup>
 		<markup-block>
 			<div class="metadataPanel">
-				<div class="dimension-pane" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
+				<div class="dimension-pane metadata-pane" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
 					<div class="dimension-label md-label" data-ibx-type="ibxLabel" data-ibxp-align="stretch">Dimensions</div>
-					<div class="dimension-tree" data-ibx-type="idMdTree" data-ibxp-dimensions-only="true" data-ibxp-align="stretch"></div>
+					<div class="dimension-tree md-tree-area" data-ibx-type="idMdTree" data-ibxp-dimensions-only="true" data-ibxp-align="stretch"></div>
 				</div>
 				<div class="h-splitter" data-ibx-type="ibxHSplitter"></div>
-				<div class="measure-pane" data-ibx-type="ibxVBox" data-ibxp-align="stretch"> 
+				<div class="measure-pane metadata-pane" data-ibx-type="ibxVBox" data-ibxp-align="stretch"> 
 					<div class="measure-label md-label" data-ibx-type="ibxLabel" data-ibxp-align="stretch">Measures</div>
-					<div class="measure-tree" data-ibx-type="idMdTree" data-ibxp-measures-only="true" data-ibxp-align="stretch"></div>
+					<div class="measure-tree md-tree-area" data-ibx-type="idMdTree" data-ibxp-measures-only="true" data-ibxp-align="stretch"></div>
 				</div>			
 			</div>
 		</markup-block>
