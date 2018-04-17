@@ -151,7 +151,7 @@
 				else
 					this.basesearchString = "";
 			}
-	
+
 			this._startProgress();
 	
 			if (runAjax)
