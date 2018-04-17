@@ -1,0 +1,29 @@
+.id-canvas
+{
+	flex: 1 1 auto;
+}
+.full-container
+{
+	border: 1px solid gray;
+	flex: 1 1 auto;
+}
+
+.heading-area
+{
+	border: 1px solid gray;
+}
+
+.chart-area
+{
+	flex: 1 1 auto;
+	position: relative;
+}
+
+.xchart-div
+{
+  	width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0px;
+    left: 0px;	
+}
