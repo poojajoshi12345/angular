@@ -82,11 +82,12 @@ $.widget("ibi.ibxSortable", $.Widget,
 					{
 						this._inDrag = true;
 						var de = this._dragElement;
+						var op = de.offsetParent()[0];
 						var ph = this._placeholder = this._createPlaceholder(de);
 						var width = de.width();
 						var height = de.height();
 						var pos = de.position();
-						de.css({"zIndex":100000, "pointerEvents":"none", "position":"absolute", "left":pos.left, "top":pos.top, "width":width, "height":height});
+						de.css({"zIndex":100000, "pointerEvents":"none", "position":"absolute", "left":pos.left + op.scrollLeft, "top":pos.top + op.scrollTop, "width":width, "height":height});
 						de.addClass("ibx-sortable-dragging " + options.sortItemClasses);
 						ph.insertAfter(de);
 						this.element.ibxAutoScroll("start");
@@ -99,12 +100,13 @@ $.widget("ibi.ibxSortable", $.Widget,
 				var eLast = this._eLast
 				var dx = e.clientX - eLast.clientX;
 				var dy = e.clientY - eLast.clientY
-				var dragPos = this._dragElement.position()
+				var dragPos = this._dragElement.position();
+				var op = this._dragElement.offsetParent()[0];
 				var vert = this.options.direction == "vertical";
 
 				//move within axis only if specified
 				if(options.lockDragAxis)
-					this._dragElement.css({"left": dragPos.left + (!vert ? dx : 0), "top": dragPos.top + (vert ? dy : 0)});
+					this._dragElement.css({"left": dragPos.left + op.scrollLeft + (!vert ? dx : 0), "top": dragPos.top + op.scrollTop + (vert ? dy : 0)});
 				else
 					this._dragElement.css({"left": dragPos.left + dx, "top":  dragPos.top + dy});
 
