@@ -14,7 +14,6 @@
 			{
 				$("#cmdTest").on("ibx_triggered", function(e)
 				{
-					//console.clear();
 					var cont = $(".container");
 					var el = cont[0];
 					var metrics = cont.metrics();
@@ -25,7 +24,7 @@
 				var container = $(".container").ibxVSortable();
 				for(var i = 0; i < 20; ++i)
 				{
-					var item = $("<div>").ibxLabel({text:"Item " + i, "class":"item"}).addClass("item-" + i);
+					var item = $("<div>").ibxLabel({text:"Item " + i, "class":"item", "glyph":"", "glyphClasses":"fa fa-level-down"}).addClass("item-" + i);
 					container.append(item);
 				}
 			}, true);
@@ -44,50 +43,40 @@
 				box-sizing:border-box;
 			}
 
-			.scroll-parent-parent
-			{
-				position:absolute;
-				left:200px;
-				top:100px;
-				width:300px;
-				height:100px;
-				border:1px solid red;
-				overflow:auto;
-			}
-
 			.scroll-parent
 			{
-				position:relative;
+				position:absolute;
 				left:20px;
 				top:20px;
-				width:100px;
-				border:1px solid blue;
+				width:300px;
+				height:200px;
+				border:5px solid blue;
 				overflow:auto;
 			}
 			.container
 			{
+				overflow:auto;
 				flex:0 0 auto;
-				border:2px solid purple;
+				border:5px solid lime;
 				box-sizing:border-box;
 			}
 			.item
 			{
-				flex:0 0 auto;
-				width:auto;
-				font-size:14px;
-				margin:2px;
+				flex:1 1 auto;
+				xwidth:100px;
+				font-size:10px;
+				margin:10px;
+				padding:10px;
 				background-color:thistle;
 				border:1px solid #888;
+				xbox-sizing:border-box;
 			}
 		</style>
 	</head>
 	<body class="ibx-root">
 		<div id="cmdTest" data-ibx-type="ibxCommand" data-ibxp-id="cmdTest" data-ibxp-shortcut="CTRL+C"></div>
-			<div class="scroll-parent-parent" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
-				<div class="scroll-parent" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
-					<div class="container" data-ibx-type="ibxVBox"></div>
-				</div>
-			</div>
+		<div class="scroll-parent" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
+			<div class="container" data-ibx-type="ibxVBox" data-ibxp-align="stretch"></div>
+		</div>
 	</body>
 </html>
-
