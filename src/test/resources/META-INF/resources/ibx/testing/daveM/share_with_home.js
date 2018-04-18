@@ -136,7 +136,6 @@
 			clearTimeout(this.typingTimer);
 	
 			var searchString = form.find(".share-with-txt-search").ibxWidget("option", "text");
-			console.log(searchString);
 
 			var runAjax = true;
 			if (this.basesearchString == "")
@@ -151,11 +150,11 @@
 				else
 					this.basesearchString = "";
 			}
-
-			this._startProgress();
 	
 			if (runAjax)
 			{
+				this._startProgress();
+
 				$('#shareWithDropdown').empty();
 	
 				var url;
@@ -177,7 +176,7 @@
 				    type: "POST",
 					contentType: "application/x-www-form-urlencoded; charset=UTF-8",
 					url: url,
-					data: {"searchPath":"*" + searchString + "*","searchRows": 500},		
+					data: {"searchPath":"*" + searchString + "*","searchRows": 100,"searchIndex": 0},		
 					dataType: "json",
 					context: this,
 				    success: function(json) 
@@ -232,7 +231,72 @@
 							$(".share-with-txt-search").focus();
 	
 					    	this._stopProgress();
-	
+
+					    	$('#shareWithDropdown').on("scroll", function (event) 
+					    	{
+								$.ajax({
+								    type: "POST",
+									contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+									url: url,
+									data: {"searchPath":"*" + this.basesearchString + "*","searchRows": 100,"searchIndex": 100},		
+									dataType: "json",
+									context: this,
+								    success: function(json) 
+								    {
+										var itemList = $('#shareWithDropdown');						
+										for (var i = 0; i < json.length; i++)
+								    	{			    		
+											var userdata = json[i]; // init
+					
+											var item = new userGroupItem(json[i],true);
+											
+											if (json[i].type == "u")
+											{
+												if (this.currentUserArrayStr.indexOf("," + json[i].name + ",") == -1)
+													{
+														item.element.addClass("share-with-item");
+														userdata.disabled = false;						
+													}
+													else
+													{
+														item.element.addClass("share-with-item share-with-item-disabled");
+														userdata.disabled = true;						
+													}						
+											}
+											else
+											{
+												if (this.currentGroupArrayStr.indexOf("," + json[i].name + ",") == -1)
+												{
+													item.element.addClass("share-with-item");
+													userdata.disabled = false;
+												}
+												else
+												{
+													item.element.addClass("share-with-item share-with-item-disabled");
+													userdata.disabled = true;
+												}
+											}
+											
+											item.element.data("userData",userdata);
+											itemList.append(item.element);
+								    	}								    	
+								    }
+								});
+/*					    	    var lastDiv = document.querySelector(".item-user-group > div:last-child");
+					    	    var maindiv = document.querySelector(".share-with-dropdown");
+					    	    var lastDivOffset = lastDiv.offsetTop + lastDiv.clientHeight;
+					    	    var pageOffset = maindiv.offsetTop + maindiv.clientHeight;   
+					    	    if (pageOffset > lastDivOffset - 10) 
+					            if ($('#shareWithDropdown').height() <= $('#shareWithDropdown').scrollTop())
+					            {
+					                alert('end of page');
+					            }
+					    		/*
+							     var newDiv = document.createElement("div");
+							        newDiv.innerHTML = "my awesome new div";
+							        $('#shareWithDropdown').append(newDiv);*/
+					    	}.bind(this));
+
 							$(this.searchDialog).find(".share-with-item").on( "click", function( e ) 
 							{
 								var userdata = $(e.currentTarget).data("userData");
@@ -268,8 +332,8 @@
 						else
 						{
 							this._stopProgress();
-							this.searchDialog.ibxWidget("close");
-							this._resetUserGroup();
+						//	this.searchDialog.ibxWidget("close");
+						//	this._resetUserGroup();
 						}
 				    },
 			        error: function() 
@@ -281,7 +345,8 @@
 			else
 			{
 				// show hide items in the dialog
-				var regx = new RegExp(searchString, "gi");
+				var newString = searchString.startsWith("*") ? searchString.substr(1) : searchString;
+				var regx = new RegExp(newString, "gi");
 				var items = $(".item-user-group");
 				items.each(function(text, regx, idx, el)
 				{
@@ -291,7 +356,7 @@
 					var passed = regx.test(item.description);
 					passed = passed || regx.test(item.name); 
 					el.style.display = passed ? "" : "none";
-				}.bind(this, searchString, regx));
+				}.bind(this, newString, regx));
 			}
 
 		},
@@ -323,7 +388,7 @@
 			$(form).find(".ibx-dialog-ok-button").ibxWidget("option", "text", ibx.resourceMgr.getString("home_ok"));
 
 			this._getIBFSlistShares(); // start collection data
-
+			 
 			$(form).find(".share-with-txt-search").on('ibx_action ibx_textchanged', function (e, info)
 			{
 				clearTimeout(this.typingTimer);
@@ -441,14 +506,15 @@
 		{ 
 			switch (this.showOption)
 			{
-				case "user":
+				case "u":
 					this.currentUserArrayStr.length == 1 ? $(form).find(".share-with-title").hide() : $(form).find(".share-with-title").show();
 					break;
-				case "group":
+				case "g":
 					this.currentGroupArrayStr.length == 1 ? $(form).find(".share-with-title").hide() : $(form).find(".share-with-title").show();
 					break;
+				case "all":
 				default:
-					this.currentGroupArrayStr.length == 1 || this.currentGroupArrayStr.length == 1 ? $(form).find(".share-with-title").hide() : $(form).find(".share-with-title").show();
+					this.currentGroupArrayStr.length == 1 && this.currentUserArrayStr.length == 1 ? $(form).find(".share-with-title").hide() : $(form).find(".share-with-title").show();
 					break;
 			}			
 		},
@@ -487,8 +553,6 @@
 				    
 		_startProgress:function()
 		{	
-			return;
-			console.log("_startProgress");
 			var settings = 
 			{
 				customImage:true
@@ -514,8 +578,6 @@
 
 		_stopProgress:function()
 		{
-			return;
-			console.log("_stopProgress");
 			ibx.waitStop();
 		},
 		
