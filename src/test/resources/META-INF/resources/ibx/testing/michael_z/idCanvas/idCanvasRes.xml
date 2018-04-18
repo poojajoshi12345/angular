@@ -17,7 +17,8 @@
 					</div>
 					<div class="chart-area" data-ibx-type="ibxHBox" data-ibxp-align="stretch">
 						<div class="chart-div" id='chart-div'></div>
-						<div class="drop-label" data-ibx-type="ibxLabel">Drop measures and dimensions here</div>
+						<div class="drop-label" data-ibx-type="ibxLabel" data-ibxp-glyph-classes="fa fa-level-down" 
+							data-ibxp-icon-position="top">Drop measures and dimensions here</div>
 					</div>
 				</div>
 			</div>

@@ -56,6 +56,8 @@
 				  		var oReturn = JSON.parse(ajaxObject.response)
 				  		$(".canvas-panel").ibxWidget("loadChart", oReturn);
 				  	}
+				  	
+				  	this.loadScript("samplechart.json");
 				
 			}, ["/ibi_apps/ibx/testing/michael_z/idCanvas/idCanvasRes.xml"], true);
 		</script>

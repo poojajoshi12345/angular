@@ -19,11 +19,18 @@
 	position: relative;
 }
 
-.xchart-div
+.chart-sample
 {
-  	width: 100%;
-    height: 100%;
-    position: absolute;
-    top: 0px;
-    left: 0px;	
+	opacity: .5;
+}
+
+.drop-label
+{
+	position: absolute;
+	opacity: .5;
+}
+
+.drop-label > .ibx-label-glyph
+{
+	opacity: .5;
 }

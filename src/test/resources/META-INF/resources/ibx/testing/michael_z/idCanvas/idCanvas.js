@@ -22,13 +22,12 @@ $.widget("ibi.idCanvas", $.ibi.ibxWidget,
 		if (oPreview.sample)
 		{
 			this._chart.noDataMode = true;
-			this.inSample = true;
+			this.inSample = true;			
 		}
 		else
 		{
 			this.inSample = false;
-		}
-		
+		}				
 		if (oPreview.pfjscript || oPreview.mbscript)
 		{
 			if (oPreview.pfjscript)
@@ -51,6 +50,27 @@ $.widget("ibi.idCanvas", $.ibi.ibxWidget,
 		else
 			this._chart.draw(chartDiv);
 		this.firstChart = false;
+		this._showDropLabel(this.inSample);
+	},
+	_showDropLabel: function(bShow)
+	{
+		var $dropLabel = $(".drop-label");
+		var $chartDiv = $(".chart-div");
+		if (bShow)
+		{			
+			var left = $chartDiv.width()/2;
+			var top = $chartDiv.height()/2;			
+			var labelOffset = $dropLabel.width()/2;
+			left = left-labelOffset;
+			$dropLabel.css("left", left);
+			$dropLabel.css("top", top);
+			$dropLabel.show();
+		}
+		else
+		{
+			$dropLabel.hide();
+		}
+		$chartDiv.toggleClass("chart-sample", bShow);	
 	}
 });
 
