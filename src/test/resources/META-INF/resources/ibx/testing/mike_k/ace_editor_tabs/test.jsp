@@ -62,7 +62,8 @@ page import="org.owasp.esapi.*,
 					}
 					else
 					{
-						var uriExec = sformat("{1}/ibx/testing/mike_k/ace_editor_tabs/wf_ace_editor.jsp?rootFolderPath={2}&folderPath={3}",			
+						//var uriExec = sformat("{1}/ibx/testing/mike_k/ace_editor_tabs/wf_ace_editor.jsp?rootFolderPath={2}&folderPath={3}",			
+						var uriExec = sformat("{1}/TED?rootFolderPath={2}&folderPath={3}",
 							applicationContext,	encodeURIComponent(encodeURIComponent("IBFS:/WFC/Repository")), encodeURIComponent(encodeURIComponent("IBFS:/WFC/Repository/HOME-958")));	
 						editorWindow = window.open(uriExec, "_blank", "location=no,status=no,toolbar=no,titlebar=no,width=1200,height=800");
 					}
@@ -77,7 +78,8 @@ page import="org.owasp.esapi.*,
 					}
 					else
 					{
-						var uriExec = sformat("{1}/ibx/testing/mike_k/ace_editor_tabs/wf_ace_editor.jsp?rootFolderPath={2}&folderPath={3}&itemName={4}",			
+						//var uriExec = sformat("{1}/ibx/testing/mike_k/ace_editor_tabs/wf_ace_editor.jsp?rootFolderPath={2}&folderPath={3}&itemName={4}",
+						var uriExec = sformat("{1}/TED?rootFolderPath={2}&folderPath={3}&itemName={4}",								
 							applicationContext,	encodeURIComponent(encodeURIComponent("IBFS:/WFC/Repository")), encodeURIComponent(encodeURIComponent("IBFS:/WFC/Repository/HOME-958")), encodeURIComponent(encodeURIComponent("1.js")));	
 						editorWindow = window.open(uriExec, "_blank", "location=no,status=no,toolbar=no,titlebar=no,width=1200,height=800");
 					}
@@ -92,7 +94,8 @@ page import="org.owasp.esapi.*,
 					}
 					else
 					{
-						var uriExec = sformat("{1}/ibx/testing/mike_k/ace_editor_tabs/wf_ace_editor.jsp?rootFolderPath={2}&folderPath={3}&itemName={4}",			
+						//var uriExec = sformat("{1}/ibx/testing/mike_k/ace_editor_tabs/wf_ace_editor.jsp?rootFolderPath={2}&folderPath={3}&itemName={4}",
+						var uriExec = sformat("{1}/TED?rootFolderPath={2}&folderPath={3}&itemName={4}",								
 							applicationContext,	encodeURIComponent(encodeURIComponent("IBFS:/WFC/Repository")), encodeURIComponent(encodeURIComponent("IBFS:/WFC/Repository/HOME-958")), encodeURIComponent(encodeURIComponent("ace_editor_style.css")));	
 						editorWindow = window.open(uriExec, "_blank", "location=no,status=no,toolbar=no,titlebar=no,width=1200,height=800");
 					}
@@ -107,7 +110,8 @@ page import="org.owasp.esapi.*,
 					}
 					else
 					{
-						var uriExec = sformat("{1}/ibx/testing/mike_k/ace_editor_tabs/wf_ace_editor.jsp?rootFolderPath={2}&folderPath={3}&itemName={4}",			
+						//var uriExec = sformat("{1}/ibx/testing/mike_k/ace_editor_tabs/wf_ace_editor.jsp?rootFolderPath={2}&folderPath={3}&itemName={4}",
+						var uriExec = sformat("{1}/TED?rootFolderPath={2}&folderPath={3}&itemName={4}",								
 							applicationContext,	encodeURIComponent(encodeURIComponent("IBFS:/WFC/Repository")), encodeURIComponent(encodeURIComponent("IBFS:/WFC/Repository/HOME-958")), encodeURIComponent(encodeURIComponent("ace_python_test.py")));	
 						editorWindow = window.open(uriExec, "_blank", "location=no,status=no,toolbar=no,titlebar=no,width=1200,height=800");
 					}
@@ -122,7 +126,8 @@ page import="org.owasp.esapi.*,
 					}
 					else
 					{
-						var uriExec = sformat("{1}/ibx/testing/mike_k/ace_editor_tabs/wf_ace_editor.jsp?rootFolderPath={2}&folderPath={3}&itemName={4}",			
+						//var uriExec = sformat("{1}/ibx/testing/mike_k/ace_editor_tabs/wf_ace_editor.jsp?rootFolderPath={2}&folderPath={3}&itemName={4}",
+						var uriExec = sformat("{1}/TED?rootFolderPath={2}&folderPath={3}&itemName={4}",								
 							applicationContext,	encodeURIComponent(encodeURIComponent("IBFS:/WFC/Repository")), encodeURIComponent(encodeURIComponent("IBFS:/WFC/Repository/HOME-958")), encodeURIComponent(encodeURIComponent("ace_r_test.r")));	
 						editorWindow = window.open(uriExec, "_blank", "location=no,status=no,toolbar=no,titlebar=no,width=1200,height=800");
 					}
@@ -137,7 +142,8 @@ page import="org.owasp.esapi.*,
 					}
 					else
 					{
-						var uriExec = sformat("{1}/ibx/testing/mike_k/ace_editor_tabs/wf_ace_editor.jsp?rootFolderPath={2}&folderPath={3}&itemName={4}",			
+						//var uriExec = sformat("{1}/ibx/testing/mike_k/ace_editor_tabs/wf_ace_editor.jsp?rootFolderPath={2}&folderPath={3}&itemName={4}",
+						var uriExec = sformat("{1}/TED?rootFolderPath={2}&folderPath={3}&itemName={4}",								
 							applicationContext,	encodeURIComponent(encodeURIComponent("IBFS:/WFC/Repository")), encodeURIComponent(encodeURIComponent("IBFS:/WFC/Repository/HOME-958")), encodeURIComponent(encodeURIComponent("ace_sql_test.sql")));	
 						editorWindow = window.open(uriExec, "_blank", "location=no,status=no,toolbar=no,titlebar=no,width=1200,height=800");
 					}
@@ -152,7 +158,8 @@ page import="org.owasp.esapi.*,
 					}
 					else
 					{
-						var uriExec = sformat("{1}/ibx/testing/mike_k/ace_editor_tabs/wf_ace_editor.jsp?rootFolderPath={2}&folderPath={3}&itemName={4}",			
+						//var uriExec = sformat("{1}/ibx/testing/mike_k/ace_editor_tabs/wf_ace_editor.jsp?rootFolderPath={2}&folderPath={3}&itemName={4}",
+						var uriExec = sformat("{1}/TED?rootFolderPath={2}&folderPath={3}&itemName={4}",								
 							applicationContext,	encodeURIComponent(encodeURIComponent("IBFS:/WFC/Repository")), encodeURIComponent(encodeURIComponent("IBFS:/WFC/Repository/HOME-958")), encodeURIComponent(encodeURIComponent("ace_fex_test.fex")));	
 						editorWindow = window.open(uriExec, "_blank", "location=no,status=no,toolbar=no,titlebar=no,width=1200,height=800");
 					}
@@ -167,7 +174,8 @@ page import="org.owasp.esapi.*,
 					}
 					else
 					{
-						var uriExec = sformat("{1}/ibx/testing/mike_k/ace_editor_tabs/wf_ace_editor.jsp?rootFolderPath={2}&folderPath={3}&itemName={4}",			
+						//var uriExec = sformat("{1}/ibx/testing/mike_k/ace_editor_tabs/wf_ace_editor.jsp?rootFolderPath={2}&folderPath={3}&itemName={4}",
+						var uriExec = sformat("{1}/TED?rootFolderPath={2}&folderPath={3}&itemName={4}",								
 							applicationContext,	encodeURIComponent(encodeURIComponent("IBFS:/WFC/Repository")), encodeURIComponent(encodeURIComponent("IBFS:/WFC/Repository/HOME-958")), encodeURIComponent(encodeURIComponent("ace1.htm")));	
 						editorWindow = window.open(uriExec, "_blank", "location=no,status=no,toolbar=no,titlebar=no,width=1200,height=800");
 					}
@@ -182,7 +190,8 @@ page import="org.owasp.esapi.*,
 					}
 					else
 					{
-						var uriExec = sformat("{1}/ibx/testing/mike_k/ace_editor_tabs/wf_ace_editor.jsp?rootFolderPath={2}&folderPath={3}&itemName={4}",			
+						//var uriExec = sformat("{1}/ibx/testing/mike_k/ace_editor_tabs/wf_ace_editor.jsp?rootFolderPath={2}&folderPath={3}&itemName={4}",
+						var uriExec = sformat("{1}/TED?rootFolderPath={2}&folderPath={3}&itemName={4}",								
 							applicationContext,	encodeURIComponent(encodeURIComponent("IBFS:/WFC/Repository")), encodeURIComponent(encodeURIComponent("IBFS:/WFC/Repository/HOME-958")), encodeURIComponent(encodeURIComponent("ace_masterfile_test.mas")));	
 						editorWindow = window.open(uriExec, "_blank", "location=no,status=no,toolbar=no,titlebar=no,width=1200,height=800");
 					}
@@ -197,7 +206,8 @@ page import="org.owasp.esapi.*,
 					}
 					else
 					{
-						var uriExec = sformat("{1}/ibx/testing/mike_k/ace_editor_tabs/wf_ace_editor.jsp?rootFolderPath={2}&folderPath={3}&itemName={4}",			
+						//var uriExec = sformat("{1}/ibx/testing/mike_k/ace_editor_tabs/wf_ace_editor.jsp?rootFolderPath={2}&folderPath={3}&itemName={4}",
+						var uriExec = sformat("{1}/TED?rootFolderPath={2}&folderPath={3}&itemName={4}",								
 							applicationContext,	encodeURIComponent(encodeURIComponent("IBFS:/WFC/Repository")), encodeURIComponent(encodeURIComponent("IBFS:/WFC/Repository/HOME-958")), encodeURIComponent(encodeURIComponent("text_1.txt")));	
 						editorWindow = window.open(uriExec, "_blank", "location=no,status=no,toolbar=no,titlebar=no,width=1200,height=800");
 					}
