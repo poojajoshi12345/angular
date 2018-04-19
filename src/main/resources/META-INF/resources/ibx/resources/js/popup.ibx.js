@@ -87,12 +87,21 @@ $.widget("ibi.ibxPopup", $.ibi.ibxWidget,
 	},
 	open:function(openInfo)
 	{
-		if(!this.isOpen() && !this.isClosing() && this._trigger("beforeopen", null, openInfo))
+		//[IBX-121][PD-839]trying to open the dialog when closing...this will cause an open from the close, when complete.
+		if(this.isClosing())
+		{
+			this._openFromClose = true;
+			return;
+		}
+
+		if(!this.isOpen() && this._trigger("beforeopen", null, openInfo))
 		{
 			//we are fully open...no longer interested in transition events.
 			this.element.on("transitionend", function(e)
 			{
+				//we are now fully open.
 				this.element.removeClass("pop-opening").off("transitionend");
+				this._openFromClose = false;
 
 				//auto close the dialog after the specified time.
 				if(options.closeOnTimer >= 0)
@@ -132,7 +141,7 @@ $.widget("ibi.ibxPopup", $.ibi.ibxWidget,
 	},
 	close:function(closeInfo)
 	{
-		if(this.isOpen() && this._trigger("beforeclose", null, closeInfo))
+		if(!this.isOpening() && this._trigger("beforeclose", null, closeInfo))
 		{
 			//we are fully closed...no longer interested in transition events.
 			this.element.on("transitionend", function(e)
@@ -149,6 +158,11 @@ $.widget("ibi.ibxPopup", $.ibi.ibxWidget,
 					this.element.appendTo(parent).css({top:"", left:""});
 					this.element.removeClass("pop-closing").off("transitionend");
 				}
+
+				//user tried to open popup while it was closing...open it now that it's fully closed.
+				if(this._openFromClose)
+					this.open();
+
 			}.bind(this));
 
 			//[IBX-87] Don't refocus if close is from a mouse event...let browser focus wherever was clicked on.
