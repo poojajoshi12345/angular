@@ -198,7 +198,7 @@ $.widget("ibi.ibxTabPane", $.ibi.ibxFlexBox,
 		else
 		{
 			element = $(element);
-			if (element.length > 0 && element.data("ibiIbxTabPage"))
+			if (element.length > 0 && element.hasClass("ibx-tab-page"))
 				this._group.ibxWidget("selected", element.ibxWidget("button"));
 			return this.element;
 		}
