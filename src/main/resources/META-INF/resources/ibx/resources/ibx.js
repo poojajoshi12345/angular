@@ -84,6 +84,13 @@ function ibx()
 			"<script type='text/javascript' src='" + ibx._path + "./js/util.ibx.js'></script>",
 			"<script type='text/javascript' src='" + ibx._path + "./js/preload.ibx.js'></script>"
 		];
+
+		//[IBX-122] don't load jQuery/jQueryUI if alread loaded
+		if(window.jQuery)
+			scripts[1] = "";
+		if(window.jQuery && window.jQuery.ui)
+			scripts[2] = "";
+
 		document.open();
 		document.write(scripts.join(""));
 		document.close();
