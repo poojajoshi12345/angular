@@ -420,7 +420,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 		ctxMenu = ctxEvent.result || ctxEvent.menu || $(this.options.ctxMenu);
 		if(ctxMenu.length)
 		{
-			ctxMenu.ibxWidget("option", "position", {my:"left top", at:"", collision:"flipfit", of:e});
+			ctxMenu.ibxWidget("option", {"ctxWidget":this.element[0], "position":{my:"left top", at:"", collision:"flipfit", of:e}});
 			ctxMenu.ibxWidget("open");
 			e.stopPropagation();
 			e.preventDefault();
@@ -618,7 +618,7 @@ $.ibi.ibxWidget.isNavKey = function(keyCode)
 		{
 			this._onDragMouseEventBound = this._onDragMouseEvent.bind(this);
 			this._onDragKeyEventBound = this._onDragKeyEvent.bind(this); 
-			this.element.on("mousedown dragover drop", this._onDragMouseEventBound);
+			this.element.on("mousedown", this._onDragMouseEventBound);
 			this.element.on("keydown", this._onDragKeyEventBound);
 			this.element.on("dragover drop", this._onNativeDragEvent.bind(this))
 			this._createOrig.apply(this, arguments);
