@@ -16,13 +16,12 @@
 
 .ibx-popup
 {
-	pointer-events:all;
-	position:relative;
-	display:inline-block;
-	z-index:1000000;
 	position:absolute;
+	display:inline-block;
 	top:0px;
 	left:0px;
+	z-index:1000000;
+	pointer-events:all;
 	background-color:white;
 	box-shadow:0 0 10px 0 #5e5e5e;
 	border-radius:5px;
