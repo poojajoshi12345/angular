@@ -345,7 +345,7 @@
 			else
 			{
 				// show hide items in the dialog
-				var newString = searchString.startsWith("*") ? searchString.substr(1) : searchString;
+				var newString = searchString.indexOf("*") == 0 ? searchString.substr(1) : searchString;
 				var regx = new RegExp(newString, "gi");
 				var items = $(".item-user-group");
 				items.each(function(text, regx, idx, el)
