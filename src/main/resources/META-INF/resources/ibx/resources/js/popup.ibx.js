@@ -141,7 +141,7 @@ $.widget("ibi.ibxPopup", $.ibi.ibxWidget,
 	},
 	close:function(closeInfo)
 	{
-		if(!this.isOpening() && this._trigger("beforeclose", null, closeInfo))
+		if(this.isOpen() && !this.isOpening() && this._trigger("beforeclose", null, closeInfo))
 		{
 			//we are fully closed...no longer interested in transition events.
 			this.element.on("transitionend", function(e)
