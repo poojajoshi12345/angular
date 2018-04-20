@@ -12,21 +12,46 @@
 		<script type="text/javascript">
 			ibx(function(e)
 			{
-				$("#cmdTest").on("ibx_triggered", function(e)
+				function MiddleTierCallToGetProperties(itemID)
 				{
-					var cont = $(".container");
-					var el = cont[0];
-					var metrics = cont.metrics();
-					var style = window.getComputedStyle(el);
-					console.log("jqwidth", cont.width(), "width", parseFloat(style.width), "offsetWidth", el.offsetWidth, metrics);
-				});
-
-				var container = $(".container").ibxVSortable();
-				for(var i = 0; i < 20; ++i)
-				{
-					var item = $("<div>").ibxLabel({text:"Item " + i, "class":"item", "glyph":"", "glyphClasses":"fa fa-level-down"}).addClass("item-" + i);
-					container.append(item);
+					var fdmPropsItem1 =
+					{
+						"demo_cmdBar":{"id": "demo_cmdBar","enabled": true,"isVisible": true,"guiType": -1,"value": "true","label": "demo_cmdBar","isEnabled": true,"editable": false,"tooltip": "demo_cmdBar_tooltip" },
+						"demo_cmdArea":{ "id": "demo_cmdArea","enabled": true,"isVisible": true,"guiType": -1,"value": "false","label": "demo_cmdArea","isEnabled": true,"editable": false,"tooltip": "demo_cmdArea_tooltip" },
+						"demo_cmdHorizontal":{ "id": "demo_cmdHorizontal","enabled": true,"isVisible": true,"guiType": -1,"value": "false","label": "demo_cmdHorizontal","isEnabled": true,"editable": false,"tooltip": "demo_cmdHorizontal_tooltip" },
+						"demo_cmdAlert1":{ "id": "demo_cmdAlert1","enabled": true,"isVisible": true,"guiType": -1,"value": "DO_NOTHING","label": "demo_cmdAlert1","isEnabled": true,"editable": false,"tooltip": "demo_cmdAlert1_tooltip" },
+					};
+					var fdmPropsItem2 =
+					{
+						"demo_cmdLine":{ "id": "demo_cmdLine","enabled": true,"isVisible": true,"guiType": -1,"value": "false","label": "demo_cmdLine","isEnabled": true,"editable": false,"tooltip": "demo_cmdLine_tooltip" },
+						"demo_cmdVertical":{ "id": "demo_cmdVertical","enabled": true,"isVisible": true,"guiType": -1,"value": "true","label": "demo_cmdVertical","isEnabled": true,"editable": false,"tooltip": "demo_cmdVertical_tooltip" },
+						"demo_cmdInvisible":{ "id": "demo_cmdInvisible","enabled": true,"isVisible": false,"guiType": -1,"label": "demo_cmdInvisible","isEnabled": true,"editable": false,"tooltip": "demo_cmdInvisible_tooltip" },
+						"demo_cmdAlert2":{ "id": "demo_cmdAlert2","enabled": true,"isVisible": true,"guiType": -1,"value": "DO_NOTHING","label": "demo_cmdAlert2","isEnabled": true,"editable": false,"tooltip": "demo_cmdAlert2_tooltip" }
+					};
+					return (itemID == "item1") ? fdmPropsItem1 : fdmPropsItem2;
 				}
+
+				function UpdateUI(id)
+				{
+					var props = MiddleTierCallToGetProperties(id);
+					var cmds = $.ibi.ibxCommand.cmds;
+					for(var key in cmds)
+					{
+						var cmd = cmds[key];
+						var cmdId = cmd.ibxWidget("option", "id");
+						var disable = props[cmdId] ? false : true;
+						cmd.ibxWidget("option", "disabled", disable);
+						var uiControls = $(sformat("[data-ibx-command={1}]", cmdId));
+						disable ? uiControls.hide() : uiControls.show();
+					}
+				}
+
+				$(".item").on("ibx_widgetfocus", function(e)
+				{
+					var item = $(e.target);
+					var itemId = item.data("fdmId");
+					UpdateUI(itemId);
+				});
 			}, true);
 		</script>
 		<style type="text/css">
@@ -42,41 +67,56 @@
 				height:100%;
 				box-sizing:border-box;
 			}
-
-			.scroll-parent
+			.tbar
 			{
-				position:absolute;
-				left:20px;
-				top:20px;
-				width:300px;
-				height:200px;
-				border:5px solid blue;
-				overflow:auto;
-			}
-			.container
-			{
-				overflow:auto;
-				flex:0 0 auto;
-				border:5px solid lime;
+				width:100%;
 				box-sizing:border-box;
+				margin:10px;
 			}
 			.item
 			{
-				flex:1 1 auto;
-				xwidth:100px;
-				font-size:10px;
+				width:200px;
+				height:200px;
 				margin:10px;
-				padding:10px;
 				background-color:thistle;
-				border:1px solid #888;
-				xbox-sizing:border-box;
+				border:2px solid black;
 			}
 		</style>
 	</head>
 	<body class="ibx-root">
-		<div id="cmdTest" data-ibx-type="ibxCommand" data-ibxp-id="cmdTest" data-ibxp-shortcut="CTRL+C"></div>
-		<div class="scroll-parent" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
-			<div class="container" data-ibx-type="ibxVBox" data-ibxp-align="stretch"></div>
+		<div class="main-box" data-ibx-type="ibxHBox" data-ibxp-align="center" data-ibxp-justify="center" data-ibxp-wrap="true">
+			<div class="tbar" data-ibx-type="ibxHBox" data-ibxp-align="center" data-ibxp-justify="center">
+				<div class="xxx" data-ibx-type="ibxButton" data-ibxp-command="demo_cmdBar">demo_cmdBar</div>
+				<div data-ibx-type="ibxButton" data-ibxp-command="demo_cmdLine">demo_cmdLine</div>
+				<div data-ibx-type="ibxButton" data-ibxp-command="demo_cmdArea">demo_cmdArea</div>
+				<div data-ibx-type="ibxButton" data-ibxp-command="demo_cmdVertical">demo_cmdVertical</div>
+				<div data-ibx-type="ibxButton" data-ibxp-command="demo_cmdHorizontal">demo_cmdHorizontal</div>
+				<div data-ibx-type="ibxButton" data-ibxp-command="demo_cmdInvisible">demo_cmdInvisible</div>
+				<div data-ibx-type="ibxButton" data-ibxp-command="demo_cmdAlert1">demo_cmdAlert1</div>
+				<div data-ibx-type="ibxButton" data-ibxp-command="demo_cmdAlert2">demo_cmdAlert2</div>
+			</div>
+			<div tabindex="0" class="item item-1" data-ibx-type="ibxVBox" data-ibxp-align="center" data-ibxp-justify="center" data-ibxp-ctx-menu=".ctx-menu" data-fdm-id="item1">Item 1</div>
+			<div tabIndex="0" class="item item-2" data-ibx-type="ibxVBox" data-ibxp-align="center" data-ibxp-justify="center" data-ibxp-ctx-menu=".ctx-menu" data-fdm-id="item2">Item 2</div>
 		</div>
+
+		<div class="ctx-menu" data-ibx-type="ibxMenu">
+			<div class="demo_cmdBar" data-ibx-type="ibxMenuItem" data-ibxp-command="demo_cmdBar">demo_cmdBar</div>
+			<div class="demo_cmdLine" data-ibx-type="ibxMenuItem" data-ibxp-command="demo_cmdLine">demo_cmdLine</div>
+			<div class="demo_cmdArea" data-ibx-type="ibxMenuItem" data-ibxp-command="demo_cmdArea">demo_cmdArea</div>
+			<div class="demo_cmdVertical" data-ibx-type="ibxMenuItem" data-ibxp-command="demo_cmdVertical">demo_cmdVertical</div>
+			<div class="demo_cmdHorizontal" data-ibx-type="ibxMenuItem" data-ibxp-command="demo_cmdHorizontal">demo_cmdHorizontal</div>
+			<div class="demo_cmdInvisible" data-ibx-type="ibxMenuItem" data-ibxp-command="demo_cmdInvisible">demo_cmdInvisible</div>
+			<div class="demo_cmdAlert1" data-ibx-type="ibxMenuItem" data-ibxp-command="demo_cmdAlert1">demo_cmdAlert1</div>
+			<div class="demo_cmdAlert2" data-ibx-type="ibxMenuItem" data-ibxp-command="demo_cmdAlert2">demo_cmdAlert2</div>
+		</div>
+
+		<div data-ibx-type="ibxCommand" data-ibxp-id="demo_cmdBar"></div>
+		<div data-ibx-type="ibxCommand" data-ibxp-id="demo_cmdLine"></div>
+		<div data-ibx-type="ibxCommand" data-ibxp-id="demo_cmdArea"></div>
+		<div data-ibx-type="ibxCommand" data-ibxp-id="demo_cmdVertical"></div>
+		<div data-ibx-type="ibxCommand" data-ibxp-id="demo_cmdHorizontal"></div>
+		<div data-ibx-type="ibxCommand" data-ibxp-id="demo_cmdInvisible"></div>
+		<div data-ibx-type="ibxCommand" data-ibxp-id="demo_cmdAlert1"></div>
+		<div data-ibx-type="ibxCommand" data-ibxp-id="demo_cmdAlert2"></div>
 	</body>
 </html>
