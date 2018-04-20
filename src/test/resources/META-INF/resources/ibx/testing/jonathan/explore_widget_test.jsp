@@ -90,10 +90,10 @@
 		</style>
 	</head>	
 	<body class="ibx-root" oncontextmenu="return false;">
-	<div data-ibx-type="IbxVBox" data-ibxp-align="stretch">	
-	<div class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="stretch" style="width:800px; height:500px; overflow-y:auto; overflow-x: hidden;">
+	<div data-ibx-type="ibxVBox" data-ibxp-align="stretch">	
+	<div class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="stretch" style="top: 10px; left: 10px; width:800px; height:500px; overflow-y:auto; overflow-x: hidden;border: 1px solid #ccc;">
 	</div>	
-	<div class="main-box2" data-ibx-type="ibxVBox" data-ibxp-align="stretch" style="position:relative; top: 520px; width:800px; height:500px; overflow-y:auto; overflow-x: hidden;">
+	<div class="main-box2" data-ibx-type="ibxVBox" data-ibxp-align="stretch" style="position:relative; top: 600px; left: 10px; width:800px; height:500px; overflow-y:auto; overflow-x: hidden;border: 1px solid #ccc;">
 	</div>
 	</div>	
 	</body>
