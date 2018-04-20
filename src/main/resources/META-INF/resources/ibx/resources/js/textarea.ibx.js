@@ -66,6 +66,20 @@ $.widget("ibi.ibxTextArea", $.ibi.ibxFlexBox,
 		if (key == "text" && this._textArea) // only do this after create
 			this._setValue(value, true);
 	},
+	scrollTop: function(scroll)
+	{
+		if(scroll === undefined)
+			return this._textArea.prop("scrollTop");
+		else
+			this._textArea.prop("scrollTop", scroll);
+	},
+	scrollLeft: function(scroll)
+	{
+		if(scroll === undefined)
+			return this._textArea.prop("scrollLeft");
+		else
+			this._textArea.prop("scrollLeft", scroll);
+	},
 	_setValue: function (value, bFormat)
 	{
 		this.options.text = bFormat && this.options.fnFormat ? this.options.fnFormat(value) : value;
