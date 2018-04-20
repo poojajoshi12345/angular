@@ -172,17 +172,24 @@
 						break;
 				}
 
+				this.MatchRows=500; 
+				this.searchRows = 500; 
+				this.searchIndex = 0;
+				this.IsScroll = false;
+
 				$.ajax({
 				    type: "POST",
 					contentType: "application/x-www-form-urlencoded; charset=UTF-8",
 					url: url,
-					data: {"searchPath":"*" + searchString + "*","searchRows": 100,"searchIndex": 0},		
+					data: {"searchPath":"*" + searchString + "*","searchRows": this.searchRows ,"searchIndex": this.searchIndex},		
 					dataType: "json",
 					context: this,
 				    success: function(json) 
 				    {
 				    	if (json.length > 0)		    		
-				    	{				    	
+				    	{
+					    	this.searchIndex += this.searchRows;
+
 					    	this.currentSearchArray = json;
 							// Show the popup window
 							this.searchDialog.ibxWidget("open").position({my:"left top", at:"left-5px bottom+6px", of: form.find(".share-with-btn-search")});
@@ -231,70 +238,71 @@
 							$(".share-with-txt-search").focus();
 	
 					    	this._stopProgress();
-
+					    	
+					    	this.lastScrollTop = 0;
 					    	$('#shareWithDropdown').on("scroll", function (event) 
 					    	{
-								$.ajax({
-								    type: "POST",
-									contentType: "application/x-www-form-urlencoded; charset=UTF-8",
-									url: url,
-									data: {"searchPath":"*" + this.basesearchString + "*","searchRows": 100,"searchIndex": 100},		
-									dataType: "json",
-									context: this,
-								    success: function(json) 
-								    {
-										var itemList = $('#shareWithDropdown');						
-										for (var i = 0; i < json.length; i++)
-								    	{			    		
-											var userdata = json[i]; // init
-					
-											var item = new userGroupItem(json[i],true);
-											
-											if (json[i].type == "u")
-											{
-												if (this.currentUserArrayStr.indexOf("," + json[i].name + ",") == -1)
+					    		 var st = $(event.currentTarget).scrollTop();
+					    		 if (st > this.lastScrollTop)
+					    		 { // down scroll code
+					    			this.lastScrollTop = st;
+
+									$.ajax({
+									    type: "POST",
+										contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+										url: url,
+										data: {"searchPath":"*" + this.basesearchString + "*","searchRows": this.searchRows,"searchIndex": this.searchIndex},		
+										dataType: "json",
+										context: this,
+									    success: function(json) 
+									    {
+									    	this.searchIndex += this.searchRows;
+	
+											var itemList = $('#shareWithDropdown');						
+											for (var i = 0; i < json.length; i++)
+									    	{			    		
+												var userdata = json[i]; // init
+						
+												var item = new userGroupItem(json[i],true);
+												
+												if (json[i].type == "u")
+												{
+													if (this.currentUserArrayStr.indexOf("," + json[i].name + ",") == -1)
+														{
+															item.element.addClass("share-with-item");
+															userdata.disabled = false;						
+														}
+														else
+														{
+															item.element.addClass("share-with-item share-with-item-disabled");
+															userdata.disabled = true;						
+														}						
+												}
+												else
+												{
+													if (this.currentGroupArrayStr.indexOf("," + json[i].name + ",") == -1)
 													{
 														item.element.addClass("share-with-item");
-														userdata.disabled = false;						
+														userdata.disabled = false;
 													}
 													else
 													{
 														item.element.addClass("share-with-item share-with-item-disabled");
-														userdata.disabled = true;						
-													}						
-											}
-											else
-											{
-												if (this.currentGroupArrayStr.indexOf("," + json[i].name + ",") == -1)
-												{
-													item.element.addClass("share-with-item");
-													userdata.disabled = false;
+														userdata.disabled = true;
+													}
 												}
-												else
-												{
-													item.element.addClass("share-with-item share-with-item-disabled");
-													userdata.disabled = true;
-												}
-											}
-											
-											item.element.data("userData",userdata);
-											itemList.append(item.element);
-								    	}								    	
-								    }
-								});
-/*					    	    var lastDiv = document.querySelector(".item-user-group > div:last-child");
-					    	    var maindiv = document.querySelector(".share-with-dropdown");
-					    	    var lastDivOffset = lastDiv.offsetTop + lastDiv.clientHeight;
-					    	    var pageOffset = maindiv.offsetTop + maindiv.clientHeight;   
-					    	    if (pageOffset > lastDivOffset - 10) 
-					            if ($('#shareWithDropdown').height() <= $('#shareWithDropdown').scrollTop())
-					            {
-					                alert('end of page');
-					            }
-					    		/*
-							     var newDiv = document.createElement("div");
-							        newDiv.innerHTML = "my awesome new div";
-							        $('#shareWithDropdown').append(newDiv);*/
+												
+												item.element.data("userData",userdata);
+												itemList.append(item.element);
+									    	}								    	
+									    }
+									});
+					    		} // downscroll code
+			/*		    		else
+					    		{ // upscroll code
+					    			// Do nothing for now
+					    		}
+			*/	    			 
 					    	}.bind(this));
 
 							$(this.searchDialog).find(".share-with-item").on( "click", function( e ) 
@@ -345,7 +353,19 @@
 			else
 			{
 				// show hide items in the dialog
-				var newString = searchString.indexOf("*") == 0 ? searchString.substr(1) : searchString;
+				var removedDuplicateStars = searchString.replace(/\*\**/g,"*");
+				var dotStar = removedDuplicateStars.replace(/\*/g,".*");
+				var newString1 = dotStar.indexOf(".*") == 0 ? dotStar.substr(2) : dotStar;
+				var newString2 = newString1.replace(/\\/g,"\\\\");
+				var newString3  = newString2.replace(/\(/g,"\\(");
+				var newString4  = newString3.replace(/\)/g,"\\)");
+				var newString5  = newString4.replace(/\[/g,"\\[");
+				var newString6  = newString5.replace(/\]/g,"\\]");
+				var newString7  = newString6.replace(/\$/g,"\\$");
+				var newString8  = newString7.replace(/\|/g,"\\|");
+				var newString9  = newString8.replace(/\+/g,"\\+");
+				var newString   = newString9.replace(/\?/g,"\\?");
+				
 				var regx = new RegExp(newString, "gi");
 				var items = $(".item-user-group");
 				items.each(function(text, regx, idx, el)
