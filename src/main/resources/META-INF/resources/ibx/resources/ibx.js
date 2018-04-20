@@ -161,7 +161,6 @@ function ibx()
 						
 							ibx._loaded = true;
 							ibx._isLoading = !ibx._loaded;
-							ibx._loadPromise.then(fn);
 							ibx._loadPromise.then(function()
 							{
 								ibx._setAccessibility(ibx.isAccessible);//turn on/off default accessibility
@@ -171,6 +170,7 @@ function ibx()
 									ibx.showRootNodes(true);
 									
 							});
+							ibx._loadPromise.then(fn);
 							ibx._loadPromise.resolve(ibx);//let everyone know the system is booted.
 							$(window).dispatchEvent("ibx_ibxevent", {"hint":"apploaded", "ibx":ibx});
 						});
