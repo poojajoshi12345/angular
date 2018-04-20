@@ -15,7 +15,7 @@ $.widget("ibi.ibxMenu", $.ibi.ibxPopup,
 		"modal":false,
 		"destroyOnClose":false,
 		"multiSelect":false, //user can select multiple items without closing menu (checkboxes, etc.)
-		"effect":"fade",
+		"effect":"menu",
 		"aria":{"role":"menu"}
 	},
 	_widgetClass: "ibx-menu",
@@ -93,6 +93,7 @@ $.widget("ibi.ibxMenu", $.ibi.ibxPopup,
 		this._super();
 	}
 });
+$.ibi.ibxPopup.statics.effect.menu = "pop-effect-menu";//NOT CURRENTLY USED - add custom menu display effect
 
 /******************************************************************************
 	IbxMenuItem

@@ -30,6 +30,18 @@
 	font-size:1em;
 }
 
+/*special menu fade - just shorter than normal fade*/
+.ibx-menu.pop-effect-menu
+{
+	opacity:1;
+	transition:opacity .1s;
+}
+.ibx-menu.pop-effect-menu.pop-closed
+{
+	opacity:0;
+}
+
+
 .ibx-menu-box
 {
 }
