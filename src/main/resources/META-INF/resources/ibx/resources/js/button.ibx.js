@@ -7,6 +7,7 @@ $.widget("ibi.ibxButton", $.ibi.ibxLabel,
 	options:
 	{
 		"iconPosition": "left",
+		"justify":"center",
 		"aria":{"role":"button"}
 	},
 	_widgetClass: "ibx-button",
