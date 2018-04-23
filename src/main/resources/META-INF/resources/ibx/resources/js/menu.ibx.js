@@ -349,6 +349,14 @@ $.widget("ibi.ibxRadioMenuItem", $.ibi.ibxCheckMenuItem,
 		this._super();
 		$.ibi.ibxRadioGroup.addControl(this.options.group, this.element[0]);
 	},
+	_onMenuItemClick:function(e)
+	{
+		/*call menu item click if radio button already selected*/	
+		if(this.options.disabled || this.options.group && this.options.checked)
+			$.ibi.ibxMenuItem.prototype._onMenuItemClick.call(this, e);
+		else
+			this._super(e);
+	},
 	getValue:$.noop,
 	_refresh:function()
 	{
