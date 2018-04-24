@@ -51,7 +51,7 @@
 				{
 						debugger;					
 				});
-				
+			
 				var explore2 = ibx.resourceMgr.getResource('.explore_widget_resources', true);					
 				explore2.ibxWidget({ctxPath: "IBFS:/WFC/Repository/Retail_Samples"});
 				$(".main-box2").append(explore2);	
@@ -73,8 +73,8 @@
 						debugger;					
 				});
 				
-				
-			}, ["../../ibxtools/explore/explore_widget.xml"], true);
+			
+			}, ["../../ibxtools/explore/explore_open_dialog.xml"], true);
 		</script>
 		
 		<style type="text/css">
