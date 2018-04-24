@@ -173,9 +173,9 @@
 				}
 
 				this.MatchRows=500; 
-				this.searchRows = 500; 
+				this.searchRows = 20; 
 				this.searchIndex = 0;
-				this.IsScroll = false;
+				this.IsScroll = true;
 
 				$.ajax({
 				    type: "POST",
@@ -200,7 +200,6 @@
 							for (var i = 0; i < json.length; i++)
 					    	{			    		
 								var userdata = json[i]; // init
-		
 								var item = new userGroupItem(json[i],true);
 								
 								if (json[i].type == "u")
@@ -240,8 +239,12 @@
 					    	this._stopProgress();
 					    	
 					    	this.lastScrollTop = 0;
+					    		  
 					    	$('#shareWithDropdown').on("scroll", function (event) 
 					    	{
+					    		 if (!this.IsScroll) // stop when you reach the total matches of the string
+					    			return;
+					    		 
 					    		 var st = $(event.currentTarget).scrollTop();
 					    		 if (st > this.lastScrollTop)
 					    		 { // down scroll code
@@ -257,10 +260,13 @@
 									    success: function(json) 
 									    {
 									    	this.searchIndex += this.searchRows;
-	
+									    	
+									    	if (json.length < this.searchRows)
+									    		this.IsScroll = false;
+									    	
 											var itemList = $('#shareWithDropdown');						
 											for (var i = 0; i < json.length; i++)
-									    	{			    		
+									    	{	
 												var userdata = json[i]; // init
 						
 												var item = new userGroupItem(json[i],true);
@@ -268,15 +274,15 @@
 												if (json[i].type == "u")
 												{
 													if (this.currentUserArrayStr.indexOf("," + json[i].name + ",") == -1)
-														{
-															item.element.addClass("share-with-item");
-															userdata.disabled = false;						
-														}
-														else
-														{
-															item.element.addClass("share-with-item share-with-item-disabled");
-															userdata.disabled = true;						
-														}						
+													{
+														item.element.addClass("share-with-item");
+														userdata.disabled = false;						
+													}
+													else
+													{
+														item.element.addClass("share-with-item share-with-item-disabled");
+														userdata.disabled = true;						
+													}						
 												}
 												else
 												{
@@ -291,21 +297,32 @@
 														userdata.disabled = true;
 													}
 												}
+/*
+												var newString  = this._escapeRegx();
+												var regx = new RegExp(newString, "gi");
 												
-												item.element.data("userData",userdata);
+												var items = $(".item-user-group");
+												items.each(function(text, regx, idx, el)
+												{
+													var item = el._userGroupItem;
+													if(!item)
+														return;
+													var passed = regx.test(item.description);
+													passed = passed || regx.test(item.name); 
+													el.style.display = passed ? "" : "none";
+												}.bind(this, newString, regx));
+*/
+												item.element.on( "click", function( e ) { this._onItemClick(userdata); }.bind(this));
 												itemList.append(item.element);
-									    	}								    	
+									    	}
 									    }
 									});
-					    		} // downscroll code
-			/*		    		else
-					    		{ // upscroll code
-					    			// Do nothing for now
-					    		}
-			*/	    			 
+					    		} // down scroll code	    			 
 					    	}.bind(this));
 
-							$(this.searchDialog).find(".share-with-item").on( "click", function( e ) 
+							$(this.searchDialog).find(".share-with-item").on( "click", function( e ) { this._onItemClick($(e.currentTarget).data("userData")); }.bind(this));	
+							
+							$(this.searchDialog).find(".share-with-item2").on( "click", function( e ) 
 							{
 								var userdata = $(e.currentTarget).data("userData");
 	
@@ -344,28 +361,17 @@
 						//	this._resetUserGroup();
 						}
 				    },
-			        error: function() 
+			        error: function(jqXHR,textStatus,errorThrown ) 
 			        {   
 			        	alert("usergrouplist failed");
+			        	this._stopProgress();
 			        }
 				});
 			}
 			else
 			{
 				// show hide items in the dialog
-				var removedDuplicateStars = searchString.replace(/\*\**/g,"*");
-				var dotStar = removedDuplicateStars.replace(/\*/g,".*");
-				var newString1 = dotStar.indexOf(".*") == 0 ? dotStar.substr(2) : dotStar;
-				var newString2 = newString1.replace(/\\/g,"\\\\");
-				var newString3  = newString2.replace(/\(/g,"\\(");
-				var newString4  = newString3.replace(/\)/g,"\\)");
-				var newString5  = newString4.replace(/\[/g,"\\[");
-				var newString6  = newString5.replace(/\]/g,"\\]");
-				var newString7  = newString6.replace(/\$/g,"\\$");
-				var newString8  = newString7.replace(/\|/g,"\\|");
-				var newString9  = newString8.replace(/\+/g,"\\+");
-				var newString   = newString9.replace(/\?/g,"\\?");
-				
+				var newString  = this._escapeRegx();
 				var regx = new RegExp(newString, "gi");
 				var items = $(".item-user-group");
 				items.each(function(text, regx, idx, el)
@@ -381,6 +387,50 @@
 
 		},
 
+		_onItemClick: function (userdata)
+		{			
+			if (userdata.disabled) // user click on disable item
+				return;
+					
+			$(form).find(".ibx-dialog-ok-button").ibxWidget('option','disabled', false);
+
+			if (userdata.type == "g")
+				this.currentGroupArrayStr += userdata.name + ",";
+			else
+				this.currentUserArrayStr += userdata.name + ",";
+			
+			this.isDropdownOpen = false;
+			
+			this.shareWithlist.push({
+				name: userdata.name,
+				description: userdata.description,
+				email: userdata.email,
+				type: userdata.type
+			});
+			
+			this.shareWithlist.sort(function (a, b) {
+				return (a.description < b.description ? -1 : (a.description > b.description ? 1 : 0));
+			});
+			
+			this._ShareWithList(this.showOption); // Show current Group and Users list shared
+			this.searchDialog.ibxWidget("close");
+			this._resetUserGroup();
+		},
+		
+		_escapeRegx: function ()
+		{
+			var searchString = form.find(".share-with-txt-search").ibxWidget("option", "text");
+			var removedDuplicateStars = searchString.replace(/\*\**/g,"*");
+			var dotStar = removedDuplicateStars.replace(/\*/g,".*");
+			var newString = dotStar.indexOf(".*") == 0 ? dotStar.substr(2) : dotStar;
+			newString = newString.replace(/\\/g,"\\\\");
+			newString  = newString.replace(/\(/g,"\\(");
+			newString  = newString.replace(/\)/g,"\\)");
+			newString  = newString.replace(/\[/g,"\\[");
+			newString  = newString.replace(/\]/g,"\\]");
+			return newString;
+		},
+		
 		_create: function ()
 		{
 			this._super();
