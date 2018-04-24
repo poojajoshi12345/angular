@@ -70,7 +70,7 @@ $.widget("ibi.ibxTreeNode", $.ibi.ibxVBox,
 		this.element.toggleClass("ibx-tree-node-expanded", options.expanded);
 
 		var glyph = options.expanded ? "remove" : "add";
-		this.btnExpand.ibxWidget("option",{"glyph":glyph, "glyphClasses":"material-icons"}).css("display", options.hasChildren ? "inline-block" : "none");
+		this.btnExpand.ibxWidget("option",{"glyph":glyph, "glyphClasses":"material-icons"}).css("visibility", options.hasChildren ? "visible" : "hidden");
 
 	}
 });
