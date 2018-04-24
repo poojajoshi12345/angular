@@ -1,3 +1,41 @@
 /*Copyright 1996-2016 Information Builders, Inc. All rights reserved.*/
 /* $Revision$: */
 
+.ibx-tree
+{
+	xfont-size:3em;
+	border:2px solid black;
+}
+
+.ibx-tree-node
+{
+	padding-top:.5em;
+}
+
+.ibx-tree-root-node
+{
+	margin:0px;
+}
+
+.ibx-tree-node-button
+{
+	margin:0px 2px 0px 2px;
+}
+
+.ibx-tree-node-button > .ibx-label-glyph
+{
+	font-weight:bold;
+	vertical-align:middle;
+}
+
+.ibx-tree-node-children
+{
+	flex:1 1 auto;
+	margin-left:1em;
+}
+
+.ibx-tree-node-collapsed
+{
+	display:none;
+}
+

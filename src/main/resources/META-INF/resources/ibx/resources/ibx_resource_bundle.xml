@@ -166,9 +166,9 @@ $Revision$:-->
 		<script-file src="./js/iframe.ibx.js"/>
 		<script-file src="./js/flexbox.ibx.js"/>
 		<script-file src="./js/grid.ibx.js"/>
-		<script-file src="./js/tree.ibx.js"/>
 		<script-file src="./js/splitter.ibx.js"/>
 		<script-file src="./js/label.ibx.js"/>
+		<script-file src="./js/tree.ibx.js"/>
 		<script-file src="./js/progress.ibx.js"/>
 		<script-file src="./js/text.ibx.js"/>
 		<script-file src="./js/textarea.ibx.js"/>
