@@ -55,14 +55,12 @@ $.widget("ibi.ibxTreeNode", $.ibi.ibxVBox,
 	{
 		var options = this.options;
 		this._super();
-		this.element.attr("tabindex", -1);
-
 		this.nodeLabel = $("<div tabindex='-1' class='ibx-tree-node-label'>").ibxLabel().appendTo(this.element);
 		options.labelOptions.text = options.labelOptions.text || this.element.textNodes().remove().text().replace(/^\s*|\s*$/g, "");
 
 		this.btnExpand = $("<div class='ibx-tree-node-button'>").ibxButtonSimple().prependTo(this.nodeLabel).on("click", this._toggleExpanded.bind(this));
 
-		this._childBox = $("<div tabindex='-1' class='ibx-tree-node-children'>").ibxVBox({"focusDefault":true}).appendTo(this.element);
+		this._childBox = $("<div class='ibx-tree-node-children'>").ibxVBox().appendTo(this.element);
 		var childNodes = this.element.children(".ibx-tree-node");
 		childNodes.appendTo(this._childBox);
 		options.hasChildren = !!childNodes.length;
