@@ -27,7 +27,7 @@ $.widget("ibi.ibxTree", $.ibi.ibxVBox,
 	},
 	navKeyChildren:function(selector)
 	{
-		return this.element.find(".ibx-tree-node-label:ibxFocusable(-1)");
+		return this.element.find(".tnode-label:ibxFocusable(-1)").filter(selector || "*");
 	},
 	_refresh:function()
 	{
@@ -41,8 +41,8 @@ $.widget("ibi.ibxTreeNode", $.ibi.ibxVBox,
 	options:
 	{
 		"labelOptions":{},
-		"buttonOptionsCollapsed":{"glyphClasses":"ibx-tree-node-btn-collapsed"},
-		"buttonOptionsExpanded":{"glyphClasses":"ibx-tree-node-btn-expanded"},
+		"btnCollapsed":"tnode-btn-collapsed",
+		"btnExpanded":"tnode-btn-expanded",
 		"hasChildren":false,
 		"expanded":false,
 		"aria":
@@ -55,12 +55,13 @@ $.widget("ibi.ibxTreeNode", $.ibi.ibxVBox,
 	{
 		var options = this.options;
 		this._super();
-		this.nodeLabel = $("<div tabindex='-1' class='ibx-tree-node-label'>").ibxLabel().on("dblclick", this._toggleExpanded.bind(this)).appendTo(this.element);
+		this.nodeLabel = $("<div tabindex='-1' class='tnode-label'>").ibxLabel().appendTo(this.element);
+		this.nodeLabel.on("dblclick", this._onNodeMouseEvent.bind(this)).on("keydown", this._onNodeKeyEvent.bind(this));
 		options.labelOptions.text = options.labelOptions.text || this.element.textNodes().remove().text().replace(/^\s*|\s*$/g, "");
 
-		this.btnExpand = $("<div class='ibx-tree-node-button'>").ibxButtonSimple().prependTo(this.nodeLabel).on("click", this._toggleExpanded.bind(this));
+		this.btnExpand = $("<div class='tnode-button'>").prependTo(this.nodeLabel).on("click", this._toggleExpanded.bind(this));
 
-		this._childBox = $("<div class='ibx-tree-node-children'>").ibxVBox().appendTo(this.element);
+		this._childBox = $("<div class='tnode-children'>").ibxVBox().appendTo(this.element);
 		var childNodes = this.element.children(".ibx-tree-node");
 		childNodes.appendTo(this._childBox);
 		options.hasChildren = !!childNodes.length;
@@ -69,20 +70,51 @@ $.widget("ibi.ibxTreeNode", $.ibi.ibxVBox,
 	{
 		this._super();
 	},
-	_toggleExpanded:function(e)
+	tree:function()
 	{
-		this.option("expanded", !this.options.expanded);
+		return this.element.closest(".ibx-tree");
+	},
+	parentNode:function()
+	{
+		return this.element.parents(".ibx-tree-node").first();
+	},
+	hasChildren:function()
+	{
+		return !!this._childBox.children(".ibx-tree-node").first();
+	},
+	_onNodeKeyEvent:function(e)
+	{
+		var options = this.options;
+		if(e.keyCode === $.ui.keyCode.RIGHT)
+		{
+			if(!options.expanded)
+				this._toggleExpanded(true);
+			else
+				this._childBox.children(":first-child").focus();
+		}
+		else
+		if(e.keyCode === $.ui.keyCode.LEFT)
+		{
+			if(options.expanded)
+				this._toggleExpanded(false);
+		}
+	},
+	_onNodeMouseEvent:function(e)
+	{
+		this._toggleExpanded();
+	},
+	_toggleExpanded:function(expand)
+	{
+		expand = (expand === undefined) ? !this.options.expanded : expand;
+		this.option("expanded", expand);
 	},
 	_refresh:function()
 	{
-		var options = this.options;
 		this._super();
-
+		var options = this.options;
 		this.nodeLabel.ibxWidget("option", options.labelOptions);
-		this.element.toggleClass("ibx-tree-node-has-children", options.hasChildren);
-		this.element.toggleClass("ibx-tree-node-expanded", options.expanded);
-		this.btnExpand.ibxWidget("option", options.expanded ? options.buttonOptionsExpanded : options.buttonOptionsCollapsed);
-		this.btnExpand.toggleClass("ibx-tree-node-btn-hidden", !options.hasChildren);
+		this.element.toggleClass("tnode-has-children", options.hasChildren).toggleClass("tnode-expanded", options.expanded);
+		this.btnExpand.toggleClass(options.btnCollapsed, options.hasChildren && !options.expanded).toggleClass(options.btnExpanded, options.hasChildren && options.expanded)
 	}
 });
 $.widget("ibi.ibxTreeRootNode", $.ibi.ibxTreeNode, {"_widgetClass":"ibx-tree-root-node"}); 
