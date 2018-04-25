@@ -31,7 +31,7 @@
 		</style>
 	</head>
 	<body class="ibx-root">
-		<div class="test-tree" data-ibx-type="ibxTree">
+		<div tabindex="0" class="test-tree" data-ibx-type="ibxTree">
 			<div data-ibx-type="ibxTreeRootNode" data-ibxp-expanded="true">Root Node
 				<div data-ibx-type="ibxTreeNode">Tree Item</div>
 				<div data-ibx-type="ibxTreeNode">Tree Item</div>

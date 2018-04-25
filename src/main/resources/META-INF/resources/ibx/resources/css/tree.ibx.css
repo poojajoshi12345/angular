@@ -15,6 +15,7 @@
 
 .ibx-tree-root-node
 {
+	padding:0px;
 	margin:0px;
 }
 
@@ -23,20 +24,34 @@
 	margin:0px 3px 0px 3px;
 }
 
-.ibx-tree-node-button > .ibx-label-glyph
+.ibx-tree-node-btn-hidden
 {
+	visibility:hidden;
+}
+
+.ibx-tree-node-btn-collapsed::before
+{
+	content:"\e145";
+	font-family:"Material Icons";
+	font-weight:bold;
+	width:1em;
+}
+.ibx-tree-node-btn-expanded::before
+{
+	content:"\e15b";
+	font-family:"Material Icons";
 	font-weight:bold;
 	width:1em;
 }
 
-.ibx-tree-node-children
+.ibx-tree-node > .ibx-tree-node-children
 {
 	flex:1 1 auto;
 	margin-left:.75em;
-}
-
-.ibx-tree-node-collapsed
-{
 	display:none;
 }
 
+.ibx-tree-node-expanded > .ibx-tree-node-children
+{
+	display:inline-block;
+}
