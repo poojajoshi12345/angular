@@ -435,6 +435,10 @@ $.widget("ibi.ibxWidget", $.Widget,
 		selector = selector || ":ibxNavFocusable";
 		return this.children(selector);
 	},
+	navKeyChildActive:function()
+	{
+		return this.navKeyChildren(".ibx-nav-key-item-active");
+	},
 	navKeyActive:function()
 	{
 		return this.element.hasClass("ibx-nav-key-root-active");
