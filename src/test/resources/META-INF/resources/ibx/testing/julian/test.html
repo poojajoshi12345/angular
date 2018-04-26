@@ -11,35 +11,68 @@
 		<script type="text/javascript" src="../../resources/ibx.js"></script>
 		<script type="text/javascript">
 			ibx(function(e)
-			{
-				var menu = $(".menu");
-				menu.on("ibx_close", function(e, origEvent)
+			{	
+				$.widget("ibi.iaWindow", $.ibi.ibxHBox, 
 				{
-					if($(origEvent.target).closest(".menu-button").length)
-						menu.ignoreClick = true;
-				});
-				$(".menu-button").on("click", function(e)
-				{
-					if(menu.ignoreClick)
+					options:
 					{
-						menu.ignoreClick = false;
-						return;
+						align:"stretch"
+					},
+					_widgetClass:"ia-window",
+					_create:function()
+					{
+						this._super();
+						this._metaTree = $("<div class='ia-meta-tree' style='flex:2 1 auto'>Meta Tree</div>").ibxLabel().on("dblclick", this._onMetaTreeDblClick.bind(this));
+						this._reportArea = $("<div class='ia-report-area' style='flex:8 1 auto'>Report Area</div>").ibxLabel();
+						this.element.append(this._metaTree, this._reportArea);
+					},
+					_destroy:function()
+					{
+						this._super();
+					},
+					_onMetaTreeDblClick:function(e)
+					{
+						this.element.dispatchEvent("META_DBL_CLICK", null, false);
+					},
+					refresh:function()
+					{
+						this._super();
+						var options = this.options;
 					}
-					menu.ibxMenu("isOpen") ? menu.ibxMenu("close") : menu.ibxMenu("open");
 				});
+				var ia = $("<div>").iaWindow();
+				ia.appendTo("body")
+
+
+				$(".ia-window").on("META_DBL_CLICK", function(e)
+				{
+					debugger;
+				});
+
 			}, true);
 		</script>
 		<style type="text/css">
+			.ia-window
+			{
+				position:absolute;
+				left:10px;
+				top:10px;
+				width:200px;
+				height:200px;
+				border:1px solid black;
+			}
+			.ia-meta-tree
+			{
+				flex:2 1 auto;
+				border:1px solid #ccc;
+			}
+			.ia-report-area
+			{
+				flex:8 1 auto;
+				border:1px solid #ccc;
+			}
 		</style>
 	</head>
 	<body class="ibx-root">
-		<div class="menu-button" data-ibx-type="ibxButton">Toggle Menu</div>
-		<div class="menu" data-ibx-type="ibxMenu">
-			<div data-ibx-type="ibxMenuItem">Menu Item</div>
-			<div data-ibx-type="ibxMenuItem">Menu Item</div>
-			<div data-ibx-type="ibxMenuItem">Menu Item</div>
-			<div data-ibx-type="ibxMenuItem">Menu Item</div>
-			<div data-ibx-type="ibxMenuItem">Menu Item</div>
-		</div>
 	</body>
 </html>
