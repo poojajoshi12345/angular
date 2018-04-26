@@ -20,10 +20,13 @@
 		<script type="text/javascript">
 			ibx(function()
 			{
-				//var tree = $(".test-tree");
-				//var treeNode = $("<div>").ibxTreeRootNode({"text":"root node"});
-				//tree.ibxWidget("add", treeNode);
+				$(".test-tree").on("ibx_before_expand ibx_expand ibx_before_collapse ibx_collapse", function(e)
+				{
+					console.log("tree", e.type, e.target);
+				})
 			}, true);
+
+
 		</script>
 
 		<style type="text/css">
