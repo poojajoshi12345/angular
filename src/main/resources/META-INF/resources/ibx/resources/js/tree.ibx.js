@@ -61,6 +61,8 @@ $.widget("ibi.ibxTreeNode", $.ibi.ibxVBox,
 		"btnExpanded":"tnode-btn-expanded",
 		"expanded":false,
 		"container":"auto",
+
+		"align":"stretch",
 		"aria":
 		{
 			"role":"listitem",

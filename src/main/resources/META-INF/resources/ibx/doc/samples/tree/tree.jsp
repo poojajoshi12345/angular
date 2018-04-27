@@ -41,6 +41,29 @@
 		.root-node
 		{
 		}
+
+		.ibx-tree-node
+		{
+		}
+		.tnode-label
+		{
+			font-family:roboto;
+			font-size:12px;
+			line-height:16px;
+			color: rgb(85, 85, 85);
+			border-bottom:1px solid rgba(0, 0 , 0, 0.05);
+			padding:8px;
+		}
+		.tnode-label:hover
+		{
+			background-color:rgba(53, 184, 254, 0.1);
+		}
+
+		.ibx-nav-key-item-active > .tnode-label
+		{
+			background-color:rgba(53, 184, 254, 0.4);
+		}
+
 		</style>
 	</head>
 	<body class="ibx-root">

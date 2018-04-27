@@ -8,18 +8,27 @@
 .ibx-tree-node
 {
 	flex:0 0 auto;
-	padding-top:.75em;
 	line-height:1em;
 }
 
 .ibx-tree-root-node
 {
-	padding:0px;
-	margin:0px;
+}
+
+.tnode-label
+{
+	padding:5px 0px 5px 0px;
+}
+
+.tnode-label:hover
+{
+	background-color:#eee;
 }
 
 .tnode-button
 {
+	font-family:"Material Icons";
+	font-weight:bold;
 	margin:0px 3px 0px 3px;
 	width:1em;
 }
@@ -27,21 +36,16 @@
 .tnode-btn-collapsed::before
 {
 	content:"\e145";
-	font-family:"Material Icons";
-	font-weight:bold;
 }
 
 .tnode-btn-expanded::before
 {
 	content: "\e15b";
-	font-family:"Material Icons";
-	font-weight:bold;
 }
 
 .ibx-tree-node > .tnode-children
 {
 	flex:1 1 auto;
-	margin-left:.75em;
 	display:none;
 }
 
@@ -49,3 +53,4 @@
 {
 	display:inline-block;
 }
+
