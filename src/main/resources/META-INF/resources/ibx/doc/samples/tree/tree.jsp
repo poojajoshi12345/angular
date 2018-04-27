@@ -20,9 +20,9 @@
 		<script type="text/javascript">
 			ibx(function()
 			{
-				$(".test-tree").on("ibx_nodeactivate ibx_nodeactivate ibx_beforeexpand ibx_expand ibx_beforecollapse ibx_collapse", function(e)
+				$(".test-tree").on("ibx_nodeactivate ibx_nodedeactivate ibx_beforeexpand ibx_expand ibx_beforecollapse ibx_collapse", function(e)
 				{
-					console.log("tree", e.type, e.target);
+					console.log("fnMain", e.type, e.target);
 				})
 			}, true);
 
@@ -38,6 +38,7 @@
 			border:1px solid #ccc;
 		}
 		/*
+		*/
 		.root-node
 		{
 		}
@@ -53,15 +54,14 @@
 			color: rgb(85, 85, 85);
 			border-bottom:1px solid rgba(0, 0 , 0, 0.05);
 		}
-		.tnode-label:hover
+		.tnode-label:hover, .tnode-label.ibx-nav-key-item-active
 		{
 			background-color:rgba(53, 184, 254, 0.1);
 		}
-		.ibx-nav-key-item-active > .tnode-label
+		.tnode-label.tnode-selected
 		{
 			background-color:rgba(53, 184, 254, 0.4);
 		}
-		*/
 		</style>
 	</head>
 	<body class="ibx-root">

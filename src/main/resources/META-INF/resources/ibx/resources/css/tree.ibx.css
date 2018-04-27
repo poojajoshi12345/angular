@@ -25,12 +25,12 @@
 	padding:5px 0px 5px 0px;
 }
 
-.tnode-label:hover, .ibx-nav-key-item-active > .tnode-label
+.tnode-label:hover, .tnode-label.ibx-nav-key-item-active
 {
 	background-color:#eee;
 }
 
-.ibx-nav-key-item-active > .tnode-label
+.tnode-label.tnode-selected
 {
 }
 

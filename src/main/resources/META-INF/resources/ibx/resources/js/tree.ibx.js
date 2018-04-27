@@ -47,11 +47,13 @@ $.widget("ibi.ibxTree", $.ibi.ibxVBox,
 	},
 	activeNode:function()
 	{
-		return this.navKeyChildren().find(".ibx-tnode-active")[0] || null;
+		return this.element.find(".tnode-active").parent()[0] || null;
 	},
 	_onNodeEvent:function(e)
 	{
 		//don't let the events bubble past the tree.
+		if(e.type == "ibx_nodeactivate")
+			this.element.find(".ibx-tree-node").not(e.target).ibxWidget("activate", false);
 		e.stopPropagation();
 	},
 	_refresh:function()
@@ -91,7 +93,6 @@ $.widget("ibi.ibxTreeNode", $.ibi.ibxVBox,
 	{
 		var options = this.options;
 		this._super();
-		this.element.attr("tabindex", -1).on("ibx_widgetfocus", this._onWidgetFocsusIn.bind(this));
 		this.nodeLabel = $("<div tabindex='-1' class='tnode-label'>").ibxLabel().appendTo(this.element);
 		this.nodeLabel.on("dblclick", this._onLabelDblClick.bind(this)).on("keydown", this._onLabelKeyEvent.bind(this));
 		options.labelOptions.text = options.labelOptions.text || this.element.textNodes().remove().text().replace(/^\s*|\s*$/g, "");
@@ -113,6 +114,10 @@ $.widget("ibi.ibxTreeNode", $.ibi.ibxVBox,
 	{
 		this._super();
 	},
+	children:function(selector)
+	{
+		return this._childBox.ibxWidget("children", selector || ".ibx-tree-node");
+	},
 	add:function(el, elSibling, before, refresh)
 	{
 		this._childBox.ibxWidget("add", el, elSibling, before, refresh)
@@ -120,10 +125,6 @@ $.widget("ibi.ibxTreeNode", $.ibi.ibxVBox,
 	remove:function(el, destroy, refresh)
 	{
 		this._childBox.ibxWidget("remove", el, destroy, refresh);
-	},
-	_onWidgetFocsusIn:function(e)
-	{
-		//this.nodeLabel.focus();
 	},
 	depth:function()
 	{
@@ -149,7 +150,7 @@ $.widget("ibi.ibxTreeNode", $.ibi.ibxVBox,
 			if(!options.expanded)
 				this._toggleExpanded(true);
 			else
-				this._childBox.children(":first-child").focus();
+				this.children().first().ibxWidget("focusNode");
 		}
 		else
 		if(e.keyCode === $.ui.keyCode.LEFT)
@@ -157,11 +158,11 @@ $.widget("ibi.ibxTreeNode", $.ibi.ibxVBox,
 			if(options.expanded)
 				this._toggleExpanded(false);
 			else
-				this.parentNode();
+				$(this.parentNode()).ibxWidget("focusNode");
 		}
 		else
 		if(e.keyCode === $.ui.keyCode.ENTER)
-			this._activate(true);
+			this.activate(true);
 	},
 	_onLabelDblClick:function(e)
 	{
@@ -176,16 +177,29 @@ $.widget("ibi.ibxTreeNode", $.ibi.ibxVBox,
 		expand = (expand === undefined) ? !this.options.expanded : expand;
 		this.option("expanded", expand);
 	},
+	focusNode:function()
+	{
+		this.nodeLabel.focus();
+	},
 	active:function()
 	{
-		return this.element.is(".ibx-tnode-active");
+		return this.nodeLabel.is(".tnode-active");
 	},
-	_activate:function(activate)
+	activate:function(activate)
 	{
 		var tree = this.tree();
-		if(this.active() && !active)
+		var active = this.active();
+		if(active && !activate)
+		{
+			this.nodeLabel.toggleClass("tnode-active", false)
+			this.element.dispatchEvent("ibx_nodedeactivate", null, true, true, tree);
+		}
+		else
+		if(!active && activate)
+		{
+			this.nodeLabel.toggleClass("tnode-active", true)
 			this.element.dispatchEvent("ibx_nodeactivate", null, true, true, tree);
-		this.element.toggleClass("ibx-tnode-active", activate).dispatchEvent("ibx_nodeactivate", null, true, true, tree);
+		}
 	},
 	_setOption:function(key, value)
 	{
