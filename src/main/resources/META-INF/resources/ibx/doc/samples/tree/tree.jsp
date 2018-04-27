@@ -20,7 +20,7 @@
 		<script type="text/javascript">
 			ibx(function()
 			{
-				$(".test-tree").on("ibx_beforeexpand ibx_expand ibx_beforecollapse ibx_collapse", function(e)
+				$(".test-tree").on("ibx_nodeactivate ibx_nodeactivate ibx_beforeexpand ibx_expand ibx_beforecollapse ibx_collapse", function(e)
 				{
 					console.log("tree", e.type, e.target);
 				})
@@ -32,7 +32,7 @@
 		<style type="text/css">
 		.test-tree
 		{
-			height:300px;
+			height:200px;
 			width:200px;
 			overflow:auto;
 			border:1px solid #ccc;

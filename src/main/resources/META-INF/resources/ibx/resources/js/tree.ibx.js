@@ -18,10 +18,11 @@ $.widget("ibi.ibxTree", $.ibi.ibxVBox,
 		}
 	},
 	_widgetClass:"ibx-tree",
+	NODE_EVENTS: "ibx_nodeactivate ibx_nodedeactivate ibx_beforeexpand ibx_expand ibx_beforecollapse ibx_collapse",
 	_create:function()
 	{
 		this._super();
-		this.element.on("ibx_beforeexpand ibx_expand ibx_beforecollapse ibx_collapse", this._onNodeExpandEvent.bind(this));
+		this.element.on(this.NODE_EVENTS, this._onNodeEvent.bind(this));
 	},
 	_destroy:function()
 	{
@@ -29,17 +30,17 @@ $.widget("ibi.ibxTree", $.ibi.ibxVBox,
 	},
 	navKeyChildren:function(selector)
 	{
-		return this.element.find(".tnode-label:ibxFocusable(-1)").filter(selector || "*");
-	},
-	activeNode:function()
-	{
-		return this.navKeyChildren().filter(".ibx-nav-key-item-active")[0] || null;
+		return this.element.find(".ibx-tree-node:ibxFocusable(-1)").filter(selector || "*");
 	},
 	selectedNode:function()
 	{
-		return this.navKeyChildren().filter(".tnode-selected")[0] || null;
+		return this.navKeyChildActive();
 	},
-	_onNodeExpandEvent:function(e)
+	activeNode:function()
+	{
+		return this.navKeyChildren().find(".ibx-tnode-active")[0] || null;
+	},
+	_onNodeEvent:function(e)
 	{
 		//don't let the events bubble past the tree.
 		e.stopPropagation();
@@ -70,6 +71,7 @@ $.widget("ibi.ibxTreeNode", $.ibi.ibxVBox,
 	{
 		var options = this.options;
 		this._super();
+		this.element.attr("tabindex", -1).on("ibx_widgetfocus", this._onWidgetFocsusIn.bind(this));
 		this.nodeLabel = $("<div tabindex='-1' class='tnode-label'>").ibxLabel().appendTo(this.element);
 		this.nodeLabel.on("dblclick", this._onLabelDblClick.bind(this)).on("keydown", this._onLabelKeyEvent.bind(this));
 		options.labelOptions.text = options.labelOptions.text || this.element.textNodes().remove().text().replace(/^\s*|\s*$/g, "");
@@ -83,6 +85,10 @@ $.widget("ibi.ibxTreeNode", $.ibi.ibxVBox,
 	_destroy:function()
 	{
 		this._super();
+	},
+	_onWidgetFocsusIn:function(e)
+	{
+		this.nodeLabel.focus();
 	},
 	tree:function()
 	{
@@ -114,8 +120,7 @@ $.widget("ibi.ibxTreeNode", $.ibi.ibxVBox,
 		}
 		else
 		if(e.keyCode === $.ui.keyCode.ENTER)
-		{
-		}
+			this._activate(true);
 	},
 	_onLabelDblClick:function(e)
 	{
@@ -129,6 +134,17 @@ $.widget("ibi.ibxTreeNode", $.ibi.ibxVBox,
 	{
 		expand = (expand === undefined) ? !this.options.expanded : expand;
 		this.option("expanded", expand);
+	},
+	active:function()
+	{
+		return this.element.is(".ibx-tnode-active");
+	},
+	_activate:function(activate)
+	{
+		var tree = this.tree();
+		if(this.active() && !active)
+			this.element.dispatchEvent("ibx_nodeactivate", null, true, true, tree);
+		this.element.toggleClass("ibx-tnode-active", activate).dispatchEvent("ibx_nodeactivate", null, true, true, tree);
 	},
 	_setOption:function(key, value)
 	{
