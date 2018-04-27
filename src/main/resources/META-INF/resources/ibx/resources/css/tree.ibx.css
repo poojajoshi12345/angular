@@ -3,13 +3,13 @@
 
 .ibx-tree
 {
-	line-height:1em;
 }
 
 .ibx-tree-node
 {
 	flex:0 0 auto;
 	padding-top:.75em;
+	line-height:1em;
 }
 
 .ibx-tree-root-node

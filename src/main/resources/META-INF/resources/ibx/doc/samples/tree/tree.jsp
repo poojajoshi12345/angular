@@ -20,7 +20,7 @@
 		<script type="text/javascript">
 			ibx(function()
 			{
-				$(".test-tree").on("ibx_before_expand ibx_expand ibx_before_collapse ibx_collapse", function(e)
+				$(".test-tree").on("ibx_beforeexpand ibx_expand ibx_beforecollapse ibx_collapse", function(e)
 				{
 					console.log("tree", e.type, e.target);
 				})
@@ -38,11 +38,14 @@
 			border:1px solid #ccc;
 			padding:5px;
 		}
+		.root-node
+		{
+		}
 		</style>
 	</head>
 	<body class="ibx-root">
 		<div tabindex="0" class="test-tree" data-ibx-type="ibxTree">
-			<div data-ibx-type="ibxTreeRootNode" data-ibxp-expanded="true">Root Node
+			<div class="root-node" data-ibx-type="ibxTreeRootNode" data-ibxp-expanded="true">Root Node
 				<div data-ibx-type="ibxTreeNode">Tree Item
 					<div data-ibx-type="ibxTreeNode">Tree Item</div>
 				</div>
