@@ -36,12 +36,11 @@
 			width:200px;
 			overflow:auto;
 			border:1px solid #ccc;
-			padding:5px;
 		}
+		/*
 		.root-node
 		{
 		}
-
 		.ibx-tree-node
 		{
 		}
@@ -50,26 +49,35 @@
 			font-family:roboto;
 			font-size:12px;
 			line-height:16px;
+			padding:8px;
 			color: rgb(85, 85, 85);
 			border-bottom:1px solid rgba(0, 0 , 0, 0.05);
-			padding:8px;
 		}
 		.tnode-label:hover
 		{
 			background-color:rgba(53, 184, 254, 0.1);
 		}
-
 		.ibx-nav-key-item-active > .tnode-label
 		{
 			background-color:rgba(53, 184, 254, 0.4);
 		}
-
+		*/
 		</style>
 	</head>
 	<body class="ibx-root">
 		<div tabindex="0" class="test-tree" data-ibx-type="ibxTree">
 			<div class="root-node" data-ibx-type="ibxTreeRootNode" data-ibxp-expanded="true">Root Node
 				<div data-ibx-type="ibxTreeNode">Tree Item
+					<div data-ibx-type="ibxTreeNode">Tree Item
+						<div data-ibx-type="ibxTreeNode">Tree Item</div>
+					</div>
+					<div data-ibx-type="ibxTreeNode">Tree Item</div>
+					<div data-ibx-type="ibxTreeNode">Tree Item</div>
+					<div data-ibx-type="ibxTreeNode">Tree Item</div>
+					<div data-ibx-type="ibxTreeNode">Tree Item</div>
+					<div data-ibx-type="ibxTreeNode">Tree Item</div>
+					<div data-ibx-type="ibxTreeNode">Tree Item</div>
+					<div data-ibx-type="ibxTreeNode">Tree Item</div>
 					<div data-ibx-type="ibxTreeNode">Tree Item</div>
 				</div>
 				<div data-ibx-type="ibxTreeNode">Tree Item</div>

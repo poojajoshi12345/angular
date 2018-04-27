@@ -28,9 +28,18 @@ $.widget("ibi.ibxTree", $.ibi.ibxVBox,
 	{
 		this._super();
 	},
+	add:function()
+	{
+	},
+	remove:function()
+	{
+	},
 	navKeyChildren:function(selector)
 	{
 		return this.element.find(".ibx-tree-node:ibxFocusable(-1)").filter(selector || "*");
+	},
+	rootNode:function()
+	{
 	},
 	selectedNode:function()
 	{
@@ -49,6 +58,7 @@ $.widget("ibi.ibxTree", $.ibi.ibxVBox,
 	{
 		var options = this.options;
 		this._super();
+		this.element.find(".ibx-tree-node").ibxWidget("refresh");
 	}
 });
 
@@ -61,6 +71,7 @@ $.widget("ibi.ibxTreeNode", $.ibi.ibxVBox,
 		"btnExpanded":"tnode-btn-expanded",
 		"expanded":false,
 		"container":"auto",
+		"indent":null,
 
 		"align":"stretch",
 		"aria":
@@ -69,6 +80,13 @@ $.widget("ibi.ibxTreeNode", $.ibi.ibxVBox,
 		}
 	},
 	_widgetClass:"ibx-tree-node",
+	_createWidget:function(options, element)
+	{
+		//set the static default tree indent...do it this way so we can define via css.
+		if($.ibi.ibxTreeNode.defaultIndent === null)
+			$.ibi.ibxTreeNode.defaultIndent = parseFloat(FindStyleRules(".tnode-indent")[0].style.paddingLeft);
+		this._super(options, element);
+	},
 	_create:function()
 	{
 		var options = this.options;
@@ -80,17 +98,29 @@ $.widget("ibi.ibxTreeNode", $.ibi.ibxVBox,
 
 		this.btnExpand = $("<div class='tnode-button'>").prependTo(this.nodeLabel).on("click", this._onBtnExpandClick.bind(this));
 
+		//add the markup children correctly.
 		this._childBox = $("<div class='tnode-children'>").ibxVBox().appendTo(this.element);
-		var childNodes = this.element.children(".ibx-tree-node");
-		childNodes.appendTo(this._childBox);
+		this.add(this.element.children(".ibx-tree-node"));
 	},
 	_destroy:function()
 	{
 		this._super();
 	},
+	add:function(el, elSibling, before, refresh)
+	{
+		this._childBox.ibxWidget("add", el, elSibling, before, refresh)
+	},
+	remove:function(el, destroy, refresh)
+	{
+		this._childBox.ibxWidget("remove", el, destroy, refresh);
+	},
 	_onWidgetFocsusIn:function(e)
 	{
 		this.nodeLabel.focus();
+	},
+	depth:function()
+	{
+		return this.element.parents(".ibx-tree-node").length;	
 	},
 	tree:function()
 	{
@@ -171,13 +201,17 @@ $.widget("ibi.ibxTreeNode", $.ibi.ibxVBox,
 	{
 		this._super();
 		var options = this.options;
+		var children = this.children();
 		var container = (options.container == "auto") ? this.hasChildren() : options.container;
-
-		this.nodeLabel.ibxWidget("option", options.labelOptions);
+		var indent = options.indent || $.ibi.ibxTreeNode.defaultIndent;
+		
+		this.nodeLabel.ibxWidget("option", options.labelOptions).css("padding-left", this.depth() * indent);
 		this.element.toggleClass("tnode-is-container", options.container).toggleClass("tnode-expanded", options.expanded);
 		this.btnExpand.toggleClass(options.btnCollapsed, container && !options.expanded).toggleClass(options.btnExpanded, container && options.expanded)
 	}
 });
+$.ibi.ibxTreeNode.defaultIndent = null;
+
 $.widget("ibi.ibxTreeRootNode", $.ibi.ibxTreeNode, {"_widgetClass":"ibx-tree-root-node"}); 
 
 //# sourceURL=tree.ibx.js

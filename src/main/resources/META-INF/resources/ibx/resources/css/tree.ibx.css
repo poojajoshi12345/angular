@@ -15,6 +15,11 @@
 {
 }
 
+.tnode-indent
+{
+	padding-left:10px;
+}
+
 .tnode-label
 {
 	padding:5px 0px 5px 0px;
