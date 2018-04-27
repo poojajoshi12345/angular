@@ -18,32 +18,23 @@ $.widget("ibi.ibxTree", $.ibi.ibxVBox,
 		}
 	},
 	_widgetClass:"ibx-tree",
-	NODE_EVENTS: "ibx_nodeselect ibx_nodedeselect ibx_beforeexpand ibx_expand ibx_beforecollapse ibx_collapse",
+	NODE_EVENTS: "dblclick ibx_nodeselect ibx_nodedeselect ibx_beforeexpand ibx_expand ibx_beforecollapse ibx_collapse",
 	_create:function()
 	{
 		this._super();
-		this.element.on(this.NODE_EVENTS, this._onNodeEvent.bind(this));
+		this.element.on(this.NODE_EVENTS, this._onNodeEvent.bind(this)).on("keydown", this._onTreeKeyEvent.bind(this));
 	},
 	_destroy:function()
 	{
 		this._super();
 	},
-	add:function()
-	{
-	},
-	remove:function()
-	{
-	},
 	navKeyChildren:function(selector)
 	{
 		return this.element.find(".tnode-label:ibxFocusable(-1)").filter(selector || "*");
 	},
-	rootNode:function()
-	{
-	},
 	activeNode:function()
 	{
-		return this.navKeyChildActive();
+		return this.navKeyActiveChild()[0];
 	},
 	selectedNode:function()
 	{
@@ -55,6 +46,11 @@ $.widget("ibi.ibxTree", $.ibi.ibxVBox,
 		if(e.type == "ibx_nodeselect")
 			this.element.find(".ibx-tree-node").not(e.target).ibxWidget("select", false);
 		e.stopPropagation();
+	},
+	_onTreeKeyEvent:function(e)
+	{
+		if(e.keyCode === $.ui.keyCode.ESCAPE)
+			$(this.selectedNode()).ibxWidget("navKeyActive");
 	},
 	_refresh:function()
 	{
@@ -68,12 +64,13 @@ $.widget("ibi.ibxTreeNode", $.ibi.ibxVBox,
 {
 	options:
 	{
+		"text":"", //tranfer the option to the inner label in refresh
 		"labelOptions":{},
 		"btnCollapsed":"tnode-btn-collapsed",
 		"btnExpanded":"tnode-btn-expanded",
 		"expanded":false,
 		"container":"auto",
-		"indent":null,
+		"indent":null, //can override the default indent for this node
 
 		"align":"stretch",
 		"aria":
@@ -86,7 +83,10 @@ $.widget("ibi.ibxTreeNode", $.ibi.ibxVBox,
 	{
 		//set the static default tree indent...do it this way so we can define via css.
 		if($.ibi.ibxTreeNode.defaultIndent === null)
-			$.ibi.ibxTreeNode.defaultIndent = parseFloat(FindStyleRules(".tnode-indent")[0].style.paddingLeft);
+		{
+			var rules = FindStyleRules(".tnode-indent");
+			$.ibi.ibxTreeNode.defaultIndent = parseFloat(rules[rules.length-1].style.paddingLeft);
+		}
 		this._super(options, element);
 	},
 	_create:function()
@@ -121,10 +121,14 @@ $.widget("ibi.ibxTreeNode", $.ibi.ibxVBox,
 	add:function(el, elSibling, before, refresh)
 	{
 		this._childBox.ibxWidget("add", el, elSibling, before, refresh)
+		if(refresh)
+			this.refresh();
 	},
 	remove:function(el, destroy, refresh)
 	{
 		this._childBox.ibxWidget("remove", el, destroy, refresh);
+		if(refresh)
+			this.refresh();
 	},
 	depth:function()
 	{
@@ -148,7 +152,7 @@ $.widget("ibi.ibxTreeNode", $.ibi.ibxVBox,
 		if(e.keyCode === $.ui.keyCode.RIGHT)
 		{
 			if(!options.expanded)
-				this._toggleExpanded(true);
+				this.toggleExpanded(true);
 			else
 				this.children().first().ibxWidget("focusNode");
 		}
@@ -156,26 +160,27 @@ $.widget("ibi.ibxTreeNode", $.ibi.ibxVBox,
 		if(e.keyCode === $.ui.keyCode.LEFT)
 		{
 			if(options.expanded)
-				this._toggleExpanded(false);
+				this.toggleExpanded(false);
 			else
 				$(this.parentNode()).ibxWidget("focusNode");
 		}
 		else
-		if(e.keyCode === $.ui.keyCode.ENTER)
+		if(e.keyCode === $.ui.keyCode.ENTER || e.keyCode === $.ui.keyCode.SPACE)
 			this.select(true);
 	},
 	_onLabelClickEvent:function(e)
 	{
 		if(e.type == "dblclick")
-			this._toggleExpanded();
+			this.toggleExpanded();
 		else
 			this.select(true);
 	},
 	_onBtnExpandClick:function(e)
 	{
-		this._toggleExpanded();
+		this.toggleExpanded();
+		e.stopPropagation();//click on button should not change tree selection...this stops that
 	},
-	_toggleExpanded:function(expand)
+	toggleExpanded:function(expand)
 	{
 		expand = (expand === undefined) ? !this.options.expanded : expand;
 		this.option("expanded", expand);
@@ -231,14 +236,12 @@ $.widget("ibi.ibxTreeNode", $.ibi.ibxVBox,
 		var container = (options.container == "auto") ? this.hasChildren() : options.container;
 		var indent = options.indent || $.ibi.ibxTreeNode.defaultIndent;
 		
+		options.labelOptions.text = options.text || options.labelOptions.text;
 		this.nodeLabel.ibxWidget("option", options.labelOptions).css("padding-left", this.depth() * indent);
 		this.element.toggleClass("tnode-is-container", options.container).toggleClass("tnode-expanded", options.expanded);
 		this.btnExpand.toggleClass(options.btnCollapsed, container && !options.expanded).toggleClass(options.btnExpanded, container && options.expanded)
 	}
 });
 $.ibi.ibxTreeNode.defaultIndent = null;
-
-$.widget("ibi.ibxTreeRootNode", $.ibi.ibxTreeNode, {"_widgetClass":"ibx-tree-root-node"}); 
-
 //# sourceURL=tree.ibx.js
 

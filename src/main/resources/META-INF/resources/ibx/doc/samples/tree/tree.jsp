@@ -20,13 +20,41 @@
 		<script type="text/javascript">
 			ibx(function()
 			{
-				$(".test-tree").on("ibx_nodeselect ibx_nodedeselect ibx_beforeexpand ibx_expand ibx_beforecollapse ibx_collapse", function(e)
+				$(".test-tree").on("dblclick ibx_nodeselect ibx_nodedeselect ibx_beforeexpand ibx_expand ibx_beforecollapse ibx_collapse", function(e)
 				{
-					console.log("fnMain", e.type, e.target);
+					//console.log("fnMain", e.type, e.target);
 				})
+				$("body").on("dblclick", function(e)
+				{
+					//console.log("body", e.type);
+				});
+
+				var date = new Date();
+				var tree = $(".test-tree")
+				var root = $("<div class='root-tree-node'>").ibxTreeNode({"expanded":true, "text":"Root Node", "labelOptions":{"glyph":"folder", "glyphClasses":"material-icons"}}).appendTo(tree);
+				for(var i = 0; i < 5; ++i)
+				{
+					var parentNode = $("<div class='test-tree-node'>").ibxTreeNode({"text": sformat("Tree Node {1}", i), "labelOptions":{"glyph":"folder", "glyphClasses":"material-icons"}})
+					root.ibxWidget("add", parentNode);
+					for(var j = 0; j < 5; ++j)
+					{
+						var childNode = $("<div class='test-tree-node'>").ibxTreeNode({"text": sformat("Tree Node {1}-{2}", i, j), "labelOptions":{"glyph":"android", "glyphClasses":"material-icons"}})
+						if(i == 0 && j == 1)
+							childNode.addClass("xxx");
+						parentNode.ibxWidget("add", childNode);
+					}
+				}
+				console.log(new Date() - date);
+				tree.ibxWidget("refresh");
+
+				$(".cmdTest").on("ibx_triggered", function(e)
+				{
+					var node = $("<div class='zzz'>Julian</div>").ibxTreeNode();
+					var parent = $(".xxx");
+					parent.ibxWidget("add", node).ibxWidget("toggleExpanded", true);
+					node.ibxWidget("refresh");
+				});
 			}, true);
-
-
 		</script>
 
 		<style type="text/css">
@@ -48,9 +76,12 @@
 			font-family:roboto;
 			font-size:12px;
 			line-height:16px;
-			padding:8px;
 			color: rgb(85, 85, 85);
 			border-bottom:1px solid rgba(0, 0 , 0, 0.05);
+		}
+		.tnode-indent
+		{
+			padding-left:10px;
 		}
 		.tnode-label:hover, .tnode-label.ibx-nav-key-item-active
 		{
@@ -65,30 +96,8 @@
 		</style>
 	</head>
 	<body class="ibx-root">
+		<div class="cmdTest" data-ibx-type="ibxCommand" data-ibxp-shortcut="CTRL+C"></div>
 		<div tabindex="0" class="test-tree" data-ibx-type="ibxTree">
-			<div class="root-node" data-ibx-type="ibxTreeRootNode" data-ibxp-expanded="true">Root Node
-				<div data-ibx-type="ibxTreeNode">Tree Item
-					<div data-ibx-type="ibxTreeNode">Tree Item
-						<div data-ibx-type="ibxTreeNode">Tree Item</div>
-					</div>
-					<div data-ibx-type="ibxTreeNode">Tree Item</div>
-					<div data-ibx-type="ibxTreeNode">Tree Item</div>
-					<div data-ibx-type="ibxTreeNode">Tree Item</div>
-					<div data-ibx-type="ibxTreeNode">Tree Item</div>
-					<div data-ibx-type="ibxTreeNode">Tree Item</div>
-					<div data-ibx-type="ibxTreeNode">Tree Item</div>
-					<div data-ibx-type="ibxTreeNode">Tree Item</div>
-					<div data-ibx-type="ibxTreeNode">Tree Item</div>
-				</div>
-				<div data-ibx-type="ibxTreeNode">Tree Item</div>
-				<div data-ibx-type="ibxTreeNode">Tree Item</div>
-				<div data-ibx-type="ibxTreeNode">Tree Item</div>
-				<div data-ibx-type="ibxTreeNode">Tree Item</div>
-				<div data-ibx-type="ibxTreeNode">Tree Item</div>
-				<div data-ibx-type="ibxTreeNode">Tree Item</div>
-				<div data-ibx-type="ibxTreeNode">Tree Item</div>
-				<div data-ibx-type="ibxTreeNode">Tree Item</div>
-			</div>
 		</div>
 	</body>
 </html>
