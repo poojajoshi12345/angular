@@ -20,7 +20,7 @@
 		<script type="text/javascript">
 			ibx(function()
 			{
-				$(".test-tree").on("ibx_nodeactivate ibx_nodedeactivate ibx_beforeexpand ibx_expand ibx_beforecollapse ibx_collapse", function(e)
+				$(".test-tree").on("ibx_nodeselect ibx_nodedeselect ibx_beforeexpand ibx_expand ibx_beforecollapse ibx_collapse", function(e)
 				{
 					console.log("fnMain", e.type, e.target);
 				})
@@ -37,8 +37,6 @@
 			overflow:auto;
 			border:1px solid #ccc;
 		}
-		/*
-		*/
 		.root-node
 		{
 		}
@@ -62,6 +60,8 @@
 		{
 			background-color:rgba(53, 184, 254, 0.4);
 		}
+		/*
+		*/
 		</style>
 	</head>
 	<body class="ibx-root">
