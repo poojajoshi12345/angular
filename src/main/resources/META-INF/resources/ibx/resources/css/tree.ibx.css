@@ -25,9 +25,13 @@
 	padding:5px 0px 5px 0px;
 }
 
-.tnode-label:hover
+.tnode-label:hover, .ibx-nav-key-item-active > .tnode-label
 {
 	background-color:#eee;
+}
+
+.ibx-nav-key-item-active > .tnode-label
+{
 }
 
 .tnode-button
@@ -54,7 +58,7 @@
 	display:none;
 }
 
-.ibx-tree-node.tnode-expanded > .tnode-children
+.tnode-expanded > .tnode-children
 {
 	display:inline-block;
 }

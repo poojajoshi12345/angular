@@ -36,7 +36,7 @@ $.widget("ibi.ibxTree", $.ibi.ibxVBox,
 	},
 	navKeyChildren:function(selector)
 	{
-		return this.element.find(".ibx-tree-node:ibxFocusable(-1)").filter(selector || "*");
+		return this.element.find(".tnode-label:ibxFocusable(-1)").filter(selector || "*");
 	},
 	rootNode:function()
 	{
@@ -76,7 +76,7 @@ $.widget("ibi.ibxTreeNode", $.ibi.ibxVBox,
 		"align":"stretch",
 		"aria":
 		{
-			"role":"listitem",
+			"role":"treeitem",
 		}
 	},
 	_widgetClass:"ibx-tree-node",
@@ -102,6 +102,13 @@ $.widget("ibi.ibxTreeNode", $.ibi.ibxVBox,
 		this._childBox = $("<div class='tnode-children'>").ibxVBox().appendTo(this.element);
 		this.add(this.element.children(".ibx-tree-node"));
 	},
+	_setAccessibility:function(accessible, aria)
+	{
+		var options = this.options;
+		this.hasChildren() ? this._childBox.attr("role", "group") : this._childBox.removeAttr("role");
+		this.element.attr("aria-expanded", options.expanded);
+		return aria
+	},
 	_destroy:function()
 	{
 		this._super();
@@ -116,7 +123,7 @@ $.widget("ibi.ibxTreeNode", $.ibi.ibxVBox,
 	},
 	_onWidgetFocsusIn:function(e)
 	{
-		this.nodeLabel.focus();
+		//this.nodeLabel.focus();
 	},
 	depth:function()
 	{
@@ -149,6 +156,8 @@ $.widget("ibi.ibxTreeNode", $.ibi.ibxVBox,
 		{
 			if(options.expanded)
 				this._toggleExpanded(false);
+			else
+				this.parentNode();
 		}
 		else
 		if(e.keyCode === $.ui.keyCode.ENTER)

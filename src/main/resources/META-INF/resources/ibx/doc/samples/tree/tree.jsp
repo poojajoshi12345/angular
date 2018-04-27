@@ -32,7 +32,7 @@
 		<style type="text/css">
 		.test-tree
 		{
-			height:200px;
+			height:300px;
 			width:200px;
 			overflow:auto;
 			border:1px solid #ccc;
