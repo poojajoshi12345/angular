@@ -46,12 +46,23 @@
 				tree.ibxWidget("refresh");
 				//$(".ibx-tree-node").ibxWidget("option", "draggable", true)
 
-				$(".cmdTest").on("ibx_triggered", function(e)
+				$(".btnHPStyle").on("ibx_change", function(e)
 				{
-					var node = $("<div class='zzz'>Julian</div>").ibxTreeNode();
-					var parent = $(".xxx");
-					parent.ibxWidget("add", node).ibxWidget("toggleExpanded", true);
-					node.ibxWidget("refresh");
+					var checked = $(e.target).ibxWidget("checked");
+					$(".test-tree").toggleClass("hp-style", checked);
+				});
+				$(".btnSingleClickExpand").on("ibx_change", function(e)
+				{
+					var checked = $(e.target).ibxWidget("checked");
+					$(".test-tree .ibx-tree-node").ibxWidget("option", "singleClickExpand", checked);
+				});
+				$(".btnExpandAll").on("click", function(e)
+				{
+					$(".test-tree .ibx-tree-node").ibxWidget("toggleExpanded", true);
+				});
+				$(".btnCollapseAll").on("click", function(e)
+				{
+					$(".test-tree .ibx-tree-node").ibxWidget("toggleExpanded", false);
 				});
 			}, true);
 		</script>
@@ -64,13 +75,13 @@
 			overflow:auto;
 			border:1px solid #ccc;
 		}
-		.root-node
+		.btn-bar *
 		{
+			margin:5px;
 		}
-		.ibx-tree-node
-		{
-		}
-		.tnode-label
+
+		/*IBI WF Tree Styles*/
+		.hp-style .tnode-label
 		{
 			font-family:roboto;
 			font-size:12px;
@@ -78,15 +89,15 @@
 			color: rgb(85, 85, 85);
 			border-bottom:1px solid rgba(0, 0 , 0, 0.05);
 		}
-		.tnode-indent
+		.hp-style .tnode-indent
 		{
 			padding-left:10px;
 		}
-		.tnode-label:hover, .tnode-label.ibx-nav-key-item-active
+		.hp-style .tnode-label:hover, .hp-style .tnode-label.ibx-nav-key-item-active
 		{
 			background-color:rgba(53, 184, 254, 0.1);
 		}
-		.tnode-label.tnode-selected
+		.hp-style .tnode-label.tnode-selected
 		{
 			background-color:rgba(53, 184, 254, 0.4);
 		}
@@ -96,6 +107,12 @@
 	</head>
 	<body class="ibx-root">
 		<div class="cmdTest" data-ibx-type="ibxCommand" data-ibxp-shortcut="CTRL+C"></div>
+		<div class="btn-bar" data-ibx-type="ibxHBox" data-ibxp-inline="false" data-ibxp-align="center">
+			<div class="btnHPStyle" data-ibx-type="ibxCheckBoxSimple">Home Page Style</div>
+			<div class="btnSingleClickExpand" data-ibx-type="ibxCheckBoxSimple">Single Click Expand</div>
+			<div class="btnExpandAll" data-ibx-type="ibxButton">Expand All</div>
+			<div class="btnCollapseAll" data-ibx-type="ibxButton">Collapse All</div>
+		</div>
 		<div tabindex="0" class="test-tree" data-ibx-type="ibxTree">
 		</div>
 	</body>
