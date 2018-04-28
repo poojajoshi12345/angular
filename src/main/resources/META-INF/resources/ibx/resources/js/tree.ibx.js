@@ -68,6 +68,7 @@ $.widget("ibi.ibxTreeNode", $.ibi.ibxVBox,
 		"labelOptions":{},
 		"btnCollapsed":"tnode-btn-collapsed",
 		"btnExpanded":"tnode-btn-expanded",
+		"singleClickExpand":false,
 		"expanded":false,
 		"container":"auto",
 		"indent":null, //can override the default indent for this node
@@ -170,15 +171,21 @@ $.widget("ibi.ibxTreeNode", $.ibi.ibxVBox,
 	},
 	_onLabelClickEvent:function(e)
 	{
-		if(e.type == "dblclick")
+		var singleClickExpand = this.options.singleClickExpand;
+		if(e.type == "dblclick" && !singleClickExpand)
 			this.toggleExpanded();
 		else
 		if(e.type == "mousedown")
+		{
 			this.select(true);
+			if(this.options.singleClickExpand)
+				this.toggleExpanded();
+		}
 	},
 	_onBtnExpandClick:function(e)
 	{
-		this.toggleExpanded();
+		if(!this.options.singleClickExpand)
+			this.toggleExpanded();
 		e.stopPropagation();//click on button should not change tree selection...this stops that
 	},
 	toggleExpanded:function(expand)
