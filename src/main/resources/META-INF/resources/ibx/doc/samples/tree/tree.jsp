@@ -22,14 +22,13 @@
 			{
 				$(".test-tree").on("dblclick ibx_nodeselect ibx_nodedeselect ibx_beforeexpand ibx_expand ibx_beforecollapse ibx_collapse", function(e)
 				{
-					//console.log("fnMain", e.type, e.target);
+					console.log("fnMain", e.type, e.target);
 				})
 				$("body").on("dblclick", function(e)
 				{
-					//console.log("body", e.type);
+					console.log("body", e.type);
 				});
 
-				var date = new Date();
 				var tree = $(".test-tree")
 				var root = $("<div class='root-tree-node'>").ibxTreeNode({"expanded":true, "text":"Root Node", "labelOptions":{"glyph":"folder", "glyphClasses":"material-icons"}}).appendTo(tree);
 				for(var i = 0; i < 5; ++i)
@@ -44,8 +43,8 @@
 						parentNode.ibxWidget("add", childNode);
 					}
 				}
-				console.log(new Date() - date);
 				tree.ibxWidget("refresh");
+				//$(".ibx-tree-node").ibxWidget("option", "draggable", true)
 
 				$(".cmdTest").on("ibx_triggered", function(e)
 				{
@@ -60,7 +59,7 @@
 		<style type="text/css">
 		.test-tree
 		{
-			height:300px;
+			xheight:300px;
 			width:200px;
 			overflow:auto;
 			border:1px solid #ccc;

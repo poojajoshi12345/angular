@@ -94,7 +94,7 @@ $.widget("ibi.ibxTreeNode", $.ibi.ibxVBox,
 		var options = this.options;
 		this._super();
 		this.nodeLabel = $("<div tabindex='-1' class='tnode-label'>").ibxLabel().appendTo(this.element);
-		this.nodeLabel.on("click dblclick", this._onLabelClickEvent.bind(this)).on("keydown", this._onLabelKeyEvent.bind(this));
+		this.nodeLabel.on("mousedown dblclick", this._onLabelClickEvent.bind(this)).on("keydown", this._onLabelKeyEvent.bind(this));
 		options.labelOptions.text = options.labelOptions.text || this.element.textNodes().remove().text().replace(/^\s*|\s*$/g, "");
 
 		this.btnExpand = $("<div class='tnode-button'>").prependTo(this.nodeLabel).on("click", this._onBtnExpandClick.bind(this));
@@ -173,6 +173,7 @@ $.widget("ibi.ibxTreeNode", $.ibi.ibxVBox,
 		if(e.type == "dblclick")
 			this.toggleExpanded();
 		else
+		if(e.type == "mousedown")
 			this.select(true);
 	},
 	_onBtnExpandClick:function(e)
