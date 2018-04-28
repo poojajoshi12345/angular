@@ -82,10 +82,9 @@ $.widget("ibi.ibxSortable", $.Widget,
 					{
 						this._inDrag = true;
 						var de = this._dragElement;
-						var mx = de.metrics();
-						var sizeBox = mx.isBorderSizing ? mx.borderBox : mx.innerBox;
+						var pos = de.position();
 						var ph = this._placeholder = this._createPlaceholder(de);
-						de.css({"zIndex":100000, "pointerEvents":"none", "position":"absolute", "left":mx.marginBox.left, "top":mx.marginBox.top, "width":sizeBox.width, "height":sizeBox.height});
+						de.css({"zIndex":100000, "pointerEvents":"none", "position":"absolute", "left":pos.left, "top":pos.top, "width":de.outerWidth, "height":de.outerHeight});
 						de.addClass("ibx-sortable-dragging " + options.sortItemClasses);
 						ph.insertAfter(de);
 						this.element.ibxAutoScroll("start");
@@ -96,16 +95,17 @@ $.widget("ibi.ibxSortable", $.Widget,
 			if(this._inDrag && this._eLast)
 			{
 				var eLast = this._eLast
-				var mx = this._dragElement.metrics();
+				var de = this._dragElement;
+				var pos = de.position();
 				var dx = e.clientX - eLast.clientX;
 				var dy = e.clientY - eLast.clientY
 				var vert = this.options.direction == "vertical";
 
 				//move within axis only if specified
 				if(options.lockDragAxis)
-					this._dragElement.css({"left": mx.marginBox.left + (!vert ? dx : 0), "top": mx.marginBox.top + (vert ? dy : 0)});
+					de.css({"left": pos.left + (!vert ? dx : 0), "top": pos.top + (vert ? dy : 0)});
 				else
-					this._dragElement.css({"left": mx.marginBox.left + dx, "top":  mx.marginBox.top + dy});
+					de.css({"left": pos.left + dx, "top":  pos.top + dy});
 
 				if(!this.element.is(target) && !this._placeholder.is(target))
 				{
@@ -122,7 +122,7 @@ $.widget("ibi.ibxSortable", $.Widget,
 							after = e.clientX > (tBounds.left + (tBounds.width / 2));
 
 						//let the world know we are doing a sort move...can't cancel
-						this.element.dispatchEvent("ibx_sortmove", {"sortElement":this._dragElement, "targetElement":target, "tBounds":tBounds, "after":after, "originalEvent":e}, false, false);
+						this.element.dispatchEvent("ibx_sortmove", {"sortElement":de, "targetElement":target, "tBounds":tBounds, "after":after, "originalEvent":e}, false, false);
 
 						if(after)
 							this._placeholder.insertAfter(target);
