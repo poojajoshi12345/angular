@@ -283,12 +283,13 @@ jQuery.fn.metrics = function()
 
 	var style = window.getComputedStyle(element);
 	var elInfo = {el:element, "style":style, "isBorderSizing":(style.boxSizing === "border-box")};
+	var html = document.documentElement;
 
 	var viewportBox = elInfo.pageViewportBox = element.getBoundingClientRect();
 	var pageBox = elInfo.pageBox = 
 	{
-		left: viewportBox.left + window.scrollX,
-		top: viewportBox.top + window.scrollY,
+		left: viewportBox.left + html.scrollLeft,
+		top: viewportBox.top + html.scrollTop,
 		right:viewportBox.left + viewportBox.width,
 		bottom: viewportBox.top + viewportBox.height,
 		width: viewportBox.width,
