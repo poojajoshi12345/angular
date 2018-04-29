@@ -22,29 +22,31 @@
 			{
 				$(".test-tree").on("dblclick ibx_nodeselect ibx_nodedeselect ibx_beforeexpand ibx_expand ibx_beforecollapse ibx_collapse", function(e)
 				{
-					console.log("fnMain", e.type, e.target);
+					//console.log("fnMain", e.type, e.target);
 				})
 				$("body").on("dblclick", function(e)
 				{
-					console.log("body", e.type);
+					//console.log("body", e.type);
 				});
 
-				var tree = $(".test-tree")
-				var root = $("<div class='root-tree-node'>").ibxTreeNode({"expanded":true, "text":"Root Node", "labelOptions":{"glyph":"folder", "glyphClasses":"material-icons"}}).appendTo(tree);
-				for(var i = 0; i < 5; ++i)
+				$(".btnLoad").on("click", function(e)
 				{
-					var parentNode = $("<div class='test-tree-node'>").ibxTreeNode({"text": sformat("Tree Node {1}", i), "labelOptions":{"glyph":"folder", "glyphClasses":"material-icons"}})
-					root.ibxWidget("add", parentNode);
-					for(var j = 0; j < 5; ++j)
+					var tree = $(".test-tree")
+					var root = $("<div class='root-tree-node'>").ibxTreeNode({"expanded":true, "text":"Root Node", "labelOptions":{"glyph":"folder", "glyphClasses":"material-icons"}}).appendTo(tree);
+					for(var i = 0; i < 10; ++i)
 					{
-						var childNode = $("<div class='test-tree-node'>").ibxTreeNode({"text": sformat("Tree Node {1}-{2}", i, j), "labelOptions":{"glyph":"android", "glyphClasses":"material-icons"}})
-						if(i == 0 && j == 1)
-							childNode.addClass("xxx");
-						parentNode.ibxWidget("add", childNode);
-					}
-				}
-				tree.ibxWidget("refresh");
-				//$(".ibx-tree-node").ibxWidget("option", "draggable", true)
+						var parentNode = $("<div class='test-tree-node'>").ibxTreeNode({"text": sformat("Tree Node {1}", i), "labelOptions":{"glyph":"folder", "glyphClasses":"material-icons"}})
+						root.ibxWidget("add", parentNode);
+						for(var j = 0; j < 10; ++j)
+						{
+							var childNode = $("<div class='test-tree-node'>").ibxTreeNode({"text": sformat("Tree Node {1}-{2}", i, j), "labelOptions":{"glyph":"android", "glyphClasses":"material-icons"}})
+							if(i == 0 && j == 1)
+								childNode.addClass("xxx");
+							parentNode.ibxWidget("add", childNode);
+						}
+						}
+					tree.ibxWidget("refresh");
+				});
 
 				$(".btnHPStyle").on("ibx_change", function(e)
 				{
@@ -54,7 +56,7 @@
 				$(".btnSingleClickExpand").on("ibx_change", function(e)
 				{
 					var checked = $(e.target).ibxWidget("checked");
-					$(".test-tree .ibx-tree-node").ibxWidget("option", "singleClickExpand", checked);
+					$(".test-tree .ibx-tree-node").ibxWidget("option", "singleClickExpand", checked, false);
 				});
 				$(".btnExpandAll").on("click", function(e)
 				{
@@ -75,7 +77,7 @@
 			overflow:auto;
 			border:1px solid #ccc;
 		}
-		.btn-bar *
+		.btn-bar > *
 		{
 			margin:5px;
 		}
@@ -108,6 +110,7 @@
 	<body class="ibx-root">
 		<div class="cmdTest" data-ibx-type="ibxCommand" data-ibxp-shortcut="CTRL+C"></div>
 		<div class="btn-bar" data-ibx-type="ibxHBox" data-ibxp-inline="false" data-ibxp-align="center">
+			<div class="btnLoad" data-ibx-type="ibxButton">Load Tree</div>
 			<div class="btnHPStyle" data-ibx-type="ibxCheckBoxSimple">Home Page Style</div>
 			<div class="btnSingleClickExpand" data-ibx-type="ibxCheckBoxSimple">Single Click Expand</div>
 			<div class="btnExpandAll" data-ibx-type="ibxButton">Expand All</div>
