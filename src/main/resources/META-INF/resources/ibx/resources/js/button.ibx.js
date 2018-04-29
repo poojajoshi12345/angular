@@ -173,7 +173,6 @@ $.widget("ibi.ibxCheckBox", $.ibi.ibxLabel,
 			if (!this._trigger("beforechange"))
 				return;
 			this._super(key, value);
-			this.element.toggleClass("checked", value);
 			this._trigger("change");
 			this.doCommandAction("checked", value);
 		}
@@ -239,8 +238,6 @@ $.widget("ibi.ibxCheckBoxSimple", $.ibi.ibxCheckBox,
 			this._marker.hide();
 
 		this.element.removeClass("ibx-check-box");
-		this.element.toggleClass("checked", this.options.checked);
-
 		this._marker.removeClass(sformat("{1} {2}-check {3}-uncheck", this.options.markerClass, this.options.markerClass, this.options.markerClass));
 		this._marker.addClass(sformat((this.options.checked ? "{1} {2}-check" : "{1} {2}-uncheck"), this.options.markerClass, this.options.markerClass));
 		this.add(this._marker, this.children()[0], true);

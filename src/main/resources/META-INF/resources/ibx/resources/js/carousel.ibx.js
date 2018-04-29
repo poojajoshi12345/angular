@@ -350,7 +350,7 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 		info.scrollBottom = info.scrollTop + info.pageHeight;
 		return info;
 	},
-	option:function(key, value)
+	option:function(key, value, refresh)
 	{
 		this._needsLayout = (key == "prevNextButtonPos" || key == "floatButtons" && value != this.options[key]);
 		return this._superApply(arguments);
