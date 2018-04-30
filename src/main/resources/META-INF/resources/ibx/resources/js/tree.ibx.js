@@ -98,7 +98,7 @@ $.widget("ibi.ibxTreeNode", $.ibi.ibxVBox,
 		this.nodeLabel.on("mousedown dblclick", this._onLabelClickEvent.bind(this)).on("keydown", this._onLabelKeyEvent.bind(this));
 		options.labelOptions.text = options.labelOptions.text || this.element.textNodes().remove().text().replace(/^\s*|\s*$/g, "");
 
-		this.btnExpand = $("<div class='tnode-button'>").prependTo(this.nodeLabel).on("click", this._onBtnExpandClick.bind(this));
+		this.btnExpand = $("<div class='tnode-button'>").prependTo(this.nodeLabel).on("mousedown click", this._onBtnExpandClick.bind(this));
 
 		//add the markup children correctly.
 		this._childBox = $("<div class='tnode-children'>").ibxVBox().appendTo(this.element);
@@ -184,9 +184,9 @@ $.widget("ibi.ibxTreeNode", $.ibi.ibxVBox,
 	},
 	_onBtnExpandClick:function(e)
 	{
-		if(!this.options.singleClickExpand)
+		if(e.type == "click")
 			this.toggleExpanded();
-		e.stopPropagation();//click on button should not change tree selection...this stops that
+		e.stopPropagation();//click/mousedown on button should not change tree selection...this stops that
 	},
 	toggleExpanded:function(expand)
 	{

@@ -32,6 +32,8 @@
 				$(".btnLoad").on("click", function(e)
 				{
 					var tree = $(".test-tree")
+					tree.ibxWidget("remove");
+
 					var root = $("<div class='root-tree-node'>").ibxTreeNode({"expanded":true, "text":"Root Node", "labelOptions":{"glyph":"folder", "glyphClasses":"material-icons"}}).appendTo(tree);
 					for(var i = 0; i < 10; ++i)
 					{
