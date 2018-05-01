@@ -435,9 +435,13 @@ $.widget("ibi.ibxWidget", $.Widget,
 		selector = selector || ":ibxNavFocusable";
 		return this.children(selector);
 	},
-	navKeyActiveChild:function()
+	navKeyActiveChild:function(el)
 	{
-		return this.navKeyChildren(".ibx-nav-key-item-active");
+		if(el === undefined)
+			return this.navKeyChildren(".ibx-nav-key-item-active");
+
+		var active = this.navKeyActiveChild().removeClass(".ibx-nav-key-item-active");
+		$(el).addClass(".ibx-nav-key-item-active");
 	},
 	navKeyActive:function()
 	{
