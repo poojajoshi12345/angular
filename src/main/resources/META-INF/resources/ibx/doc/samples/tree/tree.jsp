@@ -22,7 +22,7 @@
 			{
 				$(".test-tree").on("dblclick ibx_nodeselect ibx_nodedeselect ibx_beforeexpand ibx_expand ibx_beforecollapse ibx_collapse", function(e)
 				{
-					//console.log("fnMain", e.type, e.target);
+					console.log(e.type, e.target);
 				})
 				$("body").on("dblclick", function(e)
 				{
@@ -34,6 +34,7 @@
 					var tree = $(".test-tree")
 					tree.ibxWidget("remove");
 
+					$.ibi.ibxWidget.noRefresh = true;
 					var root = $("<div class='root-tree-node'>").ibxTreeNode({"expanded":true, "text":"Root Node", "labelOptions":{"glyph":"folder", "glyphClasses":"material-icons"}}).appendTo(tree);
 					for(var i = 0; i < 10; ++i)
 					{
@@ -42,12 +43,11 @@
 						for(var j = 0; j < 10; ++j)
 						{
 							var childNode = $("<div class='test-tree-node'>").ibxTreeNode({"text": sformat("Tree Node {1}-{2}", i, j), "labelOptions":{"glyph":"android", "glyphClasses":"material-icons"}})
-							if(i == 0 && j == 1)
-								childNode.addClass("xxx");
 							parentNode.ibxWidget("add", childNode);
 						}
-						}
-					tree.ibxWidget("refresh");
+					}
+					$.ibi.ibxWidget.noRefresh = false;
+					tree.ibxWidget("refresh", true);
 				});
 
 				$(".btnHPStyle").on("ibx_change", function(e)
@@ -67,6 +67,10 @@
 				$(".btnCollapseAll").on("click", function(e)
 				{
 					$(".test-tree .ibx-tree-node").ibxWidget("toggleExpanded", false);
+				});
+				$(".cmdTest").on("ibx_triggered", function(e)
+				{
+					$(".root-tree-node").ibxWidget("select", true);
 				});
 			}, true);
 		</script>

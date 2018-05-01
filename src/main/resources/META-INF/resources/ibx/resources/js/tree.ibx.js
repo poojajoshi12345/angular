@@ -40,11 +40,17 @@ $.widget("ibi.ibxTree", $.ibi.ibxVBox,
 	{
 		return this.element.find(".tnode-selected").parent()[0] || null;
 	},
+	selectNode:function(el, select)
+	{
+		$(el).ibxWidget("select", select)
+	},
 	_onNodeEvent:function(e)
 	{
-		//don't let the events bubble past the tree.
-		if(e.type == "ibx_nodeselect")
+		var eType = e.type;
+		if(eType == "ibx_nodeselect")
 			this.element.find(".ibx-tree-node").not(e.target).ibxWidget("select", false);
+
+		//don't let the events bubble past the tree.
 		e.stopPropagation();
 	},
 	_onTreeKeyEvent:function(e)
@@ -52,11 +58,16 @@ $.widget("ibi.ibxTree", $.ibi.ibxVBox,
 		if(e.keyCode === $.ui.keyCode.ESCAPE)
 			$(this.selectedNode()).ibxWidget("navKeyActive");
 	},
+	refresh:function(withChildren)
+	{
+		this._super();
+		if(withChildren)
+			this.element.find(".ibx-tree-node").ibxWidget("refresh");
+	},
 	_refresh:function()
 	{
 		var options = this.options;
 		this._super();
-		this.element.find(".ibx-tree-node").ibxWidget("refresh");
 	}
 });
 
@@ -207,7 +218,8 @@ $.widget("ibi.ibxTreeNode", $.ibi.ibxVBox,
 		var selected = this.selected();
 		if(select && !selected)
 		{
-			this.nodeLabel.toggleClass("tnode-selected", true)
+			this.nodeLabel.toggleClass("tnode-selected", true);
+			this.focusNode();
 			this.element.dispatchEvent("ibx_nodeselect", null, true, true, tree);
 		}
 		else
@@ -235,6 +247,12 @@ $.widget("ibi.ibxTreeNode", $.ibi.ibxVBox,
 		}
 		else
 			this._super(key, value);
+	},
+	refresh:function(withChildren)
+	{
+		this._super();
+		if(!withChildren)
+			this.navKeyChildren().ibxWidget("refresh");
 	},
 	_refresh:function()
 	{
