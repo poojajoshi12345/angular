@@ -5,6 +5,7 @@ $.widget("ibi.ibxTree", $.ibi.ibxVBox,
 {
 	options:
 	{
+		"multiSelect":true,
 		"navKeyRoot":true,
 		"navKeyDir":"vertical",
 		"navKeyResetFocusOnBlur":false,
@@ -18,11 +19,11 @@ $.widget("ibi.ibxTree", $.ibi.ibxVBox,
 		}
 	},
 	_widgetClass:"ibx-tree",
-	NODE_EVENTS: "dblclick ibx_nodeselect ibx_nodedeselect ibx_beforeexpand ibx_expand ibx_beforecollapse ibx_collapse",
+	NODE_EVENTS: "keydown keyup mousedown dblclick ibx_nodeselect ibx_nodedeselect ibx_beforeexpand ibx_expand ibx_beforecollapse ibx_collapse",
 	_create:function()
 	{
 		this._super();
-		this.element.on(this.NODE_EVENTS, this._onNodeEvent.bind(this)).on("keydown", this._onTreeKeyEvent.bind(this));
+		this.element.on(this.NODE_EVENTS, this._onNodeEvent.bind(this));
 	},
 	_destroy:function()
 	{
@@ -36,27 +37,44 @@ $.widget("ibi.ibxTree", $.ibi.ibxVBox,
 	{
 		return this.navKeyActiveChild()[0];
 	},
-	selectedNode:function()
+	selected:function()
 	{
-		return this.element.find(".tnode-selected").parent()[0] || null;
+		var selNodes = this.element.find(".tnode-selected").parent();
+		return this.options.multiSelect ? selNodes.toArray() : selNodes[0];
 	},
-	selectNode:function(el, select)
+	select:function(el, select)
 	{
 		$(el).ibxWidget("select", select)
 	},
 	_onNodeEvent:function(e)
 	{
+		var options = this.options;
 		var eType = e.type;
+
+		//save this for multi-selection
+		if(eType == "keydown" || eType == "keyup" || e.type == "mousedown")
+		{
+			this._ctrlKeyDown = e.ctrlKey;
+			this._shiftKeyDown = e.shiftKey;
+
+			if(e.keyCode === $.ui.keyCode.ESCAPE)
+				$(this.selected()).ibxWidget("select", false);
+		}
+		else
 		if(eType == "ibx_nodeselect")
-			this.element.find(".ibx-tree-node").not(e.target).ibxWidget("select", false);
+		{
+			var target = $(e.target);
+			var curSelNodes = $(this.selected()).not(e.target);
+			if(!options.multiSelect || (!this._ctrlKeyDown && !this._shiftKeyDown))
+			{
+				curSelNodes.ibxWidget("select", false).removeClass("tnode-selected-anchor");
+				target.addClass("tnode-selected-anchor");
+			}
+			target.ibxWidget("select", true);
+		}
 
 		//don't let the events bubble past the tree.
 		e.stopPropagation();
-	},
-	_onTreeKeyEvent:function(e)
-	{
-		if(e.keyCode === $.ui.keyCode.ESCAPE)
-			$(this.selectedNode()).ibxWidget("navKeyActive");
 	},
 	refresh:function(withChildren)
 	{
@@ -75,8 +93,6 @@ $.widget("ibi.ibxTreeNode", $.ibi.ibxVBox,
 {
 	options:
 	{
-		"text":"", //tranfer the option to the inner label in refresh
-		"labelOptions":{},
 		"btnCollapsed":"tnode-btn-collapsed",
 		"btnExpanded":"tnode-btn-expanded",
 		"singleClickExpand":false,
@@ -161,6 +177,7 @@ $.widget("ibi.ibxTreeNode", $.ibi.ibxVBox,
 	_onLabelKeyEvent:function(e)
 	{
 		var options = this.options;
+		console.log(e);
 		if(e.keyCode === $.ui.keyCode.RIGHT)
 		{
 			if(!options.expanded)

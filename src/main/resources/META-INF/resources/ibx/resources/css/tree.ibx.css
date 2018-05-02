@@ -32,7 +32,11 @@
 
 .tnode-label.tnode-selected
 {
-	background-color:#aaa;
+	background-color:#ddd;
+}
+
+.tnode-selected-anchor > .tnode-label
+{
 }
 
 .tnode-button

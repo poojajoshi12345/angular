@@ -22,7 +22,7 @@
 			{
 				$(".test-tree").on("dblclick ibx_nodeselect ibx_nodedeselect ibx_beforeexpand ibx_expand ibx_beforecollapse ibx_collapse", function(e)
 				{
-					console.log(e.type, e.target);
+					//console.log(e.type, e.target);
 				})
 				$("body").on("dblclick", function(e)
 				{
@@ -109,8 +109,6 @@
 		{
 			background-color:rgba(53, 184, 254, 0.4);
 		}
-		/*
-		*/
 		</style>
 	</head>
 	<body class="ibx-root">
