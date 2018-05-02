@@ -15,8 +15,7 @@
 			ibx(function()
 			{
 				var ibToolbar = $("<div>").ibToolbar();
-				console.log(ibToolbar);
-    			$(".main-toolbar").append(ibToolbar); 	
+				$(".main-toolbar").append(ibToolbar); 	
 			}, ["/ibi_apps/ibx/testing/txbtests/toolbar/ibToolbar.xml"], true);	
 	</script>
 </head>
