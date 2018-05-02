@@ -1,4 +1,4 @@
-﻿/*Copyright 1996-2016 Information Builders, Inc. All rights reserved.*/
+/*Copyright 1996-2016 Information Builders, Inc. All rights reserved.*/
 /* $Revision$: */
 
 @font-face {
@@ -38,6 +38,9 @@
 	font-feature-settings: 'liga';
 }
 
+.ibx-glyph-filter-small:before {
+  content: "\e9ca";
+}
 .ibx-glyph-average:before {
   content: "\e9c2";
 }
@@ -254,6 +257,63 @@
 }
 .ibx-glyph-unlock:before {
   content: "\e97b";
+}
+.ibx-glyph-inspect-1:before {
+  content: "\e9f4";
+}
+.ibx-glyph-inspect-2:before {
+  content: "\e9f5";
+}
+.ibx-glyph-plus-thin:before {
+  content: "\e9ef";
+}
+.ibx-glyph-map-point-bubble:before {
+  content: "\e9e0";
+}
+.ibx-glyph-map-point-density-1:before {
+  content: "\e9e2";
+}
+.ibx-glyph-map-point-density-2:before {
+  content: "\e9e3";
+}
+.ibx-glyph-map-point-marker:before {
+  content: "\e9e4";
+}
+.ibx-glyph-funnel:before {
+  content: "\e9d8";
+}
+.ibx-glyph-pyramid:before {
+  content: "\e9d9";
+}
+.ibx-glyph-shape-square:before {
+  content: "\e9da";
+}
+.ibx-glyph-shape-circle:before {
+  content: "\e9db";
+}
+.ibx-glyph-shape-fill:before {
+  content: "\e9dc";
+}
+.ibx-glyph-gauge-needle:before {
+  content: "\e9dd";
+}
+.ibx-glyph-gauge-simple:before {
+  content: "\e9de";
+}
+.ibx-glyph-gauge-label:before {
+  content: "\e9e1";
+}
+.ibx-glyph-stacked:before {
+  content: "\e9d4";
+}
+.ibx-glyph-side-by-side:before {
+  content: "\e9d5";
+}
+.ibx-glyph-absolute:before {
+  content: "\e9d6";
+}
+.ibx-glyph-percent:before {
+  content: "\e9d7";
 }
 .ibx-glyph-greater-than-or-equal:before {
   content: "\e9bc";
@@ -546,6 +606,42 @@
 .ibx-glyph-align-control-right:before {
   content: "\e9aa";
 }
+.ibx-glyph-ellipsis-h-sm:before {
+  content: "\e9e5";
+}
+.ibx-glyph-ellipsis-v-sm:before {
+  content: "\e9e6";
+}
+.ibx-glyph-animate:before {
+  content: "\e9d2";
+}
+.ibx-glyph-small-multiples:before {
+  content: "\e9d3";
+}
+.ibx-glyph-columns:before {
+  content: "\e9cb";
+}
+.ibx-glyph-rows:before {
+  content: "\e9cc";
+}
+.ibx-glyph-y-axis:before {
+  content: "\e9cd";
+}
+.ibx-glyph-y2-axis:before {
+  content: "\e9d0";
+}
+.ibx-glyph-x-axis:before {
+  content: "\e9ce";
+}
+.ibx-glyph-x2-axis:before {
+  content: "\e9d1";
+}
+.ibx-glyph-axis-grid:before {
+  content: "\e9f6";
+}
+.ibx-glyph-prompt:before {
+  content: "\e9cf";
+}
 .ibx-glyph-tree:before {
   content: "\e9c5";
 }
@@ -572,6 +668,45 @@
 }
 .ibx-glyph-compress:before {
   content: "\f066";
+}
+.ibx-glyph-union-1:before {
+  content: "\e9df";
+}
+.ibx-glyph-union-2:before {
+  content: "\e9f3";
+}
+.ibx-glyph-query-3:before {
+  content: "\e9f2";
+}
+.ibx-glyph-query-1:before {
+  content: "\e9f0";
+}
+.ibx-glyph-query-2:before {
+  content: "\e9f1";
+}
+.ibx-glyph-aggregate:before {
+  content: "\e9eb";
+}
+.ibx-glyph-detail:before {
+  content: "\e9ec";
+}
+.ibx-glyph-pivot:before {
+  content: "\e9ed";
+}
+.ibx-glyph-transpose:before {
+  content: "\e9ee";
+}
+.ibx-glyph-python-1:before {
+  content: "\e9e7";
+}
+.ibx-glyph-python-2:before {
+  content: "\e9e8";
+}
+.ibx-glyph-r-1:before {
+  content: "\e9e9";
+}
+.ibx-glyph-r-2:before {
+  content: "\e9ea";
 }
 .ibx-glyph-panel:before {
   content: "\e935";
