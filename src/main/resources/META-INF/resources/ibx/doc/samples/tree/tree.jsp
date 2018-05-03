@@ -90,6 +90,12 @@
 			margin:5px;
 		}
 
+		.tnode-selection-anchor > .tnode-label
+		{
+			font-weight:bold;
+			font-style:italic;
+		}
+
 		/*IBI WF Tree Styles*/
 		.hp-style .tnode-label
 		{
@@ -107,7 +113,7 @@
 		{
 			background-color:rgba(53, 184, 254, 0.1);
 		}
-		.hp-style .tnode-selected .tnode-label
+		.hp-style .tnode-selected > .tnode-label
 		{
 			background-color:rgba(53, 184, 254, 0.4);
 		}

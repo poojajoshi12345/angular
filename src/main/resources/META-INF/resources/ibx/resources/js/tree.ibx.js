@@ -87,8 +87,9 @@ $.widget("ibi.ibxTree", $.ibi.ibxVBox,
 			{
 				var target = $(e.target);
 				var curSelNodes = $(this.selected().not(target));
-				
-				curSelNodes.ibxWidget("anchor", false);
+
+				//remove old anchor...there can be only one! (evil laugh)
+				curSelNodes.removeClass("tnode-selection-anchor");
 
 				//not multiselect, or no selection meta key is down...clear selection start again.
 				if(!options.multiSelect || (!this._ctrlKeyDown && !this._shiftKeyDown))
@@ -253,22 +254,7 @@ $.widget("ibi.ibxTreeNode", $.ibi.ibxVBox,
 	},
 	anchor:function(anchor)
 	{
-		if(anchor === undefined)
-			return this.element.is(".tnode-selection-anchor");
-
-		var tree = this.tree();
-		var anchored = this.anchor();
-		if(anchor && !anchored)
-		{
-			this.element.toggleClass("tnode-selection-anchor", true);
-			this.element.dispatchEvent("ibx_nodeanchored", null, true, true, tree);
-		}
-		else
-		if(!anchor && anchored)
-		{
-			this.element.toggleClass("tnode-selection-anchor", false)
-			this.element.dispatchEvent("ibx_nodeunanchored", null, true, true, tree);
-		}
+		return this.element.is(".tnode-selection-anchor");
 	},
 	selected:function(select)
 	{
@@ -283,7 +269,7 @@ $.widget("ibi.ibxTreeNode", $.ibi.ibxVBox,
 			if(!evt.defaultPrevented)
 			{
 				this.anchor(true);
-				this.element.toggleClass("tnode-selected", true);
+				this.element.toggleClass("tnode-selected tnode-selection-anchor", true);
 				this.focusNode();
 			}	
 		}
@@ -295,7 +281,7 @@ $.widget("ibi.ibxTreeNode", $.ibi.ibxVBox,
 			if(!evt.defaultPrevented)
 			{
 				this.anchor(false);
-				this.element.toggleClass("tnode-selected", false)
+				this.element.toggleClass("tnode-selected tnode-selection-anchor", false)
 			}
 		}
 	},
@@ -332,7 +318,7 @@ $.widget("ibi.ibxTreeNode", $.ibi.ibxVBox,
 		var options = this.options;
 		var children = this.children();
 		var container = (options.container == "auto") ? this.hasChildren() : options.container;
-		var indent = options.indent || $.ibi.ibxTreeNode.defaultIndent;
+		var indent = (options.indent !== null) ? options.indent : $.ibi.ibxTreeNode.defaultIndent;
 		
 		options.labelOptions.text = options.text || options.labelOptions.text;
 		this.nodeLabel.ibxWidget("option", options.labelOptions).css("padding-left", this.depth() * indent);
