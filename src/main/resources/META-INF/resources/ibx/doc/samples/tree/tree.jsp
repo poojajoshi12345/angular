@@ -20,7 +20,8 @@
 		<script type="text/javascript">
 			ibx(function()
 			{
-				$(".test-tree").on("ibx_nodeselect ibx_nodedeselect ibx_nodeanchored ibx_nodeunanchored ibx_beforeexpand ibx_expand ibx_beforecollapse ibx_collapse", function(e)
+				//$(".test-tree").on("ibx_nodeselect ibx_nodedeselect ibx_nodeanchored ibx_nodeunanchored ibx_beforeexpand ibx_expand ibx_beforecollapse ibx_collapse", function(e)
+				$(".test-tree").on("ibx_nodeanchored ibx_nodeunanchored", function(e)
 				{
 					//console.log(e.type, e.target);
 				})
@@ -43,7 +44,7 @@
 					var root = $("<div class='root-tree-node'>").ibxTreeNode({"expanded":true, "text":"Root Node", "labelOptions":{"glyph":"folder", "glyphClasses":"material-icons"}}).appendTo(tree);
 					for(var i = 0; i < 10; ++i)
 					{
-						var parentNode = $("<div class='tree-parent'>").ibxTreeNode({"text": sformat("Tree Node {1}", i), "labelOptions":{"glyph":"folder", "glyphClasses":"material-icons"}})
+						var parentNode = $("<div class='tree-parent'>").ibxTreeNode({"draggable":true, "text": sformat("Tree Node {1}", i), "labelOptions":{"glyph":"folder", "glyphClasses":"material-icons"}})
 						root.ibxWidget("add", parentNode);
 						for(var j = 0; j < 10; ++j)
 						{

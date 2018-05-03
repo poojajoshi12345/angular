@@ -42,12 +42,22 @@ $.widget("ibi.ibxTree", $.ibi.ibxVBox,
 	{
 		return this.navKeyActiveChild()[0];
 	},
-	selected:function(el, selected)
+	anchor:function()
+	{
+		var anchor = this.treeNodes(".tnode-selection-anchor");
+		return anchor[0] || null;
+	},
+	selected:function(el, selected, add)
 	{
 		if(el === undefined)
 			return this.treeNodes(".tnode-selected");
-		var nodes = $(el);
+
+		var nodes = this.treeNodes();
+		if(!add)
+			nodes.ibxWidget("selected", false);
+		nodes = nodes.filter(el);
 		nodes = this.options.multiSelect ? nodes : nodes.first();
+
 		this._internalSelect = true;
 		nodes.ibxWidget("selected", selected);
 		this._internalSelect = false;
@@ -73,12 +83,21 @@ $.widget("ibi.ibxTree", $.ibi.ibxVBox,
 		else
 		if(eType == "ibx_nodeselect")
 		{
-			var target = $(e.target);
-			var curSelNodes = $(this.selected().not(target));
-			if(!this._internalSelect && (!options.multiSelect || (!this._ctrlKeyDown && !this._shiftKeyDown)))
-				curSelNodes.ibxWidget("selected", false);
-			curSelNodes.ibxWidget("anchor", false);
-			target.ibxWidget("anchor", true);
+			if(!this._internalSelect)
+			{
+				var target = $(e.target);
+				var curSelNodes = $(this.selected().not(target));
+				
+				curSelNodes.ibxWidget("anchor", false);
+
+				//not multiselect, or no selection meta key is down...clear selection start again.
+				if(!options.multiSelect || (!this._ctrlKeyDown && !this._shiftKeyDown))
+					curSelNodes.ibxWidget("selected", false);
+				else
+				if(this._shiftKeyDown)//do contiguous selection
+				{
+				}
+			}
 		}
 
 		//don't let the events bubble past the tree.
@@ -133,7 +152,7 @@ $.widget("ibi.ibxTreeNode", $.ibi.ibxVBox,
 		this.nodeLabel.on("mousedown dblclick", this._onLabelClickEvent.bind(this)).on("keydown", this._onLabelKeyEvent.bind(this));
 		options.labelOptions.text = options.labelOptions.text || this.element.textNodes().remove().text().replace(/^\s*|\s*$/g, "");
 
-		this.btnExpand = $("<div class='tnode-button'>").prependTo(this.nodeLabel).on("mousedown click", this._onBtnExpandClick.bind(this));
+		this.btnExpand = $("<div class='tnode-btn'>").prependTo(this.nodeLabel).on("mousedown click", this._onBtnExpandClick.bind(this));
 
 		//add the markup children correctly.
 		this._childBox = $("<div class='tnode-children'>").ibxVBox().appendTo(this.element);
@@ -260,15 +279,24 @@ $.widget("ibi.ibxTreeNode", $.ibi.ibxVBox,
 		var selected = this.selected();
 		if(select && !selected)
 		{
-			this.element.toggleClass("tnode-selected", true);
-			this.focusNode();
-			this.element.dispatchEvent("ibx_nodeselect", null, true, true, tree);
+			var evt = this.element.dispatchEvent("ibx_nodeselect", null, true, true, tree);
+			if(!evt.defaultPrevented)
+			{
+				this.anchor(true);
+				this.element.toggleClass("tnode-selected", true);
+				this.focusNode();
+			}	
 		}
 		else
 		if(!select && selected)
 		{
-			this.element.toggleClass("tnode-selected", false)
-			this.element.dispatchEvent("ibx_nodedeselect", null, true, true, tree);
+			
+			var evt = this.element.dispatchEvent("ibx_nodedeselect", null, true, true, tree);
+			if(!evt.defaultPrevented)
+			{
+				this.anchor(false);
+				this.element.toggleClass("tnode-selected", false)
+			}
 		}
 	},
 	_setOption:function(key, value)
@@ -284,6 +312,8 @@ $.widget("ibi.ibxTreeNode", $.ibi.ibxVBox,
 			{
 				this._super(key, value);
 				eType = value ? "ibx_expand" : "ibx_collapse";
+				if(eType == "ibx_collapse")
+					this.children().ibxWidget("selected", false);
 				this.element.dispatchEvent(eType, null, true, true, tree);
 			}
 		}
