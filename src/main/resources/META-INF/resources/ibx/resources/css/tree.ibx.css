@@ -30,13 +30,14 @@
 	background-color:#eee;
 }
 
-.tnode-label.tnode-selected
+.tnode-selected > .tnode-label
 {
-	background-color:#ddd;
+	background-color:#ccc;
 }
 
-.tnode-selected-anchor > .tnode-label
+.tnode-selection-anchor > .tnode-label
 {
+	//background-color:thistle;
 }
 
 .tnode-button

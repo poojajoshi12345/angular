@@ -6,7 +6,7 @@ $.widget("ibi.ibxTree", $.ibi.ibxVBox,
 	options:
 	{
 		"multiSelect":true,
-		"escClearSelection":false,
+		"escClearSelection":true,
 		"navKeyRoot":true,
 		"navKeyDir":"vertical",
 		"navKeyResetFocusOnBlur":false,
@@ -20,7 +20,7 @@ $.widget("ibi.ibxTree", $.ibi.ibxVBox,
 		}
 	},
 	_widgetClass:"ibx-tree",
-	NODE_EVENTS: "keydown keyup mousedown dblclick ibx_nodeselect ibx_nodedeselect ibx_beforeexpand ibx_expand ibx_beforecollapse ibx_collapse",
+	NODE_EVENTS: "keydown keyup mousedown click dblclick ibx_nodeselect ibx_nodedeselect ibx_nodeanchored ibx_nodeunanchored ibx_beforeexpand ibx_expand ibx_beforecollapse ibx_collapse",
 	_create:function()
 	{
 		this._super();
@@ -34,18 +34,23 @@ $.widget("ibi.ibxTree", $.ibi.ibxVBox,
 	{
 		return this.element.find(".tnode-label:ibxFocusable(-1)").filter(selector || "*");
 	},
-	activeNode:function()
+	treeNodes:function(pattern)
+	{
+		return this.element.find(pattern || ".ibx-tree-node");
+	},
+	active:function()
 	{
 		return this.navKeyActiveChild()[0];
 	},
-	selected:function()
+	selected:function(el, selected)
 	{
-		var selNodes = this.element.find(".tnode-selected").parent();
-		return this.options.multiSelect ? selNodes.toArray() : selNodes[0];
-	},
-	select:function(el, select)
-	{
-		$(el).ibxWidget("select", select)
+		if(el === undefined)
+			return this.treeNodes(".tnode-selected");
+		var nodes = $(el);
+		nodes = this.options.multiSelect ? nodes : nodes.first();
+		this._internalSelect = true;
+		nodes.ibxWidget("selected", selected);
+		this._internalSelect = false;
 	},
 	_onNodeEvent:function(e)
 	{
@@ -62,22 +67,18 @@ $.widget("ibi.ibxTree", $.ibi.ibxVBox,
 			if(options.escClearSelection && (e.keyCode === $.ui.keyCode.ESCAPE))
 			{
 				var selected = $(this.selected());
-				var anchor = selected.filter(".tnode-selected-anchor");
-				selected.ibxWidget("select", false);
-				anchor.ibxWidget("select", true);
+				selected.ibxWidget("selected", false).ibxWidget("anchor", false);
 			}
 		}
 		else
 		if(eType == "ibx_nodeselect")
 		{
 			var target = $(e.target);
-			var curSelNodes = $(this.selected()).not(e.target);
-			if(!options.multiSelect || (!this._ctrlKeyDown && !this._shiftKeyDown))
-			{
-				curSelNodes.ibxWidget("select", false).removeClass("tnode-selected-anchor");
-				target.addClass("tnode-selected-anchor");
-			}
-			target.ibxWidget("select", true);
+			var curSelNodes = $(this.selected().not(target));
+			if(!this._internalSelect && (!options.multiSelect || (!this._ctrlKeyDown && !this._shiftKeyDown)))
+				curSelNodes.ibxWidget("selected", false);
+			curSelNodes.ibxWidget("anchor", false);
+			target.ibxWidget("anchor", true);
 		}
 
 		//don't let the events bubble past the tree.
@@ -184,7 +185,6 @@ $.widget("ibi.ibxTreeNode", $.ibi.ibxVBox,
 	_onLabelKeyEvent:function(e)
 	{
 		var options = this.options;
-		console.log(e);
 		if(e.keyCode === $.ui.keyCode.RIGHT)
 		{
 			if(!options.expanded)
@@ -202,7 +202,7 @@ $.widget("ibi.ibxTreeNode", $.ibi.ibxVBox,
 		}
 		else
 		if(e.keyCode === $.ui.keyCode.ENTER || e.keyCode === $.ui.keyCode.SPACE)
-			this.select(true);
+			this.selected(true);
 	},
 	_onLabelClickEvent:function(e)
 	{
@@ -212,7 +212,7 @@ $.widget("ibi.ibxTreeNode", $.ibi.ibxVBox,
 		else
 		if(e.type == "mousedown")
 		{
-			this.select(true);
+			this.selected(true);
 			if(this.options.singleClickExpand)
 				this.toggleExpanded();
 		}
@@ -232,24 +232,42 @@ $.widget("ibi.ibxTreeNode", $.ibi.ibxVBox,
 	{
 		this.nodeLabel.focus();
 	},
-	selected:function()
+	anchor:function(anchor)
 	{
-		return this.nodeLabel.is(".tnode-selected");
+		if(anchor === undefined)
+			return this.element.is(".tnode-selection-anchor");
+
+		var tree = this.tree();
+		var anchored = this.anchor();
+		if(anchor && !anchored)
+		{
+			this.element.toggleClass("tnode-selection-anchor", true);
+			this.element.dispatchEvent("ibx_nodeanchored", null, true, true, tree);
+		}
+		else
+		if(!anchor && anchored)
+		{
+			this.element.toggleClass("tnode-selection-anchor", false)
+			this.element.dispatchEvent("ibx_nodeunanchored", null, true, true, tree);
+		}
 	},
-	select:function(select)
+	selected:function(select)
 	{
+		if(select === undefined)
+			return this.element.is(".tnode-selected");
+
 		var tree = this.tree();
 		var selected = this.selected();
 		if(select && !selected)
 		{
-			this.nodeLabel.toggleClass("tnode-selected", true);
+			this.element.toggleClass("tnode-selected", true);
 			this.focusNode();
 			this.element.dispatchEvent("ibx_nodeselect", null, true, true, tree);
 		}
 		else
 		if(!select && selected)
 		{
-			this.nodeLabel.toggleClass("tnode-selected", false)
+			this.element.toggleClass("tnode-selected", false)
 			this.element.dispatchEvent("ibx_nodedeselect", null, true, true, tree);
 		}
 	},

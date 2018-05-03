@@ -20,13 +20,18 @@
 		<script type="text/javascript">
 			ibx(function()
 			{
-				$(".test-tree").on("dblclick ibx_nodeselect ibx_nodedeselect ibx_beforeexpand ibx_expand ibx_beforecollapse ibx_collapse", function(e)
+				$(".test-tree").on("ibx_nodeselect ibx_nodedeselect ibx_nodeanchored ibx_nodeunanchored ibx_beforeexpand ibx_expand ibx_beforecollapse ibx_collapse", function(e)
 				{
 					//console.log(e.type, e.target);
 				})
 				$("body").on("dblclick", function(e)
 				{
 					//console.log("body", e.type);
+				});
+				$(".cmdTest").on("ibx_triggered", function(e)
+				{
+					var sel = $(".test-tree").ibxWidget("selected", null, true);
+					console.log(sel);
 				});
 
 				$(".btnLoad").on("click", function(e)
@@ -38,11 +43,11 @@
 					var root = $("<div class='root-tree-node'>").ibxTreeNode({"expanded":true, "text":"Root Node", "labelOptions":{"glyph":"folder", "glyphClasses":"material-icons"}}).appendTo(tree);
 					for(var i = 0; i < 10; ++i)
 					{
-						var parentNode = $("<div class='test-tree-node'>").ibxTreeNode({"text": sformat("Tree Node {1}", i), "labelOptions":{"glyph":"folder", "glyphClasses":"material-icons"}})
+						var parentNode = $("<div class='tree-parent'>").ibxTreeNode({"text": sformat("Tree Node {1}", i), "labelOptions":{"glyph":"folder", "glyphClasses":"material-icons"}})
 						root.ibxWidget("add", parentNode);
 						for(var j = 0; j < 10; ++j)
 						{
-							var childNode = $("<div class='test-tree-node'>").ibxTreeNode({"text": sformat("Tree Node {1}-{2}", i, j), "labelOptions":{"glyph":"android", "glyphClasses":"material-icons"}})
+							var childNode = $("<div class='tree-child'>").ibxTreeNode({"text": sformat("Tree Node {1}-{2}", i, j), "labelOptions":{"glyph":"android", "glyphClasses":"material-icons"}})
 							parentNode.ibxWidget("add", childNode);
 						}
 					}
@@ -67,10 +72,6 @@
 				$(".btnCollapseAll").on("click", function(e)
 				{
 					$(".test-tree .ibx-tree-node").ibxWidget("toggleExpanded", false);
-				});
-				$(".cmdTest").on("ibx_triggered", function(e)
-				{
-					$(".root-tree-node").ibxWidget("select", true);
 				});
 			}, true);
 		</script>
@@ -105,7 +106,7 @@
 		{
 			background-color:rgba(53, 184, 254, 0.1);
 		}
-		.hp-style .tnode-label.tnode-selected
+		.hp-style .tnode-selected .tnode-label
 		{
 			background-color:rgba(53, 184, 254, 0.4);
 		}
