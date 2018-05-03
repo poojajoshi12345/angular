@@ -6,6 +6,7 @@ $.widget("ibi.ibxTree", $.ibi.ibxVBox,
 	options:
 	{
 		"multiSelect":true,
+		"escClearSelection":false,
 		"navKeyRoot":true,
 		"navKeyDir":"vertical",
 		"navKeyResetFocusOnBlur":false,
@@ -57,8 +58,14 @@ $.widget("ibi.ibxTree", $.ibi.ibxVBox,
 			this._ctrlKeyDown = e.ctrlKey;
 			this._shiftKeyDown = e.shiftKey;
 
-			if(e.keyCode === $.ui.keyCode.ESCAPE)
-				$(this.selected()).ibxWidget("select", false);
+			//escape will clear all selections back to anchor...this is questionable...really not sure we want this functionality
+			if(options.escClearSelection && (e.keyCode === $.ui.keyCode.ESCAPE))
+			{
+				var selected = $(this.selected());
+				var anchor = selected.filter(".tnode-selected-anchor");
+				selected.ibxWidget("select", false);
+				anchor.ibxWidget("select", true);
+			}
 		}
 		else
 		if(eType == "ibx_nodeselect")
