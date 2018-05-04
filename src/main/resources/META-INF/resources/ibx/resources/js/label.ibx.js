@@ -89,6 +89,17 @@ $.widget("ibi.ibxLabel", $.ibi.ibxFlexBox,
 			options.textIsHtml ? this._text.html(options.text) : this._text.text(options.text);
 		this._text.removeClass(lastOptions.textElClass).addClass(options.textElClass).css({"text-align":options.textAlign, "white-space":options.textWrap ? "" : "nowrap"});
 
+		//[IBX-131] flexbox align center doesn't work correctly in IE with text wrapping...must be set to stretch and then center text automatically.
+		//this causes an inconsistency with other browsers...ie will center text when wrapped other won't.  
+		//SO EXPLICITLY TELL USERS TO SPECIFY THE TEXT-ALIGN THEY WANT IF WRAPPING IS ON AND WIDTH IS FIXED.
+		if(ibxPlatformCheck.isIE)
+		{
+			if(options.align == "center" && options.textWrap == true && (options.iconPosition == "top" || options.iconPosition == "bottom"))
+				this._text.css("alignSelf", "stretch").css("textAlign", options.textAlign || "center");
+			else
+				this._text.css("alignSelf", "");
+		}
+
 		//add appropriate spacer classes
 		this._glyph.toggleClass(this.options.glyphElSpacerClass, !!((options.icon || options.glyph || options.glyphClasses) && options.text));
 
@@ -124,3 +135,4 @@ $.ibi.ibxLabel.statics =
 {
 }
 //# sourceURL=label.ibx.js
+
