@@ -87,7 +87,7 @@ $.widget("ibi.ibxPopup", $.ibi.ibxWidget,
 	},
 	open:function(openInfo)
 	{
-		//[IBX-121][PD-839]trying to open the dialog when closing...this will cause an open from the close, when complete.
+		//[IBX-121][PD-839]trying to open the popup when closing...this will cause an open from the close, when complete.
 		if(this.isClosing())
 		{
 			this._openFromClose = true;
@@ -111,6 +111,10 @@ $.widget("ibi.ibxPopup", $.ibi.ibxWidget,
 						this.close();
 					}.bind(this), options.closeOnTimer);
 				}
+			
+				if(this._closeFromOpen)
+					this.close();
+
 			}.bind(this));
 
 			var options = this.options;
@@ -141,11 +145,26 @@ $.widget("ibi.ibxPopup", $.ibi.ibxWidget,
 	},
 	close:function(closeInfo)
 	{
-		if(this.isOpen() && !this.isOpening() && this._trigger("beforeclose", null, closeInfo))
+		/****
+			[HOME-1073][IBX-121][PD-839]...see 'open' function above for corollary
+			trying to close the popup when opening...this will cause a close from the open, when complete.
+			this is needed because the popup is transitioning between open/close is happening, so the popup manager is trying to close
+			this popup, but it can't because it's not fully open yet.  We stack the open/close so that when it has fully completed
+			the transition, it will then do the stacked (open/close) action.
+		****/
+		if(this.isOpening())
+		{
+			this._closeFromOpen = true;
+			return;
+		}
+
+		if(this.isOpen() && this._trigger("beforeclose", null, closeInfo))
 		{
 			//we are fully closed...no longer interested in transition events.
 			this.element.on("transitionend", function(e)
 			{
+				this._closeFromOpen = false;
+
 				//destroy on close, if desired, or put popup back under it's original parent.
 				if(!this._destroyed && this.options.destroyOnClose)
 				{
