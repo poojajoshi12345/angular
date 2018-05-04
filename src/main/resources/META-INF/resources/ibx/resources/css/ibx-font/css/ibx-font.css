@@ -150,6 +150,9 @@
 .ibx-glyph-file-css:before {
   content: "\e90d";
 }
+.ibx-glyph-file-js:before {
+  content: "\e9f7";
+}
 .ibx-glyph-file-sty:before {
   content: "\e90e";
 }
