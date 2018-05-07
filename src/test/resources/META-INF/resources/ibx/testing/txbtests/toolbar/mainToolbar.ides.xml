@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--Copyright 1996-2018 Information Builders, Inc. All rights reserved. $Revision$:-->
+<ibx-res-bundle loadContext="bundle">
+	<styles>
+		<style-file src="./resources/css/mainToolbar.ides.css"/>
+	</styles>
+	
+	<scripts>
+		<script-file src="./resources/js/mainToolbar.ides.js"/>		
+	</scripts>
+	
+	<markup>
+		<markup-block>	
+		  <div class="ides-toolbar-main" data-ibx-name="idesToolbarMain" data-ibx-type="ibxHBox">	
+		   <!-- Commands -->
+		 
+		  <div class="ides-toolbar-cmd-open" action="open" data-ibx-name="idesCmdOpen" data-ibx-type="ibxCommand" data-ibxp-id="cmdIdesOpen"></div>
+		  <div class="ides-toolbar-cmd-new" action="new" data-ibx-name="idesCmdNew" data-ibx-type="ibxCommand" data-ibxp-id="cmdIdesNew"></div>
+		  <div class="ides-toolbar-cmd-save" action="save" data-ibx-name="idesCmdSave" data-ibx-type="ibxCommand" data-ibxp-id="cmdIdesSave"></div>
+		  <div class="ides-toolbar-cmd-saveas" action="saveas" data-ibx-name="idesCmdSaveAs" data-ibx-type="ibxCommand" data-ibxp-id="cmdIdesSaveAs"></div>
+		  <div class="ides-toolbar-cmd-close" action="close" data-ibx-name="idesCmdClose" data-ibx-type="ibxCommand" data-ibxp-id="cmdIdesClose"></div>
+		  <div class="ides-toolbar-cmd-undo" action="undo" data-ibx-name="idesCmdUndo" data-ibx-type="ibxCommand" data-ibxp-id="cmdIdesUndo"></div>
+		  <div class="ides-toolbar-cmd-redo" action="redo" data-ibx-name="idesCmdRedo" data-ibx-type="ibxCommand" data-ibxp-id="cmdIdesRedo"></div>
+			
+		  <div class="ides-toolbar-button" data-ibx-name="idesTBButtonFileMenu" data-ibxp-icon="./resources/etc/bar.png" data-ibx-type="ibxMenuButton">
+				    <div class="ides-menu-toolbar-file" data-ibx-type="ibxMenu">
+						    <div class="ides-toolbar-menu" data-ibx-name="idesTBMenuOpen" data-ibx-type="ibxMenuItem" data-ibxp-label-options='{"glyphClasses":"ibx-icons ibx-glyph-edit"}' data-ibxp-command="cmdIdesOpen">Open</div>
+							<div class="ides-toolbar-menu" data-ibx-type="ibxMenuItem" data-ibxp-label-options='{"glyphClasses":"ibx-icons ibx-glyph-new"}'>New
+								<div class="ides-toolbar-file-menu-new" data-ibx-type="ibxMenu"> 
+								    <div class="ides-toolbar-radiogroup-new" data-ibx-type="ibxRadioGroup" data-ibxp-name="idesTBFileRadioNew"></div> 
+									<div class="ides-toolbar-menu ides-toolbar-file-radiomenu-new-chart" data-ibx-name="idesTBNewChart" data-ibxp-group="idTBFileRadioNew" data-ibx-type="ibxRadioMenuItem">Chart</div>
+									<div class="ides-toolbar-menu ides-toolbar-file-radiomenu-new-page" data-ibx-name="idesTBNewPage" data-ibxp-group="idTBFileRadioNew" data-ibx-type="ibxRadioMenuItem">Page</div>
+									<div class="ides-toolbar-menu ides-toolbar-file-radiomenu-new-portal" data-ibx-name="idesTBNewPortal" data-ibxp-group="idTBFileRadioNew" data-ibx-type="ibxRadioMenuItem">Portal</div>
+								</div>	
+							</div>						
+							<div class="ides-toolbar-menu" data-ibx-name="idesTBMenuSave" data-ibx-type="ibxMenuItem" data-ibxp-label-options='{"glyphClasses":"ibx-icons ibx-glyph-floppy"}' data-ibxp-command="cmdIdesSave">Save</div>
+							<div class="ides-toolbar-menu" data-ibx-name="idesTBMenuSaveAs" data-ibx-type="ibxMenuItem" data-ibxp-label-options='{"glyphClasses":"ibx-icons ibx-glyph-floppy"}' data-ibxp-command="cmdIdesSaveAs">Save As...</div>
+							<div class="ides-toolbar-separator" data-ibx-type="ibxMenuSeparator"></div>
+							<div class="ides-toolbar-menu" data-ibx-name="idesTBMenuExportData" data-ibx-type="ibxMenuItem">Export data</div>
+							<div class="ides-toolbar-menu" data-ibx-name="idesTBMenuExportImg" data-ibx-type="ibxMenuItem">Export image</div>
+							<div class="ides-toolbar-menu" data-ibx-type="ibxMenuItem" >Export As...
+								<div class="ides-toolbar-menu-export" data-ibx-type="ibxMenu"> 
+								    <div class="ides-toolbar-radiogroup-export" data-ibx-type="ibxRadioGroup" data-ibxp-name="idTBFileRadioExportAs"></div>  
+									<div  class="ides-toolbar-menu ides-toolbar-cmd-export-text" data-ibx-name="idesTBExportText" data-ibx-type="ibxRadioMenuItem">Text</div>
+									<div class="ides-toolbar-menu ides-toolbar-cmd-export-cvs" data-ibx-name="idesTBExportCVS" data-ibx-type="ibxRadioMenuItem">CVS file</div>
+									<div class="ides-toolbar-menu ides-toolbar-cmd-export-hold" data-ibx-name="idesTBExportHold" data-ibx-type="ibxRadioMenuItem">Hold</div>
+								</div>
+							</div>
+							<div class="ides-toolbar-separator" data-ibx-type="ibxMenuSeparator"></div>
+							<div class="ides-toolbar-menu" data-ibx-name="idesTBMenuSaveThemeAs" data-ibx-type="ibxMenuItem" data-ibxp-label-options='{"glyphClasses":"ibx-icons ibx-glyph-floppy"}'>Save Theme As...</div>
+							<div class="ides-toolbar-separator" data-ibx-type="ibxMenuSeparator"></div>
+							<div class="ides-toolbar-menu" data-ibx-name="idesTBMenuPreferences" data-ibx-type="ibxMenuItem" data-ibxp-label-options='{"glyphClasses":"ibx-icons ibx-glyph-ellipsis-v"}'>Preferences</div>
+							<div class="ides-toolbar-separator" data-ibx-type="ibxMenuSeparator"></div>
+							<div class="ides-toolbar-menu" data-ibx-name="idesTBMenuClose" data-ibx-type="ibxMenuItem" data-ibxp-label-options='{"glyphClasses":"ibx-icons ibx-glyph-close"}' data-ibxp-command="cmdIdesClose">Close</div>	
+					</div>		
+			</div> <!--eof "tb-main-menu" button -->				
+	 				<div class="ides-toolbar-separator" data-ibx-type="ibxMenuButtonSeparator"></div>
+					<div class="ides-toolbar-button" data-ibx-name="idesTBButtonSave" data-ibx-type="ibxButtonSimple" data-ibxp-glyph-classes="ibx-icons ibx-glyph-floppy" data-ibxp-command="cmdIdesSave" title="Save"></div>					 
+					<div class="ides-toolbar-button" data-ibx-name="idesTBButtonUndo" data-ibx-type="ibxButtonSimple" data-ibxp-glyph-classes="ibx-icons ibx-glyph-arrow-left" data-ibxp-command="cmdIdesUndo" title="Undo"></div>
+					<div class="ides-toolbar-button" data-ibx-name="idesTBMenuRedo" data-ibx-type="ibxButtonSimple" data-ibxp-glyph-classes="ibx-icons ibx-glyph-arrow-right" data-ibxp-command="cmdIdesRedo" title="Redo"></div>
+					<div class="ides-toolbar-separator" data-ibx-type="ibxMenuButtonSeparator"></div>
+					<div class="ides-toolbar-button" data-ibx-name="idesTBButtonPreview" data-ibx-type="ibxButtonSimple" data-ibxp-glyph-classes="ibx-icons ibx-glyph-preview" data-ibxp-command="cmdIdesPreview" title="Preview"></div>
+					<div class="ides-toolbar-separator" data-ibx-type="ibxMenuButtonSeparator"></div> 
+					<div class="ides-toolbar-button" data-ibx-name="idTBButtonInsight" data-ibxp-glyph-classes="ibx-icons ibx-glyph-insight" data-ibx-type="ibxButtonSimple" title="Insight"></div>
+					<div class="ides-toolbar-hsplitbutton" data-ibx-type="ibxHSplitMenuButton" data-ibx-name="idesTBButtonLayoutOptions" data-ibxp-glyph-classes="ibx-icons ibx-glyph-layout " title="Layout Options">
+						<div data-ibx-type="ibxMenu">
+							<div class="ides-toolbar-menu" data-ibx-name="idesTBMenuHeading" data-ibx-type="ibxCheckMenuItem">Heading</div>
+							<div class="ides-toolbar-menu" data-ibx-name="idesTBMenuFooting" data-ibx-type="ibxCheckMenuItem">Footing</div>
+							<div class="ides-toolbar-separator" data-ibx-type="ibxMenuSeparator"></div>
+							<div class="ides-toolbar-menu" data-ibx-name="idesTBMenuFilter" data-ibx-type="ibxCheckMenuItem">Filter toolbar</div>
+							<div class="ides-toolbar-menu" data-ibx-name="idesTBMenuLegend" data-ibx-type="ibxCheckMenuItem">Legend</div>
+						</div>
+					</div>
+					<div class="ides-toolbar-separator" data-ibx-type="ibxMenuButtonSeparator"></div>
+					<div class="ides-toolbar-button" data-ibx-name="idesTBMenuMore" data-ibxp-glyph-classes="fa fa-ellipsis-v" data-ibx-type="ibxMenuButton" title="More">
+						<div data-ibx-type="ibxMenu">
+							<div class="ides-toolbar-menu" data-ibx-name="idesTBMenuAutodrill" data-ibx-type="ibxCheckMenuItem" data-ibxp-command="cmdAutodrill">Autodrill</div>
+							<div class="ides-toolbar-menu" data-ibx-name="idesTBMenuAutolink" data-ibx-type="ibxCheckMenuItem" data-ibxp-command="cmdTbAutolink">Autolink</div>						
+							<div class="ides-toolbar-menu" data-ibx-name="idesTBMenuAutolinkTarget"  data-ibx-type="ibxCheckMenuItem" data-ibxp-command="cmdTbAutolinkTarget">Autolink Target</div>
+							<div class="ides-toolbar-separator" data-ibx-type="ibxMenuSeparator"></div>
+							<div class="ides-toolbar-menu" data-ibx-name="idesTBMenuSettings" data-ibx-type="ibxMenuItem" data-ibxp-command="cmdTbSettings">Settings...</div>
+						</div>
+					</div>	
+					 <!-- <div data-ibx-type="ibxHBox" class="ides-toolbar-toolbar-groupbox">  -->
+						<div class="ides-toolbar-button ides-toolbar-help" data-ibx-name="idesTBButtonHelp" data-ibx-type="ibxButtonSimple" data-ibxp-glyph-classes="fa fa-question" title="Help"></div>					 
+                    <!--</div>  -->
+					
+		   </div> <!-- "main-toolbar" -->
+	  	</markup-block>
+	</markup>
+</ibx-res-bundle> 

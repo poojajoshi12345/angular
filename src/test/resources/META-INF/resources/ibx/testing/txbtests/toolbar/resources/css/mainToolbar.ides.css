@@ -1,0 +1,25 @@
+.ides-toolbar-button{
+	height:25px;
+	width:30px;
+	flex:0 0 auto;
+	font-size:18px;
+	margin:2px;
+}
+
+.ides-toolbar-menu{
+	font-size:14px;
+	margin:2px;
+	padding:2px;
+}
+
+.ides-toolbar-separator{
+	align-self:stretch;
+	border-left:1px solid white;
+	margin:2px 8px 2px 8px;
+}
+
+.ides-toolbar-help{
+	  position:absolute;
+	  right:10px;
+ }
+

@@ -16,13 +16,13 @@
 			{
 				var ibToolbar = $("<div>").ibToolbar();
 				$(".main-toolbar").append(ibToolbar); 	
-			}, ["/ibi_apps/ibx/testing/txbtests/toolbar/ibToolbar.xml"], true);	
+			}, ["/ibi_apps/ibx/testing/txbtests/toolbar/mainToolbar.ides.xml"], true);	
 	</script>
 </head>
 
 <body class="ibx-root">
-<div class="main-tool" data-ibx-type="ibxVBox" class="main-box" data-ibxp-align="stretch">
-	<div class="main-toolbar" data-ibx-type="ibxHBox" data-ibxp-align="stretch"></div>
+<div class="main-tool" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
+	<div class="main-toolbar" style="background-color:grey;color:white;border:1px solid black" data-ibx-type="ibxHBox" data-ibxp-align="stretch"></div>
 	<div class="main-box" data-ibx-type="ibxHBox" data-ibxp-align="stretch">Content Area</div>
 </div>
 </body>
