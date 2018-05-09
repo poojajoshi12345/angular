@@ -222,23 +222,25 @@ $.widget("ibi.ibxWidget", $.Widget,
 			}
 
 			//do the default focusing.
-			if((options.focusDefault !== false) && !ownsTarget)
+			if((options.focusDefault !== false))
 			{
-
 				//take the element out of the tab order so shift+tab will work and not focus this container.
-				if(this.element.data("navKeyRootTabIndex") === undefined)
-					this.element.data("navKeyRootTabIndex", this.element.prop("tabindex")).prop("tabindex", -1);
+				if(this.element.data("focusDefaultParentTabIndex") === undefined)
+					this.element.data("focusDefaultParentTabIndex", this.element.prop("tabindex")).prop("tabindex", -1);
 
-				//now manage focusing the first valid child.
-				if(options.navKeyRoot)
-					this.element.dispatchEvent("keydown", "NAV_KEY_ACTIVATE");
-				else
-				if(isTarget)
+				if(!ownsTarget)
 				{
-					//focus default item...otherwise find first focusable item (ARIA needs SOMETHING to be focused on the popup)
-					var defItem = this.element.find(options.focusDefault);
-					defItem = defItem.length ? defItem : this.element.find(":ibxFocusable").first();
-					defItem.focus();
+					//now manage focusing the first valid child.
+					if(options.navKeyRoot)
+						this.element.dispatchEvent("keydown", "NAV_KEY_ACTIVATE");
+					else
+					if(isTarget)
+					{
+						//focus default item...otherwise find first focusable item (ARIA needs SOMETHING to be focused on the popup)
+						var defItem = this.element.find(options.focusDefault);
+						defItem = defItem.length ? defItem : this.element.find(":ibxFocusable").first();
+						defItem.focus();
+					}
 				}
 			}
 
@@ -264,8 +266,9 @@ $.widget("ibi.ibxWidget", $.Widget,
 			this.element.dispatchEvent("ibx_widgetblur", e, false, false, e.relatedTarget);
 
 			//put this element back in the tab order...so that next tab into will will do auto-focus.
-			if(this.element.data("navKeyRootTabIndex") !== undefined)
-				this.element.prop("tabIndex", this.element.data("navKeyRootTabIndex")).removeData("navKeyRootTabIndex");
+			if(this.element.data("focusDefaultParentTabIndex") !== undefined)
+				this.element.prop("tabIndex", this.element.data("focusDefaultParentTabIndex")).removeData("focusDefaultParentTabIndex");
+
 
 			//active items and tabbing are handled in a given 'context'...popups introduce a higher context, so ignore them here.
 			if(options.navKeyRoot)
