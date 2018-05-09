@@ -31,8 +31,8 @@
 				});
 				$(".cmdTest").on("ibx_triggered", function(e)
 				{
-					var sel = $(".test-tree").ibxWidget("selected", null, true);
-					console.log(sel);
+					var kids = $(".ibx-nav-key-child");
+					console.log(kids);
 				});
 
 				$(".btnLoad").on("click", function(e)
@@ -44,7 +44,7 @@
 					var root = $("<div class='root-tree-node'>").ibxTreeNode({"expanded":true, "text":"Root Node", "labelOptions":{"glyph":"folder", "glyphClasses":"material-icons"}}).appendTo(tree);
 					for(var i = 0; i < 10; ++i)
 					{
-						var parentNode = $("<div class='tree-parent'>").ibxTreeNode({"draggable":true, "text": sformat("Tree Node {1}", i), "labelOptions":{"glyph":"folder", "glyphClasses":"material-icons"}})
+						var parentNode = $("<div class='tree-parent'>").ibxTreeNode({"draggable":false, "text": sformat("Tree Node {1}", i), "labelOptions":{"glyph":"folder", "glyphClasses":"material-icons"}})
 						root.ibxWidget("add", parentNode);
 						for(var j = 0; j < 10; ++j)
 						{
@@ -93,7 +93,6 @@
 		.tnode-selection-anchor > .tnode-label
 		{
 			font-weight:bold;
-			font-style:italic;
 		}
 
 		/*IBI WF Tree Styles*/
