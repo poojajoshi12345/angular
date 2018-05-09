@@ -256,7 +256,6 @@ $.widget("ibi.ibxWidget", $.Widget,
 					{
 						navKid.addClass("ibx-nav-key-item-active").toggleClass("ibx-ie-pseudo-focus", ibxPlatformCheck.isIE);
 						options.aria.activedescendant = navKid.prop("id");
-						console.log(navKid);
 					}
 				}.bind(this, e.target));
 

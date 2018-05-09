@@ -31,7 +31,8 @@
 				});
 				$(".cmdTest").on("ibx_triggered", function(e)
 				{
-					var kids = $(".ibx-nav-key-child");
+					console.clear();
+					var kids = $(".ibx-nav-key-item-active");
 					console.log(kids);
 				});
 

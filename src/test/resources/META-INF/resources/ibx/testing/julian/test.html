@@ -8,44 +8,103 @@
 		<meta http-equiv="Expires" content="0" />
 		<meta name="google" value="notranslate">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<script type="text/javascript" src="../../resources/ibx.js"></script>
+		<script type="text/javascript" src="../../resources/etc/jquery/jquery-3.1.1.js"></script>
 		<script type="text/javascript">
-			ibx(function(e)
-			{	
+			$(function()
+			{
+				function mouseEventHandler(e)
+				{
+					var splitter = $(".test-splitter");
+					var eType = e.type;
+					if(eType == "mousedown")
+					{
+						$(document.body).addClass("splitter-v-active");
+						$(document).on("mouseup mousemove", mouseEventHandler);
+						window._eLast = e;
+					}
+					else
+					if(eType == "mouseup")
+					{
+						$(document.body).removeClass("splitter-v-active");
+						$(document).off("mouseup mousemove", mouseEventHandler);
+						delete window._eLast;
+					}
+					else
+					if(eType == "mousemove")
+					{
+						var oe = e.originalEvent;
+						var el1 = splitter.prevAll(":visible").first();
+						var el2= splitter.nextAll(":visible").first();
+						var s1= el1.height();
+						var s2 = el2.height();
+						var m1 = parseInt(el1.css("min-height"), 10);
+						var m2 = parseInt(el2.css("min-height"), 10);
+						var dx = e.screenX - window._eLast.screenX;
+						var dy = e.screenY - window._eLast.screenY;
 
-			}, true);
+						var s1Val = (s1+dy);
+						s1Val = s1Val <= m1 ? 0 : s1Val;
+
+						var s2Val = (s2-dy);
+						s2Val = s2Val <= m2 ? 0 : s2Val;
+
+						//don't let either side get smaller than 0 or min-width (min-height) calculated above
+						if(s1Val <= 0 || s2Val <= 0)
+							return;
+
+						//set the actual widths
+						el1.height(s1Val);
+						el2.height(s2Val);
+
+						window._eLast = e;
+					}
+				}
+				$(".test-splitter").on("mousedown", mouseEventHandler);
+
+				$(".test-frame").ready(function()
+				{
+					debugger;
+				});
+				
+			});
+
+			function fnLoad(e)
+			{
+				debugger;
+			}
+
 		</script>
 		<style type="text/css">
-			.test-box
+			.splitter-v-active
 			{
-				border:1px solid black;
-				width:500px;
+				cursor:row-resize;
+				pointer-events:none;
+			}
+			.test-frame
+			{
+				width:100%;
+				height:50%;
+				border:1px solid #ccc;
+				box-sizing:border-box;
+			}
+			.test-splitter
+			{
+				pointer-events:all;
+				height:10px;
+				background-color:#ccc;
+				margin:3px 0px 3px 0px;
+				cursor:row-resize;
+			}
+			.test-other
+			{
 				height:200px;
+				background-color:thistle;
 			}
-			.test-child1
-			{
-				flex:1 1 auto;
-				width:100px;
-				height:100px;
-				box-sizing:border-box;
-				border:1px solid red;
-			}
-
-			.test-child2
-			{
-				flex:1 1 auto;
-				width:300px;
-				height:100px;
-				box-sizing:border-box;
-				border:1px solid red;
-			}
-
 		</style>
 	</head>
-	<body class="ibx-root">
-		<div class="test-box" data-ibx-type="ibxHBox" data-ibxp-align="center">
-			<div class="test-child1" data-ibx-type="ibxLabel">Test Child1</div>
-			<div class="test-child2" data-ibx-type="ibxLabel">Test Child2</div>
-		</div>
+	<body>
+		<iframe class="test-frame" src="./test.pdf" onload="fnLoad();"></iframe>
+		<div class="test-splitter"></div>
+		<div class="test-other"></div>
 	</body>
 </html>
