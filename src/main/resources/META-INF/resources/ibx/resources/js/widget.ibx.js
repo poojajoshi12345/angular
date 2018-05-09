@@ -247,19 +247,13 @@ $.widget("ibi.ibxWidget", $.Widget,
 				//if we own the target, we are now nav active.
 				this.element.addClass("ibx-nav-key-root-active");
 
-				//de-activate all children, and activate the direct child that is/owns the target.
-				this.navKeyChildren().each(function(target, idx, el)
-				{
-					var navKid = $(el);
-					navKid.removeClass("ibx-nav-key-item-active ibx-ie-pseudo-focus").addClass("ibx-nav-key-child");
-					if($(target).closest(".ibx-nav-key-child").is(navKid))
-					{
-						navKid.addClass("ibx-nav-key-item-active").toggleClass("ibx-ie-pseudo-focus", ibxPlatformCheck.isIE);
-						options.aria.activedescendant = navKid.prop("id");
-					}
-				}.bind(this, e.target));
+				//reset the nav kids.				
+				this.navKeyChildren().removeClass("ibx-nav-key-item-active ibx-ie-pseudo-focus").addClass("ibx-nav-key-child");
 
-				//config active descendant.
+				//set the active kid.
+				var navKidActive = $(e.target).closest(".ibx-nav-key-child");
+				navKidActive.addClass("ibx-nav-key-item-active").toggleClass("ibx-ie-pseudo-focus", ibxPlatformCheck.isIE);
+				options.aria.activedescendant = navKidActive.prop("id");
 				this.setAccessibility();
 			}
 		}
