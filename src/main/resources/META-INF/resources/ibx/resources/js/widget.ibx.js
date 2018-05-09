@@ -156,7 +156,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 		this.element.off();
 		this.element.removeAttr("data-ibx-type");
 		this.element.removeClass(this.options.class);
-		this.element.removeClass("ibx-focus-root ibx-nav-key-root ibx-focus-default");
+		this.element.removeClass("ibx-focus-root ibx-nav-key-child ibx-nav-key-root ibx-focus-default");
 		this._adjustWidgetClasses(false);
 		this.setAccessibility(false);
 		this._created = false;
@@ -251,8 +251,8 @@ $.widget("ibi.ibxWidget", $.Widget,
 				this.navKeyChildren().each(function(target, idx, el)
 				{
 					var navKid = $(el);
-					navKid.removeClass("ibx-nav-key-item-active ibx-ie-pseudo-focus");
-					if(navKid.is(target) || $.contains(navKid[0], target))
+					navKid.removeClass("ibx-nav-key-item-active ibx-ie-pseudo-focus").addClass("ibx-nav-key-child");
+					if($(target).closest(".ibx-nav-key-child").is(navKid))
 					{
 						navKid.addClass("ibx-nav-key-item-active").toggleClass("ibx-ie-pseudo-focus", ibxPlatformCheck.isIE);
 						options.aria.activedescendant = navKid.prop("id");
@@ -282,6 +282,8 @@ $.widget("ibi.ibxWidget", $.Widget,
 			{
 				//no longer navActive
 				this.element.removeClass("ibx-nav-key-root-active");
+
+				children.removeClass("ibx-nav-key-child");
 
 				//remove active so next focus goes to first item.
 				if(options.navKeyResetFocusOnBlur)
