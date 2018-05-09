@@ -256,6 +256,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 					{
 						navKid.addClass("ibx-nav-key-item-active").toggleClass("ibx-ie-pseudo-focus", ibxPlatformCheck.isIE);
 						options.aria.activedescendant = navKid.prop("id");
+						console.log(navKid);
 					}
 				}.bind(this, e.target));
 
@@ -273,24 +274,24 @@ $.widget("ibi.ibxWidget", $.Widget,
 			if(this.element.data("navKeyRootTabIndex") !== undefined)
 				this.element.prop("tabIndex", this.element.data("navKeyRootTabIndex")).removeData("navKeyRootTabIndex");
 
-
-			var children = this.navKeyChildren("*");//all nav kids not just focusable...menus are hidden at this point.
-			children.removeClass("ibx-ie-pseudo-focus");
-
 			//active items and tabbing are handled in a given 'context'...popups introduce a higher context, so ignore them here.
 			if(options.navKeyRoot)
 			{
 				//no longer navActive
 				this.element.removeClass("ibx-nav-key-root-active");
 
-				children.removeClass("ibx-nav-key-child");
-
-				//remove active so next focus goes to first item.
-				if(options.navKeyResetFocusOnBlur)
+				//adjust current nav-key-children
+				var navKids = this.navKeyChildren("*");//all nav kids not just focusable...menus are hidden at this point.
+				navKids.each(function(idx, el)
 				{
-					children.removeClass("ibx-nav-key-item-active");
-					delete options.aria.activedescendant;
-				}
+					var navKid = $(el);
+					navKid.removeClass("ibx-nav-key-child ibx-ie-pseudo-focus");
+					if(options.navKeyResetFocusOnBlur)
+					{
+						navKid.removeClass("ibx-nav-key-item-active");
+						delete options.aria.activedescendant;
+					}
+				}.bind(this));
 
 				//config active descendant.
 				this.setAccessibility();
