@@ -100,6 +100,7 @@ $.widget("ibi.ibxTree", $.ibi.ibxVBox,
 				else
 				if(this._shiftKeyDown)//do contiguous selection
 				{
+					var x = 10;
 				}
 			}
 		}

@@ -20,42 +20,47 @@
 		<script type="text/javascript">
 			ibx(function()
 			{
-				//$(".test-tree").on("ibx_nodeselect ibx_nodedeselect ibx_nodeanchored ibx_nodeunanchored ibx_beforeexpand ibx_expand ibx_beforecollapse ibx_collapse", function(e)
-				$(".test-tree").on("ibx_nodeanchored ibx_nodeunanchored", function(e)
+				$(".test-tree").on("ibx_beforeexpand", function(e)
 				{
-					//console.log(e.type, e.target);
+					$.ibi.ibxWidget.noRefresh = true;
+					var targetNode = $(e.target);
+					var xItem = targetNode.data("xItem");
+					targetNode.ibxWidget("remove");
+					var xItems = xItem.children("children").children("item");
+					xItems.each(function(idx, el)
+					{
+						var treeNode = makeTreeNode(el, "ibfs_item");
+						targetNode.ibxWidget("add", treeNode);
+						
+					});
+					$.ibi.ibxWidget.noRefresh= false;
+					targetNode.ibxWidget("refresh", true);
 				})
-				$("body").on("dblclick", function(e)
-				{
-					//console.log("body", e.type);
-				});
-				$(".cmdTest").on("ibx_triggered", function(e)
-				{
-					console.clear();
-					var kids = $(".ibx-nav-key-item-active");
-					console.log(kids);
-				});
 
 				$(".btnLoad").on("click", function(e)
 				{
 					var tree = $(".test-tree")
 					tree.ibxWidget("remove");
-
-					$.ibi.ibxWidget.noRefresh = true;
-					var root = $("<div class='root-tree-node'>").ibxTreeNode({"expanded":true, "text":"Root Node", "labelOptions":{"glyph":"folder", "glyphClasses":"material-icons"}}).appendTo(tree);
-					for(var i = 0; i < 10; ++i)
+					$.get("./tree_sample.xml").then(function(doc, status, xhr)
 					{
-						var parentNode = $("<div class='tree-parent'>").ibxTreeNode({"draggable":false, "text": sformat("Tree Node {1}", i), "labelOptions":{"glyph":"folder", "glyphClasses":"material-icons"}})
-						root.ibxWidget("add", parentNode);
-						for(var j = 0; j < 10; ++j)
-						{
-							var childNode = $("<div class='tree-child'>").ibxTreeNode({"text": sformat("Tree Node {1}-{2}", i, j), "labelOptions":{"glyph":"android", "glyphClasses":"material-icons"}})
-							parentNode.ibxWidget("add", childNode);
-						}
-					}
-					$.ibi.ibxWidget.noRefresh = false;
-					tree.ibxWidget("refresh", true);
+						doc = $(doc);
+						tree.data("xDoc", doc);
+						var item = doc.find("rootObject > item");
+						var rootNode = makeTreeNode(item, "ibfs_root");
+						tree.ibxWidget("add", rootNode, null, null, true);
+						rootNode.ibxWidget("option", "expanded", true);
+					});
 				});
+
+				function makeTreeNode(xItem, itemClass, expanded)
+				{
+					xItem = $(xItem);
+					var container = xItem.attr("container");
+					var glyph = container ? "folder" : "android";
+					var node = $("<div>").ibxTreeNode({"expanded":expanded, "container":container, "text": xItem.attr("description"), "labelOptions":{"glyph": glyph, "glyphClasses":"material-icons"}});
+					node.data("xItem", xItem).addClass(itemClass);
+					return node;
+				}
 
 				$(".btnHPStyle").on("ibx_change", function(e)
 				{
@@ -75,22 +80,63 @@
 				{
 					$(".test-tree .ibx-tree-node").ibxWidget("toggleExpanded", false);
 				});
+				$(".cmdTest").on("ibx_triggered", function(e)
+				{
+					console.clear();
+					var kids = $(".ibx-nav-key-item-active");
+					console.log(kids);
+				});
 			}, true);
 		</script>
 
 		<style type="text/css">
-		.test-tree
+		html, body
 		{
-			xheight:300px;
-			width:200px;
-			overflow:auto;
-			border:1px solid #ccc;
+			width:100%;
+			height:100%;
+			margin:0px;
+			box-sizing:border-box;
+		}
+		.main-box
+		{
+			width:100%;
+			height:100%;
+			padding:5px;
+			box-sizing:border-box;
+		}
+		.btn-bar
+		{
+			flex:0 0 auto;
 		}
 		.btn-bar > *
 		{
 			margin:5px;
 		}
+		.content-box
+		{
+			flex:1 1 auto;
 
+		}
+		.test-tree
+		{
+			width:15%;
+			min-width:50px;
+			overflow:auto;
+			border:1px solid #ccc;
+			border-radius:5px;
+			padding:5px;
+		}
+		.test-splitter
+		{
+			margin:0px 2px 0px 2px;
+		}
+		.test-content
+		{
+			flex:1 1 auto;
+			border:1px solid #ccc;
+			border-radius:5px;
+			background-color:#eee;
+		}
 		.tnode-selection-anchor > .tnode-label
 		{
 			font-weight:bold;
@@ -121,14 +167,19 @@
 	</head>
 	<body class="ibx-root">
 		<div class="cmdTest" data-ibx-type="ibxCommand" data-ibxp-shortcut="CTRL+C"></div>
-		<div class="btn-bar" data-ibx-type="ibxHBox" data-ibxp-inline="false" data-ibxp-align="center">
-			<div class="btnLoad" data-ibx-type="ibxButton">Load Tree</div>
-			<div class="btnHPStyle" data-ibx-type="ibxCheckBoxSimple">Home Page Style</div>
-			<div class="btnSingleClickExpand" data-ibx-type="ibxCheckBoxSimple">Single Click Expand</div>
-			<div class="btnExpandAll" data-ibx-type="ibxButton">Expand All</div>
-			<div class="btnCollapseAll" data-ibx-type="ibxButton">Collapse All</div>
-		</div>
-		<div tabindex="0" class="test-tree" data-ibx-type="ibxTree">
+		<div class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
+			<div class="btn-bar" data-ibx-type="ibxHBox" data-ibxp-inline="false" data-ibxp-align="center">
+				<div class="btnLoad" data-ibx-type="ibxButton">Load Tree</div>
+				<div class="btnHPStyle" data-ibx-type="ibxCheckBoxSimple">Home Page Style</div>
+				<div class="btnSingleClickExpand" data-ibx-type="ibxCheckBoxSimple">Single Click Expand</div>
+				<div class="btnExpandAll" data-ibx-type="ibxButton">Expand All</div>
+				<div class="btnCollapseAll" data-ibx-type="ibxButton">Collapse All</div>
+			</div>
+			<div class="content-box" data-ibx-type="ibxHBox" data-ibxp-align="stretch">
+				<div tabindex="0" class="test-tree" data-ibx-type="ibxTree"></div>
+				<div tabindex="-1" class="test-splitter" data-ibx-type="ibxVSplitter"></div>
+				<div tabindex="0" class="test-content" data-ibx-type="ibxLabel" data-ibxp-align="center" data-ibxp-justify="center">CONTENT AREA</div>
+			</div>
 		</div>
 	</body>
 </html>
