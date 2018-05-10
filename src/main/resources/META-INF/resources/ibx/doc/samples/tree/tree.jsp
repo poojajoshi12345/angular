@@ -66,7 +66,7 @@
 							var tree = $(".test-tree");
 							var itemPath = xItem.attr("fullPath");
 							var rootNodes = tree.ibxWidget("children");
-							var foundNode = searchTree(rootNodes, itemPath);
+							var foundNode = $(searchTree(rootNodes, itemPath));
 							if(foundNode.length)
 								foundNode.ibxTreeNode("selected", true);
 
@@ -77,12 +77,14 @@
 									var treeNode = $(treeNodes[i]);
 									var nodePath = treeNode.data("ibfsPath");
 									if(path == nodePath)
-										return treeNode;
+										return treeNode[0];
 									else
 									if(0 == path.search(nodePath))
 									{
 										treeNode.ibxTreeNode("toggleExpanded", true);
-										return searchTree(treeNode.ibxWidget("children"), path);
+										var retNode = searchTree(treeNode.ibxWidget("children"), path);
+										if(retNode)
+											return retNode;
 									}
 								}
 							}
@@ -135,7 +137,7 @@
 				{
 					var checked = $(e.target).ibxWidget("checked");
 					$("body").toggleClass("hp-style", checked);
-				});
+				}).ibxWidget("checked", true);
 				$(".btnSingleClickExpand").on("ibx_change", function(e)
 				{
 					var checked = $(e.target).ibxWidget("checked");
