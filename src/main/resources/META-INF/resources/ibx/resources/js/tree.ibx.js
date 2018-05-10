@@ -50,13 +50,13 @@ $.widget("ibi.ibxTree", $.ibi.ibxVBox,
 		var anchor = this.treeNodes(".tnode-selection-anchor");
 		return anchor[0] || null;
 	},
-	selected:function(el, selected, add)
+	selected:function(el, selected, clearCurSel)
 	{
 		if(el === undefined)
 			return this.treeNodes(".tnode-selected");
 
 		var nodes = this.treeNodes();
-		if(!add)
+		if(clearCurSel)
 			nodes.ibxWidget("selected", false);
 		nodes = nodes.filter(el);
 		nodes = this.options.multiSelect ? nodes : nodes.first();

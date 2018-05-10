@@ -50,12 +50,26 @@
 					xItems.each(function(idx, el)
 					{
 						el = $(el);
-						if(!el.is("[container=true]"))
-						{
-							var fileTile = makeFileTile(el);
-							fileList.append(fileTile);
-						}
+						var fileTile = makeFileTile(el);
+						fileList.append(fileTile);
 					});
+				});
+				
+				$(".test-file-list").on("dblclick", function(e)
+				{
+					var targetItem = $(e.target).closest(".file-tile");
+					if(targetItem.length)
+					{
+						var xItem = targetItem.data("xItem");
+						if(targetItem.is(".folder"))
+						{
+							var treeNode = $(".test-tree");
+						}
+						else
+						{
+							alert(sformat("Run the file: {1}", xItem.attr("fullPath")));
+						}
+					}
 				});
 
 				$(".btnLoad").on("click", function(e)
@@ -77,18 +91,20 @@
 				{
 					xItem = $(xItem);
 					var container = xItem.attr("container");
-					var glyph = container ? "folder" : "android";
-					var node = $("<div>").ibxTreeNode({"expanded":expanded, "container":container, "text": xItem.attr("description"), "labelOptions":{"glyph": glyph, "glyphClasses":"material-icons"}});
-					node.data("xItem", xItem).addClass(itemClass);
+					var glyph = container ? "" : "insert_drive_file";
+					var glyphClasses = container ? "" : "material-icons";
+					var node = $("<div>").ibxTreeNode({"expanded":expanded, "container":container, "text": xItem.attr("description"), "labelOptions":{"glyph": glyph, "glyphClasses":glyphClasses}});
+					node.attr("data-ibfs-path", xItem.attr("fullPath")).data("xItem", xItem).addClass(container ? "folder" : "file").addClass(itemClass);
 					return node;
 				}
-				function makeFileTile(xItem)
+				
+				function makeFileTile(xItem, itemClass)
 				{
 					xItem = $(xItem);
 					var container = xItem.attr("container");
-					var glyph = container ? "folder" : "android";
-					var tile = $("<div tabindex='-1'>").ibxLabel({"text": xItem.attr("description"), textWrap:"wrap", textAlign:"center", iconPosition:"top", justify:"center", "labelOptions":{"glyph": glyph, "glyphClasses":"material-icons"}});
-					tile.data("xItem", xItem).addClass("file-tile");
+					var glyph = container ? "folder" : "insert_drive_file";
+					var tile = $("<div tabindex='-1' class='file-tile'>").ibxLabel({"text": xItem.attr("description"), textWrap:"wrap", textAlign:"center", iconPosition:"top", justify:"center", "glyph": glyph, "glyphClasses":"material-icons"});
+					tile.data("xItem", xItem).addClass(container ? "folder" : "file").addClass(itemClass);
 					return tile;
 				}
 
@@ -96,6 +112,7 @@
 				{
 					var checked = $(e.target).ibxWidget("checked");
 					$(".test-tree").toggleClass("hp-style", checked);
+					$(".test-file-list").toggleClass("hp-style", checked);
 				});
 				$(".btnSingleClickExpand").on("ibx_change", function(e)
 				{
@@ -158,6 +175,9 @@
 			border-radius:5px;
 			background-color:#fafafa;
 		}
+		.tree-folder
+		{
+		}
 		.test-splitter
 		{
 			margin:0px 3px 0px 3px;
@@ -172,13 +192,22 @@
 		}
 		.file-tile
 		{
-			width:100px;
-			height:100px;
+			width:150px;
+			height:150px;
 			margin:5px;
+			font-size:14px;
 			border:1px solid #aaa;
 			border-radius:5px;
 			background-color:white;
 			box-shadow:3px 3px 10px 0px #bbb;
+		}
+		.file-tile .ibx-label-glyph
+		{
+			font-size:18px;
+		}
+		.folder .ibx-label-glyph
+		{
+			color:gold;
 		}
 
 		.tnode-selection-anchor > .tnode-label
@@ -206,6 +235,16 @@
 		.hp-style .tnode-selected > .tnode-label
 		{
 			background-color:rgba(53, 184, 254, 0.4);
+		}
+		.hp-style .file-tile
+		{
+			font-family:roboto;
+			font-size:14px;
+			color:rgb(85, 85, 85);
+		}
+		.hp-style .file-tile.folder
+		{
+			font-weight:bold;
 		}
 		</style>
 	</head>
