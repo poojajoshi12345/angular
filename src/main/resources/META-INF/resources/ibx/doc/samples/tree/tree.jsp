@@ -24,18 +24,39 @@
 				{
 					$.ibi.ibxWidget.noRefresh = true;
 					var targetNode = $(e.target);
-					var xItem = targetNode.data("xItem");
 					targetNode.ibxWidget("remove");
+
+					var xItem = targetNode.data("xItem");
 					var xItems = xItem.children("children").children("item");
 					xItems.each(function(idx, el)
 					{
-						var treeNode = makeTreeNode(el, "ibfs_item");
-						targetNode.ibxWidget("add", treeNode);
-						
+						el = $(el);
+						if(el.is("[container=true]"))
+						{
+							var treeNode = makeTreeNode(el, "ibfs_item");
+							targetNode.ibxWidget("add", treeNode);
+						}
 					});
 					$.ibi.ibxWidget.noRefresh= false;
 					targetNode.ibxWidget("refresh", true);
-				})
+				}).on("ibx_nodeselect", function(e)
+				{
+					var fileList = $(".test-file-list");
+					fileList.ibxWidget("remove");
+
+					var targetNode = $(e.target);
+					var xItem = targetNode.data("xItem");
+					var xItems = xItem.children("children").children("item");
+					xItems.each(function(idx, el)
+					{
+						el = $(el);
+						if(!el.is("[container=true]"))
+						{
+							var fileTile = makeFileTile(el);
+							fileList.append(fileTile);
+						}
+					});
+				});
 
 				$(".btnLoad").on("click", function(e)
 				{
@@ -60,6 +81,15 @@
 					var node = $("<div>").ibxTreeNode({"expanded":expanded, "container":container, "text": xItem.attr("description"), "labelOptions":{"glyph": glyph, "glyphClasses":"material-icons"}});
 					node.data("xItem", xItem).addClass(itemClass);
 					return node;
+				}
+				function makeFileTile(xItem)
+				{
+					xItem = $(xItem);
+					var container = xItem.attr("container");
+					var glyph = container ? "folder" : "android";
+					var tile = $("<div tabindex='-1'>").ibxLabel({"text": xItem.attr("description"), textWrap:"wrap", textAlign:"center", iconPosition:"top", justify:"center", "labelOptions":{"glyph": glyph, "glyphClasses":"material-icons"}});
+					tile.data("xItem", xItem).addClass("file-tile");
+					return tile;
 				}
 
 				$(".btnHPStyle").on("ibx_change", function(e)
@@ -119,24 +149,38 @@
 		}
 		.test-tree
 		{
-			width:15%;
+			flex:0 0 auto;
+			width:150px;
 			min-width:50px;
+			padding:5px;
 			overflow:auto;
 			border:1px solid #ccc;
 			border-radius:5px;
-			padding:5px;
+			background-color:#fafafa;
 		}
 		.test-splitter
 		{
-			margin:0px 2px 0px 2px;
+			margin:0px 3px 0px 3px;
 		}
-		.test-content
+		.test-file-list
 		{
 			flex:1 1 auto;
 			border:1px solid #ccc;
 			border-radius:5px;
-			background-color:#eee;
+			background-color:#fafafa;
+			overflow:auto;
 		}
+		.file-tile
+		{
+			width:100px;
+			height:100px;
+			margin:5px;
+			border:1px solid #aaa;
+			border-radius:5px;
+			background-color:white;
+			box-shadow:3px 3px 10px 0px #bbb;
+		}
+
 		.tnode-selection-anchor > .tnode-label
 		{
 			font-weight:bold;
@@ -168,17 +212,18 @@
 	<body class="ibx-root">
 		<div class="cmdTest" data-ibx-type="ibxCommand" data-ibxp-shortcut="CTRL+C"></div>
 		<div class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
-			<div class="btn-bar" data-ibx-type="ibxHBox" data-ibxp-inline="false" data-ibxp-align="center">
-				<div class="btnLoad" data-ibx-type="ibxButton">Load Tree</div>
-				<div class="btnHPStyle" data-ibx-type="ibxCheckBoxSimple">Home Page Style</div>
-				<div class="btnSingleClickExpand" data-ibx-type="ibxCheckBoxSimple">Single Click Expand</div>
-				<div class="btnExpandAll" data-ibx-type="ibxButton">Expand All</div>
-				<div class="btnCollapseAll" data-ibx-type="ibxButton">Collapse All</div>
+			<div class="btn-bar" data-ibx-type="ibxHBox" data-ibxp-align="center">
+				<div tabindex="0" class="btnLoad" data-ibx-type="ibxButton">Load Tree</div>
+				<div tabindex="0" class="btnHPStyle" data-ibx-type="ibxCheckBoxSimple">Home Page Style</div>
+				<div tabindex="0" class="btnSingleClickExpand" data-ibx-type="ibxCheckBoxSimple">Single Click Expand</div>
+				<div tabindex="0" class="btnExpandAll" data-ibx-type="ibxButton">Expand All</div>
+				<div tabindex="0" class="btnCollapseAll" data-ibx-type="ibxButton">Collapse All</div>
+				<div tabindex="0" class="btnDetails" data-ibx-type="ibxCheckBoxSimple">Details View</div>
 			</div>
 			<div class="content-box" data-ibx-type="ibxHBox" data-ibxp-align="stretch">
 				<div tabindex="0" class="test-tree" data-ibx-type="ibxTree"></div>
-				<div tabindex="-1" class="test-splitter" data-ibx-type="ibxVSplitter"></div>
-				<div tabindex="0" class="test-content" data-ibx-type="ibxLabel" data-ibxp-align="center" data-ibxp-justify="center">CONTENT AREA</div>
+				<div class="test-splitter" data-ibx-type="ibxVSplitter"></div>
+				<div tabindex="0" class="test-file-list" data-ibx-type="ibxHBox" data-ibxp-wrap="true" data-ibxp-nav-key-root="true" data-ibxp-focus-default="true"></div>
 			</div>
 		</div>
 	</body>
