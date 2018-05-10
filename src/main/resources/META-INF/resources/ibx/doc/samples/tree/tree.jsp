@@ -69,25 +69,6 @@
 							var foundNode = $(searchTree(rootNodes, itemPath));
 							if(foundNode.length)
 								foundNode.ibxTreeNode("selected", true);
-
-							function searchTree(treeNodes, path)
-							{
-								for(var i = 0; i < treeNodes.length; ++i)
-								{
-									var treeNode = $(treeNodes[i]);
-									var nodePath = treeNode.data("ibfsPath");
-									if(path == nodePath)
-										return treeNode[0];
-									else
-									if(0 == path.search(nodePath))
-									{
-										treeNode.ibxTreeNode("toggleExpanded", true);
-										var retNode = searchTree(treeNode.ibxWidget("children"), path);
-										if(retNode)
-											return retNode;
-									}
-								}
-							}
 						}
 						else
 						{
@@ -110,29 +91,6 @@
 						rootNode.ibxWidget("option", "expanded", true);
 					});
 				});
-
-				function makeTreeNode(xItem, itemClass, expanded)
-				{
-					xItem = $(xItem);
-					var sce = $(".btnSingleClickExpand").ibxWidget("checked");
-					var container = xItem.attr("container");
-					var glyph = container ? "" : "insert_drive_file";
-					var glyphClasses = container ? "" : "material-icons";
-					var node = $("<div>").ibxTreeNode({"expanded":expanded, "singleClickExpand":sce, "container":container, "text": xItem.attr("description"), "labelOptions":{"glyph": glyph, "glyphClasses":glyphClasses}});
-					node.attr("data-ibfs-path", xItem.attr("fullPath")).data("xItem", xItem).addClass(container ? "folder" : "file").addClass(itemClass);
-					return node;
-				}
-				
-				function makeFileTile(xItem, itemClass)
-				{
-					xItem = $(xItem);
-					var container = xItem.attr("container");
-					var glyph = container ? "folder" : "insert_drive_file";
-					var tile = $("<div tabindex='-1' class='file-tile'>").ibxLabel({"text": xItem.attr("description"), textWrap:"wrap", textAlign:"center", iconPosition:"top", justify:"center", "glyph": glyph, "glyphClasses":"material-icons"});
-					tile.data("xItem", xItem).addClass(container ? "folder" : "file").addClass(itemClass);
-					return tile;
-				}
-
 				$(".btnHPStyle").on("ibx_change", function(e)
 				{
 					var checked = $(e.target).ibxWidget("checked");
@@ -158,6 +116,45 @@
 					console.log(kids);
 				});
 			}, true);
+
+			makeTreeNode = function(xItem, itemClass, expanded)
+			{
+				xItem = $(xItem);
+				var sce = $(".btnSingleClickExpand").ibxWidget("checked");
+				var container = xItem.attr("container");
+				var glyph = container ? "" : "insert_drive_file";
+				var glyphClasses = container ? "" : "material-icons";
+				var node = $("<div>").ibxTreeNode({"expanded":expanded, "singleClickExpand":sce, "container":container, "text": xItem.attr("description"), "labelOptions":{"glyph": glyph, "glyphClasses":glyphClasses}});
+				node.attr("data-ibfs-path", xItem.attr("fullPath")).data("xItem", xItem).addClass(container ? "folder" : "file").addClass(itemClass);
+				return node;
+			};
+			makeFileTile = function(xItem, itemClass)
+			{
+				xItem = $(xItem);
+				var container = xItem.attr("container");
+				var glyph = container ? "folder" : "insert_drive_file";
+				var tile = $("<div tabindex='-1' class='file-tile'>").ibxLabel({"text": xItem.attr("description"), textWrap:"wrap", textAlign:"center", iconPosition:"top", justify:"center", "glyph": glyph, "glyphClasses":"material-icons"});
+				tile.data("xItem", xItem).addClass(container ? "folder" : "file").addClass(itemClass);
+				return tile;
+			};
+			searchTree = function(treeNodes, path)
+			{
+				for(var i = 0; i < treeNodes.length; ++i)
+				{
+					var treeNode = $(treeNodes[i]);
+					var nodePath = treeNode.data("ibfsPath");
+					if(path == nodePath)
+						return treeNode[0];
+					else
+					if(0 == path.search(nodePath))
+					{
+						treeNode.ibxTreeNode("toggleExpanded", true);
+						var retNode = searchTree(treeNode.ibxWidget("children"), path);
+						if(retNode)
+							return retNode;
+					}
+				}
+			};
 		</script>
 
 		<style type="text/css">
