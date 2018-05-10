@@ -63,7 +63,29 @@
 						var xItem = targetItem.data("xItem");
 						if(targetItem.is(".folder"))
 						{
-							var treeNode = $(".test-tree");
+							var tree = $(".test-tree");
+							var itemPath = xItem.attr("fullPath");
+							var rootNodes = tree.ibxWidget("children");
+							var foundNode = searchTree(rootNodes, itemPath);
+							if(foundNode.length)
+								foundNode.ibxTreeNode("selected", true);
+
+							function searchTree(treeNodes, path)
+							{
+								for(var i = 0; i < treeNodes.length; ++i)
+								{
+									var treeNode = $(treeNodes[i]);
+									var nodePath = treeNode.data("ibfsPath");
+									if(path == nodePath)
+										return treeNode;
+									else
+									if(0 == path.search(nodePath))
+									{
+										treeNode.ibxTreeNode("toggleExpanded", true);
+										return searchTree(treeNode.ibxWidget("children"), path);
+									}
+								}
+							}
 						}
 						else
 						{
@@ -90,10 +112,11 @@
 				function makeTreeNode(xItem, itemClass, expanded)
 				{
 					xItem = $(xItem);
+					var sce = $(".btnSingleClickExpand").ibxWidget("checked");
 					var container = xItem.attr("container");
 					var glyph = container ? "" : "insert_drive_file";
 					var glyphClasses = container ? "" : "material-icons";
-					var node = $("<div>").ibxTreeNode({"expanded":expanded, "container":container, "text": xItem.attr("description"), "labelOptions":{"glyph": glyph, "glyphClasses":glyphClasses}});
+					var node = $("<div>").ibxTreeNode({"expanded":expanded, "singleClickExpand":sce, "container":container, "text": xItem.attr("description"), "labelOptions":{"glyph": glyph, "glyphClasses":glyphClasses}});
 					node.attr("data-ibfs-path", xItem.attr("fullPath")).data("xItem", xItem).addClass(container ? "folder" : "file").addClass(itemClass);
 					return node;
 				}
@@ -111,8 +134,7 @@
 				$(".btnHPStyle").on("ibx_change", function(e)
 				{
 					var checked = $(e.target).ibxWidget("checked");
-					$(".test-tree").toggleClass("hp-style", checked);
-					$(".test-file-list").toggleClass("hp-style", checked);
+					$("body").toggleClass("hp-style", checked);
 				});
 				$(".btnSingleClickExpand").on("ibx_change", function(e)
 				{
