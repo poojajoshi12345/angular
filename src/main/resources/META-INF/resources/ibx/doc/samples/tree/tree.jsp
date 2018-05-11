@@ -95,9 +95,9 @@
 						var item = doc.find("rootObject > item");
 						var rootNode = makeTreeNode(item, "ibfs_root");
 						tree.ibxWidget("add", rootNode, null, null, true);
-						rootNode.ibxWidget("option", "expanded", true);
+						rootNode.ibxWidget("option", "expanded", true).ibxWidget("selected", true);
 					});
-				});
+				}).dispatchEvent("click");
 				$(".btn-hpstyle").on("ibx_change", function(e)
 				{
 					var checked = $(e.target).ibxWidget("checked");
