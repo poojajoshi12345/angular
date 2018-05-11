@@ -352,8 +352,8 @@ $.widget("ibi.ibxWidget", $.Widget,
 				else
 				if(eventMatchesShortcut(options.navKeyKeys.last, e))
 					active = navKids.last();
-				else
-				if(options.navKeyDir == "horizontal" || options.navKeyDir == "both")
+		
+				if(!active.length && options.navKeyDir == "horizontal" || options.navKeyDir == "both")
 				{
 					if(eventMatchesShortcut(options.navKeyKeys.hprev, e))
 					{
@@ -369,8 +369,8 @@ $.widget("ibi.ibxWidget", $.Widget,
 						active = next ? $(next) : navKids.first();
 					}
 				}
-				else
-				if(options.navKeyDir == "vertical" || options.navKeyDir == "both")
+
+				if(!active.length && options.navKeyDir == "vertical" || options.navKeyDir == "both")
 				{
 					if(eventMatchesShortcut(options.navKeyKeys.vprev, e))
 					{
