@@ -41,7 +41,9 @@
 					targetNode.ibxWidget("refresh", true);
 				}).on("ibx_nodeselect", function(e)
 				{
-					var fileList = $(".test-file-list");
+					var folderList = $(".folder-list");
+					var fileList = $(".file-list");
+					folderList.ibxWidget("remove");
 					fileList.ibxWidget("remove");
 
 					var targetNode = $(e.target);
@@ -51,11 +53,11 @@
 					{
 						el = $(el);
 						var fileTile = makeFileTile(el);
-						fileList.append(fileTile);
+						(el.attr("container") == "true") ? folderList.append(fileTile) : fileList.append(fileTile);
 					});
 				});
 				
-				$(".test-file-list").on("dblclick", function(e)
+				$(".test-files-box").on("dblclick", function(e)
 				{
 					var targetItem = $(e.target).closest(".file-tile");
 					if(targetItem.length)
@@ -77,11 +79,12 @@
 					}
 				});
 
-				$(".btnLoad").on("click", function(e)
+				$(".btn-load").on("click", function(e)
 				{
 					var tree = $(".test-tree")
 					tree.ibxWidget("remove");
-					$.get("./tree_sample.xml").then(function(doc, status, xhr)
+					var src = $(".src-url").ibxWidget("value");
+					$.get(src).then(function(doc, status, xhr)
 					{
 						doc = $(doc);
 						tree.data("xDoc", doc);
@@ -91,21 +94,21 @@
 						rootNode.ibxWidget("option", "expanded", true);
 					});
 				});
-				$(".btnHPStyle").on("ibx_change", function(e)
+				$(".btn-hpstyle").on("ibx_change", function(e)
 				{
 					var checked = $(e.target).ibxWidget("checked");
 					$("body").toggleClass("hp-style", checked);
 				}).ibxWidget("checked", true);
-				$(".btnSingleClickExpand").on("ibx_change", function(e)
+				$(".btn-single-click-expand").on("ibx_change", function(e)
 				{
 					var checked = $(e.target).ibxWidget("checked");
 					$(".test-tree .ibx-tree-node").ibxWidget("option", "singleClickExpand", checked, false);
 				});
-				$(".btnExpandAll").on("click", function(e)
+				$(".btn-expand-all").on("click", function(e)
 				{
 					$(".test-tree .ibx-tree-node").ibxWidget("toggleExpanded", true);
 				});
-				$(".btnCollapseAll").on("click", function(e)
+				$(".btn-collapse-allAll").on("click", function(e)
 				{
 					$(".test-tree .ibx-tree-node").ibxWidget("toggleExpanded", false);
 				});
@@ -120,11 +123,12 @@
 			makeTreeNode = function(xItem, itemClass, expanded)
 			{
 				xItem = $(xItem);
-				var sce = $(".btnSingleClickExpand").ibxWidget("checked");
+				var sce = $(".btn-single-click-expand").ibxWidget("checked");
 				var container = xItem.attr("container");
 				var glyph = container ? "" : "insert_drive_file";
 				var glyphClasses = container ? "" : "material-icons";
-				var node = $("<div>").ibxTreeNode({"expanded":expanded, "singleClickExpand":sce, "container":container, "text": xItem.attr("description"), "labelOptions":{"glyph": glyph, "glyphClasses":glyphClasses}});
+				var title = xItem.attr("description") || xItem.attr("name");
+				var node = $("<div>").ibxTreeNode({"draggable":true, "expanded":expanded, "singleClickExpand":sce, "container":container, "text": title, "labelOptions":{"glyph": glyph, "glyphClasses":glyphClasses}});
 				node.attr("data-ibfs-path", xItem.attr("fullPath")).data("xItem", xItem).addClass(container ? "folder" : "file").addClass(itemClass);
 				return node;
 			};
@@ -132,9 +136,19 @@
 			{
 				xItem = $(xItem);
 				var container = xItem.attr("container");
-				var glyph = container ? "folder" : "insert_drive_file";
-				var tile = $("<div tabindex='-1' class='file-tile'>").ibxLabel({"text": xItem.attr("description"), textWrap:"wrap", textAlign:"center", iconPosition:"top", justify:"center", "glyph": glyph, "glyphClasses":"material-icons"});
-				tile.data("xItem", xItem).addClass(container ? "folder" : "file").addClass(itemClass);
+				var options = 
+				{
+					"draggable":true,
+					"text": xItem.attr("description") || xItem.attr("name"),
+					"textWrap": container ? "nowrap" : "wrap",
+					"textAlign": container ? "" : "center",
+					"iconPosition": container ? "left" : "top",
+					"justify": container ? "start" : "center",
+					"glyph": container ? "folder" : "insert_drive_file",
+					"glyphClasses":"material-icons"
+				}
+				var tile = $("<div tabindex='-1' class='file-tile'>").ibxLabel(options).addClass(container ? "folder" : "file").addClass(itemClass);
+				tile.data("xItem", xItem);
 				return tile;
 			};
 			searchTree = function(treeNodes, path)
@@ -180,6 +194,10 @@
 		{
 			margin:5px;
 		}
+		.src-url
+		{
+			width:200px;
+		}
 		.content-box
 		{
 			flex:1 1 auto;
@@ -188,7 +206,7 @@
 		.test-tree
 		{
 			flex:0 0 auto;
-			width:150px;
+			width:250px;
 			min-width:50px;
 			padding:5px;
 			overflow:auto;
@@ -196,14 +214,35 @@
 			border-radius:5px;
 			background-color:#fafafa;
 		}
-		.tree-folder
-		{
-		}
 		.test-splitter
 		{
+			width:7px;
 			margin:0px 3px 0px 3px;
+			border-radius:5px;
 		}
-		.test-file-list
+		.test-files-box
+		{
+			flex:1 1 auto;
+			overflow:auto;
+		}
+		.test-files-box > .ibx-label
+		{
+			flex:0 0 auto;
+			font-weight:bold;
+			font-size:1.25em;
+			color:#ccc;
+			margin-bottom:3px;
+		}
+		.folder-list
+		{
+			flex:0 0 auto;
+			border:1px solid #ccc;
+			border-radius:5px;
+			background-color:#fafafa;
+			overflow:auto;
+			margin-bottom:10px;
+		}
+		.file-list
 		{
 			flex:1 1 auto;
 			border:1px solid #ccc;
@@ -224,7 +263,14 @@
 		}
 		.file-tile .ibx-label-glyph
 		{
+			flex:0 0 auto;
 			font-size:18px;
+		}
+		.file-tile.folder
+		{
+			width:auto;
+			height:auto;
+			padding:3px;
 		}
 		.folder .ibx-label-glyph
 		{
@@ -237,10 +283,13 @@
 		}
 
 		/*IBI WF Tree Styles*/
-		.hp-style .tnode-label
+		.hp-style
 		{
 			font-family:roboto;
 			font-size:12px;
+		}
+		.hp-style .tnode-label
+		{
 			line-height:16px;
 			color: rgb(85, 85, 85);
 			border-bottom:1px solid rgba(0, 0 , 0, 0.05);
@@ -272,18 +321,29 @@
 	<body class="ibx-root">
 		<div class="cmdTest" data-ibx-type="ibxCommand" data-ibxp-shortcut="CTRL+C"></div>
 		<div class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
+			<div data-ibx-type="ibxLabel" data-ibxp-justify="center" style="flex:0 0 auto;color:#ccc;border-bottom:1px solid #ccc;margin-bottom:5px;font-size:24px;font-weight:bold">Data is snapshot from IBFS Repository</div>
 			<div class="btn-bar" data-ibx-type="ibxHBox" data-ibxp-align="center">
-				<div tabindex="0" class="btnLoad" data-ibx-type="ibxButton">Load Tree</div>
-				<div tabindex="0" class="btnHPStyle" data-ibx-type="ibxCheckBoxSimple">Home Page Style</div>
-				<div tabindex="0" class="btnSingleClickExpand" data-ibx-type="ibxCheckBoxSimple">Single Click Expand</div>
-				<div tabindex="0" class="btnExpandAll" data-ibx-type="ibxButton">Expand All</div>
-				<div tabindex="0" class="btnCollapseAll" data-ibx-type="ibxButton">Collapse All</div>
-				<div tabindex="0" class="btnDetails" data-ibx-type="ibxCheckBoxSimple">Details View</div>
+				<div tabindex="0" class="btn-load" data-ibx-type="ibxButton">Load Tree</div>
+				<div tabindex="0" class="btn-hpstyle" data-ibx-type="ibxCheckBoxSimple">Home Page Style</div>
+				<div tabindex="0" class="btn-single-click-expand" data-ibx-type="ibxCheckBoxSimple">Single Click Expand</div>
+				<div tabindex="0" class="btn-expand-all" data-ibx-type="ibxButton">Expand All</div>
+				<div tabindex="0" class="btn-collapse-allAll" data-ibx-type="ibxButton">Collapse All</div>
+
+				<div style="display:none;">
+					<div tabindex="0" data-ibxp-for=".src-url" data-ibx-type="ibxLabel">Source XML:</div>
+					<div tabindex="0" class="src-url" data-ibx-type="ibxTextField">./tree_sample_ibfs.xml</div>
+					<div tabindex="0" class="btn-details" data-ibx-type="ibxCheckBoxSimple">Details View</div>
+				</div>
 			</div>
 			<div class="content-box" data-ibx-type="ibxHBox" data-ibxp-align="stretch">
 				<div tabindex="0" class="test-tree" data-ibx-type="ibxTree"></div>
 				<div class="test-splitter" data-ibx-type="ibxVSplitter"></div>
-				<div tabindex="0" class="test-file-list" data-ibx-type="ibxHBox" data-ibxp-wrap="true" data-ibxp-nav-key-root="true" data-ibxp-focus-default="true"></div>
+				<div class="test-files-box" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
+					<div tabindex="0" data-ibxp-for=".folder-list" data-ibx-type="ibxLabel">Folders</div>
+					<div tabindex="0" class="folder-list" data-ibx-type="ibxHBox" data-ibxp-wrap="true" data-ibxp-nav-key-root="true" data-ibxp-focus-default="true"></div>
+					<div tabindex="0" data-ibxp-for=".file-list" data-ibx-type="ibxLabel">Files</div>
+					<div tabindex="0" class="file-list" data-ibx-type="ibxHBox" data-ibxp-wrap="true" data-ibxp-nav-key-root="true" data-ibxp-focus-default="true"></div>
+				</div>
 			</div>
 		</div>
 	</body>
