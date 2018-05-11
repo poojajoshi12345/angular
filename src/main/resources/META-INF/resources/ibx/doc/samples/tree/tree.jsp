@@ -57,24 +57,28 @@
 					});
 				});
 				
-				$(".test-files-box").on("dblclick", function(e)
+				$(".test-files-box").on("dblclick keydown", function(e)
 				{
-					var targetItem = $(e.target).closest(".file-tile");
-					if(targetItem.length)
+					var eType = e.type;
+					if(eType == "dblclick" || (e.type == "keydown" && e.keyCode == $.ui.keyCode.ENTER))
 					{
-						var xItem = targetItem.data("xItem");
-						if(targetItem.is(".folder"))
+						var targetItem = $(e.target).closest(".file-tile");
+						if(targetItem.length)
 						{
-							var tree = $(".test-tree");
-							var itemPath = xItem.attr("fullPath");
-							var rootNodes = tree.ibxWidget("children");
-							var foundNode = $(searchTree(rootNodes, itemPath));
-							if(foundNode.length)
-								foundNode.ibxTreeNode("selected", true);
-						}
-						else
-						{
-							alert(sformat("Run the file: {1}", xItem.attr("fullPath")));
+							var xItem = targetItem.data("xItem");
+							if(targetItem.is(".folder"))
+							{
+								var tree = $(".test-tree");
+								var itemPath = xItem.attr("fullPath");
+								var rootNodes = tree.ibxWidget("children");
+								var foundNode = $(searchTree(rootNodes, itemPath));
+								if(foundNode.length)
+									foundNode.ibxTreeNode("selected", true);
+							}
+							else
+							{
+								alert(sformat("Run the file: {1}", xItem.attr("fullPath")));
+							}
 						}
 					}
 				});
@@ -125,11 +129,16 @@
 				xItem = $(xItem);
 				var sce = $(".btn-single-click-expand").ibxWidget("checked");
 				var container = xItem.attr("container");
-				var glyph = container ? "" : "insert_drive_file";
-				var glyphClasses = container ? "" : "material-icons";
-				var title = xItem.attr("description") || xItem.attr("name");
-				var node = $("<div>").ibxTreeNode({"draggable":true, "expanded":expanded, "singleClickExpand":sce, "container":container, "text": title, "labelOptions":{"glyph": glyph, "glyphClasses":glyphClasses}});
-				node.attr("data-ibfs-path", xItem.attr("fullPath")).data("xItem", xItem).addClass(container ? "folder" : "file").addClass(itemClass);
+				var options = 
+				{
+					"container":container,
+					"draggable":true,
+					"expanded":expanded,
+					"text": xItem.attr("description") || xItem.attr("name"),
+					"labelOptions":{"glyph": container ? "" : "insert_drive_file", "glyphClasses": container ? "" : "material-icons"}
+				}
+				var node = $("<div>").ibxTreeNode(options).addClass(container ? "folder" : "file").addClass(itemClass);
+				node.attr("data-ibfs-path", xItem.attr("fullPath")).data("xItem", xItem);
 				return node;
 			};
 			makeFileTile = function(xItem, itemClass)
@@ -189,6 +198,9 @@
 		.btn-bar
 		{
 			flex:0 0 auto;
+			border-top:1px solid #ccc;
+			border-bottom:1px solid #ccc;
+			margin:5px 0px 5px 0px;
 		}
 		.btn-bar > *
 		{
@@ -321,7 +333,7 @@
 	<body class="ibx-root">
 		<div class="cmdTest" data-ibx-type="ibxCommand" data-ibxp-shortcut="CTRL+C"></div>
 		<div class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
-			<div data-ibx-type="ibxLabel" data-ibxp-justify="center" style="flex:0 0 auto;color:#ccc;border-bottom:1px solid #ccc;margin-bottom:5px;font-size:24px;font-weight:bold">Data is snapshot from IBFS Repository</div>
+			<div data-ibx-type="ibxLabel" data-ibxp-justify="center" style="flex:0 0 auto;color:#ccc;font-size:24px;font-weight:bold">Data is snapshot from IBFS Repository</div>
 			<div class="btn-bar" data-ibx-type="ibxHBox" data-ibxp-align="center">
 				<div tabindex="0" class="btn-load" data-ibx-type="ibxButton">Load Tree</div>
 				<div tabindex="0" class="btn-hpstyle" data-ibx-type="ibxCheckBoxSimple">Home Page Style</div>
@@ -339,10 +351,10 @@
 				<div tabindex="0" class="test-tree" data-ibx-type="ibxTree"></div>
 				<div class="test-splitter" data-ibx-type="ibxVSplitter"></div>
 				<div class="test-files-box" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
-					<div tabindex="0" data-ibxp-for=".folder-list" data-ibx-type="ibxLabel">Folders</div>
+					<div data-ibxp-for=".folder-list" data-ibx-type="ibxLabel">Folders</div>
 					<div tabindex="0" class="folder-list" data-ibx-type="ibxHBox" data-ibxp-wrap="true" data-ibxp-nav-key-root="true" data-ibxp-focus-default="true"></div>
-					<div tabindex="0" data-ibxp-for=".file-list" data-ibx-type="ibxLabel">Files</div>
-					<div tabindex="0" class="file-list" data-ibx-type="ibxHBox" data-ibxp-wrap="true" data-ibxp-nav-key-root="true" data-ibxp-focus-default="true"></div>
+					<div data-ibxp-for=".file-list" data-ibx-type="ibxLabel">Files</div>
+					<div tabindex="0" class="file-list" data-ibx-type="ibxHBox" data-ibxp-wrap="true" data-ibxp-nav-key-root="true" data-ibxp-nav-key-dir="horizontal" data-ibxp-focus-default="true"></div>
 				</div>
 			</div>
 		</div>
