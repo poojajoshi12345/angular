@@ -60,7 +60,7 @@
 				$(".test-files-box").on("dblclick keydown", function(e)
 				{
 					var eType = e.type;
-					if(eType == "dblclick" || (e.type == "keydown" && e.keyCode == $.ui.keyCode.ENTER))
+					if(eType == "dblclick" || (e.type == "keydown" && (e.keyCode == $.ui.keyCode.ENTER || e.keyCode == $.ui.keyCode.SPACE)))
 					{
 						var targetItem = $(e.target).closest(".file-tile");
 						if(targetItem.length)
@@ -88,7 +88,7 @@
 					var tree = $(".test-tree")
 					tree.ibxWidget("remove");
 					var src = $(".src-url").ibxWidget("value");
-					$.get(src).then(function(doc, status, xhr)
+					$.get("./tree_sample_ibfs.xml").then(function(doc, status, xhr)
 					{
 						doc = $(doc);
 						tree.data("xDoc", doc);
@@ -252,7 +252,9 @@
 		{
 			flex:0 0 auto;
 			overflow:auto;
-			margin-bottom:10px;
+			padding-bottom:5px;
+			margin-bottom:5px;
+			border-bottom:2px solid #ccc;
 		}
 		.file-list
 		{
@@ -342,12 +344,6 @@
 				<div tabindex="0" class="btn-single-click-expand" data-ibx-type="ibxCheckBoxSimple">Single Click Expand</div>
 				<div tabindex="0" class="btn-expand-all" data-ibx-type="ibxButton">Expand All</div>
 				<div tabindex="0" class="btn-collapse-allAll" data-ibx-type="ibxButton">Collapse All</div>
-
-				<div style="display:none;">
-					<div tabindex="0" data-ibxp-for=".src-url" data-ibx-type="ibxLabel">Source XML:</div>
-					<div tabindex="0" class="src-url" data-ibx-type="ibxTextField">./tree_sample_ibfs.xml</div>
-					<div tabindex="0" class="btn-details" data-ibx-type="ibxCheckBoxSimple">Details View</div>
-				</div>
 			</div>
 			<div class="content-box" data-ibx-type="ibxHBox" data-ibxp-align="stretch">
 				<div tabindex="0" class="test-tree" data-ibx-type="ibxTree"></div>
