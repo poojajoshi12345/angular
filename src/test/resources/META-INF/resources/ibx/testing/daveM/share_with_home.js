@@ -13,7 +13,7 @@
 		_getIBFSlistShares: function()
 		{	
 			form.ibxWidget('open');	
-			this._startProgress();
+			this._startProgress(".share-with-hbox");
 
 			var uriExec = sformat("{1}/wfirs", applicationContext);
 			var argument=
@@ -38,30 +38,32 @@
 					{
 						el = $(el);
 						var fullPath = el.attr("fullPath");
-						var name;
-						var type = "u";
-						var email = "";
-						var idx = fullPath.lastIndexOf("USERS/");
-						if (idx != -1)
+						if (fullPath != undefined && fullPath.length > 0)
 						{
-							name = fullPath.substr(idx+6,fullPath.length);
-							this.currentUserArrayStr += name + ",";
-							email = el.attr("email");
-						}
-						else
-						{
-							name = fullPath.substr(fullPath.lastIndexOf("GROUPS/")+7,fullPath.length);
-							this.currentGroupArrayStr += name + ",";
-							type = "g";
-						}
-						
-						this.shareWithlist.push({
-					        name: name,
-					        description: el.attr("description"),
-						    email: email,
-						    type: type
-						});
-						
+							var name;
+							var type = "u";
+							var email = "";
+							var idx = fullPath.lastIndexOf("USERS/");
+							if (idx != -1)
+							{
+								name = fullPath.substr(idx+6,fullPath.length);
+								this.currentUserArrayStr += name + ",";
+								email = el.attr("email");
+							}
+							else
+							{
+								name = fullPath.substr(fullPath.lastIndexOf("GROUPS/")+7,fullPath.length);
+								this.currentGroupArrayStr += name + ",";
+								type = "g";
+							}
+							
+							this.shareWithlist.push({
+						        name: name,
+						        description: el.attr("description"),
+							    email: email,
+							    type: type
+							});
+						}				
 					}.bind(this));
 					
 					this.shareWithlist.sort(function (a, b) {
@@ -73,11 +75,11 @@
 					if (this.shareWithlist.length > 0)
 						this._ShareWithList(this.options.show); // Show current Group and Users list shared
 					else
-						this._stopProgress();
+						this._stopProgress(".share-with-hbox");
 				}
 				else
 				{
-					this._stopProgress();
+					this._stopProgress(".share-with-hbox");
 					alert("listShares failed");
 				}
 			}.bind(this));
@@ -134,12 +136,12 @@
 
 			}.bind(this));
 			
-			this._stopProgress();
+			this._stopProgress(".share-with-hbox");
 		},
 
 		_DropDownList: function()
 		{ // show drop down dialog
-			this._startProgress();
+			this._startProgress(".share-with-hbox");
 			
 			clearTimeout(this.typingTimer);
 			var searchString = form.find(".share-with-txt-search").ibxWidget("option", "text");
@@ -176,9 +178,8 @@
 						break;
 				}
 
-				this.searchRows = 500; 
+				this.searchRows = 50; 
 				this.searchIndex = 0;
-				this.startScroll = true;
 				
 				$.ajax({
 				    type: "POST",
@@ -239,33 +240,16 @@
 							this.searchDialog.focus();
 							$(".share-with-txt-search").focus();
 						    	
-					    	this.lastScrollTop = 0;
 							this.regx = new RegExp(this._escapeRegx(), "gi");
-							
+													
 					    	$('#shareWithDropdown').on("scroll", function (event) 
-					    	{
-					    		 if (this.currentSearchArray.length < this.searchRows) // if we start with less then 500, Ignore the event
-					    			 return;
-					    		 if (!this.startScroll) // stop when you reach the total matches of the string
-					    		 {
-					    			 $(this.searchDialog).find(".share-with-dropdown-label").hide();
-					    			 return;
-					    		 }
-					    		 else
-							    	this.startScroll = false; // scroll one time only
-					    		 console.log("start")
-					    		 var stopListener = $('#shareWithDropdown').mouseup(function()
-					    		{ // listen to mouse up
-							    		console.log("stop")
-					    			 this.startScroll = true; // reset
-					    		 }.bind(this));
- 
-					    		 var st = $(event.currentTarget).scrollTop();
-					    		 if (st > this.lastScrollTop)
-					    		 { // down scroll code
-					    			this.lastScrollTop = st;
-
-									$.ajax({
+					    	{					    		
+                                if ($('#shareWithDropdown').scrollTop() + $('#shareWithDropdown').innerHeight() + 20 >= $('#shareWithDropdown')[0].scrollHeight)
+                                { // near bottom
+                                	event.preventDefault();
+	                               	this._startProgress(".share-with-container-dialog");
+                               	
+ 									$.ajax({
 									    type: "POST",
 										contentType: "application/x-www-form-urlencoded; charset=UTF-8",
 										url: this.url,
@@ -273,12 +257,11 @@
 										dataType: "json",
 										context: this,
 									    success: function(json) 
-									    {
-											this._startProgress();
+									    {				
+
 									    	this.searchIndex += this.searchRows;
 									    	
 											var itemList = $('#shareWithDropdown');	
-
 											for (var i = 0; i < json.length; i++)
 									    	{	
 												var userdata = json[i]; // init
@@ -319,10 +302,12 @@
 												item.element.on( "click", function( e ) { this._onItemClick($(e.currentTarget).data("userData")); }.bind(this));
 												itemList.append(item.element);
 									    	}
-											this._stopProgress();
+											setTimeout(function() { this._stopProgress(".share-with-container-dialog");}.bind(this), 90);
 									    }
+										
 									});
-					    		} // down scroll code	    			 
+					    		}
+	    			 
 					    	}.bind(this));
 
 							$(this.searchDialog).find(".share-with-item").on( "click", function( e ) { this._onItemClick($(e.currentTarget).data("userData")); }.bind(this));	
@@ -359,12 +344,12 @@
 								this._resetUserGroup();
 							}.bind(this));	
 				    	}
-						this._stopProgress();
+						this._stopProgress(".share-with-hbox");
 				    },
 			        error: function(jqXHR,textStatus,errorThrown ) 
 			        {   
 			        	alert("usergrouplist failed");
-			        	this._stopProgress();
+			        	this._stopProgress(".share-with-hbox");
 			        }
 				});
 			}
@@ -383,7 +368,7 @@
 					passed = passed || regx.test(item.name); 
 					el.style.display = passed ? "" : "none";
 				}.bind(this, newString, regx));
-				this._stopProgress();
+				this._stopProgress(".share-with-hbox");
 			}
 
 		},
@@ -619,24 +604,19 @@
 	    					
 	    },
 				    
-		_startProgress:function()
+		_startProgress:function(divClassName)
 		{	
-			var settings = 
-			{
-				customImage:true
-			};
+			var settings = {};
 
 			var options = 
 			{
 				text: "",
 				showProgress: true,
 				curVal: 0,
-			};
-			
-			if(settings.customImage)
-				options.glyphClasses = "fa fa-circle-o-notch";
+			};			
+			options.glyphClasses = "fa fa-circle-o-notch";
 
-			var waiting = ibx.waitStart().css("font-size", "3em");
+			var waiting = ibx.waitStart(divClassName).css("font-size", "3em");
 			settings._startDate = new Date();
 			settings._interval = window.setInterval(function(waiting, options, settings)
 			{
@@ -644,9 +624,9 @@
 			}, 900, waiting, options, settings); 
 		},		
 
-		_stopProgress:function()
+		_stopProgress:function(divClassName)
 		{
-			ibx.waitStop();
+			ibx.waitStop(divClassName);
 		},
 		
 		_destroy: function ()
