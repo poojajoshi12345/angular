@@ -102,7 +102,7 @@
 				{
 					var checked = $(e.target).ibxWidget("checked");
 					$("body").toggleClass("hp-style", checked);
-				}).ibxWidget("checked", true);
+				}).ibxWidget("checked", false);
 				$(".btn-single-click-expand").on("ibx_change", function(e)
 				{
 					var checked = $(e.target).ibxWidget("checked");
@@ -281,7 +281,7 @@
 		{
 			width:auto;
 			height:auto;
-			padding:3px;
+			padding:2px 10px 2px 10px;
 		}
 		.folder .ibx-label-glyph
 		{
@@ -324,8 +324,8 @@
 		}
 		.hp-style .file-tile
 		{
-			font-family:roboto;
 			color:rgb(85, 85, 85);
+			margin:8px;
 		}
 		.hp-style .file-tile.folder
 		{
