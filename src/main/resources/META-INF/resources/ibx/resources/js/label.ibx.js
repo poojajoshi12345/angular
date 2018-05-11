@@ -38,7 +38,8 @@ $.widget("ibi.ibxLabel", $.ibi.ibxFlexBox,
 		this._super();
 		var options = this.options;
 
-		this.element.on("focus", this._onLabelFocus.bind(this));
+		//handle the for option
+		this.element.on("focus mousedown", this._onLabelEvent.bind(this));
 
 		//alternate to data-ibxp-text...direct text node children can be used to set the text.
 		options.text = options.text || this.element.textNodes().remove().text().replace(/^\s*|\s*$/g, "");
@@ -61,11 +62,14 @@ $.widget("ibi.ibxLabel", $.ibi.ibxFlexBox,
 		this._text.remove();
 		this.element.removeClass("icon-left icon-top icon-right icon-bottom")
 	},
-	_onLabelFocus:function(e)
+	_onLabelEvent:function(e)
 	{
 		var options = this.options;
 		if(options.for)
+		{
 			$(options.for).focus();
+			e.preventDefault();
+		}
 	},
 	_refresh:function()
 	{
