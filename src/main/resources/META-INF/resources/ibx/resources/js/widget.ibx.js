@@ -609,8 +609,8 @@ $.ibi.ibxWidget.isNavKey = function(keyCode)
 			draggable:false,			//!!!!IBX DRAGGABLE!!!! ...NOTHING TO DO WITH NATIVE DRAG/DROP
 			dragClass:"ibx-drag-source",
 			dragImageClass:"",
-			dragStartDistanceX:5,
-			dragStartDistanceY:5,
+			dragStartDistanceX:15,
+			dragStartDistanceY:15,
 
 			nativeFileDropTarget:false, //!!!!NATIVE FILE DROP TARGET!!!! 
 			fileUploadAjaxOptions:
@@ -708,10 +708,10 @@ $.ibi.ibxWidget.isNavKey = function(keyCode)
 					break;
 				case "mousemove":
 					var dEvent = null;
-					var dx = Math.abs(e.clientX - this._mDownLoc.x);
-					var dy = Math.abs(e.clientY - this._mDownLoc.y);
+					var dx = e.clientX - this._mDownLoc.x;
+					var dy = e.clientY - this._mDownLoc.y;
 					var isDragging = this.isDragging();
-					if(!isDragging && (dx >= options.dragStartDistanceX || dy >= this.options.dragStartDistanceY))
+					if(!isDragging && (Math.abs(dx) >= options.dragStartDistanceX || Math.abs(dy) >= this.options.dragStartDistanceY))
 					{
 						e.stopPropagation();
 
@@ -719,10 +719,15 @@ $.ibi.ibxWidget.isNavKey = function(keyCode)
 						dEvent = this._dispatchDragEvent(e, "ibx_dragstart", this.element);
 						if(!dEvent.isDefaultPrevented())
 						{
-							//start dragging...and also set default drag image if not already set.
+							//start dragging...and also set default drag image if not already set...default the offest for drag image to where dragged on 
 							this.element.addClass(options.dragClass);
 							if(!this._dataTransfer._dragImage)
-								this._dataTransfer.setDragImage(this.getDefaultDragImage(this.element).addClass(options.dragImageClass));
+							{
+								var bRect = this.element[0].getBoundingClientRect();
+								var offsetX = bRect.x - this._mDownLoc.x;
+								var offsetY = bRect.y - this._mDownLoc.y;
+								this._dataTransfer.setDragImage(this.getDefaultDragImage(this.element).addClass(options.dragImageClass), offsetX, offsetY);
+							}
 						}
 					}
 
