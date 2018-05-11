@@ -609,8 +609,8 @@ $.ibi.ibxWidget.isNavKey = function(keyCode)
 			draggable:false,			//!!!!IBX DRAGGABLE!!!! ...NOTHING TO DO WITH NATIVE DRAG/DROP
 			dragClass:"ibx-drag-source",
 			dragImageClass:"",
-			dragStartDistanceX:15,
-			dragStartDistanceY:15,
+			dragStartDistanceX:5,
+			dragStartDistanceY:5,
 
 			nativeFileDropTarget:false, //!!!!NATIVE FILE DROP TARGET!!!! 
 			fileUploadAjaxOptions:
