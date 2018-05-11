@@ -236,38 +236,35 @@
 		{
 			flex:1 1 auto;
 			overflow:auto;
+			padding:10px;
+			border:1px solid #aaa;
+			border-radius:5px;
 		}
 		.test-files-box > .ibx-label
 		{
 			flex:0 0 auto;
 			font-weight:bold;
 			font-size:14px;
-			color:#aaa;
+			color:gray;
 			margin-bottom:3px;
 		}
 		.folder-list
 		{
 			flex:0 0 auto;
-			border:1px solid #ccc;
-			border-radius:5px;
-			background-color:#fafafa;
 			overflow:auto;
 			margin-bottom:10px;
 		}
 		.file-list
 		{
 			flex:1 1 auto;
-			border:1px solid #ccc;
-			border-radius:5px;
-			background-color:#fafafa;
 			overflow:auto;
 		}
 		.file-tile
 		{
 			width:150px;
-			height:150px;
+			height:100px;
 			margin:5px;
-			font-size:14px;
+			font-size:12px;
 			border:1px solid #aaa;
 			border-radius:5px;
 			background-color:white;
@@ -275,8 +272,8 @@
 		}
 		.file-tile .ibx-label-glyph
 		{
-			flex:0 0 auto;
-			font-size:18px;
+			font-size:24px;
+
 		}
 		.file-tile.folder
 		{
@@ -304,6 +301,7 @@
 		{
 			line-height:16px;
 			color: rgb(85, 85, 85);
+			padding:8px;
 			border-bottom:1px solid rgba(0, 0 , 0, 0.05);
 		}
 		.hp-style .tnode-indent
@@ -318,22 +316,26 @@
 		{
 			background-color:rgba(53, 184, 254, 0.4);
 		}
+		.hp-style .test-files-box
+		{
+			background-color:rgb(230, 248, 255);
+		}
 		.hp-style .file-tile
 		{
 			font-family:roboto;
-			font-size:14px;
 			color:rgb(85, 85, 85);
 		}
 		.hp-style .file-tile.folder
 		{
 			font-weight:bold;
+			color:gray;
 		}
 		</style>
 	</head>
 	<body class="ibx-root">
 		<div class="cmdTest" data-ibx-type="ibxCommand" data-ibxp-shortcut="CTRL+C"></div>
 		<div class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
-			<div data-ibx-type="ibxLabel" data-ibxp-justify="center" style="flex:0 0 auto;color:#ccc;font-size:24px;font-weight:bold">Data is snapshot from IBFS Repository</div>
+			<div data-ibx-type="ibxLabel" data-ibxp-justify="center" style="flex:0 0 auto;color:#ccc;font-size:24px;font-weight:bold">Data is snapshot from an IBFS Repository</div>
 			<div class="btn-bar" data-ibx-type="ibxHBox" data-ibxp-align="center">
 				<div tabindex="0" class="btn-load" data-ibx-type="ibxButton">Load Tree</div>
 				<div tabindex="0" class="btn-hpstyle" data-ibx-type="ibxCheckBoxSimple">Home Page Style</div>
@@ -352,9 +354,9 @@
 				<div class="test-splitter" data-ibx-type="ibxVSplitter"></div>
 				<div class="test-files-box" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
 					<div data-ibxp-for=".folder-list" data-ibx-type="ibxLabel">Folders</div>
-					<div tabindex="0" class="folder-list" data-ibx-type="ibxHBox" data-ibxp-wrap="true" data-ibxp-nav-key-root="true" data-ibxp-focus-default="true"></div>
+					<div tabindex="0" class="folder-list" data-ibx-type="ibxHBox" data-ibxp-wrap="true" data-ibxp-nav-key-root="true" data-ibxp-focus-default="true" data-ibxp-nav-key-reset-focus-on-blur="false"></div>
 					<div data-ibxp-for=".file-list" data-ibx-type="ibxLabel">Items</div>
-					<div tabindex="0" class="file-list" data-ibx-type="ibxHBox" data-ibxp-wrap="true" data-ibxp-nav-key-root="true" data-ibxp-nav-key-dir="horizontal" data-ibxp-focus-default="true"></div>
+					<div tabindex="0" class="file-list" data-ibx-type="ibxHBox" data-ibxp-wrap="true" data-ibxp-nav-key-root="true" data-ibxp-nav-key-dir="horizontal" data-ibxp-focus-default="true" data-ibxp-nav-key-reset-focus-on-blur="false"></div>
 				</div>
 			</div>
 		</div>
