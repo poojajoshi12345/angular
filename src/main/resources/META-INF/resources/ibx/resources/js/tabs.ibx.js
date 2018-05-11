@@ -79,7 +79,7 @@ $.widget("ibi.ibxTabPane", $.ibi.ibxFlexBox,
 	remove:function(el, destroy, refresh)
 	{
 		var selIndex = this.selectedIndex();
-		el = $(el).filter(".ibx-tab-page");
+		var el = this.children().filter(el);
 		el.each(function(idx, el)
 		{
 			var button = $(el).ibxWidget("button");
@@ -152,14 +152,6 @@ $.widget("ibi.ibxTabPane", $.ibi.ibxFlexBox,
 		selected.removeClass("tpg-hidden").addClass("tpg-selected");
 		this.options.selected = selected;
 		this._trigger("change", e, selected);
-	},
-	next: function ()
-	{
-		this._group.ibxRadioGroup("selectNext");
-	},
-	previous: function ()
-	{
-		this._group.ibxRadioGroup("selectPrevious")
 	},
 	userValue:function(value)
 	{

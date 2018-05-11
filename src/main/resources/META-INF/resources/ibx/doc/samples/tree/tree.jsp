@@ -241,8 +241,8 @@
 		{
 			flex:0 0 auto;
 			font-weight:bold;
-			font-size:1.25em;
-			color:#ccc;
+			font-size:14px;
+			color:#aaa;
 			margin-bottom:3px;
 		}
 		.folder-list
@@ -271,7 +271,7 @@
 			border:1px solid #aaa;
 			border-radius:5px;
 			background-color:white;
-			box-shadow:3px 3px 10px 0px #bbb;
+			box-shadow:2px 2px 5px 0px #aaa;
 		}
 		.file-tile .ibx-label-glyph
 		{
@@ -353,7 +353,7 @@
 				<div class="test-files-box" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
 					<div data-ibxp-for=".folder-list" data-ibx-type="ibxLabel">Folders</div>
 					<div tabindex="0" class="folder-list" data-ibx-type="ibxHBox" data-ibxp-wrap="true" data-ibxp-nav-key-root="true" data-ibxp-focus-default="true"></div>
-					<div data-ibxp-for=".file-list" data-ibx-type="ibxLabel">Files</div>
+					<div data-ibxp-for=".file-list" data-ibx-type="ibxLabel">Items</div>
 					<div tabindex="0" class="file-list" data-ibx-type="ibxHBox" data-ibxp-wrap="true" data-ibxp-nav-key-root="true" data-ibxp-nav-key-dir="horizontal" data-ibxp-focus-default="true"></div>
 				</div>
 			</div>

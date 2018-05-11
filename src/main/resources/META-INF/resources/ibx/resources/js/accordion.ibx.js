@@ -41,7 +41,7 @@ $.widget("ibi.ibxAccordionPane", $.ibi.ibxFlexBox,
 	{
 		var selIndex = this.selectedIndex();
 		var options = this.options;
-		el = this.element.children(el).not(this._group);
+		var el = this.children().not(this._group).filter(el);
 		el.filter(".ibx-accordion-page").each(function(options, idx, el)
 		{
 			el = $(el);
@@ -64,14 +64,6 @@ $.widget("ibi.ibxAccordionPane", $.ibi.ibxFlexBox,
 		}
 	},
 	group:function(){return this._group;},
-	next:function()
-	{
-		this._group.ibxRadioGroup("selectNext");
-	},
-	previous:function()
-	{
-		this._group.ibxRadioGroup("selectPrevious")
-	},
 	userValue:function(value)
 	{
 		return this._group.ibxWidget("userValue", value);
