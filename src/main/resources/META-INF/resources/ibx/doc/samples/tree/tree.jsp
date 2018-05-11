@@ -245,7 +245,6 @@
 			flex:0 0 auto;
 			font-weight:bold;
 			font-size:14px;
-			color:gray;
 			margin-bottom:3px;
 		}
 		.folder-list
@@ -275,7 +274,6 @@
 		.file-tile .ibx-label-glyph
 		{
 			font-size:24px;
-
 		}
 		.file-tile.folder
 		{
@@ -285,7 +283,6 @@
 		}
 		.folder .ibx-label-glyph
 		{
-			color:gold;
 		}
 
 		.tnode-selection-anchor > .tnode-label
@@ -331,6 +328,10 @@
 		{
 			font-weight:bold;
 			color:gray;
+		}
+		.hp-style .file-tile.folder .ibx-label-glyph
+		{
+			color:gold;
 		}
 		</style>
 	</head>
