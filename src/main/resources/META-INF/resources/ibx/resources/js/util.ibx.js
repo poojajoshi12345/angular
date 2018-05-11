@@ -233,12 +233,11 @@ jQuery.fn.redraw = function()
 };
 
 //create a native browser event.
-function createNativeEvent(type, data, canBubble, cancelable, relatedTarget)
+function createNativeEvent(type, detail, canBubble, cancelable, relatedTarget)
 {
 	canBubble = canBubble !== undefined ? canBubble : true;
 	cancelable = cancelable !== undefined ? cancelable : true;
 
-	data = data || {}
 	var e = null;
 	if(typeof(Event) === "function")
 		e = new Event(type, {"bubbles":canBubble, "cancelable":true})
@@ -247,15 +246,17 @@ function createNativeEvent(type, data, canBubble, cancelable, relatedTarget)
 		e = document.createEvent("CustomEvent");
 		e.initCustomEvent(type, canBubble, cancelable, null);
 	}
-	e.data = data;
+
+	if(detail !== undefined)
+		e.data = e.detail = (detail || {});
 	e.relatedTarget = relatedTarget;
 	return e;
 }
 
 //let jQuery dispatch custom native events
-jQuery.fn.dispatchEvent = function(eType, data, canBubble, cancelable, relatedTarget)
+jQuery.fn.dispatchEvent = function(eType, detail, canBubble, cancelable, relatedTarget)
 {
-	var evt = (typeof(eType) == "object") ? createNativeEvent(eType.type, data) : createNativeEvent(eType, data, canBubble, cancelable, relatedTarget);
+	var evt = (typeof(eType) == "object") ? createNativeEvent(eType.type, detail) : createNativeEvent(eType, detail, canBubble, cancelable, relatedTarget);
 	if(typeof(eType) == "object")
 	{
 		for(var key in eType)
