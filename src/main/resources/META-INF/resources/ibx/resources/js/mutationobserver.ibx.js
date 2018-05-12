@@ -9,22 +9,14 @@ $.widget("ibi.ibxMutationObserver", $.Widget,
 	options:
 	{
 		listen:false,
-		autoBindAdded:false,
-		fnAll:$.noop,
-		fnAddedNodes:$.noop,
-		fnRemovedNodes:$.noop,
-		fnAttribute:$.noop,
-		fnCharacterData:$.noop,
-		init:
-		{
-			childList:false,
-			subtree:false,
-			characterData:false,
-			characterDataOldValue:false,
-			attributes:false,
-			attributeOldValue:false,
-			//attributeFilter:[],
-		},
+		allEvents:false,
+		childList:false,
+		subtree:false,
+		characterData:false,
+		characterDataOldValue:false,
+		attributes:false,
+		attributeOldValue:false,
+		attributeFilter:null,
 		mutationObserver:null,
 	},
 	_create:function()
@@ -33,39 +25,31 @@ $.widget("ibi.ibxMutationObserver", $.Widget,
 		var options = this.options;
 		options.mutationObserver = new MutationObserver(this._onMutationEvent.bind(this));
 	},
+	_init:function()
+	{
+		this.refresh();
+		this._super();
+	},
 	_destroy:function()
 	{
 		this.options.mutationObserver.disconnect();
 		this._super();
 	},
-	_init:function()
-	{
-		this._super();
-		this.refresh();
-	},
 	_onMutationEvent:function(mutations)
 	{
 		var options = this.options;
-		options.fnAll(mutations);
 
+		this.element.dispatchEvent("ibx_nodemutated", mutations, false, false);
 		$.each(mutations, function(idx, mutation)
 		{
-			$.each(mutation.addedNodes, function(mutation, idx, node)
-			{
-				if(options.autoBind)
-					ibx.bindElements(node);
-				options.fnAddedNodes(node, mutation);
-			}.bind(this, mutation));
-
-			$.each(mutation.removedNodes, function(mutation, idx, node)
-			{
-				options.fnRemovedNodes(node, mutation);
-			}.bind(this, mutation));
-
+			if(mutation.addedNodes.length)
+				this.element.dispatchEvent("ibx_nodesadded", mutation.addedNodes, false, false);
+			if(mutation.removedNodes.length)
+				this.element.dispatchEvent("ibx_nodesremoved", mutation.removedNodes, false, false);
 			if(mutation.attributeName)
-				options.fnAttribute(mutation.target, mutation.oldValue, mutation.attributeName, mutation.attributeNamespace, mutation)
+				this.element.dispatchEvent("ibx_nodeattrchange", mutation, false, false);
 			if(mutation.type == "characterData")
-				options.fnCharacterData(mutation.target, mutation.oldValue, mutation);
+				this.element.dispatchEvent("ibx_nodecharchange", mutation, false, false);
 		}.bind(this));
 	},
 	records:function()
@@ -75,8 +59,21 @@ $.widget("ibi.ibxMutationObserver", $.Widget,
 	refresh:function()
 	{
 		var options = this.options;
+		var all = options.allEvents;
+		var moOptions = 
+		{
+			childList: all || options.childList,
+			subtree: all || options.subtree,
+			characterData: all || options.characterData,
+			characterDataOldValue: all || options.characterDataOldValue,
+			attributes: all || options.attributes,
+			attributeOldValue: all || options.attributeOldValue,
+		};
+		if(moOptions.attributes && options.attributeFilter)
+			moOptions.attributeFilter = options.attributeFilter;
+
 		if(options.listen)
-			options.mutationObserver.observe(this.element[0], options.init);
+			options.mutationObserver.observe(this.element[0], moOptions);
 		else
 			options.mutationObserver.disconnect();
 	}
