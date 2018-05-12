@@ -319,6 +319,10 @@
 		{
 			background-color:rgb(230, 248, 255);
 		}
+		.hp-style .files-box-label
+		{
+			color:gray;
+		}
 		.hp-style .file-tile
 		{
 			color:rgb(85, 85, 85);
@@ -350,9 +354,9 @@
 				<div tabindex="0" class="test-tree" data-ibx-type="ibxTree"></div>
 				<div class="test-splitter" data-ibx-type="ibxVSplitter"></div>
 				<div class="test-files-box" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
-					<div data-ibxp-for=".folder-list" data-ibx-type="ibxLabel">Folders</div>
+					<div class="files-box-label" data-ibxp-for=".folder-list" data-ibx-type="ibxLabel">Folders</div>
 					<div tabindex="0" class="folder-list" data-ibx-type="ibxHBox" data-ibxp-wrap="true" data-ibxp-nav-key-root="true" data-ibxp-focus-default="true" data-ibxp-nav-key-reset-focus-on-blur="false"></div>
-					<div data-ibxp-for=".file-list" data-ibx-type="ibxLabel">Items</div>
+					<div class="files-box-label" data-ibxp-for=".file-list" data-ibx-type="ibxLabel">Items</div>
 					<div tabindex="0" class="file-list" data-ibx-type="ibxHBox" data-ibxp-wrap="true" data-ibxp-nav-key-root="true" data-ibxp-nav-key-dir="horizontal" data-ibxp-focus-default="true" data-ibxp-nav-key-reset-focus-on-blur="false"></div>
 				</div>
 			</div>
