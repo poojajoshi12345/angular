@@ -342,7 +342,7 @@
 	<body class="ibx-root">
 		<div class="cmdTest" data-ibx-type="ibxCommand" data-ibxp-shortcut="CTRL+C"></div>
 		<div class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
-			<div data-ibx-type="ibxLabel" data-ibxp-justify="center" style="flex:0 0 auto;color:#ccc;font-size:24px;font-weight:bold">Data is snapshot from an IBFS Repository</div>
+			<div data-ibx-type="ibxLabel" data-ibxp-justify="center" style="flex:0 0 auto;color:#ccc;font-size:24px;font-weight:bold">Data is a Sample IBFS Repository</div>
 			<div class="btn-bar" data-ibx-type="ibxHBox" data-ibxp-align="center">
 				<div tabindex="0" class="btn-load" data-ibx-type="ibxButton">Load Tree</div>
 				<div tabindex="0" class="btn-hpstyle" data-ibx-type="ibxCheckBoxSimple">Home Page Style</div>
