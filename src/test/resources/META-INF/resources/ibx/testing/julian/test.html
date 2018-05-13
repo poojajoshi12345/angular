@@ -21,16 +21,69 @@
 					_create:function()
 					{
 						this._super();
-						this.element.ibxMutationObserver({listen:true, allEvents:true});
-						this.element.on("ibx_nodesadded ibx_nodesremoved ibx_nodeattrchange ibx_nodecharchange", this._onNodeChange.bind(this));
+						this._onNodeSelectEventBound = this._onNodeSelectEvent.bind(this);
+						this.element.ibxMutationObserver({listen:true, allEvents:true}).on("mousedown", this._onMouseDown.bind(this));
+						this.element.on({"ibx_nodesadded": this._onNodesAdded.bind(this), "ibx_nodesremoved": this._onNodesRemoved.bind(this)});
 					},
 					_destroy:function()
 					{
 						this._super();
 					},
-					_onNodeChange:function(e)
+					_onMouseDown:function(e)
 					{
-						console.log(e);
+						if(this.element.is(e.target))
+							this.deselectAll();
+					},
+					_onNodesAdded:function(e)
+					{
+						$.each(e.detail, function(idx, el)
+						{
+							el = $(el);
+							el.on("keydown mousedown", this._onNodeSelectEventBound);
+						}.bind(this));
+					},
+					_onNodesRemoved:function(e)
+					{
+						$.each(e.detail, function(idx, el)
+						{
+							el = $(el);
+							el.off("keydown mousedown", this._onNodeSelectEventBound);
+						}.bind(this));
+					},
+					_onNodeSelectEvent:function(e)
+					{
+						var target = $(e.target);
+						var eType = e.type;
+						var ctrl = e.ctrlKey;
+						var shift = e.shiftKey;
+						var selected = target.is(".ibx-selected");
+						if(eType == "mousedown")
+						{
+							if(!ctrl && !shift)
+								this.deselectAll();
+							target.toggleClass("ibx-selected", ctrl ? !selected : true);
+						}
+						else
+						if(eType == "keydown")
+						{
+						}
+						console.log(e.target);
+					},
+					select:function(selector)
+					{
+						this.element.children().filter(selector).addClass("ibx-selected");
+					},
+					selectAll:function(selector)
+					{
+						this.element.children().addClass("ibx-selected");
+					},
+					deselect:function(selector)
+					{
+						this.element.children().filter(selector).removeClass("ibx-selected");
+					},
+					deselectAll:function()
+					{
+						this.element.children().filter(".ibx-selected").removeClass("ibx-selected");
 					},
 					_refresh:function()
 					{
@@ -64,7 +117,10 @@
 				height:100px;
 				border:1px solid black;
 			}
-
+			.ibx-selected
+			{
+				outline:4px solid pink;
+			}
 		</style>
 	</head>
 	<body>
