@@ -55,8 +55,30 @@
 						var fileTile = makeFileTile(el);
 						(el.attr("container") == "true") ? folderList.append(fileTile) : fileList.append(fileTile);
 					});
+
+					var crumbBox = $(".crumb-box");
+					var crumbs = xItem.attr("fullPath").split("/");
+					var crumbPath = "";
+					crumbBox.ibxWidget("remove");
+					$(crumbs).each(function(iex, pathSegment)
+					{
+						crumbPath += pathSegment + "/";
+						var crumb = $(sformat("<div class='crumb'>{1}</div><span class='crumb-marker'></span>", pathSegment));
+						crumb.data("crumbPath", crumbPath).on("click", function(e)
+						{
+							var tree = $(".test-tree");
+							var crumb = $(this);
+							var crumbPath = crumb.data("crumbPath").replace(/\/$/g, "");
+							var rootNodes = tree.ibxWidget("children");
+							var foundNode = $(searchTree(rootNodes, crumbPath));
+							if(foundNode.length)
+								foundNode.ibxTreeNode("selected", true);
+						});
+						crumbBox.append(crumb);
+					});
+					crumbBox.children(":last").remove();
 				});
-				
+
 				$(".test-files-box").on("dblclick keydown", function(e)
 				{
 					var eType = e.type;
@@ -206,9 +228,32 @@
 		{
 			margin:5px;
 		}
-		.src-url
+		.crumb-box
 		{
-			width:200px;
+			flex:0 0 auto;
+			margin-bottom:5px;
+			border:1px solid #ccc;
+			border-radius:5px;
+			line-height:1;
+		}
+		.crumb
+		{	
+			margin:3px;
+			padding:5px;
+			border:1px solid transparent;
+		}
+		.crumb:hover
+		{
+			background-color:rgb(238,238,238);
+			border:1px solid rgb(170,170,170);
+			border-radius:2px;
+		}
+		.crumb-marker:after
+		{
+			font-family:"Material Icons";
+			content:"chevron_right";
+			font-size:1.5em;
+
 		}
 		.content-box
 		{
@@ -296,6 +341,19 @@
 			font-family:roboto;
 			font-size:12px;
 		}
+		.hp-style .crumb-box
+		{
+			color: rgb(102, 102, 102);
+			font-size:14px;
+		}
+		.hp-style .crumb
+		{
+		}
+		.crumb-marker:after
+		{
+			font-size:24px;
+			font-weight:bold;
+		}
 		.hp-style .tnode-label
 		{
 			line-height:16px;
@@ -345,10 +403,12 @@
 			<div data-ibx-type="ibxLabel" data-ibxp-justify="center" style="flex:0 0 auto;color:#ccc;font-size:24px;font-weight:bold">Data is a Sample IBFS Repository</div>
 			<div class="btn-bar" data-ibx-type="ibxHBox" data-ibxp-align="center">
 				<div tabindex="0" class="btn-load" data-ibx-type="ibxButton">Load Tree</div>
-				<div tabindex="0" class="btn-hpstyle" data-ibx-type="ibxCheckBoxSimple">Home Page Style</div>
+				<div tabindex="0" class="btn-hpstyle" data-ibx-type="ibxCheckBoxSimple">Home Page Style (sorta)</div>
 				<div tabindex="0" class="btn-single-click-expand" data-ibx-type="ibxCheckBoxSimple">Single Click Expand</div>
 				<div tabindex="0" class="btn-expand-all" data-ibx-type="ibxButton">Expand All</div>
 				<div tabindex="0" class="btn-collapse-allAll" data-ibx-type="ibxButton">Collapse All</div>
+			</div>
+			<div class="crumb-box" data-ibx-type="ibxHBox" data-ibxp-align="center">
 			</div>
 			<div class="content-box" data-ibx-type="ibxHBox" data-ibxp-align="stretch">
 				<div tabindex="0" class="test-tree" data-ibx-type="ibxTree"></div>
