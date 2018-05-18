@@ -56,10 +56,6 @@
 
 }
 /* Chrome user agent sets the cursor for a label to default */
-.ibx-check-box label {
-    cursor: pointer;
-}
-
 .ibx-check-box:hover {
     color: #373a3c;
     background-color: #eee;
