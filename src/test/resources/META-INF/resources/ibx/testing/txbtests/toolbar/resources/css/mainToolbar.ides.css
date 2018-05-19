@@ -23,3 +23,18 @@
 	  right:10px;
  }
 
+.main-box{
+	background-color:yellow;
+	background-image: url(http://pgmtxb:8080/ibi_apps/ibx/testing/txbtests/toolbar/resources/etc/amalfiDrive.png); 
+	height: 800px; 
+	width: 1000px; 
+	border: 1px solid black; 
+}
+.runner-box{
+	background-color: blue; 
+	background-image: url(http://pgmtxb:8080/ibi_apps/ibx/testing/txbtests/toolbar/resources/etc/shrooms.png); 
+	height: 800px; 
+	width: 1000px; 
+	border: 1px solid black; 
+	visibility: hidden;
+}

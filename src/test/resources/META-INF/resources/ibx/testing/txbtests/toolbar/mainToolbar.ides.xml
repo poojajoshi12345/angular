@@ -57,9 +57,9 @@
 	 				<div class="ides-toolbar-separator" data-ibx-type="ibxMenuButtonSeparator"></div>
 					<div class="ides-toolbar-button" data-ibx-name="idesTBButtonSave" data-ibx-type="ibxButtonSimple" data-ibxp-glyph-classes="ibx-icons ibx-glyph-floppy" data-ibxp-command="cmdIdesSave" title="Save"></div>					 
 					<div class="ides-toolbar-button" data-ibx-name="idesTBButtonUndo" data-ibx-type="ibxButtonSimple" data-ibxp-glyph-classes="ibx-icons ibx-glyph-arrow-left" data-ibxp-command="cmdIdesUndo" title="Undo"></div>
-					<div class="ides-toolbar-button" data-ibx-name="idesTBMenuRedo" data-ibx-type="ibxButtonSimple" data-ibxp-glyph-classes="ibx-icons ibx-glyph-arrow-right" data-ibxp-command="cmdIdesRedo" title="Redo"></div>
+					<div class="ides-toolbar-button float-run" data-ibx-name="idesTBMenuRedo" data-ibx-type="ibxButtonSimple" data-ibxp-glyph-classes="ibx-icons ibx-glyph-arrow-right" data-ibxp-command="cmdIdesRedo" title="Redo"></div>
 					<div class="ides-toolbar-separator" data-ibx-type="ibxMenuButtonSeparator"></div>
-					<div class="ides-toolbar-button" data-ibx-name="idesTBButtonPreview" data-ibx-type="ibxButtonSimple" data-ibxp-glyph-classes="ibx-icons ibx-glyph-preview" data-ibxp-command="cmdIdesPreview" title="Preview"></div>
+					<div class="ides-toolbar-button run-preview" data-ibx-name="idesTBButtonPreview" data-ibx-type="ibxButtonSimple" data-ibxp-glyph-classes="ibx-icons ibx-glyph-preview" data-ibxp-command="cmdIdesPreview" title="Preview"></div>
 					<div class="ides-toolbar-separator" data-ibx-type="ibxMenuButtonSeparator"></div> 
 					<div class="ides-toolbar-button" data-ibx-name="idTBButtonInsight" data-ibxp-glyph-classes="ibx-icons ibx-glyph-insight" data-ibx-type="ibxButtonSimple" title="Insight"></div>
 					<div class="ides-toolbar-hsplitbutton" data-ibx-type="ibxHSplitMenuButton" data-ibx-name="idesTBButtonLayoutOptions" data-ibxp-glyph-classes="ibx-icons ibx-glyph-layout " title="Layout Options">
