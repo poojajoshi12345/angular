@@ -253,14 +253,7 @@ ibxDragDropManager.getDefaultDragImage = function(el)
 };
 ibxDragDropManager._dispatchDragEvent = function(e, type, target, bubbles, cancelable, data)
 {
-	var evt = createNativeEvent(type, data, bubbles, cancelable, null);
-	for(var key in e)
-	{
-		var prop = e[key];
-		if((prop instanceof Function))
-			continue;
-		evt[key] = prop;
-	}
+	var evt = cloneNativeEvent(e, type, data, bubbles, cancelable, null);
 	evt.dataTransfer = this._dataTransfer || e.dataTransfer;
 	if(target)
 		target.dispatchEvent(evt);

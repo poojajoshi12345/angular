@@ -259,21 +259,23 @@ function createNativeEvent(type, data, canBubble, cancelable, relatedTarget)
 	return e;
 }
 
+function cloneNativeEvent(e, type, data, canBubble, cancelable, relatedTarget)
+{
+	var evt = createNativeEvent(type, canBubble, cancelable, relatedTarget);
+	for(var key in e)
+	{
+		var prop = e[key];
+		if((prop instanceof Function))
+			continue;
+		evt[key] = prop;
+	}
+	return evt;
+}
+
 //let jQuery dispatch custom native events
 jQuery.fn.dispatchEvent = function(eType, data, canBubble, cancelable, relatedTarget)
 {
-	var evt = (typeof(eType) == "object") ? createNativeEvent(eType.type, data) : createNativeEvent(eType, data, canBubble, cancelable, relatedTarget);
-	if(typeof(eType) == "object")
-	{
-		for(var key in eType)
-		{
-			var prop = eType[key];
-			if((prop instanceof Function))
-				continue;
-			evt[key] = eType[key];
-		}
-	}
-
+	var evt = (typeof(eType) == "object") ? cloneNativeEvent(eType.type, data) : createNativeEvent(eType, data, canBubble, cancelable, relatedTarget);
 	this.each(function(evt, idx, el)
 	{
 		el.dispatchEvent(evt);
