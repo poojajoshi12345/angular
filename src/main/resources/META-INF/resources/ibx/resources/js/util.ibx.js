@@ -259,6 +259,7 @@ function createNativeEvent(type, data, canBubble, cancelable, relatedTarget)
 	return e;
 }
 
+//take a native event and create a new event, then copy all fields from native to new.
 function cloneNativeEvent(e, type, data, canBubble, cancelable, relatedTarget)
 {
 	var evt = createNativeEvent(type, canBubble, cancelable, relatedTarget);
