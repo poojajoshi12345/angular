@@ -254,8 +254,16 @@ ibxDragDropManager.getDefaultDragImage = function(el)
 ibxDragDropManager._dispatchDragEvent = function(e, type, target, bubbles, cancelable, data)
 {
 	var evt = createNativeEvent(type, data, bubbles, cancelable, null);
+	for(var key in e)
+	{
+		var prop = e[key];
+		if((prop instanceof Function))
+			continue;
+		evt[key] = prop;
+	}
 	evt.dataTransfer = this._dataTransfer || e.dataTransfer;
-	evt = $(target).dispatchEvent(evt);
+	if(target)
+		target.dispatchEvent(evt);
 	return evt;
 };
 ibxDragDropManager.endDrag = function(eType, e)
