@@ -23,7 +23,7 @@ $.widget("ibi.ibxTree", $.ibi.ibxVBox,
 		}
 	},
 	_widgetClass:"ibx-tree",
-	NODE_EVENTS: "keydown keyup mousedown click dblclick ibx_nodeselect ibx_nodedeselect ibx_nodeanchored ibx_nodeunanchored ibx_beforeexpand ibx_expand ibx_beforecollapse ibx_collapse",
+	NODE_EVENTS: "keydown keyup mousedown dblclick ibx_nodeselect ibx_nodedeselect ibx_nodeanchored ibx_nodeunanchored ibx_beforeexpand ibx_expand ibx_beforecollapse ibx_collapse",
 	_create:function()
 	{
 		this._super();
@@ -55,58 +55,76 @@ $.widget("ibi.ibxTree", $.ibi.ibxVBox,
 		if(el === undefined)
 			return this.treeNodes(".tnode-selected");
 
-		var nodes = this.treeNodes();
-		if(clearCurSel)
-			nodes.ibxWidget("selected", false);
-		nodes = nodes.filter(el);
-		nodes = this.options.multiSelect ? nodes : nodes.first();
+		if(!this._inSelection)
+		{
+			this._inSelection = true;
+			var nodes = $(this.treeNodes());
+			if(clearCurSel)
+				nodes.ibxTreeNode("selected", false, true);
+			nodes = nodes.filter(el);
+			nodes = this.options.multiSelect ? nodes : nodes.first();
+			nodes.ibxTreeNode("selected", selected, true);
+			
+			if(selected)
+				nodes.first().ibxTreeNode("selected", true, false);
 
-		this._internalSelect = true;
-		nodes.ibxWidget("selected", selected);
-		this._internalSelect = false;
+			this._inSelection = false;
+		}
 	},
 	_onNodeEvent:function(e)
 	{
+		var targetNode = $(e.target).closest(".ibx-tree-node").data("ibxWidget");
+		if(!targetNode)
+			return;
+
 		var options = this.options;
 		var eType = e.type;
 
 		//save this for multi-selection
-		if(eType == "keydown" || eType == "keyup" || e.type == "mousedown")
+		if(eType == "keydown" || eType == "keyup")
 		{
 			this._ctrlKeyDown = e.ctrlKey;
 			this._shiftKeyDown = e.shiftKey;
 
 			//escape will clear all selections back to anchor...this is questionable...really not sure we want this functionality
-			if(options.escClearSelection && (e.keyCode === $.ui.keyCode.ESCAPE))
+			if(e.keyCode === $.ui.keyCode.ESCAPE && options.escClearSelection)
 			{
 				var selected = $(this.selected());
-				selected.ibxWidget("selected", false).ibxWidget("anchor", false);
+				selected.ibxWidget("selected", null, false);
+			}
+		}
+		if(eType == "ibx_nodeselect")
+		{
+			if(!options.multiSelect || (!this._ctrlKeyDown && !this._shiftKeyDown))
+				this.selected(targetNode.element[0], true, true);
+			else
+			if(this._shiftKeyDown)//do contiguous selection
+			{
+				var navKids = this.navKeyChildren();
 			}
 		}
 		else
-		if(eType == "ibx_nodeselect")
-		{
-			if(!this._internalSelect)
-			{
-				var target = $(e.target);
-				var curSelNodes = $(this.selected().not(target));
-
-				//remove old anchor...there can be only one! (evil laugh)
-				curSelNodes.removeClass("tnode-selection-anchor");
-
-				//not multiselect, or no selection meta key is down...clear selection start again.
-				if(!options.multiSelect || (!this._ctrlKeyDown && !this._shiftKeyDown))
-					curSelNodes.ibxWidget("selected", false);
-				else
-				if(this._shiftKeyDown)//do contiguous selection
-				{
-					var x = 10;
-				}
-			}
-		}
+		if(eType == "ibx_nodedeselect")
+			this.selected(targetNode.element[0], false)
 
 		//don't let the events bubble past the tree.
 		e.stopPropagation();
+	},
+	_onNodeClickEvent:function(e)
+	{
+		if(!$(e.target).closest(".ibx-tree-node").is(this.element))
+			return;
+
+		var singleClickExpand = this.options.singleClickExpand;
+		if(e.type == "dblclick" && !singleClickExpand)
+			this.toggleExpanded();
+		else
+		if(e.type == "mousedown")
+		{
+			this.selected(true);
+			if(this.options.singleClickExpand)
+				this.toggleExpanded();
+		}
 	},
 	refresh:function(withChildren)
 	{
@@ -153,7 +171,8 @@ $.widget("ibi.ibxTreeNode", $.ibi.ibxVBox,
 	{
 		var options = this.options;
 		this._super();
-		this.element.attr("tabindex", -1).on("focus", this._onNodeFocusEvent.bind(this)).on("mousedown dblclick", this._onNodeClickEvent.bind(this)).on("keydown", this._onNodeKeyEvent.bind(this));;
+		this.element.attr("tabindex", -1);
+		this.element.on("focus", this._onNodeFocusEvent.bind(this)).on("keydown", this._onNodeKeyEvent.bind(this)).on("mousedown click dblclick", this._onNodeMouseEvent.bind(this));
 		this.nodeLabel = $("<div tabindex='-1' class='tnode-label'>").ibxLabel().appendTo(this.element);
 		options.labelOptions.text = options.labelOptions.text || this.element.textNodes().remove().text().replace(/^\s*|\s*$/g, "");
 
@@ -215,47 +234,42 @@ $.widget("ibi.ibxTreeNode", $.ibi.ibxVBox,
 	},
 	_onNodeKeyEvent:function(e)
 	{
-		if(!this.element.is(e.target) && !this.nodeLabel.is(e.target))
-			return;
-
-		var options = this.options;
 		if(e.keyCode === $.ui.keyCode.RIGHT)
 		{
-			if(!options.expanded)
+			if(!this.expanded())
 				this.toggleExpanded(true);
 			else
-				this.children().first().ibxWidget("focusNode");
+				this.children().first().focus();
+			e.stopPropagation();
 		}
 		else
 		if(e.keyCode === $.ui.keyCode.LEFT)
 		{
-			if(options.expanded)
+			if(this.expanded())
 				this.toggleExpanded(false);
 			else
-				$(this.parentNode()).ibxWidget("focusNode");
+				this.parentNode().focus();
+			e.stopPropagation();
 		}
 		else
 		if(e.keyCode === $.ui.keyCode.ENTER || e.keyCode === $.ui.keyCode.SPACE)
 		{
-			this.selected(true);
-			e.preventDefault();
+			this.toggleSelected();
+			e.stopPropagation();
 		}
 	},
-	_onNodeClickEvent:function(e)
+	_onNodeMouseEvent:function(e)
 	{
-		if(!$(e.target).closest(".ibx-tree-node").is(this.element))
-			return;
-
-		var singleClickExpand = this.options.singleClickExpand;
-		if(e.type == "dblclick" && !singleClickExpand)
+		var eType = e.type;
+		if(eType == "mousedown")
+			this.selected(true);
+		else
+		if(eType == "click" && this.options.singleClickExpand)
 			this.toggleExpanded();
 		else
-		if(e.type == "mousedown")
-		{
-			this.selected(true);
-			if(this.options.singleClickExpand)
-				this.toggleExpanded();
-		}
+		if(eType == "dblclick")
+			this.toggleExpanded();
+		e.stopPropagation();
 	},
 	_onBtnExpandClick:function(e)
 	{
@@ -268,42 +282,40 @@ $.widget("ibi.ibxTreeNode", $.ibi.ibxVBox,
 		expand = (expand === undefined) ? !this.options.expanded : expand;
 		this.option("expanded", expand);
 	},
-	focusNode:function()
+	expanded:function(expanded)
 	{
-		this.nodeLabel.focus();
+		if(expanded === undefined)
+			return this.options.expanded;
+		this.option("expanded", expanded);
 	},
-	anchor:function(anchor)
+	toggleSelected:function(select, silent)
 	{
-		return this.element.is(".tnode-selection-anchor");
+		select = (select === undefined) ? !this.selected() : select;
+		this.selected(select, silent);
 	},
-	selected:function(select)
+	selected:function(select, silent)
 	{
 		if(select === undefined)
 			return this.element.is(".tnode-selected");
 
+		var eType = null;
 		var tree = this.tree();
 		var selected = this.selected();
 		if(select && !selected)
 		{
-			var evt = this.element.dispatchEvent("ibx_nodeselect", null, true, true, tree);
-			if(!evt.defaultPrevented)
-			{
-				this.anchor(true);
-				this.element.toggleClass("tnode-selected tnode-selection-anchor", true);
-				this.focusNode();
-			}	
+			this.element.addClass("tnode-selected");
+			eType = "ibx_nodeselect";
 		}
 		else
 		if(!select && selected)
 		{
-			
-			var evt = this.element.dispatchEvent("ibx_nodedeselect", null, true, true, tree);
-			if(!evt.defaultPrevented)
-			{
-				this.anchor(false);
-				this.element.toggleClass("tnode-selected tnode-selection-anchor", false)
-			}
+			this.element.removeClass("tnode-selected");
+			eType = "ibx_nodedeselect";
 		}
+
+		if(eType && !silent)
+			this.element.dispatchEvent(eType, null, true, true, tree);
+			
 	},
 	_setOption:function(key, value)
 	{

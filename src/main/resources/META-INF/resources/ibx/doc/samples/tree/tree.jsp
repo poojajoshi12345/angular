@@ -20,6 +20,71 @@
 		<script type="text/javascript">
 			ibx(function()
 			{
+				$.widget("ibi.ibxSelectionManager", $.Widget, 
+				{
+					options:
+					{
+						"multiSelect":false,
+						"selectableItems":""
+					},
+					_widgetClass:"ibx-selection-manager",
+					_create:function()
+					{
+						this._super();
+						this.element.addClass("ibx-selection-manager");
+						this.element.on("keydown mousedown", this._onItemEvent.bind(this));
+					},
+					_destroy:function()
+					{
+						this._super();
+						this.element.removeClass("ibx-selection-manager");
+					},
+					_onItemEvent:function(e)
+					{
+						var options = this.options;
+						var target = $(e.target).closest(options.selectableItems);
+						var eType = e.type;
+						var ctrl = e.ctrlKey;
+						var shift = e.shiftKey;
+						var selected = target.is(".ibx-selected");
+						if(eType == "mousedown")
+						{
+							if(!ctrl && !shift)
+								this.deselectAll();
+							target.toggleClass("ibx-selected", ctrl ? !selected : true);
+							//console.log(target);
+						}
+						else
+						if(eType == "keydown")
+						{
+						}
+					},
+					select:function(selector)
+					{
+						this.element.children().filter(selector).addClass("ibx-selected");
+					},
+					selectAll:function(selector)
+					{
+						this.element.children().addClass("ibx-selected");
+					},
+					deselect:function(selector)
+					{
+						this.element.children().filter(selector).removeClass("ibx-selected");
+					},
+					deselectAll:function()
+					{
+						this.element.children().filter(".ibx-selected").removeClass("ibx-selected");
+					},
+					_refresh:function()
+					{
+						this._super();
+					}
+				});
+				$(".test-tree").ibxSelectionManager({"selectableItems":".ibx-tree-node"});
+
+
+
+
 				$(".test-tree").on("ibx_beforeexpand", function(e)
 				{
 					$.ibi.ibxWidget.noRefresh = true;
@@ -55,28 +120,6 @@
 						var fileTile = makeFileTile(el);
 						(el.attr("container") == "true") ? folderList.append(fileTile) : fileList.append(fileTile);
 					});
-
-					var crumbBox = $(".crumb-box");
-					var crumbs = xItem.attr("fullPath").split("/");
-					var crumbPath = "";
-					crumbBox.ibxWidget("remove");
-					$(crumbs).each(function(iex, pathSegment)
-					{
-						crumbPath += pathSegment + "/";
-						var crumb = $(sformat("<div class='crumb'>{1}</div><span class='crumb-marker'></span>", pathSegment));
-						crumb.data("crumbPath", crumbPath).on("click", function(e)
-						{
-							var tree = $(".test-tree");
-							var crumb = $(this);
-							var crumbPath = crumb.data("crumbPath").replace(/\/$/g, "");
-							var rootNodes = tree.ibxWidget("children");
-							var foundNode = $(searchTree(rootNodes, crumbPath));
-							if(foundNode.length)
-								foundNode.ibxTreeNode("selected", true);
-						});
-						crumbBox.append(crumb);
-					});
-					crumbBox.children(":last").remove();
 				});
 
 				$(".test-files-box").on("dblclick keydown", function(e)
@@ -179,9 +222,16 @@
 					"glyphClasses":"material-icons"
 				}
 				var tile = $("<div tabindex='-1' class='file-tile'>").ibxLabel(options).addClass(container ? "folder" : "file").addClass(itemClass);
-				tile.data("xItem", xItem);
+				tile.attr("data-ibfs-path", xItem.attr("fullPath")).data("xItem", xItem);
+				tile.on("ibx_dragover", function(e)
+				{
+					e.preventDefault();
+					var dt = e.originalEvent.dataTransfer;
+					dt.dropEffect = "move";
+				});
 				return tile;
 			};
+
 			searchTree = function(treeNodes, path)
 			{
 				for(var i = 0; i < treeNodes.length; ++i)
@@ -227,33 +277,6 @@
 		.btn-bar > *
 		{
 			margin:5px;
-		}
-		.crumb-box
-		{
-			flex:0 0 auto;
-			margin-bottom:5px;
-			border:1px solid #ccc;
-			border-radius:5px;
-			line-height:1;
-		}
-		.crumb
-		{	
-			margin:3px;
-			padding:5px;
-			border:1px solid transparent;
-		}
-		.crumb:hover
-		{
-			background-color:rgb(238,238,238);
-			border:1px solid rgb(170,170,170);
-			border-radius:2px;
-		}
-		.crumb-marker:after
-		{
-			font-family:"Material Icons";
-			content:"chevron_right";
-			font-size:1.5em;
-
 		}
 		.content-box
 		{
@@ -315,6 +338,7 @@
 			border-radius:5px;
 			background-color:white;
 			box-shadow:2px 2px 5px 0px #aaa;
+			cursor:pointer;
 		}
 		.file-tile .ibx-label-glyph
 		{
@@ -333,6 +357,18 @@
 		.tnode-selection-anchor > .tnode-label
 		{
 			font-weight:bold;
+		}
+		
+		.ibx-drag-source
+		{
+			outline:2px solid pink;
+		}
+		.ibx-drop-target:hover
+		{
+			outline:2px solid red;
+		}
+		.ibx-drag-image
+		{
 		}
 
 		/*IBI WF Tree Styles*/
@@ -407,8 +443,6 @@
 				<div tabindex="0" class="btn-single-click-expand" data-ibx-type="ibxCheckBoxSimple">Single Click Expand</div>
 				<div tabindex="0" class="btn-expand-all" data-ibx-type="ibxButton">Expand All</div>
 				<div tabindex="0" class="btn-collapse-allAll" data-ibx-type="ibxButton">Collapse All</div>
-			</div>
-			<div class="crumb-box" data-ibx-type="ibxHBox" data-ibxp-align="center">
 			</div>
 			<div class="content-box" data-ibx-type="ibxHBox" data-ibxp-align="stretch">
 				<div tabindex="0" class="test-tree" data-ibx-type="ibxTree"></div>
