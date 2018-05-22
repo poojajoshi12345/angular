@@ -21,6 +21,13 @@
 		<style-file src="./test_res_styles.css"/>
 		<style-sheet>
 		<![CDATA[
+			.test-widget
+			{
+			}
+			.test-edit
+			{
+				flex:1 1 auto;
+			}
 		]]>
 		</style-sheet>
 	</styles>
@@ -28,6 +35,9 @@
 	<markup>
 		<markup-file src="./test_res_markup.xml"/>
 		<markup-block>
+			<widget-resources>
+				<div class="test-edit" data-ibx-type="ibxRichEdit"></div>
+			</widget-resources>
 		</markup-block>
 	</markup>
 
@@ -36,15 +46,20 @@
 		<script-file src="./test_res_script.js"/>
 		<script-block>
 			<![CDATA[
-			$.widget("ibi.testDialog", $.ibi.ibxDialog, 
+			$.widget("ibi.testWidget", $.ibi.ibxVBox, 
 			{
 				options:
 				{
+					align:"stretch"
 				},
-				_widgetClass:"test-dialog",
+				_widgetClass:"test-widget",
 				_create:function()
 				{
 					this._super();
+					var res = ibx.resourceMgr.getResource("widget-resources", false);
+					var children = res.children();
+					this.element.append(children);
+					ibx.bindElements(this.element);
 				},
 				_destroy:function()
 				{

@@ -22,22 +22,24 @@
 
 			ibx(function()
 			{
-				var box = ibx.resourceMgr.getResource(".test-box", true);
-				box.on("ibx_resize", function(e)
-				{
-					console.log(e.type);
-				});
-
-				$("body").append(box);
+				var test = $("<div>").testWidget();
+				$("body").append(test);
 			}, [{src:"./test_res_bundle.xml", loadContext:"app"}], true);
 		</script>
 		<style type="text/css">
 			html, body
 			{
+				position:absolute;
 				width:100%;
 				height:100%;
 				margin:0px;
 				box-sizing:border-box;
+			}
+			.test-widget
+			{
+				width:400px;
+				height:300px;
+				border:1px solid black;
 			}
 		</style>
 	</head>

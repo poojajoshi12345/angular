@@ -34,11 +34,17 @@ $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame,
 			cd.designMode = "On";
 			cd.body.contentEditable = true;
 			cd.body.spellcheck = false;
-			cd.body.innerHTML = this.element.data("createContent");
 			$(cd).on("focusin focusout selectionchange", this._onRichEditDocEvent.bind(this));
 
 			this.styleWithCSS(true);//by default make editor use css for styling.
+
+			//set the content if this is created from markup and there is html inside the ibxRichEdit markup.
+			var content = this.element.data("createContent")
+			if(content !== undefined)
+				cd.body.innerHTML = content;
 			this.element.removeData("createContent");
+			
+			//let the world know we are done by resolving the promise.
 			this._readyPromise.resolve(this.element);
 		}
 	},
