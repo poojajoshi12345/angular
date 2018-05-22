@@ -435,11 +435,11 @@ ibxDragDropManager._onNativeDragEvent = function(e)
 				"dataTransfer":dt
 			};
 
-			if(this._dispatchDragEvent(e, "ibx_beforefilesupload", this.element, ajaxOptions).isDefaultPrevented())
+			if(this._dispatchDragEvent(e, "ibx_beforefilesupload", e.target, ajaxOptions).isDefaultPrevented())
 				return;
 
 			var deferred = $.ajax(ajaxOptions);
-			this._dispatchDragEvent(e, "ibx_filesuploading", this.element, deferred);
+			this._dispatchDragEvent(e, "ibx_filesuploading", e.target, deferred);
 		}
 		e.preventDefault();
 	}
