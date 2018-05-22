@@ -4,8 +4,6 @@
 .ibx-label
 {
 	overflow:hidden;
-	cursor:default;
-
 }
 
 .ibx-label-text
@@ -15,7 +13,6 @@
 	overflow:hidden;
 	-ms-user-select:none;
 	user-select:none;
-	cursor:inherit;
 }
 
 .ibx-label-glyph
@@ -65,7 +62,6 @@
 .ibx-label-icon
 {
 	position:relative; /*amazing...ie has to have this or pointer-events:none won't work when disabled*/
-	cursor:inherit;
 }
 
 .ibx-label.icon-left

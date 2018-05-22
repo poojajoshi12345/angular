@@ -9,7 +9,9 @@ $.widget("ibi.ibxWidget", $.Widget,
 		"ctxMenu":null,
 		"command":null,
 		"userValue":null,
+		"draggable":false,
 		"dragScrolling":false,
+		"externalDropTarget":false,		//can you drop external things on this (like native OS files).
 		"wantResize":false,
 		"opaque":false,					//add iframe behind to stop pdf from bleading through.
 
@@ -81,7 +83,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 		this.element.data("ibxWidget", this);
 		this.element.data("ibiIbxWidget", this);
 		this.element.attr("data-ibx-type", this.widgetName);
-		this.element.on("keydown", this._onWidgetKeyEvent.bind(this));
+		this.element.on("keydown ibx_keydowninternal", this._onWidgetKeyEvent.bind(this));
 		this.element.on("focusin focusout", this._onWidgetFocusEvent.bind(this));
 		this.element.on("contextmenu", this._onWidgetContextMenu.bind(this));
 		this._adjustWidgetClasses(true);
@@ -232,7 +234,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 				{
 					//now manage focusing the first valid child.
 					if(options.navKeyRoot)
-						this.element.dispatchEvent("keydown", "NAV_KEY_ACTIVATE");
+						this.element.dispatchEvent("ibx_keydowninternal", "NAV_KEY_ACTIVATE");
 					else
 					if(isTarget)
 					{
@@ -514,6 +516,8 @@ $.widget("ibi.ibxWidget", $.Widget,
 		this.element.toggleClass("ibx-focus-root", options.focusRoot);
 		this.element.toggleClass("ibx-nav-key-root", options.navKeyRoot);
 		this.element.toggleClass("ibx-focus-default", options.focusDefault);
+		this.element.toggleClass("ibx-draggable", options.draggable);
+		this.element.toggleClass("ibx-external-drop-target", options.externalDropTarget);
 
 		//should NOT BE USING defaultFocused on children of focusRoot/navKeyRoot.
 		if(options.defaultFocused)
@@ -573,271 +577,6 @@ $.ibi.ibxWidget.isNavKey = function(keyCode)
 	keyCode = (keyCode instanceof Object) ? keyCode.keyCode : keyCode;
 	return ($.ibi.ibxWidget.navKeys.indexOf(keyCode) != -1);
 };
-
-/****
- 	Drag/Drop mix in
-****/
-(function(widgetProto)
-{
-	function ibxDataTransfer()
-	{
-		this.items = {};
-		this.effectAllowed = "all";
-		this.dropEffect = "not-allowed";
-	}
-	_p = ibxDataTransfer.prototype = new Object();
-	_p.items = null;
-	_p.getData = function(type){return this.items[type]};
-	_p.setData = function(type, data){this.items[type] = data;};
-	_p.clearData = function(type){delete this.items[type];};
-	_p._dragImage = null;
-	_p.dragXOffset = 8;
-	_p.dragYOffset = 8;
-	_p.setDragImage = function(img, xOffset, yOffset)
-	{
-		this._dragImage = img ? $(img) : this._dragImage;
-		if(this._dragImage)
-			this._dragImage.css("position", "absolute").addClass("ibx-drag-image");
-		this.dragXOffset = xOffset || this.dragXOffset;
-		this.dragYOffset = yOffset || this.dragYOffset;
-	};
-
-	var draggablePatch = 
-	{
-		options:
-		{
-			draggable:false,			//!!!!IBX DRAGGABLE!!!! ...NOTHING TO DO WITH NATIVE DRAG/DROP
-			dragClass:"ibx-drag-source",
-			dragImageClass:"",
-			dragStartDistanceX:5,
-			dragStartDistanceY:5,
-
-			nativeFileDropTarget:false, //!!!!NATIVE FILE DROP TARGET!!!! 
-			fileUploadAjaxOptions:
-			{
-			}
-		},
-		_createOrig:$.ibi.ibxWidget.prototype._create,
-		_create:function()
-		{
-			this._onDragMouseEventBound = this._onDragMouseEvent.bind(this);
-			this._onDragKeyEventBound = this._onDragKeyEvent.bind(this); 
-			this.element.on("mousedown", this._onDragMouseEventBound);
-			this.element.on("keydown", this._onDragKeyEventBound);
-			this.element.on("dragover drop", this._onNativeDragEvent.bind(this))
-			this._createOrig.apply(this, arguments);
-		},
-		_destroyOrig:$.ibi.ibxWidget.prototype._destroy,
-		_destroy:function()
-		{
-			this._destroyOrig.apply(this, arguments);
-			this.element.removeClass("ibx-draggable");
-		},
-		getDefaultDragImage:function(el)
-		{
-			//clone the node and make sure the width/height are preserved so it lays out correctly.
-			el = $(el);
-			var width = el.width();
-			var height = el.height();
-			var clone = el.clone().css({"width":width + "px", "height":height + "px", "margin":"0px"});
-			return clone;
-		},
-		isDragging:function(){return this.element.hasClass(this.options.dragClass);},
-		_dispatchDragEvent:function(e, type, target, data)
-		{
-			var dEvent = $.Event(e);
-			dEvent.type = type;
-			dEvent.target = (target instanceof jQuery) ? target[0] : target;
-			dEvent.dataTransfer = this._dataTransfer || e.dataTransfer;
-			$(target).trigger(dEvent, data);
-			return dEvent;
-		},
-		endDrag:function(eType, e)
-		{
-			if(eType && this.isDragging())//[IA-7558] Only spit out event if dragging.
-				this._dispatchDragEvent(e, eType, this.element);
-			
-			if(this._dataTransfer)
-				$(this._dataTransfer._dragImage).remove();
-
-			document.documentElement.removeEventListener("mouseup", this._onDragMouseEventBound, true);
-			document.documentElement.removeEventListener("mousemove", this._onDragMouseEventBound, true);
-			this.element.removeClass(this.options.dragClass);
-			this._curTarget.css("cursor", this._curTarget.data("ibxDragTargetCursor")).removeClass("ibx-drag-target");
-
-			delete this._dataTransfer;
-			delete this._curTarget;
-			delete this._mDownLoc;
-		},
-		_onDragKeyEvent:function(e)
-		{
-			if(this.options.draggable && this.isDragging() && e.keyCode == $.ui.keyCode.ESCAPE)
-			{
-				this.endDrag("ibx_dragcancel", e);
-				e.stopPropagation();
-			}
-		},
-		_onDragMouseEvent:function(e)
-		{
-			var options = this.options;
-			if(!options.draggable)
-				return;
-
-			//stop proagation...bubbling will mess up draggable within draggable.
-			e.stopPropagation();
-
-			var eType = e.type;
-			switch(eType)
-			{
-				case "mousedown":
-					this._mDownLoc = {"x":e.clientX, "y":e.clientY};
-					document.documentElement.addEventListener("mouseup", this._onDragMouseEventBound, true);
-					document.documentElement.addEventListener("mousemove", this._onDragMouseEventBound, true);
-					this._curTarget = $();
-					break;
-				case "mouseup":
-					if(this.isDragging())
-					{
-						//if allowed let target know it was dropped on
-						if(!this._curTarget._dragPrevented)
-							this._dispatchDragEvent(e, "ibx_drop", this._curTarget);
-					}
-
-					//end the drag operation
-					this.endDrag("ibx_dragend", e);
-					break;
-				case "mousemove":
-					var dEvent = null;
-					var dx = e.clientX - this._mDownLoc.x;
-					var dy = e.clientY - this._mDownLoc.y;
-					var isDragging = this.isDragging();
-					if(!isDragging && (Math.abs(dx) >= options.dragStartDistanceX || Math.abs(dy) >= this.options.dragStartDistanceY))
-					{
-						e.stopPropagation();
-
-						this._dataTransfer = new ibxDataTransfer();
-						dEvent = this._dispatchDragEvent(e, "ibx_dragstart", this.element);
-						if(!dEvent.isDefaultPrevented())
-						{
-							//start dragging...and also set default drag image if not already set...default the offest for drag image to where dragged on 
-							this.element.addClass(options.dragClass);
-							if(!this._dataTransfer._dragImage)
-							{
-								var bRect = this.element[0].getBoundingClientRect();
-								var offsetX = bRect.x - this._mDownLoc.x;
-								var offsetY = bRect.y - this._mDownLoc.y;
-								this._dataTransfer.setDragImage(this.getDefaultDragImage(this.element).addClass(options.dragImageClass), offsetX, offsetY);
-							}
-						}
-					}
-
-					if(isDragging)
-					{
-						//find the element under the mouse.
-						var elTarget = $(document.elementFromPoint(e.clientX, e.clientY));
-
-						//manage the current target
-						if(!this._curTarget.is(elTarget))
-						{
-							//new drop target so reset the effect.
-							this._dataTransfer.dropEffect = "not-allowed";
-
-							//spit out events for source/target
-							dEvent = this._dispatchDragEvent(e, "ibx_dragleave", this._curTarget);
-							dEvent = this._dispatchDragEvent(e, "ibx_dragenter", elTarget);
-
-							//save the current drag target info.
-							this._curTarget.css("cursor", this._curTarget.data("ibxDragTargetCursor")).removeClass("ibx-drag-target");
-							this._curTarget = elTarget;
-							this._curTarget.data("ibxDragTargetCursor", this._curTarget.css("cursor")).addClass("ibx-drag-target");
-						}
-
-						//send drag messages if 'ibx_dragover' was not prevented
-						dEvent = this._dispatchDragEvent(e, "ibx_drag", this.element);
-						dEvent = this._dispatchDragEvent(e, "ibx_dragover", this._curTarget);
-						var dragPrevented = this._curTarget._dragPrevented = !dEvent.isDefaultPrevented();
-
-						//figure out the cursor
-						var cursor = "not-allowed";
-						if(!dragPrevented)
-						{
-							if(this._dataTransfer.effectAllowed == "all")
-								cursor = this._dataTransfer.dropEffect;
-							else
-							if(this._dataTransfer.effectAllowed == this._dataTransfer.dropEffect)
-								cursor = this._dataTransfer.dropEffect;
-						}
-						var curCursor = this._curTarget.css("cursor");
-						if(curCursor != cursor)
-							this._curTarget.css("cursor", cursor);
-
-						//manage the drag cursor
-						if(this._dataTransfer._dragImage)
-						{
-							var dragImage = this._dataTransfer._dragImage;
-							var xOffset = (this._dataTransfer.dragXOffset == "center") ? -(dragImage.width()/2) : this._dataTransfer.dragXOffset;
-							var yOffset = (this._dataTransfer.dragYOffset == "center") ? -(dragImage.height()/2) : this._dataTransfer.dragYOffset;
-							$(this._dataTransfer._dragImage).css(
-							{
-								"left":e.clientX + xOffset + "px",
-								"top":e.clientY + yOffset + "px",
-							}).appendTo("body.ibx-root");
-						}
-					}
-					break;
-			}
-		},
-		_onNativeDragEvent:function(e)
-		{
-			var options = this.options;
-			if(!options.nativeFileDropTarget)
-				return;
-
-			var eType = e.type;
-			if(eType == "dragover")
-				e.preventDefault();
-			else
-			if(eType == "drop")
-			{
-				var dt = e.originalEvent.dataTransfer;
-				if(dt.files.length)
-				{
-					var formData = new FormData();
-					$.each(dt.files, function(idx, file)
-					{
-						formData.append(file.name, file);
-					});
-					var ajaxOptions = $.extend(true,
-					{
-						"method":"POST",
-						"contentType":false,
-						"processData":false,
-						"data":formData,
-						"url":"",
-						"dataTransfer":dt
-					}, options.fileUploadAjaxOptions);
-
-					if(this._dispatchDragEvent(e.originalEvent, "ibx_beforefilesupload", this.element, ajaxOptions).isDefaultPrevented())
-						return;
-
-					var deferred = $.ajax(ajaxOptions);
-					this._dispatchDragEvent(e.originalEvent, "ibx_filesuploading", this.element, deferred);
-				}
-				e.preventDefault();
-			}
-		},
-		_refreshOrig:$.ibi.ibxWidget.prototype._refresh,
-		_refresh:function()
-		{
-			this._refreshOrig.apply(this, arguments);
-			var options = this.options;
-			this.element.toggleClass("ibx-draggable", !!options.draggable);
-		}
-	};
-
-	//patch ibxWidget to support drag/drop
-	$.extend(true, widgetProto, draggablePatch);
-})($.ibi.ibxWidget.prototype)
 
 
 //# sourceURL=widget.ibx.js

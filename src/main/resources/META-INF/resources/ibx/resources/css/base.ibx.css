@@ -39,6 +39,7 @@ body
 	font-size:12px;
 	font-family: 'Arial', sans-serif;
 	-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+	cursor:default;
 }
 
 /*hide from here down so we can load/bind ibx before showing markup...usually added to <body>*/
@@ -56,6 +57,13 @@ body
 .ibx-root.ibx-visible
 {
 	visibility:visible;
+}
+
+.ibx-drag-image
+{
+	pointer-events:none;
+	opacity:.5;
+	z-index:2147483647;/*max z-index*/
 }
 
 input

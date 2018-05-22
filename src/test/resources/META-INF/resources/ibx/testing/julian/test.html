@@ -36,7 +36,7 @@
 					},
 					_onNodesAdded:function(e)
 					{
-						$.each(e.detail, function(idx, el)
+						$.each(e.data, function(idx, el)
 						{
 							el = $(el);
 							el.on("keydown mousedown", this._onNodeSelectEventBound);
@@ -44,7 +44,7 @@
 					},
 					_onNodesRemoved:function(e)
 					{
-						$.each(e.detail, function(idx, el)
+						$.each(e.data, function(idx, el)
 						{
 							el = $(el);
 							el.off("keydown mousedown", this._onNodeSelectEventBound);
