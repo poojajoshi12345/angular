@@ -186,7 +186,7 @@ ibxEventManager._onNoScrollTouchEvent = function(e)
 };
 
 //singleton event manager object.
-window["ibxEventMgr"] = new ibxEventManager();
+ibx.eventMgr = new ibxEventManager();
 
 
 /****
@@ -447,6 +447,6 @@ ibxDragDropManager._onNativeDragEvent = function(e)
 };
 
 //singleton drag/drop manager object.
-window["ibxDragDropMgr"] = new ibxDragDropManager();
+ibx.dragDropMgr = new ibxDragDropManager();
 
 //# sourceURL=events.ibx.js
