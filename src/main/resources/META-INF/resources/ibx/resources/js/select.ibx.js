@@ -311,7 +311,11 @@ $.widget("ibi.ibxSelect", $.ibi.ibxSelectBase,
 	},
 	_onPopupClose: function ()
 	{
-		window.setTimeout(function (){this._control.ibxWidget("resetHighlight");}.bind(this), 10);
+		window.setTimeout(function (){
+			if (this._destroyed)
+				return;
+			this._control.ibxWidget("resetHighlight");
+		}.bind(this), 10);
 	},
 	_onTextChanged: function (e)
 	{
