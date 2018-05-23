@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿<%-- Copyright 1996-2017 Information Builders, Inc. All rights reserved. --%>
+<%-- $Revision$--%>
+<!DOCTYPE html>
 <html lang="en-us">
 	<head>
 		<title>ibx hello world sample</title>
