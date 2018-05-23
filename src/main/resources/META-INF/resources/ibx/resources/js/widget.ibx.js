@@ -389,12 +389,8 @@ $.widget("ibi.ibxWidget", $.Widget,
 
 			if(isNavActive && !active.is(current) && active.length)
 			{
-				var event = $.Event(e);
-				event.type = "ibx_beforenavkey";
-				event.target = active;
-				event.relatedTarget = current;
-				this.element.trigger(event);
-				if(!event.isDefaultPrevented())
+				var evt = $(active).dispatchEvent("ibx_beforenavkeyfocus", null, true, true, current);
+				if(!evt.isDefaultPrevented())
 				{
 					active[0].focus();
 					e.preventDefault();
