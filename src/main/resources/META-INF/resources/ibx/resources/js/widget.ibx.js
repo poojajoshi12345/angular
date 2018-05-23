@@ -163,7 +163,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 		this.setAccessibility(false);
 		this._created = false;
 		this._destroyed = true;
-		this._trigger("destroy");
+		this.element.dispatchEvent("destroy", null, false, false);
 	},
 	_init:function()
 	{
@@ -202,7 +202,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 	},
 	_resizeCallback:function()
 	{
-		this._trigger("resize");
+		this.element.dispatchEvent("ibx_resize");
 	},
 	_widgetFocused:false,
 	widgetFocused:function(){return this._widgetFocused;},
@@ -320,10 +320,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 			if(target || !tabKids.length)
 			{
 				target = $(target);
-				var ret = this._trigger("focusing", null, {"target":target, "relatedTarget":e.relatedTarget});
-				if(ret)
-					target.focus();
-
+				target.focus();
 				e.preventDefault();
 				e.stopPropagation();
 			}
