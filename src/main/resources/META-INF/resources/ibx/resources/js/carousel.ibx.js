@@ -165,8 +165,16 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 			info.steps = info.nFrames = 1;
 		}
 
-		var fnFrame = function(info, timeStamp)
+		var eventInfo = 
 		{
+			"itemsBox":this._itemsBox,
+			"info":info,
+			"pageInfo":this.getPageInfo()
+		};
+
+		var fnFrame = function(eventInfo, timeStamp)
+		{
+			var info = eventInfo.info;
 			var newScroll = this._itemsBox.prop(info.scrollAxis) + info.frameDelta;
 			if(this._scrollInfo.stop || (info.forward && newScroll >= info.scrollEndPos) || (!info.forward && newScroll <= info.scrollEndPos))
 			{
@@ -183,10 +191,7 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 					//we done...stop scrolling...let world know.
 					window.cancelAnimationFrame(info.animationFrameId)
 					this._scrollInfo = null;
-					window.setTimeout(function()
-					{
-						this._trigger("carouselscrollend", null, [this._itemsBox, info, this.getPageInfo()]);
-					}.bind(this), 20);
+					this.element.dispatchEvent("ibx_endscroll", eventInfo, false, false);
 					return;
 				}
 				else
@@ -197,9 +202,10 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 					info.curFrame = 0;
 				}
 			}
-		}.bind(this, info);
+		}.bind(this, eventInfo);
 
-		if(!this._trigger("beforescarouselcroll", null, [this._itemsBox, info,  this.getPageInfo()]))
+		var evt = this.element.dispatchEvent("ibx_beforescroll", eventInfo, false, true);
+		if(evt.isDefaultPrevented())
 		{
 			this._scrollInfo = null;
 			return;
