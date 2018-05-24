@@ -409,7 +409,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 			return;
 
 		if(ctxEvent.result)
-			console.warn("[Deprecation] Event ibx_ctxmenu - event.result is depricated.  Use event.menu instead.");
+			console.warn("[ibx Deprecation] Event ibx_ctxmenu - event.result is deprecated.  Use event.menu instead.");
 		ctxMenu = ctxEvent.result || ctxEvent.menu || $(this.options.ctxMenu);
 		if(ctxMenu.length)
 		{

@@ -25,8 +25,34 @@
 				var cmdClear = $("<div class='cmd-clear'>").ibxCommand({id:"cmdClear", "shortcut":"ALT+C"}).appendTo("body");
 				cmdClear.on("ibx_triggered", function(e)
 				{
+					var re = $(".ibx-rich-edit").data("ibxWidget");
+					var doc = re.getContentDocument();
+
 				});
 
+				$(".drag-source").attr("draggable", false).on("dragstart dragover drop ibx_dragstart ibx_dragover ibx_drop", function(e)
+				{
+					var dt = e.originalEvent.dataTransfer;
+					if(e.type == "dragstart" || e.type == "ibx_dragstart")
+					{
+						var data = e.currentTarget.innerText;
+						dt.setData("text/plain", data);
+						//dt.setData("text/html", sformat("<span style='border:1px solid red;'>{1}</span>", data));
+						e.preventDefault();
+					}
+					if(e.type == "dragover" || e.type == "ibx_dragover")
+					{
+						dt.dropEffect = "copy";
+						e.preventDefault();
+					}
+					else
+					if(e.type == "drop" || e.type == "ibx_drop")
+					{
+						var data = dt.getData("text/plain", this);
+						console.log(data);
+					}
+				});
+				
 				function updateUI()
 				{
 					var re = $(".rich-edit").ibxWidget("instance");
@@ -52,17 +78,6 @@
 					return state;
 				}
 				updateUI();
-
-				var inTest = false;
-				$(".tb-main").on("keydown", function(e)
-				{
-					if(inTest)
-						return
-					inTest = true;
-					var evt = $(this).dispatchEvent(e.originalEvent, "from tb-main");
-					console.log(e, evt);
-					inTest = false;
-				});
 
 				$(".rich-edit").ibxWidget("ready", function(richEdit)
 				{
@@ -230,6 +245,8 @@
 	<body class="ibx-root">
 		<div class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
 			<div class="tb-main" data-ibx-type="ibxHBox" data-ibxp-wrap="true" data-ibxp-align="center">
+				<div class="drag-source" data-ibx-type="ibxLabel" data-ibxp-draggable="true" data-ibxp-external-drop-target="false" style="padding:3px;border:1px solid red;">Test Drag Source</div>
+
 				<div tabindex="0" class="tb-button" title="Undo" data-ibx-type="ibxButtonSimple" data-ibxp-command="cmdUndo" data-ibxp-glyph="undo" data-ibxp-glyph-classes="material-icons"></div>
 				<div tabindex="0" class="tb-button" title="Redo" data-ibx-type="ibxButtonSimple" data-ibxp-command="cmdRedo" data-ibxp-glyph="redo" data-ibxp-glyph-classes="material-icons"></div>
 				<div tabindex="0" class="tb-separator"></div>

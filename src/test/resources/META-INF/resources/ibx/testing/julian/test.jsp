@@ -19,11 +19,45 @@
 		<Script src="<%=request.getContextPath()%>/ibx/resources/ibx.js" type="text/javascript"></script>
 		<script type="text/javascript">
 			<jsp:include page="/WEB-INF/jsp/global/wf_globals.jsp" flush="false" />
-
 			ibx(function()
 			{
-				var test = $("<div>").testWidget();
-				$("body").append(test);
+				$(".test-label").on("ibx_dragstart ibx_dragend", function(e)
+				{
+					var dt = e.originalEvent.dataTransfer;
+					var eType = e.type;
+					if(eType == "ibx_dragstart")
+					{
+						$("iframe").addClass("dragging");
+						dt.setData("testData", e.target.innerText);
+					}
+					else
+					if(eType == "ibx_dragend")
+					{
+						$("iframe").removeClass("dragging");	
+					}
+				});
+				$(".test-edit").on("ibx_dragover ibx_drop", function(e)
+				{
+					var dt = e.originalEvent.dataTransfer;
+					var eType = e.type;
+					if(eType == "ibx_dragover")
+					{
+						if(dt.getData("testData"))
+						{
+							dt.dropEffect = "copy";
+							e.preventDefault();
+						}
+					}
+					else
+					if(eType == "ibx_drop")
+					{
+						var data = dt.getData("testData")
+						var re = $(this);
+						re.ibxWidget("insertText", data);
+					}
+				});
+
+
 			}, [{src:"./test_res_bundle.xml", loadContext:"app"}], true);
 		</script>
 		<style type="text/css">
@@ -35,14 +69,25 @@
 				margin:0px;
 				box-sizing:border-box;
 			}
-			.test-widget
+			.test-label
+			{
+				border:2px solid red;
+			}
+
+			.test-edit
 			{
 				width:400px;
 				height:300px;
 				border:1px solid black;
 			}
+			iframe.dragging
+			{
+				pointer-events:none;
+			}
 		</style>
 	</head>
 	<body class="ibx-root">
+		<div class="test-label" data-ibx-type="ibxLabel" data-ibxp-draggable="true">Julian</div>
+		<div class="test-edit" data-ibx-type="ibxRichEdit"></div>
 	</body>
 </html>
