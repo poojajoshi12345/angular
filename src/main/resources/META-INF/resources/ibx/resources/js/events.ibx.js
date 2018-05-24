@@ -3,6 +3,9 @@
 
 function ibxEventManager()
 {
+	if(ibx.eventMgr)
+		return;
+
 	window.addEventListener("touchstart", ibxEventManager._onTouchEvent.bind(this), true)
 	window.addEventListener("touchend", ibxEventManager._onTouchEvent, true)
 	window.addEventListener("touchmove", ibxEventManager._onTouchEvent, true)
@@ -195,17 +198,41 @@ ibx.eventMgr = new ibxEventManager();
 function ibxDataTransfer()
 {
 	this.items = {};
+	this.types = [];
 	this.effectAllowed = "all";
 	this.dropEffect = "not-allowed";
 }
 _p = ibxDataTransfer.prototype = new Object();
+_p.dataLock = false;
 _p.items = null;
+_p.types = null;
 _p.getData = function(type){return this.items[type]};
-_p.setData = function(type, data){this.items[type] = data;};
-_p.clearData = function(type){delete this.items[type];};
-_p._dragImage = null;
+_p.setData = function(type, data)
+{
+	if(this.dataLock)
+	{
+		console.warn("[ibx Warning] ibxDataTransfer - set/clear data is not technically supported in drag/drop once drag has started.  You can set dataLock to false to enable if you must.");
+		return;
+	}
+
+	this.items[type] = data;
+	if(-1 == this.types.indexOf(type))
+		this.types.push(type);
+};
+_p.clearData = function(type)
+{
+	if(this.dataLock)
+	{
+		console.warn("[ibx Warning] ibxDataTransfer - set/clear data is not technically supported in drag/drop once drag has started.  You can set dataLock to false to enable if you must.");
+		return;
+	}
+
+	delete this.items[type];
+	this.types.splice(this.types.indexOf(type), 1);
+};
 _p.dragXOffset = 8;
 _p.dragYOffset = 8;
+_p._dragImage = null;
 _p.setDragImage = function(img, xOffset, yOffset)
 {
 	if(this._dragImage)
@@ -226,6 +253,9 @@ _p.setDragImage = function(img, xOffset, yOffset)
 
 function ibxDragDropManager()
 {
+	if(ibx.dragDropMgr)
+		return;
+
 	document.documentElement.addEventListener("keydown", ibxDragDropManager._onKeyEvent.bind(ibxDragDropManager), true);
 	document.documentElement.addEventListener("mousedown", ibxDragDropManager._onMouseEvent.bind(ibxDragDropManager), true);
 	document.documentElement.addEventListener("mouseup", ibxDragDropManager._onMouseEvent.bind(ibxDragDropManager), true);
@@ -281,6 +311,7 @@ ibxDragDropManager.endDrag = function(eType, e)
 		this.dragElement = null;
 		this.dragPrevented = false;
 	}
+	document.body.classList.remove("ibx-dragging");
 
 	delete this._dataTransfer;
 	delete this._mDownLoc;
@@ -321,21 +352,23 @@ ibxDragDropManager._onMouseEvent = function(e)
 		var isDragging = this.isDragging();
 		if(!isDragging && (Math.abs(dx) >= this.dragStartDistanceX || Math.abs(dy) >= this.dragStartDistanceY))
 		{
-			this._dataTransfer = new ibxDataTransfer();
+			var dt = this._dataTransfer = new ibxDataTransfer();
 			dEvent = this._dispatchDragEvent(e, "ibx_dragstart", this.dragElement, true, true);
 			if(!dEvent.isDefaultPrevented())
 			{
 				//start dragging...and also set default drag image if not already set...default the offest for drag image to where dragged on 
-				if(!this._dataTransfer._dragImage)
+				if(!dt._dragImage)
 				{
 					var bRect = this.dragElement.getBoundingClientRect();
 					var offsetX = bRect.left - this._mDownLoc.x;
 					var offsetY = bRect.top - this._mDownLoc.y;
-					this._dataTransfer.setDragImage(this.getDefaultDragImage(this.dragElement), offsetX, offsetY);
+					dt.setDragImage(this.getDefaultDragImage(this.dragElement), offsetX, offsetY);
 				}
 			}
 			isDragging = true;
+			dt.dataLock = true;
 			this.dragElement.classList.add(this.dragSourceClass);
+			document.body.classList.add("ibx-dragging");
 		}
 
 		if(isDragging)
@@ -448,5 +481,207 @@ ibxDragDropManager._onNativeDragEvent = function(e)
 
 //singleton drag/drop manager object.
 ibx.dragDropMgr = new ibxDragDropManager();
+
+
+/****
+ 	Selection Management - both tabs and navkey (arrows)
+****/
+function ibxSelectionManager()
+{
+	if(ibx.selectionMgr)
+		return;
+	document.documentElement.addEventListener("focusin", ibxSelectionManager._onFocusEvent.bind(ibxSelectionManager), true);
+	document.documentElement.addEventListener("xfocusout", ibxSelectionManager._onFocusEvent.bind(ibxSelectionManager), true);
+	document.documentElement.addEventListener("mousedown", ibxSelectionManager._onSelKeyEvent.bind(ibxSelectionManager), true);
+	document.documentElement.addEventListener("keydown", ibxSelectionManager._onSelKeyEvent.bind(ibxSelectionManager), true);
+}
+ibxSelectionManager._onFocusEvent = function(e)
+{
+	var eType = e.type;
+	if(eType == "focusin")
+	{
+	}
+	else
+	if(eType == "focusout")
+	{
+	}
+}
+
+ibxSelectionManager._onSelKeyEvent = function(e)
+{
+	var eType = e.type;
+	var target = $(e.target);
+	if(eType == "keydown")
+	{
+		if(e.keyCode == $.ui.keyCode.TAB)
+		{
+			var root = target.closest(".ibx-focus-root");
+			if(root.length)
+			{
+				var tabKids = root.find(":ibxFocusable");
+				var target = null;
+				var firstKid = tabKids.first();
+				var lastKid = tabKids.last();
+				if(firstKid.length && lastKid.length)
+				{
+					if((firstKid.is(e.target) || $.contains(firstKid[0], e.target)) && e.shiftKey)
+						target = tabKids.last();
+					else
+					if((lastKid.is(e.target) || $.contains(lastKid[0], e.target)) && !e.shiftKey)
+						target = tabKids.first();
+				}
+
+				//target means first/last item and need to loop...or no kids, so do nothing.
+				if(target || !tabKids.length)
+				{
+					target = $(target);
+					target.focus();
+					e.preventDefault();
+					e.stopPropagation();
+				}
+			}
+		}
+		else
+		if(false)
+		{
+			var isNavActive = this.navKeyActive();
+			var navKids = this.navKeyChildren();
+			var active = $();
+			var current = navKids.filter(".ibx-nav-key-item-active");
+
+			//[IBX-83]
+			if(!isNavActive && this.element.is(e.target) && (e.data == "NAV_KEY_ACTIVATE" || eventMatchesShortcut(options.navKeyKeys.activate, e)))
+			{
+				isNavActive = true;
+				active = current.length ? current : navKids.first();
+				current = null;//[HOME-921]this allows activation to focus child, but not key events when child is already active. (think text arrow keys!)
+			}
+			else
+			if(isNavActive && !options.focusDefault && eventMatchesShortcut(options.navKeyKeys.cancel, e))//you can't escape out of a navKeyAutoFocus.
+				active = this.element;
+			else
+			if(isNavActive)
+			{
+				if(eventMatchesShortcut(options.navKeyKeys.first, e))
+					active = navKids.first();
+				else
+				if(eventMatchesShortcut(options.navKeyKeys.last, e))
+					active = navKids.last();
+		
+				if(!active.length && options.navKeyDir == "horizontal" || options.navKeyDir == "both")
+				{
+					if(eventMatchesShortcut(options.navKeyKeys.hprev, e))
+					{
+						var idx = navKids.index(current);
+						var prev = navKids.get(--idx)
+						active = prev ? $(prev) : navKids.last();
+					}
+					else
+					if(eventMatchesShortcut(options.navKeyKeys.hnext, e))
+					{
+						var idx = navKids.index(current);
+						var next = navKids.get(++idx);
+						active = next ? $(next) : navKids.first();
+					}
+				}
+
+				if(!active.length && options.navKeyDir == "vertical" || options.navKeyDir == "both")
+				{
+					if(eventMatchesShortcut(options.navKeyKeys.vprev, e))
+					{
+						var idx = navKids.index(current);
+						var prev = navKids.get(--idx);
+						active = prev ? $(prev) : navKids.last();
+					}
+					else
+					if(eventMatchesShortcut(options.navKeyKeys.vnext, e))
+					{
+						var idx = navKids.index(current);
+						var next = navKids.get(++idx);
+						active = next ? $(next) : navKids.first();
+					}
+				}
+			}
+
+			if(isNavActive && !active.is(current) && active.length)
+			{
+				var evt = $(active).dispatchEvent("ibx_beforenavkeyfocus", null, true, true, current);
+				if(!evt.isDefaultPrevented())
+				{
+					active[0].focus();
+					e.preventDefault();
+					e.stopPropagation();
+				}
+			}
+		}
+	}
+};
+
+//singleton selection manager object.
+ibx.selectionMgr = new ibxSelectionManager();
+
+/*
+$.widget("ibi.ibxSelectionManager", $.Widget, 
+{
+	options:
+	{
+		"multiSelect":false,
+		"selectableItems":""
+	},
+	_widgetClass:"ibx-selection-manager",
+	_create:function()
+	{
+		this._super();
+		this.element.addClass("ibx-selection-manager");
+		this.element.on("keydown mousedown", this._onItemEvent.bind(this));
+	},
+	_destroy:function()
+	{
+		this._super();
+		this.element.removeClass("ibx-selection-manager");
+	},
+	_onItemEvent:function(e)
+	{
+		var options = this.options;
+		var target = $(e.target).closest(options.selectableItems);
+		var eType = e.type;
+		var ctrl = e.ctrlKey;
+		var shift = e.shiftKey;
+		var selected = target.is(".ibx-selected");
+		if(eType == "mousedown")
+		{
+			if(!ctrl && !shift)
+				this.deselectAll();
+			target.toggleClass("ibx-selected", ctrl ? !selected : true);
+			//console.log(target);
+		}
+		else
+		if(eType == "keydown")
+		{
+		}
+	},
+	select:function(selector)
+	{
+		this.element.children().filter(selector).addClass("ibx-selected");
+	},
+	selectAll:function(selector)
+	{
+		this.element.children().addClass("ibx-selected");
+	},
+	deselect:function(selector)
+	{
+		this.element.children().filter(selector).removeClass("ibx-selected");
+	},
+	deselectAll:function()
+	{
+		this.element.children().filter(".ibx-selected").removeClass("ibx-selected");
+	},
+	_refresh:function()
+	{
+		this._super();
+	}
+});
+$(".test-tree").ibxSelectionManager({"selectableItems":".ibx-tree-node"});
+*/
 
 //# sourceURL=events.ibx.js
