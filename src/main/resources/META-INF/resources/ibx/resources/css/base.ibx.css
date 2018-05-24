@@ -59,6 +59,12 @@ body
 	visibility:visible;
 }
 
+/*when dragging, stop iframes from eating the mouse events*/
+.ibx-dragging iframe
+{
+	pointer-events:none;
+}
+
 .ibx-drag-image
 {
 	pointer-events:none;

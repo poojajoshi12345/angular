@@ -16,6 +16,7 @@ $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame,
 	_create:function()
 	{
 		this._readyPromise = new $.Deferred();
+		this.element.on("ibx_dragover ibx_drop", this._onDragEvent.bind(this));
 		this.element.data("createContent", this.element.html());
 		this.element.empty();
 		this._super();
@@ -24,6 +25,68 @@ $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame,
 	_destroy:function()
 	{
 		this._super();
+	},
+	_onDragEvent:function(e)
+	{
+		var dt = e.originalEvent.dataTransfer;
+		var data = dt.items["text/html"];
+		var isHtml = !!data;
+
+		data =  isHtml ? data : dt.items["text/plain"];
+		if(!data)
+			return;
+
+		var eType = e.type;
+		if(eType == "ibx_dragover")
+		{
+			dt.dropEffect = "copy";
+			e.preventDefault();
+		}
+		else
+		if(eType == "ibx_drop")
+			(isHtml) ? this.insertHTML(data) : this.insertText(data);
+	},
+	pasteHtmlAtCaret:function pasteHtmlAtCaret(html, selectPastedContent)
+	{
+		var sel, range;
+		var sel = this.getContentWindow().getSelection();
+		if (window.getSelection)
+		{
+			// IE9 and non-IE
+			sel = window.getSelection();
+			if(sel.getRangeAt && sel.rangeCount)
+			{
+				range = sel.getRangeAt(0);
+				range.deleteContents();
+
+				// Range.createContextualFragment() would be useful here but is
+				// only relatively recently standardized and is not supported in
+				// some browsers (IE9, for one)
+				var el = document.createElement("div");
+				el.innerHTML = html;
+				var frag = document.createDocumentFragment(), node, lastNode;
+				while((node = el.firstChild))
+				{
+					lastNode = frag.appendChild(node);
+				}
+				var firstNode = frag.firstChild;
+				range.insertNode(frag);
+
+				// Preserve the selection
+				if (lastNode)
+				{
+					range = range.cloneRange();
+					range.setStartAfter(lastNode);
+					if (selectPastedContent) {
+						range.setStartBefore(firstNode);
+					} else {
+						range.collapse(true);
+					}
+					sel.removeAllRanges();
+					sel.addRange(range);
+				}
+			}
+		}
 	},
 	_onIFrameEvent:function(e)
 	{
@@ -53,8 +116,14 @@ $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame,
 		this._readyPromise.then(fnReady);
 	},
 	_curSelRange:null,
-	_capturingSelRange:null,
-	selection:function(){return this._curSelRange;},
+	selection:function(nStart, nEnd)
+	{
+		if(!arguments.length)
+			return this._curSelRange;
+		nStart = nStart || 0;
+		nEnd = nEnd || -1;
+		debugger;
+	},
 	_onRichEditDocEvent:function(e)
 	{
 		var doc = this.contentDocument();
@@ -64,20 +133,18 @@ $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame,
 			sel.removeAllRanges();
 			sel.addRange(this._curSelRange);
 		}
-		else
-		if(e.type == "focusout" && ibxPlatformCheck.isIE)
+		if(e.type == "selectionchange" && this._iFrame.is(document.activeElement))
 		{
 			var sel = doc.getSelection();
 			this._curSelRange = sel.rangeCount ? sel.getRangeAt(0) : null;
-		}
-		else
-		if(e.type == "selectionchange" && this._iFrame.is(document.activeElement))
 			this.element.dispatchEvent(e.originalEvent);
-	},
+		}
+},
 	execCommand:function(cmd, withUI, value)
 	{
 		if(ibxPlatformCheck.isIE)
 			this.contentDocument().body.focus();
+		console.dir(this._curSelRange);
 		this.contentDocument().execCommand(cmd, withUI, value);
 	},
 	commandEnabled:function(cmd){return this.contentDocument().queryCommandEnabled(cmd);},
