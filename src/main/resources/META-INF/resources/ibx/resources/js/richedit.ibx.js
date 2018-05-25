@@ -27,71 +27,6 @@ $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame,
 	{
 		this._super();
 	},
-	_onDragEvent:function(e)
-	{
-		if(!this.options.defaultDropHandling)
-			return;
-
-		var dt = e.originalEvent.dataTransfer;
-		var data = dt.items["text/html"];
-		var isHtml = !!data;
-
-		data =  isHtml ? data : dt.items["text/plain"];
-		if(!data)
-			return;
-
-		var eType = e.type;
-		if(eType == "ibx_dragover")
-		{
-			dt.dropEffect = "copy";
-			e.preventDefault();
-		}
-		else
-		if(eType == "ibx_drop")
-			(isHtml) ? this.insertHTML(data, true, true) : this.insertText(data, true, true);
-	},
-	pasteHtmlAtCaret:function pasteHtmlAtCaret(html, selectPastedContent)
-	{
-		var sel, range;
-		var sel = this.getContentWindow().getSelection();
-		if (window.getSelection)
-		{
-			// IE9 and non-IE
-			sel = window.getSelection();
-			if(sel.getRangeAt && sel.rangeCount)
-			{
-				range = sel.getRangeAt(0);
-				range.deleteContents();
-
-				// Range.createContextualFragment() would be useful here but is
-				// only relatively recently standardized and is not supported in
-				// some browsers (IE9, for one)
-				var el = document.createElement("div");
-				el.innerHTML = html;
-				var frag = document.createDocumentFragment(), node, lastNode;
-				while((node = el.firstChild))
-				{
-					lastNode = frag.appendChild(node);
-				}
-				var firstNode = frag.firstChild;
-				range.insertNode(frag);
-
-				// Preserve the selection
-				if (lastNode)
-				{
-					range = range.cloneRange();
-					range.setStartAfter(lastNode);
-					if (selectPastedContent) {
-						range.setStartBefore(firstNode);
-					} else {
-						range.collapse(true);
-					}
-					sel.removeAllRanges();
-					sel.addRange(range);
-				}
-			}
-		}
-	},
 	_onIFrameEvent:function(e)
 	{
 		this._super(e);
@@ -142,7 +77,30 @@ $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame,
 			this._curSelRange = sel.rangeCount ? sel.getRangeAt(0) : null;
 			this.element.dispatchEvent(e.originalEvent);
 		}
-},
+	},
+	_onDragEvent:function(e)
+	{
+		if(!this.options.defaultDropHandling)
+			return;
+
+		var dt = e.originalEvent.dataTransfer;
+		var data = dt.items["text/html"];
+		var isHtml = !!data;
+
+		data =  isHtml ? data : dt.items["text/plain"];
+		if(!data)
+			return;
+
+		var eType = e.type;
+		if(eType == "ibx_dragover")
+		{
+			dt.dropEffect = "copy";
+			e.preventDefault();
+		}
+		else
+		if(eType == "ibx_drop")
+			(isHtml) ? this.insertHTML(data, true, true) : this.insertText(data, true, true);
+	},
 	execCommand:function(cmd, value, withUI)
 	{
 		if(ibxPlatformCheck.isIE)
@@ -261,6 +219,5 @@ $.ibi.ibxRichEdit.justify =
 	"right":"justifyRight",
 	"full":"justifyFull"
 }
-
 //# sourceURL=richedit.ibx.js
 
