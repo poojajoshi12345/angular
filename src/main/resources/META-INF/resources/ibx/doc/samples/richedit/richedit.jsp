@@ -30,14 +30,19 @@
 
 				});
 
-				$(".drag-source").attr("draggable", false).on("dragstart dragover drop ibx_dragstart ibx_dragover ibx_drop", function(e)
+				$(".drag-source").attr("draggable", false).on("dblclick dragstart dragover drop ibx_dragstart ibx_dragover ibx_drop", function(e)
 				{
 					var dt = e.originalEvent.dataTransfer;
+					if(e.type == "dblclick")
+					{
+						data = "Double Click Data!!";
+						var re = $(".rich-edit");
+						re.ibxWidget("insertHTML", sformat("<span style='border:2px solid lime;'>{1}</span>", data), true, true);
+					}
 					if(e.type == "dragstart" || e.type == "ibx_dragstart")
 					{
-						var data = e.currentTarget.innerText;
-						dt.setData("text/plain", data);
-						//dt.setData("text/html", sformat("<span style='border:1px solid red;'>{1}</span>", data));
+						var data = "External Dragged Data!!";
+						dt.setData("text/html", sformat("<span style='border:2px solid red;'>{1}</span>", data));
 						e.preventDefault();
 					}
 					if(e.type == "dragover" || e.type == "ibx_dragover")
@@ -245,7 +250,7 @@
 	<body class="ibx-root">
 		<div class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
 			<div class="tb-main" data-ibx-type="ibxHBox" data-ibxp-wrap="true" data-ibxp-align="center">
-				<div class="drag-source" data-ibx-type="ibxLabel" data-ibxp-draggable="true" data-ibxp-external-drop-target="false" style="padding:3px;border:1px solid red;">Test Drag Source</div>
+				<div class="drag-source" data-ibx-type="ibxLabel" data-ibxp-draggable="true" data-ibxp-external-drop-target="false" style="padding:3px;border:2px solid black;">Test Data Source (drag/dblclick)</div>
 
 				<div tabindex="0" class="tb-button" title="Undo" data-ibx-type="ibxButtonSimple" data-ibxp-command="cmdUndo" data-ibxp-glyph="undo" data-ibxp-glyph-classes="material-icons"></div>
 				<div tabindex="0" class="tb-button" title="Redo" data-ibx-type="ibxButtonSimple" data-ibxp-command="cmdRedo" data-ibxp-glyph="redo" data-ibxp-glyph-classes="material-icons"></div>

@@ -7,6 +7,7 @@ $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame,
 	{
 		"navKeyRoot":true,
 		"focusDefault":true,
+		"defaultDropHandling":true,
 		"aria":
 		{
 			"role":"region",
@@ -28,6 +29,9 @@ $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame,
 	},
 	_onDragEvent:function(e)
 	{
+		if(!this.options.defaultDropHandling)
+			return;
+
 		var dt = e.originalEvent.dataTransfer;
 		var data = dt.items["text/html"];
 		var isHtml = !!data;
@@ -44,7 +48,7 @@ $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame,
 		}
 		else
 		if(eType == "ibx_drop")
-			(isHtml) ? this.insertHTML(data) : this.insertText(data);
+			(isHtml) ? this.insertHTML(data, true, true) : this.insertText(data, true, true);
 	},
 	pasteHtmlAtCaret:function pasteHtmlAtCaret(html, selectPastedContent)
 	{
@@ -122,7 +126,6 @@ $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame,
 			return this._curSelRange;
 		nStart = nStart || 0;
 		nEnd = nEnd || -1;
-		debugger;
 	},
 	_onRichEditDocEvent:function(e)
 	{
@@ -144,7 +147,6 @@ $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame,
 	{
 		if(ibxPlatformCheck.isIE)
 			this.contentDocument().body.focus();
-		console.dir(this._curSelRange);
 		this.contentDocument().execCommand(cmd, withUI, value);
 	},
 	commandEnabled:function(cmd){return this.contentDocument().queryCommandEnabled(cmd);},
@@ -185,16 +187,26 @@ $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame,
 	insertContent:function(content, isHTML, selReplace, select)
 	{
 		/*NOTE: chrome/ff could use insertHTML/insertText...ie doesn't support this, so normalize to a solution that works the same across browsers*/
+			
+		//focus the document so selections are valid.
 		var doc = this.contentDocument();
+		doc.body.focus();
+
+		//get selections and create proper node for insertion.
 		var sels = doc.getSelection();
 		var selRange = sels.getRangeAt(0);
 		var node = isHTML ? $.parseHTML(content, doc)[0] : doc.createTextNode(content);
 
+		//remove existing selected content if desired.
 		if(selReplace)
 			selRange.deleteContents();
+
+		//add new node and select.
 		selRange.insertNode(node);
 		sels.removeAllRanges();
 		sels.addRange(selRange);
+
+		//remove selection if desired.
 		if(!select)
 			selRange.collapse(false);
 	},
