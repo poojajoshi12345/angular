@@ -140,7 +140,7 @@ $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame,
 			this.element.dispatchEvent(e.originalEvent);
 		}
 },
-	execCommand:function(cmd, withUI, value)
+	execCommand:function(cmd, value, withUI)
 	{
 		if(ibxPlatformCheck.isIE)
 			this.contentDocument().body.focus();
@@ -150,7 +150,7 @@ $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame,
 	commandEnabled:function(cmd){return this.contentDocument().queryCommandEnabled(cmd);},
 	commandState:function(cmd){return this.contentDocument().queryCommandState(cmd);},
 	commandValue:function(cmd){return this.contentDocument().queryCommandValue(cmd);},
-	styleWithCSS:function(css){this.execCommand("styleWithCSS", false, css);},
+	styleWithCSS:function(css){this.execCommand("styleWithCSS", css);},
 	removeFormat:function(){this.execCommand("removeFormat");},
 	undo:function(){this.execCommand("undo");},
 	redo:function(){this.execCommand("redo");},
@@ -165,22 +165,38 @@ $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame,
 	strikeThrough:function(){this.execCommand("strikeThrough");},
 	subscript:function(){this.execCommand("subscript");},
 	superscript:function(){this.execCommand("superscript");},
-	foreColor:function(color){this.execCommand("foreColor", false, color);},
-	backColor:function(color){this.execCommand("backColor", false, color);},
+	foreColor:function(color){this.execCommand("foreColor", color);},
+	backColor:function(color){this.execCommand("backColor", color);},
 	indent:function(){this.execCommand("indent");},
 	outdent:function(){this.execCommand("outdent");},
-	insertList:function(ordered){this.execCommand(ordered ? "insertOrderedList" : "insertUnorderedList");},
-	insertHTML:function(html){this.execCommand("insertHTML", false, html);},
-	insertText:function(text){this.execCommand("insertText", false, text);},
-	createLink:function(href){this.execCommand("createLink", false, href);},
-	unlink:function(href){this.execCommand("unlink", false, href);},
+	unlink:function(href){this.execCommand("unlink", href);},
 	justify:function(justify){this.execCommand($.ibi.ibxRichEdit.justify[justify])},
-	fontName:function(name){this.execCommand("fontName", false, name);},
+	fontName:function(name){this.execCommand("fontName", name);},
 	fontSize:function(size)
 	{
 		if(isNaN(parseInt(size)))
 			size = $.ibi.ibxRichEdit.fontSize[size];
-		this.execCommand("fontSize", null, size)
+		this.execCommand("fontSize", size)
+	},
+	createLink:function(href){this.execCommand("createLink", href);},
+	insertList:function(ordered){this.execCommand(ordered ? "insertOrderedList" : "insertUnorderedList");},
+	insertHTML:function(html, selReplace, select){this.insertContent(html, true, selReplace, select);},
+	insertText:function(text, selReplace, select){this.insertContent(text, false, selReplace, select);},
+	insertContent:function(content, isHTML, selReplace, select)
+	{
+		/*NOTE: chrome/ff could use insertHTML/insertText...ie doesn't support this, so normalize to a solution that works the same across browsers*/
+		var doc = this.contentDocument();
+		var sels = doc.getSelection();
+		var selRange = sels.getRangeAt(0);
+		var node = isHTML ? $.parseHTML(content, doc)[0] : doc.createTextNode(content);
+
+		if(selReplace)
+			selRange.deleteContents();
+		selRange.insertNode(node);
+		sels.removeAllRanges();
+		sels.addRange(selRange);
+		if(!select)
+			selRange.collapse(false);
 	},
 	cmdState:function()
 	{
