@@ -56,13 +56,13 @@ $.widget("ibi.ibxTree", $.ibi.ibxVBox,
 			this._inSelection = true;
 			var nodes = $(this.treeNodes());
 			if(clearCurSel)
-				nodes.ibxTreeNode("selected", false, true);
+				nodes.ibxWidget("selected", false, true);
 			nodes = nodes.filter(el);
 			nodes = this.options.multiSelect ? nodes : nodes.first();
-			nodes.ibxTreeNode("selected", selected, true);
+			nodes.ibxWidget("selected", selected, true);
 			
 			if(selected)
-				nodes.first().ibxTreeNode("selected", true, false);
+				nodes.first().ibxWidget("selected", true, false);
 
 			this._inSelection = false;
 		}
@@ -278,7 +278,7 @@ $.widget("ibi.ibxTreeNode", $.ibi.ibxVBox,
 	toggleExpanded:function(expand)
 	{
 		expand = (expand === undefined) ? !this.options.expanded : expand;
-		this.option("expanded", expand);
+		this.expanded(expand);
 	},
 	expanded:function(expanded)
 	{
@@ -353,7 +353,14 @@ $.widget("ibi.ibxTreeNode", $.ibi.ibxVBox,
 		options.labelOptions.text = options.text || options.labelOptions.text;
 		this.nodeLabel.ibxWidget("option", options.labelOptions).css("padding-left", this.depth() * indent);
 		this.element.toggleClass("tnode-is-container", options.container).toggleClass("tnode-expanded", options.expanded);
-		this.btnExpand.toggleClass(options.btnCollapsed, container && !options.expanded).toggleClass(options.btnExpanded, container && options.expanded)
+		this.btnExpand.removeClass(options.btnCollapsed).removeClass(options.btnExpanded);
+		if (container)
+		{
+			if (options.expanded)
+				this.btnExpand.addClass(options.btnExpanded);
+			else
+				this.btnExpand.addClass(options.btnCollapsed);
+		}
 	}
 });
 $.ibi.ibxTreeNode.defaultIndent = null;
