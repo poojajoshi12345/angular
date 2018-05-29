@@ -1,9 +1,5 @@
 /*Copyright 1996-2016 Information Builders, Inc. All rights reserved.*/
 // $Revision$:
-function Julian()
-{
-}
-
 $.widget("ibi.ibxTree", $.ibi.ibxVBox, 
 {
 	options:
@@ -143,6 +139,7 @@ $.widget("ibi.ibxTreeNode", $.ibi.ibxVBox,
 {
 	options:
 	{
+		"labelOptions":{},
 		"btnCollapsed":"tnode-btn-collapsed",
 		"btnExpanded":"tnode-btn-expanded",
 		"singleClickExpand":false,
@@ -151,6 +148,7 @@ $.widget("ibi.ibxTreeNode", $.ibi.ibxVBox,
 		"indent":null, //can override the default indent for this node
 
 		"align":"stretch",
+
 		"aria":
 		{
 			"role":"treeitem",
