@@ -354,13 +354,8 @@ $.widget("ibi.ibxTreeNode", $.ibi.ibxVBox,
 		this.nodeLabel.ibxWidget("option", options.labelOptions).css("padding-left", this.depth() * indent);
 		this.element.toggleClass("tnode-is-container", options.container).toggleClass("tnode-expanded", options.expanded);
 		this.btnExpand.removeClass(options.btnCollapsed).removeClass(options.btnExpanded);
-		if (container)
-		{
-			if (options.expanded)
-				this.btnExpand.addClass(options.btnExpanded);
-			else
-				this.btnExpand.addClass(options.btnCollapsed);
-		}
+		if(container)
+			(options.expanded) ? this.btnExpand.addClass(options.btnExpanded) : this.btnExpand.addClass(options.btnCollapsed);
 	}
 });
 $.ibi.ibxTreeNode.defaultIndent = null;
