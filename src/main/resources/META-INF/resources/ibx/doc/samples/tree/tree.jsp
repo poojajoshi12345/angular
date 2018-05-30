@@ -31,7 +31,7 @@
 					xItems.each(function(idx, el)
 					{
 						el = $(el);
-						if(el.is("[container=true]"))
+						//if(el.is("[container=true]"))
 						{
 							var treeNode = makeTreeNode(el, "ibfs_item");
 							targetNode.ibxWidget("add", treeNode);
@@ -94,6 +94,7 @@
 						tree.data("xDoc", doc);
 						var item = doc.find("rootObject > item");
 						var rootNode = makeTreeNode(item, "ibfs_root");
+						rootNode.addClass("root");
 						tree.ibxWidget("add", rootNode, null, null, true);
 						rootNode.ibxWidget("option", "expanded", true).ibxWidget("selected", true);
 					});
@@ -128,14 +129,13 @@
 			{
 				xItem = $(xItem);
 				var sce = $(".btn-single-click-expand").ibxWidget("checked");
-				var container = xItem.attr("container");
+				var container = (xItem.attr("container") == "true");
 				var options = 
 				{
 					"container":container,
 					"draggable":true,
 					"expanded":expanded,
-					"text": xItem.attr("description") || xItem.attr("name"),
-					"labelOptions":{"glyph": container ? "" : "insert_drive_file", "glyphClasses": container ? "" : "material-icons"}
+					"labelOptions":{"text": xItem.attr("description") || xItem.attr("name"), "glyph": container ? "" : "insert_drive_file", "glyphClasses": container ? "" : "material-icons"}
 				}
 				var node = $("<div>").ibxTreeNode(options).addClass(container ? "folder" : "file").addClass(itemClass);
 				node.attr("data-ibfs-path", xItem.attr("fullPath")).data("xItem", xItem);
@@ -380,7 +380,7 @@
 				<div tabindex="0" class="btn-collapse-allAll" data-ibx-type="ibxButton">Collapse All</div>
 			</div>
 			<div class="content-box" data-ibx-type="ibxHBox" data-ibxp-align="stretch">
-				<div tabindex="0" class="test-tree" data-ibx-type="ibxTree"></div>
+				<div tabindex="0" class="test-tree" data-ibx-type="ibxTree" data-ibxp-show-root-nodes="false"></div>
 				<div class="test-splitter" data-ibx-type="ibxVSplitter"></div>
 				<div class="test-files-box" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
 					<div class="files-box-label" data-ibxp-for=".folder-list" data-ibx-type="ibxLabel">Folders</div>

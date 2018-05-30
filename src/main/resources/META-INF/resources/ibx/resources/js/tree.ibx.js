@@ -4,6 +4,7 @@ $.widget("ibi.ibxTree", $.ibi.ibxVBox,
 {
 	options:
 	{
+		"showRootNodes":true,
 		"multiSelect":true,
 		"escClearSelection":true,
 		"navKeyRoot":true,
@@ -130,8 +131,14 @@ $.widget("ibi.ibxTree", $.ibi.ibxVBox,
 	},
 	_refresh:function()
 	{
-		var options = this.options;
 		this._super();
+		var options = this.options;
+		var children = this.children();
+		children.each(function(idx, child)
+		{
+			var childWidget = $(child).data("ibxWidget");
+			childWidget.option("virtualParent", !options.showRootNodes);
+		}.bind(this));
 	}
 });
 
@@ -139,12 +146,13 @@ $.widget("ibi.ibxTreeNode", $.ibi.ibxVBox,
 {
 	options:
 	{
+		"virtualParent":false, //used for root nodes mostly...hides this node and makes children look like peers (not indented).
 		"labelOptions":{},
 		"btnCollapsed":"tnode-btn-collapsed",
 		"btnExpanded":"tnode-btn-expanded",
 		"singleClickExpand":false,
 		"expanded":false,
-		"container":"auto",
+		"container":false,
 		"indent":null, //can override the default indent for this node
 
 		"align":"stretch",
@@ -178,7 +186,9 @@ $.widget("ibi.ibxTreeNode", $.ibi.ibxVBox,
 
 		//add the markup children correctly.
 		this._childBox = $("<div class='tnode-children'>").ibxVBox().appendTo(this.element);
-		this.add(this.element.children(".ibx-tree-node"));
+		var nodes = this.element.children(".ibx-tree-node");
+		options.container = options.container || nodes.length;//children from markup turn this into a container by default.
+		this.add(nodes);
 	},
 	_setAccessibility:function(accessible, aria)
 	{
@@ -209,7 +219,7 @@ $.widget("ibi.ibxTreeNode", $.ibi.ibxVBox,
 	},
 	depth:function()
 	{
-		return this.element.parents(".ibx-tree-node").length;	
+		return this.element.parents(".ibx-tree-node:not(.tnode-virtual-parent)").length;	
 	},
 	tree:function()
 	{
@@ -347,14 +357,14 @@ $.widget("ibi.ibxTreeNode", $.ibi.ibxVBox,
 		this._super();
 		var options = this.options;
 		var children = this.children();
-		var container = (options.container == "auto") ? this.hasChildren() : options.container;
 		var indent = (options.indent !== null) ? options.indent : $.ibi.ibxTreeNode.defaultIndent;
-		
-		options.labelOptions.text = options.text || options.labelOptions.text;
-		this.nodeLabel.ibxWidget("option", options.labelOptions).css("padding-left", this.depth() * indent);
-		this.element.toggleClass("tnode-is-container", options.container).toggleClass("tnode-expanded", options.expanded);
+		var showLabel = (options.container && options.virtualParent) ? false : true;
+		var depth = this.depth();
+
+		this.nodeLabel.ibxWidget("option", options.labelOptions).css({"display": !showLabel ? "none" : "", "paddingLeft": depth * indent});
+		this.element.toggleClass("tnode-virtual-parent", options.virtualParent).toggleClass("tnode-is-container", options.container).toggleClass("tnode-expanded", options.expanded);
 		this.btnExpand.removeClass(options.btnCollapsed).removeClass(options.btnExpanded);
-		if(container)
+		if(options.container)
 			(options.expanded) ? this.btnExpand.addClass(options.btnExpanded) : this.btnExpand.addClass(options.btnCollapsed);
 	}
 });
