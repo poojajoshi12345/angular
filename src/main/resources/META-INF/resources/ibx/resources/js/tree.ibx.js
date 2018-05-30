@@ -264,6 +264,7 @@ $.widget("ibi.ibxTreeNode", $.ibi.ibxVBox,
 		{
 			this.toggleSelected();
 			e.stopPropagation();
+			e.preventDefault();
 		}
 	},
 	_onNodeMouseEvent:function(e)
