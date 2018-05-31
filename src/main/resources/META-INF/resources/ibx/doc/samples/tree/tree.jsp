@@ -31,7 +31,7 @@
 					xItems.each(function(idx, el)
 					{
 						el = $(el);
-						//if(el.is("[container=true]"))
+						if(el.is("[container=true]"))
 						{
 							var treeNode = makeTreeNode(el, "ibfs_item");
 							targetNode.ibxWidget("add", treeNode);
@@ -227,7 +227,6 @@
 			overflow:auto;
 			border:1px solid #ccc;
 			border-radius:5px;
-			background-color:#fafafa;
 		}
 		.test-splitter
 		{
@@ -273,7 +272,6 @@
 			border-radius:5px;
 			background-color:white;
 			box-shadow:2px 2px 5px 0px #aaa;
-			cursor:pointer;
 		}
 		.file-tile .ibx-label-glyph
 		{
@@ -380,7 +378,7 @@
 				<div tabindex="0" class="btn-collapse-allAll" data-ibx-type="ibxButton">Collapse All</div>
 			</div>
 			<div class="content-box" data-ibx-type="ibxHBox" data-ibxp-align="stretch">
-				<div tabindex="0" class="test-tree" data-ibx-type="ibxTree" data-ibxp-show-root-nodes="false"></div>
+				<div tabindex="0" class="test-tree" data-ibx-type="ibxTree" data-ibxp-show-root-nodes="true"></div>
 				<div class="test-splitter" data-ibx-type="ibxVSplitter"></div>
 				<div class="test-files-box" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
 					<div class="files-box-label" data-ibxp-for=".folder-list" data-ibx-type="ibxLabel">Folders</div>

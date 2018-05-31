@@ -305,6 +305,11 @@ ibxDragDropManager.endDrag = function(eType, e)
 		this.curTarget = null;
 	}
 
+	//reset body cursor
+	document.body.style.cursor = document.body.dataset.ibxOrigDragCursor;
+	delete document.body.dataset.ibxOrigDragCursor;
+
+
 	if(this.dragElement)
 	{
 		this.dragElement.classList.remove(this.dragSourceClass);
@@ -369,6 +374,7 @@ ibxDragDropManager._onMouseEvent = function(e)
 			dt.dataLock = true;
 			this.dragElement.classList.add(this.dragSourceClass);
 			document.body.classList.add("ibx-dragging");
+			document.body.dataset.ibxOrigDragCursor = document.body.style.cursor;
 		}
 
 		if(isDragging)
@@ -422,9 +428,10 @@ ibxDragDropManager._onMouseEvent = function(e)
 				}
 				this.curTarget.style.cursor = cursor;
 				this.curTarget.offsetHeight;
+				document.body.style.cursor = cursor;
 			}
 
-			//manage the drag cursor
+			//manage the drag image
 			if(this._dataTransfer._dragImage)
 			{
 				var dragImage = this._dataTransfer._dragImage;
