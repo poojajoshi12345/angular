@@ -55,7 +55,7 @@
 					</div>		
 			</div> <!--eof "tb-main-menu" button -->				
 	 				<div class="ides-toolbar-separator" data-ibx-type="ibxMenuButtonSeparator"></div>
-					<div class="ides-toolbar-button" data-ibx-name="idesTBButtonSave" data-ibx-type="ibxButtonSimple" data-ibxp-glyph-classes="ibx-icons ibx-glyph-floppy" data-ibxp-command="cmdIdesSave" title="Save"></div>					 
+					<div class="ides-toolbar-button ides_button_save" data-ibx-name="idesTBButtonSave" data-ibx-type="ibxButtonSimple" data-ibxp-glyph-classes="ibx-icons ibx-glyph-floppy" data-ibxp-command="cmdIdesSave" title="Save"></div>					 
 					<div class="ides-toolbar-button" data-ibx-name="idesTBButtonUndo" data-ibx-type="ibxButtonSimple" data-ibxp-glyph-classes="ibx-icons ibx-glyph-arrow-left" data-ibxp-command="cmdIdesUndo" title="Undo"></div>
 					<div class="ides-toolbar-button float-run" data-ibx-name="idesTBMenuRedo" data-ibx-type="ibxButtonSimple" data-ibxp-glyph-classes="ibx-icons ibx-glyph-arrow-right" data-ibxp-command="cmdIdesRedo" title="Redo"></div>
 					<div class="ides-toolbar-separator" data-ibx-type="ibxMenuButtonSeparator"></div>

@@ -6,6 +6,11 @@
 	margin:2px;
 }
 
+.ides-toolbar-button-checked{
+	color: rgba(255,255,255,0.8);
+  	background-color: #35b8fe;  
+}
+
 .ides-toolbar-menu{
 	font-size:14px;
 	margin:2px;

@@ -48,12 +48,14 @@ $.widget("ibi.ibToolbar", $.ibi.ibxHBox,
 	
 	_tbCommandNewExecute: function(e)
 	{
-		//alert("Ibfs master browse dialog");
+		//alert("Ibfs master browse dialog");		
 	},
 	
 	_tbCommandSaveExecute: function(e)
 	{
-		//alert("Ibfs save dialog");
+		//alert("Ibfs save dialog");		
+		this._isChecked = this._isChecked ? false : true;
+		$(".ides_button_save").toggleClass("ides-toolbar-button-checked", this._isChecked);
 	},
 	
 	_tbCommandSaveAsExecute: function(e)
