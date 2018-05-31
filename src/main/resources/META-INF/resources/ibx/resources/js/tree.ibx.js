@@ -20,11 +20,11 @@ $.widget("ibi.ibxTree", $.ibi.ibxVBox,
 		}
 	},
 	_widgetClass:"ibx-tree",
-	NODE_EVENTS: "keydown keyup mousedown dblclick ibx_nodeselect ibx_nodedeselect ibx_nodeanchored ibx_nodeunanchored ibx_beforeexpand ibx_expand ibx_beforecollapse ibx_collapse",
 	_create:function()
 	{
 		this._super();
-		this.element.on(this.NODE_EVENTS, this._onNodeEvent.bind(this));
+		var nodeEvents = "keydown keyup mousedown dblclick ibx_nodeselect ibx_nodedeselect ibx_nodeanchored ibx_nodeunanchored ibx_beforeexpand ibx_expand ibx_beforecollapse ibx_collapse";
+		this.element.on(nodeEvents, this._onNodeEvent.bind(this));
 	},
 	_destroy:function()
 	{
@@ -32,7 +32,7 @@ $.widget("ibi.ibxTree", $.ibi.ibxVBox,
 	},
 	navKeyChildren:function(selector)
 	{
-		return this.treeNodes(selector || ".ibx-tree-node:ibxNavFocusable");
+		return this.treeNodes(selector || ".tnode-label:ibxNavFocusable()");
 	},
 	treeNodes:function(selector)
 	{
@@ -177,8 +177,7 @@ $.widget("ibi.ibxTreeNode", $.ibi.ibxVBox,
 	{
 		var options = this.options;
 		this._super();
-		this.element.attr("tabindex", -1);
-		this.element.on("focus", this._onNodeFocusEvent.bind(this)).on("keydown", this._onNodeKeyEvent.bind(this)).on("mousedown click dblclick", this._onNodeMouseEvent.bind(this));
+		this.element.on("keydown", this._onNodeKeyEvent.bind(this)).on("mousedown click dblclick", this._onNodeMouseEvent.bind(this));
 		this.nodeLabel = $("<div tabindex='-1' class='tnode-label'>").ibxLabel().appendTo(this.element);
 		options.labelOptions.text = options.labelOptions.text || this.element.textNodes().remove().text().replace(/^\s*|\s*$/g, "");
 
@@ -233,13 +232,6 @@ $.widget("ibi.ibxTreeNode", $.ibi.ibxVBox,
 	{
 		return !!this._childBox.children(".ibx-tree-node").length;
 	},
-	_onNodeFocusEvent:function(e)
-	{
-		if(!this.btnExpand.is(e.target))
-			this.nodeLabel.focus();
-		else
-			e.preventDefault();
-	},
 	_onNodeKeyEvent:function(e)
 	{
 		if(e.keyCode === $.ui.keyCode.RIGHT)
@@ -247,7 +239,7 @@ $.widget("ibi.ibxTreeNode", $.ibi.ibxVBox,
 			if(!this.expanded())
 				this.toggleExpanded(true);
 			else
-				this.children().first().focus();
+				this.children().first().find(".tnode-label").focus();
 			e.stopPropagation();
 		}
 		else
@@ -256,7 +248,7 @@ $.widget("ibi.ibxTreeNode", $.ibi.ibxVBox,
 			if(this.expanded())
 				this.toggleExpanded(false);
 			else
-				this.parentNode().focus();
+				$(this.parentNode()).children(".tnode-label").focus();
 			e.stopPropagation();
 		}
 		else
@@ -323,7 +315,7 @@ $.widget("ibi.ibxTreeNode", $.ibi.ibxVBox,
 		}
 
 		if(eType && !silent)
-			this.element.dispatchEvent(eType, null, true, true, tree);
+			this.element.dispatchEvent(eType, null, true, false, tree);
 			
 	},
 	_setOption:function(key, value)
@@ -341,7 +333,7 @@ $.widget("ibi.ibxTreeNode", $.ibi.ibxVBox,
 				eType = value ? "ibx_expand" : "ibx_collapse";
 				if(eType == "ibx_collapse")
 					this.children().ibxWidget("selected", false);
-				this.element.dispatchEvent(eType, null, true, true, tree);
+				this.element.dispatchEvent(eType, null, true, false, tree);
 			}
 		}
 		else
