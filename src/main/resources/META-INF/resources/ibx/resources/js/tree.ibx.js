@@ -374,8 +374,6 @@ $.widget("ibi.ibxTreeNode", $.ibi.ibxVBox,
 	},
 	_refresh:function()
 	{
-		console.log("Refreshed: " + this.options.labelOptions.text);
-
 		this._super();
 		var options = this.options;
 		var children = this.children();
