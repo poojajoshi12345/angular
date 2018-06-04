@@ -25,10 +25,25 @@ $.widget("ibi.ibxTree", $.ibi.ibxVBox,
 		this._super();
 		var nodeEvents = "keydown keyup mousedown dblclick ibx_nodeselect ibx_nodedeselect ibx_nodeanchored ibx_nodeunanchored ibx_beforeexpand ibx_expand ibx_beforecollapse ibx_collapse";
 		this.element.on(nodeEvents, this._onNodeEvent.bind(this));
+		this.element.ibxMutationObserver({"listen":true, "subtree":true}).on("ibx_nodemutated", this._onChildrenChange.bind(this));
 	},
 	_destroy:function()
 	{
 		this._super();
+	},
+	_onChildrenChange:function(e)
+	{
+		var mRecs = e.originalEvent.data;
+		$(mRecs).each(function(idx, rec)
+		{
+			$(rec.addedNodes).each(function(idx, el)
+			{
+				var widget = $(el).data("ibxWidget");
+				if(!widget)
+					return;
+				widget.refreshIndent(null, true);
+			}.bind(this));
+		}.bind(this));
 	},
 	navKeyChildren:function(selector)
 	{
@@ -287,7 +302,10 @@ $.widget("ibi.ibxTreeNode", $.ibi.ibxVBox,
 	{
 		if(expanded === undefined)
 			return this.options.expanded;
-		this.option("expanded", expanded);
+
+		//only expand containers...stops unneeded refreshes!
+		if(this.options.container)
+			this.option("expanded", expanded);
 	},
 	toggleSelected:function(select, silent)
 	{
@@ -322,7 +340,7 @@ $.widget("ibi.ibxTreeNode", $.ibi.ibxVBox,
 	{
 		var options = this.options;
 		var changed = (this.options[key] != value);
-		if(changed && key == "expanded")
+		if(key == "expanded" && changed && options.container)
 		{
 			var tree = this.tree();
 			var eType = value ? "ibx_beforeexpand" : "ibx_beforecollapse";
@@ -332,7 +350,7 @@ $.widget("ibi.ibxTreeNode", $.ibi.ibxVBox,
 				this._super(key, value);
 				eType = value ? "ibx_expand" : "ibx_collapse";
 				if(eType == "ibx_collapse")
-					this.children().ibxWidget("selected", false);
+					this.children().ibxWidget("selected", false);//collapsed items can't be selected.
 				this.element.dispatchEvent(eType, null, true, false, tree);
 			}
 		}
@@ -342,23 +360,35 @@ $.widget("ibi.ibxTreeNode", $.ibi.ibxVBox,
 	refresh:function(withChildren)
 	{
 		this._super();
+		if(withChildren && this.options.expanded)
+			this.children().ibxWidget("refresh", true);
+	},
+	refreshIndent:function(depth, withChildren)
+	{
+		var newDepth = depth || this.depth();
+		var options = this.options;
+		var indent = (options.indent !== null) ? options.indent : $.ibi.ibxTreeNode.defaultIndent;
+		this.nodeLabel.css("paddingLeft", newDepth * indent);
 		if(withChildren)
-			this.children().ibxWidget("refresh");
+			this.children().ibxWidget("refreshIndent", depth, withChildren);
 	},
 	_refresh:function()
 	{
+		console.log("Refreshed: " + this.options.labelOptions.text);
+
 		this._super();
 		var options = this.options;
 		var children = this.children();
-		var indent = (options.indent !== null) ? options.indent : $.ibi.ibxTreeNode.defaultIndent;
 		var showLabel = (options.container && options.virtualParent) ? false : true;
-		var depth = this.depth();
 
-		this.nodeLabel.ibxWidget("option", options.labelOptions).css({"display": !showLabel ? "none" : "", "paddingLeft": depth * indent});
+		this.refreshIndent();//indent this node correctly under parent.
+
+		this.nodeLabel.ibxWidget("option", options.labelOptions).css("display", !showLabel ? "none" : "");
 		this.element.toggleClass("tnode-virtual-parent", options.virtualParent).toggleClass("tnode-is-container", options.container).toggleClass("tnode-expanded", options.expanded);
 		this.btnExpand.removeClass(options.btnCollapsed).removeClass(options.btnExpanded);
 		if(options.container)
 			(options.expanded) ? this.btnExpand.addClass(options.btnExpanded) : this.btnExpand.addClass(options.btnCollapsed);
+	
 	}
 });
 $.ibi.ibxTreeNode.defaultIndent = null;

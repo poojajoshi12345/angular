@@ -62,7 +62,7 @@ $.widget("ibi.ibxMutationObserver", $.Widget,
 		var all = options.allEvents;
 		var moOptions = 
 		{
-			childList: all || options.childList,
+			childList: all || options.childList || options.subtree,
 			subtree: all || options.subtree,
 			characterData: all || options.characterData,
 			characterDataOldValue: all || options.characterDataOldValue,

@@ -22,7 +22,6 @@
 			{
 				$(".test-tree").on("ibx_beforeexpand", function(e)
 				{
-					$.ibi.ibxWidget.noRefresh = true;
 					var targetNode = $(e.target);
 					targetNode.ibxWidget("remove");
 
@@ -37,8 +36,6 @@
 							targetNode.ibxWidget("add", treeNode);
 						}
 					});
-					$.ibi.ibxWidget.noRefresh= false;
-					targetNode.ibxWidget("refresh", true);
 				}).on("ibx_nodeselect", function(e)
 				{
 					var folderList = $(".folder-list");

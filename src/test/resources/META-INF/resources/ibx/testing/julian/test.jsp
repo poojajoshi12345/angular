@@ -21,43 +21,92 @@
 			<jsp:include page="/WEB-INF/jsp/global/wf_globals.jsp" flush="false" />
 			ibx(function()
 			{
-				$(".test-label").on("ibx_dragstart ibx_dragend", function(e)
+				var tree = $(".test-tree");
+				tree.on("ibx_dragstart ibx_dragover ibx_drop", function(e)
 				{
-					var dt = e.originalEvent.dataTransfer;
-					var eType = e.type;
-					if(eType == "ibx_dragstart")
+					e = e.originalEvent;
+					var dt = e.dataTransfer;
+					if(e.type == "ibx_dragstart")
+						dt.setData("ibxDragNode", $(e.target).closest(".ibx-tree-node"));
+					else
+					if(e.type == "ibx_dragover")
 					{
-						$("iframe").addClass("dragging");
-						dt.setData("testData", e.target.innerText);
+						dt.dropEffect = "copy";
+						e.preventDefault();
 					}
 					else
-					if(eType == "ibx_dragend")
+					if(e.type == "ibx_drop")
 					{
-						$("iframe").removeClass("dragging");	
+						var dragNode = dt.getData("ibxDragNode");
+						var dropTarget = $(e.target).closest(".ibx-tree-node");
+						dropTarget.ibxWidget("add", dragNode);
 					}
 				});
-				$(".test-edit").on("ibx_dragover ibx_drop", function(e)
+
+				$.get("./retail_lite.xml").done(function(doc, status, xhr)
 				{
-					var dt = e.originalEvent.dataTransfer;
-					var eType = e.type;
-					if(eType == "ibx_dragover")
+					tree._xDoc = $(doc);
+				}.bind(tree));
+
+				$(".btnLoadFlat").on("click", function(e)
+				{
+					var date = new Date();
+					var xRoot = tree._xDoc.children().first();
+					var tRoot = makeTreeNode(xRoot, true).addClass("root");
+					tree.ibxWidget("remove").ibxWidget("add", tRoot);
+					xRoot.find("leaf").each(function(idx, el)
 					{
-						if(dt.getData("testData"))
+						var tChild = makeTreeNode(el, true);
+						tRoot.ibxWidget("add", tChild);
+					});
+					console.log(sformat("loaded in: {1}", (new Date() - date)));
+				});
+
+				$(".btnLoadHierarchical").on("click", function(e)
+				{
+					var date = new Date();
+					var xRoot = tree._xDoc.children().first();
+					var tRoot = makeTreeNode(xRoot).addClass("root");
+					tree.ibxWidget("remove").ibxWidget("add", tRoot);
+				});
+
+				$(".btnExpandAll").on("click", function(e)
+				{
+					var tNodes = tree.find(".ibx-tree-node").ibxWidget("toggleExpanded", true);
+				});
+
+				function makeTreeNode(xNode, flat)
+				{
+					xNode = $(xNode);
+					var type = xNode.prop("nodeName");
+					var icon = xNode.attr("icon");
+					var options =
+					{
+						draggable:true,
+						container: (type == "Master_SegmentTree" || type == "branch"),
+						labelOptions:
 						{
-							dt.dropEffect = "copy";
-							e.preventDefault();
+							icon: icon ? sformat("{1}../../dhtml/images/{2}", ibx.getPath(), icon) : "",
+							text: xNode.attr("label")
 						}
-					}
-					else
-					if(eType == "ibx_drop")
+					};
+					var treeNode = $("<div>").ibxTreeNode(options).data("xNode", xNode).on("ibx_expand", function(e)
 					{
-						var data = dt.getData("testData")
-						var re = $(this);
-						re.ibxWidget("insertText", data);
-					}
-				});
+						if(flat)
+							return;
+						var tNode = $(this);
+						var xNode = tNode.data("xNode");
 
-
+						tNode.ibxWidget("remove");
+						$(xNode).children().each(function(idx, el)
+						{
+							var tChild = makeTreeNode(el);
+							tNode.ibxWidget("add", tChild);
+						});
+						e.stopPropagation();
+					});
+					return treeNode;
+				};
 			}, [{src:"./test_res_bundle.xml", loadContext:"app"}], true);
 		</script>
 		<style type="text/css">
@@ -69,25 +118,22 @@
 				margin:0px;
 				box-sizing:border-box;
 			}
-			.test-label
+			.test-tree
 			{
-				border:2px solid red;
-			}
-
-			.test-edit
-			{
-				width:400px;
-				height:300px;
-				border:1px solid black;
-			}
-			iframe.dragging
-			{
-				pointer-events:none;
+				position:absolute;
+				left:50px;
+				top:50px;
+				bottom:50px;
+				width:300px;
+				overflow:auto;
+				border:2px solid #ccc;
 			}
 		</style>
 	</head>
 	<body class="ibx-root">
-		<div class="test-label" data-ibx-type="ibxLabel" data-ibxp-draggable="true">Julian</div>
-		<div class="test-edit" data-ibx-type="ibxRichEdit"></div>
+		<div class="btnLoadFlat" data-ibx-type="ibxButton">Load Flat</div>
+		<div class="btnLoadHierarchical" data-ibx-type="ibxButton">Load Hierarchical</div>
+		<div class="btnExpandAll" data-ibx-type="ibxButton">Expand All Collapsed</div>
+		<div class="test-tree" data-ibx-type="ibxTree"></div>
 	</body>
 </html>
