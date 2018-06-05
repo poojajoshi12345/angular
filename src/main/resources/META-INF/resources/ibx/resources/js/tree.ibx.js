@@ -59,7 +59,7 @@ $.widget("ibi.ibxTree", $.ibi.ibxVBox,
 	},
 	anchor:function()
 	{
-		var anchor = this.treeNodes(".tnode-selection-anchor");
+		var anchor = this.treeNodes(".tnode-anchor");
 		return anchor[0] || null;
 	},
 	selected:function(el, selected, clearCurSel)
@@ -98,7 +98,7 @@ $.widget("ibi.ibxTree", $.ibi.ibxVBox,
 			this._ctrlKeyDown = e.ctrlKey;
 			this._shiftKeyDown = e.shiftKey;
 
-			//escape will clear all selections back to anchor...this is questionable...really not sure we want this functionality
+			//escape will clear all selections...this is questionable...really not sure we want this functionality
 			if(e.keyCode === $.ui.keyCode.ESCAPE && options.escClearSelection)
 			{
 				var selected = $(this.selected());

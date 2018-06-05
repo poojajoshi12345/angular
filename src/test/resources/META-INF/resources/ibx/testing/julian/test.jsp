@@ -22,18 +22,23 @@
 			ibx(function()
 			{
 				var tree = $(".test-tree");
-				tree.on("ibx_dragstart ibx_dragover ibx_drop", function(e)
+				tree.on("ibx_dragstart ibx_dragover ibx_dragleave ibx_drop", function(e)
 				{
+					node = $(e.target).closest(".ibx-tree-node").children(".tnode-label");
 					e = e.originalEvent;
 					var dt = e.dataTransfer;
 					if(e.type == "ibx_dragstart")
-						dt.setData("ibxDragNode", $(e.target).closest(".ibx-tree-node"));
+						dt.setData("ibxDragNode", $(e.target));
 					else
 					if(e.type == "ibx_dragover")
 					{
+						node.addClass("drag-target");
 						dt.dropEffect = "copy";
 						e.preventDefault();
 					}
+					else
+					if(e.type == "ibx_dragleave")
+						node.removeClass("drag-target");
 					else
 					if(e.type == "ibx_drop")
 					{
@@ -128,6 +133,11 @@
 				overflow:auto;
 				border:2px solid #ccc;
 			}
+			.drag-target:hover
+			{
+				background-color:thistle;
+			}
+
 		</style>
 	</head>
 	<body class="ibx-root">

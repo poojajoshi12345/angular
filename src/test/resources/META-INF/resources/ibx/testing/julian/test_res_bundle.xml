@@ -42,7 +42,8 @@
 	</markup>
 
 	<scripts>
-		<script-file src="../../../ibxtools/shared_resources/js/ibfs.js"/>
+		<script-file src="../../../ibxtools/shared_resources/js/ibfs.js" inline="false"/>
+		<script-file src="../../../tdg/jschart/distribution/tdgchart-min.js" type="text/javascript" inline="false"></script-file>
 		<script-file src="./test_res_script.js"/>
 		<script-block>
 			<![CDATA[

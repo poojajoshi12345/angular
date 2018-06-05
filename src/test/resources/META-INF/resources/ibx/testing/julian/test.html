@@ -12,93 +12,13 @@
 		<script type="text/javascript">
 			ibx(function()
 			{
-				$.widget("ibi.ibxSelectionManager", $.Widget, 
+				var parent = $(".test-parent").ibxSelectionManager({"multiSelect":true, "focusRoot":true, "focusDefault":true});
+				for(var i = 0; i < 15; ++i)
 				{
-					options:
-					{
-					},
-					_widgetClass:"ibx-selection-manager",
-					_create:function()
-					{
-						this._super();
-						this._onNodeSelectEventBound = this._onNodeSelectEvent.bind(this);
-						this.element.ibxMutationObserver({listen:true, allEvents:true}).on("mousedown", this._onMouseDown.bind(this));
-						this.element.on({"ibx_nodesadded": this._onNodesAdded.bind(this), "ibx_nodesremoved": this._onNodesRemoved.bind(this)});
-					},
-					_destroy:function()
-					{
-						this._super();
-					},
-					_onMouseDown:function(e)
-					{
-						if(this.element.is(e.target))
-							this.deselectAll();
-					},
-					_onNodesAdded:function(e)
-					{
-						$.each(e.data, function(idx, el)
-						{
-							el = $(el);
-							el.on("keydown mousedown", this._onNodeSelectEventBound);
-						}.bind(this));
-					},
-					_onNodesRemoved:function(e)
-					{
-						$.each(e.data, function(idx, el)
-						{
-							el = $(el);
-							el.off("keydown mousedown", this._onNodeSelectEventBound);
-						}.bind(this));
-					},
-					_onNodeSelectEvent:function(e)
-					{
-						var target = $(e.target);
-						var eType = e.type;
-						var ctrl = e.ctrlKey;
-						var shift = e.shiftKey;
-						var selected = target.is(".ibx-selected");
-						if(eType == "mousedown")
-						{
-							if(!ctrl && !shift)
-								this.deselectAll();
-							target.toggleClass("ibx-selected", ctrl ? !selected : true);
-						}
-						else
-						if(eType == "keydown")
-						{
-						}
-						console.log(e.target);
-					},
-					select:function(selector)
-					{
-						this.element.children().filter(selector).addClass("ibx-selected");
-					},
-					selectAll:function(selector)
-					{
-						this.element.children().addClass("ibx-selected");
-					},
-					deselect:function(selector)
-					{
-						this.element.children().filter(selector).removeClass("ibx-selected");
-					},
-					deselectAll:function()
-					{
-						this.element.children().filter(".ibx-selected").removeClass("ibx-selected");
-					},
-					_refresh:function()
-					{
-						this._super();
-					}
-				});
-
-
-				var parent = $(".test-parent").ibxSelectionManager();
-				for(var i = 0; i < 5; ++i)
-				{
-					var child = $(sformat("<div class='child child{1}'>", i)).css({left: i * 110 + 10 + "px", top:"2px"});
+					var child = $(sformat("<div tabindex='0' class='child child{1}'>", i));
 					parent.append(child);
 				}
-			});
+			}, true);
 		</script>
 		<style type="text/css">
 			.test-parent
@@ -112,9 +32,10 @@
 			}
 			.child
 			{
-				position:absolute;
+				flex:0 0 auto;
 				width:100px;
 				height:100px;
+				margin:5px;
 				border:1px solid black;
 			}
 			.ibx-selected
@@ -123,8 +44,8 @@
 			}
 		</style>
 	</head>
-	<body>
-		<div class="test-parent">
+	<body class="ibx-root">
+		<div tabindex="0" class="test-parent" data-ibx-type="ibxHBox" data-ibxp-wrap="true">
 		</div>
 	</body>
 </html>

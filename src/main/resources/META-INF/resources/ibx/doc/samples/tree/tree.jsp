@@ -52,6 +52,30 @@
 						var fileTile = makeFileTile(el);
 						(el.attr("container") == "true") ? folderList.append(fileTile) : fileList.append(fileTile);
 					});
+				}).on("ibx_dragstart ibx_dragover ibx_dragleave ibx_drop", function(e)
+				{
+					node = $(e.target).closest(".ibx-tree-node").children(".tnode-label");
+					e = e.originalEvent;
+					var dt = e.dataTransfer;
+					if(e.type == "ibx_dragstart")
+						dt.setData("ibxDragNode", $(e.target));
+					else
+					if(e.type == "ibx_dragover")
+					{
+						node.addClass("drag-target");
+						dt.dropEffect = "copy";
+						e.preventDefault();
+					}
+					else
+					if(e.type == "ibx_dragleave")
+						node.removeClass("drag-target");
+					else
+					if(e.type == "ibx_drop")
+					{
+						var dragNode = dt.getData("ibxDragNode");
+						var dropTarget = $(e.target).closest(".ibx-tree-node");
+						dropTarget.ibxWidget("add", dragNode);
+					}
 				});
 
 				$(".test-files-box").on("dblclick keydown", function(e)

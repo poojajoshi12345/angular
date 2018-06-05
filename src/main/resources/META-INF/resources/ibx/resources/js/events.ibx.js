@@ -489,4 +489,279 @@ ibxDragDropManager._onNativeDragEvent = function(e)
 //singleton drag/drop manager object.
 ibx.dragDropMgr = new ibxDragDropManager();
 
+
+$.widget("ibi.ibxSelectionManager", $.Widget, 
+{
+	options:
+	{
+		"multiSelect":false,
+		"focusRoot":false,
+		"focusDefault":false,			//focus the first item in root. (can be a select pattern).
+		"navKeyRoot":false,				//keep keyboard navigation to this container (not tabbing, more like arrows in trees/lists/etc.).
+		"navKeyDir":"horizontal",		//horizontal = left/right, vertical = up/down, or both
+		"navKeyResetFocusOnBlur":true,	//when widget loses focus, reset the current active navKey child.
+		"navKeyKeys":					//keys for various nav key events
+		{
+			"activate":"ENTER",
+			"cancel":"ESCAPE",
+			"first":"HOME",
+			"last":"END",
+			"hprev":"LEFT",
+			"hnext":"RIGHT",
+			"vprev":"UP",
+			"vnext":"DOWN"
+		},
+	},
+	_widgetClass:"ibx-selection-manager",
+	_create:function()
+	{
+		this._super();
+		this.element[0].addEventListener("focusin", this._onFocusIn.bind(this), true);
+		this.element[0].addEventListener("focusout", this._onFocusOut.bind(this), true);
+		this.element[0].addEventListener("mousedown", this._onMouseDown.bind(this), true);
+		this.element[0].addEventListener("keydown", this._onKeyDown.bind(this), true);
+	},
+	_destroy:function()
+	{
+		this._super();
+	},
+	_onFocusIn:function(e)
+	{
+		var options = this.options;
+		var isTarget = this.element.is(e.target);
+		var isRelTarget = this.element.is(e.relatedTarget);
+		var ownsTarget = $.contains(this.element[0], e.target);
+		var ownsRelTarget = $.contains(this.element[0], e.relatedTarget);
+
+		if(!this._widgetFocused)
+		{
+			this._widgetFocused = true;
+			this.element.dispatchEvent("ibx_widgetfocus", e, false, false, e.relatedTarget);
+		}
+
+		//do the default focusing.
+		if(isTarget && (options.focusDefault !== false))
+		{
+			//take the element out of the tab order so shift+tab will work and not focus this container.
+			if(this.element.data("focusDefaultWidgetTabIndex") === undefined)
+				this.element.data("focusDefaultWidgetTabIndex", this.element.prop("tabindex")).prop("tabindex", -1);
+
+			//focus default item...otherwise find first focusable item (ARIA needs SOMETHING to be focused on the popup)
+			var defItem = this.element.find(options.focusDefault);
+			defItem = defItem.length ? defItem : this.element.find(":ibxFocusable").first();
+			defItem.focus();
+		}
+
+		if(options.navKeyRoot && !isTarget)
+		{
+			//if we own the target, we are now nav active.
+			this.element.addClass("ibx-nav-key-root-active");
+
+			//reset the nav kids.				
+			this.navKeyChildren().removeClass("ibx-nav-key-item-active ibx-ie-pseudo-focus").addClass("ibx-nav-key-child");
+
+			//set the active kid.
+			var navKidActive = $(e.target).closest(".ibx-nav-key-child");
+			navKidActive.addClass("ibx-nav-key-item-active").toggleClass("ibx-ie-pseudo-focus", ibxPlatformCheck.isIE);
+			options.aria.activedescendant = navKidActive.prop("id");
+			this.setAccessibility();
+		}
+	},
+	_onFocusOut:function(e)
+	{
+		var options = this.options;
+		var isRelTarget = this.element.is(e.relatedTarget);
+		var ownsRelTarget = $.contains(this.element[0], e.relatedTarget);
+		if(this._widgetFocused && !isRelTarget && !ownsRelTarget)
+		{
+			this._widgetFocused = false;
+			this.element.dispatchEvent("ibx_widgetblur", e, false, false, e.relatedTarget);
+
+			//put this element back in the tab order...so that next tab into will will do auto-focus.
+			if(this.element.data("focusDefaultWidgetTabIndex") !== undefined)
+				this.element.prop("tabIndex", this.element.data("focusDefaultWidgetTabIndex")).removeData("focusDefaultWidgetTabIndex");
+
+
+			//active items and tabbing are handled in a given 'context'...popups introduce a higher context, so ignore them here.
+			if(options.navKeyRoot)
+			{
+				//no longer navActive
+				this.element.removeClass("ibx-nav-key-root-active");
+
+				//adjust current nav-key-children
+				var navKids = this.navKeyChildren("*");//all nav kids not just focusable...menus are hidden at this point.
+				navKids.each(function(idx, el)
+				{
+					var navKid = $(el);
+					navKid.removeClass("ibx-nav-key-child ibx-ie-pseudo-focus");
+					if(options.navKeyResetFocusOnBlur)
+					{
+						navKid.removeClass("ibx-nav-key-item-active");
+						delete options.aria.activedescendant;
+					}
+				}.bind(this));
+
+				//config active descendant.
+				this.setAccessibility();
+			}
+		}
+	},
+	_onKeyDown:function(e)
+	{
+		console.log(e.target);
+		var options = this.options;
+		if(options.tabRoot && e.keyCode == $.ui.keyCode.TAB)
+		{
+			var tabKids = this.element.find(":ibxFocusable");
+			var target = null;
+			var firstKid = tabKids.first();
+			var lastKid = tabKids.last();
+			if(firstKid.length && lastKid.length)
+			{
+				if((firstKid.is(e.target) || $.contains(firstKid[0], e.target)) && e.shiftKey)
+					target = tabKids.last();
+				else
+				if((lastKid.is(e.target) || $.contains(lastKid[0], e.target)) && !e.shiftKey)
+					target = tabKids.first();
+			}
+
+			//target means first/last item and need to loop...or no kids, so do nothing.
+			if(target || !tabKids.length)
+			{
+				target = $(target);
+				target.focus();
+				e.preventDefault();
+				e.stopPropagation();
+			}
+		}
+		if(options.navKeyRoot)
+		{
+			var isNavActive = this.navKeyActive();
+			var navKids = this.navKeyChildren();
+			var active = $();
+			var current = navKids.filter(".ibx-nav-key-item-active");
+
+			//[IBX-83]
+			if(!isNavActive && this.element.is(e.target) && (e.data == "NAV_KEY_ACTIVATE" || eventMatchesShortcut(options.navKeyKeys.activate, e)))
+			{
+				isNavActive = true;
+				active = current.length ? current : navKids.first();
+				current = null;//[HOME-921]this allows activation to focus child, but not key events when child is already active. (think text arrow keys!)
+			}
+			else
+			if(isNavActive && !options.focusDefault && eventMatchesShortcut(options.navKeyKeys.cancel, e))//you can't escape out of a navKeyAutoFocus.
+				active = this.element;
+			else
+			if(isNavActive)
+			{
+				if(eventMatchesShortcut(options.navKeyKeys.first, e))
+					active = navKids.first();
+				else
+				if(eventMatchesShortcut(options.navKeyKeys.last, e))
+					active = navKids.last();
+		
+				if(!active.length && options.navKeyDir == "horizontal" || options.navKeyDir == "both")
+				{
+					if(eventMatchesShortcut(options.navKeyKeys.hprev, e))
+					{
+						var idx = navKids.index(current);
+						var prev = navKids.get(--idx)
+						active = prev ? $(prev) : navKids.last();
+					}
+					else
+					if(eventMatchesShortcut(options.navKeyKeys.hnext, e))
+					{
+						var idx = navKids.index(current);
+						var next = navKids.get(++idx);
+						active = next ? $(next) : navKids.first();
+					}
+				}
+
+				if(!active.length && options.navKeyDir == "vertical" || options.navKeyDir == "both")
+				{
+					if(eventMatchesShortcut(options.navKeyKeys.vprev, e))
+					{
+						var idx = navKids.index(current);
+						var prev = navKids.get(--idx);
+						active = prev ? $(prev) : navKids.last();
+					}
+					else
+					if(eventMatchesShortcut(options.navKeyKeys.vnext, e))
+					{
+						var idx = navKids.index(current);
+						var next = navKids.get(++idx);
+						active = next ? $(next) : navKids.first();
+					}
+				}
+			}
+
+			if(isNavActive && !active.is(current) && active.length)
+			{
+				var evt = $(active).dispatchEvent("ibx_beforenavkeyfocus", null, true, true, current);
+				if(!evt.isDefaultPrevented())
+				{
+					active[0].focus();
+					e.preventDefault();
+					e.stopPropagation();
+				}
+			}
+		}
+	},
+	_onMouseDown:function(e)
+	{
+		if(this.element.is(e.target))
+			this.deselectAll();
+		//console.log(e.target);
+	},
+	selectableChildren:function(selector)
+	{
+		return this.children(selector);
+	},
+	_onNodeSelectEvent:function(e)
+	{
+		var target = $(e.target);
+		var eType = e.type;
+		var ctrl = e.ctrlKey;
+		var shift = e.shiftKey;
+		var selected = target.is(".ibx-selected");
+		if(eType == "mousedown")
+		{
+			if(!ctrl && !shift)
+				this.deselectAll();
+			target.toggleClass("ibx-selected", ctrl ? !selected : true);
+		}
+		else
+		if(eType == "keydown")
+		{
+		}
+		console.log(e.target);
+	},
+	select:function(select)
+	{
+	},
+	selectAll:function(selector)
+	{
+		this.element.children().addClass("ibx-selected");
+	},
+	deselect:function(selector)
+	{
+		this.element.children().filter(selector).removeClass("ibx-selected");
+	},
+	deselectAll:function()
+	{
+		this.element.children().filter(".ibx-selected").removeClass("ibx-selected");
+	},
+	_refresh:function()
+	{
+		this._super();
+		var options = this.options;
+		this.element.toggleClass("ibx-focus-root", options.focusRoot);
+		this.element.toggleClass("ibx-nav-key-root", options.navKeyRoot);
+		this.element.toggleClass("ibx-focus-default", options.focusDefault);
+	}
+});
+
+
+
+
 //# sourceURL=events.ibx.js
