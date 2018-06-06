@@ -723,7 +723,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 			}
 			else
 			{
-				var classes = "ibx-selectable ibx-ie-pseudo-focus " + (this.options.focusResetOnBlur) ? "ibx-focused" : "";
+				var classes = "ibx-selectable ibx-ie-pseudo-focus " + ((this.options.focusResetOnBlur) ? "ibx-focused" : "");
 				selChildren.removeClass(classes);
 				this.element.removeClass("ibx-selection-manager-focused");
 			}
