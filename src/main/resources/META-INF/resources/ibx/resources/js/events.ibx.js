@@ -568,7 +568,6 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 			var idxSel = selChildren.index(e.target);
 			var idxStart = Math.min(idxAnchor, idxSel);
 			var idxEnd = Math.max(idxAnchor, idxSel);
-			console.log(idxStart, idxEnd);
 			this.toggleSelected(selChildren.slice(idxStart, idxEnd + 1), this.isSelected(this._anchor), false);
 		}
 		else
@@ -605,15 +604,41 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 		if(options.navKeyRoot)
 		{
 			var selChildren = this.selectableChildren();
-			var focusedItem
+			var focusedItem = this.focused();
 			if(e.keyCode == $.ui.keyCode.LEFT || e.keyCode == $.ui.keyCode.UP)
 			{
+				var idxFocus = selChildren.index(focusedItem) - 1;
+				var focusItem = (idxFocus < 0) ? selChildren.last() : selChildren[idxFocus];
+				focusItem.focus();
 			}
 			else
 			if(e.keyCode == $.ui.keyCode.RIGHT || e.keyCode == $.ui.keyCode.DOWN)
 			{
+				var idxFocus = selChildren.index(focusedItem) + 1;
+				var focusItem = (idxFocus >= selChildren.length) ? selChildren.first() : selChildren[idxFocus];
+				focusItem.focus();
 			}
 		}
+
+		if(e.keyCode == $.ui.keyCode.ENTER || e.keyCode == $.ui.keyCode.SPACE)
+		{
+			if(!e.shiftKey && !e.ctrlKey)
+				this.deselectAll();
+
+			if(e.shiftKey)
+			{
+				var idxAnchor = selChildren.index(this._anchor[0]);
+				var idxSel = selChildren.index(this.focused());
+				var idxStart = Math.min(idxAnchor, idxSel);
+				var idxEnd = Math.max(idxAnchor, idxSel);
+				this.toggleSelected(selChildren.slice(idxStart, idxEnd + 1), this.isSelected(this._anchor), false);
+			}
+			else
+				this.toggleSelected(this.focused());
+		}
+		else
+		if(e.keyCode == $.ui.keyCode.ESCAPE && options.escClearSelection)
+			this.deselectAll();
 	},
 	selectableItem:function(el)
 	{
