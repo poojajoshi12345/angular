@@ -523,8 +523,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 		var ownsTarget = $.contains(this.element[0], e.target);
 		var ownsRelTarget = $.contains(this.element[0], e.relatedTarget);
 
-		if(!ownsRelTarget)
-			this.selectableChildren().addClass("ibx-selectable");
+		this.focus(true);
 
 		//do the default focusing.
 		if(isTarget && (options.focusDefault !== false))
@@ -560,15 +559,14 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 		if(!ownsRelTarget)
 		{
 			//put this element back in the tab order...so that next tab into will will do auto-focus.
-			if(this._focDefTabIndex !== undefined)
+			if(this.element.data("ibxFocDefSavedTabIndex") !== undefined)
 				this.element.prop("tabIndex", this.element.data("ibxFocDefSavedTabIndex")).removeData("ibxFocDefSavedTabIndex");
-
-			this.selectableChildren().removeClass("ibx-selectable ibx-ie-pseudo-focus " + (options.focusResetOnBlur ? "ibx-focused" : ""));
-			this.element.removeAttr("aria-active-descendant");
+			this.focus(false);
 		}
 	},
 	_onMouseDown:function(e)
 	{
+		this.focus(true);
 		var options = this.options;
 		var isTarget = this.element.is(e.target);
 		if(isTarget || (!e.shiftKey && !e.ctrlKey))
@@ -579,11 +577,10 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 	},
 	_onKeyDown:function(e)
 	{
-		return;
 		var options = this.options;
-		if(options.tabRoot && e.keyCode == $.ui.keyCode.TAB)
+		if(options.focusRoot && e.keyCode == $.ui.keyCode.TAB)
 		{
-			var tabKids = this.element.find(":ibxFocusable");
+			var tabKids = this.selectableChildren(":ibxFocusable");
 			var target = null;
 			var firstKid = tabKids.first();
 			var lastKid = tabKids.last();
@@ -681,38 +678,57 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 	selectableChildren:function(selector)
 	{
 		var e = this.element.dispatchEvent("ibx_selectablechildren", null, false, true);
-		var children = e.isDefaultPrevented() ? e.data : this.element.children(selector || "[tabindex]");
-		return children;
+		var children = e.isDefaultPrevented() ? e.data : this.element.children("[tabindex]");
+		return selector ? children.filter(selector) : children;
 	},
-	selected:function(el)
+	selected:function(el, select)
 	{
-		return $(el).hasClass("ibx-selected");
-	},
-	toggleSelected:function(el, selected)
-	{
-		selected = (selected === undefined) ? !this.selected(el) : selected;
-		this.select(el, selected);
-	},
-	select:function(el, select)
-	{
+		if(select === undefined)
+			return this.selectableChildren(".ibx-selected");
+
 		var eType = "";
-		var selected = this.selected(el);
+		var selected = this.isSelected(el);
 		if(!selected && select)
 			eType = "ibx_selected";
 		else
 		if(selected && !select)
-			eType == "ibx_deselected";
+			eType = "ibx_deselected";
 		$(el).toggleClass("ibx-selected", select);
 		if(eType)
-			this.element.dispatchEvent(eType, null, false, false, el);
+			this.element.dispatchEvent(eType, el, false, false);
+	},
+	isSelected:function(el){return $(el).hasClass("ibx-selected")},
+	toggleSelected:function(el, selected)
+	{
+		selected = (selected === undefined) ? !this.isSelected(el) : selected;
+		this.selected(el, selected);
 	},
 	selectAll:function(selector)
 	{
-		this.select(this.selectableChildren(), true);
+		this.selected(this.selectableChildren(), true);
 	},
 	deselectAll:function()
 	{
-		this.select(this.selectableChildren(), false);
+		this.selected(this.selected(), false);
+	},
+	focus:function(focus)
+	{
+		if(this._focus != focus)
+		{
+			var selChildren = this.selectableChildren();
+			if(focus)
+			{
+				selChildren.addClass("ibx-selectable");
+				this.element.addClass("ibx-selection-manager-focused");
+			}
+			else
+			{
+				var classes = "ibx-selectable ibx-ie-pseudo-focus " + (this.options.focusResetOnBlur) ? "ibx-focused" : "";
+				selChildren.removeClass(classes);
+				this.element.removeClass("ibx-selection-manager-focused");
+			}
+			this._focus = focus
+		}
 	},
 	_refresh:function()
 	{

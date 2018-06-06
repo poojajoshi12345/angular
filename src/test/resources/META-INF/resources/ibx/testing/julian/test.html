@@ -12,10 +12,16 @@
 		<script type="text/javascript">
 			ibx(function()
 			{
-				var parent = $(".test-parent").ibxSelectionManager({"multiSelect":true, "focusRoot":true, "focusDefault":true});
-				for(var i = 0; i < 15; ++i)
+				var parent = $(".test-parent").ibxSelectionManager({"multiSelect":true, "focusRoot":true, "focusDefault":true, "focusResetOnBlur":true});
+				parent.on("ibx_selected ibx_deselected", function(e)
 				{
-					var child = $(sformat("<div tabindex='0' class='child child{1}'>", i));
+					e = e.originalEvent;
+					console.log(e.type, e.data);
+				});
+
+				for(var i = 0; i < 10; ++i)
+				{
+					var child = $(sformat("<div tabindex='0' class='child child{1}'>", i)).ibxAriaId();
 					parent.append(child);
 				}
 			}, true);
@@ -25,9 +31,10 @@
 			{
 				position:absolute;
 				left:10px;
-				top:10px;
+				top:50px;
 				right:10px;
 				bottom:10px;
+				overflow:auto;
 				border:2px solid gray;
 			}
 			.child
@@ -38,13 +45,18 @@
 				margin:5px;
 				border:1px solid black;
 			}
+			.ibx-focused
+			{
+				border:2px solid black;
+			}
 			.ibx-selected
 			{
-				outline:4px solid pink;
+				background-color:pink;
 			}
 		</style>
 	</head>
 	<body class="ibx-root">
+		<div tabindex="0">Some other tabby element</div>
 		<div tabindex="0" class="test-parent" data-ibx-type="ibxHBox" data-ibxp-wrap="true">
 		</div>
 	</body>
