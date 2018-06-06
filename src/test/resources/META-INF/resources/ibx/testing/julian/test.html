@@ -12,16 +12,18 @@
 		<script type="text/javascript">
 			ibx(function()
 			{
-				var parent = $(".test-parent").ibxSelectionManager({"multiSelect":true, "focusRoot":true, "focusDefault":true, "focusResetOnBlur":true});
-				parent.on("ibx_selected ibx_deselected", function(e)
+				var parent = $(".test-parent").ibxSelectionManager({"multiSelect":true, "focusRoot":true, "focusDefault":true, "focusResetOnBlur":false});
+				parent.on("ibx_selecting ibx_deselecting ibx_selchange", function(e)
 				{
 					e = e.originalEvent;
-					console.log(e.type, e.data);
+					var data = e.data;
+					//console.log(e.type, data);
 				});
 
 				for(var i = 0; i < 10; ++i)
 				{
 					var child = $(sformat("<div tabindex='0' class='child child{1}'>", i)).ibxAriaId();
+					child.addClass(i%2 ? "even" : "odd");
 					parent.append(child);
 				}
 			}, true);
@@ -45,14 +47,11 @@
 				margin:5px;
 				border:1px solid black;
 			}
-			.ibx-focused
-			{
-				border:2px solid black;
-			}
-			.ibx-selected
-			{
-				background-color:pink;
-			}
+			.odd{background-color:thistle;}
+			.even{background-color:greenyellow;}
+			.ibx-selmgr-focused .ibx-sm-focused{box-shadow:3px 3px 5px 0px #888;}
+			.ibx-sm-selected{background-color:pink;}
+			.ibx-sm-selected:before{content:"SELECTED";font-size:12px;font-family:monospace;}
 		</style>
 	</head>
 	<body class="ibx-root">

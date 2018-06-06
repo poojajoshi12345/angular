@@ -1,407 +1,769 @@
 /*Copyright 1996-2016 Information Builders, Inc. All rights reserved.*/
 // $Revision$:
 
+function ibxEventManager()
+{
+	if(ibx.eventMgr)
+		return;
 
-$.widget("ibi.ibxPopup", $.ibi.ibxWidget, 
+	window.addEventListener("touchstart", ibxEventManager._onTouchEvent.bind(this), true)
+	window.addEventListener("touchend", ibxEventManager._onTouchEvent, true)
+	window.addEventListener("touchmove", ibxEventManager._onTouchEvent, true)
+	window.addEventListener("contextmenu", ibxEventManager._onContextMenu);
+	window.addEventListener("keydown", ibxEventManager._onKeyDown);
+
+	document.body.addEventListener("touchstart", ibxEventManager._onNoScrollTouchEvent);
+}
+ibxEventManager.noBrowserCtxMenu = true;
+ibxEventManager.noBackspaceNavigate = true;
+ibxEventManager.noSpaceScroll = true;
+ibxEventManager.noIOSBodyScroll = false;
+ibxEventManager.msDblClick = 300;
+ibxEventManager.msCtxMenu = 500;
+ibxEventManager.createMouseEvent = function(eType, e)
+{
+	var touch = (e instanceof TouchEvent) ? e.touches[0] : null;
+	var eLast = ((e instanceof TouchEvent) && ibxEventManager._eLast) ? ibxEventManager._eLast.touches[0] : null;
+	var eInit = $.extend({}, e, touch);
+	eInit.movementX = eLast ? (eInit.screenX - eLast.screenX) : 0;
+	eInit.movementY = eLast ? (eInit.screenY - eLast.screenY) : 0;
+
+	var event = new MouseEvent(eType, eInit);
+	event.movementX = eInit.movementX;//for IOS...they don't allow arbitrary properties in new MouseEvent.
+	event.movementY = eInit.movementY;//for IOS...they don't allow arbitrary properties in new MouseEvent.
+	event.originalEvent = e;
+	return event;
+};
+
+
+ibxEventManager._onTouchEvent = function(e)
+{
+	var eType = e.type;
+	if(eType == "touchstart")
+	{
+		ibxEventManager._hasSwiped = false;
+		if(ibxPlatformCheck.isIOS)
+		{
+			var me = ibxEventManager.createMouseEvent("mousedown", e);
+			e.target.dispatchEvent(me);
+			ibxEventManager._eLast = e;
+
+			ibxEventManager._ctxMenuTimer = window.setTimeout(function(e)
+			{
+				var me = ibxEventManager.createMouseEvent("contextmenu", e);
+				e.target.dispatchEvent(me);
+				ibxEventManager._eLast = e;
+			}.bind(ibxEventManager, e), ibxEventManager.msCtxMenu);
+		}
+		else
+			ibxEventManager._eLast = e;
+	}
+	else
+	if(eType == "touchend")
+	{
+		window.clearTimeout(ibxEventManager._ctxMenuTimer);//cancel context menu
+
+		if(ibxPlatformCheck.isIOS)
+		{
+			var me = ibxEventManager.createMouseEvent("mouseup", e);
+			e.target.dispatchEvent(me);
+			ibxEventManager._eLast = e;
+		}
+
+		var dblClick = false;
+		if(ibxEventManager._eLast.type != "contextmenu")
+		{
+			var dt = ibxEventManager._eLastClick ? (e.timeStamp - ibxEventManager._eLastClick.timeStamp) : Infinity;
+			dblClick = (dt < ibxEventManager.msDblClick);
+			ibxEventManager._eLast = e;
+			ibxEventManager._eLastClick = e;
+		}
+
+		if(dblClick)
+		{
+			var me = ibxEventManager.createMouseEvent("dblclick", e);
+			e.target.dispatchEvent(me);
+			e.preventDefault();//[IBX-40]stop double tap zoom on ios.
+		}
+
+		ibxEventManager._eLast = null;
+		ibxEventManager._hasMoved = false;
+	}
+	else
+	if(eType == "touchmove")
+	{
+		window.clearTimeout(ibxEventManager._ctxMenuTimer);//cancel context menu
+
+		//figure out swiping
+		var touch = e.touches[0];
+		if(!ibxEventManager._hasSwiped)
+		{
+			var tElapsed = e.timeStamp - ibxEventManager._eLast.timeStamp;
+			var dx = touch.clientX - ibxEventManager._eLast.touches[0].clientX;
+			var dy = touch.clientY - ibxEventManager._eLast.touches[0].clientY;
+			var sEvent = null;
+			if(dx > 30)
+				sEvent = "swiperight";
+			else
+			if(dx < -30)
+				sEvent = "swipeleft";
+
+			if(sEvent && tElapsed <= 300)
+			{
+				var se = ibxEventManager.createMouseEvent(sEvent, e);
+				ibxEventManager._hasSwiped = true
+				e.target.dispatchEvent(se);
+			}
+
+			sEvent = null;
+			if(dy > 30)
+				sEvent = "swipedown";
+			else
+			if(dy < -30)
+				sEvent = "swipeup";
+			
+			if(sEvent && tElapsed <= 300)
+			{
+				var se = ibxEventManager.createMouseEvent(sEvent, e);
+				ibxEventManager._hasSwiped = true
+				e.target.dispatchEvent(se);
+			}
+		}
+
+		var me = ibxEventManager.createMouseEvent("mousemove", e);
+		e.target.dispatchEvent(me);
+		ibxEventManager._eLast = e;
+		ibxEventManager._hasMoved = true;//stop possible dblclick on touchend
+	}
+};
+
+ibxEventManager._onContextMenu = function(e)
+{
+	if(ibxEventManager.noBrowserCtxMenu)
+		e.preventDefault();
+};
+
+//[HOME-183] stop backspace from navigating
+//see: https://stackoverflow.com/questions/1495219/how-can-i-prevent-the-backspace-key-from-navigating-back
+ibxEventManager._onKeyDown = function(event)
+{
+	if((ibxEventManager.noBackspaceNavigate && (event.keyCode === $.ui.keyCode.BACKSPACE)) || (ibxEventManager.noSpaceScroll && (event.keyCode === $.ui.keyCode.SPACE)))
+	{
+		var doPrevent = true;
+		var types = ["text", "password", "file", "search", "email", "number", "date", "color", "datetime", "datetime-local", "month", "range", "search", "tel", "time", "url", "week"];
+		var d = $(event.srcElement || event.target);
+		var disabled = d.prop("readonly") || d.prop("disabled");
+
+		if(!disabled)
+		{
+			if(d[0].isContentEditable)
+				doPrevent = false;
+			else
+			if(d.is("input"))
+			{
+				var type = d.attr("type");
+				if(type)
+					type = type.toLowerCase();
+				if(types.indexOf(type) > -1)
+					doPrevent = false;
+			}
+			else
+			if(d.is("textarea"))
+				doPrevent = false;
+		}
+
+		if(doPrevent)
+		{
+			event.preventDefault();
+			return false;
+		}
+	}
+};
+
+//ios has an annoying habit of attempting to scroll the body element even when it has nothing to scroll.  This stops that!
+ibxEventManager._onNoScrollTouchEvent = function(e)
+{
+	//THIS IS NOT WORKING CORRECTLY YET...DO NOT UNCOMMENT!!!!
+	//if(ibxPlatformCheck.isIOS && ibxEventManager.noIOSBodyScroll && e.target === document.body)
+	//	e.preventDefault();
+};
+
+//singleton event manager object.
+ibx.eventMgr = new ibxEventManager();
+
+
+/****
+ 	Drag/Drop Management
+****/
+function ibxDataTransfer()
+{
+	this.items = {};
+	this.types = [];
+	this.effectAllowed = "all";
+	this.dropEffect = "not-allowed";
+}
+_p = ibxDataTransfer.prototype = new Object();
+_p.dataLock = false;
+_p.items = null;
+_p.types = null;
+_p.getData = function(type){return this.items[type]};
+_p.setData = function(type, data)
+{
+	if(this.dataLock)
+	{
+		console.warn("[ibx Warning] ibxDataTransfer - set/clear data is not technically supported in drag/drop once drag has started.  You can set dataLock to false to enable if you must.");
+		return;
+	}
+
+	this.items[type] = data;
+	if(-1 == this.types.indexOf(type))
+		this.types.push(type);
+};
+_p.clearData = function(type)
+{
+	if(this.dataLock)
+	{
+		console.warn("[ibx Warning] ibxDataTransfer - set/clear data is not technically supported in drag/drop once drag has started.  You can set dataLock to false to enable if you must.");
+		return;
+	}
+
+	delete this.items[type];
+	this.types.splice(this.types.indexOf(type), 1);
+};
+_p.dragXOffset = 8;
+_p.dragYOffset = 8;
+_p._dragImage = null;
+_p.setDragImage = function(img, xOffset, yOffset)
+{
+	if(this._dragImage)
+	{
+		this._dragImage.style.position = "";
+		this._dragImage.classList.remove(ibxDragDropManager.dragImageClass);
+	}
+	
+	this._dragImage = img ? img : this._dragImage;
+	if(this._dragImage)
+	{
+		this._dragImage.style.position = "absolute";
+		this._dragImage.classList.add(ibxDragDropManager.dragImageClass);
+	}
+	this.dragXOffset = xOffset || this.dragXOffset;
+	this.dragYOffset = yOffset || this.dragYOffset;
+};
+
+function ibxDragDropManager()
+{
+	if(ibx.dragDropMgr)
+		return;
+
+	document.documentElement.addEventListener("keydown", ibxDragDropManager._onKeyEvent.bind(ibxDragDropManager), true);
+	document.documentElement.addEventListener("mousedown", ibxDragDropManager._onMouseEvent.bind(ibxDragDropManager), true);
+	document.documentElement.addEventListener("mouseup", ibxDragDropManager._onMouseEvent.bind(ibxDragDropManager), true);
+	document.documentElement.addEventListener("mousemove", ibxDragDropManager._onMouseEvent.bind(ibxDragDropManager), true);
+	document.documentElement.addEventListener("dragover", ibxDragDropManager._onNativeDragEvent.bind(ibxDragDropManager), true);
+	document.documentElement.addEventListener("drop", ibxDragDropManager._onNativeDragEvent.bind(ibxDragDropManager), true);
+}
+ibxDragDropManager.dragPrevented = false;
+ibxDragDropManager.dragElement = null;
+ibxDragDropManager.curTarget = null;
+ibxDragDropManager.dragSourceClass = "ibx-drag-source",
+ibxDragDropManager.dragTargetClass = "ibx-drop-target",
+ibxDragDropManager.dragImageClass = "ibx-drag-image",
+ibxDragDropManager.dragStartDistanceX = 5,
+ibxDragDropManager.dragStartDistanceY = 5,
+
+ibxDragDropManager.getDefaultDragImage = function(el)
+{
+	//clone the node and make sure the width/height are preserved so it lays out correctly.
+	el = $(el);
+	var width = el.width();
+	var height = el.height();
+	var clone = el.clone().css({"width":width + "px", "height":height + "px", "margin":"0px"});
+	return clone[0];
+};
+ibxDragDropManager._dispatchDragEvent = function(e, type, target, bubbles, cancelable, data)
+{
+	var evt = cloneNativeEvent(e, type, data, bubbles, cancelable, null);
+	evt.dataTransfer = this._dataTransfer || e.dataTransfer;
+	if(target)
+		target.dispatchEvent(evt);
+	return evt;
+};
+ibxDragDropManager.endDrag = function(eType, e)
+{
+	if(eType && this.isDragging())//[IA-7558] Only spit out event if dragging.
+		this._dispatchDragEvent(e, eType, this.dragElement, true);
+			
+	if(this._dataTransfer)
+		$(this._dataTransfer._dragImage).remove();
+
+	if(this.curTarget)
+	{
+		this.curTarget.classList.remove(this.dragTargetClass);
+		this.curTarget.style.cursor = this.curTarget.dataset.ibxDragTargetCursorOrig;
+		delete this.curTarget.dataset.ibxDragTargetCursorOrig;
+		this.curTarget = null;
+	}
+
+	//reset body cursor
+	document.body.style.cursor = document.body.dataset.ibxOrigDragCursor;
+	delete document.body.dataset.ibxOrigDragCursor;
+
+
+	if(this.dragElement)
+	{
+		this.dragElement.classList.remove(this.dragSourceClass);
+		this.dragElement = null;
+		this.dragPrevented = false;
+	}
+	document.body.classList.remove("ibx-dragging");
+
+	delete this._dataTransfer;
+	delete this._mDownLoc;
+};
+ibxDragDropManager._onKeyEvent = function(e)
+{
+	if(this.isDragging() && e.keyCode == $.ui.keyCode.ESCAPE)
+		this.endDrag("ibx_dragcancel", e);
+};
+ibxDragDropManager.isDragging = function()
+{
+	return (this.dragElement && this.dragElement.classList.contains(this.dragSourceClass));
+}
+ibxDragDropManager._onMouseEvent = function(e)
+{
+	var eType = e.type;
+	if(eType == "mousedown" && !this.isDragging())
+	{
+		this.dragElement = $(e.target).closest(".ibx-draggable")[0];
+		this._mDownLoc = {"x":e.clientX, "y":e.clientY};
+	}
+	else
+	if(eType == "mouseup")
+	{
+		//if allowed let target know it was dropped on
+		if(!this.dragPrevented && this.isDragging())
+			this._dispatchDragEvent(e, "ibx_drop", this.curTarget, true, true);
+
+		//end the drag operation
+		this.endDrag("ibx_dragend", e);
+	}
+	else
+	if(eType == "mousemove" && this.dragElement)
+	{
+		var dEvent = null;
+		var dx = e.clientX - this._mDownLoc.x;
+		var dy = e.clientY - this._mDownLoc.y;
+		var isDragging = this.isDragging();
+		if(!isDragging && (Math.abs(dx) >= this.dragStartDistanceX || Math.abs(dy) >= this.dragStartDistanceY))
+		{
+			var dt = this._dataTransfer = new ibxDataTransfer();
+			dEvent = this._dispatchDragEvent(e, "ibx_dragstart", this.dragElement, true, true);
+			if(!dEvent.isDefaultPrevented())
+			{
+				//start dragging...and also set default drag image if not already set...default the offest for drag image to where dragged on 
+				if(!dt._dragImage)
+				{
+					var bRect = this.dragElement.getBoundingClientRect();
+					var offsetX = bRect.left - this._mDownLoc.x;
+					var offsetY = bRect.top - this._mDownLoc.y;
+					dt.setDragImage(this.getDefaultDragImage(this.dragElement), offsetX, offsetY);
+				}
+			}
+			isDragging = true;
+			dt.dataLock = true;
+			this.dragElement.classList.add(this.dragSourceClass);
+			document.body.classList.add("ibx-dragging");
+			document.body.dataset.ibxOrigDragCursor = document.body.style.cursor;
+		}
+
+		if(isDragging)
+		{
+			//find the element under the mouse.
+			var elTarget = document.elementFromPoint(e.clientX, e.clientY);
+
+			//new drop target so reset the effect.
+			this._dataTransfer.dropEffect = "not-allowed";
+
+			//manage the current target
+			if(this.curTarget !== elTarget)
+			{
+				//spit out events for source/target
+				dEvent = this._dispatchDragEvent(e, "ibx_dragleave", this.curTarget, true);
+				dEvent = this._dispatchDragEvent(e, "ibx_dragenter", elTarget, true, true);
+
+				//reset last drag target
+				if(this.curTarget)
+				{
+					this.curTarget.classList.remove(this.dragTargetClass);
+					this.curTarget.style.cursor = this.curTarget.dataset.ibxDragTargetCursorOrig;
+					delete this.curTarget.dataset.ibxDragTargetCursorOrig;
+				}
+
+				//save new drag target
+				this.curTarget = elTarget;
+				if(this.curTarget)
+				{
+					this.curTarget.dataset.ibxDragTargetCursorOrig = this.curTarget.style.cursor;
+					this.curTarget.classList.add(this.dragTargetClass);
+				}
+			}
+
+			if(this.curTarget)
+			{
+				//send drag messages if 'ibx_dragover' was not prevented
+				dEvent = this._dispatchDragEvent(e, "ibx_drag", this.dragElement, true, true);
+				dEvent = this._dispatchDragEvent(e, "ibx_dragover", this.curTarget, true, true);
+				this.dragPrevented = !dEvent.isDefaultPrevented();
+
+				//figure out the cursor
+				var cursor = "not-allowed";
+				if(!this.dragPrevented)
+				{
+					if(this._dataTransfer.effectAllowed == "all")
+						cursor = this._dataTransfer.dropEffect;
+					else
+					if(this._dataTransfer.effectAllowed == this._dataTransfer.dropEffect)
+						cursor = this._dataTransfer.dropEffect;
+				}
+				this.curTarget.style.cursor = cursor;
+				this.curTarget.offsetHeight;
+				document.body.style.cursor = cursor;
+			}
+
+			//manage the drag image
+			if(this._dataTransfer._dragImage)
+			{
+				var dragImage = this._dataTransfer._dragImage;
+				var xOffset = (this._dataTransfer.dragXOffset == "center") ? -(dragImage.width()/2) : this._dataTransfer.dragXOffset;
+				var yOffset = (this._dataTransfer.dragYOffset == "center") ? -(dragImage.height()/2) : this._dataTransfer.dragYOffset;
+				$(this._dataTransfer._dragImage).css(
+				{
+					"left":e.clientX + xOffset + "px",
+					"top":e.clientY + yOffset + "px",
+				}).appendTo("body.ibx-root");
+			}
+		}
+	}
+};
+ibxDragDropManager._onNativeDragEvent = function(e)
+{
+	var dropTarget = $(e.target).closest(".ibx-external-drop-target")[0];
+	if(!dropTarget)
+		return;
+
+	var eType = e.type;
+	if(eType == "dragover")
+		e.preventDefault();
+	else
+	if(eType == "drop")
+	{
+		var dt = e.dataTransfer;
+		if(dt.files.length)
+		{
+			var formData = new FormData();
+			$.each(dt.files, function(idx, file)
+			{
+				formData.append(file.name, file);
+			});
+			var ajaxOptions = 
+			{
+				"method":"POST",
+				"contentType":false,
+				"processData":false,
+				"data":formData,
+				"url":"",
+				"dataTransfer":dt
+			};
+
+			if(this._dispatchDragEvent(e, "ibx_beforefilesupload", e.target, ajaxOptions).isDefaultPrevented())
+				return;
+
+			var deferred = $.ajax(ajaxOptions);
+			this._dispatchDragEvent(e, "ibx_filesuploading", e.target, deferred);
+		}
+		e.preventDefault();
+	}
+};
+
+//singleton drag/drop manager object.
+ibx.dragDropMgr = new ibxDragDropManager();
+
+
+$.widget("ibi.ibxSelectionManager", $.Widget, 
 {
 	options:
 	{
-		"focusRoot":true,
-		"focusDefault":".ibx-default-focused",
-		"modal":false,
-		"autoClose":true,
-		"movable":false,
-		"moveable":false,
-		"moveHandle":null,
-		"resizable":false,
-		"resizeHandles":null,
-		"escapeToClose":true,
-		"destroyOnClose":true,
-		"effect":"none",
-		"closeOnTimer":-1,
-		"refocusLastActiveOnClose":true,
-
-		"position":
-		{
-			/* for my/at position values see: http://api.jqueryui.com/position/ */
-			"my":"center",
-			"at":"center",
-			"of":window,
-			"collision":"flip",
-			"using":null,
-			"within":null,
-		},
-		"aria":
-		{
-		}
+		"multiSelect":false,
+		"escClearSelection":true,
+		"focusRoot":false,					//keep focus circular within this element
+		"focusDefault":false,				//focus the first item in root. (can be a select pattern).
+		"focusResetOnBlur":true,			//when widget loses focus, reset the current active navKey child.
+		"navKeyRoot":false,					//arrow keys will move you circularly through the items.
+		"navKeyDir":"both",					//horizontal = left/right, vertical = up/down, or both
+	
+		"focusRootClass":"ibx-focus-root",
+		"navKeyRootClass":"ibx-nav-key-root",
+		"mgrFocusedClass":"ibx-selmgr-focused",
+		"selectableClass":"ibx-sm-selectable",
+		"selectedClass":"ibx-sm-selected",
+		"focusedClass":"ibx-sm-focused",
+		"focusedIEClass":"ibx-sm-ie-pseudo-focus",
+		"anchorClass":"ibx-sm-anchor",
 	},
-	_widgetClass:"ibx-popup",
+	_widgetClass:"ibx-selection-manager",
 	_create:function()
 	{
-		var options = this.options;
-		this.element.addClass("pop-closed").prop("tabIndex", -1).css("position", "absolute").on("keydown", this._onPopupKeyEvent.bind(this));
-		this._onPopupWindowResizeBound = this._onPopupWindowResize.bind(this);
-		$(window).on("resize", this._onPopupWindowResizeBound);
 		this._super();
-	},
-	_setAccessibility:function(accessible, aria)
-	{
-		aria = this._super(accessible, aria);
-		aria.hidden = this.isOpen() ? false : true;
-		return aria
+		this.element[0].addEventListener("focusin", this._onFocusIn.bind(this), true);
+		this.element[0].addEventListener("focusout", this._onFocusOut.bind(this), true);
+		this.element[0].addEventListener("mousedown", this._onMouseDown.bind(this), true);
+		this.element[0].addEventListener("keydown", this._onKeyDown.bind(this), true);
 	},
 	_destroy:function()
 	{
 		this._super();
+	},
+	_onFocusIn:function(e)
+	{
 		var options = this.options;
-		this.element.removeClass("pop-closed pop-modal pop-top").off("mousedown");
-		this.element.removeClass($.ibi.ibxPopup.statics.effect[options.effect]);
-		if(options.movable)
-			this.element.draggable("destroy");
-		if(options.resizable)
-			this.element.resizable("destroy");
+		var isTarget = this.element.is(e.target);
+		var isRelTarget = this.element.is(e.relatedTarget);
+		var ownsTarget = $.contains(this.element[0], e.target);
+		var ownsRelTarget = $.contains(this.element[0], e.relatedTarget);
 
-		$(window).off("resize", this._onPopupWindowResizeBound);
-	},
-	_onPopupKeyEvent:function(e)
-	{
-		if(this.options.escapeToClose && e.keyCode == $.ui.keyCode.ESCAPE)
-			this.close("cancel");
-	},
-	_onPopupWindowResize:function(e)
-	{
-		if(this.isOpen() && (window === e.target))
-			this.element.position(this.options.position);
-	},
-	isClosing:function()
-	{
-		return this.element.is(".pop-closing");
-	},
-	isOpening:function()
-	{
-		return this.element.is(".pop-opening");
-	},
-	isOpen:function()
-	{
-		return !this.element.is(".pop-closed, .pop-closing, .pop-opening");
-	},
-	open:function(openInfo)
-	{
-		//[IBX-121][PD-839]trying to open the dialog when closing...this will cause an open from the close, when complete.
-		if(this.isClosing())
+		this.focus(true);
+
+		//do the default focusing.
+		if(isTarget && (options.focusDefault !== false))
 		{
-			this._openFromClose = true;
-			return;
+			//take the element out of the tab order so shift+tab will work and not focus this container.
+			if(this.element.data("ibxFocDefSavedTabIndex") === undefined)
+				this.element.data("ibxFocDefSavedTabIndex", this.element.prop("tabindex")).prop("tabindex", -1);
+
+			//focus default item...otherwise find first focusable item (ARIA needs SOMETHING to be focused on the popup)
+			var selChildren = this.selectableChildren();
+			var defItem = selChildren.filter(options.focusedClass);
+			if(!defItem.length)
+			{
+				var defItem = this.element.find(options.focusDefault);
+				defItem = defItem.length ? defItem : selChildren.first();
+			}
+			defItem.focus();
 		}
 
-		if(!this.isOpen() && this._trigger("beforeopen", null, openInfo))
+		//manage focus states of children
+		if(!isTarget && ownsTarget)
 		{
-			//we are fully open...no longer interested in transition events.
-			this.element.on("transitionend", function(e)
-			{
-				//we are now fully open.
-				this.element.removeClass("pop-opening").off("transitionend");
-				this._openFromClose = false;
-
-				//auto close the dialog after the specified time.
-				if(options.closeOnTimer >= 0)
-				{
-					window.setTimeout(function()
-					{
-						this.close();
-					}.bind(this), options.closeOnTimer);
-				}
-			}.bind(this));
-
-			var options = this.options;
-
-			//save currently active element for refocusing on close.
-			//[IA-8479] IE11 (some installs) have a problem with activeElement in iframe documents.  So, the if check will basically
-			//just force the activeElement to document.body if document.activeElement is not correct.
-			if(document.activeElement instanceof HTMLElement)
-				this._elPrevActive = document.activeElement;
-			else
-				this._elPrevActive = document.body;
-
-			//move the popup to the body so it can be top level...and position it correctly.
-			this.element.data("ibxPopupParent", this.element.parent()).appendTo(document.body);
-			this.element.position(options.position);
-
-			//tell manager to open the popup.
-			this.element.addClass("pop-opening");
-			this._trigger("popup_mgr_open", null, this.element);
-
-			//we're visible so focus...auto-focusing of children now happens in ibxWidget.
-			this.setAccessibility();
-			this.element.focus();
-
-			//let people know we are fully open
-			this._trigger("open");
+			this.selectableChildren().removeClass(sformat("{1} {2}", options.focusedClass, options.focusedIEClass));
+			var selItem = $(e.target).closest(options.selectableClass);
+			selItem.addClass(options.focusedClass).toggleClass(options.focusedIEClass, ibxPlatformCheck.isIE);
+			this.element.attr("aria-active-descendant", selItem.prop("id"));
 		}
 	},
-	close:function(closeInfo)
+	_onFocusOut:function(e)
 	{
-		if(this.element.is(".pop-closed"))
-			return;
-
-		if(!this.isOpening() && this._trigger("beforeclose", null, closeInfo))
+		var options = this.options;
+		var ownsRelTarget = $.contains(this.element[0], e.relatedTarget);
+		if(!ownsRelTarget)
 		{
-			//we are fully closed...no longer interested in transition events.
-			this.element.on("transitionend", function(e)
+			//put this element back in the tab order...so that next tab into will will do auto-focus.
+			if(this.element.data("ibxFocDefSavedTabIndex") !== undefined)
+				this.element.prop("tabIndex", this.element.data("ibxFocDefSavedTabIndex")).removeData("ibxFocDefSavedTabIndex");
+			this.focus(false);
+		}
+	},
+	_onMouseDown:function(e)
+	{
+		this.focus(true);
+		var options = this.options;
+		var isTarget = this.element.is(e.target);
+		if(isTarget || (!e.shiftKey && !e.ctrlKey))
+			this.deselectAll();
+
+		var selItem = $(e.target).closest(options.selectableClass);
+		this.toggleSelected(selItem);
+	},
+	_onKeyDown:function(e)
+	{
+		var options = this.options;
+		if(options.focusRoot && e.keyCode == $.ui.keyCode.TAB)
+		{
+			var tabKids = this.selectableChildren(":ibxFocusable");
+			var target = null;
+			var firstKid = tabKids.first();
+			var lastKid = tabKids.last();
+			if(firstKid.length && lastKid.length)
 			{
-				//destroy on close, if desired, or put popup back under it's original parent.
-				if(!this._destroyed && this.options.destroyOnClose)
-				{
-					this.destroy();
-					this.element.remove();
-				}
+				if((firstKid.is(e.target) || $.contains(firstKid[0], e.target)) && e.shiftKey)
+					target = tabKids.last();
 				else
+				if((lastKid.is(e.target) || $.contains(lastKid[0], e.target)) && !e.shiftKey)
+					target = tabKids.first();
+			}
+
+			//target means first/last item and need to loop...or no kids, so do nothing.
+			if(target || !tabKids.length)
+			{
+				target = $(target);
+				target.focus();
+				e.preventDefault();
+				e.stopPropagation();
+			}
+		}
+		if(options.navKeyRoot)
+		{
+			var isNavActive = this.navKeyActive();
+			var navKids = this.navKeyChildren();
+			var active = $();
+			var current = navKids.filter(".ibx-nav-key-item-active");
+
+			//[IBX-83]
+			if(!isNavActive && this.element.is(e.target) && (e.data == "NAV_KEY_ACTIVATE" || eventMatchesShortcut(options.navKeyKeys.activate, e)))
+			{
+				isNavActive = true;
+				active = current.length ? current : navKids.first();
+				current = null;//[HOME-921]this allows activation to focus child, but not key events when child is already active. (think text arrow keys!)
+			}
+			else
+			if(isNavActive && !options.focusDefault && eventMatchesShortcut(options.navKeyKeys.cancel, e))//you can't escape out of a navKeyAutoFocus.
+				active = this.element;
+			else
+			if(isNavActive)
+			{
+				if(eventMatchesShortcut(options.navKeyKeys.first, e))
+					active = navKids.first();
+				else
+				if(eventMatchesShortcut(options.navKeyKeys.last, e))
+					active = navKids.last();
+		
+				if(!active.length && options.navKeyDir == "horizontal" || options.navKeyDir == "both")
 				{
-					var parent = this.element.data("ibxPopupParent") || document.body;
-					this.element.appendTo(parent).css({top:"", left:""});
-					this.element.removeClass("pop-closing").off("transitionend");
+					if(eventMatchesShortcut(options.navKeyKeys.hprev, e))
+					{
+						var idx = navKids.index(current);
+						var prev = navKids.get(--idx)
+						active = prev ? $(prev) : navKids.last();
+					}
+					else
+					if(eventMatchesShortcut(options.navKeyKeys.hnext, e))
+					{
+						var idx = navKids.index(current);
+						var next = navKids.get(++idx);
+						active = next ? $(next) : navKids.first();
+					}
 				}
 
-				//user tried to open popup while it was closing...open it now that it's fully closed.
-				if(this._openFromClose)
-					this.open();
+				if(!active.length && options.navKeyDir == "vertical" || options.navKeyDir == "both")
+				{
+					if(eventMatchesShortcut(options.navKeyKeys.vprev, e))
+					{
+						var idx = navKids.index(current);
+						var prev = navKids.get(--idx);
+						active = prev ? $(prev) : navKids.last();
+					}
+					else
+					if(eventMatchesShortcut(options.navKeyKeys.vnext, e))
+					{
+						var idx = navKids.index(current);
+						var next = navKids.get(++idx);
+						active = next ? $(next) : navKids.first();
+					}
+				}
+			}
 
-			}.bind(this));
+			if(isNavActive && !active.is(current) && active.length)
+			{
+				var evt = $(active).dispatchEvent("ibx_beforenavkeyfocus", null, true, true, current);
+				if(!evt.isDefaultPrevented())
+				{
+					active[0].focus();
+					e.preventDefault();
+					e.stopPropagation();
+				}
+			}
+		}
+	},
+	anchor:function(el)
+	{
+		var options = this.options;
+		if(el === undefined)
+			return this.selectableChildren(options.anchorClass);
+	},
+	selectableChildren:function(selector)
+	{
+		var e = this.element.dispatchEvent("ibx_selectablechildren", null, false, true);
+		var children = e.isDefaultPrevented() ? e.data : this.element.children("[tabindex]");
+		return selector ? children.filter(selector) : children;
+	},
+	selected:function(el, select)
+	{
+		var options = this.options;
+		if(select === undefined)
+			return this.selectableChildren(options.selectedClass);
 
-			//[IBX-87] Don't refocus if close is from a mouse event...let browser focus wherever was clicked on.
-			//ALSO, check for pop-top, because if we aren't the topmost popup, then we shouldn't be resetting focus.  Think menu item opening dialog.
-			if(!(closeInfo instanceof MouseEvent) && this.element.is(".pop-top") && this.options.refocusLastActiveOnClose && this._elPrevActive)
-				this._elPrevActive.focus();
-			delete this._elPrevActive;
-
-			this.element.addClass("pop-closing");
-			this._trigger("popup_mgr_close", null, this.element);
-			this._trigger("close", null, closeInfo);
-			this.setAccessibility();
+		if(select)
+		{
+			el = $(el).filter(sformat(":not({1})", options.selectedClass));
+			var evt = this.element.dispatchEvent("ibx_selecting", el, false, true);
+			if(!evt.isDefaultPrevented())
+			{
+				el = evt.data;
+				el.addClass(options.selectedClass);
+			}
+		}
+		else
+		{
+			el = $(el).filter(options.selectedClass);
+			var evt = this.element.dispatchEvent("ibx_deselecting", el, false, true);
+			if(!evt.isDefaultPrevented())
+			{
+				el = evt.data;
+				el.removeClass(options.selectedClass);
+			}
+		}
+		this.element.dispatchEvent("ibx_selchange", el, false, false);
+	},
+	isSelected:function(el){return $(el).hasClass(this.options.selectedClass)},
+	toggleSelected:function(el, selected)
+	{
+		selected = (selected === undefined) ? !this.isSelected(el) : selected;
+		this.selected(el, selected);
+	},
+	selectAll:function(selector)
+	{
+		this.selected(this.selectableChildren(), true);
+	},
+	deselectAll:function()
+	{
+		this.selected(this.selected(), false);
+	},
+	focus:function(focus)
+	{
+		if(this._focus != focus)
+		{
+			var options = this.options;
+			var selChildren = this.selectableChildren();
+			if(focus)
+			{
+				selChildren.addClass(options.selectableClass);
+				this.element.addClass(options.mgrFocusedClass);
+			}
+			else
+			{
+				var classes = sformat("{1} {2} {3}", options.selectableClass, options.focusedIEClass, (this.options.focusResetOnBlur) ? options.focusedClass : "");
+				selChildren.removeClass(classes);
+				this.element.removeClass(options.mgrFocusedClass);
+			}
+			this._focus = focus
 		}
 	},
 	_refresh:function()
 	{
 		this._super();
 		var options = this.options;
-		this.element.addClass($.ibi.ibxPopup.statics.effect[options.effect]);
-		options.modal ? this.element.addClass("pop-modal") : this.element.removeClass("pop-modal");
-
-		//WRONG OPTION!
-		if(options.moveable)
-			console.warn("[ibx Deprecation] option 'moveable' is deprecated because it's spelled wrong. Use 'movable' instead! =>", this.element);
-
-		//turn draggable on/off
-		if(options.movable || options.moveable)
-			this.element.draggable({handle:options.moveHandle});
-		else
-		if(this.element.is(".ui-draggable"))
-			this.element.draggable("destroy");
-
-		//turn resizable on/off
-		if(options.resizable)
-			this.element.resizable({handles:options.resizeHandles});
-		else
-		if(this.element.is(".ui-resizable"))
-			this.element.resizable("destroy");
-
-		this.element.on("resizestart resizestop dragstart dragstop", function(e)
-		{
-			//[IBX-78] make resize/move work when content has iframes...stop pointer events so they don't eat the events.
-			var frames = this.element.find("iframe")
-			frames.css("pointerEvents", (e.type == "resizestart" || e.type == "dragstart") ? "none" : "NONE");
-		}.bind(this));
+		this.element.toggleClass("ibx-focus-root", options.focusRoot);
+		this.element.toggleClass("ibx-nav-key-root", options.navKeyRoot);
 	}
 });
-
-
-/******************************************************************************
-	MANAGER OF HIDING/SHOWING POPUPS...STACKING MODALS, ETC.
-******************************************************************************/
-function ibxPopupManager()
-{
-	$(window).on("ibx_popup_mgr_open ibx_popup_mgr_close", ibxPopupManager.onPopupEvent.bind(this));
-	window.addEventListener("mousedown", ibxPopupManager.onWindowEvent.bind(this), true);
-	window.addEventListener("keydown", ibxPopupManager.onWindowEvent.bind(this), true);
-	this._gp = $("<div class='ibx-popup-glass-pane'>").on("mousedown mouseup click", function(e){e.stopPropagation();});
-};
-ibxPopupManager._openPopups = $();//array of currently open ixbPoups
-ibxPopupManager.autoDisableIFrames = true;//no pointer events for iframes
-ibxPopupManager.onPopupEvent = function(e, popup)
-{
-	var popup = $(popup);
-
-	//remove existing .pop-top as we're going to reset it
-	$(".ibx-popup").removeClass("pop-top");
-
-	var topPop = ibxPopupManager.getOpenPopups().not(popup).first();//find the top popup excluding the one in question
-	var eType = e.type;
-	if(eType == "ibx_popup_mgr_open")
-	{
-		var topZ = topPop.zIndex() || popup.zIndex();
-		popup.addClass("pop-top")
-		popup.css("zIndex", topZ + 1000);
-		popup.removeClass("pop-closed");
-		topPop = popup;
-
-		//manage the currently open popups
-		ibxPopupManager._openPopups = ibxPopupManager._openPopups.add(popup);
-	}
-	else
-	if(eType == "ibx_popup_mgr_close")
-	{
-		popup.addClass("pop-closed")
-		topPop.addClass("pop-top");
-
-		//manage the currently open popups
-		ibxPopupManager._openPopups = ibxPopupManager._openPopups.not(popup);
-	}
-
-	//now, find the topmost modal popup...if there is one, stick the glass pane behind it, and stop mouse events
-	var topModal = ibxPopupManager.getOpenPopups(".pop-modal").first()
-	if(topModal.length)
-	{
-		var zIndex = topModal.zIndex() - 10;
-		this._gp.css("zIndex", zIndex);
-		$("body").append(this._gp);
-	}
-	else
-		this._gp.css("zIndex", "").detach();
-
-	//[IBX-66]if desired, kill all pointer events on background iframes.
-	if(ibxPopupManager.autoDisableIFrames)
-		$("iframe:not(.pop-top iframe)").toggleClass("ibx-popup-disabled-iframe", !!topPop.length);
-};
-ibxPopupManager.onWindowEvent = function(e)
-{
-	if(e.eventPhase == 1)
-	{
-		if(e.type == "mousedown")
-		{
-	
-			//if we clicked on a popup, then close all higher zIndex popups
-			var popup = $(e.target).closest(".ibx-popup");
-			if(popup.length)
-			{
-				var zMin = popup.zIndex() + 1;
-				ibxPopupManager.closeOpenPopups("", zMin, Infinity, false, e);
-				return;
-			}
-
-			//otherwise, close all open menus
-			var menus = ibxPopupManager.getOpenPopups(":openMenuPopup");
-			if(menus.length)
-			{
-				menus.ibxWidget("close", e);
-				return;
-			}
-
-			//otherwise, if any modals are open, then attempt to close any popups above the top modal, or
-			//the modal itself if it's autoClose
-			var modal = ibxPopupManager.getOpenPopups(":openModalPopup").first();
-			if(modal.length)
-			{
-				var zMin = modal.zIndex() + 1;//add one so the modal isn't included in the get open popups.
-				popup = ibxPopupManager.getOpenPopups(":autoClose", zMin);
-				if(popup.length)
-					popup.ibxWidget("close", e);
-				else
-				if(modal.ibxWidget("option", "autoClose"))
-					modal.ibxWidget("close", e);
-				return;
-			}
-
-			//finally, close all open autoClose popups
-			ibxPopupManager.closeOpenPopups(null, null, null, false, e);
-		}
-		else
-		if(e.type = "keydown")
-		{
-		}
-	}
-};
-ibxPopupManager.getOpenPopups = function(filter, zMin, zMax)
-{
-	var pattern = sformat("{1}:openPopup({2}, {3})", (filter || ""), zMin, zMax);
-	var popups = ibxPopupManager._openPopups.filter(pattern).sort(fnSortZIndex);
-	return popups;
-};
-ibxPopupManager.closeOpenPopups = function(filter, zMin, zMax, forceClose, closeData)
-{
-	//close all open popups within z limits...and only do autoClose unless forceClose is specified.
-	var openPopups = ibxPopupManager.getOpenPopups((!forceClose ? ":autoClose" : "") + (filter || ""), zMin, zMax);
-	if(openPopups.length)
-		openPopups.ibxWidget("close", closeData);
-};
-
-$.ibi.ibxPopup.statics = 
-{
-	effect:
-	{
-		none:"pop-effect-none",
-		fade:"pop-effect-fade",
-		scale:"pop-effect-scale",
-		blind:"pop-effect-blind"
-	},
-	popupManager:new ibxPopupManager(),
-};
-
-//# sourceURL=popup.ibx.js
-
-
-
-
-		if(e.type == "focusin")
-		{
-			if(!this._widgetFocused)
-			{
-				this._widgetFocused = true;
-				this.element.dispatchEvent("ibx_widgetfocus", e.originalEvent, false, false, e.relatedTarget);
-			}
-
-			//do the default focusing.
-			if((options.focusDefault !== false))
-			{
-				//take the element out of the tab order so shift+tab will work and not focus this container.
-				if(this.element.data("focusDefaultOrigTabIndex") === undefined)
-					this.element.data("focusDefaultOrigTabIndex", this.element.prop("tabindex")).prop("tabindex", -1);
-
-				//now manage focusing the first valid child.
-				if(options.navKeyRoot)
-					this.element.dispatchEvent("keydown", "NAV_KEY_ACTIVATE");
-				else
-				if(isTarget)
-				{
-					//focus default item...otherwise find first focusable item (ARIA needs SOMETHING to be focused on the popup)
-					var defItem = this.element.find(options.focusDefault);
-					defItem = defItem.length ? defItem : this.element.find(":ibxFocusable").first();
-					defItem.focus();
-				}
-			}
-
-			if(options.navKeyRoot && !isTarget)
-			{
-				//if we own the target, we are now nav active.
-				this.element.addClass("ibx-nav-key-root-active");
-
-				//de-activate all children, and activate the direct child that is/owns the target.
-				this.navKeyChildren().each(function(target, idx, el)
-				{
-					var navKid = $(el);
-					navKid.removeClass("ibx-nav-key-item-active ibx-ie-pseudo-focus");
-					if(navKid.is(target) || $.contains(navKid[0], target))
-					{
-						navKid.addClass("ibx-nav-key-item-active").toggleClass("ibx-ie-pseudo-focus", ibxPlatformCheck.isIE);
-						options.aria.activedescendant = navKid.prop("id");
-					}
-				}.bind(this, e.target));
-
-				//config active descendant.
-				this.setAccessibility();
-			}
-		}
-
-function julian()
-{
-	alert("julian hyman");
-}
+//# sourceURL=events.ibx.js
