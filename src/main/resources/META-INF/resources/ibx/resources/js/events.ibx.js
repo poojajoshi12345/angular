@@ -561,8 +561,18 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 		if(isTarget || (!e.shiftKey && !e.ctrlKey))
 			this.deselectAll();
 
-		var selItem = this.selectableItem(e.target);
-		this.toggleSelected(selItem);
+		var selChildren = this.selectableChildren();
+		if(e.shiftKey)
+		{
+			var idxAnchor = selChildren.index(this._anchor[0]);
+			var idxSel = selChildren.index(e.target);
+			var idxStart = Math.min(idxAnchor, idxSel);
+			var idxEnd = Math.max(idxAnchor, idxSel);
+			console.log(idxStart, idxEnd);
+			this.toggleSelected(selChildren.slice(idxStart, idxEnd + 1), this.isSelected(this._anchor), false);
+		}
+		else
+			this.toggleSelected(selChildren.filter(e.target));
 	},
 	_onKeyDown:function(e)
 	{
@@ -615,10 +625,13 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 		var children = e.isDefaultPrevented() ? e.data : this.element.children("[tabindex]");
 		return selector ? children.filter(selector) : children;
 	},
-	selected:function(el, select)
+	selected:function(el, select, anchor)
 	{
 		if(select === undefined)
 			return this.selectableChildren(".ibx-sm-selected");
+
+		//by default set the anchor item
+		anchor = (anchor === undefined) ? true : false;
 
 		if(select)
 		{
@@ -626,8 +639,10 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 			var evt = this.element.dispatchEvent("ibx_selecting", el, false, true);
 			if(!evt.isDefaultPrevented())
 			{
-				el = evt.data;
+				el = $(evt.data);
 				el.addClass("ibx-sm-selected");
+				if(anchor)
+					this.anchor(el.last());
 			}
 		}
 		else
@@ -638,15 +653,17 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 			{
 				el = evt.data;
 				el.removeClass("ibx-sm-selected");
+				if(anchor)
+					this.anchor(el.last());
 			}
 		}
 		this.element.dispatchEvent("ibx_selchange", el, false, false);
 	},
 	isSelected:function(el){return $(el).hasClass("ibx-sm-selected")},
-	toggleSelected:function(el, selected)
+	toggleSelected:function(el, selected, anchor)
 	{
 		selected = (selected === undefined) ? !this.isSelected(el) : selected;
-		this.selected(el, selected);
+		this.selected(el, selected, anchor);
 	},
 	selectAll:function(selector)
 	{
@@ -656,10 +673,16 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 	{
 		this.selected(this.selected(), false);
 	},
+	_anchor:null,
 	anchor:function(el)
 	{
 		if(el === undefined)
 			return this.selectableChildren(".ibx-sm-anchor");
+
+		if(this._anchor)
+			this._anchor.removeClass("ibx-sm-anchor");
+		this._anchor = $(el).first();
+		this._anchor.addClass("ibx-sm-anchor");
 	},
 	focused:function(el, focus)
 	{
