@@ -534,7 +534,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 
 			//focus default item...otherwise find first focusable item (ARIA needs SOMETHING to be focused on the popup)
 			var selChildren = this.selectableChildren();
-			var defItem = selChildren.filter(".ibx-focused");
+			var defItem = selChildren.filter(".ibx-sm-focused");
 			if(!defItem.length)
 			{
 				var defItem = this.element.find(options.focusDefault);
@@ -546,9 +546,9 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 		//manage focus states of children
 		if(!isTarget && ownsTarget)
 		{
-			this.selectableChildren().removeClass("ibx-focused ibx-ie-pseudo-focus");
-			var selItem = $(e.target).closest(".ibx-selectable");
-			selItem.addClass("ibx-focused").toggleClass("ibx-ie-pseudo-focus", ibxPlatformCheck.isIE);
+			this.selectableChildren().removeClass("ibx-sm-focused ibx-ie-pseudo-focus");
+			var selItem = $(e.target).closest(".ibx-sm-selectable");
+			selItem.addClass("ibx-sm-focused").toggleClass("ibx-ie-pseudo-focus", ibxPlatformCheck.isIE);
 			this.element.attr("aria-active-descendant", selItem.prop("id"));
 		}
 	},
@@ -572,7 +572,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 		if(isTarget || (!e.shiftKey && !e.ctrlKey))
 			this.deselectAll();
 
-		var selItem = $(e.target).closest(".ibx-selectable");
+		var selItem = $(e.target).closest(".ibx-sm-selectable");
 		this.toggleSelected(selItem);
 	},
 	_onKeyDown:function(e)
@@ -675,6 +675,11 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 			}
 		}
 	},
+	anchor:function(el)
+	{
+		if(el === undefined)
+			return this.selectableChildren(".ibx-sm-anchor");
+	},
 	selectableChildren:function(selector)
 	{
 		var e = this.element.dispatchEvent("ibx_selectablechildren", null, false, true);
@@ -684,20 +689,31 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 	selected:function(el, select)
 	{
 		if(select === undefined)
-			return this.selectableChildren(".ibx-selected");
+			return this.selectableChildren(".ibx-sm-selected");
 
-		var eType = "";
-		var selected = this.isSelected(el);
-		if(!selected && select)
-			eType = "ibx_selected";
+		if(select)
+		{
+			el = $(el).filter(":not(.ibx-sm-selected)");
+			var evt = this.element.dispatchEvent("ibx_selecting", el, false, true);
+			if(!evt.isDefaultPrevented())
+			{
+				el = evt.data;
+				el.addClass("ibx-sm-selected");
+			}
+		}
 		else
-		if(selected && !select)
-			eType = "ibx_deselected";
-		$(el).toggleClass("ibx-selected", select);
-		if(eType)
-			this.element.dispatchEvent(eType, el, false, false);
+		{
+			el = $(el).filter(".ibx-sm-selected");
+			var evt = this.element.dispatchEvent("ibx_deselecting", el, false, true);
+			if(!evt.isDefaultPrevented())
+			{
+				el = evt.data;
+				el.removeClass("ibx-sm-selected");
+			}
+		}
+		this.element.dispatchEvent("ibx_selchange", el, false, false);
 	},
-	isSelected:function(el){return $(el).hasClass("ibx-selected")},
+	isSelected:function(el){return $(el).hasClass("ibx-sm-selected")},
 	toggleSelected:function(el, selected)
 	{
 		selected = (selected === undefined) ? !this.isSelected(el) : selected;
@@ -718,14 +734,14 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 			var selChildren = this.selectableChildren();
 			if(focus)
 			{
-				selChildren.addClass("ibx-selectable");
-				this.element.addClass("ibx-selection-manager-focused");
+				selChildren.addClass("ibx-sm-selectable");
+				this.element.addClass("ibx-selmgr-focused");
 			}
 			else
 			{
-				var classes = "ibx-selectable ibx-ie-pseudo-focus " + ((this.options.focusResetOnBlur) ? "ibx-focused" : "");
+				var classes = "ibx-sm-selectable ibx-ie-pseudo-focus " + ((this.options.focusResetOnBlur) ? "ibx-sm-focused" : "");
 				selChildren.removeClass(classes);
-				this.element.removeClass("ibx-selection-manager-focused");
+				this.element.removeClass("ibx-selmgr-focused");
 			}
 			this._focus = focus
 		}
@@ -736,11 +752,6 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 		var options = this.options;
 		this.element.toggleClass("ibx-focus-root", options.focusRoot);
 		this.element.toggleClass("ibx-nav-key-root", options.navKeyRoot);
-		this.element.toggleClass("ibx-focus-default", options.focusDefault);
 	}
 });
-
-
-
-
 //# sourceURL=events.ibx.js
