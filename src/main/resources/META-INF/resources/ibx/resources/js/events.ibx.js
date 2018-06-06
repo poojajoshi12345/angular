@@ -540,7 +540,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 		//focus the selected item
 		if(!isTarget && ownsTarget)
 		{
-			var selItem = this.selectableItem(e.target);
+			var selItem = this.selectableChild(e.target);
 			this.focused(selItem, true);
 		}
 	},
@@ -576,6 +576,8 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 	_onKeyDown:function(e)
 	{
 		var options = this.options;
+
+		//manage circulat tabbing if desired.
 		if(options.focusRoot && e.keyCode == $.ui.keyCode.TAB)
 		{
 			var tabKids = this.selectableChildren();
@@ -601,6 +603,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 			}
 		}
 
+		//manage arrow navigation if desired.
 		if(options.navKeyRoot)
 		{
 			var selChildren = this.selectableChildren();
@@ -620,6 +623,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 			}
 		}
 
+		//manage selection, and focus jumping
 		if(e.keyCode == $.ui.keyCode.ENTER || e.keyCode == $.ui.keyCode.SPACE)
 		{
 			if(!e.shiftKey && !e.ctrlKey)
@@ -639,8 +643,14 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 		else
 		if(e.keyCode == $.ui.keyCode.ESCAPE && options.escClearSelection)
 			this.deselectAll();
+		else
+		if(e.keyCode == $.ui.keyCode.HOME)
+			this.selectableChildren().first().focus();
+		else
+		if(e.keyCode == $.ui.keyCode.END)
+			this.selectableChildren().last().focus();
 	},
-	selectableItem:function(el)
+	selectableChild:function(el)
 	{
 		return $(el).closest(".ibx-sm-selectable")[0];
 	},
