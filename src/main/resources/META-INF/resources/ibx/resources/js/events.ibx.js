@@ -515,58 +515,51 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 	{
 		this._super();
 	},
+	selectableItem:function(el)
+	{
+		return $(el).closest(".ibx-sm-selectable")[0];
+	},
 	_onFocusIn:function(e)
 	{
 		var options = this.options;
 		var isTarget = this.element.is(e.target);
-		var isRelTarget = this.element.is(e.relatedTarget);
 		var ownsTarget = $.contains(this.element[0], e.target);
-		var ownsRelTarget = $.contains(this.element[0], e.relatedTarget);
 
-		this.focus(true);
+		//make sure the manager is in the focused state.
+		this.focusMgr(true);
 
-		//do the default focusing.
+		//do the default focusing when manager is directly focused (not one of its children).
 		if(isTarget && (options.focusDefault !== false))
 		{
-			//take the element out of the tab order so shift+tab will work and not focus this container.
-			if(this.element.data("ibxFocDefSavedTabIndex") === undefined)
-				this.element.data("ibxFocDefSavedTabIndex", this.element.prop("tabindex")).prop("tabindex", -1);
-
 			//focus default item...otherwise find first focusable item (ARIA needs SOMETHING to be focused on the popup)
-			var selChildren = this.selectableChildren();
-			var defItem = selChildren.filter(".ibx-sm-focused");
+			var defItem = this.focused();
 			if(!defItem.length)
 			{
 				var defItem = this.element.find(options.focusDefault);
-				defItem = defItem.length ? defItem : selChildren.first();
+				defItem = defItem.length ? defItem : this.selectableChildren().first();
 			}
 			defItem.focus();
 		}
 
-		//manage focus states of children
+		//focus the selected item
 		if(!isTarget && ownsTarget)
 		{
-			this.selectableChildren().removeClass("ibx-sm-focused ibx-ie-pseudo-focus");
 			var selItem = $(e.target).closest(".ibx-sm-selectable");
-			selItem.addClass("ibx-sm-focused").toggleClass("ibx-ie-pseudo-focus", ibxPlatformCheck.isIE);
-			this.element.attr("aria-active-descendant", selItem.prop("id"));
+			this.focused(selItem, true);
 		}
 	},
 	_onFocusOut:function(e)
 	{
-		var options = this.options;
+		//make sure the manager is in the blurred stated when some external element is focused.
+		var isTarget = this.element.is(e.target);
 		var ownsRelTarget = $.contains(this.element[0], e.relatedTarget);
-		if(!ownsRelTarget)
-		{
-			//put this element back in the tab order...so that next tab into will will do auto-focus.
-			if(this.element.data("ibxFocDefSavedTabIndex") !== undefined)
-				this.element.prop("tabIndex", this.element.data("ibxFocDefSavedTabIndex")).removeData("ibxFocDefSavedTabIndex");
-			this.focus(false);
-		}
+		if(!isTarget && !ownsRelTarget)
+			this.focusMgr(false);
 	},
 	_onMouseDown:function(e)
 	{
-		this.focus(true);
+		this.focusMgr(true);
+
 		var options = this.options;
 		var isTarget = this.element.is(e.target);
 		if(isTarget || (!e.shiftKey && !e.ctrlKey))
@@ -580,7 +573,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 		var options = this.options;
 		if(options.focusRoot && e.keyCode == $.ui.keyCode.TAB)
 		{
-			var tabKids = this.selectableChildren(":ibxFocusable");
+			var tabKids = this.selectableChildren();
 			var target = null;
 			var firstKid = tabKids.first();
 			var lastKid = tabKids.last();
@@ -602,83 +595,19 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 				e.stopPropagation();
 			}
 		}
+
 		if(options.navKeyRoot)
 		{
-			var isNavActive = this.navKeyActive();
-			var navKids = this.navKeyChildren();
-			var active = $();
-			var current = navKids.filter(".ibx-nav-key-item-active");
-
-			//[IBX-83]
-			if(!isNavActive && this.element.is(e.target) && (e.data == "NAV_KEY_ACTIVATE" || eventMatchesShortcut(options.navKeyKeys.activate, e)))
+			var selChildren = this.selectableChildren();
+			var focusedItem
+			if(e.keyCode == $.ui.keyCode.LEFT || e.keyCode == $.ui.keyCode.UP)
 			{
-				isNavActive = true;
-				active = current.length ? current : navKids.first();
-				current = null;//[HOME-921]this allows activation to focus child, but not key events when child is already active. (think text arrow keys!)
 			}
 			else
-			if(isNavActive && !options.focusDefault && eventMatchesShortcut(options.navKeyKeys.cancel, e))//you can't escape out of a navKeyAutoFocus.
-				active = this.element;
-			else
-			if(isNavActive)
+			if(e.keyCode == $.ui.keyCode.RIGHT || e.keyCode == $.ui.keyCode.DOWN)
 			{
-				if(eventMatchesShortcut(options.navKeyKeys.first, e))
-					active = navKids.first();
-				else
-				if(eventMatchesShortcut(options.navKeyKeys.last, e))
-					active = navKids.last();
-		
-				if(!active.length && options.navKeyDir == "horizontal" || options.navKeyDir == "both")
-				{
-					if(eventMatchesShortcut(options.navKeyKeys.hprev, e))
-					{
-						var idx = navKids.index(current);
-						var prev = navKids.get(--idx)
-						active = prev ? $(prev) : navKids.last();
-					}
-					else
-					if(eventMatchesShortcut(options.navKeyKeys.hnext, e))
-					{
-						var idx = navKids.index(current);
-						var next = navKids.get(++idx);
-						active = next ? $(next) : navKids.first();
-					}
-				}
-
-				if(!active.length && options.navKeyDir == "vertical" || options.navKeyDir == "both")
-				{
-					if(eventMatchesShortcut(options.navKeyKeys.vprev, e))
-					{
-						var idx = navKids.index(current);
-						var prev = navKids.get(--idx);
-						active = prev ? $(prev) : navKids.last();
-					}
-					else
-					if(eventMatchesShortcut(options.navKeyKeys.vnext, e))
-					{
-						var idx = navKids.index(current);
-						var next = navKids.get(++idx);
-						active = next ? $(next) : navKids.first();
-					}
-				}
-			}
-
-			if(isNavActive && !active.is(current) && active.length)
-			{
-				var evt = $(active).dispatchEvent("ibx_beforenavkeyfocus", null, true, true, current);
-				if(!evt.isDefaultPrevented())
-				{
-					active[0].focus();
-					e.preventDefault();
-					e.stopPropagation();
-				}
 			}
 		}
-	},
-	anchor:function(el)
-	{
-		if(el === undefined)
-			return this.selectableChildren(".ibx-sm-anchor");
 	},
 	selectableChildren:function(selector)
 	{
@@ -727,21 +656,50 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 	{
 		this.selected(this.selected(), false);
 	},
-	focus:function(focus)
+	anchor:function(el)
+	{
+		if(el === undefined)
+			return this.selectableChildren(".ibx-sm-anchor");
+	},
+	focused:function(el, focus)
+	{
+		if(focus === undefined)
+			return this.selectableChildren(".ibx-sm-focused");
+
+		el = $(el);
+		this.selectableChildren(".ibx-sm-focused").removeClass("ibx-sm-focused ibx-ie-pseudo-focus");
+		if(focus)
+		{
+			el.first().addClass("ibx-sm-focused " + (ibxPlatformCheck.isIE ? "ibx-ie-pseudo-focus" : ""));
+			this.element.attr("aria-active-descendant", el.prop("id"));
+		}
+		else
+			this.element.attr("aria-active-descendant", el.prop("id"));
+	},
+	focusMgr:function(focus)
 	{
 		if(this._focus != focus)
 		{
+			var options = this.options;
 			var selChildren = this.selectableChildren();
 			if(focus)
 			{
 				selChildren.addClass("ibx-sm-selectable");
 				this.element.addClass("ibx-selmgr-focused");
+
+				//take the element out of the tab order so shift+tab will work and not focus this container.
+				if(options.focusDefault)
+					this.element.data("ibxFocDefSavedTabIndex", this.element.prop("tabindex")).prop("tabindex", -1);
 			}
 			else
 			{
-				var classes = "ibx-sm-selectable ibx-ie-pseudo-focus " + ((this.options.focusResetOnBlur) ? "ibx-sm-focused" : "");
-				selChildren.removeClass(classes);
+				selChildren.removeClass("ibx-sm-selectable");
+				if(this.options.focusResetOnBlur)
+					this.focused(null, false);
 				this.element.removeClass("ibx-selmgr-focused");
+
+				//put this element back in the tab order...so that next tab into will will do auto-focus.
+				this.element.prop("tabIndex", this.element.data("ibxFocDefSavedTabIndex")).removeData("ibxFocDefSavedTabIndex");
 			}
 			this._focus = focus
 		}
