@@ -515,10 +515,6 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 	{
 		this._super();
 	},
-	selectableItem:function(el)
-	{
-		return $(el).closest(".ibx-sm-selectable")[0];
-	},
 	_onFocusIn:function(e)
 	{
 		var options = this.options;
@@ -533,7 +529,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 		{
 			//focus default item...otherwise find first focusable item (ARIA needs SOMETHING to be focused on the popup)
 			var defItem = this.focused();
-			if(!defItem.length)
+			if(!defItem)
 			{
 				var defItem = this.element.find(options.focusDefault);
 				defItem = defItem.length ? defItem : this.selectableChildren().first();
@@ -544,7 +540,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 		//focus the selected item
 		if(!isTarget && ownsTarget)
 		{
-			var selItem = $(e.target).closest(".ibx-sm-selectable");
+			var selItem = this.selectableItem(e.target);
 			this.focused(selItem, true);
 		}
 	},
@@ -565,7 +561,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 		if(isTarget || (!e.shiftKey && !e.ctrlKey))
 			this.deselectAll();
 
-		var selItem = $(e.target).closest(".ibx-sm-selectable");
+		var selItem = this.selectableItem(e.target);
 		this.toggleSelected(selItem);
 	},
 	_onKeyDown:function(e)
@@ -608,6 +604,10 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 			{
 			}
 		}
+	},
+	selectableItem:function(el)
+	{
+		return $(el).closest(".ibx-sm-selectable")[0];
 	},
 	selectableChildren:function(selector)
 	{
@@ -664,7 +664,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 	focused:function(el, focus)
 	{
 		if(focus === undefined)
-			return this.selectableChildren(".ibx-sm-focused");
+			return this.selectableChildren(".ibx-sm-focused")[0];
 
 		el = $(el);
 		this.selectableChildren(".ibx-sm-focused").removeClass("ibx-sm-focused ibx-ie-pseudo-focus");
