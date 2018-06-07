@@ -609,21 +609,21 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 		{
 			var selChildren = this.selectableChildren();
 			var focusedItem = this.focused();
-			var keyCodes = (options.navKeyDir == "horizontal") ? [$.ui.keyCodes.LEFT, $.ui.keyCodes.RIGHT] : [$.ui.keyCodes.DOWN, $.ui.keyCodes.DOWN];
+			var idxFocused = selChildren.index(focusedItem);
 			var goPrev = (e.keyCode == $.ui.keyCode.LEFT || e.keyCode == $.ui.keyCode.UP);
 			var goNext = (e.keyCode == $.ui.keyCode.RIGHT || e.keyCode == $.ui.keyCode.DOWN);
+			var vert = (options.navKeyDir == "horizontal" || options.navKeyDir == "both") && (e.keyCode == $.ui.keyCode.LEFT || e.keyCode == $.ui.keyCode.RIGHT);
+			var horz = (options.navKeyDir == "vertical" || options.navKeyDir == "both") && (e.keyCode == $.ui.keyCode.UP || e.keyCode == $.ui.keyCode.DOWN);
 
-			if(e.keyCode == $.ui.keyCode.LEFT || e.keyCode == $.ui.keyCode.UP)
+			if(goPrev && (vert || horz))
 			{
-				var idxFocus = selChildren.index(focusedItem) - 1;
-				var focusItem = (idxFocus < 0) ? selChildren.last() : selChildren[idxFocus];
+				var focusItem = (idxFocused > 0) ? selChildren[idxFocused - 1] : selChildren.last();
 				focusItem.focus();
 			}
 			else
-			if(e.keyCode == $.ui.keyCode.RIGHT || e.keyCode == $.ui.keyCode.DOWN)
+			if(goNext && vert || horz)
 			{
-				var idxFocus = selChildren.index(focusedItem) + 1;
-				var focusItem = (idxFocus >= selChildren.length) ? selChildren.first() : selChildren[idxFocus];
+				var focusItem = (idxFocused < selChildren.length-1) ? selChildren[idxFocused + 1] : selChildren.first();
 				focusItem.focus();
 			}
 		}
