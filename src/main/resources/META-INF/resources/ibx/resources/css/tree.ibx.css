@@ -30,12 +30,12 @@
 	background-color:#eee;
 }
 
-.tnode-selected > .tnode-label
+.tnode-label.ibx-sm-selected
 {
 	background-color:#ccc;
 }
 
-.tnode-selection-anchor > .tnode-label
+.tnode-label.ibx-sm-anchor
 {
 }
 

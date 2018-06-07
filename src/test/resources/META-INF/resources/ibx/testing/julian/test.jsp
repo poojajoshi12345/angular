@@ -101,6 +101,8 @@
 							return;
 						var tNode = $(this);
 						var xNode = tNode.data("xNode");
+						if(tNode.ibxWidget("hasChildren"))
+							return;
 
 						tNode.ibxWidget("remove");
 						$(xNode).children().each(function(idx, el)
@@ -144,6 +146,6 @@
 		<div class="btnLoadFlat" data-ibx-type="ibxButton">Load Flat</div>
 		<div class="btnLoadHierarchical" data-ibx-type="ibxButton">Load Hierarchical</div>
 		<div class="btnExpandAll" data-ibx-type="ibxButton">Expand All Collapsed</div>
-		<div class="test-tree" data-ibx-type="ibxTree"></div>
+		<div tabindex="0" class="test-tree" data-ibx-type="ibxTree"></div>
 	</body>
 </html>
