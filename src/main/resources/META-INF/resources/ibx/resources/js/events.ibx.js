@@ -494,8 +494,8 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 {
 	options:
 	{
-		"multiSelect":false,
-		"escClearSelection":true,
+		"type":-1,							//-1 - navigation only, 0 - single selection, 1 - multiple selection
+		"escClearSelection":true,			//clear the selection on the escape key
 		"focusRoot":false,					//keep focus circular within this element
 		"focusDefault":false,				//focus the first item in root. (can be a select pattern).
 		"focusResetOnBlur":true,			//when widget loses focus, reset the current active navKey child.
@@ -506,6 +506,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 	_create:function()
 	{
 		this._super();
+		this.element.data("ibiIbxSelectionManager", this);//plymorphism
 		this.element[0].addEventListener("focusin", this._onFocusIn.bind(this), true);
 		this.element[0].addEventListener("focusout", this._onFocusOut.bind(this), true);
 		this.element[0].addEventListener("mousedown", this._onMouseDown.bind(this), true);
@@ -608,6 +609,10 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 		{
 			var selChildren = this.selectableChildren();
 			var focusedItem = this.focused();
+			var keyCodes = (options.navKeyDir == "horizontal") ? [$.ui.keyCodes.LEFT, $.ui.keyCodes.RIGHT] : [$.ui.keyCodes.DOWN, $.ui.keyCodes.DOWN];
+			var goPrev = (e.keyCode == $.ui.keyCode.LEFT || e.keyCode == $.ui.keyCode.UP);
+			var goNext = (e.keyCode == $.ui.keyCode.RIGHT || e.keyCode == $.ui.keyCode.DOWN);
+
 			if(e.keyCode == $.ui.keyCode.LEFT || e.keyCode == $.ui.keyCode.UP)
 			{
 				var idxFocus = selChildren.index(focusedItem) - 1;
@@ -657,8 +662,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 	selectableChildren:function(selector)
 	{
 		var e = this.element.dispatchEvent("ibx_selectablechildren", null, false, true);
-		var childSelector = sformat(":ibxFocusable({1}, {2})", this.options.navKeyRoot ? -1 : 0, this.options.focusRoot ? "Infinity" : -1);
-		var children = e.isDefaultPrevented() ? e.data : this.element.children(childSelector);
+		var children = e.isDefaultPrevented() ? $(e.data) : this.element.children("[tabindex]");
 		return selector ? children.filter(selector) : children;
 	},
 	selected:function(el, select, anchor)
@@ -671,7 +675,19 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 
 		if(select)
 		{
-			el = $(el).filter(":not(.ibx-sm-selected)");
+			//handle selection types...
+			var options = this.options;
+			if(options.type == -1)//none
+				el = $();
+			else
+			if(options.type == 0)//single
+			{
+				this.deselectAll();
+				el = $(el).first(":not(.ibx-sm-selected)");
+			}
+			else//multi
+				el = $(el).filter(":not(.ibx-sm-selected)");
+
 			var evt = this.element.dispatchEvent("ibx_selecting", el, false, true);
 			if(!evt.isDefaultPrevented())
 			{
@@ -771,4 +787,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 		this.element.toggleClass("ibx-nav-key-root", options.navKeyRoot);
 	}
 });
+$.widget("ibi.ibxSelMgrNavigator", $.ibi.ibxSelectionManager, {options:{"type":-1}});
+$.widget("ibi.ibxSelMgrSingle", $.ibi.ibxSelectionManager, {options:{"type":0}});
+$.widget("ibi.ibxSelMgrMulti", $.ibi.ibxSelectionManager, {options:{"type":1}});
 //# sourceURL=events.ibx.js

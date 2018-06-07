@@ -12,7 +12,7 @@
 		<script type="text/javascript">
 			ibx(function()
 			{
-				var parent = $(".test-parent").ibxSelectionManager({"multiSelect":true, "navKeyRoot": true, "focusRoot":true, "focusDefault":true, "focusResetOnBlur":false});
+				var parent = $(".test-parent").ibxSelMgrSingle({"navKeyRoot": true, "focusRoot":true, "focusDefault":true, "focusResetOnBlur":false});
 				parent.on("ibx_selecting ibx_deselecting ibx_selchange", function(e)
 				{
 					e = e.originalEvent;
@@ -20,11 +20,10 @@
 					//console.log(e.type, data);
 				});
 
-				for(var i = 0; i < 10; ++i)
+				for(var i = 0; i < 1000; ++i)
 				{
-					var child = $(sformat("<div class='child child{1}'>", i)).ibxAriaId();
+					var child = $(sformat("<div tabindex='0' class='child child{1}'>", i)).ibxAriaId();
 					child.addClass(i%2 ? "even" : "odd");
-					child.prop("tabindex", (i%2 ? -1 : 0));
 					parent.append(child);
 				}
 			}, true);
