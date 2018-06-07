@@ -36,14 +36,19 @@
 							targetNode.ibxWidget("add", treeNode);
 						}
 					});
-				}).on("ibx_nodeselect", function(e)
+				}).on("ibx_selchange", function(e)
 				{
+					e = e.originalEvent;
+					var selInfo = e.data;
+					if(!selInfo.selected)
+						return; 
+
+					var targetNode = selInfo.items.data("ibxTreeNode");
 					var folderList = $(".folder-list");
 					var fileList = $(".file-list");
 					folderList.ibxWidget("remove");
 					fileList.ibxWidget("remove");
 
-					var targetNode = $(e.target);
 					var xItem = targetNode.data("xItem");
 					var xItems = xItem.children("children").children("item");
 					xItems.each(function(idx, el)
@@ -94,7 +99,7 @@
 								var rootNodes = tree.ibxWidget("children");
 								var foundNode = $(searchTree(rootNodes, itemPath));
 								if(foundNode.length)
-									foundNode.ibxTreeNode("selected", true);
+									tree.ibxSelectionManager("selected", foundNode, true);
 							}
 							else
 							{
@@ -158,7 +163,7 @@
 					"expanded":expanded,
 					"labelOptions":{"text": xItem.attr("description") || xItem.attr("name"), "glyph": container ? "" : "insert_drive_file", "glyphClasses": container ? "" : "material-icons"}
 				}
-				var node = $("<div>").ibxTreeNode(options).addClass(container ? "folder" : "file").addClass(itemClass);
+				var node = $("<div class='ibfs-tree-node'>").ibxTreeNode(options).addClass(container ? "folder" : "file").addClass(itemClass);
 				node.attr("data-ibfs-path", xItem.attr("fullPath")).data("xItem", xItem);
 				return node;
 			};
