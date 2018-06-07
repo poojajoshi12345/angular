@@ -563,7 +563,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 			this.deselectAll();
 
 		var selChildren = this.selectableChildren();
-		if(e.shiftKey)
+		if(e.shiftKey && options.type == 1)
 		{
 			var idxAnchor = selChildren.index(this._anchor[0]);
 			var idxSel = selChildren.index(e.target);
@@ -577,25 +577,28 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 	_onKeyDown:function(e)
 	{
 		var options = this.options;
+		if(!options.focusRoot && !options.navKeyRoot)
+			return;
+		var selChildren = this.selectableChildren();
 
 		//manage circulat tabbing if desired.
 		if(options.focusRoot && e.keyCode == $.ui.keyCode.TAB)
 		{
-			var tabKids = this.selectableChildren();
+			var selChildren = this.selectableChildren();
 			var target = null;
-			var firstKid = tabKids.first();
-			var lastKid = tabKids.last();
+			var firstKid = selChildren.first();
+			var lastKid = selChildren.last();
 			if(firstKid.length && lastKid.length)
 			{
 				if((firstKid.is(e.target) || $.contains(firstKid[0], e.target)) && e.shiftKey)
-					target = tabKids.last();
+					target = selChildren.last();
 				else
 				if((lastKid.is(e.target) || $.contains(lastKid[0], e.target)) && !e.shiftKey)
-					target = tabKids.first();
+					target = selChildren.first();
 			}
 
 			//target means first/last item and need to loop...or no kids, so do nothing.
-			if(target || !tabKids.length)
+			if(target || !selChildren.length)
 			{
 				target = $(target);
 				target.focus();
@@ -607,7 +610,6 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 		//manage arrow navigation if desired.
 		if(options.navKeyRoot)
 		{
-			var selChildren = this.selectableChildren();
 			var focusedItem = this.focused();
 			var idxFocused = selChildren.index(focusedItem);
 			var goPrev = (e.keyCode == $.ui.keyCode.LEFT || e.keyCode == $.ui.keyCode.UP);
@@ -646,14 +648,14 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 				this.toggleSelected(this.focused());
 		}
 		else
-		if(e.keyCode == $.ui.keyCode.ESCAPE && options.escClearSelection)
-			this.deselectAll();
-		else
 		if(e.keyCode == $.ui.keyCode.HOME)
-			this.selectableChildren().first().focus();
+			selChildren.first().focus();
 		else
 		if(e.keyCode == $.ui.keyCode.END)
-			this.selectableChildren().last().focus();
+			selChildren.last().focus();
+		else
+		if(e.keyCode == $.ui.keyCode.ESCAPE && options.escClearSelection)
+			this.deselectAll();
 	},
 	selectableChild:function(el)
 	{
@@ -661,10 +663,13 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 	},
 	selectableChildren:function(selector)
 	{
-		var e = this.element.dispatchEvent("ibx_selectablechildren", null, false, true);
-		var children = e.isDefaultPrevented() ? $(e.data) : this.element.children("[tabindex]");
+		var options = this.options;
+		var e = this.element.dispatchEvent("ibx_selchildren", null, false, true);
+		var pattern = sformat(":ibxFocusable({1}, {2})", options.navKeyRoot ? -1 : 0, options.focusRoot ? Infinity : -1);
+		var children = e.isDefaultPrevented() ? $(e.data) : this.element.children(pattern);
 		return selector ? children.filter(selector) : children;
 	},
+	isSelected:function(el){return $(el).hasClass("ibx-sm-selected")},
 	selected:function(el, select, anchor)
 	{
 		if(select === undefined)
@@ -711,7 +716,6 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 		}
 		this.element.dispatchEvent("ibx_selchange", el, false, false);
 	},
-	isSelected:function(el){return $(el).hasClass("ibx-sm-selected")},
 	toggleSelected:function(el, selected, anchor)
 	{
 		selected = (selected === undefined) ? !this.isSelected(el) : selected;

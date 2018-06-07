@@ -12,7 +12,7 @@
 		<script type="text/javascript">
 			ibx(function()
 			{
-				var parent = $(".test-parent").ibxSelMgrSingle({"navKeyRoot": true, "focusRoot":true, "focusDefault":true, "focusResetOnBlur":false});
+				var parent = $(".test-parent").ibxSelMgrMulti({"navKeyRoot": true, "focusRoot":true, "focusDefault":true, "focusResetOnBlur":false});
 				parent.on("ibx_selecting ibx_deselecting ibx_selchange", function(e)
 				{
 					e = e.originalEvent;
