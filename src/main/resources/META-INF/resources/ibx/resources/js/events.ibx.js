@@ -657,7 +657,8 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 	selectableChildren:function(selector)
 	{
 		var e = this.element.dispatchEvent("ibx_selectablechildren", null, false, true);
-		var children = e.isDefaultPrevented() ? e.data : this.element.children("[tabindex]");
+		var childSelector = sformat(":ibxFocusable({1}, {2})", this.options.navKeyRoot ? -1 : 0, this.options.focusRoot ? "Infinity" : -1);
+		var children = e.isDefaultPrevented() ? e.data : this.element.children(childSelector);
 		return selector ? children.filter(selector) : children;
 	},
 	selected:function(el, select, anchor)

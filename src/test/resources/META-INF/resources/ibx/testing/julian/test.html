@@ -20,10 +20,11 @@
 					//console.log(e.type, data);
 				});
 
-				for(var i = 0; i < 1000; ++i)
+				for(var i = 0; i < 10; ++i)
 				{
-					var child = $(sformat("<div tabindex='0' class='child child{1}'>", i)).ibxAriaId();
+					var child = $(sformat("<div class='child child{1}'>", i)).ibxAriaId();
 					child.addClass(i%2 ? "even" : "odd");
+					child.prop("tabindex", (i%2 ? -1 : 0));
 					parent.append(child);
 				}
 			}, true);
