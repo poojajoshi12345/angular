@@ -501,6 +501,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 		"focusResetOnBlur":true,			//when widget loses focus, reset the current active navKey child.
 		"navKeyRoot":false,					//arrow keys will move you circularly through the items.
 		"navKeyDir":"both",					//horizontal = left/right, vertical = up/down, or both
+		"navKeys":[$.ui.keyCode.LEFT, $.ui.keyCode.RIGHT, $.ui.keyCode.UP, $.ui.keyCode.DOWN, $.ui.keyCode.ESCAPE, $.ui.keyCode.ENTER, $.ui.keyCode.SPACE, $.ui.keyCode.HOME, $.ui.keyCode.END],
 	},
 	_widgetClass:"ibx-selection-manager",
 	_create:function()
@@ -509,8 +510,8 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 		this.element.data("ibiIbxSelectionManager", this);//plymorphism
 		this.element[0].addEventListener("focusin", this._onFocusIn.bind(this), true);
 		this.element[0].addEventListener("focusout", this._onFocusOut.bind(this), true);
-		this.element[0].addEventListener("mousedown", this._onMouseDown.bind(this), true);
-		this.element[0].addEventListener("keydown", this._onKeyDown.bind(this), true);
+		this.element[0].addEventListener("mousedown", this._onMouseDown.bind(this), false);
+		this.element[0].addEventListener("keydown", this._onKeyDown.bind(this), false);
 	},
 	_destroy:function()
 	{
@@ -540,10 +541,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 
 		//focus the selected item
 		if(!isTarget && ownsTarget)
-		{
-			var selItem = this.selectableChild(e.target);
-			this.focused(selItem, true);
-		}
+			this.focused(e.target, true);
 	},
 	_onFocusOut:function(e)
 	{
@@ -563,16 +561,18 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 			this.deselectAll();
 
 		var selChildren = this.selectableChildren();
+		var selTarget = this.selectableChild(e.target);
+
 		if(e.shiftKey && options.type == 1)
 		{
 			var idxAnchor = selChildren.index(this._anchor[0]);
-			var idxSel = selChildren.index(e.target);
+			var idxSel = selChildren.index(selTarget);
 			var idxStart = Math.min(idxAnchor, idxSel);
 			var idxEnd = Math.max(idxAnchor, idxSel);
 			this.toggleSelected(selChildren.slice(idxStart, idxEnd + 1), this.isSelected(this._anchor), false);
 		}
 		else
-			this.toggleSelected(selChildren.filter(e.target));
+			this.toggleSelected(selChildren.filter(selTarget));
 	},
 	_onKeyDown:function(e)
 	{
@@ -625,7 +625,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 			else
 			if(goNext && vert || horz)
 			{
-				var focusItem = (idxFocused < selChildren.length-1) ? selChildren[idxFocused + 1] : selChildren.first();
+				var focusItem = (idxFocused < selChildren.length-1) ? selChildren[idxFocused + 1] : selChildren.first()[0];
 				focusItem.focus();
 			}
 		}
@@ -656,28 +656,35 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 		else
 		if(e.keyCode == $.ui.keyCode.ESCAPE && options.escClearSelection)
 			this.deselectAll();
+
+		if(!-1 != options.navKeys.indexOf(e.keyCode))
+		{
+			//e.preventDefault();
+			//e.stopPropagation();
+		}
 	},
 	selectableChild:function(el)
 	{
-		return $(el).closest(".ibx-sm-selectable")[0];
+		return $(el).closest(".ibx-selectable")[0];
 	},
 	selectableChildren:function(selector)
 	{
 		var options = this.options;
-		var e = this.element.dispatchEvent("ibx_selchildren", null, false, true);
+		var e = this.element.dispatchEvent("ibx_selectablechildren", null, false, true);
 		var pattern = sformat(":ibxFocusable({1}, {2})", options.navKeyRoot ? -1 : 0, options.focusRoot ? Infinity : -1);
 		var children = e.isDefaultPrevented() ? $(e.data) : this.element.children(pattern);
-		return selector ? children.filter(selector) : children;
+		children = selector ? children.filter(selector) : children;
+		children.addClass("ibx-selectable");
+		return children;
 	},
 	isSelected:function(el){return $(el).hasClass("ibx-sm-selected")},
 	selected:function(el, select, anchor)
 	{
-		if(select === undefined)
+		if(el === undefined)
 			return this.selectableChildren(".ibx-sm-selected");
 
 		//by default set the anchor item
 		anchor = (anchor === undefined) ? true : false;
-
 		if(select)
 		{
 			//handle selection types...
@@ -742,14 +749,15 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 	},
 	focused:function(el, focus)
 	{
-		if(focus === undefined)
+		if(el === undefined)
 			return this.selectableChildren(".ibx-sm-focused")[0];
 
-		el = $(el);
+		el = $(this.selectableChild(el));
+
 		this.selectableChildren(".ibx-sm-focused").removeClass("ibx-sm-focused ibx-ie-pseudo-focus");
-		if(focus)
+		if(el.length && focus)
 		{
-			el.first().addClass("ibx-sm-focused " + (ibxPlatformCheck.isIE ? "ibx-ie-pseudo-focus" : ""));
+			el.addClass("ibx-sm-focused " + (ibxPlatformCheck.isIE ? "ibx-ie-pseudo-focus" : ""));
 			this.element.attr("aria-active-descendant", el.prop("id"));
 		}
 		else
@@ -763,7 +771,6 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 			var selChildren = this.selectableChildren();
 			if(focus)
 			{
-				selChildren.addClass("ibx-sm-selectable");
 				this.element.addClass("ibx-selmgr-focused");
 
 				//take the element out of the tab order so shift+tab will work and not focus this container.
@@ -772,7 +779,6 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 			}
 			else
 			{
-				selChildren.removeClass("ibx-sm-selectable");
 				if(this.options.focusResetOnBlur)
 					this.focused(null, false);
 				this.element.removeClass("ibx-selmgr-focused");
