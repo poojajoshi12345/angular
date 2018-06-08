@@ -39,11 +39,10 @@
 				}).on("ibx_selchange", function(e)
 				{
 					e = e.originalEvent;
-					var selInfo = e.data;
-					if(!selInfo.selected)
-						return; 
+					var targetNode = e.data.selected ? e.data.items : null;
+					if(!targetNode || !targetNode.length)
+						return;
 
-					var targetNode = selInfo.items.data("ibxTreeNode");
 					var folderList = $(".folder-list");
 					var fileList = $(".file-list");
 					folderList.ibxWidget("remove");
