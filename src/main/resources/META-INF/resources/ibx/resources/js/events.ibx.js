@@ -615,18 +615,17 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 			var goNext = (e.keyCode == $.ui.keyCode.RIGHT || e.keyCode == $.ui.keyCode.DOWN);
 			var vert = (options.navKeyDir == "horizontal" || options.navKeyDir == "both") && (e.keyCode == $.ui.keyCode.LEFT || e.keyCode == $.ui.keyCode.RIGHT);
 			var horz = (options.navKeyDir == "vertical" || options.navKeyDir == "both") && (e.keyCode == $.ui.keyCode.UP || e.keyCode == $.ui.keyCode.DOWN);
+			var focusItem = $();
 
+			if(this.element.is(document.activeElement))
+				focusItem = (focusedItem && focusedItem.length) ? focusedItem : selChildren.first();
+			else
 			if(goPrev && (vert || horz))
-			{
-				var focusItem = (idxFocused > 0) ? selChildren[idxFocused - 1] : selChildren.last();
-				focusItem.focus();
-			}
+				focusItem = (idxFocused > 0) ? selChildren[idxFocused - 1] : selChildren.last();
 			else
 			if(goNext && vert || horz)
-			{
-				var focusItem = (idxFocused < selChildren.length-1) ? selChildren[idxFocused + 1] : selChildren.first()[0];
-				focusItem.focus();
-			}
+				focusItem = (idxFocused < selChildren.length-1) ? selChildren[idxFocused + 1] : selChildren.first()[0];
+			focusItem.focus();
 		}
 
 		//manage selection, and focus jumping
@@ -757,12 +756,11 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 			return this.mapFromSelectable(this._anchor);
 
 		//make sure the elements passed in are the actual selectable elements
-		el = this.mapToSelectable(el);
+		el = this.mapToSelectable(el)[0];
 
 		if(this._anchor)
 			this._anchor.removeClass("ibx-sm-anchor");
-		this._anchor = $(el).first();
-		this._anchor.addClass("ibx-sm-anchor");
+		this._anchor = $(el).first().addClass("ibx-sm-anchor");
 		var evt = this._dispatchEvent("ibx_anchored", {"items":el}, true, false);
 	},
 	_focused:null,
@@ -776,8 +774,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 
 		if(this._focused)
 			this._focused.removeClass("ibx-sm-focused ibx-ie-pseudo-focus");
-		this._focused = $(el).first();
-		this._focused.addClass("ibx-sm-focused " + (ibxPlatformCheck.isIE ? "ibx-ie-pseudo-focus" : ""));
+		this._focused = $(el).first().addClass("ibx-sm-focused " + (ibxPlatformCheck.isIE ? "ibx-ie-pseudo-focus" : ""));
 		this._focused.length ? this.element.attr("aria-active-descendant", el.prop("id")) : this.element.removeAttr("aria-active-descendant");
 		var evt = this._dispatchEvent("ibx_focused", {"items":el}, true, false);
 	},

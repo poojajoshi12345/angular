@@ -12,12 +12,19 @@
 		<script type="text/javascript">
 			ibx(function()
 			{
-				var parent = $(".test-parent").ibxSelMgrMulti({"navKeyRoot": true, "focusRoot":true, "focusDefault":true, "focusResetOnBlur":false});
-				parent.on("ibx_selecting ibx_deselecting ibx_selchange", function(e)
+				var parent = $(".test-parent").ibxSelectionManager(
+				{
+					"type":"multi",
+					"navKeyRoot": true,
+					"focusRoot":true,
+					"focusDefault":true,
+					"focusResetOnBlur":false
+				});
+				parent.on("ibx_selchange", function(e)
 				{
 					e = e.originalEvent;
 					var data = e.data;
-					//console.log(e.type, data);
+					console.log(e.type, data);
 				});
 
 				for(var i = 0; i < 10; ++i)
