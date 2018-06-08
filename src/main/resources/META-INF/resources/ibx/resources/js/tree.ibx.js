@@ -9,8 +9,8 @@ $.widget("ibi.ibxTreeSelectionManager", $.ibi.ibxSelectionManager,
 		"navKeyRoot":true,
 		"navKeyDir":"vertical",
 		"focusDefault":true,
-		"escClearSelection":true,
 		"focusResetOnBlur":false,
+		"escClearSelection":true,
 	},
 	selectableChildren:function(selector)
 	{
@@ -250,6 +250,7 @@ $.widget("ibi.ibxTreeNode", $.ibi.ibxVBox,
 		else
 		if(eType == "dblclick")
 			this.toggleExpanded();
+		e.stopPropagation();
 	},
 	_onBtnExpandClick:function(e)
 	{
