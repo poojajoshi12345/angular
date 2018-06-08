@@ -701,9 +701,6 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 		{
 			//handle selection types...
 			var options = this.options;
-			if(options.type == "nav")//no selection
-				el = $();
-			else
 			if(options.type == "single")//single selection
 			{
 				this.deselectAll();
@@ -712,6 +709,8 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 			else//multi
 			if(options.type == "multi")//multiple selection
 				el = $(el).filter(":not(.ibx-sm-selected)");
+			else
+				el = $();//default just nav, no selection.
 
 			var evt = this._dispatchEvent("ibx_beforeselchange", {"selected":select, "items":el}, false, true);
 			if(!evt.isDefaultPrevented())
