@@ -132,7 +132,7 @@
 				$(".btn-single-click-expand").on("ibx_change", function(e)
 				{
 					var checked = $(e.target).ibxWidget("checked");
-					$(".test-tree .ibx-tree-node").ibxWidget("option", "singleClickExpand", checked, false);
+					$(".test-tree").ibxWidget("option", "singleClickExpand", checked);
 				});
 				$(".btn-expand-all").on("click", function(e)
 				{

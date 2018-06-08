@@ -39,6 +39,7 @@ $.widget("ibi.ibxTree", $.ibi.ibxVBox,
 	{
 		"selectionOptions":{},
 		"showRootNodes":true,
+		"singleClickExpand":false,
 		"inline":true,
 		"align":"stretch",
 		"aria":
@@ -51,8 +52,7 @@ $.widget("ibi.ibxTree", $.ibi.ibxVBox,
 	_create:function()
 	{
 		this._super();
-		var nodeEvents = "keydown keyup mousedown dblclick ibx_beforeexpand ibx_expand ibx_beforecollapse ibx_collapse ibx_selected";
-		this.element.on(nodeEvents, this._onNodeEvent.bind(this));
+		this.element.on("click dblclick", this._onNodeEvent.bind(this));
 		this.element.ibxMutationObserver({"listen":true, "subtree":true}).on("ibx_nodemutated", this._onChildrenChange.bind(this));
 		this.element.ibxTreeSelectionManager();
 	},
@@ -87,18 +87,6 @@ $.widget("ibi.ibxTree", $.ibi.ibxVBox,
 		var anchor = this.treeNodes(".tnode-anchor");
 		return anchor[0] || null;
 	},
-	_onNodeClickEvent:function(e)
-	{
-		if(!$(e.target).closest(".ibx-tree-node").is(this.element))
-			return;
-
-		var singleClickExpand = this.options.singleClickExpand;
-		if(e.type == "dblclick" && !singleClickExpand)
-			this.toggleExpanded();
-		else
-		if(e.type == "mousedown" && this.options.singleClickExpand)
-			this.toggleExpanded();
-	},
 	_onNodeEvent:function(e)
 	{
 		var targetNode = $(e.target).closest(".ibx-tree-node");
@@ -113,6 +101,12 @@ $.widget("ibi.ibxTree", $.ibi.ibxVBox,
 			var selNodes = targetNode.ibxTreeNode("children").find(".ibx-sm-selected");
 			this.element.ibxSelectionManager("selected", selNodes, false);
 		}
+		else
+		if(eType == "click" && options.singleClickExpand)
+			targetNode.ibxTreeNode("toggleExpanded");
+		else
+		if(eType == "dblclick")
+			targetNode.ibxTreeNode("toggleExpanded");
 	},
 	refresh:function(withChildren)
 	{
@@ -142,7 +136,6 @@ $.widget("ibi.ibxTreeNode", $.ibi.ibxVBox,
 		"labelOptions":{},
 		"btnCollapsed":"tnode-btn-collapsed",
 		"btnExpanded":"tnode-btn-expanded",
-		"singleClickExpand":false,
 		"expanded":false,
 		"container":false,
 		"indent":null, //can override the default indent for this node
@@ -169,7 +162,7 @@ $.widget("ibi.ibxTreeNode", $.ibi.ibxVBox,
 	{
 		var options = this.options;
 		this._super();
-		this.element.on("keydown", this._onNodeKeyEvent.bind(this)).on("mousedown click dblclick", this._onNodeMouseEvent.bind(this));
+		this.element.on("keydown", this._onNodeKeyEvent.bind(this));
 		this.nodeLabel = $("<div tabindex='-1' class='tnode-label'>").ibxLabel().appendTo(this.element).data("ibxTreeNode", this.element);
 		options.labelOptions.text = options.labelOptions.text || this.element.textNodes().remove().text().replace(/^\s*|\s*$/g, "");
 
@@ -241,18 +234,6 @@ $.widget("ibi.ibxTreeNode", $.ibi.ibxVBox,
 				this.toggleExpanded(false);
 			else
 				$(this.parentNode()).children(".tnode-label").focus();
-			e.stopPropagation();
-		}
-	},
-	_onNodeMouseEvent:function(e)
-	{
-		var eType = e.type;
-		if(eType == "click" && this.options.singleClickExpand)
-			this.toggleExpanded();
-		else
-		if(eType == "dblclick")
-		{
-			this.toggleExpanded();
 			e.stopPropagation();
 		}
 	},
