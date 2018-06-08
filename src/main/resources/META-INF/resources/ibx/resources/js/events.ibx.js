@@ -494,7 +494,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 {
 	options:
 	{
-		"type":-1,							//-1 - navigation only, 0 - single selection, 1 - multiple selection
+		"type":-1,							//0 - navigation only, -1 - single selection, 1 - multiple selection
 		"escClearSelection":true,			//clear the selection on the escape key
 		"focusRoot":false,					//keep focus circular within this element
 		"focusDefault":false,				//focus the first item in root. (can be a select pattern).
@@ -516,12 +516,6 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 	_destroy:function()
 	{
 		this._super();
-	},
-	preDispacthEvent:function(eventInfo){return eventInfo;},
-	_dispatchEvent:function(eType, data, canBubble, cancelable, relatedTarget)
-	{
-		var parms = this.preDispacthEvent({"eType":eType, "data":data, "canBubble":canBubble, "cancelable":cancelable, "relatedTarget":relatedTarget});
-		return this.element.dispatchEvent(parms.eType, parms.data, parms.canBubble, parms.cancelable, parms.relatedTarget);
 	},
 	_onFocusIn:function(e)
 	{
@@ -563,11 +557,10 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 
 		var options = this.options;
 		var isTarget = this.element.is(e.target);
-		if(isTarget || (!e.shiftKey && !e.ctrlKey))
+		if(isTarget || ((options.type == 1) && !e.shiftKey && !e.ctrlKey))
 			this.deselectAll();
 
 		var selTarget = this.mapToSelectable(e.target);
-
 		if(e.shiftKey && options.type == 1)
 		{
 			var selChildren = this.selectableChildren();
@@ -639,7 +632,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 		//manage selection, and focus jumping
 		if(e.keyCode == $.ui.keyCode.ENTER || e.keyCode == $.ui.keyCode.SPACE)
 		{
-			if(!e.shiftKey && !e.ctrlKey)
+			if((options.type == 1) && !e.shiftKey && !e.ctrlKey)
 				this.deselectAll();
 
 			if(e.shiftKey)
@@ -663,18 +656,27 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 		if(e.keyCode == $.ui.keyCode.ESCAPE && options.escClearSelection)
 			this.deselectAll();
 	},
+	preDispacthEvent:function(eventInfo){return eventInfo;},
+	_dispatchEvent:function(eType, data, canBubble, cancelable, relatedTarget)
+	{
+		data.items = this.mapFromSelectable(data.items);
+		var parms = this.preDispacthEvent({"eType":eType, "data":data, "canBubble":canBubble, "cancelable":cancelable, "relatedTarget":relatedTarget});
+		var evt = this.element.dispatchEvent(parms.eType, parms.data, parms.canBubble, parms.cancelable, parms.relatedTarget);
+		evt.data.items = this.mapToSelectable(data.items);
+		return evt;
+	},
 	mapToSelectable:function(el)
 	{
 		return $(el).closest(".ibx-selectable", this.element[0]);
 	},
 	mapFromSelectable:function(el)
 	{
-		return $(el).closest(".ibx-selectable", this.element[0]);
+		return el;//default returns same.
 	},
 	selectableChildren:function(selector)
 	{
 		var options = this.options;
-		var e = this._dispatchEvent("ibx_selectablechildren", null, false, true);
+		var e = this._dispatchEvent("ibx_selectablechildren", {"items":null}, false, true);
 		var pattern = sformat(":ibxFocusable({1}, {2})", options.navKeyRoot ? -1 : 0, options.focusRoot ? Infinity : -1);
 		var children = e.isDefaultPrevented() ? $(e.data) : this.element.children(pattern);
 		children = selector ? children.filter(selector) : children;
@@ -685,21 +687,25 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 	selected:function(el, select, anchor)
 	{
 		if(el === undefined)
+		{
+			select = (select === undefined) ? true : select;
 			return this.mapFromSelectable(this.selectableChildren(select ? ".ibx-sm-selected" : ":not(.ibx-sm-selected)"));
+		}
 
 		//make sure the elements passed in are the actual selectable elements
 		el = this.mapToSelectable(el);
 
 		//by default set the anchor item
 		anchor = (anchor === undefined) ? true : false;
+
 		if(select)
 		{
 			//handle selection types...
 			var options = this.options;
-			if(options.type == -1)//none
+			if(options.type == 0)//none
 				el = $();
 			else
-			if(options.type == 0)//single
+			if(options.type == -1)//single
 			{
 				this.deselectAll();
 				el = $(el).first(":not(.ibx-sm-selected)");
@@ -707,28 +713,28 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 			else//multi
 				el = $(el).filter(":not(.ibx-sm-selected)");
 
-			var evt = this._dispatchEvent("ibx_selecting", el, false, true);
+			var evt = this._dispatchEvent("ibx_beforeselchange", {"selected":select, "items":el}, false, true);
 			if(!evt.isDefaultPrevented())
 			{
-				el = $(evt.data);
+				el = evt.data.items;
 				el.addClass("ibx-sm-selected");
 				if(anchor)
 					this.anchor(el.last());
+				this._dispatchEvent("ibx_selchange", {"selected":select, "items":el}, false, false);
 			}
 		}
 		else
 		{
 			el = $(el).filter(".ibx-sm-selected");
-			var evt = this._dispatchEvent("ibx_deselecting", el, false, true);
+			var evt = this._dispatchEvent("ibx_beforeselchange", {"selected":select, "items":el}, false, true);
 			if(!evt.isDefaultPrevented())
 			{
-				el = evt.data;
 				el.removeClass("ibx-sm-selected");
 				if(anchor)
 					this.anchor(el.last());
+				this._dispatchEvent("ibx_selchange", {"selected":select, "items":el}, false, false);
 			}
 		}
-		this._dispatchEvent("ibx_selchange", {"selected": select, "items":el}, false, false);
 	},
 	toggleSelected:function(el, selected, anchor)
 	{
@@ -737,11 +743,11 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 	},
 	selectAll:function(selector)
 	{
-		this.selected(this.selectableChildren(), true);
+		this.selected(this.selectableChildren(":not(ibx-sm-selected')"), true);
 	},
 	deselectAll:function()
 	{
-		this.selected(this.selectableChildren(), false);
+		this.selected(this.selectableChildren(".ibx-sm-selected"), false);
 	},
 	_anchor:null,
 	anchor:function(el)
@@ -756,7 +762,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 			this._anchor.removeClass("ibx-sm-anchor");
 		this._anchor = $(el).first();
 		this._anchor.addClass("ibx-sm-anchor");
-		var evt = this._dispatchEvent("ibx_anchored", el, true, false);
+		var evt = this._dispatchEvent("ibx_anchored", {"items":el}, true, false);
 	},
 	_focused:null,
 	focused:function(el, focus)
@@ -772,7 +778,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 		this._focused = $(el).first();
 		this._focused.addClass("ibx-sm-focused " + (ibxPlatformCheck.isIE ? "ibx-ie-pseudo-focus" : ""));
 		this._focused.length ? this.element.attr("aria-active-descendant", el.prop("id")) : this.element.removeAttr("aria-active-descendant");
-		var evt = this._dispatchEvent("ibx_focused", {"focused":focus, "item":el}, true, false);
+		var evt = this._dispatchEvent("ibx_focused", {"items":el}, true, false);
 	},
 	focusMgr:function(focus)
 	{

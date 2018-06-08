@@ -5,7 +5,7 @@ $.widget("ibi.ibxTreeSelectionManager", $.ibi.ibxSelectionManager,
 {
 	"options":
 	{
-		"type":1,
+		"type":0,//single select by default
 		"navKeyRoot":true,
 		"navKeyDir":"vertical",
 		"focusDefault":true,
@@ -249,8 +249,10 @@ $.widget("ibi.ibxTreeNode", $.ibi.ibxVBox,
 			this.toggleExpanded();
 		else
 		if(eType == "dblclick")
+		{
 			this.toggleExpanded();
-		e.stopPropagation();
+			e.stopPropagation();
+		}
 	},
 	_onBtnExpandClick:function(e)
 	{
