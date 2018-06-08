@@ -5,7 +5,7 @@ $.widget("ibi.ibxTreeSelectionManager", $.ibi.ibxSelectionManager,
 {
 	"options":
 	{
-		"type":0,//single select by default
+		"type":"single",
 		"navKeyRoot":true,
 		"navKeyDir":"vertical",
 		"focusDefault":true,
@@ -37,6 +37,7 @@ $.widget("ibi.ibxTree", $.ibi.ibxVBox,
 {
 	options:
 	{
+		"selectionOptions":{},
 		"showRootNodes":true,
 		"inline":true,
 		"align":"stretch",
@@ -129,6 +130,7 @@ $.widget("ibi.ibxTree", $.ibi.ibxVBox,
 			var childWidget = $(child).data("ibxWidget");
 			childWidget.option("virtualParent", !options.showRootNodes);
 		}.bind(this));
+		this.element.ibxSelectionManager("option", options.selectionOptions);
 	}
 });
 

@@ -494,7 +494,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 {
 	options:
 	{
-		"type":-1,							//0 - navigation only, -1 - single selection, 1 - multiple selection
+		"type":"single",					//nav - navigation only, single - single selection, multi - multiple selection
 		"escClearSelection":true,			//clear the selection on the escape key
 		"focusRoot":false,					//keep focus circular within this element
 		"focusDefault":false,				//focus the first item in root. (can be a select pattern).
@@ -557,11 +557,11 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 
 		var options = this.options;
 		var isTarget = this.element.is(e.target);
-		if(isTarget || ((options.type == 1) && !e.shiftKey && !e.ctrlKey))
+		if(isTarget || ((options.type == "multi") && !e.shiftKey && !e.ctrlKey))
 			this.deselectAll();
 
 		var selTarget = this.mapToSelectable(e.target);
-		if(e.shiftKey && options.type == 1)
+		if(e.shiftKey && options.type == "multi")
 		{
 			var selChildren = this.selectableChildren();
 			var idxAnchor = selChildren.index(this._anchor[0]);
@@ -632,7 +632,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 		//manage selection, and focus jumping
 		if(e.keyCode == $.ui.keyCode.ENTER || e.keyCode == $.ui.keyCode.SPACE)
 		{
-			if((options.type == 1) && !e.shiftKey && !e.ctrlKey)
+			if((options.type == "multi") && !e.shiftKey && !e.ctrlKey)
 				this.deselectAll();
 
 			if(e.shiftKey)
@@ -702,15 +702,16 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 		{
 			//handle selection types...
 			var options = this.options;
-			if(options.type == 0)//none
+			if(options.type == "nav")//no selection
 				el = $();
 			else
-			if(options.type == -1)//single
+			if(options.type == "single")//single selection
 			{
 				this.deselectAll();
 				el = $(el).first(":not(.ibx-sm-selected)");
 			}
 			else//multi
+			if(options.type == "multi")//multiple selection
 				el = $(el).filter(":not(.ibx-sm-selected)");
 
 			var evt = this._dispatchEvent("ibx_beforeselchange", {"selected":select, "items":el}, false, true);
@@ -806,6 +807,12 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 			this._focus = focus
 		}
 	},
+	_setOption:function(key, value)
+	{
+		if(key == "type" && value != this.options[key])
+			this.deselectAll();
+		this._super(key, value);
+	},
 	_refresh:function()
 	{
 		this._super();
@@ -814,7 +821,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 		this.element.toggleClass("ibx-nav-key-root", options.navKeyRoot);
 	}
 });
-$.widget("ibi.ibxSelMgrNavigator", $.ibi.ibxSelectionManager, {options:{"type":-1}});
-$.widget("ibi.ibxSelMgrSingle", $.ibi.ibxSelectionManager, {options:{"type":0}});
-$.widget("ibi.ibxSelMgrMulti", $.ibi.ibxSelectionManager, {options:{"type":1}});
+$.widget("ibi.ibxSelMgrNavigator", $.ibi.ibxSelectionManager, {options:{"type":"none"}});
+$.widget("ibi.ibxSelMgrSingle", $.ibi.ibxSelectionManager, {options:{"type":"single"}});
+$.widget("ibi.ibxSelMgrMulti", $.ibi.ibxSelectionManager, {options:{"type":"multi"}});
 //# sourceURL=events.ibx.js
