@@ -52,7 +52,7 @@ $.widget("ibi.ibxTree", $.ibi.ibxVBox,
 	_create:function()
 	{
 		this._super();
-		this.element.on("click dblclick", this._onNodeEvent.bind(this));
+		this.element.on("keydown click dblclick", this._onNodeEvent.bind(this));
 		this.element.ibxMutationObserver({"listen":true, "subtree":true}).on("ibx_nodemutated", this._onChildrenChange.bind(this));
 		this.element.ibxTreeSelectionManager();
 	},
@@ -89,8 +89,8 @@ $.widget("ibi.ibxTree", $.ibi.ibxVBox,
 	},
 	_onNodeEvent:function(e)
 	{
-		var targetNode = $(e.target).closest(".ibx-tree-node");
-		if(!targetNode.length)
+		var targetNode = $(e.target).closest(".ibx-tree-node").data("ibxWidget");
+		if(!targetNode)
 			return;
 
 		var options = this.options;
@@ -98,15 +98,35 @@ $.widget("ibi.ibxTree", $.ibi.ibxVBox,
 
 		if(eType == "ibx_collapse")
 		{
-			var selNodes = targetNode.ibxTreeNode("children").find(".ibx-sm-selected");
+			var selNodes = targetNode.children().find(".ibx-sm-selected");
 			this.element.ibxSelectionManager("selected", selNodes, false);
 		}
 		else
 		if(eType == "click" && options.singleClickExpand)
-			targetNode.ibxTreeNode("toggleExpanded");
+			targetNode.toggleExpanded();
 		else
 		if(eType == "dblclick")
-			targetNode.ibxTreeNode("toggleExpanded");
+			targetNode.toggleExpanded();
+		else
+		if(eType == "keydown")
+		{
+			if(e.keyCode === $.ui.keyCode.RIGHT)
+			{
+				if(!targetNode.expanded())
+					targetNode.toggleExpanded(true);
+				else
+					targetNode.children().first().find(".tnode-label").focus();
+			}
+			else
+			if(e.keyCode === $.ui.keyCode.LEFT)
+			{
+				if(targetNode.expanded())
+					targetNode.toggleExpanded(false);
+				else
+					$(targetNode.parentNode()).children(".tnode-label").focus();
+				e.stopPropagation();
+			}
+		}
 	},
 	refresh:function(withChildren)
 	{
@@ -162,7 +182,6 @@ $.widget("ibi.ibxTreeNode", $.ibi.ibxVBox,
 	{
 		var options = this.options;
 		this._super();
-		this.element.on("keydown", this._onNodeKeyEvent.bind(this));
 		this.nodeLabel = $("<div tabindex='-1' class='tnode-label'>").ibxLabel().appendTo(this.element).data("ibxTreeNode", this.element);
 		options.labelOptions.text = options.labelOptions.text || this.element.textNodes().remove().text().replace(/^\s*|\s*$/g, "");
 
@@ -216,26 +235,6 @@ $.widget("ibi.ibxTreeNode", $.ibi.ibxVBox,
 	hasChildren:function()
 	{
 		return !!this._childBox.children(".ibx-tree-node").length;
-	},
-	_onNodeKeyEvent:function(e)
-	{
-		if(e.keyCode === $.ui.keyCode.RIGHT)
-		{
-			if(!this.expanded())
-				this.toggleExpanded(true);
-			else
-				this.children().first().find(".tnode-label").focus();
-			e.stopPropagation();
-		}
-		else
-		if(e.keyCode === $.ui.keyCode.LEFT)
-		{
-			if(this.expanded())
-				this.toggleExpanded(false);
-			else
-				$(this.parentNode()).children(".tnode-label").focus();
-			e.stopPropagation();
-		}
 	},
 	_onBtnExpandClick:function(e)
 	{
@@ -309,4 +308,5 @@ $.widget("ibi.ibxTreeNode", $.ibi.ibxVBox,
 	}
 });
 $.ibi.ibxTreeNode.defaultIndent = null;
+
 //# sourceURL=tree.ibx.js
