@@ -10,46 +10,27 @@ $.widget("ibi.ibxTreeSelectionManager", $.ibi.ibxSelectionManager,
 		"navKeyDir":"vertical",
 		"focusDefault":true,
 		"escClearSelection":true,
-	},
-	preDispacthEvent:function(eventInfo)
-	{
-		return eventInfo;
-	},
-	mapToSelectable:function(el)
-	{
-		if(el !== undefined)
-		{
-			el = $(el).map(function(idx, el)
-			{
-				el = $(el)
-				el = el.is(".ibx-tree-node") ? el.children(".tnode-label") : el.closest(".tnode-label");
-				return el[0];
-			}.bind(this));
-		}
-		return el;
+		"focusResetOnBlur":false,
 	},
 	selectableChildren:function(selector)
 	{
 		var nodes = this.element.find(".tnode-label:visible");
 		return selector ? nodes.filter(selector) : nodes;
 	},
-	selected:function(el, selected, anchor)
+	mapToSelectable:function(el)
 	{
-		el = this.mapToSelectable(el);
-		return this._super(el, selected, anchor);
+		el = $(el).map(function(idx, el)
+		{
+			el = $(el)
+			el = el.is(".ibx-tree-node") ? el.children(".tnode-label") : el.closest(".tnode-label", this.element);
+			return el[0];
+		}.bind(this));
+		return el;
 	},
-	/*
-	anchor:function(el)
+	mapFromSelectable:function(el)
 	{
-		el = this._mapNodesToSelectables(el);
-		return this._super(el);
+		return $(el).closest(".ibx-tree-node", this.element);
 	},
-	focused:function(el, focused)
-	{
-		el = this._mapNodesToSelectables(el);
-		return this._superApply(el, focused);
-	},
-	*/
 });
 
 $.widget("ibi.ibxTree", $.ibi.ibxVBox, 
