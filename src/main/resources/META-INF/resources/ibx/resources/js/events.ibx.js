@@ -743,7 +743,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 	},
 	selectAll:function(selector)
 	{
-		this.selected(this.selectableChildren(":not(ibx-sm-selected')"), true);
+		this.selected(this.selectableChildren(":not(.ibx-sm-selected)"), true);
 	},
 	deselectAll:function()
 	{
