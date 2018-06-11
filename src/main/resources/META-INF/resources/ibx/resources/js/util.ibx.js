@@ -221,6 +221,13 @@ jQuery.fn.directChild = function(el)
 	return child[0];
 };
 
+
+jQuery.fn.hasScrollbar = function()
+{
+    return this.get(0).scrollHeight > this.height();
+}
+
+
 //force redraw/repaint element...I'm dubious about whether this actually works...got from:
 //https://stackoverflow.com/questions/3485365/how-can-i-force-webkit-to-redraw-repaint-to-propagate-style-changes
 jQuery.fn.redraw = function()
@@ -525,6 +532,31 @@ function CanonicalizePath(strPath)
 			arPathOut.push(strPathElem);
 	}
 	return arPathOut.join("/").replace("http:>>", "http://");
+}
+
+function getScrollbarWidth() {
+    var outer = document.createElement("div");
+    outer.style.visibility = "hidden";
+    outer.style.width = "100px";
+    outer.style.msOverflowStyle = "scrollbar"; // needed for WinJS apps
+
+    document.body.appendChild(outer);
+
+    var widthNoScroll = outer.offsetWidth;
+    // force scrollbars
+    outer.style.overflow = "scroll";
+
+    // add innerdiv
+    var inner = document.createElement("div");
+    inner.style.width = "100%";
+    outer.appendChild(inner);        
+
+    var widthWithScroll = inner.offsetWidth;
+
+    // remove divs
+    outer.parentNode.removeChild(outer);
+
+    return widthNoScroll - widthWithScroll;
 }
 
 /**

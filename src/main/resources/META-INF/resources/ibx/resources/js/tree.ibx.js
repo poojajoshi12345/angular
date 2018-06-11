@@ -5,7 +5,8 @@ $.widget("ibi.ibxTreeSelectionManager", $.ibi.ibxSelectionManager,
 {
 	"options":
 	{
-		"type":"single",
+		"type":"multi",
+		"toggleSelection":false,
 		"navKeyRoot":true,
 		"navKeyDir":"vertical",
 		"focusDefault":true,

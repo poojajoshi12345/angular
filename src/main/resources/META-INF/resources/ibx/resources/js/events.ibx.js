@@ -495,6 +495,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 	options:
 	{
 		"type":"single",					//nav - navigation only, single - single selection, multi - multiple selection
+		"toggleSelection":true,				//clicking on an item will select/deselect.
 		"escClearSelection":true,			//clear the selection on the escape key
 		"focusRoot":false,					//keep focus circular within this element
 		"focusDefault":false,				//focus the first item in root. (can be a select pattern).
@@ -522,12 +523,13 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 		var options = this.options;
 		var isTarget = this.element.is(e.target);
 		var ownsTarget = $.contains(this.element[0], e.target);
+		var ownsRelTarget = $.contains(this.element[0], e.relatedTarget);
 
 		//make sure the manager is in the focused state.
 		this.focusMgr(true);
 
 		//do the default focusing when manager is directly focused (not one of its children).
-		if(isTarget && (options.focusDefault !== false))
+		if(isTarget && !ownsRelTarget && (options.focusDefault !== false))
 		{
 			//focus default item...otherwise find first focusable item (ARIA needs SOMETHING to be focused on the popup)
 			var defItem = this._focused;
@@ -557,7 +559,11 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 
 		var options = this.options;
 		var isTarget = this.element.is(e.target);
-		if(isTarget || ((options.type == "multi") && !e.shiftKey && !e.ctrlKey))
+		var sbv = this.element.hasScrollbar();
+		var rBounds = this.element[0].getBoundingClientRect();
+		var isMulti = options.type == "multi";
+
+		if(isTarget || (isMulti && !e.shiftKey && !e.ctrlKey))
 			this.deselectAll();
 
 		var selTarget = this.mapToSelectable(e.target);
@@ -571,7 +577,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 			this.toggleSelected(selChildren.slice(idxStart, idxEnd + 1), this.isSelected(this._anchor), false);
 		}
 		else
-			this.toggleSelected(selTarget);
+			this.toggleSelected(selTarget, isMulti || options.toggleSelection ? undefined : true);
 	},
 	_onKeyDown:function(e)
 	{

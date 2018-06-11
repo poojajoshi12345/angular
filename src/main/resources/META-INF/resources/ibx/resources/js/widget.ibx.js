@@ -563,6 +563,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 		}
 	}
 });
+$.ibi.ibxWidget.scrollbarWidth = getScrollbarWidth();
 $.ibi.ibxWidget.noRefresh = false; //globally turn off refresh to speed up various add/remove/update operations.
 $.ibi.ibxWidget.navKeys = [$.ui.keyCode.LEFT, $.ui.keyCode.RIGHT, $.ui.keyCode.UP, $.ui.keyCode.DOWN, $.ui.keyCode.HOME, $.ui.keyCode.END, $.ui.keyCode.PAGE_UP, $.ui.keyCode.PAGE_DOWN, 45/*INSERT*/];
 $.ibi.ibxWidget.isNavKey = function(keyCode)
