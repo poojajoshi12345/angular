@@ -233,9 +233,7 @@ jQuery.fn.clickOnScrollbar = function(clientX, clientY)
 	var vBar = this.hasScrollbar(false);
 	var hBar = this.hasScrollbar(true);
 	var size = getScrollbarWidth();
-	var ret = (vBar && (clientX < (rBounds.right - size)));
-	ret |= (hBar && (clientY < (rBounds.bottom - size)));
-	return !ret;
+	return (vBar && (clientX > (rBounds.right - size))) || (hBar && (clientY > (rBounds.bottom - size)));
 }
 
 //force redraw/repaint element...I'm dubious about whether this actually works...got from:
