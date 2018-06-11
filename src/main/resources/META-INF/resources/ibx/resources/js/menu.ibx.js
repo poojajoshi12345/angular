@@ -528,6 +528,12 @@ $.widget("ibi.ibxSplitMenuButton", $.ibi.ibxButtonSimple,
 		var separator = this._separator = $("<div class='split-separator'>");
 		this.element.append(separator, menuBtn).on({"click":this._onBtnClick.bind(this), "keyup":this._onBtnKeyEvent.bind(this)});
 	},
+	menu:function(menu)
+	{
+		if(menu === undefined)
+			return this._menuBtn.ibxWidget("option", "menu");
+		this._menuBtn.ibxWidget("option", "menu", menu);
+	},
 	_onBtnClick:function(e)
 	{
 		var event = $.Event(e.origionalEvent);
