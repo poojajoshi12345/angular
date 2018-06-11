@@ -559,12 +559,17 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 
 		var options = this.options;
 		var isTarget = this.element.is(e.target);
-		var sbv = this.element.hasScrollbar();
-		var rBounds = this.element[0].getBoundingClientRect();
 		var isMulti = options.type == "multi";
+		var vsb = this.element.hasScrollbar(false);
+		var hsb = this.element.hasScrollbar(true);
+		var metrics = this.element.metrics();
 
-		if(isTarget || (isMulti && !e.shiftKey && !e.ctrlKey))
-			this.deselectAll();
+		//don't deselect if clicking on scrollbar.
+		if((vsb && e.clientX < (metrics.contentBox.right - $.ibi.ibxWidget.scrollbarWidth)) || (hsb && e.clientY < (metrics.contentBox.bottom - $.ibi.ibxWidget.scrollbarWidth)))
+		{
+			if(isTarget || (isMulti && !e.shiftKey && !e.ctrlKey))
+				this.deselectAll();
+		}
 
 		var selTarget = this.mapToSelectable(e.target);
 		if(e.shiftKey && options.type == "multi")

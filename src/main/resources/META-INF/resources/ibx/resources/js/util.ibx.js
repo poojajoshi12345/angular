@@ -221,12 +221,11 @@ jQuery.fn.directChild = function(el)
 	return child[0];
 };
 
-
-jQuery.fn.hasScrollbar = function()
+//is there currently a scrollbar visible
+jQuery.fn.hasScrollbar = function(horizontal)
 {
-    return this.get(0).scrollHeight > this.height();
+    return horizontal ? this.get(0).scrollWidth > this.width() : this.get(0).scrollHeight > this.height();
 }
-
 
 //force redraw/repaint element...I'm dubious about whether this actually works...got from:
 //https://stackoverflow.com/questions/3485365/how-can-i-force-webkit-to-redraw-repaint-to-propagate-style-changes
