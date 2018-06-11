@@ -227,6 +227,17 @@ jQuery.fn.hasScrollbar = function(horizontal)
     return horizontal ? this.get(0).scrollWidth > this.width() : this.get(0).scrollHeight > this.height();
 }
 
+jQuery.fn.clickOnScrollbar = function(clientX, clientY)
+{
+	var rBounds = this[0].getBoundingClientRect();
+	var vBar = this.hasScrollbar(false);
+	var hBar = this.hasScrollbar(true);
+	var size = getScrollbarWidth();
+	var ret = (vBar && (clientX < (rBounds.right - size)));
+	ret |= (hBar && (clientY < (rBounds.bottom - size)));
+	return !ret;
+}
+
 //force redraw/repaint element...I'm dubious about whether this actually works...got from:
 //https://stackoverflow.com/questions/3485365/how-can-i-force-webkit-to-redraw-repaint-to-propagate-style-changes
 jQuery.fn.redraw = function()
@@ -534,6 +545,9 @@ function CanonicalizePath(strPath)
 }
 
 function getScrollbarWidth() {
+	if(this._scrollbarWidth)
+		return this._scrollbarWidth;
+
     var outer = document.createElement("div");
     outer.style.visibility = "hidden";
     outer.style.width = "100px";
@@ -555,7 +569,7 @@ function getScrollbarWidth() {
     // remove divs
     outer.parentNode.removeChild(outer);
 
-    return widthNoScroll - widthWithScroll;
+    return this._scrollbarWidth = (widthNoScroll - widthWithScroll);
 }
 
 /**

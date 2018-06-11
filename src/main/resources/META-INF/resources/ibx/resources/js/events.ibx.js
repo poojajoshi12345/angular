@@ -560,12 +560,9 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 		var options = this.options;
 		var isTarget = this.element.is(e.target);
 		var isMulti = options.type == "multi";
-		var vsb = this.element.hasScrollbar(false);
-		var hsb = this.element.hasScrollbar(true);
-		var metrics = this.element.metrics();
 
 		//don't deselect if clicking on scrollbar.
-		if((vsb && e.clientX < (metrics.contentBox.right - $.ibi.ibxWidget.scrollbarWidth)) || (hsb && e.clientY < (metrics.contentBox.bottom - $.ibi.ibxWidget.scrollbarWidth)))
+		if(!this.element.clickOnScrollbar(e.clientX, e.clientY))
 		{
 			if(isTarget || (isMulti && !e.shiftKey && !e.ctrlKey))
 				this.deselectAll();
@@ -636,7 +633,13 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 			else
 			if(goNext && vert || horz)
 				focusItem = (idxFocused < selChildren.length-1) ? selChildren[idxFocused + 1] : selChildren.first()[0];
-			focusItem.focus();
+			
+			//don't focus for just shift/ctrl keys
+			if(e.keyCode != 17 && e.keyCode != 16)
+			{
+				focusItem.focus();
+				e.preventDefault();
+			}
 		}
 
 		//manage selection, and focus jumping
