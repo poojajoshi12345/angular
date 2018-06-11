@@ -577,7 +577,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 			this.toggleSelected(selChildren.slice(idxStart, idxEnd + 1), this.isSelected(this._anchor), false);
 		}
 		else
-			this.toggleSelected(selTarget, isMulti || options.toggleSelection ? undefined : true);
+			this.toggleSelected(selTarget, (isMulti && e.ctrlKey) || options.toggleSelection ? undefined : true);
 	},
 	_onKeyDown:function(e)
 	{
