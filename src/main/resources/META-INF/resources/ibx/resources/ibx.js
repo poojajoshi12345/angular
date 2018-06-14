@@ -79,7 +79,7 @@ function ibx()
 		var scripts = 
 		[
 			"<link type='text/css' rel='stylesheet' href='" + ibx._path + "./css/base.ibx.css'/>",
-			"<script type='text/javascript' src='" + ibx._path + "./etc/jquery/jquery-3.1.1.js'></script>",
+			"<script type='text/javascript' src='" + ibx._path + "./etc/jquery/jquery-3.3.1.js'></script>",
 			"<script type='text/javascript' src='" + ibx._path + "./etc/jquery/jquery-ui-1.12.1/jquery-ui.js'></script>",
 			"<script type='text/javascript' src='" + ibx._path + "./js/util.ibx.js'></script>",
 			"<script type='text/javascript' src='" + ibx._path + "./js/preload.ibx.js'></script>"
