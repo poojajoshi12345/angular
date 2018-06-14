@@ -143,9 +143,9 @@
 		</style>
 	</head>
 	<body class="ibx-root">
-		<div class="btnLoadFlat" data-ibx-type="ibxButton">Load Flat</div>
-		<div class="btnLoadHierarchical" data-ibx-type="ibxButton">Load Hierarchical</div>
-		<div class="btnExpandAll" data-ibx-type="ibxButton">Expand All Collapsed</div>
+		<div tabindex="0" class="btnLoadFlat" data-ibx-type="ibxButton">Load Flat</div>
+		<div tabindex="0" class="btnLoadHierarchical" data-ibx-type="ibxButton">Load Hierarchical</div>
+		<div tabindex="0" class="btnExpandAll" data-ibx-type="ibxButton">Expand All Collapsed</div>
 		<div tabindex="0" class="test-tree" data-ibx-type="ibxTree"></div>
 	</body>
 </html>
