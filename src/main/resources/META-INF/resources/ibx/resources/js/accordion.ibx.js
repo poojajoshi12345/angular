@@ -141,7 +141,6 @@ $.widget("ibi.ibxAccordionPage", $.ibi.ibxFlexBox,
 {
 	options:
 	{
-		focusRoot:false,
 		autoClose:true,
 		group:"",
 		direction:"column",

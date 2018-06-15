@@ -5,7 +5,6 @@ $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame,
 {
 	options:
 	{
-		"navKeyRoot":true,
 		"focusDefault":true,
 		"defaultDropHandling":true,
 		"aria":

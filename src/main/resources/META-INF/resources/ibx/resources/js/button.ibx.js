@@ -344,6 +344,8 @@ $.widget("ibi.ibxButtonGroup", $.ibi.ibxFlexBox,
 	{
 		role: "group",
 		navKeyRoot:true,
+
+
 		name: "",
 		form: "",
 		align: "stretch",
@@ -366,7 +368,8 @@ $.widget("ibi.ibxButtonGroup", $.ibi.ibxFlexBox,
 				this.element.uniqueId();
 			this.options.name = this.element.attr("id");
 		}
-		this.add(this.element.children(".ibx-button, .ibx-check-box, .ibx-check-box-simple, .ibx-radio-button-simple"));
+		var btns = this.element.children(".ibx-button, .ibx-check-box, .ibx-check-box-simple, .ibx-radio-button-simple").prop("tabindex", -1);
+		this.add(btns);
 		this._super();
 	},
 	children:function(selector)

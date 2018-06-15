@@ -8,7 +8,6 @@ $.widget("ibi.ibxTabPane", $.ibi.ibxFlexBox,
 {
 	options:
 	{
-		navKeyRoot:true,
 		focusDefault:true,
 		position: "top",
 		direction: "column",
@@ -242,7 +241,6 @@ $.widget("ibi.ibxTabPage", $.ibi.ibxWidget,
 {
 	options:
 	{
-		focusRoot:false,
 		selected: false,
 		tabOptions:{},
 		aria:{role:"tabpanel"}
@@ -341,7 +339,7 @@ $.widget("ibi.ibxHTabGroup", $.ibi.ibxHCarousel,
 	_create: function ()
 	{
 		this._super();
-		this.element.addClass("ibx-tab-group-horizontal");
+		this.element.addClass("ibx-tab-group-horizontal").prop("tabindex", -1);
 	},
 	_refresh: function ()
 	{
@@ -371,8 +369,7 @@ $.widget("ibi.ibxVTabGroup", $.ibi.ibxVCarousel,
 	_create: function ()
 	{
 		this._super();
-		this.element.addClass("ibx-tab-group-vertical");
-		this.element.attr("tabindex", 0);
+		this.element.addClass("ibx-tab-group-vertical").prop("tabindex", -1);
 	},
 	_refresh: function ()
 	{

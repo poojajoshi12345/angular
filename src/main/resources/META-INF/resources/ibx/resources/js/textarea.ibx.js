@@ -25,7 +25,6 @@ $.widget("ibi.ibxTextArea", $.ibi.ibxFlexBox,
 		"wrap": false,
 		"align": "stretch",
 
-		"navKeyRoot":true,
 		"focusDefault":true,
 
 		"aria":
@@ -44,13 +43,7 @@ $.widget("ibi.ibxTextArea", $.ibi.ibxFlexBox,
 		this._textArea.on("blur", this._onTextAreaBlur.bind(this)).on("focus", this._onTextAreaFocus.bind(this));
 		this._textArea.on("input", this._onTextAreaInput.bind(this)).on("keydown", this._onTextAreaKeyDown.bind(this));
 		this._setValue(this.options.text, true);
-		this.element.append(this._textArea).on(
-		{
-			"focus":function(e)
-			{
-				this._textArea.focus();
-			}.bind(this)
-		});
+		this.element.append(this._textArea);
 	},
 	_setAccessibility:function(accessible, aria)
 	{

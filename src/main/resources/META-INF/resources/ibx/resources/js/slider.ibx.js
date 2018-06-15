@@ -319,10 +319,6 @@ $.widget("ibi.ibxSlider", $.ibi.ibxGrid,
 			this._popup = null;
 		}
 	},
-	navKeyChildren:function()
-	{
-		return $([this._slider[0]]);
-	},
 	_refresh: function ()
 	{
 		this._labelMin.ibxWidget('option', 'text', this._getFormattedText("min"));
@@ -748,10 +744,6 @@ $.widget("ibi.ibxRange", $.ibi.ibxSlider,
 	_destroy: function ()
 	{
 		this._super();
-	},
-	navKeyChildren:function()
-	{
-		return $([this._slider[0], this._slider2[0]]);
 	},
 	_refresh: function ()
 	{

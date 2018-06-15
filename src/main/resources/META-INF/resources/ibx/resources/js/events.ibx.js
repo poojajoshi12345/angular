@@ -833,7 +833,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 			else
 			{
 				if(this.options.focusResetOnBlur)
-					this._focused(null, false);
+					this._focus(null, false);
 				this.element.removeClass("ibx-sm-active");
 
 				//put this element back in the tab order...so that next tab into will will do auto-focus.

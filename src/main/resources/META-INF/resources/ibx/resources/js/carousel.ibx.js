@@ -243,8 +243,11 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 	},
 	_onItemsBoxFocus:function(e)
 	{
+		return;
+		//the idea was that if nothing was focused, then when the items box is focused
+		//automatically focus the first item visible in the carousel's viewport.
 		//don't do the focusing if selected item is already a child.
-		if($(e.target).ibxWidget("navKeyActive"))
+		if($(e.target).ibxSelectionManager("active"))
 		{
 			var oEvent = e.originalEvent.data;
 			if(!$.contains(e.target, oEvent.target))
