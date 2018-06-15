@@ -73,7 +73,7 @@ jQuery.expr[":"]["ibxFocusable"] = function(elem, idx, meta, stack)
 	tMax = isNaN(tMax) ? Infinity : tMax;
 
 	var tabIndex = parseInt(el.attr("tabIndex"), 10);
-	var visible = (el.css("visibility") != "hidden" && el.is(":visible"));
+	var visible = (el.css("visibility") != "hidden" && el.is(":visible") && !el.is(".ibx-widget-disabled"));
 	var ret = (tabIndex >= tMin && tabIndex <= tMax && visible);
 	return ret;
 };
@@ -84,6 +84,8 @@ jQuery.expr[":"]["ibxNavFocusable"] = function(elem, idx, meta, stack)
 };
 jQuery.expr[":"]["inViewport"] = function(elem, idx, meta, stack)
 {
+	console.warn("[ibx Not Implemented] This filter is not currently implemented!");
+	return;
 	var info = GetVisibilty(elem);
 	return (meta[3] == "true") ? info.total : info.partial;
 };
@@ -211,6 +213,18 @@ jQuery.fn.bounds = function(inner)
 	return bounds;
 };
 
+//regardless of layers of DOM...is a descendent 'logically' a child of this element
+jQuery.fn.logicalChildren = function(parentSelector, childSelector)
+{
+	var children = this.find(childSelector);
+	var ret = children.filter(function(idx, el)
+	{
+		return $(el.parentNode).closest(parentSelector, this).is(this);
+	}.bind(this));
+	return ret;
+};
+
+//
 jQuery.fn.directChild = function(el)
 {
 	var child = $(el);
@@ -484,6 +498,49 @@ function GetRandomInt(min, max)
 	max = Math.floor(max);
 	return Math.floor(Math.random() * (max - min)) + min; //The maximum is exclusive and the minimum is inclusive
 }
+
+/*
+//just returns metrics/info for an element.
+function GetElementInfo(element, withMargin)
+{
+	withMargin = !!withMargin;
+	el = $(element);
+	var style = window.getComputedStyle(element);
+	var positioned = (el.css("position") != "static");
+	var elInfo = el.position() || {};
+	elInfo.el = element;
+	elInfo.left = element.offsetLeft - (withMargin ? parseFloat(style.marginLeft) : 0);
+	elInfo.top = element.offsetTop - (withMargin ? parseFloat(style.marginTop) : 0);
+	elInfo.width = el.outerWidth(withMargin);
+	elInfo.height = el.outerHeight(withMargin);
+	elInfo.right = elInfo.left + elInfo.width;
+	elInfo.bottom = elInfo.top + elInfo.height;
+	elInfo.viewPort = 
+	{
+		"left": element.scrollLeft + element.clientLeft + parseFloat(style.paddingLeft) + (positioned ? 0 : element.offsetLeft),
+		"top": element.scrollTop + element.clientTop + parseFloat(style.paddingTop) + (positioned ? 0 : element.offsetLeft)
+	}
+	elInfo.viewPort.right = elInfo.viewPort.left + element.clientWidth - parseFloat(style.paddingRight);
+	elInfo.viewPort.bottom = elInfo.viewPort.top + element.clientHeight - parseFloat(style.paddingBottom);
+	return elInfo;
+}
+
+function GetVisibilty(element, withMargin)
+{
+	var elInfo = GetElementInfo(element, withMargin);
+	var pInfo = GetElementInfo(element.parentNode);
+	var ret = 
+	{
+		"lVis": (elInfo.left >= pInfo.viewPort.left && elInfo.left <= pInfo.viewPort.right),
+		"rVis": (elInfo.right >= pInfo.viewPort.left && elInfo.right <= pInfo.viewPort.right),
+		"tVis": (elInfo.top >= pInfo.viewPort.top && elInfo.top <= pInfo.viewPort.bottom ),
+		"bVis": (elInfo.bottom >= pInfo.viewPort.top && elInfo.bottom <= pInfo.viewPort.bottom)
+	}
+	ret.total = (ret.lVis && ret.rVis && ret.tVis && ret.bVis);
+	ret.partial = (ret.lVis || ret.rVis) && (ret.tVis || ret.bVis);
+	return ret;
+}
+*/
 
 //search currently loaded stylesheets for defined rules of selector.
 function FindStyleRules(selector)
