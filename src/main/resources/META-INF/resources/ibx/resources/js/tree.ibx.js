@@ -33,7 +33,7 @@ $.widget("ibi.ibxTree", $.ibi.ibxVBox,
 {
 	options:
 	{
-		"selectionOptions":{},
+		"selType":"single",
 		"showRootNodes":true,
 		"singleClickExpand":false,
 		"inline":true,
@@ -48,7 +48,7 @@ $.widget("ibi.ibxTree", $.ibi.ibxVBox,
 	_create:function()
 	{
 		this._super();
-		this.element.on("keydown click dblclick", this._onNodeEvent.bind(this));
+		this.element.on("keydown click dblclick ibx_collapse", this._onNodeEvent.bind(this));
 		this.element.ibxMutationObserver({"listen":true, "subtree":true}).on("ibx_nodemutated", this._onChildrenChange.bind(this));
 		this.element.ibxTreeSelectionManager();
 	},
@@ -131,7 +131,7 @@ $.widget("ibi.ibxTree", $.ibi.ibxVBox,
 			var childWidget = $(child).data("ibxWidget");
 			childWidget.option("virtualParent", !options.showRootNodes);
 		}.bind(this));
-		this.element.ibxSelectionManager("option", options.selectionOptions);
+		this.element.ibxSelectionManager("option", "type", options.selType);
 	}
 });
 

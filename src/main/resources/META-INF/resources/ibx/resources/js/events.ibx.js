@@ -526,12 +526,12 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 		var ownsRelTarget = $.contains(this.element[0], e.relatedTarget);
 
 		//make sure the manager is in the focused state.
-		this.active(true);
+		this._activate(true);
 
 		//do the default focusing when manager is directly focused (not one of its children).
 		if(isTarget && !ownsRelTarget && options.focusDefault !== false)
 		{
-			var defItem = this._focused;
+			var defItem = this._focus();
 			if(!defItem.length)
 			{
 				var defItem = this.element.find(options.focusDefault);
@@ -543,7 +543,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 
 		//focus the selected item
 		if(!isTarget && ownsTarget)
-			this.focused(e.target, true);
+			this._focus(e.target, true);
 	},
 	_onFocusOut:function(e)
 	{
@@ -552,7 +552,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 		var ownsRelTarget = $.contains(this.element[0], e.relatedTarget);
 		
 		if(!isTarget && !ownsRelTarget)
-			this.active(false);
+			this._activate(false);
 	},
 	_onKeyDown:function(e)
 	{
@@ -592,7 +592,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 		if(options.navKeyRoot && [$.ui.keyCode.LEFT, $.ui.keyCode.RIGHT, $.ui.keyCode.UP, $.ui.keyCode.DOWN].indexOf(e.keyCode) != -1)
 		{
 			var navKids = this.selectableChildren();
-			var focusedItem = this._focused;
+			var focusedItem = this._focus()[0];
 			var idxFocused = navKids.index(focusedItem);
 			var goPrev = (e.keyCode == $.ui.keyCode.LEFT || e.keyCode == $.ui.keyCode.UP);
 			var goNext = (e.keyCode == $.ui.keyCode.RIGHT || e.keyCode == $.ui.keyCode.DOWN);
@@ -601,7 +601,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 			var focusItem = $();
 
 			if(this.element.is(document.activeElement))
-				focusItem = (focusedItem.length) ? focusedItem : navKids.first();
+				focusItem = (focusedItem) ? focusedItem : navKids.first();
 			else
 			if(goPrev && (vert || horz))
 				focusItem = (idxFocused > 0) ? navKids[idxFocused - 1] : navKids.last();
@@ -626,14 +626,14 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 			if(e.shiftKey)
 			{
 				var selChildren = this.selectableChildren();
-				var idxAnchor = selChildren.index(this._anchor[0]);
-				var idxSel = selChildren.index(this._focused);
+				var idxAnchor = selChildren.index(this._anchor());
+				var idxSel = selChildren.index(this._focus()[0]);
 				var idxStart = Math.min(idxAnchor, idxSel);
 				var idxEnd = Math.max(idxAnchor, idxSel);
-				this.toggleSelected(selChildren.slice(idxStart, idxEnd + 1), this.isSelected(this._anchor), false);
+				this.toggleSelected(selChildren.slice(idxStart, idxEnd + 1), this.isSelected(this._anchor()), false);
 			}
 			else
-				this.toggleSelected(this._focused);
+				this.toggleSelected(this._focus());
 		}
 		else
 		if(e.keyCode == $.ui.keyCode.HOME)
@@ -652,7 +652,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 		var isMulti = options.type == "multi";
 
 		//mousedown happens before focus, so make us active before anything.
-		this.active(true);
+		this._activate(true);
 
 		//don't deselect if clicking on scrollbar.
 		if(!this.element.clickOnScrollbar(e.clientX, e.clientY))
@@ -661,15 +661,16 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 				this.deselectAll();
 		}
 
+		//event could happen on child element...map back to something we know can be selected
 		var selTarget = this.mapToSelectable(e.target);
 		if(e.shiftKey && options.type == "multi")
 		{
 			var selChildren = this.selectableChildren();
-			var idxAnchor = selChildren.index(this._anchor[0]);
+			var idxAnchor = selChildren.index(this._anchor());
 			var idxSel = selChildren.index(selTarget[0]);
 			var idxStart = Math.min(idxAnchor, idxSel);
 			var idxEnd = Math.max(idxAnchor, idxSel);
-			this.toggleSelected(selChildren.slice(idxStart, idxEnd + 1), this.isSelected(this._anchor), false);
+			this.toggleSelected(selChildren.slice(idxStart, idxEnd + 1), this.isSelected(this._anchor()), false);
 		}
 		else
 			this.toggleSelected(selTarget, (isMulti && e.ctrlKey) || options.toggleSelection ? undefined : true);
@@ -695,23 +696,26 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 	selectableChildren:function(selector)
 	{
 		var options = this.options;
-		//var e = this._dispatchEvent("ibx_selectablechildren", {"items":null}, false, true, undefined, false);
-		//var children = e.data.items ? $(e.data.items) : this.element.find(":ibxFocusable(-1)");			
-		//children.addClass("ibx-sm-selectable");
-		var children = this.element.logicalChildren(".ibx-sm-nav-key-root, .ibx-sm-focus-default", ":ibxFocusable(-1)").addClass("ibx-sm-selectable");
+		var e = this._dispatchEvent("ibx_selectablechildren", {"items":null}, false, true, undefined, false);
+		var children = e.data.items ? $(e.data.items) : this.element.logicalChildren(".ibx-sm-nav-key-root, .ibx-sm-focus-default", ":ibxFocusable(-1)");			
+		children.addClass("ibx-sm-selectable");
 		return selector ? children.filter(selector) : children;
 	},
 	isSelected:function(el){return $(el).hasClass("ibx-sm-selected")},
 	selected:function(el, select, anchor)
 	{
+		//public interface needs to map nodes...think tree from ibxTreeNode to it's selectable label.
+		el = el ? this.mapToSelectable(el) : el;
+		el = this._selected(el, select, anchor);
+		return el ? this.mapFromSelectable(el) : undefined;
+	},
+	_selected:function(el, select, anchor)
+	{
 		if(el === undefined)
 		{
-			select = (select === undefined) ? true : select;
-			return this.mapFromSelectable(this.selectableChildren(select ? ".ibx-sm-selected" : ":not(.ibx-sm-selected)"));
+			select = (select !== false) ? ".ibx-sm-selected" : ":not(.ibx-sm-selected)";
+			return this.selectableChildren(select);
 		}
-
-		//make sure the elements passed in are the actual selectable elements
-		el = this.mapToSelectable(el);
 
 		//by default set the anchor item
 		anchor = (anchor === undefined) ? true : false;
@@ -731,26 +735,32 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 			else
 				el = $();//default just nav, no selection.
 
-			var evt = this._dispatchEvent("ibx_beforeselchange", {"selected":select, "items":el}, false, true);
-			if(!evt.isDefaultPrevented())
+			if(el.length)
 			{
-				el = evt.data.items;
-				el.addClass("ibx-sm-selected");
-				if(anchor)
-					this.anchor(el.last());
-				this._dispatchEvent("ibx_selchange", {"selected":select, "items":el}, false, false);
+				var evt = this._dispatchEvent("ibx_beforeselchange", {"selected":select, "items":el}, false, true);
+				if(!evt.isDefaultPrevented())
+				{
+					el = evt.data.items;
+					el.addClass("ibx-sm-selected");
+					if(anchor)
+						this._anchor(el.last());
+					this._dispatchEvent("ibx_selchange", {"selected":select, "items":el}, false, false);
+				}
 			}
 		}
 		else
 		{
 			el = $(el).filter(".ibx-sm-selected");
-			var evt = this._dispatchEvent("ibx_beforeselchange", {"selected":select, "items":el}, false, true);
-			if(!evt.isDefaultPrevented())
+			if(el.length)
 			{
-				el.removeClass("ibx-sm-selected");
-				if(anchor)
-					this.anchor(el.last());
-				this._dispatchEvent("ibx_selchange", {"selected":select, "items":el}, false, false);
+				var evt = this._dispatchEvent("ibx_beforeselchange", {"selected":select, "items":el}, false, true);
+				if(!evt.isDefaultPrevented())
+				{
+					el.removeClass("ibx-sm-selected");
+					if(anchor)
+						this._anchor(el.last());
+					this._dispatchEvent("ibx_selchange", {"selected":select, "items":el}, false, false);
+				}
 			}
 		}
 	},
@@ -767,29 +777,43 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 	{
 		this.selected(this.selectableChildren(".ibx-sm-selected"), false);
 	},
-	_anchor:$(),
+	_elAnchor:$(),
 	anchor:function(el)
 	{
-		if(el === undefined)
-			return this.mapFromSelectable(this._anchor);
-
-		this._anchor.removeClass("ibx-sm-anchor");
-		this._anchor = this.mapToSelectable(el).first().addClass("ibx-sm-anchor");
-		var evt = this._dispatchEvent("ibx_anchored", {"items":this._anchor}, true, false);
+		//public interface needs to map nodes...think tree from ibxTreeNode to it's selectable label.
+		el = el ? this.mapToSelectable(el) : el;
+		el = this._anchor(el);
+		return el ? this.mapFromSelectable(el) : undefined;
 	},
-	_focused:$(),
-	focused:function(el, focus)
+	_anchor:function(el)
 	{
 		if(el === undefined)
-			return this.mapFromSelectable(this._focused);
+			return this._elAnchor;
 
-		this._focused.removeClass("ibx-sm-focused ibx-ie-pseudo-focus");
-		this._focused = this.mapToSelectable(el).first().addClass("ibx-sm-focused " + (ibxPlatformCheck.isIE ? "ibx-ie-pseudo-focus" : ""));
-		this._focused ? this.element.attr("aria-active-descendant", this._focused.prop("id")) : this.element.removeAttr("aria-active-descendant");
-		var evt = this._dispatchEvent("ibx_focused", {"items":this._focused}, true, false);
+		this._elAnchor.removeClass("ibx-sm-anchor");
+		this._elAnchor = $(el).first().addClass("ibx-sm-anchor");
+		var evt = this._dispatchEvent("ibx_anchored", {"items":this._elAnchor}, true, false);
+	},
+	_elFocus:$(),
+	focus:function(el, focus)
+	{
+		//public interface needs to map nodes...think tree from ibxTreeNode to it's selectable label.
+		el = el ? this.mapToSelectable(el) : el;
+		el = this._focus(el, focus);
+		return el ? this.mapFromSelectable(el) : undefined;
+	},
+	_focus:function(el, focus)
+	{
+		if(el === undefined)
+			return this._elFocus;
+
+		this._elFocus.removeClass("ibx-sm-focused ibx-ie-pseudo-focus");
+		this._elFocus = $(el).first().addClass("ibx-sm-focused " + (ibxPlatformCheck.isIE ? "ibx-ie-pseudo-focus" : ""));
+		this._elFocus ? this.element.attr("aria-active-descendant", this._elFocus.prop("id")) : this.element.removeAttr("aria-active-descendant");
+		var evt = this._dispatchEvent("ibx_focused", {"items":this._elFocus}, true, false);
 	},
 	_active:false,
-	active:function(active)
+	_activate:function(active)
 	{
 		if(active === undefined)
 			return this._active;
@@ -809,7 +833,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 			else
 			{
 				if(this.options.focusResetOnBlur)
-					this.focused(null, false);
+					this._focused(null, false);
 				this.element.removeClass("ibx-sm-active");
 
 				//put this element back in the tab order...so that next tab into will will do auto-focus.
