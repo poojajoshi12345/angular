@@ -363,7 +363,7 @@
 		{
 			background-color:rgba(53, 184, 254, 0.1);
 		}
-		.hp-style .tnode-selected > .tnode-label
+		.hp-style .ibx-sm-selected.tnode-label
 		{
 			background-color:rgba(53, 184, 254, 0.4);
 		}
