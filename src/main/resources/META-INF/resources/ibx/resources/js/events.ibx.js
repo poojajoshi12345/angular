@@ -507,6 +507,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 	_create:function()
 	{
 		this._super();
+		this.option(this.options);//force initial update.
 		this.element.data("ibiIbxSelectionManager", this);//plymorphism
 		this.element[0].addEventListener("focusin", this._onFocusIn.bind(this), true);
 		this.element[0].addEventListener("focusout", this._onFocusOut.bind(this), true);
@@ -562,7 +563,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 		//manage circular tabbing if desired.
 		if(options.focusRoot && e.keyCode == $.ui.keyCode.TAB)
 		{
-			var focusKids = this.element.logicalChildren(".ibx-focus-root", ":ibxFocusable");
+			var focusKids = this.element.logicalChildren(".ibx-sm-focus-root", ":ibxFocusable");
 			var target = null;
 			var firstKid = focusKids.first();
 			var lastKid = focusKids.last();
@@ -694,10 +695,10 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 	selectableChildren:function(selector)
 	{
 		var options = this.options;
-		var e = this._dispatchEvent("ibx_selectablechildren", {"items":null}, false, true, undefined, false);
+		//var e = this._dispatchEvent("ibx_selectablechildren", {"items":null}, false, true, undefined, false);
 		//var children = e.data.items ? $(e.data.items) : this.element.find(":ibxFocusable(-1)");			
 		//children.addClass("ibx-sm-selectable");
-		var children = this.element.logicalChildren(".ibx-nav-key-root, .ibx-focus-default", ":ibxFocusable(-1)").addClass("ibx-sm-selectable");
+		var children = this.element.logicalChildren(".ibx-sm-nav-key-root, .ibx-sm-focus-default", ":ibxFocusable(-1)").addClass("ibx-sm-selectable");
 		return selector ? children.filter(selector) : children;
 	},
 	isSelected:function(el){return $(el).hasClass("ibx-sm-selected")},
@@ -827,13 +828,13 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 			this.deselectAll();
 		else
 		if(key == "focusRoot")
-			this.element.toggleClass("ibx-focus-root", value);
+			this.element.toggleClass("ibx-sm-focus-root", value);
 		else
 		if(key == "navKeyRoot")
-			this.element.toggleClass("ibx-nav-key-root", value);
+			this.element.toggleClass("ibx-sm-nav-key-root", value);
 		else
 		if(key == "focusDefault")
-			this.element.toggleClass("ibx-focus-default", value);
+			this.element.toggleClass("ibx-sm-focus-default", !!value);
 		
 		this._super(key, value);
 	},

@@ -5,18 +5,13 @@ $.widget("ibi.ibxTreeSelectionManager", $.ibi.ibxSelectionManager,
 {
 	"options":
 	{
-		"type":"multi",
+		"type":"single",
 		"toggleSelection":false,
 		"navKeyRoot":true,
 		"navKeyDir":"vertical",
 		"focusDefault":true,
 		"focusResetOnBlur":false,
 		"escClearSelection":true,
-	},
-	_create:function()
-	{
-		this._super();
-		this.option(this.options);//force an update of the options
 	},
 	mapToSelectable:function(el)
 	{
