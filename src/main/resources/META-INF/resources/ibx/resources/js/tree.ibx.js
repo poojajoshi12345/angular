@@ -13,10 +13,10 @@ $.widget("ibi.ibxTreeSelectionManager", $.ibi.ibxSelectionManager,
 		"focusResetOnBlur":false,
 		"escClearSelection":true,
 	},
-	selectableChildren:function(selector)
+	_create:function()
 	{
-		var nodes = this.element.find(".tnode-label:visible");
-		return selector ? nodes.filter(selector) : nodes;
+		this._super();
+		this.option(this.options);//force an update of the options
 	},
 	mapToSelectable:function(el)
 	{
@@ -79,15 +79,6 @@ $.widget("ibi.ibxTree", $.ibi.ibxVBox,
 	{
 		return this.element.find(selector || ".ibx-tree-node");
 	},
-	active:function()
-	{
-		return this.navKeyActiveChild()[0];
-	},
-	anchor:function()
-	{
-		var anchor = this.treeNodes(".tnode-anchor");
-		return anchor[0] || null;
-	},
 	_onNodeEvent:function(e)
 	{
 		var targetNode = $(e.target).closest(".ibx-tree-node").data("ibxWidget");
@@ -116,7 +107,7 @@ $.widget("ibi.ibxTree", $.ibi.ibxVBox,
 				if(!targetNode.expanded())
 					targetNode.toggleExpanded(true);
 				else
-					targetNode.children().first().find(".tnode-label").focus();
+					targetNode.children().first().find(".tnode-label").first().focus();
 			}
 			else
 			if(e.keyCode === $.ui.keyCode.LEFT)
@@ -124,7 +115,7 @@ $.widget("ibi.ibxTree", $.ibi.ibxVBox,
 				if(targetNode.expanded())
 					targetNode.toggleExpanded(false);
 				else
-					$(targetNode.parentNode()).children(".tnode-label").focus();
+					$(targetNode.parentNode()).children(".tnode-label").first().focus();
 				e.stopPropagation();
 			}
 		}

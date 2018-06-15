@@ -494,7 +494,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 {
 	options:
 	{
-		"type":"single",					//nav - navigation only, single - single selection, multi - multiple selection
+		"seltype":"nav",					//nav - navigation only, single - single selection, multi - multiple selection
 		"toggleSelection":true,				//clicking on an item will select/deselect.
 		"escClearSelection":true,			//clear the selection on the escape key
 		"focusRoot":false,					//keep focus circular within this element
@@ -502,7 +502,6 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 		"focusResetOnBlur":true,			//when widget loses focus, reset the current active navKey child.
 		"navKeyRoot":false,					//arrow keys will move you circularly through the items.
 		"navKeyDir":"both",					//horizontal = left/right, vertical = up/down, or both
-		"navKeys":[$.ui.keyCode.LEFT, $.ui.keyCode.RIGHT, $.ui.keyCode.UP, $.ui.keyCode.DOWN, $.ui.keyCode.ESCAPE, $.ui.keyCode.ENTER, $.ui.keyCode.SPACE, $.ui.keyCode.HOME, $.ui.keyCode.END],
 	},
 	_widgetClass:"ibx-selection-manager",
 	_create:function()
@@ -526,19 +525,19 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 		var ownsRelTarget = $.contains(this.element[0], e.relatedTarget);
 
 		//make sure the manager is in the focused state.
-		this.focusMgr(true);
+		this.active(true);
 
 		//do the default focusing when manager is directly focused (not one of its children).
-		if(isTarget && !ownsRelTarget && (options.focusDefault !== false))
+		if(isTarget && !ownsRelTarget && options.focusDefault !== false)
 		{
-			//focus default item...otherwise find first focusable item (ARIA needs SOMETHING to be focused on the popup)
 			var defItem = this._focused;
-			if(!defItem)
+			if(!defItem.length)
 			{
 				var defItem = this.element.find(options.focusDefault);
 				defItem = defItem.length ? defItem : this.selectableChildren().first();
 			}
 			defItem.focus();
+			return;
 		}
 
 		//focus the selected item
@@ -550,16 +549,109 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 		//make sure the manager is in the blurred stated when some external element is focused.
 		var isTarget = this.element.is(e.target);
 		var ownsRelTarget = $.contains(this.element[0], e.relatedTarget);
+		
 		if(!isTarget && !ownsRelTarget)
-			this.focusMgr(false);
+			this.active(false);
+	},
+	_onKeyDown:function(e)
+	{
+		var options = this.options;
+		if(!options.focusRoot && !options.navKeyRoot)
+			return;
+
+		//manage circular tabbing if desired.
+		if(options.focusRoot && e.keyCode == $.ui.keyCode.TAB)
+		{
+			var focusKids = this.element.logicalChildren(".ibx-focus-root", ":ibxFocusable");
+			var target = null;
+			var firstKid = focusKids.first();
+			var lastKid = focusKids.last();
+
+			if(firstKid.length && lastKid.length)
+			{
+				var mappedTarget = this.mapToSelectable(e.target);
+				if((firstKid.is(mappedTarget) || $.contains(firstKid[0], mappedTarget)) && e.shiftKey)
+					target = focusKids.last();
+				else
+				if((lastKid.is(mappedTarget) || $.contains(lastKid[0], mappedTarget)) && !e.shiftKey)
+					target = focusKids.first();
+			}
+
+			//target means first/last item and need to loop...or no kids, so do nothing.
+			if(target || !focusKids.length)
+			{
+				target = $(target);
+				target.focus();
+				e.preventDefault();
+				e.stopPropagation();
+			}
+		}
+
+		//manage arrow navigation if desired.
+		if(options.navKeyRoot && [$.ui.keyCode.LEFT, $.ui.keyCode.RIGHT, $.ui.keyCode.UP, $.ui.keyCode.DOWN].indexOf(e.keyCode) != -1)
+		{
+			var navKids = this.selectableChildren();
+			var focusedItem = this._focused;
+			var idxFocused = navKids.index(focusedItem);
+			var goPrev = (e.keyCode == $.ui.keyCode.LEFT || e.keyCode == $.ui.keyCode.UP);
+			var goNext = (e.keyCode == $.ui.keyCode.RIGHT || e.keyCode == $.ui.keyCode.DOWN);
+			var vert = (options.navKeyDir == "horizontal" || options.navKeyDir == "both") && (e.keyCode == $.ui.keyCode.LEFT || e.keyCode == $.ui.keyCode.RIGHT);
+			var horz = (options.navKeyDir == "vertical" || options.navKeyDir == "both") && (e.keyCode == $.ui.keyCode.UP || e.keyCode == $.ui.keyCode.DOWN);
+			var focusItem = $();
+
+			if(this.element.is(document.activeElement))
+				focusItem = (focusedItem.length) ? focusedItem : navKids.first();
+			else
+			if(goPrev && (vert || horz))
+				focusItem = (idxFocused > 0) ? navKids[idxFocused - 1] : navKids.last();
+			else
+			if(goNext && vert || horz)
+				focusItem = (idxFocused < navKids.length-1) ? navKids[idxFocused + 1] : navKids.first();
+			
+			//don't focus for just shift/ctrl keys
+			if(e.keyCode != 17 && e.keyCode != 16)
+			{
+				focusItem.focus();
+				e.preventDefault();
+			}
+		}
+
+		//manage selection, and focus jumping
+		if(e.keyCode == $.ui.keyCode.ENTER || e.keyCode == $.ui.keyCode.SPACE)
+		{
+			if((options.type == "multi") && !e.shiftKey && !e.ctrlKey)
+				this.deselectAll();
+
+			if(e.shiftKey)
+			{
+				var selChildren = this.selectableChildren();
+				var idxAnchor = selChildren.index(this._anchor[0]);
+				var idxSel = selChildren.index(this._focused);
+				var idxStart = Math.min(idxAnchor, idxSel);
+				var idxEnd = Math.max(idxAnchor, idxSel);
+				this.toggleSelected(selChildren.slice(idxStart, idxEnd + 1), this.isSelected(this._anchor), false);
+			}
+			else
+				this.toggleSelected(this._focused);
+		}
+		else
+		if(e.keyCode == $.ui.keyCode.HOME)
+			this.selectableChildren().first().focus();
+		else
+		if(e.keyCode == $.ui.keyCode.END)
+			this.selectableChildren().last().focus();
+		else
+		if(e.keyCode == $.ui.keyCode.ESCAPE && options.escClearSelection)
+			this.deselectAll();
 	},
 	_onMouseDown:function(e)
 	{
-		this.focusMgr(true);
-
 		var options = this.options;
 		var isTarget = this.element.is(e.target);
 		var isMulti = options.type == "multi";
+
+		//mousedown happens before focus, so make us active before anything.
+		this.active(true);
 
 		//don't deselect if clicking on scrollbar.
 		if(!this.element.clickOnScrollbar(e.clientX, e.clientY))
@@ -581,120 +673,32 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 		else
 			this.toggleSelected(selTarget, (isMulti && e.ctrlKey) || options.toggleSelection ? undefined : true);
 	},
-	_onKeyDown:function(e)
-	{
-		var options = this.options;
-		if(!options.focusRoot && !options.navKeyRoot)
-			return;
-		var selChildren = this.selectableChildren();
-
-		//manage circulat tabbing if desired.
-		if(options.focusRoot && e.keyCode == $.ui.keyCode.TAB)
-		{
-			var selChildren = this.selectableChildren();
-			var target = null;
-			var firstKid = selChildren.first();
-			var lastKid = selChildren.last();
-			if(firstKid.length && lastKid.length)
-			{
-				if((firstKid.is(e.target) || $.contains(firstKid[0], e.target)) && e.shiftKey)
-					target = selChildren.last();
-				else
-				if((lastKid.is(e.target) || $.contains(lastKid[0], e.target)) && !e.shiftKey)
-					target = selChildren.first();
-			}
-
-			//target means first/last item and need to loop...or no kids, so do nothing.
-			if(target || !selChildren.length)
-			{
-				target = $(target);
-				target.focus();
-				e.preventDefault();
-				e.stopPropagation();
-			}
-		}
-
-		//manage arrow navigation if desired.
-		if(options.navKeyRoot)
-		{
-			var focusedItem = this._focused;
-			var idxFocused = selChildren.index(focusedItem);
-			var goPrev = (e.keyCode == $.ui.keyCode.LEFT || e.keyCode == $.ui.keyCode.UP);
-			var goNext = (e.keyCode == $.ui.keyCode.RIGHT || e.keyCode == $.ui.keyCode.DOWN);
-			var vert = (options.navKeyDir == "horizontal" || options.navKeyDir == "both") && (e.keyCode == $.ui.keyCode.LEFT || e.keyCode == $.ui.keyCode.RIGHT);
-			var horz = (options.navKeyDir == "vertical" || options.navKeyDir == "both") && (e.keyCode == $.ui.keyCode.UP || e.keyCode == $.ui.keyCode.DOWN);
-			var focusItem = $();
-
-			if(this.element.is(document.activeElement))
-				focusItem = (focusedItem && focusedItem.length) ? focusedItem : selChildren.first();
-			else
-			if(goPrev && (vert || horz))
-				focusItem = (idxFocused > 0) ? selChildren[idxFocused - 1] : selChildren.last();
-			else
-			if(goNext && vert || horz)
-				focusItem = (idxFocused < selChildren.length-1) ? selChildren[idxFocused + 1] : selChildren.first()[0];
-			
-			//don't focus for just shift/ctrl keys
-			if(e.keyCode != 17 && e.keyCode != 16)
-			{
-				focusItem.focus();
-				e.preventDefault();
-			}
-		}
-
-		//manage selection, and focus jumping
-		if(e.keyCode == $.ui.keyCode.ENTER || e.keyCode == $.ui.keyCode.SPACE)
-		{
-			if((options.type == "multi") && !e.shiftKey && !e.ctrlKey)
-				this.deselectAll();
-
-			if(e.shiftKey)
-			{
-				var idxAnchor = selChildren.index(this._anchor[0]);
-				var idxSel = selChildren.index(this._focused);
-				var idxStart = Math.min(idxAnchor, idxSel);
-				var idxEnd = Math.max(idxAnchor, idxSel);
-				this.toggleSelected(selChildren.slice(idxStart, idxEnd + 1), this.isSelected(this._anchor), false);
-			}
-			else
-				this.toggleSelected(this._focused);
-		}
-		else
-		if(e.keyCode == $.ui.keyCode.HOME)
-			selChildren.first().focus();
-		else
-		if(e.keyCode == $.ui.keyCode.END)
-			selChildren.last().focus();
-		else
-		if(e.keyCode == $.ui.keyCode.ESCAPE && options.escClearSelection)
-			this.deselectAll();
-	},
 	preDispacthEvent:function(eventInfo){return eventInfo;},
-	_dispatchEvent:function(eType, data, canBubble, cancelable, relatedTarget)
+	_dispatchEvent:function(eType, data, canBubble, cancelable, relatedTarget, mapItems)
 	{
-		data.items = this.mapFromSelectable(data.items);
+		mapItems = (mapItems === undefined) ? true : mapItems;
+		data.items = mapItems ? this.mapFromSelectable(data.items) : data.items;
 		var parms = this.preDispacthEvent({"eType":eType, "data":data, "canBubble":canBubble, "cancelable":cancelable, "relatedTarget":relatedTarget});
 		var evt = this.element.dispatchEvent(parms.eType, parms.data, parms.canBubble, parms.cancelable, parms.relatedTarget);
-		evt.data.items = this.mapToSelectable(data.items);
+		evt.data.items = mapItems ? this.mapToSelectable(data.items) : data.items;
 		return evt;
 	},
 	mapToSelectable:function(el)
 	{
-		return $(el).closest(".ibx-selectable", this.element[0]);
+		return $(el).closest(".ibx-sm-selectable");
 	},
 	mapFromSelectable:function(el)
 	{
-		return el;//default returns same.
+		return $(el);
 	},
 	selectableChildren:function(selector)
 	{
 		var options = this.options;
-		var e = this._dispatchEvent("ibx_selectablechildren", {"items":null}, false, true);
-		var pattern = sformat(":ibxFocusable({1}, {2})", options.navKeyRoot ? -1 : 0, options.focusRoot ? Infinity : -1);
-		var children = e.isDefaultPrevented() ? $(e.data) : this.element.children(pattern);
-		children = selector ? children.filter(selector) : children;
-		children.addClass("ibx-selectable");
-		return children;
+		var e = this._dispatchEvent("ibx_selectablechildren", {"items":null}, false, true, undefined, false);
+		//var children = e.data.items ? $(e.data.items) : this.element.find(":ibxFocusable(-1)");			
+		//children.addClass("ibx-sm-selectable");
+		var children = this.element.logicalChildren(".ibx-nav-key-root, .ibx-focus-default", ":ibxFocusable(-1)").addClass("ibx-sm-selectable");
+		return selector ? children.filter(selector) : children;
 	},
 	isSelected:function(el){return $(el).hasClass("ibx-sm-selected")},
 	selected:function(el, select, anchor)
@@ -762,74 +766,77 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 	{
 		this.selected(this.selectableChildren(".ibx-sm-selected"), false);
 	},
-	_anchor:null,
+	_anchor:$(),
 	anchor:function(el)
 	{
 		if(el === undefined)
 			return this.mapFromSelectable(this._anchor);
 
-		//make sure the elements passed in are the actual selectable elements
-		el = this.mapToSelectable(el)[0];
-
-		if(this._anchor)
-			this._anchor.removeClass("ibx-sm-anchor");
-		this._anchor = $(el).first().addClass("ibx-sm-anchor");
-		var evt = this._dispatchEvent("ibx_anchored", {"items":el}, true, false);
+		this._anchor.removeClass("ibx-sm-anchor");
+		this._anchor = this.mapToSelectable(el).first().addClass("ibx-sm-anchor");
+		var evt = this._dispatchEvent("ibx_anchored", {"items":this._anchor}, true, false);
 	},
-	_focused:null,
+	_focused:$(),
 	focused:function(el, focus)
 	{
 		if(el === undefined)
 			return this.mapFromSelectable(this._focused);
-	
-		//make sure the elements passed in are the actual selectable elements
-		el = this.mapToSelectable(el);
 
-		if(this._focused)
-			this._focused.removeClass("ibx-sm-focused ibx-ie-pseudo-focus");
-		this._focused = $(el).first().addClass("ibx-sm-focused " + (ibxPlatformCheck.isIE ? "ibx-ie-pseudo-focus" : ""));
-		this._focused.length ? this.element.attr("aria-active-descendant", el.prop("id")) : this.element.removeAttr("aria-active-descendant");
-		var evt = this._dispatchEvent("ibx_focused", {"items":el}, true, false);
+		this._focused.removeClass("ibx-sm-focused ibx-ie-pseudo-focus");
+		this._focused = this.mapToSelectable(el).first().addClass("ibx-sm-focused " + (ibxPlatformCheck.isIE ? "ibx-ie-pseudo-focus" : ""));
+		this._focused ? this.element.attr("aria-active-descendant", this._focused.prop("id")) : this.element.removeAttr("aria-active-descendant");
+		var evt = this._dispatchEvent("ibx_focused", {"items":this._focused}, true, false);
 	},
-	focusMgr:function(focus)
+	_active:false,
+	active:function(active)
 	{
-		if(this._focus != focus)
+		if(active === undefined)
+			return this._active;
+
+		if(this._active != active)
 		{
 			var options = this.options;
-			var selChildren = this.selectableChildren();
-			if(focus)
+			if(active)
 			{
-				this.element.addClass("ibx-selmgr-focused");
+				this.element.addClass("ibx-sm-active");
+				this.selectableChildren();
 
 				//take the element out of the tab order so shift+tab will work and not focus this container.
-				if(options.focusDefault)
-					this.element.data("ibxFocDefSavedTabIndex", this.element.prop("tabindex")).prop("tabindex", -1);
+				//if(options.focusDefault)
+				//	this.element.data("ibxFocDefSavedTabIndex", this.element.prop("tabindex")).prop("tabindex", -1);
 			}
 			else
 			{
 				if(this.options.focusResetOnBlur)
 					this.focused(null, false);
-				this.element.removeClass("ibx-selmgr-focused");
+				this.element.removeClass("ibx-sm-active");
 
 				//put this element back in the tab order...so that next tab into will will do auto-focus.
-				this.element.prop("tabIndex", this.element.data("ibxFocDefSavedTabIndex")).removeData("ibxFocDefSavedTabIndex");
+				//this.element.prop("tabIndex", this.element.data("ibxFocDefSavedTabIndex")).removeData("ibxFocDefSavedTabIndex");
 			}
-			this._focus = focus
+			this._active = active;
 		}
+	},
+	option:function(key, value)
+	{
+		this._super(key, value);
 	},
 	_setOption:function(key, value)
 	{
 		if(key == "type" && value != this.options[key])
 			this.deselectAll();
+		else
+		if(key == "focusRoot")
+			this.element.toggleClass("ibx-focus-root", value);
+		else
+		if(key == "navKeyRoot")
+			this.element.toggleClass("ibx-nav-key-root", value);
+		else
+		if(key == "focusDefault")
+			this.element.toggleClass("ibx-focus-default", value);
+		
 		this._super(key, value);
 	},
-	_refresh:function()
-	{
-		this._super();
-		var options = this.options;
-		this.element.toggleClass("ibx-focus-root", options.focusRoot);
-		this.element.toggleClass("ibx-nav-key-root", options.navKeyRoot);
-	}
 });
 $.widget("ibi.ibxSelMgrNavigator", $.ibi.ibxSelectionManager, {options:{"type":"none"}});
 $.widget("ibi.ibxSelMgrSingle", $.ibi.ibxSelectionManager, {options:{"type":"single"}});
