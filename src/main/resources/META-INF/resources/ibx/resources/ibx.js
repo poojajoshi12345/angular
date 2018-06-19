@@ -130,6 +130,9 @@ function ibx()
 							var url = ibx._path + "./js/resources.ibx.js";
 							$.get(url).done(function(dfd, text, status, xhr)
 							{
+								//[ACT-1571] Have to reload via script tag if inline loading is on.
+								if(ibx.forceInlineResLoading)
+									$("head").append($("<script type='text/javascript'>").attr("data-ibx-src", url).text(text));
 								dfd.resolve();
 							}.bind(this, dfd));
 						}
