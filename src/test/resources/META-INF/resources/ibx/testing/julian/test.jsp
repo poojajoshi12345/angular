@@ -19,6 +19,8 @@
 		<Script src="<%=request.getContextPath()%>/ibx/resources/ibx.js" type="text/javascript"></script>
 		<script type="text/javascript">
 			<jsp:include page="/WEB-INF/jsp/global/wf_globals.jsp" flush="false" />
+
+			ibx.forceInlineResLoading = true;
 			ibx(function()
 			{
 				var tree = $(".test-tree");
@@ -114,7 +116,7 @@
 					});
 					return treeNode;
 				};
-			}, [{src:"./test_res_bundle.xml", loadContext:"app"}], true);
+			}, true);
 		</script>
 		<style type="text/css">
 			html, body

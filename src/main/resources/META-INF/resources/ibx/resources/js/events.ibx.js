@@ -265,7 +265,7 @@ function ibxDragDropManager()
 }
 ibxDragDropManager.dragPrevented = false;
 ibxDragDropManager.dragElement = null;
-ibxDragDropManager.curTarget = null;
+ibxDragDropManager.curTarget = $();
 ibxDragDropManager.dragSourceClass = "ibx-drag-source",
 ibxDragDropManager.dragTargetClass = "ibx-drop-target",
 ibxDragDropManager.dragImageClass = "ibx-drag-image",
@@ -297,12 +297,12 @@ ibxDragDropManager.endDrag = function(eType, e)
 	if(this._dataTransfer)
 		$(this._dataTransfer._dragImage).remove();
 
-	if(this.curTarget)
+	if(this.curTarget.length)
 	{
-		this.curTarget.classList.remove(this.dragTargetClass);
-		this.curTarget.style.cursor = this.curTarget.dataset.ibxDragTargetCursorOrig;
-		delete this.curTarget.dataset.ibxDragTargetCursorOrig;
-		this.curTarget = null;
+		this.curTarget.removeClass(this.dragTargetClass);
+		this.curTarget.css("cursor", this.curTarget.data("ibxDragTargetCursorOrig")); 
+		this.curTarget.removeData("ibxDragTargetCursorOrig");
+		this.curTarget = $();
 	}
 
 	//reset body cursor
@@ -343,7 +343,7 @@ ibxDragDropManager._onMouseEvent = function(e)
 	{
 		//if allowed let target know it was dropped on
 		if(!this.dragPrevented && this.isDragging())
-			this._dispatchDragEvent(e, "ibx_drop", this.curTarget, true, true);
+			this._dispatchDragEvent(e, "ibx_drop", this.curTarget[0], true, true);
 
 		//end the drag operation
 		this.endDrag("ibx_dragend", e);
@@ -386,34 +386,36 @@ ibxDragDropManager._onMouseEvent = function(e)
 			this._dataTransfer.dropEffect = "not-allowed";
 
 			//manage the current target
-			if(this.curTarget !== elTarget)
+			if(!this.curTarget.is(elTarget))
 			{
 				//spit out events for source/target
 				dEvent = this._dispatchDragEvent(e, "ibx_dragleave", this.curTarget, true);
 				dEvent = this._dispatchDragEvent(e, "ibx_dragenter", elTarget, true, true);
 
 				//reset last drag target
-				if(this.curTarget)
+				if(this.curTarget.length)
 				{
-					this.curTarget.classList.remove(this.dragTargetClass);
-					this.curTarget.style.cursor = this.curTarget.dataset.ibxDragTargetCursorOrig;
-					delete this.curTarget.dataset.ibxDragTargetCursorOrig;
+					this.curTarget.removeClass(this.dragTargetClass);
+					this.curTarget.css("cursor", this.curTarget.data("ibxDragTargetCursorOrig"));
+					this.curTarget.removeData("ibxDragTargetCursorOrig");
 				}
 
 				//save new drag target
-				this.curTarget = elTarget;
-				if(this.curTarget)
+				this.curTarget = $(elTarget);
+				if(this.curTarget.length)
 				{
-					this.curTarget.dataset.ibxDragTargetCursorOrig = this.curTarget.style.cursor;
-					this.curTarget.classList.add(this.dragTargetClass);
+					//[IA-8982] when dragging over an svg node in IE (of course) there is no style property...so just ignore in that case.
+					var cursor = this.curTarget[0].style ? this.curTarget[0].style.cursor : ""
+					this.curTarget.data("ibxDragTargetCursorOrig", cursor);
+					this.curTarget.addClass(this.dragTargetClass);
 				}
 			}
 
-			if(this.curTarget)
+			if(this.curTarget.length)
 			{
 				//send drag messages if 'ibx_dragover' was not prevented
 				dEvent = this._dispatchDragEvent(e, "ibx_drag", this.dragElement, true, true);
-				dEvent = this._dispatchDragEvent(e, "ibx_dragover", this.curTarget, true, true);
+				dEvent = this._dispatchDragEvent(e, "ibx_dragover", this.curTarget[0], true, true);
 				this.dragPrevented = !dEvent.isDefaultPrevented();
 
 				//figure out the cursor
@@ -426,8 +428,8 @@ ibxDragDropManager._onMouseEvent = function(e)
 					if(this._dataTransfer.effectAllowed == this._dataTransfer.dropEffect)
 						cursor = this._dataTransfer.dropEffect;
 				}
-				this.curTarget.style.cursor = cursor;
-				this.curTarget.offsetHeight;
+				this.curTarget.css("cursor", cursor);
+				this.curTarget[0].offsetHeight;
 				document.body.style.cursor = cursor;
 			}
 
@@ -813,6 +815,10 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 		var evt = this._dispatchEvent("ibx_focused", {"items":this._elFocus}, true, false);
 	},
 	_active:false,
+	active:function()
+	{
+		return this._active;
+	},
 	_activate:function(active)
 	{
 		if(active === undefined)
