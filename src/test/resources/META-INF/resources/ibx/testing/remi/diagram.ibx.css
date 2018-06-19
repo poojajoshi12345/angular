@@ -19,10 +19,9 @@
 
 .ibx-diagram-connection {
 	stroke: black;
-	stroke-width: 1px
+	stroke-width: 1px;
 }
 
 .ui-state-highlight {
 	border: 2px solid #8787e4 !important;
-	border-radius: 
 }
