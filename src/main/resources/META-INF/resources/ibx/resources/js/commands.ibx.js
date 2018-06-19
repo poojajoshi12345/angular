@@ -58,15 +58,16 @@ $.widget("ibi.ibxCommand", $.ibi.ibxWidget,
 	_setOption:function(key, value)
 	{
 		var changed = this.options[key] != value;
-		this._super(key, value);
-		if(changed && key == "checked")
-			this.element.dispatchEvent("ibx_checkchanged", value, false, false, this._relTarget);
-		else
-		if(changed && key == "userValue")
-			this.element.dispatchEvent("ibx_uservaluechanged", value, false, false, this._relTarget);
-		else
+
 		if(changed && key == "id")
 			delete $.ibi.ibxCommand.cmds[this.options.id];
+
+		this._super(key, value);
+
+		if(changed && key == "checked")
+			this.element.dispatchEvent("ibx_checkchanged", value, false, false, this._relTarget);
+		if(changed && key == "userValue")
+			this.element.dispatchEvent("ibx_uservaluechanged", value, false, false, this._relTarget);
 	},
 	_refresh:function()
 	{
