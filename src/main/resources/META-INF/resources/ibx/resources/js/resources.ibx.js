@@ -134,7 +134,7 @@ _p.loadExternalResFile = function(elFile)
 			if(fileType == "style-file")
 				var x = 10;
 			var asInline = (elFile.attr("inline") == "true") || (fileType == "script-file" && (elFile.attr("inline") !== "false")) || (fileType == "string-file") || (fileType == "markup-file");
-			if(asInline)
+			if(ibx.forceInlineResLoading || asInline)
 			{
 				$.get({async:false, url:src, dataType:"text", error:this._resFileRetrievalError.bind(this, src)}).done(function(elFIle, src, fileType, content, status, xhr)
 				{
@@ -164,7 +164,10 @@ _p.loadExternalResFile = function(elFile)
 						else
 						if(fileType == "script-file")
 						{
-							eval.call(window, content);
+							if(ibx.forceInlineResLoading)
+								$("head").append($("<script type='text/javascript'>").attr("data-ibx-src", src).text(content));
+							else
+								eval.call(window, content);
 							eType = "scriptfileinlineloaded";
 						}
 						this.loadedFiles[src] = true;

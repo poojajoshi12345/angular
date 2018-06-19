@@ -227,6 +227,8 @@ ibx._setAccessibility = function(accessible)
 	accessible ? $(".ibx-root").attr("role", "application") : $(".ibx-root").removeAttr("role");
 };
 
+ibx.forceInlineResLoading = false;//[ACT-1571]Needed a way to package ibx into single file...this forces all script/css to be inline.
+
 //where ibx.js loaded from
 ibx._path = "";
 ibx.getPath = function(){return ibx._path;};
