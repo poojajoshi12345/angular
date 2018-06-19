@@ -8,63 +8,44 @@
 		<meta http-equiv="Expires" content="0" />
 		<meta name="google" value="notranslate">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
+
+		<script id="resBundle" type="text/xmldata">
+			<ibx-res-bundle name="ibx_resourece_bundle.xml" loadContext="ibx">
+				<strings>
+				</strings>
+
+				<!--styles-->
+				<styles>
+				</styles>
+
+				<!--markup-->
+				<markup>
+				</markup>
+
+				<!--scripts-->
+				<scripts>
+				</scripts>
+
+				<!--default external bundles to be loaded AFTER this bundles is fully loaded and running-->
+				<packages>
+				</packages>
+
+			</ibx-res-bundle>
+		</script>
 		<script type="text/javascript" src="../../resources/ibx.js"></script>
-		<script type="text/javascript">
+		<script data-ibx-main="true" type="text/javascript">
 			ibx(function()
 			{
-				var parent = $(".test-parent").ibxSelectionManager(
+				var htmlOut = "<!DOCTYPE html><html lang='en'><head>
+				$.get(sformat("{1}ibx.js", ibx.getPath()), function(text, status, xhr)
 				{
-					"type":"multi",
-					"navKeyRoot": true,
-					"focusRoot":true,
-					"focusDefault":true,
-					"focusResetOnBlur":false
+					$("head").append($("<script type='text/javascript'>").text(text));
 				});
-				parent.on("ibx_selchange", function(e)
-				{
-					e = e.originalEvent;
-					var data = e.data;
-					console.log(e.type, data);
-				});
-
-				for(var i = 0; i < 10; ++i)
-				{
-					var child = $(sformat("<div tabindex='0' class='child child{1}'>", i)).ibxAriaId();
-					child.addClass(i%2 ? "even" : "odd").prop("tabindex", i%2 ? 0 : -1);
-					parent.append(child);
-				}
 			}, true);
 		</script>
 		<style type="text/css">
-			.test-parent
-			{
-				position:absolute;
-				left:10px;
-				top:50px;
-				right:10px;
-				bottom:10px;
-				overflow:auto;
-				border:2px solid gray;
-			}
-			.child
-			{
-				flex:0 0 auto;
-				width:100px;
-				height:100px;
-				margin:5px;
-				border:1px solid black;
-			}
-			.odd{background-color:thistle;}
-			.even{background-color:greenyellow;}
-			.ibx-sm-focused{box-shadow:3px 3px 5px 0px #888;}
-			.ibx-sm-selected{background-color:pink;}
-			.ibx-sm-selected:before{content:"SELECTED";font-size:11px;font-family:monospace;}
-			.ibx-sm-anchor:after{content:"_ANCHOR";font-size:11px;font-family:monospace;}
-		</style>
+	</style>
 	</head>
 	<body class="ibx-root">
-		<div tabindex="0">Some other tabby element</div>
-		<div tabindex="0" class="test-parent" data-ibx-type="ibxHBox" data-ibxp-wrap="true">
-		</div>
 	</body>
 </html>
