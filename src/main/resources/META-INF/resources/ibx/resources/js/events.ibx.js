@@ -719,6 +719,9 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 			return this.selectableChildren(select);
 		}
 
+		//only children that are direct descendants of this root can be manipulated.
+		el = this.element.logicalChildren(".ibx-sm-selection-root", el);
+
 		//by default set the anchor item
 		anchor = (anchor === undefined) ? true : false;
 
@@ -856,6 +859,8 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 	{
 		if(key == "type" && value != this.options[key])
 			this.deselectAll();
+		if(key == "type")
+			this.element.toggleClass("ibx-sm-selection-root", (value != "nav"));
 		else
 		if(key == "focusRoot")
 			this.element.toggleClass("ibx-sm-focus-root", value);
