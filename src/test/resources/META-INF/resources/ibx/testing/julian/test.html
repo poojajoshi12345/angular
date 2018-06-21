@@ -31245,6 +31245,35 @@ ibx.coercePropVal = function (val)
 
 
 </script>
+		<script class="src-util" type="text/javascript">
+			function getBundle(bundle)
+			{
+				var strBundle = $(bundle).text();
+				var parser = new DOMParser();
+				var bundle = parser.parseFromString(strBundle, "application/xml");
+				return bundle;
+			}
+			function loadBundle(bundle)
+			{
+				var bundle = getBundle(bundle);
+				ibx.resourceMgr.loadBundle(bundle);
+			}
+			function ibxInit()
+			{
+				ibx._appName = window.location.href.substring(window.location.href.lastIndexOf("/") + 1)
+				ibx._appPath = window.location.href.substring(0, window.location.href.lastIndexOf("/") + 1);
+				ibx._path = ibx._appPath;
+				ibx._isLoading = false;
+				ibx._loaded = true;
+				ibx.resourceMgr = new ibxResourceManager();
+				ibx.resourceMgr.loadBundle(getBundle(".ibx-bundle"));
+				ibx.bindElements("");
+				$("body").addClass("ibx-visible");
+
+				ibx._loadPromise = $.Deferred();
+				ibx._loadPromise.resolve(ibx);
+			};
+		</script>
 
 		<style type="text/css">
 			body
@@ -31369,35 +31398,10 @@ ibx.coercePropVal = function (val)
 
 	<!-- MUST BE AFTER HEAD IS CREATED -->
 	<script class="src-util" type="text/javascript">
-		function getBundle(bundle)
-		{
-			var strBundle = $(bundle).text();
-			var parser = new DOMParser();
-			var bundle = parser.parseFromString(strBundle, "application/xml");
-			return bundle;
-		}
-
-		function loadBundle(bundle)
-		{
-			var bundle = getBundle(bundle);
-			ibx.resourceMgr.loadBundle(bundle);
-			console.dir(ibx.resourceMgr);
-		}
-
-		function ibxInit()
-		{
-			ibx._appName = window.location.href.substring(window.location.href.lastIndexOf("/") + 1)
-			ibx._appPath = window.location.href.substring(0, window.location.href.lastIndexOf("/") + 1);
-			ibx._path = ibx._appPath;
-			ibx._isLoading = false;
-			ibx._loaded = true;
-			ibx.resourceMgr = new ibxResourceManager();
-			ibx.resourceMgr.loadBundle(getBundle(".ibx-bundle"));
-
-			ibx.bindElements("");
-			$("body").addClass("ibx-visible");
-		};
 		ibxInit();
+		ibx(function()
+		{
+		});
 	</script>
 
 </body></html>
