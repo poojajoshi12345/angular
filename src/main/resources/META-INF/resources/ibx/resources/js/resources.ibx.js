@@ -4,7 +4,7 @@
 /******************************************************************************
 	RESOURCE BUNDLE MANAGEMENT
 ******************************************************************************/
-function ibxResourceManager()
+function ibxResourceManager(ctxPath)
 {
 	this._resBundle = $($.parseXML("<ibx-res-bundle><markup></markup></ibx-res-bundle>"));
 	this._styleSheet = $("<style type='text/css'>").prop("id", "ibxResourceManager_inline_styles").appendTo("head");
@@ -14,7 +14,7 @@ function ibxResourceManager()
 	this.language = document.documentElement.getAttribute("lang") || "ibx_default";//if no lang attribute default to ibx_default bundle
 	this.strings = {"ibx_default":{}};
 
-	this.setContextPath(ibx.getPath());//default to the global ibx context path.
+	this.setContextPath(ctxPath || ibx.getPath());//default to the global ibx context path.
 }
 var _p = ibxResourceManager.prototype = new Object();
 
@@ -408,4 +408,135 @@ _p.preProcessResource = function(resource, language)
 
 	return resource;
 };
+
+
+
+function ibxResourceCompiler(ctxPath, bootable)
+{
+	ibxResourceManager.call(this);
+	this._resBundle = $($.get({"url":this._contextPath + "./ibx_compiler_bundle.xml", "async":false, "dataType":"xml"}).responseXML);
+	this._bootable = bootable
+	var bootRes = this._resBundle.find("ibx-boot-resources").detach();
+	this._initScripts = bootable ? bootRes.children("ibx-init-scripts") : $();
+	this._bootScripts = bootable ? bootRes.children("ibx-boot-scripts") : $();
+	this._bootFiles = bootable ? bootRes.children("ibx-boot-files") : $();
+	if(bootable)
+	{
+		this._bootFiles = this._bootFiles.children().map(function(idx, file)
+		{
+			var ret = null
+			var xhr = $.get({"url":this._contextPath + file.getAttribute("src"), "async":false, "dataType":"text"});
+			if(file.nodeName == "style-file")
+				ret = $(sformat("<style type='text/css'>{2}</style>", file.getAttribute("src"), xhr.responseText))[0];
+			else
+			if(file.nodeName == "script-file")
+				ret = $(sformat("<script type='text/javascript'>{2}</script>", file.getAttribute("src"), xhr.responseText))[0];
+			return ret;
+		}.bind(this));
+
+		var coreBundle = $($.get({"url":this._contextPath + "./ibx_resource_bundle.xml", "async":false, "dataType":"xml"}).responseXML);
+		//this.compileBundle(coreBundle);
+	}
+}
+var _p = ibxResourceCompiler.prototype = new ibxResourceManager();
+
+_p._bootable = false;
+_p.bootable = function(){return this._bootable;};
+
+_p._makeResBlock = function(type, src, content)
+{
+	return $(sformat("<{1} src='{2}'><![CDATA[{3}\]\]\></{1}>", type, src, content), this._resBundle);
+};
+
+_p.getBundle = function()
+{
+	return this._resBundle[0];
+};
+_p.getBundleAsString = function()
+{
+	var bundle = this.getBundle();
+	var serializer = new XMLSerializer();
+	return serializer.serializeToString(bundle);
+};
+
+_p.linkBundle = function(inputDoc)
+{
+	var linkedDoc = $(inputDoc.cloneNode(true));
+	var bundle = sformat("<script class='ibx-res-bundle' type='text/xml'>{1}</script>", this.getBundleAsString());
+	var head = linkedDoc.find("head");
+	var scripts = linkedDoc.find("scripts");
+	if(scripts.length)
+	{
+		scripts.first().before(bundle);
+		if(this._bootable)
+			this._bootFiles.insertAfter(scripts.last());
+	}
+	else
+	{
+		head.append(bundle);
+		if(this._bootable)
+			head.append(this._bootFiles);
+	}
+	var body = linkedDoc.find("body");
+
+	if(this._bootable)
+		body.after(this._initScripts.text());
+	return linkedDoc[0];
+};
+
+_p.compileBundles = function(bundles)
+{
+	$(bundles).each(function(idx, bundle)
+	{
+		this.compileBundle(bundle);
+	}.bind(this));
+	return this;
+};
+
+_p.compileBundle = function(bundle)
+{
+	this.loadBundle(bundle);
+};
+
+_p.addStringBundle = function(strBundle)
+{
+	var section = this._resBundle.find("strings");
+	var strings = this._makeResBlock("string-bundle", "inline", JSON.stringify(strBundle));
+	section.append(strings);
+}
+
+_p.loadExternalResFile = function(elFile)
+{
+	$(elFile).each(function(idx, file)
+	{
+		var type = file.nodeName;
+		var xhr = $.get({"url":this._contextPath + file.getAttribute("src"), "async":false, "dataType":"text"});
+		var content = xhr.responseText;
+
+		if(type == "string-file")
+		{	
+			var block = this._makeResBlock("string-bundle", file.getAttribute("src"), content);
+			this._resBundle.find("strings").append(block);
+		}
+		else
+		if(type == "style-file")
+		{
+			var block = this._makeResBlock("style-sheet", file.getAttribute("src"), content);
+			this._resBundle.find("styles").append(block);
+		}
+		else
+		if(type == "markup-file")
+		{
+			var block = this._makeResBlock("markup-block", file.getAttribute("src"), content);
+			this._resBundle.find("markup").append(block);
+		}
+		else
+		if(type == "script-file")
+		{
+			var block = this._makeResBlock("script-block", file.getAttribute("src"), content);
+			this._resBundle.find("scripts").append(block);
+		}
+	}.bind(this));
+}
+
 //# sourceURL=resources.ibx.js
