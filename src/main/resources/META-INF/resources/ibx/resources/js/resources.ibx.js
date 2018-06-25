@@ -422,22 +422,26 @@ function ibxResourceCompiler(ctxPath, bootable)
 	this._bootFiles = bootable ? bootRes.children("ibx-boot-files") : $();
 	if(bootable)
 	{
-		var bootFiles = "";
-		this._bootFiles = this._bootFiles.children().map(function(idx, file)
+		var strBootFiles = "";
+		this._bootFiles.children().each(function(idx, file)
 		{
 			var ret = null
 			var xhr = $.get({"url":this._contextPath + file.getAttribute("src"), "async":false, "dataType":"text"});
-			var content = xhr.responseText;
 			if(file.nodeName == "style-file")
-				bootFiles = sformat("<style type='text/css' data-ibx-src='{1}'>{2}</style>", file.getAttribute("src"), content);
+				ret = $(sformat("<style data-ibx-src='{1}' type='text/css'>{2}</style>", file.getAttribute("src"), xhr.responseText))[0];
 			else
 			if(file.nodeName == "script-file")
-				bootFiles = sformat("<{1} type='text/xml' data-ibx-src='{2}'>{3}</{1}>", "script", file.getAttribute("src"), content);
-			return ret;
+			{
+				ret = sformat("<sc" + "ript data-ibx-src='{1}' type='text/javascript'>\nSCRIPT_CONTENT_HERE\n</sc" + "ript>\n", file.getAttribute("src"), xhr.responseText);
+				ret = ret.replace("SCRIPT_CONTENT_HERE", xhr.responseText);
+				strBootFiles += ret + "\n";
+			}
 		}.bind(this));
 
-		this._bootFiles = bootFiles;
-		var coreBundle = $.get({"url":this._contextPath + "./ibx_resource_bundle.xml", "async":false, "dataType":"xml"}).responseXML;
+		var cdata = $("<![CDATA[]]>", this._resBundle);
+		cdata[0].textContent = strBootFiles;
+		this._bootFiles.empty().append(cdata);
+		var coreBundle = $($.get({"url":this._contextPath + "./ibx_resource_bundle.xml", "async":false, "dataType":"xml"}).responseXML);
 		//this.compileBundle(coreBundle);
 	}
 }
@@ -462,13 +466,12 @@ _p.getBundleAsString = function()
 	return serializer.serializeToString(bundle);
 };
 
-_p.linkBundle = function(inputDoc)
+_p.linkBundle = function(outDoc)
 {
-	var linkedDoc = $(inputDoc.cloneNode(true));
-	var bundle = sformat("<script class='ibx-res-bundle' type='text/xml'>{1}</script>", this.getBundleAsString());
-	var head = linkedDoc.find("head");
-	var scripts = linkedDoc.find("scripts");
-	var bootFiles = $("<script type='text/javascript'>");
+	outDoc = $(outDoc);
+	var bundle = sformat("<sc" + "ript class='ibx-res-bundle' type='text/xml'>{1}</sc" +"ript>", this.getBundleAsString());
+	var head = outDoc.find("head");
+	var scripts = outDoc.find("scripts");
 	if(scripts.length)
 	{
 		scripts.first().before(bundle);
@@ -479,13 +482,13 @@ _p.linkBundle = function(inputDoc)
 	{
 		head.append(bundle);
 		if(this._bootable)
-			head.append(this._bootFiles);
+			head.append(this._bootFiles.text());
 	}
-	var body = linkedDoc.find("body");
+	var body = outDoc.find("body");
 
 	if(this._bootable)
 		body.after(this._initScripts.text());
-	return linkedDoc[0];
+	return outDoc[0];
 };
 
 _p.compileBundles = function(bundles)
