@@ -422,19 +422,22 @@ function ibxResourceCompiler(ctxPath, bootable)
 	this._bootFiles = bootable ? bootRes.children("ibx-boot-files") : $();
 	if(bootable)
 	{
+		var bootFiles = "";
 		this._bootFiles = this._bootFiles.children().map(function(idx, file)
 		{
 			var ret = null
 			var xhr = $.get({"url":this._contextPath + file.getAttribute("src"), "async":false, "dataType":"text"});
+			var content = xhr.responseText;
 			if(file.nodeName == "style-file")
-				ret = $(sformat("<style type='text/css'>{2}</style>", file.getAttribute("src"), xhr.responseText))[0];
+				bootFiles = sformat("<style type='text/css' data-ibx-src='{1}'>{2}</style>", file.getAttribute("src"), content);
 			else
 			if(file.nodeName == "script-file")
-				ret = $(sformat("<script type='text/javascript'>{2}</script>", file.getAttribute("src"), xhr.responseText))[0];
+				bootFiles = sformat("<{1} type='text/xml' data-ibx-src='{2}'>{3}</{1}>", "script", file.getAttribute("src"), content);
 			return ret;
 		}.bind(this));
 
-		var coreBundle = $($.get({"url":this._contextPath + "./ibx_resource_bundle.xml", "async":false, "dataType":"xml"}).responseXML);
+		this._bootFiles = bootFiles;
+		var coreBundle = $.get({"url":this._contextPath + "./ibx_resource_bundle.xml", "async":false, "dataType":"xml"}).responseXML;
 		//this.compileBundle(coreBundle);
 	}
 }
@@ -465,6 +468,7 @@ _p.linkBundle = function(inputDoc)
 	var bundle = sformat("<script class='ibx-res-bundle' type='text/xml'>{1}</script>", this.getBundleAsString());
 	var head = linkedDoc.find("head");
 	var scripts = linkedDoc.find("scripts");
+	var bootFiles = $("<script type='text/javascript'>");
 	if(scripts.length)
 	{
 		scripts.first().before(bundle);
