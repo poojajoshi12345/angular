@@ -425,16 +425,15 @@ function ibxResourceCompiler(ctxPath, bootable)
 		var strBootFiles = "";
 		this._bootFiles.children().each(function(idx, file)
 		{
-			var ret = null
 			var xhr = $.get({"url":this._contextPath + file.getAttribute("src"), "async":false, "dataType":"text"});
 			if(file.nodeName == "style-file")
-				ret = $(sformat("<style data-ibx-src='{1}' type='text/css'>{2}</style>", file.getAttribute("src"), xhr.responseText))[0];
+				strBootFiles += sformat("<style data-ibx-src='{1}' type='text/css'>{2}</style>\n", file.getAttribute("src"), xhr.responseText);
 			else
 			if(file.nodeName == "script-file")
 			{
-				ret = sformat("<sc" + "ript data-ibx-src='{1}' type='text/javascript'>\nSCRIPT_CONTENT_HERE\n</sc" + "ript>\n", file.getAttribute("src"), xhr.responseText);
-				ret = ret.replace("SCRIPT_CONTENT_HERE", xhr.responseText);
-				strBootFiles += ret + "\n";
+				block = sformat("<sc" + "ript data-ibx-src='{1}' type='text/javascript'>\nSCRIPT_CONTENT_HERE\n</sc" + "ript>\n", file.getAttribute("src"), xhr.responseText);
+				block = block.replace("SCRIPT_CONTENT_HERE", xhr.responseText);
+				strBootFiles += block + "\n";
 			}
 		}.bind(this));
 
@@ -442,7 +441,7 @@ function ibxResourceCompiler(ctxPath, bootable)
 		cdata[0].textContent = strBootFiles;
 		this._bootFiles.empty().append(cdata);
 		var coreBundle = $($.get({"url":this._contextPath + "./ibx_resource_bundle.xml", "async":false, "dataType":"xml"}).responseXML);
-		//this.compileBundle(coreBundle);
+		this.compileBundle(coreBundle);
 	}
 }
 var _p = ibxResourceCompiler.prototype = new ibxResourceManager();
@@ -482,7 +481,7 @@ _p.linkBundle = function(outDoc)
 	{
 		head.append(bundle);
 		if(this._bootable)
-			head.append(this._bootFiles.text());
+			head.append(this._bootFiles.text(), this._bootScripts.text());
 	}
 	var body = outDoc.find("body");
 
