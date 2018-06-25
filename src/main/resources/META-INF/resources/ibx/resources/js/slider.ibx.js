@@ -92,6 +92,8 @@ $.widget("ibi.ibxSlider", $.ibi.ibxGrid,
 	},
 	_initSlider: function ()
 	{
+		if (this._destroyed)
+			return;
 		this._setValue("" + this.options.value, this.info());
 		this._slider.show();
 	},
@@ -589,6 +591,8 @@ $.widget("ibi.ibxRange", $.ibi.ibxSlider,
 	},
 	_initSlider: function ()
 	{
+		if (this._destroyed)
+			return;
 		this._super();
 		this._setValue("" + this.options.value + "," + this.options.value2, this.info());
 		this._slider2.show();
@@ -812,6 +816,8 @@ $.widget("ibi.ibxLeftRange", $.ibi.ibxRange,
 	},
 	_initSlider: function ()
 	{
+		if (this._destroyed)
+			return;
 		this._super();
 		this._slider.hide();
 	},
@@ -834,6 +840,8 @@ $.widget("ibi.ibxRightRange", $.ibi.ibxRange,
 	},
 	_initSlider: function ()
 	{
+		if (this._destroyed)
+			return;
 		this._super();
 		this._slider2.hide();
 	},
