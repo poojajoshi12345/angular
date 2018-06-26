@@ -425,15 +425,17 @@ function ibxResourceCompiler(ctxPath, bootable)
 		var strBootFiles = "";
 		this._bootFiles.children().each(function(idx, file)
 		{
+			var filePath = file.getAttribute("src");
 			var xhr = $.get({"url":this._contextPath + file.getAttribute("src"), "async":false, "dataType":"text"});
 			if(file.nodeName == "style-file")
-				strBootFiles += sformat("<style data-ibx-src='{1}' type='text/css'>{2}</style>\n", file.getAttribute("src"), xhr.responseText);
+				strBootFiles += sformat("<style data-ibx-src='{1}' type='text/css'>{2}</style>\n", filePath, xhr.responseText);
 			else
 			if(file.nodeName == "script-file")
 			{
-				block = sformat("<sc" + "ript data-ibx-src='{1}' type='text/javascript'>\nSCRIPT_CONTENT_HERE\n</sc" + "ript>\n", file.getAttribute("src"), xhr.responseText);
+				var isIbx = (filePath.search("/ibx.js") != -1);
+				block = sformat("<sc" + "ript data-ibx-src='{1}' type='text/javascript'>\nSCRIPT_CONTENT_HERE\n{2}</sc" + "ript>\n", filePath, isIbx ? "ibx.preCompiled = true;" : "");
 				block = block.replace("SCRIPT_CONTENT_HERE", xhr.responseText);
-				strBootFiles += block + "\n";
+				strBootFiles += block;
 			}
 		}.bind(this));
 
@@ -468,14 +470,15 @@ _p.getBundleAsString = function()
 _p.linkBundle = function(outDoc)
 {
 	outDoc = $(outDoc);
-	var bundle = sformat("<sc" + "ript class='ibx-res-bundle' type='text/xml'>{1}</sc" +"ript>", this.getBundleAsString());
+	var bundle = sformat("<sc" + "ript class='ibx-precompiled-res-bundle' type='text/xml'>{1}</sc" +"ript>", this.getBundleAsString());
 	var head = outDoc.find("head");
-	var scripts = outDoc.find("scripts");
+	var scripts = outDoc.find("script");
 	if(scripts.length)
 	{
-		scripts.first().before(bundle);
+		var firstScript = scripts.first();
+		firstScript.before(bundle);
 		if(this._bootable)
-			this._bootFiles.insertAfter(scripts.last());
+			firstScript.before(this._bootFiles.text(), this._bootScripts.text());
 	}
 	else
 	{

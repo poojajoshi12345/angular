@@ -9,8 +9,6 @@ $Revision$:-->
 
 	<!--strings-->
 	<strings>
-		<string-file src="./strings/strings.en.ibx.txt"/>
-
 		<!--inline-->
 		<string-bundle>
 			<![CDATA[

@@ -47,11 +47,35 @@ function ibx()
 	if(typeof(a3) === "boolean")
 		autoBind = a3;
 
-	if(!ibx._loaded && !ibx._isLoading)
+	//ibx is inline and alreayd loaded...so just initialize various things and don't deal with resources.
+	if(ibx.preCompiled && !ibx._loaded)
+	{
+		ibx._isLoading = false;
+		ibx._loaded = true;
+		ibx._appName = window.location.href.substring(window.location.href.lastIndexOf("/") + 1)
+		ibx._appPath = window.location.href.substring(0, window.location.href.lastIndexOf("/") + 1);
+		ibx._path = ibx._appPath;
+		ibx._loadPromise = $.Deferred();
+
+		window.addEventListener("load", function(e)
+		{
+			var strBundle = $(".ibx-precompiled-res-bundle").text();
+			var parser = new DOMParser();
+			var bundle = parser.parseFromString(strBundle, "application/xml");
+
+			ibx.resourceMgr = new ibxResourceManager();
+			ibx.resourceMgr.loadBundle(bundle);
+			ibx.bindElements("");
+			$("body").addClass("ibx-visible");
+			ibx._loadPromise.resolve(ibx);
+		}.bind(this));
+	}
+
+	if(!ibx.preCompiled && !ibx._loaded && !ibx._isLoading)
 	{
 		//resolve various ibx context values based on where we're loading from.
 		var ibxScript = document.querySelector("script[src*='ibx.js']");
-		var ibxPath = ibxScript.getAttribute("src").replace("ibx.js", "");
+		var ibxPath = ibxScript ? ibxScript.getAttribute("src").replace("ibx.js", "") : "";
 		ibx.setPath(ibxPath);
 		ibx.setAppPath(window.location.href.substring(0, window.location.href.lastIndexOf("/") + 1));
 		ibx._appName = window.location.href.substring(window.location.href.lastIndexOf("/") + 1)
@@ -231,6 +255,7 @@ ibx._setAccessibility = function(accessible)
 };
 
 ibx.forceInlineResLoading = false;//[ACT-1571]Needed a way to package ibx into single file...this forces all script/css to be inline.
+ibx.preCompiled = false;
 
 //where ibx.js loaded from
 ibx._path = "";
