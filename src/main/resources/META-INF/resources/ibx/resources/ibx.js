@@ -59,7 +59,8 @@ function ibx()
 
 		window.addEventListener("load", function(e)
 		{
-			var strBundle = $(".ibx-precompiled-res-bundle").text();
+			var bundle = $(".ibx-precompiled-res-bundle").remove();//remove bundle from DOM...no longer needed, saves memory.
+			var strBundle = bundle.text();
 			var parser = new DOMParser();
 			var bundle = parser.parseFromString(strBundle, "application/xml");
 
@@ -68,6 +69,7 @@ function ibx()
 			ibx.bindElements("");
 			$("body").addClass("ibx-visible");
 			ibx._loadPromise.resolve(ibx);
+
 		}.bind(this));
 	}
 

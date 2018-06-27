@@ -417,8 +417,6 @@ function ibxResourceCompiler(ctxPath, bootable)
 	this._resBundle = $($.get({"url":this._contextPath + "./ibx_compiler_bundle.xml", "async":false, "dataType":"xml"}).responseXML);
 	this._bootable = bootable
 	var bootRes = this._resBundle.find("ibx-boot-resources").detach();
-	this._initScripts = bootable ? bootRes.children("ibx-init-scripts") : $();
-	this._bootScripts = bootable ? bootRes.children("ibx-boot-scripts") : $();
 	this._bootFiles = bootable ? bootRes.children("ibx-boot-files") : $();
 	if(bootable)
 	{
@@ -478,18 +476,15 @@ _p.linkBundle = function(outDoc)
 		var firstScript = scripts.first();
 		firstScript.before(bundle);
 		if(this._bootable)
-			firstScript.before(this._bootFiles.text(), this._bootScripts.text());
+			firstScript.before(this._bootFiles.text());
 	}
 	else
 	{
 		head.append(bundle);
 		if(this._bootable)
-			head.append(this._bootFiles.text(), this._bootScripts.text());
+			head.append(this._bootFiles.text());
 	}
 	var body = outDoc.find("body");
-
-	if(this._bootable)
-		body.after(this._initScripts.text());
 	return outDoc[0];
 };
 
