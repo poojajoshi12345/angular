@@ -459,7 +459,7 @@ ibxDragDropManager._onNativeDragEvent = function(e)
 	if(eType == "dragover")
 		e.preventDefault();
 	else
-	if(eType == "drop")
+	if(eType == "drop" && !e.defaultPrevented)
 	{
 		var dt = e.dataTransfer;
 		if(dt.files.length)
