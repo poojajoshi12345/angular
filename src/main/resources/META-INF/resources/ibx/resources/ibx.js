@@ -47,7 +47,7 @@ function ibx()
 	if(typeof(a3) === "boolean")
 		autoBind = a3;
 
-	//ibx is inline and alreayd loaded...so just initialize various things and don't deal with resources.
+	//ibx is inline and already loaded...so just initialize various things and load resources from internal bundle.
 	if(ibx.preCompiled && !ibx._loaded)
 	{
 		ibx._isLoading = false;
@@ -69,7 +69,6 @@ function ibx()
 			ibx.bindElements("");
 			$("body").addClass("ibx-visible");
 			ibx._loadPromise.resolve(ibx);
-
 		}.bind(this));
 	}
 

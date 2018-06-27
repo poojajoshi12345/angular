@@ -1,12 +1,15 @@
 <html lang="en"><head>
-		<title>ibx compiled application</title>
+		<title>ibx accessibility sample</title>
 		<meta http-equiv="X-UA-Compatible" content="IE=11">
 		<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 		<meta http-equiv="Pragma" content="no-cache">
 		<meta http-equiv="Expires" content="0">
 		<meta name="google" value="notranslate">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
-	<script class="ibx-precompiled-res-bundle" type="text/xml"><?xml version="1.0" encoding="UTF-8"?><!--Copyright 1996-2016 Information Builders, Inc. All rights reserved.
+
+		<!--include this script...will boot ibx into the running state-->
+		
+		<script class="ibx-precompiled-res-bundle" type="text/xml"><?xml version="1.0" encoding="UTF-8"?><!--Copyright 1996-2016 Information Builders, Inc. All rights reserved.
 $Revision$:--><ibx-precompiled-res-bundle>
 	<ibx-res-bundle name="base resource bundle for ibxResourceCompiler" load-context="ibx">
 		
@@ -17,7 +20,7 @@ $Revision$:--><ibx-precompiled-res-bundle>
 
 		<!--strings-->
 		<strings>
-		<string-bundle src="inline"><![CDATA[{"language":"ibx_default","strings":{"IBX_STR_SAMPLE":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.","IBX_STR_LOADING":"Waiting...","IBX_STR_OK":"OK","IBX_STR_NO":"No","IBX_STR_CANCEL":"Cancel","IBX_STR_APPLY":"Apply","IBX_STR_CLOSE":"Close","IBX_DLG_CAPTION_PLN":"Attention","IBX_DLG_CAPTION_ERR":"Error","IBX_DLG_CAPTION_WRN":"Warning","IBX_DLG_CAPTION_INF":"Information","IBX_DLG_CAPTION_QST":"Question","IBX_STR_SLIDER":"Slider","IBX_STR_SLIDER_DEF_LABEL":"Slider string-bundle to inline","IBX_STR_SLIDER_RANGE":"Range","IBX_STR_SLIDER_RANGE_DEF_LABEL":"Range string-bundle to inline","IBX_STR_SLIDER_RANGE_VAL_LOW":"string-bundle low end of range value","IBX_STR_SLIDER_RANGE_VAL_HIGH":"string-bundle high end of range value","IBX_CAROUSEL":"Carousel","IBX_CAROUSEL_PREV":"Previous carousel items","IBX_CAROUSEL_NEXT":"Next carousel items","IBX_CAROUSEL_ITEMS":"Carousel Items","IBX_CAROUSEL_PAGES":"Carousel Pages","IBX_CAROUSEL_PAGE":"Go to Page","IBX_DP_MONTHS":"['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']","IBX_DP_MONTHS_SHORT":"['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']","IBX_DP_DAYS":"['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']","IBX_DP_DAYS_SHORT":"['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']","IBX_DP_DAYS_MIN":"['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa']","IBX_DP_DATE_OUTPUT_FORMAT":"M d, yy","IBX_DP_BUTTON_TEXT":"Choose","IBX_DP_CLOSE_TEXT":"Done","IBX_DP_PREV_TEXT":"Previous","IBX_DP_NEXT_TEXT":"Next","IBX_DP_CUR_TEXT":"Today","IBX_DP_WEEK_HEADER":"Wk","IBX_PAGE_LIST_SELECT_ALL":"Select all","IBX_PAGE_LIST_SELECT_NONE":"Clear","IBX_PAGE_LIST_PAGES":"Page string-bundle of inline","IBX_PAGE_LIST_TOOLTIP_CLEAR_SEARCH":"Clear search text","IBX_TERMINATING_STRING":""}}]]></string-bundle></strings>
+		<string-bundle src="inline"><![CDATA[{"language":"ibx_default","strings":{"IBX_STR_SAMPLE":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.","IBX_STR_LOADING":"Waiting...","IBX_STR_OK":"OK","IBX_STR_NO":"No","IBX_STR_CANCEL":"Cancel","IBX_STR_APPLY":"Apply","IBX_STR_CLOSE":"Close","IBX_DLG_CAPTION_PLN":"Attention","IBX_DLG_CAPTION_ERR":"Error","IBX_DLG_CAPTION_WRN":"Warning","IBX_DLG_CAPTION_INF":"Information","IBX_DLG_CAPTION_QST":"Question","IBX_STR_SLIDER":"Slider","IBX_STR_SLIDER_DEF_LABEL":"Slider {1} to {2}","IBX_STR_SLIDER_RANGE":"Range","IBX_STR_SLIDER_RANGE_DEF_LABEL":"Range {1} to {2}","IBX_STR_SLIDER_RANGE_VAL_LOW":"{1} low end of range value","IBX_STR_SLIDER_RANGE_VAL_HIGH":"{1} high end of range value","IBX_CAROUSEL":"Carousel","IBX_CAROUSEL_PREV":"Previous carousel items","IBX_CAROUSEL_NEXT":"Next carousel items","IBX_CAROUSEL_ITEMS":"Carousel Items","IBX_CAROUSEL_PAGES":"Carousel Pages","IBX_CAROUSEL_PAGE":"Go to Page","IBX_DP_MONTHS":"['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']","IBX_DP_MONTHS_SHORT":"['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']","IBX_DP_DAYS":"['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']","IBX_DP_DAYS_SHORT":"['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']","IBX_DP_DAYS_MIN":"['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa']","IBX_DP_DATE_OUTPUT_FORMAT":"M d, yy","IBX_DP_BUTTON_TEXT":"Choose","IBX_DP_CLOSE_TEXT":"Done","IBX_DP_PREV_TEXT":"Previous","IBX_DP_NEXT_TEXT":"Next","IBX_DP_CUR_TEXT":"Today","IBX_DP_WEEK_HEADER":"Wk","IBX_PAGE_LIST_SELECT_ALL":"Select all","IBX_PAGE_LIST_SELECT_NONE":"Clear","IBX_PAGE_LIST_PAGES":"Page {1} of {2}","IBX_PAGE_LIST_TOOLTIP_CLEAR_SEARCH":"Clear search text","IBX_TERMINATING_STRING":""}}]]></string-bundle></strings>
 
 		<!--styles-->
 		<styles>
@@ -9282,8 +9285,8 @@ function ibxDragDropManager()
 	document.documentElement.addEventListener("mousedown", ibxDragDropManager._onMouseEvent.bind(ibxDragDropManager), true);
 	document.documentElement.addEventListener("mouseup", ibxDragDropManager._onMouseEvent.bind(ibxDragDropManager), true);
 	document.documentElement.addEventListener("mousemove", ibxDragDropManager._onMouseEvent.bind(ibxDragDropManager), true);
-	document.documentElement.addEventListener("dragover", ibxDragDropManager._onNativeDragEvent.bind(ibxDragDropManager), true);
-	document.documentElement.addEventListener("drop", ibxDragDropManager._onNativeDragEvent.bind(ibxDragDropManager), true);
+	document.documentElement.addEventListener("dragover", ibxDragDropManager._onNativeDragEvent.bind(ibxDragDropManager), false);
+	document.documentElement.addEventListener("drop", ibxDragDropManager._onNativeDragEvent.bind(ibxDragDropManager), false);
 }
 ibxDragDropManager.dragPrevented = false;
 ibxDragDropManager.dragElement = null;
@@ -9481,7 +9484,7 @@ ibxDragDropManager._onNativeDragEvent = function(e)
 	if(eType == "dragover")
 		e.preventDefault();
 	else
-	if(eType == "drop")
+	if(eType == "drop" && !e.defaultPrevented)
 	{
 		var dt = e.dataTransfer;
 		if(dt.files.length)
@@ -10309,7 +10312,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 		{
 			if(!this.element.children(".ibx-opaque-frame").length)
 			{
-				var path = sformat("script-block/./js/widget.ibx.js", ibx.getPath(), "markup/blank.html");
+				var path = sformat("{1}/{2}", ibx.getPath(), "markup/blank.html");
 				var iframe = $("<iframe class='ibx-opaque-frame' allowTransparency='false'>").prop("src", path);
 				this.element.addClass("ibx-opaque").append(iframe);
 			}
@@ -10430,7 +10433,7 @@ $.widget("ibi.ibxCommand", $.ibi.ibxWidget,
 		var options = this.options;
 
 		//configure associated widgets
-		var widgets = $(sformat(".ibx-widget[data-ibx-command='script-block']", options.id))
+		var widgets = $(sformat(".ibx-widget[data-ibx-command='{1}']", options.id))
 		widgets.ibxWidget(options.disabled ? "disable" : "enable");
 		widgets.ibxWidget("userValue", options.userValue);
 		widgets.filter(".ibx-can-toggle").ibxWidget("checked", options.checked);
@@ -11368,11 +11371,11 @@ $.widget("ibi.ibxFlexGrid", $.ibi.ibxHBox,
 	},
 	row:function(row)
 	{
-		return this.children(sformat("[data-grid-row='script-block']", row));
+		return this.children(sformat("[data-grid-row='{1}']", row));
 	},
 	column:function(col)
 	{
-		return this.children(sformat("[data-grid-col='script-block']", col));
+		return this.children(sformat("[data-grid-col='{1}']", col));
 	},
 	_refresh:function()
 	{
@@ -11390,9 +11393,9 @@ $.widget("ibi.ibxFlexGrid", $.ibi.ibxHBox,
 				spanCount = 0;
 			}
 			colSpan = cell.data("ibxColSpan") || 1;
-			var cellClasses = sformat("ibx-flex-grid-cell ibx-flex-grid-span-script-block", colSpan);
+			var cellClasses = sformat("ibx-flex-grid-cell ibx-flex-grid-span-{1}", colSpan);
 			var width = (colSpan * colSize);
-			cell.addClass(cellClasses).css("width", sformat("script-block%", width))
+			cell.addClass(cellClasses).css("width", sformat("{1}%", width))
 			cell.attr({"data-grid-row": curRow, "data-grid-col": spanCount, "data-grid-span": colSpan});
 			spanCount += colSpan;
 		}.bind(this));
@@ -11596,7 +11599,7 @@ $.widget("ibi.ibxLabel", $.ibi.ibxFlexBox,
 
 		//only update if changed
 		if(options.icon != lastOptions.icon)
-			this._glyph.removeClass(lastOptions.iconClasses).addClass(options.iconClasses).css("backgroundImage", options.icon ? sformat("url('script-block')", options.icon) : "");
+			this._glyph.removeClass(lastOptions.iconClasses).addClass(options.iconClasses).css("backgroundImage", options.icon ? sformat("url('{1}')", options.icon) : "");
 
 		//only update if changed
 		if(options.glyph != lastOptions.glyph || options.glyphClasses != lastOptions.glyphClasses)
@@ -11638,7 +11641,7 @@ $.widget("ibi.ibxLabel", $.ibi.ibxFlexBox,
 			
 			var elOverlay = null;
 			if(overlay.icon)
-				elOverlay = $(sformat("<img class='ibx-label-overlay script-block' src='./js/label.ibx.js'/>", overlay.iconClasses || "ibx-overlay-image", overlay.icon));
+				elOverlay = $(sformat("<img class='ibx-label-overlay {1}' src='{2}'/>", overlay.iconClasses || "ibx-overlay-image", overlay.icon));
 			else	
 				elOverlay = $("<span class='ibx-label-overlay'>").addClass(overlay.glyphClasses).text(overlay.glyph);
 
@@ -13212,7 +13215,7 @@ $.widget("ibi.ibxCheckBoxSimple", $.ibi.ibxCheckBox,
 	{
 		if (key === "markerClass")
 		{
-			this._marker.removeClass(sformat("script-block ./js/button.ibx.js-check {3}-uncheck", this.options.markerClass, this.options.markerClass, this.options.markerClass));
+			this._marker.removeClass(sformat("{1} {2}-check {3}-uncheck", this.options.markerClass, this.options.markerClass, this.options.markerClass));
 			if (!value)
 				value = "ibx-check-box-simple-marker";
 		}
@@ -13227,8 +13230,8 @@ $.widget("ibi.ibxCheckBoxSimple", $.ibi.ibxCheckBox,
 			this._marker.hide();
 
 		this.element.removeClass("ibx-check-box");
-		this._marker.removeClass(sformat("script-block ./js/button.ibx.js-check {3}-uncheck", this.options.markerClass, this.options.markerClass, this.options.markerClass));
-		this._marker.addClass(sformat((this.options.checked ? "script-block ./js/button.ibx.js-check" : "script-block ./js/button.ibx.js-uncheck"), this.options.markerClass, this.options.markerClass));
+		this._marker.removeClass(sformat("{1} {2}-check {3}-uncheck", this.options.markerClass, this.options.markerClass, this.options.markerClass));
+		this._marker.addClass(sformat((this.options.checked ? "{1} {2}-check" : "{1} {2}-uncheck"), this.options.markerClass, this.options.markerClass));
 		this.add(this._marker, this.children()[0], true);
 	}
 });
@@ -13269,7 +13272,7 @@ $.widget("ibi.ibxRadioButtonSimple", $.ibi.ibxRadioButton,
 	{
 		if (key === "markerClass")
 		{
-			this._marker.removeClass(sformat("script-block ./js/button.ibx.js-check {3}-uncheck", this.options.markerClass, this.options.markerClass, this.options.markerClass));
+			this._marker.removeClass(sformat("{1} {2}-check {3}-uncheck", this.options.markerClass, this.options.markerClass, this.options.markerClass));
 			if (!value)
 				value = "ibx-radio-button-simple-marker";
 		}
@@ -13287,8 +13290,8 @@ $.widget("ibi.ibxRadioButtonSimple", $.ibi.ibxRadioButton,
 		this.element.removeClass("ibx-check-box ibx-radio-button");
 		this.element.toggleClass("checked", this.options.checked);
 
-		this._marker.removeClass(sformat("script-block ./js/button.ibx.js-check {3}-uncheck", this.options.markerClass, this.options.markerClass, this.options.markerClass));
-		this._marker.addClass(sformat((this.options.checked ? "script-block ./js/button.ibx.js-check" : "script-block ./js/button.ibx.js-uncheck"), this.options.markerClass, this.options.markerClass));
+		this._marker.removeClass(sformat("{1} {2}-check {3}-uncheck", this.options.markerClass, this.options.markerClass, this.options.markerClass));
+		this._marker.addClass(sformat((this.options.checked ? "{1} {2}-check" : "{1} {2}-uncheck"), this.options.markerClass, this.options.markerClass));
 		this.add(this._marker, this.children()[0], true);
 	}
 });
@@ -14667,7 +14670,7 @@ ibxPopupManager.onWindowEvent = function(e)
 };
 ibxPopupManager.getOpenPopups = function(filter, zMin, zMax)
 {
-	var pattern = sformat("script-block:openPopup(./js/popup.ibx.js, {3})", (filter || ""), zMin, zMax);
+	var pattern = sformat("{1}:openPopup({2}, {3})", (filter || ""), zMin, zMax);
 	var popups = ibxPopupManager._openPopups.filter(pattern).sort(fnSortZIndex);
 	return popups;
 };
@@ -15731,9 +15734,9 @@ $.widget("ibi.ibxMenuItem", $.ibi.ibxHBox,
 		this._super();
 
 		var options = this.options;
-		this._startMarker.addClass(sformat("script-block ./js/menu.ibx.js", options.markerClass, options.startMarkerClass));
+		this._startMarker.addClass(sformat("{1} {2}", options.markerClass, options.startMarkerClass));
 		this._label.addClass(options.labelClass);
-		this._endMarker.addClass(sformat("script-block ./js/menu.ibx.js", options.markerClass, options.endMarkerClass));
+		this._endMarker.addClass(sformat("{1} {2}", options.markerClass, options.endMarkerClass));
 		this._endMarker.toggleClass("ibx-marker-sub", !!this.subMenu());
 
 		//setup the command shortcut key for the menu item
@@ -18008,8 +18011,8 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 		for(var i = 0; i < pageInfo.pages; ++i)
 		{
 			var isCurPage = (i == pageInfo.curPage);
-			var pageMarker = $(sformat("<div role='option' class='script-block ./js/carousel.ibx.js' tabIndex='-1'>", this.options.pageMarkerClass, isCurPage ? this.options.pageMarkerSelectedClass : ""));
-			pageMarker.prop("title", sformat("script-block ./js/carousel.ibx.js", ibx.resourceMgr.getString("IBX_CAROUSEL_PAGE"), i+1));
+			var pageMarker = $(sformat("<div role='option' class='{1} {2}' tabIndex='-1'>", this.options.pageMarkerClass, isCurPage ? this.options.pageMarkerSelectedClass : ""));
+			pageMarker.prop("title", sformat("{1} {2}", ibx.resourceMgr.getString("IBX_CAROUSEL_PAGE"), i+1));
 			pageMarker.data("ibxPageMarkerInfo", {"pageNo":i, "pageInfo":pageInfo}).on("click", this._onPageMarkerClick.bind(this)).on("keyup", this._onPageMarkerKeyEvent.bind(this));
 
 			if(this.options.aria.accessible)
@@ -30434,7 +30437,7 @@ function ibx()
 	if(typeof(a3) === "boolean")
 		autoBind = a3;
 
-	//ibx is inline and alreayd loaded...so just initialize various things and don't deal with resources.
+	//ibx is inline and already loaded...so just initialize various things and load resources from internal bundle.
 	if(ibx.preCompiled && !ibx._loaded)
 	{
 		ibx._isLoading = false;
@@ -30446,7 +30449,8 @@ function ibx()
 
 		window.addEventListener("load", function(e)
 		{
-			var strBundle = $(".ibx-precompiled-res-bundle").text();
+			var bundle = $(".ibx-precompiled-res-bundle").remove();//remove bundle from DOM...no longer needed, saves memory.
+			var strBundle = bundle.text();
 			var parser = new DOMParser();
 			var bundle = parser.parseFromString(strBundle, "application/xml");
 
@@ -31226,8 +31230,6 @@ function ibxResourceCompiler(ctxPath, bootable)
 	this._resBundle = $($.get({"url":this._contextPath + "./ibx_compiler_bundle.xml", "async":false, "dataType":"xml"}).responseXML);
 	this._bootable = bootable
 	var bootRes = this._resBundle.find("ibx-boot-resources").detach();
-	this._initScripts = bootable ? bootRes.children("ibx-init-scripts") : $();
-	this._bootScripts = bootable ? bootRes.children("ibx-boot-scripts") : $();
 	this._bootFiles = bootable ? bootRes.children("ibx-boot-files") : $();
 	if(bootable)
 	{
@@ -31262,7 +31264,9 @@ _p.bootable = function(){return this._bootable;};
 
 _p._makeResBlock = function(type, src, content)
 {
-	return $(sformat("<{1} src='{2}'><![CDATA[{3}\]\]\></{1}>", type, src, content), this._resBundle);
+	var block = sformat("<{1} src='{2}'><![CDATA[BLOCK-CONTENT-HERE\]\]\></{1}>", type, src);
+	block = block.replace("BLOCK-CONTENT-HERE", content);
+	return $(block, this._resBundle);
 };
 
 _p.getBundle = function()
@@ -31287,18 +31291,15 @@ _p.linkBundle = function(outDoc)
 		var firstScript = scripts.first();
 		firstScript.before(bundle);
 		if(this._bootable)
-			firstScript.before(this._bootFiles.text(), this._bootScripts.text());
+			firstScript.before(this._bootFiles.text());
 	}
 	else
 	{
 		head.append(bundle);
 		if(this._bootable)
-			head.append(this._bootFiles.text(), this._bootScripts.text());
+			head.append(this._bootFiles.text());
 	}
 	var body = outDoc.find("body");
-
-	if(this._bootable)
-		body.after(this._initScripts.text());
 	return outDoc[0];
 };
 
@@ -31360,21 +31361,474 @@ _p.loadExternalResFile = function(elFile)
 //# sourceURL=resources.ibx.js
 
 </script>
+<script type="text/javascript">
+			
+function WFGlobals()
+{
+}
+WFGlobals.ses_auth_val = "54e03bdddc52c1b239641ad5f1dff3dd";
+WFGlobals.ses_auth_parm = "IBIWF_SES_AUTH_TOKEN";
+WFGlobals.getSesAuthVal = function getSesAuthVal() { return encodeURIComponent(WFGlobals.ses_auth_val); };
+WFGlobals.getSesAuthParm = function getSesAuthParm() { return WFGlobals.ses_auth_parm; };
+WFGlobals.getSesAuthParmPair = function getSesAuthParmPair() {return WFGlobals.getSesAuthParm() + "=" + WFGlobals.getSesAuthVal(); };   
+WFGlobals.jsTrace = "";
+WFGlobals.IBI_CACHE_FLUSH_KEY = "S12434_15289421181F/";
 
-				
-				<script class="ibx-boot-scripts" type="text/javascript"></script>
-				
-			<script type="text/javascript">
-		ibx(function()
-		{
-		});
-	</script></head>
-	
+WFGlobals.ibfsLanguage = "en_US";
+
+WFGlobals.EnabledFeatures = "ThumbNails;MenusV2;IBXHome;IBXPage;IndexLibrary;IndexRepositoryDescriptions;AskWebFOCUS;IntentPhrase;ChartExtensionConsole;RCHeapDump;";
+WFGlobals.TechPreviewFeatureList = "InsightDesigner;EditManifest;RSMetadataSavedByIA;WEBQ_ExpAnalytics;WEBQ_NewLinks;IBIPortal;ApplicationProperties;GlobalVarV2;IBIEditor;CFRConfig;";
+WFGlobals.isFeatureEnabled = function isFeatureEnabled(featureName) {
+     if (WFGlobals.EnabledFeatures.indexOf(featureName) > -1) return true; // If on the list - then it is enabled no matter what it's status
+     if (WFGlobals.TechPreviewFeatureList.indexOf(featureName) > -1) return false; // If not enabled - but on this list - then it is not
+     return true;  // Not on list and NOT in list of controls - default is enabled
+};
+
+/*[CLRPT-861] Added to localization settings*/
+WFGlobals.language = "en";
+WFGlobals.isRTL = (WFGlobals.language.length >= 2 && (WFGlobals.language.substring(0,2) === "iw" || WFGlobals.language.substring(0,2) === "ar"));
+WFGlobals.firstDayOfWeek = 0;  //placeholder for when someone who knows better can actually set this correctly: 0=sun, 1=mon, etc.
+WFGlobals.showMonthAfterYear = false;
+
+var IBI_random = "IBI_random";
+
+var isV4 = true;
+
+var applicationContext = "/ibi_apps";
+
+var applicationScheme = "http";
+
+var IBI_HELP_CONTEXT = "/ibi_help";
+
+var WFCRepositoryPath = "IBFS:/WFC/Repository";
+
+var isEdge = /Edge\//i.test( navigator.userAgent );
+
+var isChrome = !isEdge && /Chrome\//i.test( navigator.userAgent );
+
+WFGlobals.mapSafeUrl = function mapSafeUrl(url) {
+	var flushValue = "/S12434_15289421181F";
+	if(flushValue == null || flushValue.length == 0)
+		return url;
+	var i = url.lastIndexOf("/");
+	if (i >= 0)
+	{
+		var start = url.substring(0, i);
+		var end = url.substring(i);
+		url = start + flushValue + end;
+	}
+	else
+		url = flushValue.substring(1) + url;
+	return url;	
+	};
+			ibx(function()
+			{
+				$("body").on("keydown", function(e)
+				{
+					if(e.ctrlKey && e.key == 'c')
+						console.clear();
+				});
+
+				$(".btnDialog").on("click", function(e)
+				{
+					$(".dlg").ibxWidget("open");
+				});
+
+				$(".btn-start-progress").on("click", function(e)
+				{
+					var options = 
+					{
+						"type":"std plain",
+						"buttons":"cancel",
+						"caption":"Uploading Files",
+						"message":"Starting upload...",
+						"aria":
+						{
+						}
+					};
+					var dlg = $.ibi.ibxDialog.createMessageDialog(options);
+					var contentBox = dlg.ibxWidget("member", "contentBox");
+					var msg = dlg.ibxWidget("member", "message");
+					var pBar = $("<div tabindex='-1' class='test-prog-bar'>").ibxProgressBar({aria:{describedby:msg.prop("id")}});
+					dlg.ibxWidget("add", pBar);
+					dlg.ibxWidget("open").on("ibx_close", function(e){window.clearInterval(prog_id);});
+					prog_id = window.setInterval(function(msg, pBar, timestamp)
+					{
+						var dlg = $(this);
+						var curVal = pBar.ibxWidget("option", "curVal") + 10;
+						if(curVal >= 100)
+						{
+							var btnCancel = this.ibxWidget("member", "btnCancel");
+							btnCancel.ibxWidget("option", "text", "Done");
+							window.clearInterval(prog_id);
+						}
+						pBar.ibxWidget("option", "curVal", curVal);
+						msg.ibxWidget("option", "text", sformat("Complete {1}%", curVal));
+					}.bind(dlg, msg, pBar), 500);
+				});
+
+				$(".btn-start-waiting").on("click", function(e)
+				{
+					var btn = $(this);
+					var date = new Date();
+					ibx.waitStart(null, "Waiting").on("ibx_waiting", function(startDate, e, wait)
+					{
+						wait = $(wait);
+						var date = new Date();
+						var elapsed = (5 - (date - startDate)/1000).toPrecision(1);
+						wait.ibxWidget("message", sformat("Waiting for {1} seconds.", elapsed));
+						if(elapsed <= 0)
+							ibx.waitStop();
+					}.bind(this, date))
+				});
+
+				var carousel = $(".test-carousel");
+				for(var i = 0; i < 25; ++i)
+				{
+					var w = GetRandomInt(50, 200);
+					var item = $("<div class='test-carousel-tile'>").css("width", w).attr("id", "item" + i).text("Carousel Item " + i);
+					carousel.ibxWidget("add", item);
+				}
+
+
+				$.each($.ibi.ibxCommand.cmds, function(key, cmd)
+				{
+					cmd.on("ibx_triggered ibx_checkchanged ibx_uservaluechanged", function(e)
+					{
+					});
+				});
+
+			}, null, true);
+		</script>
+		<style type="text/css">
+			.main-box
+			{
+				position:absolute;
+				left:0px;
+				top:0px;
+				right:0px;
+				bottom:0px;
+				overflow:auto;
+			}
+			.main-box > *
+			{
+				flex:0 0 auto;
+				margin:10px;
+			}
+
+			.sample-grouping > *
+			{
+				margin-right:7px;
+			} 
+
+			.dlg
+			{
+				width:400px;
+				height:300px;
+			}
+			.dlg-ctl-label
+			{
+				margin:10px 0px 2px 0px;
+			}
+
+			.txt-body
+			{
+				flex:1 1 auto;
+			}
+
+			.test-r-slider, .test-h-slider
+			{
+				width:200px;
+			}
+
+			.test-tab-pane
+			{
+				width:300px;
+				height:200px;
+			}
+
+			.tab-content
+			{
+				position:absolute;
+				left:0px;
+				top:0px;
+				right:0px;
+				bottom:0px;
+				margin:10px;
+			}
+
+			.test-carousel
+			{
+				border:1px solid #aaa;
+				border-radius:.25em;
+				max-width:413px;
+				overflow:auto;
+			}
+			.test-carousel-tile
+			{
+				width:100px;
+				height:100px;
+				padding:5px;
+				border:1px solid #888;
+				border-radius:.25em;
+				box-shadow:3px 3px 3px 0px #aaa;
+				text-align:center;
+				margin:5px;
+			}
+
+			.test-menubar
+			{
+				align-self:flex-start;
+				border:1px solid #aaa;
+				border-radius:.25em;
+			}
+
+			.rg-test *
+			{
+				margin-left:.1em;
+			}
+
+			.test-prog-bar
+			{
+				width:200px;
+				margin:5px 0px 5px 0px;
+			}
+
+			.test-select
+			{
+				width:150px;
+			}
+
+			.test-spinner
+			{
+				width:50px;
+			}
+
+			.test-text-ctrl
+			{
+				width:100px;
+			}
+		</style>
+	</head>
 	<body class="ibx-root">
+		<div class="main-box" data-ibx-type="ibxVBox" data-ibxp-wrap="true" data-ibxp-align="start">
+			<div class="cmd cmd-cut" data-ibx-type="ibxCommand" data-ibxp-id="cmdCut" data-ibxp-shortcut="Ctrl+X"></div>
+			<div class="cmd cmd-copy" data-ibx-type="ibxCommand" data-ibxp-id="cmdCopy" data-ibxp-shortcut="Ctrl+C"></div>
+			<div class="cmd cmd-paste" data-ibx-type="ibxCommand" data-ibxp-id="cmdPaste" data-ibxp-shortcut="Ctrl+V"></div>
+			<div class="cmd cmd-undo" data-ibx-type="ibxCommand" data-ibxp-id="cmdUndo" data-ibxp-shortcut="Ctrl+Z"></div>
+			<div class="cmd cmd-redo" data-ibx-type="ibxCommand" data-ibxp-id="cmdRedo" data-ibxp-shortcut="Ctrl+Y"></div>
+			
+			<div class="test-menubar" tabindex="0" aria-label="Example IBX horizontal menu bar" data-ibx-type="ibxHMenuBar" data-ibxp-aria.label="Menus">
+				<div class="menu-btn-file" data-ibx-type="ibxMenuButton" data-ibxp-text="File">
+					<div class="file-menu" data-ibx-type="ibxMenu">
+						<div data-ibx-type="ibxMenuItem" data-ibxp-label-options="{&quot;glyph&quot;:&quot;fiber_new&quot;, &quot;glyphClasses&quot;:&quot;material-icons&quot;}">New</div>
+						<div data-ibx-type="ibxMenuItem" data-ibxp-label-options="{&quot;glyph&quot;:&quot;open_in_new&quot;, &quot;glyphClasses&quot;:&quot;material-icons&quot;}">Open...</div>
+						<div data-ibx-type="ibxMenuSeparator"></div>
+						<div data-ibx-type="ibxMenuItem" data-ibxp-label-options="{&quot;glyph&quot;:&quot;save&quot;, &quot;glyphClasses&quot;:&quot;material-icons&quot;}">Save</div>
+						<div data-ibx-type="ibxMenuItem">Save As...</div>
+						<div data-ibx-type="ibxMenuSeparator"></div>
+						<div data-ibx-type="ibxMenuItem" data-ibxp-label-options="{&quot;glyph&quot;:&quot;exit_to_app&quot;, &quot;glyphClasses&quot;:&quot;material-icons&quot;}">Exit</div>
+					</div>
+				</div>
+				<div class="menu-btn-edit" data-ibx-type="ibxMenuButton" data-ibxp-text="Edit">
+					<div data-ibx-type="ibxMenu" data-ibxp-multi-select="true">
+						<div data-ibx-type="ibxMenuItem" data-ibxp-command="cmdUndo" data-ibxp-label-options="{&quot;glyph&quot;:&quot;undo&quot;, &quot;glyphClasses&quot;:&quot;material-icons&quot;}">Undo</div>
+						<div data-ibx-type="ibxMenuItem" data-ibxp-command="cmdRedo" data-ibxp-label-options="{&quot;glyph&quot;:&quot;redo&quot;, &quot;glyphClasses&quot;:&quot;material-icons&quot;}">Redo</div>
+						<div data-ibx-type="ibxMenuSeparator"></div>
+						<div data-ibx-type="ibxMenuItem" data-ibxp-command="cmdCut" data-ibxp-label-options="{&quot;glyph&quot;:&quot;content_cut&quot;, &quot;glyphClasses&quot;:&quot;material-icons&quot;}">Cut</div>
+						<div data-ibx-type="ibxMenuItem" data-ibxp-command="cmdCopy" data-ibxp-label-options="{&quot;glyph&quot;:&quot;content_copy&quot;, &quot;glyphClasses&quot;:&quot;material-icons&quot;}">Copy</div>
+						<div data-ibx-type="ibxMenuItem" data-ibxp-command="cmdPaste" data-ibxp-label-options="{&quot;glyph&quot;:&quot;content_paste&quot;, &quot;glyphClasses&quot;:&quot;material-icons&quot;}">Paste</div>
+						<div data-ibx-type="ibxMenuSeparator"></div>
+						<div data-ibx-type="ibxMenuItem" data-ibxp-label-options="{&quot;glyph&quot;:&quot;find_in_page&quot;, &quot;glyphClasses&quot;:&quot;material-icons&quot;}">Find...</div>
+						<div data-ibx-type="ibxMenuSeparator"></div>
+						<div data-ibx-type="ibxCheckMenuItem" data-ibxp-command="cmdCheck" data-ibxp-label-options="{&quot;glyph&quot;:&quot;accessibility&quot;, &quot;glyphClasses&quot;:&quot;material-icons&quot;}">Check 1</div>
+						<div data-ibx-type="ibxCheckMenuItem" data-ibxp-label-options="{&quot;glyph&quot;:&quot;android&quot;, &quot;glyphClasses&quot;:&quot;material-icons&quot;}">Check 2</div>
+						<div data-ibx-type="ibxCheckMenuItem" data-ibxp-label-options="{&quot;glyph&quot;:&quot;face&quot;, &quot;glyphClasses&quot;:&quot;material-icons&quot;}">Check 3</div>
+					</div>
+				</div>
+				<div class="menu-btn-view" data-ibx-type="ibxMenuButton" data-ibxp-text="View">
+					<div class="view-menu" data-ibx-type="ibxMenu">
+						<div class="rg-view-as" data-ibx-type="ibxRadioGroup" data-ibxp-name="rgViewAs" data-ibxp-command="cmdRadioMenu"></div>
+						<div class="cmd cmd-radio-menu" data-ibx-type="ibxCommand" data-ibxp-id="cmdRadioMenu"></div>
+						<div id="asList" data-ibx-type="ibxRadioMenuItem" data-ibxp-group="rgViewAs" data-ibxp-user-value="list" data-ibxp-label-options="{&quot;glyph&quot;:&quot;view_list&quot;, &quot;glyphClasses&quot;:&quot;material-icons&quot;}">as List</div>
+						<div id="asIcons" data-ibx-type="ibxRadioMenuItem" data-ibxp-group="rgViewAs" data-ibxp-user-value="icons" data-ibxp-label-options="{&quot;glyph&quot;:&quot;picture_in_picture&quot;, &quot;glyphClasses&quot;:&quot;material-icons&quot;}">as Icons</div>
+						<div id="asDetails" data-ibx-type="ibxRadioMenuItem" data-ibxp-group="rgViewAs" data-ibxp-user-value="details" data-ibxp-label-options="{&quot;glyph&quot;:&quot;search&quot;, &quot;glyphClasses&quot;:&quot;material-icons&quot;}">as Details</div>
+						<div id="" data-ibx-type="ibxMenuSeparator"></div>
+						<div id="viewAsMagic" data-ibx-type="ibxMenuItem">
+							View as Magic
+							<div class="magic-menu" data-ibx-type="ibxMenu">
+								<div id="pullARabbit" data-ibx-type="ibxMenuItem" data-ibxp-label-options="{&quot;glyph&quot;:&quot;pets&quot;, &quot;glyphClasses&quot;:&quot;material-icons&quot;}">
+									Pull a Rabbit!
+									<div class="magic-submenu" data-ibx-type="ibxMenu">
+										<div id="outOfHat" data-ibx-type="ibxMenuItem" data-ibxp-label-options="{&quot;glyphClasses&quot;:&quot;fa fa-circle-o-notch fa-spin&quot;}">Out of Your Hat!</div>
+										<div id="orHere" data-ibx-type="ibxMenuItem" data-ibxp-label-options="{&quot;glyphClasses&quot;:&quot;fa fa-spinner fa-spin&quot;}">Or Here</div>
+										<div id="notThere" data-ibx-type="ibxMenuItem" data-ibxp-label-options="{&quot;glyphClasses&quot;:&quot;fa fa-cog fa-spin&quot;}">Not There</div>
+										<div id="lookBehind" data-ibx-type="ibxMenuItem" data-ibxp-label-options="{&quot;glyphClasses&quot;:&quot;fa fa-refresh fa-spin&quot;}">Look Behind You!</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div data-ibx-type="ibxMenuButtonSeparator"></div>
+				<div class="menu-btn-window" data-ibx-type="ibxMenuButton">
+					Window
+					<div class="window-menu" data-ibx-type="ibxMenu">
+						<div data-ibx-type="ibxMenuItem">Cascade</div>
+						<div data-ibx-type="ibxMenuItem">Tile</div>
+						<div data-ibx-type="ibxMenuSeparator"></div>
+						<div data-ibx-type="ibxMenuItem">Maximize</div>
+						<div data-ibx-type="ibxMenuItem">Minimize</div>
+					</div>
+				</div>
+				<div class="menu-btn-help" title="Help" data-ibx-type="ibxMenuButton" data-ibxp-glyph="help_outline" data-ibxp-glyph-classes="material-icons md-14"></div>
+			</div>
+
+			<div data-ibx-type="ibxHBox" data-ibxp-align="center">
+				<div tabindex="0" class="test-carousel" data-ibx-type="ibxHCarousel">
+				</div>
+			</div>
+
+			<div class="sample-grouping" data-ibx-type="ibxHBox" data-ibxp-align="center">
+				<div class="btn-start-progress" tabindex="0" data-ibx-type="ibxButton">Start Progress...</div>
+				<div class="btn-start-waiting" tabindex="0" data-ibx-type="ibxButton">Start Waiting (5 Seconds)</div>
+			</div>
+
+			<div class="sample-grouping" data-ibx-type="ibxHBox" data-ibxp-align="center" data-ibxp-wrap="true">
+				<button tabindex="0">Native</button>
+				<div tabindex="0" class="testbutton" data-ibx-type="ibxButton">Press Me!</div>
+				<div tabindex="0" class="btnDialog" data-ibx-type="ibxButton">Dialog
+					<div class="dlg" data-ibx-type="ibxDialog" data-ibxp-destroy-on-close="false" data-ibxp-auto-size="false" data-ibxp-resizable="true">
+						<div id="txtTitleLabel" class="dlg-ctl-label" data-ibx-type="ibxLabel">Enter Title:</div>
+						<div tabindex="0" class="txt-title" data-ibx-type="ibxTextField" data-ibxp-placeholder="Enter one line of text" data-ibxp-aria.labelled-by="txtTitleLabel"></div>
+						<div id="txtBodyLabel" class="dlg-ctl-label" data-ibx-type="ibxLabel">Enter Text Here:</div>
+						<div tabindex="0" class="txt-body" data-ibx-type="ibxTextArea" data-ibxp-placeholder="Enter multiple line of text" data-ibxp-aria.labelled-by="txtBodyLabel" data-ibxp-aria.described-by="txtBodyLabel"></div>
+					</div>
+				</div>
+				<div class="split-menu-button" tabindex="0" data-ibx-type="ibxHSplitMenuButton" data-ibxp-default-menu-item=".def-item" data-ibxp-glyph-classes="fa fa-12 fa-gears">
+					Split Horizontal
+					<div data-ibx-type="ibxMenu">
+						<div data-ibxp-aria.labelled-by="xx" data-ibx-type="ibxMenuItem">Menu Item</div>
+						<div class="def-item" data-ibx-type="ibxMenuItem">Default Menu Item</div>
+						<div data-ibx-type="ibxMenuItem">Menu Item</div>
+					</div>
+				</div>
+				<div class="split-menu-button" tabindex="0" data-ibx-type="ibxVSplitMenuButton" data-ibxp-default-menu-item=".def-item" data-ibxp-glyph-classes="fa fa-12 fa-gears">
+					Split Vertical
+					<div data-ibx-type="ibxMenu">
+						<div class="def-item" data-ibx-type="ibxMenuItem">Default Menu Item</div>
+						<div data-ibx-type="ibxMenuItem">Menu Item</div>
+						<div data-ibx-type="ibxMenuItem">Menu Item</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="sample-grouping" data-ibx-type="ibxHBox" data-ibxp-align="center">
+				<input tabindex="0" id="nativeCheckbox" type="checkbox" aria-label="Native"><label for="nativeCheckbox">Native</label>
+				<div tabindex="0" class="test-check" data-ibx-type="ibxCheckBoxSimple" data-ibxp-command="cmdCheck">Check 1</div>
+				<div tabindex="0" data-ibx-type="ibxCheckBoxSimple">Check 2</div>
+				<div tabindex="0" data-ibx-type="ibxCheckBoxSimple">Check 3</div>
+				<div tabindex="0" data-ibx-type="ibxCheckBox">Check Box</div>
+				<div id="switchLabel" data-ibx-type="ibxLabel">Switch</div>
+				<div tabindex="0" data-ibx-type="ibxSwitch" data-ibxp-aria.labelledby="switchLabel"></div>
+			</div>
+
+			<div class="sample-grouping" data-ibx-type="ibxHBox" data-ibxp-align="center">
+				<input tabindex="0" id="nativeRadio" type="radio" aria-label="Native"><label for="nativeRadio">Native</label>
+				<div tabindex="0" data-ibx-type="ibxRadioGroup" data-ibxp-name="rgTestBtns1" data-ibxp-command="cmdRadioBtns">
+					<div class="cmd-radio-btns" data-ibx-type="ibxCommand" data-ibxp-id="cmdRadioBtns"></div>
+					<div class="test-radio" data-ibx-type="ibxRadioButtonSimple" data-ibxp-group="rgTestBtns1" data-ibxp-user-value="r1">Radio 1</div>
+					<div data-ibx-type="ibxRadioButtonSimple" data-ibxp-group="rgTestBtns1" data-ibxp-user-value="r2">Radio 2</div>
+					<div data-ibx-type="ibxRadioButtonSimple" data-ibxp-group="rgTestBtns1" data-ibxp-user-value="r3">Radio 3</div>
+				</div>
+			</div>
+
+			<div class="sample-grouping" data-ibx-type="ibxHBox">
+				<select>
+					<option>Option 1</option>
+					<option>Option 2</option>
+					<option>Option 3</option>
+					<option>Option 4</option>
+					<option>Option 5</option>
+				</select>
+				<div class="test-select" tabindex="0" data-ibx-type="ibxSelect">
+					<div data-ibx-type="ibxRadioGroup" data-ibxp-name="rgTestBtns2" data-ibxp-command="cmdRadioBtns"></div>
+					<div class="test-select-item" data-ibx-type="ibxSelectItem">Item s1</div>
+					<div data-ibx-type="ibxMenuSeparator"></div>
+					<div class="test-select-item" data-ibx-type="ibxSelectCheckItem" data-ibxp-command="cmdCheck">Item c1</div>
+					<div data-ibx-type="ibxMenuSeparator"></div>
+					<div class="test-select-item" data-ibx-type="ibxSelectRadioItem" data-ibxp-group="rgTestBtns2" data-ibxp-user-value="r1">Radio 1</div>
+					<div class="test-select-item" data-ibx-type="ibxSelectRadioItem" data-ibxp-group="rgTestBtns2" data-ibxp-user-value="r2">Radio 2</div>
+					<div class="test-select-item" data-ibx-type="ibxSelectRadioItem" data-ibxp-group="rgTestBtns2" data-ibxp-user-value="r3">Radio 3</div>
+				</div>
+				<div class="test-select test-select-list" tabindex="0" data-ibx-type="ibxSelect" data-ibxp-readonly="true">
+					<div data-ibx-type="ibxRadioGroup" data-ibxp-name="rgTestBtns3" data-ibxp-command="cmdRadioBtns"></div>
+					<div class="test-select-item" data-ibx-type="ibxSelectItem">Item s1</div>
+					<div data-ibx-type="ibxMenuSeparator"></div>
+					<div class="test-select-item" data-ibx-type="ibxSelectCheckItem" data-ibxp-command="cmdCheck">Item c1</div>
+					<div data-ibx-type="ibxMenuSeparator"></div>
+					<div class="test-select-item" data-ibx-type="ibxSelectRadioItem" data-ibxp-group="rgTestBtns3" data-ibxp-user-value="r1">Radio 1</div>
+					<div class="test-select-item" data-ibx-type="ibxSelectRadioItem" data-ibxp-group="rgTestBtns3" data-ibxp-user-value="r2">Radio 2</div>
+					<div class="test-select-item" data-ibx-type="ibxSelectRadioItem" data-ibxp-group="rgTestBtns3" data-ibxp-user-value="r3">Radio 3</div>
+				</div>
+				<div class="test-select test-select-paged" tabindex="0" data-ibx-type="ibxSelectPaged" data-ibxp-search="true" data-ibxp-selection-controls="true" data-ibxp-enable-paging-trigger="0" data-ibxp-page-size="2">
+					<div class="test-select-item" data-ibx-type="ibxSelectItem">Item s1</div>
+					<div class="test-select-item" data-ibx-type="ibxSelectItem">Item s2</div>
+					<div class="test-select-item" data-ibx-type="ibxSelectItem">Item s3</div>
+					<div class="test-select-item" data-ibx-type="ibxSelectItem">Item s4</div>
+					<div class="test-select-item" data-ibx-type="ibxSelectItem">Item s5</div>
+				</div>
+			</div>
+			<div class="sample-grouping" data-ibx-type="ibxHBox">
+					<div class="test-select test-select-paged" tabindex="0" data-ibx-type="ibxSelectItemList" data-ibxp-multi-select="true">
+					<div class="test-select-item" data-ibx-type="ibxSelectItem">Item s1</div>
+					<div class="test-select-item" data-ibx-type="ibxSelectItem">Item s2</div>
+					<div class="test-select-item" data-ibx-type="ibxSelectItem">Item s3</div>
+					<div class="test-select-item" data-ibx-type="ibxSelectItem">Item s4</div>
+					<div class="test-select-item" data-ibx-type="ibxSelectItem">Item s5</div>
+				</div>
+				<div class="test-select test-select-paged" tabindex="0" data-ibx-type="ibxSelectItemListPaged" data-ibxp-search="true" data-ibxp-selection-controls="true" data-ibxp-enable-paging-trigger="0" data-ibxp-page-size="2">
+					<div class="test-select-item" data-ibx-type="ibxSelectItem">Item s1</div>
+					<div class="test-select-item" data-ibx-type="ibxSelectItem">Item s2</div>
+					<div class="test-select-item" data-ibx-type="ibxSelectItem">Item s3</div>
+					<div class="test-select-item" data-ibx-type="ibxSelectItem">Item s4</div>
+					<div class="test-select-item" data-ibx-type="ibxSelectItem">Item s5</div>
+				</div>
+			</div>
+
+			<div class="sample-grouping" data-ibx-type="ibxHBox" data-ibxp-align="center">
+				<div class="test-h-slider" tabindex="0" data-ibx-type="ibxHSlider" data-ibxp-value-text-pos="end" data-ibxp-min-text-pos="center" data-ibxp-max-text-pos="center"></div>
+				<div class="test-r-slider" tabindex="0" data-ibx-type="ibxHRange" data-ibx-options="{value:25, value2:75, valueTextPos:'end', minTextPos:'center', maxTextPos:'center'}"></div>
+			</div>
+
+			<div data-ibx-type="ibxHBox" data-ibxp-align="center">
+				<div class="test-spinner" tabindex="0" data-ibx-type="ibxSpinner"></div>
+			</div>
+			<div class="sample-grouping" data-ibx-type="ibxHBox" data-ibxp-align="center">
+				<div id="txtFieldLabel" data-ibx-type="ibxLabel" data-ibxp-for=".test-text-field">Text Field Label:</div>
+				<div class="test-text-ctrl test-text-field" tabindex="0" data-ibx-type="ibxTextField" data-ibxp-aria.labelledby="txtFieldLabel" data-ibxp-placeholder="Placeholder"></div>
+		
+				<div id="txtAreaLabel" data-ibx-type="ibxLabel" data-ibxp-for=".test-text-area">Text Area Label:</div>
+				<div class="test-text-ctrl test-text-area" tabindex="0" data-ibx-type="ibxTextArea" data-ibxp-aria.labelledby="txtAreaLabel" data-ibxp-placeholder="Placeholder"></div>
+			</div>
+
+			<div class="test-tab-pane" tabindex="0" data-ibx-type="ibxTabPane" data-ibxp-inline="true" data-ibxp-aria.label="Tabs">
+				<div data-ibx-type="ibxTabPage">Page 1
+					<div class="tab-content" data-ibx-type="ibxVBox" data-ibxp-align="start" data-ibxp-justify="start">
+						<div>
+							<div tabindex="0" data-ibx-type="ibxButton">Button1</div>
+							<div tabindex="0" data-ibx-type="ibxButton">Button2</div>
+							<div tabindex="0" data-ibx-type="ibxButton">Button3</div>
+						</div>
+					</div>
+				</div>
+				<div data-ibx-type="ibxTabPage">Page 2
+					<div class="test-tab-content" data-ibx-type="ibxVBox" data-ibxp-align="center" data-ibxp-justify="center">
+						<div data-ibx-type="ibxLabel">Tab Page</div>
+					</div>
+				</div>
+			</div>
+		</div>
 	
 
-</body>
-				
-				<script class="ibx-init-scripts" type="text/javascript"></script>
-				
-			</html>
+</body></html>

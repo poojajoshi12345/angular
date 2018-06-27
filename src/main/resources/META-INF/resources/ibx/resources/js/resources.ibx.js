@@ -451,7 +451,9 @@ _p.bootable = function(){return this._bootable;};
 
 _p._makeResBlock = function(type, src, content)
 {
-	return $(sformat("<{1} src='{2}'><![CDATA[{3}\]\]\></{1}>", type, src, content), this._resBundle);
+	var block = sformat("<{1} src='{2}'><![CDATA[BLOCK-CONTENT-HERE\]\]\></{1}>", type, src);
+	block = block.replace("BLOCK-CONTENT-HERE", content);
+	return $(block, this._resBundle);
 };
 
 _p.getBundle = function()
