@@ -369,12 +369,13 @@ ibxDragDropManager._onMouseEvent = function(e)
 					var offsetY = bRect.top - this._mDownLoc.y;
 					dt.setDragImage(this.getDefaultDragImage(this.dragElement), offsetX, offsetY);
 				}
+
+				isDragging = true;
+				dt.dataLock = true;
+				this.dragElement.classList.add(this.dragSourceClass);
+				document.body.classList.add("ibx-dragging");
+				document.body.dataset.ibxOrigDragCursor = document.body.style.cursor;
 			}
-			isDragging = true;
-			dt.dataLock = true;
-			this.dragElement.classList.add(this.dragSourceClass);
-			document.body.classList.add("ibx-dragging");
-			document.body.dataset.ibxOrigDragCursor = document.body.style.cursor;
 		}
 
 		if(isDragging)
