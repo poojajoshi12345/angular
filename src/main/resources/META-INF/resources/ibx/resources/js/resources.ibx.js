@@ -437,7 +437,7 @@ function ibxResourceCompiler(ctxPath, bootable)
 			}
 		}.bind(this));
 
-		var cdata = $("<![CDATA[]]>", this._resBundle);
+		var cdata = $("\n<![CDATA[]]>\n", this._resBundle);
 		cdata[0].textContent = strBootFiles;
 		this._bootFiles.empty().append(cdata);
 		var coreBundle = $($.get({"url":this._contextPath + "./ibx_resource_bundle.xml", "async":false, "dataType":"xml"}).responseXML);
@@ -451,7 +451,7 @@ _p.bootable = function(){return this._bootable;};
 
 _p._makeResBlock = function(type, src, content)
 {
-	var block = sformat("<{1} src='{2}'><![CDATA[BLOCK-CONTENT-HERE\]\]\></{1}>", type, src);
+	var block = sformat("<{1} src='{2}'>\n<![CDATA[\nBLOCK-CONTENT-HERE\n\]\]\>\n</{1}>", type, src);
 	block = block.replace("BLOCK-CONTENT-HERE", content);
 	return $(block, this._resBundle);
 };
