@@ -389,7 +389,6 @@ ibxDragDropManager._onMouseEvent = function(e)
 			//manage the current target
 			if(!this.curTarget.is(elTarget))
 			{
-				console.dir(this.curTarget);
 				//spit out events for source/target
 				dEvent = this._dispatchDragEvent(e, "ibx_dragleave", this.curTarget[0], true);
 				dEvent = this._dispatchDragEvent(e, "ibx_dragenter", elTarget, true, true);
