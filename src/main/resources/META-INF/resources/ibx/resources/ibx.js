@@ -77,6 +77,8 @@ function ibx()
 		ibx._appInfoResolved = true;
 	}
 
+
+
 	if(!ibx._loaded && !ibx._isLoading)
 	{
 		if(!ibx._preCompiled)
@@ -112,7 +114,7 @@ function ibx()
 				window.clearInterval(ibx._loadTimer);
 				throw("Error loading pre ibx resources: " + scripts);
 			}
-			if(window.jQuery && window.jQuery.widget && ibxResourceManager)
+			if(window.jQuery && window.jQuery.widget && window.ibxResourceManager)
 			{
 				//jQuery/jQueryUI is in scope...stop polling...
 				window.clearInterval(ibx._loadTimer);
@@ -120,6 +122,21 @@ function ibx()
 				//wait for jQuery to be fully loaded...
 				$(function()
 				{
+					//we want to precompile this application, not run it.
+					if(ibx._appParms.ibx_compile == "true")
+					{
+						var xhr = $.ajax({"url": window.location.pathname, "dataType":"text", "async":false});
+						var inDoc = parser.parseFromString(xhr.responseText, "text/html");
+
+						//remove the "ibx.js" script if it exists...will mess up the final compiled app.
+						$(inDoc.querySelector("script[src*='/ibx.js']")).remove();
+
+						var compiler = new ibxResourceCompiler(ibx.getPath(), true);
+						var outDoc = compiler.linkBundle(inDoc);
+						$(".output").ibxTextArea("option", "text", outDoc.documentElement.outerHTML).ibxTextArea("selectAll");
+						return;
+					}
+
 					//jquery is fully loaded and running
 					$(window).dispatchEvent("ibx_ibxevent", {"hint":"jqueryloaded", "ibx":ibx});
 

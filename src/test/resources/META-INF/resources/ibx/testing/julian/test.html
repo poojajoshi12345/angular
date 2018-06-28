@@ -1,5 +1,5 @@
-<html lang="en-us"><head>
-		<title>ibx hello world sample</title>
+<html lang="en"><head>
+		<title>ibx calculator sample</title>
 		<meta http-equiv="X-UA-Compatible" content="IE=EDGE">
 		<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 		<meta http-equiv="Pragma" content="no-cache">
@@ -7,7 +7,7 @@
 		<meta name="google" value="notranslate">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 
-		<!--include this script...will boot ibx into the running state-->
+		
 		
 		<script class="ibx-precompiled-res-bundle" type="text/xml"><?xml version="1.0" encoding="UTF-8"?><!--Copyright 1996-2016 Information Builders, Inc. All rights reserved.
 $Revision$:--><ibx-precompiled-res-bundle>
@@ -28343,69 +28343,123 @@ _p.loadExternalResFile = function(elFile)
 
 </script>
 <script type="text/javascript">
-
-			/****
-				ibx applications use resource bundles (simple xml files) to load needed resources and dependencies.  When you
-				initilialze ibx you can pass an array of bundles which will load in the order specified. A resource bundle specifies all
-				of the assets your application needs to run (css/strings/javascript/markup/other resource bundles).
-
-				You do not have to use resource bundles.  Everything can be inline, or managed by you via link/script tags.  However, resource 
-				bunldes allow you to create simple reusable/modularized hierarchies of ibx components.
-			****/
-			var resBundles = 
-			[
-				{"src":"./resources/helloworld.res.xml", "loadContext":"app"}
-			];			
 			
-			/****
-				ibx can be called with the following parameters and signatures...
-	
-				parms:
-					function:	to call upon load
-					array:		resource packages to load after ibx boots
-					bool:		when loaded autobind all markup
+function WFGlobals()
+{
+}
+WFGlobals.ses_auth_val = "5c5d82b86064f2f08c8428969702f42e";
+WFGlobals.ses_auth_parm = "IBIWF_SES_AUTH_TOKEN";
+WFGlobals.getSesAuthVal = function getSesAuthVal() { return encodeURIComponent(WFGlobals.ses_auth_val); };
+WFGlobals.getSesAuthParm = function getSesAuthParm() { return WFGlobals.ses_auth_parm; };
+WFGlobals.getSesAuthParmPair = function getSesAuthParmPair() {return WFGlobals.getSesAuthParm() + "=" + WFGlobals.getSesAuthVal(); };   
+WFGlobals.jsTrace = "";
+WFGlobals.IBI_CACHE_FLUSH_KEY = "S12434_15289421181F/";
 
-				signatures (overloads):
-					ibx(function, array, bool)
-					ibx(function, array)
-					ibx(function, bool)
-					ibx(array, bool)
-					ibx(array)
-					ibx(bool)
-			****/
+WFGlobals.ibfsLanguage = "en_US";
+
+WFGlobals.EnabledFeatures = "ThumbNails;MenusV2;IBXHome;IBXPage;IndexLibrary;IndexRepositoryDescriptions;AskWebFOCUS;IntentPhrase;ChartExtensionConsole;RCHeapDump;";
+WFGlobals.TechPreviewFeatureList = "InsightDesigner;EditManifest;RSMetadataSavedByIA;WEBQ_ExpAnalytics;WEBQ_NewLinks;IBIPortal;ApplicationProperties;GlobalVarV2;IBIEditor;CFRConfig;";
+WFGlobals.isFeatureEnabled = function isFeatureEnabled(featureName) {
+     if (WFGlobals.EnabledFeatures.indexOf(featureName) > -1) return true; // If on the list - then it is enabled no matter what it's status
+     if (WFGlobals.TechPreviewFeatureList.indexOf(featureName) > -1) return false; // If not enabled - but on this list - then it is not
+     return true;  // Not on list and NOT in list of controls - default is enabled
+};
+
+/*[CLRPT-861] Added to localization settings*/
+WFGlobals.language = "en";
+WFGlobals.isRTL = (WFGlobals.language.length >= 2 && (WFGlobals.language.substring(0,2) === "iw" || WFGlobals.language.substring(0,2) === "ar"));
+WFGlobals.firstDayOfWeek = 0;  //placeholder for when someone who knows better can actually set this correctly: 0=sun, 1=mon, etc.
+WFGlobals.showMonthAfterYear = false;
+
+var IBI_random = "IBI_random";
+
+var isV4 = true;
+
+var applicationContext = "/ibi_apps";
+
+var applicationScheme = "http";
+
+var IBI_HELP_CONTEXT = "/ibi_help";
+
+var WFCRepositoryPath = "IBFS:/WFC/Repository";
+
+var isEdge = /Edge\//i.test( navigator.userAgent );
+
+var isChrome = !isEdge && /Chrome\//i.test( navigator.userAgent );
+
+WFGlobals.mapSafeUrl = function mapSafeUrl(url) {
+	var flushValue = "/S12434_15289421181F";
+	if(flushValue == null || flushValue.length == 0)
+		return url;
+	var i = url.lastIndexOf("/");
+	if (i >= 0)
+	{
+		var start = url.substring(0, i);
+		var end = url.substring(i);
+		url = start + flushValue + end;
+	}
+	else
+		url = flushValue.substring(1) + url;
+	return url;	
+	};
+
 			ibx(function()
 			{
-				/****
-					This is the ibx 'main' function.  When this is called
-					the system, and all resource bundles are guaranteed to be loaded and running.
-				****/
-			}, resBundles, true);
-			//# sourceURL=hello_world_ibx_sample
+				//hookup the buttons
+				$(".show-calc").on("click", function(e)
+				{
+					var calc = ibx.resourceMgr.getResource(".sample-calculator");
+					calc.appendTo("body").position({my:"left top", at:"right+10 top", of:".show-calc"});
+				});
+			}, [{"src":"./calculator_res.xml", "loadContext":"app"}], true);
 		</script>
 
-		<!--inline styles will be guaranteed to be last in DOM so they will continue to take precedence.-->
 		<style type="text/css">
-			.hello-world-jsp
+			.main-grid
 			{
-				color:red;
+				width:600px;
+
+				display:-ms-grid;
+				display:grid;
+
+				-ms-grid-columns:auto 1fr;
+				grid-template-columns:auto 1fr;
+
+				-ms-grid-rows:auto auto;
+				grid-template-rows:auto auto;
+			}
+			.grid-cell
+			{
+				border:1px solid #ccc;
+				box-shadow:3px 3px 5px 0 #aaa;
+				margin:5px;
+				align-self:center;
+			}
+
+			.show-calc
+			{
+				-ms-grid-column:1;
+				-ms-grid-column-span:1;
+				-ms-grid-column-align:stretch;
+				-ms-grid-row:1;
+				-ms-grid-row-span:1;
+				-ms-grid-row-align:center;
+			}
+			.explanation-calc
+			{
+				-ms-grid-column:2;
+				-ms-grid-column-span:1;
+				-ms-grid-column-align:stretch;
+				-ms-grid-row:1;
+				-ms-grid-row-span:1;
+				-ms-grid-row-align:center;
 			}
 		</style>
 	</head>
-
-	<!--the ibx-root class tells ibx where to start automatically binding markup on load.-->
 	<body class="ibx-root">
-		<!--
-			You can put ibx markup directly inline (as well a in resource bundles)
-
-			Most ibxWidgets use '<div>' elements as their base.  As they have no actual symantic meaning to HTML renderers,
-			and a web app is not a document, so we don't actually want the browser interpreting the markup as anything specific.
-
-			All ibxWidgets have a custom attribute: data-ibx-type="ibxWidgetType"
-			1) When ibx binds the markup it will find elements with this attribute.
-			2) ibx will attempt to create the javascript object that defines the widget type (and bind it to the element).
-			3) ibx will read all 'data-ibxp-' attributes and attempt to set their values as options on the widget.
-		-->
-		<div class="hello-world-jsp" data-ibx-type="ibxLabel" data-ibxp-text="Hello World"></div>
+		<div class="main-grid">
+			<div class="grid-cell show-calc" data-ibx-type="ibxButton" data-ibxp-glyph="apps" data-ibxp-text="New Calculator" data-ibxp-icon-position="top" data-ibxp-glyph-classes="material-icons"></div>
+		</div>
 	
 
 </body></html>
