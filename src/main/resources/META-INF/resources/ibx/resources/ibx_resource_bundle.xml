@@ -74,15 +74,15 @@ $Revision$:-->
 		<!--EXTERNAL ASSETS-->
 		<style-file src="./etc/jquery/jquery-ui-1.12.1/jquery-ui.css"/>
 		<style-file src="./etc/gridstack/gridstack.css"/>
-		<style-file src="./etc/font-awesome/css/font-awesome.css"/>
-		<style-file src="./etc/google/material-icons/material-icons.css"/>
-		<style-file src="./etc/google/css/hind.css"/>
-		<style-file src="./etc/google/css/lato.css"/>
-		<style-file src="./etc/google/css/open-sans.css"/>
-		<style-file src="./etc/google/css/roboto.css"/>
+		<style-file src="./etc/font-awesome/css/font-awesome.css" nocompile="true"/>
+		<style-file src="./etc/google/material-icons/material-icons.css" nocompile="true"/>
+		<style-file src="./etc/google/css/hind.css" nocompile="true"/>
+		<style-file src="./etc/google/css/lato.css" nocompile="true"/>
+		<style-file src="./etc/google/css/open-sans.css" nocompile="true"/>
+		<style-file src="./etc/google/css/roboto.css" nocompile="true"/>
 
 		<!--IBX ASSETS-->
-		<style-file src="./css/ibx-font/css/ibx-font.css"/>
+		<style-file src="./css/ibx-font/css/ibx-font.css" nocompile="true"/>
 		<style-file src="./css/widget.ibx.css"/>
 		<style-file src="./css/collapsible.ibx.css"/>
 		<style-file src="./css/flexbox.ibx.css"/>

@@ -270,8 +270,9 @@ _p.loadBundle = function(xResDoc)
 			var content = styleBlock.text().trim();
 			if(content)
 			{
+				var src = styleBlock.attr("src") || "inline";
 				content = this.preProcessResource(content);//precompile the content...string substitutions, etc.
-				var styleNode = $("<style type='text/css'>").text(content);
+				var styleNode = $("<style type='text/css'>").attr("data-ibx-src", src).text(content);
 				head.append(styleNode);
 				$(window).dispatchEvent("ibx_resmgr", {"hint":"cssinlineloaded", "loadDepth":this._loadDepth, "resMgr":this, "bundle":bundle[0]});
 			}
@@ -295,7 +296,8 @@ _p.loadBundle = function(xResDoc)
 			var content = scriptBlock.text().trim();
 			if(content)
 			{
-				var script = $("<script type='text/javascript'>");
+				var src = scriptBlock.attr("src") || "inline";
+				var script = $("<script type='text/javascript'>").attr("data-ibx-src", src);
 				content = this.preProcessResource(content);//precompile the content...string substitutions, etc.
 				script.text(content);
 				head.append(script);
@@ -516,30 +518,35 @@ _p.loadExternalResFile = function(elFile)
 	$(elFile).each(function(idx, file)
 	{
 		var type = file.nodeName;
-		var xhr = $.get({"url":this._contextPath + file.getAttribute("src"), "async":false, "dataType":"text"});
+		var src = file.getAttribute("src");
+		var xhr = $.get({"url":this._contextPath + src, "async":false, "dataType":"text"});
 		var content = xhr.responseText;
+
+		//do not compile into internal resource bundle.
+		if(file.getAttribute("nocompile") == "true")
+			return;
 
 		if(type == "string-file")
 		{	
-			var block = this._makeResBlock("string-bundle", file.getAttribute("src"), content);
+			var block = this._makeResBlock("string-bundle", src, content);
 			this._resBundle.find("strings").append(block);
 		}
 		else
 		if(type == "style-file")
 		{
-			var block = this._makeResBlock("style-sheet", file.getAttribute("src"), content);
+			var block = this._makeResBlock("style-sheet", src, content);
 			this._resBundle.find("styles").append(block);
 		}
 		else
 		if(type == "markup-file")
 		{
-			var block = this._makeResBlock("markup-block", file.getAttribute("src"), content);
+			var block = this._makeResBlock("markup-block", src, content);
 			this._resBundle.find("markup").append(block);
 		}
 		else
 		if(type == "script-file")
 		{
-			var block = this._makeResBlock("script-block", file.getAttribute("src"), content);
+			var block = this._makeResBlock("script-block", src, content);
 			this._resBundle.find("scripts").append(block);
 		}
 	}.bind(this));
