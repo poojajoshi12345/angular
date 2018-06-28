@@ -75,8 +75,13 @@ _p.addBundles = function(bundles, allLoaded)
 	if(bundles.length)
 	{
 		var bundleInfo = bundles.shift();
-		bundleInfo = (typeof(bundleInfo) == "string") ? {"src":bundleInfo, "loadContext":""} : bundleInfo;
-		this.addBundle(bundleInfo.src, bundleInfo.loadContext).done(this.addBundles.bind(this, bundles, allLoaded));
+		if(bundleInfo instanceof XMLDocument)
+			this.loadBundle(bundleInfo).done(this.addBundles.bind(this, bundles, allLoaded));
+		else
+		{
+			bundleInfo = (typeof(bundleInfo) == "string") ? {"src":bundleInfo, "loadContext":""} : bundleInfo;
+			this.addBundle(bundleInfo.src, bundleInfo.loadContext).done(this.addBundles.bind(this, bundles, allLoaded));
+		}
 	}
 	else
 		allLoaded.resolve();
@@ -433,7 +438,7 @@ function ibxResourceCompiler(ctxPath, bootable)
 			if(file.nodeName == "script-file")
 			{
 				var isIbx = (filePath.search("/ibx.js") != -1);
-				block = sformat("<sc" + "ript data-ibx-src='{1}' type='text/javascript'>\nSCRIPT_CONTENT_HERE\n{2}</sc" + "ript>\n", filePath, isIbx ? "ibx.preCompiled = true;" : "");
+				block = sformat("<sc" + "ript data-ibx-src='{1}' type='text/javascript'>\nSCRIPT_CONTENT_HERE\n{2}</sc" + "ript>\n", filePath, isIbx ? "ibx._preCompiled = true;" : "");
 				block = block.replace("SCRIPT_CONTENT_HERE", xhr.responseText);
 				strBootFiles += block;
 			}

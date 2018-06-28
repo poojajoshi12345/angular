@@ -77,49 +77,31 @@ function ibx()
 		ibx._appInfoResolved = true;
 	}
 
-	//ibx is inline and already loaded...so just initialize various things and load resources from internal bundle.
-	if(ibx.preCompiled && !ibx._loaded)
+	if(!ibx._loaded && !ibx._isLoading)
 	{
-		ibx._isLoading = false;
-		ibx._loaded = true;
-		ibx._loadPromise = $.Deferred();
-
-		window.addEventListener("load", function(e)
+		if(!ibx._preCompiled)
 		{
-			var bundle = $(".ibx-precompiled-res-bundle").remove();//remove bundle from DOM...no longer needed, saves memory.
-			var strBundle = bundle.text();
-			var parser = new DOMParser();
-			var bundle = parser.parseFromString(strBundle, "application/xml");
+			//things to preload for ibx.  Everything else is in the root resource bundle
+			var scripts = 
+			[
+				"<link type='text/css' rel='stylesheet' href='" + ibx._path + "./css/base.ibx.css'/>",
+				"<sc" + "ript type='text/javascript' src='" + ibx._path + "./etc/jquery/jquery-3.3.1.js'></sc" + "ript>",
+				"<sc" + "ript type='text/javascript' src='" + ibx._path + "./etc/jquery/jquery-ui-1.12.1/jquery-ui.js'></sc" + "ript>",
+				"<sc" + "ript type='text/javascript' src='" + ibx._path + "./js/util.ibx.js'></sc" + "ript>",
+				"<sc" + "ript type='text/javascript' src='" + ibx._path + "./js/preload.ibx.js'></sc" + "ript>",
+				"<sc" + "ript type='text/javascript' src='" + ibx._path + "./js/resources.ibx.js'></sc" + "ript>"
+			];
 
-			ibx.resourceMgr = new ibxResourceManager();
-			ibx.resourceMgr.loadBundle(bundle);
-			ibx.bindElements("");
-			$("body").addClass("ibx-visible");
-			ibx._loadPromise.resolve(ibx);
-		}.bind(this));
-	}
+			//[IBX-122] don't load jQuery/jQueryUI if alread loaded
+			if(window.jQuery)
+				scripts[1] = "";
+			if(window.jQuery && window.jQuery.ui)
+				scripts[2] = "";
 
-	if(!ibx.preCompiled && !ibx._loaded && !ibx._isLoading)
-	{
-		//things to preload for ibx.  Everything else is in the root resource bundle
-		var scripts = 
-		[
-			"<link type='text/css' rel='stylesheet' href='" + ibx._path + "./css/base.ibx.css'/>",
-			"<sc" + "ript type='text/javascript' src='" + ibx._path + "./etc/jquery/jquery-3.3.1.js'></sc" + "ript>",
-			"<sc" + "ript type='text/javascript' src='" + ibx._path + "./etc/jquery/jquery-ui-1.12.1/jquery-ui.js'></sc" + "ript>",
-			"<sc" + "ript type='text/javascript' src='" + ibx._path + "./js/util.ibx.js'></sc" + "ript>",
-			"<sc" + "ript type='text/javascript' src='" + ibx._path + "./js/preload.ibx.js'></sc" + "ript>"
-		];
-
-		//[IBX-122] don't load jQuery/jQueryUI if alread loaded
-		if(window.jQuery)
-			scripts[1] = "";
-		if(window.jQuery && window.jQuery.ui)
-			scripts[2] = "";
-
-		document.open();
-		document.write(scripts.join(""));
-		document.close();
+			document.open();
+			document.write(scripts.join(""));
+			document.close();
+		}
 
 		//wait for jQuery/jQueryUI to be loaded...then boot ibx
 		var dateStart = new Date();
@@ -130,7 +112,7 @@ function ibx()
 				window.clearInterval(ibx._loadTimer);
 				throw("Error loading pre ibx resources: " + scripts);
 			}
-			if(window.jQuery && window.jQuery.widget)
+			if(window.jQuery && window.jQuery.widget && ibxResourceManager)
 			{
 				//jQuery/jQueryUI is in scope...stop polling...
 				window.clearInterval(ibx._loadTimer);
@@ -145,64 +127,55 @@ function ibx()
 					$(window).dispatchEvent("ibx_ibxevent", {"hint":"ibxloading", "ibx":ibx});
 					ibx._loadPromise = $.Deferred();
 					ibx._loadPromise._autoBind = autoBind;
-					ibx._loadPromise._resPackages = resPackages;
+					ibx._loadPromise._resPackages =  resPackages;
 
-					//this is needed because the relese version of ibx prepends the ibxResourceManager to this file which means
-					//it's already defined...if in debug, we load it normally via AJAX...so this allows both.
-					$.Deferred(function(dfd)
+					//make the master/default resource manager for ibx.
+					ibx.resourceMgr = new ibxResourceManager();
+
+					var inlineStyles = $("head > style");//save the pre-ibx styles so they can be moved to the end after load.
+					var packages = ibx._loadPromise._resPackages;
+					packages.unshift("./ibx_resource_bundle.xml");
+
+					//all resources for app are in an internal resource bundle compiled previously...so just load from that.
+					if(ibx._preCompiled)
 					{
-						if(typeof(ibxResourceManager) == "undefined")
+						var bundle = $(".ibx-precompiled-res-bundle").remove();//remove bundle from DOM...no longer needed, saves memory.
+						var strBundle = bundle.text();
+						var parser = new DOMParser();
+						var bundle = parser.parseFromString(strBundle, "application/xml");
+						packages = [bundle];
+					}
+
+					ibx.resourceMgr.addBundles(packages).done(function()
+					{
+						//ibx is fully loaded and running.
+						$(window).dispatchEvent("ibx_ibxevent", {"hint":"ibxloaded", "ibx":ibx});
+
+						//bool means just bind everything...string means select these and bind them
+						$(window).dispatchEvent("ibx_ibxevent", {"hint":"markupbinding", "ibx":ibx});
+						var autoBind = ibx._loadPromise._autoBind;
+						if(autoBind)
 						{
-							var url = ibx._path + "./js/resources.ibx.js";
-							$.get(url).done(function(dfd, text, status, xhr)
-							{
-								//[ACT-1571] Have to reload via script tag if inline loading is on.
-								if(ibx.forceInlineResLoading)
-									$("head").append($("<script type='text/javascript'>").attr("data-ibx-src", url).text(text));
-								dfd.resolve();
-							}.bind(this, dfd));
+							ibx.bindElements((typeof(autoBind) === "string") ? autoBind : "");
+							$(window).dispatchEvent("ibx_ibxevent", {"hint":"markupbound", "ibx":ibx});
 						}
-						else
-							dfd.resolve();
-					}).done(function()
-					{
-						//make the master/default resource manager for ibx.
-						ibx.resourceMgr = new ibxResourceManager();
 
-						var inlineStyles = $("head > style");//save the pre-ibx styles so they can be moved to the end after load.
-						var packages = ibx._loadPromise._resPackages;
-						packages.unshift("./ibx_resource_bundle.xml");
-						ibx.resourceMgr.addBundles(packages).done(function()
-						{
-							//ibx is fully loaded and running.
-							$(window).dispatchEvent("ibx_ibxevent", {"hint":"ibxloaded", "ibx":ibx});
-
-							//bool means just bind everything...string means select these and bind them
-							$(window).dispatchEvent("ibx_ibxevent", {"hint":"markupbinding", "ibx":ibx});
-							var autoBind = ibx._loadPromise._autoBind;
-							if(autoBind)
-							{
-								ibx.bindElements((typeof(autoBind) === "string") ? autoBind : "");
-								$(window).dispatchEvent("ibx_ibxevent", {"hint":"markupbound", "ibx":ibx});
-							}
-
-							$("head").append(inlineStyles);//move any non-ibx styles to the end so they will override ibx styles.
+						$("head").append(inlineStyles);//move any non-ibx styles to the end so they will override ibx styles.
 						
-							ibx._loaded = true;
-							ibx._isLoading = !ibx._loaded;
-							ibx._loadPromise.then(function()
-							{
-								ibx._setAccessibility(ibx.isAccessible);//turn on/off default accessibility
+						ibx._loaded = true;
+						ibx._isLoading = !ibx._loaded;
+						ibx._loadPromise.then(function()
+						{
+							ibx._setAccessibility(ibx.isAccessible);//turn on/off default accessibility
 
-								var ibxRoots = $(".ibx-root").addClass("ibx-loaded");//display all ibx-roots, now that we are loaded.
-								if(ibx.showOnLoad)
-									ibx.showRootNodes(true);
+							var ibxRoots = $(".ibx-root").addClass("ibx-loaded");//display all ibx-roots, now that we are loaded.
+							if(ibx.showOnLoad)
+								ibx.showRootNodes(true);
 									
-							});
-							ibx._loadPromise.then(fn);
-							ibx._loadPromise.resolve(ibx);//let everyone know the system is booted.
-							$(window).dispatchEvent("ibx_ibxevent", {"hint":"apploaded", "ibx":ibx});
 						});
+						ibx._loadPromise.then(fn);
+						ibx._loadPromise.resolve(ibx);//let everyone know the system is booted.
+						$(window).dispatchEvent("ibx_ibxevent", {"hint":"apploaded", "ibx":ibx});
 					});
 				});
 			}
