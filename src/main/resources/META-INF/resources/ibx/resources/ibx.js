@@ -47,14 +47,41 @@ function ibx()
 	if(typeof(a3) === "boolean")
 		autoBind = a3;
 
+
+	//resolve various ibx context values based on where we're loading from, and what we're loaded with.
+	if(!ibx._appInfoResolved)
+	{
+		var ibxScript = document.querySelector("script[src*='ibx.js']");
+		var ibxPath = ibxScript ? ibxScript.getAttribute("src").replace("ibx.js", "") : "";
+		ibx.setPath(ibxPath);
+		ibx.setAppPath(window.location.href.substring(0, window.location.href.lastIndexOf("/") + 1));
+		ibx._appName = window.location.href.substring(window.location.href.lastIndexOf("/") + 1)
+		
+		//save the parameters, if any, passed on the url
+		ibx._appParms = {};
+		if(document.location.search)
+		{
+			var parms = document.location.search.replace(/^\?/, "").split("&");
+			for(var i = 0; i < parms.length; ++i)
+			{
+				parm = parms[i].split("=");
+				try {   /* We are not able to decode non UTF8 data by decodeURIComponent(). */
+						/* As you know, javascript only has decode routine for Latin-1 and UTF8. */
+						/* If value encoded is not one of them, we only have a way that set original data. */
+					ibx._appParms[decodeURIComponent(parm[0])] = decodeURIComponent(parm[1]);
+				} catch (e) {
+					ibx._appParms[parm[0]] = parm[1];
+				}
+			};
+		}
+		ibx._appInfoResolved = true;
+	}
+
 	//ibx is inline and already loaded...so just initialize various things and load resources from internal bundle.
 	if(ibx.preCompiled && !ibx._loaded)
 	{
 		ibx._isLoading = false;
 		ibx._loaded = true;
-		ibx._appName = window.location.href.substring(window.location.href.lastIndexOf("/") + 1)
-		ibx._appPath = window.location.href.substring(0, window.location.href.lastIndexOf("/") + 1);
-		ibx._path = ibx._appPath;
 		ibx._loadPromise = $.Deferred();
 
 		window.addEventListener("load", function(e)
@@ -74,32 +101,6 @@ function ibx()
 
 	if(!ibx.preCompiled && !ibx._loaded && !ibx._isLoading)
 	{
-		//resolve various ibx context values based on where we're loading from.
-		var ibxScript = document.querySelector("script[src*='ibx.js']");
-		var ibxPath = ibxScript ? ibxScript.getAttribute("src").replace("ibx.js", "") : "";
-		ibx.setPath(ibxPath);
-		ibx.setAppPath(window.location.href.substring(0, window.location.href.lastIndexOf("/") + 1));
-		ibx._appName = window.location.href.substring(window.location.href.lastIndexOf("/") + 1)
-		ibx._isLoading = !ibx.loaded;
-		
-		//save the parameters, if any, passed on the url
-		ibx._appParms = {};
-		if(document.location.search)
-		{
-			var parms = document.location.search.replace(/^\?/, "").split("&");
-			for(var i = 0; i < parms.length; ++i)
-			{
-				parm = parms[i].split("=");
-				try {   /* We are not able to decode non UTF8 data by decodeURIComponent(). */
-						/* As you know, javascript only has decode routine for Latin-1 and UTF8. */
-						/* If value encoded is not one of them, we only have a way that set original data. */
-					ibx._appParms[decodeURIComponent(parm[0])] = decodeURIComponent(parm[1]);
-				} catch (e) {
-					ibx._appParms[parm[0]] = parm[1];
-				}
-			};
-		}
-
 		//things to preload for ibx.  Everything else is in the root resource bundle
 		var scripts = 
 		[
