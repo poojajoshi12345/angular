@@ -126,15 +126,17 @@ function ibx()
 					if(ibx._appParms.ibx_compile == "true")
 					{
 						var xhr = $.ajax({"url": window.location.pathname, "dataType":"text", "async":false});
+						var parser = new DOMParser();
 						var inDoc = parser.parseFromString(xhr.responseText, "text/html");
 
 						//remove the "ibx.js" script if it exists...will mess up the final compiled app.
 						$(inDoc.querySelector("script[src*='/ibx.js']")).remove();
 
 						var compiler = new ibxResourceCompiler(ibx.getPath(), true);
+						compiler.addBundles(resPackages);
 						var outDoc = compiler.linkBundle(inDoc);
-						$(".output").ibxTextArea("option", "text", outDoc.documentElement.outerHTML).ibxTextArea("selectAll");
-						return;
+						console.log(outDoc.documentElement.outerHTML);
+						return outDoc.documentElement.outerHTML;
 					}
 
 					//jquery is fully loaded and running
