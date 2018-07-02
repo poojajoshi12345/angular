@@ -33,52 +33,89 @@ $.widget('ibi.ibxDiagram', $.ibi.ibxWidget, {
 	_destroy: function() {
 		this._super();
 	},
-	addNode: function(node) {
-		if (node instanceof Element) {
+	convertToNode: function(node) {
+		if (typeof node === 'number') {
+			return this._children[node];
+		} else if (node && node.widgetName && node.widgetName === 'ibxDiagramNode') {
+			return node;
+		} else if (node instanceof Element) {
 			node = $(node);
 		} else if (!(node instanceof jQuery)) {  // Assume 'node' is an ibxDiagramNode options object like {left, right, className, ...}
 			var child = $('<div>').ibxDiagramNode(node);
 			node = child;
 		}
-
 		if (node.ibxDiagramNode('instance') == null) {  // If node is not yet an ibxDiagramNode, make it one
 			node = node.ibxDiagramNode(node);
 		}
+		return node.ibxDiagramNode('instance');
+	},
+	addNode: function(node) {
 
-		node = node.draggable({containment: 'parent', stack: '.ibx-diagram-node'})
-			.on('drag', (function() {this.updateConnections();}).bind(this))
-			.css('position', '')  // draggable sets position to relative; undo that
-			.mousedown((function(e) {this.select(e.currentTarget);}).bind(this));
+		node = this.convertToNode(node).element;
+		var options = node.ibxDiagramNode('option');
 
-		this._children.push(node);
+		if (options.selectable) {
+			node.mousedown((function(e) {
+				this.select(e.currentTarget);
+			}).bind(this));
+		}
+
+		if (options.moveable) {
+			node.draggable({containment: 'parent', stack: '.ibx-diagram-node'})
+				.on('drag', (function() {this.updateConnections();}).bind(this))
+				.css('position', '');  // draggable sets position to relative; undo that
+		}
+		if (options.deletable) {
+			node.attr('tabindex', this._children.length);  // Need tabindex to make basic divs focusable and receive keyboard events
+			node.keydown((function(e) {
+				this.removeNode(e.currentTarget);
+			}).bind(this));
+		}
+
+		this._children.push(node.ibxDiagramNode('instance'));
 		if (node[0].parentElement !== this.element[0]) {
 			this.element.append(node);
 		}
 		this.refresh();
 		return node;
 	},
+	removeNode: function(node) {
+		node = this.convertToNode(node);
+		var idx = this._children.indexOf(node);
+		if (idx >= 0) {
+			node.element.remove();
+			this._children.splice(idx, 1);
+		}
+		this._connections = $.grep(this._connections, function(connection) {
+			return connection.from.node !== node && connection.to.node !== node;
+		});
+		this.resetConnections();
+	},
 	select: function(node) {
 		this._children.forEach(function(child) {
-			child.removeClass('ui-state-highlight');
+			child.element.removeClass('ui-state-highlight');
 		});
 		if (node) {
 			$(node).addClass('ui-state-highlight');
 		}
 	},
+	resetConnections: function() {
+		this._canvas.empty();
+		var connections = this._connections;
+		this._connections = [];
+		connections.forEach((function(connection) {
+			this.addConnection(connection);
+		}).bind(this));
+	},
 	addConnection: function(connection) {
 		var line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
 		line = $(line).attr({x1: 0, y1: 0, x2: 500, y2: 500}).addClass('ibx-diagram-connection');
 		this._canvas.append(line);
-		var from = connection.from.node, to = connection.to.node;
-		if (typeof from === 'number') {
-			from = this._children[from];
-		}
-		if (typeof to === 'number') {
-			to = this._children[to];
-		}
+		var from = this.convertToNode(connection.from.node);
+		var to = this.convertToNode(connection.to.node);
 		this._connections.push({
-			from: {node: from[0], anchor: connection.from.anchor},
-			to: {node: to[0], anchor: connection.to.anchor},
+			from: {node: from, anchor: connection.from.anchor},
+			to: {node: to, anchor: connection.to.anchor},
 			line: line[0]
 		});
 		this.refresh();
@@ -87,8 +124,8 @@ $.widget('ibi.ibxDiagram', $.ibi.ibxWidget, {
 	updateConnections: function() {
 		this._connections.forEach(function(connection) {
 			var line = connection.line;
-			var c1 = connection.from.node;
-			var c2 = connection.to.node;
+			var c1 = connection.from.node.element[0];
+			var c2 = connection.to.node.element[0];
 			var box1 = c1.getBoundingClientRect();
 			var box2 = c2.getBoundingClientRect();
 			line.setAttribute('x1', c1.offsetLeft + box1.width - 1);
@@ -101,19 +138,23 @@ $.widget('ibi.ibxDiagram', $.ibi.ibxWidget, {
 		this._super();
 		if (this.options.grid.size == null) {
 			this._children.forEach(function(child) {
-				child.draggable({grid: false});
+				if (child.options.moveable) {
+					child.element.draggable({grid: false});
+				}
 			});
 		} else {
 			var gridSize = this.options.grid.size;
 			var offset = this.options.grid.offset;
-			this._children.forEach((function(child) {
-				var pos = child.position();
-				child.css({
-					left: (Math.floor(pos.left / gridSize) * gridSize) + offset.left,
-					top: (Math.floor(pos.top / gridSize) * gridSize) + offset.top
-				});
-				child.draggable({grid: [gridSize, gridSize]});
-			}).bind(this));
+			this._children.forEach(function(child) {
+				if (child.options.moveable) {
+					var pos = child.element.position();
+					child.element.css({
+						left: (Math.floor(pos.left / gridSize) * gridSize) + offset.left,
+						top: (Math.floor(pos.top / gridSize) * gridSize) + offset.top
+					});
+					child.element.draggable({grid: [gridSize, gridSize]});
+				}
+			});
 		}
 		this.updateConnections();
 	}
@@ -122,8 +163,13 @@ $.widget('ibi.ibxDiagram', $.ibi.ibxWidget, {
 $.widget('ibi.ibxDiagramNode', $.ibi.ibxWidget, {
 	_widgetClass: 'ibx-diagram-node',
 	options: {  // All optional; can also be set via the equivalent CSS properties
-		left: null, top: null,
-		width: null, height: null
+		left: null,
+		top: null,
+		width: null,
+		height: null,
+		selectable: true,  // If true, node can be clicked on to select it
+		moveable: true,  // If true, node cannot be dragged or moved around
+		deletable: true  // If true, selecting this node then hitting the 'delete' key will delete the node
 	},
 	_create: function() {
 		this._super();
