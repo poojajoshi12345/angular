@@ -2,6 +2,8 @@
 /*Copyright 1996-2016 Information Builders, Inc. All rights reserved.*/
 // $Revision$:
 
+(function() {
+
 $.widget('ibi.ibxDiagram', $.ibi.ibxWidget, {
 	_widgetClass: 'ibx-diagram',
 	options: {
@@ -33,6 +35,36 @@ $.widget('ibi.ibxDiagram', $.ibi.ibxWidget, {
 	_destroy: function() {
 		this._super();
 	},
+	loadFromJSON: function(json) {
+		this.element.width(json.width);
+		this.element.height(json.height);
+		this._canvas.attr('width', json.width);
+		this._canvas.attr('height', json.height);
+		this.options.grid = clone(json.grid);
+		json.children.forEach((function(child) {
+			this.addNode(child);
+		}).bind(this));
+		json.connections.forEach((function(connection) {
+			this.addConnection(connection);
+		}).bind(this));
+	},
+	saveToJSON: function() {
+		var children = this._children.map(function(child) {
+			return child.saveToJSON();
+		});
+		var connections = this._connections.map((function(connection) {
+			var from = {node: this._children.indexOf(connection.from.node)};
+			var to = {node: this._children.indexOf(connection.to.node)};
+			return {from: from, to: to};
+		}).bind(this));
+		return {
+			width: this.element[0].clientWidth,
+			height: this.element[0].clientHeight,
+			grid: clone(this.options.grid),
+			children: children,
+			connections: connections
+		};
+	},
 	convertToNode: function(node) {
 		if (typeof node === 'number') {
 			return this._children[node];
@@ -51,6 +83,7 @@ $.widget('ibi.ibxDiagram', $.ibi.ibxWidget, {
 	},
 	addNode: function(node) {
 
+		var classList = node.customClassList;
 		node = this.convertToNode(node).element;
 		var options = node.ibxDiagramNode('option');
 
@@ -68,13 +101,18 @@ $.widget('ibi.ibxDiagram', $.ibi.ibxWidget, {
 		if (options.deletable) {
 			node.attr('tabindex', this._children.length);  // Need tabindex to make basic divs focusable and receive keyboard events
 			node.keydown((function(e) {
-				this.removeNode(e.currentTarget);
+				if (e.keyCode === $.ui.keyCode.DELETE) {
+					this.removeNode(e.currentTarget);
+				}
 			}).bind(this));
 		}
 
 		this._children.push(node.ibxDiagramNode('instance'));
 		if (node[0].parentElement !== this.element[0]) {
 			this.element.append(node);
+		}
+		if (classList) {
+			node.addClass(classList.join(' '));
 		}
 		this.refresh();
 		return node;
@@ -186,6 +224,24 @@ $.widget('ibi.ibxDiagramNode', $.ibi.ibxWidget, {
 			this.addAnchor('left', this.options.anchors.left);
 		}
 	},
+	saveToJSON: function() {
+		var options = this.options;
+		var el = this.element[0];
+		var bbox = el.getBoundingClientRect();
+		var classList = this.element[0].className.split(/\s+/).filter(function(el) {
+			return el.substr(0, 3).toLowerCase() !== 'ibx';
+		});
+		return {  // Must set each property individually; 'this.options' has a lot more than just this base component's options in it
+			left: options.left || el.offsetLeft,
+			top: options.top || el.offsetTop,
+			width: options.width || bbox.width,
+			height: options.height || bbox.height,
+			selectable: options.selectable,
+			moveable: options.moveable,
+			deletable: options.deletable,
+			customClassList: classList
+		};
+	},
 	addAnchor: function(position, anchor) {
 		if (!anchor || !anchor.width || !anchor.height) {
 			return;
@@ -232,5 +288,11 @@ $.widget('ibi.ibxDiagramNode', $.ibi.ibxWidget, {
 		});
 	}
 });
+
+function clone(json) {
+	return JSON.parse(JSON.stringify(json));
+}
+
+})();
 
 //# sourceURL=diagram.ibx.js
