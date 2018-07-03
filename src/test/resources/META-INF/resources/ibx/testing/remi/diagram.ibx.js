@@ -7,30 +7,20 @@
 $.widget('ibi.ibxDiagram', $.ibi.ibxWidget, {
 	_widgetClass: 'ibx-diagram',
 	options: {
+		selectMode: 'fit',  // One of 'fit' or 'touch'
 		grid: {
 			size: null,  // Either null (disable grid) or a number.  If a number, snap each node to a grid with intervals this large (in px).
 			offset: {left: 0, top: 0}  // If grid.size is set, start grid this far from the top left corner of the diagram container
 		}
 	},
 	_create: function() {
-
 		var canvas = this;
 		canvas._super();
-		$(document).click(function(e) {
-			var node = $(e.target).ibxDiagramNode('instance');
-			if (node && node.options.selectable) {
-				canvas.selectNode(node);
-			} else {
-				canvas.selectNode();
-			}
-		});
 		canvas._children = [];
 		canvas._connections = [];
-
 		canvas.children().each(function(idx, node) {
 			canvas.addNode(node);
 		});
-
 		var w = canvas.element[0].clientWidth;
 		var h = canvas.element[0].clientHeight;
 		canvas._canvas = $('<svg xmlns="http://www.w3.org/2000/svg" class="ibx-diagram-canvas" width="' + w + '" height="' + h + '"></svg>');
@@ -42,6 +32,23 @@ $.widget('ibi.ibxDiagram', $.ibi.ibxWidget, {
 	refresh: function() {
 		var canvas = this;
 		canvas._super();
+		// TODO: marquee selection box can fall outside canvas
+		this.element.selectable({
+			tolerance: this.options.selectMode,
+			filter: '.ibx-selectable',
+			selected: function(e, ui) {
+				var node = canvas.convertToNode(ui.selected);
+				if (node.options.selectable) {
+					node.options.selected = true;
+				} else {
+					node.element.removeClass('ui-selected');
+				}
+			},
+			unselected: function(e, ui) {
+				var node = canvas.convertToNode(ui.unselected);
+				node.options.selected = false;
+			}
+		});
 		if (canvas.options.grid.size == null) {
 			canvas._children.forEach(function(child) {
 				child.element.draggable({grid: false});
@@ -139,13 +146,17 @@ $.widget('ibi.ibxDiagram', $.ibi.ibxWidget, {
 		});
 		this.resetConnections();
 	},
-	selectNode: function(node) {
-		this._children.forEach(function(child) {
-			child.element.removeClass('ui-state-highlight');
-		});
-		if (node) {
-			node = this.convertToNode(node);
-			node.element.addClass('ui-state-highlight');
+	selectNode: function(e) {
+		if (!e.ctrlKey) {
+			this._children.forEach(function(child) {
+				child.options.selected = false;
+				child.element.removeClass('ui-selected');
+			});
+		}
+		var node = this.convertToNode(e.currentTarget);
+		if (node && node.options.selectable) {
+			node.options.selected = e.ctrlKey ? !node.options.selected : true;
+			node.element.toggleClass('ui-selected', node.options.selected);
 		}
 	},
 	resetConnections: function() {
@@ -200,7 +211,8 @@ $.widget('ibi.ibxDiagramNode', $.ibi.ibxWidget, {
 		anchors: [],
 		selectable: true,  // If true, node can be clicked on to select it
 		moveable: true,  // If true, node cannot be dragged or moved around
-		deletable: true  // If true, selecting this node then hitting the 'delete' key will delete the node
+		deletable: true,  // If true, selecting this node then hitting the 'delete' key will delete the node
+		selected: false
 	},
 	_create: function() {
 		this._super();
@@ -228,6 +240,7 @@ $.widget('ibi.ibxDiagramNode', $.ibi.ibxWidget, {
 			width: this.options.width,
 			height: this.options.height
 		});
+		this.element.toggleClass('ibx-selectable', this.options.selectable);
 		if (this.canvas) {
 			this.element.draggable({disabled: !this.options.moveable});
 			this.lockToGrid();
@@ -239,19 +252,74 @@ $.widget('ibi.ibxDiagramNode', $.ibi.ibxWidget, {
 		var canvas = this.canvas;
 		var options = this.options;
 		var nodeEl = this.element;
+		var selectedNodes, offset;
 
-		nodeEl.draggable({containment: 'parent', stack: '.ibx-diagram-node', disabled: !options.moveable})
+		nodeEl.draggable(
+			{
+				containment: 'parent',
+				stack: '.ibx-diagram-node',
+				disabled: !options.moveable,
+				start: function() {
+					selectedNodes = [];
+					for (var i = 0; i < canvas._children.length; i++) {
+						var child = canvas._children[i];
+						var el = child.element[0];
+						if (child.options.selected && child.options.moveable && el !== this) {
+							selectedNodes.push({
+								node: el,
+								offset: el.getBoundingClientRect()
+							});
+						}
+					}
+					if (selectedNodes.length) {
+						selectedNodes.canvasSize = {
+							width: canvas.element[0].clientWidth,
+							height: canvas.element[0].clientHeight
+						};
+						offset = this.getBoundingClientRect();
+					}
+				},
+				drag: function(e, ui) {
+					if (selectedNodes.length) {
+						var box = selectedNodes.canvasSize;
+						var dx = ui.position.top - offset.top, dy = ui.position.left - offset.left;
+						selectedNodes.forEach(function(el) {
+							el.node.style.left = Math.max(0, Math.min(box.width - el.offset.width, el.offset.left + dy)) + 'px';
+							el.node.style.top = Math.max(0, Math.min(box.height - el.offset.height, el.offset.top + dx)) + 'px';
+						});
+					}
+				}
+			})
 			.css('position', '')  // draggable sets position to relative; undo that
 			.on('drag', function(e) {
 				canvas.convertToNode(e.target).updatePosition();
 				canvas.updateConnections();
 			});
 
+		nodeEl.toggleClass('ibx-selectable', options.selectable);
 		nodeEl.attr('tabindex', canvas._children.length);  // Need tabindex to make basic divs focusable and receive keyboard events
 		nodeEl.keydown(function(e) {
-			if (options.deletable && e.keyCode === $.ui.keyCode.DELETE) {
-				canvas.removeNode(e.currentTarget);
+			if (e.keyCode !== $.ui.keyCode.DELETE) {
+				return;
 			}
+			var toDelete = canvas._children.filter(function(el) {
+				return el.options.selected && el.options.deletable;
+			});
+			while (toDelete.length) {
+				canvas.removeNode(toDelete[0]);
+				toDelete.shift();
+			}
+		});
+		nodeEl.mousedown(function(e) {
+			var node = canvas.convertToNode(e.currentTarget);
+			if (node.options.selectable) {
+				node.element[0].focus();  // Without this, jQuery draggable doesn't allow unmoveable elements to even receive focus
+			} else {
+				e.stopPropagation();  // Without this, jQuery selectable will make this unselectable node selectable, no matter what
+			}
+		});
+		nodeEl.click(function(e) {
+			canvas.selectNode(e);
 		});
 
 		// If position / size was set via CSS instead of options, copy those settings to options for consistency

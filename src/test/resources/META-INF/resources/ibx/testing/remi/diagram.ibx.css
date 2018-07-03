@@ -23,6 +23,12 @@
 	stroke-width: 1px;
 }
 
-.ui-state-highlight {
+.ui-selecting, .ui-selected {
 	border: 1px solid #8787e4 !important;
+}
+
+.ui-selectable-helper {
+	border: 1px solid #666;
+	border-style: dashed;
+	background-color: rgba(0, 0, 0, 0.03);
 }
