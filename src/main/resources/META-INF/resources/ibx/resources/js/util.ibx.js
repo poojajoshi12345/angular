@@ -85,9 +85,7 @@ jQuery.expr[":"]["ibxNavFocusable"] = function(elem, idx, meta, stack)
 jQuery.expr[":"]["inViewport"] = function(elem, idx, meta, stack)
 {
 	console.warn("[ibx Not Implemented] This filter is not currently implemented!");
-	return;
-	var info = GetVisibilty(elem);
-	return (meta[3] == "true") ? info.total : info.partial;
+	return false;
 };
 jQuery.expr[":"]["openPopup"] = function(elem, idx, meta, stack)
 {

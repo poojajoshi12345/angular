@@ -149,7 +149,7 @@ $Revision$:-->
 		<!--EXTERNAL ASSETS-->
 		<script-file src="./etc/resizepolyfill/ResizeSensor.js"/>
 		<script-file src="./etc/scrollwidthpolyfill/scrollwidthpolyfill.js"/>
-		<script-file inline="false" src="./etc/gridstack/underscore.js"/> <!--inline false because file as an incorrect source mapping will generate a warning.-->
+		<script-file src="./etc/gridstack/underscore.js"/>
 		<script-file src="./etc/gridstack/gridstack.js"/>
 
 		<!--IBX ASSETS-->

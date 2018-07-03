@@ -73,6 +73,8 @@ function ibx()
 					ibx._appParms[parm[0]] = parm[1];
 				}
 			};
+			ibx.forceInlineResLoading = ibx._appParms.forceInlineResLoading ? (ibx._appParms.forceInlineResLoading == "true") : ibx.forceInlineResLoading;
+			ibx.forceLinkLoading = ibx._appParms.forceLinkLoading ? (ibx._appParms.forceLinkLoading == "true") : ibx.forceLinkLoading;
 		}
 		ibx._appInfoResolved = true;
 	}
@@ -248,6 +250,7 @@ ibx._setAccessibility = function(accessible)
 	accessible ? $(".ibx-root").attr("role", "application") : $(".ibx-root").removeAttr("role");
 };
 
+ibx.forceLinkLoading = false;
 ibx.forceInlineResLoading = false;//[ACT-1571]Needed a way to package ibx into single file...this forces all script/css to be inline.
 ibx.preCompiled = false;
 

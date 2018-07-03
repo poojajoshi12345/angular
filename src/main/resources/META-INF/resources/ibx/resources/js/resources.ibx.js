@@ -136,8 +136,10 @@ _p.loadExternalResFile = function(elFile)
 		if(!this.loadedFiles[src])
 		{
 			var fileType = elFile.prop("tagName");
-			if(fileType == "style-file")
-				var x = 10;
+
+			if(ibx.forceLinkLoading && (fileType == "script-file" || fileType == "style-file"))
+				elFile.attr("inline" , "false");
+
 			var asInline = (elFile.attr("inline") == "true") || (fileType == "script-file" && (elFile.attr("inline") !== "false")) || (fileType == "string-file") || (fileType == "markup-file");
 			if(ibx.forceInlineResLoading || asInline)
 			{
@@ -183,8 +185,22 @@ _p.loadExternalResFile = function(elFile)
 			else
 			{
 				var isStyle = (fileType == "style-file");
-				var tag = $(isStyle ? "<link rel='stylesheet' type='text/css'>" : "<script type='text/javascript'>").attr(isStyle ? "href" : "src", src);
-				$("head").append(tag);
+				if(isStyle)
+				{
+					var el = document.createElement("link");
+					el.type = "text/css";
+					el.ref = "stylesheet";
+					el.href = src;
+					el.src = src;
+				}
+				else
+				{
+					var el = document.createElement("script");
+					el.type = "text/javascript";
+					el.async = false;
+					el.src = src;
+				}
+				$("head")[0].appendChild(el);
 				this.loadedFiles[src] = true;
 				$(window).dispatchEvent("ibx_resmgr", {"hint":isStyle ? "cssfileloaded" : "scriptfileloaded", "loadDepth":this._loadDepth, "resMgr":this, "fileNode":elFile[0], "src":src});
 			}
@@ -225,7 +241,7 @@ _p.loadBundle = function(xResDoc)
 {
 	var head = $("head");
 	var bundle = $(xResDoc).find("ibx-res-bundle").first();
-	
+
 	//switch the path for loading dependent files using this bundles's path.
 	this._bundlePath = xResDoc.path;
 
