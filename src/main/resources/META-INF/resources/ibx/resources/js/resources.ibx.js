@@ -133,61 +133,97 @@ _p.loadExternalResFile = function(elFile)
 	{
 		elFile = $(elFile);
 		var src = this.getResPath(elFile.attr("src"), elFile.closest("[loadContext]").attr("loadContext"));
-		if(!this.loadedFiles[src])
+		if(this.loadedFiles[src])
 		{
-			var fileType = elFile.prop("tagName");
-			if(fileType == "style-file")
-				var x = 10;
-			var asInline = (elFile.attr("inline") == "true") || (fileType == "script-file" && (elFile.attr("inline") !== "false")) || (fileType == "string-file") || (fileType == "markup-file");
-			if(ibx.forceInlineResLoading || asInline)
+			//duplicate, just resolve and continue
+			var dfd = elFile[0]._loadPromise;
+			if(dfd)
+				dfd.resolve();
+			return;
+		}
+
+		var fileType = elFile.prop("tagName");
+		var isInline = elFile.attr("inline") == "true";
+
+		if(fileType == "style-file")
+			elFile.attr("inline", "false");
+		else
+		if((fileType == "script-file") && ibx.forceLinkLoading)
+			elFile.attr("inline" , "false");
+		else
+		if(fileType == "script-file")
+			elFile.attr("inline", "true");
+		else
+		if(fileType == "string-file" || fileType == "markup-file")
+			elFile.attr("inline", "true");
+
+		if(ibx.forceInlineResLoading || (elFile.attr("inline") == "true"))
+		{
+			$.get({async:false, url:src, dataType:"text", error:this._resFileRetrievalError.bind(this, src)}).done(function(elFile, src, fileType, content, status, xhr)
 			{
-				$.get({async:false, url:src, dataType:"text", error:this._resFileRetrievalError.bind(this, src)}).done(function(elFIle, src, fileType, content, status, xhr)
+				content = this.preProcessResource(content);//precompile the content...string substitutions, etc.
+				if(content)
 				{
-					content = this.preProcessResource(content);//precompile the content...string substitutions, etc.
-					if(content)
+					if(fileType == "string-file")
 					{
-						if(fileType == "string-file")
-						{
-							content = content.replace(/^[^{][\s|\S][^{]*/, "");//strip off any possible header (copyright, etc.)
-							content = JSON.parse(content);
-							this.addStringBundle(content, elFile.attr("default") == "true");
-							eType = "stringfileloaded";
-						}
-						else
-						if(fileType == "markup-file")
-						{
-							this._resBundle.find("ibx-res-bundle > markup").append($(content).find("markup-block").attr("src", src));
-							eType = "markupfileloaded";
-						}
-						else
-						if(fileType == "style-file")
-						{
-							var tag = $("<style type='text/css'>").attr("data-ibx-src", src).text(content);
-							$("head").append(tag);
-							eType = "cssfileinlineloaded";
-						}
-						else
-						if(fileType == "script-file")
-						{
-							if(ibx.forceInlineResLoading)
-								$("head").append($("<script type='text/javascript'>").attr("data-ibx-src", src).text(content));
-							else
-								eval.call(window, content);
-							eType = "scriptfileinlineloaded";
-						}
-						this.loadedFiles[src] = true;
-						$(window).dispatchEvent("ibx_resmgr", {"hint":eType, "loadDepth":this._loadDepth, "resMgr":this, "fileNode":elFile[0], "src":src});
+						content = content.replace(/^[^{][\s|\S][^{]*/, "");//strip off any possible header (copyright, etc.)
+						content = JSON.parse(content);
+						this.addStringBundle(content, elFile.attr("default") == "true");
+						eType = "stringfileloaded";
 					}
-				}.bind(this, elFile, src, fileType));
+					else
+					if(fileType == "markup-file")
+					{
+						this._resBundle.find("ibx-res-bundle > markup").append($(content).find("markup-block").attr("src", src));
+						eType = "markupfileloaded";
+					}
+					else
+					if(fileType == "style-file")
+					{
+						var tag = $("<style type='text/css'>").attr("data-ibx-src", src).text(content);
+						$("head").append(tag);
+						eType = "cssfileinlineloaded";
+					}
+					else
+					if(fileType == "script-file")
+					{
+						if(ibx.forceInlineResLoading)
+							$("head").append($("<script type='text/javascript'>").attr("data-ibx-src", src).text(content));
+						else
+							eval.call(window, content);
+						elFile[0]._loadPromise.resolve();
+						eType = "scriptfileinlineloaded";
+					}
+					this.loadedFiles[src] = true;
+					$(window).dispatchEvent("ibx_resmgr", {"hint":eType, "loadDepth":this._loadDepth, "resMgr":this, "fileNode":elFile[0], "src":src});
+				}
+			}.bind(this, elFile, src, fileType));
+		}
+		else
+		{
+			var isStyle = (fileType == "style-file");
+			if(isStyle)
+			{
+				var el = document.createElement("link");
+				el.type = "text/css";
+				el.rel = "stylesheet";
+				el.href = src;
 			}
 			else
 			{
-				var isStyle = (fileType == "style-file");
-				var tag = $(isStyle ? "<link rel='stylesheet' type='text/css'>" : "<script type='text/javascript'>").attr(isStyle ? "href" : "src", src);
-				$("head").append(tag);
-				this.loadedFiles[src] = true;
-				$(window).dispatchEvent("ibx_resmgr", {"hint":isStyle ? "cssfileloaded" : "scriptfileloaded", "loadDepth":this._loadDepth, "resMgr":this, "fileNode":elFile[0], "src":src});
+				var el = document.createElement("script");
+				el.type = "text/javascript";
+				el.async = false;
+				el.src = src;
+				el._loadPromise = elFile[0]._loadPromise;
+				el.addEventListener("load", function(e)
+				{
+					e.target._loadPromise.resolve();
+				});
 			}
+			$("head")[0].appendChild(el);
+			this.loadedFiles[src] = true;
+			$(window).dispatchEvent("ibx_resmgr", {"hint":isStyle ? "cssfileloaded" : "scriptfileloaded", "loadDepth":this._loadDepth, "resMgr":this, "fileNode":elFile[0], "src":src});
 		}
 	}.bind(this));
 	return elFile;
@@ -225,7 +261,7 @@ _p.loadBundle = function(xResDoc)
 {
 	var head = $("head");
 	var bundle = $(xResDoc).find("ibx-res-bundle").first();
-	
+
 	//switch the path for loading dependent files using this bundles's path.
 	this._bundlePath = xResDoc.path;
 
@@ -244,6 +280,7 @@ _p.loadBundle = function(xResDoc)
 	});
 
 	this._bundlePath = xResDoc.path;
+
 	this.addBundles(files).done(function(curBundlePath, xResDoc, head, bundle)
 	{
 		++this._loadDepth;
@@ -292,43 +329,55 @@ _p.loadBundle = function(xResDoc)
 			$(window).dispatchEvent("ibx_resmgr", {"hint":"markupinlineloaded", "loadDepth":this._loadDepth, "resMgr":this, "bundle":bundle[0]});
 		}.bind(this));
 
-		//load scripts
-		this.loadExternalResFile(bundle.find("script-file"));
-		var scriptBlocks = bundle.find("script-block");
-		scriptBlocks.each(function(idx, scriptBlock)
+		//load scripts...they will be loaded asynchronously, but processed synchronously...so we have to make sure all
+		//scripts are loaded before we continue with the blocks and subsequent resources.
+		window.scriptPromises = [];
+		var scripts = bundle.find("script-file").each(function(idx, el)
 		{
-			scriptBlock = $(scriptBlock);
-			var content = scriptBlock.text().trim();
-			if(content)
-			{
-				var src = scriptBlock.attr("src") || "inline";
-				var script = $("<script type='text/javascript'>").attr("data-ibx-src", src);
-				content = this.preProcessResource(content);//precompile the content...string substitutions, etc.
-				script.text(content);
-				head.append(script);
-				$(window).dispatchEvent("ibx_resmgr", {"hint":"scriptinlineloaded", "loadDepth":this._loadDepth, "resMgr":this, "bundle":bundle[0]});
-			}
+			var dfd = new $.Deferred();
+			el._loadPromise = dfd;
+			scriptPromises.push(dfd);
 		}.bind(this));
-
-		//now load all forward reference Resource Bundles (packages) that this bundle wants to load.
-		var files = [];
-		bundle.find("ibx-package").each(function(idx, el){el = $(el);files.push({"src":$(el).attr("src"), "loadContext":el.closest("[loadContext]").attr("loadContext")});});
-		this.addBundles(files).done(function()
+		this.loadExternalResFile(scripts);
+		$.when.apply($, scriptPromises).then(function()
 		{
-			//save that this bundles has been loaded.
-			if(xResDoc.src)
-				this.loadedBundles[xResDoc.src] = xResDoc.resLoaded;
-			
-			--this._loadDepth;
-
-			//give the main thread a chance to render what's been loaded before resolving the promise
-			window.setTimeout(function(bundle)
+			var scriptBlocks = bundle.find("script-block");
+			scriptBlocks.each(function(idx, scriptBlock)
 			{
-				$(window).dispatchEvent("ibx_resmgr", {"hint":"bundleloaded", "loadDepth":this._loadDepth, "resMgr":this, "bundle":bundle[0]});
+				scriptBlock = $(scriptBlock);
+				var content = scriptBlock.text().trim();
+				if(content)
+				{
+					var src = scriptBlock.attr("src") || "inline";
+					var script = $("<script type='text/javascript'>").attr("data-ibx-src", src);
+					content = this.preProcessResource(content);//precompile the content...string substitutions, etc.
+					script.text(content);
+					head.append(script);
+					$(window).dispatchEvent("ibx_resmgr", {"hint":"scriptinlineloaded", "loadDepth":this._loadDepth, "resMgr":this, "bundle":bundle[0]});
+				}
+			}.bind(this));
+
+			//now load all forward reference Resource Bundles (packages) that this bundle wants to load.
+			var files = [];
+			bundle.find("ibx-package").each(function(idx, el){el = $(el);files.push({"src":$(el).attr("src"), "loadContext":el.closest("[loadContext]").attr("loadContext")});});
+			this.addBundles(files).done(function()
+			{
+				//save that this bundles has been loaded.
+				if(xResDoc.src)
+					this.loadedBundles[xResDoc.src] = xResDoc.resLoaded;
+			
 				--this._loadDepth;
-				xResDoc.resLoaded.resolve(bundle, this);
-			}.bind(this, bundle), 0);
-		}.bind(this, xResDoc, head, bundle));
+
+				//give the main thread a chance to render what's been loaded before resolving the promise
+				window.setTimeout(function(bundle)
+				{
+					$(window).dispatchEvent("ibx_resmgr", {"hint":"bundleloaded", "loadDepth":this._loadDepth, "resMgr":this, "bundle":bundle[0]});
+					--this._loadDepth;
+					xResDoc.resLoaded.resolve(bundle, this);
+				}.bind(this, bundle), 0);
+			}.bind(this, xResDoc, head, bundle));
+
+		}.bind(this, bundle));
 
 	}.bind(this, this._bundlePath, xResDoc, head, bundle));
 	return xResDoc.resLoaded;

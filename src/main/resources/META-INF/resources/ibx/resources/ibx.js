@@ -125,7 +125,7 @@ function ibx()
 				$(function()
 				{
 					//we want to precompile this application, not run it.
-					if(ibx._appParms.ibx_compile == "true")
+					if(ibx._appParms.compile == "true")
 					{
 						var xhr = $.ajax({"url": window.location.pathname, "dataType":"text", "async":false});
 						var parser = new DOMParser();
@@ -167,6 +167,7 @@ function ibx()
 						packages = [bundle];
 					}
 
+					console.log("ibx addBundles");
 					ibx.resourceMgr.addBundles(packages).done(function()
 					{
 						//ibx is fully loaded and running.
@@ -250,7 +251,7 @@ ibx._setAccessibility = function(accessible)
 	accessible ? $(".ibx-root").attr("role", "application") : $(".ibx-root").removeAttr("role");
 };
 
-ibx.forceLinkLoading = false;
+ibx.forceLinkLoading = true;//[IBX-152] will force asynchronous loading of javascript via script tags.
 ibx.forceInlineResLoading = false;//[ACT-1571]Needed a way to package ibx into single file...this forces all script/css to be inline.
 ibx.preCompiled = false;
 
