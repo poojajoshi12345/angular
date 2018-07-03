@@ -73,8 +73,8 @@ function ibx()
 					ibx._appParms[parm[0]] = parm[1];
 				}
 			};
-			ibx.forceInlineResLoading = ibx._appParms.forceInlineResLoading ? (ibx._appParms.forceInlineResLoading == "true") : ibx.forceInlineResLoading;
-			ibx.forceLinkLoading = ibx._appParms.forceLinkLoading ? (ibx._appParms.forceLinkLoading == "true") : ibx.forceLinkLoading;
+			ibx.forceInlineResLoading = (ibx._appParms.forceInlineResLoading !== undefined) ? (ibx._appParms.forceInlineResLoading == "true") : ibx.forceInlineResLoading;
+			ibx.forceLinkLoading = (ibx._appParms.forceLinkLoading !== undefined) ? (ibx._appParms.forceLinkLoading == "true") : ibx.forceLinkLoading;
 		}
 		ibx._appInfoResolved = true;
 	}
@@ -167,7 +167,6 @@ function ibx()
 						packages = [bundle];
 					}
 
-					console.log("ibx addBundles");
 					ibx.resourceMgr.addBundles(packages).done(function()
 					{
 						//ibx is fully loaded and running.
