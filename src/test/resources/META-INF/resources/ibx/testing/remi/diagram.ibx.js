@@ -14,67 +14,99 @@ $.widget('ibi.ibxDiagram', $.ibi.ibxWidget, {
 	},
 	_create: function() {
 
-		this._super();
-		this.element.click((function(e) {
-			if ($(e.target).ibxDiagramNode('instance') == null) {
-				this.select();
+		var canvas = this;
+		canvas._super();
+		canvas.element.click(function(e) {
+			if ($(e.target).ibxDiagramNode('instance') == null) {  // TODO: if click anywhere but a node, even outside canvas, deselect
+				canvas.selectNode();
 			}
-		}).bind(this));
-		this._children = [];
-		this._connections = [];
+		});
+		canvas._children = [];
+		canvas._connections = [];
 
-		this.children().each((function(idx, node) {
-			this.addNode(node);
-		}).bind(this));
+		canvas.children().each(function(idx, node) {
+			canvas.addNode(node);
+		});
 
-		var w = this.element[0].clientWidth;
-		var h = this.element[0].clientHeight;
-		this._canvas = $('<svg xmlns="http://www.w3.org/2000/svg" class="ibx-diagram-canvas" width="' + w + '" height="' + h + '"></svg>');
-		this.element.append(this._canvas);
+		var w = canvas.element[0].clientWidth;
+		var h = canvas.element[0].clientHeight;
+		canvas._canvas = $('<svg xmlns="http://www.w3.org/2000/svg" class="ibx-diagram-canvas" width="' + w + '" height="' + h + '"></svg>');
+		canvas.element.append(canvas._canvas);
 	},
 	_destroy: function() {
 		this._super();
 	},
+	refresh: function() {
+		var canvas = this;
+		canvas._super();
+		if (canvas.options.grid.size == null) {
+			canvas._children.forEach(function(child) {
+				if (child.options.moveable) {
+					child.element.draggable({grid: false});
+				}
+			});
+		} else {
+			var gridSize = canvas.options.grid.size;
+			var offset = canvas.options.grid.offset;
+			canvas._children.forEach(function(child) {
+				if (child.options.moveable) {
+					var pos = child.element.position();
+					child.element.css({
+						left: (Math.floor(pos.left / gridSize) * gridSize) + offset.left,
+						top: (Math.floor(pos.top / gridSize) * gridSize) + offset.top
+					});
+					child.element.draggable({grid: [gridSize, gridSize]});
+				}
+			});
+		}
+		canvas.updateConnections();
+	},
+	clear: function() {
+		while (this._children.length) {
+			this.removeNode(this._children[0]);
+		}
+	},
 	loadFromJSON: function(json) {
-		this.element.width(json.width);
-		this.element.height(json.height);
-		this._canvas.attr('width', json.width);
-		this._canvas.attr('height', json.height);
-		this.options.grid = clone(json.grid);
-		json.children.forEach((function(child) {
-			this.addNode(child);
-		}).bind(this));
-		json.connections.forEach((function(connection) {
-			this.addConnection(connection);
-		}).bind(this));
+		var canvas = this;
+		canvas.element.width(json.width);
+		canvas.element.height(json.height);
+		canvas._canvas.attr('width', json.width);
+		canvas._canvas.attr('height', json.height);
+		canvas.options.grid = clone(json.grid);
+		json.children.forEach(function(child) {
+			canvas.addNode(child);
+		});
+		json.connections.forEach(function(connection) {
+			canvas.addConnection(connection);
+		});
 	},
 	saveToJSON: function() {
-		var children = this._children.map(function(child) {
+		var canvas = this;
+		var children = canvas._children.map(function(child) {
 			return child.saveToJSON();
 		});
-		var connections = this._connections.map((function(connection) {
-			var from = {node: this._children.indexOf(connection.from.node)};
-			var to = {node: this._children.indexOf(connection.to.node)};
+		var connections = canvas._connections.map(function(connection) {
+			var from = {node: canvas._children.indexOf(connection.from.node)};
+			var to = {node: canvas._children.indexOf(connection.to.node)};
 			return {from: from, to: to};
-		}).bind(this));
+		});
 		return {
-			width: this.element[0].clientWidth,
-			height: this.element[0].clientHeight,
-			grid: clone(this.options.grid),
+			width: canvas.element[0].clientWidth,
+			height: canvas.element[0].clientHeight,
+			grid: clone(canvas.options.grid),
 			children: children,
 			connections: connections
 		};
 	},
-	convertToNode: function(node) {
-		if (typeof node === 'number') {
-			return this._children[node];
-		} else if (node && node.widgetName && node.widgetName === 'ibxDiagramNode') {
-			return node;
+	convertToNode: function(node) {  // Convert any variation of a 'node' into an ibxDiagramNode instance
+		if (node && node.widgetName && node.widgetName === 'ibxDiagramNode') {
+			return node;  // Node is already an ibxDiagramNode
+		} else if (typeof node === 'number') {
+			return this._children[node];  // Assume node is an entry in the list of children nodes
 		} else if (node instanceof Element) {
-			node = $(node);
-		} else if (!(node instanceof jQuery)) {  // Assume 'node' is an ibxDiagramNode options object like {left, right, className, ...}
-			var child = $('<div>').ibxDiagramNode(node);
-			node = child;
+			node = $(node);  // Assume node is a fully formed DOM node representing a diagram node
+		} else if (!(node instanceof jQuery)) {
+			node = $('<div>').ibxDiagramNode(node);  // Assume 'node' is an ibxDiagramNode options object like {left, right, className, ...}.  Create a DOM node for it.
 		}
 		if (node.ibxDiagramNode('instance') == null) {  // If node is not yet an ibxDiagramNode, make it one
 			node = node.ibxDiagramNode(node);
@@ -82,40 +114,24 @@ $.widget('ibi.ibxDiagram', $.ibi.ibxWidget, {
 		return node.ibxDiagramNode('instance');
 	},
 	addNode: function(node) {
-
+		var canvas = this;
 		var classList = node.customClassList;
-		node = this.convertToNode(node).element;
-		var options = node.ibxDiagramNode('option');
+		node = canvas.convertToNode(node);
+		var nodeEl = node.element;
 
-		if (options.selectable) {
-			node.mousedown((function(e) {
-				this.select(e.currentTarget);
-			}).bind(this));
-		}
-
-		if (options.moveable) {
-			node.draggable({containment: 'parent', stack: '.ibx-diagram-node'})
-				.on('drag', (function() {this.updateConnections();}).bind(this))
-				.css('position', '');  // draggable sets position to relative; undo that
-		}
-		if (options.deletable) {
-			node.attr('tabindex', this._children.length);  // Need tabindex to make basic divs focusable and receive keyboard events
-			node.keydown((function(e) {
-				if (e.keyCode === $.ui.keyCode.DELETE) {
-					this.removeNode(e.currentTarget);
-				}
-			}).bind(this));
+		canvas._children.push(node);
+		if (nodeEl[0].parentElement !== canvas.element[0]) {
+			canvas.element.append(nodeEl);
 		}
 
-		this._children.push(node.ibxDiagramNode('instance'));
-		if (node[0].parentElement !== this.element[0]) {
-			this.element.append(node);
-		}
+		node.canvas = canvas;
+		node.init();
+
 		if (classList) {
-			node.addClass(classList.join(' '));
+			nodeEl.addClass(classList.join(' '));
 		}
-		this.refresh();
-		return node;
+		canvas.refresh();
+		return nodeEl;
 	},
 	removeNode: function(node) {
 		node = this.convertToNode(node);
@@ -129,38 +145,43 @@ $.widget('ibi.ibxDiagram', $.ibi.ibxWidget, {
 		});
 		this.resetConnections();
 	},
-	select: function(node) {
+	selectNode: function(node) {
 		this._children.forEach(function(child) {
 			child.element.removeClass('ui-state-highlight');
 		});
 		if (node) {
-			$(node).addClass('ui-state-highlight');
+			node = this.convertToNode(node);
+			node.element.addClass('ui-state-highlight');
 		}
 	},
 	resetConnections: function() {
-		this._canvas.empty();
-		var connections = this._connections;
-		this._connections = [];
-		connections.forEach((function(connection) {
-			this.addConnection(connection);
-		}).bind(this));
+		var canvas = this;
+		canvas._canvas.empty();
+		var connections = canvas._connections;
+		canvas._connections = [];
+		connections.forEach(function(connection) {
+			canvas.addConnection(connection);
+		});
 	},
 	addConnection: function(connection) {
+		var canvas = this;
 		var line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
 		line = $(line).attr({x1: 0, y1: 0, x2: 500, y2: 500}).addClass('ibx-diagram-connection');
-		this._canvas.append(line);
-		var from = this.convertToNode(connection.from.node);
-		var to = this.convertToNode(connection.to.node);
-		this._connections.push({
+		canvas._canvas.append(line);
+		var from = canvas.convertToNode(connection.from.node);
+		var to = canvas.convertToNode(connection.to.node);
+		canvas._connections.push({
 			from: {node: from, anchor: connection.from.anchor},
 			to: {node: to, anchor: connection.to.anchor},
 			line: line[0]
 		});
-		this.refresh();
+		canvas.refresh();
 		return line;
 	},
 	updateConnections: function() {
-		this._connections.forEach(function(connection) {
+		// Keep this function fast; it gets called on every mouse move
+		for (var i = 0; i < this._connections.length; i++) {
+			var connection = this._connections[i];
 			var line = connection.line;
 			var c1 = connection.from.node.element[0];
 			var c2 = connection.to.node.element[0];
@@ -170,31 +191,7 @@ $.widget('ibi.ibxDiagram', $.ibi.ibxWidget, {
 			line.setAttribute('y1', c1.offsetTop + (box1.height / 2));
 			line.setAttribute('x2', c2.offsetLeft + 1);
 			line.setAttribute('y2', c2.offsetTop + (box2.height / 2));
-		});
-	},
-	refresh: function() {
-		this._super();
-		if (this.options.grid.size == null) {
-			this._children.forEach(function(child) {
-				if (child.options.moveable) {
-					child.element.draggable({grid: false});
-				}
-			});
-		} else {
-			var gridSize = this.options.grid.size;
-			var offset = this.options.grid.offset;
-			this._children.forEach(function(child) {
-				if (child.options.moveable) {
-					var pos = child.element.position();
-					child.element.css({
-						left: (Math.floor(pos.left / gridSize) * gridSize) + offset.left,
-						top: (Math.floor(pos.top / gridSize) * gridSize) + offset.top
-					});
-					child.element.draggable({grid: [gridSize, gridSize]});
-				}
-			});
 		}
-		this.updateConnections();
 	}
 });
 
@@ -205,6 +202,8 @@ $.widget('ibi.ibxDiagramNode', $.ibi.ibxWidget, {
 		top: null,
 		width: null,
 		height: null,
+		text: '',
+		anchors: [],
 		selectable: true,  // If true, node can be clicked on to select it
 		moveable: true,  // If true, node cannot be dragged or moved around
 		deletable: true  // If true, selecting this node then hitting the 'delete' key will delete the node
@@ -224,18 +223,73 @@ $.widget('ibi.ibxDiagramNode', $.ibi.ibxWidget, {
 			this.addAnchor('left', this.options.anchors.left);
 		}
 	},
+	_destroy: function() {
+		this._super();
+	},
+	refresh: function() {
+		this._super();
+		this.element.css({
+			left: this.options.left,
+			top: this.options.top,
+			width: this.options.width,
+			height: this.options.height
+		});
+	},
+	init: function() {
+
+		var canvas = this.canvas;
+		var nodeEl = this.element;
+		if (this.options.selectable) {
+			nodeEl.mousedown(function(e) {
+				canvas.selectNode(e.currentTarget);
+			});
+		}
+
+		if (this.options.moveable) {
+			nodeEl.draggable({containment: 'parent', stack: '.ibx-diagram-node'})
+				.css('position', '')  // draggable sets position to relative; undo that
+				.on('drag', function(e) {
+					canvas.convertToNode(e.target).updatePosition();
+					canvas.updateConnections();
+				});
+		}
+		if (this.options.deletable) {
+			nodeEl.attr('tabindex', canvas._children.length);  // Need tabindex to make basic divs focusable and receive keyboard events
+			nodeEl.keydown(function(e) {
+				if (e.keyCode === $.ui.keyCode.DELETE) {
+					canvas.removeNode(e.currentTarget);
+				}
+			});
+		}
+
+		// If position / size was set via CSS instead of options, copy those settings to options for consistency
+		if (this.options.left == null || this.options.top == null) {
+			this.updatePosition();
+		}
+		if (this.options.width == null || this.options.height == null) {
+			var box = this.element[0].getBoundingClientRect();
+			this.options.width = box.width;
+			this.options.height = box.height;
+		}
+	},
+	updatePosition: function() {
+		var el = this.element[0];
+		this.options.left = el.offsetLeft;
+		this.options.top = el.offsetTop;
+	},
 	saveToJSON: function() {
 		var options = this.options;
 		var el = this.element[0];
-		var bbox = el.getBoundingClientRect();
 		var classList = this.element[0].className.split(/\s+/).filter(function(el) {
 			return el.substr(0, 3).toLowerCase() !== 'ibx';
 		});
 		return {  // Must set each property individually; 'this.options' has a lot more than just this base component's options in it
-			left: options.left || el.offsetLeft,
-			top: options.top || el.offsetTop,
-			width: options.width || bbox.width,
-			height: options.height || bbox.height,
+			left: options.left,
+			top: options.top,
+			width: options.width,
+			height: options.height,
+			text: options.text || el.innerText || '',
+			anchors: clone(options.anchors),
 			selectable: options.selectable,
 			moveable: options.moveable,
 			deletable: options.deletable,
@@ -274,18 +328,6 @@ $.widget('ibi.ibxDiagramNode', $.ibi.ibxWidget, {
 		}
 		div.css({left: left, top: top});
 		this.element.append(div);
-	},
-	_destroy: function() {
-		this._super();
-	},
-	refresh: function() {
-		this._super();
-		this.element.css({
-			left: this.options.left,
-			top: this.options.top,
-			width: this.options.width,
-			height: this.options.height
-		});
 	}
 });
 

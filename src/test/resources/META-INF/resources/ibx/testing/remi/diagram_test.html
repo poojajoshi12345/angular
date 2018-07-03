@@ -37,6 +37,7 @@
 
 				$('.btnLoad').on('click', function(e) {
 					if (json) {
+						canvas2.clear();
 						canvas2.loadFromJSON(json);
 					}
 				});
@@ -54,7 +55,7 @@
 					className: 'layout-item', text: 'Item 2',
 					anchors: {
 						left: {className: 'anchorSymbol fa fa-adjust', width: 20, height: 20},
-						right: {className: 'anchorSymbol fa fa-times-circle', width: 20, height: 20}
+						right: {className: 'anchorSymbol fa fa-plus-circle', width: 20, height: 20}
 					}
 				});
 
@@ -71,7 +72,6 @@
 				canvas.addNode($('<div style="left: 20px; top: 400px; width: 50px; height: 50px" class="layout-item">'));
 
 				var canvas2 = $('.test-canvas2').ibxDiagram('instance');
-
 
 			}, [{"src" : "./diagram_res_bundle.xml", "loadContext" : "app"}], true);
 		</script>
@@ -144,7 +144,7 @@
 			<div class="btnGrid btn" data-ibx-type="ibxCheckBoxSimple">Lock to Grid</div>
 			<div class="btnAddNode btn" data-ibx-type="ibxButton">Add Node</div>
 			<div class="btnSave btn" data-ibx-type="ibxButton">Save as JSON</div>
-			<div class="btnLoad btn invisible" data-ibx-type="ibxButton">Load JSON to new Canvas</div>
+			<div class="btnLoad btn invisible" data-ibx-type="ibxButton">Load JSON to 2nd Canvas</div>
 		</div>
 		<!-- <div class="test-canvas" data-ibx-type="ibxDiagram" data-ibx-options="{grid: {size: 150, offset: {left: 25, top: 25}}}"> -->
 		<div class="test-canvas" data-ibx-type="ibxDiagram">
