@@ -16,8 +16,11 @@ $.widget('ibi.ibxDiagram', $.ibi.ibxWidget, {
 
 		var canvas = this;
 		canvas._super();
-		canvas.element.click(function(e) {
-			if ($(e.target).ibxDiagramNode('instance') == null) {  // TODO: if click anywhere but a node, even outside canvas, deselect
+		$(document).click(function(e) {
+			var node = $(e.target).ibxDiagramNode('instance');
+			if (node && node.options.selectable) {
+				canvas.selectNode(node);
+			} else {
 				canvas.selectNode();
 			}
 		});
@@ -41,22 +44,13 @@ $.widget('ibi.ibxDiagram', $.ibi.ibxWidget, {
 		canvas._super();
 		if (canvas.options.grid.size == null) {
 			canvas._children.forEach(function(child) {
-				if (child.options.moveable) {
-					child.element.draggable({grid: false});
-				}
+				child.element.draggable({grid: false});
 			});
 		} else {
 			var gridSize = canvas.options.grid.size;
-			var offset = canvas.options.grid.offset;
 			canvas._children.forEach(function(child) {
-				if (child.options.moveable) {
-					var pos = child.element.position();
-					child.element.css({
-						left: (Math.floor(pos.left / gridSize) * gridSize) + offset.left,
-						top: (Math.floor(pos.top / gridSize) * gridSize) + offset.top
-					});
-					child.element.draggable({grid: [gridSize, gridSize]});
-				}
+				child.lockToGrid();
+				child.element.draggable({grid: [gridSize, gridSize]});
 			});
 		}
 		canvas.updateConnections();
@@ -234,48 +228,57 @@ $.widget('ibi.ibxDiagramNode', $.ibi.ibxWidget, {
 			width: this.options.width,
 			height: this.options.height
 		});
+		if (this.canvas) {
+			this.element.draggable({disabled: !this.options.moveable});
+			this.lockToGrid();
+			this.canvas.updateConnections();
+		}
 	},
 	init: function() {
 
 		var canvas = this.canvas;
+		var options = this.options;
 		var nodeEl = this.element;
-		if (this.options.selectable) {
-			nodeEl.mousedown(function(e) {
-				canvas.selectNode(e.currentTarget);
-			});
-		}
 
-		if (this.options.moveable) {
-			nodeEl.draggable({containment: 'parent', stack: '.ibx-diagram-node'})
-				.css('position', '')  // draggable sets position to relative; undo that
-				.on('drag', function(e) {
-					canvas.convertToNode(e.target).updatePosition();
-					canvas.updateConnections();
-				});
-		}
-		if (this.options.deletable) {
-			nodeEl.attr('tabindex', canvas._children.length);  // Need tabindex to make basic divs focusable and receive keyboard events
-			nodeEl.keydown(function(e) {
-				if (e.keyCode === $.ui.keyCode.DELETE) {
-					canvas.removeNode(e.currentTarget);
-				}
+		nodeEl.draggable({containment: 'parent', stack: '.ibx-diagram-node', disabled: !options.moveable})
+			.css('position', '')  // draggable sets position to relative; undo that
+			.on('drag', function(e) {
+				canvas.convertToNode(e.target).updatePosition();
+				canvas.updateConnections();
 			});
-		}
+
+		nodeEl.attr('tabindex', canvas._children.length);  // Need tabindex to make basic divs focusable and receive keyboard events
+		nodeEl.keydown(function(e) {
+			if (options.deletable && e.keyCode === $.ui.keyCode.DELETE) {
+				canvas.removeNode(e.currentTarget);
+			}
+		});
 
 		// If position / size was set via CSS instead of options, copy those settings to options for consistency
-		if (this.options.left == null || this.options.top == null) {
+		if (options.left == null || options.top == null) {
 			this.updatePosition();
 		}
-		if (this.options.width == null || this.options.height == null) {
+		if (options.width == null || options.height == null) {
 			var box = this.element[0].getBoundingClientRect();
-			this.options.width = box.width;
-			this.options.height = box.height;
+			options.width = box.width;
+			options.height = box.height;
 		}
 	},
 	updatePosition: function() {
 		var el = this.element[0];
 		this.options.left = el.offsetLeft;
 		this.options.top = el.offsetTop;
+	},
+	lockToGrid: function() {
+		var gridSize = this.canvas.options.grid.size;
+		if (this.options.moveable && gridSize != null) {
+			var offset = this.canvas.options.grid.offset;
+			var pos = this.element.position();
+			this.element.css({
+				left: (Math.floor(pos.left / gridSize) * gridSize) + offset.left,
+				top: (Math.floor(pos.top / gridSize) * gridSize) + offset.top
+			});
+		}
 	},
 	saveToJSON: function() {
 		var options = this.options;
