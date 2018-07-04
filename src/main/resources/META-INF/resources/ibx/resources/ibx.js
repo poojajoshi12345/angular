@@ -47,7 +47,6 @@ function ibx()
 	if(typeof(a3) === "boolean")
 		autoBind = a3;
 
-
 	//resolve various ibx context values based on where we're loading from, and what we're loaded with.
 	if(!ibx._appInfoResolved)
 	{
@@ -78,8 +77,6 @@ function ibx()
 		}
 		ibx._appInfoResolved = true;
 	}
-
-
 
 	if(!ibx._loaded && !ibx._isLoading)
 	{
@@ -138,7 +135,8 @@ function ibx()
 						compiler.addBundles(resPackages);
 						var outDoc = compiler.linkBundle(inDoc);
 						console.log(outDoc.documentElement.outerHTML);
-						return outDoc.documentElement.outerHTML;
+						compiler.destroy();
+						return outDoc;
 					}
 
 					//jquery is fully loaded and running
@@ -218,6 +216,25 @@ ibx.loadTimeout = 10000;	//can't get preloads in running state by this interval,
 ibx._loaded = false;		//is ibx loaded.
 ibx._loadPromise = null;	//internal promise/deferred for ibx resource loading
 ibx.resourceMgr = null;		//ibx default resource manager	
+ibx.forceLinkLoading = true;//[IBX-152] will force asynchronous loading of javascript via script tags.
+ibx.forceInlineResLoading = false;//[ACT-1571]Needed a way to package ibx into single file...this forces all script/css to be inline.
+ibx.preCompiled = false;
+
+//where ibx.js loaded from
+ibx._path = "";
+ibx.getPath = function(){return ibx._path;};
+ibx.setPath = function(path){ibx._path = path;};
+
+//the window's location when the ibx <script> tag was loaded.
+ibx._appPath = "";
+ibx.getAppPath = function(){return ibx._appPath;};
+ibx.setAppPath = function(path){ibx._appPath = path;};
+
+//the endpoint of the windows location when ibx <script> tag was loaded....and any parms passed via url
+ibx._appName = "";
+ibx.getAppName = function(){return ibx._appName;};
+ibx._appParms;
+ibx.getAppParms = function(){return ibx._appParms;};
 
 //show all ibx root nodes when loaded...or don't, and show manually at user's discression.
 ibx.showOnLoad = true;
@@ -249,26 +266,6 @@ ibx._setAccessibility = function(accessible)
 {
 	accessible ? $(".ibx-root").attr("role", "application") : $(".ibx-root").removeAttr("role");
 };
-
-ibx.forceLinkLoading = true;//[IBX-152] will force asynchronous loading of javascript via script tags.
-ibx.forceInlineResLoading = false;//[ACT-1571]Needed a way to package ibx into single file...this forces all script/css to be inline.
-ibx.preCompiled = false;
-
-//where ibx.js loaded from
-ibx._path = "";
-ibx.getPath = function(){return ibx._path;};
-ibx.setPath = function(path){ibx._path = path;};
-
-//the window's location when the ibx <script> tag was loaded.
-ibx._appPath = "";
-ibx.getAppPath = function(){return ibx._appPath;};
-ibx.setAppPath = function(path){ibx._appPath = path;};
-
-//the endpoint of the windows location when ibx <script> tag was loaded....and any parms passed via url
-ibx._appName = "";
-ibx.getAppName = function(){return ibx._appName;};
-ibx._appParms;
-ibx.getAppParms = function(){return ibx._appParms;};
 
 //attach ibxWidgets to dom elements
 ibx.bindElements = function(elements)

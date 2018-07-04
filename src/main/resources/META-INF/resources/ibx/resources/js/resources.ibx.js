@@ -7,7 +7,7 @@
 function ibxResourceManager(ctxPath)
 {
 	this._resBundle = $($.parseXML("<ibx-res-bundle><markup></markup></ibx-res-bundle>"));
-	this._styleSheet = $("<style type='text/css'>").prop("id", "ibxResourceManager_inline_styles").appendTo("head");
+	this._styleSheet = $("<style type='text/css'>").addClass("ibxResourceManager_inline_styles").appendTo("head");
 	
 	this.loadedBundles = {};
 	this.loadedFiles = {};
