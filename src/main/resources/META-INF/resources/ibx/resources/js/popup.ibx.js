@@ -67,6 +67,7 @@ $.widget("ibi.ibxPopup", $.ibi.ibxWidget,
 	{
 		if(this.options.escapeToClose && e.keyCode == $.ui.keyCode.ESCAPE)
 			this.close("cancel");
+		e.stopPropagation();
 	},
 	_onPopupWindowResize:function(e)
 	{
