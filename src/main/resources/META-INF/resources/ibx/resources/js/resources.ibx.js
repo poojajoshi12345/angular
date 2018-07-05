@@ -611,8 +611,6 @@ _p.loadExternalResFile = function(elFile)
 		else
 		if(type == "script-file")
 		{
-			if(src.search("helloworld_script") != -1)
-				debugger;
 			var block = this._makeResBlock("script-block", src, content);
 			this._resBundle.find("scripts").append(block);
 		}
