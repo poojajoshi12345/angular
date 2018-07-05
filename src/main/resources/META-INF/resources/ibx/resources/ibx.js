@@ -132,10 +132,10 @@ function ibx()
 						$(inDoc.querySelector("script[src*='/ibx.js']")).remove();
 
 						var compiler = new ibxResourceCompiler(ibx.getPath(), true);
-						compiler.addBundles(resPackages);
+						compiler.compileBundles(resPackages);
 						var outDoc = compiler.linkBundle(inDoc);
-						console.log(outDoc.documentElement.outerHTML);
 						compiler.destroy();
+						console.log(outDoc.documentElement.outerHTML);
 						return outDoc;
 					}
 
@@ -225,12 +225,12 @@ ibx._path = "";
 ibx.getPath = function(){return ibx._path;};
 ibx.setPath = function(path){ibx._path = path;};
 
-//the window's location when the ibx <script> tag was loaded.
+//the window's location when the ibx script tag was loaded.
 ibx._appPath = "";
 ibx.getAppPath = function(){return ibx._appPath;};
 ibx.setAppPath = function(path){ibx._appPath = path;};
 
-//the endpoint of the windows location when ibx <script> tag was loaded....and any parms passed via url
+//the endpoint of the windows location when ibx script tag was loaded....and any parms passed via url
 ibx._appName = "";
 ibx.getAppName = function(){return ibx._appName;};
 ibx._appParms;

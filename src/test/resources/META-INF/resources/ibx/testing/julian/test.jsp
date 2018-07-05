@@ -18,136 +18,38 @@
 		<!--include this script...will boot ibx into the running state-->
 		<Script src="<%=request.getContextPath()%>/ibx/resources/ibx.js" type="text/javascript"></script>
 		<script type="text/javascript">
-			<jsp:include page="/WEB-INF/jsp/global/wf_globals.jsp" flush="false" />
 
-			ibx.forceInlineResLoading = true;
-			ibx(function()
+			window.addEventListener("load", function()
 			{
-				var tree = $(".test-tree");
-				tree.on("ibx_dragstart ibx_dragover ibx_dragleave ibx_drop", function(e)
+				function outer()
 				{
-					node = $(e.target).closest(".ibx-tree-node").children(".tnode-label");
-					e = e.originalEvent;
-					var dt = e.dataTransfer;
-					if(e.type == "ibx_dragstart")
-						dt.setData("ibxDragNode", $(e.target));
-					else
-					if(e.type == "ibx_dragover")
+					var c = 0
+					function eventHandler(e)
 					{
-						node.addClass("drag-target");
-						dt.dropEffect = "copy";
-						e.preventDefault();
-					}
-					else
-					if(e.type == "ibx_dragleave")
-						node.removeClass("drag-target");
-					else
-					if(e.type == "ibx_drop")
-					{
-						var dragNode = dt.getData("ibxDragNode");
-						var dropTarget = $(e.target).closest(".ibx-tree-node");
-						dropTarget.ibxWidget("add", dragNode);
-					}
-				});
-
-				$.get("./retail_lite.xml").done(function(doc, status, xhr)
-				{
-					tree._xDoc = $(doc);
-				}.bind(tree));
-
-				$(".btnLoadFlat").on("click", function(e)
-				{
-					var date = new Date();
-					var xRoot = tree._xDoc.children().first();
-					var tRoot = makeTreeNode(xRoot, true).addClass("root");
-					tree.ibxWidget("remove").ibxWidget("add", tRoot);
-					xRoot.find("leaf").each(function(idx, el)
-					{
-						var tChild = makeTreeNode(el, true);
-						tRoot.ibxWidget("add", tChild);
-					});
-					console.log(sformat("loaded in: {1}", (new Date() - date)));
-				});
-
-				$(".btnLoadHierarchical").on("click", function(e)
-				{
-					var date = new Date();
-					var xRoot = tree._xDoc.children().first();
-					var tRoot = makeTreeNode(xRoot).addClass("root");
-					tree.ibxWidget("remove").ibxWidget("add", tRoot);
-				});
-
-				$(".btnExpandAll").on("click", function(e)
-				{
-					var tNodes = tree.find(".ibx-tree-node").ibxWidget("toggleExpanded", true);
-				});
-
-				function makeTreeNode(xNode, flat)
-				{
-					xNode = $(xNode);
-					var type = xNode.prop("nodeName");
-					var icon = xNode.attr("icon");
-					var options =
-					{
-						draggable:true,
-						container: (type == "Master_SegmentTree" || type == "branch"),
-						labelOptions:
+						debugger;
+						c = c + 1
+						if(c == requestNumber)
 						{
-							icon: icon ? sformat("{1}../../dhtml/images/{2}", ibx.getPath(), icon) : "",
-							text: xNode.attr("label")
+							//someshit
 						}
-					};
-					var treeNode = $("<div>").ibxTreeNode(options).data("xNode", xNode).on("ibx_expand", function(e)
-					{
-						if(flat)
-							return;
-						var tNode = $(this);
-						var xNode = tNode.data("xNode");
-						if(tNode.ibxWidget("hasChildren"))
-							return;
+					}
+					$("body").on("click", eventHandler);
+				}
+				outer();
+			});
 
-						tNode.ibxWidget("remove");
-						$(xNode).children().each(function(idx, el)
-						{
-							var tChild = makeTreeNode(el);
-							tNode.ibxWidget("add", tChild);
-						});
-						e.stopPropagation();
-					});
-					return treeNode;
-				};
-			}, true);
 		</script>
 		<style type="text/css">
-			html, body
+			body
 			{
-				position:absolute;
 				width:100%;
 				height:100%;
 				margin:0px;
 				box-sizing:border-box;
+				background-color:red;
 			}
-			.test-tree
-			{
-				position:absolute;
-				left:50px;
-				top:50px;
-				bottom:50px;
-				width:300px;
-				overflow:auto;
-				border:2px solid #ccc;
-			}
-			.drag-target:hover
-			{
-				background-color:thistle;
-			}
-
 		</style>
 	</head>
 	<body class="ibx-root">
-		<div tabindex="0" class="btnLoadFlat" data-ibx-type="ibxButton">Load Flat</div>
-		<div tabindex="0" class="btnLoadHierarchical" data-ibx-type="ibxButton">Load Hierarchical</div>
-		<div tabindex="0" class="btnExpandAll" data-ibx-type="ibxButton">Expand All Collapsed</div>
-		<div tabindex="0" class="test-tree" data-ibx-type="ibxTree" data-ibxp-sel-type="multi"></div>
 	</body>
 </html>

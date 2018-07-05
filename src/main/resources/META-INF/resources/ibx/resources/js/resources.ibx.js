@@ -473,31 +473,30 @@ function ibxResourceCompiler(ctxPath, bootable)
 	this._resBundle = $($.get({"url":this._contextPath + "./ibx_compiler_bundle.xml", "async":false, "dataType":"xml"}).responseXML);
 	this._bootable = bootable
 	var bootRes = this._resBundle.find("ibx-boot-resources").detach();
-	this._bootFiles = bootable ? bootRes.children("ibx-boot-files") : $();
 	if(bootable)
 	{
-		var strBootFiles = "";
-		this._bootFiles.children().each(function(idx, file)
+		bootRes.find("ibx-boot-files").children().each(function(idx, file)
 		{
 			var filePath = file.getAttribute("src");
 			var xhr = $.get({"url":this._contextPath + file.getAttribute("src"), "async":false, "dataType":"text"});
 			if(file.nodeName == "style-file")
-				strBootFiles += sformat("<style data-ibx-src='{1}' type='text/css'>{2}</style>\n", filePath, xhr.responseText);
+			{
+				var fileBlock = this._makeResBlock("style-sheet", filePath, xhr.responseText).attr("data-boot-file", true);
+				this._resBundle.find("styles").append(fileBlock);
+			}
 			else
 			if(file.nodeName == "script-file")
 			{
 				var isIbx = (filePath.search("/ibx.js") != -1);
-				block = sformat("<sc" + "ript data-ibx-src='{1}' type='text/javascript'>\nSCRIPT_CONTENT_HERE\n{2}</sc" + "ript>\n", filePath, isIbx ? "ibx._preCompiled = true;" : "");
-				block = block.replace("SCRIPT_CONTENT_HERE", xhr.responseText);
-				strBootFiles += block;
+				var content = xhr.responseText;
+				if(isIbx)
+					content += "\nibx._preCompiled = true;\n";
+				fileBlock = this._makeResBlock("script-block", filePath, content).attr("data-boot-file", true);
+				this._resBundle.find("scripts").append(fileBlock);
 			}
 		}.bind(this));
 
-		var cdata = $("\n<![CDATA[]]>\n", this._resBundle);
-		cdata[0].textContent = strBootFiles;
-		this._bootFiles.empty().append(cdata);
-		var coreBundle = $($.get({"url":this._contextPath + "./ibx_resource_bundle.xml", "async":false, "dataType":"xml"}).responseXML);
-		this.compileBundle(coreBundle);
+		this.compileBundle(($.get({"url":this._contextPath + "./ibx_resource_bundle.xml", "async":false, "dataType":"xml"}).responseXML));
 	}
 }
 var _p = ibxResourceCompiler.prototype = new ibxResourceManager();
@@ -526,21 +525,32 @@ _p.getBundleAsString = function()
 _p.linkBundle = function(outDoc)
 {
 	outDoc = $(outDoc);
+
+
+	var bootFiles = this._resBundle.find("[data-boot-file]").detach();
+	var bootScript = $(sformat("<script type='text/javascript'>")).text(bootFiles.not("style-sheet").text());
+	var bootStyle = $(sformat("<style type='text/css'>")).text(bootFiles.not("script-block").text());
 	var bundle = sformat("<sc" + "ript class='ibx-precompiled-res-bundle' type='text/xml'>{1}</sc" +"ript>", this.getBundleAsString());
 	var head = outDoc.find("head");
-	var scripts = outDoc.find("script");
-	if(scripts.length)
+	var firstStyle = outDoc.find("style");
+	var firstScript = outDoc.find("script");
+	
+	if(firstStyle.length)
+		firstStyle.before(bootStyle);
+	else
+		head.append(bootStyle);
+
+	if(firstScript.length)
 	{
-		var firstScript = scripts.first();
 		firstScript.before(bundle);
 		if(this._bootable)
-			firstScript.before(this._bootFiles.text());
+			firstScript.before(bootScript);
 	}
 	else
 	{
 		head.append(bundle);
 		if(this._bootable)
-			head.append(this._bootFiles.text());
+			head.append(bootScript);
 	}
 	var body = outDoc.find("body");
 	return outDoc[0];
@@ -571,13 +581,14 @@ _p.loadExternalResFile = function(elFile)
 {
 	$(elFile).each(function(idx, file)
 	{
-		var type = file.nodeName;
-		var src = file.getAttribute("src");
-		var xhr = $.get({"url":this._contextPath + src, "async":false, "dataType":"text"});
+		var file = $(file);
+		var type = file.prop("nodeName");
+		var src = this.getResPath(file.attr("src"), file.closest("[loadContext]").attr("loadContext"));
+		var xhr = $.get({"url": src, "async":false, "dataType":"text"});
 		var content = xhr.responseText;
 
 		//do not compile into internal resource bundle.
-		if(file.getAttribute("nocompile") == "true")
+		if(file.attr("nocompile") == "true")
 			return;
 
 		if(type == "string-file")
@@ -600,6 +611,8 @@ _p.loadExternalResFile = function(elFile)
 		else
 		if(type == "script-file")
 		{
+			if(src.search("helloworld_script") != -1)
+				debugger;
 			var block = this._makeResBlock("script-block", src, content);
 			this._resBundle.find("scripts").append(block);
 		}
