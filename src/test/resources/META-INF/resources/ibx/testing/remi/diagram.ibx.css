@@ -16,6 +16,9 @@
 	top: 0px;
 	z-index: -1;
 	pointer-events: none;
+	fill: none;
+	stroke: black;
+	stroke-width: 1px;
 }
 
 .ibx-diagram-connection {

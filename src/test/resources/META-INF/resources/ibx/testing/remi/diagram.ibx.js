@@ -1,4 +1,4 @@
-/*global document: false, Element: false, jQuery: false, $: false */
+/*global window: false, document: false, Element: false, jQuery: false, $: false */
 /*Copyright 1996-2016 Information Builders, Inc. All rights reserved.*/
 // $Revision$:
 
@@ -87,9 +87,17 @@ $.widget('ibi.ibxDiagram', $.ibi.ibxWidget, {
 			return child.saveToJSON();
 		});
 		var connections = canvas._connections.map(function(connection) {
-			var from = {node: canvas._children.indexOf(connection.from.node)};
-			var to = {node: canvas._children.indexOf(connection.to.node)};
-			return {from: from, to: to};
+			var from = {
+				node: canvas._children.indexOf(connection.from.node),
+				anchor: connection.from.anchor,
+				tip: clone(connection.from.tip)
+			};
+			var to = {
+				node: canvas._children.indexOf(connection.to.node),
+				anchor: connection.to.anchor,
+				tip: clone(connection.to.tip)
+			};
+			return {from: from, to: to, className: connection.className};
 		});
 		return {
 			width: canvas.element[0].clientWidth,
@@ -170,35 +178,107 @@ $.widget('ibi.ibxDiagram', $.ibi.ibxWidget, {
 	},
 	addConnection: function(connection) {
 		var canvas = this;
-		var line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-		line = $(line).attr({x1: 0, y1: 0, x2: 500, y2: 500}).addClass('ibx-diagram-connection');
-		canvas._canvas.append(line);
+		var g = getConnectionPath(connection.from.tip, connection.to.tip);
+		if (connection.className) {
+			g.addClass(connection.className);
+		}
+		canvas._canvas.append(g);
+		var lineWidth = parseInt(window.getComputedStyle(g[0].firstElementChild).strokeWidth, 10);
 		var from = canvas.convertToNode(connection.from.node);
 		var to = canvas.convertToNode(connection.to.node);
 		canvas._connections.push({
-			from: {node: from, anchor: connection.from.anchor},
-			to: {node: to, anchor: connection.to.anchor},
-			line: line[0]
+			className: connection.className,
+			from: {
+				node: from,
+				anchor: connection.from.anchor,
+				tip: clone(connection.from.tip)
+			},
+			to: {
+				node: to,
+				anchor: connection.to.anchor,
+				tip: clone(connection.to.tip)
+			},
+			g: g[0],
+			lineWidth: lineWidth
 		});
 		canvas.refresh();
-		return line;
+		return g;
 	},
 	updateConnections: function() {
 		// Keep this function fast; it gets called on every mouse move
 		for (var i = 0; i < this._connections.length; i++) {
 			var connection = this._connections[i];
-			var line = connection.line;
+			var g = connection.g;
 			var c1 = connection.from.node.element[0];
+			var c1AnchorSize = connection.from.node.getAnchorSize(connection.from.anchor) / 2;
 			var c2 = connection.to.node.element[0];
+			var c2AnchorSize = connection.to.node.getAnchorSize(connection.to.anchor) / 2;
 			var box1 = c1.getBoundingClientRect();
 			var box2 = c2.getBoundingClientRect();
-			line.setAttribute('x1', c1.offsetLeft + box1.width - 1);
-			line.setAttribute('y1', c1.offsetTop + (box1.height / 2));
-			line.setAttribute('x2', c2.offsetLeft + 1);
-			line.setAttribute('y2', c2.offsetTop + (box2.height / 2));
+			var x1 = c1.offsetLeft + box1.width;
+			var y1 = c1.offsetTop + (box1.height / 2);
+			var x2 = c2.offsetLeft;
+			var y2 = c2.offsetTop + (box2.height / 2);
+			var padLeft = (g.children[1] == null) ? 0 : connection.lineWidth;
+			var padRight = (g.children[2] == null) ? 0 : connection.lineWidth;
+			var length = distance(x1, y1, x2, y2) - c1AnchorSize - padLeft - c2AnchorSize - padRight;
+			var angle = Math.atan2(y2 - y1, x2 - x1) * 180 / Math.PI;
+
+			// Move overall arrow to start connection point and rotate to point to end connection
+			g.transform.baseVal[0].setTranslate(x1 + c1AnchorSize + padLeft, y1);
+			g.transform.baseVal[1].setRotate(angle, 0, 0);
+
+			g.children[0].setAttribute('x2', length);  // Set line's end point
+			if (g.children[2]) {
+				g.children[2].transform.baseVal[0].setTranslate(length, 0);  // Position end arrow, if any
+			}
 		}
 	}
 });
+
+function distance(x1, y1, x2, y2) {
+	return Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));
+}
+
+function arrowShapeToPath(tip) {
+	var size = tip.size || 10, shape = (tip.shape || '').toLowerCase();
+	switch (shape) {
+		case 'arrow-hollow':
+			return 'M' + size + ' ' + (-size) + 'L0 0L' + size + ' ' + size + 'L0 0';
+		case 'arrow':
+			return 'M' + size + ' ' + (-size) + 'L0 0L' + size + ' ' + size + 'Z';
+	}
+	return '';
+}
+
+function getConnectionPath(fromTip, toTip) {
+	// Connections are drawn in a group that has been transformed such that
+	// (0, 0) is at left connection and (100, 0) is on right connection
+	var g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+	g.setAttribute('transform', 'translate(0, 0) rotate(0)');
+
+	var line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+	line.setAttribute('x1', 0);
+	line.setAttribute('y1', 0);
+	line.setAttribute('x2', 0);
+	line.setAttribute('y2', 0);
+	g.appendChild(line);
+
+	if (fromTip) {
+		var tip = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+		tip.setAttribute('d', arrowShapeToPath(fromTip));
+		g.appendChild(tip);
+	}
+
+	if (toTip) {
+		var tip2 = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+		tip2.setAttribute('d', arrowShapeToPath(toTip));
+		tip2.setAttribute('transform', 'translate(0, 0) rotate(180)');
+		g.appendChild(tip2);
+	}
+
+	return $(g).addClass('ibx-diagram-connection');
+}
 
 $.widget('ibi.ibxDiagramNode', $.ibi.ibxWidget, {
 	_widgetClass: 'ibx-diagram-node',
@@ -210,8 +290,8 @@ $.widget('ibi.ibxDiagramNode', $.ibi.ibxWidget, {
 		text: '',
 		anchors: [],
 		selectable: true,  // If true, node can be clicked on to select it
-		moveable: true,  // If true, node cannot be dragged or moved around
-		deletable: true,  // If true, selecting this node then hitting the 'delete' key will delete the node
+		moveable: true,    // If true, node cannot be dragged or moved around
+		deletable: true,   // If true, selecting this node then hitting the 'delete' key will delete the node
 		selected: false
 	},
 	_create: function() {
@@ -399,11 +479,18 @@ $.widget('ibi.ibxDiagramNode', $.ibi.ibxWidget, {
 		}
 		div.css({left: left, top: top});
 		this.element.append(div);
+	},
+	getAnchorSize: function(side) {
+		var anchor = this.options.anchors[side];
+		if (anchor) {
+			return (side === 'top' || side === 'bottom') ? anchor.height : anchor.width;
+		}
+		return 0;
 	}
 });
 
 function clone(json) {
-	return JSON.parse(JSON.stringify(json));
+	return JSON.parse(JSON.stringify(json || null));
 }
 
 })();
