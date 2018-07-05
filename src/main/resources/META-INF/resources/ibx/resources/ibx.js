@@ -132,11 +132,16 @@ function ibx()
 						$(inDoc.querySelector("script[src*='/ibx.js']")).remove();
 
 						var compiler = new ibxResourceCompiler(ibx.getPath(), true);
-						compiler.compileBundles(resPackages);
-						var outDoc = compiler.linkBundle(inDoc);
-						compiler.destroy();
-						console.log(outDoc.documentElement.outerHTML);
-						return outDoc;
+						resPackages._helloWorld = true;
+						window.temp = new $.Deferred();
+						var temp2 = compiler.addBundles(resPackages, temp);
+						temp.done(function()
+						{
+							var outDoc = compiler.linkBundle(inDoc);
+							compiler.destroy();
+							console.log(outDoc.documentElement.outerHTML);
+							this.compiledApp = outDoc;
+						}.bind(this));
 					}
 
 					//jquery is fully loaded and running

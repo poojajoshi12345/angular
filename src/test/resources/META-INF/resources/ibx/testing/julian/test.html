@@ -27431,7 +27431,7 @@ function ibx()
 						$(inDoc.querySelector("script[src*='/ibx.js']")).remove();
 
 						var compiler = new ibxResourceCompiler(ibx.getPath(), true);
-						compiler.compileBundles(resPackages);
+						compiler.addBundles(resPackages);
 						var outDoc = compiler.linkBundle(inDoc);
 						compiler.destroy();
 						console.log(outDoc.documentElement.outerHTML);
@@ -28214,7 +28214,7 @@ function ibxResourceCompiler(ctxPath, bootable)
 			}
 		}.bind(this));
 
-		this.compileBundle(($.get({"url":this._contextPath + "./ibx_resource_bundle.xml", "async":false, "dataType":"xml"}).responseXML));
+		this.loadBundle(($.get({"url":this._contextPath + "./ibx_resource_bundle.xml", "async":false, "dataType":"xml"}).responseXML));
 	}
 }
 var _p = ibxResourceCompiler.prototype = new ibxResourceManager();
@@ -28276,11 +28276,8 @@ _p.linkBundle = function(outDoc)
 
 _p.compileBundles = function(bundles)
 {
-	$(bundles).each(function(idx, bundle)
-	{
-		this.compileBundle(bundle);
-	}.bind(this));
-	return this;
+	this.addBundles(bundles);
+	return;
 };
 
 _p.compileBundle = function(bundle)
@@ -28329,8 +28326,6 @@ _p.loadExternalResFile = function(elFile)
 		else
 		if(type == "script-file")
 		{
-			if(src.search("helloworld_script") != -1)
-				debugger;
 			var block = this._makeResBlock("script-block", src, content);
 			this._resBundle.find("scripts").append(block);
 		}

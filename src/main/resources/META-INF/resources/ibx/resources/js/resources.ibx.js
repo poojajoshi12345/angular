@@ -80,11 +80,18 @@ _p.addBundles = function(bundles, allLoaded)
 		else
 		{
 			bundleInfo = (typeof(bundleInfo) == "string") ? {"src":bundleInfo, "loadContext":""} : bundleInfo;
-			this.addBundle(bundleInfo.src, bundleInfo.loadContext).done(this.addBundles.bind(this, bundles, allLoaded));
+			this.addBundle(bundleInfo.src, bundleInfo.loadContext).done(function(bundles, allLoaded)
+			{
+				this.addBundles(bundles, allLoaded);
+			}.bind(this, bundles, allLoaded));
 		}
 	}
 	else
+	{
+		if(allLoaded === window.temp)
+			debugger;
 		allLoaded.resolve();
+	}
 	return allLoaded;
 };
 
@@ -466,7 +473,9 @@ _p.preProcessResource = function(resource, language)
 };
 
 
-
+/******************************************************************************
+ibxResourceCompiler - used to package ibx application into single html file.
+******************************************************************************/
 function ibxResourceCompiler(ctxPath, bootable)
 {
 	ibxResourceManager.call(this);
@@ -496,7 +505,7 @@ function ibxResourceCompiler(ctxPath, bootable)
 			}
 		}.bind(this));
 
-		this.compileBundle(($.get({"url":this._contextPath + "./ibx_resource_bundle.xml", "async":false, "dataType":"xml"}).responseXML));
+		this.loadBundle(($.get({"url":this._contextPath + "./ibx_resource_bundle.xml", "async":false, "dataType":"xml"}).responseXML));
 	}
 }
 var _p = ibxResourceCompiler.prototype = new ibxResourceManager();
@@ -554,20 +563,6 @@ _p.linkBundle = function(outDoc)
 	}
 	var body = outDoc.find("body");
 	return outDoc[0];
-};
-
-_p.compileBundles = function(bundles)
-{
-	$(bundles).each(function(idx, bundle)
-	{
-		this.compileBundle(bundle);
-	}.bind(this));
-	return this;
-};
-
-_p.compileBundle = function(bundle)
-{
-	this.loadBundle(bundle);
 };
 
 _p.addStringBundle = function(strBundle)
