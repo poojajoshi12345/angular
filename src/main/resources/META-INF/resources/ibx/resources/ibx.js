@@ -131,11 +131,11 @@ function ibx()
 						//remove the "ibx.js" script if it exists...will mess up the final compiled app.
 						$(inDoc.querySelector("script[src*='/ibx.js']")).remove();
 
+						//create the resource compiler, and pass a copy of the packages to compile, so the app loads noramlly after compilation.
 						var compiler = new ibxResourceCompiler(ibx.getPath(), true);
-						resPackages._helloWorld = true;
-						window.temp = new $.Deferred();
-						var temp2 = compiler.addBundles(resPackages, temp);
-						temp.done(function()
+						var compPackages = resPackages.slice();
+						compPackages.COMPILERBUNDLE = true;
+						compiler.addBundles(compPackages).done(function()
 						{
 							var outDoc = compiler.linkBundle(inDoc);
 							compiler.destroy();

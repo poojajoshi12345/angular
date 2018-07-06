@@ -1,769 +1,614 @@
 /*Copyright 1996-2016 Information Builders, Inc. All rights reserved.*/
 // $Revision$:
 
-function ibxEventManager()
+/******************************************************************************
+	RESOURCE BUNDLE MANAGEMENT
+******************************************************************************/
+function ibxResourceManager(ctxPath)
 {
-	if(ibx.eventMgr)
-		return;
+	this._resBundle = $($.parseXML("<ibx-res-bundle><markup></markup></ibx-res-bundle>"));
+	this._styleSheet = $("<style type='text/css'>").addClass("ibxResourceManager_inline_styles").appendTo("head");
+	
+	this.loadedBundles = {};
+	this.loadedFiles = {};
+	this.language = document.documentElement.getAttribute("lang") || "ibx_default";//if no lang attribute default to ibx_default bundle
+	this.strings = {"ibx_default":{}};
 
-	window.addEventListener("touchstart", ibxEventManager._onTouchEvent.bind(this), true)
-	window.addEventListener("touchend", ibxEventManager._onTouchEvent, true)
-	window.addEventListener("touchmove", ibxEventManager._onTouchEvent, true)
-	window.addEventListener("contextmenu", ibxEventManager._onContextMenu);
-	window.addEventListener("keydown", ibxEventManager._onKeyDown);
-
-	document.body.addEventListener("touchstart", ibxEventManager._onNoScrollTouchEvent);
+	this.setContextPath(ctxPath || ibx.getPath());//default to the global ibx context path.
 }
-ibxEventManager.noBrowserCtxMenu = true;
-ibxEventManager.noBackspaceNavigate = true;
-ibxEventManager.noSpaceScroll = true;
-ibxEventManager.noIOSBodyScroll = false;
-ibxEventManager.msDblClick = 300;
-ibxEventManager.msCtxMenu = 500;
-ibxEventManager.createMouseEvent = function(eType, e)
-{
-	var touch = (e instanceof TouchEvent) ? e.touches[0] : null;
-	var eLast = ((e instanceof TouchEvent) && ibxEventManager._eLast) ? ibxEventManager._eLast.touches[0] : null;
-	var eInit = $.extend({}, e, touch);
-	eInit.movementX = eLast ? (eInit.screenX - eLast.screenX) : 0;
-	eInit.movementY = eLast ? (eInit.screenY - eLast.screenY) : 0;
+var _p = ibxResourceManager.prototype = new Object();
 
-	var event = new MouseEvent(eType, eInit);
-	event.movementX = eInit.movementX;//for IOS...they don't allow arbitrary properties in new MouseEvent.
-	event.movementY = eInit.movementY;//for IOS...they don't allow arbitrary properties in new MouseEvent.
-	event.originalEvent = e;
-	return event;
+_p.loadedBundles = null;
+_p.loadedFiles = null;
+
+_p._resBundle = null;
+_p._styleSheet = null;
+
+_p._contextPath = "";
+_p.setContextPath = function(ctxPath){this._contextPath = ctxPath;};
+_p.getContextPath = function(){return this._contextPath;};
+
+_p.destroyed = false;
+_p.destroy = function()
+{
+	this._styleSheet.remove();
+	delete this._styleSheet;
+	delete this._resBundle;
+	delete this._strings;
+	this.destroyed = true;
 };
 
-
-ibxEventManager._onTouchEvent = function(e)
+_p.missingString = "";
+_p.language = null;
+_p.strings = null;
+_p.getString = function(id, def, language)
 {
-	var eType = e.type;
-	if(eType == "touchstart")
+	//make sure language is loaded...or, cascade back to ibx_default
+	language = language || this.language;
+	if(!this.strings[language])
 	{
-		ibxEventManager._hasSwiped = false;
-		if(ibxPlatformCheck.isIOS)
-		{
-			var me = ibxEventManager.createMouseEvent("mousedown", e);
-			e.target.dispatchEvent(me);
-			ibxEventManager._eLast = e;
+		language = language.substr(0, 2);
+		if(!this.strings[language])
+			language = "ibx_default";
+	}
 
-			ibxEventManager._ctxMenuTimer = window.setTimeout(function(e)
-			{
-				var me = ibxEventManager.createMouseEvent("contextmenu", e);
-				e.target.dispatchEvent(me);
-				ibxEventManager._eLast = e;
-			}.bind(ibxEventManager, e), ibxEventManager.msCtxMenu);
-		}
+	//string not found...bad!
+	if(!this.strings[language][id] === undefined)
+		console.warn("ibx string not found, id:", id);
+
+	//return string, or one of the fallbacks.
+	return this.strings[language][id] || def || this.missingString;
+};
+_p.addStringBundle = function(bundle, defLang)
+{
+	if(!bundle.language)
+		bundle.language = "ibx_default";
+	this.strings[bundle.language] = $.extend(this.strings[bundle.language], bundle.strings);
+	if(defLang)
+		this.language = bundle.language;
+};
+
+//daisy chain the loading of the bundles so their dependencies are honored.
+_p.addBundles = function(bundles)
+{
+	if(!bundles._allLoaded)
+		bundles._allLoaded = allLoaded || $.Deferred();
+
+	var allLoaded = allLoaded || $.Deferred();
+	if(bundles.length)
+	{
+		var bundleInfo = bundles.shift();
+		if(bundleInfo instanceof XMLDocument)
+			this.loadBundle(bundleInfo).done(this.addBundles.bind(this, bundles));
 		else
-			ibxEventManager._eLast = e;
+		{
+			bundleInfo = (typeof(bundleInfo) == "string") ? {"src":bundleInfo, "loadContext":""} : bundleInfo;
+			this.addBundle(bundleInfo.src, bundleInfo.loadContext).done(function(bundles)
+			{
+				this.addBundles(bundles);
+			}.bind(this, bundles));
+		}
 	}
 	else
-	if(eType == "touchend")
+		bundles._allLoaded.resolve(this);
+	return bundles._allLoaded;
+};
+
+//can pass a string or jQuery.ajax settings object.
+_p.addBundle = function(ajaxSettings, loadContext, data)
+{
+	//resolve bundle's uri
+	ajaxSettings = (typeof(ajaxSettings) === "string") ? {url:ajaxSettings} : ajaxSettings;
+	ajaxSettings.url = this.getResPath(ajaxSettings.url, loadContext);
+
+	//is it already loaded?
+	if(this.loadedBundles[ajaxSettings.url])
+		return this.loadedBundles[ajaxSettings.url];
+
+	//...no, so let's get loadin'!
+	var resLoaded = $.Deferred();
+	var xhr = $.get(ajaxSettings, data);
+	xhr.resLoaded = resLoaded;
+	xhr.src = ajaxSettings.url;
+	xhr.done(this._onBundleFileLoaded.bind(this));
+	xhr.fail(this._onBundleFileLoadError.bind(this));
+	xhr.progress(this._onBundleFileProgress.bind(this));
+	return resLoaded;
+};
+_p._onBundleFileLoaded = function(xDoc, status, xhr)
+{
+	//successfully loaded...move needed stuff to the xDoc for loading.
+	xDoc.resLoaded = xhr.resLoaded;
+	xDoc.src = xhr.src;
+	xDoc.path = xDoc.src.substring(0, xDoc.src.lastIndexOf("/") + 1);
+	this.loadBundle(xDoc);
+};
+_p._onBundleFileProgress = function()
+{
+};
+_p._onBundleFileLoadError = function(xhr, status, msg)
+{
+	$(window).dispatchEvent("ibx_resmgr", {"hint":"load_error", "loadDepth":this._loadDepth, "resMgr":this, "bundle":null, "xhr":xhr, "status":status, "msg":msg});
+	console.error(sformat("[ibx Error] {1}", msg));
+};
+
+_p.loadExternalResFile = function(elFile)
+{
+	elFile = $(elFile);
+	elFile.each(function(idx, elFile)
 	{
-		window.clearTimeout(ibxEventManager._ctxMenuTimer);//cancel context menu
-
-		if(ibxPlatformCheck.isIOS)
+		elFile = $(elFile);
+		var src = this.getResPath(elFile.attr("src"), elFile.closest("[loadContext]").attr("loadContext"));
+		if(this.loadedFiles[src])
 		{
-			var me = ibxEventManager.createMouseEvent("mouseup", e);
-			e.target.dispatchEvent(me);
-			ibxEventManager._eLast = e;
+			//duplicate, just resolve and continue
+			var dfd = elFile[0]._loadPromise;
+			if(dfd)
+				dfd.resolve();
+			return;
 		}
 
-		var dblClick = false;
-		if(ibxEventManager._eLast.type != "contextmenu")
+		var fileType = elFile.prop("tagName");
+		var isInline = elFile.attr("inline") == "true";
+
+		if(fileType == "style-file")
+			elFile.attr("inline", "false");
+		else
+		if((fileType == "script-file") && ibx.forceLinkLoading)
+			elFile.attr("inline" , "false");
+		else
+		if(fileType == "script-file")
+			elFile.attr("inline", "true");
+		else
+		if(fileType == "string-file" || fileType == "markup-file")
+			elFile.attr("inline", "true");
+
+		if(ibx.forceInlineResLoading || (elFile.attr("inline") == "true"))
 		{
-			var dt = ibxEventManager._eLastClick ? (e.timeStamp - ibxEventManager._eLastClick.timeStamp) : Infinity;
-			dblClick = (dt < ibxEventManager.msDblClick);
-			ibxEventManager._eLast = e;
-			ibxEventManager._eLastClick = e;
-		}
-
-		if(dblClick)
-		{
-			var me = ibxEventManager.createMouseEvent("dblclick", e);
-			e.target.dispatchEvent(me);
-			e.preventDefault();//[IBX-40]stop double tap zoom on ios.
-		}
-
-		ibxEventManager._eLast = null;
-		ibxEventManager._hasMoved = false;
-	}
-	else
-	if(eType == "touchmove")
-	{
-		window.clearTimeout(ibxEventManager._ctxMenuTimer);//cancel context menu
-
-		//figure out swiping
-		var touch = e.touches[0];
-		if(!ibxEventManager._hasSwiped)
-		{
-			var tElapsed = e.timeStamp - ibxEventManager._eLast.timeStamp;
-			var dx = touch.clientX - ibxEventManager._eLast.touches[0].clientX;
-			var dy = touch.clientY - ibxEventManager._eLast.touches[0].clientY;
-			var sEvent = null;
-			if(dx > 30)
-				sEvent = "swiperight";
-			else
-			if(dx < -30)
-				sEvent = "swipeleft";
-
-			if(sEvent && tElapsed <= 300)
+			$.get({async:false, url:src, dataType:"text", error:this._resFileRetrievalError.bind(this, src)}).done(function(elFile, src, fileType, content, status, xhr)
 			{
-				var se = ibxEventManager.createMouseEvent(sEvent, e);
-				ibxEventManager._hasSwiped = true
-				e.target.dispatchEvent(se);
-			}
-
-			sEvent = null;
-			if(dy > 30)
-				sEvent = "swipedown";
-			else
-			if(dy < -30)
-				sEvent = "swipeup";
-			
-			if(sEvent && tElapsed <= 300)
-			{
-				var se = ibxEventManager.createMouseEvent(sEvent, e);
-				ibxEventManager._hasSwiped = true
-				e.target.dispatchEvent(se);
-			}
-		}
-
-		var me = ibxEventManager.createMouseEvent("mousemove", e);
-		e.target.dispatchEvent(me);
-		ibxEventManager._eLast = e;
-		ibxEventManager._hasMoved = true;//stop possible dblclick on touchend
-	}
-};
-
-ibxEventManager._onContextMenu = function(e)
-{
-	if(ibxEventManager.noBrowserCtxMenu)
-		e.preventDefault();
-};
-
-//[HOME-183] stop backspace from navigating
-//see: https://stackoverflow.com/questions/1495219/how-can-i-prevent-the-backspace-key-from-navigating-back
-ibxEventManager._onKeyDown = function(event)
-{
-	if((ibxEventManager.noBackspaceNavigate && (event.keyCode === $.ui.keyCode.BACKSPACE)) || (ibxEventManager.noSpaceScroll && (event.keyCode === $.ui.keyCode.SPACE)))
-	{
-		var doPrevent = true;
-		var types = ["text", "password", "file", "search", "email", "number", "date", "color", "datetime", "datetime-local", "month", "range", "search", "tel", "time", "url", "week"];
-		var d = $(event.srcElement || event.target);
-		var disabled = d.prop("readonly") || d.prop("disabled");
-
-		if(!disabled)
-		{
-			if(d[0].isContentEditable)
-				doPrevent = false;
-			else
-			if(d.is("input"))
-			{
-				var type = d.attr("type");
-				if(type)
-					type = type.toLowerCase();
-				if(types.indexOf(type) > -1)
-					doPrevent = false;
-			}
-			else
-			if(d.is("textarea"))
-				doPrevent = false;
-		}
-
-		if(doPrevent)
-		{
-			event.preventDefault();
-			return false;
-		}
-	}
-};
-
-//ios has an annoying habit of attempting to scroll the body element even when it has nothing to scroll.  This stops that!
-ibxEventManager._onNoScrollTouchEvent = function(e)
-{
-	//THIS IS NOT WORKING CORRECTLY YET...DO NOT UNCOMMENT!!!!
-	//if(ibxPlatformCheck.isIOS && ibxEventManager.noIOSBodyScroll && e.target === document.body)
-	//	e.preventDefault();
-};
-
-//singleton event manager object.
-ibx.eventMgr = new ibxEventManager();
-
-
-/****
- 	Drag/Drop Management
-****/
-function ibxDataTransfer()
-{
-	this.items = {};
-	this.types = [];
-	this.effectAllowed = "all";
-	this.dropEffect = "not-allowed";
-}
-_p = ibxDataTransfer.prototype = new Object();
-_p.dataLock = false;
-_p.items = null;
-_p.types = null;
-_p.getData = function(type){return this.items[type]};
-_p.setData = function(type, data)
-{
-	if(this.dataLock)
-	{
-		console.warn("[ibx Warning] ibxDataTransfer - set/clear data is not technically supported in drag/drop once drag has started.  You can set dataLock to false to enable if you must.");
-		return;
-	}
-
-	this.items[type] = data;
-	if(-1 == this.types.indexOf(type))
-		this.types.push(type);
-};
-_p.clearData = function(type)
-{
-	if(this.dataLock)
-	{
-		console.warn("[ibx Warning] ibxDataTransfer - set/clear data is not technically supported in drag/drop once drag has started.  You can set dataLock to false to enable if you must.");
-		return;
-	}
-
-	delete this.items[type];
-	this.types.splice(this.types.indexOf(type), 1);
-};
-_p.dragXOffset = 8;
-_p.dragYOffset = 8;
-_p._dragImage = null;
-_p.setDragImage = function(img, xOffset, yOffset)
-{
-	if(this._dragImage)
-	{
-		this._dragImage.style.position = "";
-		this._dragImage.classList.remove(ibxDragDropManager.dragImageClass);
-	}
-	
-	this._dragImage = img ? img : this._dragImage;
-	if(this._dragImage)
-	{
-		this._dragImage.style.position = "absolute";
-		this._dragImage.classList.add(ibxDragDropManager.dragImageClass);
-	}
-	this.dragXOffset = xOffset || this.dragXOffset;
-	this.dragYOffset = yOffset || this.dragYOffset;
-};
-
-function ibxDragDropManager()
-{
-	if(ibx.dragDropMgr)
-		return;
-
-	document.documentElement.addEventListener("keydown", ibxDragDropManager._onKeyEvent.bind(ibxDragDropManager), true);
-	document.documentElement.addEventListener("mousedown", ibxDragDropManager._onMouseEvent.bind(ibxDragDropManager), true);
-	document.documentElement.addEventListener("mouseup", ibxDragDropManager._onMouseEvent.bind(ibxDragDropManager), true);
-	document.documentElement.addEventListener("mousemove", ibxDragDropManager._onMouseEvent.bind(ibxDragDropManager), true);
-	document.documentElement.addEventListener("dragover", ibxDragDropManager._onNativeDragEvent.bind(ibxDragDropManager), true);
-	document.documentElement.addEventListener("drop", ibxDragDropManager._onNativeDragEvent.bind(ibxDragDropManager), true);
-}
-ibxDragDropManager.dragPrevented = false;
-ibxDragDropManager.dragElement = null;
-ibxDragDropManager.curTarget = null;
-ibxDragDropManager.dragSourceClass = "ibx-drag-source",
-ibxDragDropManager.dragTargetClass = "ibx-drop-target",
-ibxDragDropManager.dragImageClass = "ibx-drag-image",
-ibxDragDropManager.dragStartDistanceX = 5,
-ibxDragDropManager.dragStartDistanceY = 5,
-
-ibxDragDropManager.getDefaultDragImage = function(el)
-{
-	//clone the node and make sure the width/height are preserved so it lays out correctly.
-	el = $(el);
-	var width = el.width();
-	var height = el.height();
-	var clone = el.clone().css({"width":width + "px", "height":height + "px", "margin":"0px"});
-	return clone[0];
-};
-ibxDragDropManager._dispatchDragEvent = function(e, type, target, bubbles, cancelable, data)
-{
-	var evt = cloneNativeEvent(e, type, data, bubbles, cancelable, null);
-	evt.dataTransfer = this._dataTransfer || e.dataTransfer;
-	if(target)
-		target.dispatchEvent(evt);
-	return evt;
-};
-ibxDragDropManager.endDrag = function(eType, e)
-{
-	if(eType && this.isDragging())//[IA-7558] Only spit out event if dragging.
-		this._dispatchDragEvent(e, eType, this.dragElement, true);
-			
-	if(this._dataTransfer)
-		$(this._dataTransfer._dragImage).remove();
-
-	if(this.curTarget)
-	{
-		this.curTarget.classList.remove(this.dragTargetClass);
-		this.curTarget.style.cursor = this.curTarget.dataset.ibxDragTargetCursorOrig;
-		delete this.curTarget.dataset.ibxDragTargetCursorOrig;
-		this.curTarget = null;
-	}
-
-	//reset body cursor
-	document.body.style.cursor = document.body.dataset.ibxOrigDragCursor;
-	delete document.body.dataset.ibxOrigDragCursor;
-
-
-	if(this.dragElement)
-	{
-		this.dragElement.classList.remove(this.dragSourceClass);
-		this.dragElement = null;
-		this.dragPrevented = false;
-	}
-	document.body.classList.remove("ibx-dragging");
-
-	delete this._dataTransfer;
-	delete this._mDownLoc;
-};
-ibxDragDropManager._onKeyEvent = function(e)
-{
-	if(this.isDragging() && e.keyCode == $.ui.keyCode.ESCAPE)
-		this.endDrag("ibx_dragcancel", e);
-};
-ibxDragDropManager.isDragging = function()
-{
-	return (this.dragElement && this.dragElement.classList.contains(this.dragSourceClass));
-}
-ibxDragDropManager._onMouseEvent = function(e)
-{
-	var eType = e.type;
-	if(eType == "mousedown" && !this.isDragging())
-	{
-		this.dragElement = $(e.target).closest(".ibx-draggable")[0];
-		this._mDownLoc = {"x":e.clientX, "y":e.clientY};
-	}
-	else
-	if(eType == "mouseup")
-	{
-		//if allowed let target know it was dropped on
-		if(!this.dragPrevented && this.isDragging())
-			this._dispatchDragEvent(e, "ibx_drop", this.curTarget, true, true);
-
-		//end the drag operation
-		this.endDrag("ibx_dragend", e);
-	}
-	else
-	if(eType == "mousemove" && this.dragElement)
-	{
-		var dEvent = null;
-		var dx = e.clientX - this._mDownLoc.x;
-		var dy = e.clientY - this._mDownLoc.y;
-		var isDragging = this.isDragging();
-		if(!isDragging && (Math.abs(dx) >= this.dragStartDistanceX || Math.abs(dy) >= this.dragStartDistanceY))
-		{
-			var dt = this._dataTransfer = new ibxDataTransfer();
-			dEvent = this._dispatchDragEvent(e, "ibx_dragstart", this.dragElement, true, true);
-			if(!dEvent.isDefaultPrevented())
-			{
-				//start dragging...and also set default drag image if not already set...default the offest for drag image to where dragged on 
-				if(!dt._dragImage)
+				content = this.preProcessResource(content);//precompile the content...string substitutions, etc.
+				if(content)
 				{
-					var bRect = this.dragElement.getBoundingClientRect();
-					var offsetX = bRect.left - this._mDownLoc.x;
-					var offsetY = bRect.top - this._mDownLoc.y;
-					dt.setDragImage(this.getDefaultDragImage(this.dragElement), offsetX, offsetY);
-				}
-			}
-			isDragging = true;
-			dt.dataLock = true;
-			this.dragElement.classList.add(this.dragSourceClass);
-			document.body.classList.add("ibx-dragging");
-			document.body.dataset.ibxOrigDragCursor = document.body.style.cursor;
-		}
-
-		if(isDragging)
-		{
-			//find the element under the mouse.
-			var elTarget = document.elementFromPoint(e.clientX, e.clientY);
-
-			//new drop target so reset the effect.
-			this._dataTransfer.dropEffect = "not-allowed";
-
-			//manage the current target
-			if(this.curTarget !== elTarget)
-			{
-				//spit out events for source/target
-				dEvent = this._dispatchDragEvent(e, "ibx_dragleave", this.curTarget, true);
-				dEvent = this._dispatchDragEvent(e, "ibx_dragenter", elTarget, true, true);
-
-				//reset last drag target
-				if(this.curTarget)
-				{
-					this.curTarget.classList.remove(this.dragTargetClass);
-					this.curTarget.style.cursor = this.curTarget.dataset.ibxDragTargetCursorOrig;
-					delete this.curTarget.dataset.ibxDragTargetCursorOrig;
-				}
-
-				//save new drag target
-				this.curTarget = elTarget;
-				if(this.curTarget)
-				{
-					this.curTarget.dataset.ibxDragTargetCursorOrig = this.curTarget.style.cursor;
-					this.curTarget.classList.add(this.dragTargetClass);
-				}
-			}
-
-			if(this.curTarget)
-			{
-				//send drag messages if 'ibx_dragover' was not prevented
-				dEvent = this._dispatchDragEvent(e, "ibx_drag", this.dragElement, true, true);
-				dEvent = this._dispatchDragEvent(e, "ibx_dragover", this.curTarget, true, true);
-				this.dragPrevented = !dEvent.isDefaultPrevented();
-
-				//figure out the cursor
-				var cursor = "not-allowed";
-				if(!this.dragPrevented)
-				{
-					if(this._dataTransfer.effectAllowed == "all")
-						cursor = this._dataTransfer.dropEffect;
-					else
-					if(this._dataTransfer.effectAllowed == this._dataTransfer.dropEffect)
-						cursor = this._dataTransfer.dropEffect;
-				}
-				this.curTarget.style.cursor = cursor;
-				this.curTarget.offsetHeight;
-				document.body.style.cursor = cursor;
-			}
-
-			//manage the drag image
-			if(this._dataTransfer._dragImage)
-			{
-				var dragImage = this._dataTransfer._dragImage;
-				var xOffset = (this._dataTransfer.dragXOffset == "center") ? -(dragImage.width()/2) : this._dataTransfer.dragXOffset;
-				var yOffset = (this._dataTransfer.dragYOffset == "center") ? -(dragImage.height()/2) : this._dataTransfer.dragYOffset;
-				$(this._dataTransfer._dragImage).css(
-				{
-					"left":e.clientX + xOffset + "px",
-					"top":e.clientY + yOffset + "px",
-				}).appendTo("body.ibx-root");
-			}
-		}
-	}
-};
-ibxDragDropManager._onNativeDragEvent = function(e)
-{
-	var dropTarget = $(e.target).closest(".ibx-external-drop-target")[0];
-	if(!dropTarget)
-		return;
-
-	var eType = e.type;
-	if(eType == "dragover")
-		e.preventDefault();
-	else
-	if(eType == "drop")
-	{
-		var dt = e.dataTransfer;
-		if(dt.files.length)
-		{
-			var formData = new FormData();
-			$.each(dt.files, function(idx, file)
-			{
-				formData.append(file.name, file);
-			});
-			var ajaxOptions = 
-			{
-				"method":"POST",
-				"contentType":false,
-				"processData":false,
-				"data":formData,
-				"url":"",
-				"dataTransfer":dt
-			};
-
-			if(this._dispatchDragEvent(e, "ibx_beforefilesupload", e.target, ajaxOptions).isDefaultPrevented())
-				return;
-
-			var deferred = $.ajax(ajaxOptions);
-			this._dispatchDragEvent(e, "ibx_filesuploading", e.target, deferred);
-		}
-		e.preventDefault();
-	}
-};
-
-//singleton drag/drop manager object.
-ibx.dragDropMgr = new ibxDragDropManager();
-
-
-$.widget("ibi.ibxSelectionManager", $.Widget, 
-{
-	options:
-	{
-		"multiSelect":false,
-		"escClearSelection":true,
-		"focusRoot":false,					//keep focus circular within this element
-		"focusDefault":false,				//focus the first item in root. (can be a select pattern).
-		"focusResetOnBlur":true,			//when widget loses focus, reset the current active navKey child.
-		"navKeyRoot":false,					//arrow keys will move you circularly through the items.
-		"navKeyDir":"both",					//horizontal = left/right, vertical = up/down, or both
-	
-		"focusRootClass":"ibx-focus-root",
-		"navKeyRootClass":"ibx-nav-key-root",
-		"mgrFocusedClass":"ibx-selmgr-focused",
-		"selectableClass":"ibx-sm-selectable",
-		"selectedClass":"ibx-sm-selected",
-		"focusedClass":"ibx-sm-focused",
-		"focusedIEClass":"ibx-sm-ie-pseudo-focus",
-		"anchorClass":"ibx-sm-anchor",
-	},
-	_widgetClass:"ibx-selection-manager",
-	_create:function()
-	{
-		this._super();
-		this.element[0].addEventListener("focusin", this._onFocusIn.bind(this), true);
-		this.element[0].addEventListener("focusout", this._onFocusOut.bind(this), true);
-		this.element[0].addEventListener("mousedown", this._onMouseDown.bind(this), true);
-		this.element[0].addEventListener("keydown", this._onKeyDown.bind(this), true);
-	},
-	_destroy:function()
-	{
-		this._super();
-	},
-	_onFocusIn:function(e)
-	{
-		var options = this.options;
-		var isTarget = this.element.is(e.target);
-		var isRelTarget = this.element.is(e.relatedTarget);
-		var ownsTarget = $.contains(this.element[0], e.target);
-		var ownsRelTarget = $.contains(this.element[0], e.relatedTarget);
-
-		this.focus(true);
-
-		//do the default focusing.
-		if(isTarget && (options.focusDefault !== false))
-		{
-			//take the element out of the tab order so shift+tab will work and not focus this container.
-			if(this.element.data("ibxFocDefSavedTabIndex") === undefined)
-				this.element.data("ibxFocDefSavedTabIndex", this.element.prop("tabindex")).prop("tabindex", -1);
-
-			//focus default item...otherwise find first focusable item (ARIA needs SOMETHING to be focused on the popup)
-			var selChildren = this.selectableChildren();
-			var defItem = selChildren.filter(options.focusedClass);
-			if(!defItem.length)
-			{
-				var defItem = this.element.find(options.focusDefault);
-				defItem = defItem.length ? defItem : selChildren.first();
-			}
-			defItem.focus();
-		}
-
-		//manage focus states of children
-		if(!isTarget && ownsTarget)
-		{
-			this.selectableChildren().removeClass(sformat("{1} {2}", options.focusedClass, options.focusedIEClass));
-			var selItem = $(e.target).closest(options.selectableClass);
-			selItem.addClass(options.focusedClass).toggleClass(options.focusedIEClass, ibxPlatformCheck.isIE);
-			this.element.attr("aria-active-descendant", selItem.prop("id"));
-		}
-	},
-	_onFocusOut:function(e)
-	{
-		var options = this.options;
-		var ownsRelTarget = $.contains(this.element[0], e.relatedTarget);
-		if(!ownsRelTarget)
-		{
-			//put this element back in the tab order...so that next tab into will will do auto-focus.
-			if(this.element.data("ibxFocDefSavedTabIndex") !== undefined)
-				this.element.prop("tabIndex", this.element.data("ibxFocDefSavedTabIndex")).removeData("ibxFocDefSavedTabIndex");
-			this.focus(false);
-		}
-	},
-	_onMouseDown:function(e)
-	{
-		this.focus(true);
-		var options = this.options;
-		var isTarget = this.element.is(e.target);
-		if(isTarget || (!e.shiftKey && !e.ctrlKey))
-			this.deselectAll();
-
-		var selItem = $(e.target).closest(options.selectableClass);
-		this.toggleSelected(selItem);
-	},
-	_onKeyDown:function(e)
-	{
-		var options = this.options;
-		if(options.focusRoot && e.keyCode == $.ui.keyCode.TAB)
-		{
-			var tabKids = this.selectableChildren(":ibxFocusable");
-			var target = null;
-			var firstKid = tabKids.first();
-			var lastKid = tabKids.last();
-			if(firstKid.length && lastKid.length)
-			{
-				if((firstKid.is(e.target) || $.contains(firstKid[0], e.target)) && e.shiftKey)
-					target = tabKids.last();
-				else
-				if((lastKid.is(e.target) || $.contains(lastKid[0], e.target)) && !e.shiftKey)
-					target = tabKids.first();
-			}
-
-			//target means first/last item and need to loop...or no kids, so do nothing.
-			if(target || !tabKids.length)
-			{
-				target = $(target);
-				target.focus();
-				e.preventDefault();
-				e.stopPropagation();
-			}
-		}
-		if(options.navKeyRoot)
-		{
-			var isNavActive = this.navKeyActive();
-			var navKids = this.navKeyChildren();
-			var active = $();
-			var current = navKids.filter(".ibx-nav-key-item-active");
-
-			//[IBX-83]
-			if(!isNavActive && this.element.is(e.target) && (e.data == "NAV_KEY_ACTIVATE" || eventMatchesShortcut(options.navKeyKeys.activate, e)))
-			{
-				isNavActive = true;
-				active = current.length ? current : navKids.first();
-				current = null;//[HOME-921]this allows activation to focus child, but not key events when child is already active. (think text arrow keys!)
-			}
-			else
-			if(isNavActive && !options.focusDefault && eventMatchesShortcut(options.navKeyKeys.cancel, e))//you can't escape out of a navKeyAutoFocus.
-				active = this.element;
-			else
-			if(isNavActive)
-			{
-				if(eventMatchesShortcut(options.navKeyKeys.first, e))
-					active = navKids.first();
-				else
-				if(eventMatchesShortcut(options.navKeyKeys.last, e))
-					active = navKids.last();
-		
-				if(!active.length && options.navKeyDir == "horizontal" || options.navKeyDir == "both")
-				{
-					if(eventMatchesShortcut(options.navKeyKeys.hprev, e))
+					if(fileType == "string-file")
 					{
-						var idx = navKids.index(current);
-						var prev = navKids.get(--idx)
-						active = prev ? $(prev) : navKids.last();
+						content = content.replace(/^[^{][\s|\S][^{]*/, "");//strip off any possible header (copyright, etc.)
+						content = JSON.parse(content);
+						this.addStringBundle(content, elFile.attr("default") == "true");
+						eType = "stringfileloaded";
 					}
 					else
-					if(eventMatchesShortcut(options.navKeyKeys.hnext, e))
+					if(fileType == "markup-file")
 					{
-						var idx = navKids.index(current);
-						var next = navKids.get(++idx);
-						active = next ? $(next) : navKids.first();
-					}
-				}
-
-				if(!active.length && options.navKeyDir == "vertical" || options.navKeyDir == "both")
-				{
-					if(eventMatchesShortcut(options.navKeyKeys.vprev, e))
-					{
-						var idx = navKids.index(current);
-						var prev = navKids.get(--idx);
-						active = prev ? $(prev) : navKids.last();
+						this._resBundle.find("ibx-res-bundle > markup").append($(content).find("markup-block").attr("src", src));
+						eType = "markupfileloaded";
 					}
 					else
-					if(eventMatchesShortcut(options.navKeyKeys.vnext, e))
+					if(fileType == "style-file")
 					{
-						var idx = navKids.index(current);
-						var next = navKids.get(++idx);
-						active = next ? $(next) : navKids.first();
+						var tag = $("<style type='text/css'>").attr("data-ibx-src", src).text(content);
+						$("head").append(tag);
+						eType = "cssfileinlineloaded";
 					}
+					else
+					if(fileType == "script-file")
+					{
+						if(ibx.forceInlineResLoading)
+							$("head").append($("<script type='text/javascript'>").attr("data-ibx-src", src).text(content));
+						else
+							eval.call(window, content);
+						elFile[0]._loadPromise.resolve();
+						eType = "scriptfileinlineloaded";
+					}
+					this.loadedFiles[src] = true;
+					$(window).dispatchEvent("ibx_resmgr", {"hint":eType, "loadDepth":this._loadDepth, "resMgr":this, "fileNode":elFile[0], "src":src});
 				}
-			}
-
-			if(isNavActive && !active.is(current) && active.length)
-			{
-				var evt = $(active).dispatchEvent("ibx_beforenavkeyfocus", null, true, true, current);
-				if(!evt.isDefaultPrevented())
-				{
-					active[0].focus();
-					e.preventDefault();
-					e.stopPropagation();
-				}
-			}
-		}
-	},
-	anchor:function(el)
-	{
-		var options = this.options;
-		if(el === undefined)
-			return this.selectableChildren(options.anchorClass);
-	},
-	selectableChildren:function(selector)
-	{
-		var e = this.element.dispatchEvent("ibx_selectablechildren", null, false, true);
-		var children = e.isDefaultPrevented() ? e.data : this.element.children("[tabindex]");
-		return selector ? children.filter(selector) : children;
-	},
-	selected:function(el, select)
-	{
-		var options = this.options;
-		if(select === undefined)
-			return this.selectableChildren(options.selectedClass);
-
-		if(select)
-		{
-			el = $(el).filter(sformat(":not({1})", options.selectedClass));
-			var evt = this.element.dispatchEvent("ibx_selecting", el, false, true);
-			if(!evt.isDefaultPrevented())
-			{
-				el = evt.data;
-				el.addClass(options.selectedClass);
-			}
+			}.bind(this, elFile, src, fileType));
 		}
 		else
 		{
-			el = $(el).filter(options.selectedClass);
-			var evt = this.element.dispatchEvent("ibx_deselecting", el, false, true);
-			if(!evt.isDefaultPrevented())
+			var isStyle = (fileType == "style-file");
+			if(isStyle)
 			{
-				el = evt.data;
-				el.removeClass(options.selectedClass);
-			}
-		}
-		this.element.dispatchEvent("ibx_selchange", el, false, false);
-	},
-	isSelected:function(el){return $(el).hasClass(this.options.selectedClass)},
-	toggleSelected:function(el, selected)
-	{
-		selected = (selected === undefined) ? !this.isSelected(el) : selected;
-		this.selected(el, selected);
-	},
-	selectAll:function(selector)
-	{
-		this.selected(this.selectableChildren(), true);
-	},
-	deselectAll:function()
-	{
-		this.selected(this.selected(), false);
-	},
-	focus:function(focus)
-	{
-		if(this._focus != focus)
-		{
-			var options = this.options;
-			var selChildren = this.selectableChildren();
-			if(focus)
-			{
-				selChildren.addClass(options.selectableClass);
-				this.element.addClass(options.mgrFocusedClass);
+				var el = document.createElement("link");
+				el.type = "text/css";
+				el.rel = "stylesheet";
+				el.href = src;
 			}
 			else
 			{
-				var classes = sformat("{1} {2} {3}", options.selectableClass, options.focusedIEClass, (this.options.focusResetOnBlur) ? options.focusedClass : "");
-				selChildren.removeClass(classes);
-				this.element.removeClass(options.mgrFocusedClass);
+				var el = document.createElement("script");
+				el.type = "text/javascript";
+				el.async = false;
+				el.src = src;
+				el._loadPromise = elFile[0]._loadPromise;
+				el.addEventListener("load", function(e)
+				{
+					e.target._loadPromise.resolve();
+				});
 			}
-			this._focus = focus
+			$("head")[0].appendChild(el);
+			this.loadedFiles[src] = true;
+			$(window).dispatchEvent("ibx_resmgr", {"hint":isStyle ? "cssfileloaded" : "scriptfileloaded", "loadDepth":this._loadDepth, "resMgr":this, "fileNode":elFile[0], "src":src});
 		}
-	},
-	_refresh:function()
+	}.bind(this));
+	return elFile;
+};
+
+//if something bad happens while retrieving a source file in the bundle.
+_p._resFileRetrievalError = function(src, xhr, status, msg)
+{
+	$(window).dispatchEvent("ibx_resmgr", {"hint":"fileloaderror", "loadDepth":this._loadDepth, "resMgr":this, "bundle":null, "src":src, "xhr":xhr, "status":status, "msg":msg});
+};
+
+_p.getResPath = function(src, loadContext)
+{
+	var loadContext = loadContext || this.getContextPath();
+	if(loadContext == "bundle")
+		loadContext = this._bundlePath;
+	else
+	if(loadContext == "app")
+		loadContext = ibx.getAppPath();
+	else
+	if(loadContext == "ibx")
+		loadContext = ibx.getPath();
+
+	//give interested parties the ability to modify the resource uri
+	evt = $(window).dispatchEvent("ibx_resmgr_resolveuri", {"resourceMgr":this, "uri":src, "loadCtx":loadContext}, true, false);
+	var src = evt.data.uri;
+	if(!(/^[/\\]/).test(src))
+		src = loadContext + src;
+	return src;
+};
+
+//load the actual resource bundle here...can be called directly, or from an xhr load (promise/deferred fullfilled/done)
+_p._loadDepth = 0;
+_p.loadBundle = function(xResDoc)
+{
+	var head = $("head");
+	var bundle = $(xResDoc).find("ibx-res-bundle").first();
+
+	//switch the path for loading dependent files using this bundles's path.
+	this._bundlePath = xResDoc.path;
+
+	//make sure we have a promise to resolve when loaded
+	xResDoc.resLoaded = xResDoc.resLoaded || $.Deferred();
+
+	//let the loading begin!
+	$(window).dispatchEvent("ibx_resmgr", {"hint":"bundleloading", "loadDepth":this._loadDepth, "resMgr":this, "bundle":bundle[0], src:xResDoc.path});
+
+	//First load the dependency Resource Bundles...this will chain to any depth
+	var files = [];
+	bundle.find("ibx-res-bundle").each(function(idx, el)
 	{
-		this._super();
-		var options = this.options;
-		this.element.toggleClass("ibx-focus-root", options.focusRoot);
-		this.element.toggleClass("ibx-nav-key-root", options.navKeyRoot);
+		el = $(el);
+		files.push({"src":el.attr("src"), "loadContext":el.closest("[loadContext]").attr("loadContext")});
+	});
+
+	this._bundlePath = xResDoc.path;
+
+	this.addBundles(files).done(function(curBundlePath, xResDoc, head, bundle)
+	{
+		++this._loadDepth;
+
+		//now that dependent bundles are loaded, set back the correct path to this bundle.
+		this._bundlePath = curBundlePath;
+
+		//load strings
+		this.loadExternalResFile(bundle.find("string-file"));
+		var stringBundles = bundle.find("string-bundle");
+		stringBundles.each(function(idx, stringBundle)
+		{
+			stringBundle = $(stringBundle);
+			var content = stringBundle.text().trim();
+			if(content)
+			{
+				content = this.preProcessResource(content);//precompile the content...string substitutions, etc.
+				var strBundle = JSON.parse(content);
+				this.addStringBundle(strBundle);
+				$(window).dispatchEvent("ibx_resmgr", {"hint":"stringinlineloaded", "loadDepth":this._loadDepth, "resMgr":this, "bundle":bundle[0]});
+			}
+		}.bind(this));
+
+		//load css
+		this.loadExternalResFile(bundle.find("style-file"));
+		styleBlocks = bundle.find("style-sheet").each(function(idx, styleBlock)
+		{
+			styleBlock = $(styleBlock);
+			var content = styleBlock.text().trim();
+			if(content)
+			{
+				var src = styleBlock.attr("src") || "inline";
+				content = this.preProcessResource(content);//precompile the content...string substitutions, etc.
+				var styleNode = $("<style type='text/css'>").attr("data-ibx-src", src).text(content);
+				head.append(styleNode);
+				$(window).dispatchEvent("ibx_resmgr", {"hint":"cssinlineloaded", "loadDepth":this._loadDepth, "resMgr":this, "bundle":bundle[0]});
+			}
+		}.bind(this));
+
+		//load markup
+		this.loadExternalResFile(bundle.find("markup-file"));
+		var markupBlocks = bundle.find("markup-block");
+		markupBlocks.each(function(idx, markup)
+		{
+			this._resBundle.find("ibx-res-bundle > markup").first().append($(markup).clone());
+			$(window).dispatchEvent("ibx_resmgr", {"hint":"markupinlineloaded", "loadDepth":this._loadDepth, "resMgr":this, "bundle":bundle[0]});
+		}.bind(this));
+
+		//load scripts...they will be loaded asynchronously, but processed synchronously...so we have to make sure all
+		//scripts are loaded before we continue with the blocks and subsequent resources.
+		window.scriptPromises = [];
+		var scripts = bundle.find("script-file").each(function(idx, el)
+		{
+			var dfd = new $.Deferred();
+			el._loadPromise = dfd;
+			scriptPromises.push(dfd);
+		}.bind(this));
+		this.loadExternalResFile(scripts);
+		$.when.apply($, scriptPromises).then(function()
+		{
+			var scriptBlocks = bundle.find("script-block");
+			scriptBlocks.each(function(idx, scriptBlock)
+			{
+				scriptBlock = $(scriptBlock);
+				var content = scriptBlock.text().trim();
+				if(content)
+				{
+					var src = scriptBlock.attr("src") || "inline";
+					var script = $("<script type='text/javascript'>").attr("data-ibx-src", src);
+					content = this.preProcessResource(content);//precompile the content...string substitutions, etc.
+					script.text(content);
+					head.append(script);
+					$(window).dispatchEvent("ibx_resmgr", {"hint":"scriptinlineloaded", "loadDepth":this._loadDepth, "resMgr":this, "bundle":bundle[0]});
+				}
+			}.bind(this));
+
+			//now load all forward reference Resource Bundles (packages) that this bundle wants to load.
+			var files = [];
+			bundle.find("ibx-package").each(function(idx, el){el = $(el);files.push({"src":$(el).attr("src"), "loadContext":el.closest("[loadContext]").attr("loadContext")});});
+			this.addBundles(files).done(function()
+			{
+				//save that this bundles has been loaded.
+				if(xResDoc.src)
+					this.loadedBundles[xResDoc.src] = xResDoc.resLoaded;
+			
+				--this._loadDepth;
+
+				//give the main thread a chance to render what's been loaded before resolving the promise
+				window.setTimeout(function(bundle)
+				{
+					$(window).dispatchEvent("ibx_resmgr", {"hint":"bundleloaded", "loadDepth":this._loadDepth, "resMgr":this, "bundle":bundle[0]});
+					--this._loadDepth;
+					xResDoc.resLoaded.resolve(bundle, this);
+				}.bind(this, bundle), 0);
+			}.bind(this, xResDoc, head, bundle));
+
+		}.bind(this, bundle));
+
+	}.bind(this, this._bundlePath, xResDoc, head, bundle));
+	return xResDoc.resLoaded;
+};
+
+_p.getResource = function(selector, ibxBind, forceCreate)
+{
+	//first, has the resource been loaded...and do we want it, or create a new instance
+	forceCreate = (forceCreate === undefined) ? true : forceCreate;
+	var resource = $(selector);
+	if(forceCreate || !resource.length)
+		resource = this._resBundle.find(selector);
+
+	if(!resource.length)
+		throw(sformat("ibx.resourceMgr failed to find resource: {1}", selector));
+
+	//get the xml out of the resource bundle as a string (essentially making a clone/copy)
+	var markup = "";
+	resource.each(function(idx, res)
+	{
+		markup += (new XMLSerializer()).serializeToString(res);
+		markup = this.preProcessResource(markup);
+	}.bind(this));
+	if(!markup.length)
+		throw(sformat("ibx.resourceMgr failed to load resource: {1}", selector));
+	markup = $(markup);
+
+	//replace the data-ibx-resource placeholders with the actual resources.
+	this.processPlaceholders(markup.find("[data-ibx-resource]"));
+
+	//will autobind if element is an ibx type thing, and user didn't explicitly say NO!
+	ibxBind = ((markup.is("[data-ibx-type]") || markup.find("[data-ibx-type]").length) && (typeof(ibxBind) === "undefined")) ? true : ibxBind;
+	if(ibxBind)
+	{
+		var bindingDiv =  $("<div class='ibx-resource-manager-binding-div' style='display:none'></div>").append(markup).appendTo("body");
+		ibx.bindElements(markup);
+		markup.detach();
+		bindingDiv.detach();
 	}
-});
-//# sourceURL=events.ibx.js
+	return markup;
+};
+
+_p.processPlaceholders = function(resource)
+{
+	resource.each(function(idx, el)
+	{
+		el = $(el);
+		var resId = el.attr("data-ibx-resource");
+		var res = ibx.resourceMgr.getResource(resId, false, true).addClass(el.prop("className"));
+		el.replaceWith(res);
+	}.bind(this));
+	return resource;
+};
+
+_p.preProcessResource = function(resource, language)
+{
+	language = language || this.language;
+	
+	var strInfo = [];
+	var regEx = /@ibxString\w*\((.[^\)]*)\)/gi;
+	while(match = regEx.exec(resource))
+	{
+		var symbol = unescapeXmlString(match[1]).replace(/ |\"|\'/g, "").split(",");//remove any existing quotes and split parms into array.
+		symbol = sformat("\"{1}\"", symbol.join("\",\""));//recombine parms with quotes.
+		var str = eval("(this.getString(" + symbol + "))");//get the string.
+		if(match[0].search("@ibxStringXml") == 0)
+			str = escapeXmlString(str);
+		else
+		if(match[0].search("@ibxStringJson") == 0)
+		{
+			//[IBX-46]Have to escape the quotes so when turned back into a string JSON will parse correctly.
+
+			str = JSON.stringify(str).slice(1,-1); // escape string and then remove leading and trainling double quotes that stringify adds
+			str = str.replace(/'/g, "\\'"); // escape single quotes as it's not done by stringify
+			str = escapeXmlString(str);
+		}
+		strInfo.push({"match":match, "string":str});
+	}
+
+	$(strInfo).each(function(idx, info)
+	{
+		resource = resource.replace(info.match[0], info.string);
+	}.bind(this));
+
+	return resource;
+};
+
+
+/******************************************************************************
+ibxResourceCompiler - used to package ibx application into single html file.
+******************************************************************************/
+function ibxResourceCompiler(ctxPath, bootable)
+{
+	ibxResourceManager.call(this);
+	this._resBundle = $($.get({"url":this._contextPath + "./ibx_compiler_bundle.xml", "async":false, "dataType":"xml"}).responseXML);
+	this._bootable = bootable
+	var bootRes = this._resBundle.find("ibx-boot-resources").detach();
+	if(bootable)
+	{
+		bootRes.find("ibx-boot-files").children().each(function(idx, file)
+		{
+			var filePath = file.getAttribute("src");
+			var xhr = $.get({"url":this._contextPath + file.getAttribute("src"), "async":false, "dataType":"text"});
+			if(file.nodeName == "style-file")
+			{
+				var fileBlock = this._makeResBlock("style-sheet", filePath, xhr.responseText).attr("data-boot-file", true);
+				this._resBundle.find("styles").append(fileBlock);
+			}
+			else
+			if(file.nodeName == "script-file")
+			{
+				var isIbx = (filePath.search("/ibx.js") != -1);
+				var content = xhr.responseText;
+				if(isIbx)
+					content += "\nibx._preCompiled = true;\n";
+				fileBlock = this._makeResBlock("script-block", filePath, content).attr("data-boot-file", true);
+				this._resBundle.find("scripts").append(fileBlock);
+			}
+		}.bind(this));
+
+		this.loadBundle(($.get({"url":this._contextPath + "./ibx_resource_bundle.xml", "async":false, "dataType":"xml"}).responseXML));
+	}
+}
+var _p = ibxResourceCompiler.prototype = new ibxResourceManager();
+
+_p._bootable = false;
+_p.bootable = function(){return this._bootable;};
+
+_p._makeResBlock = function(type, src, content)
+{
+	var block = sformat("<{1} src='{2}'>\n<![CDATA[\nBLOCK-CONTENT-HERE\n\]\]\>\n</{1}>", type, src);
+	block = block.replace("BLOCK-CONTENT-HERE", content);
+	return $(block, this._resBundle);
+};
+
+_p.getBundle = function()
+{
+	return this._resBundle[0];
+};
+_p.getBundleAsString = function()
+{
+	var bundle = this.getBundle();
+	var serializer = new XMLSerializer();
+	return serializer.serializeToString(bundle);
+};
+
+_p.linkBundle = function(outDoc)
+{
+	outDoc = $(outDoc);
+
+
+	var bootFiles = this._resBundle.find("[data-boot-file]").detach();
+	var bootScript = $(sformat("<script type='text/javascript'>")).text(bootFiles.not("style-sheet").text());
+	var bootStyle = $(sformat("<style type='text/css'>")).text(bootFiles.not("script-block").text());
+	var bundle = sformat("<sc" + "ript class='ibx-precompiled-res-bundle' type='text/xml'>{1}</sc" +"ript>", this.getBundleAsString());
+	var head = outDoc.find("head");
+	var firstStyle = outDoc.find("style");
+	var firstScript = outDoc.find("script");
+	
+	if(firstStyle.length)
+		firstStyle.before(bootStyle);
+	else
+		head.append(bootStyle);
+
+	if(firstScript.length)
+	{
+		firstScript.before(bundle);
+		if(this._bootable)
+			firstScript.before(bootScript);
+	}
+	else
+	{
+		head.append(bundle);
+		if(this._bootable)
+			head.append(bootScript);
+	}
+	var body = outDoc.find("body");
+	return outDoc[0];
+};
+
+_p.addStringBundle = function(strBundle)
+{
+	var section = this._resBundle.find("strings");
+	var strings = this._makeResBlock("string-bundle", "inline", JSON.stringify(strBundle));
+	section.append(strings);
+}
+
+_p.loadExternalResFile = function(elFile)
+{
+	$(elFile).each(function(idx, file)
+	{
+		var file = $(file);
+		var type = file.prop("nodeName");
+		var src = this.getResPath(file.attr("src"), file.closest("[loadContext]").attr("loadContext"));
+		var xhr = $.get({"url": src, "async":false, "dataType":"text"});
+		var content = xhr.responseText;
+
+		//do not compile into internal resource bundle.
+		if(file.attr("nocompile") == "true")
+			return;
+
+		if(type == "string-file")
+		{	
+			var block = this._makeResBlock("string-bundle", src, content);
+			this._resBundle.find("strings").append(block);
+		}
+		else
+		if(type == "style-file")
+		{
+			var block = this._makeResBlock("style-sheet", src, content);
+			this._resBundle.find("styles").append(block);
+		}
+		else
+		if(type == "markup-file")
+		{
+			var block = this._makeResBlock("markup-block", src, content);
+			this._resBundle.find("markup").append(block);
+		}
+		else
+		if(type == "script-file")
+		{
+			var block = this._makeResBlock("script-block", src, content);
+			this._resBundle.find("scripts").append(block);
+		}
+	}.bind(this));
+}
+
+//# sourceURL=resources.ibx.js

@@ -69,26 +69,29 @@ _p.addStringBundle = function(bundle, defLang)
 };
 
 //daisy chain the loading of the bundles so their dependencies are honored.
-_p.addBundles = function(bundles, allLoaded)
+_p.addBundles = function(bundles)
 {
+	if(!bundles._allLoaded)
+		bundles._allLoaded = allLoaded || $.Deferred();
+
 	var allLoaded = allLoaded || $.Deferred();
 	if(bundles.length)
 	{
 		var bundleInfo = bundles.shift();
 		if(bundleInfo instanceof XMLDocument)
-			this.loadBundle(bundleInfo).done(this.addBundles.bind(this, bundles, allLoaded));
+			this.loadBundle(bundleInfo).done(this.addBundles.bind(this, bundles));
 		else
 		{
 			bundleInfo = (typeof(bundleInfo) == "string") ? {"src":bundleInfo, "loadContext":""} : bundleInfo;
-			this.addBundle(bundleInfo.src, bundleInfo.loadContext).done(function(bundles, allLoaded)
+			this.addBundle(bundleInfo.src, bundleInfo.loadContext).done(function(bundles)
 			{
-				this.addBundles(bundles, allLoaded);
-			}.bind(this, bundles, allLoaded));
+				this.addBundles(bundles);
+			}.bind(this, bundles));
 		}
 	}
 	else
-		allLoaded.resolve();
-	return allLoaded;
+		bundles._allLoaded.resolve(this);
+	return bundles._allLoaded;
 };
 
 //can pass a string or jQuery.ajax settings object.
@@ -104,6 +107,8 @@ _p.addBundle = function(ajaxSettings, loadContext, data)
 
 	//...no, so let's get loadin'!
 	var resLoaded = $.Deferred();
+	resLoaded.src = ajaxSettings.url;
+
 	var xhr = $.get(ajaxSettings, data);
 	xhr.resLoaded = resLoaded;
 	xhr.src = ajaxSettings.url;
@@ -579,9 +584,6 @@ _p.loadExternalResFile = function(elFile)
 		var content = xhr.responseText;
 
 		//do not compile into internal resource bundle.
-		if(file.attr("nocompile") == "true")
-			return;
-
 		if(type == "string-file")
 		{	
 			var block = this._makeResBlock("string-bundle", src, content);
@@ -605,6 +607,11 @@ _p.loadExternalResFile = function(elFile)
 			var block = this._makeResBlock("script-block", src, content);
 			this._resBundle.find("scripts").append(block);
 		}
+
+		//resolve the promise for this file.
+		if(file[0]._loadPromise)
+			file[0]._loadPromise.resolve();			
+
 	}.bind(this));
 }
 
