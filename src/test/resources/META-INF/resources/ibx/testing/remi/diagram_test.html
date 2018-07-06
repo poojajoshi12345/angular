@@ -89,8 +89,8 @@
 				});
 
 				canvas.addConnection({
-					from: {node: 0, anchor: 'left'},
-					to: {node: n2, anchor: 'right'}
+					from: {node: 0, anchor: 'right', tip: {shape: 'arrow-hollow', size: 8}},
+					to: {node: n2, anchor: 'left'}
 				});
 
 				canvas.addConnection({
@@ -159,10 +159,10 @@
 
 			.anchor-right {
 				position: absolute;
-				left: 95px;
-				top: 45px;
-				width: 10px;
-				height: 10px;
+				left: 85px;
+				top: 35px;
+				width: 30px;
+				height: 30px;
 			}
 
 			.btn {

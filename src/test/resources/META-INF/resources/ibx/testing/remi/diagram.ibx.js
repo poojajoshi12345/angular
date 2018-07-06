@@ -18,8 +18,27 @@ $.widget('ibi.ibxDiagram', $.ibi.ibxWidget, {
 		canvas._super();
 		canvas._children = [];
 		canvas._connections = [];
-		canvas.children().each(function(idx, node) {
-			canvas.addNode(node);
+		canvas.children().each(function(idx, domNode) {
+			var node = canvas.addNode(domNode);
+			$(domNode).children().each(function(idx, anchor) {
+				var position;
+				var anchorX = anchor.offsetWidth / 2, anchorY = anchor.offsetHeight / 2;
+				var w = node.options.width, h = node.options.height;
+				if (Math.abs(w - anchor.offsetLeft - anchorX) < 5) {
+					position = 'right';
+				} else if (Math.abs(anchor.offsetTop + anchorY) < 5) {
+					position = 'top';
+				} else if (Math.abs(h - anchor.offsetTop - anchorY) < 5) {
+					position = 'bottom';
+				} else {
+					position = 'left';
+				}
+				node.options.anchors[position] = {
+					width: anchor.clientWidth,
+					height: anchor.clientHeight,
+					className: anchor.getAttribute('class')
+				};
+			});
 		});
 		var w = canvas.element[0].clientWidth;
 		var h = canvas.element[0].clientHeight;
@@ -140,7 +159,7 @@ $.widget('ibi.ibxDiagram', $.ibi.ibxWidget, {
 			nodeEl.addClass(classList.join(' '));
 		}
 		canvas.refresh();
-		return nodeEl;
+		return node;
 	},
 	removeNode: function(node) {
 		node = this.convertToNode(node);
@@ -288,7 +307,7 @@ $.widget('ibi.ibxDiagramNode', $.ibi.ibxWidget, {
 		width: null,
 		height: null,
 		text: '',
-		anchors: [],
+		anchors: {},
 		selectable: true,  // If true, node can be clicked on to select it
 		moveable: true,    // If true, node cannot be dragged or moved around
 		deletable: true,   // If true, selecting this node then hitting the 'delete' key will delete the node
@@ -303,10 +322,10 @@ $.widget('ibi.ibxDiagramNode', $.ibi.ibxWidget, {
 			this.element.html(this.options.text);
 		}
 		if (this.options.anchors) {
-			this.addAnchor('top', this.options.anchors.top);
-			this.addAnchor('right', this.options.anchors.right);
-			this.addAnchor('bottom', this.options.anchors.bottom);
-			this.addAnchor('left', this.options.anchors.left);
+			this.addAnchorDOM('top', this.options.anchors.top);
+			this.addAnchorDOM('right', this.options.anchors.right);
+			this.addAnchorDOM('bottom', this.options.anchors.bottom);
+			this.addAnchorDOM('left', this.options.anchors.left);
 		}
 	},
 	_destroy: function() {
@@ -447,7 +466,7 @@ $.widget('ibi.ibxDiagramNode', $.ibi.ibxWidget, {
 			customClassList: classList
 		};
 	},
-	addAnchor: function(position, anchor) {
+	addAnchorDOM: function(position, anchor) {
 		if (!anchor || !anchor.width || !anchor.height) {
 			return;
 		}
