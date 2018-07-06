@@ -20,7 +20,9 @@ $.widget('ibi.ibxDiagram', $.ibi.ibxWidget, {
 		canvas._children = [];
 		canvas._connections = [];
 		canvas.children().each(function(idx, domNode) {
-			canvas.addDOMChild(domNode);
+			if ($(domNode).ibxDiagramNode('instance')) {  // Add any ibxDiagramNodes child nodes to this canvas
+				canvas.addDOMChild(domNode);
+			}
 		});
 		var w = element[0].clientWidth;
 		var h = element[0].clientHeight;
@@ -34,7 +36,12 @@ $.widget('ibi.ibxDiagram', $.ibi.ibxWidget, {
 			var id = e.originalEvent.dataTransfer.getData('text');
 			var domNode = document.getElementById(id);
 			if (domNode) {
-				var node = canvas.addDOMChild(domNode.cloneNode(true));
+				domNode = domNode.cloneNode(true);
+				var element = $(domNode);
+				if (element.ibxDiagramNode('instance') == null) {
+					element.ibxDiagramNode(element);  // If node is not yet an ibxDiagramNode, make it one
+				}
+				var node = canvas.addDOMChild(domNode);
 				node.options.left = Math.max(0, e.offsetX - (domNode.clientWidth / 2));
 				node.options.top = Math.max(0, e.offsetY - (domNode.clientHeight / 2));
 				node.refresh();
@@ -133,9 +140,6 @@ $.widget('ibi.ibxDiagram', $.ibi.ibxWidget, {
 		} else if (!(node instanceof jQuery)) {
 			node = $('<div>').ibxDiagramNode(node);  // Assume 'node' is an ibxDiagramNode options object like {left, right, className, ...}.  Create a DOM node for it.
 		}
-		if (node.ibxDiagramNode('instance') == null) {  // If node is not yet an ibxDiagramNode, make it one
-			node = node.ibxDiagramNode(node);
-		}
 		return node.ibxDiagramNode('instance');
 	},
 	addDOMChild: function(domNode) {
@@ -166,6 +170,9 @@ $.widget('ibi.ibxDiagram', $.ibi.ibxWidget, {
 		var canvas = this;
 		var classList = node.customClassList;
 		node = canvas.convertToNode(node);
+		if (!node) {
+			return null;
+		}
 		var nodeEl = node.element;
 
 		canvas._children.push(node);
