@@ -87,11 +87,7 @@ _p.addBundles = function(bundles, allLoaded)
 		}
 	}
 	else
-	{
-		if(allLoaded === window.temp)
-			debugger;
 		allLoaded.resolve();
-	}
 	return allLoaded;
 };
 
