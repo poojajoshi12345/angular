@@ -15,35 +15,31 @@ $.widget('ibi.ibxDiagram', $.ibi.ibxWidget, {
 	},
 	_create: function() {
 		var canvas = this;
+		var element = canvas.element;
 		canvas._super();
 		canvas._children = [];
 		canvas._connections = [];
 		canvas.children().each(function(idx, domNode) {
-			var node = canvas.addNode(domNode);
-			$(domNode).children().each(function(idx, anchor) {
-				var position;
-				var anchorX = anchor.offsetWidth / 2, anchorY = anchor.offsetHeight / 2;
-				var w = node.options.width, h = node.options.height;
-				if (Math.abs(w - anchor.offsetLeft - anchorX) < 5) {
-					position = 'right';
-				} else if (Math.abs(anchor.offsetTop + anchorY) < 5) {
-					position = 'top';
-				} else if (Math.abs(h - anchor.offsetTop - anchorY) < 5) {
-					position = 'bottom';
-				} else {
-					position = 'left';
-				}
-				node.options.anchors[position] = {
-					width: anchor.clientWidth,
-					height: anchor.clientHeight,
-					className: anchor.getAttribute('class')
-				};
-			});
+			canvas.addDOMChild(domNode);
 		});
-		var w = canvas.element[0].clientWidth;
-		var h = canvas.element[0].clientHeight;
+		var w = element[0].clientWidth;
+		var h = element[0].clientHeight;
 		canvas._canvas = $('<svg xmlns="http://www.w3.org/2000/svg" class="ibx-diagram-canvas" width="' + w + '" height="' + h + '"></svg>');
-		canvas.element.append(canvas._canvas);
+		element.append(canvas._canvas);
+
+		element.on('dragover', false);
+		element.on('drop', function(e) {
+			e.preventDefault();
+			e.stopPropagation();
+			var id = e.originalEvent.dataTransfer.getData('text');
+			var domNode = document.getElementById(id);
+			if (domNode) {
+				var node = canvas.addDOMChild(domNode.cloneNode(true));
+				node.options.left = Math.max(0, e.offsetX - (domNode.clientWidth / 2));
+				node.options.top = Math.max(0, e.offsetY - (domNode.clientHeight / 2));
+				node.refresh();
+			}
+		});
 	},
 	_destroy: function() {
 		this._super();
@@ -52,8 +48,8 @@ $.widget('ibi.ibxDiagram', $.ibi.ibxWidget, {
 		var canvas = this;
 		canvas._super();
 		// TODO: marquee selection box can fall outside canvas
-		this.element.selectable({
-			tolerance: this.options.selectMode,
+		canvas.element.selectable({
+			tolerance: canvas.options.selectMode,
 			filter: '.ibx-selectable',
 			selected: function(e, ui) {
 				var node = canvas.convertToNode(ui.selected);
@@ -82,8 +78,9 @@ $.widget('ibi.ibxDiagram', $.ibi.ibxWidget, {
 		canvas.updateConnections();
 	},
 	clear: function() {
-		while (this._children.length) {
-			this.removeNode(this._children[0]);
+		var canvas = this;
+		while (canvas._children.length) {
+			canvas.removeNode(canvas._children[0]);
 		}
 	},
 	loadFromJSON: function(json) {
@@ -140,6 +137,30 @@ $.widget('ibi.ibxDiagram', $.ibi.ibxWidget, {
 			node = node.ibxDiagramNode(node);
 		}
 		return node.ibxDiagramNode('instance');
+	},
+	addDOMChild: function(domNode) {
+		var canvas = this;
+		var node = canvas.addNode(domNode);
+		$(domNode).children().each(function(idx, anchor) {
+			var position;
+			var anchorX = anchor.offsetWidth / 2, anchorY = anchor.offsetHeight / 2;
+			var w = node.options.width, h = node.options.height;
+			if (Math.abs(w - anchor.offsetLeft - anchorX) < 5) {
+				position = 'right';
+			} else if (Math.abs(anchor.offsetTop + anchorY) < 5) {
+				position = 'top';
+			} else if (Math.abs(h - anchor.offsetTop - anchorY) < 5) {
+				position = 'bottom';
+			} else {
+				position = 'left';
+			}
+			node.options.anchors[position] = {
+				width: anchor.clientWidth,
+				height: anchor.clientHeight,
+				className: anchor.getAttribute('class')
+			};
+		});
+		return node;
 	},
 	addNode: function(node) {
 		var canvas = this;
