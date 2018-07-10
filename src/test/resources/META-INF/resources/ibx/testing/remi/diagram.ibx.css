@@ -26,6 +26,10 @@
 	stroke-width: 1px;
 }
 
+.ibx-diagram-annotation {
+	position: absolute;
+}
+
 .ui-selecting, .ui-selected {
 	border: 1px solid #8787e4 !important;
 }

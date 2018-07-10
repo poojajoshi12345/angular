@@ -21,7 +21,7 @@ $.widget('ibi.ibxDiagram', $.ibi.ibxWidget, {
 		canvas._connections = [];
 		canvas.children().each(function(idx, domNode) {
 			if ($(domNode).ibxDiagramNode('instance')) {  // Add any ibxDiagramNodes child nodes to this canvas
-				canvas.addDOMChild(domNode);
+				canvas.addNode(domNode);
 			}
 		});
 		var w = element[0].clientWidth;
@@ -41,7 +41,7 @@ $.widget('ibi.ibxDiagram', $.ibi.ibxWidget, {
 				if (element.ibxDiagramNode('instance') == null) {
 					element.ibxDiagramNode(element);  // If node is not yet an ibxDiagramNode, make it one
 				}
-				var node = canvas.addDOMChild(domNode);
+				var node = canvas.addNode(domNode);
 				node.options.left = Math.max(0, e.offsetX - (domNode.clientWidth / 2));
 				node.options.top = Math.max(0, e.offsetY - (domNode.clientHeight / 2));
 				node.refresh();
@@ -131,7 +131,7 @@ $.widget('ibi.ibxDiagram', $.ibi.ibxWidget, {
 		};
 	},
 	convertToNode: function(node) {  // Convert any variation of a 'node' into an ibxDiagramNode instance
-		if (node && node.widgetName && node.widgetName === 'ibxDiagramNode') {
+		if (node && node.widgetName === 'ibxDiagramNode') {
 			return node;  // Node is already an ibxDiagramNode
 		} else if (typeof node === 'number') {
 			return this._children[node];  // Assume node is an entry in the list of children nodes
@@ -141,30 +141,6 @@ $.widget('ibi.ibxDiagram', $.ibi.ibxWidget, {
 			node = $('<div>').ibxDiagramNode(node);  // Assume 'node' is an ibxDiagramNode options object like {left, right, className, ...}.  Create a DOM node for it.
 		}
 		return node.ibxDiagramNode('instance');
-	},
-	addDOMChild: function(domNode) {
-		var canvas = this;
-		var node = canvas.addNode(domNode);
-		$(domNode).children().each(function(idx, anchor) {
-			var position;
-			var anchorX = anchor.offsetWidth / 2, anchorY = anchor.offsetHeight / 2;
-			var w = node.options.width, h = node.options.height;
-			if (Math.abs(w - anchor.offsetLeft - anchorX) < 5) {
-				position = 'right';
-			} else if (Math.abs(anchor.offsetTop + anchorY) < 5) {
-				position = 'top';
-			} else if (Math.abs(h - anchor.offsetTop - anchorY) < 5) {
-				position = 'bottom';
-			} else {
-				position = 'left';
-			}
-			node.options.anchors[position] = {
-				width: anchor.clientWidth,
-				height: anchor.clientHeight,
-				className: anchor.getAttribute('class')
-			};
-		});
-		return node;
 	},
 	addNode: function(node) {
 		var canvas = this;
@@ -335,7 +311,7 @@ $.widget('ibi.ibxDiagramNode', $.ibi.ibxWidget, {
 		width: null,
 		height: null,
 		text: '',
-		anchors: {},
+		annotations: [],
 		selectable: true,  // If true, node can be clicked on to select it
 		moveable: true,    // If true, node cannot be dragged or moved around
 		deletable: true,   // If true, selecting this node then hitting the 'delete' key will delete the node
@@ -348,12 +324,6 @@ $.widget('ibi.ibxDiagramNode', $.ibi.ibxWidget, {
 		}
 		if (this.options.text) {
 			this.element.html(this.options.text);
-		}
-		if (this.options.anchors) {
-			this.addAnchorDOM('top', this.options.anchors.top);
-			this.addAnchorDOM('right', this.options.anchors.right);
-			this.addAnchorDOM('bottom', this.options.anchors.bottom);
-			this.addAnchorDOM('left', this.options.anchors.left);
 		}
 	},
 	_destroy: function() {
@@ -458,6 +428,39 @@ $.widget('ibi.ibxDiagramNode', $.ibi.ibxWidget, {
 			options.width = box.width;
 			options.height = box.height;
 		}
+		this.children().each((function(idx, domNode) {
+			var annotation = this.addAnnotation(domNode);
+			if (annotation) {
+				this.options.annotations.push(annotation);
+			}
+		}).bind(this));
+
+		if (this.options.annotations.length) {
+			this.options.annotations = this.options.annotations.map((function(annotation) {
+				if (annotation && annotation.widgetName === 'ibxDiagramAnnotation') {
+					return annotation;  // Node is already an ibxDiagramAnnotation
+				}
+				var classList = annotation.customClassList;
+				annotation = $('<div>').ibxDiagramAnnotation(annotation);  // Assume 'annotation' is an ibxDiagramNode options object like {left, right, className, ...}.  Create a DOM node for it.
+				annotation = this.addAnnotation(annotation);
+
+				if (classList) {
+					annotation.element.addClass(classList.join(' '));
+				}
+				return annotation;
+			}).bind(this));
+		}
+	},
+	addAnnotation: function(annotation) {
+		annotation = $(annotation).ibxDiagramAnnotation('instance');
+		if (annotation) {
+			annotation.parent = this;
+			if (annotation.element[0].parentElement !== this.element[0]) {
+				this.element.append(annotation.element);
+			}
+			annotation.init();
+		}
+		return annotation;
 	},
 	updatePosition: function() {
 		var el = this.element[0];
@@ -478,8 +481,11 @@ $.widget('ibi.ibxDiagramNode', $.ibi.ibxWidget, {
 	saveToJSON: function() {
 		var options = this.options;
 		var el = this.element[0];
-		var classList = this.element[0].className.split(/\s+/).filter(function(el) {
+		var classList = el.className.split(/\s+/).filter(function(el) {
 			return el.substr(0, 3).toLowerCase() !== 'ibx';
+		});
+		var annotations = options.annotations.map(function(a) {
+			return a.saveToJSON();
 		});
 		return {  // Must set each property individually; 'this.options' has a lot more than just this base component's options in it
 			left: options.left,
@@ -487,52 +493,105 @@ $.widget('ibi.ibxDiagramNode', $.ibi.ibxWidget, {
 			width: options.width,
 			height: options.height,
 			text: options.text || el.innerText || '',
-			anchors: clone(options.anchors),
+			annotations: annotations,
 			selectable: options.selectable,
 			moveable: options.moveable,
 			deletable: options.deletable,
 			customClassList: classList
 		};
 	},
-	addAnchorDOM: function(position, anchor) {
-		if (!anchor || !anchor.width || !anchor.height) {
-			return;
-		}
-		var div = $('<div>');
-		div.css({width: anchor.width, height: anchor.height, position: 'absolute'});
-		if (anchor.className) {
-			div.addClass(anchor.className);
-		}
-		var left, top;
-		var w = this.options.width, h = this.options.height;
-		var anchorX = anchor.width / 2, anchorY = anchor.height / 2;
-		switch (position) {
-			case 'top':
-				left = (w / 2) - anchorX;
-				top = -anchorY;
-				break;
-			case 'right':
-				left = w - anchorX;
-				top = (h / 2) - anchorY;
-				break;
-			case 'bottom':
-				left = (w / 2) - anchorX;
-				top = h - anchorY;
-				break;
-			case 'left':
-				left = -anchorX;
-				top = (h / 2) - anchorY;
-				break;
-		}
-		div.css({left: left, top: top});
-		this.element.append(div);
-	},
 	getAnchorSize: function(side) {
-		var anchor = this.options.anchors[side];
-		if (anchor) {
-			return (side === 'top' || side === 'bottom') ? anchor.height : anchor.width;
+		var annotations = this.options.annotations;
+		for (var i = 0; i < annotations.length; i++) {
+			var o = annotations[i].options;
+			if (o.position === side) {
+				return (side === 'top' || side === 'bottom') ? o.height : o.width;
+			}
 		}
 		return 0;
+	}
+});
+
+$.widget('ibi.ibxDiagramAnnotation', $.ibi.ibxWidget, {
+	_widgetClass: 'ibx-diagram-annotation',
+	options: {  // All optional; can also be set via the equivalent CSS properties
+		position: null,  // Either ''top', 'right', 'bottom', left', or an object {left, top}
+		width: null,
+		height: null,
+		text: ''
+	},
+	_create: function() {
+		this._super();
+		if (this.options.className) {
+			this.element.addClass(this.options.className);
+		}
+		if (this.options.text) {
+			this.element.html(this.options.text);
+		}
+	},
+	_destroy: function() {
+		this._super();
+	},
+	refresh: function() {
+		this._super();
+	},
+	init: function() {
+		var el = this.element[0];
+		var options = this.options;
+		if (options.position == null) {
+			// If position / size was set via CSS instead of options, copy those settings to options for consistency
+			options.position = {
+				left: el.offsetLeft,
+				top: el.offsetTop
+			};
+		}
+		if (options.width == null || options.height == null) {
+			var box = el.getBoundingClientRect();
+			options.width = box.width;
+			options.height = box.height;
+		}
+		var pos = this.getPosition();
+		this.element.css({
+			left: pos.left,
+			top: pos.top,
+			width: this.options.width,
+			height: this.options.height
+		});
+	},
+	getPosition: function() {
+		var pos = this.options.position;
+		if (pos.hasOwnProperty('left') && pos.hasOwnProperty('top')) {
+			return pos;
+		}
+		if (!this.parent) {
+			return {left: 0, top: 0};
+		}
+		var w = this.options.width / 2, h = this.options.height / 2;
+		var parentW = this.parent.options.width, parentH = this.parent.options.height;
+		if (pos === 'top') {
+			return {left: (parentW / 2) - w, top: -h};
+		} else if (pos === 'right') {
+			return {left: parentW - w, top: (parentH / 2) - h};
+		} else if (pos === 'bottom') {
+			return {left: (parentW / 2) - w, top: parentH - h};
+		} else if (pos === 'left') {
+			return {left: -w, top: (parentH / 2) - h};
+		}
+		return {left: 0, top: 0};
+	},
+	saveToJSON: function() {
+		var options = this.options;
+		var el = this.element[0];
+		var classList = el.className.split(/\s+/).filter(function(el) {
+			return el.substr(0, 3).toLowerCase() !== 'ibx';
+		});
+		return {  // Must set each property individually; 'this.options' has a lot more than just this base component's options in it
+			position: clone(options.position),
+			width: options.width,
+			height: options.height,
+			text: options.text || el.innerText || '',
+			customClassList: classList
+		};
 	}
 });
 
