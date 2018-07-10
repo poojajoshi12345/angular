@@ -8,9 +8,6 @@
 				"language":"ibx_default",
 				"strings":
 				{
-					"A_TEST_STRING_INLINE":"INLINE -> String with ' apostrophy and a \" quote",
-					"A_TEST_STRING_XML":"XML -> String with ' apostrophy and a \" quote",
-					"A_TEST_STRING_JSON":"JSON String with ' apostrophy and a \" quote"
 				}
 			}
 		]]>
@@ -21,23 +18,28 @@
 		<style-file src="./test_res_styles.css"/>
 		<style-sheet>
 		<![CDATA[
-			.test-widget
-			{
-			}
-			.test-edit
-			{
-				flex:1 1 auto;
-			}
 		]]>
 		</style-sheet>
 	</styles>
 
 	<markup>
 		<markup-file src="./test_res_markup.xml"/>
+
 		<markup-block>
-			<widget-resources>
-				<div class="test-edit" data-ibx-type="ibxRichEdit"></div>
-			</widget-resources>
+			<div class="test-markup">
+				<div class="cmd-test" data-ibx-type="ibxCommand" data-ibxp-id="cmdTest"></div>
+				<div class="ctx-menu" data-ibx-type="ibxMenu">
+					<div class="test-radio-group" data-ibx-type="ibxRadioGroup" data-ibxp-name="radioGroup" data-ibxp-command="cmdTest"></div>
+					<div data-ibx-type="ibxMenuItem">Parent Menu
+						<div data-ibx-type="ibxMenu">
+							<div class="test-item1" data-ibx-type="ibxRadioMenuItem" data-ibxp-group="radioGroup" data-ibxp-user-value="c1">Choice1</div>
+							<div class="test-item2" data-ibx-type="ibxRadioMenuItem" data-ibxp-group="radioGroup" data-ibxp-user-value="c2">Choice2</div>
+							<div class="test-item3" data-ibx-type="ibxRadioMenuItem" data-ibxp-group="radioGroup" data-ibxp-user-value="c3">Choice3</div>
+						</div>
+
+					</div>
+				</div>
+			</div>
 		</markup-block>
 	</markup>
 
@@ -45,31 +47,11 @@
 		<script-file src="../../../ibxtools/shared_resources/js/ibfs.js" inline="false"/>
 		<script-file src="./test_res_script.js"/>
 		<script-block>
-			<![CDATA[
-			$.widget("ibi.testWidget", $.ibi.ibxVBox, 
+		<![CDATA[
+			function testfun()
 			{
-				options:
-				{
-					align:"stretch"
-				},
-				_widgetClass:"test-widget",
-				_create:function()
-				{
-					this._super();
-					var res = ibx.resourceMgr.getResource("widget-resources", false);
-					var children = res.children();
-					this.element.append(children);
-					ibx.bindElements(this.element);
-				},
-				_destroy:function()
-				{
-					this._super();
-				},
-				_refresh:function()
-				{
-					this._super();
-				}
-			});
+				alert("foo");
+			}	
 			//# sourceURL=test_res_bundle.xml
 		]]>
 		</script-block>

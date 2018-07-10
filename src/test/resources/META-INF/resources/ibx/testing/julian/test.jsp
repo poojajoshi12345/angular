@@ -18,26 +18,20 @@
 		<!--include this script...will boot ibx into the running state-->
 		<Script src="<%=request.getContextPath()%>/ibx/resources/ibx.js" type="text/javascript"></script>
 		<script type="text/javascript">
-
-			window.addEventListener("load", function()
+			ibx(function()
 			{
-				function outer()
+				var cmdTest = ibx.resourceMgr.getResource(".cmd-test");
+				var ctxMenu = ibx.resourceMgr.getResource(".ctx-menu").appendTo("body");
+				ctxMenu.on("ibx_beforeopen", function(e)
 				{
-					var c = 0
-					function eventHandler(e)
-					{
-						debugger;
-						c = c + 1
-						if(c == requestNumber)
-						{
-							//someshit
-						}
-					}
-					$("body").on("click", eventHandler);
-				}
-				outer();
-			});
+					var cmdTest = $.ibi.ibxCommand.cmds.cmdTest;
+					cmdTest.ibxWidget("userValue", "c2");
+					//cmdTest.ibxWidget("refresh");
+				});	
 
+				$(".test-label").ibxWidget("option", "ctxMenu", ctxMenu);
+
+			}, [{"src":"./test_res_bundle.xml", "loadContext":"app"}], true);
 		</script>
 		<style type="text/css">
 			body
@@ -46,10 +40,11 @@
 				height:100%;
 				margin:0px;
 				box-sizing:border-box;
-				background-color:red;
 			}
 		</style>
 	</head>
+
 	<body class="ibx-root">
+		<div class="test-label" data-ibx-type="ibxLabel">Test</div>
 	</body>
 </html>
