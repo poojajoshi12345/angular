@@ -213,7 +213,11 @@ $.widget("ibi.ibxMenuItem", $.ibi.ibxHBox,
 		e.stopPropagation();
 	},
 	parentMenu:function(){return this.element.parents(".ibx-menu").first() || null},
-	subMenu:function(){return this.element.data("ibxSubMenu");},
+	subMenu:function()
+	{
+		var subMenu = this.element.data("ibxSubMenu");
+		return subMenu || null;//can't return undefined, because jQueryUI will make that return 'this.element'
+	},
 	addSubMenu:function(subMenu)
 	{
 		this.removeSubMenu();
