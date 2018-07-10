@@ -31,6 +31,7 @@ $.widget('ibi.ibxDiagram', $.ibi.ibxWidget, {
 
 		element.on('dragover', false);
 		element.on('drop', function(e) {
+			var x = e.offsetX, y = e.offsetY;
 			e.preventDefault();
 			e.stopPropagation();
 			var id = e.originalEvent.dataTransfer.getData('text');
@@ -42,8 +43,18 @@ $.widget('ibi.ibxDiagram', $.ibi.ibxWidget, {
 					element.ibxDiagramNode(element);  // If node is not yet an ibxDiagramNode, make it one
 				}
 				var node = canvas.addNode(domNode);
-				node.options.left = Math.max(0, e.offsetX - (domNode.clientWidth / 2));
-				node.options.top = Math.max(0, e.offsetY - (domNode.clientHeight / 2));
+				var annotation = $(e.target).ibxDiagramAnnotation('instance');
+				if (annotation && annotation.options.drop === 'connect') {
+					var annotationElement = annotation.element[0];
+					x = annotationElement.parentElement.offsetLeft - annotationElement.offsetLeft - 100;
+					y = annotationElement.parentElement.offsetTop + (domNode.clientHeight / 2);
+					canvas.addConnection({
+						from: {node: node, anchor: 'right'},
+						to: {node: annotation.parent, anchor: 'left'}
+					});
+				}
+				node.options.left = Math.max(0, x - (domNode.clientWidth / 2));
+				node.options.top = Math.max(0, y - (domNode.clientHeight / 2));
 				node.refresh();
 			}
 		});
