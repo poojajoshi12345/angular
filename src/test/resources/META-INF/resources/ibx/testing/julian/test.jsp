@@ -35,21 +35,12 @@
 				margin:0px;
 				box-sizing:border-box;
 			}
-			
-			.test-label:active, .test-label.ibx-button-active
-			{
-				background-color:red;
-			}
-			.test-cp
-			{
-				width:100px;
-				height:100px;
-			}
 		</style>
 	</head>
 
 	<body class="ibx-root">
 		<div tabindex="0" class="test-button" data-ibx-type="ibxMenuButton" data-ibxp-glyph="face" data-ibxp-glyph-classes="material-icons">Test Menu Button</div>
-		<div tabindex="0" class="color-picker" data-ibx-type="colorPicker"></div>
+		<div tabindex="0" class="test-color-mixer" data-ibx-type="colorMixer" data-ibxp-color="#ccc"></div>
+		<div tabindex="0" class="test-palette-selector" data-ibx-type="paletteSelector"></div>
 	</body>
 </html>
