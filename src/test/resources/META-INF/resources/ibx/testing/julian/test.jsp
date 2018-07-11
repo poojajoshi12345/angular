@@ -21,15 +21,18 @@
 			ibx(function()
 			{
 				var cmdTest = ibx.resourceMgr.getResource(".cmd-test");
-				var ctxMenu = ibx.resourceMgr.getResource(".ctx-menu").appendTo("body");
-				ctxMenu.on("ibx_beforeopen", function(e)
+				var ctxMenu = ibx.resourceMgr.getResource(".ctx-menu");
+				ctxMenu.on("ibx_open", function(e)
 				{
-					var cmdTest = $.ibi.ibxCommand.cmds.cmdTest;
-					cmdTest.ibxWidget("userValue", "c2");
-					//cmdTest.ibxWidget("refresh");
+					var rGroup = $(this).find(".test-radio-group");
+					rGroup.ibxWidget("userValue", "c3");
 				});	
 
 				$(".test-label").ibxWidget("option", "ctxMenu", ctxMenu);
+				$(".test-cp").farbtastic(function(color)
+				{
+					console.log(color);
+				});
 
 			}, [{"src":"./test_res_bundle.xml", "loadContext":"app"}], true);
 		</script>
@@ -41,10 +44,22 @@
 				margin:0px;
 				box-sizing:border-box;
 			}
+			
+			.test-label:active, .test-label.ibx-button-active
+			{
+				background-color:red;
+			}
+			.test-cp
+			{
+				width:100px;
+				height:100px;
+			}
 		</style>
 	</head>
 
 	<body class="ibx-root">
-		<div class="test-label" data-ibx-type="ibxLabel">Test</div>
+		<div tabindex="0" class="test-label" data-ibx-type="ibxButton">Test</div>
+		<input class="cp-text" type="text"/>
+		<div tabindex="0" class="test-cp"></div>
 	</body>
 </html>
