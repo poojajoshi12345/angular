@@ -18,23 +18,14 @@
 		<!--include this script...will boot ibx into the running state-->
 		<Script src="<%=request.getContextPath()%>/ibx/resources/ibx.js" type="text/javascript"></script>
 		<script type="text/javascript">
+			var packages = 
+			[
+				{"src":"./test_res_bundle.xml", "loadContext":"app"},
+				{"src":"./colorpicker/resources/colorpicker_res_bundle.xml", "loadContext":"app"}
+			]
 			ibx(function()
 			{
-				var cmdTest = ibx.resourceMgr.getResource(".cmd-test");
-				var ctxMenu = ibx.resourceMgr.getResource(".ctx-menu");
-				ctxMenu.on("ibx_open", function(e)
-				{
-					var rGroup = $(this).find(".test-radio-group");
-					rGroup.ibxWidget("userValue", "c3");
-				});	
-
-				$(".test-label").ibxWidget("option", "ctxMenu", ctxMenu);
-				$(".test-cp").farbtastic(function(color)
-				{
-					console.log(color);
-				});
-
-			}, [{"src":"./test_res_bundle.xml", "loadContext":"app"}], true);
+			}, packages, true);
 		</script>
 		<style type="text/css">
 			body
@@ -58,8 +49,7 @@
 	</head>
 
 	<body class="ibx-root">
-		<div tabindex="0" class="test-label" data-ibx-type="ibxButton">Test</div>
-		<input class="cp-text" type="text"/>
-		<div tabindex="0" class="test-cp"></div>
+		<div tabindex="0" class="test-button" data-ibx-type="ibxMenuButton" data-ibxp-glyph="face" data-ibxp-glyph-classes="material-icons">Test Menu Button</div>
+		<div tabindex="0" class="color-picker" data-ibx-type="colorPicker"></div>
 	</body>
 </html>
