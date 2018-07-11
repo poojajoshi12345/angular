@@ -141,7 +141,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 		this.element.off();
 		this.element.removeAttr("data-ibx-type");
 		this.element.removeClass(this.options.class);
-		this.element.removeClass("ibx-focus-root ibx-nav-key-child ibx-nav-key-root ibx-focus-default");
+		this.element.removeClass("ibx-focus-root ibx-nav-key-child ibx-nav-key-root ibx-focus-default ibx-sm-focus-default");
 		this._adjustWidgetClasses(false);
 		this.setAccessibility(false);
 		this._created = false;
