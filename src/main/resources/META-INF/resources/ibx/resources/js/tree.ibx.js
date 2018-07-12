@@ -195,7 +195,7 @@ $.widget("ibi.ibxTreeNode", $.ibi.ibxVBox,
 	},
 	singleClickExpand:function()
 	{
-		return $(this.tree()).ibxTree("option", "singleClickExpand");
+		return $(this.tree()).ibxWidget("option", "singleClickExpand");
 	},
 	_onNodeLabelEvent:function(e)
 	{
