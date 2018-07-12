@@ -25,6 +25,11 @@
 			]
 			ibx(function()
 			{
+				var palFile = $.get(ibx.getAppPath() + "colorpicker/resources/colorpicker_res_bundle.xml").done(function(doc, status, xhr)
+				{
+					var palPicker = $(".test-pal-picker");
+					palPicker.ibxWidget("paletteFile", doc);
+				});
 			}, packages, true);
 		</script>
 		<style type="text/css">
@@ -40,7 +45,7 @@
 
 	<body class="ibx-root">
 		<div tabindex="0" class="test-button" data-ibx-type="ibxMenuButton" data-ibxp-glyph="face" data-ibxp-glyph-classes="material-icons">Test Menu Button</div>
-		<div tabindex="0" class="test-color-mixer" data-ibx-type="colorMixer" data-ibxp-color="#ccc"></div>
-		<div tabindex="0" class="test-palette-selector" data-ibx-type="paletteSelector"></div>
+		<div tabindex="0" class="test-color-picker" data-ibx-type="ibxColorPicker" data-ibxp-color="#ccc"></div>
+		<div tabindex="0" class="test-pal-picker" data-ibx-type="ibxPalettePicker"></div>
 	</body>
 </html>
