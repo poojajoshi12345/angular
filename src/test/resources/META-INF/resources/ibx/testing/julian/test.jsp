@@ -33,7 +33,7 @@
 			}, packages, true);
 		</script>
 		<style type="text/css">
-			body
+			html, body
 			{
 				width:100%;
 				height:100%;
@@ -44,7 +44,6 @@
 	</head>
 
 	<body class="ibx-root">
-		<div tabindex="0" class="test-button" data-ibx-type="ibxMenuButton" data-ibxp-glyph="face" data-ibxp-glyph-classes="material-icons">Test Menu Button</div>
 		<div tabindex="0" class="test-color-picker" data-ibx-type="ibxColorPicker" data-ibxp-color="#ccc"></div>
 		<div tabindex="0" class="test-pal-picker" data-ibx-type="ibxPalettePicker"></div>
 	</body>
