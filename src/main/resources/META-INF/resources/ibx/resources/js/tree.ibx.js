@@ -204,7 +204,6 @@ $.widget("ibi.ibxTreeNode", $.ibi.ibxVBox,
 
 		if(eType == "click" && this.singleClickExpand())
 		{
-			console.log($(e.target));
 			this.toggleExpanded();
 			e.stopPropagation();
 		}
