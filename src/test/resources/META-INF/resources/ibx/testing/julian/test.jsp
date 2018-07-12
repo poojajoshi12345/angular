@@ -28,8 +28,22 @@
 				var palFile = $.get(ibx.getAppPath() + "colorpicker/resources/colorpicker_res_bundle.xml").done(function(doc, status, xhr)
 				{
 					var palPicker = $(".test-pal-picker");
-					palPicker.ibxWidget("paletteFile", doc);
+					palPicker.ibxWidget("paletteFile", doc).on("ibx_selchange", function(e)
+					{
+						var info = e.originalEvent.data;
+						$("body").css("backgroundColor", $(info.items[0]).css("backgroundColor"));
+					});
+
+					var colorPicker = $(".test-color-picker");
+					colorPicker.on("ibx_colorchange", function(e)
+					{
+						var color = e.originalEvent.data;
+						$("body").css("backgroundColor", color);
+					});
 				});
+
+				
+
 			}, packages, true);
 		</script>
 		<style type="text/css">
@@ -39,6 +53,13 @@
 				height:100%;
 				margin:0px;
 				box-sizing:border-box;
+			}
+			.test-color-picker, .test-pal-picker
+			{
+				background-color:white;
+				border:1px solid black;
+				padding:10px;
+				margin:10px;
 			}
 		</style>
 	</head>
