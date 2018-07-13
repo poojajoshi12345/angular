@@ -78,6 +78,10 @@ input
   margin: 0px;
   padding:0px;
 }
+input:read-only
+{
+	cursor:inherit;
+}
 /*chrome turns off the focus outline when readonly...not sure why, but this is better.*/
 /*[PD-762] they don't want this behavior.
 input:read-only:focus
