@@ -145,38 +145,40 @@ ibxEventManager._onContextMenu = function(e)
 
 //[HOME-183] stop backspace from navigating
 //see: https://stackoverflow.com/questions/1495219/how-can-i-prevent-the-backspace-key-from-navigating-back
+ibxEventManager.isInputEventToIgnore = function(el)
+{
+	var ignore = true;
+	var types = ["text", "password", "file", "search", "email", "number", "date", "color", "datetime", "datetime-local", "month", "range", "search", "tel", "time", "url", "week"];
+	var d = $(event.srcElement || event.target);
+	var disabled = d.prop("readonly") || d.prop("disabled");
+
+	if(!disabled)
+	{
+		if(d[0].isContentEditable)
+			ignore = false;
+		else
+		if(d.is("input"))
+		{
+			var type = d.attr("type");
+			if(type)
+				type = type.toLowerCase();
+			if(types.indexOf(type) > -1)
+				ignore = false;
+		}
+		else
+		if(d.is("textarea"))
+			ignore = false;
+	}
+	return ignore;
+};
 ibxEventManager._onKeyDown = function(event)
 {
 	if((ibxEventManager.noBackspaceNavigate && (event.keyCode === $.ui.keyCode.BACKSPACE)) || (ibxEventManager.noSpaceScroll && (event.keyCode === $.ui.keyCode.SPACE)))
 	{
-		var doPrevent = true;
-		var types = ["text", "password", "file", "search", "email", "number", "date", "color", "datetime", "datetime-local", "month", "range", "search", "tel", "time", "url", "week"];
-		var d = $(event.srcElement || event.target);
-		var disabled = d.prop("readonly") || d.prop("disabled");
-
-		if(!disabled)
-		{
-			if(d[0].isContentEditable)
-				doPrevent = false;
-			else
-			if(d.is("input"))
-			{
-				var type = d.attr("type");
-				if(type)
-					type = type.toLowerCase();
-				if(types.indexOf(type) > -1)
-					doPrevent = false;
-			}
-			else
-			if(d.is("textarea"))
-				doPrevent = false;
-		}
-
-		if(doPrevent)
-		{
+		var ignore = ibxEventManager.isInputEventToIgnore(event);
+		if(ignore)
 			event.preventDefault();
-			return false;
-		}
+		return !ignore;
 	}
 };
 
@@ -639,10 +641,10 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 				this.toggleSelected(this._focus());
 		}
 		else
-		if(e.keyCode == $.ui.keyCode.HOME)
+		if((e.keyCode == $.ui.keyCode.HOME) && ibxEventManager.isInputEventToIgnore(e))
 			this.selectableChildren().first().focus();
 		else
-		if(e.keyCode == $.ui.keyCode.END)
+		if((e.keyCode == $.ui.keyCode.END) && ibxEventManager.isInputEventToIgnore(e))
 			this.selectableChildren().last().focus();
 		else
 		if(e.keyCode == $.ui.keyCode.ESCAPE && options.escClearSelection)
