@@ -25,25 +25,20 @@
 			]
 			ibx(function()
 			{
-				var palFile = $.get(ibx.getAppPath() + "colorpicker/resources/colorpicker_res_bundle.xml").done(function(doc, status, xhr)
+				var palPicker = $(".test-pal-picker");
+				palPicker.ibxWidget("paletteFile", ibx.resourceMgr.getResource(".palette-picker-default-palettes"), "p2");
+				palPicker.on("ibx_selchange", function(e)
 				{
-					var palPicker = $(".test-pal-picker");
-					palPicker.ibxWidget("paletteFile", doc).on("ibx_selchange", function(e)
-					{
-						var info = e.originalEvent.data;
-						$("body").css("backgroundColor", $(info.items[0]).css("backgroundColor"));
-					});
-
-					var colorPicker = $(".test-color-picker");
-					colorPicker.on("ibx_colorchange", function(e)
-					{
-						var color = e.originalEvent.data;
-						$("body").css("backgroundColor", color);
-					});
+					var info = e.originalEvent.data;
+					$("body").css("backgroundColor", $(info.items[0]).css("backgroundColor"));
 				});
 
-				
-
+				var colorPicker = $(".test-color-picker");
+				colorPicker.on("ibx_colorchange", function(e)
+				{
+					var color = e.originalEvent.data;
+					$("body").css("backgroundColor", color);
+				});
 			}, packages, true);
 		</script>
 		<style type="text/css">
