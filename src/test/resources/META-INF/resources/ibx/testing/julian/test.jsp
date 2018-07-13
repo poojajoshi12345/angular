@@ -26,7 +26,7 @@
 			ibx(function()
 			{
 				var palPicker = $(".test-pal-picker");
-				palPicker.ibxWidget("paletteFile", ibx.resourceMgr.getResource(".palette-picker-default-palettes"), "p2");
+				palPicker.ibxWidget("paletteFile", ibx.resourceMgr.getResource(".palette-picker-default-palettes"), "basic");
 				palPicker.on("ibx_selchange", function(e)
 				{
 					var info = e.originalEvent.data;
