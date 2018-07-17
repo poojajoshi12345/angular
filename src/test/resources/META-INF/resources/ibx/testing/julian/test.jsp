@@ -26,7 +26,7 @@
 			ibx(function()
 			{
 				var palPicker = $(".test-pal-picker");
-				palPicker.ibxWidget("paletteFile", ibx.resourceMgr.getResource(".palette-picker-default-palettes"), "basic");
+				palPicker.ibxWidget("paletteFile", ibx.resourceMgr.getXmlResource(".palette-picker-default-palettes"), "default_basic");
 				palPicker.on("ibx_selchange", function(e)
 				{
 					var info = e.originalEvent.data;
@@ -62,5 +62,13 @@
 	<body class="ibx-root">
 		<div tabindex="0" class="test-color-picker" data-ibx-type="ibxColorPicker" data-ibxp-color="#ccc"></div>
 		<div tabindex="0" class="test-pal-picker" data-ibx-type="ibxPalettePicker"></div>
+		<div tabindex="0" class="test-tab-panel" data-ibx-type="ibxTabPane">
+			<div data-ibx-type="ibxTabPage" data-ibxp-selected="true">Presets
+				<div tabindex="0" class="test-pal-picker" data-ibx-type="ibxPalettePicker"></div>
+			</div>
+			<div data-ibx-type="ibxTabPage">Palette
+				<div tabindex="0" class="test-color-picker" data-ibx-type="ibxColorPicker" data-ibxp-color="#ccc"></div>
+			</div>
+		</div>
 	</body>
 </html>

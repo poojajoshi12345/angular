@@ -21,8 +21,9 @@ var _p = ibxResourceManager.prototype = new Object();
 _p.loadedBundles = null;
 _p.loadedFiles = null;
 
-_p._resBundle = null;
 _p._styleSheet = null;
+_p._resBundle = null;
+_p.getResBundle = function(){return this._resBundle;};
 
 _p._contextPath = "";
 _p.setContextPath = function(ctxPath){this._contextPath = ctxPath;};
@@ -425,6 +426,25 @@ _p.getResource = function(selector, ibxBind, forceCreate)
 		markup.detach();
 		bindingDiv.detach();
 	}
+	return markup;
+};
+
+_p.getXmlResource = function(selector)
+{
+	var resource = this._resBundle.find(selector);
+	if(!resource.length)
+		throw(sformat("ibx.resourceMgr failed to find resource: {1}", selector));
+	
+	//get the xml out of the resource bundle as a string (essentially making a clone/copy)
+	var markup = "";
+	resource.each(function(idx, res)
+	{
+		markup += (new XMLSerializer()).serializeToString(res);
+		markup = this.preProcessResource(markup);
+	}.bind(this));
+	if(!markup.length)
+		throw(sformat("ibx.resourceMgr failed to load resource: {1}", selector));
+	markup = $(markup, this._resBundle);
 	return markup;
 };
 
