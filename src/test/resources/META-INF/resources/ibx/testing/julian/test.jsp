@@ -61,7 +61,7 @@
 
 	<body class="ibx-root">
 		<div tabindex="0" class="test-color-picker" data-ibx-type="ibxColorPicker" data-ibxp-color="#ccc"></div>
-		<div tabindex="0" class="test-pal-picker" data-ibx-type="ibxPalettePicker"></div>
+		<div tabindex="0" class="test-pal-picker" data-ibx-type="ibxPalettePicker" data-ibxp-color="#FF7827"></div>
 		<div tabindex="0" class="test-tab-panel" data-ibx-type="ibxTabPane">
 			<div data-ibx-type="ibxTabPage" data-ibxp-selected="true">Presets
 				<div tabindex="0" class="test-pal-picker" data-ibx-type="ibxPalettePicker"></div>
