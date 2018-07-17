@@ -44,8 +44,8 @@ $.widget("ibi.ibxGrid", $.ibi.ibxWidget,
 		var gridCss = 
 		{
 			//IE...do before so standard CSS can override in compliant browsers
-			"grid-columns":				options.cols,
-			"grid-rows":				options.rows,
+			"-ms-grid-columns":			options.cols,
+			"-ms-grid-rows":			options.rows,
 
 			//Standard CSS
 			"grid-template-columns":	options.cols,
@@ -77,27 +77,27 @@ $.widget("ibi.ibxGrid", $.ibi.ibxWidget,
 			var css = 
 			{
 				//IE Columns...do before so standard CSS can override in compliant browsers
-				"grid-column":			colStart,
-				"grid-column-span":		colEnd.replace(/\s*span\s*/, ""),
-				"grid-column-align":	cell.data("ibxJustify") || options.justify,
+				"-ms-grid-column":			colStart,
+				"-ms-grid-column-span":		colEnd.replace(/\s*span\s*/, ""),
+				"-ms-grid-column-align":	cell.data("ibxJustify") || options.justify,
 
 				//IE Rows...do before so standard CSS can override in compliant browsers
-				"grid-row":				rowStart,
-				"grid-row-span":		rowEnd.replace(/\s*span\s*/, ""),
-				"grid-row-align":		cell.data("ibxAlign") || options.align,
+				"-ms-grid-row":				rowStart,
+				"-ms-grid-row-span":		rowEnd.replace(/\s*span\s*/, ""),
+				"-ms-grid-row-align":		cell.data("ibxAlign") || options.align,
 
 				//Standard CSS Columns
-				"grid-column-start":	colStart,
-				"grid-column-end":		colEnd,
-				"justify-self":			cell.data("ibxJustify"),
+				"grid-column-start":		colStart,
+				"grid-column-end":			colEnd,
+				"justify-self":				cell.data("ibxJustify"),
 
 				//Standard CSS Rows
-				"grid-row-start":		rowStart,
-				"grid-row-end":			rowEnd,
-				"align-self":			cell.data("ibxAlign"),
+				"grid-row-start":			rowStart,
+				"grid-row-end":				rowEnd,
+				"align-self":				cell.data("ibxAlign"),
 
 				//Standard CSS not supported by IE
-				"grid-area":			cell.data("ibxArea"),
+				"grid-area":				cell.data("ibxArea"),
 			}
 			cell.css(css).addClass("ibx-grid-cell");
 		}.bind(this, options));		
