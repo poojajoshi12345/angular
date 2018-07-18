@@ -79,8 +79,8 @@ $.widget("ibi.ibxPalettePicker", $.ibi.ibxVBox,
 		ibx.bindElements(this.element);
 		this._palSelect.on("ibx_change", this._onPalSelectChange.bind(this));
 
-		var palDefault = ibx.resourceMgr.getResource(".palette-picker-default-palettes", false);
-		this.paletteFile(palDefault, "basic");
+		var palDefault = ibx.resourceMgr.getXmlResource(".palette-picker-default-palettes", false);
+		this.paletteFile(palDefault, "default_basic");
 	},
 	_destroy: function ()
 	{
