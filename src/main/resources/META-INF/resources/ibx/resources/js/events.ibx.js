@@ -667,18 +667,22 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 		}
 
 		//event could happen on child element...map back to something we know can be selected
+		//and can actually be selected by this selection manager.
 		var selTarget = this.mapToSelectable(e.target);
-		if(e.shiftKey && options.type == "multi")
+		var selChildren = this.selectableChildren();
+		if(selChildren.index(selTarget) != -1)
 		{
-			var selChildren = this.selectableChildren();
-			var idxAnchor = selChildren.index(this._anchor());
-			var idxSel = selChildren.index(selTarget[0]);
-			var idxStart = Math.min(idxAnchor, idxSel);
-			var idxEnd = Math.max(idxAnchor, idxSel);
-			this.toggleSelected(selChildren.slice(idxStart, idxEnd + 1), this.isSelected(this._anchor()), false);
+			if(e.shiftKey && options.type == "multi")
+			{
+				var idxAnchor = selChildren.index(this._anchor());
+				var idxSel = selChildren.index(selTarget[0]);
+				var idxStart = Math.min(idxAnchor, idxSel);
+				var idxEnd = Math.max(idxAnchor, idxSel);
+				this.toggleSelected(selChildren.slice(idxStart, idxEnd + 1), this.isSelected(this._anchor()), false);
+			}
+			else
+				this.toggleSelected(selTarget, (isMulti && e.ctrlKey) || options.toggleSelection ? undefined : true);
 		}
-		else
-			this.toggleSelected(selTarget, (isMulti && e.ctrlKey) || options.toggleSelection ? undefined : true);
 	},
 	preDispacthEvent:function(eventInfo){return eventInfo;},
 	_dispatchEvent:function(eType, data, canBubble, cancelable, relatedTarget, mapItems)
