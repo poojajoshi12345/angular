@@ -442,9 +442,11 @@ _p.getXmlResource = function(selector)
 		markup += (new XMLSerializer()).serializeToString(res);
 		markup = this.preProcessResource(markup);
 	}.bind(this));
+
+	markup = $.parseXML(markup);
+	markup = $(markup);
 	if(!markup.length)
 		throw(sformat("ibx.resourceMgr failed to load resource: {1}", selector));
-	markup = $(markup, this._resBundle);
 	return markup;
 };
 
