@@ -164,7 +164,7 @@ $.widget("ibi.ibxPalettePicker", $.ibi.ibxVBox,
 				colors.sort(this._sortColors.bind(this)).each(function(idx, color)
 				{
 					var value = color.getAttribute("value").toLowerCase();
-					var swatch = $(sformat("<div tabindex='0' class='pp-swatch' data-pp-hex-value='{1}'>", value));
+					var swatch = $(sformat("<div tabindex='0' class='pp-swatch' title='{1}' data-pp-hex-value='{2}'>", color.getAttribute("display-name"), value));
 					swatch.css("backgroundColor", value).attr("data-pp-rgb-value", swatch.css("backgroundColor"));
 					this._swatchBox.append(swatch);
 				}.bind(this));

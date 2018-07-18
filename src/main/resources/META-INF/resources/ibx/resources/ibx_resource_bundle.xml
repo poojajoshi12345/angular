@@ -124,37 +124,37 @@ $Revision$:-->
 		</markup-block>
 		<markup-block class="palette-picker-default-palettes">
 			<palette pid="default_basic" display-name="@ibxString(PP_PAL_NAME_BASIC)">
-				<color idx="0" cid="" display-name="" value="#000000"/>
-				<color idx="10" cid="" display-name="" value="#ffffff"/>
-				<color idx="1" cid="" display-name="" value="#7f7f7f"/>
-				<color idx="11" cid="" display-name="" value="#c3c3c3"/>
-				<color idx="2" cid="" display-name="" value="#880015"/>
-				<color idx="12" cid="" display-name="" value="#b97a57"/>
-				<color idx="3" cid="" display-name="" value="#ed1c24"/>
-				<color idx="13" cid="" display-name="" value="#ffaec9"/>
-				<color idx="4" cid="" display-name="" value="#ff7827"/>
-				<color idx="14" cid="" display-name="" value="#ffc90e"/>
-				<color idx="5" cid="" display-name="" value="#fff200"/>
-				<color idx="15" cid="" display-name="" value="#efe4b0"/>
-				<color idx="6" cid="" display-name="" value="#22b14c"/>
-				<color idx="16" cid="" display-name="" value="#b5e61d"/>
-				<color idx="7" cid="" display-name="" value="#00a2e8"/>
-				<color idx="17" cid="" display-name="" value="#99d9ea"/>
-				<color idx="8" cid="" display-name="" value="#3f48cc"/>
-				<color idx="18" cid="" display-name="" value="#7092be"/>
-				<color idx="9" cid="" display-name="" value="#a349a4"/>
-				<color idx="19" cid="" display-name="" value="#c8bfe7"/>
+				<color idx="0" display-name="" value="#000000"/>
+				<color idx="10" display-name="" value="#ffffff"/>
+				<color idx="1" display-name="" value="#7f7f7f"/>
+				<color idx="11" display-name="" value="#c3c3c3"/>
+				<color idx="2" display-name="" value="#880015"/>
+				<color idx="12" display-name="" value="#b97a57"/>
+				<color idx="3" display-name="" value="#ed1c24"/>
+				<color idx="13" display-name="" value="#ffaec9"/>
+				<color idx="4" display-name="" value="#ff7827"/>
+				<color idx="14" display-name="" value="#ffc90e"/>
+				<color idx="5" display-name="" value="#fff200"/>
+				<color idx="15" display-name="" value="#efe4b0"/>
+				<color idx="6" display-name="" value="#22b14c"/>
+				<color idx="16" display-name="" value="#b5e61d"/>
+				<color idx="7" display-name="" value="#00a2e8"/>
+				<color idx="17" display-name="" value="#99d9ea"/>
+				<color idx="8" display-name="" value="#3f48cc"/>
+				<color idx="18" display-name="" value="#7092be"/>
+				<color idx="9" display-name="" value="#a349a4"/>
+				<color idx="19" display-name="" value="#c8bfe7"/>
 				<custom_colors>
-					<color idx="0" cid="" display-name="" value="#ffffff"/>
-					<color idx="1" cid="" display-name="" value="#ffffff"/>
-					<color idx="2" cid="" display-name="" value="#ffffff"/>
-					<color idx="3" cid="" display-name="" value="#ffffff"/>
-					<color idx="4" cid="" display-name="" value="#ffffff"/>
-					<color idx="5" cid="" display-name="" value="#ffffff"/>
-					<color idx="6" cid="" display-name="" value="#ffffff"/>
-					<color idx="7" cid="" display-name="" value="#ffffff"/>
-					<color idx="8" cid="" display-name="" value="#ffffff"/>
-					<color idx="9" cid="" display-name="" value="#ffffff"/>
+					<color idx="0" display-name="" value="#ffffff"/>
+					<color idx="1" display-name="" value="#ffffff"/>
+					<color idx="2" display-name="" value="#ffffff"/>
+					<color idx="3" display-name="" value="#ffffff"/>
+					<color idx="4" display-name="" value="#ffffff"/>
+					<color idx="5" display-name="" value="#ffffff"/>
+					<color idx="6" display-name="" value="#ffffff"/>
+					<color idx="7" display-name="" value="#ffffff"/>
+					<color idx="8" display-name="" value="#ffffff"/>
+					<color idx="9" display-name="" value="#ffffff"/>
 				</custom_colors>
 			</palette>
 		</markup-block>
