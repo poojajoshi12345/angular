@@ -5,7 +5,7 @@ $.widget("ibi.ibxColorPicker", $.ibi.ibxVBox,
 {
 	options:
 	{
-		"color":"#000000",
+		"color":"#ffffff",
 		"align":"center",
 		"inline":true,
 		"focusDefault":true,
@@ -42,6 +42,12 @@ $.widget("ibi.ibxColorPicker", $.ibi.ibxVBox,
 			color = "#" + color;
 		this._ctrl.prop("farbtastic").setColor(color);
 	},
+	_setOption:function(key, value)
+	{
+		if(key == "color")
+			value = value.toLowerCase();
+		this._super(key, value);
+	},
 	_refresh: function ()
 	{
 		this._super();
@@ -57,7 +63,7 @@ $.widget("ibi.ibxPalettePicker", $.ibi.ibxVBox,
 	options:
 	{
 		"palette":"",
-		"color":"",
+		"color":"#ffffff",
 		"showPalettes":true,
 		"showPalette":true,
 		"showCustom":true,
@@ -127,7 +133,6 @@ $.widget("ibi.ibxPalettePicker", $.ibi.ibxVBox,
 	{
 		var options = this.options;
 		var changed = options[key] != value;
-		this._super(key, value);
 		if(key == "palette" && changed)
 		{
 			if(!this._inSelectChange)
@@ -139,7 +144,7 @@ $.widget("ibi.ibxPalettePicker", $.ibi.ibxVBox,
 				this._swatchBox.ibxWidget("remove");
 				colors.sort(this._sortColors.bind(this)).each(function(idx, color)
 				{
-					var value = color.getAttribute("value");
+					var value = color.getAttribute("value").toLowerCase();
 					var swatch = $(sformat("<div tabindex='0' class='pp-swatch' data-pp-hex-value='{1}'>", value));
 					swatch.css("backgroundColor", value).attr("data-pp-rgb-value", swatch.css("backgroundColor"));
 					this._swatchBox.append(swatch);
@@ -149,7 +154,7 @@ $.widget("ibi.ibxPalettePicker", $.ibi.ibxVBox,
 				this._customBox.ibxWidget("remove");
 				colors.sort(this._sortColors.bind(this)).each(function(idx, color)
 				{
-					var value = color.getAttribute("value");
+					var value = color.getAttribute("value").toLowerCase();
 					var swatch = $(sformat("<div tabindex='0' class='pp-swatch pp-swatch-custom' data-pp-hex-value='{1}'>", value));
 					swatch.css("backgroundColor", value).attr("data-pp-rgb-value", swatch.css("backgroundColor"));
 					this._customBox.append(swatch);
@@ -158,6 +163,9 @@ $.widget("ibi.ibxPalettePicker", $.ibi.ibxVBox,
 				this.refresh();
 			}
 		}
+		if(key == "color")
+			value = value.toLowerCase();
+		this._super(key, value);
 	},
 	_sortColors:function(c1, c2)
 	{
