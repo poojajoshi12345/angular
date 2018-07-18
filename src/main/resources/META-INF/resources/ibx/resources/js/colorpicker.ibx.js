@@ -64,10 +64,13 @@ $.widget("ibi.ibxPalettePicker", $.ibi.ibxVBox,
 	{
 		"palette":"",
 		"color":"#ffffff",
+		"opacity":1,
 		"showPalettes":true,
 		"showPalette":true,
 		"showCustom":true,
+		"showTransparency":true,
 		"showNoFill":true,
+		"sliderOptions":{},
 		"navKeyRoot":true,
 		"navKeyDir":"both",
 		"selType":"single",
@@ -84,6 +87,7 @@ $.widget("ibi.ibxPalettePicker", $.ibi.ibxVBox,
 		this.element.on("ibx_selectablechildren ibx_selchange", this._selManagerEvent.bind(this)).append(template.children());
 		ibx.bindElements(this.element);
 		this._palSelect.on("ibx_change", this._onPalSelectChange.bind(this));
+		this._transSlider.on("ibx_change", this._onTransSliderChange.bind(this)).ibxWidget("option", "fnFormat", this._formatSliderVals.bind(this));
 
 		var palDefault = ibx.resourceMgr.getXmlResource(".palette-picker-default-palettes", false);
 		this.paletteFile(palDefault, "default_basic");
@@ -98,11 +102,25 @@ $.widget("ibi.ibxPalettePicker", $.ibi.ibxVBox,
 		if(e.type == "ibx_selectablechildren")
 			info.items = this.element.find(".pp-swatch");
 		else
-		if(e.type == "ibx_selchange")
+		if(e.type == "ibx_selchange" && info.selected == true)
 		{
 			var swatch = $(info.items[0]);
-			this.option("color", swatch.attr("data-pp-hex-value"));
+			var attr = "data-pp-hex-value";
+			if(swatch.is(".pp-no-fill"))
+				attr = "data-pp-rgb-value";
+			this.option("color", swatch.attr(attr));
 		}
+	},
+	_formatSliderVals:function(fmt, info)
+	{
+		return info[fmt] + "%";
+	},
+	_onTransSliderChange:function(e, info)
+	{
+		this._inSliderChange = true;
+		this.option("opacity", (info.value/100));
+		this._inSliderChange = false;
+		e.stopPropagation();
 	},
 	_onPalSelectChange:function(e)
 	{
@@ -110,6 +128,7 @@ $.widget("ibi.ibxPalettePicker", $.ibi.ibxVBox,
 		this._inSelectChange = true;
 		this.option("palette", pid);
 		this._inSelectChange = false;
+		e.stopPropagation();
 	},
 	_palFile:null,
 	paletteFile:function(palFile, palette)
@@ -163,9 +182,16 @@ $.widget("ibi.ibxPalettePicker", $.ibi.ibxVBox,
 				this.refresh();
 			}
 		}
+		else
 		if(key == "color")
 			value = value.toLowerCase();
+		else
+		if(key == "opacity" && !this._inSliderChange)
+			this._transSlider.ibxWidget("option", "value", value * 100);
+
 		this._super(key, value);
+		if(changed && (key == "color" || key == "opacity"))
+			this.element.dispatchEvent("ibx_change", {"color":options.color, "opacity":options.opacity}, false, false);
 	},
 	_sortColors:function(c1, c2)
 	{
@@ -189,6 +215,8 @@ $.widget("ibi.ibxPalettePicker", $.ibi.ibxVBox,
 		this._customLabel.css("display", options.showCustom ? "" : "none");
 		this._customBox.css("display", options.showCustom ? "" : "none");
 		this._noFillBox.css("display", options.showNoFill ? "" : "none");
+		this._transparencyBox.css("display", options.showTransparency ? "" : "none");
+		this._transSlider.ibxWidget("option", options.sliderOptions);
 
 		var swatch = this.element.find(sformat("[data-pp-hex-value='{1}']", options.color));
 		this.element.ibxSelectionManager("option", "toggleSelection", false).ibxSelectionManager("selected", swatch, true);

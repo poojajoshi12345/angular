@@ -71,7 +71,7 @@
 	border:1px solid #ccc;
 }
 
-.pp-custom-label
+.pp-custom-label, .pp-transparency-label
 {
 	font-weight:bold;
 	margin:10px 0px 5px 2px;

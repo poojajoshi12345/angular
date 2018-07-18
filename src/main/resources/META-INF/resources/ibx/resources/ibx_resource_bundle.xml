@@ -68,6 +68,7 @@ $Revision$:-->
 
 				"PP_CUSTOM_COLORS":"Custom Colors",
 				"PP_NO_FILL":"No fill",
+				"PP_TRANSPARENCY":"Opacity",
 				"PP_PAL_NAME_BASIC":"Basic",
 
 				"IBX_TERMINATING_STRING":""
@@ -113,8 +114,12 @@ $Revision$:-->
 			<div class="pp-custom-label" data-ibx-type="ibxLabel" data-ibx-name="_customLabel">@ibxString(PP_CUSTOM_COLORS)</div>
 			<div class="pp-custom-box" data-ibx-type="ibxHBox" data-ibx-name="_customBox" data-ibxp-align="start" data-ibxp-justify="spaceAround" data-ibxp-wrap="true"></div>
 			<div class="pp-no-fill-box" data-ibx-type="ibxHBox" data-ibx-name="_noFillBox" data-ibxp-align="center">
-				<div tabindex="0" class="pp-swatch pp-no-fill" data-ibx-name="_nfSwatch"></div>
+				<div tabindex="0" class="pp-swatch pp-no-fill" data-ibx-name="_nfSwatch" data-pp-hex-value="transparent" data-pp-rgb-value="transparent"></div>
 				<div data-ibx-type="ibxLabel">@ibxString(PP_NO_FILL)</div>
+			</div>
+			<div class="pp-transparency-box" data-ibx-type="ibxVBox" data-ibx-name="_transparencyBox" data-ibxp-align="stretch">
+				<div class="pp-transparency-label" data-ibx-type="ibxLabel">@ibxString(PP_TRANSPARENCY)</div>
+				<div class="pp-transparency-slider" data-ibx-type="ibxSlider" data-ibx-name="_transSlider" data-ibxp-value-text-pos="end" data-ibxp-min-text-pos="center" data-ibxp-max-text-pos="center" data-ibxp-min="0" data-ibxp-max="100" data-ibxp-value="100"></div>
 			</div>
 		</markup-block>
 		<markup-block class="palette-picker-default-palettes">
