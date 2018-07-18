@@ -327,14 +327,14 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 		 for(var i = 0; i < children.length; ++i) 
 		 { 
 			var child = $(children[i]);
-			var box = child.metrics().borderBox; 
+			var box = child.metrics().marginBox; 
 			if(box)
 			{
 				if((forward === true) && (Math.floor(box.right) > pageInfo.scrollRight)) 
 					childBox = box; 
 				else 
 				if((forward === false) && (Math.floor(box.left) >= pageInfo.scrollLeft) && child.prev().length) 
-					childBox = child.prev().metrics().borderBox; 
+					childBox = child.prev().metrics().marginBox; 
 
 				if(childBox) 
 					break;
