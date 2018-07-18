@@ -21,7 +21,6 @@
 			var packages = 
 			[
 				{"src":"./test_res_bundle.xml", "loadContext":"app"},
-				{"src":"./colorpicker/resources/colorpicker_res_bundle.xml", "loadContext":"app"}
 			]
 			ibx(function()
 			{

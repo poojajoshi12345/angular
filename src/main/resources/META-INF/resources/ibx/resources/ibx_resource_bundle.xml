@@ -7,6 +7,10 @@ $Revision$:-->
 	<res-bundles>
 	</res-bundles>
 
+	<!--RARELY USED - FORWARD REFERENCED BUNDLES - PROBABLY SHOULD BE A 'res-bundle'...default external bundles to be loaded AFTER this bundles is fully loaded and running-->
+	<packages>
+	</packages>
+
 	<!--strings-->
 	<strings>
 		<!--inline-->
@@ -62,6 +66,10 @@ $Revision$:-->
 				"IBX_PAGE_LIST_PAGES":"Page {1} of {2}",
 				"IBX_PAGE_LIST_TOOLTIP_CLEAR_SEARCH":"Clear search text",
 
+				"PP_CUSTOM_COLORS":"Custom Colors",
+				"PP_NO_FILL":"No fill",
+				"PP_PAL_NAME_BASIC":"Basic",
+
 				"IBX_TERMINATING_STRING":""
 			}
 		}
@@ -69,11 +77,90 @@ $Revision$:-->
 		</string-bundle>
 	</strings>
 
+	<!--markup-->
+	<markup>
+		<!--inline-->
+		<markup-block>
+			<div class="dialog-template" data-ibx-type="ibxDialog" data-ibx-name-root="true" data-ibxp-default-action=".ibx-dialog-ok-button, cancel">
+				<div class="ibx-dialog-main-box" data-ibx-type="ibxVBox" data-ibx-name="vbMain" data-ibxp-align="stretch">
+					<div class="ibx-dialog-title-box" data-ibx-type="ibxHBox" data-ibx-name="titleBox" data-ibxp-align="center">
+						<div class="ibx-title-bar-caption" data-ibx-type="ibxLabel" data-ibx-name="caption" data-ibxp-justify="start"></div>
+						<div class="ibx-title-bar-close-button" data-ibx-type="ibxButton" data-ibx-name="titleClose" title='@ibxString("IBX_STR_CLOSE")'></div>
+					</div>
+					<div class="ibx-dialog-content" data-ibx-type="ibxVBox" data-ibx-name="contentBox" data-ibxp-align="stretch"></div>
+					<div class='ibx-dialog-button-box' data-ibx-type='ibxHBox' data-ibx-name='btnBox' data-ibxp-align='stretch'>
+						<div class="ibx-dialog-button-padding" data-ibx-type="ibxNull" data-ibx-name="btnPadding"></div>
+						<div class='ibx-dialog-ok-button' data-ibx-type='ibxButton' data-ibx-name='btnOK' data-ibxp-text='@ibxString("IBX_STR_OK")' tabIndex='0'></div>
+						<div class='ibx-dialog-no-button' data-ibx-type='ibxButton' data-ibx-name='btnNo' data-ibxp-text='@ibxString("IBX_STR_NO")' tabIndex='0'></div>
+						<div class='ibx-dialog-apply-button' data-ibx-type='ibxButton' data-ibx-name='btnApply' data-ibxp-text='@ibxString("IBX_STR_APPLY")' tabIndex='0'></div>
+						<div class='ibx-dialog-cancel-button' data-ibx-type='ibxButton' data-ibx-name='btnCancel' data-ibxp-text='@ibxString("IBX_STR_CANCEL")' tabIndex='0'></div>
+					</div>
+				</div>
+			</div>
+			<div class="res-ibx-carousel-body">
+				<div class="ibx-csl-items-container" data-ibx-name="_itemsContainer" data-ibx-type="ibxHBox" data-ibxp-align="stretch">
+					<div tabindex="0" class="csl-scroll-btn" data-ibxp-auto-focused="true" title="@ibxString('IBX_CAROUSEL_PREV')" data-ibx-name="_prevBtn" data-ibx-type="ibxButtonSimple" data-ibxp-class="ibx-csl-prev-btn"></div>
+					<div tabindex="0" class="ibx-csl-items-box" data-ibx-name="_itemsBox" data-ibx-type="ibxHBox" data-ibxp-nav-key-root="true" data-ibxp-nav-key-reset-focus-on-blur="false" data-ibxp-focus-default="true" data-ibxp-align="center"></div>
+					<div tabindex="0" class="csl-scroll-btn" title="@ibxString('IBX_CAROUSEL_NEXT')" data-ibx-name="_nextBtn" data-ibx-type="ibxButtonSimple" data-ibxp-class="ibx-csl-next-btn"></div>
+				</div>
+				<div tabindex="0" class="ibx-csl-page-markers" data-ibx-name="_pageMarkers" data-ibx-type="ibxHBox" data-ibxp-nav-key-root="true" data-ibxp-focus-default="true" data-ibxp-nav-key-reset-focus-on-blur="false" data-ibxp-justify="center" data-ibxp-align="center">
+				</div>
+			</div>
+		</markup-block>
+		<markup-block class="ibx-palette-picker-template">
+			<div tabindex="0" class="pp-palette-select" data-ibx-type="ibxSelect" data-ibxp-readonly="true" data-ibx-name="_palSelect"></div>
+			<div class="pp-swatch-box" data-ibx-type="ibxHBox" data-ibx-name="_swatchBox" data-ibxp-align="start" data-ibxp-justify="spaceAround" data-ibxp-wrap="true"></div>
+			<div class="pp-custom-label" data-ibx-type="ibxLabel" data-ibx-name="_customLabel">@ibxString(PP_CUSTOM_COLORS)</div>
+			<div class="pp-custom-box" data-ibx-type="ibxHBox" data-ibx-name="_customBox" data-ibxp-align="start" data-ibxp-justify="spaceAround" data-ibxp-wrap="true"></div>
+			<div class="pp-no-fill-box" data-ibx-type="ibxHBox" data-ibx-name="_noFillBox" data-ibxp-align="center">
+				<div tabindex="0" class="pp-swatch pp-no-fill" data-ibx-name="_nfSwatch"></div>
+				<div data-ibx-type="ibxLabel">@ibxString(PP_NO_FILL)</div>
+			</div>
+		</markup-block>
+		<markup-block class="palette-picker-default-palettes">
+			<palette pid="default_basic" display-name="@ibxString(PP_PAL_NAME_BASIC)">
+				<color idx="0" cid="" display-name="" value="#000000"/>
+				<color idx="10" cid="" display-name="" value="#ffffff"/>
+				<color idx="1" cid="" display-name="" value="#7F7F7F"/>
+				<color idx="11" cid="" display-name="" value="#C3C3C3"/>
+				<color idx="2" cid="" display-name="" value="#880015"/>
+				<color idx="12" cid="" display-name="" value="#B97A57"/>
+				<color idx="3" cid="" display-name="" value="#ED1C24"/>
+				<color idx="13" cid="" display-name="" value="#FFAEC9"/>
+				<color idx="4" cid="" display-name="" value="#FF7827"/>
+				<color idx="14" cid="" display-name="" value="#FFC90E"/>
+				<color idx="5" cid="" display-name="" value="#FFF200"/>
+				<color idx="15" cid="" display-name="" value="#EFE4B0"/>
+				<color idx="6" cid="" display-name="" value="#22B14C"/>
+				<color idx="16" cid="" display-name="" value="#B5E61D"/>
+				<color idx="7" cid="" display-name="" value="#00A2E8"/>
+				<color idx="17" cid="" display-name="" value="#99D9EA"/>
+				<color idx="8" cid="" display-name="" value="#3F48CC"/>
+				<color idx="18" cid="" display-name="" value="#7092BE"/>
+				<color idx="9" cid="" display-name="" value="#A349A4"/>
+				<color idx="19" cid="" display-name="" value="#C8BFE7"/>
+				<custom_colors>
+					<color idx="0" cid="" display-name="" value="#ffffff"/>
+					<color idx="1" cid="" display-name="" value="#ffffff"/>
+					<color idx="2" cid="" display-name="" value="#ffffff"/>
+					<color idx="3" cid="" display-name="" value="#ffffff"/>
+					<color idx="4" cid="" display-name="" value="#ffffff"/>
+					<color idx="5" cid="" display-name="" value="#ffffff"/>
+					<color idx="6" cid="" display-name="" value="#ffffff"/>
+					<color idx="7" cid="" display-name="" value="#ffffff"/>
+					<color idx="8" cid="" display-name="" value="#ffffff"/>
+					<color idx="9" cid="" display-name="" value="#ffffff"/>
+				</custom_colors>
+			</palette>
+		</markup-block>
+	</markup>
+
 	<!--styles-->
 	<styles>
 		<!--EXTERNAL ASSETS-->
 		<style-file src="./etc/jquery/jquery-ui-1.12.1/jquery-ui.css"/>
 		<style-file src="./etc/gridstack/gridstack.css"/>
+		<style-file src="./etc/farbtastic/farbtastic.css"/>
 		<style-file src="./etc/font-awesome/css/font-awesome.css" nocompile="true"/>
 		<style-file src="./etc/google/material-icons/material-icons.css" nocompile="true"/>
 		<style-file src="./etc/google/css/hind.css" nocompile="true"/>
@@ -110,39 +197,14 @@ $Revision$:-->
 		<style-file src="./css/carousel.ibx.css"/>
 		<style-file src="./css/datepicker.ibx.css"/>
 		<style-file src="./css/sortable.ibx.css"/>
-	</styles>
+		<style-file src="./css/colorpicker.ibx.css"/>
 
-	<!--markup-->
-	<markup>
-		<!--inline-->
-		<markup-block>
-			<div class="dialog-template" data-ibx-type="ibxDialog" data-ibx-name-root="true" data-ibxp-default-action=".ibx-dialog-ok-button, cancel">
-				<div class="ibx-dialog-main-box" data-ibx-type="ibxVBox" data-ibx-name="vbMain" data-ibxp-align="stretch">
-					<div class="ibx-dialog-title-box" data-ibx-type="ibxHBox" data-ibx-name="titleBox" data-ibxp-align="center">
-						<div class="ibx-title-bar-caption" data-ibx-type="ibxLabel" data-ibx-name="caption" data-ibxp-justify="start"></div>
-						<div class="ibx-title-bar-close-button" data-ibx-type="ibxButton" data-ibx-name="titleClose" title='@ibxString("IBX_STR_CLOSE")'></div>
-					</div>
-					<div class="ibx-dialog-content" data-ibx-type="ibxVBox" data-ibx-name="contentBox" data-ibxp-align="stretch"></div>
-					<div class='ibx-dialog-button-box' data-ibx-type='ibxHBox' data-ibx-name='btnBox' data-ibxp-align='stretch'>
-						<div class="ibx-dialog-button-padding" data-ibx-type="ibxNull" data-ibx-name="btnPadding"></div>
-						<div class='ibx-dialog-ok-button' data-ibx-type='ibxButton' data-ibx-name='btnOK' data-ibxp-text='@ibxString("IBX_STR_OK")' tabIndex='0'></div>
-						<div class='ibx-dialog-no-button' data-ibx-type='ibxButton' data-ibx-name='btnNo' data-ibxp-text='@ibxString("IBX_STR_NO")' tabIndex='0'></div>
-						<div class='ibx-dialog-apply-button' data-ibx-type='ibxButton' data-ibx-name='btnApply' data-ibxp-text='@ibxString("IBX_STR_APPLY")' tabIndex='0'></div>
-						<div class='ibx-dialog-cancel-button' data-ibx-type='ibxButton' data-ibx-name='btnCancel' data-ibxp-text='@ibxString("IBX_STR_CANCEL")' tabIndex='0'></div>
-					</div>
-				</div>
-			</div>
-			<div class="res-ibx-carousel-body">
-				<div class="ibx-csl-items-container" data-ibx-name="_itemsContainer" data-ibx-type="ibxHBox" data-ibxp-align="stretch">
-					<div tabindex="0" class="csl-scroll-btn" data-ibxp-auto-focused="true" title="@ibxString('IBX_CAROUSEL_PREV')" data-ibx-name="_prevBtn" data-ibx-type="ibxButtonSimple" data-ibxp-class="ibx-csl-prev-btn"></div>
-					<div tabindex="0" class="ibx-csl-items-box" data-ibx-name="_itemsBox" data-ibx-type="ibxHBox" data-ibxp-nav-key-root="true" data-ibxp-nav-key-reset-focus-on-blur="false" data-ibxp-focus-default="true" data-ibxp-align="center"></div>
-					<div tabindex="0" class="csl-scroll-btn" title="@ibxString('IBX_CAROUSEL_NEXT')" data-ibx-name="_nextBtn" data-ibx-type="ibxButtonSimple" data-ibxp-class="ibx-csl-next-btn"></div>
-				</div>
-				<div tabindex="0" class="ibx-csl-page-markers" data-ibx-name="_pageMarkers" data-ibx-type="ibxHBox" data-ibxp-nav-key-root="true" data-ibxp-focus-default="true" data-ibxp-nav-key-reset-focus-on-blur="false" data-ibxp-justify="center" data-ibxp-align="center">
-				</div>
-			</div>
-		</markup-block>
-	</markup>
+		<!--inline styles-->
+		<style-sheet name="ibx_inline_bundle_styles">
+			<![CDATA[
+		]]>
+		</style-sheet>
+	</styles>
 
 	<!--scripts-->
 	<scripts>
@@ -151,6 +213,7 @@ $Revision$:-->
 		<script-file src="./etc/scrollwidthpolyfill/scrollwidthpolyfill.js"/>
 		<script-file src="./etc/gridstack/underscore.js"/>
 		<script-file src="./etc/gridstack/gridstack.js"/>
+		<script-file src="./etc/farbtastic/farbtastic.js"/>
 
 		<!--IBX ASSETS-->
 		<script-file src="./js/events.ibx.js"/>
@@ -186,16 +249,13 @@ $Revision$:-->
 		<script-file src="./js/carousel.ibx.js"/>
 		<script-file src="./js/tabs.ibx.js"/>
 		<script-file src="./js/datepicker.ibx.js"/>
-		
+		<script-file src="./js/colorpicker.ibx.js"/>
+
 		<!--scripts-->
-		<script-block name="">
+		<script-block name="ibx_inline_bundle_scripts">
 		<![CDATA[
 		]]>
 		</script-block>
 	</scripts>
-
-	<!--default external bundles to be loaded AFTER this bundles is fully loaded and running-->
-	<packages>
-	</packages>
 
 </ibx-res-bundle>
