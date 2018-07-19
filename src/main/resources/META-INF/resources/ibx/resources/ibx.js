@@ -301,6 +301,8 @@ ibx.bindElements = function(elements)
 			var memberName = element.attr("data-ibx-name");
 			if(memberName)
 			{
+				if(memberName == "_nfSwatch")
+					var x = 10;
 				var nameRoot = element.closest(":ibxNameRoot");
 				var nameRootWidget = nameRoot.data("ibxWidget");
 
@@ -327,8 +329,9 @@ ibx.bindElements = function(elements)
 					console.error("Unknown ibxWidget type:", widgetType, element[0]);
 					debugger;
 				}
-				element.data("ibxIsBound", true);//mark this element as having been bound.
 			}
+
+			element.data("ibxIsBound", true);//mark this element as having been bound.
 		}
 	}.bind(this));
 	return elBind;
