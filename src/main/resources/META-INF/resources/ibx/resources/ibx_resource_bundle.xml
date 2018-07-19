@@ -68,7 +68,7 @@ $Revision$:-->
 
 				"PP_CUSTOM_COLORS":"Custom Colors",
 				"PP_NO_FILL":"No fill",
-				"PP_TRANSPARENCY":"Transparency",
+				"PP_TRANSPARENCY":"Opacity",
 				"PP_PAL_NAME_BASIC":"Basic",
 
 				"IBX_TERMINATING_STRING":""
