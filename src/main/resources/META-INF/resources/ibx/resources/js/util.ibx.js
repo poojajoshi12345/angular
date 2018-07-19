@@ -1,6 +1,27 @@
 /*Copyright 1996-2016 Information Builders, Inc. All rights reserved.*/
 // $Revision$:
 
+/****
+	UTILITY FUNCTION FOR DERIVING CLASSES IN BASE CLASS CHECK TO SEE IF
+	_ibxInPrototype = true, and return before doing anything
+	eg:
+		function myBaseClass()
+		{
+			if(_ibxInPrototype)return;
+			IF NOT THEN DO CONSTRUCTION AS USUAL
+		}
+	THIS STOPS PROTOTYPE FROM FULLY CONSTRUCTING.
+****/
+var _ibxInPrototype = false;
+function ibxDeriveClass(fnClass, fnBase)
+{
+	_ibxInPrototype = true;
+	var p = fnClass.prototype = new fnBase;
+	p.constructor = fnClass
+	_ibxInPrototype = false;
+	return p;
+}
+
 //Simple string formatting function
 function sformat()
 {
@@ -645,6 +666,47 @@ function unescapeXmlString(string)
 
 
 /****
+	Simple functions to convert between hex and rgba
+****/
+function hexToRgba(hex, opacity)
+	{
+		hex = hex || "#000000";
+		opacity = (opacity === undefined) ? 1 : opacity;
+
+		var ret = {"rgba":null, "r":null, "g":null, "b":null, "a":null};
+		var c;
+		if(/^#([A-Fa-f0-9]{3}){1,2}$/.test(hex))
+		{
+			c= hex.substring(1).split('');
+			if(c.length== 3)
+				c= [c[0], c[0], c[1], c[1], c[2], c[2]];
+			c= '0x'+c.join('');
+			ret.r = (c>>16)&255;
+			ret.g = (c>>8)&255;
+			ret.b = c&255;
+			ret.a = Number(opacity.toPrecision(1));
+			ret.rgba = sformat("rgba({1}, {2}, {3}, {4})", ret.r, ret.g, ret.b, ret.a);
+		}
+		return ret;
+};
+function rgbaToHex(r, g, b, a)
+{
+	function trim (str) {
+	  return str.replace(/^\s+|\s+$/gm,'');
+	}
+
+	if(typeof(r) === "string")
+	{
+		var parts = r.substring(r.indexOf("(")).split(",");
+		r = parseInt(trim(parts[0].substring(1)), 10);
+		g = parseInt(trim(parts[1]), 10);
+		b = parseInt(trim(parts[2]), 10);
+		a = parseFloat(trim(parts[3].substring(0, parts[3].length - 1))).toFixed(2);
+	}
+	return ('#' + r.toString(16) + g.toString(16) + b.toString(16) + (a * 255).toString(16).substring(0,2));
+};
+
+/****
 	MediaQuery is used to wrap the idea of creating javascript breakpoints to our code.  Also allows
 	manipulation of the <meta name="viewport"> tag.
 ****/
@@ -760,6 +822,8 @@ if(window.matchMedia)//Declare the static singleton if browser supports the matc
 ******************************************************************************/
 function WebApi(webAppContext, options)
 {
+	if(_ibxInPrototype)return;
+
 	//[IBX-39] webAppName now passed as an option, not a parameter...so people can set when creating an ibfs, or derived, object.
 	options = options || {};
 	var webApiOptions = 
@@ -775,7 +839,7 @@ function WebApi(webAppContext, options)
 	options = $.extend(true, {},  WebApi.statics.defaultExInfo, webApiOptions, options);
 	this.setExOptions(options);
 }
-var _p = WebApi.prototype = new Object();
+var _p = ibxDeriveClass(WebApi, Object);
 
 WebApi.statics = 
 {

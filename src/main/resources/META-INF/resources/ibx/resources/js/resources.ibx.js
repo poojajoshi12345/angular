@@ -6,6 +6,7 @@
 ******************************************************************************/
 function ibxResourceManager(ctxPath)
 {
+	if(_ibxInPrototype)return;
 	this._resBundle = $($.parseXML("<ibx-res-bundle><markup></markup></ibx-res-bundle>"));
 	this._styleSheet = $("<style type='text/css'>").addClass("ibxResourceManager_inline_styles").appendTo("head");
 	
@@ -16,7 +17,7 @@ function ibxResourceManager(ctxPath)
 
 	this.setContextPath(ctxPath || ibx.getPath());//default to the global ibx context path.
 }
-var _p = ibxResourceManager.prototype = new Object();
+var _p = ibxDeriveClass(ibxResourceManager, Object);
 
 _p.loadedBundles = null;
 _p.loadedFiles = null;
@@ -501,7 +502,9 @@ ibxResourceCompiler - used to package ibx application into single html file.
 ******************************************************************************/
 function ibxResourceCompiler(ctxPath, bootable)
 {
-	ibxResourceManager.call(this);
+	if(_ibxInPrototype)return;
+	ibxResourceManager.call(this, ctxPath);
+
 	this._resBundle = $($.get({"url":this._contextPath + "./ibx_compiler_bundle.xml", "async":false, "dataType":"xml"}).responseXML);
 	this._bootable = bootable
 	var bootRes = this._resBundle.find("ibx-boot-resources").detach();
@@ -531,7 +534,7 @@ function ibxResourceCompiler(ctxPath, bootable)
 		this.loadBundle(($.get({"url":this._contextPath + "./ibx_resource_bundle.xml", "async":false, "dataType":"xml"}).responseXML));
 	}
 }
-var _p = ibxResourceCompiler.prototype = new ibxResourceManager();
+var _p = ibxDeriveClass(ibxResourceCompiler, ibxResourceManager);
 
 _p._bootable = false;
 _p.bootable = function(){return this._bootable;};
