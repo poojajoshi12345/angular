@@ -414,7 +414,6 @@ ibx.coercePropVal = function (val)
 	}
 	return val;
 };
-
 //# sourceURL=ibx.js
 
 

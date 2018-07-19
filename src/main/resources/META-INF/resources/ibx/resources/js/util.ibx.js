@@ -1,6 +1,7 @@
 /*Copyright 1996-2016 Information Builders, Inc. All rights reserved.*/
 // $Revision$:
 
+
 /****
 	UTILITY FUNCTION FOR DERIVING CLASSES IN BASE CLASS CHECK TO SEE IF
 	_ibxInPrototype = true, and return before doing anything
@@ -12,15 +13,16 @@
 		}
 	THIS STOPS PROTOTYPE FROM FULLY CONSTRUCTING.
 ****/
-var _ibxInPrototype = false;
-function ibxDeriveClass(fnClass, fnBase)
+var _jsDerivingClass = false;
+function jsDeriveClass(fnClass, fnBase)
 {
-	_ibxInPrototype = true;
+	_jsDerivingClass = true;
 	var p = fnClass.prototype = new fnBase;
 	p.constructor = fnClass
-	_ibxInPrototype = false;
+	_jsDerivingClass = false;
 	return p;
 }
+
 
 //Simple string formatting function
 function sformat()
@@ -822,7 +824,7 @@ if(window.matchMedia)//Declare the static singleton if browser supports the matc
 ******************************************************************************/
 function WebApi(webAppContext, options)
 {
-	if(_ibxInPrototype)return;
+	if(_jsDerivingClass)return;
 
 	//[IBX-39] webAppName now passed as an option, not a parameter...so people can set when creating an ibfs, or derived, object.
 	options = options || {};
@@ -839,7 +841,7 @@ function WebApi(webAppContext, options)
 	options = $.extend(true, {},  WebApi.statics.defaultExInfo, webApiOptions, options);
 	this.setExOptions(options);
 }
-var _p = ibxDeriveClass(WebApi, Object);
+var _p = jsDeriveClass(WebApi, Object);
 
 WebApi.statics = 
 {
