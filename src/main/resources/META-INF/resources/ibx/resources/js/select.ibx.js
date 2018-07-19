@@ -657,7 +657,7 @@ $.widget("ibi.ibxSelectItemList", $.ibi.ibxVBox,
 				var itemText = $(el).data("ibxWidget").option("text") + "";
 				if (this._fnMatch ? (this._fnMatch(searchText, itemText)) : (0 == itemText.toLowerCase().indexOf(searchText.toLowerCase())))
 				{
-					if (!found)
+					if (!found && !this.options.filter)
 						$(el).addClass("ibx-select-item-highlight");
 					else
 						$(el).removeClass("ibx-select-item-highlight");
@@ -781,9 +781,11 @@ $.widget("ibi.ibxSelectItemList", $.ibi.ibxVBox,
 	},
 	focusSelItem: function ()
 	{
-		var anchor = this.element.find(".sel-anchor").first()
+		var anchor = this.element.find(".ibx-select-item-highlight:ibxNavFocusable").first();
 		if (anchor.length == 0)
-			anchor = this.element.find(".sel-selected").first();
+			anchor = this.element.find(".sel-anchor:ibxNavFocusable").first()
+		if (anchor.length == 0)
+			anchor = this.element.find(".sel-selected:ibxNavFocusable").first();
 		if (anchor.length == 0)
 		{
 			anchor = this.element.find(".ibx-select-item:ibxNavFocusable").first();
