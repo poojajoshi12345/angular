@@ -24,20 +24,12 @@
 			]
 			ibx(function()
 			{
-				var palPicker = $(".test-pal-picker");
-				palPicker.ibxWidget("paletteFile", ibx.resourceMgr.getXmlResource(".palette-picker-default-palettes"), "default_basic");
-				palPicker.on("ibx_selchange", function(e)
-				{
-					var info = e.originalEvent.data;
-					$("body").css("backgroundColor", $(info.items[0]).css("backgroundColor"));
-				});
+				var res = ibx.resourceMgr.getResource(".test-markup", false);
+				var x = $("<div>").ibxPopup();
+				x.ibxWidget("add", res);
+				ibx.bindElements(x);
+				x.ibxWidget("open")
 
-				var colorPicker = $(".test-color-picker");
-				colorPicker.on("ibx_colorchange", function(e)
-				{
-					var color = e.originalEvent.data;
-					$("body").css("backgroundColor", color);
-				});
 			}, packages, true);
 		</script>
 		<style type="text/css">
@@ -59,15 +51,8 @@
 	</head>
 
 	<body class="ibx-root">
-		<div tabindex="0" class="test-color-picker" data-ibx-type="ibxColorPicker" data-ibxp-color="#ccc"></div>
-		<div tabindex="0" class="test-pal-picker" data-ibx-type="ibxPalettePicker" data-ibxp-color="#FF7827"></div>
-		<div tabindex="0" class="test-tab-panel" data-ibx-type="ibxTabPane">
-			<div data-ibx-type="ibxTabPage" data-ibxp-selected="true">Presets
-				<div tabindex="0" class="test-pal-picker" data-ibx-type="ibxPalettePicker"></div>
-			</div>
-			<div data-ibx-type="ibxTabPage">Palette
-				<div tabindex="0" class="test-color-picker" data-ibx-type="ibxColorPicker" data-ibxp-color="#ccc"></div>
-			</div>
+		<div data-ibx-type="ibxWidget" data-ibx-name-root="true">
+			
 		</div>
 	</body>
 </html>

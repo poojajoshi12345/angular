@@ -686,7 +686,7 @@ function hexToRgba(hex, opacity)
 			ret.r = (c>>16)&255;
 			ret.g = (c>>8)&255;
 			ret.b = c&255;
-			ret.a = Number(opacity.toPrecision(1));
+			ret.a = Number(opacity.toFixed(2));
 			ret.rgba = sformat("rgba({1}, {2}, {3}, {4})", ret.r, ret.g, ret.b, ret.a);
 		}
 		return ret;

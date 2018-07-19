@@ -3,8 +3,6 @@
 
 .ibx-color-picker
 {
-	font-family:"roboto";
-	font-size:14px;
 }
 
 .cp-info-box
@@ -33,7 +31,6 @@
 .ibx-palette-picker
 {
 	width:240px;
-	border:1px solid #ccc;
 }
 
 .pp-palette-select
@@ -43,7 +40,6 @@
 
 .pp-swatch-box
 {
-	xheight:55px;
 	overflow:hidden;
 }
 

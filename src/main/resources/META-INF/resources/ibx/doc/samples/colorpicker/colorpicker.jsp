@@ -20,19 +20,28 @@
 		<script type="text/javascript">
 			ibx(function()
 			{
+				var colorPicker = $(".test-color-picker");
 				var palPicker = $(".test-pal-picker");
 				palPicker.on("ibx_change", function(e)
 				{
 					var info = e.originalEvent.data;
-					$("body").css({"backgroundColor":info.color, "opacity": info.opacity});
+					colorPicker.ibxWidget("option", "color", info.color);					
+					$("body").css("backgroundColor", info.colorRgba.rgba);
+					$(".rgb-red").text(info.colorRgba.r);
+					$(".rgb-green").text(info.colorRgba.g);
+					$(".rgb-blue").text(info.colorRgba.b);
+					$(".rgb-alpha").text(info.colorRgba.a);
+					$(".rgb-rgba").text(info.colorRgba.rgba);
+					$(".rgb-hex").text(info.color);
 				});
 
-				var colorPicker = $(".test-color-picker");
 				colorPicker.on("ibx_colorchange", function(e)
 				{
 					var color = e.originalEvent.data;
+					palPicker.ibxWidget("option", "color", color);
 					$("body").css("backgroundColor", color);
 				});
+				palPicker.ibxWidget("option", "color", "#ffffff");
 
 			}, true);
 		</script>
@@ -45,7 +54,25 @@
 				margin:0px;
 				box-sizing:border-box;
 			}
-			.test-color-picker.stand-alone
+			.color-info-box
+			{
+				width:100%;
+				margin:20px;
+				padding:5px;
+				background-color:white;
+				border:1px solid black;
+			}
+			.rgb-label
+			{
+				margin-right:3px;
+			}
+			.rgb-value
+			{
+				padding:3px;
+				margin-right:10px;
+				border:1px solid black;
+			}
+			.test-color-picker.stand-alone, .test-pal-picker.stand-alone
 			{
 				border:1px solid #ccc;
 			}
@@ -63,7 +90,16 @@
 		</style>
 	</head>
 	<body class="ibx-root">
-		<div class="main-box" data-ibx-type="ibxHBox" data-ibxp-justify="center" data-ibxp-align="center" data-ibxp-wrap="true">
+		<div class="main-box" data-ibx-type="ibxHBox" data-ibxp-justify="center" data-ibxp-wrap="true">
+			<div class="color-info-box" data-ibx-type="ibxHBox" data-ibxp-justify="center" data-ibxp-align="center">
+				<div class="rgb-label" data-ibx-type="ibxLabel">Red:</div><div class="rgb-value rgb-red"></div>
+				<div class="rgb-label" data-ibx-type="ibxLabel">Green:</div><div class="rgb-value rgb-green"></div>
+				<div class="rgb-label" data-ibx-type="ibxLabel">Blue:</div><div class="rgb-value rgb-blue"></div>
+				<div class="rgb-label" data-ibx-type="ibxLabel">Alpha:</div><div class="rgb-value rgb-alpha"></div>
+				<div class="rgb-label" data-ibx-type="ibxLabel">rgba:</div><div class="rgb-value rgb-rgba"></div>
+				<div class="rgb-label" data-ibx-type="ibxLabel">Hex:</div><div class="rgb-value rgb-hex"></div>
+			</div>
+
 			<div tabindex="0" class="test-color-picker stand-alone" data-ibx-type="ibxColorPicker"></div>
 			<div tabindex="0" class="test-pal-picker stand-alone" data-ibx-type="ibxPalettePicker"></div>
 			<div tabindex="0" class="test-combined-picker" data-ibx-type="ibxTabPane">
@@ -74,6 +110,8 @@
 					<div tabindex="0" class="test-color-picker" data-ibx-type="ibxColorPicker" data-ibxp-color="#ccc"></div>
 				</div>
 			</div>
+			<!--
+			-->
 		</div>
 	</body>
 </html>
