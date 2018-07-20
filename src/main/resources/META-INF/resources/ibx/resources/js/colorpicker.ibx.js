@@ -173,7 +173,8 @@ $.widget("ibi.ibxPalettePicker", $.ibi.ibxVBox,
 				colors.sort(this._sortColors.bind(this)).each(function(idx, color)
 				{
 					var value = color.getAttribute("value").toLowerCase();
-					var swatch = $(sformat("<div tabindex='0' class='pp-swatch' title='{1}' data-pp-hex-value='{2}'>", color.getAttribute("display-name"), value));
+					var displayName = color.getAttribute("display-name") || value;
+					var swatch = $(sformat("<div tabindex='0' class='pp-swatch' title='{1}' data-pp-hex-value='{2}'>", displayName, value));
 					swatch.css("backgroundColor", value).attr("data-pp-rgb-value", swatch.css("backgroundColor"));
 					this._swatchBox.append(swatch);
 				}.bind(this));
@@ -183,7 +184,8 @@ $.widget("ibi.ibxPalettePicker", $.ibi.ibxVBox,
 				colors.sort(this._sortColors.bind(this)).each(function(idx, color)
 				{
 					var value = color.getAttribute("value").toLowerCase();
-					var swatch = $(sformat("<div tabindex='0' class='pp-swatch pp-swatch-custom' data-pp-hex-value='{1}'>", value));
+					var displayName = color.getAttribute("display-name") || value;
+					var swatch = $(sformat("<div tabindex='0' class='pp-swatch pp-swatch-custom' title='{1}' data-pp-hex-value='{1}'>", displayName, value));
 					swatch.css("backgroundColor", value).attr("data-pp-rgb-value", swatch.css("backgroundColor"));
 					this._customBox.append(swatch);
 				}.bind(this));

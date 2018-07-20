@@ -52,6 +52,7 @@
 				width:100%;
 				height:100%;
 				margin:0px;
+				font-family:monospace;
 				box-sizing:border-box;
 			}
 			.color-info-box
@@ -68,9 +69,15 @@
 			}
 			.rgb-value
 			{
+				width:30px;
 				padding:3px;
 				margin-right:10px;
+				text-align:center;
 				border:1px solid black;
+			}
+			.rgb-rgba, .rgb-hex
+			{
+				width:auto;
 			}
 			.test-color-picker.stand-alone, .test-pal-picker.stand-alone
 			{
@@ -92,7 +99,7 @@
 	<body class="ibx-root">
 		<div class="main-box" data-ibx-type="ibxHBox" data-ibxp-justify="center" data-ibxp-wrap="true">
 			<div class="color-info-box" data-ibx-type="ibxHBox" data-ibxp-justify="center" data-ibxp-align="center">
-				<div class="rgb-label" data-ibx-type="ibxLabel">Red:</div><div class="rgb-value rgb-red"></div>
+				<div class="rgb-label" data-ibx-type="ibxLabel" data-ibxp-icon-position="top">Red:</div><div class="rgb-value rgb-red"></div>
 				<div class="rgb-label" data-ibx-type="ibxLabel">Green:</div><div class="rgb-value rgb-green"></div>
 				<div class="rgb-label" data-ibx-type="ibxLabel">Blue:</div><div class="rgb-value rgb-blue"></div>
 				<div class="rgb-label" data-ibx-type="ibxLabel">Alpha:</div><div class="rgb-value rgb-alpha"></div>
