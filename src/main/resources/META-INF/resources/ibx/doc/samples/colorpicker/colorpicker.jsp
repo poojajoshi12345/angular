@@ -63,6 +63,12 @@
 				background-color:white;
 				border:1px solid black;
 			}
+			.rgb-title
+			{
+				font-size:18px;
+				font-weight:bold;
+				margin-right:20px;
+			}
 			.rgb-label
 			{
 				margin-right:3px;
@@ -98,8 +104,9 @@
 	</head>
 	<body class="ibx-root">
 		<div class="main-box" data-ibx-type="ibxHBox" data-ibxp-justify="center" data-ibxp-wrap="true">
-			<div class="color-info-box" data-ibx-type="ibxHBox" data-ibxp-justify="center" data-ibxp-align="center">
-				<div class="rgb-label" data-ibx-type="ibxLabel" data-ibxp-icon-position="top">Red:</div><div class="rgb-value rgb-red"></div>
+			<div class="color-info-box" data-ibx-type="ibxHBox" data-ibxp-justify="start" data-ibxp-align="center">
+				<div class="rgb-title" data-ibx-type="ibxLabel">Color Values</div>
+				<div class="rgb-label" data-ibx-type="ibxLabel">Red:</div><div class="rgb-value rgb-red"></div>
 				<div class="rgb-label" data-ibx-type="ibxLabel">Green:</div><div class="rgb-value rgb-green"></div>
 				<div class="rgb-label" data-ibx-type="ibxLabel">Blue:</div><div class="rgb-value rgb-blue"></div>
 				<div class="rgb-label" data-ibx-type="ibxLabel">Alpha:</div><div class="rgb-value rgb-alpha"></div>
