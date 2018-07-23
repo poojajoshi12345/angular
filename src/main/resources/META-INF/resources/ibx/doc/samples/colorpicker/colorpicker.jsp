@@ -114,16 +114,20 @@
 				<div class="rgb-label" data-ibx-type="ibxLabel">Hex:</div><div class="rgb-value rgb-hex"></div>
 			</div>
 
-			<div tabindex="0" class="test-color-picker stand-alone" data-ibx-type="ibxColorPicker"></div>
-			<div tabindex="0" class="test-pal-picker stand-alone" data-ibx-type="ibxPalettePicker"></div>
-			<div tabindex="0" class="test-combined-picker" data-ibx-type="ibxTabPane">
-				<div data-ibx-type="ibxTabPage" data-ibxp-selected="true">Presets
-					<div tabindex="0" class="test-pal-picker" data-ibx-type="ibxPalettePicker"></div>
-				</div>
-				<div data-ibx-type="ibxTabPage">Palette
-					<div tabindex="0" class="test-color-picker" data-ibx-type="ibxColorPicker" data-ibxp-color="#ccc"></div>
+			<div class="color-picker-button" data-ibx-type="ibxMenuButton">Color...
+				<div data-ibx-type="ibxMenu">
+					<div tabindex="0" class="test-combined-picker" data-ibx-type="ibxTabPane">
+						<div data-ibx-type="ibxTabPage" data-ibxp-selected="true">Presets
+							<div tabindex="0" class="test-pal-picker" data-ibx-type="ibxPalettePicker"></div>
+						</div>
+						<div data-ibx-type="ibxTabPage">Palette
+							<div tabindex="0" class="test-color-picker" data-ibx-type="ibxColorPicker" data-ibxp-color="#ccc"></div>
+						</div>
+					</div>
 				</div>
 			</div>
+			<div tabindex="0" class="test-color-picker stand-alone" data-ibx-type="ibxColorPicker"></div>
+			<div tabindex="0" class="test-pal-picker stand-alone" data-ibx-type="ibxPalettePicker"></div>
 			<!--
 			-->
 		</div>
