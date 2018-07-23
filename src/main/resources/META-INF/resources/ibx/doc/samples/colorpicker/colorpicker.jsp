@@ -100,6 +100,13 @@
 				margin:5px;
 				background-color:white;
 			}
+			.color-picker-button
+			{
+				border:1px solid #ccc;
+				border-radius:5px;
+				padding:5px;
+				margin:5px;
+			}
 		</style>
 	</head>
 	<body class="ibx-root">
