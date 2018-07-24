@@ -22,10 +22,23 @@
 				margin: 0px;
 				box-sizing: border-box;
 			}
+			.test-grid
+			{
+				flex:1 1 auto;
+				margin:10px;
+				border:1px solid black;
+			}
+			.ibx-flex-grid-cell
+			{
+				border:1px solid red;
+			}
 		</style>
 	</head>
 	<body class="ibx-root">
-		<div class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="start" data-ibxp-justify="stretch">
+		<div class="main-box" data-ibx-type="ibxHBox" data-ibxp-align="stretch" data-ibxp-justify="stretch">
+			<div class="test-grid" data-ibx-type="ibxFlexGrid" data-ibxp-column-count="100px, *, 100px">
+				<div data-ibx-type="ibxLabel">r1c1</div><div data-ibx-type="ibxLabel">r1c2</div><div data-ibx-type="ibxLabel">r1c3</div>
+			</div>
 		</div>
 	</body>
 </html>

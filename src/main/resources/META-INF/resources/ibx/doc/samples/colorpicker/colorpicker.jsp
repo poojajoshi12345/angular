@@ -121,8 +121,8 @@
 				<div class="rgb-label" data-ibx-type="ibxLabel">Hex:</div><div class="rgb-value rgb-hex"></div>
 			</div>
 
-			<div class="color-picker-button" data-ibx-type="ibxMenuButton">Color...
-				<div data-ibx-type="ibxMenu">
+			<div class="color-picker-button" data-ibx-type="ibxSplitMenuButton">Color...
+				<div data-ibx-type="ibxPopup">
 					<div tabindex="0" class="test-combined-picker" data-ibx-type="ibxTabPane">
 						<div data-ibx-type="ibxTabPage" data-ibxp-selected="true">Presets
 							<div tabindex="0" class="test-pal-picker" data-ibx-type="ibxPalettePicker"></div>

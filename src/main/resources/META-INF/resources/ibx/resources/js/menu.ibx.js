@@ -139,7 +139,7 @@ $.widget("ibi.ibxMenuItem", $.ibi.ibxHBox,
 			"mouseenter":this._onMenuItemMouseEvent.bind(this),
 			"mouseleave": this._onMenuItemMouseEvent.bind(this)
 		});
-		this.addSubMenu(this.element.children(".ibx-menu"));
+		this.addSubMenu(this.element.children(".ibx-popup"));
 	},
 	_setAccessibility:function(accessible, aria)
 	{
@@ -444,7 +444,7 @@ $.widget("ibi.ibxMenuButton", $.ibi.ibxButtonSimple,
 		var options = this.options;
 		options.position.of = this.element[0];
 		this.element.on({"click": this._onMenuButtonMouseEvent.bind(this), "keyup": this._onMenuButtonKeyEvent.bind(this)});
-		options.menu = options.menu ||  this.element.children(".ibx-menu");
+		options.menu = options.menu ||  this.element.children(".ibx-popup");
 		options.menu.ibxAriaId();
 	},
 	_setAccessibility:function(accessible, aria)
@@ -527,7 +527,7 @@ $.widget("ibi.ibxSplitMenuButton", $.ibi.ibxButtonSimple,
 		var options = this.options;
 
 		options.menuOptions.position.of = this.element;
-		var menu = this.element.children(".ibx-menu");
+		var menu = this.element.children(".ibx-popup");
 		var menuBtn = this._menuBtn = $("<div>").append(menu).ibxMenuButton().on("mousedown click", this._onMenuButtonMouseEvent.bind(this));
 		var separator = this._separator = $("<div class='split-separator'>");
 		this.element.append(separator, menuBtn).on({"click":this._onBtnClick.bind(this), "keyup":this._onBtnKeyEvent.bind(this)});
