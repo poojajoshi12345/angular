@@ -12,6 +12,16 @@
 		<script type="text/javascript">
 			ibx(function(e)
 			{
+				var parentItem = $(".sub-menu-test");
+				for(var i = 0; i < 20; ++i)
+				{
+					var childItem = $("<div class='sub-menu-item'>Submenu Item</div>").ibxMenuItem();
+					parentItem.ibxWidget("add", childItem);
+				}
+
+				parentItem.on("ibx_beforeopen", function(e)
+				{
+				});
 			},true);
 		</script>
 		<style type="text/css">
@@ -35,9 +45,30 @@
 		</style>
 	</head>
 	<body class="ibx-root">
-		<div class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="stretch" data-ibxp-justify="stretch">
+		<div class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="center" data-ibxp-justify="start">
 			<div style="flex:1 1 auto;"></div>
-			<div class="test-menu" data-ibx-type="ibxMenuButton"
+			<div class="test-menu" data-ibx-type="ibxMenuButton">Test Menu
+				<div data-ibx-type="ibxMenu">
+					<div data-ibx-type="ibxMenuItem">Menu Item</div>
+					<div data-ibx-type="ibxMenuItem">Menu Item</div>
+					<div data-ibx-type="ibxMenuItem">Menu Item</div>
+					<div data-ibx-type="ibxMenuItem">Menu Item</div>
+					<div data-ibx-type="ibxMenuItem">Menu Item</div>
+					<div data-ibx-type="ibxMenuItem">Menu Item</div>
+					<div data-ibx-type="ibxMenuItem">Menu Item</div>
+					<div data-ibx-type="ibxMenuItem">Menu Item
+						<div class="sub-menu-test" data-ibx-type="ibxMenu">
+						</div>
+					</div>
+					<div data-ibx-type="ibxMenuItem">Menu Item</div>
+					<div data-ibx-type="ibxMenuItem">Menu Item</div>
+					<div data-ibx-type="ibxMenuItem">Menu Item</div>
+					<div data-ibx-type="ibxMenuItem">Menu Item</div>
+					<div data-ibx-type="ibxMenuItem">Menu Item</div>
+					<div data-ibx-type="ibxMenuItem">Menu Item</div>
+					<div data-ibx-type="ibxMenuItem">Menu Item</div>
+				</div>
+			</div>
 		</div>
 	</body>
 </html>

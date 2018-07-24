@@ -146,11 +146,13 @@ $.widget("ibi.ibxTabPane", $.ibi.ibxFlexBox,
 	},
 	_onTabChange: function (e)
 	{
+		var curSel = this.options.selected;
 		var tabButton = $(e.target).ibxWidget("selected");
 		var selected = tabButton.ibxWidget("option", "tabPage");
 		this.element.children(".ibx-tab-page").not(selected).addClass("tpg-hidden").removeClass("tpg-selected");
 		selected.removeClass("tpg-hidden").addClass("tpg-selected");
 		this.options.selected = selected;
+		selected.dispatchEvent("ibx_selected", null, true, false, curSel[0]);
 		this._trigger("change", e, selected);
 	},
 	userValue:function(value)
