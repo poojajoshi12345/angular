@@ -73,6 +73,47 @@
 		<script-file src="./test_res_script.js"/>
 		<script-block>
 		<![CDATA[
+			$.widget("ibi.ibxRubberBandSelection", $.Widget, 
+			{
+				options:
+				{
+				},
+				_create:function()
+				{
+					this.element.data("ibiIbxWidget", this);
+					this.element.addClass("ibx-rubber-band");
+					this.element[0].addEventListener("mousedown", this._onMouseEvent.bind(this), true);
+					this.element[0].addEventListener("mouseup", this._onMouseEvent.bind(this), true);
+					this.element[0].addEventListener("mousemove", this._onMouseEvent.bind(this), true);
+					this._super();
+				},
+				_destroy:function()
+				{
+					this._super();
+				},
+				_onMouseEvent:function(e)
+				{
+					var eType = e.type;
+					if(eType == "mousedown")
+					{
+					}
+					else
+					if(eType == "mouseup")
+					{
+					}
+					else
+					if(eType == "mousemove")
+					{
+					}
+				},
+				_refresh:function()
+				{
+					var options = this.options;
+					this._super();
+				}
+			});
+
+
 			$.widget("ibi.testFrame", $.ibi.ibxVBox, 
 			{
 				options:

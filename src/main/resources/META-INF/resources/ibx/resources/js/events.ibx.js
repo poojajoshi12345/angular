@@ -637,7 +637,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 				var idxSel = selChildren.index(this._focus()[0]);
 				var idxStart = Math.min(idxAnchor, idxSel);
 				var idxEnd = Math.max(idxAnchor, idxSel);
-				this.toggleSelected(selChildren.slice(idxStart, idxEnd + 1), this.isSelected(this._anchor()), false);
+				this.toggleSelected(selChildren.slice(idxStart, idxEnd + 1), true, false);
 			}
 			else
 				this.toggleSelected(this._focus());
@@ -657,6 +657,8 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 		var options = this.options;
 		var isTarget = this.element.is(e.target);
 		var isMulti = options.type == "multi";
+		var selChildren = this.selectableChildren();
+		var selTarget = this.mapToSelectable(e.target);
 
 		//mousedown happens before focus, so make us active before anything.
 		this._activate(true);
@@ -670,17 +672,15 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 
 		//event could happen on child element...map back to something we know can be selected
 		//and can actually be selected by this selection manager.
-		var selTarget = this.mapToSelectable(e.target);
-		var selChildren = this.selectableChildren();
 		if(selChildren.index(selTarget) != -1)
 		{
-			if(e.shiftKey && options.type == "multi")
+			if(options.type == "multi" && e.shiftKey)
 			{
 				var idxAnchor = selChildren.index(this._anchor());
 				var idxSel = selChildren.index(selTarget[0]);
 				var idxStart = Math.min(idxAnchor, idxSel);
 				var idxEnd = Math.max(idxAnchor, idxSel);
-				this.toggleSelected(selChildren.slice(idxStart, idxEnd + 1), this.isSelected(this._anchor()), false);
+				this.toggleSelected(selChildren.slice(idxStart, idxEnd + 1), true, false);
 			}
 			else
 				this.toggleSelected(selTarget, (isMulti && e.ctrlKey) || options.toggleSelection ? undefined : true);
@@ -732,7 +732,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 		el = this.element.logicalChildren(".ibx-sm-selection-root", el);
 
 		//by default set the anchor item
-		anchor = (anchor === undefined) ? true : false;
+		anchor = (select && (anchor === undefined)) ? true : false;
 
 		if(select)
 		{
