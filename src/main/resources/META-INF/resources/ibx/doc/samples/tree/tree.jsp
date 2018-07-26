@@ -30,7 +30,7 @@
 					xItems.each(function(idx, el)
 					{
 						el = $(el);
-						if(el.is("[container=true]"))
+						//if(el.is("[container=true]"))
 						{
 							var treeNode = makeTreeNode(el, "ibfs_item");
 							targetNode.ibxWidget("add", treeNode);
@@ -80,6 +80,17 @@
 						var dropTarget = $(e.target).closest(".ibx-tree-node");
 						dropTarget.ibxWidget("add", dragNode);
 					}
+				}).on("ibx_ctxmenu", function(e)
+				{
+					var treeNode = $(e.target).closest(".ibx-tree-node");
+					var nodeInfo = treeNode.data("xItem");
+					var isContainer = nodeInfo.attr("container") == "true";
+					var menu = $(isContainer ? ".ctx-menu-container" : ".ctx-menu-item");
+					e.menu = menu;
+				}).on("click dblclick keydown", function(e)
+				{
+					console.log(e.type, e.target);
+					//e.preventDefault();
 				});
 
 				$(".test-files-box").on("dblclick keydown", function(e)
@@ -392,6 +403,12 @@
 		</style>
 	</head>
 	<body class="ibx-root">
+		<div class="ctx-menu-item" data-ibx-type="ibxMenu">
+			<div data-ibx-type="ibxMenuItem">Item Context Item</div>
+		</div>
+		<div class="ctx-menu-container" data-ibx-type="ibxMenu">
+			<div data-ibx-type="ibxMenuItem">Container Context Item</div>
+		</div>
 		<div class="cmdTest" data-ibx-type="ibxCommand" data-ibxp-shortcut="CTRL+C"></div>
 		<div class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
 			<div data-ibx-type="ibxLabel" data-ibxp-justify="center" style="flex:0 0 auto;color:#ccc;font-size:24px;font-weight:bold">Data is a Sample IBFS Repository</div>
