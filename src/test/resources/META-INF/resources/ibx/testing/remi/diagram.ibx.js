@@ -30,7 +30,7 @@ $.widget('ibi.ibxDiagram', $.ibi.ibxWidget, {
 		canvas._canvas = $('<svg xmlns="http://www.w3.org/2000/svg" class="ibx-diagram-canvas" width="' + w + '" height="' + h + '"></svg>');
 		element.append(canvas._canvas);
 		canvas.children().each(function(idx, domNode) {
-			if ($(domNode).ibxDiagramNode('instance')) {  // Add any ibxDiagramNodes child nodes to this canvas
+			if (domNode !== canvas._canvas[0]) {
 				canvas.add(domNode);
 			}
 		});
@@ -132,7 +132,11 @@ $.widget('ibi.ibxDiagram', $.ibi.ibxWidget, {
 		} else if (!(node instanceof jQuery)) {
 			node = $('<div>').ibxDiagramNode(node);  // Assume 'node' is an ibxDiagramNode options object like {left, right, className, ...}.  Create a DOM node for it.
 		}
-		return node.ibxDiagramNode('instance');
+		var res = node.ibxDiagramNode('instance');
+		if (res) {
+			return res;
+		}
+		return node.ibxDiagramNode().ibxDiagramNode('instance');
 	},
 	add: function(node) {
 		var canvas = this;

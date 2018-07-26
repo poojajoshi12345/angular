@@ -17,7 +17,7 @@
 
 				$('.btnSelectMode').on('ibx_change', function(e) {
 					var checked = $(e.target).ibxWidget('checked');
-					$('.test-canvas').ibxWidget('option', 'selectMode', checked ? 'fit' : 'touch');
+					$('.test-canvas').ibxWidget('option', 'selectMode', checked ? 'touch' : 'fit');
 				});
 
 
@@ -95,9 +95,9 @@
 					to: {node: 1, anchor: 'left', tip: {shape: 'arrow-hollow', size: 10}}
 				});
 
-				canvas.add($('<div style="left: 200px; top: 400px; width: 50px; height: 50px" class="layout-item">'));  // canvas should ignore this non-diagram-node node
+				canvas.add($('<div style="left: 200px; top: 400px; width: 50px; height: 50px" class="layout-item">'));
 
-				canvas.add($('<div style="left: 20px; top: 400px; width: 50px; height: 50px" class="layout-item" data-ibx-type="ibxDiagramNode">'));  // TODO: Should this work?  It doesn't
+				canvas.add($('<div style="left: 20px; top: 400px; width: 50px; height: 50px" class="layout-item" data-ibx-type="ibxDiagramNode">'));
 
 			}, [{"src" : "./diagram_res_bundle.xml", "loadContext" : "app"}], true);
 		</script>
@@ -198,7 +198,7 @@
 
 			<div>
 				<div class="buttons">
-					<div class="btnSelectMode btn" data-ibx-type="ibxCheckBoxSimple">Lasso entire node to Select</div>
+					<div class="btnSelectMode btn" data-ibx-type="ibxCheckBoxSimple">Lasso touches node to Select</div>
 					<div class="btnGrid btn" data-ibx-type="ibxCheckBoxSimple">Lock to Grid</div>
 					<div class="btnAddNode btn" data-ibx-type="ibxButton">Add Node</div>
 				</div>
@@ -232,7 +232,7 @@
 					</div>
 					<div
 						class="layout-item item-2"
-						data-ibx-type="ibxDiagramNode"
+						data-ibx-type="ibxLabel"
 						data-ibxp-ctx-menu=".ctx-menu"
 					>
 						Layout Item 2<br>Right click for Menu
@@ -252,7 +252,6 @@
 						>
 						</div>
 					</div>
-					<div>Canvas should *not* convert this element into a canvas node</div>
 				</div>
 				<div class="ctx-menu" data-ibx-type="ibxMenu">
 					<div data-ibx-type="ibxMenuItem">Menu Item 1</div>
