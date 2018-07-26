@@ -24,35 +24,24 @@
 			]
 			ibx(function()
 			{
-				var res = ibx.resourceMgr.getResource(".test-markup", false);
-				var x = $("<div>").ibxPopup();
-				x.ibxWidget("add", res);
-				ibx.bindElements(x);
-				x.ibxWidget("open")
-
+				//var frame = ibx.resourceMgr.getResource(".test-frame", true).addClass("test-widget");
+				//$("body").append(frame);
 			}, packages, true);
 		</script>
 		<style type="text/css">
-			html, body
+			html, body, .test-widget
 			{
 				width:100%;
 				height:100%;
 				margin:0px;
 				box-sizing:border-box;
 			}
-			.test-color-picker, .test-pal-picker
-			{
-				background-color:white;
-				border:1px solid black;
-				padding:10px;
-				margin:10px;
-			}
 		</style>
 	</head>
 
 	<body class="ibx-root">
-		<div data-ibx-type="ibxWidget" data-ibx-name-root="true">
-			
-		</div>
+		<div class="test-widget" data-ibx-type="testFrame"></div>
+		<!--
+		-->
 	</body>
 </html>

@@ -18,6 +18,25 @@
 		<style-file src="./test_res_styles.css"/>
 		<style-sheet>
 		<![CDATA[
+			.menu-bar, .tool-bar, .nav-box, .content-box
+			{
+				border:1px solid #ccc;
+				border-radius:5px;
+				margin:2px;
+				padding:2px;
+			}
+			.client-box
+			{
+				flex:1 1 auto;
+			}
+			.nav-box
+			{
+				width:33%;
+			}
+			.content-box
+			{
+				flex:1 1 auto;
+			}
 		]]>
 		</style-sheet>
 	</styles>
@@ -25,9 +44,26 @@
 	<markup>
 		<markup-file src="./test_res_markup.xml"/>
 		<markup-block>
-			<div class="test-markup">
-				<div class="test-box" data-ibx-type="ibxVBox">
-					<div data-ibx-name="xxx">xxx</div>
+			<div class="test-frame" data-ibx-type="testFrame" data-ibxp-align="stretch" data-ibxp-name-root="true">
+				<div class="menu-bar" data-ibx-type="ibxMenuBar" data-ibx-name="_menuBar" data-ibxp-align="center">
+					<div data-ibx-type="ibxMenuButton" data-ibx-name="_menuButton">
+						Menu
+						<div data-ibx-type="ibxMenu">
+							<div data-ibx-type="ibxMenuItem">Menu Item</div>
+						</div>
+					</div>
+				</div>
+				<div class="tool-bar" data-ibx-type="ibxHBox" data-ibx-name="_toolBar" data-ibxp-align="center">
+					<div data-ibx-type="ibxButtonSimple" data-ibx-name="tbarButton" data-ibxp-glyph="face" data-ibxp-glyph-classes="material-icons">Toolbar</div>
+				</div>
+				<div class="client-box" data-ibx-type="ibxHBox" data-ibxp-align="stretch">
+					<div class="nav-box" data-ibx-type="ibxVBox" data-ibx-name="_navBox" data-ibxp-align="stretch">
+						<div data-ibx-type="ibxLabel">Navigation</div>
+					</div>
+					<div data-ibx-type="ibxVSplitter"></div>
+					<div class="content-box" data-ibx-type="ibxWidget" data-ibx-name="_content">
+						<div data-ibx-type="ibxLabel">Content</div>
+					</div>
 				</div>
 			</div>
 		</markup-block>
@@ -37,6 +73,27 @@
 		<script-file src="./test_res_script.js"/>
 		<script-block>
 		<![CDATA[
+			$.widget("ibi.testFrame", $.ibi.ibxVBox, 
+			{
+				options:
+				{
+					"template":".test-frame",
+				},
+				_widgetClass:"test-frame",
+				_create:function()
+				{
+					this._super();
+				},
+				_destroy:function()
+				{
+					this._super();
+				},
+				_refresh:function()
+				{
+					var options = this.options;
+					this._super();
+				}
+			});
 			//# sourceURL=test_res_bundle.xml
 		]]>
 		</script-block>

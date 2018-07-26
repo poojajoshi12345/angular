@@ -301,8 +301,6 @@ ibx.bindElements = function(elements)
 			var memberName = element.attr("data-ibx-name");
 			if(memberName)
 			{
-				if(memberName == "_nfSwatch")
-					var x = 10;
 				var nameRoot = element.closest(":ibxNameRoot");
 				var nameRootWidget = nameRoot.data("ibxWidget");
 

@@ -22,7 +22,7 @@
 				parentItem.on("ibx_beforeopen", function(e)
 				{
 				});
-			},true);
+			},[{"src": "../remi/diagram_res_bundle.xml", "loadContext":"app"}], true);
 		</script>
 		<style type="text/css">
 			html, body, .main-box
@@ -32,41 +32,17 @@
 				margin: 0px;
 				box-sizing: border-box;
 			}
-			.test-grid
+			.test-tree
 			{
-				flex:1 1 auto;
-				margin:10px;
-				border:1px solid black;
-			}
-			.ibx-flex-grid-cell
-			{
-				border:1px solid red;
+				width:250px;
 			}
 		</style>
 	</head>
 	<body class="ibx-root">
 		<div class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="center" data-ibxp-justify="start">
-			<div style="flex:1 1 auto;"></div>
-			<div class="test-menu" data-ibx-type="ibxMenuButton">Test Menu
-				<div data-ibx-type="ibxMenu">
-					<div data-ibx-type="ibxMenuItem">Menu Item</div>
-					<div data-ibx-type="ibxMenuItem">Menu Item</div>
-					<div data-ibx-type="ibxMenuItem">Menu Item</div>
-					<div data-ibx-type="ibxMenuItem">Menu Item</div>
-					<div data-ibx-type="ibxMenuItem">Menu Item</div>
-					<div data-ibx-type="ibxMenuItem">Menu Item</div>
-					<div data-ibx-type="ibxMenuItem">Menu Item</div>
-					<div data-ibx-type="ibxMenuItem">Menu Item
-						<div class="sub-menu-test" data-ibx-type="ibxMenu">
-						</div>
-					</div>
-					<div data-ibx-type="ibxMenuItem">Menu Item</div>
-					<div data-ibx-type="ibxMenuItem">Menu Item</div>
-					<div data-ibx-type="ibxMenuItem">Menu Item</div>
-					<div data-ibx-type="ibxMenuItem">Menu Item</div>
-					<div data-ibx-type="ibxMenuItem">Menu Item</div>
-					<div data-ibx-type="ibxMenuItem">Menu Item</div>
-					<div data-ibx-type="ibxMenuItem">Menu Item</div>
+			<div class="test-diagram" data-ibx-type="ibxDiagram">
+				<div data-ibx-type="ibxTreeNode" data-ibxp-container="true">ParentNode
+					<div class="ibx-tree-node" data-ibx-type="ibxCheckBoxSimple">Test check</div>
 				</div>
 			</div>
 		</div>

@@ -24,6 +24,8 @@ $.widget("ibi.ibxWidget", $.Widget,
 		"navKeyDir":"horizontal",		//horizontal = left/right, vertical = up/down, or both
 		"navKeyResetFocusOnBlur":true,	//when widget loses focus, reset the current active navKey child.
 
+		"template":null,
+
 		//ARIA (508)
 		"aria":
 		{
@@ -62,6 +64,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 	},
 	_create:function()
 	{
+		var options = this.options;
 		this.widgetFullName = this._widgetClass;
 		this.widgetEventPrefix = "ibx_";
 		this.element.data("ibxWidget", this);
@@ -150,8 +153,24 @@ $.widget("ibi.ibxWidget", $.Widget,
 	},
 	_init:function()
 	{
-		var options = $.extend(true, {}, this.options, ibx.getIbxMarkupOptions(this.element))
+		var options = this.options;
+		var template = $();
+		var templateOptions = {};
+		if(!this.element.data("ibxCreatedFromTemplate") && options.template)
+		{
+			//get the template options
+			template = ibx.resourceMgr.getResource(options.template, false);
+			templateOptions = ibx.getIbxMarkupOptions(template);
+		}
+
+		//merge the options from the template with the options from the markup, then set them on the widget.
+		var options = $.extend(true, {}, templateOptions, ibx.getIbxMarkupOptions(this.element))
 		this.option(options);
+
+		//if there is a template, merge it into this element.
+		var children = template.children();
+		children.appendTo(this.element);
+		ibx.bindElements(children);
 	},
 	owner:function(){return this.element.parent();},
 	member:function(memberName, value)
