@@ -15,6 +15,19 @@
 				var canvas = $('.test-canvas').ibxDiagram('instance');
 				var offset = 250, count = 3;
 
+				$('.test-canvas').on('ibx_diagram_selection_change', function(e) {
+					var selectedNodes = e.originalEvent.data;
+					var list = $('.selectedNodeList');
+					list.empty();
+					selectedNodes.forEach(function(node) {
+						list.append('<li>' + (node.options.text || 'No Label') + '</li>')
+					});
+				});
+
+				$('.test-canvas').on('ibx_diagram_delete_node', function(e) {
+					console.log('deleted node: ' + e.originalEvent.data.options.text);
+				});
+
 				$('.btnSelectMode').on('ibx_change', function(e) {
 					var checked = $(e.target).ibxWidget('checked');
 					$('.test-canvas').ibxWidget('option', 'selectMode', checked ? 'touch' : 'fit');
@@ -252,6 +265,11 @@
 						>
 						</div>
 					</div>
+				</div>
+				<div>
+					Selected Nodes:
+					<ul class="selectedNodeList">
+					</ul>
 				</div>
 				<div class="ctx-menu" data-ibx-type="ibxMenu">
 					<div data-ibx-type="ibxMenuItem">Menu Item 1</div>

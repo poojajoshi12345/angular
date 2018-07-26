@@ -188,7 +188,11 @@ $.widget('ibi.ibxDiagram', $.ibi.ibxWidget, {
 		this.triggerSelectionChange();
 	},
 	triggerSelectionChange: function() {
-		this.element.trigger('diagram:selection_change');
+		this.element.dispatchEvent(
+			'ibx_diagram_selection_change',
+			this.getSelectedNodes(),
+			true, true, this.element[0]  // canBubble, canCancel, relatedTarget
+		);
 	},
 	getSelectedNodes: function() {
 		return this._children.filter(function(el) {
@@ -406,7 +410,13 @@ $.widget('ibi.ibxDiagramNode', $.ibi.ibxWidget, {
 				return el.options.selected && el.options.deletable;
 			});
 			while (toDelete.length) {
-				canvas.remove(toDelete[0]);
+				var node = toDelete[0];
+				canvas.remove(node);
+				canvas.element.dispatchEvent(
+					'ibx_diagram_delete_node',
+					node,
+					true, true, canvas.element[0]
+				);
 				toDelete.shift();
 			}
 		});
