@@ -122,7 +122,7 @@
 			</div>
 
 			<div class="color-picker-button" data-ibx-type="ibxMenuButton">Color...
-				<div data-ibx-type="ibxPopup">
+				<div data-ibx-type="ibxPopup" data-ibxp-destroy-on-close="false">
 					<div tabindex="0" class="test-combined-picker" data-ibx-type="ibxTabPane">
 						<div data-ibx-type="ibxTabPage" data-ibxp-selected="true">Presets
 							<div tabindex="0" class="test-pal-picker" data-ibx-type="ibxPalettePicker"></div>
