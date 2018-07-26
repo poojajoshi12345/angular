@@ -21,7 +21,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 		"focusRoot":false,				//keep tabbing to this container (like dialogs).
 		"focusDefault":false,			//focus the first item in root. (can be a select pattern).
 		"navKeyRoot":false,				//keep keyboard navigation to this container (not tabbing, more like arrows in trees/lists/etc.).
-		"navKeyDir":"horizontal",		//horizontal = left/right, vertical = up/down, or both
+		"navKeyDir":"both",				//horizontal = left/right, vertical = up/down, or both
 		"navKeyResetFocusOnBlur":true,	//when widget loses focus, reset the current active navKey child.
 
 		//ARIA (508)

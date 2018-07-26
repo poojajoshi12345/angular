@@ -507,12 +507,14 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 		"focusResetOnBlur":true,			//when widget loses focus, reset the current active navKey child.
 		"navKeyRoot":false,					//arrow keys will move you circularly through the items.
 		"navKeyDir":"both",					//horizontal = left/right, vertical = up/down, or both
+		"rubberBand":true,					//selection by rubberband
 	},
 	_widgetClass:"ibx-selection-manager",
 	_create:function()
 	{
 		this._super();
 		this.option(this.options);//force initial update.
+		this.element.addClass(this._widgetClass);
 		this.element.data("ibiIbxSelectionManager", this);//plymorphism
 		this.element[0].addEventListener("focusin", this._onFocusIn.bind(this), true);
 		this.element[0].addEventListener("focusout", this._onFocusOut.bind(this), true);
