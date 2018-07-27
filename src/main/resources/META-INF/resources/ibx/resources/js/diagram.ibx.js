@@ -2,8 +2,8 @@
 /*Copyright 1996-2016 Information Builders, Inc. All rights reserved.*/
 // $Revision$:
 
-// emit more events tree.ibx.com dispatchEvent (util.ibx.js)
-// promote connection lines to widgets
+// TODO: dispatch more events
+// TODO: promote connection lines to widgets
 $.widget('ibi.ibxDiagram', $.ibi.ibxWidget, {
 	_widgetClass: 'ibx-diagram',
 	options: {
@@ -83,7 +83,6 @@ $.widget('ibi.ibxDiagram', $.ibi.ibxWidget, {
 		}
 		return node.ibxDiagramNode().ibxDiagramNode('instance');
 	},
-	// TODO: add: function(el, elSibling, before, refresh)  // implement this
 	add: function(el, elSibling, before, refresh) {
 		var classList = el.customClassList;
 		var node = this.convertToNode(el);
@@ -91,7 +90,12 @@ $.widget('ibi.ibxDiagram', $.ibi.ibxWidget, {
 			return null;
 		}
 
-		this._nodeContainer.append(node.element);
+		elSibling = $(elSibling);
+		if (elSibling.length) {
+			node.element[before ? 'insertBefore' : 'insertAfter'](elSibling);
+		} else {
+			this._nodeContainer[before ? 'prepend' : 'append'](node.element);
+		}
 
 		node.diagram = this;
 		node.init();
@@ -102,31 +106,38 @@ $.widget('ibi.ibxDiagram', $.ibi.ibxWidget, {
 		if (refresh) {
 			this.refresh();
 		}
-		return node;  // remove this
+		return node;
 	},
-	// TODO: remove: function(el, destroy, refresh)  implement 2 extra args
-	remove: function(node) {
-		if (node == null) {  // no arguments mean remove everything
-			this._nodeContainer.empty();
-			this._connections = [];
+	remove: function(el, destroy, refresh) {
+		var ret;
+		if (el == null) {  // no arguments mean remove everything
+			this._nodeContainer.children().each((function(idx, child) {
+				this.remove(child);
+			}).bind(this));
 		} else {
-			node = this.convertToNode(node);
-			node.element.remove();
-			node.element.dispatchEvent(
+			var node = this.convertToNode(el);
+			var evt = node.element.dispatchEvent(
 				'ibx_diagram_delete_node',
 				node,
 				true, true, node.element[0]
 			);
-			this._connections = $.grep(this._connections, function(connection) {
-				return connection.from.node !== node && connection.to.node !== node;
-			});
+			if (!evt.isDefaultPrevented()) {
+				ret = node.element[destroy ? 'remove' : 'detach']();
+				this._connections = $.grep(this._connections, function(connection) {
+					return connection.from.node !== node && connection.to.node !== node;
+				});
+			}
 		}
-		this.resetConnections();  // Don't leave any dangling connections
+		this.resetConnections();  // Don't leave any dangling connection lines
+		if (refresh) {
+			this.refresh();
+		}
+		return ret;
 	},
 	removeSelectedNodes: function() {
 		this._nodeContainer.children().each((function(idx, child) {
 			child = $(child).ibxDiagramNode('instance');
-			if (child.options.selected && child.options.deletable) {
+			if (child.options.selected) {
 				this.remove(child);
 			}
 		}).bind(this));
@@ -284,7 +295,6 @@ $.widget('ibi.ibxDiagramNode', $.ibi.ibxWidget, {  // TODO: derive from base jqu
 		annotations: [],
 		selectable: true,  // If true, node can be clicked on to select it  // TODO: like delete, fire event, if shut down don't select
 		moveable: true,    // If true, node cannot be dragged or moved around
-		deletable: true,   // If true, selecting this node then hitting the 'delete' key will delete the node  // TODO: remove this: caller has to intercept delete event and shut it down
 		selected: false
 	},
 	_create: function() {
