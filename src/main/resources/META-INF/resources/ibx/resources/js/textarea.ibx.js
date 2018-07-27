@@ -48,7 +48,7 @@ $.widget("ibi.ibxTextArea", $.ibi.ibxFlexBox,
 	_setAccessibility:function(accessible, aria)
 	{
 		aria = this._super(accessible, aria);
-		accessible ? this._textArea.attr("role", "textbox") : this._textInput.removeAttr("role");
+		accessible ? this._textArea.attr("role", "textbox") : this._textArea.removeAttr("role");
 		accessible ? this._textArea.attr("aria-labelledby", aria.labelledby) : this._textArea.removeAttr("aria-labelledby");
 		accessible ? this._textArea.attr("aria-multiline", true) : this._textArea.removeAttr("aria-multiline");
 		return aria;
