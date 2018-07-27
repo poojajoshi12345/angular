@@ -25,17 +25,41 @@
 				margin:2px;
 				padding:2px;
 			}
+			.menu-bar, .tool-bar
+			{
+				flex:0 0 auto;
+			}
+
 			.client-box
 			{
 				flex:1 1 auto;
 			}
 			.nav-box
 			{
+				flex:1 1 auto;
 				width:33%;
 			}
 			.content-box
 			{
 				flex:1 1 auto;
+				overflow:auto;
+			}
+
+			.test-item
+			{
+				width:50px;
+				height:50px;
+				margin:10px;
+				border:1px solid black;
+				background-color:thistle;
+			}
+			.test-item.ibx-sm-selected
+			{
+				outline:2px solid red;
+			}
+			.test-item.ibx-sm-anchor
+			{
+				background-color:lime;
 			}
 		]]>
 		</style-sheet>
@@ -57,12 +81,10 @@
 					<div data-ibx-type="ibxButtonSimple" data-ibx-name="tbarButton" data-ibxp-glyph="face" data-ibxp-glyph-classes="material-icons">Toolbar</div>
 				</div>
 				<div class="client-box" data-ibx-type="ibxHBox" data-ibxp-align="stretch">
-					<div class="nav-box" data-ibx-type="ibxVBox" data-ibx-name="_navBox" data-ibxp-align="stretch">
-						<div data-ibx-type="ibxLabel">Navigation</div>
-					</div>
+					<div class="nav-box" data-ibx-type="ibxVBox" data-ibx-name="_navBox" data-ibxp-align="stretch"></div>
 					<div data-ibx-type="ibxVSplitter"></div>
 					<div class="content-box" data-ibx-type="ibxWidget" data-ibx-name="_content">
-						<div data-ibx-type="ibxLabel">Content</div>
+						<div tabindex="0" class="test-content" data-ibx-type="ibxHBox" data-ibxp-wrap="true" data-ibxp-nav-key-root="true" data-ibxp-focus-default="true" data-ibxp-sel-type="multi"></div>
 					</div>
 				</div>
 			</div>
@@ -73,47 +95,6 @@
 		<script-file src="./test_res_script.js"/>
 		<script-block>
 		<![CDATA[
-			$.widget("ibi.ibxRubberBandSelection", $.Widget, 
-			{
-				options:
-				{
-				},
-				_create:function()
-				{
-					this.element.data("ibiIbxWidget", this);
-					this.element.addClass("ibx-rubber-band");
-					this.element[0].addEventListener("mousedown", this._onMouseEvent.bind(this), true);
-					this.element[0].addEventListener("mouseup", this._onMouseEvent.bind(this), true);
-					this.element[0].addEventListener("mousemove", this._onMouseEvent.bind(this), true);
-					this._super();
-				},
-				_destroy:function()
-				{
-					this._super();
-				},
-				_onMouseEvent:function(e)
-				{
-					var eType = e.type;
-					if(eType == "mousedown")
-					{
-					}
-					else
-					if(eType == "mouseup")
-					{
-					}
-					else
-					if(eType == "mousemove")
-					{
-					}
-				},
-				_refresh:function()
-				{
-					var options = this.options;
-					this._super();
-				}
-			});
-
-
 			$.widget("ibi.testFrame", $.ibi.ibxVBox, 
 			{
 				options:
@@ -124,6 +105,17 @@
 				_create:function()
 				{
 					this._super();
+				},
+				_init:function()
+				{
+					this._super();
+					var container = $(".test-content");
+					for(var i = 0; i < 50; ++i)
+					{
+						var item = $("<div tabindex='0'>").ibxLabel({"text":"Item" + i, "draggable":true, "align":"center", "justify":"center"});
+						item.addClass("test-item item"+i);
+						container.append(item);
+					};
 				},
 				_destroy:function()
 				{

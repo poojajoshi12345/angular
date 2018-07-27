@@ -26,19 +26,10 @@
 			{
 				//var frame = ibx.resourceMgr.getResource(".test-frame", true).addClass("test-widget");
 				//$("body").append(frame);
-
-				var container = $(".test-container");
-				for(var i = 0; i < 50; ++i)
-				{
-					var item = $("<div tabindex='0'>").ibxLabel({"text":"Item" + i, "draggable":true, "align":"center", "justify":"center"});
-					item.addClass("test-item item"+i);
-					container.append(item);
-				};
-
 			}, packages, true);
 		</script>
 		<style type="text/css">
-			html, body, .test-container
+			html, body, .test-widget
 			{
 				width:100%;
 				height:100%;
@@ -49,29 +40,12 @@
 			{
 				padding:10px;
 			}
-			.test-item
-			{
-				width:50px;
-				height:50px;
-				margin:10px;
-				border:1px solid black;
-				background-color:thistle;
-			}
-			.ibx-sm-selected
-			{
-				outline:2px solid red;
-			}
-			.ibx-sm-anchor
-			{
-				background-color:lime;
-			}
 		</style>
 	</head>
 
 	<body class="ibx-root">
-		<div class="test-container" data-ibx-type="ibxHBox" data-ibxp-wrap="true" data-ibxp-nav-key-root="true" data-ibxp-sel-type="multi"></div>
-		<!--
 		<div class="test-widget" data-ibx-type="testFrame"></div>
+		<!--
 		-->
 	</body>
 </html>
