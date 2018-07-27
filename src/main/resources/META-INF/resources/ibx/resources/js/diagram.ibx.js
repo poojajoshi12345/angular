@@ -4,8 +4,6 @@
 
 // emit more events tree.ibx.com dispatchEvent (util.ibx.js)
 // promote connection lines to widgets
-(function() {  // TODO: get rid of this iife
-
 $.widget('ibi.ibxDiagram', $.ibi.ibxWidget, {
 	_widgetClass: 'ibx-diagram',
 	options: {
@@ -161,7 +159,7 @@ $.widget('ibi.ibxDiagram', $.ibi.ibxWidget, {
 		});
 	},
 	addConnection: function(connection) {
-		var g = getConnectionPath(connection.from.tip, connection.to.tip);
+		var g = $.ibi.ibxDiagram.getConnectionPath(connection.from.tip, connection.to.tip);
 		if (connection.className) {
 			g.addClass(connection.className);
 		}
@@ -174,12 +172,12 @@ $.widget('ibi.ibxDiagram', $.ibi.ibxWidget, {
 			from: {
 				node: from,
 				anchor: connection.from.anchor,
-				tip: clone(connection.from.tip)
+				tip: $.ibi.ibxDiagram.clone(connection.from.tip)
 			},
 			to: {
 				node: to,
 				anchor: connection.to.anchor,
-				tip: clone(connection.to.tip)
+				tip: $.ibi.ibxDiagram.clone(connection.to.tip)
 			},
 			g: g[0],
 			lineWidth: lineWidth
@@ -204,7 +202,7 @@ $.widget('ibi.ibxDiagram', $.ibi.ibxWidget, {
 			var y2 = c2.offsetTop + (box2.height / 2);
 			var padLeft = (g.children[1] == null) ? 0 : connection.lineWidth;
 			var padRight = (g.children[2] == null) ? 0 : connection.lineWidth;
-			var length = distance(x1, y1, x2, y2) - c1AnchorSize - padLeft - c2AnchorSize - padRight;
+			var length = $.ibi.ibxDiagram.distance(x1, y1, x2, y2) - c1AnchorSize - padLeft - c2AnchorSize - padRight;
 			var angle = Math.atan2(y2 - y1, x2 - x1) * 180 / Math.PI;
 
 			// Move overall arrow to start connection point and rotate to point to end connection
@@ -219,11 +217,15 @@ $.widget('ibi.ibxDiagram', $.ibi.ibxWidget, {
 	}
 });
 
-function distance(x1, y1, x2, y2) {  // TODO: move these to private static functions
-	return Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));
-}
+$.ibi.ibxDiagram.clone = function(json) {
+	return JSON.parse(JSON.stringify(json || null));
+};
 
-function arrowShapeToPath(tip) {
+$.ibi.ibxDiagram.distance = function(x1, y1, x2, y2) {
+	return Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));
+};
+
+$.ibi.ibxDiagram.arrowShapeToPath = function(tip) {
 	var size = tip.size || 10, shape = (tip.shape || '').toLowerCase();
 	switch (shape) {
 		case 'arrow-hollow':
@@ -232,9 +234,9 @@ function arrowShapeToPath(tip) {
 			return 'M' + size + ' ' + (-size) + 'L0 0L' + size + ' ' + size + 'Z';
 	}
 	return '';
-}
+};
 
-function getConnectionPath(fromTip, toTip) {
+$.ibi.ibxDiagram.getConnectionPath = function(fromTip, toTip) {
 	// Connections are drawn in a group that has been transformed such that
 	// (0, 0) is at left connection and (100, 0) is on right connection
 	var g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
@@ -249,18 +251,18 @@ function getConnectionPath(fromTip, toTip) {
 
 	if (fromTip) {
 		var tip = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-		tip.setAttribute('d', arrowShapeToPath(fromTip));
+		tip.setAttribute('d', $.ibi.ibxDiagram.arrowShapeToPath(fromTip));
 		g.appendChild(tip);
 	}
 
 	if (toTip) {
 		var tip2 = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-		tip2.setAttribute('d', arrowShapeToPath(toTip));
+		tip2.setAttribute('d', $.ibi.ibxDiagram.arrowShapeToPath(toTip));
 		tip2.setAttribute('transform', 'translate(0, 0) rotate(180)');
 		g.appendChild(tip2);
 	}
 	return $(g).addClass('ibx-diagram-connection');
-}
+};
 
 $.widget('ibi.ibxDiagramNode', $.ibi.ibxWidget, {  // TODO: derive from base jquery ui widget ($.Widget)
 	_widgetClass: 'ibx-diagram-node',
@@ -517,11 +519,5 @@ $.widget('ibi.ibxDiagramAnnotation', $.ibi.ibxWidget, {
 		return {left: 0, top: 0};
 	}
 });
-
-function clone(json) {
-	return JSON.parse(JSON.stringify(json || null));
-}
-
-})();
 
 //# sourceURL=diagram.ibx.js
