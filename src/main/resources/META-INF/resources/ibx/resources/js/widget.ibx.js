@@ -83,6 +83,15 @@ $.widget("ibi.ibxWidget", $.Widget,
 		this.element.removeData("_ibxPrecreateMemberVariables");
 		this._super();
 	},
+	_loadWidgetTemplate:function(tmpl)
+	{
+		var template = ibx.resourceMgr.getResource(tmpl, false);
+		$.extend(true, this.options, ibx.getIbxMarkupOptions(template));
+
+		var children = template.children();
+		this.element.append(children);
+		ibx.bindElements(children);
+	},				
 	ARIA_PROPS_IGNORE:{"role":true, "accessible":true},
 	setAccessibility:function(accessible)
 	{

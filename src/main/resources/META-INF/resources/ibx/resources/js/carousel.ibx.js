@@ -50,14 +50,13 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 	{
 		this._super();
 		var children = this.element.children();
-		var resBody = ibx.resourceMgr.getResource(".res-ibx-carousel-body", false);
-		this.element.append(resBody.children());
-		ibx.bindElements(this.element.children());
+		this._loadWidgetTemplate(".ibx-carousel-template");
+		this.add(children);
+
 		this.element.on("ibx_resize", this._onResize.bind(this));
 		this._prevBtn.on("click mousedown mouseup mouseleave", this._onPrevNext.bind(this));
 		this._nextBtn.on("click mousedown mouseup mouseleave", this._onPrevNext.bind(this));
 		this._itemsBox.on("ibx_widgetfocus", this._onItemsBoxFocus.bind(this)).on("keydown", this._onItemsBoxKeyDown.bind(this)).ibxDragScrolling({overflowY:"hidden"}).on("scroll", this._onItemsBoxScroll.bind(this));	
-		this.add(children);
 
 		this._onPageMarkerScrollEndBound = this._onPageMarkerScrollEnd.bind(this);
 	},

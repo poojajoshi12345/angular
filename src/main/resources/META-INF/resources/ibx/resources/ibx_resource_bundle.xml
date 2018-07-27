@@ -82,7 +82,7 @@ $Revision$:-->
 	<markup>
 		<!--inline-->
 		<markup-block>
-			<div class="dialog-template" data-ibx-type="ibxDialog" data-ibx-name-root="true" data-ibxp-default-action=".ibx-dialog-ok-button, cancel">
+			<div class="ibx-dialog-template">
 				<div class="ibx-dialog-main-box" data-ibx-type="ibxVBox" data-ibx-name="vbMain" data-ibxp-align="stretch">
 					<div class="ibx-dialog-title-box" data-ibx-type="ibxHBox" data-ibx-name="titleBox" data-ibxp-align="center">
 						<div class="ibx-title-bar-caption" data-ibx-type="ibxLabel" data-ibx-name="caption" data-ibxp-justify="start"></div>
@@ -98,7 +98,7 @@ $Revision$:-->
 					</div>
 				</div>
 			</div>
-			<div class="res-ibx-carousel-body">
+			<div class="ibx-carousel-template">
 				<div class="ibx-csl-items-container" data-ibx-name="_itemsContainer" data-ibx-type="ibxHBox" data-ibxp-align="stretch">
 					<div tabindex="0" class="csl-scroll-btn" data-ibxp-auto-focused="true" title="@ibxString('IBX_CAROUSEL_PREV')" data-ibx-name="_prevBtn" data-ibx-type="ibxButtonSimple" data-ibxp-class="ibx-csl-prev-btn"></div>
 					<div tabindex="0" class="ibx-csl-items-box" data-ibx-name="_itemsBox" data-ibx-type="ibxHBox" data-ibxp-nav-key-root="true" data-ibxp-nav-key-reset-focus-on-blur="false" data-ibxp-focus-default="true" data-ibxp-align="center"></div>
@@ -122,7 +122,7 @@ $Revision$:-->
 				<div class="pp-transparency-slider" data-ibx-type="ibxSlider" data-ibx-name="_transSlider" data-ibxp-value-text-pos="end" data-ibxp-min-text-pos="center" data-ibxp-max-text-pos="center" data-ibxp-min="0" data-ibxp-max="100" data-ibxp-value="100"></div>
 			</div>
 		</markup-block>
-		<markup-block class="palette-picker-default-palettes">
+		<markup-block class="ibx-palette-picker-default-palettes">
 			<palette pid="default_basic" display-name="@ibxString(PP_PAL_NAME_BASIC)">
 				<color idx="0" display-name="" value="#000000"/>
 				<color idx="10" display-name="" value="#ffffff"/>

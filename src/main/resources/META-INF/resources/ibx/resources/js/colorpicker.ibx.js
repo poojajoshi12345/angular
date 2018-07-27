@@ -84,13 +84,11 @@ $.widget("ibi.ibxPalettePicker", $.ibi.ibxVBox,
 	_create: function ()
 	{
 		this._super();
-		var template = ibx.resourceMgr.getResource(".ibx-palette-picker-template", false);
-		this.element.on("ibx_selectablechildren ibx_selchange", this._selManagerEvent.bind(this)).append(template.children());
-		ibx.bindElements(this.element);
+		this._loadWidgetTemplate(".ibx-palette-picker-template");
 		this._palSelect.on("ibx_change", this._onPalSelectChange.bind(this));
 		this._transSlider.on("ibx_change", this._onTransSliderChange.bind(this)).ibxWidget("option", "fnFormat", this._formatSliderVals.bind(this));
 
-		var palDefault = ibx.resourceMgr.getXmlResource(".palette-picker-default-palettes", false);
+		var palDefault = ibx.resourceMgr.getXmlResource(".ibx-palette-picker-default-palettes", false);
 		this.paletteFile(palDefault, "default_basic");
 	},
 	_destroy: function ()

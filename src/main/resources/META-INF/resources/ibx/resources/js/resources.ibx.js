@@ -423,7 +423,6 @@ _p.getResource = function(selector, ibxBind, forceCreate)
 	if(ibxBind)
 	{
 		var bindingDiv =  $("<div class='ibx-resource-manager-binding-div' style='display:none'></div>").append(markup).appendTo("body");
-		markup.data("ibxCreatedFromTemplate", true);
 		ibx.bindElements(markup);
 		markup.detach();
 		bindingDiv.detach();

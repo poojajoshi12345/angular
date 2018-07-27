@@ -6,7 +6,6 @@ $.widget("ibi.ibxDialog", $.ibi.ibxPopup,
 	options:
 	{
 		"nameRoot":true,
-		"template":".dialog-template",
 		"type":"std plain", //predefines: std and plain/error/warning/information/question
 		"autoSize":true,
 		"modal":true,
@@ -28,16 +27,9 @@ $.widget("ibi.ibxDialog", $.ibi.ibxPopup,
 	_create:function()
 	{
 		this._super();
+		this._loadWidgetTemplate(".ibx-dialog-template");
+
 		var options = this.options;
-
-		//not created via dialog-template from ibx.resourceMgr.getResrouce
-		if(!this.vbMain)
-		{
-			var dlgRes = ibx.resourceMgr.getResource(this.options.template, false);
-			this.element.append(dlgRes.children());
-			ibx.bindElements(this.element);
-		}
-
 		options.moveHandle = this.titleBox;
 		this.element.on("keydown", this._onDialogKeyDown.bind(this));
 		this.titleClose.on("click", this.close.bind(this, "cancel"));
