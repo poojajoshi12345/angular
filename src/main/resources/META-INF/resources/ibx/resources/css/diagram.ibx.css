@@ -5,12 +5,7 @@
 	position: relative;
 }
 
-.ibx-diagram-node {
-	position: absolute;
-	outline: none;
-}
-
-.ibx-diagram-canvas {
+.ibx-diagram-svg-container {
 	position: absolute;
 	left: 0px;
 	top: 0px;
@@ -18,6 +13,19 @@
 	fill: none;
 	stroke: black;
 	stroke-width: 1px;
+}
+
+.ibx-diagram-node-container {
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	width: 100%;
+	height: 100%;
+}
+
+.ibx-diagram-node {
+	position: absolute;
+	outline: none;
 }
 
 .ibx-diagram-connection {

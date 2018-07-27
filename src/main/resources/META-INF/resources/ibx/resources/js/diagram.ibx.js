@@ -4,15 +4,11 @@
 
 // emit more events tree.ibx.com dispatchEvent (util.ibx.js)
 // promote connection lines to widgets
-
-(function() {
+(function() {  // TODO: get rid of this iife
 
 $.widget('ibi.ibxDiagram', $.ibi.ibxWidget, {
 	_widgetClass: 'ibx-diagram',
 	options: {
-		// If true, dragging & dropping an HTML node onto the canvas will add it as a new child node.
-		// Dropped node must have a unique ID and must set its dragstart dataTransfer plaintext content to this ID.
-		enableNodeDrop: true,
 		selectMode: 'fit',  // One of 'fit' or 'touch'
 		grid: {
 			size: null,  // Either null (disable grid) or a number.  If a number, snap each node to a grid with intervals this large (in px).
@@ -20,112 +16,70 @@ $.widget('ibi.ibxDiagram', $.ibi.ibxWidget, {
 		}
 	},
 	_create: function() {
-		var canvas = this;
-		var element = canvas.element;
-		canvas._super();
-		canvas._children = [];
-		canvas._connections = [];
-		var w = element[0].clientWidth;
-		var h = element[0].clientHeight;
-		canvas._canvas = $('<svg xmlns="http://www.w3.org/2000/svg" class="ibx-diagram-canvas" width="' + w + '" height="' + h + '"></svg>');
-		element.append(canvas._canvas);
-		canvas.children().each(function(idx, domNode) {
-			if (domNode !== canvas._canvas[0]) {
-				canvas.add(domNode);
-			}
-		});
-		canvas.enableDropEvent();
+		this._super();
+		this._children = [];
+		this._connections = [];
+		var w = this.element[0].clientWidth;
+		var h = this.element[0].clientHeight;
+		this._svgContainer = $('<svg xmlns="http://www.w3.org/2000/svg" class="ibx-diagram-svg-container" width="' + w + '" height="' + h + '"></svg>');
+		this._nodeContainer = $('<div class="ibx-diagram-node-container">');
+		this.children().each((function(idx, domNode) {
+			this.add(domNode);
+		}).bind(this));
+		this.element.append(this._svgContainer);
+		this.element.append(this._nodeContainer);
 	},
 	_destroy: function() {
 		this._super();
 	},
-	refresh: function() {
-		var canvas = this;
-		canvas._super();
+	_refresh: function() {
+		this._super();
 
-		this._canvas.attr('width', canvas.element[0].clientWidth);
-		this._canvas.attr('height', canvas.element[0].clientHeight);
+		this._svgContainer.attr('width', this.element[0].clientWidth);
+		this._svgContainer.attr('height', this.element[0].clientHeight);
 
 		// TODO: marquee selection box can fall outside canvas
-		canvas.element.selectable({
-			tolerance: canvas.options.selectMode,
+		// TODO: use ibx selectable here
+		this.element.selectable({
+			tolerance: this.options.selectMode,
 			filter: '.ibx-selectable',
-			selected: function(e, ui) {
-				var node = canvas.convertToNode(ui.selected);
+			selected: (function(e, ui) {
+				var node = this.convertToNode(ui.selected);
 				if (node.options.selectable) {
 					node.options.selected = true;
 				} else {
 					node.element.removeClass('ui-selected');
 				}
-				canvas.triggerSelectionChange();
-			},
-			unselected: function(e, ui) {
-				var node = canvas.convertToNode(ui.unselected);
+				this.triggerSelectionChange();
+			}).bind(this),
+			unselected: (function(e, ui) {
+				var node = this.convertToNode(ui.unselected);
 				node.options.selected = false;
-				canvas.triggerSelectionChange();
-			}
+				this.triggerSelectionChange();
+			}).bind(this)
 		});
-		if (canvas.options.grid.size == null) {
-			canvas._children.forEach(function(child) {
+		if (this.options.grid.size == null) {
+			this._children.forEach(function(child) {
 				child.element.draggable({grid: false});
 			});
 		} else {
-			var gridSize = canvas.options.grid.size;
-			canvas._children.forEach(function(child) {
+			var gridSize = this.options.grid.size;
+			this._children.forEach(function(child) {
 				child.lockToGrid();
 				child.element.draggable({grid: [gridSize, gridSize]});
 			});
 		}
-		canvas.updateConnections();
+		this.updateConnections();
 	},
-	clear: function() {
-		var canvas = this;
-		while (canvas._children.length) {
-			canvas.remove(canvas._children[0]);
+	clear: function() {  // TODO: move this to remove with no args
+		while (this._children.length) {
+			this.remove(this._children[0]);
 		}
 	},
-	enableDropEvent: function() {
-		var canvas = this;
-		canvas.element.on('ibx_dragover ibx_dragleave ibx_drop', function(e) {
-			e = e.originalEvent;
-			if (!canvas.options.enableNodeDrop) {
-				return;
-			}
-			var id = e.dataTransfer.getData('nodeId');
-			var domNode = document.getElementById(id);
-			if (e.type === 'ibx_dragover' && domNode) {
-				e.preventDefault();
-			}
-			if (e.type === 'ibx_dragover' || e.type === 'ibx_dragleave' || domNode == null) {
-				return;
-			}
-			var x = e.offsetX, y = e.offsetY;
-			domNode = domNode.cloneNode(true);
-			domNode.removeAttribute('data-ibxp-draggable');
-			var element = $(domNode);
-			if (element.ibxDiagramNode('instance') == null) {
-				element.ibxDiagramNode(element);  // If node is not yet an ibxDiagramNode, make it one
-			}
-			var node = canvas.add(domNode);
-			var annotation = $(e.target).ibxDiagramAnnotation('instance');
-			if (annotation && annotation.options.drop === 'connect') {
-				var annotationElement = annotation.element[0];
-				x = annotationElement.parentElement.offsetLeft - annotationElement.offsetLeft - 100;
-				y = annotationElement.parentElement.offsetTop + (domNode.clientHeight / 2);
-				canvas.addConnection({
-					from: {node: node, anchor: 'right'},
-					to: {node: annotation.parent, anchor: 'left'}
-				});
-			}
-			node.options.left = Math.max(0, x - (domNode.clientWidth / 2));
-			node.options.top = Math.max(0, y - (domNode.clientHeight / 2));
-			node.refresh();
-		});
-	},
 	convertToNode: function(node) {  // Convert any variation of a 'node' into an ibxDiagramNode instance
-		if (node && node.widgetName === 'ibxDiagramNode') {
+		if (node && node.widgetName === 'ibxDiagramNode') {  // TODO: clean this up - cascade isn't clear
 			return node;  // Node is already an ibxDiagramNode
-		} else if (typeof node === 'number') {
+		} else if (typeof node === 'number') {  // TODO: remove this
 			return this._children[node];  // Assume node is an entry in the list of children nodes
 		} else if (node instanceof Element) {
 			node = $(node);  // Assume node is a fully formed DOM node representing a diagram node
@@ -138,29 +92,28 @@ $.widget('ibi.ibxDiagram', $.ibi.ibxWidget, {
 		}
 		return node.ibxDiagramNode().ibxDiagramNode('instance');
 	},
+	// TODO: add: function(el, elSibling, before, refresh)  // implement this, and call base super class to implement most of it
 	add: function(node) {
-		var canvas = this;
 		var classList = node.customClassList;
-		node = canvas.convertToNode(node);
+		node = this.convertToNode(node);
 		if (!node) {
 			return null;
 		}
 		var nodeEl = node.element;
 
-		canvas._children.push(node);
-		if (nodeEl[0].parentElement !== canvas.element[0]) {
-			canvas.element.append(nodeEl);
-		}
+		this._children.push(node);
+		this._nodeContainer.append(nodeEl);
 
-		node.canvas = canvas;
+		node.canvas = this;
 		node.init();
 
 		if (classList) {
 			nodeEl.addClass(classList.join(' '));
 		}
-		canvas.refresh();
-		return node;
+		this.refresh();
+		return node;  // remove this
 	},
+	// TODO: remove: function(el, destroy, refresh)  implement 2 extra args
 	remove: function(node) {
 		node = this.convertToNode(node);
 		var idx = this._children.indexOf(node);
@@ -199,26 +152,24 @@ $.widget('ibi.ibxDiagram', $.ibi.ibxWidget, {
 			return el.options.selected;
 		});
 	},
-	resetConnections: function() {
-		var canvas = this;
-		canvas._canvas.empty();
-		var connections = canvas._connections;
-		canvas._connections = [];
+	resetConnections: function() {  // TODO: what is this for
+		this._svgContainer.empty();
+		var connections = this._connections;
+		this._connections = [];
 		connections.forEach(function(connection) {
-			canvas.addConnection(connection);
+			this.addConnection(connection);
 		});
 	},
 	addConnection: function(connection) {
-		var canvas = this;
 		var g = getConnectionPath(connection.from.tip, connection.to.tip);
 		if (connection.className) {
 			g.addClass(connection.className);
 		}
-		canvas._canvas.append(g);
+		this._svgContainer.append(g);
 		var lineWidth = parseInt(window.getComputedStyle(g[0].firstElementChild).strokeWidth, 10);
-		var from = canvas.convertToNode(connection.from.node);
-		var to = canvas.convertToNode(connection.to.node);
-		canvas._connections.push({
+		var from = this.convertToNode(connection.from.node);
+		var to = this.convertToNode(connection.to.node);
+		this._connections.push({
 			className: connection.className,
 			from: {
 				node: from,
@@ -233,7 +184,7 @@ $.widget('ibi.ibxDiagram', $.ibi.ibxWidget, {
 			g: g[0],
 			lineWidth: lineWidth
 		});
-		canvas.refresh();
+		this.refresh();
 		return g;
 	},
 	updateConnections: function() {
@@ -268,7 +219,7 @@ $.widget('ibi.ibxDiagram', $.ibi.ibxWidget, {
 	}
 });
 
-function distance(x1, y1, x2, y2) {
+function distance(x1, y1, x2, y2) {  // TODO: move these to private static functions
 	return Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));
 }
 
@@ -311,19 +262,19 @@ function getConnectionPath(fromTip, toTip) {
 	return $(g).addClass('ibx-diagram-connection');
 }
 
-$.widget('ibi.ibxDiagramNode', $.ibi.ibxWidget, {
+$.widget('ibi.ibxDiagramNode', $.ibi.ibxWidget, {  // TODO: derive from base jquery ui widget ($.Widget)
 	_widgetClass: 'ibx-diagram-node',
 	options: {  // All optional; can also be set via the equivalent CSS properties
 		left: null,
-		top: null,
+		top: null,  // TODO: remove these, but keep json api
 		width: null,
 		height: null,
-		text: '',
-		data: null,
+		text: '',  // TODO: kill this
+		data: null,  // TODO: kill or hide this
 		annotations: [],
-		selectable: true,  // If true, node can be clicked on to select it
+		selectable: true,  // If true, node can be clicked on to select it  // TODO: like delete, fire event, if shut down don't select
 		moveable: true,    // If true, node cannot be dragged or moved around
-		deletable: true,   // If true, selecting this node then hitting the 'delete' key will delete the node
+		deletable: true,   // If true, selecting this node then hitting the 'delete' key will delete the node  // TODO: remove this: caller has to intercept delete event and shut it down
 		selected: false
 	},
 	_create: function() {
@@ -353,7 +304,7 @@ $.widget('ibi.ibxDiagramNode', $.ibi.ibxWidget, {
 			this.canvas.updateConnections();
 		}
 	},
-	init: function() {
+	init: function() {  // TODO: change to _init, so it's called automatically
 
 		var canvas = this.canvas;
 		var options = this.options;
@@ -364,7 +315,7 @@ $.widget('ibi.ibxDiagramNode', $.ibi.ibxWidget, {
 			containment: 'parent',
 			stack: '.ibx-diagram-node',
 			disabled: !options.moveable,
-			start: function() {
+			start: function() {  // TODO: move multi-select movement code to canvas
 				selectedNodes = [];
 				for (var i = 0; i < canvas._children.length; i++) {
 					var child = canvas._children[i];
@@ -403,7 +354,7 @@ $.widget('ibi.ibxDiagramNode', $.ibi.ibxWidget, {
 		nodeEl.toggleClass('ibx-selectable', options.selectable);
 		nodeEl.attr('tabindex', canvas._children.length);  // Need tabindex to make basic divs focusable and receive keyboard events
 		nodeEl.keydown(function(e) {
-			if (e.keyCode !== $.ui.keyCode.DELETE) {
+			if (e.keyCode !== $.ui.keyCode.DELETE) {  // TODO: move function callback to prototype callback or similar
 				return;
 			}
 			var toDelete = canvas._children.filter(function(el) {
@@ -428,7 +379,7 @@ $.widget('ibi.ibxDiagramNode', $.ibi.ibxWidget, {
 				e.stopPropagation();  // Without this, jQuery selectable will make this unselectable node selectable, no matter what
 			}
 		});
-		nodeEl.click(function(e) {
+		nodeEl.mouseup(function(e) {
 			canvas.selectNode(e);
 		});
 
@@ -479,9 +430,8 @@ $.widget('ibi.ibxDiagramNode', $.ibi.ibxWidget, {
 		return annotation;
 	},
 	updatePosition: function() {
-		var el = this.element[0];
-		this.options.left = el.offsetLeft;
-		this.options.top = el.offsetTop;
+		this.options.left = this.element[0].offsetLeft;
+		this.options.top = this.element[0].offsetTop;
 	},
 	lockToGrid: function() {
 		var gridSize = this.canvas.options.grid.size;
@@ -506,6 +456,7 @@ $.widget('ibi.ibxDiagramNode', $.ibi.ibxWidget, {
 	}
 });
 
+// TODO: get rid of this entirely; caller can just use ibxLabel.overlays
 $.widget('ibi.ibxDiagramAnnotation', $.ibi.ibxWidget, {
 	_widgetClass: 'ibx-diagram-annotation',
 	options: {  // All optional; can also be set via the equivalent CSS properties
