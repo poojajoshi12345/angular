@@ -85,6 +85,7 @@ $.widget("ibi.ibxPalettePicker", $.ibi.ibxVBox,
 	{
 		this._super();
 		this._loadWidgetTemplate(".ibx-palette-picker-template");
+		this.element.on("ibx_selectablechildren ibx_selchange", this._selManagerEvent.bind(this));
 		this._palSelect.on("ibx_change", this._onPalSelectChange.bind(this));
 		this._transSlider.on("ibx_change", this._onTransSliderChange.bind(this)).ibxWidget("option", "fnFormat", this._formatSliderVals.bind(this));
 
