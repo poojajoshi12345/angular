@@ -507,18 +507,22 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 		"focusResetOnBlur":true,			//when widget loses focus, reset the current active navKey child.
 		"navKeyRoot":false,					//arrow keys will move you circularly through the items.
 		"navKeyDir":"both",					//horizontal = left/right, vertical = up/down, or both
-		"rubberBand":true,					//selection by rubberband
+		"rubberBand":false,					//selection by rubberband
 	},
 	_widgetClass:"ibx-selection-manager",
 	_create:function()
 	{
 		this._super();
+		$.extend(true, this.options, ibx.getIbxMarkupOptions(this.element));//we aren't an ibxWidget, so get the markup options.
 		this.option(this.options);//force initial update.
+
 		this.element.addClass(this._widgetClass);
 		this.element.data("ibiIbxSelectionManager", this);//plymorphism
 		this.element[0].addEventListener("focusin", this._onFocusIn.bind(this), true);
 		this.element[0].addEventListener("focusout", this._onFocusOut.bind(this), true);
-		this.element[0].addEventListener("mousedown", this._onMouseDown.bind(this), false);
+		this.element[0].addEventListener("mousedown", this._onMouseEvent.bind(this), false);
+		this.element[0].addEventListener("mouseup", this._onMouseEvent.bind(this), false);
+		this.element[0].addEventListener("mousemove", this._onMouseEvent.bind(this), false);
 		this.element[0].addEventListener("keydown", this._onKeyDown.bind(this), false);
 	},
 	_destroy:function()
@@ -652,38 +656,61 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 		if(e.keyCode == $.ui.keyCode.ESCAPE && options.escClearSelection)
 			this.deselectAll();
 	},
-	_onMouseDown:function(e)
+	_onMouseEvent:function(e)
 	{
+		var eType = e.type;
 		var options = this.options;
 		var isTarget = this.element.is(e.target);
 		var isMulti = options.type == "multi";
 		var selChildren = this.selectableChildren();
 		var selTarget = this.mapToSelectable(e.target);
 
-		//mousedown happens before focus, so make us active before anything.
-		this._activate(true);
-
-		//don't deselect if clicking on scrollbar.
-		if(!this.element.clickOnScrollbar(e.clientX, e.clientY))
+		if(eType == "mousedown")
 		{
-			if(isTarget || (isMulti && !e.shiftKey && !e.ctrlKey))
-				this.deselectAll();
-		}
+			//mousedown happens before focus, so make us active before anything.
+			this._activate(true);
 
-		//event could happen on child element...map back to something we know can be selected
-		//and can actually be selected by this selection manager.
-		if(selChildren.index(selTarget) != -1)
-		{
-			if(options.type == "multi" && e.shiftKey)
+			//don't deselect if clicking on scrollbar.
+			if(!this.element.clickOnScrollbar(e.clientX, e.clientY))
 			{
-				var idxAnchor = selChildren.index(this._anchor());
-				var idxSel = selChildren.index(selTarget[0]);
-				var idxStart = Math.min(idxAnchor, idxSel);
-				var idxEnd = Math.max(idxAnchor, idxSel);
-				this.toggleSelected(selChildren.slice(idxStart, idxEnd + 1), true, false);
+				if(isTarget || (isMulti && !e.shiftKey && !e.ctrlKey))
+					this.deselectAll();
+
+				if(isTarget && options.rubberBand)
+				{
+					var pos = this.element.css("position");
+					if(pos != "absolute")
+						this.element.css("position", "relative").data("ibxSelMgrRubberBandOrigPos", pos);
+					this.element.addClass("ibx-sm-rubber-banding");
+					this._rubberBand = $("<div class='ibx-sm-rubber-band'>").css({"left":e.offsetX, "top":e.offsetY}).appendTo(this.element);
+				}
 			}
-			else
-				this.toggleSelected(selTarget, (isMulti && e.ctrlKey) || options.toggleSelection ? undefined : true);
+
+			//event could happen on child element...map back to something we know can be selected
+			//and can actually be selected by this selection manager.
+			if(selChildren.index(selTarget) != -1)
+			{
+				if(options.type == "multi" && e.shiftKey)
+				{
+					var idxAnchor = selChildren.index(this._anchor());
+					var idxSel = selChildren.index(selTarget[0]);
+					var idxStart = Math.min(idxAnchor, idxSel);
+					var idxEnd = Math.max(idxAnchor, idxSel);
+					this.toggleSelected(selChildren.slice(idxStart, idxEnd + 1), true, false);
+				}
+				else
+					this.toggleSelected(selTarget, (isMulti && e.ctrlKey) || options.toggleSelection ? undefined : true);
+			}
+		}
+		else
+		if(eType == "mouseup" && this._rubberBand)
+			delete this._rubberBand.remove();
+		else
+		if(eType == "mousemove" && this._rubberBand)
+		{
+			var pos = this._rubberBand.position();
+			this._rubberBand.css({"width":e.offsetX - pos.left, "height":e.offsetY - pos.top});
+			e.stopPropagation();
 		}
 	},
 	preDispacthEvent:function(eventInfo){return eventInfo;},
