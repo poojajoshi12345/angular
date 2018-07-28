@@ -38,7 +38,7 @@
 				colorPicker.on("ibx_colorchange", function(e)
 				{
 					var color = e.originalEvent.data;
-					palPicker.ibxWidget("option", "color", color);
+					palPicker.ibxWidget("option", {"color": color, "opacity": 1});
 					$("body").css("backgroundColor", color);
 				});
 				palPicker.ibxWidget("option", "color", "#ffffff");

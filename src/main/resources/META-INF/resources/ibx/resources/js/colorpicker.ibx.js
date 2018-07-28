@@ -124,8 +124,6 @@ $.widget("ibi.ibxPalettePicker", $.ibi.ibxVBox,
 	_onTransSliderChange:function(e, info)
 	{
 		this._inSliderChange = true;
-		if(info.value == 100)
-			var x = 10;
 		this.option("opacity", (info.value/100));
 		this._inSliderChange = false;
 		e.stopPropagation();
