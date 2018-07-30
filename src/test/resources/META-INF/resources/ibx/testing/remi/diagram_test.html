@@ -19,13 +19,15 @@
 					var selectedNodes = e.originalEvent.data;
 					var list = $('.selectedNodeList');
 					list.empty();
-					selectedNodes.forEach(function(node) {
-						list.append('<li>' + (node.options.text || 'No Label') + '</li>')
+					selectedNodes.each(function(idx, node) {
+						list.append('<li>' + ($(node).ibxWidget('option').text || 'No Label') + '</li>')
 					});
 				});
 
 				$('.test-canvas').on('ibx_diagram_delete_node', function(e) {
-					console.log('deleted node: ' + e.originalEvent.data.options.text);
+					if ($(e.target).hasClass('undeletable')) {
+						e.preventDefault();  // call this to prevent node deletion
+					}
 				});
 
 				$('.btnSelectMode').on('ibx_change', function(e) {
@@ -61,12 +63,44 @@
 				});
 
 				$('.btnDeletable').on('ibx_change', function(e) {
-					var checked = $(e.target).ibxWidget('checked');
-					$('#firstNode').ibxDiagramNode('option', 'deletable', checked);
+					$('#firstNode').toggleClass('undeletable');
 				});
 
 				$('.drag-item').on('ibx_dragstart', function(e) {
 					 e.originalEvent.dataTransfer.setData("nodeId", this.id);
+				});
+
+				canvas.element.on('ibx_dragover ibx_dragleave ibx_drop', function(e) {
+					e = e.originalEvent;
+					var id = e.dataTransfer.getData('nodeId');
+					var domNode = document.getElementById(id);
+					if (e.type === 'ibx_dragover' && domNode) {
+						e.preventDefault();
+					}
+					if (e.type === 'ibx_dragover' || e.type === 'ibx_dragleave' || domNode == null) {
+						return;
+					}
+					var x = e.offsetX, y = e.offsetY;
+					domNode = domNode.cloneNode(true);
+					domNode.removeAttribute('data-ibxp-draggable');
+					var element = $(domNode);
+					if (element.ibxDiagramNode('instance') == null) {
+						element.ibxDiagramNode(element);  // If node is not yet an ibxDiagramNode, make it one
+					}
+					var node = canvas.add(domNode);
+					var annotation = $(e.target).ibxDiagramAnnotation('instance');
+					if (annotation && annotation.options.drop === 'connect') {
+						var annotationElement = annotation.element[0];
+						x = annotationElement.parentElement.offsetLeft - annotationElement.offsetLeft - 100;
+						y = annotationElement.parentElement.offsetTop + (domNode.clientHeight / 2);
+						canvas.addConnection({
+							from: {node: node, anchor: 'right'},
+							to: {node: annotation.parent, anchor: 'left'}
+						});
+					}
+					node.options.left = Math.max(0, x - (domNode.clientWidth / 2));
+					node.options.top = Math.max(0, y - (domNode.clientHeight / 2));
+					node.refresh();
 				});
 
 				$('#hoverAnchor').on('ibx_dragover', function() {
@@ -93,26 +127,28 @@
 				});
 
 				canvas.addConnection({
-					from: {node: 0, anchor: 'right', tip: {shape: 'arrow-hollow', size: 8}},
-					to: {node: n2, anchor: 'left'}
-				});
-
-				canvas.addConnection({
 					from: {node: n1, anchor: 'left'},
 					to: {node: n2, anchor: 'right'}
 				});
 
+				var firstChild = canvas.element.find('.ibx-diagram-node')[0];
+				canvas.addConnection({
+					from: {node: firstChild, anchor: 'right', tip: {shape: 'arrow-hollow', size: 8}},
+					to: {node: n2, anchor: 'left'}
+				});
+
+				var secondChild = canvas.element.find('.ibx-diagram-node')[1];
 				canvas.addConnection({
 					className: 'stylish-connection',
 					from: {node: n2, anchor: 'right', tip: {shape: 'arrow', size: 20}},
-					to: {node: 1, anchor: 'left', tip: {shape: 'arrow-hollow', size: 10}}
+					to: {node: secondChild, anchor: 'left', tip: {shape: 'arrow-hollow', size: 10}}
 				});
 
 				canvas.add($('<div style="left: 200px; top: 400px; width: 50px; height: 50px" class="layout-item">'));
 
 				canvas.add($('<div style="left: 20px; top: 400px; width: 50px; height: 50px" class="layout-item" data-ibx-type="ibxDiagramNode">'));
 
-			}, [{"src" : "./diagram_res_bundle.xml", "loadContext" : "app"}], true);
+			}, true);
 		</script>
 		<style type="text/css">
 			html, body {
@@ -180,6 +216,7 @@
 			.node-holder {
 				border: 1px solid black;
 				position: relative;
+				height: 478px;
 				max-width: 130px;
 				padding: 10px;
 				margin-top: 77px;
@@ -187,6 +224,8 @@
 
 			.arrow-separator {
 				margin: 15px;
+				margin-top: 77px;
+				height: 478px;
 			}
 
 			.drag-item {
@@ -231,7 +270,7 @@
 				>
 					<div
 						id="firstNode"
-						class="layout-item"
+						class="layout-item undeletable"
 						data-ibx-type="ibxDiagramNode"
 						data-ibx-options="{left: 20, top: 20, width: 100, height: 100, moveable: false, deletable: false, selectable: false}"
 					>
