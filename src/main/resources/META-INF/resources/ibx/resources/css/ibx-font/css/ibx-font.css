@@ -477,13 +477,13 @@
 .ibx-glyph-rotate:before {
   content: "\e942";
 }
-.ibx-glyph-pane-properties:before {
+.ibx-glyph-pane_properties:before {
   content: "\e928";
 }
-.ibx-glyph-pane-resources:before {
+.ibx-glyph-pane_resources:before {
   content: "\e929";
 }
-.ibx-glyph-pane-buckets:before {
+.ibx-glyph-pane_buckets:before {
   content: "\e9bb";
 }
 .ibx-glyph-close:before {
@@ -558,16 +558,16 @@
 .ibx-glyph-chevron-up:before {
   content: "\e95d";
 }
-.ibx-glyph-arrow-back:before {
+.ibx-glyph-arrow_back:before {
   content: "\e95e";
 }
-.ibx-glyph-arrow-downward:before {
+.ibx-glyph-arrow_downward:before {
   content: "\e95f";
 }
-.ibx-glyph-arrow-forward:before {
+.ibx-glyph-arrow_forward:before {
   content: "\e960";
 }
-.ibx-glyph-arrow-upward:before {
+.ibx-glyph-arrow_upward:before {
   content: "\e961";
 }
 .ibx-glyph-caret-down:before {
