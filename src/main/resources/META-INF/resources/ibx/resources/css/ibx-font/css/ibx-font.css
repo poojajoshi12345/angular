@@ -92,6 +92,9 @@
 .ibx-glyph-number:before {
   content: "\e985";
 }
+.ibx-glyph-workbook:before {
+  content: "\e947";
+}
 .ibx-glyph-file-ely:before {
   content: "\e9c8";
   color: #000;
