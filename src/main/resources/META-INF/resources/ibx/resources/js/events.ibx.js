@@ -520,9 +520,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 		this.element.data("ibiIbxSelectionManager", this);//plymorphism
 		this.element[0].addEventListener("focusin", this._onFocusIn.bind(this), true);
 		this.element[0].addEventListener("focusout", this._onFocusOut.bind(this), true);
-		this.element[0].addEventListener("mousedown", this._onMouseEvent.bind(this), false);
-		this.element[0].addEventListener("mouseup", this._onMouseEvent.bind(this), false);
-		this.element[0].addEventListener("mousemove", this._onMouseEvent.bind(this), false);
+		this.element[0].addEventListener("mousedown", this._onMouseDown.bind(this), false);
 		this.element[0].addEventListener("keydown", this._onKeyDown.bind(this), false);
 	},
 	_destroy:function()
@@ -656,7 +654,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 		if(e.keyCode == $.ui.keyCode.ESCAPE && options.escClearSelection)
 			this.deselectAll();
 	},
-	_onMouseEvent:function(e)
+	_onMouseDown:function(e)
 	{
 		var eType = e.type;
 		var options = this.options;
@@ -665,52 +663,30 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 		var selChildren = this.selectableChildren();
 		var selTarget = this.mapToSelectable(e.target);
 
-		if(eType == "mousedown")
+		//mousedown happens before focus, so make us active before anything.
+		this._activate(true);
+
+		//don't deselect if clicking on scrollbar.
+		if(!this.element.clickOnScrollbar(e.clientX, e.clientY))
 		{
-			//mousedown happens before focus, so make us active before anything.
-			this._activate(true);
-
-			//don't deselect if clicking on scrollbar.
-			if(!this.element.clickOnScrollbar(e.clientX, e.clientY))
-			{
-				if(isTarget || (isMulti && !e.shiftKey && !e.ctrlKey))
-					this.deselectAll();
-
-				if(isTarget && options.rubberBand)
-				{
-					var pos = this.element.css("position");
-					if(pos != "absolute")
-						this.element.css("position", "relative").data("ibxSelMgrRubberBandOrigPos", pos);
-					this.element.addClass("ibx-sm-rubber-banding");
-					this._rubberBand = $("<div class='ibx-sm-rubber-band'>").css({"left":e.offsetX, "top":e.offsetY}).appendTo(this.element);
-				}
-			}
-
-			//event could happen on child element...map back to something we know can be selected
-			//and can actually be selected by this selection manager.
-			if(selChildren.index(selTarget) != -1)
-			{
-				if(options.type == "multi" && e.shiftKey)
-				{
-					var idxAnchor = selChildren.index(this._anchor());
-					var idxSel = selChildren.index(selTarget[0]);
-					var idxStart = Math.min(idxAnchor, idxSel);
-					var idxEnd = Math.max(idxAnchor, idxSel);
-					this.toggleSelected(selChildren.slice(idxStart, idxEnd + 1), true, false);
-				}
-				else
-					this.toggleSelected(selTarget, (isMulti && e.ctrlKey) || options.toggleSelection ? undefined : true);
-			}
+			if(isTarget || (isMulti && !e.shiftKey && !e.ctrlKey))
+				this.deselectAll();
 		}
-		else
-		if(eType == "mouseup" && this._rubberBand)
-			delete this._rubberBand.remove();
-		else
-		if(eType == "mousemove" && this._rubberBand)
+
+		//event could happen on child element...map back to something we know can be selected
+		//and can actually be selected by this selection manager.
+		if(selChildren.index(selTarget) != -1)
 		{
-			var pos = this._rubberBand.position();
-			this._rubberBand.css({"width":e.offsetX - pos.left, "height":e.offsetY - pos.top});
-			e.stopPropagation();
+			if(options.type == "multi" && e.shiftKey)
+			{
+				var idxAnchor = selChildren.index(this._anchor());
+				var idxSel = selChildren.index(selTarget[0]);
+				var idxStart = Math.min(idxAnchor, idxSel);
+				var idxEnd = Math.max(idxAnchor, idxSel);
+				this.toggleSelected(selChildren.slice(idxStart, idxEnd + 1), true, false);
+			}
+			else
+				this.toggleSelected(selTarget, (isMulti && e.ctrlKey) || options.toggleSelection ? undefined : true);
 		}
 	},
 	preDispacthEvent:function(eventInfo){return eventInfo;},
@@ -913,4 +889,65 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 $.widget("ibi.ibxSelMgrNavigator", $.ibi.ibxSelectionManager, {options:{"type":"none"}});
 $.widget("ibi.ibxSelMgrSingle", $.ibi.ibxSelectionManager, {options:{"type":"single"}});
 $.widget("ibi.ibxSelMgrMulti", $.ibi.ibxSelectionManager, {options:{"type":"multi"}});
+
+$.widget("ibi.rubberBand", $.Widget, 
+{
+	options:
+	{
+	},
+	_create:function()
+	{
+		this._super();
+		this.element.addClass("ibx-rubber-band");
+		this.element[0].addEventListener("mousedown", this._onMouseEvent.bind(this), false);
+		this.element[0].addEventListener("mouseup", this._onMouseEvent.bind(this), false);
+		this.element[0].addEventListener("mousemove", this._onMouseEvent.bind(this), false);
+	},
+	_init:function()
+	{
+		this._super();
+	},
+	_destroy:function()
+	{
+		this.element.removeClass("ibx-rubber-band");
+		this._super();
+	},
+	_onMouseEvent:function(e)
+	{
+		var eType = e.type;
+		var options = this.options;
+		var isTarget = this.element.is(e.target);
+
+		if(eType == "mousedown")
+		{
+			if(isTarget)
+			{
+				var pos = this.element.css("position");
+				if(pos != "absolute")
+					this.element.css("position", "relative").data("ibxSelMgrRubberBandOrigPos", pos);
+				this.element.addClass("ibx-sm-rubber-banding");
+				this._rubberBand = $("<div class='ibx-sm-rubber-band'>").css({"left":e.offsetX, "top":e.offsetY}).appendTo(this.element);
+			}
+		}
+		else
+		if(eType == "mouseup")
+		{
+			this._rubberBand.remove();
+			delete this._rubberBand;
+		}
+		else
+		if(eType == "mousemove")
+		{
+			var pos = this._rubberBand.position();
+			this._rubberBand.css({"width":e.offsetX - pos.left, "height":e.offsetY - pos.top});
+			e.stopPropagation();
+		}
+	},
+	_refresh:function()
+	{
+		var options = this.options;
+		this._super();
+	}
+});
+
 //# sourceURL=events.ibx.js
