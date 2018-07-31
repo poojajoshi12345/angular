@@ -410,11 +410,11 @@ jQuery.fn.metrics = function()
 	return elInfo;
 }
 
-jQuery.fn.visInfo = function(box)
+jQuery.fn.visInfo = function(box, pBox)
 {
 	var elMetrics = this.metrics();
 	var elBox = elMetrics[box || "borderBox"];
-	var pBox = this.parent().metrics().viewportBox;
+	var pBox = pBox || this.parent().metrics().viewportBox;
 	var ret = 
 	{
 		"lVis": (elBox.left > pBox.left && elBox.left < pBox.right),

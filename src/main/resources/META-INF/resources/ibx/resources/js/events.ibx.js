@@ -522,6 +522,8 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 		this.element[0].addEventListener("focusout", this._onFocusOut.bind(this), true);
 		this.element[0].addEventListener("mousedown", this._onMouseDown.bind(this), false);
 		this.element[0].addEventListener("keydown", this._onKeyDown.bind(this), false);
+		this.element[0].addEventListener("ibx_rubberbandchange", this._onRubberBandEvent.bind(this), false);
+
 	},
 	_destroy:function()
 	{
@@ -687,6 +689,21 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 			}
 			else
 				this.toggleSelected(selTarget, (isMulti && e.ctrlKey) || options.toggleSelection ? undefined : true);
+		}
+	},
+	_onRubberBandEvent:function(e)
+	{
+		if(e.type == "ibx_rubberbandchange")
+		{
+			var selBox = e.data;
+			selBox.right = selBox.left + selBox.width;
+			selBox.bottom = selBox.top + selBox.height;
+			var selChildren = this.selectableChildren();
+			selChildren.each(function(idx, el)
+			{
+				var inBox = $(el).visInfo("borderBox", selBox);
+				this.selected(el, inBox.partial, false);
+			}.bind(this));
 		}
 	},
 	preDispacthEvent:function(eventInfo){return eventInfo;},
@@ -954,8 +971,9 @@ $.widget("ibi.ibxRubberBand", $.Widget,
 			var top = Math.min(this._startPoint.y, eTrueY);
 			var width = Math.abs(this._startPoint.x - eTrueX);
 			var height = Math.abs(this._startPoint.y - eTrueY);
-			this._rubberBand.css({"left": left, "top":top, "width":width, "height":height});
-			this.element.dispatchEvent("ibx_rubberbandchange", null, true, false, this._rubberBand[0]);
+			var rBounds = {"left": left, "top":top, "width":width, "height":height};
+			this._rubberBand.css(rBounds);
+			this.element.dispatchEvent("ibx_rubberbandchange", rBounds, true, false, this._rubberBand[0]);
 		}
 	},
 	stop:function(e)
