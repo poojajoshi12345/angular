@@ -92,7 +92,7 @@
 					<div class="nav-box" data-ibx-type="ibxVBox" data-ibx-name="_navBox" data-ibxp-align="stretch"></div>
 					<div data-ibx-type="ibxVSplitter"></div>
 					<div class="content-box" data-ibx-type="ibxWidget" data-ibx-name="_content">
-						<div tabindex="0" class="test-content" data-ibx-type="ibxHBox" data-ibx-name="_testContent" data-ibxp-wrap="true" data-ibxp-nav-key-root="true" data-ibxp-rubber-band="true" data-ibxp-focus-default="true" data-ibxp-sel-type="multi"></div>
+						<div tabindex="0" class="test-content" data-ibx-type="ibxHBox" data-ibx-name="_testContent" data-ibxp-wrap="true" data-ibxp-nav-key-root="true" data-ibxp-rubber-band="true" data-ibxp-rubber-band-touch-select="true" data-ibxp-focus-default="true" data-ibxp-sel-type="multi"></div>
 					</div>
 				</div>
 			</div>

@@ -508,6 +508,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 		"navKeyRoot":false,					//arrow keys will move you circularly through the items.
 		"navKeyDir":"both",					//horizontal = left/right, vertical = up/down, or both
 		"rubberBand":false,					//selection by rubberband
+		"rubberBandTouchSelect":false		//rubberband must fully enclose the item for selection
 	},
 	_widgetClass:"ibx-selection-manager",
 	_create:function()
@@ -695,6 +696,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 	{
 		if(e.type == "ibx_rubberbandchange")
 		{
+			var options = this.options;
 			var selBox = e.data;
 			selBox.right = selBox.left + selBox.width;
 			selBox.bottom = selBox.top + selBox.height;
@@ -702,7 +704,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 			selChildren.each(function(idx, el)
 			{
 				var inBox = $(el).visInfo("borderBox", selBox);
-				this.selected(el, inBox.partial, false);
+				this.selected(el, options.rubberBandTouchSelect ? inBox.partial : inBox.total, false);
 			}.bind(this));
 		}
 	},

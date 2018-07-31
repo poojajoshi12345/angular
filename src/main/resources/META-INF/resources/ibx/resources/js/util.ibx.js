@@ -424,7 +424,15 @@ jQuery.fn.visInfo = function(box, pBox)
 	}
 	ret.total = (ret.lVis && ret.rVis && ret.tVis && ret.bVis);
 	ret.partial = (ret.lVis || ret.rVis) && (ret.tVis || ret.bVis);
+	ret.partial = ret.partial || rectIntersect(elBox, pBox);
+	console.log(ret);
 	return ret;
+}
+
+function rectIntersect(r1, r2)
+{
+    return r1.left < r2.right && r2.left < r1.right &&
+            r1.top < r2.bottom && r2.top < r1.bottom;
 }
 
 //For accessibility we need to create ibx specific aria ids
