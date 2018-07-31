@@ -113,6 +113,11 @@
 				{
 					this._super();
 					this._loadWidgetTemplate(".test-frame");
+
+					this.element.on("ibx_selchange", function(e)
+					{
+						console.log(e);
+					}.bind(this));
 				},
 				_init:function()
 				{

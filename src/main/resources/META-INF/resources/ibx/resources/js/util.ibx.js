@@ -425,7 +425,6 @@ jQuery.fn.visInfo = function(box, pBox)
 	ret.total = (ret.lVis && ret.rVis && ret.tVis && ret.bVis);
 	ret.partial = (ret.lVis || ret.rVis) && (ret.tVis || ret.bVis);
 	ret.partial = ret.partial || rectIntersect(elBox, pBox);
-	console.log(ret);
 	return ret;
 }
 
