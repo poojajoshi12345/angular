@@ -80,7 +80,7 @@
 				<div class="menu-bar" data-ibx-type="ibxMenuBar" data-ibx-name="_menuBar" data-ibxp-align="center">
 					<div data-ibx-type="ibxMenuButton" data-ibx-name="_menuButton">
 						Menu
-						<div data-ibx-type="ibxMenu">
+						<div data-ibx-type="ibxMenu" data-ibxp-opaque="true">
 							<div data-ibx-type="ibxMenuItem">Menu Item</div>
 						</div>
 					</div>

@@ -882,7 +882,15 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 		else
 		if(key == "focusDefault")
 			this.element.toggleClass("ibx-sm-focus-default", !!value);
-		
+		else
+		if(key == "rubberBand")
+		{
+			if(this.element.is(".ibx-rubber-band") && value === flase)
+				this.element.ibxRubberBand("destroy");
+			else
+			if(value)
+				this.element.ibxRubberBand();
+		}
 		this._super(key, value);
 	},
 });
@@ -890,7 +898,7 @@ $.widget("ibi.ibxSelMgrNavigator", $.ibi.ibxSelectionManager, {options:{"type":"
 $.widget("ibi.ibxSelMgrSingle", $.ibi.ibxSelectionManager, {options:{"type":"single"}});
 $.widget("ibi.ibxSelMgrMulti", $.ibi.ibxSelectionManager, {options:{"type":"multi"}});
 
-$.widget("ibi.rubberBand", $.Widget, 
+$.widget("ibi.ibxRubberBand", $.Widget, 
 {
 	options:
 	{
@@ -925,22 +933,26 @@ $.widget("ibi.rubberBand", $.Widget,
 				var pos = this.element.css("position");
 				if(pos != "absolute")
 					this.element.css("position", "relative").data("ibxSelMgrRubberBandOrigPos", pos);
+				this._eMouseDown = e;
 				this.element.addClass("ibx-sm-rubber-banding");
 				this._rubberBand = $("<div class='ibx-sm-rubber-band'>").css({"left":e.offsetX, "top":e.offsetY}).appendTo(this.element);
 			}
 		}
 		else
-		if(eType == "mouseup")
+		if(eType == "mouseup" && this._rubberBand)
 		{
+			this.element.css("position", this.element.data("ibxSelMgrRubberBandOrigPos"));
 			this._rubberBand.remove();
 			delete this._rubberBand;
 		}
 		else
-		if(eType == "mousemove")
+		if(eType == "mousemove" && isTarget && this._rubberBand)
 		{
-			var pos = this._rubberBand.position();
-			this._rubberBand.css({"width":e.offsetX - pos.left, "height":e.offsetY - pos.top});
-			e.stopPropagation();
+			var left = Math.min(this._eMouseDown.offsetX, e.offsetX);
+			var top = Math.min(this._eMouseDown.offsetY, e.offsetY);
+			var width = Math.abs(e.offsetX - this._eMouseDown.offsetX);
+			var height = Math.abs(e.offsetY - this._eMouseDown.offsetY);
+			this._rubberBand.css({"left": left, "top":top, "width":width, "height":height});
 		}
 	},
 	_refresh:function()
