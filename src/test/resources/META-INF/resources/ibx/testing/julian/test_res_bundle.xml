@@ -42,13 +42,13 @@
 			.content-box
 			{
 				flex:1 1 auto;
-				overflow:auto;
 			}
 			.test-content
 			{
 				width:100%;
 				height:100%;
 				box-sizing:border-box;
+				overflow:auto;
 			}
 
 			.test-item
@@ -118,7 +118,7 @@
 				{
 					this._super();
 					var container = $(".test-content");
-					for(var i = 0; i < 1; ++i)
+					for(var i = 0; i < 100; ++i)
 					{
 						var item = $("<div tabindex='0'>").ibxLabel({"text":"Item" + i, "draggable":true, "align":"center", "justify":"center"});
 						item.addClass("test-item item"+i);

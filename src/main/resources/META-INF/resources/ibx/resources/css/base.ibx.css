@@ -103,6 +103,7 @@ textarea {
 	pointer-events:none;
 }
 
-.ibx-sm-rubber-banding
+.ibx-sm-rubber-banding *
 {
+	pointer-events:none;
 }

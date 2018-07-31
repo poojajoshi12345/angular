@@ -923,35 +923,35 @@ $.widget("ibi.ibxRubberBand", $.Widget,
 	_onMouseEvent:function(e)
 	{
 		var eType = e.type;
+		var eTrueX = e.offsetX + this.element.prop("scrollLeft");
+		var eTrueY = e.offsetY + this.element.prop("scrollTop");
 		var options = this.options;
 		var isTarget = this.element.is(e.target);
 
-		if(eType == "mousedown")
+		if(eType == "mousedown" && isTarget)
 		{
-			if(isTarget)
-			{
-				var pos = this.element.css("position");
-				if(pos != "absolute")
-					this.element.css("position", "relative").data("ibxSelMgrRubberBandOrigPos", pos);
-				this._eMouseDown = e;
-				this.element.addClass("ibx-sm-rubber-banding");
-				this._rubberBand = $("<div class='ibx-sm-rubber-band'>").css({"left":e.offsetX, "top":e.offsetY}).appendTo(this.element);
-			}
+			var pos = this.element.css("position");
+			if(pos != "absolute")
+				this.element.css("position", "relative").data("ibxSelMgrRubberBandOrigPos", pos);
+			this._startPoint = {"x":eTrueX, "y":eTrueY};
+			this.element.addClass("ibx-sm-rubber-banding");
+			this._rubberBand = $("<div class='ibx-sm-rubber-band'>").css({"left":eTrueX, "top":eTrueY}).appendTo(this.element);
 		}
 		else
 		if(eType == "mouseup" && this._rubberBand)
 		{
-			this.element.css("position", this.element.data("ibxSelMgrRubberBandOrigPos"));
+			this.element.removeClass("ibx-sm-rubber-banding").css("position", this.element.data("ibxSelMgrRubberBandOrigPos"));
 			this._rubberBand.remove();
 			delete this._rubberBand;
+			delete this._startPoint;
 		}
 		else
-		if(eType == "mousemove" && isTarget && this._rubberBand)
+		if(eType == "mousemove" && this._rubberBand)
 		{
-			var left = Math.min(this._eMouseDown.offsetX, e.offsetX);
-			var top = Math.min(this._eMouseDown.offsetY, e.offsetY);
-			var width = Math.abs(e.offsetX - this._eMouseDown.offsetX);
-			var height = Math.abs(e.offsetY - this._eMouseDown.offsetY);
+			var left = Math.min(this._startPoint.x, eTrueX);
+			var top = Math.min(this._startPoint.y, eTrueY);
+			var width = Math.abs(this._startPoint.x - eTrueX);
+			var height = Math.abs(this._startPoint.y - eTrueY);
 			this._rubberBand.css({"left": left, "top":top, "width":width, "height":height});
 		}
 	},
