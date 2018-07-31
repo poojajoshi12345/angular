@@ -773,14 +773,14 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 
 			if(el.length)
 			{
-				var evt = this._dispatchEvent("ibx_beforeselchange", {"selected":select, "items":el}, false, true);
+				var evt = this._dispatchEvent("ibx_beforeselchange", {"selected":select, "items":el}, true, true);
 				if(!evt.isDefaultPrevented())
 				{
 					el = evt.data.items;
 					el.addClass("ibx-sm-selected");
 					if(anchor)
 						this._anchor(el.last());
-					this._dispatchEvent("ibx_selchange", {"selected":select, "items":el}, false, false);
+					this._dispatchEvent("ibx_selchange", {"selected":select, "items":el}, true, false);
 				}
 			}
 		}
@@ -789,13 +789,13 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 			el = $(el).filter(".ibx-sm-selected");
 			if(el.length)
 			{
-				var evt = this._dispatchEvent("ibx_beforeselchange", {"selected":select, "items":el}, false, true);
+				var evt = this._dispatchEvent("ibx_beforeselchange", {"selected":select, "items":el}, true, true);
 				if(!evt.isDefaultPrevented())
 				{
 					el.removeClass("ibx-sm-selected");
 					if(anchor)
 						this._anchor(el.last());
-					this._dispatchEvent("ibx_selchange", {"selected":select, "items":el}, false, false);
+					this._dispatchEvent("ibx_selchange", {"selected":select, "items":el}, true, false);
 				}
 			}
 		}
