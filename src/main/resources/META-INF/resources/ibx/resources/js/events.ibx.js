@@ -906,7 +906,7 @@ $.widget("ibi.ibxRubberBand", $.Widget,
 	_create:function()
 	{
 		this._super();
-		this.element.addClass("ibx-rubber-band");
+		this.element.ibxAutoScroll({"autoActivate":true}).addClass("ibx-rubber-band");
 		this.element[0].addEventListener("mousedown", this._onMouseEvent.bind(this), false);
 		this.element[0].addEventListener("mouseup", this._onMouseEvent.bind(this), false);
 		this.element[0].addEventListener("mousemove", this._onMouseEvent.bind(this), false);
@@ -917,7 +917,7 @@ $.widget("ibi.ibxRubberBand", $.Widget,
 	},
 	_destroy:function()
 	{
-		this.element.removeClass("ibx-rubber-band");
+		this.element.ibxAutoScroll("destroy").removeClass("ibx-rubber-band");
 		this._super();
 	},
 	_onMouseEvent:function(e)
@@ -930,21 +930,23 @@ $.widget("ibi.ibxRubberBand", $.Widget,
 
 		if(eType == "mousedown" && isTarget)
 		{
-			var pos = this.element.css("position");
-			if(pos != "absolute")
-				this.element.css("position", "relative").data("ibxSelMgrRubberBandOrigPos", pos);
-			this._startPoint = {"x":eTrueX, "y":eTrueY};
-			this.element.addClass("ibx-sm-rubber-banding");
-			this._rubberBand = $("<div class='ibx-sm-rubber-band'>").css({"left":eTrueX, "top":eTrueY}).appendTo(this.element);
+			this.stop();
+
+			var event = this.element.dispatchEvent("ibx_beforerubberbandstart", null, true, true);
+			if(!event.isDefaultPrevented())
+			{
+				var pos = this.element.css("position");
+				if(pos != "absolute")
+					this.element.css("position", "relative").data("ibxSelMgrRubberBandOrigPos", pos);
+				this._startPoint = {"x":eTrueX, "y":eTrueY};
+				this.element.addClass("ibx-sm-rubber-banding");
+				this._rubberBand = $("<div class='ibx-sm-rubber-band'>").css({"left":eTrueX, "top":eTrueY}).appendTo(this.element);
+				this.element.dispatchEvent("ibx_rubberbandstart", null, true, false, this._rubberBand[0]);
+			}
 		}
 		else
 		if(eType == "mouseup" && this._rubberBand)
-		{
-			this.element.removeClass("ibx-sm-rubber-banding").css("position", this.element.data("ibxSelMgrRubberBandOrigPos"));
-			this._rubberBand.remove();
-			delete this._rubberBand;
-			delete this._startPoint;
-		}
+			this.stop();
 		else
 		if(eType == "mousemove" && this._rubberBand)
 		{
@@ -953,12 +955,25 @@ $.widget("ibi.ibxRubberBand", $.Widget,
 			var width = Math.abs(this._startPoint.x - eTrueX);
 			var height = Math.abs(this._startPoint.y - eTrueY);
 			this._rubberBand.css({"left": left, "top":top, "width":width, "height":height});
+			this.element.dispatchEvent("ibx_rubberbandchange", null, true, false, this._rubberBand[0]);
 		}
 	},
-	_refresh:function()
+	stop:function(e)
+	{
+		if(this._rubberBand)
+		{
+			this.element.dispatchEvent("ibx_rubberbandend", null, true, false, this._rubberBand[0]);
+			this.element.removeClass("ibx-sm-rubber-banding").css("position", this.element.data("ibxSelMgrRubberBandOrigPos"));
+			this._rubberBand.remove();
+			delete this._rubberBand;
+			delete this._startPoint;
+		}
+	},
+	_setOption:function(key, value)
 	{
 		var options = this.options;
-		this._super();
+		var changed = options[key] != value;
+		this._super(key, value);
 	}
 });
 
