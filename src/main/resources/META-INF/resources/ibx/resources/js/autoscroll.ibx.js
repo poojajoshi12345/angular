@@ -32,7 +32,7 @@ $.widget("ibi.ibxAutoScroll", $.Widget,
 	{
 		this._super();
 		this.disable();
-		this.removeClass(this._widgetClass);
+		this.element.removeClass(this._widgetClass);
 	},
 	_onMouseEvent: function(e)
 	{

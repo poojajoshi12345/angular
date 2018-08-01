@@ -6,9 +6,9 @@ function ibxEventManager()
 	if(ibx.eventMgr)
 		return;
 
-	window.addEventListener("touchstart", ibxEventManager._onTouchEvent.bind(this), true)
-	window.addEventListener("touchend", ibxEventManager._onTouchEvent, true)
-	window.addEventListener("touchmove", ibxEventManager._onTouchEvent, true)
+	window.addEventListener("touchstart", ibxEventManager._onTouchEvent.bind(this), true);
+	window.addEventListener("touchend", ibxEventManager._onTouchEvent, true);
+	window.addEventListener("touchmove", ibxEventManager._onTouchEvent, true);
 	window.addEventListener("contextmenu", ibxEventManager._onContextMenu);
 	window.addEventListener("keydown", ibxEventManager._onKeyDown);
 
@@ -111,7 +111,7 @@ ibxEventManager._onTouchEvent = function(e)
 			if(sEvent && tElapsed <= 300)
 			{
 				var se = ibxEventManager.createMouseEvent(sEvent, e);
-				ibxEventManager._hasSwiped = true
+				ibxEventManager._hasSwiped = true;
 				e.target.dispatchEvent(se);
 			}
 
@@ -125,7 +125,7 @@ ibxEventManager._onTouchEvent = function(e)
 			if(sEvent && tElapsed <= 300)
 			{
 				var se = ibxEventManager.createMouseEvent(sEvent, e);
-				ibxEventManager._hasSwiped = true
+				ibxEventManager._hasSwiped = true;
 				e.target.dispatchEvent(se);
 			}
 		}
@@ -208,7 +208,7 @@ _p = ibxDataTransfer.prototype = new Object();
 _p.dataLock = false;
 _p.items = null;
 _p.types = null;
-_p.getData = function(type){return this.items[type]};
+_p.getData = function(type){return this.items[type];};
 _p.setData = function(type, data)
 {
 	if(this.dataLock)
@@ -268,11 +268,11 @@ function ibxDragDropManager()
 ibxDragDropManager.dragPrevented = false;
 ibxDragDropManager.dragElement = null;
 ibxDragDropManager.curTarget = $();
-ibxDragDropManager.dragSourceClass = "ibx-drag-source",
-ibxDragDropManager.dragTargetClass = "ibx-drop-target",
-ibxDragDropManager.dragImageClass = "ibx-drag-image",
-ibxDragDropManager.dragStartDistanceX = 5,
-ibxDragDropManager.dragStartDistanceY = 5,
+ibxDragDropManager.dragSourceClass = "ibx-drag-source";
+ibxDragDropManager.dragTargetClass = "ibx-drop-target";
+ibxDragDropManager.dragImageClass = "ibx-drag-image";
+ibxDragDropManager.dragStartDistanceX = 5;
+ibxDragDropManager.dragStartDistanceY = 5;
 
 ibxDragDropManager.getDefaultDragImage = function(el)
 {
@@ -331,7 +331,7 @@ ibxDragDropManager._onKeyEvent = function(e)
 ibxDragDropManager.isDragging = function()
 {
 	return (this.dragElement && this.dragElement.classList.contains(this.dragSourceClass));
-}
+};
 ibxDragDropManager._onMouseEvent = function(e)
 {
 	var eType = e.type;
@@ -408,7 +408,7 @@ ibxDragDropManager._onMouseEvent = function(e)
 				if(this.curTarget.length)
 				{
 					//[IA-8982] when dragging over an svg node in IE (of course) there is no style property...so just ignore in that case.
-					var cursor = this.curTarget[0].style ? this.curTarget[0].style.cursor : ""
+					var cursor = this.curTarget[0].style ? this.curTarget[0].style.cursor : "";
 					this.curTarget.data("ibxDragTargetCursorOrig", cursor);
 					this.curTarget.addClass(this.dragTargetClass);
 				}
@@ -633,7 +633,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 		if(e.keyCode == $.ui.keyCode.ENTER || e.keyCode == $.ui.keyCode.SPACE)
 		{
 			if((options.type == "multi") && !e.shiftKey && !e.ctrlKey)
-				this.deselectAll();
+				this.deselectAll(true);
 
 			if(e.shiftKey)
 			{
@@ -655,7 +655,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 			this.selectableChildren().last().focus();
 		else
 		if(e.keyCode == $.ui.keyCode.ESCAPE && options.escClearSelection)
-			this.deselectAll();
+			this.deselectAll(true);
 	},
 	_onMouseDown:function(e)
 	{
@@ -673,7 +673,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 		if(!this.element.clickOnScrollbar(e.clientX, e.clientY))
 		{
 			if(isTarget || (isMulti && !e.shiftKey && !e.ctrlKey && !this.isSelected(selTarget)))
-				this.deselectAll();
+				this.deselectAll(true);
 		}
 
 		//event could happen on child element...map back to something we know can be selected
@@ -736,11 +736,11 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 	{
 		var options = this.options;
 		var e = this._dispatchEvent("ibx_selectablechildren", {"items":null}, false, true, undefined, false);
-		var children = e.data.items ? $(e.data.items) : this.element.logicalChildren(".ibx-sm-nav-key-root, .ibx-sm-focus-default", ":ibxFocusable(-1)");			
+		var children = e.data.items ? $(e.data.items) : this.element.logicalChildren(".ibx-sm-selection-root, .ibx-sm-nav-key-root, .ibx-sm-focus-root", ":ibxFocusable(-1)");			
 		children.addClass("ibx-sm-selectable");
 		return selector ? children.filter(selector) : children;
 	},
-	isSelected:function(el){return $(el).hasClass("ibx-sm-selected")},
+	isSelected:function(el){return $(el).hasClass("ibx-sm-selected");},
 	selected:function(el, select, anchor)
 	{
 		//public interface needs to map nodes...think tree from ibxTreeNode to it's selectable label.
@@ -768,7 +768,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 			var options = this.options;
 			if(options.type == "single")//single selection
 			{
-				this.deselectAll();
+				this.deselectAll(true);
 				el = $(el).first(":not(.ibx-sm-selected)");
 			}
 			else//multi
@@ -815,9 +815,11 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 	{
 		this.selected(this.selectableChildren(":not(.ibx-sm-selected)"), true);
 	},
-	deselectAll:function()
+	deselectAll:function(andAnchor)
 	{
 		this.selected(this.selectableChildren(".ibx-sm-selected"), false);
+		if(andAnchor)
+			this.anchor(null);
 	},
 	_elAnchor:$(),
 	anchor:function(el)
@@ -895,9 +897,10 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 	_setOption:function(key, value)
 	{
 		if(key == "type" && value != this.options[key])
-			this.deselectAll();
+			this.deselectAll(true);
+
 		if(key == "type")
-			this.element.toggleClass("ibx-sm-selection-root", (value != "nav"));
+			this.element.toggleClass("ibx-sm-selection-root", (value != "none"));
 		else
 		if(key == "focusRoot")
 			this.element.toggleClass("ibx-sm-focus-root", value);
@@ -910,7 +913,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 		else
 		if(key == "rubberBand")
 		{
-			if(this.element.is(".ibx-rubber-band") && value === flase)
+			if(this.element.is(".ibx-rubber-band") && value === false)
 				this.element.ibxRubberBand("destroy");
 			else
 			if(value)

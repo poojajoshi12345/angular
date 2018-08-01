@@ -17,7 +17,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 
 		//for selection and keyboard naviation (circular tabbing/arrow keys)
 		//These are just passthrough options for the attached ibxSelectionManager widget.
-		"selType":"nav",				//is selection supported - "nav" means no.
+		"selType":"none",				//is selection supported - none/single/multi.
 		"focusRoot":false,				//keep tabbing to this container (like dialogs).
 		"focusDefault":false,			//focus the first item in root. (can be a select pattern).
 		"navKeyRoot":false,				//keep keyboard navigation to this container (not tabbing, more like arrows in trees/lists/etc.).
@@ -306,7 +306,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 		this.element.toggleClass("ibx-draggable", options.draggable);
 		this.element.toggleClass("ibx-external-drop-target", options.externalDropTarget);
 
-		if(options.focusRoot || options.navKeyRoot || options.focusDefault)
+		if(options.focusRoot || options.navKeyRoot || options.focusDefault || options.selType != "none")
 		{
 			var mgrOptions = 
 			{
