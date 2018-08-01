@@ -508,7 +508,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 		"navKeyRoot":false,					//arrow keys will move you circularly through the items.
 		"navKeyDir":"both",					//horizontal = left/right, vertical = up/down, or both
 		"rubberBand":false,					//selection by rubberband
-		"rubberBandTouchSelect":false		//rubberband must fully enclose the item for selection
+		"rubberBandPartialSelect":false		//rubberband must fully enclose the item for selection
 	},
 	_widgetClass:"ibx-selection-manager",
 	_create:function()
@@ -672,7 +672,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 		//don't deselect if clicking on scrollbar.
 		if(!this.element.clickOnScrollbar(e.clientX, e.clientY))
 		{
-			if(isTarget || (isMulti && !e.shiftKey && !e.ctrlKey))
+			if(isTarget || (isMulti && !e.shiftKey && !e.ctrlKey && !this.isSelected(selTarget)))
 				this.deselectAll();
 		}
 
@@ -689,6 +689,9 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 				this.toggleSelected(selChildren.slice(idxStart, idxEnd + 1), true, false);
 			}
 			else
+			if(isMulti && !e.ctrlKey)
+				this.toggleSelected(selTarget, true);
+			else
 				this.toggleSelected(selTarget, (isMulti && e.ctrlKey) || options.toggleSelection ? undefined : true);
 		}
 	},
@@ -700,12 +703,15 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 			var selBox = e.data;
 			selBox.right = selBox.left + selBox.width;
 			selBox.bottom = selBox.top + selBox.height;
+
 			var selChildren = this.selectableChildren();
-			selChildren.each(function(idx, el)
+			for(var i = 0; i < selChildren.length; ++i)
 			{
-				var inBox = $(el).visInfo("borderBox", selBox);
-				this.selected(el, options.rubberBandTouchSelect ? inBox.partial : inBox.total, false);
-			}.bind(this));
+				var child = selChildren[i];
+				var inBox = $(child).visInfo("borderBox", selBox);
+				var select = options.rubberBandPartialSelect ? inBox.partial : inBox.total;
+				this.selected(child, select, select && !this.anchor());
+			}
 		}
 	},
 	preDispacthEvent:function(eventInfo){return eventInfo;},
@@ -754,7 +760,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 		el = this.element.logicalChildren(".ibx-sm-selection-root", el);
 
 		//by default set the anchor item
-		anchor = (select && (anchor === undefined)) ? true : false;
+		anchor = (select && (anchor === undefined)) ? true : anchor;
 
 		if(select)
 		{
@@ -779,7 +785,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 					el = evt.data.items;
 					el.addClass("ibx-sm-selected");
 					if(anchor)
-						this._anchor(el.last());
+						this._anchor(el.first());
 					this._dispatchEvent("ibx_selchange", {"selected":select, "items":el}, true, false);
 				}
 			}
@@ -794,7 +800,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 				{
 					el.removeClass("ibx-sm-selected");
 					if(anchor)
-						this._anchor(el.last());
+						this._anchor(el.first());
 					this._dispatchEvent("ibx_selchange", {"selected":select, "items":el}, true, false);
 				}
 			}
@@ -824,7 +830,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 	_anchor:function(el)
 	{
 		if(el === undefined)
-			return this._elAnchor;
+			return this._elAnchor[0];
 
 		this._elAnchor.removeClass("ibx-sm-anchor");
 		this._elAnchor = $(el).first().addClass("ibx-sm-anchor");
