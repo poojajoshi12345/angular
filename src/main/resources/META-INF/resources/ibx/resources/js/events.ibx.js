@@ -521,7 +521,8 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 		this.element.data("ibiIbxSelectionManager", this);//plymorphism
 		this.element[0].addEventListener("focusin", this._onFocusIn.bind(this), true);
 		this.element[0].addEventListener("focusout", this._onFocusOut.bind(this), true);
-		this.element[0].addEventListener("mousedown", this._onMouseDown.bind(this), false);
+		this.element[0].addEventListener("mousedown", this._onMouseEvent.bind(this), false);
+		this.element[0].addEventListener("mouseup", this._onMouseEvent.bind(this), false);
 		this.element[0].addEventListener("keydown", this._onKeyDown.bind(this), false);
 		this.element[0].addEventListener("ibx_rubberbandchange", this._onRubberBandEvent.bind(this), false);
 
@@ -544,12 +545,12 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 		if(isTarget && !ownsRelTarget && options.focusDefault !== false)
 		{
 			var defItem = this._focus();
-			if(!defItem.length)
+			if(!defItem)
 			{
 				var defItem = this.element.find(options.focusDefault);
 				defItem = defItem.length ? defItem : this.selectableChildren().first();
 			}
-			defItem.focus();
+			$(defItem).focus();
 			return;
 		}
 
@@ -604,7 +605,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 		if(options.navKeyRoot && [$.ui.keyCode.LEFT, $.ui.keyCode.RIGHT, $.ui.keyCode.UP, $.ui.keyCode.DOWN].indexOf(e.keyCode) != -1)
 		{
 			var navKids = this.selectableChildren();
-			var focusedItem = this._focus()[0];
+			var focusedItem = this.focus();
 			var idxFocused = navKids.index(focusedItem);
 			var goPrev = (e.keyCode == $.ui.keyCode.LEFT || e.keyCode == $.ui.keyCode.UP);
 			var goNext = (e.keyCode == $.ui.keyCode.RIGHT || e.keyCode == $.ui.keyCode.DOWN);
@@ -657,7 +658,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 		if(e.keyCode == $.ui.keyCode.ESCAPE && options.escClearSelection)
 			this.deselectAll(true);
 	},
-	_onMouseDown:function(e)
+	_onMouseEvent:function(e)
 	{
 		var eType = e.type;
 		var options = this.options;
@@ -666,33 +667,36 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 		var selChildren = this.selectableChildren();
 		var selTarget = this.mapToSelectable(e.target);
 
-		//mousedown happens before focus, so make us active before anything.
-		this._activate(true);
-
-		//don't deselect if clicking on scrollbar.
-		if(!this.element.clickOnScrollbar(e.clientX, e.clientY))
+		if(eType == "mousedown")
 		{
-			if(isTarget || (isMulti && !e.shiftKey && !e.ctrlKey && !this.isSelected(selTarget)))
-				this.deselectAll(true);
-		}
+			//mousedown happens before focus, so make us active before anything.
+			this._activate(true);
 
-		//event could happen on child element...map back to something we know can be selected
-		//and can actually be selected by this selection manager.
-		if(selChildren.index(selTarget) != -1)
-		{
-			if(options.type == "multi" && e.shiftKey)
+			//don't deselect if clicking on scrollbar.
+			if(!this.element.clickOnScrollbar(e.clientX, e.clientY))
 			{
-				var idxAnchor = selChildren.index(this._anchor());
-				var idxSel = selChildren.index(selTarget[0]);
-				var idxStart = Math.min(idxAnchor, idxSel);
-				var idxEnd = Math.max(idxAnchor, idxSel);
-				this.toggleSelected(selChildren.slice(idxStart, idxEnd + 1), true, false);
+				if(isTarget || (isMulti && !e.shiftKey && !e.ctrlKey && !this.isSelected(selTarget)))
+					this.deselectAll(true);
 			}
-			else
-			if(isMulti && !e.ctrlKey)
-				this.toggleSelected(selTarget, true);
-			else
-				this.toggleSelected(selTarget, (isMulti && e.ctrlKey) || options.toggleSelection ? undefined : true);
+
+			//event could happen on child element...map back to something we know can be selected
+			//and can actually be selected by this selection manager.
+			if(selChildren.index(selTarget) != -1)
+			{
+				if(options.type == "multi" && e.shiftKey)
+				{
+					var idxAnchor = selChildren.index(this._anchor());
+					var idxSel = selChildren.index(selTarget[0]);
+					var idxStart = Math.min(idxAnchor, idxSel);
+					var idxEnd = Math.max(idxAnchor, idxSel);
+					this.toggleSelected(selChildren.slice(idxStart, idxEnd + 1), true, false);
+				}
+				else
+				if(isMulti && !e.ctrlKey)
+					this.toggleSelected(selTarget, true);
+				else
+					this.toggleSelected(selTarget, (isMulti && e.ctrlKey) || options.toggleSelection ? undefined : true);
+			}
 		}
 	},
 	_onRubberBandEvent:function(e)
@@ -849,7 +853,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 	_focus:function(el, focus)
 	{
 		if(el === undefined)
-			return this._elFocus;
+			return this._elFocus[0];
 
 		this._elFocus.removeClass("ibx-sm-focused ibx-ie-pseudo-focus");
 		this._elFocus = $(el).first().addClass("ibx-sm-focused " + (ibxPlatformCheck.isIE ? "ibx-ie-pseudo-focus" : ""));
@@ -919,6 +923,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 			if(value)
 				this.element.ibxRubberBand();
 		}
+
 		this._super(key, value);
 	},
 });
