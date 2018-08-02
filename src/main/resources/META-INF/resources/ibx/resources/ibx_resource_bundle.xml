@@ -176,6 +176,9 @@ $Revision$:-->
 		<!--IBX ASSETS-->
 		<style-file src="./css/ibx-font/css/ibx-font.css" nocompile="true"/>
 		<style-file src="./css/widget.ibx.css"/>
+		<style-file src="./css/events.ibx.css"/>
+		<style-file src="./css/selection.ibx.css"/>
+		<style-file src="./css/dragdrop.ibx.css"/>
 		<style-file src="./css/collapsible.ibx.css"/>
 		<style-file src="./css/flexbox.ibx.css"/>
 		<style-file src="./css/iframe.ibx.css"/>
@@ -223,6 +226,8 @@ $Revision$:-->
 
 		<!--IBX ASSETS-->
 		<script-file src="./js/events.ibx.js"/>
+		<script-file src="./js/selection.ibx.js"/>
+		<script-file src="./js/dragdrop.ibx.js"/>
 		<script-file src="./js/mutationobserver.ibx.js"/>
 		<script-file src="./js/widget.ibx.js"/>
 		<script-file src="./js/commands.ibx.js"/>

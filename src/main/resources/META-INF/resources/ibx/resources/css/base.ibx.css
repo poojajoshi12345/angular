@@ -96,14 +96,3 @@ textarea {
     font: inherit;
 }
 
-.ibx-sm-rubber-band
-{
-	position:absolute;
-	outline:1px dotted black;
-	pointer-events:none;
-}
-
-.ibx-sm-rubber-banding *
-{
-	pointer-events:none;
-}

@@ -22,36 +22,6 @@
 {
 }
 
-/*IE will not draw a focus outline on nodes with tabIndex -1. So, for consistency, I add it manually.*/
-.ibx-ie-pseudo-focus
-{
-	outline:1px dotted black;
-}
-
-.ibx-focus-root
-{
-}
-
-.ibx-nav-key-root
-{
-}
-
-.ibx-nav-key-root-active
-{
-}
-
-.ibx-nav-key-item-active
-{
-}
-
-.ibx-default-focused
-{
-}
-
-.ibx-drag-target
-{
-}
-
 .ibx-opaque
 {
 	position:relative;

@@ -1,0 +1,61 @@
+﻿/*Copyright 1996-2016 Information Builders, Inc. All rights reserved.*/
+/* $Revision$: */
+
+.ibx-selection-manager
+{
+}
+
+.ibx-sm-selection-root
+{
+}
+
+.ibx-sm-focus-root
+{
+}
+
+.ibx-sm-nav-key-root
+{
+}
+
+.ibx-sm-focus-default
+{
+}
+
+.ibx-sm-selectable
+{
+}
+
+.ibx-sm-selected
+{
+}
+
+.ibx-sm-active
+{
+}
+
+.ibx-sm-focused
+{
+}
+
+/*IE will not draw a focus outline on nodes with tabIndex -1. So, for consistency, I add it manually.*/
+.ibx-ie-pseudo-focus
+{
+	outline:1px dotted black;
+}
+
+.ibx-sm-anchor
+{
+}
+
+.ibx-sm-rubber-band
+{
+	position:absolute;
+	outline:1px dotted black;
+	pointer-events:none;
+}
+
+.ibx-sm-rubber-banding *
+{
+	pointer-events:none;
+}
+
