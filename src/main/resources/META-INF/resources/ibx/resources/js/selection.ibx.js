@@ -442,7 +442,7 @@ $.widget("ibi.ibxRubberBand", $.Widget,
 	_create:function()
 	{
 		this._super();
-		this.element.ibxAutoScroll({"autoActivate":true}).addClass("ibx-rubber-band");
+		this.element.ibxAutoScroll().addClass("ibx-rubber-band");
 		this.element[0].addEventListener("mousedown", this._onMouseEvent.bind(this), false);
 		this.element[0].addEventListener("mouseup", this._onMouseEvent.bind(this), false);
 		this.element[0].addEventListener("mousemove", this._onMouseEvent.bind(this), false);
@@ -475,14 +475,18 @@ $.widget("ibi.ibxRubberBand", $.Widget,
 				if(pos != "absolute")
 					this.element.css("position", "relative").data("ibxSelMgrRubberBandOrigPos", pos);
 				this._startPoint = {"x":eTrueX, "y":eTrueY};
-				this.element.addClass("ibx-sm-rubber-banding");
+				this.element.addClass("ibx-sm-rubber-band-active");
 				this._rubberBand = $("<div class='ibx-sm-rubber-band'>").css({"left":eTrueX, "top":eTrueY}).appendTo(this.element);
+				this.element.ibxAutoScroll("start");
 				this.element.dispatchEvent("ibx_rubberbandstart", null, true, false, this._rubberBand[0]);
 			}
 		}
 		else
 		if(eType == "mouseup" && this._rubberBand)
+		{
 			this.stop();
+			this.element.ibxAutoScroll("stop");
+		}
 		else
 		if(eType == "mousemove" && this._rubberBand)
 		{
@@ -500,7 +504,7 @@ $.widget("ibi.ibxRubberBand", $.Widget,
 		if(this._rubberBand)
 		{
 			this.element.dispatchEvent("ibx_rubberbandend", null, true, false, this._rubberBand[0]);
-			this.element.removeClass("ibx-sm-rubber-banding").css("position", this.element.data("ibxSelMgrRubberBandOrigPos"));
+			this.element.removeClass("ibx-sm-rubber-band-active").css("position", this.element.data("ibxSelMgrRubberBandOrigPos"));
 			this._rubberBand.remove();
 			delete this._rubberBand;
 			delete this._startPoint;
