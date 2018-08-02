@@ -26,9 +26,9 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 		alignChildren:"center",
 		sizeToFit:false,	//sizes each child to fit exactly one page.
 
-		scrollType:"integral",											//page/integral/fractional
-		scrollStep:{"page":1, "integral":1, "fractional":25},			//units of type to scroll
-		scrollStepRate:{"page":300, "integral":250, "fractional":25},	//time per scroll unit (ms)
+		scrollType:"integral",														//page/integral/fractional
+		scrollStep:{"page":1, "integral":1, "fractional":25, "custom":1},			//units of type to scroll
+		scrollStepRate:{"page":300, "integral":250, "fractional":25, "custom":25},	//time per scroll unit (ms)
 		scrollProps:
 		{
 			"axis":"scrollLeft",
@@ -53,7 +53,7 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 		this._loadWidgetTemplate(".ibx-carousel-template");
 		this.add(children);
 
-		this.element.on("ibx_resize", this._onResize.bind(this));
+		this.element.data("ibiIbxCarousel", this).on("ibx_resize", this._onResize.bind(this));
 		this._prevBtn.on("click mousedown mouseup mouseleave", this._onPrevNext.bind(this));
 		this._nextBtn.on("click mousedown mouseup mouseleave", this._onPrevNext.bind(this));
 		this._itemsBox.on("ibx_widgetfocus", this._onItemsBoxFocus.bind(this)).on("keydown", this._onItemsBoxKeyDown.bind(this)).ibxDragScrolling({overflowY:"hidden"}).on("scroll", this._onItemsBoxScroll.bind(this));	
@@ -211,11 +211,27 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 		}
 		info.animationFrameId = window.requestAnimationFrame(fnFrame.bind(this, info));
 	},
+	scrollTo:function(el)
+	{
+		el = this.children().filter(el);
+		var options = this.options;
+		var pageInfo = this.getPageInfo();
+		var metrics = el.metrics();
+		var steps = 0;
+		
+		if(pageInfo.scrollRight < metrics.marginBox.right)
+			steps = metrics.marginBox.right - pageInfo.scrollRight; 
+		else
+		if(pageInfo.scrollLeft > metrics.marginBox.left)
+			steps = metrics.marginBox.left - pageInfo.scrollLeft;
+
+		this.scroll(steps, "custom", undefined, true);
+	},
 	_calcScrollStepSize:function(scrollType, forward)
 	{
 		var options = this.options;
 		var delta = 0;
-		if(scrollType == "fractional")
+		if(scrollType == "fractional" || scrollType == "custom")
 			delta = options.scrollStep[scrollType];
 		else
 		if(scrollType == "page")
