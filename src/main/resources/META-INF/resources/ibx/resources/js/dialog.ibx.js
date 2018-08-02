@@ -84,9 +84,9 @@ $.widget("ibi.ibxDialog", $.ibi.ibxPopup,
 		var defAction = this.options.defaultAction;
 		if(e.keyCode == 13 && defAction)
 		{
-			var target = this.element.find(defAction).data("ibxWidget");
-			if(!target.options.disabled)
-				target.element.trigger("click");
+			var target = this.element.find(defAction);
+			if(!target.ibxWidget("option", "disabled"))
+				target.trigger("click");
 		}
 	},
 	_refresh:function()
