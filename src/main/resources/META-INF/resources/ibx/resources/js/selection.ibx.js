@@ -5,7 +5,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 {
 	options:
 	{
-		"seltype":"nav",					//nav - navigation only, single - single selection, multi - multiple selection
+		"seltype":"none",					//none - no selection, nav - navigation only, single - single selection, multi - multiple selection
 		"toggleSelection":true,				//clicking on an item will select/deselect.
 		"escClearSelection":true,			//clear the selection on the escape key
 		"focusRoot":false,					//keep focus circular within this element
@@ -246,7 +246,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 	{
 		var options = this.options;
 		var e = this._dispatchEvent("ibx_selectablechildren", {"items":null}, false, true, undefined, false);
-		var children = e.data.items ? $(e.data.items) : this.element.logicalChildren(".ibx-sm-selection-root, .ibx-sm-nav-key-root, .ibx-sm-focus-root", ":ibxFocusable(-1)");			
+		var children = e.data.items ? $(e.data.items) : this.element.logicalChildren(".ibx-sm-selection-root, .ibx-sm-nav-key-root, .ibx-sm-focus-root, .ibx-sm-focus-default", ":ibxFocusable(-1)");			
 		children.addClass("ibx-sm-selectable");
 		return selector ? children.filter(selector) : children;
 	},
