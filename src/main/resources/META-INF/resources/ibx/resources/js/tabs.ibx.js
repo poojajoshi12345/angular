@@ -154,6 +154,7 @@ $.widget("ibi.ibxTabPane", $.ibi.ibxFlexBox,
 		this.options.selected = selected;
 		selected.dispatchEvent("ibx_selected", null, true, false, curSel[0]);
 		this._trigger("change", e, selected);
+		this._tabBar.ibxWidget("scrollTo", tabButton);
 	},
 	userValue:function(value)
 	{
@@ -173,7 +174,11 @@ $.widget("ibi.ibxTabPane", $.ibi.ibxFlexBox,
 		{
 			var pages = this.element.children(".ibx-tab-page");
 			if (index >= 0 && index < pages.length)
-				this._group.ibxWidget("selected", $(pages[index]).ibxWidget("button"));
+			{
+				var button = $(pages[index]).ibxWidget("button");
+				this._group.ibxWidget("selected", button);
+				this._tabBar.ibxWidget("scrollTo", button);
+			}
 			return this.element;
 		}
 	},
@@ -193,7 +198,11 @@ $.widget("ibi.ibxTabPane", $.ibi.ibxFlexBox,
 		{
 			element = $(element);
 			if (element.length > 0 && element.hasClass("ibx-tab-page"))
-				this._group.ibxWidget("selected", element.ibxWidget("button"));
+			{
+				var button = element.ibxWidget("button");
+				this._group.ibxWidget("selected", button);
+				this._tabBar.ibxWidget("scrollTo", button);
+			}
 			return this.element;
 		}
 	},
