@@ -388,6 +388,7 @@ $.widget("ibi.ibxMenuBar", $.ibi.ibxHBox,
 {
 	"options":
 	{
+		"navKeyDir":"horizontal",
 		"navKeyRoot":true,
 		"focusDefault":true,
 		"direction":"row",

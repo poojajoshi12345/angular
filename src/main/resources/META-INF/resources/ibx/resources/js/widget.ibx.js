@@ -17,6 +17,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 
 		//for selection and keyboard naviation (circular tabbing/arrow keys)
 		//These are just passthrough options for the attached ibxSelectionManager widget.
+		"selType":"none",				//no selection by default.
 		"focusRoot":false,				//keep tabbing to this container (like dialogs).
 		"focusDefault":false,			//focus the first item in root. (can be a select pattern).
 		"navKeyRoot":false,				//keep keyboard navigation to this container (not tabbing, more like arrows in trees/lists/etc.).
