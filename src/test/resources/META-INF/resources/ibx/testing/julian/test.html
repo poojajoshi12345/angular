@@ -1,51 +1,16 @@
-<!DOCTYPE html>
-<html lang="en">
-	<head>
-		<title>HTML Test File</title>
-		<meta http-equiv="X-UA-Compatible" content="IE=11">
-		<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-		<meta http-equiv="Pragma" content="no-cache" />
-		<meta http-equiv="Expires" content="0" />
-		<meta name="google" value="notranslate">
-		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<script type="text/javascript" src="../../resources/ibx.js"></script>
-		<script type="text/javascript">
-			ibx(function(e)
-			{
-				var parentItem = $(".sub-menu-test");
-				for(var i = 0; i < 20; ++i)
-				{
-					var childItem = $("<div class='sub-menu-item'>Submenu Item</div>").ibxMenuItem();
-					parentItem.ibxWidget("add", childItem);
-				}
-
-				parentItem.on("ibx_beforeopen", function(e)
-				{
-				});
-			},[{"src": "../remi/diagram_res_bundle.xml", "loadContext":"app"}], true);
-		</script>
-		<style type="text/css">
-			html, body, .main-box
-			{
-				width: 100%;
-				height: 100%;
-				margin: 0px;
-				box-sizing: border-box;
-			}
-			.test-tree
-			{
-				width:250px;
-			}
-		</style>
-	</head>
-	<body class="ibx-root">
-		<div class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="center" data-ibxp-justify="start">
-			<div class="test-diagram" data-ibx-type="ibxDiagram">
-				<div data-ibx-type="ibxTreeNode" data-ibxp-container="true">ParentNode
-					<div class="ibx-tree-node" data-ibx-type="ibxCheckBoxSimple">Test check</div>
-				</div>
+<div class="minicolors minicolors-theme-default minicolors-position-bottom minicolors-inline">
+	<div class="minicolors-panel minicolors-slider-wheel">
+		<div class="minicolors-slider minicolors-sprite" style="background-color: rgb(161, 255, 114);">
+			<div class="minicolors-picker" style="top: 0px;"></div>
+		</div>
+		<div class="minicolors-opacity-slider minicolors-sprite">
+			<div class="minicolors-picker"></div>
+		</div>
+		<div class="minicolors-grid minicolors-sprite">
+			<div class="minicolors-grid-inner"></div>
+			<div class="minicolors-picker" style="top: 33px; left: 81px;">
+				<div></div>
 			</div>
 		</div>
-	</body>
-</html>
-
+	</div>
+</div>

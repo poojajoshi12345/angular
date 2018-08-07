@@ -5,7 +5,10 @@ $.widget("ibi.ibxColorPicker", $.ibi.ibxVBox,
 {
 	options:
 	{
-		"color":"#ffffff",
+		"style":"wheel",
+		"color":"",
+		"opacity":1,
+		"setOpacity":false,
 		"align":"center",
 		"inline":true,
 		"focusDefault":true,
@@ -14,7 +17,7 @@ $.widget("ibi.ibxColorPicker", $.ibi.ibxVBox,
 	_create: function ()
 	{
 		this._super();
-
+		var options = this.options;
 		var infoBox = this._infoBox = $("<div class='cp-info-box'>").ibxHBox({"align":"stretch", "justify":"center"});
 		var swatch = this._swatch = $("<div class='cp-swatch'>");
 		var value = this._textValue = $("<div tabindex='-1' class='cp-text-value'>").ibxTextField().on("ibx_textchanged", this._onTextChanging.bind(this));
@@ -22,12 +25,9 @@ $.widget("ibi.ibxColorPicker", $.ibi.ibxVBox,
 					
 		infoBox.append(swatch, value);
 		this.element.append(infoBox, ctrl);
-		ctrl.minicolors(
-		{
-			"control":"wheel",
-			"inline":true,
-			"change": this._onColorChange.bind(this)
-		});
+		
+		//must be initialized after being added to dom.
+		ctrl.minicolors({"control":options.style, "inline":true, "change": this._onColorChange.bind(this)});
 	},
 	_destroy: function ()
 	{
@@ -38,8 +38,9 @@ $.widget("ibi.ibxColorPicker", $.ibi.ibxVBox,
 	},
 	_onColorChange:function(value, opacity)
 	{
-		this.option("color", value);
-		this.element.dispatchEvent("ibx_colorchange", value, false, false);
+		this.options.color = value;
+		this.options.opacity = opacity;
+		this.element.dispatchEvent("ibx_colorchange", {"color":value, "opacity":opacity}, false, false);
 	},
 	_onTextChanging:function(e, info)
 	{
@@ -50,12 +51,22 @@ $.widget("ibi.ibxColorPicker", $.ibi.ibxVBox,
 	},
 	_setOption:function(key, value)
 	{
+		var options = this.options;
 		var changed = this.options[key] != value;
 		if(!changed)
 			return;
 
 		if(key == "color")
-			value = value.toLowerCase();
+			this._ctrl.minicolors("value", {"color":value, "opacity":options.opacity});
+		else
+		if(key == "opacity")
+			this._ctrl.minicolors("value", {"color":options.color, "opacity":value});
+		else
+		if(key == "style")
+			this._ctrl.minicolors("settings", {"control": value});
+		else
+		if(key == "setOpacity")
+			this._ctrl.minicolors("settings", {"opacity": value});
 		this._super(key, value);
 	},
 	_refresh: function ()
@@ -64,7 +75,6 @@ $.widget("ibi.ibxColorPicker", $.ibi.ibxVBox,
 		var options = this.options;
 		this._swatch.css("backgroundColor", options.color);
 		this._textValue.ibxWidget("value", options.color);
-		this._ctrl.minicolors("value", options.color);
 	}
 });
 

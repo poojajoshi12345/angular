@@ -37,12 +37,11 @@
 
 				colorPicker.on("ibx_colorchange", function(e)
 				{
-					var color = e.originalEvent.data;
-					palPicker.ibxWidget("option", {"color": color, "opacity": 1});
-					$("body").css("backgroundColor", color);
+					var data = e.originalEvent.data;
+					palPicker.ibxWidget("option", {"color": data.color, "opacity": data.opacity});
+					$("body").css("backgroundColor", data.color);
 				});
 				palPicker.ibxWidget("option", "color", "#ffffff");
-
 			}, true);
 		</script>
 
@@ -128,7 +127,7 @@
 							<div tabindex="0" class="test-pal-picker" data-ibx-type="ibxPalettePicker"></div>
 						</div>
 						<div data-ibx-type="ibxTabPage">Palette
-							<div tabindex="0" class="test-color-picker" data-ibx-type="ibxColorPicker" data-ibxp-color="#ccc"></div>
+							<div tabindex="0" class="test-color-picker pop-up" data-ibx-type="ibxColorPicker" data-ibxp-color="#ccc"></div>
 						</div>
 					</div>
 				</div>
