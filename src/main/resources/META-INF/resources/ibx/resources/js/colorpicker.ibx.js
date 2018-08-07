@@ -18,10 +18,16 @@ $.widget("ibi.ibxColorPicker", $.ibi.ibxVBox,
 		var infoBox = this._infoBox = $("<div class='cp-info-box'>").ibxHBox({"align":"stretch", "justify":"center"});
 		var swatch = this._swatch = $("<div class='cp-swatch'>");
 		var value = this._textValue = $("<div tabindex='-1' class='cp-text-value'>").ibxTextField().on("ibx_textchanged", this._onTextChanging.bind(this));
-		var ctrl = this._ctrl = $("<div>").farbtastic(this._onColorChange.bind(this));
+		var ctrl = this._ctrl = $("<div class='cp-mixer'>");
 					
 		infoBox.append(swatch, value);
 		this.element.append(infoBox, ctrl);
+		ctrl.minicolors(
+		{
+			"control":"wheel",
+			"inline":true,
+			"change": this._onColorChange.bind(this)
+		});
 	},
 	_destroy: function ()
 	{
@@ -30,20 +36,24 @@ $.widget("ibi.ibxColorPicker", $.ibi.ibxVBox,
 		this._swatch.remove();
 		this._ctrl.remove();
 	},
-	_onColorChange:function(color)
+	_onColorChange:function(value, opacity)
 	{
-		this.option("color", color);
-		this.element.dispatchEvent("ibx_colorchange", color, false, false);
+		this.option("color", value);
+		this.element.dispatchEvent("ibx_colorchange", value, false, false);
 	},
 	_onTextChanging:function(e, info)
 	{
 		var color = info.text;
 		if(color[0] != "#")
 			color = "#" + color;
-		this._ctrl.prop("farbtastic").setColor(color);
+		this.option("color", color);
 	},
 	_setOption:function(key, value)
 	{
+		var changed = this.options[key] != value;
+		if(!changed)
+			return;
+
 		if(key == "color")
 			value = value.toLowerCase();
 		this._super(key, value);
@@ -54,7 +64,7 @@ $.widget("ibi.ibxColorPicker", $.ibi.ibxVBox,
 		var options = this.options;
 		this._swatch.css("backgroundColor", options.color);
 		this._textValue.ibxWidget("value", options.color);
-		this._ctrl.prop("farbtastic").setColor(options.color);
+		this._ctrl.minicolors("value", options.color);
 	}
 });
 

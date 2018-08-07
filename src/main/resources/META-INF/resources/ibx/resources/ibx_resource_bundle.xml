@@ -165,7 +165,7 @@ $Revision$:-->
 		<!--EXTERNAL ASSETS-->
 		<style-file src="./etc/jquery/jquery-ui-1.12.1/jquery-ui.css"/>
 		<style-file src="./etc/gridstack/gridstack.css"/>
-		<style-file src="./etc/farbtastic/farbtastic.css"/>
+		<style-file src="./etc/jquery-minicolors/jquery.minicolors.css"/>
 		<style-file src="./etc/font-awesome/css/font-awesome.css" nocompile="true"/>
 		<style-file src="./etc/google/material-icons/material-icons.css" nocompile="true"/>
 		<style-file src="./etc/google/css/hind.css" nocompile="true"/>
@@ -222,7 +222,7 @@ $Revision$:-->
 		<script-file src="./etc/scrollwidthpolyfill/scrollwidthpolyfill.js"/>
 		<script-file src="./etc/gridstack/underscore.js"/>
 		<script-file src="./etc/gridstack/gridstack.js"/>
-		<script-file src="./etc/farbtastic/farbtastic.js"/>
+		<script-file src="./etc/jquery-minicolors/jquery.minicolors.js"/>
 
 		<!--IBX ASSETS-->
 		<script-file src="./js/events.ibx.js"/>
