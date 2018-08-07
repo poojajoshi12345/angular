@@ -1,0 +1,39 @@
+	<bean id="bootstrap" class="com.ibi.webapp.license.ThirdPartyJar" singleton="true">
+		<constructor-arg index="0">
+			<value>Bootstrap is the most popular HTML, CSS, and JS&lt;br&gt;
+			 framework for developing responsive, mobile first &lt;br&gt;
+			 projects on the web.</value> 			<!-- Description -->
+		</constructor-arg>
+		<constructor-arg index="1">
+			<value>3.2.0</value> 			<!-- version -->
+		</constructor-arg>
+		<constructor-arg index="2">		<!-- jars -->
+		<list>		
+			<value>demo1.html</value> 			
+			<value>farbtastic.css</value> 			
+			<value>farbtastic.js</value> 			
+			<value>marker.png</value> 			
+			<value>wheel.png</value> 			
+		</list>
+		</constructor-arg>
+		<constructor-arg index="3">
+			<value>MIT License</value> 			<!-- license_type -->
+		</constructor-arg>
+		<constructor-arg index="4"> 	<!-- license_file -->
+			<list>	
+				<value>farbtastic.js_license.txt</value>
+			</list> 			
+		</constructor-arg>
+		<constructor-arg index="5">
+			<list>
+				<value>http://getbootstrap.com/getting-started/#license-faqs</value>		<!-- links -->
+			</list>
+		</constructor-arg>
+		<constructor-arg index="6">
+			<value>false</value> 			<!-- hide from i5 -->
+		</constructor-arg>		
+		<constructor-arg index="7"> <!--  when updating a jar, please add the History of patches about the Jar file -->
+			<list>
+			</list>
+		</constructor-arg>		
+	</bean>	 
