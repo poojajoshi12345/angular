@@ -38,9 +38,10 @@ $.widget("ibi.ibxColorPicker", $.ibi.ibxVBox,
 	},
 	_onColorChange:function(value, opacity)
 	{
-		this.options.color = value;
-		this.options.opacity = opacity;
-		this.element.dispatchEvent("ibx_colorchange", {"color":value, "opacity":opacity}, false, false);
+		var options = this.options;
+		options.color = value;
+		options.opacity = parseFloat(opacity);
+		this.element.dispatchEvent("ibx_colorchange", {"color":options.color, "opacity":options.opacity}, false, false);
 	},
 	_onTextChanging:function(e, info)
 	{
