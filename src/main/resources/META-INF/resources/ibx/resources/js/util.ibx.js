@@ -502,6 +502,25 @@ function eventMatchesShortcut(shortcut, evtKey)
 	return ret;
 };
 
+//general function for sorting dom elements on a given attribute.
+function fnAttrSort(attr, fmt, caseInsensitive, el1, el2)
+{
+	el1 = jQuery(el1);
+	el2 = jQuery(el2);
+
+	var v1 = el1.attr(attr);
+	v1 = (fmt == "numeric") ? Number(v1) : (caseInsensitive) ? v1.toLowercase() : v1;
+	var v2 = el2.attr(attr);
+	v2 = (fmt == "numeric") ? Number(v2) : (caseInsensitive) ? v2.toLowercase() : v2;
+
+	if(v1 == v2)
+		return 0;
+	if(v1 < v2)
+		return -1;
+	if(v1 > v2)
+		return 1;
+}
+
 //Sorts elements on zIndex (in descending order).
 function fnSortZIndex(el1, el2)
 {

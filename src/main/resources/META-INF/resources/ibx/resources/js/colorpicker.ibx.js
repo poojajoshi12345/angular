@@ -26,8 +26,21 @@ $.widget("ibi.ibxColorPicker", $.ibi.ibxVBox,
 		infoBox.append(swatch, value);
 		this.element.append(infoBox, ctrl);
 		
+		var swatches = [];
+		var palDefault = ibx.resourceMgr.getXmlResource(".ibx-palette-picker-default-palettes", false);
+		var colors = palDefault.find("[pid='default_basic'] > color");
+		colors.sort(fnAttrSort.bind(colors, "idx", "numeric", false));
+		$.each(colors, function(idx, el)
+		{
+			el = $(el);
+			var swatch = {"name":el.attr("display-name"), "color":el.attr("value")};
+			swatches.push(swatch);
+		}.bind(this));
+
 		//must be initialized after being added to dom.
-		ctrl.minicolors({"control":options.style, "opacity":options.setOpacity, "inline":true, "change": this._onColorChange.bind(this)});
+		ctrl.minicolors({"control":options.style, "opacity":options.setOpacity, "swatches":swatches, "inline":true, "change": this._onColorChange.bind(this)});
+
+
 	},
 	_destroy: function ()
 	{
@@ -189,7 +202,7 @@ $.widget("ibi.ibxPalettePicker", $.ibi.ibxVBox,
 				var pal = this._palFile.find(sformat("palette[pid={1}]", value));
 				var colors = pal.children("color");
 				this._swatchBox.ibxWidget("remove");
-				colors.sort(this._sortColors.bind(this)).each(function(idx, color)
+				colors.sort(fnAttrSort.bind(this, "idx", "numeric", false)).each(function(idx, color)
 				{
 					var value = color.getAttribute("value").toLowerCase();
 					var displayName = color.getAttribute("display-name") || value;
@@ -200,7 +213,7 @@ $.widget("ibi.ibxPalettePicker", $.ibi.ibxVBox,
 
 				var colors = pal.find("custom_colors > color");
 				this._customBox.ibxWidget("remove");
-				colors.sort(this._sortColors.bind(this)).each(function(idx, color)
+				colors.sort(fnAttrSort.bind(this, "idx", "numeric", false)).each(function(idx, color)
 				{
 					var value = color.getAttribute("value").toLowerCase();
 					var displayName = color.getAttribute("display-name") || value;
@@ -235,18 +248,6 @@ $.widget("ibi.ibxPalettePicker", $.ibi.ibxVBox,
 		this._super(key, value);
 		if(changed && (key == "color" || key == "opacity"))
 			this.element.dispatchEvent("ibx_change", {"color":options.color, "colorRgba": options.colorRgba, "opacity":options.opacity}, false, false);
-	},
-	_sortColors:function(c1, c2)
-	{
-		var idx1 = parseInt(c1.getAttribute("idx"), 10);
-		var idx2 = parseInt(c2.getAttribute("idx"), 10);
-		var ret = 0;
-		if(idx1 < idx2)
-			ret = -1;
-		else
-		if(idx1 > idx2)
-			ret = 1;
-		return ret;
 	},
 	_refresh: function ()
 	{
