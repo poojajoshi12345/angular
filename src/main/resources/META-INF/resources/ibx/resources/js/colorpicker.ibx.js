@@ -8,7 +8,7 @@ $.widget("ibi.ibxColorPicker", $.ibi.ibxVBox,
 		"style":"wheel",
 		"color":"",
 		"opacity":1,
-		"setOpacity":false,
+		"setOpacity":true,
 		"align":"center",
 		"inline":true,
 		"focusDefault":true,
@@ -27,7 +27,7 @@ $.widget("ibi.ibxColorPicker", $.ibi.ibxVBox,
 		this.element.append(infoBox, ctrl);
 		
 		//must be initialized after being added to dom.
-		ctrl.minicolors({"control":options.style, "inline":true, "change": this._onColorChange.bind(this)});
+		ctrl.minicolors({"control":options.style, "opacity":options.setOpacity, "inline":true, "change": this._onColorChange.bind(this)});
 	},
 	_destroy: function ()
 	{
@@ -40,7 +40,8 @@ $.widget("ibi.ibxColorPicker", $.ibi.ibxVBox,
 	{
 		var options = this.options;
 		options.color = value;
-		options.opacity = parseFloat(opacity);
+		options.opacity = (options.setOpacity && !isNaN(opacity)) ? parseFloat(opacity) : 1;
+		this.refresh();
 		this.element.dispatchEvent("ibx_colorchange", {"color":options.color, "opacity":options.opacity}, false, false);
 	},
 	_onTextChanging:function(e, info)

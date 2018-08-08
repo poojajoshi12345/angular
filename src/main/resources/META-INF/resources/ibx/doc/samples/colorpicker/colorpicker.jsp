@@ -25,7 +25,7 @@
 				palPicker.on("ibx_change", function(e)
 				{
 					var info = e.originalEvent.data;
-					colorPicker.ibxWidget("option", "color", info.color);					
+					colorPicker.ibxWidget("option", {"color":info.color, "opacity":info.opacity});					
 					$("body").css("backgroundColor", info.colorRgba.rgba);
 					$(".rgb-red").text(info.colorRgba.r);
 					$(".rgb-green").text(info.colorRgba.g);
@@ -39,7 +39,7 @@
 				{
 					var data = e.originalEvent.data;
 					palPicker.ibxWidget("option", {"color": data.color, "opacity": data.opacity});
-					$("body").css("backgroundColor", data.color);
+					$("body").css("backgroundColor", hexToRgba(data.color, data.opacity).rgba);
 				});
 				palPicker.ibxWidget("option", "color", "#ffffff");
 			}, true);
@@ -101,6 +101,7 @@
 			}
 			.color-picker-button
 			{
+				background-color:white;
 				border:1px solid #ccc;
 				border-radius:5px;
 				padding:5px;
