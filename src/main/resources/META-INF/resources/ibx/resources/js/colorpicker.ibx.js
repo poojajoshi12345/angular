@@ -91,7 +91,7 @@ $.widget("ibi.ibxColorPicker", $.ibi.ibxVBox,
 	{
 		this._super();
 		var options = this.options;
-		this._swatch.css("backgroundColor", options.color);
+		this._swatch.css("backgroundColor", hexToRgba(options.color, options.opacity).rgba);
 		this._textValue.ibxWidget("value", options.color);
 	}
 });
