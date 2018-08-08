@@ -51,6 +51,7 @@ $.widget("ibi.ibxColorPicker", $.ibi.ibxVBox,
 		this._swatch.remove();
 		this._ctrl.remove();
 	},
+	control:function(){return this._ctrl;},
 	_onColorChange:function(value, opacity)
 	{
 		var options = this.options;
