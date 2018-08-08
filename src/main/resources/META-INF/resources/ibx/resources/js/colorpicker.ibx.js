@@ -27,6 +27,7 @@ $.widget("ibi.ibxColorPicker", $.ibi.ibxVBox,
 		this.element.append(infoBox, ctrl);
 		
 		var swatches = [];
+		/*
 		var palDefault = ibx.resourceMgr.getXmlResource(".ibx-palette-picker-default-palettes", false);
 		var colors = palDefault.find("[pid='default_basic'] > color");
 		colors.sort(fnAttrSort.bind(colors, "idx", "numeric", false));
@@ -36,6 +37,7 @@ $.widget("ibi.ibxColorPicker", $.ibi.ibxVBox,
 			var swatch = {"name":el.attr("display-name"), "color":el.attr("value")};
 			swatches.push(swatch);
 		}.bind(this));
+		*/
 
 		//must be initialized after being added to dom.
 		ctrl.minicolors({"control":options.style, "opacity":options.setOpacity, "swatches":swatches, "inline":true, "change": this._onColorChange.bind(this)});
