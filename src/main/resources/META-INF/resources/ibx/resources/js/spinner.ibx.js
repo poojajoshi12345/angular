@@ -77,6 +77,7 @@ $.widget("ibi.ibxSpinner", $.ibi.ibxTextField,
 	{
 		if(e.type == "mouseup" || e.type == "mouseout")
 		{
+			this.element.dispatchEvent("ibx_spinend", null, true, false);
 			clearInterval(this._intervalId);
 			this._intervalId = null;
 			this._cleared = true;
@@ -84,6 +85,7 @@ $.widget("ibi.ibxSpinner", $.ibi.ibxTextField,
 		else
 		if(e.type == "mousedown")
 		{
+			this.element.dispatchEvent("ibx_spinstart", null, true, false);
 			this._cleared = false;
 			this._bUp = $(e.currentTarget).hasClass(this.options.btnUpClass);
 			this._stepSpinner(this._bUp);
