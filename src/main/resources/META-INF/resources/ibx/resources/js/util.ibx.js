@@ -326,7 +326,7 @@ function cloneNativeEvent(e, type, data, canBubble, cancelable, relatedTarget)
 //let jQuery dispatch custom native events
 jQuery.fn.dispatchEvent = function(eType, data, canBubble, cancelable, relatedTarget)
 {
-	var evt = (typeof(eType) == "object") ? cloneNativeEvent(eType.type, data) : createNativeEvent(eType, data, canBubble, cancelable, relatedTarget);
+	var evt = (typeof(eType) == "object") ? cloneNativeEvent(eType, eType.type, data) : createNativeEvent(eType, data, canBubble, cancelable, relatedTarget);
 	this.each(function(evt, idx, el)
 	{
 		el.dispatchEvent(evt);
