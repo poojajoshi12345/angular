@@ -9,6 +9,7 @@ $.widget("ibi.ibxColorPicker", $.ibi.ibxVBox,
 		"color":"",
 		"opacity":1,
 		"setOpacity":true,
+		"showColorInfo":true,
 		"align":"center",
 		"inline":true,
 		"focusDefault":true,
@@ -58,7 +59,7 @@ $.widget("ibi.ibxColorPicker", $.ibi.ibxVBox,
 		options.color = value;
 		options.opacity = (options.setOpacity && !isNaN(opacity)) ? parseFloat(opacity) : 1;
 		this.refresh();
-		this.element.dispatchEvent("ibx_colorchange", {"color":options.color, "opacity":options.opacity}, false, false);
+		this.element.dispatchEvent("ibx_colorchange", {"color":options.color, "opacity":options.opacity, "rgba":hexToRgba(options.color, options.opacity)}, false, false);
 	},
 	_onTextChanging:function(e, info)
 	{
@@ -91,6 +92,7 @@ $.widget("ibi.ibxColorPicker", $.ibi.ibxVBox,
 	{
 		this._super();
 		var options = this.options;
+		this._infoBox.css("display", options.showColorInfo ? "" : "none");
 		this._swatch.css("backgroundColor", hexToRgba(options.color, options.opacity).rgba);
 		this._textValue.ibxWidget("value", options.color);
 	}
