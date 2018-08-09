@@ -88,7 +88,7 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 	},
 	remove:function(el, destroy, refresh)
 	{
-		var children = el || this._itemsBox.ibxWidget("children", ".ibx-csl-item");
+		var children = $(el) || this._itemsBox.ibxWidget("children", ".ibx-csl-item");
 		children.removeClass("ibx-csl-item");
 		this._itemsBox.ibxWidget("remove", children, destroy, refresh);
 		if(refresh)
@@ -144,6 +144,7 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 		}
 		scrollInfo.delta = this._calcScrollStepSize(scrollInfo.steps, scrollInfo.scrollType);
 		scrollInfo.endPos = this._itemsBox.prop(scrollInfo.axis) + scrollInfo.delta;
+		scrollInfo.pageInfo = this.getPageInfo();
 
 		var evt = this.element.dispatchEvent("ibx_beforescroll", scrollInfo, false, true);
 		if(!evt.isDefaultPrevented())
@@ -164,7 +165,7 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 					if(scrollInfo.infinite && !this._stopScrolling)
 						this.scroll(scrollInfo.steps, scrollInfo.scrollType, scrollInfo.scrollTime);
 					else
-						this.element.dispatchEvent("ibx_scrollend", scrollInfo, false, false);
+						this.element.dispatchEvent("ibx_endscroll", scrollInfo, false, false);
 					this.element.removeClass("ibx-csl-scrolling")
 				}.bind(this, scrollInfo),
 			}, evt.data.animationOptions);
