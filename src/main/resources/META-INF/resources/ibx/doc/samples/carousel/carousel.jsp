@@ -24,6 +24,8 @@
 			{
 				function init(options)
 				{
+					$(".ibx-carousel").ibxWidget("remove");
+
 					var images = [ "renstimpy.png", "ren1.png", "ren2.png", "stimpy1.png", "stimpy2.png"];
 					var vCsl = $(".test-csl-v").ibxWidget("remove").prop("scrollTop", 0);
 					var hCsl = $(".test-csl-h").ibxWidget("remove").prop("scrollLeft", 0);
