@@ -43,7 +43,6 @@
 					{
 						var data = "External Dragged Data!!";
 						dt.setData("text/html", sformat("<span style='border:2px solid red;'>{1}</span>", data));
-						e.preventDefault();
 					}
 					if(e.type == "dragover" || e.type == "ibx_dragover")
 					{
