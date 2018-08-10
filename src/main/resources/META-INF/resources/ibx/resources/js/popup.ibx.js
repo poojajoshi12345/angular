@@ -280,7 +280,7 @@ ibxPopupManager.onPopupEvent = function(e, popup)
 	{
 		var zIndex = topModal.zIndex() - 10;
 		this._gp.css("zIndex", zIndex);
-		$("body").append(this._gp);
+		$("html > body").append(this._gp);
 	}
 	else
 		this._gp.css("zIndex", "").detach();
