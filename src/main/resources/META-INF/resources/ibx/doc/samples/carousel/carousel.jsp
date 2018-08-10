@@ -68,6 +68,10 @@
 					}, 1);
 				}
 
+				$(".ibx-carousel").on("ibx_beforescroll", function(e)
+				{
+				});
+
 				$(".tb-ctrl").on("ibx_change", function(e)
 				{
 					options.update();
@@ -178,7 +182,7 @@
 				background-color:thistle;
 				border:1px solid black;
 				xbox-shadow:3px 3px 5px 0 #ccc;
-				xmargin:5px;
+				margin:5px;
 			}
 			.test-csl-box-item
 			{
@@ -191,6 +195,7 @@
 				flex:1 1 auto;
 				width:50%;
 				height:50%;
+				margin:0px;
 			}
 		</style>
 	</head>
