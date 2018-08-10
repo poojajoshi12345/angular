@@ -167,6 +167,7 @@ $.widget("ibi.ibxDateRange", $.ibi.ibxDatePicker,
 		"numberOfMonths": 2,
 		"singleInput": false,
 	},
+	_widgetClass:"ibx-date-range",
 	_create: function ()
 	{
 		if (this.options.initDate)
@@ -190,6 +191,13 @@ $.widget("ibi.ibxDateRange", $.ibi.ibxDatePicker,
 			this._input2.remove();
 			this._clear2.remove();
 		}
+	},
+	dateObj:function(date, from)
+	{
+		if(date === undefined)
+			return {"from":new Date(this.options.dateFrom), "to":new Date(this.options.dateTo)};
+		else
+			this.option( from ? "dateFrom" : "dateTo", $.datepicker.formatDate(this.options.dateFormat, date));
 	},
 	_onChangeMonthYear: function (year, month, inst)
 	{
