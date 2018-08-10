@@ -1,0 +1,378 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--Copyright 1996-2016 Information Builders, Inc. All rights reserved. $Revision$:-->
+<ibx-res-bundle name="pd_res.xml" loadContext="bundle">
+
+	<ibx-res-bundle src="{context}/ibxtools/explore/explore_open_dialog.xml"/> <!-- Open/Save Dialog -->
+	<ibx-res-bundle src="{context}/ibxtools/shared_resources/shared_resource_bundle.xml"/> <!-- new page from template -->
+  
+  <strings>pvd-banner-logo
+    <string-file src="{res}/com.ibi.intl.pvd.pvd"/> 
+    <string-file src="{res}/com.ibi.intl.shared_resources.shared_resources"/> 
+ 
+    <string-bundle>
+      <![CDATA[
+			{
+				"language":"resource_strings",
+				"strings":
+				{
+					"logo_icon_path":"../ibxtools/pvd/resources/images/logo-designer-page.png",
+					"none_icon_path":"../ibxtools/pvd/resources/images/none.png",
+					"side_icon_path":"../ibxtools/pvd/resources/images/side.png",
+					"side_top_icon_path":"../ibxtools/pvd/resources/images/side-top.png",
+					"top_icon_path":"../ibxtools/pvd/resources/images/top.png",
+					"top_dropdown_icon_path":"../ibxtools/pvd/resources/images/top-dropdown.png",
+					"top_side_icon_path":"../ibxtools/pvd/resources/images/top-side.png",
+			        "tree_root": "IBFS:/WFC/Repository",
+          			"dlg_save_root": "IBFS:/WFC/Repository",
+          			"dlg_save_ext": "pgx"
+				}
+			}
+		]]>
+    </string-bundle>
+  </strings>
+
+  <styles>
+    <style-file src="{context}/homepage/resources/css/home_bundle.css" loadContext="bundle"/>
+    <style-file src="{context}/ibxtools/pd/resources/css/tool.pd.css"/>
+    <style-file src="{context}/ibxtools/pd/resources/css/tree.pd.css"/>
+    <style-file src="{context}/ibxtools/pd/resources/css/theme.pd.css"/>
+    <style-file src="./css/tool.pvd.css"/>
+    <script-file src="{context}/ibxtools/shared_resources/js/home_util.js" loadContext="bundle"/>	
+    <style-file src="{context}/ibxtools/shared_resources/css/newPageFromTemplate.css"/>
+    <!--  overwrite CSS style-->
+    <style-sheet name="pd_simple_styles">
+      <![CDATA[
+			]]>
+    </style-sheet>
+  </styles>
+
+  <markup>
+ 
+ 	<markup-block> <!-- Portal Edit Tool -->
+      <div data-ibx-type="pvdTool" class="pvd-tool ibxtool" data-ibxp-rows="auto 1fr" data-ibxp-cols="auto auto 1fr auto auto">
+
+        <!-- Floating preview butoon -->
+        <div data-ibx-type="ibxLabel" id="previewbutton" class="pd-preview-button ibxtool-preview-button" data-ibxp-align="center" data-ibxp-justify="center" data-ibxp-glyph="" data-ibxp-glyph-classes="ibx-icons ibx-glyph-arrow-circle-left"></div>
+
+        <!-- Toolbar -->
+        <div data-ibx-type="ibxHBox" class="pd-toolbar ibxtool-toolbar" data-ibxp-align="stretch" data-ibxp-wrap="true" data-ibx-row="1" data-ibx-col="1/span 5">
+          <div data-ibx-type="ibxLabel" class="pd-logo ibxtool-logo" data-ibxp-icon="@ibxStringXml('logo_icon_path', '', 'resource_strings')">
+          </div>
+          <div data-ibx-type="ibxHBox" class="ibxtool-toolbar-group" data-ibxp-align="stretch">
+            <div data-ibx-type="ibxLabel" id="save" title="@ibxStringXml('tooltip_save')" class="ibxtool-toolbar-button" data-ibxp-glyph="" data-ibxp-glyph-classes="ibx-icons ibx-glyph-floppy"></div>
+            <!-- 
+            <div data-ibx-type="ibxLabel" id="undo" title="@ibxStringXml('tooltip_undo')" class="ibxtool-toolbar-button" data-ibxp-glyph="" data-ibxp-glyph-classes="ibx-icons ibx-glyph-arrow-left"></div>
+            <div data-ibx-type="ibxLabel" id="redo" title="@ibxStringXml('tooltip_redo')" class="ibxtool-toolbar-button" data-ibxp-glyph="" data-ibxp-glyph-classes="ibx-icons ibx-glyph-arrow-right"></div>
+            -->
+          </div>
+          <div data-ibx-type="ibxHBox" class="ibxtool-toolbar-group" data-ibxp-align="stretch">
+            <div data-ibx-type="ibxLabel" id="preview" title="@ibxStringXml('tooltip_preview')" class="ibxtool-toolbar-button" data-ibxp-glyph="" data-ibxp-glyph-classes="ibx-icons ibx-glyph-preview"></div>
+          </div>
+          <div data-ibx-type="ibxHBox" class="ibxtool-toolbar-group-spacer"></div>
+          <div data-ibx-type="ibxHBox" class="ibxtool-toolbar-group" data-ibxp-align="stretch">
+<!--          
+            <div data-ibx-type="ibxLabel" id="filter" title="@ibxStringXml('tooltip_filter')" class="ibxtool-toolbar-button" data-ibxp-glyph="" data-ibxp-glyph-classes="ibx-icons ibx-glyph-quick-filter"></div>
+            <div data-ibx-type="ibxLabel" id="settings" title="@ibxStringXml('tooltip_settings')" class="ibxtool-toolbar-button" data-ibxp-glyph="" data-ibxp-glyph-classes="ibx-icons ibx-glyph-sliders"></div>
+   -->         
+            <div data-ibx-type="ibxLabel" id="help" title="@ibxStringXml('tooltip_help')" class="ibxtool-toolbar-button" data-ibxp-glyph="" data-ibxp-glyph-classes="ibx-icons ibx-glyph-question"></div>
+ <!--            <div data-ibx-type="ibxLabel" id="toggleleft" title="@ibxStringXml('tooltip_resources')" class="ibxtool-toolbar-button pd-toolbar-button pd-toolbar-button-active" data-ibxp-glyph="" data-ibxp-glyph-classes="ibx-icons ibx-glyph-pane_resources"></div>
+   --> 
+            <div data-ibx-type="ibxLabel" id="toggleright" title="@ibxStringXml('tooltip_properties')" class="ibxtool-toolbar-button pd-toolbar-button pd-toolbar-button-active" data-ibxp-glyph="" data-ibxp-glyph-classes="ibx-icons ibx-glyph-pane_properties"></div>
+          </div>
+        </div>
+ 
+        <!-- Resource Selector 
+        <div data-ibx-type="ibxVBox" class="pvd-left-pane ibxtool-left-pane" data-ibxp-align="stretch" data-ibx-row="2" data-ibx-col="1">
+              <div data-ibx-type="ibxVAccordionPane" class="ibx-accordion-pane pd-content-accordion-pane">
+                <div data-ibx-type="ibxAccordionPage" class="pd-resource-tree ibx-accordion-page pd-content-accordion-page" data-ibxp-selected="true" data-ibxp-btn-options-open="{'glyphClasses': 'ibx-icons ibx-icons ibx-glyph-chevron-down'}" data-ibxp-btn-options="{'glyph': '', 'glyphClasses': 'ibx-icons ibx-glyph-chevron-right', 'text': '@ibxStringJson('str_content')'}">
+                </div>
+              </div>
+        </div>
+-->
+        <!-- Left Splitter -->
+        <div id="leftsplitter" data-ibx-type="ibxVSplitter" data-ibxp-resize-elements="left" data-ibx-row="2" data-ibx-col="2"></div>
+
+        <!-- Canvas Area -->
+
+        <div data-ibx-type="ibxVBox" data-ibxp-position="bottom" data-ibxp-align="stretch" data-ibx-row="2" data-ibx-col="3">
+ 	        
+ 	        <div class="pvd-portal-banner" data-ibx-type="ibxHBox" data-ibxp-align="stretch">
+ 				<div data-ibx-type="ibxLabel" class="pvd-banner-logo-edit" data-ibxp-justify="center" data-ibxp-text="L O G O"></div>												
+ 				<div data-ibx-type="ibxLabel" class="pvd-title" data-ibxp-justify="center" data-ibxp-text="Portal Name"></div>												
+ 
+ 				
+  				<!-- Top banner Dynamic add on Page/Folder section -->
+  				<div class="pvd-top-menu-banner" data-ibx-type="ibxHBox" data-ibxp-align="right"></div>
+  				
+  				<!-- Menu dropdown -->
+ 				<div class="pvd-right-menu-banner" data-ibx-type="ibxHBox" data-ibxp-align="stretch"> 	
+					<div class="pvd-menu-btn pvd-menu-administrator" data-menu=".menu-administrator" data-ibx-type="ibxButtonSimple" data-ibxp-align="center">
+						<div data-ibx-type="ibxLabel" class="pvd-menu-admin" data-ibxp-align="center" data-ibxp-glyph="" data-ibxp-glyph-classes="ibx-icons ibx-glyph-user"></div>				
+						<div data-ibx-type="ibxLabel" data-ibxp-align="center" data-ibxp-glyph="" data-ibxp-glyph-classes="ibx-icons ibx-glyph-caret-down"></div>				
+					</div>
+				</div>				        
+ 	        </div>
+ 			
+ 			<div class="pvd-container" data-ibx-type="ibxHBox" data-ibxp-align="stretch"> 
+ 				<div class="pvd-left-main-panel" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
+ 					<div class="pvd-left-main-panel-content-button pvd-left-main-panel-button-size pvd-left-main-panel-content-button-active" data-ibx-type="ibxButtonSimple" data-ibxp-align="center" title="tooltips_content_view">
+						<div data-ibx-type="ibxLabel" class="lp-content-button-sm pvd-left-main-panel-image-size" data-ibxp-justify="center" data-ibxp-align="center" data-ibxp-glyph-classes="fa fa-bar-chart"></div>				
+						<div data-ibx-type="ibxLabel" class="lp-content-button pvd-left-main-panel-content pvd-left-main-panel-text-hide" data-ibxp-align="center" data-ibxp-text="Pipeline"></div>				
+					</div>
+ 					<div class="pvd-left-main-panel-content-button pvd-left-main-panel-button-size" data-ibx-type="ibxButtonSimple" data-ibxp-align="center" title="tooltips_content_view">
+						<div data-ibx-type="ibxLabel" class="lp-portals-button-sm left-main-panel-image-size" data-ibxp-justify="center" data-ibxp-align="center" data-ibxp-glyph-classes="fa fa-circle-o"></div>				
+						<div data-ibx-type="ibxLabel" class="lp-content-button pvd-left-main-panel-content pvd-left-main-panel-text-hide" data-ibxp-align="center" data-ibxp-text="Retail Info"></div>				
+					</div>
+ 				</div>			
+ 				<!-- main Canvas Area -->
+         		<div class="pvd-container" data-ibx-type="ibxTabPane" id="pagespane" data-ibxp-align="stretch"></div>	   	
+         	</div>
+		</div>
+			
+        <!-- Right Splitter -->
+        <div id="rightsplitter" data-ibx-type="ibxVSplitter" data-ibxp-resize-elements="right" data-ibx-row="2" data-ibx-col="4"></div>
+
+        <!-- Property Panel -->
+        <div data-ibx-type="ibxVBox" class="pvd-right-pane ibxtool-right-pane" data-ibxp-align="stretch" data-ibx-row="2" data-ibx-col="5">
+          <div data-ibx-type="ibxTabPane" class="ibxtool-right-tab-pane" data-ibxp-position="top" data-ibxp-align="stretch">
+            <div class="pd-settings-tab-page" data-ibx-type="ibxTabPage" data-ibxp-selected="true" data-ibxp-tab-options="{'justify': 'center', 'text': '', 'glyph': '', 'glyphClasses': 'fa fa-sliders', 'class': 'ibxtool-pane-tab'}">
+            </div>
+            <div class="pd-style-tab-page" data-ibx-type="ibxTabPage" data-ibxp-tab-options="{'justify': 'center', 'text': '', 'glyph': '', 'glyphClasses': 'ibx-icons ibx-glyph-paint-brush', 'class': 'ibxtool-pane-tab'}">
+            </div>
+          </div>
+        </div>
+      </div>
+    </markup-block>
+ 
+    <markup-block> <!-- Portal Run Tool -->
+    
+      <div data-ibx-type="pvdRunTool" class="pvd-run-tool ibxtool" data-ibxp-rows="0px 1fr" data-ibxp-cols="auto auto 1fr auto auto">
+
+        <!-- Canvas Area -->
+
+        <div data-ibx-type="ibxVBox" class="pvd-canvas-area" data-ibxp-position="bottom" data-ibxp-align="stretch" data-ibx-row="2" data-ibx-col="3">
+ 	        
+ 	        <div class="pvd-portal-banner" data-ibx-type="ibxHBox" data-ibxp-align="stretch">
+ 				<div class="pvd-banner-logo" data-ibxp-justify="center"></div>	
+ 				<div class="pvd-banner-logo-left pvd-banner-logo-btn menu-button" data-ibx-type="ibxButtonSimple" data-ibxp-align="center" title="@ibxStringXml('tooltips_collapse_side_bar')">
+					<div data-ibx-type="ibxLabel" class="pvd-banner-logo-caret" data-ibxp-align="center" data-ibxp-glyph-classes="fa fa-caret-left"></div>				
+					<div data-ibx-type="ibxLabel" data-ibxp-align="center" data-ibxp-glyph-classes="fa fa-bars"></div>				
+				</div>
+ 				<div class="pvd-banner-logo-right pvd-banner-logo-btn menu-button" data-ibx-type="ibxButtonSimple" data-ibxp-align="center" title="@ibxStringXml('tooltips_expand_side_bar')">
+					<div data-ibx-type="ibxLabel" class="pvd-banner-logo-caret-bar-right" data-ibxp-align="center" data-ibxp-glyph-classes="fa fa-bars"></div>				
+					<div data-ibx-type="ibxLabel" class="pvd-banner-logo-caret-right" data-ibxp-align="center" data-ibxp-glyph-classes="fa fa-caret-right"></div>				
+				</div>				
+ 				
+				<div data-ibx-type="ibxLabel" class="pvd-portal-title" data-ibxp-align="center" data-ibxp-text="Portal Title"></div>				
+ 				
+  				<!-- Top banner Dynamic add on Page/Folder section -->
+  				<div class="pvd-top-menu-banner" data-ibx-type="ibxHBox" data-ibxp-align="right"></div>
+  				
+  				<!-- Menu dropdown -->
+ 				<div class="pvd-right-menu-banner" data-ibx-type="ibxHBox" data-ibxp-align="stretch"> 	
+					<div class="pvd-menu-btn pvd-menu-administrator" data-menu=".menu-administrator" data-ibx-type="ibxButtonSimple" data-ibxp-align="center">
+						<div data-ibx-type="ibxLabel" class="pvd-menu-admin" data-ibxp-align="center" data-ibxp-glyph="" data-ibxp-glyph-classes="ibx-icons ibx-glyph-user"></div>				
+						<div data-ibx-type="ibxLabel" data-ibxp-align="center" data-ibxp-glyph="" data-ibxp-glyph-classes="ibx-icons ibx-glyph-caret-down"></div>				
+					</div>
+					<div class="pvd-menu-hamburger" data-menu=".menu-administrator" data-ibx-type="ibxButtonSimple" data-ibxp-glyph-classes="fa fa-bars"></div> 																			
+				</div>				        
+ 	        </div>
+ 			
+ 			<div class="pvd-right-menu-banner2" data-ibx-type="ibxHBox" data-ibxp-align="stretch"></div>				        
+
+ 			<div class="pvd-container" data-ibx-type="ibxHBox" data-ibxp-align="stretch"> 
+ 					<div class="pvd-left-main-panel" data-ibx-type="ibxVBox"  data-ibxp-align="stretch"> 			
+						<div class="bundle-folder-wrapper pvd-left-main-panel" data-ibx-type="ibxVBox"  data-ibxp-align="stretch">
+			 				<div class="pvd-left-main-panel bundle-folder-pages" data-ibx-type="ibxVBox" data-ibxp-align="stretch">	</div>
+							<div class="pvd-left-main-panel bundle-folder-structure" data-ibx-type="ibxAccordionPane"></div>					
+						</div>
+						<div class="pvd-left-main-panel menu-hamburger" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
+							<div data-ibx-type="ibxMenuSeparator" class="mmh-separator"></div>
+							<div data-ibx-type="ibxMenuItem" data-ibx-name="mmhChangePassword" data-ibxp-label-options='{"glyphClasses":"fa fa-key"}'>@ibxString('home_change_password')</div>
+							<div data-ibx-type="ibxMenuItem" data-ibx-name="mmhsignout" data-ibxp-label-options='{"glyphClasses":"fa fa-sign-out"}'>@ibxString('home_sign_out')</div>
+							<div data-ibx-type="ibxMenuItem" data-ibx-name="mmhsignin" data-ibxp-label-options='{"glyphClasses":"fa fa-sign-in"}'>@ibxString('home_sign_in')</div>						
+						</div>
+					</div>
+	 			<!-- main Canvas Area -->
+	         	<div class="pvd-canvas-container" data-ibx-type="ibxVBox" id="pagespane" data-ibxp-align="stretch"></div>
+         	</div>
+		</div>
+      </div>
+    </markup-block>
+        
+    <markup-block> <!-- Settings -->
+			
+    <!-- Page Settings -->
+      <div data-ibx-type="ibxVAccordionPane" class="page-settings ibx-accordion-pane">
+      
+        <div data-ibx-type="ibxAccordionPage" class="ibx-accordion-page" data-ibxp-auto-close="false" data-ibxp-selected="true" data-ibxp-btn-options-open="{'glyphClasses': 'ibx-icons ibx-icons ibx-glyph-chevron-down'}" data-ibxp-btn-options="{'glyph': '', 'glyphClasses': 'ibx-icons ibx-glyph-chevron-right', 'text': '@ibxStringJson('settings_portal_title')'}">
+          <div data-ibx-type="ibxGrid" class="pd-ps-grid" data-ibxp-cols="1fr 2fr" data-ibxp-justify="stretch">         
+            <div data-ibx-type="ibxLabel" class="pd-ps-name" data-ibx-col="1" data-ibx-row="1" data-ibxp-text-wrap="true" data-ibxp-for-id="ps-id-2">@ibxStringXml('settings_portal_banner')</div>
+            <div data-ibx-type="ibxSwitch" class="pd-ps-value pvd-ps-show-banner" data-ibx-col="2" data-ibx-row="1" data-ibx-justify="start" data-ibxp-checked="true" data-ibxp-for-id="ps-id-2"></div>           
+            <div data-ibx-type="ibxLabel" class="pd-ps-name" data-ibx-col="1" data-ibx-row="2" data-ibxp-text-wrap="true" data-ibxp-for-id="ps-id-3">@ibxStringXml('settings_portal_logo')</div>
+            <div data-ibx-type="ibxSwitch" class="pd-ps-value pvd-ps-show-logo" data-ibx-col="2" data-ibx-row="2" data-ibx-justify="start" data-ibxp-checked="true" data-ibxp-for-id="ps-id-3"></div>            
+            <div data-ibx-type="ibxLabel" class="pd-ps-name" data-ibx-col="1" data-ibx-row="3" data-ibxp-text-wrap="true" data-ibxp-for-id="ps-id-4">@ibxStringXml('settings_portal_links')</div>
+            <div data-ibx-type="ibxSwitch" class="pd-ps-value pvd-ps-show-logo" data-ibx-col="2" data-ibx-row="3" data-ibx-justify="start" data-ibxp-checked="true" data-ibxp-for-id="ps-id-4"></div>
+            <div data-ibx-type="ibxLabel" class="pd-ps-name" data-ibx-col="1" data-ibx-row="4" data-ibxp-text-wrap="true" data-ibxp-for-id="ps-id-5">@ibxStringXml('settings_portal_footer')</div>
+            <div data-ibx-type="ibxSwitch" class="pd-ps-value pvd-ps-show-footer" data-ibx-col="2" data-ibx-row="4" data-ibx-justify="start" data-ibxp-checked="true" data-ibxp-for-id="ps-id-5"></div>  
+
+            <div data-ibx-type="ibxLabel" class="pd-ps-name" data-ibx-col="1" data-ibx-row="5" data-ibxp-text-wrap="true" data-ibxp-for-id="ps-id-5">@ibxStringXml('settings_portal_direction')</div>
+            <div data-ibx-row="5" data-ibx-col="2" data-ibx-type="ibxSelect" data-ibxp-readonly="true" class="pd-ps-value pd-ps-target" data-ibxp-text-overflow="ellipsis" data-ibxp-for-id="ps-id-13" data-ibxp-list-classes="ibx-menu-no-icons">
+              <div data-ibx-type="ibxSelectItem" class="pd-page-select-item" data-ibxp-selected="true" data-ibxp-user-value="LTR">LTR</div>
+              <div data-ibx-type="ibxSelectItem" class="pd-page-select-item" data-ibxp-user-value="RTL">RTL</div>
+            </div>
+                    
+           </div>
+        </div>
+        
+        <div data-ibx-type="ibxAccordionPage" class="ibx-accordion-page" data-ibxp-auto-close="false" data-ibxp-selected="true" data-ibxp-btn-options-open="{'glyphClasses': 'ibx-icons ibx-icons ibx-glyph-chevron-down'}" data-ibxp-btn-options="{'glyph': '', 'glyphClasses': 'ibx-icons ibx-glyph-chevron-right', 'text': '@ibxStringJson('settings_portal_navigation')'}">
+ 	       <div data-ibx-type="ibxRadioGroup" class="pd-grid-control-group" data-ibxp-name="grid_navigation"></div>
+          <div data-ibx-type="ibxGrid" class="pd-ps-grid" data-ibxp-cols="1fr 2fr" data-ibxp-justify="stretch">
+              <div data-ibx-row="1" data-ibx-col="1" data-ibx-type="ibxRadioButton" class="pvd-grid-column-size pd-control-value icon-no-scale" data-ibxp-group="grid_navigation" data-ibxp-icon="@ibxStringXml('none_icon_path', '', 'resource_strings')" data-ibxp-icon-position="center" data-ibxp-justify="center" data-ibxp-user-value="0"></div>
+              <div data-ibx-row="1" data-ibx-col="2" data-ibx-type="ibxRadioButton" class="pvd-grid-column-size pd-control-value icon-no-scale" data-ibxp-group="grid_navigation" data-ibxp-icon="@ibxStringXml('side_top_icon_path', '', 'resource_strings')" data-ibxp-icon-position="center" data-ibxp-justify="center" data-ibxp-user-value="1"></div>
+
+             <div data-ibx-row="2" data-ibx-col="1" data-ibx-type="ibxRadioButton" class="pvd-grid-column-size pd-control-value icon-no-scale" data-ibxp-group="grid_navigation" data-ibxp-icon="@ibxStringXml('top_dropdown_icon_path', '', 'resource_strings')" data-ibxp-icon-position="center" data-ibxp-justify="center" data-ibxp-user-value="2"></div>
+             <div data-ibx-row="2" data-ibx-col="2" data-ibx-type="ibxRadioButton" class="pvd-grid-column-size pd-control-value icon-no-scale" data-ibxp-group="grid_navigation" data-ibxp-icon="@ibxStringXml('side_icon_path', '', 'resource_strings')" data-ibxp-icon-position="center" data-ibxp-justify="center" data-ibxp-user-value="3"></div>
+
+             <div data-ibx-row="3" data-ibx-col="1" data-ibx-type="ibxRadioButton" class="pvd-grid-column-size pd-control-value icon-no-scale" data-ibxp-group="grid_navigation" data-ibxp-icon="@ibxStringXml('side_top_icon_path', '', 'resource_strings')" data-ibxp-icon-position="center" data-ibxp-justify="center" data-ibxp-user-value="4"></div>
+             <div data-ibx-row="3" data-ibx-col="2" data-ibx-type="ibxRadioButton" class="pvd-grid-column-size pd-control-value icon-no-scale" data-ibxp-group="grid_navigation" data-ibxp-icon="@ibxStringXml('top_side_icon_path', '', 'resource_strings')" data-ibxp-icon-position="center" data-ibxp-justify="center" data-ibxp-user-value="5"></div>
+
+          </div>
+        </div>        
+        
+        <div data-ibx-type="ibxAccordionPage" class="ibx-accordion-page" data-ibxp-auto-close="false" data-ibxp-selected="true" data-ibxp-btn-options-open="{'glyphClasses': 'ibx-icons ibx-icons ibx-glyph-chevron-down'}" data-ibxp-btn-options="{'glyph': '', 'glyphClasses': 'ibx-icons ibx-glyph-chevron-right', 'text': '@ibxStringJson('settings_portal_top_navigation')'}">
+          <div data-ibx-type="ibxGrid" class="pd-ps-grid" data-ibxp-cols="1fr 2fr" data-ibxp-justify="stretch">
+            <div data-ibx-type="ibxLabel" class="pd-ps-name" data-ibx-col="1" data-ibx-row="1" data-ibxp-text-wrap="true" data-ibxp-for-id="ps-id-12">@ibxStringXml('settings_portal_lock')</div>
+            <div data-ibx-type="ibxSwitch" class="pd-ps-value pvd-ps-show-lock" data-ibx-col="2" data-ibx-row="1" data-ibx-justify="start" data-ibxp-checked="true" data-ibxp-for-id="ps-id-12"></div>           
+          </div>
+        </div>        
+        
+      </div>
+      
+      <!-- Page Styles -->
+       <div data-ibx-type="ibxVAccordionPane" class="page-styles ibx-accordion-pane">
+        <div data-ibx-type="ibxAccordionPage" class="ibx-accordion-page" data-ibxp-auto-close="false" data-ibxp-selected="true" data-ibxp-btn-options-open="{'glyphClasses': 'ibx-icons ibx-icons ibx-glyph-chevron-down'}" data-ibxp-btn-options="{'glyph': '', 'glyphClasses': 'ibx-icons ibx-glyph-chevron-right', 'text': '@ibxStringJson('style_portal_title')'}">
+          <div data-ibx-type="ibxGrid" class="pd-ps-grid" data-ibxp-cols="1fr 2fr" data-ibxp-justify="stretch">
+            <div data-ibx-type="ibxLabel" class="pd-ps-name" data-ibx-col="1" data-ibx-row="3" data-ibxp-text-wrap="true" data-ibxp-for-id="ps-id-4">@ibxStringXml('style_portal_theme_label')</div>
+            <div data-ibx-type="ibxSelect" data-ibxp-readonly="true" class="pd-ps-value pd-ps-page-theme" data-ibx-col="2" data-ibx-row="3" data-ibx-justify="stretch" data-ibxp-text-overflow="ellipsis" data-ibxp-for-id="ps-id-4" data-ibxp-list-classes="ibx-menu-no-icons">
+              <div data-ibx-type="ibxSelectItem" class="pd-page-select-Item pd-page-select-none" data-ibxp-user-value="none" data-ibxp-selected="true">@ibxStringXml('style_portal_theme_none')</div>
+            </div>
+            <div data-ibx-row="4" data-ibx-col="1" data-ibx-type="ibxLabel" class="pd-ps-name" data-ibxp-text-wrap="true" data-ibxp-for-id="ps-id-12">@ibxStringXml('style_portal_margin')</div>
+			<div data-ibx-row="4" data-ibx-col="2" data-ibx-type="ibxTextField" class="pd-ps-value pd-ps-margin" data-ibxp-for-id="ps-id-12" data-ibxp-ctrl-type="search"></div>
+            <div data-ibx-row="5" data-ibx-col="1" data-ibx-type="ibxLabel" class="pd-ps-name" data-ibxp-text-wrap="true" data-ibxp-for-id="ps-id-12">@ibxStringXml('style_portal_maxwidth')</div>
+			<div data-ibx-row="5" data-ibx-col="2" data-ibx-type="ibxTextField" class="pd-ps-value pd-ps-max-width" data-ibxp-for-id="ps-id-12" data-ibxp-ctrl-type="search"></div>			
+          </div>
+         </div>
+         <div data-ibx-type="ibxAccordionPage" class="ibx-accordion-page" data-ibxp-auto-close="false" data-ibxp-selected="true" data-ibxp-btn-options-open="{'glyphClasses': 'ibx-icons ibx-icons ibx-glyph-chevron-down'}" data-ibxp-btn-options="{'glyph': '', 'glyphClasses': 'ibx-icons ibx-glyph-chevron-right', 'text': '@ibxStringJson('style_portal_heading')'}">
+           <div data-ibx-type="ibxRadioGroup" class="pd-page-heading-style-group" data-ibxp-name="heading_size"></div>
+         	<div data-ibx-type="ibxVBox" class="pd-grid-col-box" data-ibxp-align="center" data-ibxp-justify="center" data-ibxp-wrap="true">
+         		<div data-ibx-type="ibxRadioButton" class="pd-heading-style-btn pd-style-normal" data-ibxp-group="heading_size" data-ibxp-user-value="pd-style-normal">@ibxStringXml('style_portal_heading_normal')</div>
+         		<div data-ibx-type="ibxRadioButton" class="pd-heading-style-btn pd-style-heading1" data-ibxp-group="heading_size" data-ibxp-user-value="pd-style-heading1">@ibxStringXml('style_portal_heading_heading1')</div>
+         		<div data-ibx-type="ibxRadioButton" class="pd-heading-style-btn pd-style-heading2" data-ibxp-group="heading_size" data-ibxp-user-value="pd-style-heading2">@ibxStringXml('style_portal_heading_heading2')</div>
+         		<div data-ibx-type="ibxRadioButton" class="pd-heading-style-btn pd-style-heading3" data-ibxp-group="heading_size" data-ibxp-user-value="pd-style-heading3">@ibxStringXml('style_portal_heading_heading3')</div>
+         		<div data-ibx-type="ibxRadioButton" class="pd-heading-style-btn pd-style-heading4" data-ibxp-group="heading_size" data-ibxp-user-value="pd-style-heading4">@ibxStringXml('style_portal_heading_heading4')</div>
+         		<div data-ibx-type="ibxRadioButton" class="pd-heading-style-btn pd-style-heading5" data-ibxp-group="heading_size" data-ibxp-user-value="pd-style-heading5">@ibxStringXml('style_portal_heading_heading5')</div>
+         		<div data-ibx-type="ibxRadioButton" class="pd-heading-style-btn pd-style-title" data-ibxp-group="heading_size" data-ibxp-user-value="pd-style-title">@ibxStringXml('style_portal_heading_title')</div>
+         		<div data-ibx-type="ibxRadioButton" class="pd-heading-style-btn pd-style-subtitle" data-ibxp-group="heading_size" data-ibxp-user-value="pd-style-subtitle">@ibxStringXml('style_portal_heading_subtitle')</div>
+         	</div>
+         </div>
+        </div>
+      
+      <!-- Button Settings-->
+      <div data-ibx-type="ibxVAccordionPane" class="button-settings ibx-accordion-pane">
+        <div data-ibx-type="ibxAccordionPage" class="ibx-accordion-page" data-ibxp-auto-close="false" data-ibxp-selected="true" data-ibxp-btn-options-open="{'glyphClasses': 'ibx-icons ibx-icons ibx-glyph-chevron-down'}" data-ibxp-btn-options="{'glyph': '', 'glyphClasses': 'ibx-icons ibx-glyph-chevron-right', 'text': '@ibxStringJson('settings_prompt_general')'}">
+          <div data-ibx-type="ibxGrid" class="pd-ps-grid" data-ibxp-cols="1fr 2fr" data-ibxp-justify="stretch">
+            <div data-ibx-row="1" data-ibx-col="1" data-ibx-type="ibxLabel" class="pd-ps-name" data-ibxp-text-wrap="true" data-ibxp-for-id="ps-id-11">@ibxStringXml('settings_prompt_label_type')</div>
+  					<div data-ibx-row="1" data-ibx-col="2" data-ibx-type="ibxTextField" class="pd-ps-value pd-ps-type" data-ibxp-for-id="ps-id-11" data-ibxp-readonly="true"></div>
+            <div data-ibx-row="2" data-ibx-col="1" data-ibx-type="ibxLabel" class="pd-ps-name" data-ibxp-text-wrap="true" data-ibxp-for-id="ps-id-12">@ibxStringXml('settings_prompt_label_tooltip')</div>
+  					<div data-ibx-row="2" data-ibx-col="2" data-ibx-type="ibxTextField" class="pd-ps-value pd-ps-tooltip" data-ibxp-for-id="ps-id-12" ></div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Section Settings -->
+      <div data-ibx-type="ibxVAccordionPane" class="section-settings ibx-accordion-pane">
+        <div data-ibx-type="ibxAccordionPage" class="ibx-accordion-page" data-ibxp-selected="true" data-ibxp-btn-options-open="{'glyphClasses': 'ibx-icons ibx-icons ibx-glyph-chevron-down'}" data-ibxp-btn-options="{'glyph': '', 'glyphClasses': 'ibx-icons ibx-glyph-chevron-right', 'text': '@ibxStringJson('settings_section_title')'}">
+          <div data-ibx-type="ibxGrid" class="pd-ps-grid" data-ibxp-cols="1fr 2fr" data-ibxp-justify="stretch">
+            <div data-ibx-type="ibxLabel" class="pd-ps-name" data-ibx-col="1" data-ibx-row="1" data-ibxp-text-wrap="true" data-ibxp-for-id="ps-id-1">@ibxStringXml('settings_section_collapsible')</div>
+            <div data-ibx-type="ibxSwitch" data-ibx-justify="start" class="pd-ps-value pd-ps-section-collapsible" data-ibx-col="2" data-ibx-row="1" data-ibxp-checked="false" data-ibxp-for-id="ps-id-1"></div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Section Styling -->
+      <div data-ibx-type="ibxVAccordionPane" class="section-styling ibx-accordion-pane">
+        <div data-ibx-type="ibxAccordionPage" class="ibx-accordion-page" data-ibxp-selected="true" data-ibxp-btn-options-open="{'glyphClasses': 'ibx-icons ibx-icons ibx-glyph-chevron-down'}" data-ibxp-btn-options="{'glyph': '', 'glyphClasses': 'ibx-icons ibx-glyph-chevron-right', 'text': '@ibxStringJson('style_section_title')'}">
+            <div data-ibx-type="ibxRadioGroup" class="pd-section-style-group" data-ibxp-name="section_style"></div>
+            <div data-ibx-type="ibxHBox" class="pd-control-box pd-section-style-box pd-control-grid-2-column" data-ibxp-justify="center" data-ibxp-wrap="true">
+              <div data-ibx-type="ibxRadioButton" class="pd-control-value pd-section-style-value pd-style-default-color" data-ibxp-group="section_style" data-ibxp-justify="center" data-ibxp-user-value="pd-style-default-color">@ibxStringXml('style_section_default_style')</div>
+              <div data-ibx-type="ibxRadioButton" class="pd-control-value pd-section-style-value pd-section-color pd-style-color2" data-ibxp-group="section_style" data-ibxp-justify="center" data-ibxp-user-value="pd-style-color2">@ibxStringXml('style_section_style2')</div>
+              <div data-ibx-type="ibxRadioButton" class="pd-control-value pd-section-style-value pd-section-color pd-style-color3" data-ibxp-group="section_style" data-ibxp-justify="center" data-ibxp-user-value="pd-style-color3">@ibxStringXml('style_section_style3')</div>
+              <div data-ibx-type="ibxRadioButton" class="pd-control-value pd-section-style-value pd-section-color pd-style-color4" data-ibxp-group="section_style" data-ibxp-justify="center" data-ibxp-user-value="pd-style-color4">@ibxStringXml('style_section_style4')</div>
+              <div data-ibx-type="ibxRadioButton" class="pd-control-value pd-section-style-value pd-section-color pd-style-color5" data-ibxp-group="section_style" data-ibxp-justify="center" data-ibxp-user-value="pd-style-color5">@ibxStringXml('style_section_style5')</div>
+              <div data-ibx-type="ibxRadioButton" class="pd-control-value pd-section-style-value pd-section-color pd-style-color6" data-ibxp-group="section_style" data-ibxp-justify="center" data-ibxp-user-value="pd-style-color6">@ibxStringXml('style_section_style6')</div>
+              <div data-ibx-type="ibxRadioButton" class="pd-control-value pd-section-style-value pd-section-color pd-style-color7" data-ibxp-group="section_style" data-ibxp-justify="center" data-ibxp-user-value="pd-style-color7">@ibxStringXml('style_section_style7')</div>
+              <div data-ibx-type="ibxRadioButton" class="pd-control-value pd-section-style-value pd-section-color pd-style-color8" data-ibxp-group="section_style" data-ibxp-justify="center" data-ibxp-user-value="pd-style-color8">@ibxStringXml('style_section_style8')</div>
+            </div>
+        </div>
+      </div>      
+
+    </markup-block>
+
+    <markup-block> <!-- popups and dialogs -->
+
+       <!-- Dirty Warning dialog -->
+      <div data-ibx-type="ibxDialog" class="pd-warning-dirty" data-ibxp-auto-close="false" data-ibxp-modal="true" data-ibxp-type="medium warning" data-ibxp-buttons="" data-ibxp-moveable="false" data-ibxp-default-action=".pd-warning-dirty-yes" data-ibxp-opaque="true">
+        <div data-ibx-type="ibxVBox" data-ibxp-align="stretch">
+          <div data-ibx-type="ibxLabel" class="pd-warning-dirty-label" data-ibxp-justify="start" data-ibxp-text-wrap="normal">@ibxStringXml('dlg_warning_dirty_message')</div>
+          <div data-ibx-type="ibxHBox" data-ibxp-justify="end">
+            <div data-ibx-type="ibxButton" class="pd-warning-dirty-button pd-warning-dirty-yes ibx-primary" data-ibxp-justify="center">@ibxStringXml('dlg_warning_dirty_yes')</div>
+            <div data-ibx-type="ibxButton" class="pd-warning-dirty-button pd-warning-dirty-no ibx-default" data-ibxp-justify="center">@ibxStringXml('dlg_warning_dirty_no')</div>
+            <div data-ibx-type="ibxButton" class="pd-warning-dirty-button pd-warning-dirty-cancel ibx-default" data-ibxp-justify="center">@ibxStringXml('dlg_warning_dirty_cancel')</div>
+          </div>
+        </div>
+      </div>
+
+    </markup-block>
+        
+    <markup-block> <!-- menus -->
+
+      <!-- Tool menu -->
+      <div data-ibx-type="ibxMenu" data-ibx-name-root="true" class="pvd-tool-menu ibxtool-menu" data-ibxp-opaque="true">
+        <div data-ibx-type="ibxMenuItem" class="pd-tool-menu-item" data-ibx-name="miOpen" data-ibxp-label-options="{'glyph':'','glyphClasses':'ibx-icons ibx-glyph-edit'}">@ibxStringXml('menu_item_open')</div>
+        <div data-ibx-type="ibxMenuItem" class="pd-tool-menu-item" data-ibx-name="miNew" data-ibxp-label-options="{'glyph':'','glyphClasses':'ibx-icons ibx-glyph-new'}">@ibxStringXml('menu_item_new')</div>
+        <div data-ibx-type="ibxMenuItem" class="pd-tool-menu-item" data-ibx-name="miSave" data-ibxp-label-options="{'glyph':'','glyphClasses':'ibx-icons ibx-glyph-floppy'}">@ibxStringXml('menu_item_save')</div>
+        <div data-ibx-type="ibxMenuItem" class="pd-tool-menu-item" data-ibx-name="miSaveAs" data-ibxp-label-options="{'glyph':'','glyphClasses':'ibx-icons ibx-glyph-floppy'}">@ibxStringXml('menu_item_save_as')</div>
+        <!-- 
+        <div data-ibx-type="ibxMenuSeparator"></div>
+        <div data-ibx-type="ibxMenuItem" class="pd-tool-menu-item" data-ibx-name="miSaveAsTemplate" data-ibxp-label-options="{'glyph':'','glyphClasses':'ibx-icons ibx-glyph-floppy'}">@ibxStringXml('menu_item_save_as_template')</div>
+        -->
+        <div data-ibx-type="ibxMenuSeparator"></div>
+        <!--<div data-ibx-type="ibxMenuItem" class="pd-tool-menu-item" data-ibx-name="miPreferences" data-ibxp-label-options="{'glyph':'','glyphClasses':'ibx-icons ibx-glyph-ellipsis-v'}">@ibxStringXml('menu_item_preferences')</div>-->
+        <div data-ibx-type="ibxMenuItem" class="pd-tool-menu-item" data-ibx-name="miClose" data-ibxp-label-options="{'glyph':'','glyphClasses':'ibx-icons ibx-glyph-times-small'}">@ibxStringXml('menu_close')</div>
+      </div>
+
+	<div class="personal-page-menu" data-ibx-name-root="true" data-ibx-type="ibxMenu">
+		<div data-ibx-type="ibxMenuItem" action="dup" data-ibx-name="miMenuItemDuplicate"   data-ibxp-label-options='{"glyphClasses":"fa fa-clone"}'>@ibxString('str_duplicate')</div>
+		<div data-ibx-type="ibxMenuItem" action="delete" data-ibxp-command="cmdDelete" data-ibx-name="miMenuItemDelete"   data-ibxp-label-options='{"glyphClasses":"fa fa-times"}'>@ibxString('str_delete')</div>
+		<div data-ibx-type="ibxMenuSeparator"></div>
+		<div data-ibx-type="ibxMenuItem" action="unshare" data-ibxp-command="cmdShareAdvanced" data-ibx-name="miMenuItemUnshare" data-ibxp-label-options='{"glyphClasses":"fa fa-reply"}'  >@ibxString('str_unshare')</div>
+		<div data-ibx-type="ibxMenuItem" action="shareAdvanced" data-ibxp-command="cmdShareAdvanced" data-ibx-name="miMenuItemShareAdvanced"   >@ibxString('str_share_with')</div>
+		<div data-ibx-type="ibxMenuItem" action="properties" metadata="objnot=BipPortalsPortal,modenot=mobile" data-ibx-name="miMenuItemProperties"   data-ibxp-label-options='{"glyphClasses":"fa fa-cog"}'>@ibxString('str_properties')</div>				
+	</div>
+	
+     </markup-block>
+
+  </markup>
+
+  <scripts>
+    <script-file src="./js/tool.pvd.js"/>
+    <script-file src="./js/tool.pvd.run.js"/>
+    <script-file src="./js/tree.pvd.js"/>
+	<script-file src="{context}/ibxtools/shared_resources/js/newPageFromTemplate.js"/>
+    <script-block name="pd_res1_block1">
+      <![CDATA[
+			]]>
+    </script-block>
+  </scripts>
+</ibx-res-bundle>
