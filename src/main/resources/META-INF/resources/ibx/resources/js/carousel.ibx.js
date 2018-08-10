@@ -139,19 +139,20 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 			"scrollTime": (scrollTime !== undefined) ? scrollTime : this.options.scrollTime[scrollType],
 			"steps": (steps !== undefined) ? steps : 1,
 			"infinite":infinite,
-			"animationOptions":{}
-		}
+			"animationProperties":{},
+			"animationOptions":{"easing":"linear"}
+		};
 		scrollInfo.delta = this._calcScrollStepSize(scrollInfo.steps, scrollInfo.scrollType);
 		scrollInfo.endPos = this._itemsBox.prop(scrollInfo.axis) + scrollInfo.delta;
 		scrollInfo.pageInfo = this.getPageInfo();
+		scrollInfo.animationProperties[scrollInfo.axis] = scrollInfo.endPos;
+		scrollInfo.animationOptions.duration = scrollInfo.scrollTime;
 
 		var evt = this.element.dispatchEvent("ibx_beforescroll", scrollInfo, false, true);
 		if(!evt.isDefaultPrevented())
 		{
-			var options = $.extend(
+			scrollInfo.animationOptions = $.extend(
 			{
-				"duration":scrollInfo.scrollTime,
-				"easing":"linear",
 				"start":function(scrollInfo, animation)
 				{
 				}.bind(this, scrollInfo),
@@ -168,10 +169,7 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 					this.element.removeClass("ibx-csl-scrolling")
 				}.bind(this, scrollInfo),
 			}, evt.data.animationOptions);
-
-			var props = {};
-			props[scrollInfo.axis] = scrollInfo.endPos;
-			this._itemsBox.animate(props, options);
+			this._itemsBox.animate(scrollInfo.animationProperties, scrollInfo.animationOptions);
 		}
 	},
 	scrollTo:function(el)

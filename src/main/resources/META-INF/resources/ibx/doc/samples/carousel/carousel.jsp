@@ -70,6 +70,7 @@
 
 				$(".ibx-carousel").on("ibx_beforescroll", function(e)
 				{
+					var scrollInfo = e.originalEvent.data;
 				});
 
 				$(".tb-ctrl").on("ibx_change", function(e)
