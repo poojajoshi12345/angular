@@ -233,7 +233,7 @@
 			<div class="csl-box-main" data-ibx-type="ibxHBox" data-ibxp-align="stretch" data-ibxp-justify="start">
 				<div class="test-csl-v" tabIndex="0" data-ibx-type="ibxVCarousel"></div>
 				<div class="csl-v-box" data-ibx-type="ibxVBox" data-ibxp-align="stretch" data-ibxp-justify="center">
-					<div class="test-csl-h" tabIndex="0" data-ibx-type="ibxHCarousel"></div>
+					<div class="xxx test-csl-h" tabIndex="0" data-ibx-type="ibxHCarousel"></div>
 					<div class="test-csl-h-big" tabIndex="0" data-ibx-type="ibxHCarousel"></div>
 					<div class="test-csl-h-stf" tabIndex="0" data-ibx-type="ibxHCarousel" data-ibxp-size-to-fit="true"></div>
 				</div>
