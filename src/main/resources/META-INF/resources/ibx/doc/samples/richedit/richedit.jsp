@@ -139,12 +139,11 @@
 					updateUI();
 				});
 
-				//$(".tb-fore-color").ibxWidget("option", "menu", makeColorSelect($(".cmd-fore-color")));
-				//$(".tb-back-color").ibxWidget("option", "menu", makeColorSelect($(".cmd-back-color")));
+				$(".tb-fore-color").ibxWidget("option", "menu", makeColorSelect($(".cmd-fore-color")));
+				$(".tb-back-color").ibxWidget("option", "menu", makeColorSelect($(".cmd-back-color")));
 				function makeColorSelect(cmd)
 				{
-					var menu = $("<div>").ibxPopup({"destroyOnClose":false});
-					var ctrl = $("<div tabindex='0'>").ibxVBox({"navKeyRoot":true, "navKeyDir":"vertical", "focusDefault":true, "align":"stretch"});
+					var menu = $("<div>").ibxMenu({"destroyOnClose":false});
 					var colors = 
 					{
 						"black":"rgb(0 ,0, 0)",
@@ -175,9 +174,14 @@
 							cmd.ibxWidget("userValue", selItem.data("color"));
 							selItem.closest(".ibx-popup").ibxWidget("close");
 						});
-						ctrl.append(selItem);
+						menu.ibxWidget("add", selItem);
 					}
-					menu.append(ctrl);
+					menu.ibxWidget("add", $("<div>").ibxMenuSeparator());
+
+					var custom = ibx.bindElements($(".cp-menu-template").clone(true).removeAttr("data-ibx-no-bind"));
+					custom.removeClass("cp-menu-template");
+					custom.ibxWidget("option", "command", cmd);
+					menu.ibxWidget("add", custom);
 					return menu;
 				}
 			}, true);
@@ -375,6 +379,12 @@
 			</div>
 			<div data-ibx-type="ibxMenuSeparator"></div>
 			<div data-ibx-type="ibxMenuItem" data-ibxp-command="cmdRemoveFormat" data-ibxp-label-options='{"glyph":"format_clear", "glyphClasses":"material-icons"}'>Remove All Formatting</div>
+		</div>
+
+		<div class="cp-menu-template" data-ibx-type="ibxMenuItem" data-ibx-no-bind="true">Custom
+			<div data-ibx-type="ibxMenu">
+				<div data-ibx-type="ibxColorPicker" data-ibxp-set-opacity="false" data-ibxp-show-color-info="false"></div>
+			</div>
 		</div>
 
 		<div class="re-cmd cmd-remove-format" data-ibx-type="ibxCommand" data-ibxp-id="cmdRemoveFormat" data-ibxp-user-value="removeFormat"></div>
