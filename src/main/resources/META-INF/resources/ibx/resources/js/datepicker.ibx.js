@@ -68,6 +68,13 @@ $.widget("ibi.ibxDatePicker", $.ibi.ibxVBox,
 	{
 		this._super();
 	},
+	dateObj:function(date)
+	{
+		if(date === undefined)
+			return new Date(this.options.date)
+		else
+			this.option("date", $.datepicker.formatDate(this.options.dateFormat, date));
+	},
 	_onClear: function ()
 	{
 		this.options.date = '';
