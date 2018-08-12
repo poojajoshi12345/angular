@@ -131,14 +131,6 @@
 					re.ibxWidget(reCmd, val);
 				})
 
-				$(".color-picker").on("ibx_colorchange", function(e)
-				{
-					var target = $(e.target);
-					var info = e.originalEvent.data;
-					target.ibxWidget("getCommand").ibxWidget("userValue", info.rgba.rgba);
-					updateUI();
-				});
-
 				$(".tb-fore-color").ibxWidget("option", "menu", makeColorSelect($(".cmd-fore-color")));
 				$(".tb-back-color").ibxWidget("option", "menu", makeColorSelect($(".cmd-back-color")));
 				function makeColorSelect(cmd)
@@ -178,10 +170,17 @@
 					}
 					menu.ibxWidget("add", $("<div>").ibxMenuSeparator());
 
-					var custom = ibx.bindElements($(".cp-menu-template").clone(true).removeAttr("data-ibx-no-bind"));
-					custom.removeClass("cp-menu-template");
-					custom.ibxWidget("option", "command", cmd);
-					menu.ibxWidget("add", custom);
+					var customMenuItem = $(".cp-menu-template").clone(true).removeAttr("data-ibx-no-bind").removeClass("cp-menu-template");
+					customMenuItem = ibx.bindElements(customMenuItem);
+					var cp = customMenuItem.find(".ibx-color-picker").ibxWidget("option", "command", cmd.ibxWidget("option", "id")).on("ibx_colorchange", function(e)
+					{
+						var target = $(e.target);
+						var info = e.originalEvent.data;
+						target.ibxWidget("getCommand").ibxWidget("userValue", info.rgba.rgba);
+						updateUI();
+					});
+					menu.ibxWidget("add", customMenuItem);
+					cp.ibxWidget("option", "color", "#ffffff");
 					return menu;
 				}
 			}, true);
@@ -254,13 +253,17 @@
 				margin:2px;
 				width:150px;
 			}
+
+			.cp-menu-template
+			{
+				display:none;
+			}
 		</style>
 	</head>
 	<body class="ibx-root">
 		<div class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
 			<div class="tb-main" data-ibx-type="ibxHBox" data-ibxp-wrap="true" data-ibxp-align="center">
 				<div class="drag-source" data-ibx-type="ibxLabel" data-ibxp-draggable="true" data-ibxp-external-drop-target="false" style="padding:3px;border:2px solid black;">Test Data Source (drag/dblclick)</div>
-
 				<div tabindex="0" class="tb-button" title="Undo" data-ibx-type="ibxButtonSimple" data-ibxp-command="cmdUndo" data-ibxp-glyph="undo" data-ibxp-glyph-classes="material-icons"></div>
 				<div tabindex="0" class="tb-button" title="Redo" data-ibx-type="ibxButtonSimple" data-ibxp-command="cmdRedo" data-ibxp-glyph="redo" data-ibxp-glyph-classes="material-icons"></div>
 				<div tabindex="0" class="tb-separator"></div>
@@ -304,16 +307,8 @@
 				<div tabindex="0" class="tb-button" title="Subscript" data-ibx-type="ibxCheckBox" data-ibxp-command="cmdSubscript" data-ibxp-glyph-classes="fa fa-subscript"></div>
 				<div tabindex="0" class="tb-button" title="Superscript" data-ibx-type="ibxCheckBox" data-ibxp-command="cmdSuperscript" data-ibxp-glyph-classes="fa fa-superscript"></div>
 				<div class="tb-separator"></div>
-				<div tabindex="0" class="tb-button tb-fore-color" title="Color" data-ibx-type="ibxMenuButton" data-ibxp-glyph="format_color_text" data-ibxp-glyph-classes="material-icons">
-					<div data-ibx-type="ibxMenu">
-						<div class="color-picker cp-fore-color" data-ibx-type="ibxColorPicker" data-ibxp-command="cmdForeColor" data-ibxp-set-opacity="false" data-ibxp-show-color-info="false"></div>
-					</div>
-				</div>
-				<div tabindex="0" class="tb-button tb-back-color" title="Background Color" data-ibx-type="ibxMenuButton" data-ibxp-glyph="format_color_fill" data-ibxp-glyph-classes="material-icons">
-					<div data-ibx-type="ibxMenu">
-						<div class="color-picker cp-back-color" data-ibx-type="ibxColorPicker" data-ibxp-command="cmdBackColor" data-ibxp-set-opacity="false" data-ibxp-show-color-info="false"></div>
-					</div>
-				</div>
+				<div tabindex="0" class="tb-button tb-fore-color" title="Color" data-ibx-type="ibxMenuButton" data-ibxp-glyph="format_color_text" data-ibxp-glyph-classes="material-icons"></div>
+				<div tabindex="0" class="tb-button tb-back-color" title="Background Color" data-ibx-type="ibxMenuButton" data-ibxp-glyph="format_color_fill" data-ibxp-glyph-classes="material-icons"></div>
 				<div class="tb-separator"></div>
 				<div tabindex="0" class="tb-button" title="Left Justify" data-ibx-type="ibxRadioButton" data-ibxp-group="rgAlign" data-ibxp-user-value="left" data-ibxp-glyph="format_align_left" data-ibxp-glyph-classes="material-icons"></div>
 				<div tabindex="0" class="tb-button" title="Center Justify" data-ibx-type="ibxRadioButton" data-ibxp-group="rgAlign" data-ibxp-user-value="center" data-ibxp-glyph="format_align_center" data-ibxp-glyph-classes="material-icons"></div>
@@ -383,7 +378,7 @@
 
 		<div class="cp-menu-template" data-ibx-type="ibxMenuItem" data-ibx-no-bind="true">Custom
 			<div data-ibx-type="ibxMenu">
-				<div data-ibx-type="ibxColorPicker" data-ibxp-set-opacity="false" data-ibxp-show-color-info="false"></div>
+				<div data-ibx-type="ibxColorPicker" data-ibxp-set-opacity="false" data-ibxp-color="#000000" data-ibxp-show-color-info="false"></div>
 			</div>
 		</div>
 
