@@ -30,7 +30,7 @@
 					xItems.each(function(idx, el)
 					{
 						el = $(el);
-						//if(el.is("[container=true]"))
+						if(el.is("[container=true]"))
 						{
 							var treeNode = makeTreeNode(el, "ibfs_item");
 							targetNode.ibxWidget("add", treeNode);

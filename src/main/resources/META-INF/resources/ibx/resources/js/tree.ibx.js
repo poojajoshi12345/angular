@@ -7,10 +7,6 @@ $.widget("ibi.ibxTreeSelectionManager", $.ibi.ibxSelectionManager,
 	{
 		"type":"single",
 		"toggleSelection":false,
-		"navKeyRoot":true,
-		"navKeyDir":"vertical",
-		"focusDefault":true,
-		"focusResetOnBlur":false,
 		"escClearSelection":true,
 	},
 	mapToSelectable:function(el)
@@ -33,6 +29,10 @@ $.widget("ibi.ibxTree", $.ibi.ibxVBox,
 {
 	options:
 	{
+		"navKeyRoot":true,
+		"navKeyDir":"vertical",
+		"navKeyResetFocusOnBlur":false,
+		"focusDefault":true,
 		"selType":"single",
 		"showRootNodes":true,
 		"singleClickExpand":false,
