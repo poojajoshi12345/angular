@@ -283,8 +283,9 @@ jQuery.fn.redraw = function()
 };
 
 //create a native browser event.
-function createNativeEvent(type, data, canBubble, cancelable, relatedTarget)
+function createNativeEvent(type, data, canBubble, cancelable, relatedTarget, ctxDocument)
 {
+	doc = ctxDocument || document;
 	canBubble = canBubble !== undefined ? canBubble : true;
 	cancelable = cancelable !== undefined ? cancelable : true;
 
@@ -297,7 +298,7 @@ function createNativeEvent(type, data, canBubble, cancelable, relatedTarget)
 	else
 	{
 		//this crap about the preventDefault is because it appears preventDefault doesn't work on CustoEvents in IE...Thanks IE!
-		e = document.createEvent("CustomEvent");
+		e = doc.createEvent("CustomEvent");
 		e.initCustomEvent(type, canBubble, cancelable, null);
 		e.ieDefaultPrevented = false;
 		e.preventDefault = function(){this.ieDefaultPrevented = true;};
@@ -310,9 +311,9 @@ function createNativeEvent(type, data, canBubble, cancelable, relatedTarget)
 }
 
 //take a native event and create a new event, then copy all fields from native to new.
-function cloneNativeEvent(e, type, data, canBubble, cancelable, relatedTarget)
+function cloneNativeEvent(e, type, data, canBubble, cancelable, relatedTarget, ctxDocument)
 {
-	var evt = createNativeEvent(type, canBubble, cancelable, relatedTarget);
+	var evt = createNativeEvent(type, canBubble, cancelable, relatedTarget, ctxDocument);
 	for(var key in e)
 	{
 		var prop = e[key];
@@ -324,9 +325,9 @@ function cloneNativeEvent(e, type, data, canBubble, cancelable, relatedTarget)
 }
 
 //let jQuery dispatch custom native events
-jQuery.fn.dispatchEvent = function(eType, data, canBubble, cancelable, relatedTarget)
+jQuery.fn.dispatchEvent = function(eType, data, canBubble, cancelable, relatedTarget, ctxDocument)
 {
-	var evt = (typeof(eType) == "object") ? cloneNativeEvent(eType, eType.type, data) : createNativeEvent(eType, data, canBubble, cancelable, relatedTarget);
+	var evt = (typeof(eType) == "object") ? cloneNativeEvent(eType, eType.type, data, ctxDocument) : createNativeEvent(eType, data, canBubble, cancelable, relatedTarget, ctxDocument);
 	this.each(function(evt, idx, el)
 	{
 		el.dispatchEvent(evt);
