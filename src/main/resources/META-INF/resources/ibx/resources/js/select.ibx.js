@@ -1037,6 +1037,17 @@ $.widget("ibi.ibxSelectPaged", $.ibi.ibxSelectBase, {
 			return this;
 		}
 	},
+	_onPopupOpen: function ()
+	{
+		if (!this._dontFocusText)
+			this._textInput.focus();
+		else
+		{
+			if (this.options.readonly)
+				this._control.ibxWidget("focusSelItem");
+		}
+		this._dontFocusText = false;
+	},
 	_onChange: function (e)
 	{
 		if (e.target !== this.element[0])
@@ -1388,6 +1399,7 @@ $.widget("ibi.ibxSelectItemListPaged", $.ibi.ibxVBox,
 		this._currentPage = pageIndex;
 
 		this._listControl.empty();
+		this._listControl.ibxWidget("option", "userValue", "");
 
 		var pageStart = this._enablePaging ? (options.pageSize * pageIndex) : 0;
 		var pageEnd = this._enablePaging ? Math.min(this._filteredValues.length, pageStart + options.pageSize) : this._filteredValues.length;
