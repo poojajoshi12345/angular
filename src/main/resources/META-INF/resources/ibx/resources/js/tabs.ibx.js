@@ -267,7 +267,6 @@ $.widget("ibi.ibxTabPage", $.ibi.ibxWidget,
 		//alternate to data-ibxp-text...direct text node children can be used to set the text.
 		options.tabOptions.text = options.tabOptions.text || this.element.textNodes().remove().text().replace(/^\s*|\s*$/g, "");
 		this._tabButton = $("<div class='ibx-tab-button'>").prop("tabIndex", -1).ibxRadioButton({"tabPage": this.element, "aria":{"role":"tab"}});
-		this.element.on("focus", this._onPageFocus.bind(this)).on("keydown", this._onTabPageKeyEvent.bind(this));
 		this.element.append(this._tabButton);
 
 	},
@@ -290,13 +289,6 @@ $.widget("ibi.ibxTabPage", $.ibi.ibxWidget,
 		}
 	},
 	button: function () { return this._tabButton; },
-	_onPageFocus: function (e)
-	{
-	},
-	_onTabPageKeyEvent:function(e)
-	{
-		e.stopPropagation();
-	},
 	selected: function (value)
 	{
 		if (value === undefined)
