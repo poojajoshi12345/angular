@@ -69,3 +69,9 @@
 	display:inline-block;
 }
 
+/*FLAT TREE CLASSES*/
+.ibx-tree-flat .ibx-label-icon
+{
+	font-size:2em;
+	color:silver;
+}

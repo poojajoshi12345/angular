@@ -22,13 +22,46 @@
 				margin: 0px;
 				box-sizing: border-box;
 			}
+			.test-tabs
+			{
+				width:200px;
+				flex:1 1 auto;
+				border:1px solid black;
+			}
+			.test-page
+			{
+				border:1px solid green;
+			}
+			.tree-box
+			{
+				position:absolute;
+				left:0px;
+				top:0px;
+				right:0px;
+				bottom:0px;
+				box-sizing:border-box;
+				border:2px solid cyan;
+			}
+			.tree
+			{
+				flex:1 1 auto;
+				border:1px solid red;
+			}
 		</style>
 	</head>
 	<body class="ibx-root">
 		<div class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="center" data-ibxp-justify="start">
-			<div class="test"></div>
-			<div class="test"></div>
-
+			<div class="test-tabs" data-ibx-type="ibxTabPane">
+				<div class="test-page" data-ibx-type="ibxTabPage" data-ibxp-selected="true">Page1
+					<div class="tree-box" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
+						<div class="tree tree1" data-ibx-type="ibxLabel" data-ibxp-inline="false">Tree1</div>
+						<div data-ibx-type="ibxHSplitter"></div>
+						<div class="tree tree2" data-ibx-type="ibxLabel" data-ibxp-inline="false">Tree2</div>
+					</div>
+				</div>
+				<div class="test-page" data-ibx-type="ibxTabPage">Page2
+				</div>
+			</div>
 		</div>
 	</body>
 </html>

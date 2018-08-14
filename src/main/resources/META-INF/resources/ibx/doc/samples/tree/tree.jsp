@@ -93,6 +93,33 @@
 					//e.preventDefault();
 				});
 
+				$(".test-tree-flat").on("ibx_beforeexpand ibx_collapse", function(e)
+				{
+					var targetNode = $(e.target);
+					var xItem = targetNode.data("xItem");
+					var xParent = xItem.parent().closest("item");
+					
+					if(e.type == "ibx_collapse")
+					{
+						xItem = xParent;
+						targetNode = makeTreeNode(xItem, "ibfs_item", true, true);
+					}
+					targetNode.ibxTreeNode("option", "hasParent", !!xParent);
+
+					var xItems = xItem.children("children").children("item");
+					xItems.each(function(idx, xItem)
+					{
+						xItem = $(xItem);
+						var treeNode = makeTreeNode(xItem, "ibfs_item", false, true);
+						targetNode.ibxWidget("add", treeNode);
+					});
+
+					var tree = $(e.currentTarget);
+					tree.ibxWidget("remove").ibxWidget("add", targetNode);
+					
+				});
+
+
 				$(".test-files-box").on("dblclick keydown", function(e)
 				{
 					var eType = e.type;
@@ -121,7 +148,9 @@
 
 				$(".btn-load").on("click", function(e)
 				{
-					var tree = $(".test-tree")
+					var tree = $(".test-tree");
+					var treeFlat = $(".test-tree-flat");
+
 					tree.ibxWidget("remove");
 					var src = $(".src-url").ibxWidget("value");
 					$.get("./tree_sample_ibfs.xml").then(function(doc, status, xhr)
@@ -130,9 +159,17 @@
 						tree.data("xDoc", doc);
 						var item = doc.find("rootObject > item");
 						var rootNode = makeTreeNode(item, "ibfs_root");
-						rootNode.addClass("root");
 						tree.ibxWidget("add", rootNode, null, null, true);
-						rootNode.ibxWidget("option", "expanded", true).ibxWidget("selected", true);
+						rootNode.addClass("root").ibxWidget("option", "expanded", true);
+						tree.ibxSelectionManager("selected", rootNode, true);
+
+						doc = $(doc);
+						treeFlat.data("xDoc", doc);
+						var item = doc.find("rootObject > item");
+						var rootNode = makeTreeNode(item, "ibfs_root");
+						treeFlat.ibxWidget("add", rootNode, null, null, true);
+						rootNode.addClass("root").ibxWidget("option", "expanded", true);
+						treeFlat.ibxSelectionManager("selected", rootNode, true);
 					});
 				}).dispatchEvent("click");
 				$(".btn-hpstyle").on("ibx_change", function(e)
@@ -161,7 +198,7 @@
 				});
 			}, true);
 
-			makeTreeNode = function(xItem, itemClass, expanded)
+			makeTreeNode = function(xItem, itemClass, expanded, flatType)
 			{
 				xItem = $(xItem);
 				var sce = $(".btn-single-click-expand").ibxWidget("checked");
@@ -173,7 +210,16 @@
 					"expanded":expanded,
 					"labelOptions":{"text": xItem.attr("description") || xItem.attr("name"), "glyph": container ? "" : "insert_drive_file", "glyphClasses": container ? "" : "material-icons"}
 				}
-				var node = $("<div class='ibfs-tree-node'>").ibxTreeNode(options).addClass(container ? "folder" : "file").addClass(itemClass);
+			
+				if(flatType)
+				{
+					options.labelOptions.glyph = container ? "folder" : options.labelOptions.glyph;
+					options.labelOptions.glyphClasses = container ? "material-icons" : options.labelOptions.glyphClasses;
+					var node = $("<div class='ibfs-tree-node-flat'>").ibxTreeNodeFlat(options).addClass(container ? "folder" : "file").addClass(itemClass);
+				}
+				else
+					var node = $("<div class='ibfs-tree-node'>").ibxTreeNode(options).addClass(container ? "folder" : "file").addClass(itemClass);
+
 				node.attr("data-ibfs-path", xItem.attr("fullPath")).data("xItem", xItem);
 				return node;
 			};
@@ -254,15 +300,27 @@
 			flex:1 1 auto;
 
 		}
-		.test-tree
+		.trees-box
 		{
 			flex:0 0 auto;
 			width:250px;
 			min-width:50px;
-			padding:5px;
+		}
+		.test-tree
+		{
+			height:25%;
 			overflow:auto;
 			border:1px solid #ccc;
 			border-radius:5px;
+			margin-bottom:3px;
+		}
+		.test-tree-flat
+		{
+			flex:1 1 1px;
+			overflow:auto;
+			border:1px solid #ccc;
+			border-radius:5px;
+			margin-top:3px;
 		}
 		.test-splitter
 		{
@@ -420,7 +478,11 @@
 				<div tabindex="0" class="btn-collapse-allAll" data-ibx-type="ibxButton">Collapse All</div>
 			</div>
 			<div class="content-box" data-ibx-type="ibxHBox" data-ibxp-align="stretch">
-				<div tabindex="0" class="test-tree" data-ibx-type="ibxTree" data-ibxp-show-root-nodes="true"></div>
+				<div class="trees-box" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
+					<div tabindex="0" class="tree test-tree" data-ibx-type="ibxTree" data-ibxp-show-root-nodes="true"></div>
+					<div data-ibx-type="ibxHSplitter"></div>
+					<div tabindex="0" class="tree test-tree-flat" data-ibx-type="ibxTreeFlat"></div>
+				</div>
 				<div class="test-splitter" data-ibx-type="ibxVSplitter"></div>
 				<div class="test-files-box" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
 					<div class="files-box-label" data-ibxp-for=".folder-list" data-ibx-type="ibxLabel">Folders</div>
