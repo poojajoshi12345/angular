@@ -332,8 +332,6 @@ $.widget("ibi.ibxTreeFlat", $.ibi.ibxVBox,
 	{
 		this._super();
 		var options = this.options;
-		var folderLabel = this._folderLabel = $("<div class='tflat-folder'>").ibxLabel();
-		var itemList = this._itemsList = $("<div class='tflat-items-list'>").ibxVBox();
 	},
 	_destroy:function()
 	{
@@ -343,7 +341,7 @@ $.widget("ibi.ibxTreeFlat", $.ibi.ibxVBox,
 	{
 		this.remove();
 		this._super(el, elSibling, before, refresh);
-		$(el).ibxTreeNode("refreshIndent", 0, true);
+		$(el).ibxWidget("option", "isRoot", true).ibxTreeNode("refreshIndent", 0, true);
 		this.element.ibxSelectionManager("selected", el, true);
 	},
 	_refresh:function()
@@ -357,6 +355,7 @@ $.widget("ibi.ibxTreeNodeFlat", $.ibi.ibxTreeNode,
 {
 	options:
 	{
+		"isRoot":false,
 		"hasParent":false,
 	},
 	_widgetClass:"ibx-tree-node-flat",
@@ -378,44 +377,19 @@ $.widget("ibi.ibxTreeNodeFlat", $.ibi.ibxTreeNode,
 	{
 		return false;
 	},
-	_onNodeLabelEvent:function(e)
-	{
-		var options = this.options;
-		var eType = e.type;
-
-		if(eType == "dblclick")
-		{
-			this.toggleExpanded();
-			e.stopPropagation();
-		}
-		else
-		if(eType == "keydown")
-		{
-			if(e.keyCode === $.ui.keyCode.RIGHT)
-				this.toggleExpanded(true);
-			else
-			if(e.keyCode === $.ui.keyCode.LEFT)
-			{
-				this.toggleExpanded(false);
-				e.stopPropagation();
-			}
-		}
-	},
 	_refresh:function()
 	{
-		this._super();
 		var options = this.options;
-		var children = this.children();
-		var showLabel = (options.container && options.virtualParent) ? false : true;
+		var isRoot = options.isRoot;
 
-		this.refreshIndent();//indent this node correctly under parent.
-
-		this.nodeLabel.ibxWidget("option", options.labelOptions).css("display", !showLabel ? "none" : "");
-		this.element.toggleClass("tnode-virtual-parent", options.virtualParent).toggleClass("tnode-is-container", options.container).toggleClass("tnode-expanded", options.expanded);
-		this.btnExpand.removeClass(options.btnCollapsed).removeClass(options.btnExpanded);
-		if(options.container)
-			(options.expanded) ? this.btnExpand.addClass(options.btnExpanded) : this.btnExpand.addClass(options.btnCollapsed);
-	
+		!isRoot ? this.btnExpand.appendTo(this.nodeLabel) : this.btnExpand.prependTo(this.nodeLabel);
+		this.element.toggleClass("ibx-tree-node-root", isRoot);
+		if(isRoot)
+		{
+			options.labelOptions.glyph = "";
+			options.labelOptions.glyphClasses = "";
+		}
+		this._super();
 	}
 });
 $.ibi.ibxTreeNode.defaultIndent = null;

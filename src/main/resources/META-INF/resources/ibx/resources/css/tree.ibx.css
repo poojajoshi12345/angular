@@ -11,7 +11,7 @@
 	line-height:1em;
 }
 
-.ibx-tree-root-node
+.ibx-tree-node-root
 {
 }
 
@@ -74,4 +74,19 @@
 {
 	font-size:2em;
 	color:silver;
+}
+
+.ibx-tree-node-flat .ibx-label-text
+{
+	flex:1 1 auto;
+}
+
+.ibx-tree-node-flat.ibx-tree-node-root .tnode-btn-expanded::before
+{
+	content:"chevron_left";
+}
+
+.ibx-tree-node-flat .tnode-btn-collapsed::before
+{
+	content:"chevron_right";
 }
