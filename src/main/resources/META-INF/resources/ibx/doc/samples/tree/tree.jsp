@@ -93,30 +93,31 @@
 					//e.preventDefault();
 				});
 
-				$(".test-tree-flat").on("ibx_downlevel ibx_uplevel", function(e)
+				$(".test-tree-flat").on("ibx_rootnodeset ibx_uproot", function(e)
 				{
-					var targetNode = $(e.target);
+					var targetNode = $(e.relatedTarget);
 					var xItem = targetNode.data("xItem");
 					var xParent = xItem.parent().closest("item");
-					
-					if(e.type == "ibx_uplevel")
+					var tree = $(e.currentTarget);
+
+					if(e.type == "ibx_uproot")
 					{
 						xItem = xParent;
 						targetNode = makeTreeNode(xItem, "ibfs_item", true, true);
+						tree.ibxWidget("rootNode", targetNode);
 					}
-					targetNode.ibxTreeNode("option", "hasParent", !!xParent);
-
-					var xItems = xItem.children("children").children("item");
-					xItems.each(function(idx, xItem)
+					else
+					if(e.type == "ibx_rootnodeset")
 					{
-						xItem = $(xItem);
-						var treeNode = makeTreeNode(xItem, "ibfs_item", false, true);
-						targetNode.ibxWidget("add", treeNode);
-					});
-
-					var tree = $(e.currentTarget);
-					tree.ibxWidget("remove").ibxWidget("rootNode", targetNode);
-					
+						targetNode.ibxTreeNode("remove");
+						var xItems = xItem.children("children").children("item");
+						xItems.each(function(idx, xItem)
+						{
+							xItem = $(xItem);
+							var treeNode = makeTreeNode(xItem, "ibfs_item", false, true);
+							targetNode.ibxWidget("add", treeNode);
+						});
+					}
 				});
 
 

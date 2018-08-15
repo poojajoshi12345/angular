@@ -332,6 +332,20 @@ $.widget("ibi.ibxTreeFlat", $.ibi.ibxVBox,
 	{
 		this._super();
 		var options = this.options;
+		this.element.data("ibiIbxTreeNode", this).on("ibx_beforeexpand ibx_beforecollapse", this._onTreeExpandEvent.bind(this));
+	},
+	_onTreeExpandEvent:function(e)
+	{
+		var eType = (e.type == "ibx_beforeexpand") ? "ibx_beforerootnodeset" : "ibx_beforeuproot";
+		var event = this.element.dispatchEvent(eType, null, e.bubbles, e.canelable, e.target);
+		if(!event.isDefaultPrevented())
+		{
+			if(eType == "ibx_beforerootnodeset")
+				this.rootNode(e.target);
+			else
+			if(eType == "ibx_beforeuproot")
+				this.element.dispatchEvent("ibx_uproot", null, true, false, e.target);
+		}
 	},
 	_destroy:function()
 	{
@@ -341,11 +355,17 @@ $.widget("ibi.ibxTreeFlat", $.ibi.ibxVBox,
 	{
 		if(!el)
 			return this.children().first()[0];
+		else
+		if(this._settingRootNode)
+			return;
 
+		this._settingRootNode = true;
 		this.remove();
 		this.add(el);
-		$(el).ibxWidget("option", "isRoot", true).ibxTreeNode("expanded", true).ibxTreeNode("refreshIndent", 0, true).dispatchEvent("ibx_rootnodeset", null, true, false);
-		this.element.ibxSelectionManager("selected", el, true);
+		$(el).ibxWidget("option", "isRoot", true).ibxTreeNode("expanded", true);
+		this.element.ibxSelectionManager("selected", el, true).dispatchEvent("ibx_rootnodeset", el, true, false, el)
+		$(el).ibxTreeNode("refreshIndent", 0, true)
+		this._settingRootNode = false;
 	},
 	_refresh:function()
 	{
@@ -366,15 +386,7 @@ $.widget("ibi.ibxTreeNodeFlat", $.ibi.ibxTreeNode,
 	{
 		var options = this.options;
 		this._super();
-		this.element.data("ibiIbxTreeNode", this).on("ibx_beforeexpand ibx_expand ibx_beforecollapse ibx_collapse", this._onTreeExpandEvent.bind(this));
-	},
-	_onTreeExpandEvent:function(e)
-	{
-		var type = "";
-		var eType = $.ibi.ibxTreeNodeFlat.eventMap[e.type];
-		var event = this.element.dispatchEvent(eType, null, e.bubbles, e.cancelable, this.tree());
-		if(event.isDefaultPrevented())
-			e.preventDefault();
+		this.element.data("ibiIbxTreeNode", this);
 	},
 	singleClickExpand:function()
 	{
@@ -396,12 +408,5 @@ $.widget("ibi.ibxTreeNodeFlat", $.ibi.ibxTreeNode,
 		this._super();
 	}
 });
-$.ibi.ibxTreeNodeFlat.eventMap = 
-{
-	"ibx_beforeexpand":"ibx_beforedownlevel",
-	"ibx_expand":"ibx_downlevel",
-	"ibx_beforecollapse":"ibx_beforeuplevel",
-	"ibx_collapse":"ibx_uplevel"
-};
 
 //# sourceURL=tree.ibx.js
