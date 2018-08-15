@@ -346,6 +346,7 @@ $.widget("ibi.ibxTreeFlat", $.ibi.ibxVBox,
 		this._super();
 		var options = this.options;
 		this.element.data("ibiIbxTreeNode", this).on("ibx_beforeexpand ibx_beforecollapse", this._onTreeExpandEvent.bind(this));
+		this.element.ibxTreeSelectionManager();
 	},
 	_onTreeExpandEvent:function(e)
 	{
@@ -377,7 +378,7 @@ $.widget("ibi.ibxTreeFlat", $.ibi.ibxVBox,
 		this.remove(curRoot);
 
 		this.add(el);
-		$(el).addClass("tnode-root").ibxTreeNode("option", "expanded", true);//.ibxTreeNode("refresh");
+		$(el).addClass("tnode-root").ibxTreeNode("expanded", true);
 		this.element.ibxSelectionManager("selected", el, true).dispatchEvent("ibx_rootnodeset", el, true, false, el)
 		$(el).ibxTreeNode("option", "hasParent", hasParent).ibxTreeNode("refreshIndent", 0, true)
 		this._settingRootNode = false;
