@@ -100,11 +100,10 @@
 					var xParent = xItem.parent().closest("item");
 					var tree = $(e.currentTarget);
 
-					if(e.type == "ibx_uproot")
+					if(e.type == "ibx_uproot" && xParent.length)
 					{
-						xItem = xParent;
-						targetNode = makeTreeNode(xItem, "ibfs_item", true, true);
-						tree.ibxWidget("rootNode", targetNode);
+						targetNode = makeTreeNode(xParent, "ibfs_item", false, true);
+						tree.ibxWidget("rootNode", targetNode, targetNode.parent().closest("item").length);
 					}
 					else
 					if(e.type == "ibx_rootnodeset")
@@ -166,8 +165,8 @@
 						var treeFlat = $(".test-tree-flat");
 						treeFlat.data("xDoc", doc);
 						var item = doc.find("rootObject > item");
-						var rootNode = makeTreeNode(item, "ibfs_root", false, true);
-						treeFlat.ibxWidget("rootNode", rootNode, null, null, true);
+						var rootNode = makeTreeNode(item, "ibfs_root", false, true).ibxWidget("option", "hasParent", false);
+						treeFlat.ibxWidget("rootNode", rootNode);
 					});
 				}).dispatchEvent("click");
 				$(".btn-wfstyle").on("ibx_change", function(e)

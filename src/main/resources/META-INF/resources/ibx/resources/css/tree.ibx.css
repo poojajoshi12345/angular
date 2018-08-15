@@ -11,7 +11,7 @@
 	line-height:1em;
 }
 
-.ibx-tree-node-root
+.tnode-root
 {
 }
 
@@ -79,11 +79,14 @@
 	flex:1 1 auto;
 }
 
-.ibx-tree-node-flat .tnode-btn
+.tnode-btn-root
 {
+	width:auto;
 }
 
-.ibx-tree-node-flat.ibx-tree-node-root .tnode-btn-expanded::before
+
+
+.ibx-tree-node-flat.tnode-root .tnode-btn-expanded::before
 {
 	content:"chevron_left";
 }
