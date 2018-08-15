@@ -337,11 +337,14 @@ $.widget("ibi.ibxTreeFlat", $.ibi.ibxVBox,
 	{
 		this._super();
 	},
-	add:function(el, elSibling, before, refresh)
+	rootNode:function(el)
 	{
+		if(!el)
+			return this.children().first()[0];
+
 		this.remove();
-		this._super(el, elSibling, before, refresh);
-		$(el).ibxWidget("option", "isRoot", true).ibxTreeNode("refreshIndent", 0, true);
+		this.add(el);
+		$(el).ibxWidget("option", "isRoot", true).ibxTreeNode("expanded", true).ibxTreeNode("refreshIndent", 0, true).dispatchEvent("ibx_rootnodeset", null, true, false);
 		this.element.ibxSelectionManager("selected", el, true);
 	},
 	_refresh:function()
@@ -363,15 +366,15 @@ $.widget("ibi.ibxTreeNodeFlat", $.ibi.ibxTreeNode,
 	{
 		var options = this.options;
 		this._super();
-		this.element.data("ibiIbxTreeNode", this);
+		this.element.data("ibiIbxTreeNode", this).on("ibx_beforeexpand ibx_expand ibx_beforecollapse ibx_collapse", this._onTreeExpandEvent.bind(this));
 	},
-	depth:function()
+	_onTreeExpandEvent:function(e)
 	{
-		return this.element.parents(".ibx-tree-node:not(.tnode-virtual-parent)").length;	
-	},
-	tree:function()
-	{
-		return this.element.closest(".ibx-tree-flat")[0];
+		var type = "";
+		var eType = $.ibi.ibxTreeNodeFlat.eventMap[e.type];
+		var event = this.element.dispatchEvent(eType, null, e.bubbles, e.cancelable, this.tree());
+		if(event.isDefaultPrevented())
+			e.preventDefault();
 	},
 	singleClickExpand:function()
 	{
@@ -389,8 +392,16 @@ $.widget("ibi.ibxTreeNodeFlat", $.ibi.ibxTreeNode,
 			options.labelOptions.glyph = "";
 			options.labelOptions.glyphClasses = "";
 		}
+
 		this._super();
 	}
 });
-$.ibi.ibxTreeNode.defaultIndent = null;
+$.ibi.ibxTreeNodeFlat.eventMap = 
+{
+	"ibx_beforeexpand":"ibx_beforedownlevel",
+	"ibx_expand":"ibx_downlevel",
+	"ibx_beforecollapse":"ibx_beforeuplevel",
+	"ibx_collapse":"ibx_uplevel"
+};
+
 //# sourceURL=tree.ibx.js

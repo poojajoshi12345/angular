@@ -72,13 +72,15 @@
 /*FLAT TREE CLASSES*/
 .ibx-tree-flat .ibx-label-icon
 {
-	font-size:2em;
-	color:silver;
 }
 
 .ibx-tree-node-flat .ibx-label-text
 {
 	flex:1 1 auto;
+}
+
+.ibx-tree-node-flat .tnode-btn
+{
 }
 
 .ibx-tree-node-flat.ibx-tree-node-root .tnode-btn-expanded::before

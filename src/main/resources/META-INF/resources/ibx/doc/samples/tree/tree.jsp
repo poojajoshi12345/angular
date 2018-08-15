@@ -93,13 +93,13 @@
 					//e.preventDefault();
 				});
 
-				$(".test-tree-flat").on("ibx_beforeexpand ibx_collapse", function(e)
+				$(".test-tree-flat").on("ibx_downlevel ibx_uplevel", function(e)
 				{
 					var targetNode = $(e.target);
 					var xItem = targetNode.data("xItem");
 					var xParent = xItem.parent().closest("item");
 					
-					if(e.type == "ibx_collapse")
+					if(e.type == "ibx_uplevel")
 					{
 						xItem = xParent;
 						targetNode = makeTreeNode(xItem, "ibfs_item", true, true);
@@ -115,7 +115,7 @@
 					});
 
 					var tree = $(e.currentTarget);
-					tree.ibxWidget("remove").ibxWidget("add", targetNode);
+					tree.ibxWidget("remove").ibxWidget("rootNode", targetNode);
 					
 				});
 
@@ -148,34 +148,31 @@
 
 				$(".btn-load").on("click", function(e)
 				{
-					var tree = $(".test-tree");
-					var treeFlat = $(".test-tree-flat");
-
-					tree.ibxWidget("remove");
 					var src = $(".src-url").ibxWidget("value");
 					$.get("./tree_sample_ibfs.xml").then(function(doc, status, xhr)
 					{
 						doc = $(doc);
+			
+						var tree = $(".test-tree");
+						tree.ibxWidget("remove");
 						tree.data("xDoc", doc);
 						var item = doc.find("rootObject > item");
 						var rootNode = makeTreeNode(item, "ibfs_root");
 						tree.ibxWidget("add", rootNode, null, null, true);
-						rootNode.addClass("root").ibxWidget("option", "expanded", true);
+						rootNode.ibxWidget("option", "expanded", true);
 						tree.ibxSelectionManager("selected", rootNode, true);
 
-						doc = $(doc);
+						var treeFlat = $(".test-tree-flat");
 						treeFlat.data("xDoc", doc);
 						var item = doc.find("rootObject > item");
-						var rootNode = makeTreeNode(item, "ibfs_root");
-						treeFlat.ibxWidget("add", rootNode, null, null, true);
-						rootNode.addClass("root").ibxWidget("option", "expanded", true);
-						treeFlat.ibxSelectionManager("selected", rootNode, true);
+						var rootNode = makeTreeNode(item, "ibfs_root", false, true);
+						treeFlat.ibxWidget("rootNode", rootNode, null, null, true);
 					});
 				}).dispatchEvent("click");
-				$(".btn-hpstyle").on("ibx_change", function(e)
+				$(".btn-wfstyle").on("ibx_change", function(e)
 				{
 					var checked = $(e.target).ibxWidget("checked");
-					$("body").toggleClass("hp-style", checked);
+					$("body").toggleClass("wf-style", checked);
 				}).ibxWidget("checked", false);
 				$(".btn-single-click-expand").on("ibx_change", function(e)
 				{
@@ -399,17 +396,17 @@
 		}
 
 		/*IBI WF Tree Styles*/
-		.hp-style
+		.wf-style
 		{
 			font-family:roboto;
 			font-size:12px;
 		}
-		.hp-style .crumb-box
+		.wf-style .crumb-box
 		{
 			color: rgb(102, 102, 102);
 			font-size:14px;
 		}
-		.hp-style .crumb
+		.wf-style .crumb
 		{
 		}
 		.crumb-marker:after
@@ -417,47 +414,58 @@
 			font-size:24px;
 			font-weight:bold;
 		}
-		.hp-style .tnode-label
+		.wf-style .tnode-label
 		{
 			line-height:16px;
 			color: rgb(85, 85, 85);
 			padding:8px;
 			border-bottom:1px solid rgba(0, 0 , 0, 0.05);
 		}
-		.hp-style .tnode-indent
+		.wf-style .tnode-indent
 		{
 			padding-left:10px;
 		}
-		.hp-style .tnode-label:hover, .hp-style .tnode-label.ibx-nav-key-item-active
+		.wf-style .tnode-label:hover, .wf-style .tnode-label.ibx-nav-key-item-active
 		{
 			background-color:rgba(53, 184, 254, 0.1);
 		}
-		.hp-style .ibx-sm-selected.tnode-label
+		.wf-style .ibx-sm-selected.tnode-label
 		{
 			background-color:rgba(53, 184, 254, 0.4);
 		}
-		.hp-style .test-files-box
+		.wf-style .test-files-box
 		{
 			background-color:rgb(230, 248, 255);
 		}
-		.hp-style .files-box-label
+		.wf-style .files-box-label
 		{
 			color:gray;
 		}
-		.hp-style .file-tile
+		.wf-style .file-tile
 		{
 			color:rgb(85, 85, 85);
 			margin:8px;
 		}
-		.hp-style .file-tile.folder
+		.wf-style .file-tile.folder
 		{
 			font-weight:bold;
 			color:gray;
 		}
-		.hp-style .file-tile.folder .ibx-label-glyph
+		.wf-style .file-tile.folder .ibx-label-glyph
 		{
 			color:gold;
 		}
+
+		.wf-style .ibx-tree-flat .ibx-label-icon
+		{
+			font-size:2em;
+			color:silver;
+		}
+		.wf-style .ibx-tree-node-flat .tnode-btn
+		{
+			font-size:1.5em;
+		}
+
 		</style>
 	</head>
 	<body class="ibx-root">
@@ -472,7 +480,7 @@
 			<div data-ibx-type="ibxLabel" data-ibxp-justify="center" style="flex:0 0 auto;color:#ccc;font-size:24px;font-weight:bold">Data is a Sample IBFS Repository</div>
 			<div class="btn-bar" data-ibx-type="ibxHBox" data-ibxp-align="center">
 				<div tabindex="0" class="btn-load" data-ibx-type="ibxButton">Load Tree</div>
-				<div tabindex="0" class="btn-hpstyle" data-ibx-type="ibxCheckBoxSimple">Home Page Style (sorta)</div>
+				<div tabindex="0" class="btn-wfstyle" data-ibx-type="ibxCheckBoxSimple">WebFOCUS Style (sorta)</div>
 				<div tabindex="0" class="btn-single-click-expand" data-ibx-type="ibxCheckBoxSimple">Single Click Expand</div>
 				<div tabindex="0" class="btn-expand-all" data-ibx-type="ibxButton">Expand All</div>
 				<div tabindex="0" class="btn-collapse-allAll" data-ibx-type="ibxButton">Collapse All</div>
