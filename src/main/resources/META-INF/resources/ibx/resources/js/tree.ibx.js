@@ -418,8 +418,6 @@ $.widget("ibi.ibxTreeNodeFlat", $.ibi.ibxTreeNode,
 		var isRoot = this.isRoot();
 
 		!isRoot ? this.btnExpand.appendTo(this.nodeLabel) : this.btnExpand.prependTo(this.nodeLabel);
-		if(options.hasParent)
-			console.log("has parent");
 		this.element.toggleClass("tnode-has-parent", options.hasParent);
 		if(isRoot)
 		{

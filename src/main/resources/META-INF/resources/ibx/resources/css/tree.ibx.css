@@ -79,14 +79,17 @@
 	flex:1 1 auto;
 }
 
-.tnode-btn-root
+.ibx-tree-node-flat .tnode-btn-root
 {
 	width:auto;
 }
 
+.ibx-tree-node-flat.tnode-root:not(.tnode-has-parent) .tnode-btn-expanded::before
+{
+	content:"";
+}
 
-
-.ibx-tree-node-flat.tnode-root .tnode-btn-expanded::before
+.ibx-tree-node-flat .tnode-btn-expanded::before
 {
 	content:"chevron_left";
 }

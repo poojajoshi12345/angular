@@ -97,13 +97,13 @@
 				{
 					var targetNode = $(e.relatedTarget);
 					var xItem = targetNode.data("xItem");
-					var xParent = xItem.parent().closest("item");
+					var xParent = xItem.parent().parents("item");
 					var tree = $(e.currentTarget);
 
 					if(e.type == "ibx_uproot" && xParent.length)
 					{
 						targetNode = makeTreeNode(xParent, "ibfs_item", false, true);
-						tree.ibxWidget("rootNode", targetNode, targetNode.parent().closest("item").length);
+						tree.ibxWidget("rootNode", targetNode, xParent.parents("item").length);
 					}
 					else
 					if(e.type == "ibx_rootnodeset")
