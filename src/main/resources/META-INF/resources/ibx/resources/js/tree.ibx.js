@@ -355,7 +355,7 @@ $.widget("ibi.ibxTreeFlat", $.ibi.ibxVBox,
 		if(!event.isDefaultPrevented())
 		{
 			if(eType == "ibx_beforerootnodeset")
-				this.rootNode(e.target);
+				this.rootNode(e.target, true);
 			else
 			if(eType == "ibx_beforeuproot")
 				this.element.dispatchEvent("ibx_uproot", null, true, false, e.target);
@@ -379,7 +379,9 @@ $.widget("ibi.ibxTreeFlat", $.ibi.ibxVBox,
 
 		this.add(el);
 		$(el).addClass("tnode-root").ibxTreeNode("expanded", true);
-		this.element.ibxSelectionManager("selected", el, true).dispatchEvent("ibx_rootnodeset", el, true, false, el)
+		this.element.ibxSelectionManager("deselectAll").ibxSelectionManager("focus", el, true);
+		this.element.ibxSelectionManager("selected", el, true);
+		this.element.dispatchEvent("ibx_rootnodeset", el, true, false, el);
 		$(el).ibxTreeNode("option", "hasParent", hasParent).ibxTreeNode("refreshIndent", 0, true)
 		this._settingRootNode = false;
 	},
@@ -413,13 +415,19 @@ $.widget("ibi.ibxTreeNodeFlat", $.ibi.ibxTreeNode,
 	{
 		return false;
 	},
+	_setOption:function(key, value)
+	{
+		if(key == "expanded" && this.isRoot() && !this.options.hasParent)
+			value = true;
+		this._super(key, value);
+	},
 	_refresh:function()
 	{
 		var options = this.options;
 		var isRoot = this.isRoot();
 
 		!isRoot ? this.btnExpand.appendTo(this.nodeLabel) : this.btnExpand.prependTo(this.nodeLabel);
-		this.element.toggleClass("tnode-has-parent", options.hasParent);
+		this.element.toggleClass("tnode-has-parent", !!options.hasParent);
 		if(isRoot)
 		{
 			options.labelOptions.glyph = "";

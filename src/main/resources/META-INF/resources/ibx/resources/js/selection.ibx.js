@@ -110,7 +110,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 		if(options.navKeyRoot && [$.ui.keyCode.LEFT, $.ui.keyCode.RIGHT, $.ui.keyCode.UP, $.ui.keyCode.DOWN].indexOf(e.keyCode) != -1)
 		{
 			var navKids = this.selectableChildren();
-			var focusedItem = this.focus();
+			var focusedItem = this._focus();
 			var idxFocused = navKids.index(focusedItem);
 			var goPrev = (e.keyCode == $.ui.keyCode.LEFT || e.keyCode == $.ui.keyCode.UP);
 			var goNext = (e.keyCode == $.ui.keyCode.RIGHT || e.keyCode == $.ui.keyCode.DOWN);
@@ -145,7 +145,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 			{
 				var selChildren = this.selectableChildren();
 				var idxAnchor = selChildren.index(this._anchor());
-				var idxSel = selChildren.index(this._focus()[0]);
+				var idxSel = selChildren.index(this._focus());
 				var idxStart = Math.min(idxAnchor, idxSel);
 				var idxEnd = Math.max(idxAnchor, idxSel);
 				this.toggleSelected(selChildren.slice(idxStart, idxEnd + 1), true, false);
@@ -253,8 +253,8 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 	selected:function(el, select, anchor)
 	{
 		//public interface needs to map nodes...think tree from ibxTreeNode to it's selectable label.
-		el = $(el, this.element);
-		el = el.length ? this.mapToSelectable(el) : el;
+		el = $(el, this.element)
+		el = this.mapToSelectable(el);
 		el = this._selected(el, select, anchor);
 		return el ? this.mapFromSelectable(el) : undefined;
 	},
@@ -335,8 +335,9 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 	anchor:function(el)
 	{
 		//public interface needs to map nodes...think tree from ibxTreeNode to it's selectable label.
-		el = el ? this.mapToSelectable(el) : el;
-		el = this._anchor(el);
+		el = $(el, this.element);
+		el = this.mapToSelectable(el);
+		el = this._anchor(el[0]);
 		return el ? this.mapFromSelectable(el) : undefined;
 	},
 	_anchor:function(el)
@@ -352,9 +353,10 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 	focus:function(el, focus)
 	{
 		//public interface needs to map nodes...think tree from ibxTreeNode to it's selectable label.
+		el = $(el, this.element);
 		el = this.mapToSelectable(el);
 		el = this._focus(el[0], focus);
-		return el;
+		return el ? this.mapFromSelectable(el) : undefined;
 	},
 	_focus:function(el, focus)
 	{
@@ -364,6 +366,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 		this._elFocus.removeClass("ibx-sm-focused ibx-ie-pseudo-focus");
 		this._elFocus = $(el).first().addClass("ibx-sm-focused " + (ibxPlatformCheck.isIE ? "ibx-ie-pseudo-focus" : ""));
 		this._elFocus ? this.element.attr("aria-active-descendant", this._elFocus.prop("id")) : this.element.removeAttr("aria-active-descendant");
+		this._elFocus.focus();
 		var evt = this._dispatchEvent("ibx_focused", {"items":this._elFocus}, true, false);
 		return this._elFocus[0];
 	},

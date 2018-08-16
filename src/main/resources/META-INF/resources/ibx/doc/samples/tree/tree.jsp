@@ -166,7 +166,7 @@
 						treeFlat.data("xDoc", doc);
 						var item = doc.find("rootObject > item");
 						var rootNode = makeTreeNode(item, "ibfs_root", false, true).ibxWidget("option", "hasParent", false);
-						treeFlat.ibxWidget("rootNode", rootNode);
+						treeFlat.ibxWidget("rootNode", rootNode, false);
 					});
 				}).dispatchEvent("click");
 				$(".btn-wfstyle").on("ibx_change", function(e)
@@ -489,7 +489,7 @@
 				<div class="trees-box" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
 					<div tabindex="0" class="tree test-tree" data-ibx-type="ibxTree" data-ibxp-show-root-nodes="true"></div>
 					<div data-ibx-type="ibxHSplitter"></div>
-					<div tabindex="0" class="tree test-tree-flat" data-ibx-type="ibxTreeFlat"></div>
+					<div tabindex="0" class="tree test-tree-flat" data-ibx-type="ibxTreeFlat" data-ibxp-sel-type="multi"></div>
 				</div>
 				<div class="test-splitter" data-ibx-type="ibxVSplitter"></div>
 				<div class="test-files-box" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
