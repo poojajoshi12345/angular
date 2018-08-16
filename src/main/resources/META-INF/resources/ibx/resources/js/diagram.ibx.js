@@ -202,7 +202,14 @@ $.widget('ibi.ibxDiagram', $.ibi.ibxWidget, {
 			lineWidth: lineWidth
 		});
 		this.refresh();
-		return g;
+		return this._connections.length - 1;
+	},
+	removeConnection: function(connectionIndex) {
+		if (connectionIndex >= 0 && connectionIndex < this._connections.length) {
+			this._connections.splice(connectionIndex, 1);
+			this.resetConnections();
+			this.refresh();
+		}
 	},
 	updateConnections: function() {
 		// Keep this function fast; it gets called on every mouse move
