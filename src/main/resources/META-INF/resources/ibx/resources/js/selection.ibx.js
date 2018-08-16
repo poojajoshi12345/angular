@@ -255,7 +255,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 		//public interface needs to map nodes...think tree from ibxTreeNode to it's selectable label.
 		el = $(el, this.element)
 		el = this.mapToSelectable(el);
-		el = this._selected(el, select, anchor);
+		el = this._selected(el[0], select, anchor);
 		return el ? this.mapFromSelectable(el) : undefined;
 	},
 	_selected:function(el, select, anchor)
