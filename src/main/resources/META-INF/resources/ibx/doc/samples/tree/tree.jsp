@@ -89,8 +89,6 @@
 					e.menu = menu;
 				}).on("click dblclick keydown", function(e)
 				{
-					console.log(e.type, e.target);
-					//e.preventDefault();
 				});
 
 				$(".test-tree-flat").on("ibx_rootnodeset ibx_uproot", function(e)
@@ -100,12 +98,6 @@
 					var xParent = xItem.parent().parents("item");
 					var tree = $(e.currentTarget);
 
-					if(e.type == "ibx_uproot" && xParent.length)
-					{
-						targetNode = makeTreeNode(xParent, "ibfs_item", false, true);
-						tree.ibxWidget("rootNode", targetNode, xParent.parents("item").length);
-					}
-					else
 					if(e.type == "ibx_rootnodeset")
 					{
 						targetNode.ibxTreeNode("remove");
@@ -160,13 +152,13 @@
 						var rootNode = makeTreeNode(item, "ibfs_root");
 						tree.ibxWidget("add", rootNode, null, null, true);
 						rootNode.ibxWidget("option", "expanded", true);
-						tree.ibxSelectionManager("selected", rootNode, true);
+						tree.ibxSelectionManager("selected", rootNode);
 
 						var treeFlat = $(".test-tree-flat");
 						treeFlat.data("xDoc", doc);
 						var item = doc.find("rootObject > item");
 						var rootNode = makeTreeNode(item, "ibfs_root", false, true).ibxWidget("option", "hasParent", false);
-						treeFlat.ibxWidget("rootNode", rootNode, false);
+						treeFlat.ibxWidget("rootNode", rootNode);
 					});
 				}).dispatchEvent("click");
 				$(".btn-wfstyle").on("ibx_change", function(e)
@@ -216,6 +208,9 @@
 				}
 				else
 					var node = $("<div class='ibfs-tree-node'>").ibxTreeNode(options).addClass(container ? "folder" : "file").addClass(itemClass);
+
+				if(xItem.attr("description") == "test")
+					node.addClass("xxx");
 
 				node.attr("data-ibfs-path", xItem.attr("fullPath")).data("xItem", xItem);
 				return node;

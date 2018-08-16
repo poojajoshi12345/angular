@@ -178,11 +178,13 @@ $.widget("ibi.ibxTreeNode", $.ibi.ibxVBox,
 	add:function(el, elSibling, before, refresh)
 	{
 		this._childBox.ibxWidget("add", el, elSibling, before, refresh)
+		$(el).data("ibxTreeParent", this.element[0]);
 		if(refresh)
 			this.refresh();
 	},
 	remove:function(el, destroy, refresh)
 	{
+		this.children(el).removeData("ibxTreeParent");
 		this._childBox.ibxWidget("remove", el, destroy, refresh);
 		if(refresh)
 			this.refresh();
@@ -197,7 +199,7 @@ $.widget("ibi.ibxTreeNode", $.ibi.ibxVBox,
 	},
 	parentNode:function()
 	{
-		return this.element.parents(".ibx-tree-node").first()[0];
+		return this.element.data("ibxTreeParent");
 	},
 	hasChildren:function()
 	{
@@ -358,14 +360,18 @@ $.widget("ibi.ibxTreeFlat", $.ibi.ibxVBox,
 				this.rootNode(e.target, true);
 			else
 			if(eType == "ibx_beforeuproot")
+			{
+				var parent = $(e.target).data("ibxTreeParent");
+				this.rootNode(parent);
 				this.element.dispatchEvent("ibx_uproot", null, true, false, e.target);
+			}
 		}
 	},
 	_destroy:function()
 	{
 		this._super();
 	},
-	rootNode:function(el, hasParent)
+	rootNode:function(el)
 	{
 		if(!el)
 			return this.children().first()[0];
@@ -382,7 +388,7 @@ $.widget("ibi.ibxTreeFlat", $.ibi.ibxVBox,
 		this.element.ibxSelectionManager("deselectAll").ibxSelectionManager("focus", el, true);
 		this.element.ibxSelectionManager("selected", el, true);
 		this.element.dispatchEvent("ibx_rootnodeset", el, true, false, el);
-		$(el).ibxTreeNode("option", "hasParent", hasParent).ibxTreeNode("refreshIndent", 0, true)
+		$(el).ibxTreeNode("refreshIndent", 0, true)
 		this._settingRootNode = false;
 	},
 	_refresh:function()
@@ -396,7 +402,6 @@ $.widget("ibi.ibxTreeNodeFlat", $.ibi.ibxTreeNode,
 {
 	options:
 	{
-		"hasParent":false,
 	},
 	_widgetClass:"ibx-tree-node-flat",
 	_create:function()
@@ -417,7 +422,7 @@ $.widget("ibi.ibxTreeNodeFlat", $.ibi.ibxTreeNode,
 	},
 	_setOption:function(key, value)
 	{
-		if(key == "expanded" && this.isRoot() && !this.options.hasParent)
+		if(key == "expanded" && this.isRoot() && !this.parentNode())
 			value = true;
 		this._super(key, value);
 	},
@@ -427,7 +432,7 @@ $.widget("ibi.ibxTreeNodeFlat", $.ibi.ibxTreeNode,
 		var isRoot = this.isRoot();
 
 		!isRoot ? this.btnExpand.appendTo(this.nodeLabel) : this.btnExpand.prependTo(this.nodeLabel);
-		this.element.toggleClass("tnode-has-parent", !!options.hasParent);
+		this.element.toggleClass("tnode-has-parent", !!this.element.data("ibxTreeParent"));
 		if(isRoot)
 		{
 			options.labelOptions.glyph = "";
