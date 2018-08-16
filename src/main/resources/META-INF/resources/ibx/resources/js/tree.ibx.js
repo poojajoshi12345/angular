@@ -324,7 +324,7 @@ $.widget("ibi.ibxTreeNode", $.ibi.ibxVBox,
 $.ibi.ibxTreeNode.defaultIndent = null;
 
 
-$.widget("ibi.ibxTreeFlat", $.ibi.ibxVBox, 
+$.widget("ibi.ibxTreeMonoLevel", $.ibi.ibxVBox, 
 {
 	options:
 	{
@@ -342,7 +342,7 @@ $.widget("ibi.ibxTreeFlat", $.ibi.ibxVBox,
 			"readonly":true
 		}
 	},
-	_widgetClass:"ibx-tree-flat",
+	_widgetClass:"ibx-tree-mono-level",
 	_create:function()
 	{
 		this._super();
@@ -398,12 +398,12 @@ $.widget("ibi.ibxTreeFlat", $.ibi.ibxVBox,
 	}
 });
 
-$.widget("ibi.ibxTreeNodeFlat", $.ibi.ibxTreeNode, 
+$.widget("ibi.ibxTreeNodeMonoLevel", $.ibi.ibxTreeNode, 
 {
 	options:
 	{
 	},
-	_widgetClass:"ibx-tree-node-flat",
+	_widgetClass:"ibx-tree-node-mono-level",
 	_create:function()
 	{
 		var options = this.options;

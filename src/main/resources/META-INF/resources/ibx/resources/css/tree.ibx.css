@@ -70,31 +70,31 @@
 }
 
 /*FLAT TREE CLASSES*/
-.ibx-tree-flat .ibx-label-icon
+.ibx-tree-mono-level .ibx-label-icon
 {
 }
 
-.ibx-tree-node-flat .ibx-label-text
+.ibx-tree-node-mono-level .ibx-label-text
 {
 	flex:1 1 auto;
 }
 
-.ibx-tree-node-flat .tnode-btn-root
+.ibx-tree-node-mono-level .tnode-btn-root
 {
 	width:auto;
 }
 
-.ibx-tree-node-flat.tnode-root:not(.tnode-has-parent) .tnode-btn-expanded::before
+.ibx-tree-node-mono-level.tnode-root:not(.tnode-has-parent) .tnode-btn-expanded::before
 {
 	content:"";
 }
 
-.ibx-tree-node-flat .tnode-btn-expanded::before
+.ibx-tree-node-mono-level .tnode-btn-expanded::before
 {
 	content:"chevron_left";
 }
 
-.ibx-tree-node-flat .tnode-btn-collapsed::before
+.ibx-tree-node-mono-level .tnode-btn-collapsed::before
 {
 	content:"chevron_right";
 }

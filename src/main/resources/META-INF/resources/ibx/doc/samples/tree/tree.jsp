@@ -91,7 +91,7 @@
 				{
 				});
 
-				$(".test-tree-flat").on("ibx_rootnodeset ibx_uproot", function(e)
+				$(".test-tree-mono-level").on("ibx_rootnodeset ibx_uproot", function(e)
 				{
 					var targetNode = $(e.relatedTarget);
 					var xItem = targetNode.data("xItem");
@@ -154,11 +154,11 @@
 						rootNode.ibxWidget("option", "expanded", true);
 						tree.ibxSelectionManager("selected", rootNode);
 
-						var treeFlat = $(".test-tree-flat");
-						treeFlat.data("xDoc", doc);
+						var treeMono = $(".test-tree-mono-level");
+						treeMono.data("xDoc", doc);
 						var item = doc.find("rootObject > item");
 						var rootNode = makeTreeNode(item, "ibfs_root", false, true).ibxWidget("option", "hasParent", false);
-						treeFlat.ibxWidget("rootNode", rootNode);
+						treeMono.ibxWidget("rootNode", rootNode);
 					});
 				}).dispatchEvent("click");
 				$(".btn-wfstyle").on("ibx_change", function(e)
@@ -204,7 +204,7 @@
 				{
 					options.labelOptions.glyph = container ? "folder" : options.labelOptions.glyph;
 					options.labelOptions.glyphClasses = container ? "material-icons" : options.labelOptions.glyphClasses;
-					var node = $("<div class='ibfs-tree-node-flat'>").ibxTreeNodeFlat(options).addClass(container ? "folder" : "file").addClass(itemClass);
+					var node = $("<div class='ibfs-tree-node-flat'>").ibxTreeNodeMonoLevel(options).addClass(container ? "folder" : "file").addClass(itemClass);
 				}
 				else
 					var node = $("<div class='ibfs-tree-node'>").ibxTreeNode(options).addClass(container ? "folder" : "file").addClass(itemClass);
@@ -484,7 +484,7 @@
 				<div class="trees-box" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
 					<div tabindex="0" class="tree test-tree" data-ibx-type="ibxTree" data-ibxp-show-root-nodes="true"></div>
 					<div data-ibx-type="ibxHSplitter"></div>
-					<div tabindex="0" class="tree test-tree-flat" data-ibx-type="ibxTreeFlat" data-ibxp-sel-type="multi"></div>
+					<div tabindex="0" class="tree test-tree-mono-level" data-ibx-type="ibxTreeMonoLevel" data-ibxp-sel-type="multi"></div>
 				</div>
 				<div class="test-splitter" data-ibx-type="ibxVSplitter"></div>
 				<div class="test-files-box" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
