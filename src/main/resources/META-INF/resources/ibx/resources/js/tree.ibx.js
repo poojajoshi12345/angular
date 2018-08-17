@@ -326,7 +326,7 @@ $.widget("ibi.ibxTreeNode", $.ibi.ibxVBox,
 $.ibi.ibxTreeNode.defaultIndent = null;
 
 
-$.widget("ibi.ibxTreeMonoLevel", $.ibi.ibxVBox, 
+$.widget("ibi.ibxTreeBrowser", $.ibi.ibxVBox, 
 {
 	options:
 	{
@@ -344,7 +344,7 @@ $.widget("ibi.ibxTreeMonoLevel", $.ibi.ibxVBox,
 			"readonly":true
 		}
 	},
-	_widgetClass:"ibx-tree-mono-level",
+	_widgetClass:"ibx-tree-browser",
 	_create:function()
 	{
 		this._super();
@@ -372,12 +372,12 @@ $.widget("ibi.ibxTreeMonoLevel", $.ibi.ibxVBox,
 	},
 });
 
-$.widget("ibi.ibxTreeNodeMonoLevel", $.ibi.ibxTreeNode, 
+$.widget("ibi.ibxTreeBrowserNode", $.ibi.ibxTreeNode, 
 {
 	options:
 	{
 	},
-	_widgetClass:"ibx-tree-node-mono-level",
+	_widgetClass:"ibx-tree-browser-node",
 	_create:function()
 	{
 		var options = this.options;
@@ -399,14 +399,14 @@ $.widget("ibi.ibxTreeNodeMonoLevel", $.ibi.ibxTreeNode,
 		var tree = $(this.tree()).data("ibxWidget");
 		if(expanded)
 		{
-			this.element.after("<div class='ibx-placeholder'>");//replace this node with a placeholder
+			this.element.after("<div class='ibx-tree-node-placeholder'>");//replace this node with a placeholder
 			tree.add(this.element);//make this node the tree root
 		}
 		else
 		{
 			tree.remove(this.element);//correctly removes this from tree...like .tnode-root
 			var parent = this.element.data("ibxTreeParent");//get it's current  parent
-			$(parent).ibxWidget("add", this.element, ".ibx-placeholder").ibxWidget("remove", ".ibx-placeholder");//add back and kill placeholder.
+			$(parent).ibxWidget("add", this.element, ".ibx-placeholder").ibxWidget("remove", ".ibx-tree-node-placeholder");//add back and kill placeholder.
 			tree.add(parent);//move up a level...make parent the root.
 		}
 	},
@@ -422,7 +422,7 @@ $.widget("ibi.ibxTreeNodeMonoLevel", $.ibi.ibxTreeNode,
 		var options = this.options;
 		var isRoot = this.isRoot();
 
-		!isRoot ? this.btnExpand.appendTo(this.nodeLabel) : this.btnExpand.prependTo(this.nodeLabel);
+		isRoot ? this.btnExpand.prependTo(this.nodeLabel) : this.btnExpand.appendTo(this.nodeLabel);
 		this.element.toggleClass("tnode-has-parent", !!this.element.data("ibxTreeParent"));
 		this.nodeLabel.data("ibxWidget")._glyph.css("display", isRoot ? "none" : "");
 	}

@@ -20,10 +20,10 @@
 		<script type="text/javascript">
 			ibx(function()
 			{
-				$(".test-tree, .test-tree-mono-level").on("ibx_beforeexpand ibx_beforecollapse", function(e)
+				$(".test-tree, .test-tree-browser").on("ibx_beforeexpand ibx_beforecollapse", function(e)
 				{
 					var eType = e.type;
-					var monoLevel = $(this).is(".ibx-tree-mono-level");
+					var monoLevel = $(this).is(".ibx-tree-browser");
 					var targetNode = $(e.target);
 					targetNode.ibxWidget("remove");
 
@@ -135,7 +135,7 @@
 						rootNode.ibxWidget("option", "expanded", true);
 						tree.ibxSelectionManager("selected", rootNode, true);
 
-						var treeMono = $(".test-tree-mono-level");
+						var treeMono = $(".test-tree-browser");
 						treeMono.data("xDoc", doc);
 						var rootNode = makeTreeNode(xItem, "ibfs_root", false, true).ibxWidget("option", "hasParent", false);
 						treeMono.ibxWidget("add", rootNode);
@@ -184,7 +184,7 @@
 				{
 					options.labelOptions.glyph = container ? "folder" : options.labelOptions.glyph;
 					options.labelOptions.glyphClasses = container ? "material-icons" : options.labelOptions.glyphClasses;
-					var node = $("<div>").ibxTreeNodeMonoLevel(options).addClass(container ? "folder" : "file").addClass(itemClass);
+					var node = $("<div>").ibxTreeBrowserNode(options).addClass(container ? "folder" : "file").addClass(itemClass);
 				}
 				else
 					var node = $("<div>").ibxTreeNode(options).addClass(container ? "folder" : "file").addClass(itemClass);
@@ -291,13 +291,13 @@
 			border-radius:5px;
 			margin-bottom:3px;
 		}
-		.test-tree-mono-level
+		.test-tree-browser
 		{
 			flex:1 1 1px;
 			overflow:auto;
 			border:1px solid #ccc;
 			border-radius:5px;
-			margin-top:3px;
+			margin:3px 0px 5px 0px;
 		}
 		.test-splitter
 		{
@@ -471,7 +471,7 @@
 					<div tabindex="0" class="tree test-tree" data-ibx-type="ibxTree" data-ibxp-show-root-nodes="true"></div>
 					<div data-ibx-type="ibxHSplitter"></div>
 					<div class="tree-type-label" data-ibx-type="ibxLabel">Mono Tree View</div>
-					<div tabindex="0" class="tree test-tree-mono-level" data-ibx-type="ibxTreeMonoLevel"></div>
+					<div tabindex="0" class="tree test-tree-browser" data-ibx-type="ibxTreeBrowser"></div>
 				</div>
 				<div class="test-splitter" data-ibx-type="ibxVSplitter"></div>
 				<div class="test-files-box" data-ibx-type="ibxVBox" data-ibxp-align="stretch">

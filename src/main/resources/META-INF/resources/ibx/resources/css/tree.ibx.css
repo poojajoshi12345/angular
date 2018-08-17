@@ -69,32 +69,32 @@
 	display:inline-block;
 }
 
-/*FLAT TREE CLASSES*/
-.ibx-tree-mono-level .ibx-label-icon
+/*TREE BROWSER CLASSES*/
+.ibx-tree-browser
 {
 }
 
-.ibx-tree-node-mono-level .ibx-label-text
+.ibx-tree-browser-node .ibx-label-text
 {
 	flex:1 1 auto;
 }
 
-.ibx-tree-node-mono-level .tnode-btn-root
+.ibx-tree-browser-node .tnode-btn-root
 {
 	width:auto;
 }
 
-.ibx-tree-node-mono-level.tnode-root:not(.tnode-has-parent) .tnode-btn-expanded::before
+.ibx-tree-browser-node.tnode-root:not(.tnode-has-parent) .tnode-btn-expanded::before
 {
 	content:"";
 }
 
-.ibx-tree-node-mono-level .tnode-btn-expanded::before
+.ibx-tree-browser-node .tnode-btn-expanded::before
 {
 	content:"chevron_left";
 }
 
-.ibx-tree-node-mono-level .tnode-btn-collapsed::before
+.ibx-tree-browser-node .tnode-btn-collapsed::before
 {
 	content:"chevron_right";
 }
