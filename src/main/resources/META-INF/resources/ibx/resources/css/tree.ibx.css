@@ -84,6 +84,11 @@
 	width:auto;
 }
 
+.ibx-tree-browser-node.tnode-root > .ibx-label > .ibx-label-glyph
+{
+	display:none;
+}
+
 .ibx-tree-browser-node.tnode-root:not(.tnode-has-parent) .tnode-btn-expanded::before
 {
 	content:"";

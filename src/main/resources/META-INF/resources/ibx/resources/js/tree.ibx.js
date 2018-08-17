@@ -424,7 +424,6 @@ $.widget("ibi.ibxTreeBrowserNode", $.ibi.ibxTreeNode,
 
 		isRoot ? this.btnExpand.prependTo(this.nodeLabel) : this.btnExpand.appendTo(this.nodeLabel);
 		this.element.toggleClass("tnode-has-parent", !!this.element.data("ibxTreeParent"));
-		this.nodeLabel.data("ibxWidget")._glyph.css("display", isRoot ? "none" : "");
 	}
 });
 
