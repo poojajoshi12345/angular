@@ -318,6 +318,7 @@ $.widget("ibi.ibxTreeNode", $.ibi.ibxVBox,
 
 		this.nodeLabel.ibxWidget("option", options.labelOptions).css("display", !showLabel ? "none" : "");
 		this.element.toggleClass("tnode-virtual-parent", options.virtualParent).toggleClass("tnode-is-container", options.container).toggleClass("tnode-expanded", options.expanded);
+		this.element.toggleClass("tnode-has-parent", !!this.element.data("ibxTreeParent"));
 		this.btnExpand.toggleClass("tnode-btn-root", this.isRoot()).removeClass(options.btnCollapsed).removeClass(options.btnExpanded);
 		if(options.container)
 			(options.expanded) ? this.btnExpand.addClass(options.btnExpanded) : this.btnExpand.addClass(options.btnCollapsed);
@@ -412,6 +413,7 @@ $.widget("ibi.ibxTreeBrowserNode", $.ibi.ibxTreeNode,
 	},
 	_setOption:function(key, value)
 	{
+		//can't collapse the top tree node...nowhere to run to, baby...nowhere to hide!
 		if(key == "expanded" && this.isRoot() && !this.parentNode())
 			value = true;
 		this._super(key, value);
@@ -422,8 +424,8 @@ $.widget("ibi.ibxTreeBrowserNode", $.ibi.ibxTreeNode,
 		var options = this.options;
 		var isRoot = this.isRoot();
 
+		///move the expand/collapse button depending on whether it's the root node.
 		isRoot ? this.btnExpand.prependTo(this.nodeLabel) : this.btnExpand.appendTo(this.nodeLabel);
-		this.element.toggleClass("tnode-has-parent", !!this.element.data("ibxTreeParent"));
 	}
 });
 
