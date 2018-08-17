@@ -240,7 +240,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 	add:function(el, elSibling, before, refresh)
 	{
 		el = $(el);
-		elSibling = $(elSibling);
+		elSibling = $(elSibling, this.element);
 		if(elSibling.length)
 			before ? el.insertBefore(elSibling) : el.insertAfter(elSibling);
 		else

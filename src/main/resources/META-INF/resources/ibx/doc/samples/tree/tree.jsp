@@ -20,8 +20,10 @@
 		<script type="text/javascript">
 			ibx(function()
 			{
-				$(".test-tree").on("ibx_beforeexpand", function(e)
+				$(".test-tree, .test-tree-mono-level").on("ibx_beforeexpand ibx_beforecollapse", function(e)
 				{
+					var eType = e.type;
+					var monoLevel = $(this).is(".ibx-tree-mono-level");
 					var targetNode = $(e.target);
 					targetNode.ibxWidget("remove");
 
@@ -30,9 +32,9 @@
 					xItems.each(function(idx, el)
 					{
 						el = $(el);
-						if(el.is("[container=true]"))
+						if(monoLevel || el.is("[container=true]"))
 						{
-							var treeNode = makeTreeNode(el, "ibfs_item");
+							var treeNode = makeTreeNode(el, "ibfs_item", false, monoLevel);
 							targetNode.ibxWidget("add", treeNode);
 						}
 					});
@@ -91,27 +93,6 @@
 				{
 				});
 
-				$(".test-tree-mono-level").on("ibx_rootnodeset ibx_uproot", function(e)
-				{
-					var targetNode = $(e.relatedTarget);
-					var xItem = targetNode.data("xItem");
-					var xParent = xItem.parent().parents("item");
-					var tree = $(e.currentTarget);
-
-					if(e.type == "ibx_rootnodeset")
-					{
-						targetNode.ibxTreeNode("remove");
-						var xItems = xItem.children("children").children("item");
-						xItems.each(function(idx, xItem)
-						{
-							xItem = $(xItem);
-							var treeNode = makeTreeNode(xItem, "ibfs_item", false, true);
-							targetNode.ibxWidget("add", treeNode);
-						});
-					}
-				});
-
-
 				$(".test-files-box").on("dblclick keydown", function(e)
 				{
 					var eType = e.type;
@@ -144,21 +125,20 @@
 					$.get("./tree_sample_ibfs.xml").then(function(doc, status, xhr)
 					{
 						doc = $(doc);
+						var xItem = doc.find("rootObject > item");
 			
 						var tree = $(".test-tree");
 						tree.ibxWidget("remove");
 						tree.data("xDoc", doc);
-						var item = doc.find("rootObject > item");
-						var rootNode = makeTreeNode(item, "ibfs_root");
-						tree.ibxWidget("add", rootNode, null, null, true);
+						var rootNode = makeTreeNode(xItem, "ibfs_root");
+						tree.ibxWidget("add", rootNode);
 						rootNode.ibxWidget("option", "expanded", true);
-						tree.ibxSelectionManager("selected", rootNode);
+						tree.ibxSelectionManager("selected", rootNode, true);
 
 						var treeMono = $(".test-tree-mono-level");
 						treeMono.data("xDoc", doc);
-						var item = doc.find("rootObject > item");
-						var rootNode = makeTreeNode(item, "ibfs_root", false, true).ibxWidget("option", "hasParent", false);
-						treeMono.ibxWidget("rootNode", rootNode);
+						var rootNode = makeTreeNode(xItem, "ibfs_root", false, true).ibxWidget("option", "hasParent", false);
+						treeMono.ibxWidget("add", rootNode);
 					});
 				}).dispatchEvent("click");
 				$(".btn-wfstyle").on("ibx_change", function(e)
@@ -187,7 +167,7 @@
 				});
 			}, true);
 
-			makeTreeNode = function(xItem, itemClass, expanded, flatType)
+			makeTreeNode = function(xItem, itemClass, expanded, monoLevel)
 			{
 				xItem = $(xItem);
 				var sce = $(".btn-single-click-expand").ibxWidget("checked");
@@ -200,17 +180,14 @@
 					"labelOptions":{"text": xItem.attr("description") || xItem.attr("name"), "glyph": container ? "" : "insert_drive_file", "glyphClasses": container ? "" : "material-icons"}
 				}
 			
-				if(flatType)
+				if(monoLevel)
 				{
 					options.labelOptions.glyph = container ? "folder" : options.labelOptions.glyph;
 					options.labelOptions.glyphClasses = container ? "material-icons" : options.labelOptions.glyphClasses;
-					var node = $("<div class='ibfs-tree-node-flat'>").ibxTreeNodeMonoLevel(options).addClass(container ? "folder" : "file").addClass(itemClass);
+					var node = $("<div>").ibxTreeNodeMonoLevel(options).addClass(container ? "folder" : "file").addClass(itemClass);
 				}
 				else
-					var node = $("<div class='ibfs-tree-node'>").ibxTreeNode(options).addClass(container ? "folder" : "file").addClass(itemClass);
-
-				if(xItem.attr("description") == "test")
-					node.addClass("xxx");
+					var node = $("<div>").ibxTreeNode(options).addClass(container ? "folder" : "file").addClass(itemClass);
 
 				node.attr("data-ibfs-path", xItem.attr("fullPath")).data("xItem", xItem);
 				return node;
@@ -287,6 +264,14 @@
 		{
 			margin:5px;
 		}
+		.tree-type-label
+		{
+			font-weight:bold;
+			font-size:1.25em;
+			color:#ccc;
+			margin-bottom:5px;
+			margin-top:5px;
+		}
 		.content-box
 		{
 			flex:1 1 auto;
@@ -295,7 +280,7 @@
 		.trees-box
 		{
 			flex:0 0 auto;
-			width:250px;
+			width:125px;
 			min-width:50px;
 		}
 		.test-tree
@@ -306,7 +291,7 @@
 			border-radius:5px;
 			margin-bottom:3px;
 		}
-		.test-tree-flat
+		.test-tree-mono-level
 		{
 			flex:1 1 1px;
 			overflow:auto;
@@ -482,9 +467,11 @@
 			</div>
 			<div class="content-box" data-ibx-type="ibxHBox" data-ibxp-align="stretch">
 				<div class="trees-box" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
+					<div class="tree-type-label" data-ibx-type="ibxLabel">Tree View</div>
 					<div tabindex="0" class="tree test-tree" data-ibx-type="ibxTree" data-ibxp-show-root-nodes="true"></div>
 					<div data-ibx-type="ibxHSplitter"></div>
-					<div tabindex="0" class="tree test-tree-mono-level" data-ibx-type="ibxTreeMonoLevel" data-ibxp-sel-type="multi"></div>
+					<div class="tree-type-label" data-ibx-type="ibxLabel">Mono Tree View</div>
+					<div tabindex="0" class="tree test-tree-mono-level" data-ibx-type="ibxTreeMonoLevel"></div>
 				</div>
 				<div class="test-splitter" data-ibx-type="ibxVSplitter"></div>
 				<div class="test-files-box" data-ibx-type="ibxVBox" data-ibxp-align="stretch">

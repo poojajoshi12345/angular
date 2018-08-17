@@ -58,13 +58,13 @@ $.widget("ibi.ibxTree", $.ibi.ibxVBox,
 	},
 	add:function(el, elSibling, before, refresh)
 	{
-		this._super(el, elSibling, before, refresh);
 		$(el).addClass("tnode-root");
+		this._super(el, elSibling, before, refresh);
 	},
 	remove:function(el, destroy, refresh)
 	{
+		this.children().filter(el).removeClass("tnode-root");
 		this._super(el, destroy, refresh);
-		$(el).removeClass("tnode-root");
 	},
 	_onChildrenChange:function(e)
 	{
@@ -267,6 +267,7 @@ $.widget("ibi.ibxTreeNode", $.ibi.ibxVBox,
 		if(this.options.container)
 			this.option("expanded", expanded);
 	},
+	_onExpanded:$.noop,
 	_setOption:function(key, value)
 	{
 		var options = this.options;
@@ -281,6 +282,7 @@ $.widget("ibi.ibxTreeNode", $.ibi.ibxVBox,
 				this._super(key, value);
 				eType = value ? "ibx_expand" : "ibx_collapse";
 				this.element.dispatchEvent(eType, null, true, false, tree);
+				this._onExpanded(value);
 			}
 		}
 		else
@@ -347,55 +349,27 @@ $.widget("ibi.ibxTreeMonoLevel", $.ibi.ibxVBox,
 	{
 		this._super();
 		var options = this.options;
-		this.element.data("ibiIbxTreeNode", this).on("ibx_beforeexpand ibx_beforecollapse", this._onTreeExpandEvent.bind(this));
-		this.element.ibxTreeSelectionManager();
-	},
-	_onTreeExpandEvent:function(e)
-	{
-		var eType = (e.type == "ibx_beforeexpand") ? "ibx_beforerootnodeset" : "ibx_beforeuproot";
-		var event = this.element.dispatchEvent(eType, null, e.bubbles, e.canelable, e.target);
-		if(!event.isDefaultPrevented())
-		{
-			if(eType == "ibx_beforerootnodeset")
-				this.rootNode(e.target, true);
-			else
-			if(eType == "ibx_beforeuproot")
-			{
-				var parent = $(e.target).data("ibxTreeParent");
-				this.rootNode(parent);
-				this.element.dispatchEvent("ibx_uproot", null, true, false, e.target);
-			}
-		}
+		this.element.addClass(".ibx-tree").ibxTreeSelectionManager();
 	},
 	_destroy:function()
 	{
 		this._super();
 	},
-	rootNode:function(el)
+	add:function(el, elSibling, before, refresh)
 	{
-		if(!el)
-			return this.children().first()[0];
-		else
-		if(this._settingRootNode)
-			return;
-
-		this._settingRootNode = true;
 		var curRoot = this.children().removeClass("tnode-root");
 		this.remove(curRoot);
-
-		this.add(el);
-		$(el).addClass("tnode-root").ibxTreeNode("expanded", true);
-		this.element.ibxSelectionManager("deselectAll").ibxSelectionManager("focus", el, true);
-		this.element.ibxSelectionManager("selected", el, true);
-		this.element.dispatchEvent("ibx_rootnodeset", el, true, false, el);
-		$(el).ibxTreeNode("refreshIndent", 0, true)
-		this._settingRootNode = false;
+		
+		$(el).addClass("tnode-root");
+		this._super(el, elSibling, before, refresh);
+		this.element.ibxSelectionManager("deselectAll").ibxSelectionManager("selected", el, true).ibxSelectionManager("focus", el, true);
+		$(el).ibxTreeNode("expanded", true).ibxTreeNode("refreshIndent", 0, true)
 	},
-	_refresh:function()
+	remove:function(el, destroy, refresh)
 	{
-		this._super();
-		var options = this.options;
-	}
+		this.children().removeClass("tnode-root");
+		this._super(el, destroy, refresh);
+	},
 });
 
 $.widget("ibi.ibxTreeNodeMonoLevel", $.ibi.ibxTreeNode, 
@@ -410,15 +384,31 @@ $.widget("ibi.ibxTreeNodeMonoLevel", $.ibi.ibxTreeNode,
 		this._super();
 		this.element.data("ibiIbxTreeNode", this);
 	},
+	_destroy:function()
+	{
+		//console.log("destroy");
+	},
 	_onNodeLabelEvent:function(e)
 	{
 		if(e.type == "dblclick" && this.options.isRoot)
 			return;
 		this._super(e);
 	},
-	singleClickExpand:function()
+	_onExpanded:function(expanded)
 	{
-		return false;
+		var tree = $(this.tree()).data("ibxWidget");
+		if(expanded)
+		{
+			this.element.after("<div class='ibx-placeholder'>");//replace this node with a placeholder
+			tree.add(this.element);//make this node the tree root
+		}
+		else
+		{
+			tree.remove(this.element);//correctly removes this from tree...like .tnode-root
+			var parent = this.element.data("ibxTreeParent");//get it's current  parent
+			$(parent).ibxWidget("add", this.element, ".ibx-placeholder").ibxWidget("remove", ".ibx-placeholder");//add back and kill placeholder.
+			tree.add(parent);//move up a level...make parent the root.
+		}
 	},
 	_setOption:function(key, value)
 	{
@@ -428,18 +418,13 @@ $.widget("ibi.ibxTreeNodeMonoLevel", $.ibi.ibxTreeNode,
 	},
 	_refresh:function()
 	{
+		this._super();
 		var options = this.options;
 		var isRoot = this.isRoot();
 
 		!isRoot ? this.btnExpand.appendTo(this.nodeLabel) : this.btnExpand.prependTo(this.nodeLabel);
 		this.element.toggleClass("tnode-has-parent", !!this.element.data("ibxTreeParent"));
-		if(isRoot)
-		{
-			options.labelOptions.glyph = "";
-			options.labelOptions.glyphClasses = "";
-		}
-
-		this._super();
+		this.nodeLabel.data("ibxWidget")._glyph.css("display", isRoot ? "none" : "");
 	}
 });
 
