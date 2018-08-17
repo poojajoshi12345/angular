@@ -280,7 +280,7 @@
 		.trees-box
 		{
 			flex:0 0 auto;
-			width:125px;
+			width:250px;
 			min-width:50px;
 		}
 		.test-tree

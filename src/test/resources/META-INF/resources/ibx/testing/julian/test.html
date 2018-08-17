@@ -12,6 +12,17 @@
 		<script type="text/javascript">
 			ibx(function(e)
 			{
+				var edit = $(".test-edit");
+				$(edit).on("ibx_widgetfocus ibx_widgetblur keydown keyup keypress mousedown mouseup contextmenu", fnEditFocusBlur);
+				function fnEditFocusBlur(e)
+				{
+					//console.log(e.type, e.target.id, e.relatedTarget ? e.relatedTarget.id : "undefined");
+					if(e.type == "ibx_widgetfocus")
+						$(".test-toolbar").addClass("visible");
+					else
+					if(e.type == "ibx_widgetblur")
+						$(".test-toolbar").removeClass("visible");
+				};
 			},true);
 		</script>
 		<style type="text/css">
@@ -24,40 +35,42 @@
 			}
 			.test-tabs
 			{
-				width:200px;
-				flex:1 1 auto;
+				width:400px;
+				height:200px;
 				border:1px solid black;
 			}
 			.test-page
 			{
-				border:1px solid green;
 			}
-			.tree-box
+			.test-edit
 			{
 				position:absolute;
-				left:0px;
-				top:0px;
-				right:0px;
-				bottom:0px;
+				width:100%;
+				height:100%;
+				padding:5px;
 				box-sizing:border-box;
-				border:2px solid cyan;
+				border:2px solid black;
+				
 			}
-			.tree
+			.test-toolbar
 			{
-				flex:1 1 auto;
-				border:1px solid red;
+				xdisplay:none;
+			}
+			.test-toolbar.visible
+			{
+				margin:5px;
+				padding:5px;
+				border:2px solid red;
+				display:inherit;
 			}
 		</style>
 	</head>
 	<body class="ibx-root">
 		<div class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="center" data-ibxp-justify="start">
+			<div id="tb1" tabindex="0" class="test-toolbar" data-ibx-type="ibxWidget">IM A TEST TOOLBAR</div>
 			<div class="test-tabs" data-ibx-type="ibxTabPane">
 				<div class="test-page" data-ibx-type="ibxTabPage" data-ibxp-selected="true">Page1
-					<div class="tree-box" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
-						<div class="tree tree1" data-ibx-type="ibxLabel" data-ibxp-inline="false">Tree1</div>
-						<div data-ibx-type="ibxHSplitter"></div>
-						<div class="tree tree2" data-ibx-type="ibxLabel" data-ibxp-inline="false">Tree2</div>
-					</div>
+					<div id="editor" tabindex="0" class="test-edit" data-ibx-type="ibxRichEdit"></div>
 				</div>
 				<div class="test-page" data-ibx-type="ibxTabPage">Page2
 				</div>
