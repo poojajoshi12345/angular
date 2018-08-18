@@ -166,17 +166,18 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 	_onMouseDown:function(e)
 	{
 		var options = this.options;
-		var isTarget = this.element.is(e.target);
-		var isMulti = options.type == "multi";
-		var selChildren = this.selectableChildren();
-		var selTarget = this.mapToSelectable(e.target);
 
 		//mousedown happens before focus, so make us active before anything.
 		this._activate(true);
 
 		//stop if we don't care about selection.
-		if(options.type == "nav")
+		if(options.type == "nav" || options.type == "none")
 			return;
+
+		var isTarget = this.element.is(e.target);
+		var isMulti = options.type == "multi";
+		var selChildren = this.selectableChildren();
+		var selTarget = this.mapToSelectable(e.target);
 
 		//don't deselect if clicking on scrollbar.
 		if(!this.element.clickOnScrollbar(e.clientX, e.clientY))
@@ -255,12 +256,12 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 		//public interface needs to map nodes...think tree from ibxTreeNode to it's selectable label.
 		el = $(el, this.element)
 		el = this.mapToSelectable(el);
-		el = this._selected(el[0], select, anchor);
+		el = this._selected(el, select, anchor);
 		return el ? this.mapFromSelectable(el) : undefined;
 	},
 	_selected:function(el, select, anchor)
 	{
-		if(el === undefined)
+		if(!el.length)
 		{
 			select = (select !== false) ? ".ibx-sm-selected" : ":not(.ibx-sm-selected)";
 			return this.selectableChildren(select);
