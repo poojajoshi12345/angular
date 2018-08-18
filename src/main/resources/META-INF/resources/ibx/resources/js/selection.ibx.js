@@ -387,7 +387,6 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 			if(active)
 			{
 				this.element.addClass("ibx-sm-active");
-				this.selectableChildren();
 
 				//take the element out of the tab order so shift+tab will work and not focus this container.
 				//if(options.focusDefault)
