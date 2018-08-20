@@ -113,10 +113,10 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 	},
 	page:function(pageNo, stepRate, relative)
 	{
+		var info = this.getPageInfo();
 		if(pageNo === undefined)
 			return info.curPage;
 
-		var info = this.getPageInfo();
 		var pages = relative ? pageNo : (pageNo - info.curPage);
 		this.scroll(pages, "page", this.options.scrollTime.jump);
 	},
