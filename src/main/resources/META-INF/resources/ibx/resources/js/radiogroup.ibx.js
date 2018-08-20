@@ -121,8 +121,8 @@ $.widget("ibi.ibxRadioGroup",$.ibi.ibxFlexBox,
 			ctrl.option("group", this.options.name);
 
 			//all items must have user values...if not set by user, then we create one.
-			var value=this._getItemUserValue(el);
-			if(!value)
+			var value = this._getItemUserValue(el);
+			if(value !== undefined)
 			{
 				value = "autoUserValue" + $.ibi.ibxRadioGroup.uniqueUserVal++;
 				ctrl.option("userValue", value);
