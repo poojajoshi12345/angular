@@ -77,6 +77,13 @@
 	content:"\e86c";
 }
 
+.ibx-select-separator
+{
+	margin-top:.25em;
+	margin-bottom:.25em;
+	border-top:1px solid #ccc;
+}
+
 
 .ibx-select-group {
     font-weight: bold;

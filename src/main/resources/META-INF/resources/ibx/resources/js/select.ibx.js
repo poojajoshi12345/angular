@@ -279,7 +279,7 @@ $.widget("ibi.ibxSelect", $.ibi.ibxSelectBase,
 	},
 	_initControl: function ()
 	{
-		this._control.ibxWidget("add", this.element.children(".ibx-select-item, .ibx-select-group"));
+		this._control.ibxWidget("add", this.element.children(".ibx-select-item, .ibx-select-group, .ibx-select-separator"));
 	},
 	_setValue: function (value, bFormat, extra)
 	{
@@ -416,12 +416,12 @@ $.widget("ibi.ibxSelectItemList", $.ibi.ibxVBox,
 	_init: function ()
 	{
 		this._super();
-		this.add(this.element.children(".ibx-select-item, .ibx-select-group"));
+		this.add(this.element.children(".ibx-select-item, .ibx-select-group, .ibx-select-separator"));
 		this.element.on("click", this._onSelect.bind(this));
 	},
 	add: function (el, sibling, before, refresh)
 	{
-		el = $(el).filter(".ibx-select-group, .ibx-select-item");
+		el = $(el).filter(".ibx-select-group, .ibx-select-item, .ibx-select-separator");
 		this._super(el, sibling, before, false);
 
 		var selChildren = [];
@@ -439,6 +439,10 @@ $.widget("ibi.ibxSelectItemList", $.ibi.ibxVBox,
 					if ($(el).ibxWidget("option", "selected") || this.options.userValue && this.options.userValue == $(el).ibxWidget("option", "userValue"))
 						selChildren.push($(el));
 				}.bind(this));
+			}
+			else if (el.hasClass("ibx-select-separator"))
+			{
+				// do nothing for separators
 			}
 			else
 			{
@@ -902,6 +906,16 @@ $.widget("ibi.ibxSelectRadioItem", $.ibi.ibxRadioButtonSimple,
 		this.element.attr("tabIndex", -1).addClass("ibx-select-item");
 		this._super();
 	},
+});
+
+// This should only be used with a simple select, otherwise unexpected results might appear
+$.widget("ibi.ibxSelectSeparator", $.ibi.ibxWidget,
+{
+	options:
+	{
+		"aria":{"role":"separator", "hidden":true},
+	},
+	_widgetClass: "ibx-select-separator",
 });
 
 $.widget("ibi.ibxSelectGroup", $.ibi.ibxLabel,
