@@ -1,6 +1,5 @@
 /*Copyright 1996-2016 Information Builders, Inc. All rights reserved.*/
 // $Revision$:
-
 $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame, 
 {
 	options:
@@ -76,6 +75,7 @@ $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame,
 			this._curSelRange = sel.rangeCount ? sel.getRangeAt(0) : null;
 			this.element.dispatchEvent(e.originalEvent);
 		}
+		this._onWidgetFocusEvent(e);
 	},
 	_onDragEvent:function(e)
 	{
@@ -218,5 +218,164 @@ $.ibi.ibxRichEdit.justify =
 	"right":"justifyRight",
 	"full":"justifyFull"
 }
+
+
+
+
+
+
+$.widget("ibi.ibxRichEdit2", $.ibi.ibxWidget, 
+{
+	options:
+	{
+		"spellCheck":false,
+		"defaultDropHandling":true,
+		"defaultParagraphSeparator":"p",
+		"aria":
+		{
+			"role":"region",
+		}
+	},
+	_widgetClass:"ibx-rich-edit2",
+	_create:function()
+	{
+		this._readyPromise = new $.Deferred();
+		this.element.on("focusin", this._onRichEditEvent.bind(this)).prop("contentEditable", true);
+		$(document).on("selectionchange", this._onRichEditEvent.bind(this));
+		this._super();
+	},
+	_destroy:function()
+	{
+		this._super();
+	},
+	_curSelRange:null,
+	selection:function(nStart, nEnd)
+	{
+		if(!arguments.length)
+			return this._curSelRange;
+		nStart = nStart || 0;
+		nEnd = nEnd || -1;
+	},
+	_onRichEditEvent:function(e)
+	{
+		if(e.type == "focusin" && ibxPlatformCheck.isIE && this._curSelRange)
+		{
+			var sel = document.getSelection();
+			sel.removeAllRanges();
+			sel.addRange(this._curSelRange);
+		}
+		if(e.type == "selectionchange" && !this._inSelChange && this.element.is(document.activeElement))
+		{
+
+			this._inSelChange = true;
+			var sel = document.getSelection();
+			this._curSelRange = sel.rangeCount ? sel.getRangeAt(0) : null;
+			this.element.dispatchEvent(e.originalEvent);
+			this._inSelChange = false;
+		}
+	},
+	execCommand:function(cmd, value, withUI)
+	{
+		if(ibxPlatformCheck.isIE)
+			this.element.focus();
+		document.execCommand(cmd, withUI, value);
+	},
+	commandEnabled:function(cmd){return document.queryCommandEnabled(cmd);},
+	commandState:function(cmd){return document.queryCommandState(cmd);},
+	commandValue:function(cmd){return document.queryCommandValue(cmd);},
+	styleWithCSS:function(css){this.execCommand("styleWithCSS", css);},
+	removeFormat:function(){this.execCommand("removeFormat");},
+	undo:function(){this.execCommand("undo");},
+	redo:function(){this.execCommand("redo");},
+	selectAll:function(){this.execCommand("selectAll");},
+	cut:function(){this.execCommand("Cut");},
+	copy:function(){this.execCommand("Copy");},
+	paste:function(){this.execCommand("Paste");},
+	del:function(){this.execCommand("Delete");},
+	bold:function(){this.execCommand("Bold");},
+	italic:function(){this.execCommand("Italic");},
+	underline:function(){this.execCommand("Underline");},
+	strikeThrough:function(){this.execCommand("strikeThrough");},
+	subscript:function(){this.execCommand("subscript");},
+	superscript:function(){this.execCommand("superscript");},
+	foreColor:function(color){this.execCommand("foreColor", color);},
+	backColor:function(color){this.execCommand("backColor", color);},
+	indent:function(){this.execCommand("indent");},
+	outdent:function(){this.execCommand("outdent");},
+	unlink:function(href){this.execCommand("unlink", href);},
+	justify:function(justify){this.execCommand($.ibi.ibxRichEdit.justify[justify])},
+	fontName:function(name){this.execCommand("fontName", name);},
+	fontSize:function(size)
+	{
+		if(isNaN(parseInt(size)))
+			size = $.ibi.ibxRichEdit.fontSize[size];
+		this.execCommand("fontSize", size)
+	},
+	createLink:function(href){this.execCommand("createLink", href);},
+	insertList:function(ordered){this.execCommand(ordered ? "insertOrderedList" : "insertUnorderedList");},
+	insertHTML:function(html, selReplace, select){this.insertContent(html, true, selReplace, select);},
+	insertText:function(text, selReplace, select){this.insertContent(text, false, selReplace, select);},
+	insertContent:function(content, isHTML, selReplace, select)
+	{
+		/*NOTE: chrome/ff could use insertHTML/insertText...ie doesn't support this, so normalize to a solution that works the same across browsers*/
+			
+		//focus the document so selections are valid.
+		var doc = this.contentDocument();
+		doc.body.focus();
+
+		//get selections and create proper node for insertion.
+		var sels = doc.getSelection();
+		var selRange = sels.getRangeAt(0);
+		var node = isHTML ? $.parseHTML(content, doc)[0] : doc.createTextNode(content);
+
+		//remove existing selected content if desired.
+		if(selReplace)
+			selRange.deleteContents();
+
+		//add new node and select.
+		selRange.insertNode(node);
+		sels.removeAllRanges();
+		sels.addRange(selRange);
+
+		//remove selection if desired.
+		if(!select)
+			selRange.collapse(false);
+	},
+	cmdState:function()
+	{
+		var state = {};
+		state.undo = this.commandEnabled("undo");
+		state.redo = this.commandEnabled("redo");
+		state.selectAll = this.commandEnabled("selectAll");
+		state.cut = this.commandEnabled("cut");
+		state.copy = this.commandEnabled("copy");
+		state.paste = this.commandEnabled("paste");
+		state.delete = this.commandEnabled("delete");
+		state.bold = this.commandState("bold");
+		state.italic = this.commandState("italic");
+		state.underline = this.commandState("underline");
+		state.strikethrough	= this.commandState("strikethrough");
+		state.superscript = this.commandState("superscript");
+		state.subscript = this.commandState("subscript");
+		state.fontName = this.commandValue("fontName");
+		state.fontSize = this.commandValue("fontSize") || 3;
+		state.justify = "";
+		state.justify = ibx.coercePropVal(this.commandValue("justifyLeft")) ? "left" : state.justify;
+		state.justify = ibx.coercePropVal(this.commandValue("justifyCenter")) ? "center" : state.justify;
+		state.justify = ibx.coercePropVal(this.commandValue("justifyRight")) ? "right" : state.justify;
+		state.justify = ibx.coercePropVal(this.commandValue("justifyFull")) ? "full" : state.justify;
+		state.foreColor = this.commandValue("foreColor");
+		state.backColor = this.commandValue("backColor");
+		return state;
+	},
+	_refresh:function()
+	{
+		var options = this.options;
+		this._super();
+		this.element.attr("spellCheck", options.spellCheck);
+		this.execCommand("defaultParagraphSeparator", options.defaultParagraphSeparator, false);
+	}
+});
+
 //# sourceURL=richedit.ibx.js
 
