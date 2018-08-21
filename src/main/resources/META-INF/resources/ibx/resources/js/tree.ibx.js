@@ -407,7 +407,7 @@ $.widget("ibi.ibxTreeBrowserNode", $.ibi.ibxTreeNode,
 		{
 			tree.remove(this.element);//correctly removes this from tree...like .tnode-root
 			var parent = this.element.data("ibxTreeParent");//get it's current  parent
-			$(parent).ibxWidget("add", this.element, ".ibx-placeholder").ibxWidget("remove", ".ibx-tree-node-placeholder");//add back and kill placeholder.
+			$(parent).ibxWidget("add", this.element, ".ibx-tree-node-placeholder").ibxWidget("remove", ".ibx-tree-node-placeholder");//add back and kill placeholder.
 			tree.add(parent);//move up a level...make parent the root.
 		}
 	},
