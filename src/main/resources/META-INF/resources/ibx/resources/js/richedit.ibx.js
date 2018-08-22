@@ -4,8 +4,6 @@ $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame,
 {
 	options:
 	{
-		"styleWithCSS":false,
-		"defaultParagraphSeparator":"p",
 		"focusDefault":true,
 		"defaultDropHandling":true,
 		"aria":
@@ -37,9 +35,6 @@ $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame,
 			cd.body.contentEditable = true;
 			cd.body.spellcheck = false;
 			$(cd).on("focusin focusout selectionchange", this._onRichEditDocEvent.bind(this));
-
-			this.styleWithCSS(this.options.styleWithCSS);
-			this.defaultParagraphSeparator(this.options.defaultParagraphSeparator);
 
 			//set the content if this is created from markup and there is html inside the ibxRichEdit markup.
 			var content = this.element.data("createContent")
@@ -117,7 +112,7 @@ $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame,
 	commandState:function(cmd){return this.contentDocument().queryCommandState(cmd);},
 	commandValue:function(cmd){return this.contentDocument().queryCommandValue(cmd);},
 	styleWithCSS:function(css){this.execCommand("styleWithCSS", css);},
-	defaultParagraphSeparator:function(css){this.execCommand("defaultParagraphSeparator", css);},
+	defaultParagraphSeparator:function(sep){this.execCommand("defaultParagraphSeparator", sep);},
 	removeFormat:function(){this.execCommand("removeFormat");},
 	undo:function(){this.execCommand("undo");},
 	redo:function(){this.execCommand("redo");},
@@ -206,8 +201,6 @@ $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame,
 	{
 		var options = this.options;
 		this._super();
-		this.styleWithCSS(options.styleWithCSS);
-		this.defaultParagraphSeparator(options.defaultParagraphSeparator);
 	}
 });
 
@@ -240,7 +233,6 @@ $.widget("ibi.ibxRichEdit2", $.ibi.ibxWidget,
 	{
 		"spellCheck":false,
 		"defaultDropHandling":true,
-		"defaultParagraphSeparator":"p",
 		"aria":
 		{
 			"role":"region",
@@ -298,7 +290,7 @@ $.widget("ibi.ibxRichEdit2", $.ibi.ibxWidget,
 	commandState:function(cmd){return document.queryCommandState(cmd);},
 	commandValue:function(cmd){return document.queryCommandValue(cmd);},
 	styleWithCSS:function(css){this.execCommand("styleWithCSS", css);},
-	defaultParagraphSeparator:function(css){this.execCommand("defaultParagraphSeparator", css);},
+	defaultParagraphSeparator:function(sep){this.execCommand("defaultParagraphSeparator", sep);},
 	removeFormat:function(){this.execCommand("removeFormat");},
 	undo:function(){this.execCommand("undo");},
 	redo:function(){this.execCommand("redo");},
@@ -388,8 +380,6 @@ $.widget("ibi.ibxRichEdit2", $.ibi.ibxWidget,
 		var options = this.options;
 		this._super();
 		this.element.attr("spellCheck", options.spellCheck);
-		this.styleWithCSS(options.styleWithCSS);
-		this.defaultParagraphSeparator(options.defaultParagraphSeparator);
 	}
 });
 
