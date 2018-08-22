@@ -476,7 +476,7 @@
 					<div class="tree-type-label" data-ibx-type="ibxLabel">Tree View</div>
 					<div tabindex="0" class="tree test-tree" data-ibx-type="ibxTree" data-ibxp-show-root-nodes="true"></div>
 					<div data-ibx-type="ibxHSplitter"></div>
-					<div class="tree-type-label" data-ibx-type="ibxLabel">Mono Tree View</div>
+					<div class="tree-type-label" data-ibx-type="ibxLabel">Tree Browser View</div>
 					<div tabindex="0" class="tree test-tree-browser" data-ibx-type="ibxTreeBrowser"></div>
 				</div>
 				<div class="test-splitter" data-ibx-type="ibxVSplitter"></div>
