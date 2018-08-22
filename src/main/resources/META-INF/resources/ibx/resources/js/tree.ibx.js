@@ -335,6 +335,7 @@ $.widget("ibi.ibxTreeBrowser", $.ibi.ibxVBox,
 {
 	options:
 	{
+		"swipeNavigation":true,
 		"scrollChildren":true,
 		"class":"ibx-tree",
 		"navKeyRoot":true,
@@ -379,7 +380,8 @@ $.widget("ibi.ibxTreeBrowser", $.ibi.ibxVBox,
 	},
 	_onTreeSwipeEvent:function(e)
 	{
-		this.children(".tnode-root").ibxWidget("expanded", false);
+		if(this.options.swipeNavigation)
+			this.children(".tnode-root").ibxWidget("expanded", false);
 	},
 	_refresh:function()
 	{
@@ -404,13 +406,14 @@ $.widget("ibi.ibxTreeBrowserNode", $.ibi.ibxTreeNode,
 	},
 	_destroy:function()
 	{
-		//console.log("destroy");
 	},
 	_onNodeLabelEvent:function(e)
 	{
+		var tree = $(this.tree());
 		if(e.type == "dblclick" && this.options.isRoot)
 			return;
-		if(e.type == "swipeleft")
+		else
+		if(e.type == "swipeleft" && tree.ibxWidget("option", "swipeNavigation"))
 			this.expanded("false");
 		this._super(e);
 	},
