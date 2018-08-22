@@ -355,7 +355,7 @@ $.widget("ibi.ibxTreeBrowser", $.ibi.ibxVBox,
 	{
 		this._super();
 		var options = this.options;
-		this.element.addClass(".ibx-tree").ibxTreeSelectionManager();
+		this.element.on("swiperight", this._onTreeSwipeEvent.bind(this)).addClass(".ibx-tree").ibxTreeSelectionManager();
 	},
 	_destroy:function()
 	{
@@ -377,6 +377,10 @@ $.widget("ibi.ibxTreeBrowser", $.ibi.ibxVBox,
 		this.children().removeClass("tnode-root");
 		this._super(el, destroy, refresh);
 	},
+	_onTreeSwipeEvent:function(e)
+	{
+		this.children(".tnode-root").ibxWidget("expanded", false);
+	},
 	_refresh:function()
 	{
 		this._super();
@@ -396,6 +400,7 @@ $.widget("ibi.ibxTreeBrowserNode", $.ibi.ibxTreeNode,
 		var options = this.options;
 		this._super();
 		this.element.data("ibiIbxTreeNode", this);
+		this.nodeLabel.on("swipeleft", this._onNodeLabelEvent.bind(this));
 	},
 	_destroy:function()
 	{
@@ -405,6 +410,8 @@ $.widget("ibi.ibxTreeBrowserNode", $.ibi.ibxTreeNode,
 	{
 		if(e.type == "dblclick" && this.options.isRoot)
 			return;
+		if(e.type == "swipeleft")
+			this.expanded("false");
 		this._super(e);
 	},
 	_onExpanded:function(expanded)
