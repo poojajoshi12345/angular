@@ -363,7 +363,7 @@ $.widget("ibi.ibxTreeBrowser", $.ibi.ibxVBox,
 	},
 	add:function(el, elSibling, before, refresh)
 	{
-		var curRoot = this.children().removeClass("tnode-root");
+		var curRoot = this.children(".tnode-root").removeClass("tnode-root");
 		this.remove(curRoot);
 		
 		$(el).addClass("tnode-root");
