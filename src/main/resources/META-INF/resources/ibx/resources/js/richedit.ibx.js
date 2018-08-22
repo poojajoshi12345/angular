@@ -38,6 +38,9 @@ $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame,
 			cd.body.spellcheck = false;
 			$(cd).on("focusin focusout selectionchange", this._onRichEditDocEvent.bind(this));
 
+			this.styleWithCSS(this.options.styleWithCSS);
+			this.defaultParagraphSeparator(this.options.defaultParagraphSeparator);
+
 			//set the content if this is created from markup and there is html inside the ibxRichEdit markup.
 			var content = this.element.data("createContent")
 			if(content !== undefined)
@@ -102,9 +105,13 @@ $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame,
 	},
 	execCommand:function(cmd, value, withUI)
 	{
-		if(ibxPlatformCheck.isIE)
-			this.contentDocument().body.focus();
-		this.contentDocument().execCommand(cmd, withUI, value);
+		var cd = this.contentDocument();
+		if(cd)
+		{
+			if(ibxPlatformCheck.isIE)
+				cd.body.focus();
+			cd.execCommand(cmd, withUI, value);
+		}
 	},
 	commandEnabled:function(cmd){return this.contentDocument().queryCommandEnabled(cmd);},
 	commandState:function(cmd){return this.contentDocument().queryCommandState(cmd);},
@@ -279,9 +286,13 @@ $.widget("ibi.ibxRichEdit2", $.ibi.ibxWidget,
 	},
 	execCommand:function(cmd, value, withUI)
 	{
-		if(ibxPlatformCheck.isIE)
-			this.element.focus();
-		document.execCommand(cmd, withUI, value);
+		var cd = this.contentDocument();
+		if(cd)
+		{
+			if(ibxPlatformCheck.isIE)
+				cd.body.focus();
+			cd.execCommand(cmd, withUI, value);
+		}
 	},
 	commandEnabled:function(cmd){return document.queryCommandEnabled(cmd);},
 	commandState:function(cmd){return document.queryCommandState(cmd);},
