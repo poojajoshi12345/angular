@@ -292,7 +292,7 @@ function createNativeEvent(type, data, canBubble, cancelable, relatedTarget, ctx
 	var e = null;
 	if(typeof(Event) === "function")
 	{
-		e = new Event(type, {"bubbles":canBubble, "cancelable":true})
+		e = new Event(type, {"bubbles":canBubble, "cancelable":cancelable})
 		e.isDefaultPrevented = function(){return this.defaultPrevented;}
 	}
 	else
@@ -313,7 +313,7 @@ function createNativeEvent(type, data, canBubble, cancelable, relatedTarget, ctx
 //take a native event and create a new event, then copy all fields from native to new.
 function cloneNativeEvent(e, type, data, canBubble, cancelable, relatedTarget, ctxDocument)
 {
-	var evt = createNativeEvent(type, canBubble, cancelable, relatedTarget, ctxDocument);
+	var evt = createNativeEvent(type, data, canBubble, cancelable, relatedTarget, ctxDocument);
 	for(var key in e)
 	{
 		var prop = e[key];
