@@ -220,7 +220,7 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 	},
 	_onItemsBoxFocus:function(e)
 	{
-		return;
+		/*COMMENTED OUT FOR NOW BECAUSE IT NEVER QUITE WORKED RIGHT!
 		//the idea was that if nothing was focused, then when the items box is focused
 		//automatically focus the first item visible in the carousel's viewport.
 		//don't do the focusing if selected item is already a child.
@@ -235,6 +235,7 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 					visChildren.first().focus();
 			}
 		}
+		*/
 	},
 	_onItemsBoxKeyDown:function(e)
 	{
