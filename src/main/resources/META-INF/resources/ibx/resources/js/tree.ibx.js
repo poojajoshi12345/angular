@@ -66,6 +66,10 @@ $.widget("ibi.ibxTree", $.ibi.ibxVBox,
 		this.children().filter(el).removeClass("tnode-root");
 		this._super(el, destroy, refresh);
 	},
+	rootNodes:function()
+	{
+		return this.children(".tnode-root");
+	},
 	_onChildrenChange:function(e)
 	{
 		var mRecs = e.originalEvent.data;
@@ -331,6 +335,7 @@ $.widget("ibi.ibxTreeBrowser", $.ibi.ibxVBox,
 {
 	options:
 	{
+		"scrollChildren":true,
 		"class":"ibx-tree",
 		"navKeyRoot":true,
 		"navKeyDir":"vertical",
@@ -365,12 +370,19 @@ $.widget("ibi.ibxTreeBrowser", $.ibi.ibxVBox,
 		this._super(el, elSibling, before, refresh);
 		this.element.ibxSelectionManager("deselectAll").ibxSelectionManager("selected", el, true).ibxSelectionManager("focus", el, true);
 		$(el).ibxTreeNode("expanded", true).ibxTreeNode("refreshIndent", 0, true)
+		this.refresh();
 	},
 	remove:function(el, destroy, refresh)
 	{
 		this.children().removeClass("tnode-root");
 		this._super(el, destroy, refresh);
 	},
+	_refresh:function()
+	{
+		this._super();
+		var options = this.options;
+		this.children(".tnode-root").toggleClass("tnode-scroll-children", options.scrollChildren);
+	}
 });
 
 $.widget("ibi.ibxTreeBrowserNode", $.ibi.ibxTreeNode, 

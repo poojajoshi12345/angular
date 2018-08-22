@@ -74,6 +74,21 @@
 {
 }
 
+.ibx-tree-browser-node.tnode-scroll-children
+{
+	flex:1 1 auto;
+}
+
+.ibx-tree-browser-node .tnode-label
+{
+	flex:0 0 auto;
+}
+
+.ibx-tree-browser-node .tnode-children
+{
+	overflow:auto;
+}
+
 .ibx-tree-browser-node .ibx-label-text
 {
 	flex:1 1 auto;
