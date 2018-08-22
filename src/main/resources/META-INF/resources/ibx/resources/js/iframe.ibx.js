@@ -52,10 +52,14 @@ $.widget("ibi.ibxIFrame", $.ibi.ibxWidget,
 	},
 	text:function(txt)
 	{
+		if(txt === undefined)
+			return this.contentDocument().body.innerText;
 		this.contentDocument().body.innerText = txt;
 	},
 	html:function(html)
 	{
+		if(html === undefined)
+			return this.contentDocument().body.innerHTML;
 		this.contentDocument().body.innerHTML = html;
 	},
 	_refresh:function()
