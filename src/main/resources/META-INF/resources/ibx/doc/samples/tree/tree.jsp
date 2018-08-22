@@ -60,6 +60,12 @@
 					});
 				}).on("ibx_dragstart ibx_dragover ibx_dragleave ibx_drop", function(e)
 				{
+					if($(e.currentTarget).is(".ibx-tree-browser") && $(e.target).closest(".ibx-tree-node").ibxWidget("option", "container"))
+					{
+						e.preventDefault();
+						return;
+					}
+
 					node = $(e.target).closest(".ibx-tree-node").children(".tnode-label");
 					e = e.originalEvent;
 					var dt = e.dataTransfer;
