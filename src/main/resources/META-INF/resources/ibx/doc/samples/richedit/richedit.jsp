@@ -122,7 +122,7 @@
 					else
 					if(cmd.is(".cmd-fore-color, .cmd-back-color"))
 					{
-						val = cmd.ibxWidget("userValue");
+						val = cmd.ibxWidget("userValue");//rgbaToHex(cmd.ibxWidget("userValue"));
 						reCmd = cmd.is(".cmd-fore-color") ? "foreColor" : "backColor";
 					}
 					if(cmd.is(".cmd-insert-ordered-list"))
@@ -181,6 +181,20 @@
 					});
 					menu.ibxWidget("add", customMenuItem);
 					cp.ibxWidget("option", "color", "#ffffff");
+
+					customMenuItem = $(".cp-menu-template2").clone(true).removeAttr("data-ibx-no-bind").removeClass("cp-menu-template2");
+					customMenuItem = ibx.bindElements(customMenuItem);
+					var cp = customMenuItem.find(".ibx-palette-picker").ibxWidget("option", "command", cmd.ibxWidget("option", "id")).on("ibx_change", function(e)
+					{
+						var target = $(e.target);
+						var info = e.originalEvent.data;
+						target.ibxWidget("getCommand").ibxWidget("userValue", e.originalEvent.data.colorOpacity);
+						updateUI();
+					});
+					menu.ibxWidget("add", customMenuItem);
+					cp.ibxWidget("option", "color", "#ffffff");
+
+
 					return menu;
 				}
 			}, true);
@@ -376,9 +390,14 @@
 			<div data-ibx-type="ibxMenuItem" data-ibxp-command="cmdRemoveFormat" data-ibxp-label-options='{"glyph":"format_clear", "glyphClasses":"material-icons"}'>Remove All Formatting</div>
 		</div>
 
-		<div class="cp-menu-template" data-ibx-type="ibxMenuItem" data-ibx-no-bind="true">Custom
+		<div class="cp-menu-template" data-ibx-type="ibxMenuItem" data-ibx-no-bind="true">Custom Color Picker
 			<div data-ibx-type="ibxMenu">
 				<div data-ibx-type="ibxColorPicker" data-ibxp-set-opacity="false" data-ibxp-color="#000000" data-ibxp-show-color-info="false"></div>
+			</div>
+		</div>
+		<div class="cp-menu-template2" data-ibx-type="ibxMenuItem" data-ibx-no-bind="true">Custom Palette Picker
+			<div data-ibx-type="ibxMenu">
+				<div data-ibx-type="ibxPalettePicker" data-ibxp-show-custom="false" data-ibxp-show-transparency="false" data-ibxp-color="#000000"></div>
 			</div>
 		</div>
 

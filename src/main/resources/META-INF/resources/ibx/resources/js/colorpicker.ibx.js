@@ -105,6 +105,7 @@ $.widget("ibi.ibxPalettePicker", $.ibi.ibxVBox,
 		"palette":"",
 		"color":"",
 		"colorRgba":"",
+		"colorOpacity":"",
 		"opacity":1,
 		"showPalettes":true,
 		"showPalette":true,
@@ -236,15 +237,17 @@ $.widget("ibi.ibxPalettePicker", $.ibi.ibxVBox,
 			if(!this._inSliderChange)
 				this._transSlider.ibxWidget("option", "value", Math.min(value * 100, 100));
 			options.colorRgba = hexToRgba(options.color, value);
+			options.colorOpacity = rgbaToHex(options.colorRgba.rgba, value);
 		}
 		else
 		if(key == "color")
 		{
 			value = value.toLowerCase();
 			options.colorRgba = hexToRgba(value, options.opacity);
+			options.colorOpacity = rgbaToHex(options.colorRgba.rgba, value);
 		}
 		else
-		if(key == "rgbaColor" && !this._inInit)
+		if((key == "rgbaColor" || key == "colorOpacity") && !this._inInit)
 		{
 			console.warn("[ibx Warning] ibxPalettePicker.option.rgbColor is readonly.")
 			return;
@@ -252,7 +255,7 @@ $.widget("ibi.ibxPalettePicker", $.ibi.ibxVBox,
 
 		this._super(key, value);
 		if(changed && (key == "color" || key == "opacity"))
-			this.element.dispatchEvent("ibx_change", {"color":options.color, "colorRgba": options.colorRgba, "opacity":options.opacity}, false, false);
+			this.element.dispatchEvent("ibx_change", {"color":options.color, "colorOpacity":options.colorOpacity, "colorRgba": options.colorRgba, "opacity":options.opacity}, false, false);
 	},
 	_refresh: function ()
 	{
