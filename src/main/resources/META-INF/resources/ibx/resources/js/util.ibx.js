@@ -289,8 +289,9 @@ function createNativeEvent(type, data, canBubble, cancelable, relatedTarget, ctx
 	canBubble = canBubble !== undefined ? canBubble : true;
 	cancelable = cancelable !== undefined ? cancelable : true;
 
+	/*[IBX-191] ie/edge don't allow cross document dispatching of events...so events must be created in the target document context*/
 	var e = null;
-	if(typeof(Event) === "function")
+	if(typeof(Event) === "function" && (!ibxPlatformCheck.isEdge && !ibxPlatformCheck.isIE))
 	{
 		e = new Event(type, {"bubbles":canBubble, "cancelable":cancelable})
 		e.isDefaultPrevented = function(){return this.defaultPrevented;}
