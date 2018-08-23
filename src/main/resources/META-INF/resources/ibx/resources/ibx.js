@@ -115,6 +115,14 @@ function ibx()
 			}
 			if(window.jQuery && window.jQuery.widget && window.ibxResourceManager)
 			{
+				/*
+					Install custom jQuery.Deferred exception handler so we can see the actual non standard exceptions
+					Note: calling 'ibx.deferredExceptionHook(false)' to revert to default jQuery handling
+				*/
+				ibx._savedDeferredExceptionHook = $.Deferred.exceptionHook;
+				ibx.deferredExceptionHook(true);
+
+
 				//jQuery/jQueryUI is in scope...stop polling...
 				window.clearInterval(ibx._loadTimer);
 
@@ -240,6 +248,17 @@ ibx._appName = "";
 ibx.getAppName = function(){return ibx._appName;};
 ibx._appParms;
 ibx.getAppParms = function(){return ibx._appParms;};
+
+ibx.deferredExceptionHook = function(useCustom)
+{
+	if(!useCustom)
+		$.Deferred.exceptionHook = ibx._savedDeferredExceptionHook;
+	else
+	if(useCustom instanceof Function)
+		$.Deferred.exceptionHook = fn;
+	else
+		$.Deferred.exceptionHook = function(error, stack){throw(error);};
+};
 
 //show all ibx root nodes when loaded...or don't, and show manually at user's discression.
 ibx.showOnLoad = true;
