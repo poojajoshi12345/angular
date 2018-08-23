@@ -257,7 +257,7 @@ ibx.deferredExceptionHook = function(useCustom)
 	if(useCustom instanceof Function)
 		$.Deferred.exceptionHook = fn;
 	else
-		$.Deferred.exceptionHook = function(error, stack){throw(error);};
+		$.Deferred.exceptionHook = function(error, stack){console.error(error.stack);};
 };
 
 //show all ibx root nodes when loaded...or don't, and show manually at user's discression.
