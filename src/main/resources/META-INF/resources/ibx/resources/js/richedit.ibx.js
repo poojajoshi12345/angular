@@ -36,6 +36,8 @@ $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame,
 			cd.body.spellcheck = false;
 			$(cd).on("focusin focusout selectionchange", this._onRichEditDocEvent.bind(this));
 
+			//this.execCommand("styleWithCSS", true);
+
 			//set the content if this is created from markup and there is html inside the ibxRichEdit markup.
 			var content = this.element.data("createContent")
 			if(content !== undefined)
@@ -276,15 +278,21 @@ $.widget("ibi.ibxRichEdit2", $.ibi.ibxWidget,
 			this._inSelChange = false;
 		}
 	},
+	text:function(txt)
+	{
+		if(txt === undefined)
+			return this.element.text();
+		this.element.text(txt);
+	},
+	html:function(html)
+	{
+		if(html === undefined)
+			return this.element.html();
+		this.element.html(html);
+	},
 	execCommand:function(cmd, value, withUI)
 	{
-		var cd = this.contentDocument();
-		if(cd)
-		{
-			if(ibxPlatformCheck.isIE)
-				cd.body.focus();
-			cd.execCommand(cmd, withUI, value);
-		}
+		document.execCommand(cmd, withUI, value);
 	},
 	commandEnabled:function(cmd){return document.queryCommandEnabled(cmd);},
 	commandState:function(cmd){return document.queryCommandState(cmd);},
