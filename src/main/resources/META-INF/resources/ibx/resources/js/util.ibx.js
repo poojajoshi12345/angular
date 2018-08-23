@@ -721,19 +721,27 @@ function hexToRgba(hex, opacity)
 };
 function rgbaToHex(r, g, b, a)
 {
-	function trim (str) {
-	  return str.replace(/^\s+|\s+$/gm,'');
+	function fmt(val)
+	{
+		var hex = null
+		if(val !== undefined)
+		{
+			hex = val.toString(16);
+			hex = hex.length == 1 ? "0" + hex : hex;
+		};
+		return hex;
 	}
 
 	if(typeof(r) === "string")
 	{
-		var parts = r.substring(r.indexOf("(")).split(",");
-		r = parseInt(trim(parts[0].substring(1)), 10);
-		g = parseInt(trim(parts[1]), 10);
-		b = parseInt(trim(parts[2]), 10);
-		a = parseFloat(trim(parts[3].substring(0, parts[3].length - 1))).toFixed(2);
+		var r = r.replace(/[rgb|rgba|(|)| ]/g, "");
+		var parts = r.split(",");
+		r = parseInt(parts[0], 10);
+		g = parseInt(parts[1], 10);
+		b = parseInt(parts[2], 10);
+		a = parts[3] ? Math.round(parseFloat(parts[3]) * 255) : undefined;
 	}
-	return ('#' + r.toString(16) + g.toString(16) + b.toString(16) + (a * 255).toString(16).substring(0,2));
+	return ('#' + fmt(r) + fmt(g) + fmt(b) + (a ? fmt(a) : ""));
 };
 
 /****
