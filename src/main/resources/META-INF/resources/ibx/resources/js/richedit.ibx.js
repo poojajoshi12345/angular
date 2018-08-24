@@ -70,7 +70,7 @@ $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame,
 			sel.addRange(this._curSelRange);
 			this._restoringSelection = false;
 		}
-		if(e.type == "selectionchange" && this._widgetFocused && !this._restoringSelection)
+		if(e.type == "selectionchange" && this._iFrame.is(document.activeElement) && !this._restoringSelection)
 		{
 			var sel = doc.getSelection();
 			this._curSelRange = sel.rangeCount ? sel.getRangeAt(0) : null;
