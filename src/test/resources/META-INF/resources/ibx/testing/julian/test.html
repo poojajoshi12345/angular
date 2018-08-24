@@ -12,17 +12,12 @@
 		<script type="text/javascript">
 			ibx(function(e)
 			{
-				var edit = $(".test-edit");
-				$(edit).on("ibx_widgetfocus ibx_widgetblur keydown keyup keypress mousedown mouseup contextmenu", fnEditFocusBlur);
-				function fnEditFocusBlur(e)
+				var box = $(".test-box");
+				for(var i = 0; i < 5; ++i)
 				{
-					//console.log(e.type, e.target.id, e.relatedTarget ? e.relatedTarget.id : "undefined");
-					if(e.type == "ibx_widgetfocus")
-						$(".test-toolbar").addClass("visible");
-					else
-					if(e.type == "ibx_widgetblur")
-						$(".test-toolbar").removeClass("visible");
-				};
+					var tile = $("<div class='test-tile'>").text("tile" + i);
+					box.ibxWidget("add", tile);
+				}
 			},true);
 		</script>
 		<style type="text/css">
@@ -33,48 +28,27 @@
 				margin: 0px;
 				box-sizing: border-box;
 			}
-			.test-tabs
+			.test-box
 			{
-				width:400px;
-				height:200px;
+				width:300px;
+				height:150px;
 				border:1px solid black;
+				border:1px solid black;
+				overflow:auto;
 			}
-			.test-page
+			.test-tile
 			{
-			}
-			.test-edit
-			{
-				position:absolute;
-				width:100%;
-				height:100%;
-				padding:5px;
-				box-sizing:border-box;
-				border:2px solid black;
-				
-			}
-			.test-toolbar
-			{
-				xdisplay:none;
-			}
-			.test-toolbar.visible
-			{
+				flex:0 0 auto;
+				width:100px;
+				height:100px;
+				border:1px solid red;
 				margin:5px;
-				padding:5px;
-				border:2px solid red;
-				display:inherit;
 			}
 		</style>
 	</head>
 	<body class="ibx-root">
-		<div class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="center" data-ibxp-justify="start">
-			<div id="tb1" tabindex="0" class="test-toolbar" data-ibx-type="ibxWidget">IM A TEST TOOLBAR</div>
-			<div class="test-tabs" data-ibx-type="ibxTabPane">
-				<div class="test-page" data-ibx-type="ibxTabPage" data-ibxp-selected="true">Page1
-					<div id="editor" tabindex="0" class="test-edit" data-ibx-type="ibxRichEdit"></div>
-				</div>
-				<div class="test-page" data-ibx-type="ibxTabPage">Page2
-				</div>
-			</div>
+		<div class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="center" data-ibxp-justify="center">
+			<div id="tb1" tabindex="0" class="test-box" data-ibx-type="ibxCarousel" data-ibxp-direction="rtl"></div>
 		</div>
 	</body>
 </html>

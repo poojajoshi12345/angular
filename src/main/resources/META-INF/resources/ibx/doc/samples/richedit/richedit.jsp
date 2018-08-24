@@ -59,6 +59,7 @@
 				
 				function updateUI()
 				{
+					window._updatingUI = true;
 					var re = $(".rich-edit").ibxWidget("instance");
 					var state = re.cmdState();
 
@@ -79,6 +80,7 @@
 					$(".rg-justify").ibxWidget("userValue", state.justify);
 					$(".tb-fore-color").css("borderColor", state.foreColor);
 					$(".tb-back-color").css("borderColor", state.backColor);
+					window._updatingUI = false;
 					return state;
 				}
 				updateUI();
@@ -131,6 +133,7 @@
 						val = "true";
 					
 					re.ibxWidget(reCmd, val);
+					updateUI();
 				})
 
 				$(".tb-fore-color").ibxWidget("option", "menu", makeColorSelect($(".cmd-fore-color")));
@@ -178,7 +181,7 @@
 					{
 						var target = $(e.target);
 						var info = e.originalEvent.data;
-						target.ibxWidget("getCommand").ibxWidget("userValue", info.rgba.rgba);
+						target.ibxWidget("getCommand").ibxWidget("userValue", info.rgba.rgb);
 						updateUI();
 					});
 					menu.ibxWidget("add", customMenuItem);

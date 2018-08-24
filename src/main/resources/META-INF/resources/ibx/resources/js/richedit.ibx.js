@@ -190,15 +190,19 @@ $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame,
 		state.subscript = this.commandState("subscript");
 		state.fontName = this.commandValue("fontName");
 		state.fontSize = this.commandValue("fontSize") || 3;
-		state.justify = "";
-		state.justify = ibx.coercePropVal(this.commandValue("justifyLeft")) ? "left" : state.justify;
-		state.justify = ibx.coercePropVal(this.commandValue("justifyCenter")) ? "center" : state.justify;
-		state.justify = ibx.coercePropVal(this.commandValue("justifyRight")) ? "right" : state.justify;
-		state.justify = ibx.coercePropVal(this.commandValue("justifyFull")) ? "full" : state.justify;
-		state.foreColor = this.commandValue("foreColor");
-		state.backColor = this.commandValue("backColor");
+
+		state.justify = "left";
+		state.justify = ibx.coercePropVal(this.commandState("justifyLeft")) ? "left" : state.justify;
+		state.justify = ibx.coercePropVal(this.commandState("justifyCenter")) ? "center" : state.justify;
+		state.justify = ibx.coercePropVal(this.commandState("justifyRight")) ? "right" : state.justify;
+		state.justify = ibx.coercePropVal(this.commandState("justifyFull")) ? "full" : state.justify;
+		if((state.justify == "justify") && ibxPlatformCheck.isFirefox)
+			state.justify = "full";//normalize Firefox..it returns 'justify'.
+
 
 		//of course, IE returns integers for the color values...seriously??
+		state.foreColor = this.commandValue("foreColor");
+		state.backColor = this.commandValue("backColor");
 		if(ibxPlatformCheck.isIE)
 		{
 			var fmt = "rgb({1}, {2}, {3})";
