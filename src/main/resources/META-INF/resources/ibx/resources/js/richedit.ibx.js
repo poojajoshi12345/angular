@@ -34,9 +34,7 @@ $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame,
 			cd.designMode = "On";
 			cd.body.contentEditable = true;
 			cd.body.spellcheck = false;
-			$(cd).on("focusin focusout selectionchange", this._onRichEditDocEvent.bind(this));
-
-			//this.execCommand("styleWithCSS", true);
+			$(cd).on("focusin selectionchange", this._onRichEditDocEvent.bind(this));
 
 			//set the content if this is created from markup and there is html inside the ibxRichEdit markup.
 			var content = this.element.data("createContent")
@@ -56,26 +54,30 @@ $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame,
 	selection:function(nStart, nEnd)
 	{
 		if(!arguments.length)
-			return this._curSelRange;
+			return this._curSel;
 		nStart = nStart || 0;
 		nEnd = nEnd || -1;
 	},
+
 	_onRichEditDocEvent:function(e)
 	{
 		var doc = this.contentDocument();
 		if(e.type == "focusin" && ibxPlatformCheck.isIE && this._curSelRange)
 		{
+			this._restoringSelection = true;
+			console.log(this._curSelRange)
 			var sel = doc.getSelection();
 			sel.removeAllRanges();
 			sel.addRange(this._curSelRange);
+			this._restoringSelection = false;
 		}
-		if(e.type == "selectionchange" && this._iFrame.is(document.activeElement))
+		if(e.type == "selectionchange" && this._widgetFocused && !this._restoringSelection)
 		{
 			var sel = doc.getSelection();
 			this._curSelRange = sel.rangeCount ? sel.getRangeAt(0) : null;
 			this.element.dispatchEvent(e.originalEvent);
+			console.log("selectionchange");
 		}
-		this._onWidgetFocusEvent(e);
 	},
 	_onDragEvent:function(e)
 	{
@@ -106,7 +108,7 @@ $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame,
 		if(cd)
 		{
 			if(ibxPlatformCheck.isIE)
-				cd.body.focus();
+				this.contentDocument().body.focus();
 			cd.execCommand(cmd, withUI, value);
 		}
 	},
@@ -188,7 +190,7 @@ $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame,
 		state.strikethrough	= this.commandState("strikethrough");
 		state.superscript = this.commandState("superscript");
 		state.subscript = this.commandState("subscript");
-		state.fontName = this.commandValue("fontName");
+		state.fontName = this.commandValue("fontName") || ""; //of course IE will return null sometimes.
 		state.fontSize = this.commandValue("fontSize") || 3;
 
 		state.justify = "left";
