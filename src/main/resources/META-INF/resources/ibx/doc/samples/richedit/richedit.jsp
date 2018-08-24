@@ -122,7 +122,9 @@
 					else
 					if(cmd.is(".cmd-fore-color, .cmd-back-color"))
 					{
-						val = cmd.ibxWidget("userValue");//rgbaToHex(cmd.ibxWidget("userValue"));
+						val = cmd.ibxWidget("userValue");
+						if(val.search(/^rgb\(/i) == 0)
+							val = rgbaToHex(val);
 						reCmd = cmd.is(".cmd-fore-color") ? "foreColor" : "backColor";
 					}
 					if(cmd.is(".cmd-insert-ordered-list"))
@@ -188,7 +190,7 @@
 					{
 						var target = $(e.target);
 						var info = e.originalEvent.data;
-						target.ibxWidget("getCommand").ibxWidget("userValue", e.originalEvent.data.colorOpacity);
+						target.ibxWidget("getCommand").ibxWidget("userValue", e.originalEvent.data.color);
 						updateUI();
 					});
 					menu.ibxWidget("add", customMenuItem);
@@ -268,7 +270,7 @@
 				width:150px;
 			}
 
-			.cp-menu-template
+			.cp-menu-template, .cp-menu-template2
 			{
 				display:none;
 			}

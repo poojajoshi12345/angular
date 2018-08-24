@@ -197,6 +197,17 @@ $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame,
 		state.justify = ibx.coercePropVal(this.commandValue("justifyFull")) ? "full" : state.justify;
 		state.foreColor = this.commandValue("foreColor");
 		state.backColor = this.commandValue("backColor");
+
+		//of course, IE returns integers for the color values...seriously??
+		if(ibxPlatformCheck.isIE)
+		{
+			var fmt = "rgb({1}, {2}, {3})";
+			var iClr = state.foreColor;
+			state.foreColor =  sformat(fmt, (iClr & 0xFF), ((iClr & 0xFF00)>>8), ((iClr & 0xFF0000)>>16));
+			iClr = state.backColor;
+			state.backColor =  sformat(fmt, (iClr & 0xFF), ((iClr & 0xFF00)>>8), ((iClr & 0xFF0000)>>16));
+		}
+
 		return state;
 	},
 	_refresh:function()
