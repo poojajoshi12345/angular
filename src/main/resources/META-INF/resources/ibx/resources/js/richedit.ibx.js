@@ -65,7 +65,6 @@ $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame,
 		if(e.type == "focusin" && ibxPlatformCheck.isIE && this._curSelRange)
 		{
 			this._restoringSelection = true;
-			console.log(this._curSelRange)
 			var sel = doc.getSelection();
 			sel.removeAllRanges();
 			sel.addRange(this._curSelRange);
@@ -76,7 +75,6 @@ $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame,
 			var sel = doc.getSelection();
 			this._curSelRange = sel.rangeCount ? sel.getRangeAt(0) : null;
 			this.element.dispatchEvent(e.originalEvent);
-			console.log("selectionchange");
 		}
 	},
 	_onDragEvent:function(e)
