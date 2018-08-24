@@ -136,9 +136,9 @@
 					updateUI();
 				})
 
-				$(".tb-fore-color").ibxWidget("option", "menu", makeColorSelect($(".cmd-fore-color")));
-				$(".tb-back-color").ibxWidget("option", "menu", makeColorSelect($(".cmd-back-color")));
-				function makeColorSelect(cmd)
+				$(".tb-fore-color").ibxWidget("option", "menu", makeColorSelect($(".cmd-fore-color"), "foreColor"));
+				$(".tb-back-color").ibxWidget("option", "menu", makeColorSelect($(".cmd-back-color"), "backColor"));
+				function makeColorSelect(cmd, reCommand)
 				{
 					var menu = $("<div>").ibxMenu({"destroyOnClose":false});
 					var colors = 
@@ -177,29 +177,34 @@
 
 					var customMenuItem = $(".cp-menu-template").clone(true).removeAttr("data-ibx-no-bind").removeClass("cp-menu-template");
 					customMenuItem = ibx.bindElements(customMenuItem);
-					var cp = customMenuItem.find(".ibx-color-picker").ibxWidget("option", "command", cmd.ibxWidget("option", "id")).on("ibx_colorchange", function(e)
+					customMenuItem.find(".ibx-menu").on("ibx_open", function(reCommand, e)
+					{
+						var state = $(".ibx-rich-edit").ibxWidget("cmdState");
+						var cp = $(e.target).find(".ibx-color-picker");
+						cp.ibxWidget("option", "color", state[reCommand]);
+					}.bind(this, reCommand));
+					customMenuItem.find(".ibx-color-picker").ibxWidget("option", "command", cmd.ibxWidget("option", "id")).on("ibx_colorchange", function(e)
 					{
 						var target = $(e.target);
-						var info = e.originalEvent.data;
-						target.ibxWidget("getCommand").ibxWidget("userValue", info.rgba.rgb);
-						updateUI();
+						target.ibxWidget("getCommand").ibxWidget("userValue",  e.originalEvent.data.color);
 					});
 					menu.ibxWidget("add", customMenuItem);
-					cp.ibxWidget("option", "color", "#ffffff");
 
 					customMenuItem = $(".cp-menu-template2").clone(true).removeAttr("data-ibx-no-bind").removeClass("cp-menu-template2");
 					customMenuItem = ibx.bindElements(customMenuItem);
+					customMenuItem.find(".ibx-menu").on("ibx_open", function(reCommand, e)
+					{
+						var state = $(".ibx-rich-edit").ibxWidget("cmdState");
+						var cp = $(e.target).find(".ibx-palette-picker");
+						cp.ibxWidget("option", "color", state[reCommand]);
+					}.bind(this, reCommand));
 					var cp = customMenuItem.find(".ibx-palette-picker").ibxWidget("option", "command", cmd.ibxWidget("option", "id")).on("ibx_change", function(e)
 					{
 						var target = $(e.target);
 						var info = e.originalEvent.data;
 						target.ibxWidget("getCommand").ibxWidget("userValue", e.originalEvent.data.color);
-						updateUI();
 					});
 					menu.ibxWidget("add", customMenuItem);
-					cp.ibxWidget("option", "color", "#ffffff");
-
-
 					return menu;
 				}
 			}, true);
@@ -249,7 +254,7 @@
 			.color-select-item
 			{
 				flex:0 0 auto;
-				width:100px;
+				min-width:100px;
 				height:15px;
 				margin:3px;
 				border:1px solid #ddd;
@@ -397,12 +402,12 @@
 
 		<div class="cp-menu-template" data-ibx-type="ibxMenuItem" data-ibx-no-bind="true">Custom Color Picker
 			<div data-ibx-type="ibxMenu">
-				<div data-ibx-type="ibxColorPicker" data-ibxp-set-opacity="false" data-ibxp-color="#000000" data-ibxp-show-color-info="false"></div>
+				<div data-ibx-type="ibxColorPicker" data-ibxp-set-opacity="false" data-ibxp-show-color-info="false"></div>
 			</div>
 		</div>
 		<div class="cp-menu-template2" data-ibx-type="ibxMenuItem" data-ibx-no-bind="true">Custom Palette Picker
 			<div data-ibx-type="ibxMenu">
-				<div data-ibx-type="ibxPalettePicker" data-ibxp-show-custom="false" data-ibxp-show-transparency="false" data-ibxp-color="#000000"></div>
+				<div data-ibx-type="ibxPalettePicker" data-ibxp-show-palettes="false" data-ibxp-show-custom="false" data-ibxp-show-transparency="false"></div>
 			</div>
 		</div>
 

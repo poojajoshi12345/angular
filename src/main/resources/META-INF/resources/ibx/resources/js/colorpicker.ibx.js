@@ -6,7 +6,9 @@ $.widget("ibi.ibxColorPicker", $.ibi.ibxVBox,
 	options:
 	{
 		"style":"wheel",
-		"color":"",
+		"color":"#ff00ff",
+		"colorRgba":"",
+		"colorOpacity":"",
 		"opacity":1,
 		"setOpacity":true,
 		"showColorInfo":true,
@@ -42,7 +44,7 @@ $.widget("ibi.ibxColorPicker", $.ibi.ibxVBox,
 
 		//must be initialized after being added to dom.
 		ctrl.minicolors({"control":options.style, "opacity":options.setOpacity, "swatches":swatches, "inline":true, "change": this._onColorChange.bind(this)});
-
+		ctrl.minicolors("value", options.color);
 
 	},
 	_destroy: function ()
@@ -55,28 +57,40 @@ $.widget("ibi.ibxColorPicker", $.ibi.ibxVBox,
 	control:function(){return this._ctrl;},
 	_onColorChange:function(value, opacity)
 	{
+		if(this._inSetOptions)
+			return;
 		var options = this.options;
 		options.color = value;
 		options.opacity = (options.setOpacity && !isNaN(opacity)) ? parseFloat(opacity) : 1;
+		options.rgba = hexToRgba(value, options.opacity);
+		options.colorOpacity = rgbaToHex(options.rgba.rgba)
 		this.refresh();
-		this.element.dispatchEvent("ibx_colorchange", {"color":options.color, "opacity":options.opacity, "rgba":hexToRgba(options.color, options.opacity)}, false, false);
+		this.element.dispatchEvent("ibx_colorchange", {"color":options.color, "colorOpacity":options.colorOpacity, "rgba": options.colorRgba, "opacity":options.opacity}, false, false);
+
 	},
 	_onTextChanging:function(e, info)
 	{
+		if(this._inSetOptions)
+			return;
+		var options = this.options;
 		var color = info.text;
 		if(color[0] != "#")
 			color = "#" + color;
-		this.option("color", color);
 	},
 	_setOption:function(key, value)
 	{
 		var options = this.options;
 		var changed = this.options[key] != value;
-		if(!changed)
+		if(!changed || this._inSetOptions)
 			return;
 
+		this._inSetOptions = true;
 		if(key == "color")
+		{
+			if(value.search(/^rgb|rgba\(/i) == 0)
+				value = rgbaToHex(value);
 			this._ctrl.minicolors("value", {"color":value, "opacity":options.opacity});
+		}
 		else
 		if(key == "opacity")
 			this._ctrl.minicolors("value", {"color":options.color, "opacity":value});
@@ -87,6 +101,7 @@ $.widget("ibi.ibxColorPicker", $.ibi.ibxVBox,
 		if(key == "setOpacity")
 			this._ctrl.minicolors("settings", {"opacity": value});
 		this._super(key, value);
+		this._inSetOptions = false;
 	},
 	_refresh: function ()
 	{
@@ -243,6 +258,8 @@ $.widget("ibi.ibxPalettePicker", $.ibi.ibxVBox,
 		if(key == "color")
 		{
 			value = value.toLowerCase();
+			if(value.search(/^rgb|rgba\(/i) == 0)
+				value = rgbaToHex(value);
 			options.colorRgba = hexToRgba(value, options.opacity);
 			options.colorOpacity = rgbaToHex(options.colorRgba.rgba, value);
 		}
@@ -255,7 +272,7 @@ $.widget("ibi.ibxPalettePicker", $.ibi.ibxVBox,
 
 		this._super(key, value);
 		if(changed && (key == "color" || key == "opacity"))
-			this.element.dispatchEvent("ibx_change", {"color":options.color, "colorOpacity":options.colorOpacity, "colorRgba": options.colorRgba, "opacity":options.opacity}, false, false);
+			this.element.dispatchEvent("ibx_change", {"color":options.color, "colorOpacity":options.colorOpacity, "rgba": options.colorRgba, "opacity":options.opacity}, false, false);
 	},
 	_refresh: function ()
 	{
