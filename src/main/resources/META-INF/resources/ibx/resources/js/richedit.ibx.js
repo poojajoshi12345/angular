@@ -280,18 +280,18 @@ $.widget("ibi.ibxRichEdit2", $.ibi.ibxWidget,
 	{
 		if(e.type == "focusin" && ibxPlatformCheck.isIE && this._curSelRange)
 		{
-			var sel = document.getSelection();
+			this._restoringSelection = true;
+			var sel = doc.getSelection();
 			sel.removeAllRanges();
 			sel.addRange(this._curSelRange);
+			this._restoringSelection = false;
 		}
-		if(e.type == "selectionchange" && !this._inSelChange && this.element.is(document.activeElement))
+		else
+		if(e.type == "selectionchange" && this.element.is(document.activeElement) && !this._restoringSelection)
 		{
-
-			this._inSelChange = true;
-			var sel = document.getSelection();
+			var sel = doc.getSelection();
 			this._curSelRange = sel.rangeCount ? sel.getRangeAt(0) : null;
-			this.element.dispatchEvent(e.originalEvent);
-			this._inSelChange = false;
+			this.element.dispatchEvent("selectionchange", sel, false, false);
 		}
 	},
 	text:function(txt)
@@ -308,6 +308,8 @@ $.widget("ibi.ibxRichEdit2", $.ibi.ibxWidget,
 	},
 	execCommand:function(cmd, value, withUI)
 	{
+		if(ibxPlatformCheck.isIE)
+			this.element.focus();
 		document.execCommand(cmd, withUI, value);
 	},
 	commandEnabled:function(cmd){return document.queryCommandEnabled(cmd);},
@@ -388,15 +390,30 @@ $.widget("ibi.ibxRichEdit2", $.ibi.ibxWidget,
 		state.strikethrough	= this.commandState("strikethrough");
 		state.superscript = this.commandState("superscript");
 		state.subscript = this.commandState("subscript");
-		state.fontName = this.commandValue("fontName");
+		state.fontName = this.commandValue("fontName") || ""; //of course IE will return null sometimes.
 		state.fontSize = this.commandValue("fontSize") || 3;
-		state.justify = "";
-		state.justify = ibx.coercePropVal(this.commandValue("justifyLeft")) ? "left" : state.justify;
-		state.justify = ibx.coercePropVal(this.commandValue("justifyCenter")) ? "center" : state.justify;
-		state.justify = ibx.coercePropVal(this.commandValue("justifyRight")) ? "right" : state.justify;
-		state.justify = ibx.coercePropVal(this.commandValue("justifyFull")) ? "full" : state.justify;
+
+		state.justify = "left";
+		state.justify = ibx.coercePropVal(this.commandState("justifyLeft")) ? "left" : state.justify;
+		state.justify = ibx.coercePropVal(this.commandState("justifyCenter")) ? "center" : state.justify;
+		state.justify = ibx.coercePropVal(this.commandState("justifyRight")) ? "right" : state.justify;
+		state.justify = ibx.coercePropVal(this.commandState("justifyFull")) ? "full" : state.justify;
+		if((state.justify == "justify") && ibxPlatformCheck.isFirefox)
+			state.justify = "full";//normalize Firefox..it returns 'justify'.
+
+
+		//of course, IE returns integers for the color values...seriously??
 		state.foreColor = this.commandValue("foreColor");
 		state.backColor = this.commandValue("backColor");
+		if(ibxPlatformCheck.isIE)
+		{
+			var fmt = "rgb({1}, {2}, {3})";
+			var iClr = state.foreColor;
+			state.foreColor =  sformat(fmt, (iClr & 0xFF), ((iClr & 0xFF00)>>8), ((iClr & 0xFF0000)>>16));
+			iClr = state.backColor;
+			state.backColor =  sformat(fmt, (iClr & 0xFF), ((iClr & 0xFF00)>>8), ((iClr & 0xFF0000)>>16));
+		}
+
 		return state;
 	},
 	_refresh:function()

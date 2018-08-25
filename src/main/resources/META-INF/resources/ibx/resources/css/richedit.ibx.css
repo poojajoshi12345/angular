@@ -8,4 +8,5 @@
 	-ms-user-select:text;
 	-moz-user-select:text;
 	user-select:text;
+	overflow:auto;
 }

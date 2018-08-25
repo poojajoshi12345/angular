@@ -85,21 +85,32 @@
 				}
 				updateUI();
 
-				$(".rich-edit").ibxWidget("ready", function(richEdit)
+				$(".rich-edit-iframe").ibxWidget("ready", function(richEdit)
 				{
 					var strSample = ibx.resourceMgr.getString("IBX_STR_SAMPLE");
-					richEdit.ibxWidget("html",  sformat("Start Text<p/>{1}<p/>{1}<p/>{1}<p/>End Text<p/>", strSample));
-				}).on("selectionchange", function(e)
+					var strFmt = sformat("{1}<p/>Start Text<p/>{2}<p/>{2}<p/>{2}<p/>End Text</p>{1}<p/>", "Rich Edit &lt;iframe>", strSample);
+					richEdit.ibxWidget("html",  strFmt);
+					
+					var strFmt = sformat("{1}<p/>Start Text<p/>{2}<p/>{2}<p/>{2}<p/>End Text<p/>{1}<p/>", "Rich Edit &lt;div>", strSample);
+					$(".rich-edit-div").ibxWidget("html", strFmt);
+				});
+				
+				$(".rich-edit").on("selectionchange", function(e)
 				{
 					var state = updateUI();
 				});
 				
+				$(".rich-edit").on("focusin", function(e)
+				{
+					window.activeEditor = e.target;
+				});
+
 				$(".re-cmd").on("ibx_triggered ibx_uservaluechanged", function(e)
 				{
 					if(window._updatingUI)
 						return;
 
-					var re = $(".rich-edit");
+					var re = $(window.activeEditor);
 					var cmd = $(e.currentTarget);
 					var	reCmd = cmd.ibxWidget("userValue");
 					var val = "";
@@ -227,11 +238,19 @@
 				height:100%;
 				box-sizing:border-box;
 			}
+			.edit-box
+			{
+				flex:1 1 auto;
+				margin-top:5px;
+				border:1px solid red;
+			}
 			.rich-edit
 			{	
-				margin-top:1px;
 				flex:1 1 auto;
-				border:1px solid #ccc;
+				height:1px;
+				margin:5px;
+				border:1px solid black;
+				box-sizing:border-box;
 			}
 			.tb-button
 			{
@@ -347,7 +366,12 @@
 				<div class="tb-separator"></div>
 				<div tabindex="0" class="tb-button" title="Remove All Formatting" data-ibx-type="ibxButton" data-ibxp-command="cmdRemoveFormat" data-ibxp-glyph="format_clear" data-ibxp-glyph-classes="material-icons"></div>
 			</div>
-			<div tabindex="0" class="rich-edit" data-ibx-type="ibxRichEdit" data-ibxp-ctx-menu=".re-ctx-menu"></div>
+
+			<div class="edit-box" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
+				<div tabindex="0" class="rich-edit rich-edit-div" data-ibx-type="ibxRichEdit2" data-ibxp-ctx-menu=".re-ctx-menu"></div>
+				<div data-ibx-type="ibxHSplitter"></div>
+				<div tabindex="0" class="rich-edit rich-edit-iframe" data-ibx-type="ibxRichEdit" data-ibxp-ctx-menu=".re-ctx-menu"></div>
+			</div>
 		</div>
 
 		<div class="re-ctx-menu" data-ibx-type="ibxMenu" data-ibxp-refocus-last-active-on-close="true">
