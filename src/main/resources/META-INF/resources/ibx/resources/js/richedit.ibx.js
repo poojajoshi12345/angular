@@ -222,24 +222,6 @@ $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame,
 	}
 });
 
-$.ibi.ibxRichEdit.fontSize = 
-{
-	"xx-small":1,
-	"x-small":2,
-	"small":3,
-	"medium":4,
-	"large":5,
-	"x-large":6,
-	"xx-large":7
-}
-$.ibi.ibxRichEdit.justify = 
-{
-	"left":"justifyLeft",
-	"center":"justifyCenter",
-	"right":"justifyRight",
-	"full":"justifyFull"
-}
-
 
 
 
@@ -293,6 +275,10 @@ $.widget("ibi.ibxRichEdit2", $.ibi.ibxWidget,
 			this._curSelRange = sel.rangeCount ? sel.getRangeAt(0) : null;
 			this.element.dispatchEvent("selectionchange", sel, false, false);
 		}
+	},
+	ready:function(fn)
+	{
+		console.warn("[ibx Deprectated] ibxRichEdit.ready (Deferred) - will never be resolved, as the control is no longer iframe based.  Don't wait for load and call functions synchronously.");
 	},
 	text:function(txt)
 	{
@@ -423,6 +409,24 @@ $.widget("ibi.ibxRichEdit2", $.ibi.ibxWidget,
 		this.element.attr("spellCheck", options.spellCheck);
 	}
 });
+
+$.ibi.ibxRichEdit.fontSize = 
+{
+	"xx-small":1,
+	"x-small":2,
+	"small":3,
+	"medium":4,
+	"large":5,
+	"x-large":6,
+	"xx-large":7
+}
+$.ibi.ibxRichEdit.justify = 
+{
+	"left":"justifyLeft",
+	"center":"justifyCenter",
+	"right":"justifyRight",
+	"full":"justifyFull"
+}
 
 //# sourceURL=richedit.ibx.js
 
