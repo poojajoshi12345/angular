@@ -88,10 +88,10 @@
 				$(".rich-edit-iframe").ibxWidget("ready", function(richEdit)
 				{
 					var strSample = ibx.resourceMgr.getString("IBX_STR_SAMPLE");
-					var strFmt = sformat("{1}<p/>Start Text<p/>{2}<p/>{2}<p/>{2}<p/>End Text</p>{1}<p/>", "Rich Edit &lt;iframe>", strSample);
+					var strFmt = sformat("{1}<p/>Start Text<p/>{2}<p/>{2}<p/>{2}<p/>End Text</p>{1}<p/>", "&lt;iframe>Rich Edit", strSample);
 					richEdit.ibxWidget("html",  strFmt);
 					
-					var strFmt = sformat("{1}<p/>Start Text<p/>{2}<p/>{2}<p/>{2}<p/>End Text<p/>{1}<p/>", "Rich Edit &lt;div>", strSample);
+					var strFmt = sformat("{1}<p/>Start Text<p/>{2}<p/>{2}<p/>{2}<p/>End Text<p/>{1}<p/>", "&lt;div>Rich Edit", strSample);
 					$(".rich-edit-div").ibxWidget("html", strFmt);
 				});
 				
