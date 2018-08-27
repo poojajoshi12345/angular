@@ -178,7 +178,10 @@ $.widget("ibi.ibxPopup", $.ibi.ibxWidget,
 					this.element.appendTo(parent).css({top:"", left:""});
 					this.element.removeClass("pop-closing").off("transitionend");
 				}
-
+				
+				//allow popup to do cleanup
+				this.popupClosed();
+				
 				//user tried to open popup while it was closing...open it now that it's fully closed.
 				if(this._openFromClose)
 					this.open();
@@ -197,6 +200,7 @@ $.widget("ibi.ibxPopup", $.ibi.ibxWidget,
 			this.setAccessibility();
 		}
 	},
+	popupClosed:$.noop,
 	_refresh:function()
 	{
 		this._super();
