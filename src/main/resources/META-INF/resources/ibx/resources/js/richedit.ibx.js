@@ -243,6 +243,7 @@ $.widget("ibi.ibxRichEdit2", $.ibi.ibxWidget,
 	{
 		this._readyPromise = new $.Deferred();
 		this.element.on("focusin", this._onRichEditEvent.bind(this)).prop("contentEditable", true);
+		this.element.on("ibx_dragover ibx_drop", this._onDragEvent.bind(this));
 		$(document).on("selectionchange", this._onRichEditEvent.bind(this));
 		this._super();
 	},
@@ -275,6 +276,29 @@ $.widget("ibi.ibxRichEdit2", $.ibi.ibxWidget,
 			this._curSelRange = sel.rangeCount ? sel.getRangeAt(0) : null;
 			this.element.dispatchEvent("selectionchange", sel, false, false);
 		}
+	},
+	_onDragEvent:function(e)
+	{
+		if(!this.options.defaultDropHandling)
+			return;
+
+		var dt = e.originalEvent.dataTransfer;
+		var data = dt.items["text/html"];
+		var isHtml = !!data;
+
+		data =  isHtml ? data : dt.items["text/plain"];
+		if(!data)
+			return;
+
+		var eType = e.type;
+		if(eType == "ibx_dragover")
+		{
+			dt.dropEffect = "copy";
+			e.preventDefault();
+		}
+		else
+		if(eType == "ibx_drop")
+			(isHtml) ? this.insertHTML(data, true, true) : this.insertText(data, true, true);
 	},
 	ready:function(fn)
 	{
@@ -337,14 +361,12 @@ $.widget("ibi.ibxRichEdit2", $.ibi.ibxWidget,
 	insertContent:function(content, isHTML, selReplace, select)
 	{
 		/*NOTE: chrome/ff could use insertHTML/insertText...ie doesn't support this, so normalize to a solution that works the same across browsers*/
-			
-		//focus the document so selections are valid.
-		var doc = this.contentDocument();
-		doc.body.focus();
+		
+		this.element.focus();
 
 		//get selections and create proper node for insertion.
-		var sels = doc.getSelection();
-		var selRange = sels.getRangeAt(0);
+		var sels = document.getSelection();
+		var selRange = sels.rangeCount ? sels.getRangeAt(0) : document.createRange();
 		var node = isHTML ? $.parseHTML(content, doc)[0] : doc.createTextNode(content);
 
 		//remove existing selected content if desired.
