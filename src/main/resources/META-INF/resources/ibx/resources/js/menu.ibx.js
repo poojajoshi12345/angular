@@ -183,7 +183,7 @@ $.widget("ibi.ibxMenuItem", $.ibi.ibxHBox,
 		if(subMenu)
 		{
 			subMenu.data("ibxParentMenu", this.parentMenu());
-			subMenu.ibxMenu({destroyOnClose: false, position:{of: this.element, at:"right top", my:"left top"}}).ibxMenu("open");
+			subMenu.ibxWidget("option", {destroyOnClose: false, position:{of: this.element, at:"right top", my:"left top"}}).ibxWidget("open");
 		}
 		else
 		{
