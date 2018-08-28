@@ -922,7 +922,12 @@ WebApi.statics =
 			url:"",
 		},
 
-		//promise stuff.
+		/*
+			=====> PROMISE STUFF...IMPORTANT READ THIS <=====
+			These functions DO NOT return the deferred, as you might expect.  They return
+			this, if you want the deferred, then use .deferred on this.
+			=====> PROMISE STUFF...IMPORTANT READ THIS <=====
+		*/
 		deferred:null,
 		done:function(fn)
 		{
