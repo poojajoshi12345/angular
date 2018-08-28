@@ -244,7 +244,7 @@ $.widget("ibi.ibxMenuItem", $.ibi.ibxHBox,
 	{
 		var subMenu = this.subMenu();
 		if(subMenu && subMenu.is(":openPopup"))
-			subMenu.ibxMenu("close", closeData);
+			subMenu.ibxWidget("close", closeData);
 	},
 	_onSubMenuOpenClose:function(e)
 	{
