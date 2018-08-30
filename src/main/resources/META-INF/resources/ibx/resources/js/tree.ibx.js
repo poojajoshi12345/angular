@@ -51,6 +51,7 @@ $.widget("ibi.ibxTree", $.ibi.ibxVBox,
 		this.element.on("ibx_collapse", this._onNodeEvent.bind(this));
 		this.element.ibxMutationObserver({"listen":true, "subtree":true}).on("ibx_nodemutated", this._onChildrenChange.bind(this));
 		this.element.ibxTreeSelectionManager();
+		this.add(this.children());
 	},
 	_destroy:function()
 	{
@@ -329,7 +330,6 @@ $.widget("ibi.ibxTreeBrowser", $.ibi.ibxVBox,
 	{
 		"swipeNavigation":true,
 		"scrollChildren":true,
-		"class":"ibx-tree",
 		"navKeyRoot":true,
 		"navKeyDir":"vertical",
 		"navKeyResetFocusOnBlur":false,
@@ -348,7 +348,8 @@ $.widget("ibi.ibxTreeBrowser", $.ibi.ibxVBox,
 	{
 		this._super();
 		var options = this.options;
-		this.element.on("swiperight", this._onTreeSwipeEvent.bind(this)).addClass(".ibx-tree").ibxTreeSelectionManager();
+		this.element.addClass("ibx-tree").on("swiperight", this._onTreeSwipeEvent.bind(this)).ibxTreeSelectionManager();
+		this.add(this.children());
 	},
 	_destroy:function()
 	{
@@ -398,6 +399,12 @@ $.widget("ibi.ibxTreeBrowserNode", $.ibi.ibxTreeNode,
 	},
 	_destroy:function()
 	{
+	},
+	_init:function()
+	{
+		this._super();
+		console.log(this.element.text());
+		this.add(this.children());
 	},
 	_onNodeLabelEvent:function(e)
 	{
