@@ -188,7 +188,7 @@ $.widget("ibi.ibxTreeNode", $.ibi.ibxVBox,
 	},
 	remove:function(el, destroy, refresh)
 	{
-		this.children(el).removeData("ibxTreeParent");
+		this.children().filter(el).removeData("ibxTreeParent");
 		this._childBox.ibxWidget("remove", el, destroy, refresh);
 		if(refresh)
 			this.refresh();
