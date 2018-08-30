@@ -23,7 +23,7 @@
 				$(".test-tree, .test-tree-browser").on("ibx_beforeexpand ibx_beforecollapse", function(e)
 				{
 					var eType = e.type;
-					var monoLevel = $(this).is(".ibx-tree-browser");
+					var browserTree = $(this).is(".ibx-tree-browser");
 					var targetNode = $(e.target);
 					targetNode.ibxWidget("remove");
 
@@ -32,12 +32,19 @@
 					xItems.each(function(idx, el)
 					{
 						el = $(el);
-						if(monoLevel || el.is("[container=true]"))
+						if(browserTree || el.is("[container=true]"))
 						{
-							var treeNode = makeTreeNode(el, "ibfs_item", false, monoLevel);
+							var treeNode = makeTreeNode(el, "ibfs_item", false, browserTree);
 							targetNode.ibxWidget("add", treeNode);
 						}
 					});
+
+					targetNode.ibxWidget("children").each(function(idx, el)
+					{
+						targetNode.ibxWidget("remove", el);
+						targetNode.ibxWidget("add", el);
+					});
+
 				}).on("ibx_selchange", function(e)
 				{
 					e = e.originalEvent;
@@ -155,7 +162,7 @@
 				$(".btn-single-click-expand").on("ibx_change", function(e)
 				{
 					var checked = $(e.target).ibxWidget("checked");
-					$(".test-tree").ibxWidget("option", "singleClickExpand", checked);
+					$(".test-tree, .test-tree-browser").ibxWidget("option", "singleClickExpand", checked);
 				});
 				$(".btn-expand-all").on("click", function(e)
 				{
@@ -173,7 +180,7 @@
 				});
 			}, true);
 
-			makeTreeNode = function(xItem, itemClass, expanded, monoLevel)
+			makeTreeNode = function(xItem, itemClass, expanded, browserTree)
 			{
 				xItem = $(xItem);
 				var sce = $(".btn-single-click-expand").ibxWidget("checked");
@@ -186,7 +193,7 @@
 					"labelOptions":{"text": xItem.attr("description") || xItem.attr("name"), "glyph": container ? "" : "insert_drive_file", "glyphClasses": container ? "" : "material-icons"}
 				}
 			
-				if(monoLevel)
+				if(browserTree)
 				{
 					options.labelOptions.glyph = container ? "folder" : options.labelOptions.glyph;
 					options.labelOptions.glyphClasses = container ? "material-icons" : options.labelOptions.glyphClasses;
@@ -196,6 +203,14 @@
 					var node = $("<div>").ibxTreeNode(options).addClass(container ? "folder" : "file").addClass(itemClass);
 
 				node.attr("data-ibfs-path", xItem.attr("fullPath")).data("xItem", xItem);
+				
+				node.on("click", function(e)
+				{
+					var node = $(this);
+					if(node.is(e.currentTarget))
+						console.log(e.type, e.currentTarget);
+					e.stopPropagation();
+				});
 				return node;
 			};
 			makeFileTile = function(xItem, itemClass)
@@ -473,10 +488,8 @@
 			</div>
 			<div class="content-box" data-ibx-type="ibxHBox" data-ibxp-align="stretch">
 				<div class="trees-box" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
-					<div class="tree-type-label" data-ibx-type="ibxLabel">Tree View</div>
 					<div tabindex="0" class="tree test-tree" data-ibx-type="ibxTree" data-ibxp-show-root-nodes="true"></div>
 					<div data-ibx-type="ibxHSplitter"></div>
-					<div class="tree-type-label" data-ibx-type="ibxLabel">Tree Browser View</div>
 					<div tabindex="0" class="tree test-tree-browser" data-ibx-type="ibxTreeBrowser"></div>
 				</div>
 				<div class="test-splitter" data-ibx-type="ibxVSplitter"></div>

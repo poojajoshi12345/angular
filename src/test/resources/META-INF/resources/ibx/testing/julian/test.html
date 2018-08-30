@@ -10,8 +10,14 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<script type="text/javascript" src="../../resources/ibx.js"></script>
 		<script type="text/javascript">
+			var pkg = 
+			[
+				{"src":"../../ibxtools/shared_resources/js/ibfs.js", "loadContext":"ibx"}
+			];
+
 			ibx(function(e)
 			{
+				
 			},true);
 		</script>
 		<style type="text/css">
@@ -25,15 +31,18 @@
 			.rich-edit
 			{
 				flex:0 0 auto;
+				height:1em;
 				border:1px solid black;
 			}
 		</style>
 	</head>
 	<body class="ibx-root">
 		<div class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="stretch" data-ibxp-justify="start">
-			<div class="rich-edit edit1" data-ibx-type="ibxRichEdit2">Item 1</div>
-			<div class="rich-edit edit2" data-ibx-type="ibxRichEdit2">Item 2</div>
-		</div>
+			<div class="xxx" data-ibx-type="ibxSelect">
+				<div class="item item1" data-ibx-type="ibxSelectItem">Item 1</div>
+				<div class="item item2" data-ibx-type="ibxSelectItem">Item 2</div>
+				<div class="item item3" data-ibx-type="ibxSelectItem">Item 3</div>
+			</div>
 	</body>
 </html>
 
