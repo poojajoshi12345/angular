@@ -396,15 +396,10 @@ $.widget("ibi.ibxTreeBrowserNode", $.ibi.ibxTreeNode,
 		this._super();
 		this.element.data("ibiIbxTreeNode", this);
 		this.nodeLabel.on("swipeleft", this._onNodeLabelEvent.bind(this));
+		this.add(this.children());
 	},
 	_destroy:function()
 	{
-	},
-	_init:function()
-	{
-		this._super();
-		console.log(this.element.text());
-		this.add(this.children());
 	},
 	_onNodeLabelEvent:function(e)
 	{
