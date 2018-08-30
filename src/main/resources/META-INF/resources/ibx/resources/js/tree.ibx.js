@@ -219,16 +219,10 @@ $.widget("ibi.ibxTreeNode", $.ibi.ibxVBox,
 		var eType = e.type;
 
 		if(eType == "click" && this.singleClickExpand())
-		{
 			this.toggleExpanded();
-			e.stopPropagation();
-		}
 		else
 		if(eType == "dblclick")
-		{
 			this.toggleExpanded();
-			e.stopPropagation();
-		}
 		else
 		if(eType == "keydown")
 		{
@@ -238,7 +232,6 @@ $.widget("ibi.ibxTreeNode", $.ibi.ibxVBox,
 					this.toggleExpanded(true);
 				else
 					this.children().first().find(".tnode-label").first().focus();
-				e.stopPropagation();
 			}
 			else
 			if(e.keyCode === $.ui.keyCode.LEFT)
@@ -247,7 +240,6 @@ $.widget("ibi.ibxTreeNode", $.ibi.ibxVBox,
 					this.toggleExpanded(false);
 				else
 					$(this.parentNode()).children(".tnode-label").first().focus();
-				e.stopPropagation();
 			}
 		}
 	},
