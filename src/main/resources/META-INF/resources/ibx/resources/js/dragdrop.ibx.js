@@ -45,6 +45,7 @@ _p.setDragImage = function(img, xOffset, yOffset)
 	{
 		this._dragImage.style.position = "";
 		this._dragImage.classList.remove(ibxDragDropManager.dragImageClass);
+		this._dragImage.remove();
 	}
 	
 	this._dragImage = img ? img : this._dragImage;
@@ -52,6 +53,7 @@ _p.setDragImage = function(img, xOffset, yOffset)
 	{
 		this._dragImage.style.position = "absolute";
 		this._dragImage.classList.add(ibxDragDropManager.dragImageClass);
+		document.body.appendChild(this._dragImage);
 	}
 	this.dragXOffset = xOffset || this.dragXOffset;
 	this.dragYOffset = yOffset || this.dragYOffset;
@@ -250,7 +252,7 @@ ibxDragDropManager._onMouseEvent = function(e)
 				{
 					"left":e.clientX + xOffset + "px",
 					"top":e.clientY + yOffset + "px",
-				}).appendTo("body.ibx-root");
+				});
 			}
 		}
 	}
