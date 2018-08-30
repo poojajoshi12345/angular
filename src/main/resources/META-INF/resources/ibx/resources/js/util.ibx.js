@@ -699,28 +699,35 @@ function unescapeXmlString(string)
 	Simple functions to convert between hex and rgba
 ****/
 function hexToRgba(hex, opacity)
+{
+	//special handling for transparent
+	if(hex === "transparent")
 	{
-		hex = hex || "#000000";
-		opacity = (opacity === undefined) ? 1 : opacity;
+		hex = "#ffffff";
+		opacity = 0;
+	}
 
-		var ret = {"rgba":null, "r":null, "g":null, "b":null, "a":null};
-		var c;
-		if(/^#([A-Fa-f0-9]{3}){1,2}$/.test(hex))
-		{
-			c= hex.substring(1).split('');
-			if(c.length== 3)
-				c= [c[0], c[0], c[1], c[1], c[2], c[2]];
-			c= '0x'+c.join('');
-			ret.r = (c>>16)&255;
-			ret.g = (c>>8)&255;
-			ret.b = c&255;
-			ret.a = Number(opacity.toFixed(2));
-			ret.rgb = sformat("rgba({1}, {2}, {3})", ret.r, ret.g, ret.b);
-			ret.rgba = sformat("rgba({1}, {2}, {3}, {4})", ret.r, ret.g, ret.b, ret.a);
-		}
-		return ret;
+	hex = hex || "#000000";
+	opacity = (opacity === undefined) ? 1 : opacity;
+
+	var ret = {"rgba":null, "r":null, "g":null, "b":null, "a":null};
+	var c;
+	if(/^#([A-Fa-f0-9]{3}){1,2}$/.test(hex))
+	{
+		c= hex.substring(1).split('');
+		if(c.length== 3)
+			c= [c[0], c[0], c[1], c[1], c[2], c[2]];
+		c= '0x'+c.join('');
+		ret.r = (c>>16)&255;
+		ret.g = (c>>8)&255;
+		ret.b = c&255;
+		ret.a = Number(opacity.toFixed(2));
+		ret.rgb = sformat("rgba({1}, {2}, {3})", ret.r, ret.g, ret.b);
+		ret.rgba = sformat("rgba({1}, {2}, {3}, {4})", ret.r, ret.g, ret.b, ret.a);
+	}
+	return ret;
 };
-function rgbaToHex(r, g, b, a)
+function rgbToHex(r, g, b)
 {
 	function fmt(val)
 	{
@@ -740,9 +747,8 @@ function rgbaToHex(r, g, b, a)
 		r = parseInt(parts[0], 10);
 		g = parseInt(parts[1], 10);
 		b = parseInt(parts[2], 10);
-		a = parts[3] ? Math.round(parseFloat(parts[3]) * 255) : undefined;
 	}
-	return ('#' + fmt(r) + fmt(g) + fmt(b) + (a ? fmt(a) : ""));
+	return ('#' + fmt(r) + fmt(g) + fmt(b));
 };
 
 /****

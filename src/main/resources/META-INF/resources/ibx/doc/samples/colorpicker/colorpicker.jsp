@@ -26,12 +26,12 @@
 				{
 					var info = e.originalEvent.data;
 					colorPicker.ibxWidget("option", {"color":info.color, "opacity":info.opacity});					
-					$("body").css("backgroundColor", info.colorRgba.rgba);
-					$(".rgb-red").text(info.colorRgba.r);
-					$(".rgb-green").text(info.colorRgba.g);
-					$(".rgb-blue").text(info.colorRgba.b);
-					$(".rgb-alpha").text(info.colorRgba.a);
-					$(".rgb-rgba").text(info.colorRgba.rgba);
+					$("body").css("backgroundColor", info.rgba.rgba);
+					$(".rgb-red").text(info.rgba.r);
+					$(".rgb-green").text(info.rgba.g);
+					$(".rgb-blue").text(info.rgba.b);
+					$(".rgb-alpha").text(info.rgba.a);
+					$(".rgb-rgba").text(info.rgba.rgba);
 					$(".rgb-hex").text(info.color);
 				});
 
@@ -41,6 +41,8 @@
 					palPicker.ibxWidget("option", {"color": data.color, "opacity": data.opacity});
 					$("body").css("backgroundColor", hexToRgba(data.color, data.opacity).rgba);
 				});
+				
+				
 				palPicker.ibxWidget("option", "color", "#ffffff");
 			}, true);
 		</script>
