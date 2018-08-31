@@ -25,58 +25,52 @@
 				{
 					Ibfs.ibfs.login("admin", "admin").done(function(e)
 					{
-						
-						var def1 = Ibfs.ibfs.listItems("IBFS:/WFC/Repository", {asJSON:true})
-						def1.id = "def1";
-						def1.done(function(exInfo)
-						{
-							console.log("def1 resolved");
-						});
-
-						var def2 = Ibfs.ibfs.listItems("IBFS:/WFC/Repository/Public", {asJSON:true})
-						def2.id = "def2";
-						def2.done(function(exInfo)
-						{
-							console.log("def2 resolved");
-						});
-
-						var arDefs = [def1.deferred, def2.deferred]
-						$.when.apply($.Deferred, arDefs).done(function()
-						{
-							console.log("array resolved");
-						});
-
-						for(var i = 0; i < 5; ++i)
-						{
-							$(".dlg-menu").off("ibx_beforeopen").on("ibx_beforeopen", function(e, info)
-							{
-								console.log(e.type);
-							});
-						}
 					});
+
+					$(".test-button").on("click", function(e)
+					{
+						$(".test-editor-dialog").ibxWidget("open");
+					});
+
 				});
 			}, [{"src":"./test_res_bundle.xml", "loadContext":"app"}], true);
 		</script>
 		<style type="text/css">
+			html, body
+			{
+				width:100%;
+				height:100%;
+				margin:0px;
+				box-sizing:border-box;
+			}
+
+			.main-box
+			{
+				width:100%;
+				height:100%;
+				overflow:auto;
+				background-color:white;
+				box-sizing:border-box;
+			}
+
+			.test-popup
+			{
+				border:1px solid #aaa;
+				box-shadow:0px 0px 15px 0px #999;
+			}
 		</style>
 	</head>
 	<body class="ibx-root">
-		<div data-ibx-type="ibxMenuButton">Menu Here
-			<div data-ibx-type="ibxMenu">
-				<div data-ibx-type="ibxMenuItem">Dialog Item
-					<div class="dlg-menu" data-ibx-type="dialogMenuItem">
-						<div data-ibx-type="ibxButton">Test Button</div>
-					</div>
-				</div>
-				<div data-ibx-type="ibxMenuItem">Regular Item
-					<div data-ibx-type="ibxMenu">
-						<div data-ibx-type="ibxMenuItem">Normal Menu Item</div>
-					</div>
-				</div>
-			</div>
+		<div class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="center" data-ibxp-justify="center">
+			<div class="test-button" data-ibx-type="ibxButton">Editor...</div>
 		</div>
 
-		<
+		<div class="test-edit-dialog" data-ibx-type="ibxDialog" data-ibxp-destroy-on-close="false">
+			<div class="test-editor" data-ibx-type="ibxRichEdit">Julian's test rich edit!</div>
+		</div>
 
+		<div class="test-popup" data-ibx-type="ibxPopup" data-ibxp-auto-close="false" data-ibxp-destroy-on-close="false" data-ibxp-opaque="true">
+			<div class="test-slider" data-ibx-type="ibxHRange" data-ibx-options="{value:25, value2:75, valueTextPos:'end', minTextPos:'center', maxTextPos:'center'}"></div>
+		</div>
 	</body>
 </html>

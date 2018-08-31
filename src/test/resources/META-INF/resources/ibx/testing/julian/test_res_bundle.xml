@@ -101,6 +101,7 @@
 
 	<scripts>
 		<script-file src="./test_res_script.js"/>
+		<script-file src="../../ibxtools/shared_resources/js/ibfs.js" loadContext="ibx"/>
 		<script-block>
 		<![CDATA[
 			$.widget("ibi.testFrame", $.ibi.ibxVBox, 

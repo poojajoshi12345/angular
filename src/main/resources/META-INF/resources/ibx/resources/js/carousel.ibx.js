@@ -12,6 +12,7 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 		nameRoot:true,
 		focusDefault:true,
 		align:"stretch",
+		allowDragScrolling:true,
 		showPageMarkers:true,
 		pageMarkersPos:"end",
 		pageMarkerClass:"ibx-csl-page-marker",
@@ -34,10 +35,10 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 			"size":"offsetWidth",
 			"pageSize":"pageWidth",
 			"scrollSize":"scrollWidth",
+			"fractionalStepSize":25,
 			"forward":{"child":"right", "page":"scrollRight"},
 			"backward":{"child":"left", "page":"scrollLeft"},
 		},
-		allowDragScrolling:true,
 
 		aria:
 		{
@@ -142,7 +143,7 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 			"animationProperties":{},
 			"animationOptions":{"easing":"linear"}
 		};
-		scrollInfo.delta = this._calcScrollStepSize(scrollInfo.steps, scrollInfo.scrollType);
+		scrollInfo.delta = this._calcScrollDelta(scrollInfo.steps, scrollInfo.scrollType);
 		scrollInfo.endPos = this._itemsBox.prop(scrollInfo.axis) + scrollInfo.delta;
 		scrollInfo.pageInfo = this.getPageInfo();
 		scrollInfo.animationProperties[scrollInfo.axis] = scrollInfo.endPos;
@@ -166,7 +167,7 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 						this.scroll(scrollInfo.steps, scrollInfo.scrollType, scrollInfo.scrollTime);
 					else
 						this.element.dispatchEvent("ibx_endscroll", scrollInfo, false, false);
-					this.element.removeClass("ibx-csl-scrolling")
+					this.element.removeClass("ibx-csl-scrolling");
 				}.bind(this, scrollInfo),
 			}, evt.data.animationOptions);
 			this._itemsBox.animate(scrollInfo.animationProperties, scrollInfo.animationOptions);
@@ -186,16 +187,21 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 		if(pageInfo.scrollLeft > metrics.marginBox.left)
 			steps = metrics.marginBox.left - pageInfo.scrollLeft;
 
+		//We need to set the size here because when fractional scrolling is no we want to make the step size
+		//bigger (25) so the control scrolls faster.  Here we need an exact 1px step for accuracy.
+		var curSize = options.scrollProps.fractionalStepSize;
+		options.scrollProps.fractionalStepSize = 1;
 		this.scroll(steps, "fractional", options.scrollTime.jump);
+		options.scrollProps.fractionalStepSize = curSize; //reset to default fractional size.
 	},
-	_calcScrollStepSize:function(steps, scrollType)
+	_calcScrollDelta:function(steps, scrollType)
 	{
 		var options = this.options;
 		var delta = 0;
 		steps = isFinite(steps) ? steps : (steps >= 0) ? 1 : -1;
 
 		if(scrollType == "fractional")
-			delta = steps * 25;
+			delta = steps * options.scrollProps.fractionalStepSize;
 		else
 		if(scrollType == "page")
 			delta =  steps * this._itemsBox.prop(options.scrollProps.size);
@@ -395,6 +401,7 @@ $.widget("ibi.ibxVCarousel", $.ibi.ibxCarousel,
 			"size":"offsetHeight",
 			"pageSize":"pageHeight",
 			"scrollSize":"scrollHeight",
+			"fractionalSize":25,
 			"forward":{"child":"bottom", "page":"scrollBottom"},
 			"backward":{"child":"top", "page":"scrollTop"},
 		},
