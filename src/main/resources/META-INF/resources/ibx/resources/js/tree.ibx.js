@@ -348,6 +348,7 @@ $.widget("ibi.ibxTreeBrowser", $.ibi.ibxVBox,
 	{
 		this._super();
 		var options = this.options;
+		this.element.ibxMutationObserver({"listen":true, "subtree":true}).on("ibx_nodemutated", this._onChildrenChange.bind(this));
 		this.element.addClass("ibx-tree").on("swiperight", this._onTreeSwipeEvent.bind(this)).ibxTreeSelectionManager();
 		this.add(this.children());
 	},
@@ -370,6 +371,20 @@ $.widget("ibi.ibxTreeBrowser", $.ibi.ibxVBox,
 	{
 		this.children().removeClass("tnode-root");
 		this._super(el, destroy, refresh);
+	},
+	_onChildrenChange:function(e)
+	{
+		var mRecs = e.originalEvent.data;
+		$(mRecs).each(function(idx, rec)
+		{
+			$(rec.addedNodes).each(function(idx, el)
+			{
+				var widget = $(el).data("ibxWidget");
+				if(!widget)
+					return;
+				widget.refreshIndent(null, true);
+			}.bind(this));
+		}.bind(this));
 	},
 	_onTreeSwipeEvent:function(e)
 	{
