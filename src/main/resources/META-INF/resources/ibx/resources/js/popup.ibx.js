@@ -291,7 +291,11 @@ ibxPopupManager.onPopupEvent = function(e, popup)
 
 	//[IBX-66]if desired, kill all pointer events on background iframes.
 	if(ibxPopupManager.autoDisableIFrames)
-		$("iframe:not(.pop-top iframe)").toggleClass("ibx-popup-disabled-iframe", !!topPop.length);
+	{
+		//[IBX-198] have to turn pointer-events back on for topmost popup iframes.
+		$("iframe").toggleClass("ibx-popup-disabled-iframe", !!topPop.length);
+		$(".pop-top iframe").removeClass("ibx-popup-disabled-iframe");
+	}
 };
 ibxPopupManager.onWindowEvent = function(e)
 {

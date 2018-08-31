@@ -29,9 +29,16 @@
 
 					$(".test-button").on("click", function(e)
 					{
-						$(".test-editor-dialog").ibxWidget("open");
-					});
+						var dlg = $(".test-editor-dialog");
+						dlg.ibxWidget("open");
 
+						var editor = $(".test-editor")
+						editor.ibxWidget("text", "Test Editor");
+					});
+					$(".dlg-btn-popup").on("click", function(e)
+					{
+						$(".test-popup").ibxWidget("open");
+					});
 				});
 			}, [{"src":"./test_res_bundle.xml", "loadContext":"app"}], true);
 		</script>
@@ -53,10 +60,20 @@
 				box-sizing:border-box;
 			}
 
+			.test-editor
+			{
+				width:300px;
+				height:200px;
+				margin-top:5px;
+				border:1px solid #ccc;
+				border-radius:5px;
+			}
+
 			.test-popup
 			{
-				border:1px solid #aaa;
-				box-shadow:0px 0px 15px 0px #999;
+				width:100px;
+				height:100px;
+				border:1px solid black;
 			}
 		</style>
 	</head>
@@ -65,12 +82,13 @@
 			<div class="test-button" data-ibx-type="ibxButton">Editor...</div>
 		</div>
 
-		<div class="test-edit-dialog" data-ibx-type="ibxDialog" data-ibxp-destroy-on-close="false">
-			<div class="test-editor" data-ibx-type="ibxRichEdit">Julian's test rich edit!</div>
+		<div class="test-editor-dialog" data-ibx-type="ibxDialog" data-ibxp-destroy-on-close="false">
+			<div tabindex="0" class="dlg-btn-popup" data-ibx-type="ibxButton">Show Popup...</div>
+			<div tabindex="0" class="test-editor" data-ibx-type="ibxRichEdit">Julian's test rich edit!</div>
 		</div>
 
-		<div class="test-popup" data-ibx-type="ibxPopup" data-ibxp-auto-close="false" data-ibxp-destroy-on-close="false" data-ibxp-opaque="true">
-			<div class="test-slider" data-ibx-type="ibxHRange" data-ibx-options="{value:25, value2:75, valueTextPos:'end', minTextPos:'center', maxTextPos:'center'}"></div>
+		<div class="test-popup" data-ibx-type="ibxPopup" data-ibxp-auto-close="true" data-ibxp-destroy-on-close="false" data-ibxp-opaque="true">
+			Test Popup
 		</div>
 	</body>
 </html>
