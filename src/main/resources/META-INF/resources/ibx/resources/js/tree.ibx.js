@@ -79,7 +79,7 @@ $.widget("ibi.ibxTree", $.ibi.ibxVBox,
 			$(rec.addedNodes).each(function(idx, el)
 			{
 				var widget = $(el).data("ibxWidget");
-				if(!widget)
+				if(!widget || !widget.element.is(".ibx-tree-node"))
 					return;
 				widget.refreshIndent(null, true);
 			}.bind(this));
@@ -380,7 +380,7 @@ $.widget("ibi.ibxTreeBrowser", $.ibi.ibxVBox,
 			$(rec.addedNodes).each(function(idx, el)
 			{
 				var widget = $(el).data("ibxWidget");
-				if(!widget)
+				if(!widget || !widget.element.is(".ibx-tree-node"))
 					return;
 				widget.refreshIndent(null, true);
 			}.bind(this));
