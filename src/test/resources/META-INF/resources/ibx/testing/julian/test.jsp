@@ -35,6 +35,17 @@
 						var editor = $(".test-editor")
 						editor.ibxWidget("text", "Test Editor");
 					});
+
+					$(".test-button").on("ibx_ctxmenu", function(e)
+					{
+						if(!window.ctxMenu)
+							window.ctxMenu = ibx.resourceMgr.getResource(".xxx");
+	
+						var menu = window.ctxMenu.clone(true);
+
+						e.menu = menu;
+					});
+
 					$(".dlg-btn-popup").on("click", function(e)
 					{
 						$(".test-popup").ibxWidget("open");

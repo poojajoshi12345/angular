@@ -10,15 +10,20 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<script type="text/javascript" src="../../resources/ibx.js"></script>
 		<script type="text/javascript">
-			var pkg = 
-			[
-				{"src":"../../ibxtools/shared_resources/js/ibfs.js", "loadContext":"ibx"}
-			];
-
 			ibx(function(e)
 			{
-				
-			},true);
+				$(".page").each(function(idx, el)
+				{
+					el = $(el);
+					var nItems = idx%2 ? 5 : 10;
+					for(var i = 0; i < nItems; ++i)
+					{
+						var item = $("<div>").text("Item " + i).addClass("test-item");
+						el.ibxWidget("add", item);
+					}
+
+				});
+			}, true);
 		</script>
 		<style type="text/css">
 			html, body, .main-box
@@ -28,21 +33,51 @@
 				margin: 0px;
 				box-sizing: border-box;
 			}
-			.rich-edit
+			.test-acc
 			{
-				flex:0 0 auto;
-				height:1em;
-				border:1px solid black;
+				flex: 1 1 auto;
+				width:100px;
 			}
+
+			.test-item
+			{
+				border:1px solid #ccc;
+				margin:2px;
+				padding:2px;
+			}
+
+			.test-edit
+			{
+				width:300px;
+				height:200px;
+				border:1px solid #ccc;
+			}
+
 		</style>
 	</head>
 	<body class="ibx-root">
-		<div class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="stretch" data-ibxp-justify="start">
-			<div class="xxx" data-ibx-type="ibxSelect">
-				<div class="item item1" data-ibx-type="ibxSelectItem">Item 1</div>
-				<div class="item item2" data-ibx-type="ibxSelectItem">Item 2</div>
-				<div class="item item3" data-ibx-type="ibxSelectItem">Item 3</div>
+		<div class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="center" data-ibxp-justify="start">
+			<div class="test-acc" data-ibx-type="ibxAccordionPane" data-ibxp-page-stretch="false" data-ibxp-page-auto-size="false">
+				<div class="page" data-ibx-type="ibxAccordionPage" data-ibxp-auto-close="false">Page
+				</div>
+				<div class="page" data-ibx-type="ibxAccordionPage" data-ibxp-auto-close="false">Page
+				</div>
+				<div class="page" data-ibx-type="ibxAccordionPage" data-ibxp-auto-close="false">Page
+				</div>
+				<div class="page" data-ibx-type="ibxAccordionPage" data-ibxp-auto-close="false">Page
+				</div>
+				<div class="page" data-ibx-type="ibxAccordionPage" data-ibxp-auto-close="false">Page
+				</div>
+				<div class="page" data-ibx-type="ibxAccordionPage" data-ibxp-auto-close="false">Page
+				</div>
+				<div class="page" data-ibx-type="ibxAccordionPage" data-ibxp-auto-close="false">Page
+				</div>
+				<div class="page" data-ibx-type="ibxAccordionPage" data-ibxp-auto-close="false">Page
+				</div>
+				<div class="page" data-ibx-type="ibxAccordionPage" data-ibxp-auto-close="false">Page
+				</div>
 			</div>
+		</div>
 	</body>
 </html>
 
