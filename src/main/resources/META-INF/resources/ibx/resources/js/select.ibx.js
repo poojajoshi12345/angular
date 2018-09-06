@@ -7,7 +7,8 @@ $.widget("ibi.ibxSelectBase", $.ibi.ibxTextField,
 		{
 			"btnShow": true,
 			"popup": true,
-			
+			"popupOnArrowOnly":false,
+
 			// overrides for the base
 			"autoComplete": "off",
 			"autoCorrect": "off",
@@ -95,11 +96,11 @@ $.widget("ibi.ibxSelectBase", $.ibi.ibxTextField,
 	_onTextChanged: function (e)
 	{
 	},
-	_onDownArrow: function ()
+	_onDownArrow: function(e)
 	{
 		if(this.options.popup && !this._popup.ibxWidget("isOpen"))
 		{
-			this._openPopup();
+			this._openPopup(e);
 		}
 	},
 	_boundPopupPosition: null,
@@ -164,7 +165,7 @@ $.widget("ibi.ibxSelectBase", $.ibi.ibxTextField,
 	{
 		if(e.keyCode == $.ui.keyCode.DOWN) // open dropdown on down arrow
 		{
-			this._onDownArrow();
+			this._onDownArrow(e);
 		}
 		else if(e.keyCode == $.ui.keyCode.ESCAPE) // close dropdown on up arrow or enter
 		{
@@ -184,7 +185,7 @@ $.widget("ibi.ibxSelectBase", $.ibi.ibxTextField,
 		else if (e.keyCode != 37 && e.keyCode != 39 && !e.shiftKey && !e.ctrlKey) // open popup for everything except left/right arrows
 		{
 			if(this.options.popup && !this._popup.ibxWidget("isOpen"))
-				this._openPopup();
+				this._openPopup(e);
 		}
 		this._super(e);
 	},
@@ -201,7 +202,7 @@ $.widget("ibi.ibxSelectBase", $.ibi.ibxTextField,
 	_onTextClick: function (e)
 	{
 		this._dontFocusText = false;
-		this._openPopup();
+		this._openPopup(e);
 	},
 	_onButtonClick: function (e)
 	{
@@ -210,7 +211,7 @@ $.widget("ibi.ibxSelectBase", $.ibi.ibxTextField,
 		else
 		{
 			this._dontFocusText = false;
-			this._openPopup();
+			this._openPopup(e);
 		}
 	},
 	closePopup: function ()
@@ -221,9 +222,9 @@ $.widget("ibi.ibxSelectBase", $.ibi.ibxTextField,
 	{
 		this._openPopup();
 	},
-	_openPopup: function ()
+	_openPopup: function(e)
 	{
-		if(this._trigger("beforeopenpopup"))
+		if(this._trigger("beforeopenpopup", e))
 		{
 			if(!this._popup.ibxWidget("isOpen"))
 			{
@@ -324,9 +325,9 @@ $.widget("ibi.ibxSelect", $.ibi.ibxSelectBase,
 	{
 		this._control.ibxWidget("selectHighlight");
 	},
-	_onDownArrow: function ()
+	_onDownArrow: function (e)
 	{
-		this._super();
+		this._super(e);
 		if(this.options.popup)
 		{
 			if (this._popup.ibxWidget("isOpen"))

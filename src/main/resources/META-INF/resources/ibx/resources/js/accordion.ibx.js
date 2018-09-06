@@ -295,15 +295,19 @@ $.widget("ibi.ibxAccordionPage", $.ibi.ibxFlexBox,
 			WE ONLY DO THIS WHEN HEIGHT IS NOT 0 AS 0 WILL NOT CAUSE THE ANIMATION TO BE TRIGGERED AND THE MAX-HEIGHT WILL NOT BE REMOVED.
 			In create we set max-height to 0 to force the initial transition.
 		****/
-		var nHeight = this._content.prop("scrollHeight");
+		var nHeight = selected ? this._content.prop("scrollHeight") : this._content.height();
 		if(nHeight != 0 && !this.element.hasClass("accordion-page-no-animate"))
 		{
-			this._content.css("max-height", nHeight + "px");
+			this._content.css("maxHeight", nHeight + "px");
+			this.element.css("minHeight", this._button.outerHeight(true) + "px");
 			this.element[0].offsetHeight;//this causes the document to reflow and trigger the max-height animation
 		}
 
 		if(!selected)
-			this._content.css("max-height", "");
+		{
+			this._content.css("maxHeight", "");
+			this.element.css("minHeight", "");
+		}
 
 		//DO NOT MOVE THIS CODE ABOVER THE max-height CALCULATION CODE ABOVE!!!!!!
 		selected ? this.element.removeClass("acc-pg-closed") : this.element.addClass("acc-pg-closed");
