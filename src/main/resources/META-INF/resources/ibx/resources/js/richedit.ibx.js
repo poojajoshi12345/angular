@@ -150,14 +150,11 @@ $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame,
 	insertContent:function(content, isHTML, selReplace, select)
 	{
 		/*NOTE: chrome/ff could use insertHTML/insertText...ie doesn't support this, so normalize to a solution that works the same across browsers*/
-			
-		//focus the document so selections are valid.
-		var doc = this.contentDocument();
-		doc.body.focus();
+		this.element.focus();
 
 		//get selections and create proper node for insertion.
-		var sels = doc.getSelection();
-		var selRange = sels.getRangeAt(0);
+		var sels = document.getSelection();
+		var selRange = sels.rangeCount ? sels.getRangeAt(0) : document.createRange();
 		var node = isHTML ? $.parseHTML(content, doc)[0] : doc.createTextNode(content);
 
 		//remove existing selected content if desired.
