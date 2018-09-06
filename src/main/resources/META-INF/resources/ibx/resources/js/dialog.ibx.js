@@ -82,7 +82,7 @@ $.widget("ibi.ibxDialog", $.ibi.ibxPopup,
 	_onDialogKeyDown:function(e)
 	{
 		var defAction = this.options.defaultAction;
-		if(e.keyCode == 13 && defAction)
+		if(!$(e.target).is(".ibx-button") && e.keyCode == 13 && defAction)
 		{
 			var target = this.element.find(defAction);
 			if(!target.ibxWidget("option", "disabled"))
