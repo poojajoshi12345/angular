@@ -43,7 +43,7 @@ $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame,
 			this.element.removeData("createContent");
 			
 			//let the world know we are done by resolving the promise.
-			this._readyPromise.resolve(this.element);
+			this._readyPromise.resolve(this.element[0]);
 		}
 	},
 	ready:function(fnReady)
@@ -153,8 +153,17 @@ $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame,
 		this.element.focus();
 
 		//get selections and create proper node for insertion.
-		var sels = document.getSelection();
-		var selRange = sels.rangeCount ? sels.getRangeAt(0) : document.createRange();
+		var doc = this.contentDocument();
+		var sels = doc.getSelection();
+		var selRange = null;
+		if(sels.rangeCount)
+			selRange = sels.getRangeAt(0)
+		else
+		{	
+			selRange = doc.createRange();
+			selRange.setStart(doc.body, 0)
+		}
+		
 		var node = isHTML ? $.parseHTML(content, doc)[0] : doc.createTextNode(content);
 
 		//remove existing selected content if desired.
