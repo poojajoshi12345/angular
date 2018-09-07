@@ -12,6 +12,7 @@ $.widget("ibi.ibxAccordionPane", $.ibi.ibxFlexBox,
 		direction:"column",
 		align:"stretch",
 		pageStretch:false,
+		pageAutoSize:false,
 		selected: "",
 		wrap: false,
 	},
@@ -122,10 +123,8 @@ $.widget("ibi.ibxAccordionPane", $.ibi.ibxFlexBox,
 	_refresh:function()
 	{
 		this._super();
-		if(this.options.pageStretch)
-			this.element.children(".ibx-accordion-page").addClass("acc-pg-stretch");
-		else
-			this.element.children(".ibx-accordion-page").removeClass("acc-pg-stretch");
+		var options = this.options;
+		this.element.children(".ibx-accordion-page").toggleClass("acc-pg-stretch", options.pageStretch).toggleClass("acc-pg-auto-size", options.pageAutoSize);
 	}
 });
 $.widget("ibi.ibxHAccordionPane", $.ibi.ibxAccordionPane, {options:{direction:"row"}, _widgetClass:"ibx-accordion-pane-horizontal"});
@@ -172,14 +171,16 @@ $.widget("ibi.ibxAccordionPage", $.ibi.ibxFlexBox,
 		this._super();
 		var options = this.options;
 
-		this.element.on("keydown", this._onPageKeyEvent.bind(this));
-		this.element.on("focus", this._onPageFocus.bind(this));
 		var content = this._content = $("<div class='ibx-accordion-page-content'>").ibxWidget(this.options.contentOptions);
+		content.on("transitionend", this._onTransition.bind(this))
+
 		var btn = this._button = $("<div tabIndex='0' class='ibx-accordion-page-button'>").on("click", this._onBtnChange.bind(this));
 		btn.data("accPage", this.element).ibxButton(this.options.btnOptions).addClass("ibx-accordion-button");
+
+		this.element.on("keydown", this._onPageKeyEvent.bind(this));
+		this.element.on("focus", this._onPageFocus.bind(this));
 		this.element.append(btn, content)
 		this.element.addClass("accordion-page-no-animate");
-		this.element.on("transitionend", this._onTransitionEnd.bind(this))
 		this.add(this.element.children());
 
 		//alternate to data-ibxp-text...direct text node children can be used to set the text.
@@ -260,13 +261,13 @@ $.widget("ibi.ibxAccordionPage", $.ibi.ibxFlexBox,
 		}
 		return this;
 	},
-	_onTransitionEnd: function (e)
+	_onTransition: function (e)
 	{
 		if (e.originalEvent.propertyName == "max-height")
 		{
 			// remove max-height at the end of the transition, so the page's content can grow as needed.
 			// max-height is really used just for animation when page closed/opened.
-			this._content.css("max-height", "");
+			this._content.css({"maxHeight": "", "overflow":""});
 		}
 	},
 	_setOption: function (key, value)
@@ -299,15 +300,11 @@ $.widget("ibi.ibxAccordionPage", $.ibi.ibxFlexBox,
 		if(nHeight != 0 && !this.element.hasClass("accordion-page-no-animate"))
 		{
 			this._content.css("maxHeight", nHeight + "px");
-			this.element.css("minHeight", this._button.outerHeight(true) + "px");
 			this.element[0].offsetHeight;//this causes the document to reflow and trigger the max-height animation
 		}
 
-		if(!selected)
-		{
-			this._content.css("maxHeight", "");
-			this.element.css("minHeight", "");
-		}
+		this._content.css({"maxHeight": selected ? (nHeight + "px") : "", "overflow":"hidden"});
+		this.element.css("minHeight", selected ? (this._button.outerHeight(true) + "px") : "");
 
 		//DO NOT MOVE THIS CODE ABOVER THE max-height CALCULATION CODE ABOVE!!!!!!
 		selected ? this.element.removeClass("acc-pg-closed") : this.element.addClass("acc-pg-closed");
