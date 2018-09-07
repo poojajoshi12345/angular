@@ -224,7 +224,9 @@ $.widget("ibi.ibxSelectBase", $.ibi.ibxTextField,
 	},
 	_openPopup: function(e)
 	{
-		if(this._trigger("beforeopenpopup", e))
+		var event = this.element.dispatchEvent("ibx_beforeopenpopup", e);
+		if(!event.isDefaultPrevented())
+		//if(this._trigger("beforeopenpopup", null, e))
 		{
 			if(!this._popup.ibxWidget("isOpen"))
 			{
