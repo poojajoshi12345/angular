@@ -19,6 +19,8 @@
 					if(!target.is(".ibx-button"))
 						return false;
 				}).remove();
+
+				addItems();
 			}, true);
 
 			function addItems()
@@ -27,11 +29,10 @@
 				for(var j = 0; j < 5; ++j)
 				{
 					var item = $("<div style='margin:5px;padding:5px;border:1px solid #ccc'>").ibxLabel({text:"Item " + j, inline:false});
-					page.ibxWidget("add", item);
+					page.ibxWidget("add", item, null, false, true);
 				}
-				page.ibxWidget("refresh");
+				//page.ibxWidget("refresh");
 			}
-
 		</script>
 		<style type="text/css">
 			html, body, .main-box
@@ -48,7 +49,8 @@
 			<div class="test-acc" data-ibx-type="ibxAccordionPane">
 				<div class="page1" data-ibx-type="ibxAccordionPage" data-ibxp-selected="true">1 page
 				</div>
-				<div class="page2" data-ibx-type="ibxAccordionPage">2 page
+				<div class="page2" data-ibx-type="ibxAccordionPage" data-ibxp-selected="false">2 page
+					<div class="xxx" style="width:100px; height:100px;border:1px solid red;">Test</div>
 				</div>
 			</div>
 

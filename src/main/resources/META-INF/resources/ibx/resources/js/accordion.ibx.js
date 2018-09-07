@@ -120,6 +120,12 @@ $.widget("ibi.ibxAccordionPane", $.ibi.ibxFlexBox,
 				this.userValue(this.options.userValue);
 		}
 	},
+	refresh:function(withChildren)
+	{
+		this._super();
+		if(withChildren)
+			this.children().ibxWidget("refresh");
+	},
 	_refresh:function()
 	{
 		this._super();
@@ -303,7 +309,7 @@ $.widget("ibi.ibxAccordionPage", $.ibi.ibxFlexBox,
 			this.element[0].offsetHeight;//this causes the document to reflow and trigger the max-height animation
 		}
 
-		this._content.css({"maxHeight": selected ? (nHeight + "px") : "", "overflow":"hidden"});
+		this._content.css({"maxHeight": (selected && nHeight) ? (nHeight + "px") : "", "overflow":"hidden"});
 		this.element.css("minHeight", selected ? (this._button.outerHeight(true) + "px") : "");
 
 		//DO NOT MOVE THIS CODE ABOVER THE max-height CALCULATION CODE ABOVE!!!!!!
