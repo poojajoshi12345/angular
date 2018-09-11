@@ -1290,6 +1290,7 @@ $.widget("ibi.ibxSelectItemListPaged", $.ibi.ibxVBox,
 			this.element.addClass("paged");
 		else
 			this.element.removeClass("paged");
+		this._listControl.ibxWidget("option", "multiSelect", this.options.multiSelect);
 	},
 	_onSearchTextChanged: function (e)
 	{
