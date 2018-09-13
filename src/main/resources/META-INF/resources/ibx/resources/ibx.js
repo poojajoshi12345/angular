@@ -177,11 +177,9 @@ function ibx()
 						var bundle = parser.parseFromString(strBundle, "application/xml");
 						packages = [bundle];
 					}
-					console.time("ibx.js-addBundles");
+
 					ibx.resourceMgr.addBundles(packages).done(function ibx_addBundlesDone()
 					{
-						console.timeEnd("ibx.js-addBundles");
-
 						//ibx is fully loaded and running.
 						$(window).dispatchEvent("ibx_ibxevent", {"hint":"ibxloaded", "ibx":ibx});
 
