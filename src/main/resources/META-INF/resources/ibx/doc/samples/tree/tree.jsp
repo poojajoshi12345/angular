@@ -204,12 +204,12 @@
 
 				node.attr("data-ibfs-path", xItem.attr("fullPath")).data("xItem", xItem);
 				
-				node.on("click", function(e)
+				node.on("ibx_click ibx_dblclick ibx_keydown", function(e)
 				{
 					var node = $(this);
-					if(node.is(e.currentTarget))
-						console.log(e.type, e.currentTarget);
-					e.stopPropagation();
+					if(node.ibxWidget("option", "container"))
+					{
+					}
 				});
 				return node;
 			};

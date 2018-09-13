@@ -219,28 +219,33 @@ $.widget("ibi.ibxTreeNode", $.ibi.ibxVBox,
 		var options = this.options;
 		var eType = e.type;
 
-		if(eType == "click" && this.singleClickExpand())
-			this.toggleExpanded();
-		else
-		if(eType == "dblclick")
-			this.toggleExpanded();
-		else
-		if(eType == "keydown")
+		var ibxType = "ibx_" + eType;
+		var ibxEvent = this.element.dispatchEvent(ibxType, e, true, true);
+		if(!ibxEvent.isDefaultPrevented())
 		{
-			if(e.keyCode === $.ui.keyCode.RIGHT)
-			{
-				if(!this.expanded())
-					this.toggleExpanded(true);
-				else
-					this.children().first().find(".tnode-label").first().focus();
-			}
+			if(eType == "click" && this.singleClickExpand())
+				this.toggleExpanded();
 			else
-			if(e.keyCode === $.ui.keyCode.LEFT)
+			if(eType == "dblclick")
+				this.toggleExpanded();
+			else
+			if(eType == "keydown")
 			{
-				if(this.expanded())
-					this.toggleExpanded(false);
+				if(e.keyCode === $.ui.keyCode.RIGHT)
+				{
+					if(!this.expanded())
+						this.toggleExpanded(true);
+					else
+						this.children().first().find(".tnode-label").first().focus();
+				}
 				else
-					$(this.parentNode()).children(".tnode-label").first().focus();
+				if(e.keyCode === $.ui.keyCode.LEFT)
+				{
+					if(this.expanded())
+						this.toggleExpanded(false);
+					else
+						$(this.parentNode()).children(".tnode-label").first().focus();
+				}
 			}
 		}
 	},

@@ -13,6 +13,14 @@
 		ibx(function(e)
 		{
 		},true);
+
+		window.addEventListener("ibx_ibxevent", ibxSystemEvent);
+		window.addEventListener("ibx_resmgr", ibxSystemEvent);
+		function ibxSystemEvent(e)
+		{
+			var hint = e.data.hint;
+			console.log(e.type, e.data.loadDepth, e.data.hint, e.data.src);
+		}
 	</script>
 	<style type="text/css">
 		html, body, .main-box
@@ -26,14 +34,6 @@
 </head>
 <body class="ibx-root">
 	<div class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="center" data-ibxp-justify="start">
-		<div class="test-tab" tabIndex="0" data-ibx-type="ibxTabPane" data-ibxp-inline="true" data-ibxp-aria.label="Tabs">
-			<div class="tab-page-1" data-ibx-type="ibxTabPage">Page 1
-			</div>
-			<!--
-			<div class="tab-page-2" data-ibx-type="ibxTabPage">Page 2
-			</div>
-			-->
-		</div>
 	</div>
 </body>
 </html>
