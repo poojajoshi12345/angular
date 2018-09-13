@@ -188,9 +188,7 @@ function ibx()
 						var autoBind = ibx._loadPromise._autoBind;
 						if(autoBind)
 						{
-							console.time("ibx.js-bindingElements");
 							ibx.bindElements((typeof(autoBind) === "string") ? autoBind : "");
-							console.timeEnd("ibx.js-bindingElements");
 							$(window).dispatchEvent("ibx_ibxevent", {"hint":"markupbound", "ibx":ibx});
 						}
 
