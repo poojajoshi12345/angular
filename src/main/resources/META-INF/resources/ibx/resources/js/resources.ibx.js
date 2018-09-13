@@ -280,7 +280,7 @@ _p.loadBundle = function(xResDoc)
 	xResDoc.resLoaded = xResDoc.resLoaded || $.Deferred();
 
 	//let the loading begin!
-	$(window).dispatchEvent("ibx_resmgr", {"hint":"bundleloading", "loadDepth":this._loadDepth, "resMgr":this, "bundle":bundle[0], src:xResDoc.path});
+	$(window).dispatchEvent("ibx_resmgr", {"hint":"bundleloading", "loadDepth":this._loadDepth, "resMgr":this, "bundle":bundle[0], src:xResDoc.documentURI});
 
 	//First load the dependency Resource Bundles...this will chain to any depth
 	var files = [];
@@ -378,8 +378,8 @@ _p.loadBundle = function(xResDoc)
 					this.loadedBundles[xResDoc.src] = xResDoc.resLoaded;
 			
 				document.body.offsetHeight;				
-				$(window).dispatchEvent("ibx_resmgr", {"hint":"bundleloaded", "loadDepth":this._loadDepth, "resMgr":this, "bundle":bundle[0]});
 				--this._loadDepth;
+				$(window).dispatchEvent("ibx_resmgr", {"hint":"bundleloaded", "loadDepth":this._loadDepth, "resMgr":this, "bundle":bundle[0], src:xResDoc.documentURI});
 				xResDoc.resLoaded.resolve(bundle, this);
 			}.bind(this, xResDoc, head, bundle));
 
