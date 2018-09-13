@@ -26,31 +26,18 @@
 					Ibfs.ibfs.login("admin", "admin").done(function(e)
 					{
 					});
-
-					$(".test-button").on("click", function(e)
-					{
-						var dlg = $(".test-editor-dialog");
-						dlg.ibxWidget("open");
-
-						var editor = $(".test-editor")
-						editor.ibxWidget("text", "Test Editor");
-					});
-
-					$(".test-button").on("ibx_ctxmenu", function(e)
-					{
-						if(!window.ctxMenu)
-							window.ctxMenu = ibx.resourceMgr.getResource(".xxx");
-	
-						var menu = window.ctxMenu.clone(true);
-
-						e.menu = menu;
-					});
-
-					$(".dlg-btn-popup").on("click", function(e)
-					{
-						$(".test-popup").ibxWidget("open");
-					});
 				});
+
+				var mainBox = $(".main-box");
+				console.time();
+				for(var i = 0; i < 30; ++i)
+				{
+					var bucket = ibx.resourceMgr.getResource(".wfc-bucket-container", true);
+					//bucket.ibxWidget("member", "bucketLabel", "Bucket" + i);
+					mainBox.ibxWidget("add", bucket);
+				}
+				console.timeEnd();
+
 			}, [{"src":"./test_res_bundle.xml", "loadContext":"app"}], true);
 		</script>
 		<style type="text/css">
@@ -70,36 +57,10 @@
 				background-color:white;
 				box-sizing:border-box;
 			}
-
-			.test-editor
-			{
-				width:300px;
-				height:200px;
-				margin-top:5px;
-				border:1px solid #ccc;
-				border-radius:5px;
-			}
-
-			.test-popup
-			{
-				width:100px;
-				height:100px;
-				border:1px solid black;
-			}
 		</style>
 	</head>
 	<body class="ibx-root">
 		<div class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="center" data-ibxp-justify="center">
-			<div class="test-button" data-ibx-type="ibxButton">Editor...</div>
-		</div>
-
-		<div class="test-editor-dialog" data-ibx-type="ibxDialog" data-ibxp-destroy-on-close="false">
-			<div tabindex="0" class="dlg-btn-popup" data-ibx-type="ibxButton">Show Popup...</div>
-			<div tabindex="0" class="test-editor" data-ibx-type="ibxRichEdit">Julian's test rich edit!</div>
-		</div>
-
-		<div class="test-popup" data-ibx-type="ibxPopup" data-ibxp-auto-close="true" data-ibxp-destroy-on-close="false" data-ibxp-opaque="true">
-			Test Popup
 		</div>
 	</body>
 </html>

@@ -71,8 +71,7 @@ $.widget("ibi.ibxTabPane", $.ibi.ibxFlexBox,
 			}
 			else
 				this._tabBar.ibxWidget("add", button, null, null, true);
-			button.ibxWidget("option", "group", this._group.ibxWidget("option", "name"));
-			this._group.ibxRadioGroup("addControl", button[0]);
+			button.ibxWidget("option", "group", this._group.ibxWidget("option", "name")); //this will add button to radioGroup
 		}.bind(this));
 		this.refresh();
 	},

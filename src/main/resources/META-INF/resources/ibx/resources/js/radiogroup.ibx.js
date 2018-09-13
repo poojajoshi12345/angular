@@ -115,6 +115,7 @@ $.widget("ibi.ibxRadioGroup",$.ibi.ibxFlexBox,
 			//add to internal controls if not already part of group.
 			if(this.hasControl(el))
 				return;
+
 			this._controls.push(el);
 
 			var ctrl = $(el).on("ibx_change", this._onChangeBind).on('ibx_beforechange', this._onBeforeChangeBind).data("ibxWidget");

@@ -106,7 +106,7 @@ function ibx()
 
 		//wait for jQuery/jQueryUI to be loaded...then boot ibx
 		var dateStart = new Date();
-		ibx._loadTimer = window.setInterval(function()
+		ibx._loadTimer = window.setInterval(function ibx_loadTimer()
 		{
 			if((new Date()) - dateStart > ibx.loadTimeout)
 			{
@@ -127,7 +127,7 @@ function ibx()
 				window.clearInterval(ibx._loadTimer);
 
 				//wait for jQuery to be fully loaded...
-				$(function()
+				$(function jQuery_main()
 				{
 					//we want to precompile this application, not run it.
 					if(ibx._appParms.compile == "true")
@@ -177,9 +177,11 @@ function ibx()
 						var bundle = parser.parseFromString(strBundle, "application/xml");
 						packages = [bundle];
 					}
-
-					ibx.resourceMgr.addBundles(packages).done(function()
+					console.time("ibx.js-addBundles");
+					ibx.resourceMgr.addBundles(packages).done(function ibx_addBundlesDone()
 					{
+						console.timeEnd("ibx.js-addBundles");
+
 						//ibx is fully loaded and running.
 						$(window).dispatchEvent("ibx_ibxevent", {"hint":"ibxloaded", "ibx":ibx});
 
@@ -188,7 +190,9 @@ function ibx()
 						var autoBind = ibx._loadPromise._autoBind;
 						if(autoBind)
 						{
+							console.time("ibx.js-bindingElements");
 							ibx.bindElements((typeof(autoBind) === "string") ? autoBind : "");
+							console.timeEnd("ibx.js-bindingElements");
 							$(window).dispatchEvent("ibx_ibxevent", {"hint":"markupbound", "ibx":ibx});
 						}
 
@@ -196,7 +200,7 @@ function ibx()
 						
 						ibx._loaded = true;
 						ibx._isLoading = !ibx._loaded;
-						ibx._loadPromise.then(function()
+						ibx._loadPromise.then(function ibx_loadPromiseDone()
 						{
 							ibx._setAccessibility(ibx.isAccessible);//turn on/off default accessibility
 
@@ -302,12 +306,12 @@ ibx.bindElements = function(elements)
 	var elBind = elements ? $(elements) : $("[data-ibx-type]");
 
 	//construct all the widgets
-	elBind.each(function(idx, el)
+	for(var i = 0; i < elBind.length; ++i)
 	{
-		var element = $(el);
+		var element = $(elBind[i]);
 
 		//construct any unconstructed children first...ignore any no-binds.
-		if(element.closest("[data-ibx-no-bind=true]").length)
+		if(element.is("[data-ibx-no-bind=true]"))
 			return;
 
 		var childWidgets = element.children();
@@ -335,7 +339,7 @@ ibx.bindElements = function(elements)
 			}
 
 			//then construct the parent element, if not already constructed.
-			if(element.is("[data-ibx-type]") && !element.is(":ibxWidget"))
+			if(element.is("[data-ibx-type]") && !element.is(".ibx-widget"))
 			{
 				var widgetType = element.attr("data-ibx-type");
 				if($.ibi[widgetType])
@@ -350,8 +354,9 @@ ibx.bindElements = function(elements)
 
 			element.data("ibxIsBound", true);//mark this element as having been bound.
 		}
-	}.bind(this));
+	}
 	return elBind;
+
 };
 
 ibx.getIbxMarkupOptions = function(el)

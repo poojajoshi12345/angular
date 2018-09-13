@@ -1,68 +1,39 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<title>HTML Test File</title>
-		<meta http-equiv="X-UA-Compatible" content="IE=11">
-		<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-		<meta http-equiv="Pragma" content="no-cache" />
-		<meta http-equiv="Expires" content="0" />
-		<meta name="google" value="notranslate">
-		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<script type="text/javascript" src="../../resources/ibx.js"></script>
-		<script type="text/javascript">
-			//ibx.jQueryDebug = true;
-			ibx(function(e)
-			{
-				$(".test-select").on("ibx_beforeopenpopup", function(e)
-				{
-					var target = $(e.originalEvent.data.target);
-					if(!target.is(".ibx-button"))
-						return false;
-				}).remove();
-
-				addItems();
-			}, true);
-
-			function addItems()
-			{
-				var page = $(".test-acc .page1");
-				for(var j = 0; j < 5; ++j)
-				{
-					var item = $("<div style='margin:5px;padding:5px;border:1px solid #ccc'>").ibxLabel({text:"Item " + j, inline:false});
-					page.ibxWidget("add", item, null, false, true);
-				}
-				//page.ibxWidget("refresh");
-			}
-		</script>
-		<style type="text/css">
-			html, body, .main-box
-			{
-				width: 100%;
-				height: 100%;
-				margin: 0px;
-				box-sizing: border-box;
-			}
-		</style>
-	</head>
-	<body class="ibx-root">
-		<div class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="center" data-ibxp-justify="start">
-			<div class="test-acc" data-ibx-type="ibxAccordionPane">
-				<div class="page1" data-ibx-type="ibxAccordionPage" data-ibxp-selected="true">1 page
-				</div>
-				<div class="page2" data-ibx-type="ibxAccordionPage" data-ibxp-selected="false">2 page
-					<div class="xxx" style="width:100px; height:100px;border:1px solid red;">Test</div>
-				</div>
+<head>
+	<title>HTML Test File</title>
+	<meta http-equiv="X-UA-Compatible" content="IE=11">
+	<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+	<meta http-equiv="Pragma" content="no-cache" />
+	<meta http-equiv="Expires" content="0" />
+	<meta name="google" value="notranslate">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<script type="text/javascript" src="../../resources/ibx.js"></script>
+	<script type="text/javascript">
+		ibx(function(e)
+		{
+		},true);
+	</script>
+	<style type="text/css">
+		html, body, .main-box
+		{
+			width: 100%;
+			height: 100%;
+			margin: 0px;
+			box-sizing: border-box;
+		}
+	</style>
+</head>
+<body class="ibx-root">
+	<div class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="center" data-ibxp-justify="start">
+		<div class="test-tab" tabIndex="0" data-ibx-type="ibxTabPane" data-ibxp-inline="true" data-ibxp-aria.label="Tabs">
+			<div class="tab-page-1" data-ibx-type="ibxTabPage">Page 1
 			</div>
-
-
-			<div class="test-select" data-ibx-type="ibxSelect">
-				<div class="item" data-ibx-type="ibxSelectItem">1 Item</div>
-				<div class="item" data-ibx-type="ibxSelectItem">2 Item</div>
-				<div class="item" data-ibx-type="ibxSelectItem">3 Item</div>
-				<div class="item" data-ibx-type="ibxSelectItem">4 Item</div>
-				<div class="item" data-ibx-type="ibxSelectItem">5 Item</div>
+			<!--
+			<div class="tab-page-2" data-ibx-type="ibxTabPage">Page 2
 			</div>
+			-->
 		</div>
-	</body>
+	</div>
+</body>
 </html>
-

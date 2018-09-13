@@ -177,7 +177,7 @@ $.widget("ibi.ibxCheckBox", $.ibi.ibxLabel,
 			this.doCommandAction("checked", value);
 		}
 		else
-		if(key == "group")
+		if(key == "group" && changed)
 		{
 			if(this.options.group != value)
 				$.ibi.ibxRadioGroup.removeControl(this.options.group, this.element[0]);

@@ -143,6 +143,7 @@ _p.loadExternalResFile = function(elFile)
 	{
 		elFile = $(elFile);
 		var src = this.getResPath(elFile.attr("src"), elFile.closest("[loadContext]").attr("loadContext"));
+
 		if(this.loadedFiles[src])
 		{
 			//duplicate, just resolve and continue
@@ -370,21 +371,16 @@ _p.loadBundle = function(xResDoc)
 			//now load all forward reference Resource Bundles (packages) that this bundle wants to load.
 			var files = [];
 			bundle.find("ibx-package").each(function(idx, el){el = $(el);files.push({"src":$(el).attr("src"), "loadContext":el.closest("[loadContext]").attr("loadContext")});});
-			this.addBundles(files).done(function()
+			this.addBundles(files).done(function ibx_resmgr_bundleFullyLoaded()
 			{
 				//save that this bundles has been loaded.
 				if(xResDoc.src)
 					this.loadedBundles[xResDoc.src] = xResDoc.resLoaded;
 			
+				document.body.offsetHeight;				
+				$(window).dispatchEvent("ibx_resmgr", {"hint":"bundleloaded", "loadDepth":this._loadDepth, "resMgr":this, "bundle":bundle[0]});
 				--this._loadDepth;
-
-				//give the main thread a chance to render what's been loaded before resolving the promise
-				window.setTimeout(function(bundle)
-				{
-					$(window).dispatchEvent("ibx_resmgr", {"hint":"bundleloaded", "loadDepth":this._loadDepth, "resMgr":this, "bundle":bundle[0]});
-					--this._loadDepth;
-					xResDoc.resLoaded.resolve(bundle, this);
-				}.bind(this, bundle), 0);
+				xResDoc.resLoaded.resolve(bundle, this);
 			}.bind(this, xResDoc, head, bundle));
 
 		}.bind(this, bundle));
