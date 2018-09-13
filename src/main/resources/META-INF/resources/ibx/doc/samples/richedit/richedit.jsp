@@ -100,17 +100,12 @@
 					var state = updateUI();
 				});
 				
-				$(".rich-edit").on("focusin", function(e)
-				{
-					window.activeEditor = e.target;
-				});
-
 				$(".re-cmd").on("ibx_triggered ibx_uservaluechanged", function(e)
 				{
 					if(window._updatingUI)
 						return;
 
-					var re = $(window.activeEditor);
+					var re = $(".rich-edit-iframe");
 					var cmd = $(e.currentTarget);
 					var	reCmd = cmd.ibxWidget("userValue");
 					var val = "";
