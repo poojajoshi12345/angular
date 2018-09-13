@@ -308,7 +308,7 @@ ibx.bindElements = function(elements)
 
 		//construct any unconstructed children first...ignore any no-binds.
 		if(element.is("[data-ibx-no-bind=true]"))
-			return;
+			continue;
 
 		var childWidgets = element.children();
 		ibx.bindElements(childWidgets);
