@@ -13,11 +13,17 @@
 	background-color:transparent;
 }
 
-.ibx-progress-marker
+.ibx-progress-marker-start-end
 {
 	flex:1 1 auto;
 	border-radius:3px;
 	background-image: linear-gradient(to right, lightgreen 90%, transparent 100%);
+}
+
+.ibx-progress-marker-complete
+{
+	background-color:lightgreen;
+	background-image: none;
 }
 
 .ibx-progress-gradient

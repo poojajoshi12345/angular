@@ -11,6 +11,7 @@ $.widget("ibi.ibxProgressBar", $.ibi.ibxHBox,
 		"minVal":0,
 		"maxVal":100,
 		"curVal":0,
+
 		"markerClasses":"",
 
 		"showProgText":false,
@@ -33,7 +34,7 @@ $.widget("ibi.ibxProgressBar", $.ibi.ibxHBox,
 	{
 		this._super();
 		this.progText = $("<div class='ibx-progress-label'>").ibxHBox({align:"stretch", justify:"end"});
-		this.progMarker = $("<div class='ibx-progress-marker'>").ibxHBox({align:"stretch"});
+		this.progMarker = $("<div class='ibx-progress-marker ibx-progress-marker-start-end'>").ibxHBox({align:"stretch"});
 		this.element.append(this.progMarker);
 	},
 	_setAccessibility:function(accessible, aria)
@@ -55,13 +56,12 @@ $.widget("ibi.ibxProgressBar", $.ibi.ibxHBox,
 	{
 		this._super();
 		this.progText.ibxWidget("destroy").removeClass("ibx-progress-label");
-		this.progMarker.ibxWidget("destroy").removeClass("ibx-progress-marker");
+		this.progMarker.ibxWidget("destroy").removeClass("ibx-progress-marker-start-end, ibx-progress-marker-end-start, ibx-progress-complete");
 	},
 	inProgress:function()
 	{
 		var options = this.options;
 		return (options.curVal > options.minVal && options.curVal < options.maxVal);
-
 	},
 	_refresh:function()
 	{
@@ -71,11 +71,47 @@ $.widget("ibi.ibxProgressBar", $.ibi.ibxHBox,
 		this._trigger("format_value", null, {"curValue": options.curVal});
 		this.progText.text(options.showProgText ? (options.progText || options.curVal) : "");
 
-		var flex = (options.curVal - options.minVal)/(options.maxVal - options.minVal);
-		this.progMarker.css("flex-grow", flex).addClass(options.markerClasses);
+		var flex = (options.curVal >= options.maxVal) ? 1 : ((options.curVal - options.minVal)/(options.maxVal - options.minVal));
+		this.progMarker.css("flex-grow", flex).addClass(options.markerClasses).toggleClass("ibx-progress-marker-complete", (flex == 1));
 		this.progText.css("flex-grow", 1-flex).addClass(options.progTextClasses);
 	
 		this.element.append(this.progMarker, this.progText);
+	}
+});
+
+$.widget("ibi.ibxIndeterminateProgressBar", $.ibi.ibxProgressBar, 
+{
+	options:
+	{
+	},
+	_widgetClass:"ibx-indeterminant-progress-bar",
+	_create:function()
+	{
+		this._super();
+	},
+	_idTimer:null,
+	start:function(nTime)
+	{
+		this.stop();
+		window.setInterval(this._onProgress.bind(this))
+	},
+	stop:function(e)
+	{
+		window.clearInterval(this._idTimer);
+		this._idTimer = null;
+	},
+	_onProgress:function()
+	{
+	},
+	inProgress:function()
+	{
+		var options = this.options;
+		return (options.curVal > options.minVal && options.curVal < options.maxVal);
+	},
+	_refresh:function()
+	{
+		this._super();
+		var options = this.options;
 	}
 });
 

@@ -91,11 +91,14 @@
 					var fonts = ["arial", "arial black", "bookman", "comic sans ms", "courier", "courier new", "georgia", "garamond", "helvetica", "palatino", "times", "times new roman", "trebuchet ms", "verdana"];
 					for(var i = 0; i < fonts.length; ++i)
 					{
-						var selectItem = $("<div class='select-font-name'>").ibxSelectRadioItem({"text":fonts[i], "userValue":fonts[i]});
-						selectItem.ibxWidget("option", "group", "rgFontName");
+						var selected = (i == 1);
+						var selectItem = $("<div class='select-font-name'>").ibxSelectRadioItem({"text":fonts[i], "group":"rgFontName", "userValue":fonts[i], "selected":selected});
+
+						//var selectItem = $("<div class='select-font-name'>").ibxSelectRadioItem({"text":fonts[i], "userValue":fonts[i]});
+						//selectItem.ibxWidget("option", "group", "rgFontName");
 						select.ibxWidget("addControlItem", selectItem);
 					}
-					select.ibxWidget("userValue", "bookman");
+					//select.ibxWidget("userValue", "bookman");
 
 					var strSample = ibx.resourceMgr.getString("IBX_STR_SAMPLE");
 					var strFmt = sformat("{1}<p/>Start Text<p/>{2}<p/>{2}<p/>{2}<p/>End Text</p>{1}<p/>", "&lt;iframe>Rich Edit", strSample);
@@ -354,7 +357,7 @@
 				<div tabindex="0" class="tb-button" title="Paste" data-ibx-type="ibxButtonSimple" data-ibxp-command="cmdPaste" data-ibxp-glyph="content_paste" data-ibxp-glyph-classes="material-icons"></div>
 				<div tabindex="0" class="tb-button" title="Clear" data-ibx-type="ibxButtonSimple" data-ibxp-command="cmdDelete" data-ibxp-glyph="clear" data-ibxp-glyph-classes="material-icons"></div>
 				<div class="tb-separator"></div>
-				<div tabindex="0" class="tb-select tb-select-font-name" data-ibxp-group="rgFontName" title="Font Size" data-ibx-type="ibxSelect" data-ibxp-command="cmdFontName" data-ibxp-readonly="true">
+				<div tabindex="0" class="tb-select tb-select-font-name" title="Font Size" data-ibx-type="ibxSelect" data-ibxp-command="cmdFontName" data-ibxp-readonly="true">
 					<!--
 					<div class="select-font-name" data-ibx-type="ibxSelectRadioItem" data-ibxp-group="rgFontName" data-ibxp-user-value="arial">Arial</div>
 					<div class="select-font-name" data-ibx-type="ibxSelectRadioItem" data-ibxp-group="rgFontName" data-ibxp-user-value="arial black">Arial Black</div>
