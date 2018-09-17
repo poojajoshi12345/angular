@@ -226,18 +226,18 @@ $.widget('ibi.ibxDiagram', $.ibi.ibxWidget, {
 			var y1 = c1.offsetTop + (box1.height / 2);
 			var x2 = c2.offsetLeft;
 			var y2 = c2.offsetTop + (box2.height / 2);
-			var padLeft = (g.children[1] == null) ? 0 : connection.lineWidth;
-			var padRight = (g.children[2] == null) ? 0 : connection.lineWidth;
+			var padLeft = (g.childNodes[1] == null) ? 0 : connection.lineWidth;
+			var padRight = (g.childNodes[2] == null) ? 0 : connection.lineWidth;
 			var length = $.ibi.ibxDiagram.distance(x1, y1, x2, y2) - c1AnchorSize - padLeft - c2AnchorSize - padRight;
 			var angle = Math.atan2(y2 - y1, x2 - x1) * 180 / Math.PI;
 
 			// Move overall arrow to start connection point and rotate to point to end connection
-			g.transform.baseVal[0].setTranslate(x1 + c1AnchorSize + padLeft, y1);
-			g.transform.baseVal[1].setRotate(angle, 0, 0);
+			g.transform.baseVal.getItem(0).setTranslate(x1 + c1AnchorSize + padLeft, y1);
+			g.transform.baseVal.getItem(1).setRotate(angle, 0, 0);
 
-			g.children[0].setAttribute('x2', length);  // Set line's end point
-			if (g.children[2]) {
-				g.children[2].transform.baseVal[0].setTranslate(length, 0);  // Position end arrow, if any
+			g.childNodes[0].setAttribute('x2', length);  // Set line's end point
+			if (g.childNodes[2]) {
+				g.childNodes[2].transform.baseVal.getItem(0).setTranslate(length, 0);  // Position end arrow, if any
 			}
 		}
 	}
