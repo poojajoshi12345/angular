@@ -74,6 +74,11 @@
 {
 }
 
+.ibx-tree-node-placeholder
+{
+	display:none;
+}
+
 .ibx-tree-browser-node.tnode-scroll-children
 {
 	flex:1 1 auto;

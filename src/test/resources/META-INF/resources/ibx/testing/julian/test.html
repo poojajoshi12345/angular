@@ -12,18 +12,15 @@
 	<script type="text/javascript">
 		ibx(function(e)
 		{
-			var prog = $("<div class='test-prog'>").ibxProgressBar({"showProgText":true});
-			$(".main-box").append(prog);
-
-			var id = window.setInterval(function()
+			var tree = $(".test-tree");
+			var root = $("<div>").ibxTreeBrowserNode({container:true, labelOptions:{text:"Root Item"}});
+			tree.ibxWidget("add", root)
+			for(var i = 0; i < 10; ++i)
 			{
-				var widget = this.data("ibxWidget");
-				var options = widget.options;
-				widget.option({"curVal":options.curVal + 1, "progText":options.curVal});
-				widget.refresh();
-				if(options.curVal > options.maxVal)
-					options.curVal = 0;//window.clearInterval(id);
-			}.bind(prog), 10);
+				var child = $("<div>").ibxTreeBrowserNode({labelOptions:{text:"Item " + i}});
+				root.ibxWidget("add", child);
+			}
+			$(".page1").ibxWidget("selected", true);
 
 		},true);
 
@@ -43,17 +40,28 @@
 			margin: 0px;
 			box-sizing: border-box;
 		}
-
-		.test-prog
+		.test-acc
 		{
-			width:200px;
-			height:1em;
-			border:1px solid black;
+			flex:1 1 auto;
+		}
+		.page1
+		{
+		}
+		.test-tree
+		{
+			width:100%;
 		}
 	</style>
 </head>
 <body class="ibx-root">
 	<div class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="center" data-ibxp-justify="center">
+		<div class="test-acc" data-ibx-type="ibxAccordionPane" data-ibxp-auto-close="false">
+			<div class="acc-page page1" data-ibx-type="ibxAccordionPage" data-ibxp-auto-close="false">Accordion Page
+				<div class="test-tree" data-ibx-type="ibxTreeBrowser"></div>
+			</div>
+			<div class="acc-page page2" data-ibx-type="ibxAccordionPage" data-ibxp-auto-close="false">Accordion Page
+			</div>
+		</div>
 	</div>
 </body>
 </html>
