@@ -166,10 +166,12 @@ $.widget("ibi.ibxPalettePicker", $.ibi.ibxVBox,
 		if(e.type == "ibx_selchange" && info.selected == true)
 		{
 			var swatch = $(info.items[0]);
-			var attr = "data-pp-hex-value";
+			var dataVal = "ppHexValue";
 			if(swatch.is(".pp-no-fill"))
-				attr = "data-pp-rgb-value";
-			this.option("color", swatch.attr(attr));
+				dataVal = "ppRgbValue";
+			//this.option("color", swatch.data(dataVal))
+			//this.option("opacity", swatch.data("ppOpacity"));
+			this.option({"color":swatch.data(dataVal), "opacity":swatch.data("ppOpacity")});
 		}
 	},
 	_formatSliderVals:function(fmt, info)
@@ -213,6 +215,7 @@ $.widget("ibi.ibxPalettePicker", $.ibi.ibxVBox,
 	{
 		var options = this.options;
 		var changed = options[key] != value;
+
 		if(key == "palette" && changed)
 		{
 			if(!this._inSelectChange)
@@ -225,8 +228,9 @@ $.widget("ibi.ibxPalettePicker", $.ibi.ibxVBox,
 				colors.sort(fnAttrSort.bind(this, "idx", "numeric", false)).each(function(idx, color)
 				{
 					var value = color.getAttribute("value").toLowerCase();
+					var opacity = ibx.coercePropVal(color.getAttribute("opacity"));
 					var displayName = color.getAttribute("display-name") || value;
-					var swatch = $(sformat("<div tabindex='0' class='pp-swatch' title='{1}' data-pp-hex-value='{2}'>", displayName, value));
+					var swatch = $(sformat("<div tabindex='0' class='pp-swatch' title='{1}' data-pp-hex-value='{2}' data-pp-opacity='{3}'>", displayName, value, opacity));
 					swatch.css("backgroundColor", value).attr("data-pp-rgb-value", swatch.css("backgroundColor"));
 					this._swatchBox.append(swatch);
 				}.bind(this));
@@ -236,8 +240,9 @@ $.widget("ibi.ibxPalettePicker", $.ibi.ibxVBox,
 				colors.sort(fnAttrSort.bind(this, "idx", "numeric", false)).each(function(idx, color)
 				{
 					var value = color.getAttribute("value").toLowerCase();
+					var opacity = ibx.coercePropVal(color.getAttribute("opacity"));
 					var displayName = color.getAttribute("display-name") || value;
-					var swatch = $(sformat("<div tabindex='0' class='pp-swatch pp-swatch-custom' title='{1}' data-pp-hex-value='{1}'>", displayName, value));
+					var swatch = $(sformat("<div tabindex='0' class='pp-swatch pp-swatch-custom' title='{1}' data-pp-hex-value='{1}' data-pp-opacity='{3}'>", displayName, value, opacity));
 					swatch.css("backgroundColor", value).attr("data-pp-rgb-value", swatch.css("backgroundColor"));
 					this._customBox.append(swatch);
 				}.bind(this));
@@ -246,14 +251,14 @@ $.widget("ibi.ibxPalettePicker", $.ibi.ibxVBox,
 			}
 		}
 		else
-		if(key == "opacity")
+		if(key == "opacity" && changed)
 		{
 			if(!this._inSliderChange)
 				this._transSlider.ibxWidget("option", "value", Math.min(value * 100, 100));
 			options.colorRgba = hexToRgba(options.color, value);
 		}
 		else
-		if(key == "color")
+		if(key == "color" && changed)
 		{
 			value = value.toLowerCase();
 			if(value.search(/^rgb\(/i) == 0)
@@ -285,7 +290,8 @@ $.widget("ibi.ibxPalettePicker", $.ibi.ibxVBox,
 		this._transSlider.ibxWidget("option", options.sliderOptions);
 
 		var swatch = this.element.find(sformat("[data-pp-hex-value='{1}']", options.color));
-		this.element.ibxSelectionManager("option", "toggleSelection", false).ibxSelectionManager("selected", swatch, true);
+		if(!this.element.ibxSelectionManager("isSelected", swatch[0]))
+			this.element.ibxSelectionManager("option", "toggleSelection", false).ibxSelectionManager("selected", swatch, true);
 	}
 });
 //# sourceURL=colorpicker.ibx.js
