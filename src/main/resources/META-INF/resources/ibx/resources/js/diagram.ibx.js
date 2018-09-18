@@ -35,26 +35,11 @@ $.widget('ibi.ibxDiagram', $.ibi.ibxWidget, {
 		this._svgContainer.attr('width', this.element[0].clientWidth);
 		this._svgContainer.attr('height', this.element[0].clientHeight);
 
-		// TODO: marquee selection box can fall outside diagram
-		// TODO: use ibx selectable here
-		this.element.selectable({
-			tolerance: this.options.selectMode,
-			filter: '.ibx-selectable',
-			selected: (function(e, ui) {
-				var node = this.convertToNode(ui.selected);
-				if (node.options.selectable) {
-					node.options.selected = true;
-				} else {
-					node.element.removeClass('ui-selected');
-				}
-				this.triggerSelectionChange();
-			}).bind(this),
-			unselected: (function(e, ui) {
-				var node = this.convertToNode(ui.unselected);
-				node.options.selected = false;
-				this.triggerSelectionChange();
-			}).bind(this)
-		});
+		this.element.click((function() {
+			this.clearSelectedNodes();
+			this.triggerSelectionChange();
+		}).bind(this));
+
 		if (this.options.grid.size == null) {
 			this._nodeContainer.children().each(function(idx, child) {
 				$(child).draggable({grid: false});
@@ -156,6 +141,13 @@ $.widget('ibi.ibxDiagram', $.ibi.ibxWidget, {
 			node.element.toggleClass('ui-selected', node.options.selected);
 		}
 		this.triggerSelectionChange();
+	},
+	clearSelectedNodes: function() {
+		this._nodeContainer.children().each((function(idx, child) {
+			child = $(child).ibxDiagramNode('instance');
+			child.options.selected = false;
+			child.element.removeClass('ui-selected');
+		}).bind(this));
 	},
 	triggerSelectionChange: function() {
 		this.element.dispatchEvent(
@@ -386,16 +378,9 @@ $.widget('ibi.ibxDiagramNode', $.ibi.ibxWidget, {  // TODO: derive from base jqu
 			}
 			diagram.removeSelectedNodes();
 		});
-		nodeEl.mousedown(function(e) {
-			var node = diagram.convertToNode(e.currentTarget);
-			if (node.options.selectable) {
-				node.element[0].focus();  // Without this, jQuery draggable doesn't allow unmoveable elements to even receive focus
-			} else {
-				e.stopPropagation();  // Without this, jQuery selectable will make this unselectable node selectable, no matter what
-			}
-		});
-		nodeEl.mouseup(function(e) {
+		nodeEl.click(function(e) {
 			diagram.selectNode(e);
+			e.stopPropagation();
 		});
 
 		// Force position to absolute, in case it's been set otherwise elsewhere
