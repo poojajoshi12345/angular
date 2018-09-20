@@ -12,24 +12,20 @@
 		<script type="text/javascript">
 			ibx(function(e)
 			{
-				var tree = $(".test-tree1");
-				var root = $("<div>").ibxTreeBrowserNode({container:true, labelOptions:{text:"Root Item"}});
-				tree.ibxWidget("add", root)
-				for(var i = 0; i < 50; ++i)
+				$(".test-button").on("click", function testButtonClick(e)
 				{
-					var child = $("<div>").ibxTreeBrowserNode({labelOptions:{text:"Item " + i}});
-					root.ibxWidget("add", child);
-				}
-				$(".page1").ibxWidget("selected", true);
-
-				var tree = $(".test-tree2");
-				var root = $("<div>").ibxTreeNode({container:true, labelOptions:{text:"Root Item"}});
-				tree.ibxWidget("add", root)
-				for(var i = 0; i < 50; ++i)
-				{
-					var child = $("<div>").ibxTreeNode({labelOptions:{text:"Item " + i}});
-					root.ibxWidget("add", child);
-				}
+					console.profile("additems");
+					var list = $(".test-list");
+					list.ibxWidget("remove");
+					for(var i = 0; i < 5; ++i)
+					{
+						console.profile("additem");
+						var item = $("<div>").ibxLabel({"text":"Item " + i, "glyph":"face", "glyphClasses":"material-icons"}).addClass("test-item");
+						list.ibxWidget("add", item)
+						console.profileEnd("additem");
+					}
+					console.profileEnd("addItems");
+				});						
 			},true);
 
 			window.addEventListener("ibx_ibxevent", ibxSystemEvent);
@@ -48,35 +44,25 @@
 				margin: 0px;
 				box-sizing: border-box;
 			}
-			.test-acc
+			.test-list
 			{
 				flex:1 1 auto;
+				overflow:auto;
+				border:1px solid #ccc;
+				padding:2px;
 			}
-			.ibx-accordion-page-content
+			.test-item
 			{
-				display:flex;
-			}
-			.test-tree, .test-tree2
-			{
-				width:100%;
-				border:2px solid red;
-				box-sizing:border-box;
-			}
-			.tnode-root
-			{
-				min-height:0px;
+				flex:0 0 auto;
+				margin:2px;
+				border:1px solid #ccc;
 			}
 		</style>
 	</head>
 	<body class="ibx-root">
 		<div class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="center" data-ibxp-justify="center">
-			<div class="test-acc" data-ibx-type="ibxAccordionPane" data-ibxp-auto-close="false">
-				<div class="acc-page page1" data-ibx-type="ibxAccordionPage" data-ibxp-auto-close="false">Accordion Page
-					<div class="test-tree test-tree1" data-ibx-type="ibxTreeBrowser"></div>
-				</div>
-				<div class="acc-page page2" data-ibx-type="ibxAccordionPage" data-ibxp-auto-close="false">Accordion Page
-					<div class="test-tree test-tree2" data-ibx-type="ibxTree"></div>
-				</div>
+			<div class="test-button" data-ibx-type="ibxButton">LoadList</div>
+			<div class="test-list" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
 			</div>
 		</div>
 	</body>
