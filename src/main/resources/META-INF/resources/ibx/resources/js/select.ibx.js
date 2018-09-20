@@ -444,7 +444,7 @@ $.widget("ibi.ibxSelectItemList", $.ibi.ibxVBox,
 			}
 			else if (el.hasClass("ibx-select-separator"))
 			{
-				// do nothing for separators
+				;// do nothing for separators
 			}
 			else
 			{
@@ -476,7 +476,7 @@ $.widget("ibi.ibxSelectItemList", $.ibi.ibxVBox,
 			{
 				var groupChildren = this.element.find(".ibx-radio-group-" + el.attr("id"));
 				groupChildren.sort(fnSort.bind(this));
-				this.add(groupChildren, el)
+				this.add(groupChildren, el);
 			}
 		}.bind(this));
 	},
@@ -586,7 +586,7 @@ $.widget("ibi.ibxSelectItemList", $.ibi.ibxVBox,
 			}
 			bKeep = true;
 		}
-		this.element.find(".ibx-select-radio-item,.ibx-select-check-item").each(function (index, el) { $(el).data("ibxWidget").option({"checked": false, "selected": false}); })
+		this.element.find(".ibx-select-radio-item,.ibx-select-check-item").each(function (index, el) { $(el).data("ibxWidget").option({"checked": false, "selected": false}); });
 		if (!this.options.multiSelect || !bKeep)
 		{
 			this.element.find(".sel-selected").removeClass("sel-selected");
@@ -600,7 +600,7 @@ $.widget("ibi.ibxSelectItemList", $.ibi.ibxVBox,
 				selItem.data("ibxWidget").option({"checked": true, "selected": true});
 			}
 		}
-		this.element.find(".sel-selected.ibx-select-check-item, .sel-selected.ibx-select-radio-item").each(function (index, el) { $(el).data("ibxWidget").option({"checked": true, "selected": true}); })
+		this.element.find(".sel-selected.ibx-select-check-item, .sel-selected.ibx-select-radio-item").each(function (index, el) { $(el).data("ibxWidget").option({"checked": true, "selected": true}); });
 		if (!bNoUpdate)
 		{
 			this._trigger("change", null, {"item": selItem, "action": "select"});
@@ -624,7 +624,7 @@ $.widget("ibi.ibxSelectItemList", $.ibi.ibxVBox,
 		selItem.removeClass("sel-selected");
 		selItem.each(function (index,el){
 			$(el).ibxWidget("option", {"checked": false, "selected": false});
-		})
+		});
 		if (!bKeepAnchor)
 		{
 			this.element.find(".sel-anchor").removeClass("sel-anchor");
@@ -792,7 +792,7 @@ $.widget("ibi.ibxSelectItemList", $.ibi.ibxVBox,
 	{
 		var anchor = this.element.find(".ibx-select-item-highlight:ibxNavFocusable").first();
 		if (anchor.length == 0)
-			anchor = this.element.find(".sel-anchor:ibxNavFocusable").first()
+			anchor = this.element.find(".sel-anchor:ibxNavFocusable").first();
 		if (anchor.length == 0)
 			anchor = this.element.find(".sel-selected:ibxNavFocusable").first();
 		if (anchor.length == 0)
@@ -1497,7 +1497,7 @@ $.widget("ibi.ibxSelectItemListPaged", $.ibi.ibxVBox,
 		}
 		else
 		{
-			this.selectItems(element)
+			this.selectItems(element);
 			return this;
 		}
 		
