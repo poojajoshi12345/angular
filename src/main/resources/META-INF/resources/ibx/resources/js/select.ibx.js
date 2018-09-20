@@ -664,7 +664,10 @@ $.widget("ibi.ibxSelectItemList", $.ibi.ibxVBox,
 				if (this._fnMatch ? (this._fnMatch(searchText, itemText)) : (0 == itemText.toLowerCase().indexOf(searchText.toLowerCase())))
 				{
 					if (!found && !this.options.filter)
+					{
 						$(el).addClass("ibx-select-item-highlight");
+						el.scrollIntoView(false);
+					}
 					else
 						$(el).removeClass("ibx-select-item-highlight");
 					found = true;
