@@ -27,7 +27,8 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 		this.element.data("ibiIbxSelectionManager", this);//plymorphism
 		this.element[0].addEventListener("focusin", this._focusInBound = this._onFocusIn.bind(this), true);
 		this.element[0].addEventListener("focusout", this._focusOutBound = this._onFocusOut.bind(this), true);
-		this.element[0].addEventListener("mousedown", this._onMouseDownBound = this._onMouseDown.bind(this), false);
+		this.element[0].addEventListener("mousedown", this._onMouseEventBound = this._onMouseEvent.bind(this), false);
+		this.element[0].addEventListener("mouseup", this._onMouseEventBound, false);
 		this.element[0].addEventListener("keydown", this._onKeyDownBound = this._onKeyDown.bind(this), false);
 		this.element[0].addEventListener("ibx_rubberbandchange", this._onRubberBandEventBound = this._onRubberBandEvent.bind(this), false);
 
@@ -36,7 +37,9 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 	{
 		this.element[0].removeEventListener("focusin", this._focusInBound, true);
 		this.element[0].removeEventListener("focusout", this._focusOutBound, true);
-		this.element[0].removeEventListener("mousedown", this._onMouseDownBound, false);
+		this.element[0].removeEventListener("mousedown", this._onMouseEventBound, false);
+		this.element[0].removeEventListener("mouseup", this._onMouseEventBound, false);
+		this.element[0].removeEventListener("mouseup", this._onMouseUpBound, false);
 		this.element[0].removeEventListener("keydown", this._onKeyDownBound, false);
 		this.element[0].removeEventListener("ibx_rubberbandchange", this._onRubberBandEventBound, false);
 		this._super();
@@ -51,8 +54,9 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 		//make sure the manager is in the focused state.
 		this._activate(true);
 
-		//do the default focusing when manager is directly focused (not one of its children).
-		if(isTarget && !ownsRelTarget && options.focusDefault !== false)
+		//do the default focusing when manager is directly focused - not one of its children, and not when clicked on its scrollbar.
+		var onScrollBar = this._eLastMouseDown ? this.element.clickOnScrollbar(this._eLastMouseDown.clientX, this._eLastMouseDown.clientY) : false;
+		if(isTarget && !onScrollBar && !this._focusedOnScrollBar && !ownsRelTarget && options.focusDefault !== false)
 		{
 			var defItem = this._focus();
 			if(!defItem)
@@ -60,6 +64,8 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 				var defItem = this.element.find(options.focusDefault);
 				defItem = defItem.length ? defItem : this.selectableChildren().first();
 			}
+
+			//this will cuase _onFocusIn to recurse with the default item being the e.target element.
 			$(defItem).focus();
 			return;
 		}
@@ -168,47 +174,53 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 		if(e.keyCode == $.ui.keyCode.ESCAPE && options.escClearSelection)
 			this.deselectAll(true);
 	},
-	_onMouseDown:function(e)
+	_eLastMouseDown:null,//used to know if click is on scrollbar for focusin
+	_onMouseEvent:function(e)
 	{
 		var options = this.options;
-
-		//mousedown happens before focus, so make us active before anything.
-		this._activate(true);
-
-		//stop if we don't care about selection.
-		if(options.type == "nav" || options.type == "none")
-			return;
-
-		var isTarget = this.element.is(e.target);
-		var isMulti = options.type == "multi";
-		var selChildren = this.selectableChildren();
-		var selTarget = this.mapToSelectable(e.target);
-
-		//don't deselect if clicking on scrollbar.
-		if(!this.element.clickOnScrollbar(e.clientX, e.clientY))
+		if(e.type == "mousedown")
 		{
-			if(isTarget || (isMulti && !e.shiftKey && !e.ctrlKey && !this.isSelected(selTarget)))
-				this.deselectAll(true);
-		}
+			this._eLastMouseDown = e;//save last mousedown so on activate we can check to see if it's on the scrollbar and not do focusDefault.
+			this._activate(true);//mousedown happens before focus, so make us active before anything.
 
-		//event could happen on child element...map back to something we know can be selected
-		//and can actually be selected by this selection manager.
-		if(selChildren.index(selTarget) != -1)
-		{
-			if(options.type == "multi" && e.shiftKey)
+			//stop if we don't care about selection.
+			if(options.type == "nav" || options.type == "none")
+				return;
+
+			var isTarget = this.element.is(e.target);
+			var isMulti = options.type == "multi";
+			var selChildren = this.selectableChildren();
+			var selTarget = this.mapToSelectable(e.target);
+
+			//don't deselect if clicking on scrollbar.
+			if(!this.element.clickOnScrollbar(e.clientX, e.clientY))
 			{
-				var idxAnchor = selChildren.index(this._anchor());
-				var idxSel = selChildren.index(selTarget[0]);
-				var idxStart = Math.min(idxAnchor, idxSel);
-				var idxEnd = Math.max(idxAnchor, idxSel);
-				this.toggleSelected(selChildren.slice(idxStart, idxEnd + 1), true, false);
+				if(isTarget || (isMulti && !e.shiftKey && !e.ctrlKey && !this.isSelected(selTarget)))
+					this.deselectAll(true);
 			}
-			else
-			if(isMulti && !e.ctrlKey)
-				this.toggleSelected(selTarget, true);
-			else
-				this.toggleSelected(selTarget, (isMulti && e.ctrlKey) || options.toggleSelection ? undefined : true);
+				
+			//event could happen on child element...map back to something we know can be selected
+			//and can actually be selected by this selection manager.
+			if(selChildren.index(selTarget) != -1)
+			{
+				if(options.type == "multi" && e.shiftKey)
+				{
+					var idxAnchor = selChildren.index(this._anchor());
+					var idxSel = selChildren.index(selTarget[0]);
+					var idxStart = Math.min(idxAnchor, idxSel);
+					var idxEnd = Math.max(idxAnchor, idxSel);
+					this.toggleSelected(selChildren.slice(idxStart, idxEnd + 1), true, false);
+				}
+				else
+				if(isMulti && !e.ctrlKey)
+					this.toggleSelected(selTarget, true);
+				else
+					this.toggleSelected(selTarget, (isMulti && e.ctrlKey) || options.toggleSelection ? undefined : true);
+			}
 		}
+		else
+		if(e.type == "mouseup")
+			this._eLastMouseDown = null;
 	},
 	_onRubberBandEvent:function(e)
 	{
