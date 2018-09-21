@@ -1,7 +1,6 @@
 /*Copyright 1996-2016 Information Builders, Inc. All rights reserved.*/
 // $Revision$:
 
-
 $.widget("ibi.ibxPopup", $.ibi.ibxWidget, 
 {
 	options:
@@ -48,7 +47,7 @@ $.widget("ibi.ibxPopup", $.ibi.ibxWidget,
 	{
 		aria = this._super(accessible, aria);
 		aria.hidden = this.isOpen() ? false : true;
-		return aria
+		return aria;
 	},
 	_destroy:function()
 	{
@@ -225,7 +224,7 @@ $.widget("ibi.ibxPopup", $.ibi.ibxWidget,
 		this.element.on("resizestart resizestop dragstart dragstop", function(e)
 		{
 			//[IBX-78] make resize/move work when content has iframes...stop pointer events so they don't eat the events.
-			var frames = this.element.find("iframe")
+			var frames = this.element.find("iframe");
 			frames.css("pointerEvents", (e.type == "resizestart" || e.type == "dragstart") ? "none" : "NONE");
 		}.bind(this));
 	}
@@ -241,7 +240,7 @@ function ibxPopupManager()
 	window.addEventListener("mousedown", ibxPopupManager.onWindowEvent.bind(this), true);
 	window.addEventListener("keydown", ibxPopupManager.onWindowEvent.bind(this), true);
 	this._gp = $("<div class='ibx-popup-glass-pane'>").on("mousedown mouseup click", function(e){e.stopPropagation();});
-};
+}
 ibxPopupManager._openPopups = $();//array of currently open ixbPoups
 ibxPopupManager.autoDisableIFrames = true;//no pointer events for iframes
 ibxPopupManager.onPopupEvent = function(e, popup)
@@ -256,7 +255,7 @@ ibxPopupManager.onPopupEvent = function(e, popup)
 	if(eType == "ibx_popup_mgr_open")
 	{
 		var topZ = topPop.zIndex() || popup.zIndex();
-		popup.addClass("pop-top")
+		popup.addClass("pop-top");
 		popup.css("zIndex", topZ + 1000);
 		popup.removeClass("pop-closed");
 		topPop = popup;
@@ -267,7 +266,7 @@ ibxPopupManager.onPopupEvent = function(e, popup)
 	else
 	if(eType == "ibx_popup_mgr_close")
 	{
-		popup.addClass("pop-closed")
+		popup.addClass("pop-closed");
 		topPop.addClass("pop-top");
 
 		//manage the currently open popups
@@ -275,7 +274,7 @@ ibxPopupManager.onPopupEvent = function(e, popup)
 	}
 
 	//now, find the topmost modal popup...if there is one, stick the glass pane behind it, and stop mouse events
-	var topModal = ibxPopupManager.getOpenPopups(".pop-modal").first()
+	var topModal = ibxPopupManager.getOpenPopups(".pop-modal").first();
 	if(topModal.length)
 	{
 		var zIndex = topModal.zIndex() - 10;
@@ -336,7 +335,7 @@ ibxPopupManager.onWindowEvent = function(e)
 			ibxPopupManager.closeOpenPopups(null, null, null, false, e);
 		}
 		else
-		if(e.type = "keydown")
+		if(e.type == "keydown")
 		{
 		}
 	}
