@@ -11,6 +11,7 @@
 	var sectionTemplate = $(".ibx-widget-info[data-ibx-no-bind]");
 	var temp = $("<div>");
 	var widgets = [];
+	var n = 0;
 	for(var name in $.ibi)
 	{
 		try
@@ -31,7 +32,7 @@
 			}
 			arParents.reverse();
 			section.find(".parent-widgets").append(arParents);
-
+			
 			var arDerived = [];
 			$.each(ctor._childConstructors, function(idx, derivedWidget)
 			{
@@ -46,7 +47,6 @@
 				return 0;
 			});
 			section.find(".derived-widgets").append(arDerived);
-
 			var arOptions = [];
 			$.each(ctor._proto.options, function(option, value)
 			{
@@ -109,7 +109,6 @@
 			{
 				"id":section.prop("id"),
 				"ctor":ctor,
-				"tocEntry":$(sformat("<a class='toc-entry toc-sub-section toc-ibx-widget' href='#{1}'>{2}</a>", section.prop("id"),  name)),
 				"section":ibx.bindElements(section)
 			};
 			widgetMap[name] = widgetInfo;
@@ -136,7 +135,6 @@
 	{
 		var widgetInfo = widgets[i];
 		widgetsArticle.append(widgetInfo.section);
-		widgetsToc.append(widgetInfo.tocEntry);
 	}
 
 	$(".prop-object").on("mouseenter mouseleave", _onPropObjectMouseEvent);

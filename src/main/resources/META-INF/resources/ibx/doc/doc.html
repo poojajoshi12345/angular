@@ -42,6 +42,8 @@
 					{
 						var toc = $(".toc");
 						var doc = $(text);
+						$(".content").append(doc);
+
 						var articles = doc.filter("article").uniqueId();
 						articles.each(function(idx, article)
 						{
@@ -57,10 +59,9 @@
 								var title = section.children("h1, h2, h3, h4, h5, h6").first();
 								var tocSection = $(sformat("<a class='toc-entry toc-sub-section' href='#{1}'>{2}</a>", section.prop("id"), title.text()));
 								section.data("tocEntry", tocSection);
-								tocArticle.append(tocSection);
+								toc.append(tocSection);
 							};
 						});
-						$(".content").append(doc);
 					});
 				});
 			}, true);
@@ -134,7 +135,8 @@
 			}
 			.toc
 			{
-				flex:0 0 auto;
+				flex:1 0 auto;
+				width:250px;
 			}
 			.content
 			{
@@ -142,7 +144,6 @@
 			}
 			.toc-entry
 			{
-				display:block;
 				margin:.25em 0px .25em 0px;
 			}
 			.toc-section
