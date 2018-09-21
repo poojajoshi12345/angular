@@ -11,8 +11,8 @@ $.widget("ibi.ibxPopup", $.ibi.ibxWidget,
 		"modal":false,
 		"autoClose":true,
 		"movable":false,
-		"moveable":false,
 		"moveHandle":null,
+		"moveConstrainToWindow":false,
 		"resizable":false,
 		"resizeHandles":null,
 		"escapeToClose":true,
@@ -208,13 +208,9 @@ $.widget("ibi.ibxPopup", $.ibi.ibxWidget,
 		this.element.addClass($.ibi.ibxPopup.statics.effect[options.effect]);
 		options.modal ? this.element.addClass("pop-modal") : this.element.removeClass("pop-modal");
 
-		//WRONG OPTION!
-		if(options.moveable)
-			console.warn("[ibx Deprecation] option 'moveable' is deprecated because it's spelled wrong. Use 'movable' instead! =>", this.element);
-
 		//turn draggable on/off
-		if(options.movable || options.moveable)
-			this.element.draggable({handle:options.moveHandle});
+		if(options.movable)
+			this.element.draggable({handle:options.moveHandle, "containment": this.options.moveConstrainToWindow ? document.body : null});
 		else
 		if(this.element.is(".ui-draggable"))
 			this.element.draggable("destroy");
