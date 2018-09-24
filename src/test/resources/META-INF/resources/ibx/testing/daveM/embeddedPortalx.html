@@ -1,0 +1,163 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Embedded Portal</title>
+    <script type="text/javascript" src="http://code.jquery.com/jquery-3.1.0.js"> </script>
+    <script type='text/javascript' src="http://cdnjs.cloudflare.com/ajax/libs/jquery-ajaxtransport-xdomainrequest/1.0.1/jquery.xdomainrequest.min.js"></script>
+
+    <script type="text/javascript">
+
+		var csrf_name;
+        var csrf_value;
+
+        $(document).ready(function () {
+            var contentType = "application/x-www-form-urlencoded; charset=utf-8";
+
+            var divToBeWorkedOn = "#AjaxPlaceHolder";
+            var webMethod = "http://davem:8080/ibi_apps/rs/ibfs";
+            var IBIRS_action = "signOn";
+            var IBIRS_userName = "admin";
+            var IBIRS_password = "admin";
+            var parameters = 'IBIRS_action=' + IBIRS_action + '&IBIRS_userName=' + IBIRS_userName + '&IBIRS_password=' + IBIRS_password;
+
+            if (window.XDomainRequest)
+                contentType = "text/plain";
+
+            $.ajax({
+                type: "POST",
+                url: webMethod,
+                data: parameters,
+                dataType: "xml",
+                async: false,
+                xhrFields: {
+                    withCredentials: true
+                },
+                crossDomain: true,
+                contentType: contentType,
+                success: function ()
+                {
+                    $("#portalframe").attr("src", "http://davem:8080/ibi_apps/portal/DavePortal/2_top/2top");
+                },
+                error:function(jqXHR,textStatus,errorThrown)
+                  {
+                    alert("You can not send Cross Domain AJAX requests: " + errorThrown);
+                  }
+            })
+        });
+
+        var eventMethod = window.addEventListener ? "addEventListener" : "attachEvent";
+        var eventer = window[eventMethod];
+        var messageEvent = eventMethod == "attachEvent" ? "onmessage" : "message";
+
+        var portalLoaded = false;
+
+        // Listen to message from child window
+        eventer(messageEvent, function (e)
+        {
+            var key = e.message ? "message" : "data";
+            var data = e[key];
+            var message_name = data["message_name"];
+            if (message_name == "height_changed")
+            {
+                if (portalLoaded) // ignore if portal not fully loaded
+                {
+                    var portal_height = data["portal_height"];
+                    document.getElementById('portalframe').style.height = portal_height;
+                }
+            }
+            else if (message_name == "portal_loaded")
+            {
+                // The portal is fully loaded. Adjust the height and enable subsequent messages
+                portalLoaded = true;
+                // Make the portal's iframe visible
+                document.getElementById('portalframe').style.visibility = "visible";
+                // Hide the wait message div
+                document.getElementById('waitmessage').style.display = "none";
+
+                var portal_height = data["portal_height"];
+                document.getElementById('portalframe').style.height = portal_height;
+            }
+        }, false);
+
+        function iframe_loaded(e)
+        {
+            // Just in case the portal failed to load, and the "portal_loaded" event is not sent,
+            // wait 10 seconds and hide the waitmessage
+            setTimeout(function ()
+            {
+                if (!portalLoaded)
+                {
+                    document.getElementById('portalframe').style.visibility = "visible";
+                    document.getElementById('waitmessage').style.display = "none";
+                    document.getElementById('portalframe').style.height = "600px";
+                }
+            }, 10000);
+        }
+
+    </script>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+
+        html, body {
+        }
+
+            body > * {
+            }
+
+        .pageheader {
+            height: 100px;
+            text-align: center;
+            vertical-align: middle;
+            line-height: 100px;
+            background-color: #FFCC66;
+            border: 1px solid #909090;
+        }
+
+        .pagefooter {
+            height: 100px;
+            text-align: center;
+            vertical-align: middle;
+            line-height: 100px;
+            background-color: #FFCC66;
+            border: 1px solid #909090;
+        }
+
+        .pagebody {
+            overflow-x: hidden;
+            background-color: #FF9900;
+        }
+
+        #waitmessage {
+            width: 100%;
+            line-height: 100px;
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        #portalframe {
+            width: 100%;
+            visibility: hidden;
+            border: 0px;
+        }
+    </style>
+</head>
+<body>
+    <div class="pageheader">This is hosting page's header.</div>
+    <div class="pagebody">
+        <div id="waitmessage">Please wait! Portal is loading...</div>
+
+        <!-- Need to load "about:blank" in the iframe because if it tries to load the portal, it will force a sign on before the signOn function gets called -->
+
+        <iframe id="portalframe" src="about:blank"></iframe>
+    </div>
+    <div class="pagefooter">This is the hosting page's footer.</div>
+
+</body>
+</html>
+
