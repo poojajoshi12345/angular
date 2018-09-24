@@ -85,6 +85,7 @@ $.widget("ibi.ibxSpinner", $.ibi.ibxTextField,
 		else
 		if(e.type == "mousedown")
 		{
+			this._onTextInputBlur(e); // just in case user typed a value
 			this.element.dispatchEvent("ibx_spinstart", null, true, false);
 			this._cleared = false;
 			this._bUp = $(e.currentTarget).hasClass(this.options.btnUpClass);
