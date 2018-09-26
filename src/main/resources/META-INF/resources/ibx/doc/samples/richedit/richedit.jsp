@@ -27,7 +27,6 @@
 				{
 					var re = $(".ibx-rich-edit").data("ibxWidget");
 					var doc = re.getContentDocument();
-
 				});
 
 				$(".drag-source").attr("draggable", false).on("dblclick dragstart dragover drop ibx_dragstart ibx_dragover ibx_drop", function(e)
@@ -222,6 +221,7 @@
 						var target = $(e.target);
 						var info = e.originalEvent.data;
 						target.ibxWidget("getCommand").ibxWidget("userValue", e.originalEvent.data.color);
+						target.closest(".ibx-popup").ibxWidget("close");
 					});
 					menu.ibxWidget("add", customMenuItem);
 					return menu;
@@ -357,24 +357,7 @@
 				<div tabindex="0" class="tb-button" title="Paste" data-ibx-type="ibxButtonSimple" data-ibxp-command="cmdPaste" data-ibxp-glyph="content_paste" data-ibxp-glyph-classes="material-icons"></div>
 				<div tabindex="0" class="tb-button" title="Clear" data-ibx-type="ibxButtonSimple" data-ibxp-command="cmdDelete" data-ibxp-glyph="clear" data-ibxp-glyph-classes="material-icons"></div>
 				<div class="tb-separator"></div>
-				<div tabindex="0" class="tb-select tb-select-font-name" title="Font Size" data-ibx-type="ibxSelect" data-ibxp-command="cmdFontName" data-ibxp-readonly="true">
-					<!--
-					<div class="select-font-name" data-ibx-type="ibxSelectRadioItem" data-ibxp-group="rgFontName" data-ibxp-user-value="arial">Arial</div>
-					<div class="select-font-name" data-ibx-type="ibxSelectRadioItem" data-ibxp-group="rgFontName" data-ibxp-user-value="arial black">Arial Black</div>
-					<div class="select-font-name" data-ibx-type="ibxSelectRadioItem" data-ibxp-group="rgFontName" data-ibxp-user-value="bookman">Bookman</div>
-					<div class="select-font-name" data-ibx-type="ibxSelectRadioItem" data-ibxp-group="rgFontName" data-ibxp-user-value="comic sans ms">Comic Sans</div>
-					<div class="select-font-name" data-ibx-type="ibxSelectRadioItem" data-ibxp-group="rgFontName" data-ibxp-user-value="courier">Courier</div>
-					<div class="select-font-name" data-ibx-type="ibxSelectRadioItem" data-ibxp-group="rgFontName" data-ibxp-user-value="courier new">Courier New</div>
-					<div class="select-font-name" data-ibx-type="ibxSelectRadioItem" data-ibxp-group="rgFontName" data-ibxp-user-value="georia">Georgia</div>
-					<div class="select-font-name" data-ibx-type="ibxSelectRadioItem" data-ibxp-group="rgFontName" data-ibxp-user-value="garamond">Garamond</div>
-					<div class="select-font-name" data-ibx-type="ibxSelectRadioItem" data-ibxp-group="rgFontName" data-ibxp-user-value="helvetica">Helvetica</div>
-					<div class="select-font-name" data-ibx-type="ibxSelectRadioItem" data-ibxp-group="rgFontName" data-ibxp-user-value="palatino">Palatino</div>
-					<div class="select-font-name" data-ibx-type="ibxSelectRadioItem" data-ibxp-group="rgFontName" data-ibxp-user-value="times">Times</div>
-					<div class="select-font-name" data-ibx-type="ibxSelectRadioItem" data-ibxp-group="rgFontName" data-ibxp-user-value="times new roman">Times New Roman</div>
-					<div class="select-font-name" data-ibx-type="ibxSelectRadioItem" data-ibxp-group="rgFontName" data-ibxp-user-value="trebuchet ms">Trebuchet</div>
-					<div class="select-font-name" data-ibx-type="ibxSelectRadioItem" data-ibxp-group="rgFontName" data-ibxp-user-value="verdana">Verdana</div>
-					-->
-				</div>
+				<div tabindex="0" class="tb-select tb-select-font-name" title="Font Size" data-ibx-type="ibxSelect" data-ibxp-command="cmdFontName" data-ibxp-readonly="true"></div>
 				<div tabindex="0" class="tb-select tb-select-font-size" data-ibxp-group="rgFontSize" title="Font Size" data-ibx-type="ibxSelect" data-ibxp-command="cmdFontSize" data-ibxp-readonly="true">
 					<div class="size-select-item" data-ibx-type="ibxSelectRadioItem" data-ibxp-group="rgFontSize" data-ibxp-user-value="1">xx-small</div>
 					<div class="size-select-item" data-ibx-type="ibxSelectRadioItem" data-ibxp-group="rgFontSize" data-ibxp-user-value="2">x-small</div>
@@ -468,12 +451,12 @@
 			<div data-ibx-type="ibxMenuItem" data-ibxp-command="cmdRemoveFormat" data-ibxp-label-options='{"glyph":"format_clear", "glyphClasses":"material-icons"}'>Remove All Formatting</div>
 		</div>
 
-		<div class="cp-menu-template" data-ibx-type="ibxMenuItem" data-ibx-no-bind="true">Custom Color Picker
+		<div class="cp-menu-template" data-ibx-type="ibxMenuItem" data-ibx-no-bind="true">Example Color Picker
 			<div data-ibx-type="ibxMenu">
 				<div data-ibx-type="ibxColorPicker" data-ibxp-set-opacity="false" data-ibxp-show-color-info="false"></div>
 			</div>
 		</div>
-		<div class="cp-menu-template2" data-ibx-type="ibxMenuItem" data-ibx-no-bind="true">Custom Palette Picker
+		<div class="cp-menu-template2" data-ibx-type="ibxMenuItem" data-ibx-no-bind="true">Example Palette Picker
 			<div data-ibx-type="ibxMenu">
 				<div data-ibx-type="ibxPalettePicker" data-ibxp-show-palettes="false" data-ibxp-show-custom="false" data-ibxp-show-transparency="false"></div>
 			</div>

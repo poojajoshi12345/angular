@@ -1,7 +1,6 @@
 /*Copyright 1996-2016 Information Builders, Inc. All rights reserved.*/
 // $Revision$:
 
-
 /****
 	ibx can be called with the following parameters and signatures...
 	
@@ -33,7 +32,7 @@ function ibx()
 		fn = a1;
 	else
 	if(a1 instanceof Array)
-		resPackages == a1;
+		resPackages == a1
 	else
 	if(typeof(a1) === "boolean")
 		autoBind = a1;
@@ -54,7 +53,7 @@ function ibx()
 		var ibxPath = ibxScript ? ibxScript.getAttribute("src").replace("ibx.js", "") : "";
 		ibx.setPath(ibxPath);
 		ibx.setAppPath(window.location.href.substring(0, window.location.href.lastIndexOf("/") + 1));
-		ibx._appName = window.location.href.substring(window.location.href.lastIndexOf("/") + 1);
+		ibx._appName = window.location.href.substring(window.location.href.lastIndexOf("/") + 1)
 		
 		//save the parameters, if any, passed on the url
 		ibx._appParms = {};
@@ -71,7 +70,7 @@ function ibx()
 				} catch (e) {
 					ibx._appParms[parm[0]] = parm[1];
 				}
-			}
+			};
 			ibx.forceInlineResLoading = (ibx._appParms.forceInlineResLoading !== undefined) ? (ibx._appParms.forceInlineResLoading == "true") : ibx.forceInlineResLoading;
 			ibx.forceLinkLoading = (ibx._appParms.forceLinkLoading !== undefined) ? (ibx._appParms.forceLinkLoading == "true") : ibx.forceLinkLoading;
 		}
@@ -285,7 +284,7 @@ ibx.accessible = function(accessible)
 		if(widget && !widget.destroyed())
 			$(el).ibxWidget("option", "aria.accessible", accessible);
 	});
-};
+}
 ibx._setAccessibility = function(accessible)
 {
 	accessible ? $(".ibx-root").attr("role", "application") : $(".ibx-root").removeAttr("role");
@@ -299,7 +298,7 @@ ibx.bindElements = function(elements)
 	ibx.resourceMgr.processPlaceholders(elPlaceholders);
 	
 	//get elements to bind
-	var elBind = elements ? $(elements) : $(".ibx-root");
+	var elBind = elements ? $(elements) : $("[data-ibx-type]");
 
 	//construct all the widgets
 	for(var i = 0; i < elBind.length; ++i)
@@ -314,7 +313,7 @@ ibx.bindElements = function(elements)
 		ibx.bindElements(childWidgets);
 
 		//only for elements that haven't been bound before.
-		if(element.is("[data-ibx-type]") && !element.data("ibxIsBound"))
+		if(!element.data("ibxIsBound"))
 		{
 			//hook up member variables to the closest nameRoot
 			var memberName = element.attr("data-ibx-name");
@@ -334,7 +333,7 @@ ibx.bindElements = function(elements)
 				}
 			}
 
-			//then construct the widget, if not already constructed.
+			//then construct the parent element, if not already constructed.
 			if(element.is("[data-ibx-type]") && !element.is(".ibx-widget"))
 			{
 				var widgetType = element.attr("data-ibx-type");
@@ -376,7 +375,7 @@ ibx.getIbxMarkupOptions = function(el)
 			if(props.length)
 			{
 				var option= ibx.parseCompoundOptions(props, attr.value);
-				options[prop] = $.extend(true, options[prop], option);
+				options[prop] = $.extend(true, options[prop], option)
 			}
 			else
 			{
@@ -385,7 +384,7 @@ ibx.getIbxMarkupOptions = function(el)
 					options[prop] = option;
 				else
 				if(option instanceof Object)
-					options[prop] = $.extend(true, options[prop], option);
+					options[prop] = $.extend(true, options[prop], option)
 				else
 					options[prop] = attr.value;
 			}
@@ -409,7 +408,7 @@ ibx.parseCompoundOptions = function(props, value)
 	else
 		options[prop] = value;
 	return options;
-};
+}
 
 ibx.parseOptions = function(opts)
 {
