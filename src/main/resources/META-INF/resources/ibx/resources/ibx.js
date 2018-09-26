@@ -1,6 +1,7 @@
 /*Copyright 1996-2016 Information Builders, Inc. All rights reserved.*/
 // $Revision$:
 
+
 /****
 	ibx can be called with the following parameters and signatures...
 	
@@ -298,7 +299,7 @@ ibx.bindElements = function(elements)
 	ibx.resourceMgr.processPlaceholders(elPlaceholders);
 	
 	//get elements to bind
-	var elBind = elements ? $(elements) : $("[data-ibx-type]");
+	var elBind = elements ? $(elements) : $(".ibx-root");
 
 	//construct all the widgets
 	for(var i = 0; i < elBind.length; ++i)
@@ -312,39 +313,35 @@ ibx.bindElements = function(elements)
 		var childWidgets = element.children();
 		ibx.bindElements(childWidgets);
 
-		//only for elements that haven't been bound before.
-		if(!element.data("ibxIsBound"))
+		//hook up member variables to the closest nameRoot
+		var memberName = element.attr("data-ibx-name");
+		if(memberName)
 		{
-			//hook up member variables to the closest nameRoot
-			var memberName = element.attr("data-ibx-name");
-			if(memberName)
-			{
-				var nameRoot = element.closest(":ibxNameRoot");
-				var nameRootWidget = nameRoot.data("ibxWidget");
+			var nameRoot = element.closest(":ibxNameRoot");
+			var nameRootWidget = nameRoot.data("ibxWidget");
 
-				if(nameRootWidget)
-					nameRootWidget.member(memberName, element);//nameRoot created, set directly
-				else
-				{
-					//nameRoot not created, so store member variable to be set in widget._create
-					var memberData = nameRoot.data("_ibxPrecreateMemberVariables") || {};
-					memberData[memberName] = element;
-					nameRoot.data("_ibxPrecreateMemberVariables", memberData);
-				}
+			if(nameRootWidget)
+				nameRootWidget.member(memberName, element);//nameRoot created, set directly
+			else
+			{
+				//nameRoot not created, so store member variable to be set in widget._create
+				var memberData = nameRoot.data("_ibxPrecreateMemberVariables") || {};
+				memberData[memberName] = element;
+				nameRoot.data("_ibxPrecreateMemberVariables", memberData);
 			}
+		}
 
-			//then construct the parent element, if not already constructed.
-			if(element.is("[data-ibx-type]") && !element.is(".ibx-widget"))
+		//then construct the parent element, if not already constructed.
+		if(element.is("[data-ibx-type]") && !element.is(".ibx-widget"))
+		{
+			var widgetType = element.attr("data-ibx-type");
+			if($.ibi[widgetType])
+				var widget = $.ibi[widgetType].call($.ibi, {}, element);
+			else
+			if(widgetType != "ibxNull")
 			{
-				var widgetType = element.attr("data-ibx-type");
-				if($.ibi[widgetType])
-					var widget = $.ibi[widgetType].call($.ibi, {}, element);
-				else
-				if(widgetType != "ibxNull")
-				{
-					console.error("Unknown ibxWidget type:", widgetType, element[0]);
-					debugger;
-				}
+				console.error("Unknown ibxWidget type:", widgetType, element[0]);
+				debugger;
 			}
 
 			element.data("ibxIsBound", true);//mark this element as having been bound.
