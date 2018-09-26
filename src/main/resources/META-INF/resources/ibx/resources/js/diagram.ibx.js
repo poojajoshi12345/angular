@@ -119,6 +119,14 @@ $.widget('ibi.ibxDiagram', $.ibi.ibxWidget, {
 		}
 		return ret;
 	},
+	clear: function() {
+		this._nodeContainer.children().each((function(idx, child) {
+			this.convertToNode(child).element.detach();
+		}).bind(this));
+		this._connections = [];
+		this.resetConnections();
+		this.refresh();
+	},
 	removeSelectedNodes: function() {
 		this._nodeContainer.children().each((function(idx, child) {
 			child = $(child).ibxDiagramNode('instance');
