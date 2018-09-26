@@ -145,7 +145,7 @@
 					{
 						val = cmd.ibxWidget("userValue");
 						if(val.search(/^rgb\(/i) == 0)
-							val = rgbaToHex(val);
+							val = rgbToHex(val);
 						reCmd = cmd.is(".cmd-fore-color") ? "foreColor" : "backColor";
 					}
 					if(cmd.is(".cmd-insert-ordered-list"))

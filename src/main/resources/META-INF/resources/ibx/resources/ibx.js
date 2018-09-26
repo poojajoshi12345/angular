@@ -299,7 +299,7 @@ ibx.bindElements = function(elements)
 	ibx.resourceMgr.processPlaceholders(elPlaceholders);
 	
 	//get elements to bind
-	var elBind = elements ? $(elements) : $("[data-ibx-type]");
+	var elBind = elements ? $(elements) : $(".ibx-root");
 
 	//construct all the widgets
 	for(var i = 0; i < elBind.length; ++i)
@@ -314,7 +314,7 @@ ibx.bindElements = function(elements)
 		ibx.bindElements(childWidgets);
 
 		//only for elements that haven't been bound before.
-		if(!element.data("ibxIsBound"))
+		if(element.is("[data-ibx-type]") && !element.data("ibxIsBound"))
 		{
 			//hook up member variables to the closest nameRoot
 			var memberName = element.attr("data-ibx-name");
@@ -334,7 +334,7 @@ ibx.bindElements = function(elements)
 				}
 			}
 
-			//then construct the parent element, if not already constructed.
+			//then construct the widget, if not already constructed.
 			if(element.is("[data-ibx-type]") && !element.is(".ibx-widget"))
 			{
 				var widgetType = element.attr("data-ibx-type");
