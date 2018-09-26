@@ -145,16 +145,14 @@ $.widget('ibi.ibxDiagram', $.ibi.ibxWidget, {
 		}
 		var node = this.convertToNode(e.currentTarget);
 		if (node && node.options.selectable) {
-			node.options.selected = e.ctrlKey ? !node.options.selected : true;
-			node.element.toggleClass('ui-selected', node.options.selected);
+			node.setSelected(e.ctrlKey ? !node.options.selected : true);
 		}
 		this.triggerSelectionChange();
 	},
 	clearSelectedNodes: function() {
 		this._nodeContainer.children().each((function(idx, child) {
 			child = $(child).ibxDiagramNode('instance');
-			child.options.selected = false;
-			child.element.removeClass('ui-selected');
+			child.setSelected(false);
 		}).bind(this));
 	},
 	triggerSelectionChange: function() {
@@ -461,6 +459,10 @@ $.widget('ibi.ibxDiagramNode', $.ibi.ibxWidget, {  // TODO: derive from base jqu
 			}
 		}
 		return 0;
+	},
+	setSelected: function(selected) {
+		this.options.selected = selected;
+		this.element.toggleClass('ui-selected', selected);
 	}
 });
 
