@@ -199,8 +199,10 @@
 					{
 						var state = $(".ibx-rich-edit").ibxWidget("cmdState");
 						var cp = $(e.target).find(".ibx-color-picker");
+						this.data("init", true);
 						cp.ibxWidget("option", "color", state[reCommand]);
-					}.bind(this, reCommand));
+						this.removeData("init");
+					}.bind(customMenuItem, reCommand));
 					customMenuItem.find(".ibx-color-picker").ibxWidget("option", "command", cmd.ibxWidget("option", "id")).on("ibx_colorchange", function(e)
 					{
 						var target = $(e.target);
@@ -214,15 +216,19 @@
 					{
 						var state = $(".ibx-rich-edit").ibxWidget("cmdState");
 						var cp = $(e.target).find(".ibx-palette-picker");
+						this.data("init", true);
 						cp.ibxWidget("option", "color", state[reCommand]);
-					}.bind(this, reCommand));
+						this.removeData("init");
+					}.bind(customMenuItem, reCommand));
 					var cp = customMenuItem.find(".ibx-palette-picker").ibxWidget("option", "command", cmd.ibxWidget("option", "id")).on("ibx_change", function(e)
 					{
+						if(this.data("init"))
+							return;
 						var target = $(e.target);
 						var info = e.originalEvent.data;
 						target.ibxWidget("getCommand").ibxWidget("userValue", e.originalEvent.data.color);
 						target.closest(".ibx-popup").ibxWidget("close");
-					});
+					}.bind(customMenuItem));
 					menu.ibxWidget("add", customMenuItem);
 					return menu;
 				}
