@@ -67,21 +67,26 @@ $.widget("ibi.ibxSortable", $.Widget,
 			this._stopDrag();
 		}
 		else
-		if(eType == "mousemove")
+		if(eType == "mousemove" && this._eMouseDown)
 		{
 			var options = this.options;
+			var de = this._dragElement;
+			var vert = this.options.direction == "vertical";
+			var horz = this.options.direction == "horizontal";
+			var both = !vert && !horz;
+
 			if(!this._inDrag && this._dragElement)
 			{
-				var vert = this.options.direction == "vertical";
 				var dx = Math.abs(e.clientX - this._eMouseDown.clientX);
 				var dy = Math.abs(e.clientY - this._eMouseDown.clientY);
-				if(!vert && dx >= options.startDragDistanceX || vert && dy >= options.startDragDistanceY)
+				var movX = dx >= options.startDragDistanceX;
+				var movY = dy >= options.startDragDistanceY;
+				if(horz && movX || vert && movY || (both && (movX || movY)))
 				{
 					var evt = this.element.dispatchEvent("ibx_beforesort", this._dragElement, false);
 					if(!evt.defaultPrevented)
 					{
 						this._inDrag = true;
-						var de = this._dragElement;
 						var pos = de.position();
 						var ph = this._placeholder = this._createPlaceholder(de);
 						de.css({"zIndex":100000, "pointerEvents":"none", "position":"absolute", "left":pos.left, "top":pos.top, "width":de.outerWidth, "height":de.outerHeight});
@@ -95,15 +100,13 @@ $.widget("ibi.ibxSortable", $.Widget,
 			if(this._inDrag && this._eLast)
 			{
 				var eLast = this._eLast
-				var de = this._dragElement;
 				var pos = de.position();
 				var dx = e.clientX - eLast.clientX;
-				var dy = e.clientY - eLast.clientY
-				var vert = this.options.direction == "vertical";
+				var dy = e.clientY - eLast.clientY;
 
 				//move within axis only if specified
 				if(options.lockDragAxis)
-					de.css({"left": pos.left + (!vert ? dx : 0), "top": pos.top + (vert ? dy : 0)});
+					de.css({"left": pos.left + (horz ? dx : 0), "top": pos.top + (vert ? dy : 0)});
 				else
 					de.css({"left": pos.left + dx, "top":  pos.top + dy});
 

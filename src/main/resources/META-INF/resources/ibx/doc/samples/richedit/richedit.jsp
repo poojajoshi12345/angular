@@ -22,6 +22,8 @@
 
 			ibx(function()
 			{
+				$(".tb-main").ibxSortable({"direction":"both", "lockDragAxis":false});
+
 				var cmdClear = $("<div class='cmd-clear'>").ibxCommand({id:"cmdClear", "shortcut":"ALT+C"}).appendTo("body");
 				cmdClear.on("ibx_triggered", function(e)
 				{
