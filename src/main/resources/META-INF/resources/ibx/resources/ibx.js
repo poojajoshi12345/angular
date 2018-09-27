@@ -311,7 +311,7 @@ ibx.bindElements = function(elements, bindInfo)
 		if(element.is("[data-ibx-no-bind=true]"))
 			continue;
 
-		var idProfile = element.attr("data-ibx-profile");
+		var idProfile = element.attr("data-ibx-bind-profile");
 		var elementTime = new Date();
 		var childTimes = new Date();
 		var childWidgets = element.children();
