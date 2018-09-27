@@ -292,7 +292,8 @@ ibx._setAccessibility = function(accessible)
 };
 
 //attach ibxWidgets to dom elements
-ibx.bindElements = function(elements)
+ibx.bindProfile = false;
+ibx.bindElements = function(elements, bindInfo)
 {
 	//get elements that represent placeholders for resource bundle markup, and process them.
 	var elPlaceholders = elements ? $(elements).find("[data-ibx-resource]") : $("[data-ibx-resource]");
@@ -310,8 +311,12 @@ ibx.bindElements = function(elements)
 		if(element.is("[data-ibx-no-bind=true]"))
 			continue;
 
+		var idProfile = element.attr("data-ibx-profile");
+		var elementTime = new Date();
+		var childTimes = new Date();
 		var childWidgets = element.children();
 		ibx.bindElements(childWidgets);
+		childTimes = new Date() - childTimes;
 
 		//hook up member variables to the closest nameRoot
 		var memberName = element.attr("data-ibx-name");
@@ -332,23 +337,29 @@ ibx.bindElements = function(elements)
 		}
 
 		//then construct the parent element, if not already constructed.
+		var widgetTime = new Date();
 		if(element.is("[data-ibx-type]") && !element.is(".ibx-widget"))
 		{
 			var widgetType = element.attr("data-ibx-type");
 			if($.ibi[widgetType])
+			{
 				var widget = $.ibi[widgetType].call($.ibi, {}, element);
+				widgetTime = new Date() - widgetTime;
+			}
 			else
 			if(widgetType != "ibxNull")
 			{
 				console.error("Unknown ibxWidget type:", widgetType, element[0]);
 				debugger;
 			}
-
 			element.data("ibxIsBound", true);//mark this element as having been bound.
 		}
+
+		elementTime = new Date() - elementTime;
+		if(ibx.bindProfile && idProfile)
+			console.log("Profile Element: %s, Widget Construction Time: %d, Children Times: %d, Total Time: %d", idProfile, widgetTime, childTimes, elementTime);
 	}
 	return elBind;
-
 };
 
 ibx.getIbxMarkupOptions = function(el)
