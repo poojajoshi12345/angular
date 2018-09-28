@@ -79,7 +79,7 @@
 				{
 					console.log(arguments);
 				}
-			}, true);
+			}, [{"src":"./resources/resbundle.xml", "loadContext":"app"}], true);
 		</script>
 		<style type="text/css">
 			body
