@@ -170,6 +170,7 @@ _p.loadExternalResFile = function(elFile)
 
 		if(ibx.forceInlineResLoading || (elFile.attr("inline") == "true"))
 		{
+			$(window).dispatchEvent("ibx_resmgr", {"hint":"fileloading", "loadDepth":this._loadDepth, "resMgr":this, "fileNode":elFile[0], "src":src});
 			$.get({async:false, url:src, dataType:"text", error:this._resFileRetrievalError.bind(this, src)}).done(function(elFile, src, fileType, content, status, xhr)
 			{
 				content = this.preProcessResource(content);//precompile the content...string substitutions, etc.
@@ -227,14 +228,15 @@ _p.loadExternalResFile = function(elFile)
 				el.async = false;
 				el.src = src;
 				el._loadPromise = elFile[0]._loadPromise;
-				el.addEventListener("load", function(e)
+				el.addEventListener("load", function(isStyle, e)
 				{
+					$(window).dispatchEvent("ibx_resmgr", {"hint":isStyle ? "cssfileloaded" : "scriptfileloaded", "loadDepth":this._loadDepth, "resMgr":this, "fileNode":elFile[0], "src":src});
 					e.target._loadPromise.resolve();
-				});
+				}.bind(this, isStyle));
 			}
 			$("head")[0].appendChild(el);
 			this.loadedFiles[src] = true;
-			$(window).dispatchEvent("ibx_resmgr", {"hint":isStyle ? "cssfileloaded" : "scriptfileloaded", "loadDepth":this._loadDepth, "resMgr":this, "fileNode":elFile[0], "src":src});
+			$(window).dispatchEvent("ibx_resmgr", {"hint":isStyle ? "cssfileloading" : "scriptfileloading", "loadDepth":this._loadDepth, "resMgr":this, "fileNode":elFile[0], "src":src});
 		}
 	}.bind(this));
 	return elFile;
@@ -280,7 +282,7 @@ _p.loadBundle = function(xResDoc)
 	xResDoc.resLoaded = xResDoc.resLoaded || $.Deferred();
 
 	//let the loading begin!
-	$(window).dispatchEvent("ibx_resmgr", {"hint":"bundleloading", "loadDepth":this._loadDepth, "resMgr":this, "bundle":bundle[0], src:xResDoc.documentURI});
+	$(window).dispatchEvent("ibx_resmgr", {"hint":"bundleloading", "loadDepth":this._loadDepth, "resMgr":this, "bundle":bundle[0], src:xResDoc.src});
 
 	//First load the dependency Resource Bundles...this will chain to any depth
 	var files = [];
@@ -379,7 +381,7 @@ _p.loadBundle = function(xResDoc)
 			
 				document.body.offsetHeight;				
 				--this._loadDepth;
-				$(window).dispatchEvent("ibx_resmgr", {"hint":"bundleloaded", "loadDepth":this._loadDepth, "resMgr":this, "bundle":bundle[0], src:xResDoc.documentURI});
+				$(window).dispatchEvent("ibx_resmgr", {"hint":"bundleloaded", "loadDepth":this._loadDepth, "resMgr":this, "bundle":bundle[0], src:xResDoc.src});
 				xResDoc.resLoaded.resolve(bundle, this);
 			}.bind(this, xResDoc, head, bundle));
 
