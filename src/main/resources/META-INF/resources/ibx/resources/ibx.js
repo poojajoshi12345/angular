@@ -93,7 +93,7 @@ function ibx()
 				"<sc" + "ript type='text/javascript' src='" + ibx._path + "./js/resources.ibx.js'></sc" + "ript>"
 			];
 
-			//[IBX-122] don't load jQuery/jQueryUI if alread loaded
+			//[IBX-122] don't load jQuery/jQueryUI if already loaded
 			if(window.jQuery)
 				scripts[1] = "";
 			if(window.jQuery && window.jQuery.ui)
@@ -105,7 +105,7 @@ function ibx()
 		}
 
 		//wait for jQuery/jQueryUI to be loaded...then boot ibx
-		var dateStart = new Date();
+		var dateStart = ibx._loadStart = new Date();
 		ibx._loadTimer = window.setInterval(function ibx_loadTimer()
 		{
 			if((new Date()) - dateStart > ibx.loadTimeout)
@@ -156,7 +156,6 @@ function ibx()
 					$(window).dispatchEvent("ibx_ibxevent", {"hint":"jqueryloaded", "ibx":ibx});
 
 					//continue booting ibx...
-					$(window).dispatchEvent("ibx_ibxevent", {"hint":"ibxloading", "ibx":ibx});
 					ibx._loadPromise = $.Deferred();
 					ibx._loadPromise._autoBind = autoBind;
 					ibx._loadPromise._resPackages =  resPackages;
@@ -178,18 +177,19 @@ function ibx()
 						packages = [bundle];
 					}
 
+					$(window).dispatchEvent("ibx_ibxevent", {"hint":"resourcesloadstart", "ibx":ibx});
 					ibx.resourceMgr.addBundles(packages).done(function ibx_addBundlesDone()
 					{
 						//ibx is fully loaded and running.
-						$(window).dispatchEvent("ibx_ibxevent", {"hint":"ibxloaded", "ibx":ibx});
+						$(window).dispatchEvent("ibx_ibxevent", {"hint":"resourcesloadend", "ibx":ibx});
 
 						//bool means just bind everything...string means select these and bind them
-						$(window).dispatchEvent("ibx_ibxevent", {"hint":"markupbinding", "ibx":ibx});
 						var autoBind = ibx._loadPromise._autoBind;
 						if(autoBind)
 						{
+							$(window).dispatchEvent("ibx_ibxevent", {"hint":"pagebindingstart", "ibx":ibx});
 							ibx.bindElements((typeof(autoBind) === "string") ? autoBind : "");
-							$(window).dispatchEvent("ibx_ibxevent", {"hint":"markupbound", "ibx":ibx});
+							$(window).dispatchEvent("ibx_ibxevent", {"hint":"pagebindingend", "ibx":ibx});
 						}
 
 						$("head").append(inlineStyles);//move any non-ibx styles to the end so they will override ibx styles.
@@ -204,10 +204,11 @@ function ibx()
 							if(ibx.showOnLoad)
 								ibx.showRootNodes(true);
 									
+							$(window).dispatchEvent("ibx_ibxevent", {"hint":"loadend", "ibx":ibx});
+							delete ibx._loadStart;
 						});
 						ibx._loadPromise.then(fn);
 						ibx._loadPromise.resolve(ibx);//let everyone know the system is booted.
-						$(window).dispatchEvent("ibx_ibxevent", {"hint":"apploaded", "ibx":ibx});
 					});
 				});
 			}
@@ -292,9 +293,10 @@ ibx._setAccessibility = function(accessible)
 };
 
 //attach ibxWidgets to dom elements
-ibx.bindProfile = false;
 ibx.bindElements = function(elements, bindInfo)
 {
+	var wnd = $(window);//saved for message dispatch
+	
 	//get elements that represent placeholders for resource bundle markup, and process them.
 	var elPlaceholders = elements ? $(elements).find("[data-ibx-resource]") : $("[data-ibx-resource]");
 	ibx.resourceMgr.processPlaceholders(elPlaceholders);
@@ -308,15 +310,14 @@ ibx.bindElements = function(elements, bindInfo)
 		var element = $(elBind[i]);
 
 		//construct any unconstructed children first...ignore any no-binds.
-		if(element.is("[data-ibx-no-bind=true]"))
+		if(element.closest("[data-ibx-no-bind=true]").length)
 			continue;
 
-		var idProfile = element.attr("data-ibx-bind-profile");
-		var elementTime = new Date();
-		var childTimes = new Date();
 		var childWidgets = element.children();
+		wnd.dispatchEvent("ibx_ibxbindevent", {"hint":"bindelementstart", "ibx":ibx, "element":element});
+		wnd.dispatchEvent("ibx_ibxbindevent", {"hint":"bindchildrenstart", "ibx":ibx, "element":element, "children":childWidgets});
 		ibx.bindElements(childWidgets);
-		childTimes = new Date() - childTimes;
+		wnd.dispatchEvent("ibx_ibxbindevent", {"hint":"bindchildrenend", "ibx":ibx, "element":element, "children":childWidgets});
 
 		//hook up member variables to the closest nameRoot
 		var memberName = element.attr("data-ibx-name");
@@ -343,8 +344,9 @@ ibx.bindElements = function(elements, bindInfo)
 			var widgetType = element.attr("data-ibx-type");
 			if($.ibi[widgetType])
 			{
+				wnd.dispatchEvent("ibx_ibxbindevent", {"hint":"bindwidgetstart", "ibx":ibx, "element":element});
 				var widget = $.ibi[widgetType].call($.ibi, {}, element);
-				widgetTime = new Date() - widgetTime;
+				wnd.dispatchEvent("ibx_ibxbindevent", {"hint":"bindwidgetend", "ibx":ibx, "element":element});
 			}
 			else
 			if(widgetType != "ibxNull")
@@ -354,10 +356,7 @@ ibx.bindElements = function(elements, bindInfo)
 			}
 			element.data("ibxIsBound", true);//mark this element as having been bound.
 		}
-
-		elementTime = new Date() - elementTime;
-		if(ibx.bindProfile && idProfile)
-			console.log("Profile Element: %s, Widget Construction Time: %d, Children Times: %d, Total Time: %d", idProfile, widgetTime, childTimes, elementTime);
+		wnd.dispatchEvent("ibx_ibxbindevent", {"hint":"bindelementend", "ibx":ibx, "element":element});
 	}
 	return elBind;
 };
@@ -439,6 +438,90 @@ ibx.coercePropVal = function (val)
 	}
 	return val;
 };
+
+/*ibx profiling*/
+ibx.profile = false;
+ibx.profileLogLevel = {"none":0, "warning":1, "error":2, "fatal":3};
+ibx.setProfileOptions = function(options){return $.extend(ibx.profileOptions, options);}
+ibx.profileOptions =
+{
+	binding:
+	{
+		widgetWarning:20,
+		widgetError:50,
+		widgetFatal:500,
+		childrenWarning:100,
+		childrenError:500,
+		childrenFatal:1000
+	}
+};
+ibx.profileInfo = {"ibx":{}, "resources":{}, "warnings":{}, "cache":{}};
+ibx._ibxSystemEvent = function(e)
+{
+	if(!ibx.profile)
+		return;
+
+	var eType = e.type;
+	var pOptions = ibx.profileOptions;
+	var pInfo = ibx.profileInfo;
+	var data = e.data;
+	var hint = data.hint;
+	if(eType == "ibx_ibxevent")
+	{
+		pInfo.cache[hint] = new Date();
+		if(hint == "loadend")
+		{
+			var info = pInfo.ibx;
+			info.loadTime = pInfo.cache.loadend - ibx._loadStart;
+			info.jQueryTime = pInfo.cache.jqueryloaded - ibx._loadStart;
+			info.resourcesTime = pInfo.cache.resourcesloadend - pInfo.cache.resourcesloadstart;
+			info.pageBindingTime = pInfo.cache.pagebindingend - pInfo.cache.pagebindingstart;
+			//delete pInfo.cache;
+			console.dir(pInfo);
+		}
+	}
+	else
+	if(eType == "ibx_resmgr")
+	{
+		if(hint == "bundleloading")
+		{
+			data.bundle.profileInfo = {};
+			data.bundle.profileInfo[hint] = new Date();
+		}
+		else		
+		if(hint == "bundleloaded")
+		{
+			if(data.src.search("ibx_resource_bundle.xml") != -1)
+				pInfo.ibx.ibxloaded = (new Date()) - ibx._loadStart;
+			pInfo.resources[data.src] = (new Date()) - data.bundle.profileInfo.bundleloading;
+			delete data.bundle.profileInfo;
+		}
+	}
+	else
+	if(eType == "ibx_ibxbindevent")
+	{
+		if(!data.element.ibxBindInfo)
+			data.element.ibxBindInfo = {"element":data.element};
+		data.element.ibxBindInfo[hint] = new Date();
+		if(hint == "bindelementend")
+		{
+			var bInfo = data.element.ibxBindInfo;
+			bInfo.bindTime = bInfo.bindelementend - bInfo.bindelementstart;
+			bInfo.bindWidgetTime  = bInfo.bindwidgetend ? (bInfo.bindwidgetend - bInfo.bindwidgetstart) : null;
+			bInfo.bindChildTime = bInfo.bindchildrenend - bInfo.bindchildrenstart;
+			var tBind = bInfo.bindelementend - bInfo.bindelementstart;
+			if(bInfo.bindTime >= pOptions.binding.widgetWarning)
+			{
+				var widget = data.element.data("ibxWidget");
+				console.warn(sformat("[ibx warning] {1}ms to bind: {2}", tBind, widget ? widget._widgetClass : "unknown type"), bInfo);
+			}
+		}
+	}
+}
+window.addEventListener("ibx_ibxevent", ibx._ibxSystemEvent.bind(ibx));
+window.addEventListener("ibx_ibxbindevent", ibx._ibxSystemEvent.bind(ibx));
+window.addEventListener("ibx_resmgr", ibx._ibxSystemEvent.bind(ibx));
+
 //# sourceURL=ibx.js
 
 

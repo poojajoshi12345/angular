@@ -27,14 +27,6 @@
 					console.profileEnd("addItems");
 				});						
 			},true);
-
-			window.addEventListener("ibx_ibxevent", ibxSystemEvent);
-			window.addEventListener("ibx_resmgr", ibxSystemEvent);
-			function ibxSystemEvent(e)
-			{
-				var hint = e.data.hint;
-				//console.log(e.type, e.data.loadDepth, e.data.hint, e.data.src);
-			}
 		</script>
 		<style type="text/css">
 			html, body, .main-box
