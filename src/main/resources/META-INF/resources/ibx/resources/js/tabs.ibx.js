@@ -320,6 +320,7 @@ $.widget("ibi.ibxTabPage", $.ibi.ibxWidget,
 	{
 		this._super();
 		this._tabButton.ibxWidget("option", this.options.tabOptions);
+		this._tabButton.attr("title", this.options.tabOptions.title);
 	}
 });
 $.ibi.ibxTabPage.statics = 
