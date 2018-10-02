@@ -115,6 +115,9 @@ function ibx()
 			}
 			if(window.jQuery && window.jQuery.widget && window.ibxResourceManager)
 			{
+				if(ibx.profiling)
+					ibx.profileStart();
+
 				/*
 					Install custom jQuery.Deferred exception handler so we can see the actual non standard exceptions
 					Note: calling 'ibx.deferredExceptionHook(false)' to revert to default jQuery handling
@@ -205,6 +208,7 @@ function ibx()
 								ibx.showRootNodes(true);
 									
 							$(window).dispatchEvent("ibx_ibxevent", {"hint":"loadend", "ibx":ibx});
+							ibx.profileEnd();
 							delete ibx._loadStart;
 						});
 						ibx._loadPromise.then(fn);
@@ -443,7 +447,6 @@ ibx.coercePropVal = function (val)
 ibx.profiling = false;
 ibx.profileLevel = {"none":0x00, "ibx":0x01, "resources":0x02, "binding":0x04};
 ibx.profileLogLevel = {"none":0x00, "warning":0x01, "error":0x02, "fatal":0x04};
-ibx.setProfileOptions = function(options){return $.extend(ibx.profileOptions, options);}
 ibx.profileOptions =
 {
 	profileLevel: ibx.profileLevel.ibx | ibx.profileLevel.resources | ibx.profileLevel.binding,
@@ -455,7 +458,7 @@ ibx.profileOptions =
 		severe:250,
 	}
 };
-ibx.profileInfo =
+ibx._profileInfo =
 {
 	"ibx":{},
 	"resources":
@@ -472,11 +475,25 @@ ibx.profileInfo =
 	"bindings":
 	{
 		"count":0,
+		"totalTime":0,
 		"log":[]
 	},
 	"cache":{}
 };
+ibx.profileInfo = null;
+ibx.profileStart = function(clear, options)
+{
+	$.extend(ibx.profileOptions, options);
 
+	if(clear || !ibx.profileInfo)
+		ibx.profileInfo = $.extend(true, {}, ibx._profileInfo);
+	ibx.profiling = true;
+}
+ibx.profileEnd = function()
+{
+	ibx.profiling = false;
+	return ibx.profileInfo;
+}
 ibx._ibxSystemEvent = function(e)
 {
 	if(!ibx.profiling)
@@ -534,7 +551,6 @@ ibx._ibxSystemEvent = function(e)
 		else
 		if(hint == "fileloading")
 		{
-
 		}
 		else
 		if(hint == "fileloaded")
@@ -573,11 +589,11 @@ ibx._ibxSystemEvent = function(e)
 				var widget = data.element.data("ibxWidget");
 				pInfo.bindings.log.push(
 				{
-					"level":type,
-					"time":bInfo.bindTime,
+					"warningLevel":type,
+					"totalTime":bInfo.bindTime,
 					"widgetTime":bInfo.bindWidgetTime,
 					"childTime":bInfo.bindChildTime,
-					"type": widget ? widget._widgetClass : bInfo.element.prop("className"),
+					"type": bInfo.element.prop("className"),
 					"element":bInfo.element[0],
 					"bindInfo":bInfo
 				});
