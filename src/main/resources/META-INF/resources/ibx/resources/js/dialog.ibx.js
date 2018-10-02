@@ -153,7 +153,7 @@ $.ibi.ibxDialog.createMessageDialog = function(options)
 	//setup the dialog
 	options.aria = $.extend(true, {}, {"describedby":msg.prop("id")}, options.aria);
 	var dlg = $("<div>").ibxDialog(options).ibxDialog("add", msg);
-	ibx.bindElements(dlg);
+	ibx.bindElements(msg);
 	return dlg;
 };
 
