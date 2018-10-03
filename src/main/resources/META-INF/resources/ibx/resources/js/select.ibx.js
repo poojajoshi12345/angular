@@ -1067,6 +1067,19 @@ $.widget("ibi.ibxSelectPaged", $.ibi.ibxSelectBase, {
 		}
 		this._dontFocusText = false;
 	},
+	_onDownArrow: function (e)
+	{
+		this._super(e);
+		if(this.options.popup)
+		{
+			if (this._popup.ibxWidget("isOpen"))
+				this._control.ibxWidget("focusSelItem");
+			else
+				this._dontFocusText = true;
+		}
+		else
+			this._control.ibxWidget("focusSelItem");
+	},
 	_onChange: function (e)
 	{
 		if (e.target !== this.element[0])
@@ -1294,6 +1307,10 @@ $.widget("ibi.ibxSelectItemListPaged", $.ibi.ibxVBox,
 		else
 			this.element.removeClass("paged");
 		this._listControl.ibxWidget("option", "multiSelect", this.options.multiSelect);
+	},
+	focusSelItem: function ()
+	{
+		this._listControl.ibxWidget("focusSelItem");
 	},
 	_onSearchTextChanged: function (e)
 	{
