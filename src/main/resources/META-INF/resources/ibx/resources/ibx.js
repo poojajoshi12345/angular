@@ -446,16 +446,17 @@ ibx.coercePropVal = function (val)
 /*ibx profiling*/
 ibx.profiling = false;
 ibx.profileLevel = {"none":0x00, "ibx":0x01, "resources":0x02, "binding":0x04};
-ibx.profileLogLevel = {"none":0x00, "warning":0x01, "error":0x02, "fatal":0x04};
+ibx.profileLogLevel = {"none":0x00, "caution":0x01, "warning":0x02, "critical":0x04, "all":0xff};
 ibx.profileOptions =
 {
-	profileLevel: ibx.profileLevel.ibx | ibx.profileLevel.resources | ibx.profileLevel.binding,
-	profileLogLevel: ibx.profileLogLevel.caution | ibx.profileLogLevel.warning | ibx.profileLogLevel.severe,
-	binding:
+	"bindingFilter":"*",
+	"bindingLogLevels": ibx.profileLogLevel.caution | ibx.profileLogLevel.warning | ibx.profileLogLevel.critical,
+	"binding":
 	{
-		caution:25,
-		warning:100,
-		severe:250,
+		"normal":0,
+		"caution":25,
+		"warning":100,
+		"critical":250,
 	}
 };
 ibx._profileInfo =
@@ -475,8 +476,7 @@ ibx._profileInfo =
 	"bindings":
 	{
 		"count":0,
-		"totalTime":0,
-		"log":[]
+		"severityLog":[]
 	},
 	"cache":{}
 };
@@ -491,8 +491,12 @@ ibx.profileStart = function(clear, options)
 }
 ibx.profileEnd = function()
 {
-	ibx.profiling = false;
-	return ibx.profileInfo;
+	if(ibx.profiling)
+	{
+		ibx.profiling = false;
+		delete ibx.profileInfo.cache;
+		return ibx.profileInfo;
+	}
 }
 ibx._ibxSystemEvent = function(e)
 {
@@ -514,13 +518,11 @@ ibx._ibxSystemEvent = function(e)
 			info.jQueryLoadTime = pInfo.cache.jqueryloaded - ibx._loadStart;
 			info.resourceFileLoadTime = pInfo.cache.resourcesloadend - pInfo.cache.resourcesloadstart;
 			info.pageBindingTime = pInfo.cache.pagebindingend - pInfo.cache.pagebindingstart;
-			pInfo.bindings.log.reverse();
 			delete pInfo.cache;
-			console.dir(pInfo);
-		}
+	}
 	}
 	else
-	if(eType == "ibx_resmgr" && (ibx.profileOptions.profileLevel & ibx.profileLevel.resources))
+	if(eType == "ibx_ibxresmgr" && (ibx.profileOptions.profileLevel & ibx.profileLevel.resources))
 	{
 		if(hint == "bundleloading")
 		{
@@ -565,45 +567,46 @@ ibx._ibxSystemEvent = function(e)
 		}
 	}
 	else
-	if(eType == "ibx_ibxbindevent" && (ibx.profileOptions.profileLevel & ibx.profileLevel.binding))
+	if(eType == "ibx_ibxbindevent")
 	{
 		if(!data.element.ibxBindInfo)
-			data.element.ibxBindInfo = {};
-		data.element.ibxBindInfo[hint] = new Date();
+			data.element.ibxBindInfo = {"cache":{}};
+		data.element.ibxBindInfo.cache[hint] = new Date();
 		if(hint == "bindelementend")
 		{
-			var bInfo = data.element.ibxBindInfo;
-			bInfo.element = data.element;
-			bInfo.bindTime = bInfo.bindelementend - bInfo.bindelementstart;
-			bInfo.bindWidgetTime  = bInfo.bindwidgetend ? (bInfo.bindwidgetend - bInfo.bindwidgetstart) : null;
-			bInfo.bindChildTime = bInfo.bindchildrenend - bInfo.bindchildrenstart;
 			pInfo.bindings.count++;
-			if(bInfo.bindTime >= pOptions.binding.caution)
-			{
-				var type = "Caution";
-				if(bInfo.bindTime >= pOptions.binding.warning)
-					type = "Warning";
-				if(bInfo.bindTime >= pOptions.binding.severe)
-					type = "Severe";
+			var bInfo = data.element.ibxBindInfo;
+			delete data.element.ibxBindInfo;
 
+			if(pOptions.bindingLogLevels != ibx.profileLogLevel.none && data.element.is(ibx.profileOptions.bindingFilter))
+			{
 				var widget = data.element.data("ibxWidget");
-				pInfo.bindings.log.push(
-				{
-					"warningLevel":type,
-					"totalTime":bInfo.bindTime,
-					"widgetTime":bInfo.bindWidgetTime,
-					"childTime":bInfo.bindChildTime,
-					"type": bInfo.element.prop("className"),
-					"element":bInfo.element[0],
-					"bindInfo":bInfo
-				});
+				bInfo.element = data.element;
+				bInfo.totalTime = bInfo.cache.bindelementend - bInfo.cache.bindelementstart;
+				bInfo.widgetTime = bInfo.cache.bindwidgetend ? (bInfo.cache.bindwidgetend - bInfo.cache.bindwidgetstart) : null;
+				bInfo.childTime = bInfo.cache.bindchildrenend - bInfo.cache.bindchildrenstart;
+				bInfo.type = bInfo.element.prop("className");
+				delete bInfo.cache;
+
+				var severity = "Normal";
+				var logLevel = ibx.profileLogLevel.none;
+				if(bInfo.bindTime >= pOptions.binding.caution && (ibx.profileOptions.bindLogLevels & ibx.profileLogLevel.caution || ibx.profileOptions.bindLogLevels == ibx.profileLogLevel.all))
+					logLevel = ibx.profileEndLogLevel.caution;
+				if(bInfo.bindTime >= pOptions.binding.warning && (ibx.profileOptions.bindLogLevels & ibx.profileLogLevel.warning || ibx.profileOptions.bindLogLevels == ibx.profileLogLevel.all))
+					logLevel = ibx.profileEndLogLevel.warning;
+				if(bInfo.bindTime >= pOptions.binding.critical && (ibx.profileOptions.bindLogLevels & ibx.profileLogLevel.critical || ibx.profileOptions.bindLogLevels == ibx.profileLogLevel.all))
+					logLevel = ibx.profileEndLogLevel.critical;
+
+				bInfo.logLevel = logLevel;
+				bInfo.severity = severity;
+				pInfo.bindings.severityLog.push(bInfo);
 			}
 		}
 	}
 }
 window.addEventListener("ibx_ibxevent", ibx._ibxSystemEvent.bind(ibx));
 window.addEventListener("ibx_ibxbindevent", ibx._ibxSystemEvent.bind(ibx));
-window.addEventListener("ibx_resmgr", ibx._ibxSystemEvent.bind(ibx));
+window.addEventListener("ibx_ibxresmgr", ibx._ibxSystemEvent.bind(ibx));
 
 //# sourceURL=ibx.js
 
