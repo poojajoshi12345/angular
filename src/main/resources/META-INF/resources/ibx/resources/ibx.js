@@ -471,6 +471,7 @@ ibx._profileInfo =
 	"bindings":
 	{
 		"count":0,
+		"sort":"none",
 		"log":[],
 	},
 	"findBinds":function(tBase, el, sort)
@@ -481,8 +482,11 @@ ibx._profileInfo =
 			var ret = $(logItem.element).is(el);
 			return ret && (logItem.totalTime >= tBase);
 		}.bind(this, el));
-
-		return !sort ? ret : ret.sort(function(logItem1, logItem2)
+		return this.sortBinds(ret, sort); 
+	},
+	"sortBinds":function(bindInfo, sort)
+	{
+		return !sort ? ret : bindInfo.sort(function(logItem1, logItem2)
 		{
 			var ret = 0;
 			if(logItem1.totalTime < logItem2.totalTime)
@@ -490,8 +494,10 @@ ibx._profileInfo =
 			else
 			if(logItem1.totalTime > logItem2.totalTime)
 				ret = 1;
-		})
+			return (sort == "descending") ? -ret : ret
+		}.bind(sort))
 	},
+
 	"cache":{},
 };
 ibx.profileInfo = null;
@@ -507,6 +513,8 @@ ibx.profileEnd = function()
 {
 	if(ibx.profiling)
 	{
+		var pInfo = ibx.profileInfo;
+		pInfo.bindings.log = pInfo.sortBinds(pInfo.bindings.log, "descending");
 		ibx.profiling = false;
 		delete ibx.profileInfo.cache;
 		return ibx.profileInfo;
@@ -532,7 +540,6 @@ ibx._ibxSystemEvent = function(e)
 			info.jQueryLoadTime = pInfo.cache.jqueryloaded - ibx._loadStart;
 			info.resourceFileLoadTime = pInfo.cache.resourcesloadend - pInfo.cache.resourcesloadstart;
 			info.pageBindingTime = pInfo.cache.pagebindingend - pInfo.cache.pagebindingstart;
-			console.log("ibxProfileInformation", pInfo);
 			delete pInfo.cache;
 		}
 	}
@@ -597,8 +604,9 @@ ibx._ibxSystemEvent = function(e)
 				bInfo.totalTime = bInfo.cache.bindelementend - bInfo.cache.bindelementstart;
 				bInfo.widgetTime = bInfo.cache.bindwidgetend ? (bInfo.cache.bindwidgetend - bInfo.cache.bindwidgetstart) : null;
 				bInfo.childTime = bInfo.cache.bindchildrenend - bInfo.cache.bindchildrenstart;
-					bInfo.classes = data.element.className;
+				bInfo.classes = data.element.className;
 				bInfo.children = bInfo.cache.bindChildren.map(function(idx, child){return child.ibxBindInfo;}).toArray();
+				bInfo.children = pInfo.sortBinds(bInfo.children, "descending");
 				bInfo.element = data.element;
 
 				delete bInfo.cache;
