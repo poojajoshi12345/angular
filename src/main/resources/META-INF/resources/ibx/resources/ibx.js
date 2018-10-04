@@ -444,7 +444,7 @@ ibx.coercePropVal = function (val)
 };
 
 /*ibx profiling*/
-ibx.profiling = true;
+ibx.profiling = false;
 ibx.profileLevel = {"none":0x00, "ibx":0x01, "resources":0x02, "binding":0x04, "all":0xff};
 ibx.profileLogLevel = {"none":0x00, "caution":0x01, "warning":0x02, "critical":0x04, "all":0xff};
 ibx.profileOptions =
