@@ -350,7 +350,9 @@ ibx.bindElements = function(elements, bindInfo)
 			if($.ibi[widgetType])
 			{
 				wnd.dispatchEvent("ibx_ibxbindevent", {"hint":"bindwidgetstart", "ibx":ibx, "element":el});
+				el.dataset.ibxConstructing = true;
 				var widget = $.ibi[widgetType].call($.ibi, {}, element);
+				delete el.dataset.ibxConstructing;
 				wnd.dispatchEvent("ibx_ibxbindevent", {"hint":"bindwidgetend", "ibx":ibx, "element":el});
 			}
 			else
@@ -532,7 +534,7 @@ ibx._ibxSystemEvent = function(e)
 			info.pageBindingTime = pInfo.cache.pagebindingend - pInfo.cache.pagebindingstart;
 			console.log("ibxProfileInformation", pInfo);
 			delete pInfo.cache;
-	}
+		}
 	}
 	else
 	if(eType == "ibx_ibxresmgr" && (ibx.profileOptions.profileLevel & ibx.profileLevel.resources))
@@ -582,10 +584,11 @@ ibx._ibxSystemEvent = function(e)
 		if(!data.element.ibxBindInfo)
 			data.element.ibxBindInfo = {"cache":{}};
 		data.element.ibxBindInfo.cache[hint] = new Date();
+		
 		if(hint == "bindchildrenstart")
-			data.element.ibxBindInfo.bindChildren = data.children;
+			data.element.ibxBindInfo.cache.bindChildren = data.children;
 		else
-		if(hint == "bindelementend")
+		if(hint == "bindelementend" && !data.element.dataset.ibxConstructing)
 		{
 			pInfo.bindings.count++;
 			if($(data.element).is(ibx.profileOptions.bindFilter))
@@ -594,16 +597,11 @@ ibx._ibxSystemEvent = function(e)
 				bInfo.totalTime = bInfo.cache.bindelementend - bInfo.cache.bindelementstart;
 				bInfo.widgetTime = bInfo.cache.bindwidgetend ? (bInfo.cache.bindwidgetend - bInfo.cache.bindwidgetstart) : null;
 				bInfo.childTime = bInfo.cache.bindchildrenend - bInfo.cache.bindchildrenstart;
-				bInfo.classes = data.element.className;
+					bInfo.classes = data.element.className;
+				bInfo.children = bInfo.cache.bindChildren.map(function(idx, child){return child.ibxBindInfo;}).toArray();
 				bInfo.element = data.element;
+
 				delete bInfo.cache;
-
-				bInfo.children = bInfo.bindChildren.map(function(idx, child)
-				{
-					return child.ibxBindInfo;
-				}).toArray();
-				delete bInfo.bindChildren;
-
 				pInfo.bindings.log.push(bInfo);
 			}
 		}
@@ -612,7 +610,6 @@ ibx._ibxSystemEvent = function(e)
 window.addEventListener("ibx_ibxevent", ibx._ibxSystemEvent.bind(ibx));
 window.addEventListener("ibx_ibxbindevent", ibx._ibxSystemEvent.bind(ibx));
 window.addEventListener("ibx_ibxresmgr", ibx._ibxSystemEvent.bind(ibx));
-
 //# sourceURL=ibx.js
 
 
