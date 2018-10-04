@@ -445,7 +445,7 @@ ibx.coercePropVal = function (val)
 
 /*ibx profiling*/
 ibx.profiling = false;
-ibx.profileLevel = {"nominal":0x00, "ibx":0x01, "resources":0x02, "binding":0x04, "all":0xff};
+ibx.profileLevel = {"none":0x00, "ibx":0x01, "resources":0x02, "binding":0x04, "all":0xff};
 ibx.profileOptions =
 {
 	"profileLevel":ibx.profileLevel.all,
@@ -469,26 +469,25 @@ ibx._profileInfo =
 	{
 		"count":0,
 		"log":[],
-		"filterTime":function(t, el){return this.filter({totalTime:sformat("{1} >= {2}", "{1}", t)}, el);},
-		"filterWidget":function(t, el){return this.filter({widgetTime:sformat("{1} >= {2}", "{1}", t)}, el);},
-		"filterChildren":function(t, el){return this.filter({childTime:sformat("{1} >= {2}", "{1}", t)}, el);},
-		"filter":function(options, el)
+	},
+	"findBinds":function(tBase, el, sort)
+	{
+		el = el ? el : "*";
+		var ret = this.bindings.log.filter(function(el, logItem)
 		{
-			el = el ? el : "*";
-			return this.log.filter(function(options, el, logItem)
-			{
-				var ret = logItem.element.is(el);
-				if(ret && options)
-				{
-					for(var option in options)
-					{
-						var val = logItem[option];
-						ret = val ? (ret && eval(sformat(options[option], val))) : false;
-					}
-				}
-				return ret;
-			}.bind(this, options, el));
-		}
+			var ret = logItem.element.is(el);
+			return ret && (logItem.totalTime >= tBase);
+		}.bind(this, el));
+
+		return !sort ? ret : ret.sort(function(logItem1, logItem2)
+		{
+			var ret = 0;
+			if(logItem1.totalTime < logItem2.totalTime)
+				ret = -1;
+			else
+			if(logItem1.totalTime > logItem2.totalTime)
+				ret = 1;
+		})
 	},
 	"cache":{},
 };
@@ -530,7 +529,7 @@ ibx._ibxSystemEvent = function(e)
 			info.jQueryLoadTime = pInfo.cache.jqueryloaded - ibx._loadStart;
 			info.resourceFileLoadTime = pInfo.cache.resourcesloadend - pInfo.cache.resourcesloadstart;
 			info.pageBindingTime = pInfo.cache.pagebindingend - pInfo.cache.pagebindingstart;
-			console.dir(pInfo);
+			console.log("ibxProfileInformation", pInfo);
 			delete pInfo.cache;
 	}
 	}
