@@ -229,12 +229,17 @@ _p.loadExternalResFile = function(elFile, bundle)
 				el.async = false;
 				el.src = src;
 				el._loadPromise = elFile[0]._loadPromise;
-				el.addEventListener("load", function(isStyle, e)
-				{
-					$(window).dispatchEvent("ibx_ibxresmgr", {"hint":"fileloaded", "loadDepth":this._loadDepth, "resMgr":this, "fileType":fileType, "fileNode":elFile[0], "src":src});
-					e.target._loadPromise.resolve();
-				}.bind(this, isStyle));
 			}
+
+			//need to resolve promise when file is actually loaded...also used for profile timings/counts.
+			el.addEventListener("load", function(isStyle, e)
+			{
+				$(window).dispatchEvent("ibx_ibxresmgr", {"hint":"fileloaded", "loadDepth":this._loadDepth, "resMgr":this, "fileType":fileType, "fileNode":elFile[0], "src":src});
+				if(e.target._loadPromise)
+					e.target._loadPromise.resolve();
+			}.bind(this, isStyle));
+
+
 			$("head")[0].appendChild(el);
 			this.loadedFiles[src] = true;
 			$(window).dispatchEvent("ibx_ibxresmgr", {"hint":"fileloading", "loadDepth":this._loadDepth, "resMgr":this, "fileType":fileType, "fileNode":elFile[0], "src":src});
