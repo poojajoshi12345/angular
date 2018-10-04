@@ -311,17 +311,18 @@ ibx.bindElements = function(elements, bindInfo)
 	//construct all the widgets
 	for(var i = 0; i < elBind.length; ++i)
 	{
-		var element = $(elBind[i]);
+		var el = elBind[i];
+		var element = $(el);
 
 		//construct any unconstructed children first...ignore any no-binds.
 		if(element.closest("[data-ibx-no-bind=true]").length)
 			continue;
 
 		var childWidgets = element.children();
-		wnd.dispatchEvent("ibx_ibxbindevent", {"hint":"bindelementstart", "ibx":ibx, "element":element});
-		wnd.dispatchEvent("ibx_ibxbindevent", {"hint":"bindchildrenstart", "ibx":ibx, "element":element, "children":childWidgets});
+		wnd.dispatchEvent("ibx_ibxbindevent", {"hint":"bindelementstart", "ibx":ibx, "element":el});
+		wnd.dispatchEvent("ibx_ibxbindevent", {"hint":"bindchildrenstart", "ibx":ibx, "element":el, "children":childWidgets});
 		ibx.bindElements(childWidgets);
-		wnd.dispatchEvent("ibx_ibxbindevent", {"hint":"bindchildrenend", "ibx":ibx, "element":element, "children":childWidgets});
+		wnd.dispatchEvent("ibx_ibxbindevent", {"hint":"bindchildrenend", "ibx":ibx, "element":el, "children":childWidgets});
 
 		//hook up member variables to the closest nameRoot
 		var memberName = element.attr("data-ibx-name");
@@ -348,9 +349,9 @@ ibx.bindElements = function(elements, bindInfo)
 			var widgetType = element.attr("data-ibx-type");
 			if($.ibi[widgetType])
 			{
-				wnd.dispatchEvent("ibx_ibxbindevent", {"hint":"bindwidgetstart", "ibx":ibx, "element":element});
+				wnd.dispatchEvent("ibx_ibxbindevent", {"hint":"bindwidgetstart", "ibx":ibx, "element":el});
 				var widget = $.ibi[widgetType].call($.ibi, {}, element);
-				wnd.dispatchEvent("ibx_ibxbindevent", {"hint":"bindwidgetend", "ibx":ibx, "element":element});
+				wnd.dispatchEvent("ibx_ibxbindevent", {"hint":"bindwidgetend", "ibx":ibx, "element":el});
 			}
 			else
 			if(widgetType != "ibxNull")
@@ -360,7 +361,7 @@ ibx.bindElements = function(elements, bindInfo)
 			}
 			element.data("ibxIsBound", true);//mark this element as having been bound.
 		}
-		wnd.dispatchEvent("ibx_ibxbindevent", {"hint":"bindelementend", "ibx":ibx, "element":element});
+		wnd.dispatchEvent("ibx_ibxbindevent", {"hint":"bindelementend", "ibx":ibx, "element":el});
 	}
 	return elBind;
 };
@@ -475,7 +476,7 @@ ibx._profileInfo =
 		el = el ? el : "*";
 		var ret = this.bindings.log.filter(function(el, logItem)
 		{
-			var ret = logItem.element.is(el);
+			var ret = $(logItem.element).is(el);
 			return ret && (logItem.totalTime >= tBase);
 		}.bind(this, el));
 
@@ -581,20 +582,27 @@ ibx._ibxSystemEvent = function(e)
 		if(!data.element.ibxBindInfo)
 			data.element.ibxBindInfo = {"cache":{}};
 		data.element.ibxBindInfo.cache[hint] = new Date();
+		if(hint == "bindchildrenstart")
+			data.element.ibxBindInfo.bindChildren = data.children;
+		else
 		if(hint == "bindelementend")
 		{
 			pInfo.bindings.count++;
-			var bInfo = data.element.ibxBindInfo;
-			delete data.element.ibxBindInfo;
-
-			if(data.element.is(ibx.profileOptions.bindFilter))
+			if($(data.element).is(ibx.profileOptions.bindFilter))
 			{
+				var bInfo = data.element.ibxBindInfo;
 				bInfo.totalTime = bInfo.cache.bindelementend - bInfo.cache.bindelementstart;
 				bInfo.widgetTime = bInfo.cache.bindwidgetend ? (bInfo.cache.bindwidgetend - bInfo.cache.bindwidgetstart) : null;
 				bInfo.childTime = bInfo.cache.bindchildrenend - bInfo.cache.bindchildrenstart;
-				bInfo.classes = data.element.prop("className");
+				bInfo.classes = data.element.className;
 				bInfo.element = data.element;
 				delete bInfo.cache;
+
+				bInfo.children = bInfo.bindChildren.map(function(idx, child)
+				{
+					return child.ibxBindInfo;
+				}).toArray();
+				delete bInfo.bindChildren;
 
 				pInfo.bindings.log.push(bInfo);
 			}
