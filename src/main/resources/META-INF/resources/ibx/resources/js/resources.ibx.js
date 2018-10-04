@@ -136,11 +136,12 @@ _p._onBundleFileLoadError = function(xhr, status, msg)
 	console.error(sformat("[ibx Error] {1}", msg));
 };
 
-_p.loadExternalResFile = function(elFile)
+_p.loadExternalResFile = function(elFile, bundle)
 {
 	elFile = $(elFile);
-	elFile.each(function(idx, elFile)
+	elFile.each(function(bundle, idx, elFile)
 	{
+		elFile.ibxBundle = bundle[0];
 		elFile = $(elFile);
 		var src = this.getResPath(elFile.attr("src"), elFile.closest("[loadContext]").attr("loadContext"));
 
@@ -238,7 +239,7 @@ _p.loadExternalResFile = function(elFile)
 			this.loadedFiles[src] = true;
 			$(window).dispatchEvent("ibx_ibxresmgr", {"hint":"fileloading", "loadDepth":this._loadDepth, "resMgr":this, "fileType":fileType, "fileNode":elFile[0], "src":src});
 		}
-	}.bind(this));
+	}.bind(this, bundle));
 	return elFile;
 };
 
@@ -302,7 +303,7 @@ _p.loadBundle = function(xResDoc)
 		this._bundlePath = curBundlePath;
 
 		//load strings
-		this.loadExternalResFile(bundle.find("string-file"));
+		this.loadExternalResFile(bundle.find("string-file"), bundle);
 		var stringBundles = bundle.find("string-bundle");
 		stringBundles.each(function(idx, stringBundle)
 		{
@@ -318,7 +319,7 @@ _p.loadBundle = function(xResDoc)
 		}.bind(this));
 
 		//load css
-		this.loadExternalResFile(bundle.find("style-file"));
+		this.loadExternalResFile(bundle.find("style-file"), bundle);
 		styleBlocks = bundle.find("style-sheet").each(function(idx, styleBlock)
 		{
 			styleBlock = $(styleBlock);
@@ -334,7 +335,7 @@ _p.loadBundle = function(xResDoc)
 		}.bind(this));
 
 		//load markup
-		this.loadExternalResFile(bundle.find("markup-file"));
+		this.loadExternalResFile(bundle.find("markup-file"), bundle);
 		var markupBlocks = bundle.find("markup-block");
 		markupBlocks.each(function(idx, markup)
 		{
@@ -351,7 +352,7 @@ _p.loadBundle = function(xResDoc)
 			el._loadPromise = dfd;
 			scriptPromises.push(dfd);
 		}.bind(this));
-		this.loadExternalResFile(scripts);
+		this.loadExternalResFile(scripts, bundle);
 		$.when.apply($, scriptPromises).then(function()
 		{
 			var scriptBlocks = bundle.find("script-block");

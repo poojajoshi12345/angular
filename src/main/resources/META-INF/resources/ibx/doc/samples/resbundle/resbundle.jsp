@@ -20,7 +20,7 @@
 		<script type="text/javascript">
 			<jsp:include page="/WEB-INF/jsp/global/wf_globals.jsp" flush="false" />
 
-			window.addEventListener("ibx_resmgr", function(e)
+			window.addEventListener("ibx_ibxresmgr", function(e)
 			{
 				var info = e.data;
 				var tabs = "";
@@ -33,6 +33,7 @@
 					txt.val(log + tabs + info.hint + "\n");
 			});
 
+			ibx.profiling = true;
 			ibx(function()
 			{
 				$(".load-btn").on("click", function(e)
