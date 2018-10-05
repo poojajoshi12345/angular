@@ -116,7 +116,7 @@ function ibx()
 			if(window.jQuery && window.jQuery.widget && window.ibxResourceManager)
 			{
 				if(ibx.profiling)
-					ibx.profileStart();
+					ibx.loadProfile = new ibxProfiler(true, {"ibxLoadStart":dateStart});
 
 				/*
 					Install custom jQuery.Deferred exception handler so we can see the actual non standard exceptions
@@ -124,7 +124,6 @@ function ibx()
 				*/
 				ibx._savedDeferredExceptionHook = $.Deferred.exceptionHook;
 				ibx.deferredExceptionHook(true);
-
 
 				//jQuery/jQueryUI is in scope...stop polling...
 				window.clearInterval(ibx._loadTimer);
@@ -208,8 +207,12 @@ function ibx()
 								ibx.showRootNodes(true);
 									
 							$(window).dispatchEvent("ibx_ibxevent", {"hint":"loadend", "ibx":ibx});
-							ibx.profileEnd();
-							delete ibx._loadStart;
+							
+							if(ibx.loadProfile)
+							{
+								var stats = ibx.loadProfile.stop();
+								console.log("loadProfile", stats);
+							}
 						});
 						ibx._loadPromise.then(fn);
 						ibx._loadPromise.resolve(ibx);//let everyone know the system is booted.
@@ -233,6 +236,8 @@ ibx.version = "0.9";		//ibx version...just a placeholder for now.
 ibx.loadTimeout = 10000;	//can't get preloads in running state by this interval, then bail!
 ibx._loaded = false;		//is ibx loaded.
 ibx._loadPromise = null;	//internal promise/deferred for ibx resource loading
+ibx.profiling = false;		//profile ibx load cycle
+ibx.loadProfile = null;		//profile for load cycle
 ibx.resourceMgr = null;		//ibx default resource manager	
 ibx.forceLinkLoading = true;//[IBX-152] will force asynchronous loading of javascript via script tags.
 ibx.forceInlineResLoading = false;//[ACT-1571]Needed a way to package ibx into single file...this forces all script/css to be inline.
@@ -447,105 +452,80 @@ ibx.coercePropVal = function (val)
 };
 
 /*ibx profiling*/
-ibx.profiling = false;
-ibx.profileLevel = {"none":0x00, "ibx":0x01, "resources":0x02, "binding":0x04, "all":0xff};
-ibx.profileOptions =
+ibxProfiler = function(start, options)
 {
-	"profileLevel":ibx.profileLevel.all,
-	"bindFilter":"*",
+	window.addEventListener("ibx_ibxevent", this._ibxSystemEvent.bind(this));
+	window.addEventListener("ibx_ibxbindevent", this._ibxSystemEvent.bind(this));
+	window.addEventListener("ibx_ibxresmgr", this._ibxSystemEvent.bind(this));
+	this.options = {"profileLevel": ibxProfiler.profileLevel.all, "bindFilter": "*",};
+	if(start)
+		this.start(true, options);
 };
-ibx._profileInfo =
+ibxProfiler.profileLevel = {"none":0x00, "ibx":0x01, "resources":0x02, "binding":0x04, "all":0xff};
+ibxProfiler._stats = 
 {
+	"cache":{},
 	"ibx":{},
-	"resources":
+	"resourceLoading":
 	{
-		"loadCounts":
-		{
-			"string-file":0,
-			"style-file":0,
-			"markup-file":0,
-			"script-file":0,
-			"ibx-res-bundle":0,
-		}
+		"loadCounts":{}
 	},
-	"bindings":
+	"resourceBinding":
 	{
 		"count":0,
-		"sort":"none",
 		"log":[],
 	},
-	"findBinds":function(tBase, el, sort)
-	{
-		el = el ? el : "*";
-		var ret = this.bindings.log.filter(function(el, logItem)
-		{
-			var ret = $(logItem.element).is(el);
-			return ret && (logItem.totalTime >= tBase);
-		}.bind(this, el));
-		return this.sortBinds(ret, sort); 
-	},
-	"sortBinds":function(bindInfo, sort)
-	{
-		return !sort ? ret : bindInfo.sort(function(logItem1, logItem2)
-		{
-			var ret = 0;
-			if(logItem1.totalTime < logItem2.totalTime)
-				ret = -1;
-			else
-			if(logItem1.totalTime > logItem2.totalTime)
-				ret = 1;
-			return (sort == "descending") ? -ret : ret
-		}.bind(sort))
-	},
-
-	"cache":{},
 };
-ibx.profileInfo = null;
-ibx.profileStart = function(clear, options)
-{
-	$.extend(ibx.profileOptions, options);
 
-	if(clear || !ibx.profileInfo)
-		ibx.profileInfo = $.extend(true, {}, ibx._profileInfo);
-	ibx.profiling = true;
-}
-ibx.profileEnd = function()
+_p = ibxProfiler.prototype = Object.create(Object.prototype);
+_p.profiling = false;
+_p.options = null;
+_p.stats = null;
+
+_p.start = function(clear, options)
 {
-	if(ibx.profiling)
+	$.extend(this.options, options);
+
+	if(clear)
+		this.stats = $.extend(true, {}, ibxProfiler._stats);
+	this.profiling = true;
+}
+_p.stop = function()
+{
+	if(this.profiling)
 	{
-		var pInfo = ibx.profileInfo;
-		pInfo.bindings.log = pInfo.sortBinds(pInfo.bindings.log, "descending");
-		ibx.profiling = false;
-		delete ibx.profileInfo.cache;
-		return ibx.profileInfo;
+		this.stats.resourceBinding.log = this.sortBinds(this.stats.resourceBinding.log, "descending");
+		this.profiling = false;
+		delete this.stats.cache;
+		return this.stats;
 	}
 }
-ibx._ibxSystemEvent = function(e)
+_p._ibxSystemEvent = function(e)
 {
-	if(!ibx.profiling)
+	if(!this.profiling)
 		return;
 
 	var eType = e.type;
-	var pOptions = ibx.profileOptions;
-	var pInfo = ibx.profileInfo;
+	var options = this.options;
+	var stats = this.stats;
 	var data = e.data;
 	var hint = data.hint;
-	if(eType == "ibx_ibxevent" && (ibx.profileOptions.profileLevel & ibx.profileLevel.ibx))
+	if(eType == "ibx_ibxevent" && (options.profileLevel & ibxProfiler.profileLevel.ibx))
 	{
-		pInfo.cache[hint] = new Date();
+		stats.cache[hint] = new Date();
 		if(hint == "loadend")
 		{
-			var info = pInfo.ibx;
-			info.totalLoadTime = pInfo.cache.loadend - ibx._loadStart;
-			info.jQueryLoadTime = pInfo.cache.jqueryloaded - ibx._loadStart;
-			info.resourceFileLoadTime = pInfo.cache.resourcesloadend - pInfo.cache.resourcesloadstart;
-			info.pageBindingTime = pInfo.cache.pagebindingend - pInfo.cache.pagebindingstart;
-			delete pInfo.cache;
+			stats.ibx.totalLoadTime = stats.cache.loadend - options.ibxLoadStart;
+			stats.ibx.jQueryLoadTime = stats.cache.jqueryloaded - options.ibxLoadStart;
+			stats.ibx.resourceFileLoadTime = stats.cache.resourcesloadend - stats.cache.resourcesloadstart;
+			stats.ibx.pageBindingTime = stats.cache.pagebindingend - stats.cache.pagebindingstart;
+			delete stats.cache;
 		}
 	}
-	else
-	if(eType == "ibx_ibxresmgr" && (ibx.profileOptions.profileLevel & ibx.profileLevel.resources))
+ 	else
+	if(eType == "ibx_ibxresmgr" && (options.profileLevel & ibxProfiler.profileLevel.resources))
 	{
+		var bundleInfo = data.bundle || data.fileNode.ibxBundle.ibxProfileInfo;
 		if(hint == "bundleloading")
 		{
 			data.bundle.ibxProfileInfo =
@@ -561,32 +541,36 @@ ibx._ibxSystemEvent = function(e)
 		}
 		if(hint == "bundleloaded")
 		{
-			var bundleInfo = data.bundle.ibxProfileInfo;
 			if(data.src.search("ibx_resource_bundle.xml") != -1)
-				pInfo.ibx.ibxLoadTime = (new Date()) - ibx._loadStart;
+				stats.ibx.ibxLoadTime = (new Date()) - options.ibxLoadStart;
 			bundleInfo.loadTime = (new Date()) - bundleInfo.loadTime;
-			pInfo.resources[data.src] = bundleInfo;
-			pInfo.resources.loadCounts["ibx-res-bundle"]++;
+			stats.resourceLoading[data.src] = bundleInfo;
+
+			var loadCounts = stats.resourceLoading.loadCounts;
+			if(!loadCounts["ibx-res-bundle"])
+				loadCounts["ibx-res-bundle"] = 0;
+			loadCounts["ibx-res-bundle"]++;
+
 			delete bundleInfo.cache;
 			delete data.bundle.ibxProfileInfo;
 		}
 		else
 		if(hint == "fileloading")
-		{
-			var bundleInfo = data.fileNode.ibxBundle.ibxProfileInfo;
 			bundleInfo.cache[data.fileNode.attributes.src.value] = new Date();
-		}
 		else
 		if(hint == "fileloaded")
 		{
-			var bundleInfo = data.fileNode.ibxBundle.ibxProfileInfo;
 			bundleInfo.cache[data.fileNode.attributes.src.value] = (new Date()) - data.fileNode.attributes.src.value;
 			bundleInfo[data.fileType]++
-			pInfo.resources.loadCounts[data.fileType]++;
+
+			var fileType = data.fileType;
+			if(!stats.resourceLoading.loadCounts[fileType])
+				stats.resourceLoading.loadCounts[fileType] = 0;
+			stats.resourceLoading.loadCounts[fileType]++;
 		}
 	}
 	else
-	if(eType == "ibx_ibxbindevent" && (ibx.profileOptions.profileLevel & ibx.profileLevel.binding))
+	if(eType == "ibx_ibxbindevent" && (options.profileLevel & ibxProfiler.profileLevel.binding))
 	{
 		if(!data.element.ibxBindInfo)
 			data.element.ibxBindInfo = {"cache":{}};
@@ -597,8 +581,8 @@ ibx._ibxSystemEvent = function(e)
 		else
 		if(hint == "bindelementend" && !data.element.dataset.ibxConstructing)
 		{
-			pInfo.bindings.count++;
-			if($(data.element).is(ibx.profileOptions.bindFilter))
+			stats.resourceBinding.count++;
+			if($(data.element).is(options.bindFilter))
 			{
 				var bInfo = data.element.ibxBindInfo;
 				bInfo.totalTime = bInfo.cache.bindelementend - bInfo.cache.bindelementstart;
@@ -606,18 +590,38 @@ ibx._ibxSystemEvent = function(e)
 				bInfo.childTime = bInfo.cache.bindchildrenend - bInfo.cache.bindchildrenstart;
 				bInfo.classes = data.element.className;
 				bInfo.children = bInfo.cache.bindChildren.map(function(idx, child){return child.ibxBindInfo;}).toArray();
-				bInfo.children = pInfo.sortBinds(bInfo.children, "descending");
+				bInfo.children = this.sortBinds(bInfo.children, "descending");
 				bInfo.element = data.element;
 
 				delete bInfo.cache;
-				pInfo.bindings.log.push(bInfo);
+				stats.resourceBinding.log.push(bInfo);
 			}
 		}
 	}
 }
-window.addEventListener("ibx_ibxevent", ibx._ibxSystemEvent.bind(ibx));
-window.addEventListener("ibx_ibxbindevent", ibx._ibxSystemEvent.bind(ibx));
-window.addEventListener("ibx_ibxresmgr", ibx._ibxSystemEvent.bind(ibx));
+_p.findBinds = function(tBase, el, sort)
+{
+	el = el ? el : "*";
+	var ret = this.bindings.log.filter(function(el, logItem)
+	{
+		var ret = $(logItem.element).is(el);
+		return ret && (logItem.totalTime >= tBase);
+	}.bind(this, el));
+	return this.sortBinds(ret, sort); 
+};
+_p.sortBinds = function(bindInfo, sort)
+{
+	return !sort ? this.profileInfo.bindings : bindInfo.sort(function(sort, logItem1, logItem2)
+	{
+		var ret = 0;
+		if(logItem1.totalTime < logItem2.totalTime)
+			ret = -1;
+		else
+		if(logItem1.totalTime > logItem2.totalTime)
+			ret = 1;
+		return (sort == "descending") ? -ret : ret
+	}.bind(this, sort))
+};
 //# sourceURL=ibx.js
 
 
