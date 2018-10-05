@@ -72,7 +72,7 @@ function ibx()
 					ibx._appParms[parm[0]] = parm[1];
 				}
 			}
-			ibx.forceInlineResLoading = (ibx._appParms.forceInlineResLoading !== undefined) ? (ibx._appParms.forceInlineResLoading == "true") : ibx.forceInlineResLoading;
+			ibx.forceInlineresLoaded = (ibx._appParms.forceInlineresLoaded !== undefined) ? (ibx._appParms.forceInlineresLoaded == "true") : ibx.forceInlineresLoaded;
 			ibx.forceLinkLoading = (ibx._appParms.forceLinkLoading !== undefined) ? (ibx._appParms.forceLinkLoading == "true") : ibx.forceLinkLoading;
 		}
 		ibx._appInfoResolved = true;
@@ -211,7 +211,7 @@ function ibx()
 							if(ibx.loadProfile)
 							{
 								var stats = ibx.loadProfile.stop();
-								console.log("loadProfile", stats);
+								console.warn("loadProfile", stats);
 							}
 						});
 						ibx._loadPromise.then(fn);
@@ -240,7 +240,7 @@ ibx.profiling = false;		//profile ibx load cycle
 ibx.loadProfile = null;		//profile for load cycle
 ibx.resourceMgr = null;		//ibx default resource manager	
 ibx.forceLinkLoading = true;//[IBX-152] will force asynchronous loading of javascript via script tags.
-ibx.forceInlineResLoading = false;//[ACT-1571]Needed a way to package ibx into single file...this forces all script/css to be inline.
+ibx.forceInlineresLoaded = false;//[ACT-1571]Needed a way to package ibx into single file...this forces all script/css to be inline.
 ibx.preCompiled = false;
 
 //where ibx.js loaded from
@@ -466,11 +466,11 @@ ibxProfiler._stats =
 {
 	"cache":{},
 	"ibx":{},
-	"resourceLoading":
+	"resLoaded":
 	{
 		"loadCounts":{}
 	},
-	"resourceBinding":
+	"resBound":
 	{
 		"count":0,
 		"log":[],
@@ -494,7 +494,8 @@ _p.stop = function()
 {
 	if(this.profiling)
 	{
-		this.stats.resourceBinding.log = this.sortBinds(this.stats.resourceBinding.log, "descending");
+		this.stats.resBound.log = this.sortBinds(this.stats.resBound.log, "descending");
+		this.stats.resBound.count = this.stats.resBound.log.length;
 		this.profiling = false;
 		delete this.stats.cache;
 		return this.stats;
@@ -525,7 +526,7 @@ _p._ibxSystemEvent = function(e)
  	else
 	if(eType == "ibx_ibxresmgr" && (options.profileLevel & ibxProfiler.profileLevel.resources))
 	{
-		var bundleInfo = data.bundle || data.fileNode.ibxBundle.ibxProfileInfo;
+		var bundleInfo = data.bundle ? data.bundle.ibxProfileInfo : data.fileNode.ibxBundle.ibxProfileInfo;
 		if(hint == "bundleloading")
 		{
 			data.bundle.ibxProfileInfo =
@@ -544,9 +545,9 @@ _p._ibxSystemEvent = function(e)
 			if(data.src.search("ibx_resource_bundle.xml") != -1)
 				stats.ibx.ibxLoadTime = (new Date()) - options.ibxLoadStart;
 			bundleInfo.loadTime = (new Date()) - bundleInfo.loadTime;
-			stats.resourceLoading[data.src] = bundleInfo;
+			stats.resLoaded[data.src] = bundleInfo;
 
-			var loadCounts = stats.resourceLoading.loadCounts;
+			var loadCounts = stats.resLoaded.loadCounts;
 			if(!loadCounts["ibx-res-bundle"])
 				loadCounts["ibx-res-bundle"] = 0;
 			loadCounts["ibx-res-bundle"]++;
@@ -561,12 +562,15 @@ _p._ibxSystemEvent = function(e)
 		if(hint == "fileloaded")
 		{
 			bundleInfo.cache[data.fileNode.attributes.src.value] = (new Date()) - data.fileNode.attributes.src.value;
+
+			if(!bundleInfo[data.fileType])
+				bundleInfo[data.fileType] = 0;
 			bundleInfo[data.fileType]++
 
 			var fileType = data.fileType;
-			if(!stats.resourceLoading.loadCounts[fileType])
-				stats.resourceLoading.loadCounts[fileType] = 0;
-			stats.resourceLoading.loadCounts[fileType]++;
+			if(!stats.resLoaded.loadCounts[fileType])
+				stats.resLoaded.loadCounts[fileType] = 0;
+			stats.resLoaded.loadCounts[fileType]++;
 		}
 	}
 	else
@@ -581,7 +585,6 @@ _p._ibxSystemEvent = function(e)
 		else
 		if(hint == "bindelementend" && !data.element.dataset.ibxConstructing)
 		{
-			stats.resourceBinding.count++;
 			if($(data.element).is(options.bindFilter))
 			{
 				var bInfo = data.element.ibxBindInfo;
@@ -594,7 +597,7 @@ _p._ibxSystemEvent = function(e)
 				bInfo.element = data.element;
 
 				delete bInfo.cache;
-				stats.resourceBinding.log.push(bInfo);
+				stats.resBound.log.push(bInfo);
 			}
 		}
 	}
@@ -602,7 +605,7 @@ _p._ibxSystemEvent = function(e)
 _p.sortBinds = function(arBindInfo, sort)
 {
 	sort = (sort === undefined) ? "descending" : sort;
-	return !sort ? this.stats.resourceBinding.log : arBindInfo.sort(function(sort, logItem1, logItem2)
+	return !sort ? this.stats.resBound.log : arBindInfo.sort(function(sort, logItem1, logItem2)
 	{
 		var ret = 0;
 		if(logItem1.totalTime < logItem2.totalTime)
@@ -613,15 +616,15 @@ _p.sortBinds = function(arBindInfo, sort)
 		return (sort == "descending") ? -ret : ret
 	}.bind(this, sort))
 };
-_p.findBinds = function(tBase, el, sort)
+_p.findBinds = function(tBase, elFilter, sort)
 {
 	tBase = (tBase === null) ? 0 : tBase
-	el = el ? el : "*";
-	var ret = this.stats.resourceBinding.log.filter(function(el, logItem)
+	elFilter = elFilter ? elFilter : "*";
+	var ret = this.stats.resBound.log.filter(function(elFilter, logItem)
 	{
-		var ret = $(logItem.element).is(el);
+		var ret = $(logItem.element).is(elFilter);
 		return ret && (logItem.totalTime >= tBase);
-	}.bind(this, el));
+	}.bind(this, elFilter));
 	return this.sortBinds(ret, sort); 
 };
 
