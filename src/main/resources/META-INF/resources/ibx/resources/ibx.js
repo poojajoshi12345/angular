@@ -624,7 +624,7 @@ _p.findBinds = function(tBase, el, sort)
 	}.bind(this, el));
 	return this.sortBinds(ret, sort); 
 };
-ibx.profiling = true;
+
 //# sourceURL=ibx.js
 
 
