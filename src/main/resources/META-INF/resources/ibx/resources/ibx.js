@@ -131,6 +131,9 @@ function ibx()
 				//wait for jQuery to be fully loaded...
 				$(function jQuery_main()
 				{
+					//jquery is fully loaded and running
+					$(window).dispatchEvent("ibx_ibxevent", {"hint":"jqueryloaded", "ibx":ibx});
+
 					//we want to precompile this application, not run it.
 					if(ibx._appParms.compile == "true")
 					{
@@ -153,9 +156,6 @@ function ibx()
 							this.compiledApp = outDoc;
 						}.bind(this));
 					}
-
-					//jquery is fully loaded and running
-					$(window).dispatchEvent("ibx_ibxevent", {"hint":"jqueryloaded", "ibx":ibx});
 
 					//continue booting ibx...
 					ibx._loadPromise = $.Deferred();
@@ -465,15 +465,19 @@ ibxProfiler.profileLevel = {"none":0x00, "ibx":0x01, "resources":0x02, "binding"
 ibxProfiler._stats = 
 {
 	"cache":{},
-	"ibx":{},
-	"resLoaded":
+	"ibx":
+	{
+		"ibxLoadTime":{}
+	},
+	"resources":
 	{
 		"loadCounts":{}
 	},
-	"resBound":
+	"binding":
 	{
 		"count":0,
-		"log":[],
+		"totalTime":0,
+		"elements":[],
 	},
 };
 
@@ -494,8 +498,8 @@ _p.stop = function()
 {
 	if(this.profiling)
 	{
-		this.stats.resBound.log = this.sortBinds(this.stats.resBound.log, "descending");
-		this.stats.resBound.count = this.stats.resBound.log.length;
+		this.stats.binding.elements = this.sortBinds(this.stats.binding.elements, "descending");
+		this.stats.binding.count = this.stats.binding.elements.length;
 		this.profiling = false;
 		delete this.stats.cache;
 		return this.stats;
@@ -517,7 +521,8 @@ _p._ibxSystemEvent = function(e)
 		if(hint == "loadend")
 		{
 			stats.ibx.totalLoadTime = stats.cache.loadend - options.ibxLoadStart;
-			stats.ibx.jQueryLoadTime = stats.cache.jqueryloaded - options.ibxLoadStart;
+			stats.ibx.ibxLoadTime.jQueryLoadTime = stats.cache.jqueryloaded - options.ibxLoadStart;
+			stats.ibx.ibxLoadTime.misc = (stats.ibx.ibxLoadTime.totalTime - stats.ibx.ibxLoadTime.resBundleTime - stats.ibx.ibxLoadTime.jQueryLoadTime);
 			stats.ibx.resourceFileLoadTime = stats.cache.resourcesloadend - stats.cache.resourcesloadstart;
 			stats.ibx.pageBindingTime = stats.cache.pagebindingend - stats.cache.pagebindingstart;
 			delete stats.cache;
@@ -542,12 +547,17 @@ _p._ibxSystemEvent = function(e)
 		}
 		if(hint == "bundleloaded")
 		{
-			if(data.src.search("ibx_resource_bundle.xml") != -1)
-				stats.ibx.ibxLoadTime = (new Date()) - options.ibxLoadStart;
 			bundleInfo.loadTime = (new Date()) - bundleInfo.loadTime;
-			stats.resLoaded[data.src] = bundleInfo;
+			stats.resources[data.src] = bundleInfo;
 
-			var loadCounts = stats.resLoaded.loadCounts;
+			//bundle is part of ibx load...not external
+			if(data.src.search("ibx_resource_bundle.xml") != -1)
+			{
+				stats.ibx.ibxLoadTime.totalTime = (new Date()) - options.ibxLoadStart;
+				stats.ibx.ibxLoadTime.resBundleTime = bundleInfo.loadTime;
+			}
+
+			var loadCounts = stats.resources.loadCounts;
 			if(!loadCounts["ibx-res-bundle"])
 				loadCounts["ibx-res-bundle"] = 0;
 			loadCounts["ibx-res-bundle"]++;
@@ -568,9 +578,9 @@ _p._ibxSystemEvent = function(e)
 			bundleInfo[data.fileType]++
 
 			var fileType = data.fileType;
-			if(!stats.resLoaded.loadCounts[fileType])
-				stats.resLoaded.loadCounts[fileType] = 0;
-			stats.resLoaded.loadCounts[fileType]++;
+			if(!stats.resources.loadCounts[fileType])
+				stats.resources.loadCounts[fileType] = 0;
+			stats.resources.loadCounts[fileType]++;
 		}
 	}
 	else
@@ -595,9 +605,10 @@ _p._ibxSystemEvent = function(e)
 				bInfo.children = bInfo.cache.bindChildren.map(function(idx, child){return child.ibxBindInfo;}).toArray();
 				bInfo.children = this.sortBinds(bInfo.children, "descending");
 				bInfo.element = data.element;
-
+				bInfo.timeStamp = bInfo.cache.bindelementend;
 				delete bInfo.cache;
-				stats.resBound.log.push(bInfo);
+				stats.binding.totalTime += bInfo.widgetTime || 0;
+				stats.binding.elements.push(bInfo);
 			}
 		}
 	}
@@ -605,7 +616,7 @@ _p._ibxSystemEvent = function(e)
 _p.sortBinds = function(arBindInfo, sort)
 {
 	sort = (sort === undefined) ? "descending" : sort;
-	return !sort ? this.stats.resBound.log : arBindInfo.sort(function(sort, logItem1, logItem2)
+	return !sort ? this.stats.binding.elements : arBindInfo.sort(function(sort, logItem1, logItem2)
 	{
 		var ret = 0;
 		if(logItem1.totalTime < logItem2.totalTime)
@@ -620,7 +631,7 @@ _p.findBinds = function(tBase, elFilter, sort)
 {
 	tBase = (tBase === null) ? 0 : tBase
 	elFilter = elFilter ? elFilter : "*";
-	var ret = this.stats.resBound.log.filter(function(elFilter, logItem)
+	var ret = this.stats.binding.elements.filter(function(elFilter, logItem)
 	{
 		var ret = $(logItem.element).is(elFilter);
 		return ret && (logItem.totalTime >= tBase);
