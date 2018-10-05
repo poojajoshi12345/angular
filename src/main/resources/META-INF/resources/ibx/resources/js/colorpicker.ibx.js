@@ -22,7 +22,7 @@ $.widget("ibi.ibxColorPicker", $.ibi.ibxVBox,
 		var options = this.options;
 		var infoBox = this._infoBox = $("<div class='cp-info-box'>").ibxHBox({"align":"stretch", "justify":"center"});
 		var swatch = this._swatch = $("<div class='cp-swatch'>");
-		var value = this._textValue = $("<div tabindex='-1' class='cp-text-value'>").ibxTextField().on("ibx_textchanged", this._onTextChanging.bind(this));
+		var value = this._textValue = $("<div tabindex='-1' class='cp-text-value'>").ibxTextField().on("ibx_change", this._onTextChanged.bind(this));
 		var ctrl = this._ctrl = $("<div class='cp-mixer'>");
 					
 		infoBox.append(swatch, value);
@@ -59,21 +59,20 @@ $.widget("ibi.ibxColorPicker", $.ibi.ibxVBox,
 		if(this._inSetOptions)
 			return;
 		var options = this.options;
-		options.color = value;
-		options.opacity = (options.setOpacity && !isNaN(opacity)) ? parseFloat(opacity) : 1;
-		options.colorRgba = hexToRgba(value, options.opacity);
-		this.refresh();
-		this.element.dispatchEvent("ibx_colorchange", {"color":options.color, "rgba": options.colorRgba, "opacity":options.opacity}, false, false);
-
+		var options = 
+		{
+			color:value,
+			opacity:(options.setOpacity && !isNaN(opacity)) ? parseFloat(opacity) : 1,
+			colorRgba:hexToRgba(value, options.opacity),
+		};
+		this.option(options);
+		return;
 	},
-	_onTextChanging:function(e, info)
+	_onTextChanged:function(e, info)
 	{
 		if(this._inSetOptions)
 			return;
-		var options = this.options;
-		var color = info.text;
-		if(color[0] != "#")
-			color = "#" + color;
+		this.option("color", info.text);
 	},
 	_setOption:function(key, value)
 	{
@@ -88,8 +87,18 @@ $.widget("ibi.ibxColorPicker", $.ibi.ibxVBox,
 			value = value.toLowerCase();
 			if(value.search(/^rgb\(/i) == 0)
 				value = rgbToHex(value);
-			options.colorRgba = hexToRgba(value, options.opacity);
-			this._ctrl.minicolors("value", {"color":options.colorRgba.rgba, "opacity":options.opacity});
+			else
+			if(value[0] != "#")
+				value = "#" + value;
+
+			var rx = new RegExp("^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$");
+			if(rx.test(value))
+			{
+				options.colorRgba = hexToRgba(value, options.opacity);
+				this._ctrl.minicolors("value", {"color":options.colorRgba.rgba, "opacity":options.opacity});
+			}
+			else
+				value = options.color;
 		}
 		else
 		if(key == "opacity")
@@ -101,6 +110,7 @@ $.widget("ibi.ibxColorPicker", $.ibi.ibxVBox,
 		if(key == "setOpacity")
 			this._ctrl.minicolors("settings", {"opacity": value});
 		this._super(key, value);
+		this.element.dispatchEvent("ibx_colorchange", {"color":options.color, "rgba": options.colorRgba, "opacity":options.opacity}, false, false);
 		this._inSetOptions = false;
 	},
 	_refresh: function ()
