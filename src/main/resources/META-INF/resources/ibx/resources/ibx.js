@@ -599,19 +599,10 @@ _p._ibxSystemEvent = function(e)
 		}
 	}
 }
-_p.findBinds = function(tBase, el, sort)
+_p.sortBinds = function(arBindInfo, sort)
 {
-	el = el ? el : "*";
-	var ret = this.bindings.log.filter(function(el, logItem)
-	{
-		var ret = $(logItem.element).is(el);
-		return ret && (logItem.totalTime >= tBase);
-	}.bind(this, el));
-	return this.sortBinds(ret, sort); 
-};
-_p.sortBinds = function(bindInfo, sort)
-{
-	return !sort ? this.profileInfo.bindings : bindInfo.sort(function(sort, logItem1, logItem2)
+	sort = (sort === undefined) ? "descending" : sort;
+	return !sort ? this.stats.resourceBinding.log : arBindInfo.sort(function(sort, logItem1, logItem2)
 	{
 		var ret = 0;
 		if(logItem1.totalTime < logItem2.totalTime)
@@ -622,6 +613,18 @@ _p.sortBinds = function(bindInfo, sort)
 		return (sort == "descending") ? -ret : ret
 	}.bind(this, sort))
 };
+_p.findBinds = function(tBase, el, sort)
+{
+	tBase = (tBase === null) ? 0 : tBase
+	el = el ? el : "*";
+	var ret = this.stats.resourceBinding.log.filter(function(el, logItem)
+	{
+		var ret = $(logItem.element).is(el);
+		return ret && (logItem.totalTime >= tBase);
+	}.bind(this, el));
+	return this.sortBinds(ret, sort); 
+};
+ibx.profiling = true;
 //# sourceURL=ibx.js
 
 
