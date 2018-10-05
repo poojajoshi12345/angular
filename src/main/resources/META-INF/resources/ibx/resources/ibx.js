@@ -493,7 +493,7 @@ _p.start = function(clear, options)
 	if(clear)
 		this.stats = $.extend(true, {}, ibxProfiler._stats);
 	this.profiling = true;
-}
+};
 _p.stop = function()
 {
 	if(this.profiling)
@@ -504,7 +504,7 @@ _p.stop = function()
 		delete this.stats.cache;
 		return this.stats;
 	}
-}
+};
 _p._ibxSystemEvent = function(e)
 {
 	if(!this.profiling)
@@ -543,7 +543,7 @@ _p._ibxSystemEvent = function(e)
 				"script-file":0,
 				"ibx-res-bundle":0,
 				"cache":{}
-			}
+			};
 		}
 		if(hint == "bundleloaded")
 		{
@@ -575,7 +575,7 @@ _p._ibxSystemEvent = function(e)
 
 			if(!bundleInfo[data.fileType])
 				bundleInfo[data.fileType] = 0;
-			bundleInfo[data.fileType]++
+			bundleInfo[data.fileType]++;
 
 			var fileType = data.fileType;
 			if(!stats.resources.loadCounts[fileType])
@@ -612,7 +612,7 @@ _p._ibxSystemEvent = function(e)
 			}
 		}
 	}
-}
+};
 _p.sortBinds = function(arBindInfo, sort)
 {
 	sort = (sort === undefined) ? "descending" : sort;
@@ -624,12 +624,12 @@ _p.sortBinds = function(arBindInfo, sort)
 		else
 		if(logItem1.totalTime > logItem2.totalTime)
 			ret = 1;
-		return (sort == "descending") ? -ret : ret
-	}.bind(this, sort))
+		return (sort == "descending") ? -ret : ret;
+	}.bind(this, sort));
 };
 _p.findBinds = function(tBase, elFilter, sort)
 {
-	tBase = (tBase === null) ? 0 : tBase
+	tBase = (tBase === null) ? 0 : tBase;
 	elFilter = elFilter ? elFilter : "*";
 	var ret = this.stats.binding.elements.filter(function(elFilter, logItem)
 	{
