@@ -278,7 +278,7 @@ $.widget("ibi.ibxPalettePicker", $.ibi.ibxVBox,
 		else
 		if((key == "colorRgba") && !this._inInit)
 		{
-			console.warn("[ibx Warning] ibxPalettePicker.option.rgbColor is readonly.")
+			console.warn("[ibx Warning] ibxPalettePicker.option.rgbColor is readonly.");
 			return;
 		}
 
