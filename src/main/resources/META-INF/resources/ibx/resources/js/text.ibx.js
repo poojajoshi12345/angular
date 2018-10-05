@@ -59,9 +59,12 @@ $.widget("ibi.ibxTextField", $.ibi.ibxFlexBox,
 	},
 	_setValue: function (value, bFormat)
 	{
-		this.options.text = bFormat && this.options.fnFormat ? this.options.fnFormat(value) : value;
-		this.refresh();
-		this._trigger("change", null, {"text": this.options.text});
+		var text = this.options.text;
+		var newText = bFormat && this.options.fnFormat ? this.options.fnFormat(value) : value;
+		this.option("text", newText);
+
+		if(text != newText)
+			this._trigger("change", null, {"text": this.options.text});
 	},
 	value:function(value, bFormat)
 	{
