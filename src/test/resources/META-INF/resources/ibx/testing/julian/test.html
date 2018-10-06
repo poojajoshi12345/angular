@@ -10,22 +10,9 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<script type="text/javascript" src="../../resources/ibx.js"></script>
 		<script type="text/javascript">
+			ibx.profiling = true;
 			ibx(function(e)
 			{
-				$(".test-button").on("click", function testButtonClick(e)
-				{
-					console.profile("additems");
-					var list = $(".test-list");
-					list.ibxWidget("remove");
-					for(var i = 0; i < 5; ++i)
-					{
-						console.profile("additem");
-						var item = $("<div>").ibxLabel({"text":"Item " + i, "glyph":"face", "glyphClasses":"material-icons"}).addClass("test-item");
-						list.ibxWidget("add", item)
-						console.profileEnd("additem");
-					}
-					console.profileEnd("addItems");
-				});						
 			},true);
 		</script>
 		<style type="text/css">
@@ -52,10 +39,9 @@
 		</style>
 	</head>
 	<body class="ibx-root">
-		<div class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="center" data-ibxp-justify="center">
-			<div class="test-button" data-ibx-type="ibxButton">LoadList</div>
-			<div class="test-list" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
-			</div>
+		<div class="main-box" data-ibx-profile="mainBox" data-ibx-type="ibxVBox" data-ibxp-align="center" data-ibxp-justify="center">
+			<div class="test-label" data-ibx-profile="testLabel" data-ibx-type="ibxLabel">Test Label</div>
+		</div>
 		</div>
 	</body>
 </html>

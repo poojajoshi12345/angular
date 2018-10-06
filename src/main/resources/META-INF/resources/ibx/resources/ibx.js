@@ -116,7 +116,7 @@ function ibx()
 			if(window.jQuery && window.jQuery.widget && window.ibxResourceManager)
 			{
 				if(ibx.profiling)
-					ibx.loadProfile = new ibxProfiler(true, {"ibxLoadStart":dateStart});
+					ibx.loadProfile = new ibxProfiler(true, "ibxLoadProfile", {"ibxLoadStart":dateStart});
 
 				/*
 					Install custom jQuery.Deferred exception handler so we can see the actual non standard exceptions
@@ -208,11 +208,9 @@ function ibx()
 									
 							$(window).dispatchEvent("ibx_ibxevent", {"hint":"loadend", "ibx":ibx});
 							
+							//if profiling...pause.
 							if(ibx.loadProfile)
-							{
-								var stats = ibx.loadProfile.stop();
-								console.warn("loadProfile", stats);
-							}
+								ibx.loadProfile.stop();
 						});
 						ibx._loadPromise.then(fn);
 						ibx._loadPromise.resolve(ibx);//let everyone know the system is booted.
@@ -319,6 +317,11 @@ ibx.bindElements = function(elements, bindInfo)
 		var el = elBind[i];
 		var element = $(el);
 
+		//turn on profiling for this element
+		var profile = element.data("ibxProfile");
+		if(profile)
+			profile = ibxProfiler.profiles = new ibxProfiler(true, profile);
+
 		//construct any unconstructed children first...ignore any no-binds.
 		if(element.closest("[data-ibx-no-bind=true]").length)
 			continue;
@@ -369,6 +372,9 @@ ibx.bindElements = function(elements, bindInfo)
 			element.data("ibxIsBound", true);//mark this element as having been bound.
 		}
 		wnd.dispatchEvent("ibx_ibxbindevent", {"hint":"bindelementend", "ibx":ibx, "element":el});
+	
+		if(profile)
+			profile.stop();
 	}
 	return elBind;
 };
@@ -452,16 +458,26 @@ ibx.coercePropVal = function (val)
 };
 
 /*ibx profiling*/
-ibxProfiler = function(start, options)
+ibxProfiler = function(start, name, options)
 {
 	window.addEventListener("ibx_ibxevent", this._ibxSystemEvent.bind(this));
 	window.addEventListener("ibx_ibxbindevent", this._ibxSystemEvent.bind(this));
 	window.addEventListener("ibx_ibxresmgr", this._ibxSystemEvent.bind(this));
-	this.options = {"profileLevel": ibxProfiler.profileLevel.all, "bindFilter": "*",};
+
+	options = (name instanceof Object) ? ibx.parseOptions(name) : options;
+	this.options = $.extend(true,
+	{
+		"name":name || "ibxProfile",
+		"logToConsole": true,
+		"profileLevel": ibxProfiler.profileLevel.all,
+		"bindFilter": "*"
+	}, options);
+	
 	if(start)
 		this.start(true, options);
 };
 ibxProfiler.profileLevel = {"none":0x00, "ibx":0x01, "resources":0x02, "binding":0x04, "all":0xff};
+ibxProfiler.profiles = {};//all static profiles
 ibxProfiler._stats = 
 {
 	"cache":{},
@@ -502,6 +518,8 @@ _p.stop = function()
 		this.stats.binding.count = this.stats.binding.elements.length;
 		this.profiling = false;
 		delete this.stats.cache;
+		if(this.options.logToConsole)
+			console.warn(this.options.name, this.stats);
 		return this.stats;
 	}
 };
@@ -586,29 +604,37 @@ _p._ibxSystemEvent = function(e)
 	else
 	if(eType == "ibx_ibxbindevent" && (options.profileLevel & ibxProfiler.profileLevel.binding))
 	{
-		if(!data.element.ibxBindInfo)
-			data.element.ibxBindInfo = {"cache":{}};
-		data.element.ibxBindInfo.cache[hint] = new Date();
+		//if first time binding then make a cache for binding information
+		if(!data.element.ibxProfileBindInfo)
+			data.element.ibxProfileBindInfo = {};
 		
+		//if first time binding for this particular profile, make a cache for this profile and element
+		var bindInfo = data.element.ibxProfileBindInfo[this.options.name];
+		if(!bindInfo)
+			bindInfo = data.element.ibxProfileBindInfo[this.options.name] = {"cache":{}};
+		
+		//save the event time.
+		bindInfo.cache[hint] = new Date();
+		
+		//process the event
 		if(hint == "bindchildrenstart")
-			data.element.ibxBindInfo.cache.bindChildren = data.children;
+			bindInfo.cache.bindChildren = data.children;
 		else
 		if(hint == "bindelementend" && !data.element.dataset.ibxConstructing)
 		{
 			if($(data.element).is(options.bindFilter))
 			{
-				var bInfo = data.element.ibxBindInfo;
-				bInfo.totalTime = bInfo.cache.bindelementend - bInfo.cache.bindelementstart;
-				bInfo.widgetTime = bInfo.cache.bindwidgetend ? (bInfo.cache.bindwidgetend - bInfo.cache.bindwidgetstart) : null;
-				bInfo.childTime = bInfo.cache.bindchildrenend - bInfo.cache.bindchildrenstart;
-				bInfo.classes = data.element.className;
-				bInfo.children = bInfo.cache.bindChildren.map(function(idx, child){return child.ibxBindInfo;}).toArray();
-				bInfo.children = this.sortBinds(bInfo.children, "descending");
-				bInfo.element = data.element;
-				bInfo.timeStamp = bInfo.cache.bindelementend;
-				delete bInfo.cache;
-				stats.binding.totalTime += bInfo.widgetTime || 0;
-				stats.binding.elements.push(bInfo);
+				bindInfo.totalTime = bindInfo.cache.bindelementend - bindInfo.cache.bindelementstart;
+				bindInfo.widgetTime = bindInfo.cache.bindwidgetend ? (bindInfo.cache.bindwidgetend - bindInfo.cache.bindwidgetstart) : null;
+				bindInfo.childTime = bindInfo.cache.bindchildrenend - bindInfo.cache.bindchildrenstart;
+				bindInfo.classes = data.element.className;
+				bindInfo.children = bindInfo.cache.bindChildren.map(function(idx, child){return child.ibxBindInfo;}).toArray();
+				bindInfo.children = this.sortBinds(bindInfo.children, "descending");
+				bindInfo.element = data.element;
+				bindInfo.timeStamp = bindInfo.cache.bindelementend;
+				delete bindInfo.cache;
+				stats.binding.totalTime += bindInfo.widgetTime || 0;
+				stats.binding.elements.push(bindInfo);
 			}
 		}
 	}
