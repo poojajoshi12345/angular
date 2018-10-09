@@ -665,6 +665,47 @@ _p.findBinds = function(tBase, elFilter, sort)
 	return this.sortBinds(ret, sort); 
 };
 
+_p.toString = function()
+{
+	var name = this.options.name;
+	var stats = this.stats;
+	var header = sformat("ibxProfile: {1}", name);
+	var strOut = header + "\n" + this._stringify(stats, 1);
+	return strOut;
+}
+
+_p._stringify = function(o, depth, format)
+{
+	var strOut = "";
+	var strIndent = (new Array(depth)).join("\t");
+
+	if(o instanceof Object)
+	{
+		for(var key in o)
+		{
+			var prop = o[key];
+			if(prop instanceof Object)
+			{
+				if(prop instanceof Array)
+					continue;
+				strOut += sformat("{1}{2}:\n", strIndent, key);
+				strOut += this._stringify(prop, depth + 1, format);
+			}
+			else
+			if(!(prop instanceof Function))
+				strOut += sformat("{1}{2}: {3}\n", strIndent, key, prop);
+		}
+	}
+	else
+	if(o instanceof Array)
+	{
+		for(var i = 0; i < o.length; ++i)
+			strOut += this._stringify(o[i], depth + 1, format) + "\n";
+	}
+
+	return strOut + "\n";
+}
+
 //# sourceURL=ibx.js
 
 
