@@ -624,10 +624,10 @@ _p._ibxSystemEvent = function(e)
 		{
 			if($(data.element).is(options.bindFilter))
 			{
+				bindInfo.classes = data.element.className;
 				bindInfo.totalTime = bindInfo.cache.bindelementend - bindInfo.cache.bindelementstart;
 				bindInfo.widgetTime = bindInfo.cache.bindwidgetend ? (bindInfo.cache.bindwidgetend - bindInfo.cache.bindwidgetstart) : null;
 				bindInfo.childTime = bindInfo.cache.bindchildrenend - bindInfo.cache.bindchildrenstart;
-				bindInfo.classes = data.element.className;
 				bindInfo.children = bindInfo.cache.bindChildren.map(function(idx, child){return child.ibxBindInfo;}).toArray();
 				bindInfo.children = this.sortBinds(bindInfo.children, "descending");
 				bindInfo.element = data.element;
@@ -677,16 +677,25 @@ _p.toString = function()
 _p._stringify = function(o, depth, format)
 {
 	var strOut = "";
-	var strIndent = (new Array(depth)).join("\t");
+	var strIndent = (new Array(depth + 1)).join("\t");
 
+	if(o instanceof Array)
+	{
+		for(var i = 0; i < o.length; ++i)
+			strOut += this._stringify(o[i], depth + 1, format) + "\n";
+	}
+	else
 	if(o instanceof Object)
 	{
 		for(var key in o)
 		{
 			var prop = o[key];
+			if(!prop)
+				continue;
+
 			if(prop instanceof Object)
 			{
-				if(prop instanceof Array)
+				if(prop instanceof HTMLElement)
 					continue;
 				strOut += sformat("{1}{2}:\n", strIndent, key);
 				strOut += this._stringify(prop, depth + 1, format);
@@ -696,14 +705,8 @@ _p._stringify = function(o, depth, format)
 				strOut += sformat("{1}{2}: {3}\n", strIndent, key, prop);
 		}
 	}
-	else
-	if(o instanceof Array)
-	{
-		for(var i = 0; i < o.length; ++i)
-			strOut += this._stringify(o[i], depth + 1, format) + "\n";
-	}
 
-	return strOut + "\n";
+	return strOut + "";
 }
 
 //# sourceURL=ibx.js
