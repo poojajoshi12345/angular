@@ -45,21 +45,18 @@ _p.language = null;
 _p.strings = null;
 _p.getString = function(id, def, language)
 {
-	//make sure language is loaded...or, cascade back to ibx_default
+	//get the string bundle...first language, if not...fallback to default
 	language = language || this.language;
-	if(!this.strings[language])
-	{
-		language = language.substr(0, 2);
-		if(!this.strings[language])
-			language = "ibx_default";
-	}
+	var stringBundle = this.strings[language] || this.strings[language.substr(0, 2)] || this.strings["ibx_default"];
 
-	//string not found...bad!
-	if(!this.strings[language][id] === undefined)
+	//get the string...try the current language, then default...then not found.
+	var strOut = stringBundle[id];
+	strOut = (strOut === undefined) ? this.strings["ibx_default"][id] : strOut;
+	if(strOut === undefined)
 		console.warn("ibx string not found, id:", id);
 
 	//return string, or one of the fallbacks.
-	return this.strings[language][id] || def || this.missingString;
+	return strOut || def || this.missingString;
 };
 _p.addStringBundle = function(bundle, defLang)
 {
