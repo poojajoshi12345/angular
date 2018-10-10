@@ -320,7 +320,7 @@ ibx.bindElements = function(elements, bindInfo)
 		//turn on profiling for this element
 		var profile = element.data("ibxProfile");
 		if(profile)
-			profile = ibxProfiler.bindingProfiles[profile] = ibxProfiler.bindingProfiles[profile] || new ibxProfiler(true, profile);
+			profile = ibxProfiler.markupProfiles[profile] = ibxProfiler.markupProfiles[profile] || new ibxProfiler(true, profile);
 
 		//construct any unconstructed children first...ignore any no-binds.
 		if(element.closest("[data-ibx-no-bind=true]").length)
@@ -477,7 +477,7 @@ ibxProfiler = function(start, name, options)
 		this.start(true, options);
 };
 ibxProfiler.profileLevel = {"none":0x00, "ibx":0x01, "resources":0x02, "binding":0x04, "all":0xff};
-ibxProfiler.bindingProfiles = {};//profiles created from data-ibx-profile markup
+ibxProfiler.markupProfiles = {};//profiles created from data-ibx-profile markup
 ibxProfiler._stats = 
 {
 	"cache":{},
