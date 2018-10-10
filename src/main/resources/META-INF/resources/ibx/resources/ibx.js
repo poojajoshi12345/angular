@@ -116,7 +116,7 @@ function ibx()
 			if(window.jQuery && window.jQuery.widget && window.ibxResourceManager)
 			{
 				if(ibx.profiling)
-					ibx.loadProfile = new ibxProfiler(true, "ibxLoadProfile");
+					ibx.loadProfile = new ibxProfiler(true, "ibxLoadProfile", {"ibxLoadStart": new Date()});
 
 				/*
 					Install custom jQuery.Deferred exception handler so we can see the actual non standard exceptions
@@ -466,8 +466,8 @@ ibxProfiler = function(start, name, options)
 	window.addEventListener("ibx_ibxresmgr", this._ibxSystemEvent.bind(this));
 
 	//save the creation date.
-	var d = new Date();
-	this.time = sformat("{1}:{2}:{3}:{7} {4}/{5}/{6}", d.getHours(), d.getMinutes(), d.getSeconds(), d.getMonth()+1, d.getDate(), d.getFullYear(), d.getMilliseconds());
+	var start = new Date();
+	this.time = sformat("{1}:{2}:{3}:{7} {4}/{5}/{6}", start.getHours(), start.getMinutes(), start.getSeconds(), start.getMonth()+1, start.getDate(), start.getFullYear(), start.getMilliseconds());
 	
 	//merge/set the options.
 	options = (name instanceof Object) ? ibx.parseOptions(name) : options;
@@ -476,7 +476,7 @@ ibxProfiler = function(start, name, options)
 		"name":name || ("ibxProfile_" + ibxProfiler._nCount++),
 		"logToConsole": true,
 		"profileLevel": ibxProfiler.profileLevel.all,
-		"bindFilter": "*"
+		"bindFilter": "*",
 	}, options);
 	
 	//start if desired.
