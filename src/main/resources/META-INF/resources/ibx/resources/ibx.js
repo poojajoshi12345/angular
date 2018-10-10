@@ -460,10 +460,16 @@ ibx.coercePropVal = function (val)
 /*ibx profiling*/
 ibxProfiler = function(start, name, options)
 {
+	//register the system events.
 	window.addEventListener("ibx_ibxevent", this._ibxSystemEvent.bind(this));
 	window.addEventListener("ibx_ibxbindevent", this._ibxSystemEvent.bind(this));
 	window.addEventListener("ibx_ibxresmgr", this._ibxSystemEvent.bind(this));
 
+	//save the creation date.
+	var d = new Date();
+	this.time = sformat("{1}:{2}:{3}:{7} {4}/{5}/{6}", d.getHours(), d.getMinutes(), d.getSeconds(), d.getMonth()+1, d.getDate(), d.getFullYear(), d.getMilliseconds());
+	
+	//merge/set the options.
 	options = (name instanceof Object) ? ibx.parseOptions(name) : options;
 	this.options = $.extend(true,
 	{
@@ -473,6 +479,7 @@ ibxProfiler = function(start, name, options)
 		"bindFilter": "*"
 	}, options);
 	
+	//start if desired.
 	if(start)
 		this.start(true, options);
 
