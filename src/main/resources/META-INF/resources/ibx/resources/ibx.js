@@ -116,7 +116,7 @@ function ibx()
 			if(window.jQuery && window.jQuery.widget && window.ibxResourceManager)
 			{
 				if(ibx.profiling)
-					ibx.loadProfile = new ibxProfiler(true, "ibxLoadProfile", {"ibxLoadStart":dateStart});
+					ibx.loadProfile = new ibxProfiler(true, "ibxLoadProfile");
 
 				/*
 					Install custom jQuery.Deferred exception handler so we can see the actual non standard exceptions
@@ -320,7 +320,7 @@ ibx.bindElements = function(elements, bindInfo)
 		//turn on profiling for this element
 		var profile = element.data("ibxProfile");
 		if(profile)
-			profile = ibxProfiler.markupProfiles[profile] = ibxProfiler.markupProfiles[profile] || new ibxProfiler(true, profile);
+			profile = ibxProfiler.profiles[profile] || new ibxProfiler(true, profile);
 
 		//construct any unconstructed children first...ignore any no-binds.
 		if(element.closest("[data-ibx-no-bind=true]").length)
@@ -467,7 +467,7 @@ ibxProfiler = function(start, name, options)
 	options = (name instanceof Object) ? ibx.parseOptions(name) : options;
 	this.options = $.extend(true,
 	{
-		"name":name || "ibxProfile",
+		"name":name || ("ibxProfile_" + ibxProfiler._nCount++),
 		"logToConsole": true,
 		"profileLevel": ibxProfiler.profileLevel.all,
 		"bindFilter": "*"
@@ -475,9 +475,13 @@ ibxProfiler = function(start, name, options)
 	
 	if(start)
 		this.start(true, options);
+
+	//register this profile in the static list of profiles.
+	ibxProfiler.profiles[this.options.name] = this;
 };
+ibxProfiler._nCount = 0;
+ibxProfiler.profiles = {};//created profiles.
 ibxProfiler.profileLevel = {"none":0x00, "ibx":0x01, "resources":0x02, "binding":0x04, "all":0xff};
-ibxProfiler.markupProfiles = {};//profiles created from data-ibx-profile markup
 ibxProfiler._stats = 
 {
 	"cache":{},
