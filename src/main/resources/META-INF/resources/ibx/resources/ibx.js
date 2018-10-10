@@ -626,14 +626,14 @@ _p._ibxSystemEvent = function(e)
 			{
 				bindInfo.classes = data.element.className;
 				bindInfo.totalTime = bindInfo.cache.bindelementend - bindInfo.cache.bindelementstart;
-				bindInfo.widgetTime = bindInfo.cache.bindwidgetend ? (bindInfo.cache.bindwidgetend - bindInfo.cache.bindwidgetstart) : null;
+				bindInfo.widgetTime = bindInfo.cache.bindwidgetend ? (bindInfo.cache.bindwidgetend - bindInfo.cache.bindwidgetstart) : "N/A";
 				bindInfo.childTime = bindInfo.cache.bindchildrenend - bindInfo.cache.bindchildrenstart;
-				bindInfo.children = bindInfo.cache.bindChildren.map(function(idx, child){return child.ibxProfileBindInfo;}).toArray();
+				bindInfo.children = bindInfo.cache.bindChildren.map(function(idx, child){return child.ibxProfileBindInfo[this.options.name];}.bind(this)).toArray();
 				bindInfo.children = this.sortBinds(bindInfo.children, "descending");
 				bindInfo.element = data.element;
 				bindInfo.timeStamp = bindInfo.cache.bindelementend;
 				delete bindInfo.cache;
-				stats.binding.totalTime += bindInfo.widgetTime || 0;
+				stats.binding.totalTime += isNaN(bindInfo.widgetTime) ? 0 : bindInfo.widgetTime;
 				stats.binding.elements.push(bindInfo);
 			}
 		}
