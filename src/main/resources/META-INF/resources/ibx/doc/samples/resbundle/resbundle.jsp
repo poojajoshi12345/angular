@@ -22,15 +22,19 @@
 
 			window.addEventListener("ibx_ibxresmgr", function(e)
 			{
-				var info = e.data;
-				var tabs = "";
-				for(var i = 0; i < info.loadDepth; ++i)tabs+="\t";
-				var txt =  $(".txt-out");
-				var log = txt.val();
-				if(info.src)
-					txt.val(log + tabs + info.hint + ": " +  info.src + "\n");
-				else
-					txt.val(log + tabs + info.hint + "\n");
+				//output log on timer so it doesn't skew the profiler timings.
+				window.setTimeout(function(e)
+				{
+					var info = e.data;
+					var tabs = "";
+					for(var i = 0; i < info.loadDepth; ++i)tabs+="\t";
+					var txt =  $(".txt-out");
+					var log = txt.val();
+					if(info.src)
+						txt.val(log + tabs + info.hint + ": " +  info.src + "\n");
+					else
+						txt.val(log + tabs + info.hint + "\n");
+				}.bind(this, e));
 			});
 
 			ibx.profiling = true;
