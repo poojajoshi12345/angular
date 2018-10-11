@@ -498,12 +498,14 @@ ibxProfiler._stats =
 	},
 	"resources":
 	{
-		"loadCounts":{}
+		"totalTime":0,
+		"loadCounts":{},
+		"bundles":{}
 	},
 	"binding":
 	{
-		"count":0,
 		"totalTime":0,
+		"count":0,
 		"elements":[],
 	},
 };
@@ -549,7 +551,7 @@ _p._ibxSystemEvent = function(e)
 		stats.cache[hint] = new Date();
 		if(hint == "loadend")
 		{
-			stats.ibx.totalLoadTime = stats.cache.loadend - options.ibxLoadStart;
+			stats.ibx.totalTime = stats.cache.loadend - options.ibxLoadStart;
 			stats.ibx.ibxLoadTime.jQueryLoadTime = stats.cache.jqueryloaded - options.ibxLoadStart;
 			stats.ibx.ibxLoadTime.misc = (stats.ibx.ibxLoadTime.totalTime - stats.ibx.ibxLoadTime.resBundleTime - stats.ibx.ibxLoadTime.jQueryLoadTime);
 			stats.ibx.resourceFileLoadTime = stats.cache.resourcesloadend - stats.cache.resourcesloadstart;
@@ -577,7 +579,8 @@ _p._ibxSystemEvent = function(e)
 		if(hint == "bundleloaded")
 		{
 			bundleInfo.loadTime = (new Date()) - bundleInfo.loadTime;
-			stats.resources[data.src] = bundleInfo;
+			stats.resources.bundles[data.src] = bundleInfo;
+			stats.resources.totalTime += bundleInfo.loadTime;
 
 			//bundle is part of ibx load...not external
 			if(data.src.search("ibx_resource_bundle.xml") != -1)
@@ -680,12 +683,17 @@ _p.toString = function()
 {
 	var name = this.options.name;
 	var stats = this.stats;
-	var header = sformat("ibxProfile: {1}", name);
-	var strOut = header + "\n" + this._stringify(stats, 1);
+	var resCounts = stats.resources.loadCounts;
+	var strOut = sformat("ibxProfile {1}: ibx {2}ms, binding {3}ms (count: {4}), resources {5}ms (counts: bundle {6}, markup {7}, scripts {8}, strings {9}, styles {10})",
+		name,
+		stats.ibx.ibxLoadTime.totalTime,
+		stats.binding.totalTime, stats.binding.count,
+		stats.resources.totalTime, resCounts["ibx-res-bundle"], resCounts["markup-file"], resCounts["script-file"], resCounts["string-file"], resCounts["style-file"]
+	);
 	return strOut;
 }
 
-_p._stringify = function(o, depth, format)
+_p.serialize = function(o, depth, format)
 {
 	var strOut = "";
 	var strIndent = (new Array(depth + 1)).join("\t");
