@@ -120,11 +120,6 @@
 				border-radius:3px;
 				resize:none;
 			}
-
-			.box-items
-			{
-				flex:1 1 auto;
-			}
 		</style>
 	</head>
 	<body class="ibx-root">
@@ -142,7 +137,6 @@
 				<div id="resBundle" class="txt-res-bundle" data-ibx-type="ibxTextField" tabIndex="0">./resources/resbundle.xml</div>
 			</div>
 			<textarea class="txt-out" readonly="true"></textarea>
-			<div class="box-items" data-ibx-type="ibxVBox"></div>
 		</div>
 	</body>
 </html>
