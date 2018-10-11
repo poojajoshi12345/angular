@@ -142,10 +142,12 @@ $.widget("ibi.ibxTreeNode", $.ibi.ibxVBox,
 	_createWidget:function(options, element)
 	{
 		//set the static default tree indent...do it this way so we can define via css.
-		if($.ibi.ibxTreeNode.defaultIndent === null)
+ 		if($.ibi.ibxTreeNode.defaultIndent === null)
 		{
-			var rules = FindStyleRules(".tnode-indent");
-			$.ibi.ibxTreeNode.defaultIndent = parseFloat(rules[rules.length-1].style.paddingLeft);
+			var tmp = $("<div class='tnode-indent' style='display:none'>");
+			tmp.appendTo("body");
+			$.ibi.ibxTreeNode.defaultIndent = parseFloat(tmp.css("paddingLeft"));
+			tmp.remove();
 		}
 		this._super(options, element);
 	},
