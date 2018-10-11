@@ -33,7 +33,8 @@
 					var hCslStf = $(".test-csl-h-stf").ibxWidget("remove").prop("scrollLeft", 0).detach();
 					for(var i = 0; i < options.numChildren; ++i)
 					{
-						var size = options.varSizeChildren ? GetRandomInt(100, 350) + "px" : "";
+						//make children of variable size fractional so we can make sure calculations work with weird sizes
+						var size = options.varSizeChildren ? (GetRandomInt(10000, 30000)/100) + "px" : "";
 						var item = $("<div class='test-csl-item' tabIndex='0'>Item_" + i + "</div>");
 						vCsl.ibxWidget("add", item, null, null, false);
 						item.css("height", size);
