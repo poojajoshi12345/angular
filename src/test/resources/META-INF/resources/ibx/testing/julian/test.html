@@ -12,34 +12,52 @@
 		<script type="text/javascript">
 			ibx(function(e)
 			{
+				$(".test-dialog").on("ibx_open", function(e)
+				{
+					var re = $(".test-edit");
+					//re.ibxRichEdit("insertText", "This is some sample text");
+				})
+				$(".insert-text-button").on("click", function(e)
+				{
+					var replace = $(".btn-replace-text").ibxWidget("checked");
+					var select = $(".btn-sel-text").ibxWidget("checked");
+					re = $(".test-edit");
+					re.ibxWidget("insertText", " TEXT ", replace, select);
+					re.focus();
+				})
 				$(".test-button").on("click", function testButtonClick(e)
 				{
-					function buildTree(parent, depth)
-					{
-						if(depth > 0)
-							return;
-						for(var i = 0; i < 1; ++i)
-						{
-							var item = $("<div>").ibxTreeNode({"expanded":true, "container":true, "labelOptions":{"text":"Item " + i, "glyph":"face", "glyphClasses":"material-icons"}}).addClass("test-item");
-							buildTree(item, depth + 1);
-							parent.ibxWidget("add", item);
-						}
-						return parent;
-					}
+					$(".test-dialog").ibxWidget("open");
 
-					var parent = $(".test-parent");
-					parent.ibxWidget("remove");
+					// console.time("ibxWidget_construct");
+					// for(var i = 0; i < 1000; ++i)
+					// {					
+					// 	var item = document.createElement("div");
+					// 	document.body.appendChild(item);
+					// 	$(item).ibxWidget();
+					// }
+					// console.timeEnd("ibxWidget_construct");
 
-					var date = new Date();
-					var name = "buildTree_" + date;
-					console.profile(name);
-					var x = buildTree(parent, 0)
-					console.profileEnd(name);
-					var time = new Date() - date;
-					var items = $(".ibx-tree-node").length;
-					console.log("Items:", items, "Time:", time, "Time/Each:", time/items);
+					// function buildTree(parent, depth)
+					// {
+					// 	if(depth > 0)
+					// 		return;
+					// 	for(var i = 0; i < 5; ++i)
+					// 	{
+					// 		var item = $("<div>").ibxTreeNode({"expanded":true, "container":true, "labelOptions":{"text":"Item " + i, "glyph":"face", "glyphClasses":"material-icons"}}).addClass("test-item");
+					// 		buildTree(item, depth + 1);
+					// 		parent.ibxWidget("add", item);
+					// 	}
+					// 	return parent;
+					// }
 
-				});						
+					// var parent = $(".test-parent");
+					// parent.ibxWidget("remove");
+					// var x = buildTree(parent, 0)
+				});	
+
+				$(".test-edit").focus();
+
 			},true);
 		</script>
 		<style type="text/css">
@@ -62,14 +80,28 @@
 			{
 				flex:0 0 auto;
 				margin:2px;
-				xborder:1px solid #ccc;
+				border:1px solid #ccc;
+			}
+			.test-edit
+			{
+				height:100px;
+				width:200px;
+				border:1px solid #ccc;
 			}
 		</style>
 	</head>
 	<body class="ibx-root">
 		<div class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="center" data-ibxp-justify="start">
-			<div class="test-button" data-ibx-type="ibxButton">Make Labels</div>
-			<div class="test-parent" data-ibx-type="ibxTree"></div>
+			<div tabindex="0" class="test-button" data-ibx-type="ibxButton">Make Labels</div>
+			<div tabindex="0" class="test-parent" data-ibx-type="ibxTree"></div>
+		</div>
+
+		<div class="test-dialog" data-ibx-type="ibxDialog" data-ibxp-destroy-on-close="false" data-ibxp-caption="Rich Edit Test">
+			<div tabindex="0" class="insert-text-button" data-ibx-type="ibxButton">Insert Text</div>
+			<div tabindex="0" class="btn-replace-text" data-ibx-type="ibxCheckBoxSimple">Replace Text</div>
+			<div tabindex="0" class="btn-sel-text" data-ibx-type="ibxCheckBoxSimple">Select Text</div>
+			<div data-ibx-type="ibxLabel">Rich Edit Title</div>
+			<div tabindex="0" class="test-edit ibx-default-focused" data-ibx-type="ibxRichEdit">Oh Julian</div>
 		</div>
 	</body>
 </html>
