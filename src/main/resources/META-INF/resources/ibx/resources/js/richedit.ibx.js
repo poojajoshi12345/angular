@@ -4,7 +4,6 @@ $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame,
 {
 	options:
 	{
-		"focusDefault":true,
 		"defaultDropHandling":true,
 		"aria":
 		{
@@ -16,10 +15,15 @@ $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame,
 	{
 		this._readyPromise = new $.Deferred();
 		this.element.on("ibx_dragover ibx_drop", this._onDragEvent.bind(this));
-		this.element.data("createContent", this.element.html());
+
+		//save the markup html and set it when iframe is loaded.
+		var createContent = this.element.html() || "<span></span>";
 		this.element.empty();
+
 		this._super();
-		this._iFrame.prop("tabindex", -1);
+		
+		if(createContent)
+			this.insertHTML(createContent, true);
 	},
 	_destroy:function()
 	{
@@ -38,9 +42,11 @@ $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame,
 
 			//set the content if this is created from markup and there is html inside the ibxRichEdit markup.
 			var content = this.element.data("createContent")
-			if(content !== undefined)
-				cd.body.innerHTML = content;
-			this.element.removeData("createContent");
+			if(content)
+			{
+				this.insertHTML(content.content, content.isHTML, content.replace, content.select);
+				this.element.removeData("createContent");
+			}
 			
 			//let the world know we are done by resolving the promise.
 			this._readyPromise.resolve(this.element[0]);
@@ -150,10 +156,14 @@ $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame,
 	insertContent:function(content, isHTML, selReplace, select)
 	{
 		/*NOTE: chrome/ff could use insertHTML/insertText...ie doesn't support this, so normalize to a solution that works the same across browsers*/
-		this.element.focus();
-
 		//get selections and create proper node for insertion.
 		var doc = this.contentDocument();
+		if(!doc || (doc.readyState != "complete"))
+		{
+			this.element.data("createContent", {"content":content, "isHTML":isHTML, "replace":selReplace, "select":select});
+			return;
+		}
+
 		var sels = doc.getSelection();
 		var selRange = null;
 		if(sels.rangeCount)
