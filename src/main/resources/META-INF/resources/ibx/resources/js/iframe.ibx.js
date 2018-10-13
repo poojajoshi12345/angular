@@ -11,6 +11,7 @@ $.widget("ibi.ibxIFrame", $.ibi.ibxWidget,
 {
 	options:
 	{
+		"focusDefault":true,
 		"name":"",
 		"src":""
 	},
@@ -18,7 +19,7 @@ $.widget("ibi.ibxIFrame", $.ibi.ibxWidget,
 	_create:function()
 	{
 		this._super();
-		var frame = this._iFrame = $("<iframe>").addClass("ibx-iframe-frame");
+		var frame = this._iFrame = $("<iframe tabindex='-1'>").addClass("ibx-iframe-frame");
 		frame.on("DOMContentLoaded readystatechange load beforeunload unload", this._onIFrameEvent.bind(this));
 		this.element.append(frame);
 
