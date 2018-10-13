@@ -12,6 +12,7 @@
 		<script type="text/javascript">
 			ibx(function(e)
 			{
+				var nText = 0;
 				$(".test-dialog").on("ibx_open", function(e)
 				{
 					var re = $(".test-edit");
@@ -22,7 +23,7 @@
 					var replace = $(".btn-replace-text").ibxWidget("checked");
 					var select = $(".btn-sel-text").ibxWidget("checked");
 					re = $(".test-edit");
-					re.ibxWidget("insertText", " TEXT ", replace, select);
+					re.ibxWidget("insertText", "TEXT"+nText++, replace, select);
 					re.focus();
 				})
 				$(".test-button").on("click", function testButtonClick(e)
