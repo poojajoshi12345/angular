@@ -151,14 +151,14 @@ $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame,
 	},
 	createLink:function(href){this.execCommand("createLink", href);},
 	insertList:function(ordered){this.execCommand(ordered ? "insertOrderedList" : "insertUnorderedList");},
-	insertHTML:function(html, selReplace, select){this.insertContent(html, true, selReplace, select);},
-	insertText:function(text, selReplace, select){this.insertContent(text, false, selReplace, select);},
-	insertContent:function(content, isHTML, selReplace, select)
+	insertHTML:function(html, selReplace, select, focus){this.insertContent(html, true, selReplace, select, focus);},
+	insertText:function(text, selReplace, select, focus){this.insertContent(text, false, selReplace, select, focus);},
+	insertContent:function(content, isHTML, selReplace, select, focus)
 	{
 		/*NOTE: chrome/ff could use insertHTML/insertText...ie doesn't support this, so normalize to a solution that works the same across browsers*/
 		//get selections and create proper node for insertion.
 		var doc = this.contentDocument();
-		if(!doc || (doc.readyState != "complete"))
+		if(doc.readyState != "complete")
 		{
 			this.element.data("createContent", {"content":content, "isHTML":isHTML, "replace":selReplace, "select":select});
 			return;
@@ -188,6 +188,9 @@ $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame,
 		//remove selection if desired.
 		if(!select)
 			selRange.collapse(false);
+
+		if(focus)
+			this._iFrame.focus();
 	},
 	cmdState:function()
 	{
