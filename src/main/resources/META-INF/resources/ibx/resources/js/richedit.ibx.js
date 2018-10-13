@@ -158,6 +158,11 @@ $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame,
 		/*NOTE: chrome/ff could use insertHTML/insertText...ie doesn't support this, so normalize to a solution that works the same across browsers*/
 		//get selections and create proper node for insertion.
 		var doc = this.contentDocument();
+		
+		//nice...ie must have body focused for selections to work...awesome Microsoft!
+		if(ibxPlatformCheck.isIE)
+			doc.body.focus();
+
 		if(doc.readyState != "complete")
 		{
 			this.element.data("createContent", {"content":content, "isHTML":isHTML, "replace":selReplace, "select":select});
@@ -191,7 +196,32 @@ $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame,
 
 		if(focus)
 			this._iFrame.focus();
-	},
+	
+	
+		// /*NOTE: chrome/ff could use insertHTML/insertText...ie doesn't support this, so normalize to a solution that works the same across browsers*/
+			
+		// //focus the document so selections are valid.
+		// var doc = this.contentDocument();
+		// doc.body.focus();
+
+		// //get selections and create proper node for insertion.
+		// var sels = doc.getSelection();
+		// var selRange = sels.getRangeAt(0);
+		// var node = isHTML ? $.parseHTML(content, doc)[0] : doc.createTextNode(content);
+
+		// //remove existing selected content if desired.
+		// if(selReplace)
+		// 	selRange.deleteContents();
+
+		// //add new node and select.
+		// selRange.insertNode(node);
+		// sels.removeAllRanges();
+		// sels.addRange(selRange);
+
+		// //remove selection if desired.
+		// if(!select)
+		// 	selRange.collapse(false);
+},
 	cmdState:function()
 	{
 		var state = {};
