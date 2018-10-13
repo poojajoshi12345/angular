@@ -23,7 +23,7 @@ $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame,
 		this._super();
 		
 		if(createContent)
-			this.insertHTML(createContent, true);
+			this.insertHTML(createContent);
 	},
 	_destroy:function()
 	{
