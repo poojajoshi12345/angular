@@ -160,10 +160,10 @@ $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame,
 		var doc = this.contentDocument();
 		
 		//nice...ie must have body focused for selections to work...awesome Microsoft!
-		if(ibxPlatformCheck.isIE)
+		if(doc && ibxPlatformCheck.isIE)
 			doc.body.focus();
 
-		if(doc.readyState != "complete")
+		if(!doc || (doc.readyState != "complete"))
 		{
 			this.element.data("createContent", {"content":content, "isHTML":isHTML, "replace":selReplace, "select":select});
 			return;
