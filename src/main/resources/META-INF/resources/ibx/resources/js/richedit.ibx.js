@@ -13,17 +13,17 @@ $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame,
 	_widgetClass:"ibx-rich-edit",
 	_create:function()
 	{
-		this._readyPromise = new $.Deferred();
 		this.element.on("ibx_dragover ibx_drop", this._onDragEvent.bind(this));
 
 		//save the markup html and set it when iframe is loaded.
-		var createContent = this.element.html() || "<span></span>";
+		var createContent = this.element.html();
 		this.element.empty();
 
 		this._super();
 		
 		if(createContent)
 			this.insertHTML(createContent);
+	
 	},
 	_destroy:function()
 	{
@@ -47,40 +47,37 @@ $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame,
 				this.insertHTML(content.content, content.isHTML, content.replace, content.select);
 				this.element.removeData("createContent");
 			}
-			
-			//let the world know we are done by resolving the promise.
-			this._readyPromise.resolve(this.element[0]);
 		}
 	},
-	ready:function(fnReady)
-	{
-		this._readyPromise.then(fnReady);
-	},
-	_curSelRange:null,
+	_currange:null,
 	selection:function(nStart, nEnd)
 	{
 		if(!arguments.length)
-			return this._curSel;
-		nStart = nStart || 0;
-		nEnd = nEnd || -1;
-	},
+			return this._currange;
 
+		var doc = this.contentDocument();
+		var sel = doc.getSelection();
+		range = doc.createRange();
+		range.setStart(doc.body, nStart);
+		range.setEnd(doc.body, nEnd);
+		sel.addRange(range);
+	},
 	_onRichEditDocEvent:function(e)
 	{
 		var doc = this.contentDocument();
-		if(e.type == "focusin" && ibxPlatformCheck.isIE && this._curSelRange)
+		if(e.type == "focusin" && ibxPlatformCheck.isIE && this._currange)
 		{
 			this._restoringSelection = true;
 			var sel = doc.getSelection();
 			sel.removeAllRanges();
-			sel.addRange(this._curSelRange);
+			sel.addRange(this._currange);
 			this._restoringSelection = false;
 		}
 		else
 		if(e.type == "selectionchange" && this._iFrame.is(document.activeElement) && !this._restoringSelection)
 		{
 			var sel = doc.getSelection();
-			this._curSelRange = sel.rangeCount ? sel.getRangeAt(0) : null;
+			this._currange = sel.rangeCount ? sel.getRangeAt(0) : null;
 			this.element.dispatchEvent(e.originalEvent);
 		}
 	},
@@ -126,6 +123,11 @@ $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame,
 	undo:function(){this.execCommand("undo");},
 	redo:function(){this.execCommand("redo");},
 	selectAll:function(){this.execCommand("selectAll");},
+	deselectAll:function(collapseToStart)
+	{
+		var selection = this.contentDocument().getSelection();
+		collapseToStart ? selection.collapseToStart() : selection.collapseToEnd();
+	},
 	cut:function(){this.execCommand("Cut");},
 	copy:function(){this.execCommand("Copy");},
 	paste:function(){this.execCommand("Paste");},
@@ -165,37 +167,46 @@ $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame,
 		}
 
 		//nice...ie must have body focused for selections to work...awesome Microsoft!
+		var focusItem = document.activeElement;
 		if(ibxPlatformCheck.isIE)
 			doc.body.focus();
 
-		var sels = doc.getSelection();
-		var selRange = null;
-		if(sels.rangeCount)
-			selRange = sels.getRangeAt(0)
+		//now do the actual insertion
+		var selection = doc.getSelection();
+		var range = null;
+		if(selection.rangeCount)
+			range = selection.getRangeAt(0)
 		else
-		{	
-			selRange = doc.createRange();
-			selRange.setStart(doc.body, 0)
+		{
+			range = doc.createRange();
+			range.setStart(doc.body, 0)
 		}
 		
-		var node = isHTML ? $.parseHTML(content, doc)[0] : doc.createTextNode(content);
-
 		//remove existing selected content if desired.
 		if(selReplace)
-			selRange.deleteContents();
+			range.deleteContents();
 
 		//add new node and select.
-		selRange.insertNode(node);
-		sels.removeAllRanges();
-		sels.addRange(selRange);
+		var node = isHTML ? $.parseHTML(content, doc)[0] : doc.createTextNode(content);
+		selection.removeAllRanges();
+		range.insertNode(node);
+		selection.addRange(range);
 
 		//remove selection if desired.
 		if(!select)
-			selRange.collapse(false);
+			range.collapse(false);
 
-		if(focus)
-			this._iFrame.focus();
+		(focus) ? doc.body.focus() : $(focusItem).focus();
 	
+		/*
+		1. ie - can't NOT focus control after inserting content.
+		2. ie - can't NOT select text after inserting content.
+		3. ie/chrome/ff - with text selected, no replace will add text to start of selection.
+		4. FF comes up with rich edit focused...no idea why.
+		5. FF doesn't wrap inserted text.
+		*/
+
+		//doc.body.focus();
 	
 		// /*NOTE: chrome/ff could use insertHTML/insertText...ie doesn't support this, so normalize to a solution that works the same across browsers*/
 			
@@ -204,22 +215,22 @@ $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame,
 		// doc.body.focus();
 
 		// //get selections and create proper node for insertion.
-		// var sels = doc.getSelection();
-		// var selRange = sels.getRangeAt(0);
+		// var selection = doc.getSelection();
+		// var range = selection.getRangeAt(0);
 		// var node = isHTML ? $.parseHTML(content, doc)[0] : doc.createTextNode(content);
 
 		// //remove existing selected content if desired.
 		// if(selReplace)
-		// 	selRange.deleteContents();
+		// 	range.deleteContents();
 
 		// //add new node and select.
-		// selRange.insertNode(node);
-		// sels.removeAllRanges();
-		// sels.addRange(selRange);
+		// range.insertNode(node);
+		// selection.removeAllRanges();
+		// selection.addRange(range);
 
 		// //remove selection if desired.
 		// if(!select)
-		// 	selRange.collapse(false);
+		// 	range.collapse(false);
 },
 	cmdState:function()
 	{
@@ -299,29 +310,29 @@ $.widget("ibi.ibxRichEdit2", $.ibi.ibxWidget,
 	{
 		this._super();
 	},
-	_curSelRange:null,
+	_currange:null,
 	selection:function(nStart, nEnd)
 	{
 		if(!arguments.length)
-			return this._curSelRange;
+			return this._currange;
 		nStart = nStart || 0;
 		nEnd = nEnd || -1;
 	},
 	_onRichEditEvent:function(e)
 	{
-		if(e.type == "focusin" && ibxPlatformCheck.isIE && this._curSelRange)
+		if(e.type == "focusin" && ibxPlatformCheck.isIE && this._currange)
 		{
 			this._restoringSelection = true;
 			var sel = doc.getSelection();
 			sel.removeAllRanges();
-			sel.addRange(this._curSelRange);
+			sel.addRange(this._currange);
 			this._restoringSelection = false;
 		}
 		else
 		if(e.type == "selectionchange" && this.element.is(document.activeElement) && !this._restoringSelection)
 		{
 			var sel = doc.getSelection();
-			this._curSelRange = sel.rangeCount ? sel.getRangeAt(0) : null;
+			this._currange = sel.rangeCount ? sel.getRangeAt(0) : null;
 			this.element.dispatchEvent("selectionchange", sel, false, false);
 		}
 	},
@@ -413,22 +424,22 @@ $.widget("ibi.ibxRichEdit2", $.ibi.ibxWidget,
 		this.element.focus();
 
 		//get selections and create proper node for insertion.
-		var sels = document.getSelection();
-		var selRange = sels.rangeCount ? sels.getRangeAt(0) : document.createRange();
+		var selection = document.getSelection();
+		var range = selection.rangeCount ? selection.getRangeAt(0) : document.createRange();
 		var node = isHTML ? $.parseHTML(content, doc)[0] : doc.createTextNode(content);
 
 		//remove existing selected content if desired.
 		if(selReplace)
-			selRange.deleteContents();
+			range.deleteContents();
 
 		//add new node and select.
-		selRange.insertNode(node);
-		sels.removeAllRanges();
-		sels.addRange(selRange);
+		range.insertNode(node);
+		selection.removeAllRanges();
+		selection.addRange(range);
 
 		//remove selection if desired.
 		if(!select)
-			selRange.collapse(false);
+			range.collapse(false);
 	},
 	cmdState:function()
 	{

@@ -105,8 +105,8 @@
 					var strFmt = sformat("{1}<p/>Start Text<p/>{2}<p/>{2}<p/>{2}<p/>End Text</p>{1}<p/>", "&lt;iframe>Rich Edit", strSample);
 					$(richEdit).ibxWidget("html",  strFmt);
 					
-					var strFmt = sformat("{1}<p/>Start Text<p/>{2}<p/>{2}<p/>{2}<p/>End Text<p/>{1}<p/>", "&lt;div>Rich Edit", strSample);
-					$(".rich-edit-div").ibxWidget("html", strFmt);
+					//var strFmt = sformat("{1}<p/>Start Text<p/>{2}<p/>{2}<p/>{2}<p/>End Text<p/>{1}<p/>", "&lt;div>Rich Edit", strSample);
+					//$(".rich-edit-div").ibxWidget("html", strFmt);
 				});
 				
 				$(".rich-edit").on("selectionchange", function(e)
@@ -354,7 +354,7 @@
 		<div class="re-cmd cmd-back-color" data-ibx-type="ibxCommand" data-ibxp-id="cmdBackColor" data-ibxp-user-value="backColor"></div>
 		<div class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
 			<div class="tb-main" data-ibx-type="ibxHBox" data-ibxp-wrap="true" data-ibxp-align="center">
-				<div class="drag-source" data-ibx-type="ibxLabel" data-ibxp-draggable="true" data-ibxp-external-drop-target="false" style="padding:3px;border:2px solid black;">Test Data Source (drag/dblclick)</div>
+				<div tabindex="0" class="drag-source" data-ibx-type="ibxLabel" data-ibxp-draggable="true" data-ibxp-external-drop-target="false" style="padding:3px;border:2px solid black;">Test Data Source (drag/dblclick)</div>
 				<div tabindex="0" class="tb-button" title="Undo" data-ibx-type="ibxButtonSimple" data-ibxp-command="cmdUndo" data-ibxp-glyph="undo" data-ibxp-glyph-classes="material-icons"></div>
 				<div tabindex="0" class="tb-button" title="Redo" data-ibx-type="ibxButtonSimple" data-ibxp-command="cmdRedo" data-ibxp-glyph="redo" data-ibxp-glyph-classes="material-icons"></div>
 				<div tabindex="0" class="tb-separator"></div>

@@ -19,8 +19,9 @@ $.widget("ibi.ibxIFrame", $.ibi.ibxWidget,
 	_create:function()
 	{
 		this._super();
+		this._loadPromise = new $.Deferred();
 		var frame = this._iFrame = $("<iframe tabindex='-1'>").addClass("ibx-iframe-frame");
-		frame.on("DOMContentLoaded readystatechange load beforeunload unload", this._onIFrameEvent.bind(this));
+		frame.on("load", this._onIFrameEvent.bind(this));
 		this.element.append(frame);
 
 		var cw = $(this.contentWindow());
@@ -36,12 +37,16 @@ $.widget("ibi.ibxIFrame", $.ibi.ibxWidget,
 	},
 	_onIFrameEvent:function(e)
 	{
-		if(e.type == "load" && this._loadPromise)
-			this._loadPromise.resolve(this.element);
+		if(e.type == "load")
+			this._loadPromise.resolve(this.element[0]);
 
 		var proxyEvent = $.Event(e.originalEvent);
 		if(!this.element.trigger(proxyEvent))
 			e.preventDefault;
+	},
+	ready:function(fnReady)
+	{
+		this._loadPromise.then(fnReady);
 	},
 	contentDocument:function()
 	{
