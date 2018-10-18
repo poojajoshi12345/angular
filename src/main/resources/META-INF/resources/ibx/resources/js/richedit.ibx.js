@@ -197,42 +197,16 @@ $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame,
 
 		//add the range to the selection and focus editor if desired.
 		selection.addRange(range);
-		(focus) ? doc.body.focus() : $(focusItem).focus();
-	
-		/*
-		1. ie - can't NOT focus control after inserting content.
-		2. ie - can't NOT select text after inserting content.
-		3. ie/chrome/ff - with text selected, no replace will add text to start of selection.
-		4. FF comes up with rich edit focused...no idea why.
-		5. FF doesn't wrap inserted text.
-		*/
-
-		//doc.body.focus();
-	
-		// /*NOTE: chrome/ff could use insertHTML/insertText...ie doesn't support this, so normalize to a solution that works the same across browsers*/
-			
-		// //focus the document so selections are valid.
-		// var doc = this.contentDocument();
-		// doc.body.focus();
-
-		// //get selections and create proper node for insertion.
-		// var selection = doc.getSelection();
-		// var range = selection.getRangeAt(0);
-		// var node = isHTML ? $.parseHTML(content, doc)[0] : doc.createTextNode(content);
-
-		// //remove existing selected content if desired.
-		// if(selReplace)
-		// 	range.deleteContents();
-
-		// //add new node and select.
-		// range.insertNode(node);
-		// selection.removeAllRanges();
-		// selection.addRange(range);
-
-		// //remove selection if desired.
-		// if(!select)
-		// 	range.collapse(false);
-},
+		if(focus)
+		{
+			this._iFrame.focus();
+			doc.body.focus()
+		}
+		else
+		{
+			$(focusItem).focus();
+		}
+	},
 	cmdState:function()
 	{
 		var state = {};
