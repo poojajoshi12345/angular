@@ -38,7 +38,7 @@
 					{
 						data = "Double Click Data!!";
 						var re = $(".rich-edit");
-						re.ibxWidget("insertHTML", sformat("<span style='border:2px solid lime;'>{1}</span>", data), true, true);
+						re.ibxWidget("insertHTML", sformat("<span style='border:2px solid lime;'>{1}</span>", data), true, true, false);
 					}
 					if(e.type == "dragstart" || e.type == "ibx_dragstart")
 					{

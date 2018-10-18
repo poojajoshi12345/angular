@@ -190,12 +190,13 @@ $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame,
 		var node = isHTML ? $.parseHTML(content, doc)[0] : doc.createTextNode(content);
 		selection.removeAllRanges();
 		range.insertNode(node);
-		selection.addRange(range);
 
 		//remove selection if desired.
 		if(!select)
 			range.collapse(false);
 
+		//add the range to the selection and focus editor if desired.
+		selection.addRange(range);
 		(focus) ? doc.body.focus() : $(focusItem).focus();
 	
 		/*
