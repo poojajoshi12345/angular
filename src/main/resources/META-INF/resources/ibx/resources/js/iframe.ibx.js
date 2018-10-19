@@ -40,9 +40,13 @@ $.widget("ibi.ibxIFrame", $.ibi.ibxWidget,
 		if(e.type == "load")
 			this._loadPromise.resolve(this.element[0]);
 
-		var proxyEvent = $.Event(e.originalEvent);
-		if(!this.element.trigger(proxyEvent))
-			e.preventDefault;
+
+		if(e.originalEvent)
+		{
+			var proxyEvent = $.Event(e.originalEvent);
+			if(!this.element.trigger(proxyEvent))
+				e.preventDefault;
+		}
 	},
 	ready:function(fnReady)
 	{

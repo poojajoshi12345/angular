@@ -13,48 +13,18 @@
 			ibx(function(e)
 			{
 				var nText = 0;
-				$(".test-dialog").on("ibx_open", function(e)
+				$(".focus-button").on("click", function(e)
 				{
-					var re = $(".test-edit");
-					//re.ibxRichEdit("insertText", "This is some sample text");
-				})
-				$(".insert-text-button").on("click", function(e)
+					$(".test-edit-inline").focus();
+				});
+				$(".test-button").on("click", function testButtonClick(e)
 				{
 					var replace = $(".btn-replace-text").ibxWidget("checked");
 					var select = $(".btn-sel-text").ibxWidget("checked");
 					var focus = $(".btn-focus-text").ibxWidget("checked");
+					var text = sformat("<span style='xborder:2px solid red'>Julian {1}</span>", ++nText);
 					re = $(".test-edit-inline");
-					re.ibxWidget("insertText", "TEXT"+nText++, replace, select, focus);
-				})
-				$(".test-button").on("click", function testButtonClick(e)
-				{
-					$(".test-dialog").ibxWidget("open");
-
-					// console.time("ibxWidget_construct");  
-					// for(var i = 0; i < 1000; ++i)
-					// {					
-					// 	var item = document.createElement("div");
-					// 	document.body.appendChild(item);
-					// 	$(item).ibxWidget();
-					// }
-					// console.timeEnd("ibxWidget_construct");
-
-					// function buildTree(parent, depth)
-					// {
-					// 	if(depth > 0)
-					// 		return;
-					// 	for(var i = 0; i < 5; ++i)
-					// 	{
-					// 		var item = $("<div>").ibxTreeNode({"expanded":true, "container":true, "labelOptions":{"text":"Item " + i, "glyph":"face", "glyphClasses":"material-icons"}}).addClass("test-item");
-					// 		buildTree(item, depth + 1);
-					// 		parent.ibxWidget("add", item);
-					// 	}
-					// 	return parent;
-					// }
-
-					// var parent = $(".test-parent");
-					// parent.ibxWidget("remove");
-					// var x = buildTree(parent, 0)
+					re.ibxWidget("insertHTML", text, replace, select, focus);
 				});	
 			},true);
 		</script>
@@ -66,42 +36,29 @@
 				margin: 0px;
 				box-sizing: border-box;
 			}
-			.test-parent
+			.btn
 			{
-				flex:1 1 auto;
 				width:150px;
-				overflow:auto;
-				border:1px solid #ccc;
-				padding:2px;
-			}
-			.test-item
-			{
-				flex:0 0 auto;
-				margin:2px;
-				border:1px solid #ccc;
+				margin:2px 0px 2px 0px;
 			}
 			.test-edit
 			{
+				flex:1 1 auto;
 				height:100px;
 				width:200px;
 				border:1px solid #ccc;
 			}
+			.ibx-check-
 		</style>
 	</head>
 	<body class="ibx-root">
 		<div class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="center" data-ibxp-justify="start">
-			<div tabindex="0" class="test-button" data-ibx-type="ibxButton">Make Labels</div>
-			<div tabindex="0" class="test-edit test-edit-inline ibx-default-focused" data-ibx-type="ibxRichEdit">Some Text</div>
-			<div tabindex="0" class="test-parent" data-ibx-type="ibxTree"></div>
-		</div>
-
-		<div class="test-dialog" data-ibx-type="ibxDialog" data-ibxp-destroy-on-close="false" data-ibxp-caption="Rich Edit Test">
-			<div tabindex="0" class="insert-text-button" data-ibx-type="ibxButton">Insert Text</div>
-			<div tabindex="0" class="btn-replace-text" data-ibx-type="ibxCheckBoxSimple">Replace Text</div>
-			<div tabindex="0" class="btn-sel-text" data-ibx-type="ibxCheckBoxSimple">Select Text</div>
-			<div tabindex="0" class="btn-focus-text" data-ibx-type="ibxCheckBoxSimple" data-ibxp-checked="true">Focus Text</div>
-			<div data-ibx-type="ibxLabel">Rich Edit Title</div>
-			<div tabindex="0" class="test-edit test-edit-dialog ibx-default-focused" data-ibx-type="ibxRichEdit">Default Dialog Text</div>
+			<div tabindex="0" class="btn focus-button" data-ibx-type="ibxButton">Focus RichEdit</div>
+			<div tabindex="0" class="btn test-button" data-ibx-type="ibxButton">Insert Text</div>
+			<div tabindex="0" class="btn btn-replace-text" data-ibx-type="ibxCheckBoxSimple">Replace Text</div>
+			<div tabindex="0" class="btn btn-sel-text" data-ibx-type="ibxCheckBoxSimple">Select Text</div>
+			<div tabindex="0" class="btn btn-focus-text" data-ibx-type="ibxCheckBoxSimple" data-ibxp-checked="true">Focus Text</div>
+			<div tabindex="0" class="test-edit test-edit-inline ibx-default-focused" data-ibx-type="ibxRichEdit"></div>
 		</div>
 	</body>
 </html>

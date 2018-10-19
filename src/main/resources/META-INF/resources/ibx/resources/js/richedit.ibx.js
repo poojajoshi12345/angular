@@ -13,17 +13,15 @@ $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame,
 	_widgetClass:"ibx-rich-edit",
 	_create:function()
 	{
-		this.element.on("ibx_dragover ibx_drop", this._onDragEvent.bind(this));
-
-		//save the markup html and set it when iframe is loaded.
+		//save any content before super, so we can set it as the text of the rich edit after create.
 		var createContent = this.element.html();
 		this.element.empty();
-
 		this._super();
-		
+
+		this.element.on("ibx_dragover ibx_drop", this._onDragEvent.bind(this));
 		if(createContent)
 			this.insertHTML(createContent);
-	
+		this._iFrame.on("focusin", this._onIFrameEvent.bind(this));
 	},
 	_destroy:function()
 	{
@@ -32,9 +30,9 @@ $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame,
 	_onIFrameEvent:function(e)
 	{
 		this._super(e);
+		var cd = this.contentDocument();
 		if(e.type == "load")
 		{
-			var cd = this.contentDocument();
 			cd.designMode = "On";
 			cd.body.contentEditable = true;
 			cd.body.spellcheck = false;
@@ -48,6 +46,9 @@ $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame,
 				this.element.removeData("createContent");
 			}
 		}
+		else
+		if(e.type == "focusin" && this._iFrame.is(e.target))
+			cd.body.focus();
 	},
 	_currange:null,
 	selection:function(nStart, nEnd)
@@ -169,7 +170,7 @@ $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame,
 		//nice...ie must have body focused for selections to work...awesome Microsoft!
 		var focusItem = document.activeElement;
 		if(ibxPlatformCheck.isIE)
-			doc.body.focus();
+			this.element[0].focus();
 
 		//now do the actual insertion
 		var selection = doc.getSelection();
@@ -186,26 +187,24 @@ $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame,
 		if(selReplace)
 			range.deleteContents();
 
-		//add new node and select.
+		//add new node and select...normalize the parent to combine the text elements.
 		var node = isHTML ? $.parseHTML(content, doc)[0] : doc.createTextNode(content);
 		selection.removeAllRanges();
 		range.insertNode(node);
+		node.parentElement.normalize();
 
 		//remove selection if desired.
 		if(!select)
 			range.collapse(false);
 
-		//add the range to the selection and focus editor if desired.
+		//add the range to the selection, and do focusing
+		//NOTE: of course ie always focuses the rich edit after insertion...soooooo...we have to reset the focus back....thanks MS!
 		selection.addRange(range);
 		if(focus)
-		{
-			this._iFrame.focus();
-			doc.body.focus()
-		}
+			this.element[0].focus();
 		else
-		{
-			$(focusItem).focus();
-		}
+		if(!focus && ibxPlatformCheck.isIE)
+			focusItem.focus();
 	},
 	cmdState:function()
 	{

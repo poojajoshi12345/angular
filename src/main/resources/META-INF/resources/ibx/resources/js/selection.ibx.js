@@ -385,7 +385,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 		this._elFocus = $(el).first().addClass("ibx-sm-focused " + (ibxPlatformCheck.isIE ? "ibx-ie-pseudo-focus" : ""));
 		this._elFocus ? this.element.attr("aria-active-descendant", this._elFocus.prop("id")) : this.element.removeAttr("aria-active-descendant");
 		this._elFocus.focus();
-		var evt = this._dispatchEvent("ibx_focused", {"items":this._elFocus}, true, false);
+		this._dispatchEvent("ibx_focused", {"items":this._elFocus}, true, false);
 		return this._elFocus[0];
 	},
 	_active:false,
