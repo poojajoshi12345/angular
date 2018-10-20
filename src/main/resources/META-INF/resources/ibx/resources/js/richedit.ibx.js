@@ -187,7 +187,10 @@ $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame,
 		if(selReplace)
 			range.deleteContents();
 
-		//add new node and select...normalize the parent to combine the text elements.
+		//new insertion point is at end of current selection
+		range.collapse(false);
+
+		//kill current selection add new node and select...normalize the parent to combine the text elements.
 		var node = isHTML ? $.parseHTML(content, doc)[0] : doc.createTextNode(content);
 		selection.removeAllRanges();
 		range.insertNode(node);
