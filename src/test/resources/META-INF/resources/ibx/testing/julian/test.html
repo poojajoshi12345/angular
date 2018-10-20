@@ -21,10 +21,11 @@
 				{
 					var replace = $(".btn-replace-text").ibxWidget("checked");
 					var select = $(".btn-sel-text").ibxWidget("checked");
+					var extend = $(".btn-extend-sel-text").ibxWidget("checked");
 					var focus = $(".btn-focus-text").ibxWidget("checked");
 					var text = sformat("<span style='xborder:2px solid red'>Julian {1}</span>", ++nText);
 					re = $(".test-edit-inline");
-					re.ibxWidget("insertHTML", text, replace, select, focus);
+					re.ibxWidget("insertHTML", text, replace, select, focus, extend);
 				});	
 			},true);
 		</script>
@@ -57,6 +58,7 @@
 			<div tabindex="0" class="btn test-button" data-ibx-type="ibxButton">Insert Text</div>
 			<div tabindex="0" class="btn btn-replace-text" data-ibx-type="ibxCheckBoxSimple">Replace Text</div>
 			<div tabindex="0" class="btn btn-sel-text" data-ibx-type="ibxCheckBoxSimple">Select Text</div>
+			<div tabindex="0" class="btn btn-extend-sel-text" data-ibx-type="ibxCheckBoxSimple">Extend Selection</div>
 			<div tabindex="0" class="btn btn-focus-text" data-ibx-type="ibxCheckBoxSimple" data-ibxp-checked="false">Focus Text</div>
 			<div tabindex="0" class="test-edit test-edit-inline ibx-default-focused" data-ibx-type="ibxRichEdit"></div>
 		</div>

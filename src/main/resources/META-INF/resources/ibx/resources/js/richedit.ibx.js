@@ -154,9 +154,9 @@ $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame,
 	},
 	createLink:function(href){this.execCommand("createLink", href);},
 	insertList:function(ordered){this.execCommand(ordered ? "insertOrderedList" : "insertUnorderedList");},
-	insertHTML:function(html, selReplace, select, focus){this.insertContent(html, true, selReplace, select, focus);},
-	insertText:function(text, selReplace, select, focus){this.insertContent(text, false, selReplace, select, focus);},
-	insertContent:function(content, isHTML, selReplace, select, focus)
+	insertHTML:function(html, selReplace, select, focus, extendSel){this.insertContent(html, true, selReplace, select, focus, extendSel);},
+	insertText:function(text, selReplace, select, focus, extendSel){this.insertContent(text, false, selReplace, select, focus, extendSel);},
+	insertContent:function(content, isHTML, selReplace, select, focus, extendSel)
 	{
 		/*NOTE: chrome/ff could use insertHTML/insertText...ie doesn't support this, so normalize to a solution that works the same across browsers*/
 		//get selections and create proper node for insertion.
@@ -187,8 +187,9 @@ $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame,
 		if(selReplace)
 			range.deleteContents();
 
-		//new insertion point is at end of current selection
-		range.collapse(false);
+		//new insertion point is at end of current selection, unless specified
+		if(!extendSel)
+			range.collapse(false);
 
 		//kill current selection add new node and select...normalize the parent to combine the text elements.
 		var node = isHTML ? $.parseHTML(content, doc)[0] : doc.createTextNode(content);
