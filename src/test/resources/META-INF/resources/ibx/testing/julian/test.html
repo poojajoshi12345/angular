@@ -10,6 +10,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<script type="text/javascript" src="../../resources/ibx.js"></script>
 		<script type="text/javascript">
+			ibx.profiling = true;
 			ibx(function(e)
 			{
 				var nText = 0;
@@ -26,7 +27,22 @@
 					var text = sformat("<span style='xborder:2px solid red'>Julian {1}</span>", ++nText);
 					re = $(".test-edit-inline");
 					re.ibxWidget("insertHTML", text, select, replace, extend, focus);
-				});	
+				});
+
+				$(".test-popup").on("ibx_open", function(e)
+				{
+					window.setTimeout(function()
+					{
+						$(".pop-rich-edit").ibxWidget("insertText", "Julian Hyman", false, true, false, true);
+						//$(".pop-rich-edit").focus();
+					}, 10);
+				})
+
+				$(".pop-focus-button").on("click", function(e)
+				{
+					console.log(e.type);
+					$(".pop-rich-edit").focus();
+				})	
 			},true);
 		</script>
 		<style type="text/css">
@@ -49,11 +65,36 @@
 				width:200px;
 				border:1px solid #ccc;
 			}
-			.ibx-check-
+			.test-popup
+			{
+				padding:2px;
+			}
+			.pop-rich-edit
+			{
+				width:200px;
+				height:200px;
+				border:1px solid #ccc;
+				margin:2px;
+			}
 		</style>
 	</head>
 	<body class="ibx-root">
 		<div class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="center" data-ibxp-justify="start">
+			<div tabindex="0" class="btn menu-button" data-ibx-type="ibxMenuButton">Test Menu
+				<div data-ibx-type="ibxMenu">
+					<div data-ibx-type="ibxMenuItem">Menu Item</div>
+					<div data-ibx-type="ibxMenuItem">Popup Item
+						<div class="test-popup" data-ibx-type="ibxPopup">
+							<div data-ibx-type="ibxVBox" data-ibxp-align="center" data-ibxp-auto-close="false">
+								<div data-ibx-type="ibxHBox" data-ibxp-align="center" data-ibxp-auto-close="false">
+									<div tabindex="0" class="pop-focus-button" data-ibx-type="ibxButton">Focus</div>
+								</div>
+								<div tabindex="0" class="pop-rich-edit" data-ibx-type="ibxRichEdit"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
 			<div tabindex="0" class="btn focus-button" data-ibx-type="ibxButton">Focus RichEdit</div>
 			<div tabindex="0" class="btn test-button" data-ibx-type="ibxButton">Insert Text</div>
 			<div tabindex="0" class="btn btn-replace-text" data-ibx-type="ibxCheckBoxSimple">Replace Text</div>

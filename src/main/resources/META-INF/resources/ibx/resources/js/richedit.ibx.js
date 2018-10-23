@@ -195,7 +195,7 @@ $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame,
 		var node = isHTML ? $.parseHTML(content, doc)[0] : doc.createTextNode(content);
 		selection.removeAllRanges();
 		range.insertNode(node);
-		node.parentElement.normalize();
+		(node.parentNode || node.parentElement).normalize();
 
 		//remove selection if desired.
 		if(!select)
