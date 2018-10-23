@@ -264,6 +264,12 @@
 .ibx-glyph-unlock:before {
   content: "\e97b";
 }
+.ibx-glyph-clear-filter:before {
+  content: "\ea03";
+}
+.ibx-glyph-bar-chart:before {
+  content: "\ea02";
+}
 .ibx-glyph-upload:before {
   content: "\e946";
 }
