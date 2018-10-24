@@ -10,7 +10,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<script type="text/javascript" src="../../resources/ibx.js"></script>
 		<script type="text/javascript">
-			ibx.profiling = true;
+			//ibx.profiling = true;
 			ibx(function(e)
 			{
 				var nText = 0;
@@ -22,26 +22,30 @@
 				{
 					var replace = $(".btn-replace-text").ibxWidget("checked");
 					var select = $(".btn-sel-text").ibxWidget("checked");
-					var extend = $(".btn-extend-sel-text").ibxWidget("checked");
 					var focus = $(".btn-focus-text").ibxWidget("checked");
-					var text = sformat("<span style='xborder:2px solid red'>Julian {1}</span>", ++nText);
+					// var text = sformat("<span style='xborder:2px solid red'>Julian {1}</span>", ++nText);
+					// re = $(".test-edit-inline");
+					// re.ibxWidget("insertHTML", text, select, replace, focus);
+					var text = sformat("Julian {1}", ++nText);
 					re = $(".test-edit-inline");
-					re.ibxWidget("insertHTML", text, select, replace, extend, focus);
+					re.ibxWidget("insertText", text, select, replace, focus);
 				});
 
 				$(".test-popup").on("ibx_open", function(e)
 				{
 					window.setTimeout(function()
 					{
-						$(".pop-rich-edit").ibxWidget("insertText", "Julian Hyman", false, true, false, true);
-						//$(".pop-rich-edit").focus();
+						var text = sformat(" Julian {1} ", ++nText);
+						re = $(".pop-rich-edit");
+						re.ibxWidget("insertText", text, false, true, true);
 					}, 10);
 				})
 
 				$(".pop-focus-button").on("click", function(e)
 				{
-					console.log(e.type);
-					$(".pop-rich-edit").focus();
+					var text = sformat(" Julian {1} ", ++nText);
+					re = $(".pop-rich-edit");
+					re.ibxWidget("insertText", text, false, true, true);
 				})	
 			},true);
 		</script>
@@ -99,7 +103,6 @@
 			<div tabindex="0" class="btn test-button" data-ibx-type="ibxButton">Insert Text</div>
 			<div tabindex="0" class="btn btn-replace-text" data-ibx-type="ibxCheckBoxSimple">Replace Text</div>
 			<div tabindex="0" class="btn btn-sel-text" data-ibx-type="ibxCheckBoxSimple">Select Text</div>
-			<div tabindex="0" class="btn btn-extend-sel-text" data-ibx-type="ibxCheckBoxSimple">Extend Selection</div>
 			<div tabindex="0" class="btn btn-focus-text" data-ibx-type="ibxCheckBoxSimple" data-ibxp-checked="false">Focus Text</div>
 			<div tabindex="0" class="test-edit test-edit-inline ibx-default-focused" data-ibx-type="ibxRichEdit"></div>
 		</div>

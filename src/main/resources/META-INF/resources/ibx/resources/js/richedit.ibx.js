@@ -154,9 +154,9 @@ $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame,
 	},
 	createLink:function(href){this.execCommand("createLink", href);},
 	insertList:function(ordered){this.execCommand(ordered ? "insertOrderedList" : "insertUnorderedList");},
-	insertHTML:function(html, select, selReplace, selExtend, focus){this.insertContent(html, true, select, selReplace, selExtend, focus);},
-	insertText:function(text, select,  selReplace, selExtend, focus){this.insertContent(text, false, select, selReplace, selExtend, focus);},
-	insertContent:function(content, isHTML, select, selReplace, selExtend, focus)
+	insertHTML:function(html, select, selReplace, focus){this.insertContent(html, true, select, selReplace, focus);},
+	insertText:function(text, select,  selReplace, focus){this.insertContent(text, false, select, selReplace, focus);},
+	insertContent:function(content, isHTML, select, selReplace, focus)
 	{
 		/*NOTE: chrome/ff could use insertHTML/insertText...ie doesn't support this, so normalize to a solution that works the same across browsers*/
 		//get selections and create proper node for insertion.
@@ -179,36 +179,36 @@ $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame,
 			range = selection.getRangeAt(0)
 		else
 		{
+			var el = doc.body.lastChild ? doc.body.lastChild : doc.body; 
+			var offset = el.textContent.length;
 			range = doc.createRange();
-			range.setStart(doc.body, 0)
+			range.setStart(el, offset)
 		}
-		
+
+		var node = isHTML ? $.parseHTML(content, doc)[0] : doc.createTextNode(content);
+
 		//remove existing selected content if desired.
 		if(selReplace)
 			range.deleteContents();
 
-		//new insertion point is at end of current selection, unless specified
-		if(!selExtend)
-			range.collapse(false);
-
-		//kill current selection add new node and select...normalize the parent to combine the text elements.
-		var node = isHTML ? $.parseHTML(content, doc)[0] : doc.createTextNode(content);
-		selection.removeAllRanges();
+		//insert the new node at end of current selection/caret.
+		range.collapse(false);
 		range.insertNode(node);
-		(node.parentNode || node.parentElement).normalize();
-
-		//remove selection if desired.
-		if(!select)
+		
+		//OK, so...IE and Chrome are fine with addRange causing a selection of new node...Firefox needs to collapse the range, as it seems to add it automatically...OMG what a nightmare!
+		if(select)
+			selection.addRange(range);
+		else
 			range.collapse(false);
 
-		//add the range to the selection, and do focusing
-		//NOTE: of course ie always focuses the rich edit after insertion...soooooo...we have to reset the focus back....thanks MS!
-		selection.addRange(range);
+		//focus if desired
 		if(focus)
 			this.element[0].focus();
 		else
 		if(!focus && ibxPlatformCheck.isIE)
 			focusItem.focus();
+
+		return;
 	},
 	cmdState:function()
 	{
