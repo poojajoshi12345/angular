@@ -48,7 +48,10 @@ $.widget("ibi.ibxWidget", $.Widget,
 		for(var i = 0; i < classes.length; ++i)
 		{
 			var cls = classes[i];
-			bAdd ? this.element.addClass(cls) : this.element.removeClass(cls);
+			if(cls == "ibx-tree")
+				var x = 10;
+				
+			this.element.ibxToggleClass(cls, bAdd);
 		}
 	},
 	created:function(){return this._created;},
@@ -149,7 +152,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 		
 		this.element.off();
 		this.element.removeAttr("data-ibx-type");
-		this.element.removeClass(this.options.class);
+		this.element.ibxRemoveClass(this.options.class);
 		this._adjustWidgetClasses(false);
 		this.setAccessibility(false);
 		this._created = false;
@@ -269,16 +272,16 @@ $.widget("ibi.ibxWidget", $.Widget,
 	_setOptionDisabled:function(value)
 	{
 		//only do this if the state is changing.
-		var changed = value != this.element.hasClass("ibx-widget-disabled");
+		var changed = value != this.element.ibxHasClass("ibx-widget-disabled");
 		if(!changed)
 			return;
 
 		this._super(value);
 		var wClass = this._widgetClass;
-		(value) ? this.element.addClass("ibx-widget-disabled") : this.element.removeClass("ibx-widget-disabled");
-		(value) ? this.element.addClass(wClass + "-disabled") : this.element.removeClass(wClass + "-disabled");
+		this.element.ibxToggleClass("ibx-widget-disabled", value);
+		this.element.ibxToggleClass(wClass + "-disabled", value);
 		if(this.options.class)
-			(value) ? this.element.addClass(this.options.class + "-disabled") : this.element.removeClass(this.options.class + "-disabled");
+			this.element.ibxToggleClass(this.options.class + "-disabled", value);
 
 		this.setAccessibility();
 		
@@ -301,9 +304,9 @@ $.widget("ibi.ibxWidget", $.Widget,
 	{
 		var options = this.options;
 
-		this.element.addClass(options.class);
-		this.element.toggleClass("ibx-draggable", options.draggable);
-		this.element.toggleClass("ibx-external-drop-target", options.externalDropTarget);
+		this.element.ibxAddClass(options.class);
+		this.element.ibxToggleClass("ibx-draggable", options.draggable);
+		this.element.ibxToggleClass("ibx-external-drop-target", options.externalDropTarget);
 
 		if(options.focusRoot || options.navKeyRoot || options.focusDefault || options.selType != "none")
 		{
@@ -333,13 +336,13 @@ $.widget("ibi.ibxWidget", $.Widget,
 			{
 				var path = sformat("{1}{2}", ibx.getPath(), "markup/blank.html");
 				var iframe = $("<iframe class='ibx-opaque-frame' allowTransparency='false'>").prop("src", path);
-				this.element.addClass("ibx-opaque").append(iframe);
+				this.element.ibxAddClass("ibx-opaque").append(iframe);
 			}
 		}
 		else
 		{
 			this.element.children(".ibx-opaque-frame").remove();
-			this.element.removeClass("ibx-opaque");
+			this.element.ibxRemoveClass("ibx-opaque");
 		}
 
 		//hookup the resize sensor if interested in resize events.

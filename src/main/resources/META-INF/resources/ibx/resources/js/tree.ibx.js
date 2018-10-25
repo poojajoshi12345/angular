@@ -59,12 +59,12 @@ $.widget("ibi.ibxTree", $.ibi.ibxVBox,
 	},
 	add:function(el, elSibling, before, refresh)
 	{
-		$(el).addClass("tnode-root");
+		$(el).ibxAddClass("tnode-root");
 		this._super(el, elSibling, before, refresh);
 	},
 	remove:function(el, destroy, refresh)
 	{
-		this.children().filter(el).removeClass("tnode-root");
+		this.children().filter(el).ibxRemoveClass("tnode-root");
 		this._super(el, destroy, refresh);
 	},
 	rootNodes:function()
@@ -321,11 +321,11 @@ $.widget("ibi.ibxTreeNode", $.ibi.ibxVBox,
 		this.refreshIndent();//indent this node correctly under parent.
 
 		this.nodeLabel.ibxWidget("option", options.labelOptions).css("display", !showLabel ? "none" : "");
-		this.element.toggleClass("tnode-virtual-parent", options.virtualParent).toggleClass("tnode-is-container", options.container).toggleClass("tnode-expanded", options.expanded);
-		this.element.toggleClass("tnode-has-parent", !!this.element.data("ibxTreeParent"));
-		this.btnExpand.toggleClass("tnode-btn-root", this.isRoot()).removeClass(options.btnCollapsed).removeClass(options.btnExpanded);
+		this.element.ibxToggleClass("tnode-virtual-parent", options.virtualParent).ibxToggleClass("tnode-is-container", options.container).ibxToggleClass("tnode-expanded", options.expanded);
+		this.element.ibxToggleClass("tnode-has-parent", !!this.element.data("ibxTreeParent"));
+		this.btnExpand.ibxToggleClass("tnode-btn-root", this.isRoot()).ibxRemoveClass(options.btnCollapsed).ibxRemoveClass(options.btnExpanded);
 		if(options.container)
-			(options.expanded) ? this.btnExpand.addClass(options.btnExpanded) : this.btnExpand.addClass(options.btnCollapsed);
+			(options.expanded) ? this.btnExpand.ibxAddClass(options.btnExpanded) : this.btnExpand.ibxAddClass(options.btnCollapsed);
 	}
 });
 $.ibi.ibxTreeNode.defaultIndent = null;
@@ -356,7 +356,7 @@ $.widget("ibi.ibxTreeBrowser", $.ibi.ibxVBox,
 		this._super();
 		var options = this.options;
 		this.element.ibxMutationObserver({"listen":true, "subtree":true}).on("ibx_nodemutated", this._onChildrenChange.bind(this));
-		this.element.addClass("ibx-tree").on("swiperight", this._onTreeSwipeEvent.bind(this)).ibxTreeSelectionManager();
+		this.element.ibxAddClass("ibx-tree").on("swiperight", this._onTreeSwipeEvent.bind(this)).ibxTreeSelectionManager();
 		this.add(this.children());
 	},
 	_destroy:function()
@@ -365,10 +365,10 @@ $.widget("ibi.ibxTreeBrowser", $.ibi.ibxVBox,
 	},
 	add:function(el, elSibling, before, refresh)
 	{
-		var curRoot = this.children(".tnode-root").removeClass("tnode-root");
+		var curRoot = this.children(".tnode-root").ibxRemoveClass("tnode-root");
 		this.remove(curRoot);
 		
-		$(el).addClass("tnode-root");
+		$(el).ibxAddClass("tnode-root");
 		this._super(el, elSibling, before, refresh);
 		this.element.ibxSelectionManager("deselectAll").ibxSelectionManager("selected", el, true).ibxSelectionManager("focus", el, true);
 		$(el).ibxTreeNode("expanded", true).ibxTreeNode("refreshIndent", 0, true)
@@ -376,7 +376,7 @@ $.widget("ibi.ibxTreeBrowser", $.ibi.ibxVBox,
 	},
 	remove:function(el, destroy, refresh)
 	{
-		this.children().removeClass("tnode-root");
+		this.children().ibxRemoveClass("tnode-root");
 		this._super(el, destroy, refresh);
 	},
 	_onChildrenChange:function(e)
@@ -402,7 +402,7 @@ $.widget("ibi.ibxTreeBrowser", $.ibi.ibxVBox,
 	{
 		this._super();
 		var options = this.options;
-		this.children(".tnode-root").toggleClass("tnode-scroll-children", options.scrollChildren);
+		this.children(".tnode-root").ibxToggleClass("tnode-scroll-children", options.scrollChildren);
 	}
 });
 

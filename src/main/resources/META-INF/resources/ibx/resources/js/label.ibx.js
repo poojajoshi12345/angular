@@ -45,8 +45,8 @@ $.widget("ibi.ibxLabel", $.ibi.ibxFlexBox,
 		options.text = options.text || this.element.textNodes().remove().text().replace(/^\s*|\s*$/g, "");
 
 		//add the sub-elements
-		this._glyph = $("<div>").addClass(options.glyphElClass);
-		this._text = $("<div>").addClass(options.textElClass);
+		this._glyph = $("<div>").ibxAddClass(options.glyphElClass);
+		this._text = $("<div>").ibxAddClass(options.textElClass);
 		this.element.append(this._glyph, this._text);
 	},
 	_setAccessibility:function(accessible, aria)
@@ -60,7 +60,7 @@ $.widget("ibi.ibxLabel", $.ibi.ibxFlexBox,
 		this._super();
 		this._glyph.remove();
 		this._text.remove();
-		this.element.removeClass("icon-left icon-top icon-right icon-bottom")
+		this.element.ibxRemoveClass("icon-left icon-top icon-right icon-bottom")
 	},
 	_onLabelEvent:function(e)
 	{
@@ -84,18 +84,18 @@ $.widget("ibi.ibxLabel", $.ibi.ibxFlexBox,
 
 		//only update if changed
 		if(options.icon != lastOptions.icon)
-			this._glyph.removeClass(lastOptions.iconClasses).addClass(options.iconClasses).css("backgroundImage", options.icon ? sformat("url('{1}')", options.icon) : "");
+			this._glyph.ibxRemoveClass(lastOptions.iconClasses).ibxAddClass(options.iconClasses).css("backgroundImage", options.icon ? sformat("url('{1}')", options.icon) : "");
 
 		//only update if changed
 		if(options.glyph != lastOptions.glyph || options.glyphClasses != lastOptions.glyphClasses)
 			this._glyph.html(options.glyph);	
-		this._glyph.removeClass(lastOptions.glyphClasses).addClass(options.glyphClasses).addClass(options.glyphElClass);
+		this._glyph.ibxRemoveClass(lastOptions.glyphClasses).ibxAddClass(options.glyphClasses).ibxAddClass(options.glyphElClass);
 		this._glyph.css("display", (!glyphVisible && !options.icon) ? "none" : "");
 
 		//only update if changed
 		if(options.text != lastOptions.text)
 			options.textIsHtml ? this._text.html(options.text) : this._text.text(options.text);
-		this._text.removeClass(lastOptions.textElClass).addClass(options.textElClass).css({"text-align":options.textAlign, "white-space":options.textWrap ? "" : "nowrap"});
+		this._text.ibxRemoveClass(lastOptions.textElClass).ibxAddClass(options.textElClass).css({"text-align":options.textAlign, "white-space":options.textWrap ? "" : "nowrap"});
 
 		//[IBX-131] flexbox align center doesn't work correctly in IE with text wrapping...must be set to stretch and then center text automatically.
 		//this causes an inconsistency with other browsers...ie will center text when wrapped other won't.  
@@ -109,26 +109,26 @@ $.widget("ibi.ibxLabel", $.ibi.ibxFlexBox,
 		}
 
 		//add appropriate spacer classes
-		this._glyph.toggleClass(this.options.glyphElSpacerClass, !!((options.icon || options.glyph || options.glyphClasses) && options.text));
+		this._glyph.ibxToggleClass(this.options.glyphElSpacerClass, !!((options.icon || options.glyph || options.glyphClasses) && options.text));
 
 		//general options maintenance
-		this.element.removeClass("icon-left icon-top icon-right icon-bottom")
-		this.element.addClass("icon-" + options.iconPosition);
-		this.element.toggleClass("ibx-label-no-icon", !glyphVisible && !options.icon).toggleClass("ibx-icon-only", !glyphVisible && !options.text);
+		this.element.ibxRemoveClass("icon-left icon-top icon-right icon-bottom")
+		this.element.ibxAddClass("icon-" + options.iconPosition);
+		this.element.ibxToggleClass("ibx-label-no-icon", !glyphVisible && !options.icon).ibxToggleClass("ibx-icon-only", !glyphVisible && !options.text);
 
 		//handle overlays
 		this._glyph.children(".ibx-label-overlay-frame").remove();
 		for(var i = 0; i < options.overlays.length; ++i)
 		{
 			var overlay = options.overlays[i];
-			var elFrame = $("<label class='ibx-label-overlay-frame'>").addClass(overlay.position)
+			var elFrame = $("<label class='ibx-label-overlay-frame'>").ibxAddClass(overlay.position)
 			this._glyph.append(elFrame);
 			
 			var elOverlay = null;
 			if(overlay.icon)
 				elOverlay = $(sformat("<img class='ibx-label-overlay {1}' src='{2}'/>", overlay.iconClasses || "ibx-overlay-image", overlay.icon));
 			else	
-				elOverlay = $("<span class='ibx-label-overlay'>").addClass(overlay.glyphClasses).text(overlay.glyph);
+				elOverlay = $("<span class='ibx-label-overlay'>").ibxAddClass(overlay.glyphClasses).text(overlay.glyph);
 
 			elFrame.append(elOverlay);
 		}

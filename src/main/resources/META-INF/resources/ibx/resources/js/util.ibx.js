@@ -147,6 +147,85 @@ jQuery.expr[":"]["hasSubMenu"] = function(elem)
 	return subMenu ? true : false;
 };
 
+//Implement the native element classList api via jQuery...much faster than the jQuery add/removeClass functions.
+ibx.jqClassApi = false;
+jQuery.fn.extend({
+		ibxAddClass:function(classes)
+		{
+			if(ibx.jqClassApi)
+			{
+				this.addClass(classes);
+				return this;
+			}
+
+			if(classes === undefined)
+				classes = "";
+			var args = (arguments.length == 1 ) ? classes.split(" ") : arguments;
+			if(args.indexOf("") != -1 || args.indexOf(" ") != -1 || args.indexOf(undefined) != -1)
+				return this;
+			
+			var i = 0;
+			while((elem = this[ i++ ]))
+			{
+				elem.classList.add.apply(elem.classList, args);
+			}
+			return this;
+		},
+		ibxRemoveClass:function(classes)
+		{
+			if(ibx.jqClassApi)
+			{
+				this.removeClass(classes);
+				return this;
+			}
+
+			if(classes === undefined)
+				classes = "";
+			var args = (arguments.length == 1 ) ? classes.split(" ") : arguments;
+			if(args.indexOf("") != -1 || args.indexOf(" ") != -1 || args.indexOf(undefined) != -1)
+				return this;
+
+			var i = 0;
+			while((elem = this[ i++ ]))
+			{
+				elem.classList.remove.apply(elem.classList, args);
+			}
+			return this;
+		},
+		ibxToggleClass:function(value, stateVal)
+		{
+			if(ibx.jqClassApi)
+			{
+				this.toggleClass(value, stateVal);
+				return this;
+			}
+
+			var i = 0;
+			while((elem = this[ i++ ]))
+			{
+				elem.classList.toggle(value, stateVal);
+			}
+			return this;
+		},
+		ibxItemClass:function(nItem)
+		{
+			return this[0] ? this[0].classList.item(nItem) : null;
+		},
+		ibxHasClass:function(className)
+		{
+			return this[0] ? this[0].classList.contains(className) : null;
+		},
+		ibxReplaceClass:function(oldClass, newClass)
+		{
+			var i = 0;
+			while((elem = this[ i++ ]))
+			{
+				elem.classList.replace(oldClass, newClass);
+			}
+			return this;
+		},
+});
+
 // trigger/on/off using native dom events
 // helpful is you don't want the events to bubble
 // but still want to pass a data object to the handler
