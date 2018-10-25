@@ -12,38 +12,71 @@
 		<script type="text/javascript">
 			ibx(function(e)
 			{
-				$(".test-button").on("click", function testButtonClick(e)
+				$(".test-button").on("click", function buttonClick(e)
 				{
-					function buildTree(parentNode)
-					{
-						var children = [];
-						var childNodes = parentNode.childNodes;
-						for(var i = 0; i < childNodes.length; ++i)
-						{
-							var child = childNodes[i];
-							if(child.nodeType == 3 || child.nodeType == 8)
-								continue;
-							children.push(buildTree(child));
-						}
+					ibx.jqClassApi = true;
+					var body = $(document.body);
+					console.time("ibxAddClass");
+					for(var i = 0; i < 1000; ++i)
+						body.ibxAddClass("ibxClass1 ibxClass2 ibxClass3");
+					console.timeEnd("ibxAddClass");
 
-						var labelText = sformat("<{1}>", parentNode.tagName, parentNode.className);
-						console.time("tree_item");
-						var parent = $("<div>").ibxTreeNode({"expanded":true, "container":children.length, "labelOptions":{"text": labelText, "glyph":"face", "glyphClasses":"material-icons"}}).addClass("test-item");
-						console.timeEnd("tree_item");
-						parent.ibxWidget("add", children);
-						return parent[0];
-					}
+					console.time("jQueryAddClass");
+					for(var i = 0; i < 1000; ++i)
+						body.addClass("jqClass1 jqClass2 jqClass3");
+					console.timeEnd("jQueryAddClass");
 
-					//$.get("./test.xml").then(function(doc, status, xhr)
-					$.get("../../resources/ibx_resource_bundle.xml").then(function(doc, status, xhr)
-					{
-						var tree = $(".test-tree");
-						tree.ibxWidget("remove");
-						console.time("total_tree_time");
-						var root = buildTree(doc.documentElement)
-						console.timeEnd("total_tree_time");
-						tree.ibxWidget("add", root);
-					});
+					console.time("ibxRemoveClass");
+					for(var i = 0; i < 1000; ++i)
+						body.ibxRemoveClass("ibxClass1 ibxClass2 ibxClass3");
+					console.timeEnd("ibxRemoveClass");
+
+					console.time("jQueryRemoveClass");
+					for(var i = 0; i < 1000; ++i)
+						body.removeClass("jqClass1 jqClass2 jqClass3");
+					console.timeEnd("jQueryRemoveClass");
+
+					console.time("ibxToggleClass");
+					for(var i = 0; i < 1000; ++i)
+						body.ibxToggleClass("ibxClass1");
+					console.timeEnd("ibxToggleClass");
+
+					console.time("jQueryToggleClass");
+					for(var i = 0; i < 1000; ++i)
+						body.toggleClass("jqClass1");
+					console.timeEnd("jQueryToggleClass");
+
+					ibx.jqClassApi = false;
+					var body = $(document.body);
+					console.time("ibxAddClass");
+					for(var i = 0; i < 1000; ++i)
+						body.ibxAddClass("ibxClass1 ibxClass2 ibxClass3");
+					console.timeEnd("ibxAddClass");
+
+					console.time("jQueryAddClass");
+					for(var i = 0; i < 1000; ++i)
+						body.addClass("jqClass1 jqClass2 jqClass3");
+					console.timeEnd("jQueryAddClass");
+
+					console.time("ibxRemoveClass");
+					for(var i = 0; i < 1000; ++i)
+						body.ibxRemoveClass("ibxClass1 ibxClass2 ibxClass3");
+					console.timeEnd("ibxRemoveClass");
+
+					console.time("jQueryRemoveClass");
+					for(var i = 0; i < 1000; ++i)
+						body.removeClass("jqClass1 jqClass2 jqClass3");
+					console.timeEnd("jQueryRemoveClass");
+
+					console.time("ibxToggleClass");
+					for(var i = 0; i < 1000; ++i)
+						body.ibxToggleClass("ibxClass1");
+					console.timeEnd("ibxToggleClass");
+
+					console.time("jQueryToggleClass");
+					for(var i = 0; i < 1000; ++i)
+						body.toggleClass("jqClass1");
+					console.timeEnd("jQueryToggleClass");
 				});						
 			},true);
 		</script>
@@ -78,8 +111,7 @@
 	</head>
 	<body class="ibx-root">
 		<div class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="center" data-ibxp-justify="start">
-			<div class="test-button" data-ibx-type="ibxButton">Make Tree</div>
-			<div class="test-tree" data-ibx-type="ibxTree"></div>
+			<div class="test-button" data-ibx-type="ibxButton">Test</div>
 		</div>
 	</body>
 </html>
