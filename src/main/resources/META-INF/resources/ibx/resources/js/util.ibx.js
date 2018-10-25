@@ -160,7 +160,7 @@ jQuery.fn.extend({
 
 			if(classes === undefined)
 				classes = "";
-			var args = (arguments.length == 1 ) ? classes.split(" ") : arguments;
+			var args = (arguments.length == 1 ) ? classes.trim().split(" ") : arguments;
 			if(args.indexOf("") != -1 || args.indexOf(" ") != -1 || args.indexOf(undefined) != -1)
 				return this;
 			
@@ -181,7 +181,7 @@ jQuery.fn.extend({
 
 			if(classes === undefined)
 				classes = "";
-			var args = (arguments.length == 1 ) ? classes.split(" ") : arguments;
+			var args = (arguments.length == 1 ) ? classes.trim().split(" ") : arguments;
 			if(args.indexOf("") != -1 || args.indexOf(" ") != -1 || args.indexOf(undefined) != -1)
 				return this;
 
