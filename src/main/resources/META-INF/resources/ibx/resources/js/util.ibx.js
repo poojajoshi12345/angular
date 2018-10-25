@@ -148,7 +148,7 @@ jQuery.expr[":"]["hasSubMenu"] = function(elem)
 };
 
 //Implement the native element classList api via jQuery...much faster than the jQuery add/removeClass functions.
-ibx.jqClassApi = false;
+ibx.jqClassApi = true;
 jQuery.fn.extend({
 		ibxAddClass:function(classes)
 		{
@@ -160,15 +160,17 @@ jQuery.fn.extend({
 
 			if(!classes)
 				return this;
-				
+
 			var args = (arguments.length == 1 ) ? classes.trim().split(" ") : arguments;
-			if(args.indexOf("") != -1 || args.indexOf(" ") != -1 || args.indexOf(undefined) != -1)
+			if(args.indexOf(" ") != -1 || args.indexOf(undefined) != -1)
 				return this;
 			
 			var i = 0;
 			while((elem = this[ i++ ]))
 			{
 				elem.classList.add.apply(elem.classList, args);
+				if($(elem).is(".create-new-item .ibx-label-icon"))
+					var x = 10;
 			}
 			return this;
 		},
@@ -184,7 +186,7 @@ jQuery.fn.extend({
 				return this;
 
 			var args = (arguments.length == 1 ) ? classes.trim().split(" ") : arguments;
-			if(args.indexOf("") != -1 || args.indexOf(" ") != -1 || args.indexOf(undefined) != -1)
+			if(args.indexOf(" ") != -1 || args.indexOf(undefined) != -1)
 				return this;
 
 			var i = 0;
@@ -215,6 +217,9 @@ jQuery.fn.extend({
 		},
 		ibxHasClass:function(className)
 		{
+			if(ibx.jqClassApi)
+				return this.hasClass(className);
+
 			return this[0] ? this[0].classList.contains(className) : null;
 		},
 		ibxReplaceClass:function(oldClass, newClass)
