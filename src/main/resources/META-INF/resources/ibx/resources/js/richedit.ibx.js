@@ -126,14 +126,11 @@ $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame,
 	selectAll:function(){this.execCommand("selectAll");},
 	deselectAll:function(collapseToStart)
 	{
+		//IE - of course, the selection is removed when focus is lost...so restore, if needed, before collapse.
 		var selection = this.contentDocument().getSelection();
 		if(!selection.rangeCount && ibxPlatformCheck.isIE)
-			selection.addRange(this._currange)
+			selection.addRange(this._currange || document.createRange())
 		collapseToStart ? selection.collapseToStart() : selection.collapseToEnd();
-
-		//seems to work in all browsers all the time.
-		//if(this._currange)
-		//	this._currange.collapse(true);
 	},
 	cut:function(){this.execCommand("Cut");},
 	copy:function(){this.execCommand("Copy");},
