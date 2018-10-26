@@ -10,73 +10,28 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<script type="text/javascript" src="../../resources/ibx.js"></script>
 		<script type="text/javascript">
+			function test(el, str)
+			{
+				el = $(el)[0];
+				var args = str.split(" ");
+				return el.classList.add.apply(el.classList, args);
+			}
 			ibx(function(e)
 			{
 				$(".test-button").on("click", function buttonClick(e)
 				{
-					ibx.jqClassApi = true;
-					var body = $(document.body);
-					console.time("ibxAddClass");
+					ibx.jqClassApi = $(".jq-class-api").ibxWidget("checked");
+					var widgets = [];				
+					console.time("create_widgets");
 					for(var i = 0; i < 1000; ++i)
-						body.ibxAddClass("ibxClass1 ibxClass2 ibxClass3");
-					console.timeEnd("ibxAddClass");
-
-					console.time("jQueryAddClass");
-					for(var i = 0; i < 1000; ++i)
-						body.addClass("jqClass1 jqClass2 jqClass3");
-					console.timeEnd("jQueryAddClass");
-
-					console.time("ibxRemoveClass");
-					for(var i = 0; i < 1000; ++i)
-						body.ibxRemoveClass("ibxClass1 ibxClass2 ibxClass3");
-					console.timeEnd("ibxRemoveClass");
-
-					console.time("jQueryRemoveClass");
-					for(var i = 0; i < 1000; ++i)
-						body.removeClass("jqClass1 jqClass2 jqClass3");
-					console.timeEnd("jQueryRemoveClass");
-
-					console.time("ibxToggleClass");
-					for(var i = 0; i < 1000; ++i)
-						body.ibxToggleClass("ibxClass1");
-					console.timeEnd("ibxToggleClass");
-
-					console.time("jQueryToggleClass");
-					for(var i = 0; i < 1000; ++i)
-						body.toggleClass("jqClass1");
-					console.timeEnd("jQueryToggleClass");
-
-					ibx.jqClassApi = false;
-					var body = $(document.body);
-					console.time("ibxAddClass");
-					for(var i = 0; i < 1000; ++i)
-						body.ibxAddClass("ibxClass1 ibxClass2 ibxClass3");
-					console.timeEnd("ibxAddClass");
-
-					console.time("jQueryAddClass");
-					for(var i = 0; i < 1000; ++i)
-						body.addClass("jqClass1 jqClass2 jqClass3");
-					console.timeEnd("jQueryAddClass");
-
-					console.time("ibxRemoveClass");
-					for(var i = 0; i < 1000; ++i)
-						body.ibxRemoveClass("ibxClass1 ibxClass2 ibxClass3");
-					console.timeEnd("ibxRemoveClass");
-
-					console.time("jQueryRemoveClass");
-					for(var i = 0; i < 1000; ++i)
-						body.removeClass("jqClass1 jqClass2 jqClass3");
-					console.timeEnd("jQueryRemoveClass");
-
-					console.time("ibxToggleClass");
-					for(var i = 0; i < 1000; ++i)
-						body.ibxToggleClass("ibxClass1");
-					console.timeEnd("ibxToggleClass");
-
-					console.time("jQueryToggleClass");
-					for(var i = 0; i < 1000; ++i)
-						body.toggleClass("jqClass1");
-					console.timeEnd("jQueryToggleClass");
+					{
+						console.time("create_widget");
+						var widget = $("<div class='test-widget'>").ibxSelectItem({text:"item"+1, labelOptions:{text:"item"+i}});
+						console.timeEnd("create_widget");
+						widgets.push(widget);
+					}
+					console.timeEnd("create_widgets");
+					$(".widget-box").append(widgets);
 				});						
 			},true);
 		</script>
@@ -88,30 +43,41 @@
 				margin: 0px;
 				box-sizing: border-box;
 			}
-			.test-button
+			.main-box
+			{
+				border:1px solid red;
+			}
+			.test-button, .jq-class-api
 			{
 				flex:0 0 auto;
 				margin:5px;
 			}
-			.test-tree
+			.widget-box
 			{
 				flex:1 1 auto;
-				width:80%;
+				align-self:stretch;
+				padding:5px;
+				border:1px solid black;
 				overflow:auto;
-				border:1px solid #ccc;
-				padding:2px;
 			}
-			.test-item
+			.very-wide
+			{
+				border:1px solid lime;
+			}
+			.test-widget
 			{
 				flex:0 0 auto;
 				margin:2px;
-				xborder:1px solid #ccc;
+				border:1px solid #ccc;
+				overflow:auto;
 			}
 		</style>
 	</head>
 	<body class="ibx-root">
 		<div class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="center" data-ibxp-justify="start">
+			<div class="jq-class-api" data-ibx-type="ibxCheckBoxSimple">Use jQuery Class API</div>
 			<div class="test-button" data-ibx-type="ibxButton">Test</div>
+			<div class="widget-box" data-ibx-type="ibxHBox" data-ibxp-wrap="true"></div>
 		</div>
 	</body>
 </html>
