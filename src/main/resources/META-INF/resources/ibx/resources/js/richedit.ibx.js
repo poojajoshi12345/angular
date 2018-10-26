@@ -127,7 +127,13 @@ $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame,
 	deselectAll:function(collapseToStart)
 	{
 		var selection = this.contentDocument().getSelection();
+		if(!selection.rangeCount && ibxPlatformCheck.isIE)
+			selection.addRange(this._currange)
 		collapseToStart ? selection.collapseToStart() : selection.collapseToEnd();
+
+		//seems to work in all browsers all the time.
+		//if(this._currange)
+		//	this._currange.collapse(true);
 	},
 	cut:function(){this.execCommand("Cut");},
 	copy:function(){this.execCommand("Copy");},
