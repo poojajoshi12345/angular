@@ -147,90 +147,107 @@ jQuery.expr[":"]["hasSubMenu"] = function(elem)
 	return subMenu ? true : false;
 };
 
-//Implement the native element classList api via jQuery...much faster than the jQuery add/removeClass functions.
-ibx.jqClassApi = true;
-jQuery.fn.extend({
-		ibxAddClass:function(classes)
-		{
-			if(ibx.jqClassApi)
-			{
-				this.addClass(classes);
-				return this;
-			}
+//Implement the native element classList api as alternate to jQuery...much faster than the jQuery add/removeClass functions.
+ibx.useCustomClassAPI = false;
+jQuery.fn.extend(
+{
+	ibxAddClass:function(classes)
+	{
+		if(!ibx.useCustomClassAPI)
+			return this.addClass(classes);
 
-			if(!classes)
-				return this;
-
-			var args = (arguments.length == 1 ) ? classes.trim().split(" ") : arguments;
-			if(args.indexOf(" ") != -1 || args.indexOf(undefined) != -1)
-				return this;
-			
-			var i = 0;
-			while((elem = this[ i++ ]))
-			{
-				elem.classList.add.apply(elem.classList, args);
-				if($(elem).is(".create-new-item .ibx-label-icon"))
-					var x = 10;
-			}
+		if(!classes)
 			return this;
-		},
-		ibxRemoveClass:function(classes)
-		{
-			if(ibx.jqClassApi)
-			{
-				this.removeClass(classes);
-				return this;
-			}
 
-			if(!classes)
-				return this;
-
-			var args = (arguments.length == 1 ) ? classes.trim().split(" ") : arguments;
-			if(args.indexOf(" ") != -1 || args.indexOf(undefined) != -1)
-				return this;
-
-			var i = 0;
-			while((elem = this[ i++ ]))
-			{
-				elem.classList.remove.apply(elem.classList, args);
-			}
+		var args = classes.trim().replace(/ +/g, " ").split(" ");
+		if(!args.length)
 			return this;
-		},
-		ibxToggleClass:function(value, stateVal)
+		
+		var i = 0;
+		while((elem = this[ i++ ]))
 		{
-			if(ibx.jqClassApi)
+			if(ibxPlatformCheck.isIE)
 			{
-				this.toggleClass(value, stateVal);
-				return this;
+				for(var j = 0; j < args.length; ++j)
+					elem.classList.add(args[j]);
 			}
+			else
+				DOMTokenList.prototype.add.apply(elem.classList, args);
+		}
 
-			var i = 0;
-			while((elem = this[ i++ ]))
-			{
-				elem.classList.toggle(value, stateVal);
-			}
-			return this;
-		},
-		ibxItemClass:function(nItem)
-		{
-			return this[0] ? this[0].classList.item(nItem) : null;
-		},
-		ibxHasClass:function(className)
-		{
-			if(ibx.jqClassApi)
-				return this.hasClass(className);
+		return this;
+	},
+	ibxRemoveClass:function(classes)
+	{
+		if(!ibx.useCustomClassAPI)
+			return this.removeClass(classes);
 
-			return this[0] ? this[0].classList.contains(className) : null;
-		},
-		ibxReplaceClass:function(oldClass, newClass)
-		{
-			var i = 0;
-			while((elem = this[ i++ ]))
-			{
-				elem.classList.replace(oldClass, newClass);
-			}
+		if(!classes)
 			return this;
-		},
+
+		var args = classes.trim().replace(/ +/g, " ").split(" ");
+		if(!args.length)
+			return this;
+
+		var i = 0;
+		while((elem = this[ i++ ]))
+		{
+			if(ibxPlatformCheck.isIE)
+			{
+				for(var j = 0; j < args.length; ++j)
+					elem.classList.remove(args[j]);
+			}
+			else
+				DOMTokenList.prototype.remove.apply(elem.classList, args);
+		}
+		return this;
+	},
+	ibxToggleClass:function(value, stateVal)
+	{
+		if(!ibx.useCustomClassAPI)
+			return this.toggleClass(value, stateVal);
+
+		if(!value)
+			return this;
+
+		var args = value.trim().replace(/ +/g, " ").split(" ");
+		if(!args.length)
+			return this;
+
+		var i = 0;
+		while((elem = this[ i++ ]))
+		{
+			for(var j = 0; j < args.length; ++j)
+				elem.classList.toggle(args[j], stateVal);
+		}
+		return this;
+	},
+	ibxReplaceClass:function(oldClass, newClass)
+	{
+		var i = 0;
+		while((elem = this[ i++ ]))
+		{
+			elem.classList.replace(oldClass, newClass);
+		}
+		return this;
+	},
+	ibxHasClass:function(className)
+	{
+		if(!ibx.useCustomClassAPI)
+			return this.hasClass(className);
+
+		var i = 0;
+		while((elem = this[ i++ ]))
+		{
+			if(elem.classList.contains(className))
+				return true;
+		}
+		return false;
+	},
+	ibxItemClass:function(nItem)
+	{
+		return this[0] ? this[0].classList.item(nItem) : null;
+	},
 });
 
 // trigger/on/off using native dom events
