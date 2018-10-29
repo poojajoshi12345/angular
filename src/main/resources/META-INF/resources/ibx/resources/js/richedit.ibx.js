@@ -185,7 +185,7 @@ $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame,
 			var el = doc.body.lastChild ? doc.body.lastChild : doc.body; 
 			var offset = el.textContent.length;
 			range = doc.createRange();
-			range.setStart(el, offset)
+			//range.setStart(el, offset) remove to quickly fix IA-10255...but this needs to be fixed correctly.
 		}
 
 		var node = isHTML ? $.parseHTML(content, doc)[0] : doc.createTextNode(content);
