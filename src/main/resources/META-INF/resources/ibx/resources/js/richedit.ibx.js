@@ -69,9 +69,15 @@ $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame,
 		if(e.type == "focusin" && ibxPlatformCheck.isIE && this._currange)
 		{
 			this._restoringSelection = true;
-			var sel = doc.getSelection();
-			sel.removeAllRanges();
-			sel.addRange(this._currange);
+			if(doc.documentElement.outerText)
+			{
+				//[IA-10255]
+				//Of course IE has a bug where if you restore the last range, but there is no text, then insertContent
+				//will blow up with invalid document nonsense!
+				var sel = doc.getSelection();
+				sel.removeAllRanges();
+				sel.addRange(this._currange);
+			}
 			this._restoringSelection = false;
 		}
 		else
@@ -185,7 +191,7 @@ $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame,
 			var el = doc.body.lastChild ? doc.body.lastChild : doc.body; 
 			var offset = el.textContent.length;
 			range = doc.createRange();
-			//range.setStart(el, offset) remove to quickly fix IA-10255...but this needs to be fixed correctly.
+			range.setStart(el, offset);
 		}
 
 		var node = isHTML ? $.parseHTML(content, doc)[0] : doc.createTextNode(content);
@@ -210,7 +216,6 @@ $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame,
 		else
 		if(!focus && ibxPlatformCheck.isIE)
 			focusItem.focus();
-
 		return;
 	},
 	cmdState:function()
