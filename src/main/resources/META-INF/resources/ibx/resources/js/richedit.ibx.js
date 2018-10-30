@@ -69,15 +69,9 @@ $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame,
 		if(e.type == "focusin" && ibxPlatformCheck.isIE && this._currange)
 		{
 			this._restoringSelection = true;
-			if(doc.documentElement.outerText)
-			{
-				//[IA-10255]
-				//Of course IE has a bug where if you restore the last range, but there is no text, then insertContent
-				//will blow up with invalid document nonsense!
-				var sel = doc.getSelection();
-				sel.removeAllRanges();
-				sel.addRange(this._currange);
-			}
+			var sel = doc.getSelection();
+			sel.removeAllRanges();
+			sel.addRange(this._currange);
 			this._restoringSelection = false;
 		}
 		else
@@ -188,10 +182,8 @@ $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame,
 			range = selection.getRangeAt(0)
 		else
 		{
-			var el = doc.body.lastChild ? doc.body.lastChild : doc.body; 
-			var offset = el.textContent.length;
 			range = doc.createRange();
-			range.setStart(el, offset);
+			range.setStart(doc.body, 0);
 		}
 
 		var node = isHTML ? $.parseHTML(content, doc)[0] : doc.createTextNode(content);
@@ -202,7 +194,13 @@ $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame,
 
 		//insert the new node at end of current selection/caret.
 		range.collapse(false);
-		range.insertNode(node);
+		try
+		{
+			range.insertNode(node);
+		}
+		catch(ex)
+		{
+		}
 		
 		//OK, so...IE and Chrome are fine with addRange causing a selection of new node...Firefox needs to collapse the range, as it seems to add it automatically...OMG what a nightmare!
 		if(select)
