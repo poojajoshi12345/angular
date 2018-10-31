@@ -204,8 +204,7 @@ jQuery.fn.extend(
 	},
 	ibxToggleClass:function(value, stateVal)
 	{
-		//toggle doesn't work properly for IE...doesn't take stateVal, so can't use it.
-		if(ibxPlatformCheck.isIE || !ibx.useCustomClassAPI)
+		if(!ibx.useCustomClassAPI)
 			return this.toggleClass(value, stateVal);
 
 		if(!value)
@@ -219,7 +218,13 @@ jQuery.fn.extend(
 		while((elem = this[ i++ ]))
 		{
 			for(var j = 0; j < args.length; ++j)
-				elem.classList.toggle(args[j], stateVal);
+			{
+				var arg = args[j];
+				if(ibxPlatformCheck.isIE && (stateVal != undefined))
+					(!stateVal) ? elem.classList.remove(arg) : elem.classList.add(arg);//of course, IE doesn't handle toggle correctly (so, polyfill)
+				else
+					elem.classList.toggle(arg, stateVal);
+			}
 		}
 		return this;
 	},
