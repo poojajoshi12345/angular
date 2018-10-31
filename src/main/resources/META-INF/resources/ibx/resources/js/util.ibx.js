@@ -148,7 +148,7 @@ jQuery.expr[":"]["hasSubMenu"] = function(elem)
 };
 
 //Implement the native element classList api as alternate to jQuery...much faster than the jQuery add/removeClass functions.
-ibx.useCustomClassAPI = false;
+ibx.useCustomClassAPI = true;
 jQuery.fn.extend(
 {
 	ibxAddClass:function(classes)
@@ -204,7 +204,8 @@ jQuery.fn.extend(
 	},
 	ibxToggleClass:function(value, stateVal)
 	{
-		if(!ibx.useCustomClassAPI)
+		//toggle doesn't work properly for IE...doesn't take stateVal, so can't use it.
+		if(ibxPlatformCheck.isIE || !ibx.useCustomClassAPI)
 			return this.toggleClass(value, stateVal);
 
 		if(!value)
@@ -226,9 +227,7 @@ jQuery.fn.extend(
 	{
 		var i = 0;
 		while((elem = this[ i++ ]))
-		{
-			elem.classList.replace(oldClass, newClass);
-		}
+			(ibxPlatformCheck.isIE) ? $(elem).removeClass(oldClass).addClass(newClass) : elem.classList.replace(oldClass, newClass);
 		return this;
 	},
 	ibxHasClass:function(className)
