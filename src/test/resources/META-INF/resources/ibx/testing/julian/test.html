@@ -13,98 +13,114 @@
 			//ibx.profiling = true;
 			ibx(function(e)
 			{
-				var nText = 0;
-				$(".focus-button").on("click", function(e)
-				{
-					$(".test-edit-inline").focus();
-				});
-				$(".test-button").on("click", function testButtonClick(e)
-				{
-					var replace = $(".btn-replace-text").ibxWidget("checked");
-					var select = $(".btn-sel-text").ibxWidget("checked");
-					var focus = $(".btn-focus-text").ibxWidget("checked");
-					// var text = sformat("<span style='xborder:2px solid red'>Julian {1}</span>", ++nText);
-					// re = $(".test-edit-inline");
-					// re.ibxWidget("insertHTML", text, select, replace, focus);
-					var text = sformat("Julian {1}", ++nText);
-					re = $(".test-edit-inline");
-					re.ibxWidget("insertText", text, select, replace, focus);
-				});
-
-				$(".test-popup").on("ibx_open", function(e)
-				{
-					window.setTimeout(function()
+					var sidebar = $(".sidebar");
+					sidebar.ibxCollapsible();
+					
+					$(".hamburger").on("click", function(e)
 					{
-						var text = sformat(" Julian {1} ", ++nText);
-						re = $(".pop-rich-edit");
-						re.ibxWidget("insertText", text, false, true, true);
-					}, 10);
-				})
+						var sidebar = $(".sidebar");
+						sidebar.ibxCollapsible("toggle");
+					})
 
-				$(".pop-focus-button").on("click", function(e)
-				{
-					var text = sformat(" Julian {1} ", ++nText);
-					re = $(".pop-rich-edit");
-					re.ibxWidget("insertText", text, false, true, true);
-				})	
 			},true);
 		</script>
 		<style type="text/css">
-			html, body, .main-box
+			.container
 			{
-				width: 100%;
-				height: 100%;
-				margin: 0px;
-				box-sizing: border-box;
+				position:absolute;
+				left:100px;
+				top:100px;
+				width:400px;
+				height:400px;
+				overflow:hidden;
+				border:1px solid black;
+				z-index: 0;
 			}
-			.btn
+			.sidebar
 			{
-				width:150px;
-				margin:2px 0px 2px 0px;
-			}
-			.test-edit
-			{
-				flex:1 1 auto;
-				height:100px;
-				width:200px;
+				flex:0 0 auto;
+				align-self:stretch;
+				width:33%;
 				border:1px solid #ccc;
+				box-sizing:border-box;
+				background-color: white;
+				z-index: 1000;
 			}
-			.test-popup
+			.sidebar-tbar
 			{
+				flex:0 0 auto;
+				border-bottom:1px solid #ccc;
 				padding:2px;
 			}
-			.pop-rich-edit
+			.sidebar-file-list
 			{
-				width:200px;
-				height:200px;
+				flex:1 1 auto;
+				overflow:auto;
+				padding:2px;
+			}
+			.sidebar-file
+			{
+				flex:0 0 auto;
+				line-height:3em;
 				border:1px solid #ccc;
-				margin:2px;
+				margin-bottom:1px;
+			}
+			.topbar
+			{
+				flex:1 1 auto;
+				box-sizing: border-box;
+			}
+			.hamburger
+			{
+				font-size:2em;
+			}
+			.content
+			{
+				position:absolute;
+				left:0px;
+				top:2em;
+				right:0px;
+				bottom:0px;
+				box-sizing:border-box;
+				border-top:1px solid black;
 			}
 		</style>
 	</head>
 	<body class="ibx-root">
-		<div class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="center" data-ibxp-justify="start">
-			<div tabindex="0" class="btn menu-button" data-ibx-type="ibxMenuButton">Test Menu
-				<div data-ibx-type="ibxMenu">
-					<div data-ibx-type="ibxMenuItem">Menu Item</div>
-					<div data-ibx-type="ibxMenuItem">Popup Item
-						<div class="test-popup" data-ibx-type="ibxPopup">
-							<div data-ibx-type="ibxVBox" data-ibxp-align="center" data-ibxp-auto-close="false">
-								<div data-ibx-type="ibxHBox" data-ibxp-align="center" data-ibxp-auto-close="false">
-									<div tabindex="0" class="pop-focus-button" data-ibx-type="ibxButton">Focus</div>
-								</div>
-								<div tabindex="0" class="pop-rich-edit" data-ibx-type="ibxRichEdit"></div>
-							</div>
-						</div>
-					</div>
+		<div class="container" data-ibx-type="ibxHBox" data-ibxp-align="start">
+			<div class="sidebar" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
+				<div class="sidebar-tbar" data-ibx-type="ibxHBox">
+					<div class="sidebar-btn" data-ibx-type="ibxButton">Button</div>
+				</div>
+				<div class="sidebar-file-list" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
+					<div class="sidebar-file" data-ibx-type="ibxLabel">File Item</div>
+					<div class="sidebar-file" data-ibx-type="ibxLabel">File Item</div>
+					<div class="sidebar-file" data-ibx-type="ibxLabel">File Item</div>
+					<div class="sidebar-file" data-ibx-type="ibxLabel">File Item</div>
+					<div class="sidebar-file" data-ibx-type="ibxLabel">File Item</div>
+					<div class="sidebar-file" data-ibx-type="ibxLabel">File Item</div>
+					<div class="sidebar-file" data-ibx-type="ibxLabel">File Item</div>
+					<div class="sidebar-file" data-ibx-type="ibxLabel">File Item</div>
+					<div class="sidebar-file" data-ibx-type="ibxLabel">File Item</div>
+					<div class="sidebar-file" data-ibx-type="ibxLabel">File Item</div>
+					<div class="sidebar-file" data-ibx-type="ibxLabel">File Item</div>
+					<div class="sidebar-file" data-ibx-type="ibxLabel">File Item</div>
+					<div class="sidebar-file" data-ibx-type="ibxLabel">File Item</div>
+					<div class="sidebar-file" data-ibx-type="ibxLabel">File Item</div>
+					<div class="sidebar-file" data-ibx-type="ibxLabel">File Item</div>
+					<div class="sidebar-file" data-ibx-type="ibxLabel">File Item</div>
+					<div class="sidebar-file" data-ibx-type="ibxLabel">File Item</div>
+					<div class="sidebar-file" data-ibx-type="ibxLabel">File Item</div>
+					<div class="sidebar-file" data-ibx-type="ibxLabel">File Item</div>
+					<div class="sidebar-file" data-ibx-type="ibxLabel">File Item</div>
 				</div>
 			</div>
-			<div tabindex="0" class="btn focus-button" data-ibx-type="ibxButton">Focus RichEdit</div>
-			<div tabindex="0" class="btn test-button" data-ibx-type="ibxButton">Insert Text</div>
-			<div tabindex="0" class="btn btn-replace-text" data-ibx-type="ibxCheckBoxSimple">Replace Text</div>
-			<div tabindex="0" class="btn btn-sel-text" data-ibx-type="ibxCheckBoxSimple">Select Text</div>
-			<div tabindex="0" class="btn btn-focus-text" data-ibx-type="ibxCheckBoxSimple" data-ibxp-checked="false">Focus Text</div>
-			<div tabindex="0" class="test-edit test-edit-inline ibx-default-focused" data-ibx-type="ibxRichEdit"></div>
+			<div class="topbar" data-ibx-type="ibxHBox" data-ibxp-align="center">
+				<div class="hamburger" data-ibx-type="ibxLabel" data-ibxp-glyph="reorder" data-ibxp-glyph-classes="material-icons"></div>
+			</div>
+			<div class="content" data-ibx-type="ibxWidget">
+				THIS IS A SAMPLE REPORT THAT IS UNDERNEATH THE SIDEBAR.
+			</div>
 		</div>
 	</body>
 </html>
