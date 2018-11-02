@@ -196,6 +196,16 @@ $.widget("ibi.ibxTreeNode", $.ibi.ibxVBox,
 		if(refresh)
 			this.refresh();
 	},
+	startEditing:function(editOptions)
+	{
+		this.nodeLabel.ibxEditable().ibxEditable("startEditing", editOptions);
+	},
+	stopEditing:function(revertToOriginal)
+	{
+		if(this.nodeLabel.is(".ibx-editable"))
+			this.nodeLabel.ibxEditable("stopEditing", revertToOriginal);
+
+	},
 	depth:function()
 	{
 		return this.element.parents(".ibx-tree-node:not(.tnode-virtual-parent)").length;	

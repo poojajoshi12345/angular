@@ -347,12 +347,15 @@ $.widget("ibi.ibxEditable", $.Widget,
 	 */
 	stopEditing:function(revertToOriginal)
 	{
-		this.element.off("keydown blur", this._onElementEventBound).prop("contentEditable", false).ibxRemoveClass("ibx-content-editing");
-		this.element.focus();
-		if(revertToOriginal)
-			this.element.html(this._preEditValue);
-		else
-			this.element.dispatchEvent("ibx_textchanged", this.element.text(), true, false);
+		if(this.element.is(".ibx-content-editing"))
+		{
+			this.element.off("keydown blur", this._onElementEventBound).prop("contentEditable", false).ibxRemoveClass("ibx-content-editing");
+			this.element.focus();
+			if(revertToOriginal)
+				this.element.html(this._preEditValue);
+			else
+				this.element.dispatchEvent("ibx_textchanged", this.element.text(), true, false);
+		}
 	},
 });
 

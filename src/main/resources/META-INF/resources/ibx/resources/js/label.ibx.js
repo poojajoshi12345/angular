@@ -62,6 +62,16 @@ $.widget("ibi.ibxLabel", $.ibi.ibxFlexBox,
 		this._text.remove();
 		this.element.ibxRemoveClass("icon-left icon-top icon-right icon-bottom")
 	},
+	startEditing:function(editOptions)
+	{
+		this._text.ibxEditable().ibxEditable("startEditing", editOptions);
+	},
+	stopEditing:function(revertToOriginal)
+	{
+		if(this._text.is(".ibx-editable"))
+			this._text.ibxEditable("stopEditing", revertToOriginal);
+
+	},
 	_onLabelEvent:function(e)
 	{
 		var options = this.options;
