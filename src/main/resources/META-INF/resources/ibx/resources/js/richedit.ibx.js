@@ -265,6 +265,25 @@ $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame,
 	}
 });
 
+$.widget("ibi.ibxSimpleEdit", $.Widget, 
+{
+	options:
+	{
+		"spellcheck":false,
+		"autocomplete":false,
+		"autocapitalize":false,
+		"autocorrect":false,
+		"selectAll":true,
+		"insertBrOnReturn":true,
+		"commitKey":$.ui.keyCode.ENTER,
+		"commitOnBlur":true,
+	},
+	_create:function()
+	{
+		this.element.ibxAddClass("ibx-editable");
+		this._super();
+	},
+})
 
 
 
