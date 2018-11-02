@@ -10,117 +10,66 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<script type="text/javascript" src="../../resources/ibx.js"></script>
 		<script type="text/javascript">
-			//ibx.profiling = true;
 			ibx(function(e)
 			{
-					var sidebar = $(".sidebar");
-					sidebar.ibxCollapsible();
-					
-					$(".hamburger").on("click", function(e)
+				$(".test-label").ibxEditable().on("mousedown", function(e)
+				{
+					var el = $(this);
+					var focused = el.isFocused();
+					if(!focused)
 					{
-						var sidebar = $(".sidebar");
-						sidebar.ibxCollapsible("toggle");
-					})
+						console.log(e.type);
+						el.data("ibxFocusedFromClick", true)
+					}
+				}).on("click", function(e)
+				{
+					var el = $(this);
+					if(el.data("ibxFocusedFromClick"))
+						el.removeData("ibxFocusedFromClick");
+					else
+						el.ibxWidget("startEditing");
+				}).on("keydown", function(e)
+				{
+					if(e.keyCode == 113)
+						$(e.currentTarget).ibxWidget("startEditing");
+				}).on("ibx_textchanging", function(e)
+				{
+					var data = e.originalEvent.data;
+					if(data.char == 32)
+						e.preventDefault();
+				}).on("ibx_textchanged", function(e)
+				{
+					var text = e.originalEvent.data;
+					$(e.target).ibxWidget("option", "text", "Edited: " + text);
+				});
 
 			},true);
 		</script>
 		<style type="text/css">
-			.container
+			html, body, .main-box
 			{
-				position:absolute;
-				left:100px;
-				top:100px;
-				width:400px;
-				height:400px;
-				overflow:hidden;
-				border:1px solid black;
-				z-index: 0;
-			}
-			.sidebar
-			{
-				flex:0 0 auto;
-				align-self:stretch;
-				width:33%;
-				border:1px solid #ccc;
-				box-sizing:border-box;
-				background-color: white;
-				z-index: 1000;
-			}
-			.sidebar-tbar
-			{
-				flex:0 0 auto;
-				border-bottom:1px solid #ccc;
-				padding:2px;
-			}
-			.sidebar-file-list
-			{
-				flex:1 1 auto;
-				overflow:auto;
-				padding:2px;
-			}
-			.sidebar-file
-			{
-				flex:0 0 auto;
-				line-height:3em;
-				border:1px solid #ccc;
-				margin-bottom:1px;
-			}
-			.topbar
-			{
-				flex:1 1 auto;
+				width: 100%;
+				height: 100%;
+				margin: 0px;
 				box-sizing: border-box;
 			}
-			.hamburger
+			.test-label
 			{
-				font-size:2em;
+				flex:0 0 auto;
+				border:1px solid #ccc;
+				margin:5px;
+				padding:10px;
 			}
-			.content
+			.test-label:focus
 			{
-				position:absolute;
-				left:0px;
-				top:2em;
-				right:0px;
-				bottom:0px;
-				box-sizing:border-box;
-				border-top:1px solid black;
+				background-color:#eee;
 			}
 		</style>
 	</head>
 	<body class="ibx-root">
-		<div class="container" data-ibx-type="ibxHBox" data-ibxp-align="start">
-			<div class="sidebar" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
-				<div class="sidebar-tbar" data-ibx-type="ibxHBox">
-					<div class="sidebar-btn" data-ibx-type="ibxButton">Button</div>
-				</div>
-				<div class="sidebar-file-list" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
-					<div class="sidebar-file" data-ibx-type="ibxLabel">File Item</div>
-					<div class="sidebar-file" data-ibx-type="ibxLabel">File Item</div>
-					<div class="sidebar-file" data-ibx-type="ibxLabel">File Item</div>
-					<div class="sidebar-file" data-ibx-type="ibxLabel">File Item</div>
-					<div class="sidebar-file" data-ibx-type="ibxLabel">File Item</div>
-					<div class="sidebar-file" data-ibx-type="ibxLabel">File Item</div>
-					<div class="sidebar-file" data-ibx-type="ibxLabel">File Item</div>
-					<div class="sidebar-file" data-ibx-type="ibxLabel">File Item</div>
-					<div class="sidebar-file" data-ibx-type="ibxLabel">File Item</div>
-					<div class="sidebar-file" data-ibx-type="ibxLabel">File Item</div>
-					<div class="sidebar-file" data-ibx-type="ibxLabel">File Item</div>
-					<div class="sidebar-file" data-ibx-type="ibxLabel">File Item</div>
-					<div class="sidebar-file" data-ibx-type="ibxLabel">File Item</div>
-					<div class="sidebar-file" data-ibx-type="ibxLabel">File Item</div>
-					<div class="sidebar-file" data-ibx-type="ibxLabel">File Item</div>
-					<div class="sidebar-file" data-ibx-type="ibxLabel">File Item</div>
-					<div class="sidebar-file" data-ibx-type="ibxLabel">File Item</div>
-					<div class="sidebar-file" data-ibx-type="ibxLabel">File Item</div>
-					<div class="sidebar-file" data-ibx-type="ibxLabel">File Item</div>
-					<div class="sidebar-file" data-ibx-type="ibxLabel">File Item</div>
-				</div>
-			</div>
-			<div class="topbar" data-ibx-type="ibxHBox" data-ibxp-align="center">
-				<div class="hamburger" data-ibx-type="ibxLabel" data-ibxp-glyph="reorder" data-ibxp-glyph-classes="material-icons"></div>
-			</div>
-			<div class="content" data-ibx-type="ibxWidget">
-				THIS IS A SAMPLE REPORT THAT IS UNDERNEATH THE SIDEBAR.
-			</div>
+		<div class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="center" data-ibxp-justify="start">
+			<div tabindex="0" class="test-label" data-ibx-type="ibxEditable">Test Label1</div>
+			<div tabindex="0" class="" data-ibx-type="ibxLabel">Some other Label</div>
 		</div>
 	</body>
 </html>

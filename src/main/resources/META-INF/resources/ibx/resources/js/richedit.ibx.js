@@ -39,7 +39,7 @@ $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame,
 			$(cd).on("focusin selectionchange", this._onRichEditDocEvent.bind(this));
 
 			//set the content if this is created from markup and there is html inside the ibxRichEdit markup.
-			var content = this.element.data("createContent")
+			var content = this.element.data("createContent");
 			if(content)
 			{
 				this.insertHTML(content.content, content.isHTML, content.replace, content.select);
@@ -129,7 +129,7 @@ $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame,
 		//IE - of course, the selection is removed when focus is lost...so restore, if needed, before collapse.
 		var selection = this.contentDocument().getSelection();
 		if(!selection.rangeCount && ibxPlatformCheck.isIE)
-			selection.addRange(this._currange || document.createRange())
+			selection.addRange(this._currange || document.createRange());
 		collapseToStart ? selection.collapseToStart() : selection.collapseToEnd();
 	},
 	cut:function(){this.execCommand("Cut");},
@@ -147,13 +147,13 @@ $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame,
 	indent:function(){this.execCommand("indent");},
 	outdent:function(){this.execCommand("outdent");},
 	unlink:function(href){this.execCommand("unlink", href);},
-	justify:function(justify){this.execCommand($.ibi.ibxRichEdit.justify[justify])},
+	justify:function(justify){this.execCommand($.ibi.ibxRichEdit.justify[justify]);},
 	fontName:function(name){this.execCommand("fontName", name);},
 	fontSize:function(size)
 	{
-		if(isNaN(parseInt(size)))
+		if(isNaN(parseInt(size, 10)))
 			size = $.ibi.ibxRichEdit.fontSize[size];
-		this.execCommand("fontSize", size)
+		this.execCommand("fontSize", size);
 	},
 	createLink:function(href){this.execCommand("createLink", href);},
 	insertList:function(ordered){this.execCommand(ordered ? "insertOrderedList" : "insertUnorderedList");},
@@ -179,7 +179,7 @@ $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame,
 		var selection = doc.getSelection();
 		var range = null;
 		if(selection.rangeCount)
-			range = selection.getRangeAt(0)
+			range = selection.getRangeAt(0);
 		else
 		{
 			range = doc.createRange();
@@ -266,11 +266,15 @@ $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame,
 });
 
 
-/******************************************************************************
- * SIMPLE EDIT MODE FOR ANY ELEMENT THAT CAN BE contentEditable
+/**
+ * @namespace ibi.ibxEditable
  */
 $.widget("ibi.ibxEditable", $.Widget, 
 {
+	/**
+	 * @name ibi.ibxEditable
+	 * @description Allows any elligable element to be user editable.
+	 */
 	options:
 	{
 		"spellcheck":false,
@@ -300,9 +304,9 @@ $.widget("ibi.ibxEditable", $.Widget,
 			var isCommit = e.keyCode == options.commitKey;
 			if(isCancel || isCommit)
 			{
+				this.stopEditing(isCancel);
 				e.preventDefault();
 				e.stopPropagation();
-				this.stopEditing(isCancel);
 			}
 			else
 			{
@@ -319,6 +323,12 @@ $.widget("ibi.ibxEditable", $.Widget,
 		}
 	},
 	_preEditValue:null,
+	/**
+	 * @name ibi.ibxEditable.startEditing
+	 * @function
+	 * @description Start editing the attached element.
+	 * @param {object} editOptions - see: spellcheck, autocorrect, etc.
+	 */
 	startEditing:function(editOptions)
 	{
 		this._preEditValue = this.element.html();//save the current text for possible reversion.
@@ -329,6 +339,12 @@ $.widget("ibi.ibxEditable", $.Widget,
 		if(options.selectAll)
 			document.getSelection().selectAllChildren(this.element[0]);
 	},
+	/**
+	 * @name ibi.ibxEditable.stopEditing
+	 * @function
+	 * @description Stop editing the attached element.
+	 * @param {boolean} reverts the element's content back to what it was before editing began.
+	 */
 	stopEditing:function(revertToOriginal)
 	{
 		this.element.off("keydown blur", this._onElementEventBound).prop("contentEditable", false).ibxRemoveClass("ibx-content-editing");
@@ -338,7 +354,7 @@ $.widget("ibi.ibxEditable", $.Widget,
 		else
 			this.element.dispatchEvent("ibx_textchanged", this.element.text(), true, false);
 	},
-})
+});
 
 //# sourceURL=richedit.ibx.js
 
