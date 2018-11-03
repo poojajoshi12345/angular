@@ -350,6 +350,7 @@ $.widget("ibi.ibxEditable", $.Widget,
 		if(this.element.is(".ibx-content-editing"))
 		{
 			this.element.off("keydown blur", this._onElementEventBound).prop("contentEditable", false).ibxRemoveClass("ibx-content-editing");
+			this.element.ibxMutationObserver({"listen":false});
 			this.element.focus();
 			if(revertToOriginal)
 				this.element.html(this._preEditValue);
