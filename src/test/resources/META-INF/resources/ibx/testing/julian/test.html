@@ -12,7 +12,7 @@
 		<script type="text/javascript">
 			ibx(function(e)
 			{
-				$(".test-label").ibxEditable().on("mousedown", function(e)
+				$(".test-label").ibxEditable({"validation":/j/g}).on("mousedown", function(e)
 				{
 					var el = $(this);
 					var focused = el.isFocused();
@@ -35,8 +35,8 @@
 				}).on("ibx_textchanging", function(e)
 				{
 					var data = e.originalEvent.data;
-					if(data.char == 32)
-						e.preventDefault();
+					//if(data.char == 32)
+					//	e.preventDefault();
 				}).on("ibx_textchanged", function(e)
 				{
 					var text = e.originalEvent.data;
@@ -63,6 +63,12 @@
 			.test-label:focus
 			{
 				background-color:#eee;
+			}
+			.ibx-content-editing .ibx-label-text
+			{
+				font-size:3em;
+				background-color:white;
+				border:2px solid red;
 			}
 		</style>
 	</head>

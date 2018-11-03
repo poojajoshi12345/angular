@@ -265,16 +265,8 @@ $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame,
 	}
 });
 
-
-/**
- * @namespace ibi.ibxEditable
- */
 $.widget("ibi.ibxEditable", $.Widget, 
 {
-	/**
-	 * @name ibi.ibxEditable
-	 * @description Allows any elligable element to be user editable.
-	 */
 	options:
 	{
 		"spellcheck":false,
@@ -283,6 +275,7 @@ $.widget("ibi.ibxEditable", $.Widget,
 		"autocorrect":false,
 		"selectAll":true,
 		"insertBrOnReturn":true,
+		"validattion":null,
 		"commitKey":$.ui.keyCode.ENTER,
 		"cancelKey":$.ui.keyCode.ESCAPE,
 		"commitOnBlur":true,
@@ -310,8 +303,15 @@ $.widget("ibi.ibxEditable", $.Widget,
 			}
 			else
 			{
-				var event = this.element.dispatchEvent("ibx_textchanging", {"text":this.element.text(), "char":e.keyCode}, true, true);
+				var value = this.element.text();
+				var event = this.element.dispatchEvent("ibx_textchanging", {"text":value, "char":e.keyCode}, true, true);
 				if(event.isDefaultPrevented())
+					e.preventDefault();
+				else
+				if((options.validation instanceof RegExp) && !options.validation.test(value))
+					e.preventDefault();
+				else
+				if((options.validation instanceof Function) && !options.validation.call(value))
 					e.preventDefault();
 			}
 		}
@@ -323,12 +323,6 @@ $.widget("ibi.ibxEditable", $.Widget,
 		}
 	},
 	_preEditValue:null,
-	/**
-	 * @name ibi.ibxEditable.startEditing
-	 * @function
-	 * @description Start editing the attached element.
-	 * @param {object} editOptions - see: spellcheck, autocorrect, etc.
-	 */
 	startEditing:function(editOptions)
 	{
 		this._preEditValue = this.element.html();//save the current text for possible reversion.
@@ -339,12 +333,6 @@ $.widget("ibi.ibxEditable", $.Widget,
 		if(options.selectAll)
 			document.getSelection().selectAllChildren(this.element[0]);
 	},
-	/**
-	 * @name ibi.ibxEditable.stopEditing
-	 * @function
-	 * @description Stop editing the attached element.
-	 * @param {boolean} reverts the element's content back to what it was before editing began.
-	 */
 	stopEditing:function(revertToOriginal)
 	{
 		if(this.element.is(".ibx-content-editing"))
