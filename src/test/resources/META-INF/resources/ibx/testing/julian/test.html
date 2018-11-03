@@ -12,7 +12,7 @@
 		<script type="text/javascript">
 			ibx(function(e)
 			{
-				$(".test-label").ibxEditable({"validation":/j/g}).on("mousedown", function(e)
+				$(".test-label").ibxEditable({"xvalidation":/[^ ]/g}).on("mousedown", function(e)
 				{
 					var el = $(this);
 					var focused = el.isFocused();

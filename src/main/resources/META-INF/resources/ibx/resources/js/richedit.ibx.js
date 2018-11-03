@@ -303,16 +303,27 @@ $.widget("ibi.ibxEditable", $.Widget,
 			}
 			else
 			{
-				var value = this.element.text();
-				var event = this.element.dispatchEvent("ibx_textchanging", {"text":value, "char":e.keyCode}, true, true);
+				var event = this.element.dispatchEvent("ibx_textchanging", {"text":this.element.text(), "char":e.keyCode}, true, true);
 				if(event.isDefaultPrevented())
 					e.preventDefault();
-				else
-				if((options.validation instanceof RegExp) && !options.validation.test(value))
-					e.preventDefault();
-				else
-				if((options.validation instanceof Function) && !options.validation.call(value))
-					e.preventDefault();
+			}
+		}
+		else
+		if(e.type == "ibx_nodecharchange" && !this._resettingValue)
+		{
+			var reset = false;
+			var mr = e.originalEvent.data;
+			var newValue = mr.target.wholeText;
+			var reset = ((options.validation instanceof RegExp) && !options.validation.test(newValue));
+			reset |= ((options.validation instanceof Function) && !options.validation.call(newValue));
+			if(reset && !this._resettingValue)
+			{
+				this._resettingValue = true;
+				var selection = document.getSelection();
+				this.element.text(mr.oldValue);
+				range = selection.getRangeAt(0);
+				document.getSelection().addRange(range);
+				this._resettingValue = false;
 			}
 		}
 		else
@@ -326,7 +337,8 @@ $.widget("ibi.ibxEditable", $.Widget,
 	startEditing:function(editOptions)
 	{
 		this._preEditValue = this.element.html();//save the current text for possible reversion.
-		this.element.on("keydown blur", this._onElementEventBound);
+		this.element.on("keydown keypress blur", this._onElementEventBound);
+		this.element.ibxMutationObserver({"listen":true, "allEvents":true}).on("ibx_nodecharchange", this._onElementEventBound);
 
 		var options = $.extend({contentEditable:true}, this.options, editOptions); 
 		this.element.prop(options).ibxAddClass("ibx-content-editing").focus();
