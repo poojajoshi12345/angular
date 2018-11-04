@@ -12,7 +12,7 @@
 		<script type="text/javascript">
 			ibx(function(e)
 			{
-				$(".test-label").ibxEditable({"xvalidation":/[^ ]/g}).on("mousedown", function(e)
+				$(".test-label").ibxEditable({}).on("mousedown", function(e)
 				{
 					var el = $(this);
 					var focused = el.isFocused();
@@ -35,8 +35,8 @@
 				}).on("ibx_textchanging", function(e)
 				{
 					var data = e.originalEvent.data;
-					//if(data.char == 32)
-					//	e.preventDefault();
+					if(data.keyEvent.keyCode == 32)
+						e.preventDefault();
 				}).on("ibx_textchanged", function(e)
 				{
 					var text = e.originalEvent.data;
