@@ -264,6 +264,24 @@ $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame,
 		this._super();
 	}
 });
+$.ibi.ibxRichEdit.fontSize = 
+{
+	"xx-small":1,
+	"x-small":2,
+	"small":3,
+	"medium":4,
+	"large":5,
+	"x-large":6,
+	"xx-large":7
+}
+$.ibi.ibxRichEdit.justify = 
+{
+	"left":"justifyLeft",
+	"center":"justifyCenter",
+	"right":"justifyRight",
+	"full":"justifyFull"
+}
+
 
 $.widget("ibi.ibxEditable", $.Widget, 
 {
