@@ -159,7 +159,7 @@ jQuery.fn.extend(
 		if(!classes)
 			return this;
 
-		var args = classes.trim().replace(/ +/g, " ").split(" ");
+		var args = Array.isArray(classes) ? classes : classes.trim().replace(/ +/g, " ").split(" ");
 		if(!args.length)
 			return this;
 		
@@ -185,7 +185,7 @@ jQuery.fn.extend(
 		if(!classes)
 			return this;
 
-		var args = classes.trim().replace(/ +/g, " ").split(" ");
+		var args = Array.isArray(classes) ? classes : classes.trim().replace(/ +/g, " ").split(" ");
 		if(!args.length)
 			return this;
 
@@ -210,7 +210,7 @@ jQuery.fn.extend(
 		if(!value)
 			return this;
 
-		var args = value.trim().replace(/ +/g, " ").split(" ");
+		var args = Array.isArray(value) ? value : value.trim().replace(/ +/g, " ").split(" ");
 		if(!args.length)
 			return this;
 
