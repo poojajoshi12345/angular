@@ -10,39 +10,60 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<script type="text/javascript" src="../../resources/ibx.js"></script>
 		<script type="text/javascript">
+			//ibx.profiling = true;
 			ibx(function(e)
 			{
-				$(".test-label").ibxEditable({}).on("mousedown", function(e)
+				var nText = 0;
+				$(".focus-button").on("click", function(e)
 				{
-					var el = $(this);
-					var focused = el.isFocused();
-					if(!focused)
-					{
-						console.log(e.type);
-						el.data("ibxFocusedFromClick", true)
-					}
-				}).on("click", function(e)
+					$(".test-edit-inline").focus();
+				});
+				$(".test-button").on("click", function testButtonClick(e)
 				{
-					var el = $(this);
-					if(el.data("ibxFocusedFromClick"))
-						el.removeData("ibxFocusedFromClick");
-					else
-						el.ibxWidget("startEditing");
-				}).on("keydown", function(e)
-				{
-					if(e.keyCode == 113)
-						$(e.currentTarget).ibxWidget("startEditing");
-				}).on("ibx_textchanging", function(e)
-				{
-					var data = e.originalEvent.data;
-					if(data.keyEvent.keyCode == 32)
-						e.preventDefault();
-				}).on("ibx_textchanged", function(e)
-				{
-					var text = e.originalEvent.data;
-					$(e.target).ibxWidget("option", "text", "Edited: " + text);
+					var replace = $(".btn-replace-text").ibxWidget("checked");
+					var select = $(".btn-sel-text").ibxWidget("checked");
+					var focus = $(".btn-focus-text").ibxWidget("checked");
+					// var text = sformat("<span style='xborder:2px solid red'>Julian {1}</span>", ++nText);
+					// re = $(".test-edit-inline");
+					// re.ibxWidget("insertHTML", text, select, replace, focus);
+					var text = sformat("Julian {1}", ++nText);
+					re = $(".test-edit-inline");
+					re.ibxWidget("insertText", text, select, replace, focus);
 				});
 
+				$(".test-menu").on("ibx_beforeopen ibx_beforeclose", function(e)
+				{
+					console.log(e.type);
+					var menuItem = $(".mi-popup");
+					var subMenu = menuItem.ibxWidget("subMenu");
+					if(e.type == "ibx_beforeopen" && !subMenu)
+					{
+						var subMenu = $.clone($(".test-popup").removeAttr("data-ibx-no-bind")[0]);
+						ibx.bindElements(subMenu, true);
+						menuItem.ibxWidget("addSubMenu", subMenu);
+					}
+					else
+					if(e.type == "ibx_beforeclose")
+					{
+						menuItem.ibxWidget("addSubMenu", null);
+						subMenu.ibxWidget("destroy");
+
+					}
+				})
+
+				$(".test-popup").on("ibx_open", function(e)
+				{
+					var text = sformat(" Julian {1} ", ++nText);
+					re = $(".pop-rich-edit");
+					re.ibxWidget("insertText", text, true, true, true);
+				})
+
+				$(".pop-focus-button").on("click", function(e)
+				{
+					var text = sformat(" Julian {1} ", ++nText);
+					re = $(".pop-rich-edit");
+					re.ibxWidget("insertText", text, false, true, true);
+				})	
 			},true);
 		</script>
 		<style type="text/css">
@@ -53,29 +74,69 @@
 				margin: 0px;
 				box-sizing: border-box;
 			}
-			.test-label
+			.btn
 			{
-				flex:0 0 auto;
+				width:150px;
+				margin:2px 0px 2px 0px;
+			}
+			.test-edit
+			{
+				flex:1 1 auto;
+				height:100px;
+				width:200px;
 				border:1px solid #ccc;
-				margin:5px;
-				padding:10px;
 			}
-			.test-label:focus
+			.test-popup
 			{
-				background-color:#eee;
+				padding:2px;
 			}
-			.ibx-content-editing .ibx-label-text
+			.test-popup-closed
 			{
-				font-size:3em;
-				background-color:white;
-				border:2px solid red;
+				display:none;
+			}
+			.pop-rich-edit
+			{
+				width:200px;
+				height:200px;
+				border:1px solid #ccc;
+				margin:2px;
 			}
 		</style>
 	</head>
 	<body class="ibx-root">
 		<div class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="center" data-ibxp-justify="start">
-			<div tabindex="0" class="test-label" data-ibx-type="ibxLabel">Test Label1</div>
-			<div tabindex="0" class="" data-ibx-type="ibxLabel">Some other Label</div>
+			<div tabindex="0" class="btn menu-button" data-ibx-type="ibxMenuButton">Test Menu
+				<div class="test-menu" data-ibx-type="ibxMenu">
+					<div data-ibx-type="ibxMenuItem">Menu Item</div>
+					<div class="mi-popup" data-ibx-type="ibxMenuItem">Popup Item</div>
+				</div>
+			</div>
+			<div tabindex="0" class="btn focus-button" data-ibx-type="ibxButton">Focus RichEdit</div>
+			<div tabindex="0" class="btn test-button" data-ibx-type="ibxButton">Insert Text</div>
+			<div tabindex="0" class="btn btn-replace-text" data-ibx-type="ibxCheckBoxSimple">Replace Text</div>
+			<div tabindex="0" class="btn btn-sel-text" data-ibx-type="ibxCheckBoxSimple">Select Text</div>
+			<div tabindex="0" class="btn btn-focus-text" data-ibx-type="ibxCheckBoxSimple" data-ibxp-checked="false">Focus Text</div>
+			<div tabindex="0" class="test-edit test-edit-inline ibx-default-focused" data-ibx-type="ibxRichEdit"></div>
 		</div>
+
+		<div class="test-popup" data-ibx-type="ibxPopup" data-ibx-no-bind="true">
+			<div data-ibx-type="ibxVBox" data-ibxp-align="center" data-ibxp-auto-close="false">
+				<div data-ibx-type="ibxHBox" data-ibxp-align="center" data-ibxp-auto-close="false">
+					<div tabindex="0" class="pop-focus-button" data-ibx-type="ibxButton">Focus</div>
+				</div>
+				<div tabindex="0" class="pop-select" data-ibx-type="ibxSelect">
+					<div data-ibx-type="ibxSelectItem">Item</div>
+					<div data-ibx-type="ibxSelectItem">Item</div>
+					<div data-ibx-type="ibxSelectItem">Item</div>
+					<div data-ibx-type="ibxSelectItem">Item</div>
+					<div data-ibx-type="ibxSelectItem">Item</div>
+					<div data-ibx-type="ibxSelectItem">Item</div>
+					<div data-ibx-type="ibxSelectItem">Item</div>
+				</div>
+				<div tabindex="0" class="pop-rich-edit" data-ibx-type="ibxRichEdit"></div>
+			</div>
+		</div>
+
+
 	</body>
 </html>
