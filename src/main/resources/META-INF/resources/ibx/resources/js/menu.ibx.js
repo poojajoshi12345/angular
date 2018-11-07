@@ -221,7 +221,8 @@ $.widget("ibi.ibxMenuItem", $.ibi.ibxHBox,
 	addSubMenu:function(subMenu)
 	{
 		this.removeSubMenu();
-		if(subMenu && subMenu.length)
+		subMenu = $(subMenu);
+		if(subMenu.is(".ibx-popup"))
 		{
 			this.element.data("ibxSubMenu", subMenu);
 			subMenu.appendTo(this.element);
