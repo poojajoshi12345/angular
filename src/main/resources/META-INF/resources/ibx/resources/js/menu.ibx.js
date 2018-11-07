@@ -77,7 +77,7 @@ $.widget("ibi.ibxMenu", $.ibi.ibxPopup,
 	},
 	open:function(openInfo)
 	{
-		this._super(openInfo)
+		this._super(openInfo);
 	},
 	close:function(closeData)
 	{
@@ -212,7 +212,7 @@ $.widget("ibi.ibxMenuItem", $.ibi.ibxHBox,
 		}
 		e.stopPropagation();
 	},
-	parentMenu:function(){return this.element.parents(".ibx-menu").first() || null},
+	parentMenu:function(){return this.element.parents(".ibx-menu").first() || null;};,
 	subMenu:function()
 	{
 		var subMenu = this.element.data("ibxSubMenu");
@@ -225,7 +225,7 @@ $.widget("ibi.ibxMenuItem", $.ibi.ibxHBox,
 		{
 			this.element.data("ibxSubMenu", subMenu);
 			subMenu.appendTo(this.element);
-			subMenu.on("ibx_open ibx_close", this._onSubMenuOpenClose.bind(this))
+			subMenu.on("ibx_open ibx_close", this._onSubMenuOpenClose.bind(this));
 			this.refresh();
 		}
 	},
