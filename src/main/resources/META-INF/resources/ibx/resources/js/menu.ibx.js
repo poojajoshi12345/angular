@@ -212,7 +212,7 @@ $.widget("ibi.ibxMenuItem", $.ibi.ibxHBox,
 		}
 		e.stopPropagation();
 	},
-	parentMenu:function(){return this.element.parents(".ibx-menu").first() || null;};,
+	parentMenu:function(){return this.element.parents(".ibx-menu").first() || null;},
 	subMenu:function()
 	{
 		var subMenu = this.element.data("ibxSubMenu");
