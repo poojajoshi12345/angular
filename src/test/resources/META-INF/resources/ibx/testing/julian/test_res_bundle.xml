@@ -18,54 +18,19 @@
 		<style-file src="./test_res_styles.css"/>
 		<style-sheet>
 		<![CDATA[
-			.menu-bar, .tool-bar, .nav-box, .content-box
+			.date-label
+			{
+				margin-right:2px;
+			}
+			.date-value
 			{
 				border:1px solid #ccc;
-				border-radius:5px;
-				margin:2px;
 				padding:2px;
+				margin-right:2px;
 			}
-			.menu-bar, .tool-bar
+			.date-button
 			{
-				flex:0 0 auto;
-			}
-
-			.client-box
-			{
-				flex:1 1 auto;
-			}
-			.nav-box
-			{
-				flex:0 0 auto;
-				width:200px;
-			}
-			.content-box
-			{
-				flex:1 1 auto;
-			}
-			.test-content
-			{
-				width:100%;
-				height:100%;
-				box-sizing:border-box;
-				overflow:auto;
-			}
-
-			.test-item
-			{
-				width:50px;
-				height:50px;
-				margin:10px;
-				border:1px solid black;
-				background-color:thistle;
-			}
-			.test-item.ibx-sm-selected
-			{
-				outline:2px solid red;
-			}
-			.test-item.ibx-sm-anchor
-			{
-				background-color:lime;
+				font-size:1.5em;
 			}
 		]]>
 		</style-sheet>
@@ -74,28 +39,6 @@
 	<markup>
 		<markup-file src="./test_res_markup.xml"/>
 		<markup-block>
-			<div class="test-dialog" data-ibx-type="ibxDialog"></div>
-
-			<div class="test-frame" data-ibx-type="testFrame" data-ibxp-align="stretch" data-ibxp-name-root="true">
-				<div class="menu-bar" data-ibx-type="ibxMenuBar" data-ibx-name="_menuBar" data-ibxp-align="center">
-					<div data-ibx-type="ibxMenuButton" data-ibx-name="_menuButton">
-						Menu
-						<div data-ibx-type="ibxMenu" data-ibxp-opaque="true">
-							<div data-ibx-type="ibxMenuItem">Menu Item</div>
-						</div>
-					</div>
-				</div>
-				<div class="tool-bar" data-ibx-type="ibxHBox" data-ibx-name="_toolBar" data-ibxp-align="center">
-					<div data-ibx-type="ibxButtonSimple" data-ibx-name="tbarButton" data-ibxp-glyph="face" data-ibxp-glyph-classes="material-icons">Toolbar</div>
-				</div>
-				<div class="client-box" data-ibx-type="ibxHBox" data-ibxp-align="stretch">
-					<div class="nav-box" data-ibx-type="ibxVBox" data-ibx-name="_navBox" data-ibxp-align="stretch"></div>
-					<div data-ibx-type="ibxVSplitter"></div>
-					<div class="content-box" data-ibx-type="ibxWidget" data-ibx-name="_content">
-						<div tabindex="0" class="test-content" data-ibx-type="ibxHBox" data-ibx-name="_testContent" data-ibxp-wrap="true" data-ibxp-nav-key-root="true" data-ibxp-rubber-band="true" data-ibxp-rubber-band-partial-select="true" data-ibxp-focus-default="true" data-ibxp-sel-type="multi"></div>
-					</div>
-				</div>
-			</div>
 		</markup-block>
 	</markup>
 
@@ -104,36 +47,60 @@
 		<script-file src="../../ibxtools/shared_resources/js/ibfs.js" loadContext="ibx"/>
 		<script-block>
 		<![CDATA[
-			$.widget("ibi.testFrame", $.ibi.ibxVBox, 
+			$.widget("ibi.ibxDateRange", $.ibi.ibxFlexBox, 
 			{
 				options:
 				{
+					align:"center",
+					dateOptions:
+					{
+						"type":"inline",
+						"changeYear":true,
+						"changeMonth":true,
+					}
 				},
-				_widgetClass:"test-frame",
+				_widgetClass:"ibx-date-range",
 				_create:function()
 				{
 					this._super();
-					this._loadWidgetTemplate(".test-frame");
+					var dateBox = this.dateFromBox = $("<div class='date-box date-box-from'>").ibxFlexBox({align:"center"})
+					var dateLabel = this.dateFromLabel = $("<div class='date-label date-from-label'>From:</div>").ibxLabel();
+					var dateValue = this.dateFromValue = $("<div tabindex='0' class='date-value date-from-value'>00/00/0000</div>").ibxLabel();
+					var dateButton = this.dateFromButton = $("<div tabindex='0' class='date-button date-from-button'>").ibxButtonSimple({glyphClasses:"fa fa-calendar"});
+					dateBox.append(dateLabel, dateValue, dateButton);
 
-					this.element.on("ibx_selchange", function(e)
-					{
-						//onsole.log(e);
-					}.bind(this));
+					var dateBox = this.dateToBox = $("<div class='date-box date-box-to'>").ibxFlexBox({align:"center"})
+					var dateLabel = this.dateToLabel = $("<div class='date-label date-to-label'>To:</div>").ibxLabel();
+					var dateValue = this.dateToValue = $("<div tabindex='0' class='date-value date-to-value'>00/00/0000</div>").ibxLabel();
+					var dateButton = this.dateToButton = $("<div tabindex='0' class='date-button date-to-button'>").ibxButtonSimple({glyphClasses:"fa fa-calendar"});
+					dateBox.append(dateLabel, dateValue, dateButton);
+
+					$([this.dateFromButton[0], this.dateToButton[0]]).on("click", this._onDateBtnClick.bind(this));
+
+
+					this.element.append(this.dateFromBox, this.dateToBox);
 				},
 				_init:function()
 				{
 					this._super();
-					var container = $(".test-content");
-					for(var i = 0; i < 50; ++i)
-					{
-						var item = $("<div tabindex='0'>").ibxLabel({"text":"Item" + i, "draggable":true, "align":"center", "justify":"center"});
-						item.addClass("test-item item"+i);
-						container.append(item);
-					};
 				},
 				_destroy:function()
 				{
 					this._super();
+				},
+				_onDateBtnClick:function(e)
+				{
+					var btn = $(e.currentTarget);
+					var cal = $("<div>").ibxDatePicker(this.options.dateOptions).on("ibx_change", this._onDateChange.bind(this)).data("triggerButton", btn);
+					var popup = $("<div>").ibxPopup({position:{my:"left top", at:"left bottom", of:btn.closest(".date-box"), collision:"fit flip"}});
+					popup.append(cal).ibxWidget("open");
+				},
+				_onDateChange:function(e, data)
+				{
+					var datePicker = $(e.target);
+					var btn = datePicker.data("triggerButton");
+					var value = btn.siblings(".date-value");
+					value.ibxWidget("option", "text", data.date);
 				},
 				_refresh:function()
 				{

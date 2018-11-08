@@ -21,22 +21,36 @@
 			<jsp:include page="/WEB-INF/jsp/global/wf_globals.jsp" flush="false" />
 			ibx(function()
 			{
-				Ibfs.load().done(function()
+				var options = 
 				{
-					Ibfs.ibfs.login("admin", "admin").done(function(e)
+					"type":"inline",
+					"changeYear":true,
+					"changeMonth":true,
+
+				}
+
+				$(".date-1-btn").on("click", function(e)
+				{
+					var cal = $("<div>").ibxDatePicker(options).on("ibx_change", function(e, data)
 					{
+						$(".date-1-val").ibxWidget("option", "text", data.date);
 					});
+					var pop = $("<div>").ibxPopup({position:{my:"left top", at:"left bottom", of:e.currentTarget}});
+					pop.append(cal).ibxWidget("open");
 				});
 
-				var mainBox = $(".main-box");
-				console.time();
-				for(var i = 0; i < 30; ++i)
+				$(".date-2-btn").on("click", function(e)
 				{
-					var bucket = ibx.resourceMgr.getResource(".wfc-bucket-container", true);
-					//bucket.ibxWidget("member", "bucketLabel", "Bucket" + i);
-					mainBox.ibxWidget("add", bucket);
-				}
-				console.timeEnd();
+					var cal = $("<div>").ibxDatePicker(options).on("ibx_change", function(e, data)
+					{
+						$(".date-2-val").ibxWidget("option", "text", data.date);
+					});
+					var pop = $("<div>").ibxPopup({position:{my:"left top", at:"left bottom", of:e.currentTarget}});
+					pop.append(cal).ibxWidget("open");
+				});
+
+
+
 
 			}, [{"src":"./test_res_bundle.xml", "loadContext":"app"}], true);
 		</script>
@@ -57,10 +71,25 @@
 				background-color:white;
 				box-sizing:border-box;
 			}
+			.date-box
+			{
+				margin:2px;
+			}
+			.date-val
+			{
+				border:1px solid #ccc;
+				margin:2px;
+				padding:2px;
+			}
+			.date-btn
+			{
+				font-size:1.5em;
+			}
 		</style>
 	</head>
 	<body class="ibx-root">
 		<div class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="center" data-ibxp-justify="center">
+			<div class="date-range" data-ibx-type="ibxDateRange"></div>
 		</div>
 	</body>
 </html>
