@@ -307,11 +307,6 @@ ibxPopupManager.onWindowEvent = function(e)
 				return;
 			}
 
-			//otherwise, close all open menus
-			//var menus = ibxPopupManager.getOpenPopups(":openMenuPopup");
-			//if(menus.length)
-			//	menus.ibxWidget("close", e);
-
 			//otherwise, if any modals are open, then attempt to close any popups above the top modal, or
 			//the modal itself if it's autoClose
 			var modal = ibxPopupManager.getOpenPopups(":openModalPopup").first();
