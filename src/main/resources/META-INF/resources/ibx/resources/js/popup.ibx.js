@@ -298,7 +298,6 @@ ibxPopupManager.onWindowEvent = function(e)
 	{
 		if(e.type == "mousedown")
 		{
-	
 			//if we clicked on a popup, then close all higher zIndex popups
 			var popup = $(e.target).closest(".ibx-popup");
 			if(popup.length)
@@ -309,12 +308,9 @@ ibxPopupManager.onWindowEvent = function(e)
 			}
 
 			//otherwise, close all open menus
-			var menus = ibxPopupManager.getOpenPopups(":openMenuPopup");
-			if(menus.length)
-			{
-				menus.ibxWidget("close", e);
-				return;
-			}
+			//var menus = ibxPopupManager.getOpenPopups(":openMenuPopup");
+			//if(menus.length)
+			//	menus.ibxWidget("close", e);
 
 			//otherwise, if any modals are open, then attempt to close any popups above the top modal, or
 			//the modal itself if it's autoClose
