@@ -309,7 +309,6 @@ $.widget("ibi.ibxEditable", $.Widget,
 	 */
 	options:
 	{
-		/**should spell checking be turned on when editing */
 		"spellcheck":false,
 		"autocomplete":false,
 		"autocapitalize":false,
