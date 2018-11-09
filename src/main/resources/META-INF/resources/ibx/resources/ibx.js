@@ -679,17 +679,24 @@ _p.findBinds = function(tBase, elFilter, sort)
 	return this.sortBinds(ret, sort); 
 };
 
-_p.toString = function()
+_p.toString = function(verbose)
 {
 	var name = this.options.name;
 	var stats = this.stats;
 	var resCounts = stats.resources.loadCounts;
-	var strOut = sformat("ibxProfile {1}: ibx {2}ms, binding {3}ms (count: {4}), resources {5}ms (counts: bundle {6}, markup {7}, scripts {8}, strings {9}, styles {10})",
-		name,
-		stats.ibx.ibxLoadTime.totalTime,
-		stats.binding.totalTime, stats.binding.count,
-		stats.resources.totalTime, resCounts["ibx-res-bundle"], resCounts["markup-file"], resCounts["script-file"], resCounts["string-file"], resCounts["style-file"]
-	);
+	var strOut = "";
+
+	if(verbose)
+		strOut = sformat("Summary: {1}\nDetail:\n{2}", this.toString(), this.serialize(this.stats, 0));
+	else
+	{
+		strOut = sformat("ibxProfile {1}: ibx {2}ms, binding {3}ms (count: {4}), resources {5}ms (counts: bundle {6}, markup {7}, scripts {8}, strings {9}, styles {10})",
+			name,
+			stats.ibx.ibxLoadTime.totalTime,
+			stats.binding.totalTime, stats.binding.count,
+			stats.resources.totalTime, resCounts["ibx-res-bundle"], resCounts["markup-file"], resCounts["script-file"], resCounts["string-file"], resCounts["style-file"]
+		);
+	}
 	return strOut;
 }
 
@@ -701,7 +708,7 @@ _p.serialize = function(o, depth, format)
 	if(o instanceof Array)
 	{
 		for(var i = 0; i < o.length; ++i)
-			strOut += this._stringify(o[i], depth + 1, format) + "\n";
+			strOut += this.serialize(o[i], depth + 1, format) + "\n";
 	}
 	else
 	if(o instanceof Object)
@@ -717,7 +724,7 @@ _p.serialize = function(o, depth, format)
 				if(prop instanceof HTMLElement)
 					continue;
 				strOut += sformat("{1}{2}:\n", strIndent, key);
-				strOut += this._stringify(prop, depth + 1, format);
+				strOut += this.serialize(prop, depth + 1, format);
 			}
 			else
 			if(!(prop instanceof Function))
