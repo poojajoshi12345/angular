@@ -283,10 +283,35 @@ $.ibi.ibxRichEdit.justify =
 }
 
 
+
+
+/**
+ * @namespace ibi.ibxEditable
+ * @class
+ * @classdesc Allows in-place editing of any elligable element (div/span/etc)
+ * @param {object} options The initial options for the widget.
+ * @example var myWidget = $(element).ibxEditable(options);
+ */
 $.widget("ibi.ibxEditable", $.Widget, 
 {
+	/**
+	 * @memberof ibi.ibxEditable.prototype
+	 * @name options
+	 * @description Configuration options for widget.
+	 * @property {object} options
+	 * @property {boolean} options.spellcheck Should the element spell check its content .
+	 * @property {boolean} options.autocomplete Should the element attempt to autocomplete while entering content.
+	 * @property {boolean} options.autocapitalize Should the element attempt to capitalize while entering content.
+	 * @property {boolean} options.autocorrect Should the element attempt to correct 'errors' while entering content.
+	 * @property {boolean} options.selectAll Should all contents be selected when entering edit mode.
+	 * @property {boolean} options.insertBrOnReturn Should element use a &lt;br> for line breaks.
+	 * @property {keycode} options.commitKey What key press should signify a commit of the current editing.
+	 * @property {keycode} options.cancelKey What key press should signify a cancel of the current editing.
+	 * @property {boolean} options.commitOnBlur Should the element commit the current text when blurred.
+	 */
 	options:
 	{
+		/**should spell checking be turned on when editing */
 		"spellcheck":false,
 		"autocomplete":false,
 		"autocapitalize":false,
@@ -335,16 +360,28 @@ $.widget("ibi.ibxEditable", $.Widget,
 		}
 	},
 	_preEditValue:null,
+	/**
+	 * @memberof ibi.ibxEditable.prototype
+	 * @description Start editing the element's content.
+	 * @param {object} editOptions The runtime options to use when editing.  Will overlay the widget's options.
+	 */
 	startEditing:function(editOptions)
 	{
 		this._preEditValue = this.element.html();//save the current text for possible reversion.
 		this.element.on("keydown blur", this._onElementEventBound);
 
 		var options = $.extend({contentEditable:true}, this.options, editOptions); 
+		this.option(options);
 		this.element.prop(options).ibxAddClass("ibx-content-editing").focus();
 		if(options.selectAll)
 			document.getSelection().selectAllChildren(this.element[0]);
 	},
+	/**
+	 * @memberof ibi.ibxEditable.prototype
+	 * @description Stop editing the element's content.
+	 * @param {boolean} revertToOriginal Should the original value (text before editing) be restored.  Essentially a "cancel".
+	 * @fires Event:ibx_changed The event's data member will have the new text
+	 */
 	stopEditing:function(revertToOriginal)
 	{
 		if(this.element.is(".ibx-content-editing"))
@@ -354,10 +391,30 @@ $.widget("ibi.ibxEditable", $.Widget,
 			if(revertToOriginal)
 				this.element.html(this._preEditValue);
 			else
-				this.element.dispatchEvent("ibx_textchanged", this.element.text(), true, false);
+				this.element.dispatchEvent("ibx_changed", this.element.text(), true, false);
 		}
 	},
+	/**
+	 * @memberof ibi.ibxEditable.prototype
+	 * @description Set the text content of the element.
+	 * @param {string} text  The text to set into the element.
+	 * @fires Event:ibx_changed The event's data member will have the new text
+	 */
+	text:function(text)
+	{
+		this.element.text(text);
+		this.element.dispatchEvent("ibx_changed", text, true, false);
+	},
+	/**
+	 * @memberof ibi.ibxEditable.prototype
+	 * @description Set the html content of the element.
+	 * @param {string} html  The html to set into the element.
+	 * @fires Event:ibx_changed The event's data member will have the new text
+	 */
+	html:function(html)
+	{
+		this.element.html(html)
+		this.element.dispatchEvent("ibx_changed", text, true, false);
+	}
 });
-
 //# sourceURL=richedit.ibx.js
-

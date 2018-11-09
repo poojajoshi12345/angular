@@ -21,6 +21,13 @@
 			<jsp:include page="/WEB-INF/jsp/global/wf_globals.jsp" flush="false" />
 			ibx(function()
 			{
+				$(".del-command").on("ibx_triggered", function(e)
+				{
+					console.log(e.type);
+					e.preventDefault();
+					e.stopPropagation();
+				});
+
 				var options = 
 				{
 					"type":"inline",
@@ -75,11 +82,12 @@
 			{
 				margin:2px;
 			}
-			.date-val
+			.date-value
 			{
 				border:1px solid #ccc;
 				margin:2px;
 				padding:2px;
+				width:100px;
 			}
 			.date-btn
 			{
@@ -88,7 +96,9 @@
 		</style>
 	</head>
 	<body class="ibx-root">
-		<div class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="center" data-ibxp-justify="center">
+		<div class="del-command" data-ibx-type="ibxCommand" data-ibxp-id="cmdDelete" data-ibxp-shortcut="CTRL+SHIFT+DEL"></div>
+		<div class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="center" data-ibxp-justify="center" data-ibxp-command="cmdDelete">
+			<div class="test" data-ibx-type="ibxButton">Test</div>
 			<div class="date-range" data-ibx-type="ibxDateRange"></div>
 		</div>
 	</body>

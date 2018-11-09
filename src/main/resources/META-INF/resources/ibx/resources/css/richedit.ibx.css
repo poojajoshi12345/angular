@@ -11,4 +11,5 @@
 .ibx-editable.ibx-content-editing
 {
 	cursor:text;
+	text-overflow:unset;
 }

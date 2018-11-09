@@ -76,6 +76,7 @@
 					dateBox.append(dateLabel, dateValue, dateButton);
 
 					$([this.dateFromButton[0], this.dateToButton[0]]).on("click", this._onDateBtnClick.bind(this));
+					$([this.dateFromValue[0], this.dateToValue[0]]).on("click", this._onDateValueClick.bind(this));
 
 
 					this.element.append(this.dateFromBox, this.dateToBox);
@@ -94,6 +95,10 @@
 					var cal = $("<div>").ibxDatePicker(this.options.dateOptions).on("ibx_change", this._onDateChange.bind(this)).data("triggerButton", btn);
 					var popup = $("<div>").ibxPopup({position:{my:"left top", at:"left bottom", of:btn.closest(".date-box"), collision:"fit flip"}});
 					popup.append(cal).ibxWidget("open");
+				},
+				_onDateValueClick:function(e)
+				{
+					$(e.currentTarget).ibxWidget("startEditing", {commitOnBlur:false});
 				},
 				_onDateChange:function(e, data)
 				{
