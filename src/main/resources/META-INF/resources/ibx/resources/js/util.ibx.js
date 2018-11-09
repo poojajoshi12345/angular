@@ -594,16 +594,10 @@ function eventMatchesShortcut(shortcut, evtKey)
 	var ret = false;
 	if(shortcut)
 	{
-		var match = true;
 		var sc = shortcut.toUpperCase();
-		if(-1 != sc.indexOf("CTRL"))
-			match = match & evtKey.ctrlKey;
-
-		if(-1 != sc.indexOf("ALT"))
-			match = match & evtKey.altKey;
-
-		if(-1 != sc.indexOf("SHIFT"))
-			match = match & evtKey.shiftKey;
+		var match = (-1 != sc.indexOf("CTRL")) ? evtKey.ctrlKey : !evtKey.ctrlKey;
+		match &= match & (-1 != sc.indexOf("ALT")) ? evtKey.altKey : !evtKey.altKey;
+		match &= match & (-1 != sc.indexOf("SHIFT")) ? evtKey.shiftKey : !evtKey.shiftKey;
 
 		sc = sc.replace(/CTRL|ALT|SHIFT|\+| /gi, "");
 		ret = match & (($.ui.keyCode[sc] == evtKey.keyCode) || (parseInt(sc, 10) == evtKey.keyCode) || (evtKey.key && sc == evtKey.key.toUpperCase()));
