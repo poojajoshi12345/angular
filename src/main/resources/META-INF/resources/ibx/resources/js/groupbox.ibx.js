@@ -42,18 +42,18 @@ $.widget("ibi.ibxGroupBox", $.ibi.ibxWidget,
 		this.options.labelOptions.iconPosition = this.options.iconPosition;
 		this.options.labelOptions.justify = (this.options.titlePosition.search("left") != -1) ? "start" : (this.options.titlePosition.search("right") != -1 ? "end" : "center");
 		this._label.ibxWidget('option', this.options.labelOptions);
-		this._label.addClass("ibx-group-box-label");
-		this.element.removeClass("ibx-group-label-pos-top ibx-group-label-pos-bottom");
+		this._label.ibxAddClass("ibx-group-box-label");
+		this.element.ibxRemoveClass("ibx-group-label-pos-top ibx-group-label-pos-bottom");
 		if (this.options.titlePosition.search("top") != -1)
 		{
-			this.element.addClass("ibx-group-label-pos-top");
+			this.element.ibxAddClass("ibx-group-label-pos-top");
 			this.element.prepend(this._labelBox);
 			this._labelBox.css("top", (-this._labelBox.outerHeight() / 2) + "px");
 			this._labelBox.css("bottom", "");
 		}
 		else
 		{
-			this.element.addClass("ibx-group-label-pos-bottom");
+			this.element.ibxAddClass("ibx-group-label-pos-bottom");
 			this.element.append(this._labelBox);
 			this._labelBox.css("bottom", (-this._labelBox.outerHeight() / 2) + "px");
 			this._labelBox.css("top", "");

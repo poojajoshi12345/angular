@@ -22,7 +22,7 @@ $.widget("ibi.ibxMenu", $.ibi.ibxPopup,
 	_create: function ()
 	{
 		this._super();
-		var box = this._box = $("<div>").ibxVBox({"wrap":"false", "align":"stretch"}).addClass("ibx-menu-box");
+		var box = this._box = $("<div>").ibxVBox({"wrap":"false", "align":"stretch"}).ibxAddClass("ibx-menu-box");
 		this.element.append(box);
 		this.element.on("keydown", this._onMenuKeyDown.bind(this));
 		this.element.on("ibx_menu_item_click", this._onMenuItemClick.bind(this));
@@ -256,15 +256,15 @@ $.widget("ibi.ibxMenuItem", $.ibi.ibxHBox,
 		this._super();
 
 		var options = this.options;
-		this._startMarker.addClass(sformat("{1} {2}", options.markerClass, options.startMarkerClass));
-		this._label.addClass(options.labelClass);
-		this._endMarker.addClass(sformat("{1} {2}", options.markerClass, options.endMarkerClass));
-		this._endMarker.toggleClass("ibx-marker-sub", !!this.subMenu());
+		this._startMarker.ibxAddClass(sformat("{1} {2}", options.markerClass, options.startMarkerClass));
+		this._label.ibxAddClass(options.labelClass);
+		this._endMarker.ibxAddClass(sformat("{1} {2}", options.markerClass, options.endMarkerClass));
+		this._endMarker.ibxToggleClass("ibx-marker-sub", !!this.subMenu());
 
 		//setup the command shortcut key for the menu item
 		var cmd = this.getCommand();
 		var scut = cmd ? cmd.ibxWidget("option", "shortcut") : null;
-		this._endMarker.text(scut).toggleClass("ibx-end-marker-cmd-shortcut", !!cmd);
+		this._endMarker.text(scut).ibxToggleClass("ibx-end-marker-cmd-shortcut", !!cmd);
 
 		//set the label's options...if there's no start marker (not check or radio) and no glyph...add space for glyph.
 		var labelOptions = options.labelOptions;
@@ -291,7 +291,7 @@ $.widget("ibi.ibxCheckMenuItem", $.ibi.ibxMenuItem,
 	_create:function()
 	{
 		this._super();
-		this.element.prepend(this._startMarker).addClass("ibx-can-toggle");
+		this.element.prepend(this._startMarker).ibxAddClass("ibx-can-toggle");
 	},
 	_setAccessibility:function(accessible, aria)
 	{
@@ -323,8 +323,8 @@ $.widget("ibi.ibxCheckMenuItem", $.ibi.ibxMenuItem,
 	_refresh:function()
 	{
 		var options = this.options;
-		this._startMarker.removeClass("ibx-marker-uncheck ibx-marker-check");
-		this._startMarker.addClass(options.checked ? "ibx-marker-check" : "ibx-marker-uncheck");
+		this._startMarker.ibxRemoveClass("ibx-marker-uncheck ibx-marker-check");
+		this._startMarker.ibxAddClass(options.checked ? "ibx-marker-check" : "ibx-marker-uncheck");
 		this._super();
 	}
 });
@@ -366,8 +366,8 @@ $.widget("ibi.ibxRadioMenuItem", $.ibi.ibxCheckMenuItem,
 	_refresh:function()
 	{
 		var options = this.options;
-		this._startMarker.removeClass("ibx-marker-radio-uncheck ibx-marker-radio-check");
-		this._startMarker.addClass(options.checked ? "ibx-marker-radio-check" : "ibx-marker-radio-uncheck");
+		this._startMarker.ibxRemoveClass("ibx-marker-radio-uncheck ibx-marker-radio-check");
+		this._startMarker.ibxAddClass(options.checked ? "ibx-marker-radio-check" : "ibx-marker-radio-uncheck");
 		this._super();
 	}
 });
@@ -575,7 +575,7 @@ $.widget("ibi.ibxSplitMenuButton", $.ibi.ibxButtonSimple,
 		menu.css("minWidth", this.element.css("width"));
 
 		var menuItems = menu.ibxWidget("children");
-		menuItems.removeClass("ibx-split-button-default-item").filter(options.defaultMenuItem).addClass("ibx-split-button-default-item");
+		menuItems.ibxRemoveClass("ibx-split-button-default-item").filter(options.defaultMenuItem).ibxAddClass("ibx-split-button-default-item");
 	}
 });
 //defined types mostly for markup readability

@@ -55,8 +55,8 @@ $.widget("ibi.ibxProgressBar", $.ibi.ibxHBox,
 	_destroy:function()
 	{
 		this._super();
-		this.progText.ibxWidget("destroy").removeClass("ibx-progress-label");
-		this.progMarker.ibxWidget("destroy").removeClass("ibx-progress-marker-start-end, ibx-progress-marker-end-start, ibx-progress-complete");
+		this.progText.ibxWidget("destroy").ibxRemoveClass("ibx-progress-label");
+		this.progMarker.ibxWidget("destroy").ibxRemoveClass("ibx-progress-marker-start-end, ibx-progress-marker-end-start, ibx-progress-complete");
 	},
 	inProgress:function()
 	{
@@ -72,8 +72,8 @@ $.widget("ibi.ibxProgressBar", $.ibi.ibxHBox,
 		this.progText.text(options.showProgText ? (options.progText || options.curVal) : "");
 
 		var flex = (options.curVal >= options.maxVal) ? 1 : ((options.curVal - options.minVal)/(options.maxVal - options.minVal));
-		this.progMarker.css("flex-grow", flex).addClass(options.markerClasses).toggleClass("ibx-progress-marker-complete", (flex == 1));
-		this.progText.css("flex-grow", 1-flex).addClass(options.progTextClasses);
+		this.progMarker.css("flex-grow", flex).ibxAddClass(options.markerClasses).ibxToggleClass("ibx-progress-marker-complete", (flex == 1));
+		this.progText.css("flex-grow", 1-flex).ibxAddClass(options.progTextClasses);
 	
 		this.element.append(this.progMarker, this.progText);
 	}
@@ -197,7 +197,7 @@ $.widget("ibi.ibxWaiting", $.ibi.ibxLabel,
 	_refresh:function()
 	{
 		var options = this.options;
-		this._glyph.toggleClass("wait-stretch", options.stretch)
+		this._glyph.ibxToggleClass("wait-stretch", options.stretch)
 		this._super();
 	}
 });
@@ -240,7 +240,7 @@ ibx.waitStart = function(el, message)
 		ibx.waitStop(el);
 
 		options = (typeof(message) === "string") ? {text:message} : message;//overload message to allow string/object.
-		var waitTemp = $("<div>").addClass(global ? "ibx-waiting-global" : null).ibxWaiting(options);
+		var waitTemp = $("<div>").ibxAddClass(global ? "ibx-waiting-global" : null).ibxWaiting(options);
 		var waitInfo = {posInline:el[0].style.position,	ibxWaiting:waitTemp};
 
 		if(!el.is("body") && el.css("position") == "static")

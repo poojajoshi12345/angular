@@ -252,7 +252,7 @@ $.widget("ibi.ibxSelectBase", $.ibi.ibxTextField,
 		if (this._control)
 		{
 			if (this.options.controlClasses && this._control)
-				this._control.addClass(this.options.controlClasses);
+				this._control.ibxAddClass(this.options.controlClasses);
 		}
 	}
 });
@@ -434,7 +434,7 @@ $.widget("ibi.ibxSelectItemList", $.ibi.ibxVBox,
 			{
 				el.ibxWidget("option", "selectCtrl", this.element);
 				var children = el.children(".ibx-select-item");
-				children.prepend($("<div>").addClass("ibx-select-group-marker")).addClass("ibx-select-group-item ibx-radio-group-" + $(el).attr("id"));
+				children.prepend($("<div>").ibxAddClass("ibx-select-group-marker")).ibxAddClass("ibx-select-group-item ibx-radio-group-" + $(el).attr("id"));
 				this._super(children, el, false, false);
 				children.each(function (index, el)
 				{
@@ -502,7 +502,7 @@ $.widget("ibi.ibxSelectItemList", $.ibi.ibxVBox,
 			// select block - select between current anchor and current item.
 			//				- if no current anchor, select from beginning to current item
 			var all = this.element.find(".ibx-select-item");
-			all.removeClass("sel-selected");
+			all.ibxRemoveClass("sel-selected");
 			var anchor = this.element.find(".sel-anchor").first();
 			if (anchor.length == 0)
 				anchor = all.first();
@@ -523,13 +523,13 @@ $.widget("ibi.ibxSelectItemList", $.ibi.ibxVBox,
 					if (!bAdd && (current.is(selItem) || current.is(anchor)))
 					{
 						bAdd = true;
-						current.addClass("sel-selected");
+						current.ibxAddClass("sel-selected");
 					}
 					else
 					{
 						if (bAdd)
 						{
-							current.addClass("sel-selected");
+							current.ibxAddClass("sel-selected");
 							if (current.is(selItem) || current.is(anchor))
 								break;
 						}
@@ -589,14 +589,14 @@ $.widget("ibi.ibxSelectItemList", $.ibi.ibxVBox,
 		this.element.find(".ibx-select-radio-item,.ibx-select-check-item").each(function (index, el) { $(el).data("ibxWidget").option({"checked": false, "selected": false}); });
 		if (!this.options.multiSelect || !bKeep)
 		{
-			this.element.find(".sel-selected").removeClass("sel-selected");
+			this.element.find(".sel-selected").ibxRemoveClass("sel-selected");
 		}
 		if (!this.options.multiSelect || !bKeepAnchor)
 		{
-			this.element.find(".sel-anchor").removeClass("sel-anchor");
+			this.element.find(".sel-anchor").ibxRemoveClass("sel-anchor");
 			if (selItem.length > 0)
 			{
-				selItem.addClass("sel-selected sel-anchor");
+				selItem.ibxAddClass("sel-selected sel-anchor");
 				selItem.data("ibxWidget").option({"checked": true, "selected": true});
 			}
 		}
@@ -621,14 +621,14 @@ $.widget("ibi.ibxSelectItemList", $.ibi.ibxVBox,
 		if (selItem.length == 0)
 			return;
 
-		selItem.removeClass("sel-selected");
+		selItem.ibxRemoveClass("sel-selected");
 		selItem.each(function (index,el){
 			$(el).ibxWidget("option", {"checked": false, "selected": false});
 		});
 		if (!bKeepAnchor)
 		{
-			this.element.find(".sel-anchor").removeClass("sel-anchor");
-			selItem.first().addClass("sel-anchor");
+			this.element.find(".sel-anchor").ibxRemoveClass("sel-anchor");
+			selItem.first().ibxAddClass("sel-anchor");
 		}
 		if (!bNoUpdate)
 		{
@@ -645,7 +645,7 @@ $.widget("ibi.ibxSelectItemList", $.ibi.ibxVBox,
 	},
 	_resetHighlight: function ()
 	{
-		this.element.find(".ibx-select-item").removeClass("ibx-select-item-highlight");
+		this.element.find(".ibx-select-item").ibxRemoveClass("ibx-select-item-highlight");
 		this.element.find(".ibx-select-item").show();
 		this.element.find(".ibx-select-group").show();
 	},
@@ -665,17 +665,17 @@ $.widget("ibi.ibxSelectItemList", $.ibi.ibxVBox,
 				{
 					if (!found && !this.options.filter)
 					{
-						$(el).addClass("ibx-select-item-highlight");
+						$(el).ibxAddClass("ibx-select-item-highlight");
 						el.scrollIntoView(false);
 					}
 					else
-						$(el).removeClass("ibx-select-item-highlight");
+						$(el).ibxRemoveClass("ibx-select-item-highlight");
 					found = true;
 					$(el).show();
 				}
 				else
 				{
-					$(el).removeClass("ibx-select-item-highlight");
+					$(el).ibxRemoveClass("ibx-select-item-highlight");
 					if (this.options.filter)
 						$(el).hide();
 				}
@@ -893,7 +893,7 @@ $.widget("ibi.ibxSelectCheckItem", $.ibi.ibxCheckBoxSimple,
 	_widgetClass: "ibx-select-check-item",
 	_create: function ()
 	{
-		this.element.attr("tabIndex", -1).addClass("ibx-select-item");
+		this.element.attr("tabIndex", -1).ibxAddClass("ibx-select-item");
 		this._super();
 	},
 });
@@ -908,7 +908,7 @@ $.widget("ibi.ibxSelectRadioItem", $.ibi.ibxRadioButtonSimple,
 	_widgetClass: "ibx-select-radio-item",
 	_create: function ()
 	{
-		this.element.attr("tabIndex", -1).addClass("ibx-select-item");
+		this.element.attr("tabIndex", -1).ibxAddClass("ibx-select-item");
 		this._super();
 	},
 });
@@ -953,7 +953,7 @@ $.widget("ibi.ibxSelectGroup", $.ibi.ibxLabel,
 			el = $(el);
 			var children = this.children();
 			var after = (children.length == 0) ? this.element : after = children[children.length - 1];
-			el.prepend($("<div>").addClass("ibx-select-group-marker")).addClass("ibx-select-group-item ibx-radio-group-" + $(this.element).attr("id"));
+			el.prepend($("<div>").ibxAddClass("ibx-select-group-marker")).ibxAddClass("ibx-select-group-item ibx-radio-group-" + $(this.element).attr("id"));
 			el.insertAfter(after);
 			if (el.ibxWidget("option", "selected"))
 				this.options.selectCtrl.ibxWidget("selectItem", el);
@@ -1303,9 +1303,9 @@ $.widget("ibi.ibxSelectItemListPaged", $.ibi.ibxVBox,
 		else
 			this._pageBox.hide();
 		if (this.options.search || this.options.selectionControls || this._enablePaging)
-			this.element.addClass("paged");
+			this.element.ibxAddClass("paged");
 		else
-			this.element.removeClass("paged");
+			this.element.ibxRemoveClass("paged");
 		this._listControl.ibxWidget("option", "multiSelect", this.options.multiSelect);
 		this._setPage();
 	},
@@ -1385,7 +1385,7 @@ $.widget("ibi.ibxSelectItemListPaged", $.ibi.ibxVBox,
 		var items = this.element.find(".ibx-paged-item");
 		items.each(function (index, el){
 			el = $(el);
-			el.removeClass("sel-selected");
+			el.ibxRemoveClass("sel-selected");
 			el.ibxWidget("option", "valObj").checked = true;
 		});
 		this._listControl.ibxWidget("selectAll");
@@ -1452,7 +1452,7 @@ $.widget("ibi.ibxSelectItemListPaged", $.ibi.ibxVBox,
 			else
 				item = $("<div class='ibx-paged-item'>").ibxSelectItem({"text": valInfo.display ? valInfo.display : valInfo.value, "userValue": valInfo.value, "selected": valInfo.checked });
 			if (valInfo.class)
-				item.addClass(valInfo.class);
+				item.ibxAddClass(valInfo.class);
 			item.ibxWidget("option", "valObj", valInfo);
 			nodes.push(item[0]);
 		}

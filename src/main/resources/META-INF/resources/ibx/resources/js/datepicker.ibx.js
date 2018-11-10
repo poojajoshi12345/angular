@@ -26,7 +26,7 @@ $.widget("ibi.ibxDatePicker", $.ibi.ibxVBox,
 		this.element.on("focus", this._showPopup.bind(this));
 		this._input = $('<div class="ibx-datepicker-input">').ibxLabel({glyphClasses:"fa fa-calendar", 'align': 'stretch'}).on('click', this._showPopup.bind(this));
 		this._clear = $('<div class="ibx-datepicker-clear">').ibxButtonSimple({glyphClasses:"fa fa-times"}).on('click', this._onClear.bind(this)).hide();
-		this._inputWrapper = $('<div>').ibxHBox({align: 'center'}).addClass('ibx-datepicker-input-wrapper');
+		this._inputWrapper = $('<div>').ibxHBox({align: 'center'}).ibxAddClass('ibx-datepicker-input-wrapper');
 		this._inputWrapper.append(this._input, this._clear);
 		this._dateWrapper = $('<div>').ibxFlexBox({ 'wrap': false });
 		this._datePicker = $('<div>').datepicker({
@@ -55,7 +55,7 @@ $.widget("ibi.ibxDatePicker", $.ibi.ibxVBox,
 			"dayNamesShort" : (eval(ibx.resourceMgr.getString("IBX_DP_DAYS_SHORT"))),
 			"dayNamesMin" : (eval(ibx.resourceMgr.getString("IBX_DP_DAYS_MIN"))),
 			"buttonText" : ibx.resourceMgr.getString("IBX_DP_BUTTON_TEXT")};
-		this._dateWrapper.append(this._datePicker).addClass('ibx-datepicker-date-wrapper');
+		this._dateWrapper.append(this._datePicker).ibxAddClass('ibx-datepicker-date-wrapper');
 		this.element.append(this._inputWrapper, this._dateWrapper);
 		this._popup = $('<div class="ibx-datepicker-popup">').ibxPopup({'destroyOnClose': false});
 	},
@@ -104,13 +104,13 @@ $.widget("ibi.ibxDatePicker", $.ibi.ibxVBox,
 	},
 	_refresh: function ()
 	{
-		this.element.removeClass('popup simple inline');
+		this.element.ibxRemoveClass('popup simple inline');
 		if (this.options.showClear)
 			this._clear.show();
 		else
 			this._clear.hide();
 		if (this.options.pickerClasses)
-			this._popup.addClass(this.options.pickerClasses);
+			this._popup.ibxAddClass(this.options.pickerClasses);
 		this._datePicker.datepicker('option', this.options);
 		var dateObj = $.datepicker.parseDate(this.options.dateFormat, this.options.date) || new Date();
 		this._datePicker.datepicker('setDate', dateObj);
@@ -122,18 +122,18 @@ $.widget("ibi.ibxDatePicker", $.ibi.ibxVBox,
 		{
 			default:
 			case 'popup':
-				this.element.addClass('popup');
+				this.element.ibxAddClass('popup');
 				this._inputWrapper.show();
 				this._popup.ibxWidget('option', 'position', { "my": "left top", "at": "left bottom+5px", "of": this._input, "collision": "fit" });
 				this._popup.append(this._dateWrapper);
 				break;
 			case 'simple':
-				this.element.addClass('simple');
+				this.element.ibxAddClass('simple');
 				this._inputWrapper.show();
 				this.element.append(this._dateWrapper);
 				break;
 			case 'inline':
-				this.element.addClass('inline');
+				this.element.ibxAddClass('inline');
 				this._inputWrapper.hide();
 				this.element.append(this._dateWrapper);
 				break;

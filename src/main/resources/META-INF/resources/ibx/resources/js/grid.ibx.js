@@ -62,7 +62,7 @@ $.widget("ibi.ibxGrid", $.ibi.ibxWidget,
 			"align-items":				options.align,				//stretch - default
 		}
 		this.element.css(gridCss);
-		options.inline ? this.element.addClass("gd-inline") : this.element.removeClass("gd-inline");
+		options.inline ? this.element.ibxAddClass("gd-inline") : this.element.ibxRemoveClass("gd-inline");
 
 		this.element.children().each(function(options, idx, cell)
 		{
@@ -99,7 +99,7 @@ $.widget("ibi.ibxGrid", $.ibi.ibxWidget,
 				//Standard CSS not supported by IE
 				"grid-area":				cell.data("ibxArea"),
 			}
-			cell.css(css).addClass("ibx-grid-cell");
+			cell.css(css).ibxAddClass("ibx-grid-cell");
 		}.bind(this, options));		
 	}
 });
@@ -144,7 +144,7 @@ $.widget("ibi.ibxFlexGrid", $.ibi.ibxHBox,
 	},
 	remove:function(el, destroy, refresh)
 	{
-		this.children().removeAttr("data-grid-row data-grid-col data-grid-span").removeClass("ibx-flex-grid-cell");
+		this.children().removeAttr("data-grid-row data-grid-col data-grid-span").ibxRemoveClass("ibx-flex-grid-cell");
 		this._super(el, destroy, refresh);
 	},
 	_colSize:-1,
@@ -178,7 +178,7 @@ $.widget("ibi.ibxFlexGrid", $.ibi.ibxHBox,
 			colSpan = cell.data("ibxColSpan") || 1;
 			var cellClasses = sformat("ibx-flex-grid-cell ibx-flex-grid-span-{1}", colSpan);
 			var width = (colSpan * colSize);
-			cell.addClass(cellClasses).css("width", sformat("{1}%", width))
+			cell.ibxAddClass(cellClasses).css("width", sformat("{1}%", width))
 			cell.attr({"data-grid-row": curRow, "data-grid-col": spanCount, "data-grid-span": colSpan});
 			spanCount += colSpan;
 		}.bind(this));

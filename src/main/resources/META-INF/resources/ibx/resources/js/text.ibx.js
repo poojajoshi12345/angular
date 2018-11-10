@@ -186,11 +186,11 @@ $.widget("ibi.ibxTextField", $.ibi.ibxFlexBox,
 			this._textInput.css("text-overflow", "");
 		if (this.options.autoSize)
 		{
-			this.element.addClass('txt-auto-size');
+			this.element.ibxAddClass('txt-auto-size');
 			this._setAutoSize();
 		}
 		else
-			this.element.removeClass('txt-auto-size');
+			this.element.ibxRemoveClass('txt-auto-size');
 
 		this._textInput.css("width", this.options.autoSize ? "1px" : "");
 	}

@@ -20,7 +20,7 @@ $.widget("ibi.ibxIFrame", $.ibi.ibxWidget,
 	{
 		this._super();
 		this._loadPromise = new $.Deferred();
-		var frame = this._iFrame = $("<iframe tabindex='-1'>").addClass("ibx-iframe-frame");
+		var frame = this._iFrame = $("<iframe tabindex='-1'>").ibxAddClass("ibx-iframe-frame");
 		frame.on("load", this._onIFrameEvent.bind(this));
 		this.element.append(frame);
 

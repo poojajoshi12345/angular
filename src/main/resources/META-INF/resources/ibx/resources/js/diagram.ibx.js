@@ -86,7 +86,7 @@ $.widget('ibi.ibxDiagram', $.ibi.ibxWidget, {
 		node.init();
 
 		if (classList) {
-			node.element.addClass(classList.join(' '));
+			node.element.ibxAddClass(classList.join(' '));
 		}
 		if (refresh) {
 			this.refresh();
@@ -140,7 +140,7 @@ $.widget('ibi.ibxDiagram', $.ibi.ibxWidget, {
 			this._nodeContainer.children().each(function(idx, child) {
 				child = $(child).ibxDiagramNode('instance');
 				child.options.selected = false;
-				child.element.removeClass('ui-selected');
+				child.element.ibxRemoveClass('ui-selected');
 			});
 		}
 		var node = this.convertToNode(e.currentTarget);
@@ -178,7 +178,7 @@ $.widget('ibi.ibxDiagram', $.ibi.ibxWidget, {
 	addConnection: function(connection) {
 		var g = $.ibi.ibxDiagram.getConnectionPath(connection.from.tip, connection.to.tip);
 		if (connection.className) {
-			g.addClass(connection.className);
+			g.ibxAddClass(connection.className);
 		}
 		this._svgContainer.append(g);
 		var lineWidth = parseInt(window.getComputedStyle(g[0].firstElementChild).strokeWidth, 10);
@@ -285,7 +285,7 @@ $.ibi.ibxDiagram.getConnectionPath = function(fromTip, toTip) {
 		tip2.setAttribute('transform', 'translate(0, 0) rotate(180)');
 		g.appendChild(tip2);
 	}
-	return $(g).addClass('ibx-diagram-connection');
+	return $(g).ibxAddClass('ibx-diagram-connection');
 };
 
 $.widget('ibi.ibxDiagramNode', $.ibi.ibxWidget, {  // TODO: derive from base jquery ui widget ($.Widget)
@@ -305,7 +305,7 @@ $.widget('ibi.ibxDiagramNode', $.ibi.ibxWidget, {  // TODO: derive from base jqu
 	_create: function() {
 		this._super();
 		if (this.options.className) {
-			this.element.addClass(this.options.className);
+			this.element.ibxAddClass(this.options.className);
 		}
 		if (this.options.text) {
 			this.element.html($('<span class="ibx-diagram-node-text">' + this.options.text + '</span>'));
@@ -322,7 +322,7 @@ $.widget('ibi.ibxDiagramNode', $.ibi.ibxWidget, {  // TODO: derive from base jqu
 			width: this.options.width,
 			height: this.options.height
 		});
-		this.element.toggleClass('ibx-selectable', this.options.selectable);
+		this.element.ibxToggleClass('ibx-selectable', this.options.selectable);
 		if (this.diagram) {
 			this.element.draggable({disabled: !this.options.moveable});
 			this.lockToGrid();
@@ -376,7 +376,7 @@ $.widget('ibi.ibxDiagramNode', $.ibi.ibxWidget, {  // TODO: derive from base jqu
 				diagram.updateConnections();
 			});
 
-		nodeEl.toggleClass('ibx-selectable', options.selectable);
+		nodeEl.ibxToggleClass('ibx-selectable', options.selectable);
 		nodeEl.attr('tabindex', diagram._nodeContainer.children().length);  // Need tabindex to make basic divs focusable and receive keyboard events
 		nodeEl.keydown(function(e) {
 			if (e.keyCode !== $.ui.keyCode.DELETE) {  // TODO: move function callback to prototype callback or similar
@@ -418,7 +418,7 @@ $.widget('ibi.ibxDiagramNode', $.ibi.ibxWidget, {  // TODO: derive from base jqu
 				annotation = this.addAnnotation(annotation);
 
 				if (classList) {
-					annotation.element.addClass(classList.join(' '));
+					annotation.element.ibxAddClass(classList.join(' '));
 				}
 				return annotation;
 			}).bind(this));
@@ -462,7 +462,7 @@ $.widget('ibi.ibxDiagramNode', $.ibi.ibxWidget, {  // TODO: derive from base jqu
 	},
 	setSelected: function(selected) {
 		this.options.selected = selected;
-		this.element.toggleClass('ui-selected', selected);
+		this.element.ibxToggleClass('ui-selected', selected);
 	}
 });
 
@@ -479,7 +479,7 @@ $.widget('ibi.ibxDiagramAnnotation', $.ibi.ibxWidget, {
 	_create: function() {
 		this._super();
 		if (this.options.className) {
-			this.element.addClass(this.options.className);
+			this.element.ibxAddClass(this.options.className);
 		}
 		if (this.options.text) {
 			this.element.html($('<span class="ibx-diagram-annotation-text">' + this.options.text + '</span>'));

@@ -31,7 +31,7 @@ $.widget("ibi.ibxSplitter", $.ibi.ibxWidget,
 				this._initialized = true;
 			}
 
-			$(document.body).addClass(bVertical ? "ibx-body-splitter-v" : "ibx-body-splitter-h").css("pointerEvents", "none");
+			$(document.body).ibxAddClass(bVertical ? "ibx-body-splitter-v" : "ibx-body-splitter-h").css("pointerEvents", "none");
 			$(document).on("mouseup mousemove", this._fnSplitterMouseEvent);
 			this._eLast = e;
 			this._trigger("resizestart", null, { "el1": this.element.prev(), "el2": this.element.next() });
@@ -39,7 +39,7 @@ $.widget("ibi.ibxSplitter", $.ibi.ibxWidget,
 		else
 		if(eType == "mouseup")
 		{
-			$(document.body).removeClass("ibx-body-splitter-v ibx-body-splitter-h").css("pointerEvents", "");
+			$(document.body).ibxRemoveClass("ibx-body-splitter-v ibx-body-splitter-h").css("pointerEvents", "");
 			$(document).off("mouseup mousemove", this._fnSplitterMouseEvent);
 			delete this._eLast;
 			this._trigger("resizeend", null, { "el1": this.element.prev(), "el2": this.element.next() });
@@ -89,7 +89,7 @@ $.widget("ibi.ibxSplitter", $.ibi.ibxWidget,
 	{
 		this._super();
 		this.reset()
-		this.element.removeClass("ibx-splitter-v ibx-splitter-h");
+		this.element.ibxRemoveClass("ibx-splitter-v ibx-splitter-h");
 	},
 	reset:function()
 	{
@@ -101,7 +101,7 @@ $.widget("ibi.ibxSplitter", $.ibi.ibxWidget,
 		this._super();
 		var options = this.options;
 		var bVertical = (options.orientation == "vertical");
-		this.element.removeClass("ibx-splitter-v ibx-splitter-h").addClass(bVertical ? "ibx-splitter-v" : "ibx-splitter-h");
+		this.element.ibxRemoveClass("ibx-splitter-v ibx-splitter-h").ibxAddClass(bVertical ? "ibx-splitter-v" : "ibx-splitter-h");
 	}
 });
 $.widget("ibi.ibxHSplitter", $.ibi.ibxSplitter, {options:{orientation:"horizontal"}, _widgetClass:"ibx-splitter-horizontal"});

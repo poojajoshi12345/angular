@@ -24,7 +24,7 @@ $.widget("ibi.ibxFlexBox", $.ibi.ibxWidget,
 	_destroy:function()
 	{
 		this._super();
-		this.element.removeClass(this._curClasses);
+		this.element.ibxRemoveClass(this._curClasses);
 	},
 	_refresh:function()
 	{
@@ -46,7 +46,7 @@ $.widget("ibi.ibxFlexBox", $.ibi.ibxWidget,
 		//classes += fc["alignContent"][options.alignContent];
 		classes += fc["childSizing"][options.childSizing] + " ";
 		this._curClasses = classes;
-		this.element.addClass(classes);
+		this.element.ibxAddClass(classes);
 		this._super();
 	}
 });

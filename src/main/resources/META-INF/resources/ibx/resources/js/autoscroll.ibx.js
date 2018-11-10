@@ -22,7 +22,7 @@ $.widget("ibi.ibxAutoScroll", $.Widget,
 	_create:function()
 	{
 		this._super();
-		this.element.addClass(this._widgetClass);
+		this.element.ibxAddClass(this._widgetClass);
 		var el = this.element[0];
 		el.addEventListener("mousemove", this._onMouseEvent.bind(this), true);
 		el.addEventListener("mouseover", this._onMouseEvent.bind(this), true);
@@ -32,7 +32,7 @@ $.widget("ibi.ibxAutoScroll", $.Widget,
 	{
 		this._super();
 		this.disable();
-		this.element.removeClass(this._widgetClass);
+		this.element.ibxRemoveClass(this._widgetClass);
 	},
 	_onMouseEvent: function(e)
 	{

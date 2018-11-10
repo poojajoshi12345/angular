@@ -110,7 +110,7 @@ $.widget("ibi.ibxSlider", $.ibi.ibxGrid,
 	_focusSlider: function (e)
 	{
 		this._activeSlider = this._slider;
-		this._slider.addClass('ibx-slider-marker-move');
+		this._slider.ibxAddClass('ibx-slider-marker-move');
 		var info = this.info();
 		this._moveSlider(e);
 		this._slider.focus();
@@ -145,7 +145,7 @@ $.widget("ibi.ibxSlider", $.ibi.ibxGrid,
 					this._hidePopup();
 					$(document.body).css("pointerEvents", "");
 					$(document).off("mouseup mousemove", this._fnSliderMouseEvent);
-					this._activeSlider.removeClass('ibx-slider-marker-move');
+					this._activeSlider.ibxRemoveClass('ibx-slider-marker-move');
 					e.preventDefault();
 					this._trigger("end", null, this.info());
 				}
@@ -476,48 +476,48 @@ $.widget("ibi.ibxSlider", $.ibi.ibxGrid,
 		if (horiz)
 		{
 			this.options.direction = "row";
-			this._sliderWrapper.removeClass('ibx-slider-vertical');
-			this._sliderWrapper.addClass('ibx-slider-horizontal');
+			this._sliderWrapper.ibxRemoveClass('ibx-slider-vertical');
+			this._sliderWrapper.ibxAddClass('ibx-slider-horizontal');
 			this._slider.css(flipLayout ? 'right' : 'left', Math.ceil((info.value - info.min) * (this._sliderWrapper.outerWidth() - (this.options.edge == "center" ? 0 : this._slider.outerWidth())) / (info.max - info.min) - (this.options.edge == "center" ? (this._slider.outerWidth() / 2) : 0)) + 'px');
 			this._slider.css('top', Math.ceil((this._sliderWrapper.outerHeight() - this._slider.outerHeight()) / 2) + "px");
-			this.element.removeClass('ibx-slider-vertical');
-			this.element.addClass('ibx-slider-horizontal');
-			this._labelMin.removeClass('ibx-slider-vertical');
-			this._labelMin.addClass('ibx-slider-horizontal');
-			this._labelMax.removeClass('ibx-slider-vertical');
-			this._labelMax.addClass('ibx-slider-horizontal');
-			this._labelValue.removeClass('ibx-slider-vertical');
-			this._labelValue.addClass('ibx-slider-horizontal');
-			this._sliderBody.removeClass('ibx-slider-body-vertical');
-			this._sliderBody.addClass('ibx-slider-body-horizontal');
+			this.element.ibxRemoveClass('ibx-slider-vertical');
+			this.element.ibxAddClass('ibx-slider-horizontal');
+			this._labelMin.ibxRemoveClass('ibx-slider-vertical');
+			this._labelMin.ibxAddClass('ibx-slider-horizontal');
+			this._labelMax.ibxRemoveClass('ibx-slider-vertical');
+			this._labelMax.ibxAddClass('ibx-slider-horizontal');
+			this._labelValue.ibxRemoveClass('ibx-slider-vertical');
+			this._labelValue.ibxAddClass('ibx-slider-horizontal');
+			this._sliderBody.ibxRemoveClass('ibx-slider-body-vertical');
+			this._sliderBody.ibxAddClass('ibx-slider-body-horizontal');
 			this._sliderBody.css('top', Math.ceil((this._sliderWrapper.outerHeight() - this._sliderBody.outerHeight()) / 2) + "px");
 		}
 		else
 		{
 			this.options.direction = "column";
 			this.options.iconPosition = "bottom";
-			this._sliderWrapper.removeClass('ibx-slider-horizontal');
-			this._sliderWrapper.addClass('ibx-slider-vertical');
+			this._sliderWrapper.ibxRemoveClass('ibx-slider-horizontal');
+			this._sliderWrapper.ibxAddClass('ibx-slider-vertical');
 			this._slider.css(flipLayout ? 'top' : 'bottom', Math.ceil((info.value - info.min) * (this._sliderWrapper.outerHeight() - (this.options.edge == "center" ? 0 : this._slider.outerHeight())) / (info.max - info.min) - (this.options.edge == "center" ? (this._slider.outerHeight() / 2) : 0)) + 'px');
 			this._slider.css('left', Math.ceil((this._sliderWrapper.outerWidth() - this._slider.outerWidth()) / 2) + "px");
-			this.element.removeClass('ibx-slider-horizontal');
-			this.element.addClass('ibx-slider-vertical');
-			this._labelMin.removeClass('ibx-slider-horizontal');
-			this._labelMin.addClass('ibx-slider-vertical');
-			this._labelMax.removeClass('ibx-slider-horizontal');
-			this._labelMax.addClass('ibx-slider-vertical');
-			this._labelValue.removeClass('ibx-slider-horizontal');
-			this._labelValue.addClass('ibx-slider-vertical');
-			this._sliderBody.removeClass('ibx-slider-body-horizontal');
-			this._sliderBody.addClass('ibx-slider-body-vertical');
+			this.element.ibxRemoveClass('ibx-slider-horizontal');
+			this.element.ibxAddClass('ibx-slider-vertical');
+			this._labelMin.ibxRemoveClass('ibx-slider-horizontal');
+			this._labelMin.ibxAddClass('ibx-slider-vertical');
+			this._labelMax.ibxRemoveClass('ibx-slider-horizontal');
+			this._labelMax.ibxAddClass('ibx-slider-vertical');
+			this._labelValue.ibxRemoveClass('ibx-slider-horizontal');
+			this._labelValue.ibxAddClass('ibx-slider-vertical');
+			this._sliderBody.ibxRemoveClass('ibx-slider-body-horizontal');
+			this._sliderBody.ibxAddClass('ibx-slider-body-vertical');
 			this._sliderBody.css('left', Math.ceil((this._sliderWrapper.outerWidth() - this._sliderBody.outerWidth()) / 2) + "px");
 		}
 
-		this._slider.removeClass('ibx-slider-marker-round locked');
+		this._slider.ibxRemoveClass('ibx-slider-marker-round locked');
 		if (this.options.lock)
-			this._slider.addClass('locked');
+			this._slider.ibxAddClass('locked');
 		if (this.options.markerShape == 'circle')
-			this._slider.addClass('ibx-slider-marker-round');
+			this._slider.ibxAddClass('ibx-slider-marker-round');
 	}
 });
 
@@ -650,7 +650,7 @@ $.widget("ibi.ibxRange", $.ibi.ibxSlider,
 			}
 		}
 
-		this._activeSlider.addClass('ibx-slider-marker-move');
+		this._activeSlider.ibxAddClass('ibx-slider-marker-move');
 		var info = this.info();
 		this._moveSlider(e);
 		this._activeSlider.focus();
@@ -763,25 +763,25 @@ $.widget("ibi.ibxRange", $.ibi.ibxSlider,
 		{
 			this._slider2.css(flipLayout ? 'right' : 'left', Math.ceil((info.value2 - info.min) * (this._sliderWrapper.outerWidth() - (this.options.edge == "center" ? 0 : this._slider2.outerWidth())) / (info.max - info.min) - (this.options.edge == "center" ? (this._slider2.outerWidth() / 2) : 0)) + 'px');
 			this._slider2.css('top', Math.ceil((this._sliderWrapper.outerHeight() - this._slider2.outerHeight()) / 2) + "px");
-			this._sliderRangeBody.removeClass('ibx-slider-range-body-vertical');
-			this._sliderRangeBody.addClass('ibx-slider-range-body-horizontal');
+			this._sliderRangeBody.ibxRemoveClass('ibx-slider-range-body-vertical');
+			this._sliderRangeBody.ibxAddClass('ibx-slider-range-body-horizontal');
 			this._sliderRangeBody.css('top', Math.ceil((this._sliderWrapper.outerHeight() - this._sliderRangeBody.outerHeight()) / 2) + "px");
 		}
 		else
 		{
 			this._slider2.css(flipLayout ? 'top' : 'bottom', Math.ceil((info.value2 - info.min) * (this._sliderWrapper.outerHeight() - (this.options.edge == "center" ? 0 : this._slider2.outerHeight())) / (info.max - info.min) - (this.options.edge == "center" ? (this._slider2.outerHeight() / 2) : 0)) + 'px');
 			this._slider2.css('left', Math.ceil((this._sliderWrapper.outerWidth() - this._slider2.outerWidth()) / 2) + "px");
-			this._sliderRangeBody.removeClass('ibx-slider-range-body-horizontal');
-			this._sliderRangeBody.addClass('ibx-slider-range-body-vertical');
+			this._sliderRangeBody.ibxRemoveClass('ibx-slider-range-body-horizontal');
+			this._sliderRangeBody.ibxAddClass('ibx-slider-range-body-vertical');
 			this._sliderRangeBody.css('left', Math.ceil((this._sliderWrapper.outerWidth() - this._sliderRangeBody.outerWidth()) / 2) + "px");
 		}
 
-		this._slider2.removeClass('ibx-slider-marker-round locked');
+		this._slider2.ibxRemoveClass('ibx-slider-marker-round locked');
 		if (this.options.lock2)
-			this._slider2.addClass('locked');
+			this._slider2.ibxAddClass('locked');
 		var markerShape = this.options.markerShape2 ? this.options.markerShape2 : this.options.markerShape;
 		if (markerShape == 'circle')
-			this._slider2.addClass('ibx-slider-marker-round');
+			this._slider2.ibxAddClass('ibx-slider-marker-round');
 
 		var s = flipLayout ? this._slider2 : this._slider;
 		var s2 = flipLayout ? this._slider : this._slider2;
@@ -824,7 +824,7 @@ $.widget("ibi.ibxLeftRange", $.ibi.ibxRange,
 	_focusSlider: function (e)
 	{
 		this._activeSlider = this._slider2;
-		this._activeSlider.addClass('ibx-slider-marker-move');
+		this._activeSlider.ibxAddClass('ibx-slider-marker-move');
 		var info = this.info();
 		this._moveSlider(e);
 		this._activeSlider.focus();
@@ -848,7 +848,7 @@ $.widget("ibi.ibxRightRange", $.ibi.ibxRange,
 	_focusSlider: function (e)
 	{
 		this._activeSlider = this._slider;
-		this._activeSlider.addClass('ibx-slider-marker-move');
+		this._activeSlider.ibxAddClass('ibx-slider-marker-move');
 		var info = this.info();
 		this._moveSlider(e);
 		this._activeSlider.focus();

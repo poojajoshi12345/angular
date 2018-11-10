@@ -81,7 +81,7 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 	add:function(el, sibling, before, refresh)
 	{
 		el = $(el);
-		el.addClass("ibx-csl-item").prop("tabIndex", -1).attr("role", "listitem");
+		el.ibxAddClass("ibx-csl-item").prop("tabIndex", -1).attr("role", "listitem");
 		
 		this._itemsBox.ibxWidget("add", el, sibling, before, refresh);
 		if(refresh)
@@ -89,7 +89,7 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 	},
 	remove:function(el, destroy, refresh)
 	{
-		var children = this.children().filter(el || ".ibx-csl-item").removeClass("ibx-csl-item");
+		var children = this.children().filter(el || ".ibx-csl-item").ibxRemoveClass("ibx-csl-item");
 		this._itemsBox.ibxWidget("remove", children, destroy, refresh);
 		if(refresh)
 			this.refresh();
@@ -159,7 +159,7 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 				}.bind(this, scrollInfo),
 				"progress":function(scrollInfo, animation, progress, remainingMs)
 				{
-					this.element.addClass("ibx-csl-scrolling")
+					this.element.ibxAddClass("ibx-csl-scrolling")
 				}.bind(this, scrollInfo),
 				"done":function(scrollInfo, animation, jumpToEnd)
 				{
@@ -167,7 +167,7 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 						this.scroll(scrollInfo.steps, scrollInfo.scrollType, scrollInfo.scrollTime);
 					else
 						this.element.dispatchEvent("ibx_endscroll", scrollInfo, false, false);
-					this.element.removeClass("ibx-csl-scrolling");
+					this.element.ibxRemoveClass("ibx-csl-scrolling");
 				}.bind(this, scrollInfo),
 			}, evt.data.animationOptions);
 			this._itemsBox.animate(scrollInfo.animationProperties, scrollInfo.animationOptions);
@@ -292,10 +292,10 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 
 		var options = this.options;
 		var disabled = pageInfo[options.scrollProps.axis] <= 0;
-		this._prevBtn.ibxWidget("option", "disabled", disabled).toggleClass("csl-btn-hidden", (disabled && options.hideDisabledButtons));
+		this._prevBtn.ibxWidget("option", "disabled", disabled).ibxToggleClass("csl-btn-hidden", (disabled && options.hideDisabledButtons));
 
 		disabled = (pageInfo[options.scrollProps.axis] + pageInfo[options.scrollProps.pageSize]) >= pageInfo[options.scrollProps.scrollSize];
-		this._nextBtn.ibxWidget("option", "disabled", disabled).toggleClass("csl-btn-hidden", (disabled && options.hideDisabledButtons));
+		this._nextBtn.ibxWidget("option", "disabled", disabled).ibxToggleClass("csl-btn-hidden", (disabled && options.hideDisabledButtons));
 	},
 	getScrollChild:function(forward) 
 	{ 
@@ -358,8 +358,8 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 		this._nextBtn.css("display", options.showNextButton ? "" : "none");
 
 		//floated buttons force position to either end of the carousel
-		this._prevBtn.toggleClass("csl-btn-float", options.floatButtons);	
-		this._nextBtn.toggleClass("csl-btn-float", options.floatButtons);	
+		this._prevBtn.ibxToggleClass("csl-btn-float", options.floatButtons);	
+		this._nextBtn.ibxToggleClass("csl-btn-float", options.floatButtons);	
 		if(options.floatButtons)
 			options.prevNextButtonPos = "ends";
 

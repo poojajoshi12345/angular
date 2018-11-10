@@ -19,7 +19,7 @@ $.widget("ibi.ibxSortable", $.Widget,
 		this._super();
 		var options = this.options;
 		var curPos = this.element.css("position");
-		this.element.addClass(this._widgetClass).ibxAutoScroll({"direction":options.direction});
+		this.element.ibxAddClass(this._widgetClass).ibxAutoScroll({"direction":options.direction});
 		var el = this.element[0];
 		el.addEventListener("mousedown", this._onDragEvent.bind(this), true);
 		el.addEventListener("mouseup", this._onDragEvent.bind(this), true);
@@ -28,11 +28,11 @@ $.widget("ibi.ibxSortable", $.Widget,
 	_destroy:function()
 	{
 		this._super();
-		this.removeClass(this._widgetClass);
+		this.ibxRemoveClass(this._widgetClass);
 	},
 	_createPlaceholder:function(dragElement)
 	{
-		var ph = dragElement.clone().addClass("ibx-sortable-placeholder " + this.options.placeholderClasses);
+		var ph = dragElement.clone().ibxAddClass("ibx-sortable-placeholder " + this.options.placeholderClasses);
 		var e = this.element.dispatchEvent("ibx_createplaceholder", ph, false);
 		ph = e.data;
 		return ph;
@@ -90,7 +90,7 @@ $.widget("ibi.ibxSortable", $.Widget,
 						var pos = de.position();
 						var ph = this._placeholder = this._createPlaceholder(de);
 						de.css({"zIndex":100000, "pointerEvents":"none", "position":"absolute", "left":pos.left, "top":pos.top, "width":de.outerWidth, "height":de.outerHeight});
-						de.addClass("ibx-sortable-dragging " + options.sortItemClasses);
+						de.ibxAddClass("ibx-sortable-dragging " + options.sortItemClasses);
 						ph.insertAfter(de);
 						this.element.ibxAutoScroll("start");
 					}
@@ -141,7 +141,7 @@ $.widget("ibi.ibxSortable", $.Widget,
 	{
 		this.element.ibxAutoScroll("stop");
 		if(this._dragElement)
-			this._dragElement.css({"zIndex":"", "pointerEvents":"", "position":"", "width":"", "height":"", "left":"", "top":""}).removeClass("ibx-sortable-dragging " + this.options.sortItemClasses);
+			this._dragElement.css({"zIndex":"", "pointerEvents":"", "position":"", "width":"", "height":"", "left":"", "top":""}).ibxRemoveClass("ibx-sortable-dragging " + this.options.sortItemClasses);
 		delete this._dragElement;
 		if(this._placeholder)
 			this._placeholder.remove();

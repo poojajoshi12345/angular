@@ -22,7 +22,7 @@ $.widget("ibi.ibxCollapsible", $.Widget,
 			"margin-bottom":this.element.css("margin-bottom"),
 		}
 		this.widgetEventPrefix = "ibx_";
-		this.element.addClass("ibx-collapsible");
+		this.element.ibxAddClass("ibx-collapsible");
 		this.element.on("transitionend", this._onTransitionEnd.bind(this))
 		this.element.on("click", this._onMouseEvent.bind(this));
 		this._boundWindowMouseEvent = this._onWindowMouseEvent.bind(this);
@@ -39,7 +39,7 @@ $.widget("ibi.ibxCollapsible", $.Widget,
 		//don't call super as close/open calls refresh
 		if(this.element.hasClass("menu-bar"))
 			var x = 10;
-		this.element.addClass("ibx-collapsible-initializing");//stop transition while initializing
+		this.element.ibxAddClass("ibx-collapsible-initializing");//stop transition while initializing
 		this._isOpen = this.options.startCollapsed;
 		this.options.startCollapsed ? this.close() : this.open();
 		this._onTransitionEnd();
@@ -55,9 +55,9 @@ $.widget("ibi.ibxCollapsible", $.Widget,
 		{
 			//remove the initializing class that stops transitions. Could be done just first time, but really doesn't matter to do it every time
 			this._isOpen = true;
-			this.element.removeClass("ibx-collapsed ibx-collapsible-initializing")
+			this.element.ibxRemoveClass("ibx-collapsed ibx-collapsible-initializing")
 			if(this.options.autoClose)
-				$("body").addClass("body-collapsible-auto-close");
+				$("body").ibxAddClass("body-collapsible-auto-close");
 			this.refresh();
 			this._trigger("opened")
 		}
@@ -81,7 +81,7 @@ $.widget("ibi.ibxCollapsible", $.Widget,
 		{
 			//close all open auto close collapsible and then let body get pointer events again.
 			this.close();
-			$("body").removeClass("body-collapsible-auto-close");
+			$("body").ibxRemoveClass("body-collapsible-auto-close");
 		}
 	},
 	_onMouseEvent: function (e)
@@ -99,7 +99,7 @@ $.widget("ibi.ibxCollapsible", $.Widget,
 		{
 			if(!e || e.originalEvent.propertyName.search("margin") != -1)
 			{
-				this.element.addClass("ibx-collapsed");
+				this.element.ibxAddClass("ibx-collapsed");
 				$(window).off("click", this._boundWindowMouseEvent);
 				this._trigger("close");
 			}
@@ -110,7 +110,7 @@ $.widget("ibi.ibxCollapsible", $.Widget,
 		var options = this.options;
 		var isOpen = this.isOpen();
 
-		this.element.toggleClass("auto-close", options.autoClose);
+		this.element.ibxToggleClass("auto-close", options.autoClose);
 		
 		var nMargin = 0;
 		if(isOpen)

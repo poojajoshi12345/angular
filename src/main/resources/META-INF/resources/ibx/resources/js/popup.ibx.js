@@ -38,7 +38,7 @@ $.widget("ibi.ibxPopup", $.ibi.ibxWidget,
 	_create:function()
 	{
 		var options = this.options;
-		this.element.addClass("pop-closed").prop("tabIndex", -1).css("position", "absolute").on("keydown", this._onPopupKeyEvent.bind(this));
+		this.element.ibxAddClass("pop-closed").prop("tabIndex", -1).css("position", "absolute").on("keydown", this._onPopupKeyEvent.bind(this));
 		this._onPopupWindowResizeBound = this._onPopupWindowResize.bind(this);
 		$(window).on("resize", this._onPopupWindowResizeBound);
 		this._super();
@@ -53,8 +53,8 @@ $.widget("ibi.ibxPopup", $.ibi.ibxWidget,
 	{
 		this._super();
 		var options = this.options;
-		this.element.removeClass("pop-closed pop-modal pop-top").off("mousedown");
-		this.element.removeClass($.ibi.ibxPopup.statics.effect[options.effect]);
+		this.element.ibxRemoveClass("pop-closed pop-modal pop-top").off("mousedown");
+		this.element.ibxRemoveClass($.ibi.ibxPopup.statics.effect[options.effect]);
 		if(options.movable)
 			this.element.draggable("destroy");
 		if(options.resizable)
@@ -100,7 +100,7 @@ $.widget("ibi.ibxPopup", $.ibi.ibxWidget,
 			this.element.on("transitionend", function(e)
 			{
 				//we are now fully open.
-				this.element.removeClass("pop-opening").off("transitionend");
+				this.element.ibxRemoveClass("pop-opening").off("transitionend");
 				this._openFromClose = false;
 
 				//auto close the dialog after the specified time.
@@ -132,7 +132,7 @@ $.widget("ibi.ibxPopup", $.ibi.ibxWidget,
 			this.element.position(options.position);
 
 			//tell manager to open the popup.
-			this.element.addClass("pop-opening");
+			this.element.ibxAddClass("pop-opening");
 			this._trigger("popup_mgr_open", null, this.element);
 
 			//we're visible so focus...auto-focusing of children now happens in ibxWidget.
@@ -175,7 +175,7 @@ $.widget("ibi.ibxPopup", $.ibi.ibxWidget,
 				{
 					var parent = this.element.data("ibxPopupParent") || document.body;
 					this.element.appendTo(parent).css({top:"", left:""});
-					this.element.removeClass("pop-closing").off("transitionend");
+					this.element.ibxRemoveClass("pop-closing").off("transitionend");
 				}
 				
 				//allow popup to do cleanup
@@ -193,7 +193,7 @@ $.widget("ibi.ibxPopup", $.ibi.ibxWidget,
 				this._elPrevActive.focus();
 			delete this._elPrevActive;
 
-			this.element.addClass("pop-closing");
+			this.element.ibxAddClass("pop-closing");
 			this._trigger("popup_mgr_close", null, this.element);
 			this._trigger("close", null, closeInfo);
 			this.setAccessibility();
@@ -204,8 +204,8 @@ $.widget("ibi.ibxPopup", $.ibi.ibxWidget,
 	{
 		this._super();
 		var options = this.options;
-		this.element.addClass($.ibi.ibxPopup.statics.effect[options.effect]);
-		options.modal ? this.element.addClass("pop-modal") : this.element.removeClass("pop-modal");
+		this.element.ibxAddClass($.ibi.ibxPopup.statics.effect[options.effect]);
+		options.modal ? this.element.ibxAddClass("pop-modal") : this.element.ibxRemoveClass("pop-modal");
 
 		//turn draggable on/off
 		if(options.movable)
@@ -248,16 +248,16 @@ ibxPopupManager.onPopupEvent = function(e, popup)
 	var popup = $(popup);
 
 	//remove existing .pop-top as we're going to reset it
-	$(".ibx-popup").removeClass("pop-top");
+	$(".ibx-popup").ibxRemoveClass("pop-top");
 
 	var topPop = ibxPopupManager.getOpenPopups().not(popup).first();//find the top popup excluding the one in question
 	var eType = e.type;
 	if(eType == "ibx_popup_mgr_open")
 	{
 		var topZ = topPop.zIndex() || popup.zIndex();
-		popup.addClass("pop-top");
+		popup.ibxAddClass("pop-top");
 		popup.css("zIndex", topZ + 1000);
-		popup.removeClass("pop-closed");
+		popup.ibxRemoveClass("pop-closed");
 		topPop = popup;
 
 		//manage the currently open popups
@@ -266,8 +266,8 @@ ibxPopupManager.onPopupEvent = function(e, popup)
 	else
 	if(eType == "ibx_popup_mgr_close")
 	{
-		popup.addClass("pop-closed");
-		topPop.addClass("pop-top");
+		popup.ibxAddClass("pop-closed");
+		topPop.ibxAddClass("pop-top");
 
 		//manage the currently open popups
 		ibxPopupManager._openPopups = ibxPopupManager._openPopups.not(popup);
@@ -288,8 +288,8 @@ ibxPopupManager.onPopupEvent = function(e, popup)
 	if(ibxPopupManager.autoDisableIFrames)
 	{
 		//[IBX-198] have to turn pointer-events back on for topmost popup iframes.
-		$("iframe").toggleClass("ibx-popup-disabled-iframe", !!topPop.length);
-		topPop.find("iframe").removeClass("ibx-popup-disabled-iframe");
+		$("iframe").ibxToggleClass("ibx-popup-disabled-iframe", !!topPop.length);
+		topPop.find("iframe").ibxRemoveClass("ibx-popup-disabled-iframe");
 	}
 };
 ibxPopupManager.onWindowEvent = function(e)

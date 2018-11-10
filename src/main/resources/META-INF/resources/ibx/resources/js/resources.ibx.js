@@ -8,7 +8,7 @@ function ibxResourceManager(ctxPath)
 {
 	if(_jsDerivingClass)return;
 	this._resBundle = $($.parseXML("<ibx-res-bundle><markup></markup></ibx-res-bundle>"));
-	this._styleSheet = $("<style type='text/css'>").addClass("ibxResourceManager_inline_styles").appendTo("head");
+	this._styleSheet = $("<style type='text/css'>").ibxAddClass("ibxResourceManager_inline_styles").appendTo("head");
 	
 	this.loadedBundles = {};
 	this.loadedFiles = {};
@@ -458,7 +458,7 @@ _p.processPlaceholders = function(resource)
 	{
 		el = $(el);
 		var resId = el.attr("data-ibx-resource");
-		var res = ibx.resourceMgr.getResource(resId, false, true).addClass(el.prop("className"));
+		var res = ibx.resourceMgr.getResource(resId, false, true).ibxAddClass(el.prop("className"));
 		el.replaceWith(res);
 	}.bind(this));
 	return resource;

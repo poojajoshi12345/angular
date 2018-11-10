@@ -142,7 +142,7 @@ $.widget("ibi.ibxRadioGroup",$.ibi.ibxFlexBox,
 			this._controls.splice(this._controls.indexOf(el), 1);
 			
 			el = $(el);
-			el.removeClass("radio-group-checked" + this.options.name);
+			el.ibxRemoveClass("radio-group-checked" + this.options.name);
 			el.off("ibx_change", null, this._onChangeBind).off('ibx_beforechange', this._onBeforeChangeBind);
 			this.refresh();
 		}
@@ -182,10 +182,10 @@ $.widget("ibi.ibxRadioGroup",$.ibi.ibxFlexBox,
 			$(this._controls).each(function(value, index, el)
 			{
 				el = $(el);
-				el.removeClass('radio-group-checked').ibxWidget('checked',false)
+				el.ibxRemoveClass('radio-group-checked').ibxWidget('checked',false)
 				var itemUserValue = this._getItemUserValue(el);
 				if(itemUserValue == value)
-					el.ibxWidget('checked', true).addClass('radio-group-checked');
+					el.ibxWidget('checked', true).ibxAddClass('radio-group-checked');
 			}.bind(this, value));
 
 			this.element.dispatchEvent("ibx_change", null, false);

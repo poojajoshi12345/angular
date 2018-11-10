@@ -130,7 +130,7 @@ $.widget("ibi.ibxAccordionPane", $.ibi.ibxFlexBox,
 	{
 		this._super();
 		var options = this.options;
-		this.element.children(".ibx-accordion-page").toggleClass("acc-pg-stretch", options.pageStretch).toggleClass("acc-pg-auto-size", options.pageAutoSize);
+		this.element.children(".ibx-accordion-page").ibxToggleClass("acc-pg-stretch", options.pageStretch).ibxToggleClass("acc-pg-auto-size", options.pageAutoSize);
 	}
 });
 $.widget("ibi.ibxHAccordionPane", $.ibi.ibxAccordionPane, {options:{direction:"row"}, _widgetClass:"ibx-accordion-pane-horizontal"});
@@ -181,19 +181,19 @@ $.widget("ibi.ibxAccordionPage", $.ibi.ibxFlexBox,
 		content.on("transitionend", this._onTransition.bind(this))
 
 		var btn = this._button = $("<div tabIndex='0' class='ibx-accordion-page-button'>").on("click", this._onBtnChange.bind(this));
-		btn.data("accPage", this.element).ibxButton(this.options.btnOptions).addClass("ibx-accordion-button");
+		btn.data("accPage", this.element).ibxButton(this.options.btnOptions).ibxAddClass("ibx-accordion-button");
 
 		this.element.on("keydown", this._onPageKeyEvent.bind(this));
 		this.element.on("focus", this._onPageFocus.bind(this));
 		this.element.append(btn, content)
-		this.element.addClass("accordion-page-no-animate");
+		this.element.ibxAddClass("accordion-page-no-animate");
 		this.add(this.element.children());
 
 		//alternate to data-ibxp-text...direct text node children can be used to set the text.
 		options.btnOptions.text = options.btnOptions.text || this.element.textNodes().remove().text().replace(/^\s*|\s*$/g, "");
 
 		//need this on timer so we can stop the initial animation for selected pages.
-		window.setTimeout(function(){this.element.removeClass("accordion-page-no-animate");}.bind(this), 0);
+		window.setTimeout(function(){this.element.ibxRemoveClass("accordion-page-no-animate");}.bind(this), 0);
 	},
 	_destroy:function()
 	{
@@ -295,7 +295,7 @@ $.widget("ibi.ibxAccordionPage", $.ibi.ibxFlexBox,
 		//set the button options and also its position
 		opts = $.extend({}, this.options.btnOptions, selected ? options.btnOptionsOpen : null);
 		this._button.ibxButton("option", opts).css("order", (options.btnPosition == "end") ? 1 : -1);
-		options.btnShow ? this._button.removeClass("acc-btn-hide") : this._button.addClass("acc-btn-hide");
+		options.btnShow ? this._button.ibxRemoveClass("acc-btn-hide") : this._button.ibxAddClass("acc-btn-hide");
 
 		/****
 			Figure out the desired height of the content so we can apply the max-height property which triggers the transition animation.
@@ -313,9 +313,9 @@ $.widget("ibi.ibxAccordionPage", $.ibi.ibxFlexBox,
 		this.element.css("minHeight", selected ? (this._button.outerHeight(true) + "px") : "");
 
 		//DO NOT MOVE THIS CODE ABOVER THE max-height CALCULATION CODE ABOVE!!!!!!
-		selected ? this.element.removeClass("acc-pg-closed") : this.element.addClass("acc-pg-closed");
-		selected ? this._button.removeClass("acc-btn-closed") : this._button.addClass("acc-btn-closed");
-		selected ? this._content.removeClass("acc-cnt-closed") : this._content.addClass("acc-cnt-closed");
+		selected ? this.element.ibxRemoveClass("acc-pg-closed") : this.element.ibxAddClass("acc-pg-closed");
+		selected ? this._button.ibxRemoveClass("acc-btn-closed") : this._button.ibxAddClass("acc-btn-closed");
+		selected ? this._content.ibxRemoveClass("acc-cnt-closed") : this._content.ibxAddClass("acc-cnt-closed");
 	}
 });
 $.widget("ibi.ibxHAccordionPage", $.ibi.ibxAccordionPage, {options:{direction:"row"}, _widgetClass:"ibx-accordion-page-horizontal"});

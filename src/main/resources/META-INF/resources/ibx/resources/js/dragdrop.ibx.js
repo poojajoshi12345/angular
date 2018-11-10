@@ -107,7 +107,7 @@ ibxDragDropManager.endDrag = function(eType, e)
 
 	if(this.curTarget.length)
 	{
-		this.curTarget.removeClass(this.dragTargetClass);
+		this.curTarget.ibxRemoveClass(this.dragTargetClass);
 		this.curTarget.css("cursor", this.curTarget.data("ibxDragTargetCursorOrig")); 
 		this.curTarget.removeData("ibxDragTargetCursorOrig");
 		this.curTarget = $();
@@ -204,7 +204,7 @@ ibxDragDropManager._onMouseEvent = function(e)
 				//reset last drag target
 				if(this.curTarget.length)
 				{
-					this.curTarget.removeClass(this.dragTargetClass);
+					this.curTarget.ibxRemoveClass(this.dragTargetClass);
 					this.curTarget.css("cursor", this.curTarget.data("ibxDragTargetCursorOrig"));
 					this.curTarget.removeData("ibxDragTargetCursorOrig");
 				}
@@ -216,7 +216,7 @@ ibxDragDropManager._onMouseEvent = function(e)
 					//[IA-8982] when dragging over an svg node in IE (of course) there is no style property...so just ignore in that case.
 					var cursor = this.curTarget[0].style ? this.curTarget[0].style.cursor : "";
 					this.curTarget.data("ibxDragTargetCursorOrig", cursor);
-					this.curTarget.addClass(this.dragTargetClass);
+					this.curTarget.ibxAddClass(this.dragTargetClass);
 				}
 			}
 

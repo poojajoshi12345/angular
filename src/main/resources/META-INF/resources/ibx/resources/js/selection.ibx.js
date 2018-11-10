@@ -23,7 +23,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 		$.extend(true, this.options, ibx.getIbxMarkupOptions(this.element));//we aren't an ibxWidget, so get the markup options.
 		this.option(this.options);//force initial update.
 
-		this.element.addClass(this._widgetClass);
+		this.element.ibxAddClass(this._widgetClass);
 		this.element.data("ibiIbxSelectionManager", this);//plymorphism
 		this.element[0].addEventListener("focusin", this._focusInBound = this._onFocusIn.bind(this), true);
 		this.element[0].addEventListener("focusout", this._focusOutBound = this._onFocusOut.bind(this), true);
@@ -264,7 +264,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 		var options = this.options;
 		var e = this._dispatchEvent("ibx_selectablechildren", {"items":null}, false, true, undefined, false);
 		var children = e.data.items ? $(e.data.items) : this.element.logicalChildren(".ibx-sm-selection-root, .ibx-sm-nav-key-root, .ibx-sm-focus-root, .ibx-sm-focus-default", ":ibxFocusable(-1)");			
-		children.addClass("ibx-sm-selectable");
+		children.ibxAddClass("ibx-sm-selectable");
 		return selector ? children.filter(selector) : children;
 	},
 	isSelected:function(el){return $(el).hasClass("ibx-sm-selected");},
@@ -311,7 +311,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 				if(!evt.isDefaultPrevented())
 				{
 					el = evt.data.items;
-					el.addClass("ibx-sm-selected");
+					el.ibxAddClass("ibx-sm-selected");
 					if(anchor)
 						this._anchor(el.first());
 					this._dispatchEvent("ibx_selchange", {"selected":select, "items":el}, true, false);
@@ -326,7 +326,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 				var evt = this._dispatchEvent("ibx_beforeselchange", {"selected":select, "items":el}, true, true);
 				if(!evt.isDefaultPrevented())
 				{
-					el.removeClass("ibx-sm-selected");
+					el.ibxRemoveClass("ibx-sm-selected");
 					if(anchor)
 						this._anchor(el.first());
 					this._dispatchEvent("ibx_selchange", {"selected":select, "items":el}, true, false);
@@ -363,8 +363,8 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 		if(el === undefined)
 			return this._elAnchor[0];
 
-		this._elAnchor.removeClass("ibx-sm-anchor");
-		this._elAnchor = $(el).first().addClass("ibx-sm-anchor");
+		this._elAnchor.ibxRemoveClass("ibx-sm-anchor");
+		this._elAnchor = $(el).first().ibxAddClass("ibx-sm-anchor");
 		var evt = this._dispatchEvent("ibx_anchored", {"items":this._elAnchor}, true, false);
 	},
 	_elFocus:$(),
@@ -381,8 +381,8 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 		if(el === undefined)
 			return this._elFocus[0];
 
-		this._elFocus.removeClass("ibx-sm-focused ibx-ie-pseudo-focus");
-		this._elFocus = $(el).first().addClass("ibx-sm-focused " + (ibxPlatformCheck.isIE ? "ibx-ie-pseudo-focus" : ""));
+		this._elFocus.ibxRemoveClass("ibx-sm-focused ibx-ie-pseudo-focus");
+		this._elFocus = $(el).first().ibxAddClass("ibx-sm-focused " + (ibxPlatformCheck.isIE ? "ibx-ie-pseudo-focus" : ""));
 		this._elFocus ? this.element.attr("aria-active-descendant", this._elFocus.prop("id")) : this.element.removeAttr("aria-active-descendant");
 		this._elFocus.focus();
 		this._dispatchEvent("ibx_focused", {"items":this._elFocus}, true, false);
@@ -403,7 +403,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 			var options = this.options;
 			if(active)
 			{
-				this.element.addClass("ibx-sm-active");
+				this.element.ibxAddClass("ibx-sm-active");
 
 				//take the element out of the tab order so shift+tab will work and not focus this container.
 				//if(options.focusDefault)
@@ -413,7 +413,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 			{
 				if(this.options.focusResetOnBlur)
 					this._focus(null, false);
-				this.element.removeClass("ibx-sm-active");
+				this.element.ibxRemoveClass("ibx-sm-active");
 
 				//put this element back in the tab order...so that next tab into will will do auto-focus.
 				//this.element.prop("tabIndex", this.element.data("ibxFocDefSavedTabIndex")).removeData("ibxFocDefSavedTabIndex");
@@ -431,16 +431,16 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 			this.deselectAll(true);
 
 		if(key == "type")
-			this.element.toggleClass("ibx-sm-selection-root", (value != "none"));
+			this.element.ibxToggleClass("ibx-sm-selection-root", (value != "none"));
 		else
 		if(key == "focusRoot")
-			this.element.toggleClass("ibx-sm-focus-root", value);
+			this.element.ibxToggleClass("ibx-sm-focus-root", value);
 		else
 		if(key == "navKeyRoot")
-			this.element.toggleClass("ibx-sm-nav-key-root", value);
+			this.element.ibxToggleClass("ibx-sm-nav-key-root", value);
 		else
 		if(key == "focusDefault")
-			this.element.toggleClass("ibx-sm-focus-default", !!value);
+			this.element.ibxToggleClass("ibx-sm-focus-default", !!value);
 		else
 		if(key == "rubberBand")
 		{
@@ -463,7 +463,7 @@ $.widget("ibi.ibxRubberBand", $.Widget,
 	_create:function()
 	{
 		this._super();
-		this.element.ibxAutoScroll().addClass("ibx-rubber-band");
+		this.element.ibxAutoScroll().ibxAddClass("ibx-rubber-band");
 		this.element[0].addEventListener("mousedown", this._onMouseEvent.bind(this), false);
 		this.element[0].addEventListener("mouseup", this._onMouseEvent.bind(this), false);
 		this.element[0].addEventListener("mousemove", this._onMouseEvent.bind(this), false);
@@ -474,7 +474,7 @@ $.widget("ibi.ibxRubberBand", $.Widget,
 	},
 	_destroy:function()
 	{
-		this.element.ibxAutoScroll("destroy").removeClass("ibx-rubber-band");
+		this.element.ibxAutoScroll("destroy").ibxRemoveClass("ibx-rubber-band");
 		this._super();
 	},
 	_onMouseEvent:function(e)
@@ -496,7 +496,7 @@ $.widget("ibi.ibxRubberBand", $.Widget,
 				if(pos != "absolute")
 					this.element.css("position", "relative").data("ibxSelMgrRubberBandOrigPos", pos);
 				this._startPoint = {"x":eTrueX, "y":eTrueY};
-				this.element.addClass("ibx-sm-rubber-band-active");
+				this.element.ibxAddClass("ibx-sm-rubber-band-active");
 				this._rubberBand = $("<div class='ibx-sm-rubber-band'>").css({"left":eTrueX, "top":eTrueY}).appendTo(this.element);
 				this.element.ibxAutoScroll("start");
 				this.element.dispatchEvent("ibx_rubberbandstart", null, true, false, this._rubberBand[0]);
@@ -525,7 +525,7 @@ $.widget("ibi.ibxRubberBand", $.Widget,
 		if(this._rubberBand)
 		{
 			this.element.dispatchEvent("ibx_rubberbandend", null, true, false, this._rubberBand[0]);
-			this.element.removeClass("ibx-sm-rubber-band-active").css("position", this.element.data("ibxSelMgrRubberBandOrigPos"));
+			this.element.ibxRemoveClass("ibx-sm-rubber-band-active").css("position", this.element.data("ibxSelMgrRubberBandOrigPos"));
 			this._rubberBand.remove();
 			delete this._rubberBand;
 			delete this._startPoint;

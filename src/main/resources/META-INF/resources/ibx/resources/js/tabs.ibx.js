@@ -58,7 +58,7 @@ $.widget("ibi.ibxTabPane", $.ibi.ibxFlexBox,
 		el.each(function(idx, el)
 		{
 			el = $(el);
-			el.addClass("tpg-hidden").on("keydown", this._onTabPaneKeyDown.bind(this));
+			el.ibxAddClass("tpg-hidden").on("keydown", this._onTabPaneKeyDown.bind(this));
 			var button = el.ibxWidget("button");
 			var nextPage = el.next(".ibx-tab-page");
 			if (nextPage.length > 0)
@@ -82,7 +82,7 @@ $.widget("ibi.ibxTabPane", $.ibi.ibxFlexBox,
 		el.each(function(idx, el)
 		{
 			var button = $(el).ibxWidget("button");
-			button.css("flex", "").removeClass("tpg-hidden").detach();
+			button.css("flex", "").ibxRemoveClass("tpg-hidden").detach();
 			button.ibxWidget("option", "group", "");
 			this._group.ibxRadioGroup("removeControl", button[0]);
 		}.bind(this));
@@ -148,8 +148,8 @@ $.widget("ibi.ibxTabPane", $.ibi.ibxFlexBox,
 		var curSel = this.options.selected;
 		var tabButton = $(e.target).ibxWidget("selected");
 		var selected = tabButton.ibxWidget("option", "tabPage");
-		this.element.children(".ibx-tab-page").not(selected).addClass("tpg-hidden").removeClass("tpg-selected");
-		selected.removeClass("tpg-hidden").addClass("tpg-selected");
+		this.element.children(".ibx-tab-page").not(selected).ibxAddClass("tpg-hidden").ibxRemoveClass("tpg-selected");
+		selected.ibxRemoveClass("tpg-hidden").ibxAddClass("tpg-selected");
 		this.options.selected = selected;
 		selected.dispatchEvent("ibx_selected", null, true, false, curSel[0]);
 		this._trigger("change", e, selected);
@@ -343,19 +343,19 @@ $.widget("ibi.ibxHTabGroup", $.ibi.ibxHCarousel,
 	_create: function ()
 	{
 		this._super();
-		this.element.addClass("ibx-tab-group-horizontal").prop("tabindex", -1);
+		this.element.ibxAddClass("ibx-tab-group-horizontal").prop("tabindex", -1);
 	},
 	_refresh: function ()
 	{
 		this._super();
-		this.element.removeClass("ibx-tab-position-top ibx-tab-position-bottom");
+		this.element.ibxRemoveClass("ibx-tab-position-top ibx-tab-position-bottom");
 		switch (this.options.position)
 		{
 			default:
 			case "top":
-				this.element.addClass("ibx-tab-position-top"); break;
+				this.element.ibxAddClass("ibx-tab-position-top"); break;
 			case "bottom":
-				this.element.addClass("ibx-tab-position-bottom"); break;
+				this.element.ibxAddClass("ibx-tab-position-bottom"); break;
 		}
 	}
 });
@@ -373,19 +373,19 @@ $.widget("ibi.ibxVTabGroup", $.ibi.ibxVCarousel,
 	_create: function ()
 	{
 		this._super();
-		this.element.addClass("ibx-tab-group-vertical").prop("tabindex", -1);
+		this.element.ibxAddClass("ibx-tab-group-vertical").prop("tabindex", -1);
 	},
 	_refresh: function ()
 	{
 		this._super();
-		this.element.removeClass("ibx-tab-position-left ibx-tab-position-right");
+		this.element.ibxRemoveClass("ibx-tab-position-left ibx-tab-position-right");
 		switch (this.options.position)
 		{
 			default:
 			case "left":
-				this.element.addClass("ibx-tab-position-left"); break;
+				this.element.ibxAddClass("ibx-tab-position-left"); break;
 			case "right":
-				this.element.addClass("ibx-tab-position-right"); break;
+				this.element.ibxAddClass("ibx-tab-position-right"); break;
 
 		}
 	}

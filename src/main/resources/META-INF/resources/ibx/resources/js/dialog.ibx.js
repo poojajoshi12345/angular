@@ -49,8 +49,8 @@ $.widget("ibi.ibxDialog", $.ibi.ibxPopup,
 	{
 		this._super();
 		var options = this.options;
-		this.element.removeClass("dlg-auto-size");
-		this.element.removeClass(options.type);
+		this.element.ibxRemoveClass("dlg-auto-size");
+		this.element.ibxRemoveClass(options.type);
 
 		var children = this.children();
 		children.detach();
@@ -122,10 +122,10 @@ $.widget("ibi.ibxDialog", $.ibi.ibxPopup,
 		this.btnNo.css("display", options.buttons.search("no") != -1 ? "" : "none");
 		this.btnCancel.css("display", options.buttons.search("cancel") != -1 ? "" : "none");
 		this.btnApply.css("display", options.buttons.search("apply") != -1 ? "" : "none");
-		this.element.find(".ibx-dlg-default-action").removeClass("ibx-dlg-default-action");
-		this.element.find(options.defaultAction).addClass("ibx-dlg-default-action");
-		this.element.addClass(options.type);
-		options.autoSize ? this.element.addClass("dlg-auto-size") : this.element.removeClass("dlg-auto-size");
+		this.element.find(".ibx-dlg-default-action").ibxRemoveClass("ibx-dlg-default-action");
+		this.element.find(options.defaultAction).ibxAddClass("ibx-dlg-default-action");
+		this.element.ibxAddClass(options.type);
+		options.autoSize ? this.element.ibxAddClass("dlg-auto-size") : this.element.ibxRemoveClass("dlg-auto-size");
 	}
 });
 $.ibi.ibxDialog.createMessageDialog = function(options)
@@ -148,7 +148,7 @@ $.ibi.ibxDialog.createMessageDialog = function(options)
 		},
 		aria:{role:"alertdialog"}
 	}, options);
-	var msg = $("<div data-ibx-name='message'>").ibxLabel(options.messageOptions).addClass("ibx-dialog-message").ibxAriaId();
+	var msg = $("<div data-ibx-name='message'>").ibxLabel(options.messageOptions).ibxAddClass("ibx-dialog-message").ibxAriaId();
 
 	//setup the dialog
 	options.aria = $.extend(true, {}, {"describedby":msg.prop("id")}, options.aria);
