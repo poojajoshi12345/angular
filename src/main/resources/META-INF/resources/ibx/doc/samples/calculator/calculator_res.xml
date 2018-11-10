@@ -168,7 +168,7 @@
 					{
 						this._super();
 						this.element.empty();
-						this.element.removeClass("sample-calculator");
+						this.element.ibxRemoveClass("sample-calculator");
 						this.element.draggable("destroy");
 					},
 					reset:function()

@@ -195,7 +195,7 @@
 					}
 					menu.ibxWidget("add", $("<div>").ibxMenuSeparator());
 
-					var customMenuItem = $(".cp-menu-template").clone(true).removeAttr("data-ibx-no-bind").removeClass("cp-menu-template");
+					var customMenuItem = $(".cp-menu-template").clone(true).removeAttr("data-ibx-no-bind").ibxRemoveClass("cp-menu-template");
 					customMenuItem = ibx.bindElements(customMenuItem);
 					customMenuItem.find(".ibx-menu").on("ibx_open", function(reCommand, e)
 					{
@@ -212,7 +212,7 @@
 					});
 					menu.ibxWidget("add", customMenuItem);
 
-					customMenuItem = $(".cp-menu-template2").clone(true).removeAttr("data-ibx-no-bind").removeClass("cp-menu-template2");
+					customMenuItem = $(".cp-menu-template2").clone(true).removeAttr("data-ibx-no-bind").ibxRemoveClass("cp-menu-template2");
 					customMenuItem = ibx.bindElements(customMenuItem);
 					customMenuItem.find(".ibx-menu").on("ibx_open", function(reCommand, e)
 					{

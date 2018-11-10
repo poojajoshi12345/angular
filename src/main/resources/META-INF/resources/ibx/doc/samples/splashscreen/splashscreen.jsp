@@ -25,13 +25,13 @@
 			{
 				$(".btn-show-splash").on("click", function(e)
 				{
-					$(".ibx-splash-screen").addClass("ibx-splash-show");
+					$(".ibx-splash-screen").ibxAddClass("ibx-splash-show");
 					ibx.showRootNodes(false);
 				});
 
 				$(".ibx-splash-screen").on("click", function(e)
 				{
-					$(this).removeClass("ibx-splash-show");
+					$(this).ibxRemoveClass("ibx-splash-show");
 					ibx.showRootNodes(true);
 				});
 			}, true);
@@ -47,12 +47,12 @@
 				if(eType == "ibx_ibxevent" && data.hint == "jqueryloaded")
 				{
 					$(".ibx-splash-logo-image").prop("src", ibx.getPath() + "css/images/ibx.png");
-					splash.addClass("ibx-splash-show");
+					splash.ibxAddClass("ibx-splash-show");
 				}
 				else
 				if(eType == "ibx_ibxevent" && data.hint == "markupbound")
 				{
-					splash.removeClass("ibx-splash-show");
+					splash.ibxRemoveClass("ibx-splash-show");
 					ibx.showRootNodes(true);
 				}
 

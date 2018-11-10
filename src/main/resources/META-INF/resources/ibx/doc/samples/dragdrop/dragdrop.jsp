@@ -32,7 +32,7 @@
 						var tType = dragItem.data("dragType");
 						if(tType)	
 						{
-							target.addClass("drag-target");
+							target.ibxAddClass("drag-target");
 							dt.dropEffect = "copy";
 							e.preventDefault();
 						}
@@ -40,12 +40,12 @@
 					else
 					if(e.type == "ibx_dragleave")
 					{
-						target.removeClass("drag-target");
+						target.ibxRemoveClass("drag-target");
 					}
 					else
 					if(e.type == "ibx_drop")
 					{
-						target.removeClass("drag-target");
+						target.ibxRemoveClass("drag-target");
 						var dragItem = $("#" + dt.getData("dragItem"));
 						var dragType = dragItem.data("dragType");
 						(dragType == "ren") ? dragItem.insertBefore(target) : dragItem.insertAfter(target);
@@ -70,7 +70,7 @@
 						var dType = dragItem.data("dragType");
 						if(dType != tType)	
 						{
-							target.addClass("drag-target");
+							target.ibxAddClass("drag-target");
 							dt.dropEffect = "copy";
 							e.preventDefault();
 						}
@@ -78,12 +78,12 @@
 					else
 					if(e.type == "ibx_dragleave")
 					{
-						target.removeClass("drag-target");
+						target.ibxRemoveClass("drag-target");
 					}
 					else
 					if(e.type == "ibx_drop")
 					{
-						target.removeClass("drag-target");
+						target.ibxRemoveClass("drag-target");
 						var dragItem = $("#" + dt.getData("dragItem"));
 						dragItem.insertAfter(target);
 					}

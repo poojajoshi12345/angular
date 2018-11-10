@@ -23,7 +23,7 @@
 			{
 				var bindingRoots = $(".ibx-root:not(.ibx-bound)");
 				ibx.bindElements(bindingRoots);
-				bindingRoots.addClass("ibx-bound");
+				bindingRoots.ibxAddClass("ibx-bound");
 					
 				for (var w in $['ibi'])
 				{

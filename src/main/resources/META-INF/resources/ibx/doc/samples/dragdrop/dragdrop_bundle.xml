@@ -218,7 +218,7 @@
 				_gameStep:0,
 				newGame:function()
 				{
-					this._gameOver.removeClass("over").detach();
+					this._gameOver.ibxRemoveClass("over").detach();
 					this._gameBoard.find(".game-tile").remove();
 					this._gameStart = new Date();
 					this.options.score = 0;
@@ -238,7 +238,7 @@
 						if((tiles.length + 1) > options.maxTiles)
 						{
 							this._gameBoard.append(this._gameOver);
-							this._gameOver.data("ibxWidget")._label.addClass("open");
+							this._gameOver.data("ibxWidget")._label.ibxAddClass("open");
 							this._gameStart = null;
 						}
 						this._tileCount.text(tiles.length);
@@ -335,8 +335,8 @@
 				refresh:function()
 				{
 					var options = this.options;
-					this.element.removeClass("tile-type-1 tile-type-2 tile-type-3 tile-type-4");
-					this.element.addClass("tile-type-" + options.type);
+					this.element.ibxRemoveClass("tile-type-1 tile-type-2 tile-type-3 tile-type-4");
+					this.element.ibxAddClass("tile-type-" + options.type);
 					this._super();
 				}
 			});

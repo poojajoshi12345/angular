@@ -15,10 +15,10 @@ $.widget("ibi.ibxTreeNode", $.ibi.ibxVBox,
 		this._super();
 		debugger;
 		this._isOpen = this.options.startExanded;
-		this._lineWrapper = $("<div>").ibxHBox().addClass("line-wrapper");
-		this._wrapper = $("<div>").ibxHBox().addClass("node-wrapper");
+		this._lineWrapper = $("<div>").ibxHBox().ibxAddClass("line-wrapper");
+		this._wrapper = $("<div>").ibxHBox().ibxAddClass("node-wrapper");
 		this._lineWrapper.ibxWidget("add", this._wrapper);
-		this.nodeLabel = $("<div>").ibxLabel().addClass("node-label");
+		this.nodeLabel = $("<div>").ibxLabel().ibxAddClass("node-label");
 		this._wrapper.ibxWidget("add", this.nodeLabel);
 		this.add(this._lineWrapper);
 		this._wrapper.on("dblclick", this._onDoubleClick.bind(this));
@@ -62,8 +62,8 @@ $.widget("ibi.ibxTreeNode", $.ibi.ibxVBox,
 	select: function(add)
 	{
 		if (!add)
-			$(".node-selected").removeClass("node-selected");		
-		this._wrapper.addClass("node-selected");
+			$(".node-selected").ibxRemoveClass("node-selected");		
+		this._wrapper.ibxAddClass("node-selected");
 	},
 	refresh: function()
 	{
@@ -73,13 +73,13 @@ $.widget("ibi.ibxTreeNode", $.ibi.ibxVBox,
 		if (this.options.glyphClasses != "")
 		{
 			if (!this.nodeIcon)
-				this.nodeIcon = $("<div>").ibxLabel({"glyphClasses": this.options.glyphClasses}).addClass("node-icon");
+				this.nodeIcon = $("<div>").ibxLabel({"glyphClasses": this.options.glyphClasses}).ibxAddClass("node-icon");
 			this._wrapper.ibxWidget("add", this.nodeIcon, this.nodeLabel, true, false);
 		}	
 
 		if (!this.expanderIcon)
 		{
-			this.expanderIcon = $("<div>").ibxLabel({"glyphClasses": this._isOpen ? this.options.expandedIcon : this.options.collapsedIcon}).addClass("folder-icon");
+			this.expanderIcon = $("<div>").ibxLabel({"glyphClasses": this._isOpen ? this.options.expandedIcon : this.options.collapsedIcon}).ibxAddClass("folder-icon");
 			var beforeEl = this.nodeIcon ? this.nodeIcon : this.nodeLabel;
 			this.expanderIcon.insertBefore(this._wrapper);
 		}

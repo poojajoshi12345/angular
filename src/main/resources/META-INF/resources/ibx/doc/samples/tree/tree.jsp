@@ -81,13 +81,13 @@
 					else
 					if(e.type == "ibx_dragover")
 					{
-						node.addClass("drag-target");
+						node.ibxAddClass("drag-target");
 						dt.dropEffect = "copy";
 						e.preventDefault();
 					}
 					else
 					if(e.type == "ibx_dragleave")
-						node.removeClass("drag-target");
+						node.ibxRemoveClass("drag-target");
 					else
 					if(e.type == "ibx_drop")
 					{
@@ -157,7 +157,7 @@
 				$(".btn-wfstyle").on("ibx_change", function(e)
 				{
 					var checked = $(e.target).ibxWidget("checked");
-					$("body").toggleClass("wf-style", checked);
+					$("body").ibxToggleClass("wf-style", checked);
 				}).ibxWidget("checked", false);
 				$(".btn-single-click-expand").on("ibx_change", function(e)
 				{
@@ -197,10 +197,10 @@
 				{
 					options.labelOptions.glyph = container ? "folder" : options.labelOptions.glyph;
 					options.labelOptions.glyphClasses = container ? "material-icons" : options.labelOptions.glyphClasses;
-					var node = $("<div>").ibxTreeBrowserNode(options).addClass(container ? "folder" : "file").addClass(itemClass);
+					var node = $("<div>").ibxTreeBrowserNode(options).ibxAddClass(container ? "folder" : "file").ibxAddClass(itemClass);
 				}
 				else
-					var node = $("<div>").ibxTreeNode(options).addClass(container ? "folder" : "file").addClass(itemClass);
+					var node = $("<div>").ibxTreeNode(options).ibxAddClass(container ? "folder" : "file").ibxAddClass(itemClass);
 
 				node.attr("data-ibfs-path", xItem.attr("fullPath")).data("xItem", xItem);
 				
@@ -228,7 +228,7 @@
 					"glyph": container ? "folder" : "insert_drive_file",
 					"glyphClasses":"material-icons"
 				}
-				var tile = $("<div tabindex='-1' class='file-tile'>").ibxLabel(options).addClass(container ? "folder" : "file").addClass(itemClass);
+				var tile = $("<div tabindex='-1' class='file-tile'>").ibxLabel(options).ibxAddClass(container ? "folder" : "file").ibxAddClass(itemClass);
 				tile.attr("data-ibfs-path", xItem.attr("fullPath")).data("xItem", xItem);
 				tile.on("ibx_dragover", function(e)
 				{

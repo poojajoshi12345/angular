@@ -102,15 +102,15 @@
 				// Add calendar widget
 				$('.form-start-date').datepicker();
 				$('.form-start-date').datepicker('setDate', new Date());
-				$('.form-start-date').on('blur', function (e) { $(e.currentTarget).removeClass('control-invalid');});
+				$('.form-start-date').on('blur', function (e) { $(e.currentTarget).ibxRemoveClass('control-invalid');});
 
 				// Disable notify text when not checked
 				$('.form-notify-switch').on('ibx_change', function (e) 
 				{
 				  if ($(e.target).ibxWidget('checked'))
-						$('.form-notify-title').removeClass('form-notify-title-unchecked');
+						$('.form-notify-title').ibxRemoveClass('form-notify-title-unchecked');
 				  else
-						$('.form-notify-title').addClass('form-notify-title-unchecked');
+						$('.form-notify-title').ibxAddClass('form-notify-title-unchecked');
 				});
 
 
@@ -180,7 +180,7 @@
 					// check start date
 					if (!$('.form-start-date').val())
 					{
-						$(".form-start-date").addClass('control-invalid');
+						$(".form-start-date").ibxAddClass('control-invalid');
 						foundInvalid = true;
 						message += "Start date required.\n";
 					}

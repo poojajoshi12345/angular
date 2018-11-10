@@ -39,7 +39,7 @@
 						vCsl.ibxWidget("add", item, null, null, false);
 						item.css("height", size);
 
-						var item = $("<div class='test-csl-item' tabIndex='0'>Item_" + i + "</div>").addClass("test-item-"+i);
+						var item = $("<div class='test-csl-item' tabIndex='0'>Item_" + i + "</div>").ibxAddClass("test-item-"+i);
 						hCsl.ibxWidget("add", item, null, null, false);
 						item.css("width", size);
 
@@ -47,12 +47,12 @@
 						hBigCsl.ibxWidget("add", hBox, null, null, false);
 						for(var j = 0; j < 4; ++j)
 						{
-							var item = $("<div class='test-csl-item test-csl-sub-item' tabIndex='0'>Item_" + ((i*4)+j) + "</div>").addClass("test-item-"+i);
+							var item = $("<div class='test-csl-item test-csl-sub-item' tabIndex='0'>Item_" + ((i*4)+j) + "</div>").ibxAddClass("test-item-"+i);
 							hBox.ibxWidget("add", item, null, null, false);
 						}
 
 						var img = images[i%5];
-						var itemStf = $(sformat("<img class='test-csl-item-stf' tabIndex='0' src='{1}'>", img)).addClass("test-item-stf"+i);
+						var itemStf = $(sformat("<img class='test-csl-item-stf' tabIndex='0' src='{1}'>", img)).ibxAddClass("test-item-stf"+i);
 						itemStf.on("dragstart", function(e){e.preventDefault()});
 						hCslStf.ibxWidget("add", itemStf, null, null, false);
 					}	

@@ -77,7 +77,7 @@
 					glyph: "",//item.container ? "folder" : "insert_drive_file",
 					glyphClasses: "ibx-icons " + Ibfs.DEFINES.ITEM_TYPE_INFO[item.type].glyphClasses || "",//item.container ? "folder" : "insert_drive_file","material-icons"
 				}
-				this._element = $("<div tabIndex='0'>").ibxLabel(options).addClass("ibfs-item").data({"ibfs":ibfs, "ibfsItem":this, "ibfsObject":item}); //dom element bound to widget.
+				this._element = $("<div tabIndex='0'>").ibxLabel(options).ibxAddClass("ibfs-item").data({"ibfs":ibfs, "ibfsItem":this, "ibfsObject":item}); //dom element bound to widget.
 				this._element.on(
 				{
 					"click":this._onClick.bind(this),
