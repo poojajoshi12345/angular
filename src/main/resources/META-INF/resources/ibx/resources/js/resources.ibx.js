@@ -130,7 +130,7 @@ _p._onBundleFileProgress = function()
 _p._onBundleFileLoadError = function(xhr, status, msg)
 {
 	$(window).dispatchEvent("ibx_ibxresmgr", {"hint":"load_error", "loadDepth":this._loadDepth, "resMgr":this, "bundle":null, "xhr":xhr, "status":status, "msg":msg});
-	console.error(sformat("[ibx Error] {1}", msg));
+	console.error(sformat("[ibx Error] {1}\n{2}", xhr.statusText, msg));
 };
 
 _p.loadExternalResFile = function(elFile, bundle)
