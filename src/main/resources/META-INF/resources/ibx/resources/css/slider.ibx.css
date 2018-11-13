@@ -51,20 +51,20 @@
     min-width: 1.2em;
 }
 
-.ibx-slider-body {
+.ibx-slider-body-start, .ibx-slider-body-end {
     position: absolute;
     background-color: white;
     border-radius: 0.05em;
     border: 1px solid #ccc;
 }
 
-.ibx-slider-body-horizontal {
+.ibx-slider-body-horizontal-start, .ibx-slider-body-horizontal-end {
     height: 0.1em;
     left: 0px;
     right: 0px;
 }
 
-.ibx-slider-body-vertical {
+.ibx-slider-body-vertical-start, .ibx-slider-body-vertical-end {
     width: 0.1em;
     top: 0px;
     bottom: 0px;
