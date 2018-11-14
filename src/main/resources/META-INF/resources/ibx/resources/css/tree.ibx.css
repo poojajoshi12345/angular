@@ -116,10 +116,10 @@
 
 .ibx-tree-browser-node .tnode-btn-expanded::before
 {
-	content:"chevron_left";
+	content:"\e5cb";/*can't be ligature name for IE...must be hex value*/
 }
 
 .ibx-tree-browser-node .tnode-btn-collapsed::before
 {
-	content:"chevron_right";
+	content:"\e5cc";/*can't be ligature name for IE...must be hex value*/
 }
