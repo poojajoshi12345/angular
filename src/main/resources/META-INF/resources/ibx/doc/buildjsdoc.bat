@@ -1,0 +1,1 @@
+jsdoc ../resources/js
