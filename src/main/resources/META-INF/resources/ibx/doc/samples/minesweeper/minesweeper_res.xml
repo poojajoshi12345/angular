@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ibx-res-bundle name="test_res_bundle.xml" loadContext="bundle">
+	<strings>
+		<string-bundle>
+			<![CDATA[
+			{
+				"language":"ibx_default",
+				"strings":
+				{
+				}
+			}
+		]]>
+		</string-bundle>
+	</strings>
+
+	<styles>
+		<style-sheet>
+		<![CDATA[
+			.info-box
+			{
+				margin:5px;
+				padding:5px;
+			}
+			.info-label
+			{
+				font-size:20px;
+				background-color:black;
+				color:red;
+			}
+			.board-tile
+			{
+				width:25px;
+				height:25px;
+				border:2px outset;
+				background-color:#ccc;
+			}
+		]]>
+		</style-sheet>
+	</styles>
+
+	<markup>
+		<markup-block>
+			<div class="mine-sweeper-board">
+				<div class="info-box" data-ibx-name="infoBox" data-ibx-type="ibxHBox" data-ibxp-align="center" data-ibxp-justify="center">
+					<div tabindex="0" data-ibx-name="minesRemaining" class="info-label mines-remaining" data-ibx-type="ibxLabel"></div>
+					<div tabindex="0" data-ibx-name="btnReset" class="btn-reset" data-ibx-type="ibxButtonSimple" data-ibxp-glyph-classes="fa fa-smile-o"></div>
+					<div tabindex="0" data-ibx-name="gameTime" class="info-label game-time" data-ibx-type="ibxLabel"></div>
+				</div>
+				<div class="board" data-ibx-name="board">
+				</div>
+			</div>
+		</markup-block>
+	</markup>
+
+	<scripts>
+		<script-block>
+		<![CDATA[
+			$.widget("ibi.minesweeper", $.ibi.ibxVBox, 
+			{
+				options:
+				{
+					nameRoot:true,
+					align:"stretch",
+					nMines:99,
+					boardHeight:16,
+					boardWidth:30,
+				},
+				_widgetClass:"mine-sweeper",
+				_create:function()
+				{
+					this._super();
+					var res = ibx.resourceMgr.getResource(".mine-sweeper-board");
+					this.element.append(res)
+					ibx.bindElements(res);
+				},
+				_init:function()
+				{
+					this._super();
+				},
+				_destroy:function()
+				{
+					this._super();
+				},
+				_refresh:function()
+				{
+					var options = this.options;
+					this._super();
+
+					this.minesRemaining.ibxWidget("option", "text", options.nMines);
+					this.gameTime.ibxWidget("option", "text", "---");
+
+					this.board.empty();
+					for(var i = 0; i < options.boardHeight; ++i)
+					{
+						var row = $("<div>").ibxFlexGrid({columnCount:options.boardWidth, wrap:false});
+						this.board.append(row);
+						for(var j = 0; j < options.boardWidth; ++j)
+						{
+							var tile = $("<div class='board-tile'>");
+							row.append(tile);
+						}
+					}
+				}
+			});
+			//# sourceURL=minesweeper.xml
+		]]>
+		</script-block>
+	</scripts>
+</ibx-res-bundle>
