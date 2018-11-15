@@ -209,7 +209,7 @@ $.widget("ibi.ibxPopup", $.ibi.ibxWidget,
 
 		//turn draggable on/off
 		if(options.movable)
-			this.element.draggable({handle:options.moveHandle, "containment": this.options.moveConstrainToWindow ? document.body : null});
+			this.element.draggable({handle:options.moveHandle, "containment": this.options.moveConstrainToWindow ? "window" : null});
 		else
 		if(this.element.is(".ui-draggable"))
 			this.element.draggable("destroy");
