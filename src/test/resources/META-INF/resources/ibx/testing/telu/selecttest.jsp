@@ -39,7 +39,7 @@
 				$(".autoheight").ibxWidget('values', values);
 				$(".autoheight").ibxWidget('userValue', 'item10');
 
-				for (var i = 0; i < 150; i++)
+				for (var i = 0; i < 2000; i++)
 					$(".autoheight2").ibxWidget('addControlItem', $("<div>").ibxSelectCheckItem({'text': 'Item' + i, 'userValue': 'item' + i}));
 				$(".autoheight2").ibxWidget('userValue', 'item10');
 

@@ -29,11 +29,12 @@
 			{
 				jQuery.event.special['ibx_change'] = { noBubble: true };
 
-				this._dateRangePicker = ibx.resourceMgr.getResource('.date-range-picker', true);
-				this._menuButton = $("<div class='menu-button'>").ibxHMenuButton({"menu": this._dateRangePicker, "justify":"start", "glyphClasses": "fa fa-calendar"});
-				$("body").append(this._menuButton);
-				this._dateRangePicker.on("ibx_change", function (e, data){
-					$(".menu-button").ibxWidget("option", "text", data.text);
+				$(".mybutton").on("click", function(){
+					console.time("start");
+					for (var i = 0; i < 2000; i++)
+						$(".autoheight2").ibxWidget('addControlItem', $("<div>").ibxSelectItem({'text': 'Item' + i, 'userValue': 'item' + i}));
+					console.timeEnd("start");
+
 				});
 
 
@@ -42,9 +43,44 @@
 		</script>
 
 		<style type="text/css">
+			.mytab
+			{
+				width:600px;
+			}
+			.mybutton
+			{
+				font-size: 24px;
+				width: 50px;
+				height: 50px;
+			}
+			.myslider
+			{
+				width: 200px;
+			}
+
+			.myslider2{
+				height: 200px;
+			}
+
+			.ibx-slider-body-horizontal-start,
+			.ibx-slider-body-vertical-start
+			{
+				background-color: blue;
+				border-color: blue;
+			}
+			.ibx-slider-body-horizontal-end,
+			.ibx-slider-body-vertical-end
+			{
+				background-color: red;
+				border-color: red;
+			}
 		</style>
 	</head>
 	<body class="ibx-root">
+
+		<div class="myslider" data-ibx-type="ibxHSlider"></div>
+		<div class="myslider2" data-ibx-type="ibxVSlider"></div>
+
 	</body>
 </html>
 
