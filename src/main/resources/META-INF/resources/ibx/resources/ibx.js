@@ -80,29 +80,26 @@ function ibx()
 
 	if(!ibx._loaded && !ibx._isLoading)
 	{
-		if(!ibx._preCompiled)
-		{
-			//things to preload for ibx.  Everything else is in the root resource bundle
-			var scripts = 
-			[
-				"<link type='text/css' rel='stylesheet' href='" + ibx._path + "./css/base.ibx.css'/>",
-				"<sc" + "ript type='text/javascript' src='" + ibx._path + "./etc/jquery/jquery-3.3.1.js'></sc" + "ript>",
-				"<sc" + "ript type='text/javascript' src='" + ibx._path + "./etc/jquery/jquery-ui-1.12.1/jquery-ui.js'></sc" + "ript>",
-				"<sc" + "ript type='text/javascript' src='" + ibx._path + "./js/util.ibx.js'></sc" + "ript>",
-				"<sc" + "ript type='text/javascript' src='" + ibx._path + "./js/preload.ibx.js'></sc" + "ript>",
-				"<sc" + "ript type='text/javascript' src='" + ibx._path + "./js/resources.ibx.js'></sc" + "ript>"
-			];
+		//things to preload for ibx.  Everything else is in the root resource bundle
+		var scripts = 
+		[
+			"<link type='text/css' rel='stylesheet' href='" + ibx._path + "./css/base.ibx.css'/>",
+			"<sc" + "ript type='text/javascript' src='" + ibx._path + "./etc/jquery/jquery-3.3.1.js'></sc" + "ript>",
+			"<sc" + "ript type='text/javascript' src='" + ibx._path + "./etc/jquery/jquery-ui-1.12.1/jquery-ui.js'></sc" + "ript>",
+			"<sc" + "ript type='text/javascript' src='" + ibx._path + "./js/util.ibx.js'></sc" + "ript>",
+			"<sc" + "ript type='text/javascript' src='" + ibx._path + "./js/preload.ibx.js'></sc" + "ript>",
+			"<sc" + "ript type='text/javascript' src='" + ibx._path + "./js/resources.ibx.js'></sc" + "ript>"
+		];
 
-			//[IBX-122] don't load jQuery/jQueryUI if already loaded
-			if(window.jQuery)
-				scripts[1] = "";
-			if(window.jQuery && window.jQuery.ui)
-				scripts[2] = "";
+		//[IBX-122] don't load jQuery/jQueryUI if already loaded
+		if(window.jQuery)
+			scripts[1] = "";
+		if(window.jQuery && window.jQuery.ui)
+			scripts[2] = "";
 
-			document.open();
-			document.write(scripts.join(""));
-			document.close();
-		}
+		document.open();
+		document.write(scripts.join(""));
+		document.close();
 
 		//wait for jQuery/jQueryUI to be loaded...then boot ibx
 		var dateStart = ibx._loadStart = new Date();
@@ -134,29 +131,6 @@ function ibx()
 					//jquery is fully loaded and running
 					$(window).dispatchEvent("ibx_ibxevent", {"hint":"jqueryloaded", "ibx":ibx});
 
-					//we want to precompile this application, not run it.
-					if(ibx._appParms.compile == "true")
-					{
-						var xhr = $.ajax({"url": window.location.pathname, "dataType":"text", "async":false});
-						var parser = new DOMParser();
-						var inDoc = parser.parseFromString(xhr.responseText, "text/html");
-
-						//remove the "ibx.js" script if it exists...will mess up the final compiled app.
-						$(inDoc.querySelector("script[src*='/ibx.js']")).remove();
-
-						//create the resource compiler, and pass a copy of the packages to compile, so the app loads noramlly after compilation.
-						var compiler = new ibxResourceCompiler(ibx.getPath(), true);
-						var compPackages = resPackages.slice();
-						compPackages.COMPILERBUNDLE = true;
-						compiler.addBundles(compPackages).done(function()
-						{
-							var outDoc = compiler.linkBundle(inDoc);
-							compiler.destroy();
-							console.log(outDoc.documentElement.outerHTML);
-							this.compiledApp = outDoc;
-						}.bind(this));
-					}
-
 					//continue booting ibx...
 					ibx._loadPromise = $.Deferred();
 					ibx._loadPromise._autoBind = autoBind;
@@ -168,16 +142,6 @@ function ibx()
 					var inlineStyles = $("head > style");//save the pre-ibx styles so they can be moved to the end after load.
 					var packages = ibx._loadPromise._resPackages;
 					packages.unshift("./ibx_resource_bundle.xml");
-
-					//all resources for app are in an internal resource bundle compiled previously...so just load from that.
-					if(ibx._preCompiled)
-					{
-						var bundle = $(".ibx-precompiled-res-bundle").remove();//remove bundle from DOM...no longer needed, saves memory.
-						var strBundle = bundle.text();
-						var parser = new DOMParser();
-						var bundle = parser.parseFromString(strBundle, "application/xml");
-						packages = [bundle];
-					}
 
 					$(window).dispatchEvent("ibx_ibxevent", {"hint":"resourcesloadstart", "ibx":ibx});
 					ibx.resourceMgr.addBundles(packages).done(function ibx_addBundlesDone()
@@ -239,7 +203,6 @@ ibx.loadProfile = null;		//profile for load cycle
 ibx.resourceMgr = null;		//ibx default resource manager	
 ibx.forceLinkLoading = true;//[IBX-152] will force asynchronous loading of javascript via script tags.
 ibx.forceInlineresLoaded = false;//[ACT-1571]Needed a way to package ibx into single file...this forces all script/css to be inline.
-ibx.preCompiled = false;
 
 //where ibx.js loaded from
 ibx._path = "";
