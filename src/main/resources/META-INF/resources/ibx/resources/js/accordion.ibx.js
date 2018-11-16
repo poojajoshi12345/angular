@@ -20,9 +20,10 @@ $.widget("ibi.ibxAccordionPane", $.ibi.ibxFlexBox,
 	_create:function()
 	{
 		this._super();
+		var options = this.options;
 		this._group = $("<div>").uniqueId().appendTo(this.element);
 		this._group.ibxRadioGroup({name:this._group.prop("id")}).on("ibx_change", this._onPageChange.bind(this));
-		this.add(this.element.children(".ibx-accordion-page"));
+		this.add(this.element.children());
 	},
 	children:function(selector)
 	{
