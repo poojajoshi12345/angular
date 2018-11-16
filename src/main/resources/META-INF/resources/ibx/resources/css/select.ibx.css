@@ -23,7 +23,8 @@
 }
 
 .ibx-select-open-btn::before {
-	font-family:"FontAwesome";
+	font-family:"FontAwesome", "Font Awesome 5 Free";
+    font-weight:900;
 	content:"\f0d7";
 }
 

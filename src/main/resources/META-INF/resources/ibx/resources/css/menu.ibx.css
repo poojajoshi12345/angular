@@ -162,7 +162,8 @@
 .ibx-split-menu-button > .split-menu::before
 {
 	width:1em;
-	font-family:"FontAwesome";
+	font-family:"FontAwesome", "Font Awesome 5 Free";
+	font-weight:900;
 	content:"\F0D7";
 	text-align:center;
 }
