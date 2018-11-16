@@ -383,6 +383,11 @@ $.widget("ibi.ibxEditable", $.Widget,
 	{
 		if(this.element.is(".ibx-content-editing"))
 		{
+			//if any seletion, remove it when finished editing.
+			var sel = document.getSelection();
+			sel.removeAllRanges();
+
+			//cleanup and let world know we're done.
 			this.element.off("keydown blur", this._onElementEventBound).prop("contentEditable", false).ibxRemoveClass("ibx-content-editing");
 			this.element.focus();
 			if(revertToOriginal)
