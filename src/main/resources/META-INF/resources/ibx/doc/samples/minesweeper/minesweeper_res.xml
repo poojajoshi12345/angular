@@ -48,8 +48,8 @@
 			}
 			.board-tile
 			{
-				width:25px;
-				height:25px;
+				width:15px;
+				height:15px;
 				border:2px outset;
 				background-color:#ccc;
 			}
