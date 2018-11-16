@@ -40,6 +40,9 @@
 					for(var i = 0; i < rules.length; ++i)
 					{
 						var rule = rules[i];
+						if(!rule.style.content)
+							continue;
+							
 						var selector = rule.selectorText.replace(/\./g, "").replace(/:.*/, "");
 						var options = 
 						{
