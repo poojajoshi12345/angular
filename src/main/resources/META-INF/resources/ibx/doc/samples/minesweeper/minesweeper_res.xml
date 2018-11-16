@@ -16,16 +16,35 @@
 	<styles>
 		<style-sheet>
 		<![CDATA[
+			.mine-sweeper
+			{
+				background-color:#ccc;
+				padding:5px;
+				border:2px outset;
+			}
 			.info-box
 			{
-				margin:5px;
+				margin:5px 0px 5px 0px;
 				padding:5px;
+				border:2px inset;
 			}
 			.info-label
 			{
+				font-family:monospace;
 				font-size:20px;
 				background-color:black;
 				color:red;
+				width:50px;
+			}
+			.btn-reset
+			{
+				font-size:1.5em;
+				background-color:yellow;
+				border:2px outset;
+			}
+			.mine-sweeper-board
+			{
+				border:2px inset;
 			}
 			.board-tile
 			{
@@ -34,19 +53,23 @@
 				border:2px outset;
 				background-color:#ccc;
 			}
+			.board-tile:hover
+			{
+				background-color:unset;
+			}
 		]]>
 		</style-sheet>
 	</styles>
 
 	<markup>
 		<markup-block>
-			<div class="mine-sweeper-board">
-				<div class="info-box" data-ibx-name="infoBox" data-ibx-type="ibxHBox" data-ibxp-align="center" data-ibxp-justify="center">
-					<div tabindex="0" data-ibx-name="minesRemaining" class="info-label mines-remaining" data-ibx-type="ibxLabel"></div>
+			<div class="mine-sweeper-markup">
+				<div class="info-box" data-ibx-name="infoBox" data-ibx-type="ibxHBox" data-ibxp-align="center" data-ibxp-justify="spaceBetween">
+					<div data-ibx-name="minesRemaining" class="info-label mines-remaining" data-ibx-type="ibxLabel" data-ibxp-icon-position="top"></div>
 					<div tabindex="0" data-ibx-name="btnReset" class="btn-reset" data-ibx-type="ibxButtonSimple" data-ibxp-glyph-classes="fa fa-smile-o"></div>
-					<div tabindex="0" data-ibx-name="gameTime" class="info-label game-time" data-ibx-type="ibxLabel"></div>
+					<div data-ibx-name="gameTime" class="info-label game-time" data-ibx-type="ibxLabel" data-ibxp-icon-position="top"></div>
 				</div>
-				<div class="board" data-ibx-name="board">
+				<div class="mine-sweeper-board" data-ibx-name="board">
 				</div>
 			</div>
 		</markup-block>
@@ -66,28 +89,28 @@
 					boardWidth:30,
 				},
 				_widgetClass:"mine-sweeper",
+				_minesRemaining:0,
+				_gameTime:0,
+				_timer:null,
 				_create:function()
 				{
 					this._super();
-					var res = ibx.resourceMgr.getResource(".mine-sweeper-board");
+					var res = ibx.resourceMgr.getResource(".mine-sweeper-markup");
 					this.element.append(res)
 					ibx.bindElements(res);
 				},
 				_init:function()
 				{
 					this._super();
+					this.newGame();
 				},
 				_destroy:function()
 				{
 					this._super();
 				},
-				_refresh:function()
+				newGame:function(options)
 				{
-					var options = this.options;
-					this._super();
-
-					this.minesRemaining.ibxWidget("option", "text", options.nMines);
-					this.gameTime.ibxWidget("option", "text", "---");
+					options = $.extend({}, this.options, options);
 
 					this.board.empty();
 					for(var i = 0; i < options.boardHeight; ++i)
@@ -96,10 +119,33 @@
 						this.board.append(row);
 						for(var j = 0; j < options.boardWidth; ++j)
 						{
-							var tile = $("<div class='board-tile'>");
+							var tile = $("<div tabindex='0' class='board-tile'>").on("click", this._onTileClick.bind(this));
 							row.append(tile);
 						}
 					}
+
+					this._minesRemaining = options.nMines;
+					this._gameTime = 0;
+					this.minesRemaining.ibxWidget("option", "text", this._minesRemaining);
+					this.gameTime.ibxWidget("option", "text", this._gameTime);
+					this._timer = window.setInterval(this._onTick.bind(this), 1000);
+				},
+				_onGameOver:function(e)
+				{
+					window.clearInterval(this._time);
+				},
+				_onTileClick:function(e)
+				{
+				},
+				_onTick:function()
+				{
+					this._gameTime++;
+					this.gameTime.ibxWidget("option", "text", this._gameTime);
+				},
+				_refresh:function()
+				{
+					var options = this.options;
+					this._super();
 				}
 			});
 			//# sourceURL=minesweeper.xml
