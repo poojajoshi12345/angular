@@ -32,10 +32,6 @@
 				margin:0px;
 				box-sizing:border-box;
 			}
-			.mine-sweeper
-			{
-				font-size:20px;
-			}
 		</style>
 	</head>
 	<body class="ibx-root">

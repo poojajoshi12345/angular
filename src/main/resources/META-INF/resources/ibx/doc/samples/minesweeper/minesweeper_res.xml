@@ -48,10 +48,10 @@
 			}
 			.board-tile
 			{
-				width:1em;
-				height:1em;
-				xpadding:1px;
-				border:2px outset;
+				width:20px;
+				height:20px;
+				padding:10px;
+				border:outset;
 				background-color:#ccc;
 			}
 			.board-tile:hover
@@ -60,15 +60,14 @@
 			}
 			.board-tile-pressed
 			{
-				border:none;
+				border:inset transparent;
 			}
 			.mine-uxb
 			{
-				border:1px solid red;
+				background-color:#aaa;
 			}
 			.reveal-mines .mine-uxb
 			{
-				border:none;
 			}
 		]]>
 		</style-sheet>
@@ -153,7 +152,7 @@
 						for(var j = 0; j < cols; ++j)
 						{
 							var isMine = (mines[(i||1) * (j||1)] === true);
-							var tile = $("<div tabindex='0' class='board-tile'>").on("mousedown mouseup click", this._onTileClick.bind(this));
+							var tile = $("<div tabindex='0' class='board-tile ibx-flexbox fbx-inline fbx-align-items-center fbx-justify-content-center'>").on("mousedown mouseup click", this._onTileClick.bind(this));
 							tile.data("isMine", isMine);
 							tile.ibxToggleClass("mine-uxb", isMine);
 							row.append(tile);
