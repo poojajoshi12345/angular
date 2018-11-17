@@ -57,6 +57,10 @@
 			{
 				background-color:unset;
 			}
+			.mine-uxb
+			{
+				background-color:red;
+			}
 		]]>
 		</style-sheet>
 	</styles>
@@ -102,40 +106,73 @@
 				_init:function()
 				{
 					this._super();
-					this.newGame();
 				},
 				_destroy:function()
 				{
 					this._super();
 				},
-				newGame:function(options)
+				start:function(options)
 				{
+					this.stop();
+
 					options = $.extend({}, this.options, options);
-
-					this.board.empty();
-					for(var i = 0; i < options.boardHeight; ++i)
-					{
-						var row = $("<div>").ibxFlexGrid({columnCount:options.boardWidth, wrap:false});
-						this.board.append(row);
-						for(var j = 0; j < options.boardWidth; ++j)
-						{
-							var tile = $("<div tabindex='0' class='board-tile'>").on("click", this._onTileClick.bind(this));
-							row.append(tile);
-						}
-					}
-
 					this._minesRemaining = options.nMines;
 					this._gameTime = 0;
 					this.minesRemaining.ibxWidget("option", "text", this._minesRemaining);
 					this.gameTime.ibxWidget("option", "text", this._gameTime);
+					this._generateBoard(options.boardHeight, options.boardWidth);
 					this._timer = window.setInterval(this._onTick.bind(this), 1000);
 				},
-				_onGameOver:function(e)
+				stop:function(why)
 				{
-					window.clearInterval(this._time);
+					window.clearInterval(this._timer);
+				},
+				_generateBoard:function(rows, cols)
+				{
+					var options = this.options;
+					var mines = this._generateMines(options.nMines, 0, rows * cols);
+
+					this.board.empty();
+					for(var i = 0; i < rows; ++i)
+					{
+						var row = $("<div>").ibxFlexGrid({columnCount:cols, wrap:false});
+						this.board.append(row);
+						for(var j = 0; j < cols; ++j)
+						{
+							var tile = $("<div tabindex='0' class='board-tile'>").on("click", this._onTileClick.bind(this));
+							tile.data("coords", {row:i, col:j});
+
+							var isMine = (mines[(i||1) * (j||1)] === true);
+							tile.ibxToggleClass("mine-uxb", isMine);
+							row.append(tile);
+						}
+					}
+				},
+				_generateMines:function(nMines, min, max)
+				{
+					var options = this.options;
+					var mines = {};
+					var i = 0;
+					while(i < nMines)
+					{
+						var int = GetRandomInt(min, max);
+						if(mines[int])
+							continue;
+						mines[int] = true;
+						i++;
+					}
+					return mines;
 				},
 				_onTileClick:function(e)
 				{
+					var mines = this._mines;
+					var tile = $(e.target);
+					var coords = tile.data("coords");
+					if(mines.indexOf(coords.row * coords.col) != -1)
+						console.log("DEAD");
+					else
+						console.log("OK");
+						
 				},
 				_onTick:function()
 				{

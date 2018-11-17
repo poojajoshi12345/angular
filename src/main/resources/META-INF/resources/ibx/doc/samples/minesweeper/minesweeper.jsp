@@ -20,6 +20,11 @@
 		<script type="text/javascript">
 			ibx(function()
 			{
+				$(".new-button").on("click", function(e)
+				{
+					var ms = $(".mine-sweeper");
+					ms.ibxWidget("start");
+				});
 			}, [{src:"./minesweeper_res.xml", loadContext:"app"}],true);
 		</script>
 
@@ -34,7 +39,8 @@
 		</style>
 	</head>
 	<body class="ibx-root">
-		<div class="main-box" data-ibx-type="ibxHBox" data-ibxp-justify="center" data-ibxp-wrap="true">
+		<div class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="center" data-ibxp-wrap="true">
+			<div class="new-button" data-ibx-type="ibxButton">New Game</div>
 			<div data-ibx-type="minesweeper"></div>
 		</div>
 	</body>
