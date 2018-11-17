@@ -48,18 +48,27 @@
 			}
 			.board-tile
 			{
-				width:15px;
-				height:15px;
+				width:1em;
+				height:1em;
+				xpadding:1px;
 				border:2px outset;
 				background-color:#ccc;
 			}
 			.board-tile:hover
 			{
-				background-color:unset;
+				background-color:#e0e0e0;
+			}
+			.board-tile-pressed
+			{
+				border:none;
 			}
 			.mine-uxb
 			{
-				background-color:red;
+				border:1px solid red;
+			}
+			.reveal-mines .mine-uxb
+			{
+				border:none;
 			}
 		]]>
 		</style-sheet>
@@ -102,6 +111,7 @@
 					var res = ibx.resourceMgr.getResource(".mine-sweeper-markup");
 					this.element.append(res)
 					ibx.bindElements(res);
+					this.btnReset.on("click", this.start.bind(this));
 				},
 				_init:function()
 				{
@@ -114,8 +124,9 @@
 				start:function(options)
 				{
 					this.stop();
-
 					options = $.extend({}, this.options, options);
+
+					this.board.ibxRemoveClass("reveal-mines");
 					this._minesRemaining = options.nMines;
 					this._gameTime = 0;
 					this.minesRemaining.ibxWidget("option", "text", this._minesRemaining);
@@ -123,9 +134,11 @@
 					this._generateBoard(options.boardHeight, options.boardWidth);
 					this._timer = window.setInterval(this._onTick.bind(this), 1000);
 				},
-				stop:function(why)
+				stop:function()
 				{
 					window.clearInterval(this._timer);
+					this.board.addClass("reveal-mines");
+					this.board.find(".mine-uxb").addClass("fa fa-bomb");
 				},
 				_generateBoard:function(rows, cols)
 				{
@@ -139,10 +152,9 @@
 						this.board.append(row);
 						for(var j = 0; j < cols; ++j)
 						{
-							var tile = $("<div tabindex='0' class='board-tile'>").on("click", this._onTileClick.bind(this));
-							tile.data("coords", {row:i, col:j});
-
 							var isMine = (mines[(i||1) * (j||1)] === true);
+							var tile = $("<div tabindex='0' class='board-tile'>").on("mousedown mouseup click", this._onTileClick.bind(this));
+							tile.data("isMine", isMine);
 							tile.ibxToggleClass("mine-uxb", isMine);
 							row.append(tile);
 						}
@@ -165,14 +177,15 @@
 				},
 				_onTileClick:function(e)
 				{
-					var mines = this._mines;
-					var tile = $(e.target);
-					var coords = tile.data("coords");
-					if(mines.indexOf(coords.row * coords.col) != -1)
-						console.log("DEAD");
-					else
-						console.log("OK");
-						
+					var tile = $(e.currentTarget);
+					var eType = e.type;
+					if(eType == "click")
+					{
+						var isMine = tile.data("isMine");
+						if(isMine)
+							this.stop();
+					}
+					tile.ibxToggleClass("board-tile-pressed", (e.type === "mousedown"));
 				},
 				_onTick:function()
 				{
