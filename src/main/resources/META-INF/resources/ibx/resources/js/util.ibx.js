@@ -413,7 +413,7 @@ function createNativeEvent(type, data, canBubble, cancelable, relatedTarget, ctx
 		e.isDefaultPrevented = function(){return this.ieDefaultPrevented;};
 	}
 
-	e.data = (data || {});
+	e.data = (data === undefined ? {} : data);
 	e.relatedTarget = relatedTarget;
 	return e;
 }
