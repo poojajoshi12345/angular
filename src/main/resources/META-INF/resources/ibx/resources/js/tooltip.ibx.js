@@ -8,6 +8,7 @@ $.widget("ibi.ibxTooltip", $.ibi.ibxPopup,
 		"text":null,
 		"effect":"fade",
 		"delay":500,
+		"destroyOnClose":false,
 	},
 	_widgetClass:"ibx-tooltip",
 	_create:function()

@@ -247,24 +247,25 @@ $.widget("ibi.ibxWidget", $.Widget,
 		{
 			var tt = this.options.tooltip;
 			if(typeof(tt) == "string")
-				tt = this._ttPopup = $("<div>").ibxTooltip({"text":tt, });
+				tt = $("<div>").ibxTooltip({"text":tt});
 			
 			if(tt)
 			{
-				var popupWidget = this._ttPopup.data("ibxWidget");
+				var popupWidget = tt.data("ibxWidget");
 				var delay = popupWidget.options.delay;
 				this._ttTimer = window.setTimeout(function(popupWidget)
 				{
 					popupWidget.option("position", {"my":"left+8 top+22", "at":"left bottom", "of":this._eLastMouse})
 					popupWidget.open();
 				}.bind(this, popupWidget), delay);
+				this._ttPopup = tt;
 				e.stopPropagation();
 			}
 		}
 		else
 		if(eType == "mouseout" && this._ttPopup && !this._ttPopup.is(e.relatedTarget))
 		{
-			window.clearInterval(this._ttTimer)
+			window.clearTimeout(this._ttTimer)
 			this._ttPopup.ibxWidget("close");
 			this._ttPopup = null;
 		}
