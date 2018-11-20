@@ -62,6 +62,10 @@ $.widget("ibi.ibxLabel", $.ibi.ibxFlexBox,
 		this._text.remove();
 		this.element.ibxRemoveClass("icon-left icon-top icon-right icon-bottom")
 	},
+	isEditing:function()
+	{
+		return this._text.is(".ibx-content-editing");
+	},
 	startEditing:function(editOptions)
 	{
 		this._text.ibxEditable().ibxEditable("startEditing", editOptions);

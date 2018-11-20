@@ -359,6 +359,14 @@ $.widget("ibi.ibxEditable", $.Widget,
 	_preEditValue:null,
 	/**
 	 * @memberof ibi.ibxEditable.prototype
+	 * @description Is this control in edit mode.
+	 */
+	isEditing:function()
+	{
+		return this.element.is(".ibx-content-editing");
+	},
+	/**
+	 * @memberof ibi.ibxEditable.prototype
 	 * @description Start editing the element's content.
 	 * @param {object} editOptions The runtime options to use when editing.  Will overlay the widget's options.
 	 */
@@ -381,7 +389,7 @@ $.widget("ibi.ibxEditable", $.Widget,
 	 */
 	stopEditing:function(revertToOriginal)
 	{
-		if(this.element.is(".ibx-content-editing"))
+		if(this.isEditing())
 		{
 			//if any seletion, remove it when finished editing.
 			var sel = document.getSelection();
