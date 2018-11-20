@@ -402,7 +402,10 @@ $.widget("ibi.ibxEditable", $.Widget,
 			this.element.off("keydown blur", this._onElementEventBound).prop("contentEditable", false).ibxRemoveClass("ibx-content-editing");
 			this.element.focus();
 			if(revertToOriginal)
+			{
 				this.element.html(this._preEditValue);
+				this.element.dispatchEvent("ibx_canceledit", this.element.text(), true, false);
+			}
 			else
 				this.element.dispatchEvent("ibx_changed", this.element.text(), true, false);
 		}
