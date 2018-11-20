@@ -14,6 +14,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 		"externalDropTarget":false,		//can you drop external things on this (like native OS files).
 		"wantResize":false,
 		"opaque":false,					//add iframe behind to stop pdf from bleading through.
+		"tooltip":null,
 
 		//for selection and keyboard naviation (circular tabbing/arrow keys)
 		//These are just passthrough options for the attached ibxSelectionManager widget.
@@ -72,6 +73,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 		this.element.attr("data-ibx-type", this.widgetName);
 		this.element.on("focusin focusout", this._onWidgetFocusEvent.bind(this));
 		this.element.on("contextmenu", this._onWidgetContextMenu.bind(this));
+		this.element.on("mouseover mouseout mousemove", this._onWidgetMouseEvent.bind(this));
 		this._adjustWidgetClasses(true);
 
 		//save the resize sensor callback;
@@ -235,6 +237,38 @@ $.widget("ibi.ibxWidget", $.Widget,
 			e.stopPropagation();
 			e.preventDefault();
 		}
+	},
+	_ttTimer:null,
+	_ttPopup:null,
+	_onWidgetMouseEvent:function(e)
+	{
+		var eType = e.type;
+		if(eType == "mouseover" && !this._ttPopup)
+		{
+			var tt = this.options.tooltip;
+			if(typeof(tt) == "string")
+				tt = this._ttPopup = $("<div>").ibxTooltip({"text":tt, });
+			
+			if(tt)
+			{
+				var popupWidget = this._ttPopup.data("ibxWidget");
+				var delay = popupWidget.options.delay;
+				this._ttTimer = window.setTimeout(function(popupWidget)
+				{
+					popupWidget.option("position", {"my":"left+8 top+22", "at":"left bottom", "of":this._eLastMouse})
+					popupWidget.open();
+				}.bind(this, popupWidget), delay);
+				e.stopPropagation();
+			}
+		}
+		else
+		if(eType == "mouseout" && this._ttPopup && !this._ttPopup.is(e.relatedTarget))
+		{
+			window.clearInterval(this._ttTimer)
+			this._ttPopup.ibxWidget("close");
+			this._ttPopup = null;
+		}
+		this._eLastMouse = e;
 	},
 	children:function(selector)
 	{

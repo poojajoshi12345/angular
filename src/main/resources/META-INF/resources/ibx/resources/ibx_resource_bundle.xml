@@ -195,6 +195,7 @@ $Revision$:-->
 		<style-file src="./css/slider.ibx.css"/>
 		<style-file src="./css/popup.ibx.css"/>
 		<style-file src="./css/dialog.ibx.css"/>
+		<style-file src="./css/tooltip.ibx.css"/>
 		<style-file src="./css/form.ibx.css"/>
 		<style-file src="./css/tabs.ibx.css"/>
 		<style-file src="./css/accordion.ibx.css"/>
@@ -250,6 +251,7 @@ $Revision$:-->
 		<script-file src="./js/slider.ibx.js"/>
 		<script-file src="./js/popup.ibx.js"/>
 		<script-file src="./js/dialog.ibx.js"/>
+		<script-file src="./js/tooltip.ibx.js"/>
 		<script-file src="./js/radiogroup.ibx.js"/>
 		<script-file src="./js/form.ibx.js"/>
 		<script-file src="./js/accordion.ibx.js"/>
