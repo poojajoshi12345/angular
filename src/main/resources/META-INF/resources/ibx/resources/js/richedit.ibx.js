@@ -372,14 +372,17 @@ $.widget("ibi.ibxEditable", $.Widget,
 	 */
 	startEditing:function(editOptions)
 	{
-		this._preEditValue = this.element.html();//save the current text for possible reversion.
-		this.element.on("keydown blur", this._onElementEventBound);
+		if(!this.isEditing())
+		{
+			this._preEditValue = this.element.html();//save the current text for possible reversion.
+			this.element.on("keydown blur", this._onElementEventBound);
 
-		var options = $.extend({contentEditable:true}, this.options, editOptions); 
-		this.option(options);
-		this.element.prop(options).ibxAddClass("ibx-content-editing").focus();
-		if(options.selectAll)
-			document.getSelection().selectAllChildren(this.element[0]);
+			var options = $.extend({contentEditable:true}, this.options, editOptions); 
+			this.option(options);
+			this.element.prop(options).ibxAddClass("ibx-content-editing").focus();
+			if(options.selectAll)
+				document.getSelection().selectAllChildren(this.element[0]);
+		}
 	},
 	/**
 	 * @memberof ibi.ibxEditable.prototype
