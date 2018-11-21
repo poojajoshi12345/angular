@@ -106,10 +106,10 @@ $.widget("ibi.ibxWidget", $.Widget,
 
 		//NEVER reset the role unless you have to, as it will cause the reader to completely re-read the element!
 		if(accessible &&  aria.role && (this.element.attr("role") != aria.role))
-			this.element.attr("role", aria.role)
+			this.element.attr("role", aria.role);
 		else
 		if(!accessible || !aria.role)
-			this.element.removeAttr("role")
+			this.element.removeAttr("role");
 			
 		accessible ? this.element.ibxAriaId() : this.element.removeIbxAriaId();
 
@@ -132,7 +132,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 	_setAccessibility:function(accessible, aria)
 	{
 		//do nothing.
-		return aria
+		return aria;
 	},
 	destroyed:function(){return this._destroyed;},
 	_destroyed:false,
@@ -166,7 +166,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 	},
 	_init:function()
 	{
-		var options = $.extend(true, {}, this.options, ibx.getIbxMarkupOptions(this.element))
+		var options = $.extend(true, {}, this.options, ibx.getIbxMarkupOptions(this.element));
 		this.option(options);
 	},
 	owner:function(){return this.element.parent();},
@@ -267,8 +267,11 @@ $.widget("ibi.ibxWidget", $.Widget,
 				var delay = ttWidget.options.delay;
 				this._ttTimer = window.setTimeout(function(ttWidget)
 				{
-					ttWidget.option("position", {"collision":"flip fit", "my":"left+8 top+22", "at":"left bottom", "of":this._eLastMouse})
-					ttWidget.open();
+					ttWidget.option("position", {"collision":"flip fit", "my":"left+8 top+22", "at":"left bottom", "of":this._eLastMouse});
+					ttWidget.element.ibxWidget("open").on("ibx_close", function(e)
+					{
+						this._ttPopup = null;//if user closes by clicking, or something other than mouseout.
+					}.bind(this));
 				}.bind(this, ttWidget), delay);
 				this._ttPopup = tt;
 				e.stopPropagation();
@@ -277,7 +280,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 		else
 		if(eType == "mouseout" && this._ttPopup && !this._ttPopup.is(e.relatedTarget) && !$.contains(this._ttPopup[0], e.relatedTarget))
 		{
-			window.clearTimeout(this._ttTimer)
+			window.clearTimeout(this._ttTimer);
 			this._ttPopup.ibxWidget("close");
 			this._ttPopup = null;
 		}
