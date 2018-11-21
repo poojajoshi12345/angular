@@ -15,6 +15,7 @@
 	</strings>
 
 	<styles>
+		<style-file src="//js.arcgis.com/4.9/esri/css/main.css"/>
 		<style-file src="./test_res_styles.css"/>
 		<style-sheet>
 		<![CDATA[
@@ -42,44 +43,27 @@
 		</markup-block>
 	</markup>
 
+	<!--
+	<link rel="stylesheet" href="https://js.arcgis.com/4.9/esri/css/main.css">
+	<script src="https://js.arcgis.com/4.9/"></script>
+	-->
+
 	<scripts>
+		<script-file src="//js.arcgis.com/4.9/"/>
 		<script-file src="./test_res_script.js"/>
 		<script-file src="../../ibxtools/shared_resources/js/ibfs.js" loadContext="ibx"/>
 		<script-block>
 		<![CDATA[
-			$.widget("ibi.ibxDateRange", $.ibi.ibxFlexBox, 
+			$.widget("ibi.ibxPropRow", $.ibi.ibxHBox, 
 			{
 				options:
 				{
-					align:"center",
-					dateOptions:
-					{
-						"type":"inline",
-						"changeYear":true,
-						"changeMonth":true,
-					}
+				
 				},
 				_widgetClass:"ibx-date-range",
 				_create:function()
 				{
 					this._super();
-					var dateBox = this.dateFromBox = $("<div class='date-box date-box-from'>").ibxFlexBox({align:"center"})
-					var dateLabel = this.dateFromLabel = $("<div class='date-label date-from-label'>From:</div>").ibxLabel();
-					var dateValue = this.dateFromValue = $("<div tabindex='0' class='date-value date-from-value'>00/00/0000</div>").ibxLabel();
-					var dateButton = this.dateFromButton = $("<div tabindex='0' class='date-button date-from-button'>").ibxButtonSimple({glyphClasses:"fa fa-calendar"});
-					dateBox.append(dateLabel, dateValue, dateButton);
-
-					var dateBox = this.dateToBox = $("<div class='date-box date-box-to'>").ibxFlexBox({align:"center"})
-					var dateLabel = this.dateToLabel = $("<div class='date-label date-to-label'>To:</div>").ibxLabel();
-					var dateValue = this.dateToValue = $("<div tabindex='0' class='date-value date-to-value'>00/00/0000</div>").ibxLabel();
-					var dateButton = this.dateToButton = $("<div tabindex='0' class='date-button date-to-button'>").ibxButtonSimple({glyphClasses:"fa fa-calendar"});
-					dateBox.append(dateLabel, dateValue, dateButton);
-
-					$([this.dateFromButton[0], this.dateToButton[0]]).on("click", this._onDateBtnClick.bind(this));
-					$([this.dateFromValue[0], this.dateToValue[0]]).on("click", this._onDateValueClick.bind(this));
-
-
-					this.element.append(this.dateFromBox, this.dateToBox);
 				},
 				_init:function()
 				{
@@ -89,23 +73,30 @@
 				{
 					this._super();
 				},
-				_onDateBtnClick:function(e)
+				_refresh:function()
 				{
-					var btn = $(e.currentTarget);
-					var cal = $("<div>").ibxDatePicker(this.options.dateOptions).on("ibx_change", this._onDateChange.bind(this)).data("triggerButton", btn);
-					var popup = $("<div>").ibxPopup({position:{my:"left top", at:"left bottom", of:btn.closest(".date-box"), collision:"fit flip"}});
-					popup.append(cal).ibxWidget("open");
+					var options = this.options;
+					this._super();
+				}
+			});
+
+			$.widget("ibi.ibxPropGrid", $.ibi.ibxVBox, 
+			{
+				options:
+				{
 				},
-				_onDateValueClick:function(e)
+				_widgetClass:"ibx-date-range",
+				_create:function()
 				{
-					$(e.currentTarget).ibxWidget("startEditing", {commitOnBlur:false});
+					this._super();
 				},
-				_onDateChange:function(e, data)
+				_init:function()
 				{
-					var datePicker = $(e.target);
-					var btn = datePicker.data("triggerButton");
-					var value = btn.siblings(".date-value");
-					value.ibxWidget("option", "text", data.date);
+					this._super();
+				},
+				_destroy:function()
+				{
+					this._super();
 				},
 				_refresh:function()
 				{

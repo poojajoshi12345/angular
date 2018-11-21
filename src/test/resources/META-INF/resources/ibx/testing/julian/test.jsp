@@ -21,85 +21,55 @@
 			<jsp:include page="/WEB-INF/jsp/global/wf_globals.jsp" flush="false" />
 			ibx(function()
 			{
-				$(".del-command").on("ibx_triggered", function(e)
-				{
-					console.log(e.type);
-					e.preventDefault();
-					e.stopPropagation();
-				});
-
-				var options = 
-				{
-					"type":"inline",
-					"changeYear":true,
-					"changeMonth":true,
-
-				}
-
-				$(".date-1-btn").on("click", function(e)
-				{
-					var cal = $("<div>").ibxDatePicker(options).on("ibx_change", function(e, data)
-					{
-						$(".date-1-val").ibxWidget("option", "text", data.date);
-					});
-					var pop = $("<div>").ibxPopup({position:{my:"left top", at:"left bottom", of:e.currentTarget}});
-					pop.append(cal).ibxWidget("open");
-				});
-
-				$(".date-2-btn").on("click", function(e)
-				{
-					var cal = $("<div>").ibxDatePicker(options).on("ibx_change", function(e, data)
-					{
-						$(".date-2-val").ibxWidget("option", "text", data.date);
-					});
-					var pop = $("<div>").ibxPopup({position:{my:"left top", at:"left bottom", of:e.currentTarget}});
-					pop.append(cal).ibxWidget("open");
-				});
-
-
-
-
-			}, [{"src":"./test_res_bundle.xml", "loadContext":"app"}], true);
+			},
+			[
+				{"src":"./test_res_bundle.xml", "loadContext":"app"},
+				{"src":"../../ibxtools/mapping/resources/mapping_res.xml", "loadContext":"ibx"}
+			], true);
 		</script>
 		<style type="text/css">
-			html, body
+			html, body, .main-box
 			{
 				width:100%;
 				height:100%;
 				margin:0px;
 				box-sizing:border-box;
 			}
+			.test-grid
+			{
+				width:400px;
+				height:400px;
+				border:1px solid red;
+				padding:5px;
+			}
+			.grid-cell
+			{
+				border:1px solid black;
+				xwidth:100px;
+				xheight:100px;
+			}
 
-			.main-box
+			.test-map
 			{
-				width:100%;
-				height:100%;
-				overflow:auto;
-				background-color:white;
-				box-sizing:border-box;
-			}
-			.date-box
-			{
-				margin:2px;
-			}
-			.date-value
-			{
-				border:1px solid #ccc;
-				margin:2px;
-				padding:2px;
-				width:100px;
-			}
-			.date-btn
-			{
-				font-size:1.5em;
+				width:500px;
+				height:500px;
 			}
 		</style>
 	</head>
 	<body class="ibx-root">
 		<div class="del-command" data-ibx-type="ibxCommand" data-ibxp-id="cmdDelete" data-ibxp-shortcut="CTRL+SHIFT+DEL"></div>
 		<div class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="center" data-ibxp-justify="center" data-ibxp-command="cmdDelete">
-			<div class="test" data-ibx-type="ibxButton">Test</div>
-			<div class="date-range" data-ibx-type="ibxDateRange"></div>
+
+			<div class="test-map" data-ibx-type="esriMap"></div>
+
+			<!-- <div class="test-grid" data-ibx-type="ibxGrid" data-ibx-options='{"cols":"1fr 1fr", "justify":"center", "align":"stretch"}'>
+
+				<div class="grid-cell" data-ibx-type="ibxLabel" data-ibx-col="1" data-ibx-row="1">Grid Item</div>
+				<div class="grid-cell" data-ibx-type="ibxLabel" data-ibx-col="2" data-ibx-row="1">Grid Item</div>
+				<div class="grid-cell" data-ibx-type="ibxLabel" data-ibx-col="1" data-ibx-row="2">Grid Item</div>
+				<div class="grid-cell" data-ibx-type="ibxLabel" data-ibx-col="2" data-ibx-row="2">Grid Item</div>
+
+			</div> -->
 		</div>
 	</body>
 </html>

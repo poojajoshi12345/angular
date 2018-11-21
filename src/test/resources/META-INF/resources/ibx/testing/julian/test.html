@@ -12,11 +12,6 @@
 		<script type="text/javascript">
 			ibx(function(e)
 			{
-				$(".test-label").on("ibx_widgetfocus", function(e)
-				{
-					var label = $(e.currentTarget);
-					label.ibxWidget("startEditing", {selectAll:false});
-				});
 			},true);
 		</script>
 		<style type="text/css">
@@ -31,7 +26,6 @@
 			{
 				font-family:monospace;
 				font-size:2em;
-				xwidth:100px;
 				margin:1em;
 				border:1px solid black;
 			}
@@ -39,7 +33,6 @@
 	</head>
 	<body class="ibx-root">
 		<div class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="center" data-ibxp-justify="start">
-			<div tabindex="0" class="test-label" data-ibx-type="ibxLabel">This is a test</div>
 		</div>
 	</body>
 </html>

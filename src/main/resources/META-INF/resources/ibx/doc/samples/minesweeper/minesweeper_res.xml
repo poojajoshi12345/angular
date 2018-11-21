@@ -48,9 +48,9 @@
 			}
 			.board-tile
 			{
+				font-size:2em;
 				width:20px;
 				height:20px;
-				padding:10px;
 				border:outset;
 				background-color:#ccc;
 			}
