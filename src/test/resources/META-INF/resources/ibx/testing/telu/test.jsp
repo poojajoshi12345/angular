@@ -29,15 +29,16 @@
 			{
 				jQuery.event.special['ibx_change'] = { noBubble: true };
 
-				$(".mybutton").on("click", function(){
-					console.time("start");
-					for (var i = 0; i < 2000; i++)
-						$(".autoheight2").ibxWidget('addControlItem', $("<div>").ibxSelectItem({'text': 'Item' + i, 'userValue': 'item' + i}));
-					console.timeEnd("start");
+				var label = $(".mylabel");
+				label[0].addEventListener("mousedown", function (e){
 
+				}, true);
+				label.on('dblclick', function (e){
+					label.ibxWidget("startEditing");
 				});
 
-
+				label.draggable();
+				//label.draggable("disable");
 
 			}, packages, true);
 		</script>
@@ -78,8 +79,7 @@
 	</head>
 	<body class="ibx-root">
 
-		<div class="myslider" data-ibx-type="ibxHSlider"></div>
-		<div class="myslider2" data-ibx-type="ibxVSlider"></div>
+		<div data-ibx-type="ibxLabel" class="mylabel">This is a label</div>
 
 	</body>
 </html>
