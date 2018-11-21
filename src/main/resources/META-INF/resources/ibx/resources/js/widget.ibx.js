@@ -115,6 +115,9 @@ $.widget("ibi.ibxWidget", $.Widget,
 
 		//let derived adjust their attributes, and adjust labelledby
 		aria = this._setAccessibility(accessible, aria);
+		aria.label = aria.label || this.element.attr("title");
+		aria.label = (typeof(this.options.tooltip) === "string") ? this.options.tooltip : aria.label;
+
 		aria.labelledby = aria.label ? null : aria.labelledby; //can't have aria-label and aria-labelledby at same time...label wins.
 
 		//now set the aria- attributes.
@@ -263,7 +266,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 			}
 		}
 		else
-		if(eType == "mouseout" && this._ttPopup && !this._ttPopup.is(e.relatedTarget))
+		if(eType == "mouseout" && this._ttPopup && !this._ttPopup.is(e.relatedTarget) && !$.contains(this.element[0], e.relatedTarget))
 		{
 			window.clearTimeout(this._ttTimer)
 			this._ttPopup.ibxWidget("close");

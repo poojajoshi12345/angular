@@ -19,6 +19,11 @@ $.widget("ibi.ibxTooltip", $.ibi.ibxPopup,
 	{
 		this._super();
 	},
+	open:function(openInfo)
+	{
+		ibxPopupManager.closeOpenPopups(".ibx-tooltip");
+		this._super();
+	},
 	_refresh:function()
 	{
 		this._super();
