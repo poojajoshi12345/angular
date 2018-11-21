@@ -7,8 +7,8 @@ $.widget("ibi.ibxTooltip", $.ibi.ibxPopup,
 	{
 		"text":null,
 		"effect":"fade",
-		"delay":500,
-		"destroyOnClose":false,
+		"delay":300,
+		"destroyOnClose":true,
 	},
 	_widgetClass:"ibx-tooltip",
 	_create:function()
@@ -22,6 +22,10 @@ $.widget("ibi.ibxTooltip", $.ibi.ibxPopup,
 	open:function(openInfo)
 	{
 		ibxPopupManager.closeOpenPopups(".ibx-tooltip");
+		this._super();
+	},
+	close:function(closeInfo)
+	{
 		this._super();
 	},
 	_refresh:function()

@@ -248,30 +248,43 @@ $.widget("ibi.ibxWidget", $.Widget,
 		var eType = e.type;
 		if(eType == "mouseover" && !this._ttPopup)
 		{
+			//let the user stop/modify the tooltip
 			var tt = this.options.tooltip;
+			var event = this.element.dispatchEvent("ibx_beforeshowtooltip", tt, true, true);
+			if(event.isDefaultPrevented())
+			{
+				e.stopPropagation();
+				return;
+			}
+
+			tt = event.data;
 			if(typeof(tt) == "string")
-				tt = $("<div>").ibxTooltip({"text":tt});
-			
+				tt = $("<div>").ibxTooltip({"text":tt, "destroyOnClose":true});
+
 			if(tt)
 			{
-				var popupWidget = tt.data("ibxWidget");
-				var delay = popupWidget.options.delay;
-				this._ttTimer = window.setTimeout(function(popupWidget)
+				var ttWidget = tt.data("ibxWidget");
+				var delay = ttWidget.options.delay;
+				this._ttTimer = window.setTimeout(function(ttWidget)
 				{
-					popupWidget.option("position", {"my":"left+8 top+22", "at":"left bottom", "of":this._eLastMouse})
-					popupWidget.open();
-				}.bind(this, popupWidget), delay);
+					ttWidget.option("position", {"collision":"flip fit", "my":"left+8 top+22", "at":"left bottom", "of":this._eLastMouse})
+					ttWidget.open();
+				}.bind(this, ttWidget), delay);
 				this._ttPopup = tt;
 				e.stopPropagation();
 			}
 		}
 		else
-		if(eType == "mouseout" && this._ttPopup && !this._ttPopup.is(e.relatedTarget) && !$.contains(this.element[0], e.relatedTarget))
+		if(eType == "mouseout" && this._ttPopup && !this._ttPopup.is(e.relatedTarget) && !$.contains(this._ttPopup[0], e.relatedTarget))
 		{
 			window.clearTimeout(this._ttTimer)
 			this._ttPopup.ibxWidget("close");
 			this._ttPopup = null;
 		}
+		else
+		if(this._ttPopup)
+			e.stopPropagation();//if a tooltip is showing, then stop any higher level from doing the same.
+
 		this._eLastMouse = e;
 	},
 	children:function(selector)
