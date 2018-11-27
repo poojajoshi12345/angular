@@ -20,45 +20,30 @@
 		<![CDATA[
 			.ibx-prop-heading
 			{
-				width:100%;
-				box-sizing:border-box;
-				overflow:hidden;
+				background-color:#ccc;
 			}
 			.ibx-prop-heading-label
 			{
 				padding:3px;
-				background-color:#ccc;
 				border:1px outset;
 			}
 			.ibx-prop-heading-name
 			{
 				width:25%;
+				border-right:1px solid #ccc;
 			}
 			.ibx-prop-heading-value
 			{
 				flex:1 1 auto;
 			}
-			.ibx-prop-tree
-			{
-				align-self:flex-start;
-				width:25%;
-				border-right:1px solid #ccc;
-			}
-			.ibx-prop-tree-node .tnode-label
-			{
-				border-bottom:1px solid #ccc;
-			}
-			.ibx-prop-values
-			{
-				flex:1 1 auto;
-				xborder:1px solid lime;
-			}
-			.ibx-prop-splitter
+			.ibx-prop-heading-splitter
 			{
 				min-width:1px;
 				width:2px;
-				background-color:#ccc;
-				border:none;
+			}
+			.ibx-prop-collapsed
+			{
+				height:0px;
 			}
 		]]>
 		</style-sheet>
@@ -84,6 +69,7 @@
 					"value":"1px solid black",
 					"type":"string",
 					"uiType":"borderSelector",
+					"expanded":false,
 					"props":
 					{
 						"left":
@@ -93,6 +79,7 @@
 							"value":"1px solid black",
 							"type":"string",
 							"uiType":"borderSelector",
+							"expanded":false,
 							"props":
 							{
 								"width":
@@ -106,8 +93,8 @@
 								"style":
 								{
 									"displayName":"Style",
-									"displayValue":"1px",
-									"value":"1px",
+									"displayValue":"Solid",
+									"value":"solid",
 									"type":"string",
 									"uiType":"select",
 									"values":
@@ -143,26 +130,26 @@
 				}
 			};
 
-			$.widget("ibi.ibxPropertySheet", $.ibi.ibxHBox, 
+			$.widget("ibi.ibxPropertySheet", $.ibi.ibxGrid, 
 			{
 				options:
 				{
-					align:"start",
-					wrap:"true",
+					indentColumn:1,
+					alignContent:"start",
+					justifyContent:"stretch",
+					cols:"25% 1fr",
+					rows:"",
 				},
 				_widgetClass:"ibx-property-sheet",
 				_create:function()
 				{
 					this._super();
-					var header = this._heading = $("<div class='ibx-prop-heading'>").ibxHBox();
-					var nameLabel = this._nameLabel = $("<div class='ibx-prop-heading-label ibx-prop-heading-name'>Name</div>").ibxLabel();
-					var splitter = this._splitter = $("<div class='ibx-prop-splitter'>").ibxSplitter().on("ibx_resize", this._onSplitterResize.bind(this));
-					var valueLabel = this._valueLabel = $("<div class='ibx-prop-heading-label ibx-prop-heading-value'>Value</div>").ibxLabel();
-					header.append(nameLabel, splitter, valueLabel);
-
-					var tree = this._propTree = $("<div class='ibx-prop-tree'>").ibxTree();
-					var vals = this._propVals = $("<div class='ibx-prop-values'>").ibxVBox();
-					this.element.append(header, tree, vals);
+					this._headingBar = $("<div class='ibx-prop-heading' data-ibx-col='1/span3' data-ibx-row='1'>").ibxHBox();
+					this._headingName = $("<div class='ibx-prop-heading-label ibx-prop-heading-name'>").ibxLabel({text:"Name"}),
+					this._headingSplitter = $("<div class='ibx-prop-heading-splitter'>").ibxSplitter().on("ibx_resize", this._onSplitterResize.bind(this)),
+					this._headingValue = $("<div class='ibx-prop-heading-label ibx-prop-heading-value''>").ibxLabel({text:"Value"}),
+					this._headingBar.append(this._headingName, this._headingSplitter, this._headingValue);
+					this.element.append(this._headingBar);
 				},
 				_init:function()
 				{
@@ -175,32 +162,57 @@
 				props:function(props)
 				{
 					this._props = props;
-					this._propTree.ibxWidget("remove");
-					this._propVals.ibxWidget("remove");
-					this._buildTree(props, this._propTree);
+					this.remove(".ibx-prop-name, .ibx-prop-value");
+					this._buildTree(props, 1);
+					this._onSplitterResize();
+					this.refresh();
 				},
-				_buildTree:function(prop, parent)
+				_buildTree:function(props, rowCount)
 				{
-					for(var key in prop)
+					var arProps = [];
+					for(var key in props)
 					{
-						var item = prop[key];
-						var treeItem = $("<div class='ibx-prop-tree-node'>").ibxTreeNode({container:!!item.props, labelOptions:{text:item.displayName}});
-						treeItem.data("ibxPropInfo", "prop");
-						parent.ibxWidget("add", treeItem);
-						if(item.props)
+						rowCount++;
+						var prop = props[key];
+						var pName = $("<div tabindex='0' class='ibx-prop-name'>").ibxTreeNode({container:!!prop.props, labelOptions:{text:prop.displayName}}).data({ibxCol:1, ibxRow:rowCount});
+						pName.on("ibx_expand ibx_collapse", this._onPropExpandEvent.bind(this));
+						var pValue = $("<div tabindex='0' class='ibx-prop-value'>").ibxLabel({text:prop.displayValue}).data({ibxCol:2, ibxRow:rowCount});
+						this.element.append(pName, pValue);
+						var propObject = {"prop":prop, "pName":pName, "pValue":pValue, "children":null};
+						pName.data("ibxProp", propObject);
+						if(prop.props)
 						{
-							this._buildTree(item.props, treeItem)
+							propObject.children = this._buildTree(prop.props, rowCount)
+							if(!prop.expanded)
+								$(propObject.children).each(function(idx, pObject)
+								{
+									pObject.pName.ibxAddClass("ibx-prop-collapsed");
+									pObject.pValue.ibxAddClass("ibx-prop-collapsed");
+								});
 						}
+						arProps.push(propObject);
 					}
+					return arProps;
 				},
 				_onSplitterResize:function(e, resizeInfo)
 				{
-					var width = resizeInfo.el1.outerWidth();
-					this._propTree.width(width);
+					this.refresh();
+				},
+				_onPropExpandEvent:function(e)
+				{
+					var expanded = (e.type == "ibx_collapse");
+					var propInfo = $(e.target).data("ibxProp");
+					$(propInfo.children).each(function(idx, pObject)
+					{
+						pObject.pName.ibxToggleClass("ibx-prop-collapsed", expanded);
+						pObject.pValue.ibxToggleClass("ibx-prop-collapsed", expanded);
+					});
 				},
 				_refresh:function()
 				{
 					var options = this.options;
+					var width = this._headingName.outerWidth();
+					this.options.cols = width + "px 1fr";
 					this._super();
 				}
 			});
