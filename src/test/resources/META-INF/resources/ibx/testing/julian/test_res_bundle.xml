@@ -18,10 +18,35 @@
 		<style-file src="./test_res_styles.css"/>
 		<style-sheet>
 		<![CDATA[
-			.ibx-prop-tree
+			.ibx-prop-heading
+			{
+				width:100%;
+				box-sizing:border-box;
+				overflow:hidden;
+			}
+			.ibx-prop-heading-label
+			{
+				padding:3px;
+				background-color:#ccc;
+				border:1px outset;
+			}
+			.ibx-prop-heading-name
 			{
 				width:25%;
-				xborder:1px solid red;
+			}
+			.ibx-prop-heading-value
+			{
+				flex:1 1 auto;
+			}
+			.ibx-prop-tree
+			{
+				align-self:flex-start;
+				width:25%;
+				border-right:1px solid #ccc;
+			}
+			.ibx-prop-tree-node .tnode-label
+			{
+				border-bottom:1px solid #ccc;
 			}
 			.ibx-prop-values
 			{
@@ -31,13 +56,9 @@
 			.ibx-prop-splitter
 			{
 				min-width:1px;
-				width:1px;
+				width:2px;
 				background-color:#ccc;
 				border:none;
-			}
-			.ibx-prop-tree-node .tnode-label
-			{
-				border-bottom:1px solid #ccc;
 			}
 		]]>
 		</style-sheet>
@@ -126,16 +147,22 @@
 			{
 				options:
 				{
-					align:"stretch",
+					align:"start",
+					wrap:"true",
 				},
 				_widgetClass:"ibx-property-sheet",
 				_create:function()
 				{
 					this._super();
+					var header = this._heading = $("<div class='ibx-prop-heading'>").ibxHBox();
+					var nameLabel = this._nameLabel = $("<div class='ibx-prop-heading-label ibx-prop-heading-name'>Name</div>").ibxLabel();
+					var splitter = this._splitter = $("<div class='ibx-prop-splitter'>").ibxSplitter().on("ibx_resize", this._onSplitterResize.bind(this));
+					var valueLabel = this._valueLabel = $("<div class='ibx-prop-heading-label ibx-prop-heading-value'>Value</div>").ibxLabel();
+					header.append(nameLabel, splitter, valueLabel);
+
 					var tree = this._propTree = $("<div class='ibx-prop-tree'>").ibxTree();
-					var splitter = this._splitter = $("<div class='ibx-prop-splitter'>").ibxSplitter();
-					var vals = this._propVals = $("<div class='ibx-prop-values'>").ibxHBox();
-					this.element.append(tree, splitter, vals);
+					var vals = this._propVals = $("<div class='ibx-prop-values'>").ibxVBox();
+					this.element.append(header, tree, vals);
 				},
 				_init:function()
 				{
@@ -165,6 +192,11 @@
 							this._buildTree(item.props, treeItem)
 						}
 					}
+				},
+				_onSplitterResize:function(e, resizeInfo)
+				{
+					var width = resizeInfo.el1.outerWidth();
+					this._propTree.width(width);
 				},
 				_refresh:function()
 				{
