@@ -60,7 +60,7 @@ $.widget("ibi.ibxLabel", $.ibi.ibxFlexBox,
 		this._super();
 		this._glyph.remove();
 		this._text.remove();
-		this.element.ibxRemoveClass("icon-left icon-top icon-right icon-bottom")
+		this.element.ibxRemoveClass("icon-left icon-top icon-right icon-bottom");
 	},
 	isEditing:function()
 	{
@@ -126,7 +126,7 @@ $.widget("ibi.ibxLabel", $.ibi.ibxFlexBox,
 		this._glyph.ibxToggleClass(this.options.glyphElSpacerClass, !!((options.icon || options.glyph || options.glyphClasses) && options.text));
 
 		//general options maintenance
-		this.element.ibxRemoveClass("icon-left icon-top icon-right icon-bottom")
+		this.element.ibxRemoveClass("icon-left icon-top icon-right icon-bottom");
 		this.element.ibxAddClass("icon-" + options.iconPosition);
 		this.element.ibxToggleClass("ibx-label-no-icon", !glyphVisible && !options.icon).ibxToggleClass("ibx-icon-only", !glyphVisible && !options.text);
 
@@ -135,7 +135,7 @@ $.widget("ibi.ibxLabel", $.ibi.ibxFlexBox,
 		for(var i = 0; i < options.overlays.length; ++i)
 		{
 			var overlay = options.overlays[i];
-			var elFrame = $("<label class='ibx-label-overlay-frame'>").ibxAddClass(overlay.position)
+			var elFrame = $("<label class='ibx-label-overlay-frame'>").ibxAddClass(overlay.position);
 			this._glyph.append(elFrame);
 			
 			var elOverlay = null;
@@ -155,6 +155,6 @@ $.widget("ibi.ibxLabel", $.ibi.ibxFlexBox,
 });
 $.ibi.ibxLabel.statics = 
 {
-}
+};
 //# sourceURL=label.ibx.js
 

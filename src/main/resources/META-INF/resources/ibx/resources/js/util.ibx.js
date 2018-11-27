@@ -18,7 +18,7 @@ function jsDeriveClass(fnClass, fnBase)
 {
 	_jsDerivingClass = true;
 	var p = fnClass.prototype = new fnBase;
-	p.constructor = fnClass
+	p.constructor = fnClass;
 	_jsDerivingClass = false;
 	return p;
 }
@@ -62,7 +62,7 @@ function sformat()
 //Custom jQuery selectors
 jQuery.expr[":"]["displayNone"] = function(elem)
 {
-	return ($(elem).css("display") == "none")
+	return ($(elem).css("display") == "none");
 };
 jQuery.expr[":"]["ibxWidget"] = function(elem)
 {
@@ -78,7 +78,7 @@ jQuery.expr[":"]["ibxNameRoot"] = function(elem)
 jQuery.expr[":"]["ibxRadioGroup"] = function(elem, idx, meta, stack)
 {
 	elem = $(elem);
-	var name = meta[3]
+	var name = meta[3];
 	var selector = sformat(".ibx-radio-group-control-{1}", name);
 	return elem.is(selector);
 };
@@ -292,7 +292,7 @@ jQuery.fn.extend({
 		this.each(function (index, el)
 		{
 			el.dispatchEvent(event);
-		})
+		});
 	},
 	// Support function.
 	_nativeHandler: function (fn, event)
@@ -333,7 +333,7 @@ jQuery.fn.textNodes = function()
 
 jQuery.fn.bounds = function(inner)
 {
-	var bounds = this.position()
+	var bounds = this.position();
 	bounds.width = inner ? this.width() : this.outerWidth();
 	bounds.height = inner ? this.height() : this.outerHeight();
 	bounds.right = bounds.left + bounds.width;
@@ -367,7 +367,7 @@ jQuery.fn.directChild = function(el)
 jQuery.fn.hasScrollbar = function(horizontal)
 {
     return horizontal ? this.get(0).scrollWidth > this.width() : this.get(0).scrollHeight > this.height();
-}
+};
 
 jQuery.fn.clickOnScrollbar = function(clientX, clientY)
 {
@@ -376,7 +376,7 @@ jQuery.fn.clickOnScrollbar = function(clientX, clientY)
 	var hBar = this.hasScrollbar(true);
 	var size = getScrollbarWidth();
 	return (vBar && (clientX > (rBounds.right - size))) || (hBar && (clientY > (rBounds.bottom - size)));
-}
+};
 
 //force redraw/repaint element...I'm dubious about whether this actually works...got from:
 //https://stackoverflow.com/questions/3485365/how-can-i-force-webkit-to-redraw-repaint-to-propagate-style-changes
@@ -400,8 +400,8 @@ function createNativeEvent(type, data, canBubble, cancelable, relatedTarget, ctx
 	var e = null;
 	if(typeof(Event) === "function" && (!ibxPlatformCheck.isEdge && !ibxPlatformCheck.isIE))
 	{
-		e = new Event(type, {"bubbles":canBubble, "cancelable":cancelable})
-		e.isDefaultPrevented = function(){return this.defaultPrevented;}
+		e = new Event(type, {"bubbles":canBubble, "cancelable":cancelable});
+		e.isDefaultPrevented = function(){return this.defaultPrevented;};
 	}
 	else
 	{
@@ -469,7 +469,7 @@ jQuery.fn.metrics = function()
     {
     	left: element.offsetLeft - parseFloat(style.marginLeft),
     	top: element.offsetTop - parseFloat(style.marginTop),
-    }
+    };
 	marginBox.right = element.offsetLeft + element.offsetWidth + parseFloat(style.marginRight || 0);
 	marginBox.bottom = element.offsetTop + element.offsetHeight + parseFloat(style.marginBottom || 0);
 	marginBox.width = marginBox.right - marginBox.left;
@@ -479,7 +479,7 @@ jQuery.fn.metrics = function()
     {
     	left: element.offsetLeft,
     	top: element.offsetTop,
-    }
+    };
 	borderBox.right = element.offsetLeft + element.offsetWidth;
 	borderBox.bottom = element.offsetTop + element.offsetHeight;
 	borderBox.width = element.offsetWidth;
@@ -489,7 +489,7 @@ jQuery.fn.metrics = function()
     {
     	left: borderBox.left + parseFloat(style.borderLeft || 0),
     	top: borderBox.top + parseFloat(style.borderTop || 0),
-    }
+    };
 	contentBox.right = borderBox.right - parseFloat(style.borderRight || 0);
 	contentBox.bottom = borderBox.bottom - parseFloat(style.borderBottom || 0);
 	contentBox.width = contentBox.right - contentBox.left;
@@ -499,7 +499,7 @@ jQuery.fn.metrics = function()
     {
     	left: contentBox.left + parseFloat(style.paddingLeft || 0),
     	top: contentBox.top + parseFloat(style.paddingTop || 0),
-    }
+    };
 	innerBox.right = contentBox.right - parseFloat(style.paddingRight || 0);
 	innerBox.bottom = contentBox.bottom - parseFloat(style.paddingBottom || 0);
 	innerBox.width = innerBox.right - innerBox.left;
@@ -510,14 +510,14 @@ jQuery.fn.metrics = function()
     {
     	left: positioned ? element.scrollLeft : contentBox.left + element.scrollLeft,
     	top: positioned ? element.scrollTop : contentBox.top + element.scrollTop
-    }
+    };
 	viewportBox.right = viewportBox.left + contentBox.width;
 	viewportBox.bottom = viewportBox.top + contentBox.height;
 	viewportBox.width = viewportBox.right - viewportBox.left;
 	viewportBox.height = viewportBox.bottom - viewportBox.top;
 
 	return elInfo;
-}
+};
 
 jQuery.fn.visInfo = function(box, pBox)
 {
@@ -530,12 +530,12 @@ jQuery.fn.visInfo = function(box, pBox)
 		"rVis": (elBox.right > pBox.left && elBox.right < pBox.right),
 		"tVis": (elBox.top > pBox.top && elBox.top < pBox.bottom ),
 		"bVis": (elBox.bottom > pBox.top && elBox.bottom < pBox.bottom)
-	}
+	};
 	ret.total = (ret.lVis && ret.rVis && ret.tVis && ret.bVis);
 	ret.partial = (ret.lVis || ret.rVis) && (ret.tVis || ret.bVis);
 	ret.partial = ret.partial || rectIntersect(elBox, pBox);
 	return ret;
-}
+};
 
 function rectIntersect(r1, r2)
 {
@@ -603,7 +603,7 @@ function eventMatchesShortcut(shortcut, evtKey)
 		ret = match & (($.ui.keyCode[sc] == evtKey.keyCode) || (parseInt(sc, 10) == evtKey.keyCode) || (evtKey.key && sc == evtKey.key.toUpperCase()));
 	}
 	return ret;
-};
+}
 
 //general function for sorting dom elements on a given attribute.
 function fnAttrSort(attr, fmt, caseInsensitive, el1, el2)
@@ -616,12 +616,11 @@ function fnAttrSort(attr, fmt, caseInsensitive, el1, el2)
 	var v2 = el2.attr(attr);
 	v2 = (fmt == "numeric") ? Number(v2) : (caseInsensitive) ? v2.toLowercase() : v2;
 
-	if(v1 == v2)
-		return 0;
 	if(v1 < v2)
 		return -1;
 	if(v1 > v2)
 		return 1;
+	return 0;
 }
 
 //Sorts elements on zIndex (in descending order).
@@ -633,12 +632,11 @@ function fnSortZIndex(el1, el2)
 	var z1 = parseInt(el1.css("zIndex"), 10);
 	var z2 = parseInt(el2.css("zIndex"), 10);
 
-	if(z1 == z2)
-		return 0;
 	if(z1 > z2)
 		return -1;
 	if(z1 < z2)
 		return 1;
+	return 0;
 }
 
 //generate a pseudo random number between limits.
@@ -832,7 +830,7 @@ function rgbToHex(r, g, b)
 {
 	function fmt(val)
 	{
-		var hex = null
+		var hex = null;
 		if(val !== undefined)
 		{
 			hex = val.toString(16);
@@ -1087,7 +1085,7 @@ _p.exec = function exec(options)
 
 _p._getExInfo = function()
 {
-	var exInfo = $.extend(true, {}, this.getExOptions())
+	var exInfo = $.extend(true, {}, this.getExOptions());
 	exInfo.webApi = this;
 	exInfo.deferred = $.Deferred();
 	exInfo.ajax.beforeSend = this._onBeforeSend.bind(this, exInfo);
