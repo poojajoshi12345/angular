@@ -1306,8 +1306,10 @@ $.widget("ibi.ibxSelectItemListPaged", $.ibi.ibxVBox,
 			this.element.ibxAddClass("paged");
 		else
 			this.element.ibxRemoveClass("paged");
+		var oldMultiSelect = this._listControl.ibxWidget("option", "multiSelect");
 		this._listControl.ibxWidget("option", "multiSelect", this.options.multiSelect);
-		this._setPage();
+		if (oldMultiSelect != this.options.multiSelect)
+			this._setPage();
 	},
 	focusSelItem: function ()
 	{
