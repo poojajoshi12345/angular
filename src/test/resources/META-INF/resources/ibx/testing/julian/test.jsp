@@ -21,6 +21,8 @@
 			<jsp:include page="/WEB-INF/jsp/global/wf_globals.jsp" flush="false" />
 			ibx(function()
 			{
+				var props = $(".ibx-property-sheet");
+				props.ibxWidget("props", testProps);
 			},
 			[
 				{"src":"./test_res_bundle.xml", "loadContext":"app"},
@@ -35,11 +37,11 @@
 				margin:0px;
 				box-sizing:border-box;
 			}
-			.test-grid
+			.test-props
 			{
 				width:400px;
 				height:400px;
-				border:1px solid red;
+				border:1px solid black;
 				padding:5px;
 			}
 			.grid-cell
@@ -60,9 +62,9 @@
 		<div class="del-command" data-ibx-type="ibxCommand" data-ibxp-id="cmdDelete" data-ibxp-shortcut="CTRL+SHIFT+DEL"></div>
 		<div class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="center" data-ibxp-justify="center" data-ibxp-command="cmdDelete">
 
-			<div class="test-map" data-ibx-type="esriMap"></div>
+			<div class="test-props" data-ibx-type="ibxPropertySheet"></div>
 
-			<!-- <div class="test-grid" data-ibx-type="ibxGrid" data-ibx-options='{"cols":"1fr 1fr", "justify":"center", "align":"stretch"}'>
+			<!-- <div class="test-grid" data-ibx-type="ibxGrid" data-ibx-options='{"cols":"1fr 1fr", "xjustify":"center", "xalign":"stretch"}'>
 
 				<div class="grid-cell" data-ibx-type="ibxLabel" data-ibx-col="1" data-ibx-row="1">Grid Item</div>
 				<div class="grid-cell" data-ibx-type="ibxLabel" data-ibx-col="2" data-ibx-row="1">Grid Item</div>

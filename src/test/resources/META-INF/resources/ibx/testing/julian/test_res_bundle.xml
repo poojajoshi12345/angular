@@ -15,23 +15,29 @@
 	</strings>
 
 	<styles>
-		<style-file src="//js.arcgis.com/4.9/esri/css/main.css"/>
 		<style-file src="./test_res_styles.css"/>
 		<style-sheet>
 		<![CDATA[
-			.date-label
+			.ibx-prop-tree
 			{
-				margin-right:2px;
+				width:25%;
+				xborder:1px solid red;
 			}
-			.date-value
+			.ibx-prop-values
 			{
-				border:1px solid #ccc;
-				padding:2px;
-				margin-right:2px;
+				flex:1 1 auto;
+				xborder:1px solid lime;
 			}
-			.date-button
+			.ibx-prop-splitter
 			{
-				font-size:1.5em;
+				min-width:1px;
+				width:1px;
+				background-color:#ccc;
+				border:none;
+			}
+			.ibx-prop-tree-node .tnode-label
+			{
+				border-bottom:1px solid #ccc;
 			}
 		]]>
 		</style-sheet>
@@ -43,52 +49,93 @@
 		</markup-block>
 	</markup>
 
-	<!--
-	<link rel="stylesheet" href="https://js.arcgis.com/4.9/esri/css/main.css">
-	<script src="https://js.arcgis.com/4.9/"></script>
-	-->
-
 	<scripts>
-		<script-file src="//js.arcgis.com/4.9/"/>
 		<script-file src="./test_res_script.js"/>
 		<script-file src="../../ibxtools/shared_resources/js/ibfs.js" loadContext="ibx"/>
 		<script-block>
 		<![CDATA[
-			$.widget("ibi.ibxPropRow", $.ibi.ibxHBox, 
+			var testProps = 
 			{
-				options:
+				"border":
 				{
-				
-				},
-				_widgetClass:"ibx-date-range",
-				_create:function()
-				{
-					this._super();
-				},
-				_init:function()
-				{
-					this._super();
-				},
-				_destroy:function()
-				{
-					this._super();
-				},
-				_refresh:function()
-				{
-					var options = this.options;
-					this._super();
+					"displayName":"Border",
+					"displayValue":"1px solid black",
+					"value":"1px solid black",
+					"type":"string",
+					"uiType":"borderSelector",
+					"props":
+					{
+						"left":
+						{
+							"displayName":"Left",
+							"displayValue":"1px solid black",
+							"value":"1px solid black",
+							"type":"string",
+							"uiType":"borderSelector",
+							"props":
+							{
+								"width":
+								{
+									"displayName":"Width",
+									"displayValue":"1px",
+									"value":"1px",
+									"type":"string",
+									"uiType":"textField",
+								},
+								"style":
+								{
+									"displayName":"Style",
+									"displayValue":"1px",
+									"value":"1px",
+									"type":"string",
+									"uiType":"select",
+									"values":
+									{
+										"solid":
+										{
+											"displayName":"Solid",
+											"value":"solid",
+										},
+										"dashed":
+										{
+											"displayName":"Dashed",
+											"value":"dashed",
+										},
+										"dotted":
+										{
+											"displayName":"Dotted",
+											"value":"dotted",
+										},
+									},
+								},
+								"color":
+								{
+									"displayName":"Color",
+									"displayValue":"red",
+									"value":"red",
+									"type":"color",
+									"uiType":"colorPicker",
+								},
+							}
+						}
+					}
 				}
-			});
+			};
 
-			$.widget("ibi.ibxPropGrid", $.ibi.ibxVBox, 
+			$.widget("ibi.ibxPropertySheet", $.ibi.ibxHBox, 
 			{
 				options:
 				{
+					align:"stretch",
 				},
-				_widgetClass:"ibx-date-range",
+				_widgetClass:"ibx-property-sheet",
 				_create:function()
 				{
 					this._super();
+					var tree = this._propTree = $("<div class='ibx-prop-tree'>").ibxTree();
+					var splitter = this._splitter = $("<div class='ibx-prop-splitter'>").ibxSplitter();
+					var vals = this._propVals = $("<div class='ibx-prop-values'>").ibxHBox();
+					this.element.append(tree, splitter, vals);
 				},
 				_init:function()
 				{
@@ -97,6 +144,27 @@
 				_destroy:function()
 				{
 					this._super();
+				},
+				props:function(props)
+				{
+					this._props = props;
+					this._propTree.ibxWidget("remove");
+					this._propVals.ibxWidget("remove");
+					this._buildTree(props, this._propTree);
+				},
+				_buildTree:function(prop, parent)
+				{
+					for(var key in prop)
+					{
+						var item = prop[key];
+						var treeItem = $("<div class='ibx-prop-tree-node'>").ibxTreeNode({container:!!item.props, labelOptions:{text:item.displayName}});
+						treeItem.data("ibxPropInfo", "prop");
+						parent.ibxWidget("add", treeItem);
+						if(item.props)
+						{
+							this._buildTree(item.props, treeItem)
+						}
+					}
 				},
 				_refresh:function()
 				{
