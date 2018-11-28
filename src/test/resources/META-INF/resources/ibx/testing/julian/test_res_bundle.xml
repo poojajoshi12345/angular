@@ -79,86 +79,140 @@
 		<script-block>
 		<![CDATA[
 			var testProps = 
-			{
-				"props":
+			[
 				{
-					"border":
-					{
-						"displayName":"Border",
-						"displayValue":"1px solid black",
-						"value":"1px solid black",
-						"type":"string",
-						"uiType":"borderSelector",
-						"expanded":false,
-						"props":
+					"displayName":"Background Color",
+					"displayValue":"White",
+					"name":"backgroundColor",
+					"value":"white",
+					"type":"string",
+					"uiType":"colorPicker",
+					"expanded":false,
+				},
+				{
+					"displayName":"Border",
+					"displayValue":"1px solid black",
+					"name":"border",
+					"value":"1px solid black",
+					"type":"string",
+					"uiType":"borderSelector",
+					"expanded":false,
+					"props":
+					[
 						{
-							"left":
-							{
-								"displayName":"Left",
-								"displayValue":"1px solid black",
-								"value":"1px solid black",
-								"type":"string",
-								"uiType":"borderSelector",
-								"expanded":false,
-								"props":
+							"displayName":"Left",
+							"displayValue":"1px solid black",
+							"name":"left",
+							"value":"1px solid black",
+							"type":"string",
+							"uiType":"borderSelector",
+							"expanded":false,
+							"props":
+							[
 								{
-									"width":
+									"displayName":"Width",
+									"displayValue":"1px",
+									"name":"width",
+									"value":"1px",
+									"type":"string",
+									"uiType":"textField",
+								},
+								{
+									"displayName":"Style",
+									"displayValue":"Solid",
+									"name":"style",
+									"value":"solid",
+									"type":"string",
+									"uiType":"select",
+									"values":
 									{
-										"displayName":"Width",
-										"displayValue":"1px",
-										"value":"1px",
-										"type":"string",
-										"uiType":"textField",
-									},
-									"style":
-									{
-										"displayName":"Style",
-										"displayValue":"Solid",
-										"value":"solid",
-										"type":"string",
-										"uiType":"select",
-										"values":
+										"solid":
 										{
-											"solid":
-											{
-												"displayName":"Solid",
-												"value":"solid",
-											},
-											"dashed":
-											{
-												"displayName":"Dashed",
-												"value":"dashed",
-											},
-											"dotted":
-											{
-												"displayName":"Dotted",
-												"value":"dotted",
-											},
+											"displayName":"Solid",
+											"value":"solid",
+										},
+										"dashed":
+										{
+											"displayName":"Dashed",
+											"value":"dashed",
+										},
+										"dotted":
+										{
+											"displayName":"Dotted",
+											"value":"dotted",
 										},
 									},
-									"color":
-									{
-										"displayName":"Color",
-										"displayValue":"red",
-										"value":"red",
-										"type":"color",
-										"uiType":"colorPicker",
-									},
-								}
-							}
+								},
+								{
+									"displayName":"Color",
+									"displayValue":"red",
+									"name":"color",
+									"value":"red",
+									"type":"color",
+									"uiType":"colorPicker",
+								},
+							]
 						}
-					}
+					]
 				}
-			};
+			];
+
+			$.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
+			{
+				options:
+				{
+					headingMap:[{"title":"displayName"}, {"title":"displayValue"}, {"title":"name"}, {"title":"value"}, {"title":"type"}, {"title":"uiType"}],
+					columnMap:
+					[
+						{"attr":"displayName", "width":"1fr"},
+						{"attr":"displayValue", "width":"1fr"},
+						{"attr":"name", "width":"1fr"},
+						{"attr":"value", "width":"1fr"},
+						{"attr":"type", "width":"1fr"},
+						{"attr":"uiType", "width":"1fr"}
+					],
+				},
+				_widgetClass:"ibx-data-grid",
+				_create:function()
+				{
+					this._super;
+					var options = this.options;
+					this._headingBar = $("<div class='ibx-grid-heading'>").ibxHBox();
+					for(var i = 0; i < options.headingMap; ++i)
+					{
+						var hInfo = options.headingMap[i];
+						var header = $(sformat("<div class='ibx-data-grid-col-heading'>{1}</div>", hInfo.title));
+						this._headingBar.ibxWidget("add", header);
+					}
+				},
+				_refresh()
+				{
+					this._super();
+					var options = this.options;
+
+					options.cols = ""
+					for(var i = 0; i < options.columnMap.length; ++i)
+					{
+						var colInfo = options.columnMap[i];
+						cols += colInfo.width + " ";
+					}
+
+
+					this._headingBar.data({ibxRow:1, });
+
+				}
+			});
 
 			$.widget("ibi.ibxPropertySheet", $.ibi.ibxGrid, 
 			{
 				options:
 				{
+					singleClickExpand:false,
 					indentColumn:1,
 					alignContent:"start",
 					justifyContent:"stretch",
-					cols:"0px 1fr",
+					headingMap:[{"title":"Name", "pos":"33%"}, {"attr":"displayValue", "pos":"1fr"}],
+					colsMap:[{"attr":"displayName", "pos":"33%"}, {"attr":"displayValue", "pos":"1fr"}],
 					rows:"",
 				},
 				_widgetClass:"ibx-property-sheet",
@@ -180,55 +234,36 @@
 				{
 					this._super();
 				},
+				colCount:function()
+				{
+					return this.options.cols.split(" ").length;
+				},
 				props:function(props)
 				{
+					if(props === undefined)
+						return this._props;
+
 					this._props = props;
 					this.remove(".ibx-prop-name-col, .ibx-prop-value-col");
-					this._buildTree(props, 1);
+
+					for(var i = 0; i < props.length; ++i)
+					{
+						var prop = props[i];
+						var pNode = $("<div tabindex='0'>").ibxPropertySheetRow({property:prop, parentNode:null});
+						var cols = pNode.ibxWidget("columns");
+						this.add(cols);
+						pNode.ibxWidget("refresh");
+
+						if(prop.expanded)
+							pNode.ibxWidget("expanded", true);
+					}
+
 					this._onSplitterResize();
 					this.refresh();
-				},
-				_buildTree:function(propParent, rowCount)
-				{
-					for(let key in propParent.props)
-					{
-						rowCount++;
-						var prop = propParent.props[key];
-						var pName = $("<div tabindex='0' class='ibx-prop-row ibx-prop-name-col'>").ibxTreeNode({container:!!prop.props, labelOptions:{text:prop.displayName}}).data({ibxCol:1, ibxRow:rowCount});
-						pName.on("ibx_expand ibx_collapse", this._onPropExpandEvent.bind(this));
-						var pValue = $("<div tabindex='0' class='ibx-prop-row ibx-prop-value-col'>").ibxLabel({text:prop.displayValue}).data({ibxCol:2, ibxRow:rowCount});
-						this.element.append(pName, pValue);
-						
-						prop.propParent = propParent;
-						prop._internal = {"propParent":propParent, "pName":pName, "pValue":pValue};
-						pName.data("ibxPropInfo", prop);
-						if(prop.props)
-						{
-							this._buildTree(prop, rowCount)
-							if(!prop.expanded)
-								for(let key in prop.props)
-								{
-									let propChild = prop.props[key];
-									propChild._internal.pName.ibxAddClass("ibx-prop-collapsed");
-									propChild._internal.pValue.ibxAddClass("ibx-prop-collapsed");
-								}
-						}
-					}
 				},
 				_onSplitterResize:function(e, resizeInfo)
 				{
 					this.refresh();
-				},
-				_onPropExpandEvent:function(e)
-				{
-					var expanded = (e.type == "ibx_collapse");
-					var prop = $(e.target).data("ibxPropInfo");
-					for(let key in prop.props)
-					{
-						let propChild = prop.props[key];
-						propChild._internal.pName.ibxToggleClass("ibx-prop-collapsed");
-						propChild._internal.pValue.ibxToggleClass("ibx-prop-collapsed");
-					};
 				},
 				_refresh:function()
 				{
@@ -236,19 +271,99 @@
 					var width = this._headingName.outerWidth();
 					this.options.cols = width + "px 1fr";
 					this._super();
-
-					var indent = (options.indent) ? options.indent : $.ibi.ibxTreeNode.defaultIndent;
-					this.element.find(".ibx-prop-name-col").each(function(idx, el)
-					{
-						el = $(el);
-						var propInfo = el.data("ibxPropInfo");
-						var depth = 0;
-						while(propInfo = propInfo._internal ? propInfo._internal.propParent : null)
-							depth++;
-						el.css("paddingLeft", depth * indent);
-					}.bind(this));
 				}
 			});
+
+
+			$.widget("ibi.ibxPropertySheetRow", $.ibi.ibxTreeNode, 
+			{
+				options:
+				{
+					property:{},
+					columnMap:
+					[
+						{"attr":"displayName", "pos":1},
+						{"attr":"displayValue", "pos":2},
+					],
+				},
+				_widgetClass:"ibx-propert-sheet-tree-node",
+				_createWidget:function(options, element)
+				{
+					this._super(options, element);
+				},
+				_create:function()
+				{
+					var options = this.options;
+					this._super();
+
+					this._columns.push(this.element.ibxAddClass("ibx-psheet-column")[0]);
+					for(var i = 1; i < options.columnMap.length; ++i)
+						this._columns.push($("<div>").ibxLabel().ibxAddClass("ibx-psheet-column")[0]);
+				},
+				_destroy:function()
+				{
+					this._super();
+				},
+				_columns:[],
+				columns:function()
+				{
+					return this._columns;
+				},
+				children:function(selector)
+				{
+				},
+				add:function(el, elSibling, before, refresh)
+				{
+				},
+				remove:function(el, destroy, refresh)
+				{
+				},
+				depth:function()
+				{
+					var depth = 0;
+					var parentNode = this.element;;
+					while(parentNode = parentNode.ibxWidget("parentNode"))
+						depth++;
+					return depth;	
+				},
+				tree:function()
+				{
+					return this.element.closest(".ibx-property-sheet");
+				},
+				parentNode:function()
+				{
+					return this.options.parentNode;
+				},
+				hasChildren:function()
+				{
+					var props = this.options.property.props;
+					return props ? !!this.options.property.length : false;
+				},
+				_onNodeLabelEvent:function(e)
+				{
+					this._super(e);
+				},
+				_refresh:function()
+				{
+					var options = this.options;
+					var prop = options.property;
+					var colMap = options.columnMap;
+
+					options.container = this.hasChildren();
+					options.labelOptions.text = prop[colMap[0].attr];
+					this._super();
+
+					var colCount = this.tree().ibxWidget("colCount");
+					var rowNum = this.element.prevAll(".ibx-psheet-column").length/colCount;
+					for(var i = 1; i < options.columnMap.length; ++i)
+					{
+						var colInfo = options.columnMap[i];
+						var col = this._columns[i];
+						$(col).ibxWidget("option", "text", prop[colInfo.attr]).data({"ibxRow":rowNum, "ibxCol":colInfo.pos});
+					}
+				}
+			});
+			
 			//# sourceURL=test_res_bundle.xml
 		]]>
 		</script-block>
