@@ -27,9 +27,13 @@
 				padding:3px;
 				border:1px outset;
 			}
+			.ibx-prop-row
+			{
+				border-bottom:1px solid #eee;
+			}
 			.ibx-prop-heading-name
 			{
-				width:100px;
+				width:33%;
 				border-right:1px solid #ccc;
 			}
 			.ibx-prop-heading-value
@@ -41,18 +45,23 @@
 				min-width:1px;
 				width:2px;
 			}
+			.ibx-prop-row
+			{
+				border-bottom:1px solid #eee;
+			}
 			.ibx-prop-name-col
 			{
-				border-right:1px solid #ccc;
+				border-right:1px solid #eee;
 			}
 			.ibx-prop-value-col
 			{
-				margin-left:1em;
+				margin-left:.5em;
 			}
 			.ibx-prop-collapsed
 			{
 				height:0px;
 				overflow:hidden;
+				border:none;
 			}
 		]]>
 		</style-sheet>
