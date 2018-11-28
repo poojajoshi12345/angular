@@ -25,9 +25,7 @@
 				props.ibxWidget("props", testProps);
 			},
 			[
-				{"src":"./test_res_bundle.xml", "loadContext":"app"},
-				{"src":"../../ibxtools/mapping/resources/mapping_res.xml", "loadContext":"ibx"}
-			], true);
+				{"src":"./test_res_bundle.xml", "loadContext":"app"}], true);
 		</script>
 		<style type="text/css">
 			html, body, .main-box

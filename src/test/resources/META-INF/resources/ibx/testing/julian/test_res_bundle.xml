@@ -29,7 +29,7 @@
 			}
 			.ibx-prop-heading-name
 			{
-				width:25%;
+				width:100px;
 				border-right:1px solid #ccc;
 			}
 			.ibx-prop-heading-value
@@ -41,9 +41,18 @@
 				min-width:1px;
 				width:2px;
 			}
+			.ibx-prop-name-col
+			{
+				border-right:1px solid #ccc;
+			}
+			.ibx-prop-value-col
+			{
+				margin-left:1em;
+			}
 			.ibx-prop-collapsed
 			{
 				height:0px;
+				overflow:hidden;
 			}
 		]]>
 		</style-sheet>
@@ -62,68 +71,71 @@
 		<![CDATA[
 			var testProps = 
 			{
-				"border":
+				"props":
 				{
-					"displayName":"Border",
-					"displayValue":"1px solid black",
-					"value":"1px solid black",
-					"type":"string",
-					"uiType":"borderSelector",
-					"expanded":false,
-					"props":
+					"border":
 					{
-						"left":
+						"displayName":"Border",
+						"displayValue":"1px solid black",
+						"value":"1px solid black",
+						"type":"string",
+						"uiType":"borderSelector",
+						"expanded":false,
+						"props":
 						{
-							"displayName":"Left",
-							"displayValue":"1px solid black",
-							"value":"1px solid black",
-							"type":"string",
-							"uiType":"borderSelector",
-							"expanded":false,
-							"props":
+							"left":
 							{
-								"width":
+								"displayName":"Left",
+								"displayValue":"1px solid black",
+								"value":"1px solid black",
+								"type":"string",
+								"uiType":"borderSelector",
+								"expanded":false,
+								"props":
 								{
-									"displayName":"Width",
-									"displayValue":"1px",
-									"value":"1px",
-									"type":"string",
-									"uiType":"textField",
-								},
-								"style":
-								{
-									"displayName":"Style",
-									"displayValue":"Solid",
-									"value":"solid",
-									"type":"string",
-									"uiType":"select",
-									"values":
+									"width":
 									{
-										"solid":
+										"displayName":"Width",
+										"displayValue":"1px",
+										"value":"1px",
+										"type":"string",
+										"uiType":"textField",
+									},
+									"style":
+									{
+										"displayName":"Style",
+										"displayValue":"Solid",
+										"value":"solid",
+										"type":"string",
+										"uiType":"select",
+										"values":
 										{
-											"displayName":"Solid",
-											"value":"solid",
-										},
-										"dashed":
-										{
-											"displayName":"Dashed",
-											"value":"dashed",
-										},
-										"dotted":
-										{
-											"displayName":"Dotted",
-											"value":"dotted",
+											"solid":
+											{
+												"displayName":"Solid",
+												"value":"solid",
+											},
+											"dashed":
+											{
+												"displayName":"Dashed",
+												"value":"dashed",
+											},
+											"dotted":
+											{
+												"displayName":"Dotted",
+												"value":"dotted",
+											},
 										},
 									},
-								},
-								"color":
-								{
-									"displayName":"Color",
-									"displayValue":"red",
-									"value":"red",
-									"type":"color",
-									"uiType":"colorPicker",
-								},
+									"color":
+									{
+										"displayName":"Color",
+										"displayValue":"red",
+										"value":"red",
+										"type":"color",
+										"uiType":"colorPicker",
+									},
+								}
 							}
 						}
 					}
@@ -137,7 +149,7 @@
 					indentColumn:1,
 					alignContent:"start",
 					justifyContent:"stretch",
-					cols:"25% 1fr",
+					cols:"0px 1fr",
 					rows:"",
 				},
 				_widgetClass:"ibx-property-sheet",
@@ -162,37 +174,37 @@
 				props:function(props)
 				{
 					this._props = props;
-					this.remove(".ibx-prop-name, .ibx-prop-value");
+					this.remove(".ibx-prop-name-col, .ibx-prop-value-col");
 					this._buildTree(props, 1);
 					this._onSplitterResize();
 					this.refresh();
 				},
-				_buildTree:function(props, rowCount)
+				_buildTree:function(propParent, rowCount)
 				{
-					var arProps = [];
-					for(var key in props)
+					for(let key in propParent.props)
 					{
 						rowCount++;
-						var prop = props[key];
-						var pName = $("<div tabindex='0' class='ibx-prop-name'>").ibxTreeNode({container:!!prop.props, labelOptions:{text:prop.displayName}}).data({ibxCol:1, ibxRow:rowCount});
+						var prop = propParent.props[key];
+						var pName = $("<div tabindex='0' class='ibx-prop-row ibx-prop-name-col'>").ibxTreeNode({container:!!prop.props, labelOptions:{text:prop.displayName}}).data({ibxCol:1, ibxRow:rowCount});
 						pName.on("ibx_expand ibx_collapse", this._onPropExpandEvent.bind(this));
-						var pValue = $("<div tabindex='0' class='ibx-prop-value'>").ibxLabel({text:prop.displayValue}).data({ibxCol:2, ibxRow:rowCount});
+						var pValue = $("<div tabindex='0' class='ibx-prop-row ibx-prop-value-col'>").ibxLabel({text:prop.displayValue}).data({ibxCol:2, ibxRow:rowCount});
 						this.element.append(pName, pValue);
-						var propObject = {"prop":prop, "pName":pName, "pValue":pValue, "children":null};
-						pName.data("ibxProp", propObject);
+						
+						prop.propParent = propParent;
+						prop._internal = {"propParent":propParent, "pName":pName, "pValue":pValue};
+						pName.data("ibxPropInfo", prop);
 						if(prop.props)
 						{
-							propObject.children = this._buildTree(prop.props, rowCount)
+							this._buildTree(prop, rowCount)
 							if(!prop.expanded)
-								$(propObject.children).each(function(idx, pObject)
+								for(let key in prop.props)
 								{
-									pObject.pName.ibxAddClass("ibx-prop-collapsed");
-									pObject.pValue.ibxAddClass("ibx-prop-collapsed");
-								});
+									let propChild = prop.props[key];
+									propChild._internal.pName.ibxAddClass("ibx-prop-collapsed");
+									propChild._internal.pValue.ibxAddClass("ibx-prop-collapsed");
+								}
 						}
-						arProps.push(propObject);
 					}
-					return arProps;
 				},
 				_onSplitterResize:function(e, resizeInfo)
 				{
@@ -201,12 +213,13 @@
 				_onPropExpandEvent:function(e)
 				{
 					var expanded = (e.type == "ibx_collapse");
-					var propInfo = $(e.target).data("ibxProp");
-					$(propInfo.children).each(function(idx, pObject)
+					var prop = $(e.target).data("ibxPropInfo");
+					for(let key in prop.props)
 					{
-						pObject.pName.ibxToggleClass("ibx-prop-collapsed", expanded);
-						pObject.pValue.ibxToggleClass("ibx-prop-collapsed", expanded);
-					});
+						let propChild = prop.props[key];
+						propChild._internal.pName.ibxToggleClass("ibx-prop-collapsed");
+						propChild._internal.pValue.ibxToggleClass("ibx-prop-collapsed");
+					};
 				},
 				_refresh:function()
 				{
@@ -214,6 +227,17 @@
 					var width = this._headingName.outerWidth();
 					this.options.cols = width + "px 1fr";
 					this._super();
+
+					var indent = (options.indent) ? options.indent : $.ibi.ibxTreeNode.defaultIndent;
+					this.element.find(".ibx-prop-name-col").each(function(idx, el)
+					{
+						el = $(el);
+						var propInfo = el.data("ibxPropInfo");
+						var depth = 0;
+						while(propInfo = propInfo._internal ? propInfo._internal.propParent : null)
+							depth++;
+						el.css("paddingLeft", depth * indent);
+					}.bind(this));
 				}
 			});
 			//# sourceURL=test_res_bundle.xml
