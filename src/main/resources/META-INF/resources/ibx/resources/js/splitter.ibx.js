@@ -6,6 +6,7 @@ $.widget("ibi.ibxSplitter", $.ibi.ibxWidget,
 	options:
 	{
 		"orientation":"vertical",
+		"resize":"both",
 		"autoReset":true,
 	},
 	_widgetClass:"ibx-splitter",
@@ -69,8 +70,11 @@ $.widget("ibi.ibxSplitter", $.ibi.ibxWidget,
 				return;
 
 			//set the actual widths
-			bVertical ? el1.width(s1Val) : el1.height(s1Val);
-			bVertical ? el2.width(s2Val) : el2.height(s2Val);
+			if(options.resize == "both" || options.resize == "first")
+				bVertical ? el1.width(s1Val) : el1.height(s1Val);
+
+			if(options.resize == "both" || options.resize == "second")
+				bVertical ? el2.width(s2Val) : el2.height(s2Val);
 
 			this._trigger("resize", null, { "el1": el1, "el2": el2, "dx": dx, "dy": dy });
 			this._eLast = e;

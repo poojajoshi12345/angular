@@ -37,30 +37,18 @@
 			}
 			.test-props
 			{
-				width:400px;
 				height:400px;
 				border:1px solid black;
 				padding:5px;
-			}
-			.grid-cell
-			{
-				border:1px solid black;
-				xwidth:100px;
-				xheight:100px;
-			}
-
-			.test-map
-			{
-				width:500px;
-				height:500px;
+				margin:10px;
 			}
 		</style>
 	</head>
 	<body class="ibx-root">
 		<div class="del-command" data-ibx-type="ibxCommand" data-ibxp-id="cmdDelete" data-ibxp-shortcut="CTRL+SHIFT+DEL"></div>
-		<div class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="center" data-ibxp-justify="center" data-ibxp-command="cmdDelete">
+		<div class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="stretch" data-ibxp-justify="center" data-ibxp-command="cmdDelete">
 
-			<div class="test-props" data-ibx-type="ibxPropertySheet"></div>
+			<div class="test-props" data-ibx-type="ibxDataGrid"></div>
 
 			<!-- <div class="test-grid" data-ibx-type="ibxGrid" data-ibx-options='{"cols":"1fr 1fr", "xjustify":"center", "xalign":"stretch"}'>
 
