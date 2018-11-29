@@ -28,30 +28,25 @@
 					buildTree(testProps);
 					function buildTree(props)
 					{
-						for(var i = 0; i < props.length; ++i)
+						for(var i = 0; props && i < props.length; ++i)
 						{
 							var row = [];
 							prop = props[i];
 							for(var key in prop)
 							{
-								if(key == "props")
-									buildTree(prop[key]);
-								else
-								if(prop[key] instanceof Object)
-									continue;
-								else
+								if(!(prop[key] instanceof Object))
 								{
 									var cell = $("<div tabindex='0'>").ibxLabel({text:(prop[key]).toString()})[0];
 									row.push(cell);
 								}
 							}
 							grid.ibxWidget("addRow", row, null, null, true);
+							buildTree(prop.props);
 						}
 					}
 				});
 			},
-			[
-				{"src":"./test_res_bundle.xml", "loadContext":"app"}], true);
+			[{"src":"./test_res_bundle.xml", "loadContext":"app"}], true);
 		</script>
 		<style type="text/css">
 			html, body, .main-box
