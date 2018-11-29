@@ -18,6 +18,10 @@
 		<style-file src="./test_res_styles.css"/>
 		<style-sheet>
 		<![CDATA[
+			.ibx-data-grid
+			{
+				overflow:auto;
+			}
 			.ibx-data-grid-heading-bar
 			{
 				padding:2px;
@@ -147,21 +151,21 @@
 					[
 						{"title":"displayName", "size":"100px"},
 						{"title":"displayValue", "size":"100px"},
-						{"title":"name", "size":"50px"},
-						{"title":"value", "size":"50px"},
-						{"title":"type", "size":"50px"},
+						{"title":"name", "size":"75px"},
+						{"title":"value", "size":"75px"},
+						{"title":"type", "size":"75px"},
 						{"title":"uiType", "size":"*"},
 					],
 
-					align:"start",
+					align:"center",
+					alignContent:"start",
 				},
 				_widgetClass:"ibx-data-grid",
 				_create:function()
 				{
 					var options = this.options;
-					this._headingBar = $("<div>").ibxAddClass(options.headingBarClass).ibxHBox().data({ibxCol:"1/span"+options.columnMap.length});
+					this._headingBar = $("<div>").ibxAddClass(options.headingBarClass).ibxHBox().data({ibxCol:"1/span " + options.columnMap.length});
 
-					var cols = "";
 					for(var i = 0; i < options.columnMap.length; ++i)
 					{
 						var cInfo = options.columnMap[i];
@@ -170,8 +174,6 @@
 						cHeading.ibxButtonSimple({justify:"start"});
 						this._headingBar.ibxWidget("add", cHeading);
 
-						cols += (cInfo.size == "*") ? "1fr " : cHeading.outerWidth() + 2 + "px ";
-
 						if(i == options.columnMap.length-1)
 							continue;
 
@@ -179,16 +181,50 @@
 						this._headingBar.ibxWidget("add", splitter);
 					}
 					this.add(this._headingBar);
-					options.cols = cols;
 					this._super();
 				},
-				_onSplitterResize:function(e)
+				_calcColumnsFromHeaders:function()
 				{
+					var cols = "";
+					var splitterWidth = this._headingBar.ibxWidget("children", "."+this.options.headingSplitterClass).first().outerWidth();
+					var headers = this._headingBar.ibxWidget("children", "."+this.options.headingClass);
+					for(var i = 0; i < headers.length; ++i)
+					{
+						var header = $(headers[i]);
+						var isFlexing = parseInt(header.css("flexGrow"), 0);
+						cols += isFlexing ? "1fr " : header.outerWidth() + (splitterWidth || 0) + "px ";
+					}
+					return cols;
+				},
+				_onSplitterResize:function(e, resizeInfo)
+				{
+					this.refresh();
+				},
+				addRow:function(elRow, rowSibling, before, refresh)
+				{
+					var options = this.options;
+					var nCells = this.children("." + options.cellClass).length;
+					var idxRow = (1 + Math.floor(nCells/options.columnMap.length)) + 1;
+					for(var i = 0; i < elRow.length; ++i)
+					{
+						var el = $(elRow[i]);
+						el.addClass(options.cellClass).data({ibxCol:i+1, ibxRow:idxRow});
+					}
+					this.add(elRow, rowSibling, before, refresh);
+
+				},
+				removeRow:function(row)
+				{
+				},
+				removeAll:function()
+				{
+					this.remove("." + this.options.cellClass);
 				},
 				_refresh:function()
 				{
-					this._super();
 					var options = this.options;
+					options.cols = this._calcColumnsFromHeaders();
+					this._super();
 				}
 			});
 
