@@ -26,9 +26,39 @@
 					var grid = $(".test-grid");
 					var colMap = 
 					[
-						
-					]
-					grid.ibxWidget("option", {});
+						{"title":"displayName", "size":"100px"},
+						{"title":"displayValue", "size":"100px"},
+						{"title":"name", "size":"75px"},
+						{"title":"value", "size":"75px"},
+						{"title":"type", "size":"75px"},
+						{"title":"uiType", "size":"75px"},
+						{"title":"expanded", "size":"*"},
+					];
+					grid.ibxWidget("option", {"colMap":colMap});
+
+					grid.ibxWidget("removeAll");
+					buildTree(testProps);
+					function buildTree(props)
+					{
+						for(var i = 0; props && i < props.length; ++i)
+						{
+							var row = [];
+							prop = props[i];
+							for(var key in prop)
+							{
+								if(!(prop[key] instanceof Object))
+								{
+									var cell = $("<div tabindex='0'>").ibxLabel({text:(prop[key]).toString()})[0];
+									row.push(cell);
+								}
+							}
+							grid.ibxWidget("addRow", row);
+							buildTree(prop.props);
+						}
+					}
+					grid.ibxWidget("refresh");
+					
+
 				});
 			},
 			[{"src":"./test_res_bundle.xml", "loadContext":"app"}], true);

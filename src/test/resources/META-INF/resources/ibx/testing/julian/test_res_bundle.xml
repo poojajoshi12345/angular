@@ -21,16 +21,30 @@
 			.ibx-data-grid
 			{
 				box-sizing:border-box;
+				overflow:auto;
 			}
 			.dgrid-header-col-bar, .dgrid-header-row-bar
 			{
 				padding:2px;
 				background-color:#ccc;
-				border:1px solid red;
+			}
+			.dgrid-header-col, .dgrid-header-row
+			{
+				padding:3px;
+				border:1px outset;
+				box-sizing:border-box;
+			}
+			.dgrid-header-col-splitter
+			{
+				min-width:0px;
+				width:2px;
+				background-color:transparent;
+				box-sizing:border-box;
 			}
 			.dgrid-grid
 			{
-				border:1px solid black;
+				padding:2px;
+				border-top:1px solid black;
 				overflow:auto;
 			}
 			.dgrid-row
@@ -39,7 +53,8 @@
 			}
 			.dgrid-cell
 			{
-				flex:1 0 auto;
+				flex:0 0 auto;
+
 				border-right:1px solid #ccc;
 				border-bottom:1px solid #ccc;
 			}
@@ -167,7 +182,9 @@
 			{
 				options:
 				{
-					colMap:[],
+					colMap:[], //entries: {title:"column title", size:"100px"}...size can be "*" meaning "flex 1 1 auto".
+					showColHeaders:true,
+					showRowHeaders:false,
 					
 					/*frame stuff*/
 					cols:"auto 1fr",
@@ -201,33 +218,82 @@
 					this.add([colHeaderBar[0], rowHeaderBar[0], grid[0]]);
 					this._super();
 				},
-				_onSplitterResize:function(e, resizeInfo)
-				{
-					this.refresh();
-				},
 				_buildHeaders:function()
 				{
-					this._colHeaderBar.ibxWidget("remove");
+					var options = this.options;
+					var classes = options.classes;
 
-				}
+					this._colHeaderBar.ibxWidget("remove");
+					for(var i = 0; i < options.colMap.length; ++i)
+					{
+						var cInfo = options.colMap[i];
+						var size = (cInfo.size == "*") ? "flex:1 1 auto" : "width:"+cInfo.size;
+						var cHeading = $(sformat("<div class='{1}' style='{2};'>{3}</div>", classes.colHeaderClass, size, cInfo.title));
+						cHeading.ibxButtonSimple({justify:"start"});
+						this._colHeaderBar.ibxWidget("add", cHeading);
+
+						if(i == options.colMap.length-1)
+							continue;
+
+						var splitter = $(sformat("<div class='{1}'>", classes.colHeaderSplitterClass)).ibxSplitter({resize:"first"}).on("ibx_resize", this._onSplitterResize.bind(this));
+						this._colHeaderBar.ibxWidget("add", splitter);
+					}
+				},
+				_rows:[],
+				addRow:function(elRow, sibling, before, refresh)
+				{
+					var options = this.options;
+					var row = $("<div>").ibxHBox().ibxAddClass(options.classes.gridRow);
+					row.append(elRow);
+					this._grid.append(row);
+
+					$(elRow).ibxAddClass("dgrid-cell");
+					if(refresh)
+						this.refresh();
+				},
+				removeAll:function()
+				{
+					this._grid.ibxWidget("remove");
+				},
+				_onSplitterResize:function(e, resizeInfo)
+				{
+					var splitter = $(e.target);
+					var sWidth = splitter.outerWidth();
+					var e1lWidth = resizeInfo.el1.outerWidth();
+					var colMap = this.options.colMap;
+
+					var idxEl = splitter.siblings(".dgrid-header-col").index(resizeInfo.el1);
+					var cells = this._grid.find(sformat(".dgrid-row > .dgrid-cell:nth-child({1})", idxEl+1));
+					cells.outerWidth(e1lWidth + sWidth);
+				},
+				_setOption:function(key, value)
+				{
+					this._super(key, value);
+					if(key == "colMap")
+					{
+						this._buildHeaders();
+					}
+				},
 				_refresh:function()
 				{
 					var options = this.options;
+					options.cols = options.showRowHeaders ? "auto 1fr" : "0px 1fr";
+					options.rows = options.showColHeaders ? "auto 1fr" : "0px 1fr";
+					this._colHeaderBar.css("display", options.showColHeaders ? "" : "none");
+					this._rowHeaderBar.css("display", options.showRowHeaders ? "" : "none");
 					this._super();
 
-					this._grid.ibxWidget("remove");
-					for(var i = 0; i < options.rowCount; ++i)
+					var colMap = options.colMap;
+					for(var i = 0; i < colMap.length; ++i)
 					{
-						var row = $("<div>").ibxHBox().ibxAddClass(options.classes.gridRow);
-						for(var j = 0; j < options.colCount; ++j)
-						{
-							var cell = $("<div class='dgrid-cell'>").ibxLabel({text: sformat("Cell ({1}, {2})", i, j)});
-							row.ibxWidget("add", cell);
-						}
-						this._grid.ibxWidget("add", row);
+						var cells = this._grid.find(sformat(".dgrid-row > .dgrid-cell:nth-child({1})", i+1));
+						if(!cells.length)
+							continue;
+						cells.outerWidth(colMap[i].size || colMap[i].curSize);
+						console.log(colMap[i].title, colMap[i].size, cells.outerWidth());
 					}
 
-					this._grid.ibxWidget("option", options.gridOptions);
+
 				}
 			});
 
