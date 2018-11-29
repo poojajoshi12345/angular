@@ -34,11 +34,14 @@
 							prop = props[i];
 							for(var key in prop)
 							{
-								if(prop[key] instanceof Object)
+								if(key == "props")
 									buildTree(prop[key]);
 								else
+								if(prop[key] instanceof Object)
+									continue;
+								else
 								{
-									var cell = $("<div tabindex='0'>").ibxLabel({text:prop[key]})[0];
+									var cell = $("<div tabindex='0'>").ibxLabel({text:(prop[key]).toString()})[0];
 									row.push(cell);
 								}
 							}

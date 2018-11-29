@@ -41,6 +41,15 @@
 				background-color:transparent;
 				box-sizing:border-box;
 			}
+			.ibx-data-grid-cell
+			{
+				box-sizing:border-box;
+				border-right:1px solid #ccc;
+				border-bottom:1px solid #ccc;
+			}
+			.ibx-data-grid-cell-padding
+			{
+			}
 			.test-class
 			{
 				font-size:2em;
@@ -154,10 +163,11 @@
 						{"title":"name", "size":"75px"},
 						{"title":"value", "size":"75px"},
 						{"title":"type", "size":"75px"},
-						{"title":"uiType", "size":"*"},
+						{"title":"uiType", "size":"75px"},
+						{"title":"expanded", "size":"*"},
 					],
 
-					align:"center",
+					align:"stretch",
 					alignContent:"start",
 				},
 				_widgetClass:"ibx-data-grid",
@@ -183,6 +193,10 @@
 					this.add(this._headingBar);
 					this._super();
 				},
+				columnCount:function()
+				{
+					return this.options.columnMap.length;
+				},
 				_calcColumnsFromHeaders:function()
 				{
 					var cols = "";
@@ -205,12 +219,14 @@
 					var options = this.options;
 					var nCells = this.children("." + options.cellClass).length;
 					var idxRow = (1 + Math.floor(nCells/options.columnMap.length)) + 1;
-					for(var i = 0; i < elRow.length; ++i)
+					var row = [];
+					for(var i = 0; i < options.columnMap.length; ++i)
 					{
-						var el = $(elRow[i]);
-						el.addClass(options.cellClass).data({ibxCol:i+1, ibxRow:idxRow});
+						var el = (elRow[i]) ? $(elRow[i]) : $("<div class='ibx-data-grid-cell-padding'></div>");
+						el.ibxAddClass(options.cellClass).data({ibxCol:i+1, ibxRow:idxRow});
+						row.push(el[0]);
 					}
-					this.add(elRow, rowSibling, before, refresh);
+					this.add(row, rowSibling, before, refresh);
 
 				},
 				removeRow:function(row)
