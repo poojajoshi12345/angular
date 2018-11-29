@@ -20,13 +20,28 @@
 		<![CDATA[
 			.ibx-data-grid
 			{
-				overflow:auto;
+				box-sizing:border-box;
 			}
-			.ibx-data-grid-heading-bar
+			.dgrid-header-col-bar, .dgrid-header-row-bar
 			{
 				padding:2px;
 				background-color:#ccc;
-				box-sizing:border-box;
+				border:1px solid red;
+			}
+			.dgrid-grid
+			{
+				border:1px solid black;
+				overflow:auto;
+			}
+			.dgrid-row
+			{
+				flex:0 0 auto;
+			}
+			.dgrid-cell
+			{
+				flex:1 0 auto;
+				border-right:1px solid #ccc;
+				border-bottom:1px solid #ccc;
 			}
 			.ibx-data-grid-heading
 			{
@@ -152,95 +167,67 @@
 			{
 				options:
 				{
-					headingBarClass:"ibx-data-grid-heading-bar",
-					headingClass:"ibx-data-grid-heading",
-					headingSplitterClass:"ibx-data-grid-heading-splitter",
-					cellClass:"ibx-data-grid-cell",
-					columnMap:
-					[
-						{"title":"displayName", "size":"100px"},
-						{"title":"displayValue", "size":"100px"},
-						{"title":"name", "size":"75px"},
-						{"title":"value", "size":"75px"},
-						{"title":"type", "size":"75px"},
-						{"title":"uiType", "size":"75px"},
-						{"title":"expanded", "size":"*"},
-					],
-
-					align:"stretch",
-					alignContent:"start",
+					colMap:[],
+					
+					/*frame stuff*/
+					cols:"auto 1fr",
+					rows:"auto 1fr",
+					classes:
+					{
+						colHeaderBarClass:"dgrid-header-col-bar",
+						colHeaderClass:"dgrid-header-col",
+						colHeaderSplitterClass:"dgrid-header-col-splitter",
+						rowHeaderBarClass:"dgrid-header-row-bar",
+						rowHeaderClass:"dgrid-header-row",
+						rowHeaderSplitterClass:"dgrid-header-row-splitter",
+						gridClass:"dgrid-grid",
+						gridRow:"dgrid-row",
+						cellClass:"dgrid-cell",
+					},
+					gridOptions:
+					{
+						align:"stretch",
+						justify:"start",
+					}
 				},
 				_widgetClass:"ibx-data-grid",
 				_create:function()
 				{
 					var options = this.options;
-					this._headingBar = $("<div>").ibxAddClass(options.headingBarClass).ibxHBox().data({ibxCol:"1/span " + options.columnMap.length});
-
-					for(var i = 0; i < options.columnMap.length; ++i)
-					{
-						var cInfo = options.columnMap[i];
-						var size = (cInfo.size == "*") ? "flex:1 1 auto" : "width:"+cInfo.size;
-						var cHeading = $(sformat("<div class='{1} {2}' style='{3};'>{4}</div>", options.headingClass, cInfo.headingClass, size, cInfo.title));
-						cHeading.ibxButtonSimple({justify:"start"});
-						this._headingBar.ibxWidget("add", cHeading);
-
-						if(i == options.columnMap.length-1)
-							continue;
-
-						var splitter = $(sformat("<div class='{1}'>", options.headingSplitterClass)).ibxSplitter({resize:"first"}).on("ibx_resize", this._onSplitterResize.bind(this));
-						this._headingBar.ibxWidget("add", splitter);
-					}
-					this.add(this._headingBar);
+					var classes = options.classes;
+					var colHeaderBar = this._colHeaderBar = $("<div>").ibxHBox().ibxAddClass(classes.colHeaderBarClass).data({ibxCol:"2", ibxRow:"1"});
+					var rowHeaderBar = this._rowHeaderBar = $("<div>").ibxVBox().ibxAddClass(classes.rowHeaderBarClass).data({ibxCol:"1", ibxRow:"2"});
+					var grid = this._grid = $("<div>").ibxVBox().ibxAddClass(classes.gridClass).data({ibxCol:"2", ibxRow:"2"});
+					this.add([colHeaderBar[0], rowHeaderBar[0], grid[0]]);
 					this._super();
-				},
-				columnCount:function()
-				{
-					return this.options.columnMap.length;
-				},
-				_calcColumnsFromHeaders:function()
-				{
-					var cols = "";
-					var splitterWidth = this._headingBar.ibxWidget("children", "."+this.options.headingSplitterClass).first().outerWidth();
-					var headers = this._headingBar.ibxWidget("children", "."+this.options.headingClass);
-					for(var i = 0; i < headers.length; ++i)
-					{
-						var header = $(headers[i]);
-						var isFlexing = parseInt(header.css("flexGrow"), 0);
-						cols += isFlexing ? "1fr " : header.outerWidth() + (splitterWidth || 0) + "px ";
-					}
-					return cols;
 				},
 				_onSplitterResize:function(e, resizeInfo)
 				{
 					this.refresh();
 				},
-				addRow:function(elRow, rowSibling, before, refresh)
+				_buildHeaders:function()
 				{
-					var options = this.options;
-					var nCells = this.children("." + options.cellClass).length;
-					var idxRow = (1 + Math.floor(nCells/options.columnMap.length)) + 1;
-					var row = [];
-					for(var i = 0; i < options.columnMap.length; ++i)
-					{
-						var el = (elRow[i]) ? $(elRow[i]) : $("<div class='ibx-data-grid-cell-padding'></div>");
-						el.ibxAddClass(options.cellClass).data({ibxCol:i+1, ibxRow:idxRow});
-						row.push(el[0]);
-					}
-					this.add(row, rowSibling, before, refresh);
+					this._colHeaderBar.ibxWidget("remove");
 
-				},
-				removeRow:function(row)
-				{
-				},
-				removeAll:function()
-				{
-					this.remove("." + this.options.cellClass);
-				},
+				}
 				_refresh:function()
 				{
 					var options = this.options;
-					options.cols = this._calcColumnsFromHeaders();
 					this._super();
+
+					this._grid.ibxWidget("remove");
+					for(var i = 0; i < options.rowCount; ++i)
+					{
+						var row = $("<div>").ibxHBox().ibxAddClass(options.classes.gridRow);
+						for(var j = 0; j < options.colCount; ++j)
+						{
+							var cell = $("<div class='dgrid-cell'>").ibxLabel({text: sformat("Cell ({1}, {2})", i, j)});
+							row.ibxWidget("add", cell);
+						}
+						this._grid.ibxWidget("add", row);
+					}
+
+					this._grid.ibxWidget("option", options.gridOptions);
 				}
 			});
 

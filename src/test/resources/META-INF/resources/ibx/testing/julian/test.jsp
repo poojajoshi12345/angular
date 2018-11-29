@@ -24,26 +24,11 @@
 				$(".btn-load").on("click", function(e)
 				{
 					var grid = $(".test-grid");
-					grid.ibxWidget("removeAll");
-					buildTree(testProps);
-					function buildTree(props)
-					{
-						for(var i = 0; props && i < props.length; ++i)
-						{
-							var row = [];
-							prop = props[i];
-							for(var key in prop)
-							{
-								if(!(prop[key] instanceof Object))
-								{
-									var cell = $("<div tabindex='0'>").ibxLabel({text:(prop[key]).toString()})[0];
-									row.push(cell);
-								}
-							}
-							grid.ibxWidget("addRow", row, null, null, true);
-							buildTree(prop.props);
-						}
-					}
+					var colMap = 
+					[
+						
+					]
+					grid.ibxWidget("option", {});
 				});
 			},
 			[{"src":"./test_res_bundle.xml", "loadContext":"app"}], true);
@@ -73,15 +58,6 @@
 		<div class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="stretch" data-ibxp-justify="center" data-ibxp-command="cmdDelete">
 			<div class="btn-load" data-ibx-type="ibxButton">Load Grid</div>
 			<div class="test-grid" data-ibx-type="ibxDataGrid"></div>
-
-			<!-- <div class="test-grid" data-ibx-type="ibxGrid" data-ibx-options='{"cols":"1fr 1fr", "xjustify":"center", "xalign":"stretch"}'>
-
-				<div class="grid-cell" data-ibx-type="ibxLabel" data-ibx-col="1" data-ibx-row="1">Grid Item</div>
-				<div class="grid-cell" data-ibx-type="ibxLabel" data-ibx-col="2" data-ibx-row="1">Grid Item</div>
-				<div class="grid-cell" data-ibx-type="ibxLabel" data-ibx-col="1" data-ibx-row="2">Grid Item</div>
-				<div class="grid-cell" data-ibx-type="ibxLabel" data-ibx-col="2" data-ibx-row="2">Grid Item</div>
-
-			</div> -->
 		</div>
 	</body>
 </html>
