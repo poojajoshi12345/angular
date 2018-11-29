@@ -214,7 +214,7 @@
 					var classes = options.classes;
 					var colHeaderBar = this._colHeaderBar = $("<div>").ibxHBox().ibxAddClass(classes.colHeaderBarClass).data({ibxCol:"2", ibxRow:"1"});
 					var rowHeaderBar = this._rowHeaderBar = $("<div>").ibxVBox().ibxAddClass(classes.rowHeaderBarClass).data({ibxCol:"1", ibxRow:"2"});
-					var grid = this._grid = $("<div>").ibxVBox().ibxAddClass(classes.gridClass).data({ibxCol:"2", ibxRow:"2"});
+					var grid = this._grid = $("<div>").ibxVBox({align:"stretch"}).ibxAddClass(classes.gridClass).data({ibxCol:"2", ibxRow:"2"});
 					this.add([colHeaderBar[0], rowHeaderBar[0], grid[0]]);
 					this._super();
 				},
@@ -231,6 +231,7 @@
 						var cHeading = $(sformat("<div class='{1}' style='{2};'>{3}</div>", classes.colHeaderClass, size, cInfo.title));
 						cHeading.ibxButtonSimple({justify:"start"});
 						this._colHeaderBar.ibxWidget("add", cHeading);
+						cInfo._curSize = cHeading.outerWidth();
 
 						if(i == options.colMap.length-1)
 							continue;
@@ -239,7 +240,6 @@
 						this._colHeaderBar.ibxWidget("add", splitter);
 					}
 				},
-				_rows:[],
 				addRow:function(elRow, sibling, before, refresh)
 				{
 					var options = this.options;
@@ -283,17 +283,17 @@
 					this._rowHeaderBar.css("display", options.showRowHeaders ? "" : "none");
 					this._super();
 
-					var colMap = options.colMap;
-					for(var i = 0; i < colMap.length; ++i)
+					if(options.colMap.length)
 					{
-						var cells = this._grid.find(sformat(".dgrid-row > .dgrid-cell:nth-child({1})", i+1));
-						if(!cells.length)
-							continue;
-						cells.outerWidth(colMap[i].size || colMap[i].curSize);
-						console.log(colMap[i].title, colMap[i].size, cells.outerWidth());
+						var sWidth = $(this._colHeaderBar[0].querySelector(".dgrid-header-col-splitter")).outerWidth();
+						var colMap = options.colMap;
+						for(var i = 0; i < colMap.length; ++i)
+						{
+							var cells = this._grid.find(sformat(".dgrid-row > .dgrid-cell:nth-child({1})", i+1));
+							var size = (colMap[i]._curSize || colMap[i].size);
+							(colMap[i].size == "*") ? cells.css({"flex":"1 1 auto", "width":"1px"}) : cells.outerWidth(size + sWidth);
+						}
 					}
-
-
 				}
 			});
 
