@@ -44,6 +44,11 @@
 				border-right:1px solid #ccc;
 				box-sizing:border-box;
 			}
+			.dgrid-header-col:last-child
+			{
+				border-right:1px solid #ccc;
+			}
+
 			.dgrid-grid
 			{
 				border-top:1px solid black;
@@ -205,9 +210,10 @@
 					var classes = options.classes;
 
 					this._colHeaderBar.ibxWidget("remove");
-					for(var i = 0; i < options.colMap.length; ++i)
+					var colMap = options.colMap;
+					for(var i = 0; i < colMap.length; ++i)
 					{
-						var cInfo = options.colMap[i] = $.extend({}, options.defaultColConfig, options.colMap[i]);
+						var cInfo = colMap[i] = $.extend({}, options.defaultColConfig, colMap[i]);
 						var size = (cInfo.size == "*") ? "flex:1 1 auto" : "width:"+cInfo.size;
 
 						//make header
@@ -215,8 +221,8 @@
 						cHeading.ibxButtonSimple({justify:cInfo.justify || "start"});
 						
 						//make splitter
-						var splitter = (i != options.colMap.length-1) ? $(sformat("<div class='{1}'>", classes.colHeaderSplitterClass)) : $();
-						splitter.ibxSplitter({locked:!cInfo.resizable, resize:"first"}).on("ibx_resize", this._onSplitterResize.bind(this));
+						var splitter = $(sformat("<div class='{1}'>", classes.colHeaderSplitterClass));
+						splitter.ibxSplitter({locked:!cInfo.resizable || (i == colMap.length-1), resize:"first"}).on("ibx_resize", this._onSplitterResize.bind(this));
 
 						//add header to bar
 						this._colHeaderBar.ibxWidget("add", [cHeading[0], splitter[0]]);
