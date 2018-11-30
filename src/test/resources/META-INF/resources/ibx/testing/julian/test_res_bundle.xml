@@ -25,25 +25,28 @@
 			}
 			.dgrid-header-col-bar, .dgrid-header-row-bar
 			{
-				padding:2px;
-				background-color:#ccc;
+				background-color:#eee;
+			}
+			.ibx-data-grid > .dgrid-header-bar-hidden
+			{
+				display:none;
 			}
 			.dgrid-header-col, .dgrid-header-row
 			{
-				padding:3px;
-				border:1px outset;
+				padding: .5em;
+				border-left:1px solid #ccc;
+				border-right:1px solid #ccc;
 				box-sizing:border-box;
 			}
 			.dgrid-header-col-splitter
 			{
 				min-width:0px;
-				width:2px;
+				width:3px;
 				background-color:transparent;
 				box-sizing:border-box;
 			}
 			.dgrid-grid
 			{
-				padding:2px;
 				border-top:1px solid black;
 				overflow:auto;
 			}
@@ -55,39 +58,12 @@
 			{
 				height:1em;
 				flex:0 0 auto;
-				padding:3px;
+				padding:.5em;
 				border-right:1px solid #ccc;
 				border-bottom:1px solid #ccc;
 			}
-			.dgrid-cell-padding
+			.dgrid-cell-auto-create
 			{
-				flex:1 1 auto;
-			}
-			.ibx-data-grid-heading
-			{
-				padding:3px;
-				border:1px outset;
-				box-sizing:border-box;
-			}
-			.ibx-data-grid-heading-splitter
-			{
-				min-width:0px;
-				width:2px;
-				background-color:transparent;
-				box-sizing:border-box;
-			}
-			.ibx-data-grid-cell
-			{
-				box-sizing:border-box;
-				border-right:1px solid #ccc;
-				border-bottom:1px solid #ccc;
-			}
-			.ibx-data-grid-cell-padding
-			{
-			}
-			.test-class
-			{
-				font-size:2em;
 			}
 		]]>
 		</style-sheet>
@@ -187,7 +163,8 @@
 			{
 				options:
 				{
-					colMap:[], //entries: {title:"column title", size:"100px"}...size can be "*" meaning "flex 1 1 auto".
+					colMap:[], //entries: {title:"column title", size:"100px", align:"left"}...size can be "*" meaning "flex 1 1 auto".
+					defaultColConfig: {title:"Column", size:"100px", "justify":"center"},
 					showColHeaders:true,
 					showRowHeaders:false,
 					
@@ -231,10 +208,10 @@
 					this._colHeaderBar.ibxWidget("remove");
 					for(var i = 0; i < options.colMap.length; ++i)
 					{
-						var cInfo = options.colMap[i];
+						var cInfo = options.colMap[i] = $.extend({}, options.defaultColConfig, options.colMap[i]);
 						var size = (cInfo.size == "*") ? "flex:1 1 auto" : "width:"+cInfo.size;
 						var cHeading = $(sformat("<div class='{1}' style='{2};'>{3}</div>", classes.colHeaderClass, size, cInfo.title));
-						cHeading.ibxButtonSimple({justify:"start"});
+						cHeading.ibxButtonSimple({justify:"start", justify:cInfo.justify || "start"});
 						this._colHeaderBar.ibxWidget("add", cHeading);
 						cInfo._curSize = cHeading.outerWidth();
 
@@ -262,10 +239,13 @@
 					var options = this.options;
 					var row = $("<div>").ibxHBox().ibxAddClass(options.classes.gridRow);
 
-					//trim extra cells...or if not enough, pad missing cells.
-					cells = cells.slice(0, options.colMap.length);
+					//create extra columns less than cells.
+					while(cells.length > options.colMap.length)
+						options.colMap.push($.extend({}, options.defaultColConfig));
+
+					//create extra cells less that columns.
 					while(cells.length < options.colMap.length)
-						cells.push($("<div class='dgrid-cell-padding'>")[0]);
+						cells.push($("<div class='dgrid-cell-auto-create'>")[0]);
 
 					row.append(cells);
 					this._grid.append(row);
@@ -305,10 +285,8 @@
 				_refresh:function()
 				{
 					var options = this.options;
-					options.cols = options.showRowHeaders ? "auto 1fr" : "0px 1fr";
-					options.rows = options.showColHeaders ? "auto 1fr" : "0px 1fr";
-					this._colHeaderBar.css("display", options.showColHeaders ? "" : "none");
-					this._rowHeaderBar.css("display", options.showRowHeaders ? "" : "none");
+					this._colHeaderBar.ibxToggleClass("dgrid-header-bar-hidden", !options.showColHeaders);
+					this._rowHeaderBar.ibxToggleClass("dgrid-header-bar-hidden", !options.showRowHeaders);
 					this._super();
 
 					if(options.colMap.length)

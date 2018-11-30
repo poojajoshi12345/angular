@@ -26,13 +26,13 @@
 					var grid = $(".test-grid");
 					var colMap = 
 					[
-						{"title":"displayName", "size":"100px"},
-						{"title":"displayValue", "size":"100px"},
-						{"title":"name", "size":"75px"},
-						{"title":"value", "size":"75px"},
-						{"title":"type", "size":"75px"},
-						{"title":"uiType", "size":"75px"},
-						{"title":"expanded", "size":"*"},
+						{"title":"displayName", "size":"100px", "justify":"start"},
+						{"title":"displayValue", "size":"100px", "justify":"start"},
+						{"title":"name", "size":"75px", "justify":"start"},
+						{"title":"value", "size":"75px", "justify":"start"},
+						{"title":"type", "size":"75px", "justify":"start"},
+						{"title":"uiType", "size":"75px", "justify":"start"},
+						{"title":"expanded", "size":"*", "justify":"start"},
 					];
 					grid.ibxWidget("option", {"colMap":colMap});
 
