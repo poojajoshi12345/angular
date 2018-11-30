@@ -26,18 +26,18 @@
 					var grid = $(".test-grid");
 					var colMap = 
 					[
-						{"title":"displayName", "size":"100px", "justify":"start"},
-						{"title":"displayValue", "size":"100px", "justify":"start"},
-						{"title":"name", "size":"75px", "justify":"start"},
-						{"title":"value", "size":"75px", "justify":"start"},
-						{"title":"type", "size":"75px", "justify":"start"},
-						{"title":"uiType", "size":"75px", "justify":"start"},
-						{"title":"expanded", "size":"*", "justify":"start"},
+						{"title":"displayName"},
+						{"title":"displayValue"},
+						{"title":"name"},
+						{"title":"value", "size":"200px"},
+						{"title":"type", "size":"50px"},
+						{"title":"uiType", "size":"75px"},
+						{"title":"expanded", "size":"*", justify:"center"},
 					];
-					grid.ibxWidget("option", {"colMap":colMap});
+					grid.ibxWidget("option", {"defaultColConfig":{justify:"start", resizable:true}, "colMap":colMap});
+					return;
 
 					grid.ibxWidget("removeAll");
-					var rowCount = 1;
 					buildTree(testProps);
 					function buildTree(props)
 					{
@@ -54,7 +54,6 @@
 								}
 							}
 							var row = grid.ibxWidget("addRow", row);
-							row.classList.add("row" + rowCount++);
 							buildTree(prop.props);
 						}
 					}

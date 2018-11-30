@@ -34,15 +34,14 @@
 			.dgrid-header-col, .dgrid-header-row
 			{
 				padding: .5em;
-				border-left:1px solid #ccc;
-				border-right:1px solid #ccc;
 				box-sizing:border-box;
 			}
 			.dgrid-header-col-splitter
 			{
 				min-width:0px;
-				width:3px;
+				width:5px;
 				background-color:transparent;
+				border-right:1px solid #ccc;
 				box-sizing:border-box;
 			}
 			.dgrid-grid
@@ -163,8 +162,8 @@
 			{
 				options:
 				{
-					colMap:[], //entries: {title:"column title", size:"100px", align:"left"}...size can be "*" meaning "flex 1 1 auto".
-					defaultColConfig: {title:"Column", size:"100px", "justify":"center"},
+					colMap:[],
+					defaultColConfig: {title:"Column", size:"100px", "justify":"center", resizable:false},
 					showColHeaders:true,
 					showRowHeaders:false,
 					
@@ -210,16 +209,17 @@
 					{
 						var cInfo = options.colMap[i] = $.extend({}, options.defaultColConfig, options.colMap[i]);
 						var size = (cInfo.size == "*") ? "flex:1 1 auto" : "width:"+cInfo.size;
-						var cHeading = $(sformat("<div class='{1}' style='{2};'>{3}</div>", classes.colHeaderClass, size, cInfo.title));
-						cHeading.ibxButtonSimple({justify:"start", justify:cInfo.justify || "start"});
-						this._colHeaderBar.ibxWidget("add", cHeading);
-						cInfo._curSize = cHeading.outerWidth();
 
-						if(i == options.colMap.length-1)
-							continue;
+						//make header
+						var cHeading = $(sformat("<div class='{1}' style='{2};'>{3}</div>", classes.colHeaderClass, size, cInfo.title))
+						cHeading.ibxButtonSimple({justify:cInfo.justify || "start"});
+						
+						//make splitter
+						var splitter = (i != options.colMap.length-1) ? $(sformat("<div class='{1}'>", classes.colHeaderSplitterClass)) : $();
+						splitter.ibxSplitter({locked:!cInfo.resizable, resize:"first"}).on("ibx_resize", this._onSplitterResize.bind(this));
 
-						var splitter = $(sformat("<div class='{1}'>", classes.colHeaderSplitterClass)).ibxSplitter({resize:"first"}).on("ibx_resize", this._onSplitterResize.bind(this));
-						this._colHeaderBar.ibxWidget("add", splitter);
+						//add header to bar
+						this._colHeaderBar.ibxWidget("add", [cHeading[0], splitter[0]]);
 					}
 				},
 				getCell:function(idxRow, idxCol)
@@ -276,11 +276,19 @@
 				},
 				_setOption:function(key, value)
 				{
-					this._super(key, value);
+					var options = this.options;
 					if(key == "colMap")
 					{
-						this._buildHeaders();
+						//make sure passed configs have all missing values with defaults.
+						 $.each(value, function(idx, colConfig)
+						 {
+						 	var config = $.extend({}, options.defaultColConfig, colConfig);
+						 	$.extend(colConfig, config);
+						 }.bind(this));
 					}
+					if(key == "defaultColConfig")
+						value = $.extend({}, options.defaultColConfig, value);
+					this._super(key, value);
 				},
 				_refresh:function()
 				{
@@ -289,15 +297,19 @@
 					this._rowHeaderBar.ibxToggleClass("dgrid-header-bar-hidden", !options.showRowHeaders);
 					this._super();
 
+					//update the header bars regardless of visibility, as they control the grid cell sizes.
+					this._buildHeaders();
+
+					//update column widths
 					if(options.colMap.length)
 					{
-						var sWidth = $(this._colHeaderBar[0].querySelector(".dgrid-header-col-splitter")).outerWidth();
+						var splitterSize = $(this._colHeaderBar[0].querySelector(".dgrid-header-col-splitter")).outerWidth();
 						var colMap = options.colMap;
 						for(var i = 0; i < colMap.length; ++i)
 						{
 							var cells = this._grid.find(sformat(".dgrid-row > .dgrid-cell:nth-child({1})", i+1));
-							var size = (colMap[i]._curSize || colMap[i].size);
-							(colMap[i].size == "*") ? cells.css({"flex":"1 1 auto", "width":"1px"}) : cells.outerWidth(size + sWidth);
+							var cellSize = parseInt((colMap[i]._curSize || colMap[i].size), 10);
+							(colMap[i].size == "*") ? cells.css({"flex":"1 1 auto", "width":"1px"}) : cells.outerWidth(cellSize + splitterSize);
 						}
 					}
 				}
