@@ -7,6 +7,7 @@ $.widget("ibi.ibxSplitter", $.ibi.ibxWidget,
 	{
 		"orientation":"vertical",
 		"resize":"both",
+		"locked":false,
 		"autoReset":true,
 	},
 	_widgetClass:"ibx-splitter",
@@ -20,6 +21,11 @@ $.widget("ibi.ibxSplitter", $.ibi.ibxWidget,
 	{
 		var bVertical = (this.options.orientation == "vertical");
 		var eType = e.type;
+
+		//locked so no action taken.
+		if(this.options.locked)
+			return;
+
 		if(eType == "mousedown")
 		{
 			if(!this._initialized)
@@ -105,6 +111,7 @@ $.widget("ibi.ibxSplitter", $.ibi.ibxWidget,
 		this._super();
 		var options = this.options;
 		var bVertical = (options.orientation == "vertical");
+		this.element.ibxToggleClass("ibx-splitter-locked", options.locked);
 		this.element.ibxRemoveClass("ibx-splitter-v ibx-splitter-h").ibxAddClass(bVertical ? "ibx-splitter-v" : "ibx-splitter-h");
 	}
 });

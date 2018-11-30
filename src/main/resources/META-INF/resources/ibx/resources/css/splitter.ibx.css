@@ -16,6 +16,11 @@
 	background-color:#ddd;
 }
 
+.ibx-splitter.ibx-splitter-locked
+{
+	cursor:auto;
+}
+
 .ibx-splitter-v
 {
 	display:inline-block;
