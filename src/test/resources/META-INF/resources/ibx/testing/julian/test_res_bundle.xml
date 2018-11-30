@@ -21,11 +21,11 @@
 			.ibx-data-grid
 			{
 				box-sizing:border-box;
-				overflow:auto;
 			}
 			.dgrid-header-col-bar, .dgrid-header-row-bar
 			{
 				background-color:#eee;
+				overflow:hidden;
 			}
 			.ibx-data-grid > .dgrid-header-bar-hidden
 			{
@@ -33,6 +33,7 @@
 			}
 			.dgrid-header-col, .dgrid-header-row
 			{
+				flex:1 0 auto;
 				padding: .5em;
 				box-sizing:border-box;
 			}
@@ -44,11 +45,6 @@
 				border-right:1px solid #ccc;
 				box-sizing:border-box;
 			}
-			.dgrid-header-col:last-child
-			{
-				border-right:1px solid #ccc;
-			}
-
 			.dgrid-grid
 			{
 				border-top:1px solid black;
@@ -198,8 +194,8 @@
 				{
 					var options = this.options;
 					var classes = options.classes;
-					var colHeaderBar = this._colHeaderBar = $("<div>").ibxHBox().ibxAddClass(classes.colHeaderBarClass).data({ibxCol:"2", ibxRow:"1"});
-					var rowHeaderBar = this._rowHeaderBar = $("<div>").ibxVBox().ibxAddClass(classes.rowHeaderBarClass).data({ibxCol:"1", ibxRow:"2"});
+					var colHeaderBar = this._colHeaderBar = $("<div>").ibxHBox().ibxAddClass(classes.colHeaderBarClass).data({ibxCol:"2/span1", ibxRow:"1"});
+					var rowHeaderBar = this._rowHeaderBar = $("<div>").ibxVBox().ibxAddClass(classes.rowHeaderBarClass).data({ibxCol:"1/span1", ibxRow:"2"});
 					var grid = this._grid = $("<div>").ibxVBox({align:"stretch"}).ibxAddClass(classes.gridClass).data({ibxCol:"2", ibxRow:"2"});
 					this.add([colHeaderBar[0], rowHeaderBar[0], grid[0]]);
 					this._super();
@@ -260,6 +256,13 @@
 					if(refresh)
 						this.refresh();
 					return row[0];
+				},
+				addRows:function(rows, sibling, before, refresh)
+				{
+					var ret = [];
+					for(var i = 0; i < rows.length; ++i)
+						ret.push(this.addRow(rows[i], sibling, before, refresh));
+					return ret;
 				},
 				removeRow:function(row, destroy, refresh)
 				{

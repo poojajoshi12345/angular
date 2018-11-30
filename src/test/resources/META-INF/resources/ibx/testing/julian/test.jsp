@@ -35,8 +35,7 @@
 						{"title":"expanded", "size":"*", justify:"center"},
 					];
 					grid.ibxWidget("option", {"defaultColConfig":{justify:"start", resizable:true}, "colMap":colMap});
-					return;
-
+					
 					grid.ibxWidget("removeAll");
 					buildTree(testProps);
 					function buildTree(props)
@@ -80,7 +79,7 @@
 			{
 				height:400px;
 				border:1px solid black;
-				margin:10px;
+				margin:200px;
 			}
 			.dgrid-row:hover
 			{
