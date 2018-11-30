@@ -54,7 +54,7 @@
 			}
 			.dgrid-cell
 			{
-				xheight:1em;
+				height:1em;
 				flex:0 0 auto;
 				padding:.5em;
 				border-right:1px solid #ccc;
