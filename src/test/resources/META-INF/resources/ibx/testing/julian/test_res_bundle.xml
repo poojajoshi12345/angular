@@ -250,12 +250,12 @@
 					var ret = null;
 					var row = this.getRow(idxRow);
 					var filter = (Number.isInteger(idxCol)) ? sformat(".dgrid-cell:nth-child({1})", idxCol+1) : idxCol;
-					return $(row).children(filter)[0];
+					return $(row).children(filter)[0] || null;
 				},
 				getRow:function(idxRow)
 				{
 					var filter = (Number.isInteger(idxRow)) ? sformat(".dgrid-row:nth-child({1})", idxRow+1) : idxRow;
-					return this._grid.children(filter)[0];
+					return this._grid.children(filter)[0] || null;
 				},
 				addRow:function(cells, sibling, before, refresh)
 				{

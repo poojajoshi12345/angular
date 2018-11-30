@@ -75,13 +75,26 @@
 			}
 			.btn-load
 			{
-					margin:10px;
+				margin:10px;
 			}
 			.test-grid
 			{
 				height:400px;
 				border:1px solid black;
 				margin:10px;
+			}
+			.dgrid-row:hover
+			{
+				background-color:#efefef;
+			}
+			.dgrid-cell:hover
+			{
+				background-color:thistle;
+			}
+			.dgrid-cell:focus
+			{
+				background-color:black;
+				color:white;
 			}
 		</style>
 	</head>
