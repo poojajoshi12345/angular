@@ -53,10 +53,15 @@
 			}
 			.dgrid-cell
 			{
+				height:1em;
 				flex:0 0 auto;
-
+				padding:3px;
 				border-right:1px solid #ccc;
 				border-bottom:1px solid #ccc;
+			}
+			.dgrid-cell-padding
+			{
+				flex:1 1 auto;
 			}
 			.ibx-data-grid-heading
 			{
@@ -240,16 +245,39 @@
 						this._colHeaderBar.ibxWidget("add", splitter);
 					}
 				},
-				addRow:function(elRow, sibling, before, refresh)
+				getCell:function(idxRow, idxCol)
+				{
+					var ret = null;
+					var row = this.getRow(idxRow);
+					var filter = (Number.isInteger(idxCol)) ? sformat(".dgrid-cell:nth-child({1})", idxCol+1) : idxCol;
+					return $(row).children(filter)[0];
+				},
+				getRow:function(idxRow)
+				{
+					var filter = (Number.isInteger(idxRow)) ? sformat(".dgrid-row:nth-child({1})", idxRow+1) : idxRow;
+					return this._grid.children(filter)[0];
+				},
+				addRow:function(cells, sibling, before, refresh)
 				{
 					var options = this.options;
 					var row = $("<div>").ibxHBox().ibxAddClass(options.classes.gridRow);
-					row.append(elRow);
-					this._grid.append(row);
 
-					$(elRow).ibxAddClass("dgrid-cell");
+					//trim extra cells...or if not enough, pad missing cells.
+					cells = cells.slice(0, options.colMap.length);
+					while(cells.length < options.colMap.length)
+						cells.push($("<div class='dgrid-cell-padding'>")[0]);
+
+					row.append(cells);
+					this._grid.append(row);
+					$(cells).ibxAddClass("dgrid-cell").data("ibxGridRow", row[0]);
+
 					if(refresh)
 						this.refresh();
+					return row[0];
+				},
+				removeRow:function(row, destroy, refresh)
+				{
+					this._grid.ibxWidget("remove", row, destroy, refresh);
 				},
 				removeAll:function()
 				{

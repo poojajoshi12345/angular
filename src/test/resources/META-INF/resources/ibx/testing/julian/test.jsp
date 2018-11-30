@@ -37,6 +37,7 @@
 					grid.ibxWidget("option", {"colMap":colMap});
 
 					grid.ibxWidget("removeAll");
+					var rowCount = 1;
 					buildTree(testProps);
 					function buildTree(props)
 					{
@@ -52,7 +53,8 @@
 									row.push(cell);
 								}
 							}
-							grid.ibxWidget("addRow", row);
+							var row = grid.ibxWidget("addRow", row);
+							row.classList.add("row" + rowCount++);
 							buildTree(prop.props);
 						}
 					}
