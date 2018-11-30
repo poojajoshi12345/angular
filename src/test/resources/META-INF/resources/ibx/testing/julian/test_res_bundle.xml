@@ -33,9 +33,8 @@
 			}
 			.dgrid-header-col, .dgrid-header-row
 			{
-				flex:1 0 auto;
-				padding: .5em;
-				box-sizing:border-box;
+				flex:0 0 auto;
+				padding:.5em;
 			}
 			.dgrid-header-col-splitter
 			{
@@ -43,7 +42,6 @@
 				width:5px;
 				background-color:transparent;
 				border-right:1px solid #ccc;
-				box-sizing:border-box;
 			}
 			.dgrid-grid
 			{
@@ -56,7 +54,7 @@
 			}
 			.dgrid-cell
 			{
-				height:1em;
+				xheight:1em;
 				flex:0 0 auto;
 				padding:.5em;
 				border-right:1px solid #ccc;
@@ -164,7 +162,7 @@
 				options:
 				{
 					colMap:[],
-					defaultColConfig: {title:"Column", size:"100px", "justify":"center", resizable:false},
+					defaultColConfig: {title:"Column", size:"100px", flex:false, justify:"center", resizable:false},
 					showColHeaders:true,
 					showRowHeaders:false,
 					
@@ -197,6 +195,8 @@
 					var colHeaderBar = this._colHeaderBar = $("<div>").ibxHBox().ibxAddClass(classes.colHeaderBarClass).data({ibxCol:"2/span1", ibxRow:"1"});
 					var rowHeaderBar = this._rowHeaderBar = $("<div>").ibxVBox().ibxAddClass(classes.rowHeaderBarClass).data({ibxCol:"1/span1", ibxRow:"2"});
 					var grid = this._grid = $("<div>").ibxVBox({align:"stretch"}).ibxAddClass(classes.gridClass).data({ibxCol:"2", ibxRow:"2"});
+					grid.on("scroll", this._onGridScroll.bind(this));
+
 					this.add([colHeaderBar[0], rowHeaderBar[0], grid[0]]);
 					this._super();
 				},
@@ -206,11 +206,12 @@
 					var classes = options.classes;
 
 					this._colHeaderBar.ibxWidget("remove");
+
 					var colMap = options.colMap;
 					for(var i = 0; i < colMap.length; ++i)
 					{
 						var cInfo = colMap[i] = $.extend({}, options.defaultColConfig, colMap[i]);
-						var size = (cInfo.size == "*") ? "flex:1 1 auto" : "width:"+cInfo.size;
+						var size = sformat("width:{1};flex:{2} 0 auto;", cInfo.size, cInfo.flex ? 1 : 0);
 
 						//make header
 						var cHeading = $(sformat("<div class='{1}' style='{2};'>{3}</div>", classes.colHeaderClass, size, cInfo.title))
@@ -220,7 +221,8 @@
 						var splitter = $(sformat("<div class='{1}'>", classes.colHeaderSplitterClass));
 						splitter.ibxSplitter({locked:!cInfo.resizable || (i == colMap.length-1), resize:"first"}).on("ibx_resize", this._onSplitterResize.bind(this));
 
-						//add header to bar
+						//save UI, and add header to bar
+						cInfo._ui = {"header":cHeading, "splitter":splitter};
 						this._colHeaderBar.ibxWidget("add", [cHeading[0], splitter[0]]);
 					}
 				},
@@ -283,6 +285,18 @@
 					var cells = this._grid.find(sformat(".dgrid-row > .dgrid-cell:nth-child({1})", idxEl+1));
 					cells.outerWidth(e1lWidth + sWidth);
 				},
+				_onGridScroll:function(e)
+				{
+					var scrollX = this._grid.prop("scrollLeft");
+					var scrollY = this._grid.prop("scrollTop");
+
+					var sbw = getScrollbarWidth();
+					var hsb = this._grid.hasScrollbar(true);
+					var vsb = this._grid.hasScrollbar(false);
+
+					this._colHeaderBar.prop("scrollLeft", scrollX);
+					this._rowHeaderBar.prop("scrollLeft", scrollY);
+				},
 				_setOption:function(key, value)
 				{
 					var options = this.options;
@@ -316,9 +330,10 @@
 						var colMap = options.colMap;
 						for(var i = 0; i < colMap.length; ++i)
 						{
+							cInfo = colMap[i];
 							var cells = this._grid.find(sformat(".dgrid-row > .dgrid-cell:nth-child({1})", i+1));
-							var cellSize = parseInt((colMap[i]._curSize || colMap[i].size), 10);
-							(colMap[i].size == "*") ? cells.css({"flex":"1 1 auto", "width":"1px"}) : cells.outerWidth(cellSize + splitterSize);
+							var cellSize = cInfo._ui.header.outerWidth() + cInfo._ui.splitter.outerWidth();
+							cInfo.flex ? cells.css({flex:"1 0 auto", width:cellSize}) : cells.outerWidth(cellSize);
 						}
 					}
 				}

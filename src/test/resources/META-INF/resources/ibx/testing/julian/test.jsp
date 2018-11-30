@@ -19,6 +19,26 @@
 		<Script src="<%=request.getContextPath()%>/ibx/resources/ibx.js" type="text/javascript"></script>
 		<script type="text/javascript">
 			<jsp:include page="/WEB-INF/jsp/global/wf_globals.jsp" flush="false" />
+			function testLoad()
+			{
+				console.time();
+				var rows = [];
+				for(var i = 0; i < 50; ++i)
+				{
+					var cols = [];
+					for(var j = 0; j < 5; ++j)
+						cols.push($(sformat("<div tabindex='0'>cell ({1},{2})</div>", i, j))[0]);
+					rows.push(cols);
+				}
+
+				var grid = $(".ibx-data-grid");
+
+				//grid.ibxWidget("removeAll");
+				grid.ibxWidget("option", "defaultColConfig", {resizable:true})
+				grid.ibxWidget("addRows", rows);
+				grid.ibxWidget("refresh");
+				console.timeEnd();
+			}
 			ibx(function()
 			{
 				$(".btn-load").on("click", function(e)
@@ -32,11 +52,11 @@
 						{"title":"value", "size":"200px"},
 						{"title":"type", "size":"50px"},
 						{"title":"uiType", "size":"75px"},
-						{"title":"expanded", "size":"*", justify:"center"},
+						{"title":"expanded", "size":"100px", "flex":true, "justify":"center"},
 					];
 					grid.ibxWidget("option", {"defaultColConfig":{justify:"start", resizable:true}, "colMap":colMap});
 					
-					grid.ibxWidget("removeAll");
+					//grid.ibxWidget("removeAll");
 					buildTree(testProps);
 					function buildTree(props)
 					{
@@ -79,7 +99,7 @@
 			{
 				height:400px;
 				border:1px solid black;
-				margin:200px;
+				margin:100px;
 			}
 			.dgrid-row:hover
 			{
