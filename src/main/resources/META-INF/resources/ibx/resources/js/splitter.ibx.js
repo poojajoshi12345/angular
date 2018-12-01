@@ -32,9 +32,9 @@ $.widget("ibi.ibxSplitter", $.ibi.ibxWidget,
 			{
 				//save initial sizes for dblclick reset.
 				var e1 = this.element.prevAll(":visible").first();
-				this._e1Info = {el:e1, width:e1.outerWidth(), height:e1.outerHeight()};
+				this._e1Info = {el:e1, width:e1.width(), height:e1.height()};
 				var e2 = this.element.nextAll(":visible").first();
-				this._e2Info =  {el:e2, width:e2.outerWidth(), height:e2.outerHeight()};
+				this._e2Info =  {el:e2, width:e2.width(), height:e2.height()};
 				this._initialized = true;
 			}
 
@@ -86,14 +86,8 @@ $.widget("ibi.ibxSplitter", $.ibi.ibxWidget,
 			this._eLast = e;
 		}
 		else
-		if(eType == "dblclick")
-		{
-			if (this.options.autoReset)
-			{
-				this.reset();
-				this._trigger("reset", null, { "el1": el1, "el2": el2, "dx": dx, "dy": dy });
-			}
-		}
+		if(eType == "dblclick" && this.options.autoReset)
+			this.reset();
 	},
 	_destroy:function()
 	{
@@ -103,8 +97,17 @@ $.widget("ibi.ibxSplitter", $.ibi.ibxWidget,
 	},
 	reset:function()
 	{
-		this.element.prev().css(this._e1Info);
-		this.element.next().css(this._e2Info);
+		var options = this.options;
+		var el1 = this.element.prevAll(":visible").first();
+		var el2= this.element.nextAll(":visible").first();
+		
+		if(options.resize == "both" || options.resize == "first")
+			el1.css(this._e1Info);
+
+		if(options.resize == "both" || options.resize == "second")
+			el2.css(this._e2Info);
+			
+		this._trigger("reset", null, {"el1": el1, "el2": el2});
 	},
 	_refresh:function()
 	{
