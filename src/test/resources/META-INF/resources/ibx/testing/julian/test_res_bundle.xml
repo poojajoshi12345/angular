@@ -219,12 +219,19 @@
 						
 						//make splitter
 						var splitter = $(sformat("<div class='{1}'>", classes.colHeaderSplitterClass));
-						splitter.ibxSplitter({locked:!cInfo.resizable || (i == colMap.length-1), resize:"first"}).on("ibx_resize", this._onSplitterResize.bind(this));
+						splitter.ibxSplitter({locked:!cInfo.resizable || (i == colMap.length-1), resize:"first"}).on("ibx_resize ibx_reset", this._onSplitterResize.bind(this));
 
 						//save UI, and add header to bar
 						cInfo._ui = {"header":cHeading, "splitter":splitter};
 						this._colHeaderBar.ibxWidget("add", [cHeading[0], splitter[0]]);
 					}
+
+					var sbw = getScrollbarWidth();
+					var padding = $("<div style='flex:0 0 auto;'>");
+
+					this._colHeaderBar.append(padding.css({"width":"50px", height:"1px"}));
+					this._rowHeaderBar.append(padding.clone().css({"width":"1px", height:"50px"}));
+
 				},
 				getCell:function(idxRow, idxCol)
 				{
@@ -289,11 +296,6 @@
 				{
 					var scrollX = this._grid.prop("scrollLeft");
 					var scrollY = this._grid.prop("scrollTop");
-
-					var sbw = getScrollbarWidth();
-					var hsb = this._grid.hasScrollbar(true);
-					var vsb = this._grid.hasScrollbar(false);
-
 					this._colHeaderBar.prop("scrollLeft", scrollX);
 					this._rowHeaderBar.prop("scrollLeft", scrollY);
 				},

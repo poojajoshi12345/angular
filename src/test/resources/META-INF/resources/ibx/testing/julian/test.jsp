@@ -19,9 +19,27 @@
 		<Script src="<%=request.getContextPath()%>/ibx/resources/ibx.js" type="text/javascript"></script>
 		<script type="text/javascript">
 			<jsp:include page="/WEB-INF/jsp/global/wf_globals.jsp" flush="false" />
+			
+			(function()
+			{
+				var errLimit = 10;
+				var errors = 0;
+				function _ibiErrorTracker(e)
+				{
+					if(errors++ >= errLimit)
+						window.removeEventListener("error", _onError);
+
+					var parms = encodeURI("error=" + e.error.message + "&stack=" + e.error.stack);
+					var xhr = new XMLHttpRequest();
+					xhr.open('POST', "http://YOUR_URL_TO_TRACK_ERROR", true);
+					xhr.setRequestHeader('Content-Type', 'text/plain');
+					xhr.send(parms);
+				}
+				window.addEventListener("error", _ibiErrorTracker);
+			})();
+
 			function testLoad()
 			{
-				console.time();
 				var rows = [];
 				for(var i = 0; i < 50; ++i)
 				{
