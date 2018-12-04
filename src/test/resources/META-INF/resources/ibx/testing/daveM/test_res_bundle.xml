@@ -50,8 +50,6 @@
 
 	<scripts>
 		<script-file src="../../../ibxtools/shared_resources/js/ibfs.js"/>
-		<script-file src="./ace/ace-builds-master/src/ace.js"/>
-		<script-file src="./test_res_script.js"/>
 		<script-block>
 			<![CDATA[
 			$.widget("ibi.testWidget", $.ibi.ibxVBox, 
