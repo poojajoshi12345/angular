@@ -198,7 +198,7 @@ $.widget("ibi.ibxTreeNode", $.ibi.ibxVBox,
 	},
 	startEditing:function(editOptions)
 	{
-		this.nodeLabel.ibxEditable().ibxEditable("startEditing", editOptions);
+		this.nodeLabel.data("ibxWidget")._text.ibxEditable().ibxEditable("startEditing", editOptions);
 	},
 	stopEditing:function(revertToOriginal)
 	{
@@ -243,6 +243,12 @@ $.widget("ibi.ibxTreeNode", $.ibi.ibxVBox,
 			else
 			if(eType == "keydown")
 			{
+				if(this.nodeLabel.ibxWidget("isEditing"))
+				{
+					console.log(e.keyCode);
+					e.stopPropagation();
+					return;
+				}
 				if(e.keyCode === $.ui.keyCode.RIGHT)
 				{
 					if(!this.expanded())
