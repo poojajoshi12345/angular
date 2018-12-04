@@ -23,10 +23,10 @@
 			function testLoad()
 			{
 				var rows = [];
-				for(var i = 0; i < 50; ++i)
+				for(var i = 0; i < 100; ++i)
 				{
 					var cols = [];
-					for(var j = 0; j < 50; ++j)
+					for(var j = 0; j < 20; ++j)
 						cols.push($(sformat("<div tabindex='0'>Cell {1}/{2}</div>", i, j))[0]);
 					rows.push(cols);
 				}

@@ -173,8 +173,6 @@
 					"navKeyResetFocusOnBlur":false,
 					"toggleSelection":true,
 					"escClearSelection":true,
-					"rubberBand":true,
-					"rubberBandPartialSelect":true,
 				},
 				_onKeyDown:function(e)
 				{
@@ -291,20 +289,17 @@
 				{
 					var ret = null;
 					var row = this.getRow(idxRow);
-					var filter = (Number.isInteger(idxCol)) ? sformat(".dgrid-cell:nth-child({1})", idxCol+1) : idxCol;
+					var filter = (parseInt(idxRow, 10) !== NaN) ? sformat(".dgrid-cell:nth-child({1})", idxCol+1) : idxCol;
 					return $(row).children(filter)[0] || null;
-				},
-				getCellLocation:function(cell)
-				{
-
 				},
 				getColumn:function(idxCol)
 				{
-					return this._grid.find(sformat(".dgrid-row > .dgrid-cell:nth-child({1})", idxCol + 1));
+					var filter =  (parseInt(idxCol, 10) !== NaN) ? sformat(".dgrid-row > .dgrid-cell:nth-child({1})", idxCol + 1) : idxCol;
+					return this._grid.find(filter);
 				},
 				getRow:function(idxRow)
 				{
-					var filter = (Number.isInteger(idxRow)) ? sformat(".dgrid-row:nth-child({1})", idxRow+1) : idxRow;
+					var filter = (parseInt(idxRow, 10) !== NaN) ? sformat(".dgrid-row:nth-child({1})", idxRow+1) : idxRow;
 					return this._grid.children(filter)[0] || null;
 				},
 				addRow:function(cells, sibling, before, refresh)
