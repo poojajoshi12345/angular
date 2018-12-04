@@ -63,6 +63,11 @@
 			.dgrid-cell-auto-create
 			{
 			}
+			.dgrid-cell.ibx-sm-selected
+			{
+				background-color:#666;
+				color:white;
+			}
 		]]>
 		</style-sheet>
 	</styles>
@@ -157,6 +162,49 @@
 				}
 			];
 
+			$.widget("ibi.ibxDataGridSelectionManager", $.ibi.ibxSelectionManager,
+			{
+				"options":
+				{
+					"grid":null,
+					"type":"multi",
+					"focusRoot":true,
+					"navKeyRoot":true,
+					"navKeyResetFocusOnBlur":false,
+					"toggleSelection":true,
+					"escClearSelection":true,
+					"rubberBand":true,
+					"rubberBandPartialSelect":true,
+				},
+				_onKeyDown:function(e)
+				{
+					var options = this.options;
+					if(options.navKeyRoot && [$.ui.keyCode.LEFT, $.ui.keyCode.RIGHT, $.ui.keyCode.UP, $.ui.keyCode.DOWN].indexOf(e.keyCode) != -1)
+					{
+						var cell = this.focus();
+						var row = cell.parent();
+						var idxRow = row.parent().children().index(row[0]);
+						var idxCol = row.children().index(cell[0]);
+						if(e.keyCode == $.ui.keyCode.LEFT)
+							cell = options.grid.getCell(idxRow, idxCol-1);
+						else
+						if(e.keyCode == $.ui.keyCode.RIGHT)
+							cell = options.grid.getCell(idxRow, idxCol+1);
+						else
+						if(e.keyCode == $.ui.keyCode.UP)
+							cell = options.grid.getCell(idxRow-1, idxCol);
+						else
+						if(e.keyCode == $.ui.keyCode.DOWN)
+							cell = options.grid.getCell(idxRow+1, idxCol);
+
+						cell ? this.focus(cell, true) : this._super(e);
+						e.preventDefault();
+					}
+					else
+						this._super(e);
+				}
+			});
+
 			$.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 			{
 				options:
@@ -196,6 +244,7 @@
 					var rowHeaderBar = this._rowHeaderBar = $("<div>").ibxVBox().ibxAddClass(classes.rowHeaderBarClass).data({ibxCol:"1/span1", ibxRow:"2"});
 					var grid = this._grid = $("<div>").ibxVBox({align:"stretch"}).ibxAddClass(classes.gridClass).data({ibxCol:"2", ibxRow:"2"});
 					grid.on("scroll", this._onGridScroll.bind(this));
+					grid.ibxDataGridSelectionManager({grid:this});
 
 					this.add([colHeaderBar[0], rowHeaderBar[0], grid[0]]);
 					this._super();
@@ -216,7 +265,7 @@
 						//make header
 						var cHeading = $(sformat("<div class='{1}' style='{2};'>{3}</div>", classes.colHeaderClass, size, cInfo.title))
 						cHeading.ibxButtonSimple({justify:cInfo.justify || "start"});
-						
+
 						//make splitter
 						var splitter = $(sformat("<div class='{1}'>", classes.colHeaderSplitterClass));
 						splitter.ibxSplitter({locked:!cInfo.resizable || (i == colMap.length-1), resize:"first"}).on("ibx_resize ibx_reset", this._onSplitterResize.bind(this));
@@ -229,9 +278,14 @@
 					var sbw = getScrollbarWidth();
 					var padding = $("<div style='flex:0 0 auto;'>");
 
-					this._colHeaderBar.append(padding.css({"width":"50px", height:"1px"}));
-					this._rowHeaderBar.append(padding.clone().css({"width":"1px", height:"50px"}));
+					this._colHeaderBar.append(padding.css({"width":"20px", height:"1px"}));
+					this._rowHeaderBar.append(padding.clone().css({"width":"1px", height:"20px"}));
 
+				},
+				getHeaders:function(row)
+				{
+					var headerBar = row ? this._rowHeaderBar : this._colHeaderBar;
+					return headerBar.children("."+this.options.classes.colHeaderClass).toArray();
 				},
 				getCell:function(idxRow, idxCol)
 				{
@@ -239,6 +293,14 @@
 					var row = this.getRow(idxRow);
 					var filter = (Number.isInteger(idxCol)) ? sformat(".dgrid-cell:nth-child({1})", idxCol+1) : idxCol;
 					return $(row).children(filter)[0] || null;
+				},
+				getCellLocation:function(cell)
+				{
+
+				},
+				getColumn:function(idxCol)
+				{
+					return this._grid.find(sformat(".dgrid-row > .dgrid-cell:nth-child({1})", idxCol + 1));
 				},
 				getRow:function(idxRow)
 				{
@@ -333,7 +395,7 @@
 						for(var i = 0; i < colMap.length; ++i)
 						{
 							cInfo = colMap[i];
-							var cells = this._grid.find(sformat(".dgrid-row > .dgrid-cell:nth-child({1})", i+1));
+							var cells = this.getColumn(i);
 							var cellSize = cInfo._ui.header.outerWidth() + cInfo._ui.splitter.outerWidth();
 							cInfo.flex ? cells.css({flex:"1 0 auto", width:cellSize}) : cells.outerWidth(cellSize);
 						}

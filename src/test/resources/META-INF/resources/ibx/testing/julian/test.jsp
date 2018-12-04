@@ -20,32 +20,14 @@
 		<script type="text/javascript">
 			<jsp:include page="/WEB-INF/jsp/global/wf_globals.jsp" flush="false" />
 			
-			(function()
-			{
-				var errLimit = 10;
-				var errors = 0;
-				function _ibiErrorTracker(e)
-				{
-					if(errors++ >= errLimit)
-						window.removeEventListener("error", _onError);
-
-					var parms = encodeURI("error=" + e.error.message + "&stack=" + e.error.stack);
-					var xhr = new XMLHttpRequest();
-					xhr.open('POST', "http://YOUR_URL_TO_TRACK_ERROR", true);
-					xhr.setRequestHeader('Content-Type', 'text/plain');
-					xhr.send(parms);
-				}
-				window.addEventListener("error", _ibiErrorTracker);
-			})();
-
 			function testLoad()
 			{
 				var rows = [];
 				for(var i = 0; i < 50; ++i)
 				{
 					var cols = [];
-					for(var j = 0; j < 5; ++j)
-						cols.push($(sformat("<div tabindex='0'>cell ({1},{2})</div>", i, j))[0]);
+					for(var j = 0; j < 50; ++j)
+						cols.push($(sformat("<div tabindex='0'>Cell {1}/{2}</div>", i, j))[0]);
 					rows.push(cols);
 				}
 
@@ -55,8 +37,20 @@
 				grid.ibxWidget("option", "defaultColConfig", {resizable:true})
 				grid.ibxWidget("addRows", rows);
 				grid.ibxWidget("refresh");
-				console.timeEnd();
+
+
+				var headers = grid.ibxWidget("getHeaders");
+				$(headers).on("click", function(headers, grid, e)
+				{
+					var col = headers.indexOf(e.currentTarget);
+					var header = $(e.currentTarget);
+					var col = grid.ibxWidget("getColumn", col);
+					$(col).ibxToggleClass("dgrid-cell-selected");
+
+
+				}.bind(this, headers, grid));
 			}
+
 			ibx(function()
 			{
 				$(".btn-load").on("click", function(e)
@@ -67,7 +61,7 @@
 						{"title":"displayName"},
 						{"title":"displayValue"},
 						{"title":"name"},
-						{"title":"value", "size":"200px"},
+						{"title":"value",},
 						{"title":"type", "size":"50px"},
 						{"title":"uiType", "size":"75px"},
 						{"title":"expanded", "size":"100px", "flex":true, "justify":"center"},
@@ -127,18 +121,14 @@
 			{
 				background-color:thistle;
 			}
-			.dgrid-cell:focus
-			{
-				background-color:black;
-				color:white;
-			}
 		</style>
 	</head>
 	<body class="ibx-root">
 		<div class="del-command" data-ibx-type="ibxCommand" data-ibxp-id="cmdDelete" data-ibxp-shortcut="CTRL+SHIFT+DEL"></div>
 		<div class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="stretch" data-ibxp-justify="center" data-ibxp-command="cmdDelete">
-			<div class="btn-load" data-ibx-type="ibxButton">Load Grid</div>
-			<div class="test-grid" data-ibx-type="ibxDataGrid"></div>
+			<div tabindex="0" class="btn-load" data-ibx-type="ibxButton">Load Grid</div>
+			<div tabindex="0" class="test-grid" data-ibx-type="ibxDataGrid">
+			</div>
 		</div>
 	</body>
 </html>
