@@ -13,7 +13,7 @@ $.widget("ibi.ibxTreeSelectionManager", $.ibi.ibxSelectionManager,
 	{
 		el = $(el).map(function(idx, el)
 		{
-			el = $(el)
+			el = $(el);
 			el = el.is(".ibx-tree-node") ? el.children(".tnode-label") : el.closest(".tnode-label", this.element);
 			return el[0];
 		}.bind(this));
@@ -172,7 +172,7 @@ $.widget("ibi.ibxTreeNode", $.ibi.ibxVBox,
 		var options = this.options;
 		this.hasChildren() ? this._childBox.attr("role", "group") : this._childBox.removeAttr("role");
 		this.element.attr("aria-expanded", options.expanded);
-		return aria
+		return aria;
 	},
 	_destroy:function()
 	{
@@ -184,7 +184,7 @@ $.widget("ibi.ibxTreeNode", $.ibi.ibxVBox,
 	},
 	add:function(el, elSibling, before, refresh)
 	{
-		this._childBox.ibxWidget("add", el, elSibling, before, refresh)
+		this._childBox.ibxWidget("add", el, elSibling, before, refresh);
 		$(el).data("ibxTreeParent", this.element[0]);
 		if(refresh)
 			this.refresh();
@@ -387,7 +387,7 @@ $.widget("ibi.ibxTreeBrowser", $.ibi.ibxVBox,
 		$(el).ibxAddClass("tnode-root");
 		this._super(el, elSibling, before, refresh);
 		this.element.ibxSelectionManager("deselectAll").ibxSelectionManager("selected", el, true).ibxSelectionManager("focus", el, true);
-		$(el).ibxTreeNode("expanded", true).ibxTreeNode("refreshIndent", 0, true)
+		$(el).ibxTreeNode("expanded", true).ibxTreeNode("refreshIndent", 0, true);
 		this.refresh();
 	},
 	remove:function(el, destroy, refresh)
