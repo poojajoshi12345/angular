@@ -14,7 +14,8 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 		"navKeyRoot":false,					//arrow keys will move you circularly through the items.
 		"navKeyDir":"both",					//horizontal = left/right, vertical = up/down, or both
 		"rubberBand":false,					//selection by rubberband
-		"rubberBandPartialSelect":false		//rubberband must fully enclose the item for selection
+		"rubberBandPartialSelect":false,	//rubberband must fully enclose the item for selection
+		"selectableChildren":null,			//class for what children are selectable.
 	},
 	_widgetClass:"ibx-selection-manager",
 	_create:function()
@@ -262,10 +263,12 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 	selectableChildren:function(selector)
 	{
 		var options = this.options;
+		selector = selector || ("."+options.selectableChildren);
+
 		var e = this._dispatchEvent("ibx_selectablechildren", {"items":null}, false, true, undefined, false);
 		var children = e.data.items ? $(e.data.items) : this.element.logicalChildren(".ibx-sm-selection-root, .ibx-sm-nav-key-root, .ibx-sm-focus-root, .ibx-sm-focus-default", ":ibxFocusable(-1)");			
-		children.ibxAddClass("ibx-sm-selectable");
-		return selector ? children.filter(selector) : children;
+		children =  selector ? children.filter(selector) : children;
+		return children.ibxAddClass("ibx-sm-selectable");
 	},
 	isSelected:function(el){return $(el).hasClass("ibx-sm-selected");},
 	selected:function(el, select, anchor)
@@ -423,7 +426,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 	},
 	option:function(key, value)
 	{
-		this._super(key, value);
+		return this._superApply(arguments);
 	},
 	_setOption:function(key, value)
 	{

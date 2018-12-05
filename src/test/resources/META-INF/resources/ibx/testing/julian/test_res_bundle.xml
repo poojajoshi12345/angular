@@ -169,11 +169,13 @@
 					"grid":null,
 					"type":"multi",
 					"focusDefault":true,
+					"focusResetOnBlur":false,
 					"navKeyRoot":true,
-					"navKeyResetFocusOnBlur":false,
 					"toggleSelection":true,
 					"escClearSelection":true,
+					"selectableChildren":"dgrid-selectable"
 				},
+				_widgetClass:"ibx-data-grid-selection-model",
 				_onKeyDown:function(e)
 				{
 					var options = this.options;
@@ -201,6 +203,11 @@
 					else
 						this._super(e);
 				},
+				foo:function(asdf)
+				{
+					debugger;
+					return "Julian";
+				}
 			});
 
 			$.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
@@ -208,7 +215,7 @@
 				options:
 				{
 					colMap:[],
-					defaultColConfig: {title:"Column", size:"100px", flex:false, justify:"center", resizable:false},
+					defaultColConfig: {title:"Column", size:"100px", flex:false, justify:"center", resizable:false, selectable:true},
 					showColHeaders:true,
 					showRowHeaders:false,
 					
@@ -247,8 +254,7 @@
 					var colHeaderBar = this._colHeaderBar = $("<div tabindex='0'>").ibxHBox().ibxAddClass(classes.colHeaderBarClass).data({ibxCol:"2/span1", ibxRow:"1"});
 					var rowHeaderBar = this._rowHeaderBar = $("<div tabindex='0'>").ibxVBox().ibxAddClass(classes.rowHeaderBarClass).data({ibxCol:"1/span1", ibxRow:"2"});
 					var grid = this._grid = $("<div tabindex='0'>").ibxVBox({align:"stretch"}).ibxAddClass(classes.gridClass).data({ibxCol:"2", ibxRow:"2"});
-					grid.on("scroll", this._onGridScroll.bind(this));
-					grid.ibxDataGridSelectionManager({grid:this});
+					grid.on("scroll", this._onGridScroll.bind(this)).ibxDataGridSelectionManager({grid:this});
 
 					colHeaderBar.ibxWidget({navKeyRoot:true});
 
@@ -319,18 +325,24 @@
 				addRow:function(cells, sibling, before, refresh)
 				{
 					var options = this.options;
+					var selOptions = this._grid.ibxDataGridSelectionManager("option");
 					var row = $("<div>").ibxHBox().ibxAddClass(options.classes.gridRow);
 
 					//create extra columns less than cells.
 					while(cells.length > options.colMap.length)
 						options.colMap.push($.extend({}, options.defaultColConfig));
 
-					//create extra cells less that columns.
+					//create extra cells less than columns.
 					while(cells.length < options.colMap.length)
 						cells.push($("<div>")[0]);
 
-					//make sure the cells and row have proper aria stuff and classes, etc.
-					$(cells).attr({"role":"gridcell", "tabindex":"-1"}).ibxAddClass("dgrid-cell").data("ibxGridRow", row[0]);
+					//make sure the cells and row have proper aria stuff, classes, etc.
+					$(cells).attr({"role":"gridcell", "tabindex":"-1"}).ibxAddClass("dgrid-cell").data("ibxGridRow", row[0]).each(function(idx, el)
+					{
+						var cInfo = options.colMap[idx];
+						$(el).ibxToggleClass(selOptions.selectableChildren, cInfo.selectable);
+					}.bind(this));
+
 					row.attr("role", "row").append(cells);
 					this._grid.append(row);
 

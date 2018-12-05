@@ -27,7 +27,7 @@
 				{
 					var cols = [];
 					for(var j = 0; j < 20; ++j)
-						cols.push($(sformat("<div tabindex='0'>Cell {1}/{2}</div>", i, j))[0]);
+						cols.push($(sformat("<div>Cell {1}/{2}</div>", i, j))[0]);
 					rows.push(cols);
 				}
 
@@ -61,7 +61,7 @@
 						{"title":"displayName"},
 						{"title":"displayValue"},
 						{"title":"name"},
-						{"title":"value",},
+						{"title":"value"},
 						{"title":"type", "size":"50px"},
 						{"title":"uiType", "size":"75px"},
 						{"title":"expanded", "size":"100px", "flex":true, "justify":"center"},
