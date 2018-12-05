@@ -1,4 +1,6 @@
-﻿<%-- Copyright 1996-2016 Information Builders, Inc. All rights reserved. 
+﻿<%-- Copyright 1996-2016 Information Builders, Inc. All rights reserved.
+ $Revision$:
+--%><%-- Copyright 1996-2016 Information Builders, Inc. All rights reserved.
  $Revision$:
 --%><%
 	response.addHeader("Pragma", "no-cache");
@@ -21,6 +23,25 @@
 			<jsp:include page="/WEB-INF/jsp/global/wf_globals.jsp" flush="false" />
 			ibx(function()
 			{
+			$(".btn-change3d").on("click", function(e){
+				var options = {
+					basemap: 'satellite',
+					type: "3d",
+					zoom: {visible: true, position:"bottom-right"}, //top-left, top-right, bottom-left
+					baseMapGallery: {visible: false, position: "top-right"}
+				};
+				//var map = $(".test-map").ibxWidget("option", "type", "3d");
+				var map = $(".test-map").ibxWidget("option", options);
+			});
+			$(".btn-changeBaseMap").on("click", function(e){
+				var options = {
+					basemap: 'dark-gray-vector',
+				};
+				//var map = $(".test-map").ibxWidget("option", "type", "3d");
+				var map = $(".test-map").ibxWidget("option", options);
+			});
+
+
 
 			}, [{"src":"../../ibxtools/mapping/resources/mapping_res.xml", "loadContext":"ibx"}], true);
 		</script>
@@ -29,7 +50,7 @@
 			{
 				width:100%;
 				height:100%;
-				margin:0px;
+				margin:0;
 				box-sizing:border-box;
 			}
 			.test-map{
@@ -41,7 +62,8 @@
 	<body class="ibx-root">
 		<div class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="center" data-ibxp-justify="center" data-ibxp-command="cmdDelete">
 			<div class="test-map" data-ibx-type="esriMap"></div>
-			<button>change to 3d</button>
+			<div class="btn-change3d" data-ibx-type="ibxButton">Change to 3D</div>
+			<div class="btn-changeBaseMap" data-ibx-type="ibxButton">Change to DarkGray</div>
 		</div>
 	</body>
 </html>
