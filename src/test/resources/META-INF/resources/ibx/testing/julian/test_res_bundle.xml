@@ -60,7 +60,7 @@
 				border-right:1px solid #ccc;
 				border-bottom:1px solid #ccc;
 			}
-			.dgrid-cell-auto-create
+			.dgrid-cell-auto-padding
 			{
 			}
 			.dgrid-cell.ibx-sm-selected
@@ -168,7 +168,7 @@
 				{
 					"grid":null,
 					"type":"multi",
-					"focusRoot":true,
+					"focusDefault":true,
 					"navKeyRoot":true,
 					"navKeyResetFocusOnBlur":false,
 					"toggleSelection":true,
@@ -177,9 +177,9 @@
 				_onKeyDown:function(e)
 				{
 					var options = this.options;
-					if(options.navKeyRoot && [$.ui.keyCode.LEFT, $.ui.keyCode.RIGHT, $.ui.keyCode.UP, $.ui.keyCode.DOWN].indexOf(e.keyCode) != -1)
+					var cell = this.focus();
+					if(cell && options.navKeyRoot && [$.ui.keyCode.LEFT, $.ui.keyCode.RIGHT, $.ui.keyCode.UP, $.ui.keyCode.DOWN].indexOf(e.keyCode) != -1)
 					{
-						var cell = this.focus();
 						var row = cell.parent();
 						var idxRow = row.parent().children().index(row[0]);
 						var idxCol = row.children().index(cell[0]);
@@ -200,7 +200,7 @@
 					}
 					else
 						this._super(e);
-				}
+				},
 			});
 
 			$.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
@@ -231,6 +231,12 @@
 					{
 						align:"stretch",
 						justify:"start",
+					},
+
+					/*accessibility stuff*/
+					aria:
+					{
+						role:"grid"
 					}
 				},
 				_widgetClass:"ibx-data-grid",
@@ -238,14 +244,21 @@
 				{
 					var options = this.options;
 					var classes = options.classes;
-					var colHeaderBar = this._colHeaderBar = $("<div>").ibxHBox().ibxAddClass(classes.colHeaderBarClass).data({ibxCol:"2/span1", ibxRow:"1"});
-					var rowHeaderBar = this._rowHeaderBar = $("<div>").ibxVBox().ibxAddClass(classes.rowHeaderBarClass).data({ibxCol:"1/span1", ibxRow:"2"});
-					var grid = this._grid = $("<div>").ibxVBox({align:"stretch"}).ibxAddClass(classes.gridClass).data({ibxCol:"2", ibxRow:"2"});
+					var colHeaderBar = this._colHeaderBar = $("<div tabindex='0'>").ibxHBox().ibxAddClass(classes.colHeaderBarClass).data({ibxCol:"2/span1", ibxRow:"1"});
+					var rowHeaderBar = this._rowHeaderBar = $("<div tabindex='0'>").ibxVBox().ibxAddClass(classes.rowHeaderBarClass).data({ibxCol:"1/span1", ibxRow:"2"});
+					var grid = this._grid = $("<div tabindex='0'>").ibxVBox({align:"stretch"}).ibxAddClass(classes.gridClass).data({ibxCol:"2", ibxRow:"2"});
 					grid.on("scroll", this._onGridScroll.bind(this));
 					grid.ibxDataGridSelectionManager({grid:this});
 
+					colHeaderBar.ibxWidget({navKeyRoot:true});
+
 					this.add([colHeaderBar[0], rowHeaderBar[0], grid[0]]);
 					this._super();
+				},
+				_setAccessibility:function(accessible, aria)
+				{
+					var options = this.options;
+					return aria;
 				},
 				_buildHeaders:function()
 				{
@@ -261,8 +274,9 @@
 						var size = sformat("width:{1};flex:{2} 0 auto;", cInfo.size, cInfo.flex ? 1 : 0);
 
 						//make header
-						var cHeading = $(sformat("<div class='{1}' style='{2};'>{3}</div>", classes.colHeaderClass, size, cInfo.title))
+						var cHeading = $(sformat("<div tabindex='-1' class='{1}' style='{2};'>{3}</div>", classes.colHeaderClass, size, cInfo.title))
 						cHeading.ibxButtonSimple({justify:cInfo.justify || "start"});
+						cHeading.attr("role", "columnheader");
 
 						//make splitter
 						var splitter = $(sformat("<div class='{1}'>", classes.colHeaderSplitterClass));
@@ -313,11 +327,12 @@
 
 					//create extra cells less that columns.
 					while(cells.length < options.colMap.length)
-						cells.push($("<div class='dgrid-cell-auto-create'>")[0]);
+						cells.push($("<div>")[0]);
 
-					row.append(cells);
+					//make sure the cells and row have proper aria stuff and classes, etc.
+					$(cells).attr({"role":"gridcell", "tabindex":"-1"}).ibxAddClass("dgrid-cell").data("ibxGridRow", row[0]);
+					row.attr("role", "row").append(cells);
 					this._grid.append(row);
-					$(cells).ibxAddClass("dgrid-cell").data("ibxGridRow", row[0]);
 
 					if(refresh)
 						this.refresh();

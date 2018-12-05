@@ -80,7 +80,7 @@
 							{
 								if(!(prop[key] instanceof Object))
 								{
-									var cell = $("<div tabindex='0'>").ibxLabel({text:(prop[key]).toString()})[0];
+									var cell = $("<div>").ibxLabel({text:(prop[key]).toString()})[0];
 									row.push(cell);
 								}
 							}
