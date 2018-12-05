@@ -22,23 +22,14 @@
 
 			ibx(function()
 			{
-				$(".tb-main").ibxSortable({"direction":"both", "lockDragAxis":false});
-
-				var cmdClear = $("<div class='cmd-clear'>").ibxCommand({id:"cmdClear", "shortcut":"ALT+C"}).appendTo("body");
-				cmdClear.on("ibx_triggered", function(e)
-				{
-					var re = $(".ibx-rich-edit").data("ibxWidget");
-					var doc = re.getContentDocument();
-				});
-
-				$(".drag-source").attr("draggable", false).on("dblclick dragstart dragover drop ibx_dragstart ibx_dragover ibx_drop", function(e)
+				$(".drag-source, .ibx-rich-edit").on("dblclick dragstart dragover drop ibx_dragstart ibx_dragover ibx_drop", function(e)
 				{
 					var dt = e.originalEvent.dataTransfer;
 					if(e.type == "dblclick")
 					{
 						data = "Double Click Data!!";
 						var re = $(".rich-edit");
-						re.ibxWidget("insertHTML", sformat("<span style='border:2px solid lime;'>{1}</span>", data), true, true, false);
+						re.ibxWidget("insertHTML", sformat("<span style='border:2px solid lime;'>{1}</span>", data), true, true, true);
 					}
 					if(e.type == "dragstart" || e.type == "ibx_dragstart")
 					{
@@ -54,6 +45,7 @@
 					if(e.type == "drop" || e.type == "ibx_drop")
 					{
 						var data = dt.getData("text/plain", this);
+						$(".rich-edit").focus();
 						console.log(data);
 					}
 				});
