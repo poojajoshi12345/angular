@@ -85,7 +85,6 @@ jQuery.expr[":"]["ibxRadioGroup"] = function(elem, idx, meta, stack)
 jQuery.expr[":"]["ibxFocusable"] = function(elem, idx, meta, stack)
 {
 	var el = $(elem);
-	var tRanges = meta[3] ? meta[3].split(",") : [0, Infinity];
 	var tMin = 0, tMax = NaN;
 	if(meta[3])
 	{
