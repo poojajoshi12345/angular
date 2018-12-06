@@ -84,10 +84,11 @@
 									row.push(cell);
 								}
 							}
-							var row = grid.ibxWidget("addRow", row);
+							var row = grid.ibxWidget("addRow", row, null, null, false);
 							buildTree(prop.props);
 						}
 					}
+
 					grid.ibxWidget("refresh");
 					
 

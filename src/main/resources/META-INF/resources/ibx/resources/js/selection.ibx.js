@@ -263,13 +263,13 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 	selectableChildren:function(selector)
 	{
 		var options = this.options;
+		var e = this._dispatchEvent("ibx_selectablechildren", {"items":null}, false, true, undefined, false);
+		var children = e.data.items ? $(e.data.items) : this.element.logicalChildren(".ibx-sm-selection-root, .ibx-sm-nav-key-root, .ibx-sm-focus-root, .ibx-sm-focus-default", ":ibxFocusable(-1)");			
 
 		if(!selector && options.selectableChildren)
 			selector = "." + options.selectableChildren;
-
-		var e = this._dispatchEvent("ibx_selectablechildren", {"items":null}, false, true, undefined, false);
-		var children = e.data.items ? $(e.data.items) : this.element.logicalChildren(".ibx-sm-selection-root, .ibx-sm-nav-key-root, .ibx-sm-focus-root, .ibx-sm-focus-default", ":ibxFocusable(-1)");			
 		children =  selector ? children.filter(selector) : children;
+
 		return children.ibxAddClass("ibx-sm-selectable");
 	},
 	isSelected:function(el){return $(el).hasClass("ibx-sm-selected");},

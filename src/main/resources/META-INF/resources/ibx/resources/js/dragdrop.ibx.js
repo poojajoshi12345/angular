@@ -55,6 +55,7 @@ _p.setDragImage = function(img, xOffset, yOffset)
 		this._dragImage.classList.add(ibxDragDropManager.dragImageClass);
 		document.body.appendChild(this._dragImage);
 	}
+
 	this.dragXOffset = xOffset || this.dragXOffset;
 	this.dragYOffset = yOffset || this.dragYOffset;
 };
