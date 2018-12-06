@@ -142,7 +142,6 @@
 			<div class="top-banner-label" data-ibx-type="ibxLabel" data-ibxp-justify="center">Drag Stuff Around!</div>
 			<div class="box-banner" data-ibx-type="ibxHBox" data-ibxp-justify="center" data-ibxp-align="center">
 				<div class="top-banner-icon" data-ibx-type="ibxLabel" data-ibxp-external-drop-target="true" data-ibxp-icon="./renstimpy.png"></div>
-				<div style="font-size:2em;" class="xxx" data-ibx-type="ibxLabel" data-ibxp-glyph-classes="fa fa-anchor" data-ibxp-icon-position="top" data-ibxp-draggable="true">Julian</div>
 			</div>
 			<div class="box-content" data-ibx-type="ibxHBox" data-ibxp-align="stretch" data-ibxp-justify="center">
 				<div class="box-ren" data-ibx-type="ibxHBox" data-ibxp-align="center" data-ibxp-justify="center">
