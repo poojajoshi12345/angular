@@ -86,7 +86,7 @@ ibxDragDropManager.getDefaultDragImage = function(el)
 	el = $(el);
 	var width = el.outerWidth();
 	var height = el.outerWidth();
-	var clone = el.clone().css({"width":width + "px", "height":height + "px", "margin":"0px"});
+	var clone = el.clone().css({"width":width + "px", "height":height + "px", "margin":"0px"}).removeAttr("id");
 	return clone[0];
 };
 ibxDragDropManager._dispatchDragEvent = function(e, type, target, bubbles, cancelable, data)
