@@ -263,7 +263,9 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 	selectableChildren:function(selector)
 	{
 		var options = this.options;
-		selector = selector || ("."+options.selectableChildren);
+
+		if(!selector && options.selectableChildren)
+			selector = "." + options.selectableChildren;
 
 		var e = this._dispatchEvent("ibx_selectablechildren", {"items":null}, false, true, undefined, false);
 		var children = e.data.items ? $(e.data.items) : this.element.logicalChildren(".ibx-sm-selection-root, .ibx-sm-nav-key-root, .ibx-sm-focus-root, .ibx-sm-focus-default", ":ibxFocusable(-1)");			
