@@ -35,6 +35,7 @@
 
 				$(".ibx-data-grid").on("ibx_gridheadercreate", function(e)
 				{
+					var grid = $(".ibx-data-grid");
 					var data = e.originalEvent.data;
 					if(data.type == "column")
 					{
@@ -69,8 +70,9 @@
 
 				$(".btn-load").on("click", function(e)
 				{
+					console.time("totalLoad");
 					var rows = [];
-					var nRows = parseInt($(".num-rows").text(), 20);
+					var nRows = parseInt($(".num-rows").text(), 10);
 					var nCols = parseInt($(".num-cols").text(), 10);
 					for(var i = 0; i < nRows; ++i)
 					{
@@ -92,15 +94,9 @@
 					grid.ibxWidget("removeAll");
 					grid.ibxWidget("option", {"defaultColConfig":{resizable:true}});
 					grid.ibxWidget("addRows", rows);
-					updateDataGridSettings();
 					grid.ibxWidget("refresh");
-
-					var headers = grid.ibxWidget("getHeaders", "row");
-					$(headers).on("click", function(headers, grid, e)
-					{
-						var rowIdx = headers.index(e.currentTarget);
-						grid.ibxWidget("selectRow", rowIdx, true);
-					}.bind(this, headers, grid));
+					console.timeEnd("totalLoad");
+					updateDataGridSettings();
 				});
 
 				gridTabs.rgCellsJustify.on("ibx_change", function(e, rg)

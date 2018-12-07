@@ -436,6 +436,7 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 			this._buildHeaders("row");
 
 		//update column widths
+		console.error("YOU NEED TO OPTIMIZE THIS SO IT DOESN'T KEEP RECALCING THE CELLS!");
 		if(options.colMap.length)
 		{
 			var splitterSize = $(this._colHeaderBar[0].querySelector(".dgrid-header-col-splitter")).outerWidth();
