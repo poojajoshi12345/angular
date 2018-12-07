@@ -20,41 +20,63 @@
 		<script type="text/javascript">
 			<jsp:include page="/WEB-INF/jsp/global/wf_globals.jsp" flush="false" />
 			
-			function testLoad()
-			{
-				var rows = [];
-				for(var i = 0; i < 100; ++i)
-				{
-					var cols = [];
-					for(var j = 0; j < 20; ++j)
-						cols.push($(sformat("<div>Cell {1}/{2}</div>", i, j))[0]);
-					rows.push(cols);
-				}
-
-				var grid = $(".ibx-data-grid");
-
-				//grid.ibxWidget("removeAll");
-				grid.ibxWidget("option", "defaultColConfig", {resizable:true})
-				grid.ibxWidget("addRows", rows);
-				grid.ibxWidget("refresh");
-
-
-				var headers = grid.ibxWidget("getHeaders");
-				$(headers).on("click", function(headers, grid, e)
-				{
-					var col = headers.indexOf(e.currentTarget);
-					var header = $(e.currentTarget);
-					var col = grid.ibxWidget("getColumn", col);
-					$(col).ibxToggleClass("dgrid-cell-selected");
-
-
-				}.bind(this, headers, grid));
-			}
-
 			ibx(function()
 			{
+				$(".text-entry").on("ibx_widgetfocus ibx_widgetblur", function(e)
+				{
+					var input = $(e.target);
+					if(e.type == "ibx_widgetfocus")
+						input.ibxWidget("startEditing");
+					else
+					if(e.type == "ibx_widgetblur")
+						input.ibxWidget("stopEditing");
+				})
+
 				$(".btn-load").on("click", function(e)
 				{
+					var rows = [];
+					var nRows = parseInt($(".num-rows").text(), 10);
+					var nCols = parseInt($(".num-cols").text(), 10);
+					for(var i = 0; i < nRows; ++i)
+					{
+						var cols = [];
+						for(var j = 0; j < nCols; ++j)
+						{
+							var cell = $(sformat("<div style='user-select:none;'>Cell {1}/{2}</div>", i, j));
+							cell.ibxEditable();
+							cell.on("dblclick", function(e)
+							{
+								$(e.target).ibxEditable("startEditing");
+							})
+							cols.push(cell[0]);
+						}
+						rows.push(cols);
+					}
+
+					var showRowH = $(".btn-row-headers").ibxWidget("checked");
+					var showColH = $(".btn-col-headers").ibxWidget("checked");
+					var grid = $(".ibx-data-grid");
+					grid.ibxWidget("removeAll");
+					grid.ibxWidget("option", {"defaultColConfig":{resizable:true}, "showColumnHeaders":showColH, "showRowHeaders":showRowH});
+					grid.ibxWidget("addRows", rows);
+					grid.ibxWidget("refresh");
+
+
+					var headers = grid.ibxWidget("getHeaders");
+					$(headers).on("click", function(headers, grid, e)
+					{
+						var colIdx = headers.indexOf(e.currentTarget);
+						grid.ibxWidget("selectColumn", colIdx, true);
+					}.bind(this, headers, grid));
+
+					var headers = grid.ibxWidget("getHeaders", "row");
+					$(headers).on("click", function(headers, grid, e)
+					{
+						var rowIdx = headers.indexOf(e.currentTarget);
+						grid.ibxWidget("selectRow", rowIdx, true);
+					}.bind(this, headers, grid));
+
+					/*
 					var grid = $(".test-grid");
 					var colMap = 
 					[
@@ -90,8 +112,7 @@
 					}
 
 					grid.ibxWidget("refresh");
-					
-
+					*/
 				});
 			},
 			[{"src":"./test_res_bundle.xml", "loadContext":"app"}], true);
@@ -104,30 +125,43 @@
 				margin:0px;
 				box-sizing:border-box;
 			}
-			.btn-load
+			.tool-bar
 			{
-				margin:10px;
+				padding:5px;
+				border-bottom:1px solid #ccc;
+			}
+			.tool-bar > div
+			{
+				margin:3px;
+			}
+			.text-entry
+			{
+				min-width:25px;
+				padding:3px;
+				border:1px solid #ccc;
+				border-radius:5px;
 			}
 			.test-grid
 			{
-				height:400px;
+				height:500px;
 				border:1px solid black;
 				margin:100px;
-			}
-			.dgrid-row:hover
-			{
-				background-color:#efefef;
-			}
-			.dgrid-cell:hover
-			{
-				background-color:thistle;
 			}
 		</style>
 	</head>
 	<body class="ibx-root">
 		<div class="del-command" data-ibx-type="ibxCommand" data-ibxp-id="cmdDelete" data-ibxp-shortcut="CTRL+SHIFT+DEL"></div>
-		<div class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="stretch" data-ibxp-justify="center" data-ibxp-command="cmdDelete">
-			<div tabindex="0" class="btn-load" data-ibx-type="ibxButton">Load Grid</div>
+		<div class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="stretch" data-ibxp-justify="start" data-ibxp-command="cmdDelete">
+			<div class="tool-bar" data-ibx-type="ibxHBox" data-ibxp-align="center">
+				<div tabindex="0" class="btn-load" data-ibx-type="ibxButton">Load Grid</div>
+				<div data-ibx-type="ibxLabel" data-ibxp-for=".num-cols">Cols:</div>
+				<div tabindex="0" class="text-entry num-cols" data-ibx-type="ibxLabel" data-ibxp-justify="center">10</div>
+				<div class="" data-ibx-type="ibxLabel" data-ibxp-for=".num-rows">Rows:</div>
+				<div tabindex="0" class="text-entry num-rows" data-ibx-type="ibxLabel" data-ibxp-justify="center">50</div>
+				<div tabindex="0" class="btn-col-headers" data-ibx-type="ibxCheckBoxSimple" data-ibxp-checked="true">Show Column Headings</div>
+				<div tabindex="0" class="btn-row-headers" data-ibx-type="ibxCheckBoxSimple" data-ibxp-checked="true">Show Row Headings</div>
+			</div>
+
 			<div tabindex="0" class="test-grid" data-ibx-type="ibxDataGrid">
 			</div>
 		</div>

@@ -79,6 +79,10 @@
 			{
 				flex:0 0 auto;
 			}
+			.dgrid-row:hover
+			{
+				background-color:#efefef;
+			}
 			.dgrid-cell
 			{
 				height:1em;
@@ -86,6 +90,10 @@
 				padding:.5em;
 				border-right:1px solid #ccc;
 				border-bottom:1px solid #ccc;
+			}
+			.dgrid-cell:hover
+			{
+				background-color:thistle;
 			}
 			.dgrid-cell-auto-padding
 			{
@@ -353,14 +361,14 @@
 				getHeaders:function(row)
 				{
 					var headerBar = row ? this._rowHeaderBar : this._colHeaderBar;
-					return headerBar.children("."+this.options.classes.colHeaderClass).toArray();
+					var headerClass = row ? this.options.classes.rowHeaderClass : this.options.classes.colHeaderClass;
+					return headerBar.children("." + headerClass).toArray();
 				},
 				getCell:function(idxRow, idxCol)
 				{
 					var ret = null;
 					var row = this.getRow(idxRow);
-					var filter = (parseInt(idxRow, 10) !== NaN) ? sformat(".{1}:nth-child({2})", this.options.classes.gridCell, idxCol+1) : idxCol;
-					return $(row).children(filter)[0] || null;
+					return row[idxCol] || null;
 				},
 				getColumnCount:function()
 				{
