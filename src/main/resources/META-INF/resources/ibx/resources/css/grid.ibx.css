@@ -17,6 +17,97 @@
 }
 
 /******************************************************************************
+	DATA GRID
+******************************************************************************/
+.ibx-data-grid
+{
+	box-sizing:border-box;
+}
+.dgrid-corner
+{
+	border-right:1px solid #ccc;
+	border-bottom:1px solid #ccc;
+	background-color:#eee;
+}
+.dgrid-header-col-bar, .dgrid-header-row-bar
+{
+	background-color:#eee;
+	overflow:hidden;
+}
+.dgrid-header-col-bar
+{
+	border-bottom:1px solid #888;
+}
+.dgrid-header-row-bar
+{
+	border-right:1px solid #888;
+}
+.ibx-data-grid > .dgrid-header-bar-hidden
+{
+	display:none;
+}
+.ibx-data-grid .dgrid-col-hidden, .ibx-data-grid .dgrid-row-hidden
+{
+	display:none;
+}
+.dgrid-header-col
+{
+	flex:0 0 auto;
+	padding:.5em;
+}
+.dgrid-header-row
+{
+	font-size:.9em;
+	flex:0 0 auto;
+	min-width:3em;
+	border-bottom:1px solid #ccc;
+	box-sizing:border-box;
+}
+.dgrid-header-col-splitter
+{
+	min-width:0px;
+	width:5px;
+	background-color:transparent;
+	border-right:1px solid #ccc;
+}
+.dgrid-grid
+{
+	xborder-top:1px solid black;
+	xborder-left:1px solid black;
+	overflow:auto;
+}
+.dgrid-row
+{
+	flex:0 0 auto;
+}
+.dgrid-row:hover
+{
+	background-color:#efefef;
+}
+.dgrid-cell
+{
+	height:1em;
+	flex:0 0 auto;
+	padding:.5em;
+	border-right:1px solid #ccc;
+	border-bottom:1px solid #ccc;
+}
+.dgrid-cell:hover
+{
+	background-color:thistle;
+}
+.dgrid-cell-auto-padding
+{
+}
+.dgrid-cell.ibx-sm-selected
+{
+	background-color:#666;
+	color:white;
+}
+
+
+
+/******************************************************************************
 	FLEX GRID
 ******************************************************************************/
 .ibx-flex-grid

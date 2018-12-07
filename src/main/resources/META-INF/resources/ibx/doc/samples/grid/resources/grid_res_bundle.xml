@@ -20,8 +20,13 @@
 			.toolbar
 			{
 				margin-bottom:5px;
+				padding:5px;
+				border-bottom:1px solid #ccc;
 			}
-
+			.toolbar > div
+			{
+				margin:3px;
+			}
 			.toolbar-item
 			{
 			}
@@ -76,7 +81,19 @@
 				<div data-ibx-type="ibxRadioGroup" data-ibx-name="rgCellsAlign" data-ibxp-name="rgCellsAlign"></div>
 				<div data-ibx-type="ibxRadioGroup" data-ibx-name="rgGridJustify" data-ibxp-name="rgGridJustify"></div>
 				<div data-ibx-type="ibxRadioGroup" data-ibx-name="rgGridAlign" data-ibxp-name="rgGridAlign"></div>
-				<div class="grid-tab" data-ibx-name="tabGrid" data-ibx-type="ibxTabPage" data-ibxp-selected="true" data-ibxp-tab-options="{'text':'ibxGrid - CSS Grid'}" data-ibxp-ctx-menu=".grid-menu">
+				<div class="data-grid-tab" data-ibx-name="tabGrid" data-ibx-type="ibxTabPage" data-ibxp-selected="true" data-ibxp-tab-options="{'text':'ibxDataGrid'}">
+					<div class="toolbar" data-ibx-type="ibxHBox" data-ibxp-align="center">
+						<div tabindex="0" class="btn-load" data-ibx-type="ibxButton">Load Grid</div>
+						<div data-ibx-type="ibxLabel" data-ibxp-for=".num-cols">Cols:</div>
+						<div tabindex="0" class="text-entry num-cols" data-ibx-type="ibxLabel" data-ibxp-justify="center">10</div>
+						<div class="" data-ibx-type="ibxLabel" data-ibxp-for=".num-rows">Rows:</div>
+						<div tabindex="0" class="text-entry num-rows" data-ibx-type="ibxLabel" data-ibxp-justify="center">20</div>
+						<div tabindex="0" class="btn-col-headers" data-ibx-type="ibxCheckBoxSimple" data-ibxp-checked="true">Show Column Headings</div>
+						<div tabindex="0" class="btn-row-headers" data-ibx-type="ibxCheckBoxSimple" data-ibxp-checked="true">Show Row Headings</div>
+					</div>
+					<div tabindex="0" class="test-grid" style="border:1px solid #ccc;margin:5px;height:500px;" data-ibx-type="ibxDataGrid"></div>
+				</div>
+				<div class="grid-tab" data-ibx-name="tabGrid" data-ibx-type="ibxTabPage" data-ibxp-selected="false" data-ibxp-tab-options="{'text':'ibxGrid - CSS Grid'}" data-ibxp-ctx-menu=".grid-menu">
 					<div class="toolbar" data-ibx-type="ibxHBox" data-ibxp-align="center">
 						<div class="toolbar-item cell-label" data-ibx-type="ibxLabel" data-ibxp-text="Cells:"></div>
 						<div class="button-group" data-ibx-type="ibxHButtonGroup">

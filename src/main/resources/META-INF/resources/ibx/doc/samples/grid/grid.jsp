@@ -23,6 +23,61 @@
 				var gridTabs = ibx.resourceMgr.getResource(".grid-tabs").data("ibxWidget");
 				$("body").append(gridTabs.element);
 
+				$(".text-entry").on("ibx_widgetfocus ibx_widgetblur", function(e)
+				{
+					var input = $(e.target);
+					if(e.type == "ibx_widgetfocus")
+						input.ibxWidget("startEditing");
+					else
+					if(e.type == "ibx_widgetblur")
+						input.ibxWidget("stopEditing");
+				})
+
+				$(".btn-load").on("click", function(e)
+				{
+					var rows = [];
+					var nRows = parseInt($(".num-rows").text(), 20);
+					var nCols = parseInt($(".num-cols").text(), 10);
+					for(var i = 0; i < nRows; ++i)
+					{
+						var cols = [];
+						for(var j = 0; j < nCols; ++j)
+						{
+							var cell = $(sformat("<div style='user-select:none;'>Cell {1}/{2}</div>", i, j));
+							cell.ibxEditable();
+							cell.on("dblclick", function(e)
+							{
+								$(e.target).ibxEditable("startEditing");
+							})
+							cols.push(cell[0]);
+						}
+						rows.push(cols);
+					}
+
+					var showRowH = $(".btn-row-headers").ibxWidget("checked");
+					var showColH = $(".btn-col-headers").ibxWidget("checked");
+					var grid = $(".ibx-data-grid");
+					grid.ibxWidget("removeAll");
+					grid.ibxWidget("option", {"defaultColConfig":{resizable:true}, "showColumnHeaders":showColH, "showRowHeaders":showRowH});
+					grid.ibxWidget("addRows", rows);
+					grid.ibxWidget("refresh");
+
+
+					var headers = grid.ibxWidget("getHeaders");
+					$(headers).on("click", function(headers, grid, e)
+					{
+						var colIdx = headers.indexOf(e.currentTarget);
+						grid.ibxWidget("selectColumn", colIdx, true);
+					}.bind(this, headers, grid));
+
+					var headers = grid.ibxWidget("getHeaders", "row");
+					$(headers).on("click", function(headers, grid, e)
+					{
+						var rowIdx = headers.indexOf(e.currentTarget);
+						grid.ibxWidget("selectRow", rowIdx, true);
+					}.bind(this, headers, grid));
+				});
+
 				gridTabs.rgCellsJustify.on("ibx_change", function(e, rg)
 				{
 					rg = $(rg);
