@@ -108,6 +108,10 @@ ibxDragDropManager.endDrag = function(eType, e)
 
 	if(this.curTarget.length)
 	{
+		//when canceling a drag target gets a dragleave
+		if(eType == "ibx_dragcancel")
+			this._dispatchDragEvent(e, "ibx_dragleave", this._curTarget, true)
+
 		this.curTarget.ibxRemoveClass(this.dragTargetClass);
 		this.curTarget.css("cursor", this.curTarget.data("ibxDragTargetCursorOrig")); 
 		this.curTarget.removeData("ibxDragTargetCursorOrig");
