@@ -164,11 +164,6 @@ $.widget("ibi.ibxDataGridSelectionManager", $.ibi.ibxSelectionManager,
 		else
 			this._super(e);
 	},
-	foo:function(asdf)
-	{
-		debugger;
-		return "Julian";
-	}
 });
 
 $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
