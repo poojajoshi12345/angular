@@ -1424,6 +1424,9 @@ $.widget("ibi.ibxSelectItemListPaged", $.ibi.ibxVBox,
 	},
 	_setPage: function (pageIndex)
 	{
+		if (pageIndex === undefined)
+			pageIndex = 0;
+		
 		this._inSetPage = true;
 		var options = this.options;
 		//options.parent.options.userValue = "";
