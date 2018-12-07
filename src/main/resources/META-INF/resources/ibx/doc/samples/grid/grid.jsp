@@ -33,6 +33,40 @@
 						input.ibxWidget("stopEditing");
 				})
 
+				$(".ibx-data-grid").on("ibx_gridheadercreate", function(e)
+				{
+					var data = e.originalEvent.data;
+					if(data.type == "column")
+					{
+						$(data.header).text("Column " + data.idx).on("click", function(e)
+						{
+							grid.ibxWidget("selectColumn", data.idx, true);
+						});
+					}
+					else
+					if(data.type == "row")
+					{
+						$(data.header).on("click", function(e)
+						{
+							grid.ibxWidget("selectRow", data.idx, true);
+						});
+					}
+				});
+
+				$(".btn-col-headers, .btn-row-headers, .btn-hide-cols, .btn-hide-rows").on("ibx_change", function(e)
+				{
+					updateDataGridSettings();
+				});
+
+				function updateDataGridSettings()
+				{
+					var showColHeaders = $(".btn-col-headers").ibxWidget("checked");
+					var showRowHeaders = $(".btn-row-headers").ibxWidget("checked");
+					var hideCols = $(".btn-hide-cols").ibxWidget("checked");
+					var hideRows = $(".btn-hide-rows").ibxWidget("checked");
+					$(".ibx-data-grid").ibxWidget("option", {"showColumnHeaders":showColHeaders, "showRowHeaders":showRowHeaders});
+				}
+
 				$(".btn-load").on("click", function(e)
 				{
 					var rows = [];
@@ -54,26 +88,17 @@
 						rows.push(cols);
 					}
 
-					var showRowH = $(".btn-row-headers").ibxWidget("checked");
-					var showColH = $(".btn-col-headers").ibxWidget("checked");
 					var grid = $(".ibx-data-grid");
 					grid.ibxWidget("removeAll");
-					grid.ibxWidget("option", {"defaultColConfig":{resizable:true}, "showColumnHeaders":showColH, "showRowHeaders":showRowH});
+					grid.ibxWidget("option", {"defaultColConfig":{resizable:true}});
 					grid.ibxWidget("addRows", rows);
+					updateDataGridSettings();
 					grid.ibxWidget("refresh");
-
-
-					var headers = grid.ibxWidget("getHeaders");
-					$(headers).on("click", function(headers, grid, e)
-					{
-						var colIdx = headers.indexOf(e.currentTarget);
-						grid.ibxWidget("selectColumn", colIdx, true);
-					}.bind(this, headers, grid));
 
 					var headers = grid.ibxWidget("getHeaders", "row");
 					$(headers).on("click", function(headers, grid, e)
 					{
-						var rowIdx = headers.indexOf(e.currentTarget);
+						var rowIdx = headers.index(e.currentTarget);
 						grid.ibxWidget("selectRow", rowIdx, true);
 					}.bind(this, headers, grid));
 				});

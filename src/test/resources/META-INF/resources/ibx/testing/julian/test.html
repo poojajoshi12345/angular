@@ -12,6 +12,12 @@
 		<script type="text/javascript">
 			ibx(function(e)
 			{
+				$(".drop-target").on("dragenter dragover dragleave drop", function(e)
+				{
+					console.log(e.type);
+					if(e.type == "dragover")
+						e.preventDefault();
+				});
 			},true);
 		</script>
 		<style type="text/css">
@@ -29,10 +35,20 @@
 				margin:1em;
 				border:1px solid black;
 			}
+			.dd
+			{
+				width:100px;
+				height:100px;
+				border:1px solid black;
+				margin:25px;
+			}
+
 		</style>
 	</head>
 	<body class="ibx-root">
 		<div class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="center" data-ibxp-justify="start">
+			<div draggable="true" class="dd drag-source">Drag Me</div>
+			<div class="dd drop-target">Drop Here</div>
 		</div>
 	</body>
 </html>

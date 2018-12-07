@@ -72,8 +72,6 @@
 }
 .dgrid-grid
 {
-	xborder-top:1px solid black;
-	xborder-left:1px solid black;
 	overflow:auto;
 }
 .dgrid-row

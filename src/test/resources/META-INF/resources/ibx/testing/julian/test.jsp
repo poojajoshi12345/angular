@@ -35,7 +35,7 @@
 				$(".btn-load").on("click", function(e)
 				{
 					var rows = [];
-					var nRows = parseInt($(".num-rows").text(), 10);
+					var nRows = parseInt($(".num-rows").text(), 20);
 					var nCols = parseInt($(".num-cols").text(), 10);
 					for(var i = 0; i < nRows; ++i)
 					{
@@ -157,7 +157,7 @@
 				<div data-ibx-type="ibxLabel" data-ibxp-for=".num-cols">Cols:</div>
 				<div tabindex="0" class="text-entry num-cols" data-ibx-type="ibxLabel" data-ibxp-justify="center">10</div>
 				<div class="" data-ibx-type="ibxLabel" data-ibxp-for=".num-rows">Rows:</div>
-				<div tabindex="0" class="text-entry num-rows" data-ibx-type="ibxLabel" data-ibxp-justify="center">50</div>
+				<div tabindex="0" class="text-entry num-rows" data-ibx-type="ibxLabel" data-ibxp-justify="center">10</div>
 				<div tabindex="0" class="btn-col-headers" data-ibx-type="ibxCheckBoxSimple" data-ibxp-checked="true">Show Column Headings</div>
 				<div tabindex="0" class="btn-row-headers" data-ibx-type="ibxCheckBoxSimple" data-ibxp-checked="true">Show Row Headings</div>
 			</div>

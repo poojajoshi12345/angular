@@ -250,9 +250,10 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 				//make splitter
 				var splitter = $(sformat("<div class='{1}'>", classes.colHeaderSplitterClass));
 				splitter.ibxSplitter({locked:!cInfo.resizable || (i == colMap.length-1), resize:"first"}).on("ibx_resize ibx_reset", this._onSplitterResize.bind(this));
-
-				//save UI, and add header to bar
 				cInfo._ui = {"header":cHeading, "splitter":splitter};
+
+				//let people change the header
+				this.element.dispatchEvent("ibx_gridheadercreate", {"grid":this.element, "type":"column", "idx": i, "header":cHeading[0], "splitter":splitter[0]});
 				this._colHeaderBar.ibxWidget("add", [cHeading[0], splitter[0]]);
 			}
 
@@ -268,12 +269,15 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 			for(var i = 0; i < nRows; ++i)
 			{
 				//make header
-				var row = $(this.getRow(i));
+				var row = this.getRow(i);
 				var size = sformat("height:{1}px;", row.outerHeight());
 				var rHeading = $(sformat("<div tabindex='-1' class='{1}' style='{2};'>{3}</div>", options.classes.rowHeaderClass, size, i+1))
 				rHeading.ibxButtonSimple({justify:"center"});
 				rHeading.attr("role", "rowheader");
-				this._rowHeaderBar.append(rHeading);
+
+				//let people change the header
+				this.element.dispatchEvent("ibx_gridheadercreate", {"grid":this.element, "type":"row", "idx": i, "header":rHeading[0]});
+				this._rowHeaderBar.ibxWidget("add", rHeading[0]);
 			}
 			var padding = $("<div style='flex:0 0 auto;'>").css({"width":"1px", height:"20px"});
 			this._rowHeaderBar.append(padding);
@@ -283,13 +287,13 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 	{
 		var headerBar = row ? this._rowHeaderBar : this._colHeaderBar;
 		var headerClass = row ? this.options.classes.rowHeaderClass : this.options.classes.colHeaderClass;
-		return headerBar.children("." + headerClass).toArray();
+		return headerBar.children("." + headerClass);
 	},
 	getCell:function(idxRow, idxCol)
 	{
 		var ret = null;
 		var row = this.getRow(idxRow);
-		return row[idxCol] || null;
+		return row.children(sformat(":nth-child({1})", idxCol + 1)) || null;
 	},
 	getColumnCount:function()
 	{
@@ -299,11 +303,11 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 	{
 		var classes = this.options.classes;
 		var filter = sformat(".{1} > .{2}:nth-child({3})", classes.gridRow, classes.gridCell, idxCol + 1);
-		return this._grid.find(filter).toArray() || null;
+		return this._grid.find(filter) || null;
 	},
 	showColumn:function(idxCol, show)
 	{
-		var cells = $(this.getColumn(idxCol));
+		var cells = this.getColumn(idxCol);
 		var cInfo = this.options.colMap[idxCol];
 		if(cInfo && cInfo._ui)
 			cells = cells.add(cInfo._ui.header).add(cInfo._ui.splitter);
@@ -314,7 +318,7 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 		var cells = this.getColumn(idxCol);
 		if(!addSelection)
 			this._grid.ibxDataGridSelectionManager("deselectAll", true);
-		this._grid.ibxDataGridSelectionManager("selected", cells, select);
+		this._grid.ibxDataGridSelectionManager("selected", cells.toArray(), select);
 	},
 	getRowCount:function()
 	{
@@ -323,11 +327,11 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 	getRow:function(idxRow)
 	{
 		var filter = sformat(".{1}:nth-child({2})", this.options.classes.gridRow, idxRow+1);
-		return this._grid.children(filter).children(sformat(".{1}", this.options.classes.gridCell)).toArray() || null;
+		return this._grid.children(filter).children(sformat(".{1}", this.options.classes.gridCell)) || null;
 	},
 	showRow:function(idxRow, show)
 	{
-		var cells = $(this.getRow(idxRow));
+		var cells = this.getRow(idxRow);
 		var cInfo = this.options.rowMap[idxRow];
 		if(cInfo && cInfo._ui)
 			cells = cells.add(cInfo._ui.header).add(cInfo._ui.splitter);
@@ -338,7 +342,7 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 		var cells = this.getRow(idxRow);
 		if(!addSelection)
 			this._grid.ibxDataGridSelectionManager("deselectAll", true);
-		this._grid.ibxDataGridSelectionManager("selected", cells, select);
+		this._grid.ibxDataGridSelectionManager("selected", cells.toArray(), select);
 	},
 	addRow:function(cells, sibling, before, refresh)
 	{
@@ -439,7 +443,7 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 			for(var i = 0; i < colMap.length; ++i)
 			{
 				cInfo = colMap[i];
-				var cells = $(this.getColumn(i));
+				var cells = this.getColumn(i);
 
 				cellSize = cInfo.size;
 				if(cInfo._ui)
