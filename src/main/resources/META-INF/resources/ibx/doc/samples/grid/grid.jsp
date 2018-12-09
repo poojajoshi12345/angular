@@ -33,7 +33,7 @@
 						input.ibxWidget("stopEditing");
 				})
 
-				$(".ibx-data-grid").on("ibx_gridheadercreate", function(e)
+				$(".ibx-data-grid").on("xibx_gridheadercreate", function(e)
 				{
 					var grid = $(".ibx-data-grid");
 					var data = e.originalEvent.data;
@@ -70,6 +70,14 @@
 
 				$(".btn-load").on("click", function(e)
 				{
+					var grid = $(".ibx-data-grid");
+					var colMap = 
+					[
+						{"size":"200px", "title":"Julian"},
+						{"size":"400px", "title":"Hyman", resizable:false}
+					];
+					grid.ibxWidget("option", "colMap", colMap);
+
 					console.time("totalLoad");
 					var rows = [];
 					var nRows = parseInt($(".num-rows").text(), 10);
@@ -90,7 +98,6 @@
 						rows.push(cols);
 					}
 
-					var grid = $(".ibx-data-grid");
 					grid.ibxWidget("removeAll");
 					grid.ibxWidget("option", {"defaultColConfig":{resizable:true}});
 					grid.ibxWidget("addRows", rows);
