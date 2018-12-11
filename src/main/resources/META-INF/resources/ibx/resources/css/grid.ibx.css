@@ -56,7 +56,6 @@
 }
 .dgrid-header-row
 {
-	font-size:.9em;
 	flex:0 0 auto;
 	min-width:3em;
 	border-bottom:1px solid #ccc;
@@ -76,7 +75,7 @@
 .dgrid-row
 {
 	flex:0 0 auto;
-	height:2em;
+	height:1.75em;
 }
 .dgrid-row:hover
 {

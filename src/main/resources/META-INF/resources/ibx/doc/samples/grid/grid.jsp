@@ -100,7 +100,7 @@
 						"showColumnHeaders":$(".btn-col-headers").ibxWidget("checked"),
 						"showRowHeaders":$(".btn-row-headers").ibxWidget("checked"),
 						"defaultColConfig":{"resizable":true}
-					}, null, false);
+					});
 				}
 
 				gridTabs.rgCellsJustify.on("ibx_change", function(e, rg)
