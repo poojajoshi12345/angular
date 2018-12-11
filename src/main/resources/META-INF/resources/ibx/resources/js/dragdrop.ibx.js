@@ -305,4 +305,90 @@ ibxDragDropManager._onNativeDragEvent = function(e)
 //singleton drag/drop manager object.
 ibx.dragDropMgr = new ibxDragDropManager();
 
+
+/******************************************************************************
+Drag scrolling allows any object to be scrolled by dragging its content area (panning)
+******************************************************************************/
+$.widget("ibi.ibxDragScrolling", $.Widget, 
+{
+	options:
+	{
+		overflowX:"auto",
+		overflowY:"auto",
+	},
+	_create:function()
+	{
+		this._super();
+		this.widgetEventPrefix = "ibx_";
+		this._onDragScrollBound = this._onDragScroll.bind(this);
+
+		this.element.on("wheel", function(e)
+		{
+			this._onDragScroll(e);
+			e.preventDefault();
+		}.bind(this));
+
+		//on mobile let the device do the scrolling...otherwise we handle it.
+		if(ibxPlatformCheck.isMobile)
+			this.element.css({"overflow":"auto", "-webkit-overflow-scrolling":"touch"});
+		else
+			this.element.on("mousedown mouseup mousemove mouseleave", this._onDragScrollBound);
+	},
+	_destroy:function()
+	{
+		this._super();
+		this.element.off("mousedown mouseup mousemove mouseleave", this._onDragScrollBound);
+	},
+	_onDragScroll:function(e)
+	{
+		if(this.options.disabled)
+			return;
+
+		if(e.type == "mousedown")
+		{
+			if(!this.element.dispatchEvent("ibx_beforescroll", null, true, true).isDefaultPrevented())
+			{
+				this._scrolling = true;
+				this._eLast = e;
+			}
+		}
+		else
+		if(e.type == "mouseup" || e.type == "mouseleave" && this._scrolling)
+		{
+			this._scrolling = false;
+			this.element.dispatchEvent("ibx_endscroll", null, true, false);
+		}
+		else
+		if(this._scrolling && e.type == "mousemove" && this._scrolling)
+		{
+			var dx = e.screenX - this._eLast.screenX;
+			var dy = e.screenY - this._eLast.screenY;
+			this._scroll(dx, dy);
+			this._eLast = e;
+		}
+		else
+		if(e.type == "wheel")
+		{
+			//firefox always seems to report a delta of 1...chrome/ie 100...go figure.
+			var dx = (e.originalEvent.deltaX * -1) * (ibxPlatformCheck.isFirefox ? 100 : 1);
+			var dy = (e.originalEvent.deltaY * -1) * (ibxPlatformCheck.isFirefox ? 100 : 1);
+			this._scroll(dx, dy);
+		}
+	},
+	_scroll:function(dx, dy)
+	{
+		var options = this.options;
+		dx = options.overflowX != "hidden" ? dx : 0;
+		dy = options.overflowY != "hidden" ? dy : 0;
+
+		var sl = this.element.prop("scrollLeft");
+		var st = this.element.prop("scrollTop");
+		this.element.prop({"scrollLeft": sl - dx, "scrollTop": st - dy});
+	},
+	_refresh:function()
+	{
+		this._super();
+	}
+});
+
 //# sourceURL=dragdrop.ibx.js
