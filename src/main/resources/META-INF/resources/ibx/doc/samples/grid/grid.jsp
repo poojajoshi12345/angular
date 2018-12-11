@@ -59,27 +59,11 @@
 					updateDataGridSettings();
 				});
 
-				function updateDataGridSettings()
-				{
-					var showColHeaders = $(".btn-col-headers").ibxWidget("checked");
-					var showRowHeaders = $(".btn-row-headers").ibxWidget("checked");
-					var hideCols = $(".btn-hide-cols").ibxWidget("checked");
-					var hideRows = $(".btn-hide-rows").ibxWidget("checked");
-					$(".ibx-data-grid").ibxWidget("option", {"showColumnHeaders":showColHeaders, "showRowHeaders":showRowHeaders});
-				}
-
 				$(".btn-load").on("click", function(e)
 				{
-					var grid = $(".ibx-data-grid");
-					var colMap = 
-					[
-						{"size":"200px", "title":"Julian"},
-						{"size":"400px", "title":"Hyman", resizable:false}
-					];
-					grid.ibxWidget("option", "colMap", colMap);
-
 					console.time("totalLoad");
 					var rows = [];
+					var colMap = [];
 					var nRows = parseInt($(".num-rows").text(), 10);
 					var nCols = parseInt($(".num-cols").text(), 10);
 					for(var i = 0; i < nRows; ++i)
@@ -88,23 +72,36 @@
 						for(var j = 0; j < nCols; ++j)
 						{
 							var cell = $(sformat("<div style='user-select:none;'>Cell {1}/{2}</div>", i, j));
-							cell.ibxEditable();
-							cell.on("dblclick", function(e)
+							cell.ibxAddClass("ibx-flexbox fbx-inline fbx-row fbx-align-items-center fbx-aligncontent-center").on("dblclick", function(e)
 							{
 								$(e.target).ibxEditable("startEditing");
 							})
 							cols.push(cell[0]);
+							if(i == 0)
+								colMap.push({"title":"Column " + j, "size":"100px"});
 						}
 						rows.push(cols);
 					}
 
+					var grid = $(".ibx-data-grid");
+					updateDataGridSettings(colMap);
 					grid.ibxWidget("removeAll");
-					grid.ibxWidget("option", {"defaultColConfig":{resizable:true}});
-					grid.ibxWidget("addRows", rows);
-					grid.ibxWidget("refresh");
+					grid.ibxWidget("addRows", rows, null, null);
 					console.timeEnd("totalLoad");
-					updateDataGridSettings();
 				});
+
+				function updateDataGridSettings(colMap)
+				{
+					var hideCols = $(".btn-hide-cols").ibxWidget("checked");
+					var hideRows = $(".btn-hide-rows").ibxWidget("checked");
+					var grid = $(".ibx-data-grid").ibxWidget("option",
+					{
+						"colMap":colMap,
+						"showColumnHeaders":$(".btn-col-headers").ibxWidget("checked"),
+						"showRowHeaders":$(".btn-row-headers").ibxWidget("checked"),
+						"defaultColConfig":{"resizable":true}
+					}, null, false);
+				}
 
 				gridTabs.rgCellsJustify.on("ibx_change", function(e, rg)
 				{

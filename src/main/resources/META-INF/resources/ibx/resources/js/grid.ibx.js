@@ -369,11 +369,11 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 			this._grid.ibxDataGridSelectionManager("deselectAll", true);
 		this._grid.ibxDataGridSelectionManager("selected", cells.toArray(), select);
 	},
-	addRow:function(cells, sibling, before, refreshHeaders)
+	addRow:function(cells, sibling, before)
 	{
 		var options = this.options;
 		var selOptions = this._grid.ibxDataGridSelectionManager("option");
-		var row = $("<div style='flex:0 0 auto;'>").ibxAddClass("ibx-flexbox fbx-inline fbx-row fbx-align-items-center fbx-align-content-center").attr("role", "row");
+		var row = $("<div style='flex:0 0 auto;'>").ibxAddClass("ibx-flexbox fbx-inline fbx-row fbx-align-items-stretch fbx-align-content-center").attr("role", "row");
 		row.addClass(options.classes.gridRow);
 
 		//create extra cells if passed aren't fully packed less than columns.
@@ -381,27 +381,13 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 			cells.push($("<div>")[0]);
 
 		//configure, and add cell to the row.
-		var buildHeaders = false;
-		$(cells).attr({"role":"gridcell", "tabindex":"-1"}).ibxAddClass(options.classes.gridCell).data("ibxGridRow", row[0]).each(function(idx, el)
+		var cells = $(cells).attr({"role":"gridcell", "tabindex":"-1"}).ibxAddClass(options.classes.gridCell).data("ibxGridRow", row[0]).each(function(idx, el)
 		{
 			var cInfo = options.colMap[idx];
-			if(!cInfo)
-			{
-				//create extra columns if cells overflow current columns.
-				cInfo = $.extend({}, options.defaultColConfig);
-				options.colMap.push(cInfo);
-				buildHeaders = true;
-			}
-
-			console.error("WHY ARE THE COLUMNS STILL THE CORRECT SIZE WITH THIS COMMENTED OUT?!!!");
-			//$(el).outerWidth(this.getColumnWidth(idx)).ibxToggleClass(selOptions.selectableChildren, cInfo.selectable);
-			row.append(el);
+			var cWidth = this.getColumnWidth(idx);
+			$(el).ibxAddClass(options.classes.gridCell).ibxToggleClass(selOptions.selectableChildren, cInfo.selectable).outerWidth(cWidth);
 		}.bind(this));
-		
-		if(buildHeaders && (refreshHeaders !== false))
-			this._buildHeaders();
-
-		//add row to the grid.
+		row.append(cells);
 		this._grid.append(row);
 		return row[0];
 	},
@@ -410,10 +396,9 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 		var ret = [];
 		for(var i = 0; i < rows.length; ++i)
 			ret.push(this.addRow(rows[i], sibling, before, false));
-		this._buildHeaders();
 		return ret;
 	},
-	removeRow:function(row, destroy, refresh)
+	removeRow:function(row, destroy)
 	{
 		this._grid.ibxWidget("remove", row, destroy, refresh);
 	},
@@ -439,6 +424,19 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 		this._colHeaderBar.prop("scrollLeft", scrollX);
 		this._rowHeaderBar.prop("scrollTop", scrollY);
 	},
+	updateColMap:function(cols, refresh)
+	{
+		var colMap = this.options.colMap;
+		for(var key in cols)
+		{
+			var colInfo = colMap[key];
+			if(colInfo)
+				$.extend(colInfo, cols[key]);
+		}
+
+		if(refresh !== false)
+			this.refresh();
+	},
 	_setOption:function(key, value)
 	{
 		var options = this.options;
@@ -448,10 +446,9 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 			var colMap = options.colMap = [];
 			$.each(value, function(idx, colConfig)
 			{
-				colMap.push( $.extend({}, options.defaultColConfig, colConfig));
-				this.setColumnWidth(idx, colConfig.size);
+				colMap.push($.extend({}, options.defaultColConfig, colConfig));
 			}.bind(this));
-			this._buildHeaders("column");
+			this._buildHeaders();
 		}
 		else
 		if(key == "defaultColConfig")

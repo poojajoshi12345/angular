@@ -21,7 +21,6 @@
 ******************************************************************************/
 .ibx-data-grid
 {
-	box-sizing:border-box;
 }
 .dgrid-corner
 {
@@ -77,6 +76,7 @@
 .dgrid-row
 {
 	flex:0 0 auto;
+	height:2em;
 }
 .dgrid-row:hover
 {
@@ -84,19 +84,18 @@
 }
 .dgrid-cell
 {
-	height:1em;
 	flex:0 0 auto;
+	overflow:hidden;
 	padding:.5em;
 	border-right:1px solid #ccc;
 	border-bottom:1px solid #ccc;
+	box-sizing:border-box;
 }
 .dgrid-cell:hover
 {
 	background-color:thistle;
 }
-.dgrid-cell-auto-padding
-{
-}
+
 .dgrid-cell.ibx-sm-selected
 {
 	background-color:#666;
