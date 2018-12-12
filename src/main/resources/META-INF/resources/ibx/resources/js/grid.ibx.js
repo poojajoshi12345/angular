@@ -266,28 +266,6 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 			var padding = $("<div style='flex:0 0 auto;'>").css({"width":"20px", height:"1px"});
 			this._colHeaderBar.append(padding);
 		}
-
-		if(which == "row" || which == "both")
-		{
-			this._rowHeaderBar.ibxWidget("remove");
-
-			var nRows = this.getRowCount();
-			for(var i = 0; i < nRows; ++i)
-			{
-				//make header
-				var row = this.getRow(i);
-				var size = sformat("height:{1}px;", row.outerHeight());
-				var rHeading = $(sformat("<div tabindex='-1' class='{1}' style='{2};'>{3}</div>", options.classes.rowHeaderClass, size, i+1))
-				rHeading.ibxButtonSimple({justify:"center"});
-				rHeading.attr("role", "rowheader");
-
-				//let people change the header
-				this.element.dispatchEvent("ibx_gridheadercreate", {"grid":this.element, "type":"row", "idx": i, "header":rHeading[0]});
-				this._rowHeaderBar.ibxWidget("add", rHeading[0]);
-			}
-			var padding = $("<div style='flex:0 0 auto;'>").css({"width":"1px", height:"20px"});
-			this._rowHeaderBar.append(padding);
-		}
 	},
 	getHeaders:function(row)
 	{
@@ -351,8 +329,8 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 	},
 	getRow:function(idxRow)
 	{
-		var filter = sformat(".{1}:nth-child({2})", this.options.classes.gridRow, idxRow+1);
-		return this._grid.children(filter).children(sformat(".{1}", this.options.classes.gridCell)) || null;
+		var filter = sformat(".{1}:nth-child({2})", this.options.classes.gridRow, idxRow + 1);
+		return this._grid.children(filter);
 	},
 	showRow:function(idxRow, show)
 	{
@@ -361,7 +339,7 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 	},
 	selectRow:function(idxRow, select, addSelection)
 	{
-		var cells = this.getRow(idxRow);
+		var cells = this.getRow(idxRow).children();
 		if(!addSelection)
 			this._grid.ibxDataGridSelectionManager("deselectAll", true);
 		this._grid.ibxDataGridSelectionManager("selected", cells.toArray(), select);
@@ -396,7 +374,7 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 		{
 			var cInfo = options.colMap[idx];
 			var cWidth = this.getColumnWidth(idx);
-			$(el).ibxAddClass(options.classes.gridCell).ibxToggleClass(selOptions.selectableChildren, cInfo.selectable).outerWidth(cWidth);
+			$(el).ibxToggleClass(selOptions.selectableChildren, cInfo.selectable).outerWidth(cWidth);
 		}.bind(this));
 		row.append(cells);
 
