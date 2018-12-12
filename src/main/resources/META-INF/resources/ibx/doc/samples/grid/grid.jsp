@@ -33,12 +33,16 @@
 						input.ibxWidget("stopEditing");
 				})
 
-				$(".ibx-data-grid").on("xibx_gridheadercreate", function(e)
+				$(".ibx-data-grid").on("ibx_gridheaderupdate", function(e)
 				{
 					var grid = $(".ibx-data-grid");
 					var data = e.originalEvent.data;
 					if(data.type == "column")
 					{
+						console.error("THIS SHIT AINT WORKING!....WHY WHY WHY!?");
+						data.header.innerText = "JH Col - " + data.idx;
+						e.preventDefault();
+						
 						$(data.header).text("Column " + data.idx).on("click", function(e)
 						{
 							grid.ibxWidget("selectColumn", data.idx, true);

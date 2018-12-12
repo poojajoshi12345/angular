@@ -250,13 +250,15 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 				splitter.ibxSplitter({locked:!cInfo.resizable || (i == colMap.length-1), resize:"first"}).on("ibx_resize ibx_reset", this._onSplitterResize.bind(this));
 
 				//make header
-				var cHeading = $(sformat("<div tabindex='-1' class='{1}'>{2}</div>", classes.colHeaderClass, cInfo.title))
+				var cHeading = $(sformat("<div tabindex='-1' class='{1}'>", classes.colHeaderClass))
 				cHeading.ibxButtonSimple({justify:cInfo.justify || "start"});
 				cHeading.attr("role", "columnheader");
 				cInfo._ui = {"header":cHeading, "splitter":splitter};
 
-				//let people change the header
-				this.element.dispatchEvent("ibx_gridheadercreate", {"grid":this.element, "type":"column", "idx": i, "header":cHeading[0], "splitter":splitter[0]});
+				//let people change the header before adding it to the bar.
+				var event = this.element.dispatchEvent("ibx_gridheaderupdate", {"grid":this.element, "type":"column", "idx": i, "header":cHeading[0], "splitter":splitter[0]});
+				if(!event.isDefaultPrevented())
+					cHeading.text(cInfo.title);
 				this._colHeaderBar.ibxWidget("add", [cHeading[0], splitter[0]]);
 				
 				//now set the column size as everything is in the dom.
@@ -265,6 +267,19 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 
 			var padding = $("<div style='flex:0 0 auto;'>").css({"width":"20px", height:"1px"});
 			this._colHeaderBar.append(padding);
+		}
+
+		if(which == "row" || which == "both")
+		{
+			var rHeaders = this._rowHeaderBar.children(sformat(".{1}", options.classes.rowHeaderClass))
+			for(var i = 0; i < rHeaders.length; ++i)
+			{
+				var rHeader = rHeaders[i];
+				//let people change the header
+				var event = this.element.dispatchEvent("ibx_gridheaderupdate", {"grid":this.element, "type":"row", "idx": i, "header":rHeader[0], "splitter":null});
+				if(!event.isDefaultPrevented())
+					rHeader.innerText = i;
+			}
 		}
 	},
 	getHeaders:function(row)
@@ -359,9 +374,10 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 		rHeading.attr("role", "rowheader");
 
 		//let people change the header
-		this.element.dispatchEvent("ibx_gridheadercreate", {"grid":this.element, "type":"row", "idx": rowCount, "header":rHeading[0]});
+		this.element.dispatchEvent("ibx_gridheaderupdate", {"grid":this.element, "type":"row", "idx": rowCount, "header":rHeading[0]});
 		this._rowHeaderBar.ibxWidget("add", rHeading[0]);
 
+		//padding has to be always added to the end of the bar.
 		var padding = this._rowHeaderPadding = this._rowHeaderPadding || $("<div style='flex:0 0 auto;'>").css({"width":"1px", height:"20px"});
 		this._rowHeaderBar.append(padding);
 
@@ -430,7 +446,7 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 	_setOption:function(key, value)
 	{
 		var options = this.options;
-		if(key == "colMap")
+		if(key == "colMap" && value)
 		{
 			//make sure passed configs have all missing values with defaults, and update cell widths.
 			var colMap = options.colMap = [];
