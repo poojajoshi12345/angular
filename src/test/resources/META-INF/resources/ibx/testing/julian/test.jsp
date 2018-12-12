@@ -34,21 +34,20 @@
 
 				$(".btn-load").on("click", function(e)
 				{
+					var colMap = [];
 					var rows = [];
-					var nRows = parseInt($(".num-rows").text(), 20);
+					var nRows = parseInt($(".num-rows").text(), 10);
 					var nCols = parseInt($(".num-cols").text(), 10);
 					for(var i = 0; i < nRows; ++i)
 					{
 						var cols = [];
 						for(var j = 0; j < nCols; ++j)
 						{
-							var cell = $(sformat("<div style='user-select:none;'>Cell {1}/{2}</div>", i, j));
-							cell.ibxEditable();
-							cell.on("dblclick", function(e)
-							{
-								$(e.target).ibxEditable("startEditing");
-							})
+							var cell = $(sformat("<div style='user-select:none;'>Cell ({1},{2})</div>", i, j));
 							cols.push(cell[0]);
+
+							if(i == 0)
+								colMap.push($.extend({}, {"title":"Column " + j, "resizable":true}))
 						}
 						rows.push(cols);
 					}
@@ -56,10 +55,13 @@
 					var showRowH = $(".btn-row-headers").ibxWidget("checked");
 					var showColH = $(".btn-col-headers").ibxWidget("checked");
 					var grid = $(".ibx-data-grid");
+
+					console.time("buildGrid");
 					grid.ibxWidget("removeAll");
-					grid.ibxWidget("option", {"defaultColConfig":{resizable:true}, "showColumnHeaders":showColH, "showRowHeaders":showRowH});
+					grid.ibxWidget("option", {"colMap":colMap, "showColumnHeaders":showColH, "showRowHeaders":showRowH});
 					grid.ibxWidget("addRows", rows);
 					grid.ibxWidget("refresh");
+					console.timeEnd("buildGrid");
 
 
 					var headers = grid.ibxWidget("getHeaders");
@@ -157,7 +159,7 @@
 				<div data-ibx-type="ibxLabel" data-ibxp-for=".num-cols">Cols:</div>
 				<div tabindex="0" class="text-entry num-cols" data-ibx-type="ibxLabel" data-ibxp-justify="center">10</div>
 				<div class="" data-ibx-type="ibxLabel" data-ibxp-for=".num-rows">Rows:</div>
-				<div tabindex="0" class="text-entry num-rows" data-ibx-type="ibxLabel" data-ibxp-justify="center">10</div>
+				<div tabindex="0" class="text-entry num-rows" data-ibx-type="ibxLabel" data-ibxp-justify="center">100</div>
 				<div tabindex="0" class="btn-col-headers" data-ibx-type="ibxCheckBoxSimple" data-ibxp-checked="true">Show Column Headings</div>
 				<div tabindex="0" class="btn-row-headers" data-ibx-type="ibxCheckBoxSimple" data-ibxp-checked="true">Show Row Headings</div>
 			</div>

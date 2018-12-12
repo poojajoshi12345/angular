@@ -61,11 +61,10 @@
 
 				$(".btn-load").on("click", function(e)
 				{
-					console.time("totalLoad");
 					var rows = [];
 					var colMap = [];
-					var nRows = parseInt($(".num-rows").text(), 10);
-					var nCols = parseInt($(".num-cols").text(), 10);
+					var nRows = 100;//parseInt($(".num-rows").text(), 10);
+					var nCols = 10;//parseInt($(".num-cols").text(), 10);
 					for(var i = 0; i < nRows; ++i)
 					{
 						var cols = [];
@@ -84,6 +83,7 @@
 					}
 
 					var grid = $(".ibx-data-grid");
+					console.time("totalLoad");
 					updateDataGridSettings(colMap);
 					grid.ibxWidget("removeAll");
 					grid.ibxWidget("addRows", rows, null, null);

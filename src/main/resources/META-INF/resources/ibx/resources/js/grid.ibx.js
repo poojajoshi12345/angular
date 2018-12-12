@@ -171,7 +171,7 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 	options:
 	{
 		colMap:[],
-		defaultColConfig: {title:"Column", size:"100px", flex:false, justify:"center", resizable:true, selectable:true, visible:true, position:null},
+		defaultColConfig: {title:"Column", size:"100px", flex:false, justify:"center", resizable:true, selectable:true, visible:true},
 		
 		rowMap:[],//not currently used.
 		defaultRowConfig: {},//not currently used.
@@ -245,22 +245,24 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 				var cInfo = colMap[i];
 				var size = sformat("width:{1};flex:{2} 0 auto;", cInfo.size, cInfo.flex ? 1 : 0);
 
+				//make header
+				var cHeading = $(sformat("<div tabindex='-1' class='{1}'>", classes.colHeaderClass))
+				cHeading.ibxButtonSimple({justify:cInfo.justify || "start"}).attr("role", "columnheader");
+
 				//make splitter
 				var splitter = $(sformat("<div class='{1}'>", classes.colHeaderSplitterClass));
 				splitter.ibxSplitter({locked:!cInfo.resizable || (i == colMap.length-1), resize:"first"}).on("ibx_resize ibx_reset", this._onSplitterResize.bind(this));
 
-				//make header
-				var cHeading = $(sformat("<div tabindex='-1' class='{1}'>", classes.colHeaderClass))
-				cHeading.ibxButtonSimple({justify:cInfo.justify || "start"});
-				cHeading.attr("role", "columnheader");
-				cInfo._ui = {"header":cHeading, "splitter":splitter};
-
-				//let people change the header before adding it to the bar.
-				var event = this.element.dispatchEvent("ibx_gridheaderupdate", {"grid":this.element, "type":"column", "idx": i, "header":cHeading[0], "splitter":splitter[0]});
+				//let people change the header before adding it to the bar...reasign because if they did we want to use that...if they didn't then nothing will have changed.
+				var event = this.element.dispatchEvent("ibx_gridheaderupdate", {"grid":this.element, "type":"column", "info":cInfo, "idx": i, "header":cHeading[0], "splitter":splitter[0]});
+				cHeading = $(event.data.header);
+				splitter = $(event.data.splitter);
 				if(!event.isDefaultPrevented())
 					cHeading.ibxWidget("option", "text", cInfo.title);
 				
 				//now add the column header and set the size as everything is in the dom.
+				cInfo._ui = {"idx":i, "header":cHeading, "splitter":splitter, curSize:null};
+				cHeading.data("ibxGridHeaderInfo", cInfo);
 				this._colHeaderBar.ibxWidget("add", [cHeading[0], splitter[0]]);
 				this.setColumnWidth(i, cInfo.size);
 			}
@@ -306,11 +308,11 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 	setColumnWidth:function(colIdx, width)
 	{
 		var cInfo = this.options.colMap[colIdx];
-		cInfo.size = width;
 		if(cInfo._ui)
 		{
 			//this looks weird because the 'width' parm can be a string like "100px", and that has to be set, then we need the 
 			//actual width...AND THEN...we need to subtract out the splitter width...oy vey!
+			cInfo._ui.curSize = width;
 			cInfo._ui.header.outerWidth(width);
 			cInfo._ui.header.outerWidth(cInfo._ui.header.outerWidth() - cInfo._ui.splitter.outerWidth());
 		}
@@ -368,8 +370,7 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 
 		//make header
 		var rowCount = this.getRowCount();
-		var size = sformat("xheight:{1}px;", row.outerHeight());
-		var rHeading = $(sformat("<div tabindex='-1' class='dgrid-row {1}' style='{2};'>{3}</div>", options.classes.rowHeaderClass, size, rowCount+1))
+		var rHeading = $(sformat("<div tabindex='-1' class='dgrid-row {1}'>{2}</div>", options.classes.rowHeaderClass, rowCount+1))
 		rHeading.ibxButtonSimple({justify:"center"});
 		rHeading.attr("role", "rowheader");
 
@@ -388,9 +389,15 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 		//configure, and add cell to the row.
 		var cells = $(cells).attr({"role":"gridcell", "tabindex":"-1"}).ibxAddClass(options.classes.gridCell).data("ibxGridRow", row[0]).each(function(idx, el)
 		{
+			el = $(el);
 			var cInfo = options.colMap[idx];
-			var cWidth = this.getColumnWidth(idx);
-			$(el).ibxToggleClass(selOptions.selectableChildren, cInfo.selectable).outerWidth(cWidth);
+			if(cInfo)
+			{
+				var cWidth = cInfo._ui.curSize;
+				el.ibxToggleClass(selOptions.selectableChildren, cInfo.selectable).outerWidth(cWidth);
+			}
+			else
+				el.ibxAddClass("dgrid-col-hidden");//overflow cells are just hidden.
 		}.bind(this));
 		row.append(cells);
 
@@ -414,14 +421,10 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 	},
 	_onSplitterResize:function(e, resizeInfo)
 	{
-		var splitter = $(e.target);
-		var sWidth = splitter.outerWidth();
-		var e1lWidth = resizeInfo.el1.outerWidth();
-		var colMap = this.options.colMap;
-
-		var idxEl = splitter.siblings(".dgrid-header-col").index(resizeInfo.el1);
-		var cells = this._grid.find(sformat(".dgrid-row > .{1}:nth-child({2})", this.options.classes.gridCell, idxEl+1));
-		cells.outerWidth(e1lWidth + sWidth);
+		var sWidth = $(e.target).outerWidth();
+		var el1Width = resizeInfo.el1.outerWidth();
+		var cInfo = resizeInfo.el1.data("ibxGridHeaderInfo");
+		this.setColumnWidth(cInfo._ui.idx, sWidth + el1Width);
 	},
 	_onGridScroll:function(e)
 	{
@@ -455,6 +458,7 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 				colMap.push($.extend({}, options.defaultColConfig, colConfig));
 			}.bind(this));
 			this.updateHeaders("column");
+			return;
 		}
 		else
 		if(key == "defaultColConfig")
@@ -467,9 +471,6 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 		this._colHeaderBar.ibxToggleClass("dgrid-header-bar-hidden", !options.showColumnHeaders);
 		this._rowHeaderBar.ibxToggleClass("dgrid-header-bar-hidden", !options.showRowHeaders);
 		this._super();
-
-		//this is like a refresh for the selection model..will adjust the classes of the selectable children correctly.
-		this._grid.ibxDataGridSelectionManager("selectableChildren");
 	}
 });
 
