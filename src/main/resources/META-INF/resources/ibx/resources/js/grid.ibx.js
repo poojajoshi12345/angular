@@ -258,14 +258,14 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 				//let people change the header before adding it to the bar.
 				var event = this.element.dispatchEvent("ibx_gridheaderupdate", {"grid":this.element, "type":"column", "idx": i, "header":cHeading[0], "splitter":splitter[0]});
 				if(!event.isDefaultPrevented())
-					cHeading.text(cInfo.title);
-				this._colHeaderBar.ibxWidget("add", [cHeading[0], splitter[0]]);
+					cHeading.ibxWidget("option", "text", cInfo.title);
 				
-				//now set the column size as everything is in the dom.
+				//now add the column header and set the size as everything is in the dom.
+				this._colHeaderBar.ibxWidget("add", [cHeading[0], splitter[0]]);
 				this.setColumnWidth(i, cInfo.size);
 			}
 
-			var padding = $("<div style='flex:0 0 auto;'>").css({"width":"20px", height:"1px"});
+			var padding = $("<div style='flex:0 0 auto;'>").css({"width":"100px", height:"1px"});
 			this._colHeaderBar.append(padding);
 		}
 
@@ -378,7 +378,7 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 		this._rowHeaderBar.ibxWidget("add", rHeading[0]);
 
 		//padding has to be always added to the end of the bar.
-		var padding = this._rowHeaderPadding = this._rowHeaderPadding || $("<div style='flex:0 0 auto;'>").css({"width":"1px", height:"20px"});
+		var padding = this._rowHeaderPadding = this._rowHeaderPadding || $("<div style='flex:0 0 auto;'>").css({"width":"1px", height:"100px"});
 		this._rowHeaderBar.append(padding);
 
 		//create extra cells if passed aren't fully packed less than columns.
