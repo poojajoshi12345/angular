@@ -368,17 +368,16 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 		var row = $("<div>").ibxAddClass("ibx-flexbox fbx-inline fbx-row fbx-align-items-stretch fbx-align-content-center").attr("role", "row");
 		row.addClass(options.classes.gridRow);
 
-		//make header
+		// make header
 		var rowCount = this.getRowCount();
-		var rHeading = $(sformat("<div tabindex='-1' class='dgrid-row {1}'>{2}</div>", options.classes.rowHeaderClass, rowCount+1))
-		rHeading.ibxButtonSimple({justify:"center"});
+		var rHeading = $(sformat("<div tabindex='-1' class='ibx-flexbox fbx-inline fbx-row fbx-align-items-center fbx-justify-content-center dgrid-row {1} '>{2}</div>", options.classes.rowHeaderClass, rowCount+1))
 		rHeading.attr("role", "rowheader");
 
-		//let people change the header
+		// //let people change the header
 		this.element.dispatchEvent("ibx_gridheaderupdate", {"grid":this.element, "type":"row", "idx": rowCount, "header":rHeading[0]});
 		this._rowHeaderBar.ibxWidget("add", rHeading[0]);
 
-		//padding has to be always added to the end of the bar.
+		// padding has to be always added to the end of the bar.
 		var padding = this._rowHeaderPadding = this._rowHeaderPadding || $("<div style='flex:0 0 auto;'>").css({"width":"1px", height:"100px"});
 		this._rowHeaderBar.append(padding);
 

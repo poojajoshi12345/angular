@@ -63,18 +63,17 @@
 					grid.ibxWidget("refresh");
 					console.timeEnd("buildGrid");
 
-
 					var headers = grid.ibxWidget("getHeaders");
 					$(headers).on("click", function(headers, grid, e)
 					{
-						var colIdx = headers.indexOf(e.currentTarget);
+						var colIdx = headers.index(e.currentTarget);
 						grid.ibxWidget("selectColumn", colIdx, true);
 					}.bind(this, headers, grid));
 
 					var headers = grid.ibxWidget("getHeaders", "row");
 					$(headers).on("click", function(headers, grid, e)
 					{
-						var rowIdx = headers.indexOf(e.currentTarget);
+						var rowIdx = headers.index(e.currentTarget);
 						grid.ibxWidget("selectRow", rowIdx, true);
 					}.bind(this, headers, grid));
 
@@ -159,7 +158,7 @@
 				<div data-ibx-type="ibxLabel" data-ibxp-for=".num-cols">Cols:</div>
 				<div tabindex="0" class="text-entry num-cols" data-ibx-type="ibxLabel" data-ibxp-justify="center">10</div>
 				<div class="" data-ibx-type="ibxLabel" data-ibxp-for=".num-rows">Rows:</div>
-				<div tabindex="0" class="text-entry num-rows" data-ibx-type="ibxLabel" data-ibxp-justify="center">100</div>
+				<div tabindex="0" class="text-entry num-rows" data-ibx-type="ibxLabel" data-ibxp-justify="center">1000</div>
 				<div tabindex="0" class="btn-col-headers" data-ibx-type="ibxCheckBoxSimple" data-ibxp-checked="true">Show Column Headings</div>
 				<div tabindex="0" class="btn-row-headers" data-ibx-type="ibxCheckBoxSimple" data-ibxp-checked="true">Show Row Headings</div>
 			</div>
