@@ -22,46 +22,43 @@
 			
 			ibx(function()
 			{
-				$(".text-entry").on("ibx_widgetfocus ibx_widgetblur", function(e)
-				{
-					var input = $(e.target);
-					if(e.type == "ibx_widgetfocus")
-						input.ibxWidget("startEditing");
-					else
-					if(e.type == "ibx_widgetblur")
-						input.ibxWidget("stopEditing");
-				})
-
 				$(".btn-load").on("click", function(e)
 				{
 					var colMap = [];
 					var rows = [];
 					var nRows = parseInt($(".num-rows").text(), 10);
 					var nCols = parseInt($(".num-cols").text(), 10);
+					console.time("totalLoad");
+					console.time("genCells");
 					for(var i = 0; i < nRows; ++i)
 					{
-						var cols = [];
+						var row = {"title":i+1, "cells":[]};
 						for(var j = 0; j < nCols; ++j)
 						{
-							var cell = $(sformat("<div style='user-select:none;'>Cell ({1},{2})</div>", i, j));
-							cols.push(cell[0]);
-
+							var cell = $(sformat("<div style='user-select:none;'>Cell ({1},{2})</div>", i+1, j+1));
+							row.cells.push(cell[0]);
 							if(i == 0)
 								colMap.push($.extend({}, {"title":"Column " + j, "resizable":true}))
 						}
-						rows.push(cols);
+						rows.push(row);
 					}
+					console.timeEnd("genCells");
 
 					var showRowH = $(".btn-row-headers").ibxWidget("checked");
 					var showColH = $(".btn-col-headers").ibxWidget("checked");
 					var grid = $(".ibx-data-grid");
 
-					console.time("buildGrid");
+					console.time("popGrid");
 					grid.ibxWidget("removeAll");
 					grid.ibxWidget("option", {"colMap":colMap, "showColumnHeaders":showColH, "showRowHeaders":showRowH});
 					grid.ibxWidget("addRows", rows);
 					grid.ibxWidget("refresh");
-					console.timeEnd("buildGrid");
+					console.timeEnd("popGrid");
+					console.timeEnd("totalLoad");
+
+					grid.on("ibx_gridheaderupdate", function(e)
+					{
+					});
 
 					var headers = grid.ibxWidget("getHeaders");
 					$(headers).on("click", function(headers, grid, e)
@@ -158,7 +155,7 @@
 				<div data-ibx-type="ibxLabel" data-ibxp-for=".num-cols">Cols:</div>
 				<div tabindex="0" class="text-entry num-cols" data-ibx-type="ibxLabel" data-ibxp-justify="center">10</div>
 				<div class="" data-ibx-type="ibxLabel" data-ibxp-for=".num-rows">Rows:</div>
-				<div tabindex="0" class="text-entry num-rows" data-ibx-type="ibxLabel" data-ibxp-justify="center">1000</div>
+				<div tabindex="0" class="text-entry num-rows" data-ibx-type="ibxLabel" data-ibxp-justify="center">100</div>
 				<div tabindex="0" class="btn-col-headers" data-ibx-type="ibxCheckBoxSimple" data-ibxp-checked="true">Show Column Headings</div>
 				<div tabindex="0" class="btn-row-headers" data-ibx-type="ibxCheckBoxSimple" data-ibxp-checked="true">Show Row Headings</div>
 			</div>

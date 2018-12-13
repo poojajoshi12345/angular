@@ -255,14 +255,12 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 
 				//let people change the header before adding it to the bar...reasign because if they did we want to use that...if they didn't then nothing will have changed.
 				var event = this.element.dispatchEvent("ibx_gridheaderupdate", {"grid":this.element, "type":"column", "info":cInfo, "idx": i, "header":cHeading[0], "splitter":splitter[0]});
-				cHeading = $(event.data.header);
-				splitter = $(event.data.splitter);
 				if(!event.isDefaultPrevented())
 					cHeading.ibxWidget("option", "text", cInfo.title);
 				
 				//now add the column header and set the size as everything is in the dom.
-				cInfo._ui = {"idx":i, "header":cHeading, "splitter":splitter, curSize:null};
-				cHeading.data("ibxGridHeaderInfo", cInfo);
+				cInfo.ui = {"idx":i, "header":cHeading, "splitter":splitter, "curSize":null};
+				cHeading.data("ibxDataGridColumnInfo", cInfo);
 				this._colHeaderBar.ibxWidget("add", [cHeading[0], splitter[0]]);
 				this.setColumnWidth(i, cInfo.size);
 			}
@@ -300,24 +298,25 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 	{
 		return this.options.colMap.length;
 	},
-	getColumnWidth:function(colIdx)
+	getColumnWidth:function(idxCol)
 	{
-		var cInfo = this.options.colMap[colIdx];
-		return (cInfo && cInfo._ui && cInfo._ui.header) ? cInfo._ui.header.outerWidth() + cInfo._ui.splitter.outerWidth() : cInfo.size;
+		var cInfo = this.options.colMap[idxCol];
+		return (cInfo && cInfo.ui && cInfo.ui.header) ? cInfo.ui.header.outerWidth() + cInfo.ui.splitter.outerWidth() : cInfo.size;
 	},
-	setColumnWidth:function(colIdx, width)
+	setColumnWidth:function(idxCol, width)
 	{
-		var cInfo = this.options.colMap[colIdx];
-		if(cInfo._ui)
+		var cInfo = this.options.colMap[idxCol];
+		if(cInfo && cInfo.ui)
 		{
 			//this looks weird because the 'width' parm can be a string like "100px", and that has to be set, then we need the 
 			//actual width...AND THEN...we need to subtract out the splitter width...oy vey!
-			cInfo._ui.curSize = width;
-			cInfo._ui.header.outerWidth(width);
-			cInfo._ui.header.outerWidth(cInfo._ui.header.outerWidth() - cInfo._ui.splitter.outerWidth());
+			cInfo.ui.curSize = width;
+			cInfo.ui.header.outerWidth(width);
+			cInfo.ui.header.outerWidth(cInfo.ui.header.outerWidth() - cInfo.ui.splitter.outerWidth());
+
+			var cells = this.getColumn(idxCol);
+			cInfo.flex ? cells.css({flex:"1 0 auto", width:width}) : cells.outerWidth(width);
 		}
-		var cells = this.getColumn(colIdx);
-		cInfo.flex ? cells.css({flex:"1 0 auto", width:width}) : cells.outerWidth(width);
 	},
 	getColumn:function(idxCol)
 	{
@@ -329,8 +328,8 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 	{
 		var cells = this.getColumn(idxCol);
 		var cInfo = this.options.colMap[idxCol];
-		if(cInfo && cInfo._ui)
-			cells = cells.add(cInfo._ui.header).add(cInfo._ui.splitter);
+		if(cInfo && cInfo.ui)
+			cells = cells.add(cInfo.ui.header).add(cInfo.ui.splitter);
 		cells.ibxToggleClass("dgrid-col-hidden", !show);
 	},
 	selectColumn:function(idxCol, select, addSelection)
@@ -344,86 +343,103 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 	{
 		return this._grid.children("." + this.options.classes.gridRow).length;
 	},
-	getRow:function(idxRow)
+	getRow:function(row)
 	{
-		var filter = sformat(".{1}:nth-child({2})", this.options.classes.gridRow, idxRow + 1);
+		var filter = isNaN(row) ? row : sformat(".{1}:nth-child({2})", this.options.classes.gridRow, row + 1);
 		return this._grid.children(filter);
 	},
-	showRow:function(idxRow, show)
+	showRow:function(row, show)
 	{
-		this._grid.children(sformat(".dgrid-row:nth-child({1})", idxRow+1)).ibxToggleClass("dgrid-row-hidden", !show);
-		this._rowHeaderBar.children(sformat(":nth-child({1})", idxRow+1)).ibxToggleClass("dgrid-row-hidden", !show);
+		var row = this.getRow(row);
+		row.each(function(idx, row)
+		{
+			row = $(row);
+			rInfo = row.data("ibxDataGridRowInfo");
+			row.ibxToggleClass("dgrid-row-hidden", !show);
+			rInfo.ui.header.ibxToggleClass("dgrid-row-hidden", !show);
+		}.bind(this));
 	},
-	selectRow:function(idxRow, select, addSelection)
+	selectRow:function(row, select, addSelection)
 	{
-		var cells = this.getRow(idxRow).children();
+		var cells = this.getRow(row).children();
 		if(!addSelection)
 			this._grid.ibxDataGridSelectionManager("deselectAll", true);
 		this._grid.ibxDataGridSelectionManager("selected", cells.toArray(), select);
 	},
-	addRow:function(cells, sibling, before)
+	addRow:function(rowInfo, sibling, before, parent)
 	{
 		var options = this.options;
 		var selOptions = this._grid.ibxDataGridSelectionManager("option");
 		var row = $("<div>").ibxAddClass("ibx-flexbox fbx-inline fbx-row fbx-align-items-stretch fbx-align-content-center").attr("role", "row");
-		row.addClass(options.classes.gridRow);
+		row.ibxAddClass(options.classes.gridRow).data("ibxDataGridRowInfo", rowInfo);
 
-		// make header
-		var rowCount = this.getRowCount();
-		var rHeading = $(sformat("<div tabindex='-1' class='ibx-flexbox fbx-inline fbx-row fbx-align-items-center fbx-justify-content-center dgrid-row {1} '>{2}</div>", options.classes.rowHeaderClass, rowCount+1))
+		// make/save header
+		var rHeading = $(sformat("<div tabindex='-1' class='ibx-flexbox fbx-inline fbx-row fbx-align-items-center fbx-justify-content-center dgrid-row {1} '></div>", options.classes.rowHeaderClass))
 		rHeading.attr("role", "rowheader");
 
 		// //let people change the header
-		this.element.dispatchEvent("ibx_gridheaderupdate", {"grid":this.element, "type":"row", "idx": rowCount, "header":rHeading[0]});
-		this._rowHeaderBar.ibxWidget("add", rHeading[0]);
+		var event = this.element.dispatchEvent("ibx_gridheaderupdate", {"grid":this.element, "type":"row", "info":rowInfo, "header":rHeading[0], "splitter":null});
+		if(!event.isDefaultPrevented())
+			rHeading.text(rowInfo.title);
+		rowInfo.ui = {"row":row, "header":rHeading, "splitter":null, "curSize":null};
+		rHeading.data("ibxDataGridRowInfo", rowInfo);
+		this._rowHeaderBar.ibxWidget("add", rHeading);
 
 		// padding has to be always added to the end of the bar.
 		var padding = this._rowHeaderPadding = this._rowHeaderPadding || $("<div style='flex:0 0 auto;'>").css({"width":"1px", height:"100px"});
 		this._rowHeaderBar.append(padding);
 
 		//create extra cells if passed aren't fully packed less than columns.
-		while(cells.length < options.colMap.length)
-			cells.push($("<div>")[0]);
+		while(rowInfo.cells.length < options.colMap.length)
+			rowInfo.cells.push($("<div>")[0]);
 
-		//configure, and add cell to the row.
-		var cells = $(cells).attr({"role":"gridcell", "tabindex":"-1"}).ibxAddClass(options.classes.gridCell).data("ibxGridRow", row[0]).each(function(idx, el)
+		//Happens a lot: DON'T USE JQUERY (VERY SLOW).
+		for(var i = 0; i < rowInfo.cells.length; ++i)
 		{
-			el = $(el);
-			var cInfo = options.colMap[idx];
+			var cell = rowInfo.cells[i];
+			var cInfo = options.colMap[i];
 			if(cInfo)
 			{
-				var cWidth = cInfo._ui.curSize;
-				el.ibxToggleClass(selOptions.selectableChildren, cInfo.selectable).outerWidth(cWidth);
+				cell.style.width = isNaN(cInfo.ui.curSize) ? cInfo.ui.curSize : cInfo.ui.curSize + "px";//if size is just a number assume pixels.
+				cell.setAttribute("tabindex", -1);
+				cell.classList.toggle(selOptions.selectableChildren, cInfo.selectable);
+				cell.classList.add(options.classes.gridCell);
+				cell._ibxGridRowInfo = rowInfo;
 			}
 			else
-				el.ibxAddClass("dgrid-col-hidden");//overflow cells are just hidden.
-		}.bind(this));
-		row.append(cells);
-
+				cell.ibxAddClass("dgrid-col-hidden");
+		}
+		row.append(rowInfo.cells);
 		this._grid.append(row);
-		return row[0];
 	},
 	addRows:function(rows, sibling, before)
 	{
 		var ret = [];
 		for(var i = 0; i < rows.length; ++i)
 			ret.push(this.addRow(rows[i], sibling, before, false));
-		return ret;
 	},
-	removeRow:function(row, destroy)
+	removeRow:function(row)
 	{
-		this._grid.ibxWidget("remove", row, destroy, refresh);
+		var row = this.getRow(row);
+		row.each(function(idx, row)
+		{
+			row = $(row);
+			var rInfo = row.data("ibxDataGridRowInfo");
+			rInfo.ui.row.detach();
+			rInfo.ui.header.remove();
+
+		}.bind(this));
 	},
 	removeAll:function()
 	{
-		this._grid.ibxWidget("remove");
+		this.removeRow("*");
 	},
 	_onSplitterResize:function(e, resizeInfo)
 	{
 		var sWidth = $(e.target).outerWidth();
 		var el1Width = resizeInfo.el1.outerWidth();
-		var cInfo = resizeInfo.el1.data("ibxGridHeaderInfo");
-		this.setColumnWidth(cInfo._ui.idx, sWidth + el1Width);
+		var cInfo = resizeInfo.el1.data("ibxDataGridColumnInfo");
+		this.setColumnWidth(cInfo.ui.idx, sWidth + el1Width);
 	},
 	_onGridScroll:function(e)
 	{
