@@ -377,9 +377,9 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 		row.each(function(idx, row)
 		{
 			row = $(row);
-			rInfo = row.data("ibxDataGridInfo");
+			rInfo = row.data("ibxDataGridRow");
 			row.ibxToggleClass("dgrid-row-hidden", !show);
-			rInfo.ui.header.ibxToggleClass("dgrid-row-hidden", !show);
+			rInfo.header.ibxToggleClass("dgrid-row-hidden", !show);
 		}.bind(this));
 	},
 	selectRow:function(row, select, addSelection)
@@ -394,10 +394,10 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 		var options = this.options;
 		var selOptions = this._grid.ibxDataGridSelectionManager("option");
 		var rowData = row.data("ibxDataGridRow");
-		this._rowHeaderBar.ibxWidget("add", rowData.header);
+		this._rowHeaderBar.append(rowData.header);
 
-		// padding has to be always added to the end of the bar.
-		var padding = this._rowHeaderPadding = this._rowHeaderPadding || $("<div>").css({"flex":"flex:0 0 auto", "width":"1px", height:"100px"});
+		//padding has to be always added to the end of the bar.
+		var padding = this._rowHeaderPadding = this._rowHeaderPadding || $("<div>").css({"flex":"0 0 auto", "width":"1px", "height":"100px"});
 		this._rowHeaderBar.append(padding);
 
 		//create extra cells if row has less than columns.

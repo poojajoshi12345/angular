@@ -26,8 +26,8 @@
 				{
 					var colMap = [];
 					var rows = [];
-					var nRows = 500;//parseInt($(".num-rows").text(), 10);
-					var nCols = parseInt($(".num-cols").text(), 10);
+					var nRows = 100;//parseInt($(".num-rows").text(), 10);
+					var nCols = 10;//parseInt($(".num-cols").text(), 10);
 
 					console.time("totalLoad");
 					console.time("genRows");
