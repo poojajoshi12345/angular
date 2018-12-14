@@ -22,12 +22,14 @@
 			
 			ibx(function()
 			{
+				$(".text-entry").ibxWidget("startEditing", {selectAll:false, cancelKey:null, commitOnBlur:false}).blur();
+
 				$(".btn-load").on("click", function(e)
 				{
 					var colMap = [];
 					var rows = [];
-					var nRows = 100;//parseInt($(".num-rows").text(), 10);
-					var nCols = 10;//parseInt($(".num-cols").text(), 10);
+					var nRows = parseInt($(".num-rows").text(), 10);
+					var nCols = parseInt($(".num-cols").text(), 10);
 
 					console.time("totalLoad");
 					console.time("genRows");
@@ -51,6 +53,7 @@
 
 					console.time("popGrid");
 					grid.ibxWidget("removeAll");
+					//grid.ibxWidget("option", {"colMap":colMap, "showColumnHeaders":showColH, "showRowHeaders":showRowH});
 					grid.ibxWidget("option", {"colMap":colMap, "showColumnHeaders":showColH, "showRowHeaders":showRowH});
 					grid.ibxWidget("addRows", rows);
 					grid.ibxWidget("refresh");
@@ -149,15 +152,31 @@
 		<div class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="stretch" data-ibxp-justify="start" data-ibxp-command="cmdDelete">
 			<div class="tool-bar" data-ibx-type="ibxHBox" data-ibxp-align="center">
 				<div tabindex="0" class="btn-load" data-ibx-type="ibxButton">Load Grid</div>
-				<div data-ibx-type="ibxLabel" data-ibxp-for=".num-cols">Cols:</div>
-				<div tabindex="0" class="text-entry num-cols" data-ibx-type="ibxLabel" data-ibxp-justify="center">10</div>
 				<div class="" data-ibx-type="ibxLabel" data-ibxp-for=".num-rows">Rows:</div>
 				<div tabindex="0" class="text-entry num-rows" data-ibx-type="ibxLabel" data-ibxp-justify="center">100</div>
+				<div data-ibx-type="ibxLabel" data-ibxp-for=".num-cols">Cols:</div>
+				<div tabindex="0" class="text-entry num-cols" data-ibx-type="ibxLabel" data-ibxp-justify="center">10</div>
 				<div tabindex="0" class="btn-col-headers" data-ibx-type="ibxCheckBoxSimple" data-ibxp-checked="true">Show Column Headings</div>
 				<div tabindex="0" class="btn-row-headers" data-ibx-type="ibxCheckBoxSimple" data-ibxp-checked="true">Show Row Headings</div>
 			</div>
 
 			<div tabindex="0" class="test-grid" data-ibx-type="ibxDataGrid">
+				<div data-ibxp-grid-col-map>
+					<div data-ibxp-size="10em">First Name</div>
+					<div>Middle Name</div>
+					<div>Last Name</div>
+					<div>Sex</div>
+					<div>Age</div>
+				</div>
+				<div data-grid-row data-ibxp-title="1">
+					<div>Julian</div><div>Alexander</div><div>Hyman</div><div>Male</div><div>54</div>
+				</div>
+				<div data-grid-row data-ibxp-title="2">
+					<div>James</div><div>Edward</div><div>Hyman</div><div>Male</div><div>59</div>
+				</div>
+				<div data-grid-row data-ibxp-title="3">
+					<div>Charles</div><div>Lewis</div><div>Hyman</div><div>Male</div><div>63</div>
+				</div>
 			</div>
 		</div>
 	</body>

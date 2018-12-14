@@ -56,8 +56,8 @@
 }
 .dgrid-header-row
 {
-	flex:0 0 auto;
 	min-width:3em;
+	padding:0px .5em 0px .5em;
 	border-bottom:1px solid #ccc;
 	box-sizing:border-box;
 }
