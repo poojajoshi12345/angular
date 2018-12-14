@@ -219,6 +219,7 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 			rowHeaderBarClass:"dgrid-header-row-bar",
 			rowHeaderClass:"dgrid-header-row",
 			rowHeaderSplitterClass:"dgrid-header-row-splitter",
+			gridSelectable:"dgrid-selectable",
 			gridClass:"dgrid-grid",
 			gridRow:"dgrid-row",
 			gridCell:"dgrid-cell",
@@ -239,7 +240,7 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 		var colHeaderBar = this._colHeaderBar = $("<div tabindex='0'>").ibxHBox().ibxAddClass(classes.colHeaderBarClass).data({ibxCol:"2", ibxRow:"1"});
 		var rowHeaderBar = this._rowHeaderBar = $("<div tabindex='0'>").ibxVBox({align:"stretch"}).ibxAddClass(classes.rowHeaderBarClass).data({ibxCol:"1", ibxRow:"2"});
 		var grid = this._grid = $("<div tabindex='0'>").ibxVBox({align:"stretch"}).ibxAddClass(classes.gridClass).data({ibxCol:"2", ibxRow:"2"});
-		grid.on("scroll", this._onGridScroll.bind(this)).ibxDataGridSelectionManager({grid:this});
+		grid.on("scroll", this._onGridScroll.bind(this)).ibxDataGridSelectionManager({grid:this, selectableChildren:options.classes.gridSelectable});
 
 		colHeaderBar.ibxWidget({navKeyRoot:true});
 		rowHeaderBar.ibxWidget({navKeyRoot:true});
@@ -392,13 +393,6 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 	addRow:function(row, sibling, before)
 	{
 		var options = this.options;
-		var selOptions = this._grid.ibxDataGridSelectionManager("option");
-		var rowData = row.data("ibxDataGridRow");
-		this._rowHeaderBar.append(rowData.header);
-
-		//padding has to be always added to the end of the bar.
-		var padding = this._rowHeaderPadding = this._rowHeaderPadding || $("<div>").css({"flex":"0 0 auto", "width":"1px", "height":"100px"});
-		this._rowHeaderBar.append(padding);
 
 		//create extra cells if row has less than columns.
 		while(row[0].children.length < options.colMap.length)
@@ -414,13 +408,21 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 			{
 				cell.style.width = isNaN(cInfo.ui.curSize) ? cInfo.ui.curSize : cInfo.ui.curSize + "px";//if size is just a number assume pixels.
 				cell.setAttribute("tabindex", -1);
-				cell.classList.toggle(selOptions.selectableChildren, cInfo.selectable);
+				cell.classList.toggle(options.classes.gridSelectable, cInfo.selectable);
 				cell.classList.add(options.classes.gridCell);
 			}
 			else
 				cell.ibxAddClass("dgrid-col-hidden");
 		}
 		this._grid.ibxWidget("add", row, sibling, before);
+
+		var rowData = row.data("ibxDataGridRow");
+		var sibData = $(sibling).data("ibxDataGridRow") || {header:null};
+		this._rowHeaderBar.ibxWidget("add", rowData.header, sibData.header, before)
+
+		//padding has to be always added to the end of the bar.
+		var padding = this._rowHeaderPadding = this._rowHeaderPadding || $("<div>").css({"flex":"0 0 auto", "width":"1px", "height":"100px"});
+		this._rowHeaderBar.append(padding);
 	},
 	addRows:function(rows, sibling, before)
 	{

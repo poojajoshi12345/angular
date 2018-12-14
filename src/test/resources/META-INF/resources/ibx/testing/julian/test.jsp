@@ -33,7 +33,7 @@
 					console.time("genRows");
 					for(var i = 0; i < nRows; ++i)
 					{
-						var row = $("<div></div>").ibxDataGridRow({"title":i, "size":null});
+						var row = $("<div></div>").ibxDataGridRow({"title":i, "size":null}).ibxAddClass("row-" + i);
 						for(var j = 0; j < nCols; ++j)
 						{
 							var cell = $(sformat("<div style='user-select:none;'>Cell ({1},{2})</div>", i+1, j+1));
