@@ -53,7 +53,6 @@
 
 					console.time("popGrid");
 					grid.ibxWidget("removeAll");
-					//grid.ibxWidget("option", {"colMap":colMap, "showColumnHeaders":showColH, "showRowHeaders":showRowH});
 					grid.ibxWidget("option", {"colMap":colMap, "showColumnHeaders":showColH, "showRowHeaders":showRowH});
 					grid.ibxWidget("addRows", rows);
 					grid.ibxWidget("refresh");
@@ -162,7 +161,7 @@
 
 			<div tabindex="0" class="test-grid" data-ibx-type="ibxDataGrid">
 				<div data-ibxp-grid-col-map>
-					<div data-ibxp-size="10em">First Name</div>
+					<div data-ibxp-size="200px">First Name</div>
 					<div>Middle Name</div>
 					<div>Last Name</div>
 					<div>Sex</div>
