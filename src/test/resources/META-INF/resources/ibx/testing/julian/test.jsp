@@ -26,23 +26,24 @@
 				{
 					var colMap = [];
 					var rows = [];
-					var nRows = parseInt($(".num-rows").text(), 10);
+					var nRows = 500;//parseInt($(".num-rows").text(), 10);
 					var nCols = parseInt($(".num-cols").text(), 10);
+
 					console.time("totalLoad");
-					console.time("genCells");
+					console.time("genRows");
 					for(var i = 0; i < nRows; ++i)
 					{
-						var row = {"title":i+1, "cells":[]};
+						var row = $("<div></div>").ibxDataGridRow({"title":i, "size":null});
 						for(var j = 0; j < nCols; ++j)
 						{
 							var cell = $(sformat("<div style='user-select:none;'>Cell ({1},{2})</div>", i+1, j+1));
-							row.cells.push(cell[0]);
+							row.append(cell)
 							if(i == 0)
 								colMap.push($.extend({}, {"title":"Column " + j, "resizable":true}))
 						}
 						rows.push(row);
 					}
-					console.timeEnd("genCells");
+					console.timeEnd("genRows");
 
 					var showRowH = $(".btn-row-headers").ibxWidget("checked");
 					var showColH = $(".btn-col-headers").ibxWidget("checked");
@@ -55,10 +56,6 @@
 					grid.ibxWidget("refresh");
 					console.timeEnd("popGrid");
 					console.timeEnd("totalLoad");
-
-					grid.on("ibx_gridheaderupdate", function(e)
-					{
-					});
 
 					var headers = grid.ibxWidget("getHeaders");
 					$(headers).on("click", function(headers, grid, e)

@@ -166,6 +166,37 @@ $.widget("ibi.ibxDataGridSelectionManager", $.ibi.ibxSelectionManager,
 	},
 });
 
+$.ibi.ibxDataGridRow = function()
+{
+	return this.each(function(args, idx, el)
+	{
+		el = $(el);
+		var fn = args[0];
+		var data = el.data("ibxDataGridRow");
+		if(!data)
+		{
+			el.ibxAddClass(["dgrid-row", "ibx-flexbox", "fbx-inline", "fbx-row", "fbx-align-items-stretch", "fbx-align-content-center"]).attr("role", "row");
+			var header = $("<div>").attr({"tabindex": -1, "role":"rowheader"}).ibxAddClass(["dgrid-row", "dgrid-header-row", "ibx-flexbox", "fbx-inline", "fbx-row", "fbx-align-items-center", "fbx-justify-content-center"]);
+			data =
+			{
+				"rInfo":null,
+				"el":this,
+				"header":header,
+				"splitter":null,
+				"children":[],
+			}
+			el.data("ibxDataGridRow", data);
+		}
+		if(fn instanceof Object)
+		{
+			data.rInfo = fn;
+			data.header.text(data.rInfo.title);
+		}
+		return this;
+	}.bind(this, arguments));
+};
+$.fn.ibxDataGridRow = $.ibi.ibxDataGridRow;
+
 $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 {
 	options:
@@ -175,7 +206,7 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 		defaultRowConfig: {},//not currently used.
 
 		showColumnHeaders:true,
-		showRowHeaders:false,
+		showRowHeaders:true,
 		
 		/*frame stuff*/
 		cols:"auto 1fr",
@@ -358,41 +389,29 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 			this._grid.ibxDataGridSelectionManager("deselectAll", true);
 		this._grid.ibxDataGridSelectionManager("selected", cells.toArray(), select);
 	},
-	addRow:function(rInfo, sibling, before)
+	addRow:function(row, sibling, before)
 	{
 		var options = this.options;
 		var selOptions = this._grid.ibxDataGridSelectionManager("option");
-		var row = $("<div>").ibxAddClass("ibx-flexbox fbx-inline fbx-row fbx-align-items-stretch fbx-align-content-center").attr("role", "row");
-		row.ibxAddClass(options.classes.gridRow).data("ibxDataGridInfo", rInfo);
-
-		// make/save header
-		var rHeading = $(sformat("<div tabindex='-1' class='ibx-flexbox fbx-inline fbx-row fbx-align-items-center fbx-justify-content-center dgrid-row {1} '></div>", options.classes.rowHeaderClass))
-		rHeading.attr("role", "rowheader");
-
-		// //let people change the header
-		var event = this.element.dispatchEvent("ibx_gridheaderupdate", {"grid":this.element, "type":"row", "info":rInfo, "header":rHeading[0], "splitter":null});
-		if(!event.isDefaultPrevented())
-			rHeading.text(rInfo.title);
-		rInfo.ui = {"row":row, "header":rHeading, "splitter":null, "curSize":null};
-		rHeading.data("ibxDataGridrInfo", rInfo);
-		this._rowHeaderBar.ibxWidget("add", rHeading);
+		var rowData = row.data("ibxDataGridRow");
+		this._rowHeaderBar.ibxWidget("add", rowData.header);
 
 		// padding has to be always added to the end of the bar.
-		var padding = this._rowHeaderPadding = this._rowHeaderPadding || $("<div style='flex:0 0 auto;'>").css({"width":"1px", height:"100px"});
+		var padding = this._rowHeaderPadding = this._rowHeaderPadding || $("<div>").css({"flex":"flex:0 0 auto", "width":"1px", height:"100px"});
 		this._rowHeaderBar.append(padding);
 
-		//create extra cells if passed aren't fully packed less than columns.
-		while(rInfo.cells.length < options.colMap.length)
-			rInfo.cells.push($("<div>")[0]);
+		//create extra cells if row has less than columns.
+		while(row[0].children.length < options.colMap.length)
+			row.append($("<div>"));
 
 		//Happens a lot: DON'T USE JQUERY (VERY SLOW).
-		for(var i = 0; i < rInfo.cells.length; ++i)
+		var cells = row.children();
+		for(var i = 0; i < cells.length; ++i)
 		{
-			var cell = rInfo.cells[i];
+			var cell = cells[i];
 			var cInfo = options.colMap[i];
 			if(cInfo)
 			{
-				cell._ibxDataGridInfo = {"rInfo":rInfo, "cInfo":cInfo};
 				cell.style.width = isNaN(cInfo.ui.curSize) ? cInfo.ui.curSize : cInfo.ui.curSize + "px";//if size is just a number assume pixels.
 				cell.setAttribute("tabindex", -1);
 				cell.classList.toggle(selOptions.selectableChildren, cInfo.selectable);
@@ -401,8 +420,6 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 			else
 				cell.ibxAddClass("dgrid-col-hidden");
 		}
-		row.append(rInfo.cells);
-		
 		this._grid.ibxWidget("add", row, sibling, before);
 	},
 	addRows:function(rows, sibling, before)
@@ -416,11 +433,7 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 		var row = this.getRow(row);
 		row.each(function(idx, row)
 		{
-			row = $(row);
-			var rInfo = row.data("ibxDataGridInfo");
-			rInfo.ui.row.detach();
-			rInfo.ui.header.remove();
-
+			$(row).detach().data("ibxDataGridRow").header.remove();
 		}.bind(this));
 	},
 	removeAll:function()
