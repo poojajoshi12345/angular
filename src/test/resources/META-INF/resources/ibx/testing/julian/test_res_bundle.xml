@@ -107,7 +107,62 @@
 									"uiType":"colorPicker",
 								},
 							]
+						},
+						{
+							"displayName":"Top",
+							"displayValue":"1px solid black",
+							"name":"left",
+							"value":"1px solid black",
+							"type":"string",
+							"uiType":"borderSelector",
+							"expanded":false,
+							"props":
+							[
+								{
+									"displayName":"Width",
+									"displayValue":"1px",
+									"name":"width",
+									"value":"1px",
+									"type":"string",
+									"uiType":"textField",
+								},
+								{
+									"displayName":"Style",
+									"displayValue":"Solid",
+									"name":"style",
+									"value":"solid",
+									"type":"string",
+									"uiType":"select",
+									"values":
+									{
+										"solid":
+										{
+											"displayName":"Solid",
+											"value":"solid",
+										},
+										"dashed":
+										{
+											"displayName":"Dashed",
+											"value":"dashed",
+										},
+										"dotted":
+										{
+											"displayName":"Dotted",
+											"value":"dotted",
+										},
+									},
+								},
+								{
+									"displayName":"Color",
+									"displayValue":"red",
+									"name":"color",
+									"value":"red",
+									"type":"color",
+									"uiType":"colorPicker",
+								},
+							]
 						}
+
 					]
 				}
 			];

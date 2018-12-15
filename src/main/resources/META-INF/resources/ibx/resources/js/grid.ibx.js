@@ -179,7 +179,6 @@ $.fn.ibxDataGridRow = $.ibi.ibxDataGridRow = function()
 			widget =
 			{
 				"element":el,
-				"children":[],
 				"parent":null,
 				"header":$("<div>").attr({"tabindex": -1, "role":"rowheader"}),
 				"splitter":null,
@@ -194,9 +193,17 @@ $.fn.ibxDataGridRow = $.ibi.ibxDataGridRow = function()
 					$.extend(this, options);
 					this.element.ibxAddClass(widget.rowClasses).data("ibxDataGridRow", widget);
 					this.header.ibxAddClass(widget.headerClasses).data("ibxDataGridRow", widget).text(this.title);
-
 					this._boundParentEvent = this._onParentExpand.bind(this);
 					$(this.parent).on("ibx_parent_expand ibx_parent_collapse", this._boundParentEvent);
+					this.expand(this.expanded);
+				},
+				"depth":function()
+				{
+					var depth = 0;
+					var parent = this.element;
+					while(parent = $(parent).data("ibxDataGridRow").parent)
+						depth++;
+					return depth;
 				},
 				"add":function(el)
 				{
@@ -204,7 +211,7 @@ $.fn.ibxDataGridRow = $.ibi.ibxDataGridRow = function()
 				},
 				"remove":function(el)
 				{
-					$(el).ibxDataGridRow("parent", null);
+					$(el).ibxDataGridRow({"parent":null});
 				},
 				"expand":function(expand)
 				{
@@ -217,8 +224,12 @@ $.fn.ibxDataGridRow = $.ibi.ibxDataGridRow = function()
 				},
 				_onParentExpand:function(e)
 				{
-					var expanded = $(e.target).data("ibxDataGridRow").expanded;
+					console.log(e.type, this.element);
+					var expanded = e.type == "ibx_parent_expand";//$(e.target).data("ibxDataGridRow").expanded;
 					this.element.css("display", expanded ? "" : "none");
+					this.header.css("display", expanded ? "" : "none");
+					if(this.expanded)
+						this.element.dispatchEvent(e.type, null, false, false);
 				},
 			};
 			widget.refresh();
