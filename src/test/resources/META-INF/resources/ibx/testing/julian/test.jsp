@@ -22,10 +22,12 @@
 			
 			ibx(function()
 			{
-				$(".text-entry").ibxWidget("startEditing", {selectAll:false, cancelKey:null, commitOnBlur:false}).blur();
+				$(".text-entry").ibxWidget("startEditing", {selectAll:false, cancelKey:null, commitOnBlur:false});
+				document.activeElement.blur();
 
 				$(".btn-load").on("click", function(e)
 				{
+					/*
 					var colMap = [];
 					var rows = [];
 					var nRows = parseInt($(".num-rows").text(), 10);
@@ -72,9 +74,10 @@
 						var rowIdx = headers.index(e.currentTarget);
 						grid.ibxWidget("selectRow", rowIdx, true);
 					}.bind(this, headers, grid));
+					*/
 
-					/*
-					var grid = $(".test-grid");
+
+					var grid = $(".ibx-data-grid");
 					var colMap = 
 					[
 						{"title":"displayName"},
@@ -87,29 +90,36 @@
 					];
 					grid.ibxWidget("option", {"defaultColConfig":{justify:"start", resizable:true}, "colMap":colMap});
 					
-					//grid.ibxWidget("removeAll");
+					grid.ibxWidget("removeAll");
 					buildTree(testProps);
-					function buildTree(props)
+					function buildTree(props, parentRow)
 					{
 						for(var i = 0; props && i < props.length; ++i)
 						{
-							var row = [];
+							var row = $("<div>").ibxDataGridRow({"parent":parentRow}).on("dblclick", function(e)
+							{
+								var row = $(e.currentTarget);
+								row.ibxDataGridRow("toggleExpand"); 
+							});
+							
+							if(parentRow)
+								parentRow.ibxDataGridRow("add", row);
+
 							prop = props[i];
 							for(var key in prop)
 							{
 								if(!(prop[key] instanceof Object))
 								{
-									var cell = $("<div>").ibxLabel({text:(prop[key]).toString()})[0];
-									row.push(cell);
+									var cell = $("<div>").text(prop[key]);
+									row.append(cell);
 								}
 							}
-							var row = grid.ibxWidget("addRow", row, null, null, false);
-							buildTree(prop.props);
+							grid.ibxWidget("addRow", row, null, null, false);
+							buildTree(prop.props, row);
 						}
 					}
 
 					grid.ibxWidget("refresh");
-					*/
 				});
 			},
 			[{"src":"./test_res_bundle.xml", "loadContext":"app"}], true);

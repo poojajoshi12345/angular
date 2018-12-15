@@ -170,35 +170,72 @@ $.widget("ibi.ibxDataGridSelectionManager", $.ibi.ibxSelectionManager,
 $.fn.ibxDataGridRow = $.ibi.ibxDataGridRow = function()
 {
 	var ret = this;
-	this.each(function(args, idx, el)
+	this.each(function ibxDataGridRow(args, idx, el)
 	{
 		el = $(el);
-		var val = this;
-		var fn = args[0];
-		var data = el.data("ibxDataGridRow");
-		if(!data)
+		var widget = el.data("ibxDataGridRow");
+		if(!widget)
 		{
-			data =
+			widget =
 			{
-				"el":this,
+				"element":el,
+				"children":[],
+				"parent":null,
 				"header":$("<div>").attr({"tabindex": -1, "role":"rowheader"}),
 				"splitter":null,
-				"children":[],
 				"title":"",
 				"size":null,
 				"rowClasses":["ibx-data-grid-row", "dgrid-row", "ibx-flexbox", "fbx-inline", "fbx-row", "fbx-align-items-stretch", "fbx-align-content-center"],
 				"headerClasses":["dgrid-row", "dgrid-header-row", "ibx-flexbox", "fbx-inline", "fbx-row", "fbx-align-items-center", "fbx-justify-content-center"],
+				"expanded":true,
+				"refresh":function(options)
+				{
+					$(this.parent).off("ibx_parent_expand ibx_parent_collapse", this._boundParentEvent);
+					$.extend(this, options);
+					this.element.ibxAddClass(widget.rowClasses).data("ibxDataGridRow", widget);
+					this.header.ibxAddClass(widget.headerClasses).data("ibxDataGridRow", widget).text(this.title);
+
+					this._boundParentEvent = this._onParentExpand.bind(this);
+					$(this.parent).on("ibx_parent_expand ibx_parent_collapse", this._boundParentEvent);
+				},
+				"add":function(el)
+				{
+					$(el).ibxDataGridRow({"parent":this.element});
+				},
+				"remove":function(el)
+				{
+					$(el).ibxDataGridRow("parent", null);
+				},
+				"expand":function(expand)
+				{
+					this.expanded = expand;
+					this.element.dispatchEvent(this.expanded ? "ibx_parent_expand" : "ibx_parent_collapse", null, false, false);
+				},
+				"toggleExpand":function()
+				{
+					this.expand(!this.expanded);
+				},
+				_onParentExpand:function(e)
+				{
+					var expanded = $(e.target).data("ibxDataGridRow").expanded;
+					this.element.css("display", expanded ? "" : "none");
+				},
 			};
-			el.ibxAddClass(data.rowClasses).data("ibxDataGridRow", data);
-			data.header.ibxAddClass(data.headerClasses).data("ibxDataGridRow", data);
-		}
-		if(fn instanceof Object)
-		{
-			$.extend(data, fn);
-			data.header.text(data.title);
+			widget.refresh();
 		}
 
-		if(val != this)
+		var val = this;
+		var fn = args[0];
+		if(fn instanceof Object)
+			widget.refresh(fn);
+		else
+		if(widget[fn] instanceof Function)
+		{
+			var fnArgs = $(args).toArray().slice(1);
+			val = widget[fn].apply(widget, fnArgs);
+		}
+
+		if(val != this && val !== undefined)
 		{
 			ret = val;
 			return false;
