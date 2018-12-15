@@ -170,7 +170,7 @@ $.widget("ibi.ibxDataGridSelectionManager", $.ibi.ibxSelectionManager,
 $.fn.ibxDataGridRow = $.ibi.ibxDataGridRow = function()
 {
 	var ret = this;
-	this.each(function ibxDataGridRow(args, idx, el)
+	this.each(function ibxDataGridRow_widget(args, idx, el)
 	{
 		el = $(el);
 		var widget = el.data("ibxDataGridRow");
@@ -189,12 +189,15 @@ $.fn.ibxDataGridRow = $.ibi.ibxDataGridRow = function()
 				"expanded":true,
 				"refresh":function(options)
 				{
-					$(this.parent).off("ibx_parent_expand ibx_parent_collapse", this._boundParentEvent);
+					$(this.parent).off("ibx_row_expand ibx_row_collapse", this._boundParentEvent);
 					$.extend(this, options);
 					this.element.ibxAddClass(widget.rowClasses).data("ibxDataGridRow", widget);
+
+					var depth = this.depth();
+					var padding = 
 					this.header.ibxAddClass(widget.headerClasses).data("ibxDataGridRow", widget).text(this.title);
 					this._boundParentEvent = this._onParentExpand.bind(this);
-					$(this.parent).on("ibx_parent_expand ibx_parent_collapse", this._boundParentEvent);
+					$(this.parent).on("ibx_row_expand ibx_row_collapse", this._boundParentEvent);
 					this.expand(this.expanded);
 				},
 				"depth":function()
@@ -208,15 +211,17 @@ $.fn.ibxDataGridRow = $.ibi.ibxDataGridRow = function()
 				"add":function(el)
 				{
 					$(el).ibxDataGridRow({"parent":this.element});
+					this.refresh();
 				},
 				"remove":function(el)
 				{
 					$(el).ibxDataGridRow({"parent":null});
+					this.refresh();
 				},
 				"expand":function(expand)
 				{
 					this.expanded = expand;
-					this.element.dispatchEvent(this.expanded ? "ibx_parent_expand" : "ibx_parent_collapse", null, false, false);
+					this.element.dispatchEvent(this.expanded ? "ibx_row_expand" : "ibx_row_collapse", null, false, false);
 				},
 				"toggleExpand":function()
 				{
@@ -224,8 +229,7 @@ $.fn.ibxDataGridRow = $.ibi.ibxDataGridRow = function()
 				},
 				_onParentExpand:function(e)
 				{
-					console.log(e.type, this.element);
-					var expanded = e.type == "ibx_parent_expand";//$(e.target).data("ibxDataGridRow").expanded;
+					var expanded = e.type == "ibx_row_expand";
 					this.element.css("display", expanded ? "" : "none");
 					this.header.css("display", expanded ? "" : "none");
 					if(this.expanded)
@@ -262,7 +266,7 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 		colMap:[],
 		defaultColConfig: {title:"Column", size:"100px", flex:false, justify:"center", resizable:true, selectable:true, visible:true},
 		defaultRowConfig: {},//not currently used.
-
+		indentColumn:-1,
 		showColumnHeaders:true,
 		showRowHeaders:true,
 		
