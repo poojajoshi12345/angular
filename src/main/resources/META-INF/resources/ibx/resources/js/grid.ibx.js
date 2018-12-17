@@ -239,7 +239,7 @@ $.fn.ibxDataGridRow = $.ibi.ibxDataGridRow = function()
 					$.extend(this, options);
 					this.element.ibxAddClass(widget.rowClasses).data("ibxDataGridRow", widget);
 					this.header.ibxAddClass(widget.headerClasses).data("ibxDataGridRow", widget).text(this.title);
-
+					this.header.height(this.element.outerHeight());
 					if(this.container)
 					{
 						var indentWrapper = this._indentWrapper = (this._indentWrapper) || $("<div><div></div></div>");
@@ -354,8 +354,6 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 	},
 	_init:function()
 	{
-		this._super();
-
 		//make the columns from markup.
 		var colMap = [];
 		var cols = this.element.children("[data-ibxp-grid-col-map]").detach().children();
@@ -377,6 +375,7 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 			$(row).ibxDataGridRow(opts);
 		}
 		this.addRows(rows);
+		this._super();
 	},
 	updateHeaders:function(which)
 	{

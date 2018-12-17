@@ -27,7 +27,6 @@
 
 				$(".btn-load").on("click", function(e)
 				{
-					/*
 					var colMap = [];
 					var rows = [];
 					var nRows = parseInt($(".num-rows").text(), 10);
@@ -74,13 +73,12 @@
 						var rowIdx = headers.index(e.currentTarget);
 						grid.ibxWidget("selectRow", rowIdx, true);
 					}.bind(this, headers, grid));
-					*/
 
-
+					/*
 					var grid = $(".ibx-data-grid");
 					var colMap = 
 					[
-						{"title":"displayName"},
+						{"title":"displayName", "size":"150px"},
 						{"title":"displayValue"},
 						{"title":"name"},
 						{"title":"value"},
@@ -124,6 +122,7 @@
 					}
 
 					grid.ibxWidget("refresh");
+					*/
 				});
 			},
 			[{"src":"./test_res_bundle.xml", "loadContext":"app"}], true);
