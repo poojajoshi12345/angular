@@ -178,29 +178,19 @@ $.fn.ibxDataGridRow = $.ibi.ibxDataGridRow = function()
 		{
 			widget =
 			{
-				"element":el,
-				"parent":null,
-				"header":$("<div>").attr({"tabindex": -1, "role":"rowheader"}),
-				"splitter":null,
-				"title":"",
-				"size":null,
-				"rowClasses":["ibx-data-grid-row", "dgrid-row", "ibx-flexbox", "fbx-inline", "fbx-row", "fbx-align-items-stretch", "fbx-align-content-center"],
-				"headerClasses":["dgrid-row", "dgrid-header-row", "ibx-flexbox", "fbx-inline", "fbx-row", "fbx-align-items-center", "fbx-justify-content-center"],
-				"expanded":true,
-				"refresh":function(options)
-				{
-					$(this.parent).off("ibx_row_expand ibx_row_collapse", this._boundParentEvent);
-					$.extend(this, options);
-					this.element.ibxAddClass(widget.rowClasses).data("ibxDataGridRow", widget);
+				element:el,
+				parent:null,
+				container:false,
+				indentColumn:-1,
+				header:$("<div>").attr({"tabindex": -1, "role":"rowheader"}),
+				splitter:null,
+				title:"",
+				size:null,
+				rowClasses:["ibx-data-grid-row", "dgrid-row", "ibx-flexbox", "fbx-inline", "fbx-row", "fbx-align-items-stretch", "fbx-align-content-center"],
+				headerClasses:["dgrid-row", "dgrid-header-row", "ibx-flexbox", "fbx-inline", "fbx-row", "fbx-align-items-center", "fbx-justify-content-center"],
+				expanded:true,
 
-					var depth = this.depth();
-					var padding = 
-					this.header.ibxAddClass(widget.headerClasses).data("ibxDataGridRow", widget).text(this.title);
-					this._boundParentEvent = this._onParentExpand.bind(this);
-					$(this.parent).on("ibx_row_expand ibx_row_collapse", this._boundParentEvent);
-					this.expand(this.expanded);
-				},
-				"depth":function()
+				depth:function()
 				{
 					var depth = 0;
 					var parent = this.element;
@@ -208,32 +198,82 @@ $.fn.ibxDataGridRow = $.ibi.ibxDataGridRow = function()
 						depth++;
 					return depth;
 				},
-				"add":function(el)
+				setParent:function(parent)
 				{
-					$(el).ibxDataGridRow({"parent":this.element});
+					$(this.parent).off("ibx_row_expand ibx_row_collapse ibx_get_row_children", this._boundParentEvent);
+					this.parent = parent;
+					this._boundParentEvent = this._onParentEvent.bind(this);
+					$(this.parent).on("ibx_row_expand ibx_row_collapse ibx_get_row_children", this._boundParentEvent);
 					this.refresh();
 				},
-				"remove":function(el)
+				childRows:function()
 				{
-					$(el).ibxDataGridRow({"parent":null});
-					this.refresh();
+					var event = this.element.dispatchEvent("ibx_get_row_children", [], false, false);
+					return event.data;
 				},
-				"expand":function(expand)
+				expand:function(expand)
 				{
 					this.expanded = expand;
 					this.element.dispatchEvent(this.expanded ? "ibx_row_expand" : "ibx_row_collapse", null, false, false);
 				},
-				"toggleExpand":function()
+				toggleExpand:function()
 				{
 					this.expand(!this.expanded);
 				},
-				_onParentExpand:function(e)
+				_onParentEvent:function(e)
 				{
-					var expanded = e.type == "ibx_row_expand";
-					this.element.css("display", expanded ? "" : "none");
-					this.header.css("display", expanded ? "" : "none");
-					if(this.expanded)
-						this.element.dispatchEvent(e.type, null, false, false);
+					if(e.type == "ibx_get_row_children")
+						e.originalEvent.data.push(this.element[0]);
+					else
+					{
+						var expanded = e.type == "ibx_row_expand";
+						this.element.css("display", expanded ? "" : "none");
+						this.header.css("display", expanded ? "" : "none");
+						if(this.expanded)
+							this.element.dispatchEvent(e.type, null, false, false);
+					}
+				},
+				_indentWrapper:null,
+				refresh:function(options)
+				{
+					$.extend(this, options);
+					this.element.ibxAddClass(widget.rowClasses).data("ibxDataGridRow", widget);
+					this.header.ibxAddClass(widget.headerClasses).data("ibxDataGridRow", widget).text(this.title);
+
+					if(this.container)
+					{
+						var indentWrapper = this._indentWrapper = (this._indentWrapper) || $("<div><div></div></div>");
+						var indentCell = indentWrapper.children(".dgrid-cell-indented");
+						indentCell.insertAfter(indentWrapper).ibxRemoveClass("dgrid-cell-indented");
+						indentWrapper.detach();
+
+						if(this.indentColumn != -1)
+						{
+							indentCell = this.element.children(sformat(":nth-child({1})", this.indentColumn+1));
+							indentWrapper.insertAfter(indentCell);
+							indentWrapper.append(indentCell.ibxAddClass("dgrid-cell-indented"));
+						}
+					}
+
+					// var depth = this.depth() + 1;
+					// var selector = sformat(":nth-child({1})", this.indentColumn+1);
+					// var childRows = this.childRows();
+
+					// for(var i = 0; i < childRows.length; ++i)
+					// {
+					// 	var childRow = childRows[i];
+					// 	var indentCell = $(childRow.querySelector(".dgrid-cell-indent-wrapper"));
+
+					// 	indentCell = $(childRow.querySelector(sformat(":nth-child({1})", this.indentColumn+1)));
+					// 	var cellWrapper = $("<div class='dgrid-cell-indent-wrapper'><div class='dgric-cell-expand-button'></div></div>");
+
+					// 	indentCell.addClass("dgrid-cell-indented").appendTo(cellWrapper);
+
+
+					// 	//indentCell.css("paddingLeft", (depth * 15)+"px");	
+					// }
+
+					this.expand(this.expanded);
 				},
 			};
 			widget.refresh();
@@ -500,8 +540,8 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 			else
 				cell.classList.add("dgrid-col-hidden");
 		}
-		this._grid.ibxWidget("add", row, sibling, before);
 
+		this._grid.ibxWidget("add", row, sibling, before);
 		var rowData = row.data("ibxDataGridRow");
 		var sibData = $(sibling).data("ibxDataGridRow") || {header:null};
 		this._rowHeaderBar.ibxWidget("add", rowData.header, sibData.header, before);
@@ -520,7 +560,9 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 		var row = this.getRow(row);
 		row.each(function(idx, row)
 		{
-			$(row).detach().data("ibxDataGridRow").header.remove();
+			var widget = $(row).detach().data("ibxDataGridRow");
+			widget.header.remove();
+			widget.indentColumn = -1;
 		}.bind(this));
 	},
 	removeAll:function()
@@ -579,6 +621,8 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 		this._colHeaderBar.ibxToggleClass("dgrid-header-bar-hidden", !options.showColumnHeaders);
 		this._rowHeaderBar.ibxToggleClass("dgrid-header-bar-hidden", !options.showRowHeaders);
 		this._super();
+
+		this.getRow().ibxDataGridRow({"indentColumn":options.indentColumn});
 	}
 });
 

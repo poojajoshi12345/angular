@@ -94,16 +94,16 @@
 					buildTree(testProps);
 					function buildTree(props, parentRow)
 					{
+						var rows = [];
 						for(var i = 0; props && i < props.length; ++i)
 						{
-							var row = $("<div>").ibxDataGridRow({"parent":parentRow}).on("dblclick", function(e)
+							var row = $("<div>").ibxDataGridRow().on("dblclick", function(e)
 							{
 								var row = $(e.currentTarget);
 								row.ibxDataGridRow("toggleExpand"); 
 							});
-							
-							if(parentRow)
-								parentRow.ibxDataGridRow("add", row);
+							row.ibxDataGridRow("setParent", parentRow);
+							rows.push(row);
 
 							prop = props[i];
 							for(var key in prop)
@@ -115,8 +115,12 @@
 								}
 							}
 							grid.ibxWidget("addRow", row, null, null, false);
-							buildTree(prop.props, row);
+							var childRows = buildTree(prop.props, row);
+							if(childRows.length)
+								row.ibxDataGridRow({"container":true});
+							row.ibxDataGridRow("refresh");
 						}
+						return rows;
 					}
 
 					grid.ibxWidget("refresh");
@@ -169,7 +173,7 @@
 				<div tabindex="0" class="btn-row-headers" data-ibx-type="ibxCheckBoxSimple" data-ibxp-checked="true">Show Row Headings</div>
 			</div>
 
-			<div tabindex="0" class="test-grid" data-ibx-type="ibxDataGrid">
+			<div tabindex="0" class="test-grid" data-ibx-type="ibxDataGrid" data-ibxp-indent-column="0">
 				<div data-ibxp-grid-col-map>
 					<div data-ibxp-size="200px">First Name</div>
 					<div>Middle Name</div>
