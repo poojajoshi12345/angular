@@ -25,7 +25,59 @@
 				$(".text-entry").ibxWidget("startEditing", {selectAll:false, cancelKey:null, commitOnBlur:false});
 				document.activeElement.blur();
 
-				$(".btn-load").on("click", function(e)
+				$(".btn-load-props").on("click", function(e)
+				{
+					var grid = $(".ibx-data-grid");
+					grid.ibxWidget("removeAll");
+
+					var rowCount = 0;
+					buildTree(testProps);
+					function buildTree(props, parentRow)
+					{
+						var rows = [];
+						for(var i = 0; props && i < props.length; ++i)
+						{
+							var row = $("<div>").ibxDataGridRow({"title":rowCount++}).on("dblclick", function(e)
+							{
+								var row = $(e.currentTarget);
+								row.ibxDataGridRow("toggleExpand"); 
+							});
+							row.ibxDataGridRow("setParent", parentRow);
+							rows.push(row);
+
+							prop = props[i];
+							for(var key in prop)
+							{
+								if(!(prop[key] instanceof Object))
+								{
+									var cell = $("<div>").text(prop[key]);
+									row.append(cell);
+								}
+							}
+							grid.ibxWidget("addRow", row, null, null, false);
+							var childRows = buildTree(prop.props, row);
+							if(childRows.length)
+								row.ibxDataGridRow({"container":true});
+							row.ibxDataGridRow("refresh");
+						}
+						return rows;
+					}
+
+					var colMap = 
+					[
+						{"title":"displayName", "size":"150px"},
+						{"title":"displayValue"},
+						{"title":"name"},
+						{"title":"value"},
+						{"title":"type", "size":"50px"},
+						{"title":"uiType", "size":"75px"},
+						{"title":"expanded", "size":"100px", "flex":true, "justify":"center"},
+					];
+					grid.ibxWidget("option", {"defaultColConfig":{justify:"start", resizable:true}, "colMap":colMap});
+					//grid.ibxWidget("refresh");
+				});
+
+				$(".btn-load-grid").on("click", function(e)
 				{
 					var colMap = [];
 					var rows = [];
@@ -74,55 +126,6 @@
 						grid.ibxWidget("selectRow", rowIdx, true);
 					}.bind(this, headers, grid));
 
-					/*
-					var grid = $(".ibx-data-grid");
-					var colMap = 
-					[
-						{"title":"displayName", "size":"150px"},
-						{"title":"displayValue"},
-						{"title":"name"},
-						{"title":"value"},
-						{"title":"type", "size":"50px"},
-						{"title":"uiType", "size":"75px"},
-						{"title":"expanded", "size":"100px", "flex":true, "justify":"center"},
-					];
-					grid.ibxWidget("option", {"defaultColConfig":{justify:"start", resizable:true}, "colMap":colMap});
-					
-					grid.ibxWidget("removeAll");
-					buildTree(testProps);
-					function buildTree(props, parentRow)
-					{
-						var rows = [];
-						for(var i = 0; props && i < props.length; ++i)
-						{
-							var row = $("<div>").ibxDataGridRow().on("dblclick", function(e)
-							{
-								var row = $(e.currentTarget);
-								row.ibxDataGridRow("toggleExpand"); 
-							});
-							row.ibxDataGridRow("setParent", parentRow);
-							rows.push(row);
-
-							prop = props[i];
-							for(var key in prop)
-							{
-								if(!(prop[key] instanceof Object))
-								{
-									var cell = $("<div>").text(prop[key]);
-									row.append(cell);
-								}
-							}
-							grid.ibxWidget("addRow", row, null, null, false);
-							var childRows = buildTree(prop.props, row);
-							if(childRows.length)
-								row.ibxDataGridRow({"container":true});
-							row.ibxDataGridRow("refresh");
-						}
-						return rows;
-					}
-
-					grid.ibxWidget("refresh");
-					*/
 				});
 			},
 			[{"src":"./test_res_bundle.xml", "loadContext":"app"}], true);
@@ -163,7 +166,8 @@
 		<div class="del-command" data-ibx-type="ibxCommand" data-ibxp-id="cmdDelete" data-ibxp-shortcut="CTRL+SHIFT+DEL"></div>
 		<div class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="stretch" data-ibxp-justify="start" data-ibxp-command="cmdDelete">
 			<div class="tool-bar" data-ibx-type="ibxHBox" data-ibxp-align="center">
-				<div tabindex="0" class="btn-load" data-ibx-type="ibxButton">Load Grid</div>
+				<div tabindex="0" class="btn-load-props" data-ibx-type="ibxButton">Load Properties</div>
+				<div tabindex="0" class="btn-load-grid" data-ibx-type="ibxButton">Load Grid</div>
 				<div class="" data-ibx-type="ibxLabel" data-ibxp-for=".num-rows">Rows:</div>
 				<div tabindex="0" class="text-entry num-rows" data-ibx-type="ibxLabel" data-ibxp-justify="center">100</div>
 				<div data-ibx-type="ibxLabel" data-ibxp-for=".num-cols">Cols:</div>
@@ -183,12 +187,12 @@
 				<div data-grid-row data-ibxp-title="1">
 					<div>Julian</div><div>Alexander</div><div>Hyman</div><div>Male</div><div>54</div>
 				</div>
-				<!-- <div data-grid-row data-ibxp-title="2">
+				<div data-grid-row data-ibxp-title="2">
 					<div>James</div><div>Edward</div><div>Hyman</div><div>Male</div><div>59</div>
 				</div>
 				<div data-grid-row data-ibxp-title="3">
 					<div>Charles</div><div>Lewis</div><div>Hyman</div><div>Male</div><div>63</div>
-				</div> -->
+				</div>
 			</div>
 		</div>
 	</body>

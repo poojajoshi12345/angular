@@ -33,6 +33,23 @@
 		<script-file src="../../ibxtools/shared_resources/js/ibfs.js" loadContext="ibx"/>
 		<script-block>
 		<![CDATA[
+			/*
+			var testProps = 
+			[
+				{
+					"displayName":"Test Property",
+					"expanded":false,
+					"props":
+					[
+						{
+							"displayName":"Child Property",
+							"expanded":false,
+						}
+					]
+				}
+			]
+			*/
+
 			var testProps = 
 			[
 				{
@@ -166,6 +183,7 @@
 					]
 				}
 			];
+
 			//# sourceURL=test_res_bundle.xml
 		]]>
 		</script-block>

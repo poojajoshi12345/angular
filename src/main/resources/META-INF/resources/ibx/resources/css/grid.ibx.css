@@ -21,6 +21,7 @@
 ******************************************************************************/
 .ibx-data-grid
 {
+	font-size:2em;
 }
 .dgrid-corner
 {
@@ -89,9 +90,6 @@
 	border-bottom:1px solid #ccc;
 	box-sizing:border-box;
 }
-.dgrid-cell-indented
-{
-}
 .dgrid-cell:hover
 {
 	background-color:thistle;
@@ -101,8 +99,20 @@
 	background-color:#666;
 	color:white;
 }
-
-
+.dgrid-cell-indent
+{
+}
+.dgrid-cell-expandable::before
+{
+	font-family:"Material Icons";
+	font-size:1em;
+	width:1em;
+	content:"\e145";
+}
+.dgrid-cell-expandable-expanded::before
+{
+	content:"\e15b";
+}
 
 /******************************************************************************
 	FLEX GRID

@@ -181,7 +181,6 @@ $.fn.ibxDataGridRow = $.ibi.ibxDataGridRow = function()
 				element:el,
 				parent:null,
 				container:false,
-				indentColumn:-1,
 				header:$("<div>").attr({"tabindex": -1, "role":"rowheader"}),
 				splitter:null,
 				title:"",
@@ -233,12 +232,10 @@ $.fn.ibxDataGridRow = $.ibi.ibxDataGridRow = function()
 							this.element.dispatchEvent(e.type, null, false, false);
 					}
 				},
-				_indentWrapper:null,
-				_refresh:0,
 				refresh:function(options)
 				{
 					$.extend(this, options);
-					this.element.ibxAddClass(widget.rowClasses).data("ibxDataGridRow", widget);
+					this.element.ibxAddClass(widget.rowClasses).ibxToggleClass("dgrid-row-expanded", this.expanded).data("ibxDataGridRow", widget);
 					this.header.ibxAddClass(widget.headerClasses).data("ibxDataGridRow", widget).text(this.title);
 					this.header.css("visibility", "hidden");
 
@@ -247,39 +244,6 @@ $.fn.ibxDataGridRow = $.ibi.ibxDataGridRow = function()
 					{
 						this.header.outerHeight(this.element.outerHeight()).css("visibility", "");
 					}.bind(this), 0);
-
-					if(this.container)
-					{
-						var indentWrapper = this._indentWrapper = (this._indentWrapper) || $("<div><div></div></div>");
-						var indentCell = indentWrapper.children(".dgrid-cell-indented");
-						indentCell.insertAfter(indentWrapper).ibxRemoveClass("dgrid-cell-indented");
-						indentWrapper.detach();
-
-						if(this.indentColumn != -1)
-						{
-							indentCell = this.element.children(sformat(":nth-child({1})", this.indentColumn+1));
-							indentWrapper.insertAfter(indentCell);
-							indentWrapper.append(indentCell.ibxAddClass("dgrid-cell-indented"));
-						}
-					}
-
-					// var depth = this.depth() + 1;
-					// var selector = sformat(":nth-child({1})", this.indentColumn+1);
-					// var childRows = this.childRows();
-
-					// for(var i = 0; i < childRows.length; ++i)
-					// {
-					// 	var childRow = childRows[i];
-					// 	var indentCell = $(childRow.querySelector(".dgrid-cell-indent-wrapper"));
-
-					// 	indentCell = $(childRow.querySelector(sformat(":nth-child({1})", this.indentColumn+1)));
-					// 	var cellWrapper = $("<div class='dgrid-cell-indent-wrapper'><div class='dgric-cell-expand-button'></div></div>");
-
-					// 	indentCell.addClass("dgrid-cell-indented").appendTo(cellWrapper);
-
-
-					// 	//indentCell.css("paddingLeft", (depth * 15)+"px");	
-					// }
 
 					this.expand(this.expanded);
 				},
@@ -316,9 +280,10 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 		colMap:[],
 		defaultColConfig: {title:"Column", size:"100px", flex:false, justify:"center", resizable:true, selectable:true, visible:true},
 		defaultRowConfig: {},//not currently used.
-		indentColumn:-1,
 		showColumnHeaders:true,
 		showRowHeaders:true,
+		indentColumn:-1,
+		_curIndentColumn:-1,
 		
 		/*frame stuff*/
 		cols:"auto 1fr",
@@ -615,6 +580,7 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 	},
 	_setOption:function(key, value)
 	{
+		var changed = this.options[key] != value;
 		var options = this.options;
 		if(key == "colMap" && value)
 		{
@@ -645,9 +611,23 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 		this._rowHeaderBar.ibxToggleClass("dgrid-header-bar-hidden", !options.showRowHeaders);
 		this._super();
 
-		//refresh the grid rows.
-		this._grid.children("."+options.classes.gridRow).ibxDataGridRow({"indentColumn":options.indentColumn});
-	}
+		//set new column as indent.
+		var rows = this.getRow();
+		for(var i = 0; i < rows.length; ++i)
+		{
+			var row = $(rows[i]).data("ibxDataGridRow");
+			var depth = row.depth()+1;
+
+			var cells = row.element.children();
+			$(cells[options._curIndentColumn]).ibxRemoveClass("dgrid-cell-indent dgrid-cell-expandable").css("paddingLeft", "");
+			
+			var cell = $(cells[options.indentColumn]).ibxAddClass("dgrid-cell-indent");
+			cell.css("paddingLeft", (depth+"em"));
+			cell.ibxToggleClass("dgrid-cell-expandable ibx-flexbox fbx-inline fbx-row fbx-align-items-center fbx-align-content-center", row.container);
+			cell.ibxToggleClass("dgrid-cell-expandable-expanded", (row.container && row.expanded));
+		}
+		options._curIndentColumn = options.indentColumn;
+	},
 });
 
 
