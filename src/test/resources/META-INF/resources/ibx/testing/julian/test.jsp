@@ -87,7 +87,12 @@
 					console.time("genRows");
 					for(var i = 0; i < nRows; ++i)
 					{
-						var row = $("<div></div>").ibxDataGridRow({"title":i, "size":null}).ibxAddClass("row-" + i);
+						var row = $("<div></div>").ibxDataGridRow({"container":false, "title":i, "size":null}).ibxAddClass("row-" + i).on("dblclick", function(e)
+						{
+							var row = $(e.currentTarget);
+							row.ibxDataGridRow("toggleExpand"); 
+						});
+
 						for(var j = 0; j < nCols; ++j)
 						{
 							var cell = $(sformat("<div style='user-select:none;'>Cell ({1},{2})</div>", i+1, j+1));
@@ -96,6 +101,11 @@
 								colMap.push($.extend({}, {"title":"Column " + j, "resizable":true}))
 						}
 						rows.push(row);
+
+						var childRow = $("<div></div>").ibxDataGridRow({"title":"CHILD"+i, "size":null}).ibxAddClass("child-row-" + i);
+						childRow.ibxDataGridRow("setParent", row);
+						rows.push(childRow);
+
 					}
 					console.timeEnd("genRows");
 
