@@ -234,12 +234,20 @@ $.fn.ibxDataGridRow = $.ibi.ibxDataGridRow = function()
 					}
 				},
 				_indentWrapper:null,
+				_refresh:0,
 				refresh:function(options)
 				{
 					$.extend(this, options);
 					this.element.ibxAddClass(widget.rowClasses).data("ibxDataGridRow", widget);
 					this.header.ibxAddClass(widget.headerClasses).data("ibxDataGridRow", widget).text(this.title);
-					this.header.height(this.element.outerHeight());
+					this.header.css("visibility", "hidden");
+
+					//Much as I HATE timers...getting the height is EXTREMELY SLOW (causes a reflow)...so do it on a timer so ui is responsive.
+					window.setTimeout(function()
+					{
+						this.header.outerHeight(this.element.outerHeight()).css("visibility", "");
+					}.bind(this), 0);
+
 					if(this.container)
 					{
 						var indentWrapper = this._indentWrapper = (this._indentWrapper) || $("<div><div></div></div>");
@@ -276,24 +284,26 @@ $.fn.ibxDataGridRow = $.ibi.ibxDataGridRow = function()
 					this.expand(this.expanded);
 				},
 			};
-			widget.refresh();
+			widget.refresh(args[0]);//when constructing, only an 'options' object can be passed.
 		}
-
-		var val = this;
-		var fn = args[0];
-		if(fn instanceof Object)
-			widget.refresh(fn);
 		else
-		if(widget[fn] instanceof Function)
 		{
-			var fnArgs = $(args).toArray().slice(1);
-			val = widget[fn].apply(widget, fnArgs);
-		}
+			var val = this;
+			var fn = args[0];
+			if(fn instanceof Object)
+				widget.refresh(fn);
+			else
+			if(widget[fn] instanceof Function)
+			{
+				var fnArgs = $(args).toArray().slice(1);
+				val = widget[fn].apply(widget, fnArgs);
+			}
 
-		if(val != this && val !== undefined)
-		{
-			ret = val;
-			return false;
+			if(val != this && val !== undefined)
+			{
+				ret = val;
+				return false;
+			}
 		}
 	}.bind(this, arguments));
 	return ret;
@@ -354,6 +364,9 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 	},
 	_init:function()
 	{
+		//call super first so grid options are set correctly before adding rows.
+		this._super();
+
 		//make the columns from markup.
 		var colMap = [];
 		var cols = this.element.children("[data-ibxp-grid-col-map]").detach().children();
@@ -374,8 +387,10 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 			var opts = ibx.getIbxMarkupOptions(row);
 			$(row).ibxDataGridRow(opts);
 		}
+
+		//add rows and do another refresh so they will be configured correctly.
 		this.addRows(rows);
-		this._super();
+		this.refresh();
 	},
 	updateHeaders:function(which)
 	{
@@ -498,14 +513,14 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 	},
 	showRow:function(row, show)
 	{
-		var row = this.getRow(row);
-		row.each(function(idx, row)
+		var rows = this.getRow(row);
+		for(var i = 0; i < rows.length; ++i)
 		{
-			row = $(row);
+			row = $(rows[i]);
 			rInfo = row.data("ibxDataGridRow");
 			row.ibxToggleClass("dgrid-row-hidden", !show);
 			rInfo.header.ibxToggleClass("dgrid-row-hidden", !show);
-		}.bind(this));
+		}
 	},
 	selectRow:function(row, select, addSelection)
 	{
@@ -540,8 +555,11 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 				cell.classList.add("dgrid-col-hidden");
 		}
 
-		this._grid.ibxWidget("add", row, sibling, before);
+		//set row options and add to grid.
 		var rowData = row.data("ibxDataGridRow");
+		this._grid.ibxWidget("add", row, sibling, before);
+
+		//add header in correct location.
 		var sibData = $(sibling).data("ibxDataGridRow") || {header:null};
 		this._rowHeaderBar.ibxWidget("add", rowData.header, sibData.header, before);
 
@@ -614,6 +632,12 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 			value = $.extend({}, options.defaultColConfig, value);
 		this._super(key, value);
 	},
+	refresh:function(withHeaders, whichHeaders)
+	{
+		this._super();
+		if(withHeaders)
+			this.updateHeaders(whichHeaders || "both");
+	},
 	_refresh:function()
 	{
 		var options = this.options;
@@ -621,7 +645,8 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 		this._rowHeaderBar.ibxToggleClass("dgrid-header-bar-hidden", !options.showRowHeaders);
 		this._super();
 
-		this.getRow().ibxDataGridRow({"indentColumn":options.indentColumn});
+		//refresh the grid rows.
+		this._grid.children("."+options.classes.gridRow).ibxDataGridRow({"indentColumn":options.indentColumn});
 	}
 });
 

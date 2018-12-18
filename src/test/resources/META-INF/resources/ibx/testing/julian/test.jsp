@@ -172,7 +172,7 @@
 				<div tabindex="0" class="btn-row-headers" data-ibx-type="ibxCheckBoxSimple" data-ibxp-checked="true">Show Row Headings</div>
 			</div>
 
-			<div tabindex="0" class="test-grid" data-ibx-type="ibxDataGrid" data-ibxp-indent-column="0">
+			<div tabindex="0" class="test-grid" data-ibx-type="ibxDataGrid" data-ibxp-show-row-headers="true" data-ibxp-indent-column="0">
 				<div data-ibxp-grid-col-map>
 					<div data-ibxp-size="200px">First Name</div>
 					<div>Middle Name</div>
@@ -183,12 +183,12 @@
 				<div data-grid-row data-ibxp-title="1">
 					<div>Julian</div><div>Alexander</div><div>Hyman</div><div>Male</div><div>54</div>
 				</div>
-				<div data-grid-row data-ibxp-title="2">
+				<!-- <div data-grid-row data-ibxp-title="2">
 					<div>James</div><div>Edward</div><div>Hyman</div><div>Male</div><div>59</div>
 				</div>
 				<div data-grid-row data-ibxp-title="3">
 					<div>Charles</div><div>Lewis</div><div>Hyman</div><div>Male</div><div>63</div>
-				</div>
+				</div> -->
 			</div>
 		</div>
 	</body>
