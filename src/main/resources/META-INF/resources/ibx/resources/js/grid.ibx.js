@@ -187,6 +187,7 @@ $.fn.ibxDataGridRow = $.ibi.ibxDataGridRow = function()
 				size:null,
 				rowClasses:["ibx-data-grid-row", "dgrid-row", "ibx-flexbox", "fbx-inline", "fbx-row", "fbx-align-items-stretch", "fbx-align-content-center"],
 				headerClasses:["dgrid-row", "dgrid-header-row", "ibx-flexbox", "fbx-inline", "fbx-row", "fbx-align-items-center", "fbx-justify-content-center"],
+				containerClasses:["dgrid-cell-expandable", "ibx-flexbox", "fbx-inline", "fbx-row", "fbx-align-items-center"],
 				expanded:true,
 
 				depth:function()
@@ -212,7 +213,8 @@ $.fn.ibxDataGridRow = $.ibi.ibxDataGridRow = function()
 				},
 				expand:function(expand)
 				{
-					this.expanded = expand;
+					this.expanded = expand && this.container;
+					this.element.children(sformat(":nth-child({1})", this._indentColumn+1)).ibxToggleClass("dgrid-cell-expandable-expanded", this.expanded);
 					this.element.dispatchEvent(this.expanded ? "ibx_row_expand" : "ibx_row_collapse", null, false, false);
 				},
 				toggleExpand:function()
@@ -228,10 +230,18 @@ $.fn.ibxDataGridRow = $.ibi.ibxDataGridRow = function()
 						var expanded = e.type == "ibx_row_expand";
 						this.element.css("display", expanded ? "" : "none");
 						this.header.css("display", expanded ? "" : "none");
+						
+						//THIS SHOULD NOT BE NEEDED BUT FOR SOME REASON THE INITIAL UPDATE OF THE HEADER SIZE IS WRONT IN REFRESH!!!
+						if(expanded)
+							this.refresh();
+
 						if(this.expanded)
+						{
 							this.element.dispatchEvent(e.type, null, false, false);
+						}
 					}
 				},
+				_indentColumn:-1,
 				refresh:function(options)
 				{
 					$.extend(this, options);
@@ -239,13 +249,31 @@ $.fn.ibxDataGridRow = $.ibi.ibxDataGridRow = function()
 					this.header.ibxAddClass(widget.headerClasses).data("ibxDataGridRow", widget).text(this.title);
 					this.header.css("visibility", "hidden");
 
+					var indentCell = this.element.children(sformat(":nth-child({1})", this._indentColumn+1));
+					var indentColumn = this.element.closest(".ibx-data-grid").ibxDataGrid("option", "indentColumn");
+					if(indentColumn != this._indentColum)
+					{
+						indentCell.ibxRemoveClass("dgrid-cell-indent-padding");
+						indentCell.ibxRemoveClass(this.containerClasses).ibxRemoveClass("dgrid-cell-expandable-expanded").css("paddingLeft", "");
+
+						if(!isNaN(indentColumn))
+						{
+							var indentCell = this.element.children(sformat(":nth-child({1})", indentColumn+1));
+							indentCell.ibxAddClass("dgrid-cell-indent");
+							indentCell.ibxToggleClass(this.containerClasses, this.container)
+							indentCell.ibxToggleClass("dgrid-cell-indent-padding", !this.container);
+							indentCell.css("paddingLeft", (this.depth()+"em"));
+							this._indentColumn = indentColumn;
+						}
+					}
+
+					this.expand(this.expanded);
+
 					//Much as I HATE timers...getting the height is EXTREMELY SLOW (causes a reflow)...so do it on a timer so ui is responsive.
 					window.setTimeout(function()
 					{
 						this.header.outerHeight(this.element.outerHeight()).css("visibility", "");
 					}.bind(this), 0);
-
-					this.expand(this.expanded);
 				},
 			};
 			widget.refresh(args[0]);//when constructing, only an 'options' object can be passed.
@@ -598,11 +626,9 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 			value = $.extend({}, options.defaultColConfig, value);
 		this._super(key, value);
 	},
-	refresh:function(withHeaders, whichHeaders)
+	refresh:function()
 	{
 		this._super();
-		if(withHeaders)
-			this.updateHeaders(whichHeaders || "both");
 	},
 	_refresh:function()
 	{
@@ -610,23 +636,7 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 		this._colHeaderBar.ibxToggleClass("dgrid-header-bar-hidden", !options.showColumnHeaders);
 		this._rowHeaderBar.ibxToggleClass("dgrid-header-bar-hidden", !options.showRowHeaders);
 		this._super();
-
-		//set new column as indent.
-		var rows = this.getRow();
-		for(var i = 0; i < rows.length; ++i)
-		{
-			var row = $(rows[i]).data("ibxDataGridRow");
-			var depth = row.depth()+1;
-
-			var cells = row.element.children();
-			$(cells[options._curIndentColumn]).ibxRemoveClass("dgrid-cell-indent dgrid-cell-expandable").css("paddingLeft", "");
-			
-			var cell = $(cells[options.indentColumn]).ibxAddClass("dgrid-cell-indent");
-			cell.css("paddingLeft", (depth+"em"));
-			cell.ibxToggleClass("dgrid-cell-expandable ibx-flexbox fbx-inline fbx-row fbx-align-items-center fbx-align-content-center", row.container);
-			cell.ibxToggleClass("dgrid-cell-expandable-expanded", (row.container && row.expanded));
-		}
-		options._curIndentColumn = options.indentColumn;
+		this.getRow().ibxDataGridRow("refresh");
 	},
 });
 

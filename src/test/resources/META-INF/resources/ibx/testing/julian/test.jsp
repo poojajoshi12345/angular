@@ -74,7 +74,6 @@
 						{"title":"expanded", "size":"100px", "flex":true, "justify":"center"},
 					];
 					grid.ibxWidget("option", {"defaultColConfig":{justify:"start", resizable:true}, "colMap":colMap});
-					//grid.ibxWidget("refresh");
 				});
 
 				$(".btn-load-grid").on("click", function(e)

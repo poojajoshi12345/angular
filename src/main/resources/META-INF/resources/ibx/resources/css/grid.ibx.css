@@ -21,7 +21,6 @@
 ******************************************************************************/
 .ibx-data-grid
 {
-	font-size:2em;
 }
 .dgrid-corner
 {
@@ -104,14 +103,20 @@
 }
 .dgrid-cell-expandable::before
 {
+	flex:0 0 auto;
 	font-family:"Material Icons";
-	font-size:1em;
 	width:1em;
 	content:"\e145";
 }
 .dgrid-cell-expandable-expanded::before
 {
 	content:"\e15b";
+}
+.dgrid-cell-indent-padding::before
+{
+	flex:0 0 auto;
+	padding-left:1em;
+	content:" ";
 }
 
 /******************************************************************************
