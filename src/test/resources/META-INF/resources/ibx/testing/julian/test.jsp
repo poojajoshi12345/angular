@@ -28,6 +28,7 @@
 				$(".btn-load-props").on("click", function(e)
 				{
 					var grid = $(".ibx-data-grid");
+					var indentColumn = grid.ibxDataGrid("option", "indentColumn");
 					grid.ibxWidget("removeAll");
 
 					var rowCount = 0;
@@ -37,12 +38,7 @@
 						var rows = [];
 						for(var i = 0; props && i < props.length; ++i)
 						{
-							var row = $("<div>").ibxDataGridRow({"title":rowCount++}).on("dblclick", function(e)
-							{
-								var row = $(e.currentTarget);
-								row.ibxDataGridRow("toggleExpand"); 
-							});
-							row.ibxDataGridRow("setParent", parentRow);
+							var row = $("<div>").ibxDataGridRow({"title":rowCount++});
 							rows.push(row);
 
 							var prop = props[i];
@@ -54,9 +50,15 @@
 									row.append(cell);
 								}
 							}
-							grid.ibxWidget("addRow", row, null, null, false);
+
+							row.children(sformat(":nth-child({1})", indentColumn+1)).on("dblclick", function(e)
+							{
+								this.ibxDataGridRow("toggleExpand");
+							}.bind(row));
+
+							grid.ibxWidget("addRow", row);
 							var childRows = buildTree(prop.props, row);
-							row.ibxDataGridRow("refresh", {"container": !!childRows.length, "expanded":prop.expanded});
+							row.ibxDataGridRow("addRow", childRows).ibxDataGridRow({"expanded":true});
 						}
 						return rows;
 					}
@@ -80,35 +82,40 @@
 					var rows = [];
 					var nRows = parseInt($(".num-rows").text(), 10);
 					var nCols = parseInt($(".num-cols").text(), 10);
+					var grid = $(".ibx-data-grid");
+					var indentColumn = grid.ibxDataGrid("option", "indentColumn");
 
 					console.time("totalLoad");
 					console.time("genRows");
 					for(var i = 0; i < nRows; ++i)
 					{
-						var row = $("<div></div>").ibxDataGridRow({"container":true, "title":i, "size":null}).ibxAddClass("row-" + i).on("dblclick", function(e)
-						{
-							var row = $(e.currentTarget);
-							row.ibxDataGridRow("toggleExpand"); 
-						});
-
+						var row = $("<div></div>").ibxDataGridRow({"title":i, "size":null}).ibxAddClass("row-" + i);
 						for(var j = 0; j < nCols; ++j)
 						{
 							var cell = $(sformat("<div style='user-select:none;'>Cell ({1},{2})</div>", i+1, j+1));
 							row.append(cell)
+
 							if(i == 0)
 								colMap.push($.extend({}, {"title":"Column " + j, "resizable":true}))
+
+							if(j == indentColumn)
+							{
+								cell.on("dblclick", function(e)
+								{
+									this.ibxDataGridRow("toggleExpand"); 
+								}.bind(row));								
+							}
 						}
 						rows.push(row);
 
-						var childRow = $("<div></div>").ibxDataGridRow({"title":"CHILD"+i, "size":null}).ibxAddClass("child-row-" + i);
-						childRow.ibxDataGridRow("setParent", row);
+						var childRow = $("<div><div>Child Row</div></div>").ibxDataGridRow({"title":i+"a", "size":null}).ibxAddClass("child-row-" + i);
+						row.ibxDataGridRow("addRow", childRow);
 						rows.push(childRow);
 					}
 					console.timeEnd("genRows");
 
 					var showRowH = $(".btn-row-headers").ibxWidget("checked");
 					var showColH = $(".btn-col-headers").ibxWidget("checked");
-					var grid = $(".ibx-data-grid");
 
 					console.time("popGrid");
 					grid.ibxWidget("removeAll");

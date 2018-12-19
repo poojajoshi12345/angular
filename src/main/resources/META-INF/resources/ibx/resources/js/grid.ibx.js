@@ -205,16 +205,28 @@ $.fn.ibxDataGridRow = $.ibi.ibxDataGridRow = function()
 					this.parent = parent;
 					this._boundParentEvent = this._onParentEvent.bind(this);
 					$(this.parent).on("ibx_row_expand ibx_row_collapse ibx_get_row_children", this._boundParentEvent);
-					this.refresh();
+					this.updateIndent();
 				},
-				childRows:function()
+				addRow:function(row)
 				{
-					var event = this.element.dispatchEvent("ibx_get_row_children", [], false, false);
-					return event.data;
+					var row = $(row).ibxDataGridRow("setParent", this.element);
+					this.container = row.length || this.container;
+				},
+				removeRow:function(row)
+				{
+					var row = $(row).ibxDataGridRow("setParent", null);
+				},
+				childRows:function(filter)
+				{
+					filter = filter || "*";
+					var event = this.element.dispatchEvent("ibx_get_row_children", {"filter":filter, "children":[]}, false, false);
+					return event.data.children;
 				},
 				expand:function(expand)
 				{
-					this.expanded = expand && this.container;
+					if(!this.container)
+						return;
+					this.expanded = expand;
 					this.element.ibxToggleClass("dgrid-row-expanded", this.expanded);
 					this.element.children(sformat(":nth-child({1})", this._indentColumn+1)).ibxToggleClass("dgrid-cell-expandable-expanded", this.expanded);
 					this.element.dispatchEvent(this.expanded ? "ibx_row_expand" : "ibx_row_collapse", null, false, false);
@@ -226,7 +238,11 @@ $.fn.ibxDataGridRow = $.ibi.ibxDataGridRow = function()
 				_onParentEvent:function(e)
 				{
 					if(e.type == "ibx_get_row_children")
-						e.originalEvent.data.push(this.element[0]);
+					{
+						var data = e.originalEvent.data;
+						if(this.element.is(data.filter))
+							data.children.push(this.element[0]);
+					}
 					else
 					{
 						var expanded = e.type == "ibx_row_expand";
@@ -239,6 +255,15 @@ $.fn.ibxDataGridRow = $.ibi.ibxDataGridRow = function()
 					}
 				},
 				_indentColumn:-1,
+				updateIndent:function(indentCell)
+				{
+					//update our indent
+					var indentCell = (indentCell === undefined) ? this.element.children(sformat(":nth-child({1})", this._indentColumn+1)) : indentCell;
+					indentCell.css("paddingLeft", (this.depth()+"em"));
+					
+					//then update all our children...and so on.
+					$(this.childRows()).ibxDataGridRow("updateIndent");
+				},
 				refresh:function(options)
 				{
 					$.extend(this, options);
@@ -256,9 +281,9 @@ $.fn.ibxDataGridRow = $.ibi.ibxDataGridRow = function()
 						indentCell.ibxAddClass("dgrid-cell-indent");
 						indentCell.ibxToggleClass(this.containerClasses, this.container)
 						indentCell.ibxToggleClass("dgrid-cell-indent-padding", !this.container);
-						indentCell.css("paddingLeft", (this.depth()+"em"));
-
 						this._indentColumn = indentColumn;
+
+						this.updateIndent(indentCell);
 					}
 
 					this.expand(this.expanded);
@@ -288,6 +313,8 @@ $.fn.ibxDataGridRow = $.ibi.ibxDataGridRow = function()
 				var fnArgs = $(args).toArray().slice(1);
 				val = widget[fn].apply(widget, fnArgs);
 			}
+			else
+				console.error("[ibxDataGridRow] No such method '" + fn + "'.");
 
 			if(val != this && val !== undefined)
 			{
@@ -520,6 +547,14 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 			this._grid.ibxDataGridSelectionManager("deselectAll", true);
 		this._grid.ibxDataGridSelectionManager("selected", cells.toArray(), select);
 	},
+	expandRow:function(row, expand)
+	{
+		if(this.options.indentColumn != -1)
+		{
+			row = row || "*";
+			this.getRow(row).ibxDataGridRow("expand", expand);
+		}
+	},
 	addRow:function(row, sibling, before)
 	{
 		row = $(row);
@@ -590,19 +625,6 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 		var scrollY = this._grid.prop("scrollTop");
 		this._colHeaderBar.prop("scrollLeft", scrollX);
 		this._rowHeaderBar.prop("scrollTop", scrollY);
-	},
-	updateColMap:function(cols, refresh)
-	{
-		var colMap = this.options.colMap;
-		for(var key in cols)
-		{
-			var colInfo = colMap[key];
-			if(colInfo)
-				$.extend(colInfo, cols[key]);
-		}
-
-		if(refresh !== false)
-			this.refresh();
 	},
 	_setOption:function(key, value)
 	{
