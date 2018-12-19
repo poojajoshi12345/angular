@@ -229,6 +229,8 @@ $.fn.ibxDataGridRow = $.ibi.ibxDataGridRow = function()
 					this.expanded = expand;
 					this.element.ibxToggleClass("dgrid-row-expanded", this.expanded);
 					this.element.children(sformat(":nth-child({1})", this._indentColumn+1)).ibxToggleClass("dgrid-cell-expandable-expanded", this.expanded);
+					console.error("YOU WERE GOING TO MAKE THE ADD/REMOVE INTO CLASSES SO THEY CAN BE DONE FROM CSS");
+					this._expandButton.text(this.expanded ? "remove" : "add");
 					this.element.dispatchEvent(this.expanded ? "ibx_row_expand" : "ibx_row_collapse", null, false, false);
 				},
 				toggleExpand:function()
@@ -275,11 +277,16 @@ $.fn.ibxDataGridRow = $.ibi.ibxDataGridRow = function()
 					{
 						var indentCell = this.element.children(sformat(":nth-child({1})", this._indentColumn+1));
 						indentCell.ibxRemoveClass("dgrid-cell-indent-padding");
-						indentCell.ibxRemoveClass(this.containerClasses).ibxRemoveClass("dgrid-cell-expandable-expanded").css("paddingLeft", "");
+						indentCell.ibxRemoveClass(this.containerClasses).ibxRemoveClass("dgrid-cell-indent-column dgrid-cell-expandable-expanded").css("paddingLeft", "");
 
 						var indentCell = this.element.children(sformat(":nth-child({1})", indentColumn+1));
-						indentCell.ibxAddClass("dgrid-cell-indent");
-						indentCell.ibxToggleClass(this.containerClasses, this.container)
+						indentCell.ibxAddClass("dgrid-cell-indent-column").ibxToggleClass(this.containerClasses, this.container);
+						if(this.container)
+						{
+							var expandButton = this._expandButton = this._expandButton || $("<div class='dgrid-cell-expand-button'></div>");
+							expandButton.detach();
+							indentCell.prepend(expandButton);
+						}
 						indentCell.ibxToggleClass("dgrid-cell-indent-padding", !this.container);
 						this._indentColumn = indentColumn;
 

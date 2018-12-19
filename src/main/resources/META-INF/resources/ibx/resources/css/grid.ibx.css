@@ -100,19 +100,25 @@
 	background-color:#666;
 	color:white;
 }
-.dgrid-cell-indent
+.dgrid-cell-indent-column
 {
+	background-color:#f8f8f8;
 }
-.dgrid-cell-expandable::before
+.dgrid-cell-expandable::xbefore
 {
 	flex:0 0 auto;
 	font-family:"Material Icons";
 	width:1em;
 	content:"\e145";
 }
-.dgrid-cell-expandable-expanded::before
+.dgrid-cell-expandable-expanded::xbefore
 {
 	content:"\e15b";
+}
+.dgrid-cell-expand-button
+{
+	font-family:"Material Icons";
+	width:1em;
 }
 .dgrid-cell-indent-padding::before
 {

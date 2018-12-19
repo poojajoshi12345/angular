@@ -28,9 +28,20 @@
 				$(".btn-load-props").on("click", function(e)
 				{
 					var grid = $(".ibx-data-grid");
-					var indentColumn = grid.ibxDataGrid("option", "indentColumn");
+					var colMap = 
+					[
+						{"title":"displayName", "size":"150px"},
+						{"title":"displayValue"},
+						{"title":"name"},
+						{"title":"value"},
+						{"title":"type", "size":"50px"},
+						{"title":"uiType", "size":"75px"},
+						{"title":"expanded", "size":"100px", "flex":true, "justify":"center"},
+					];
+					grid.ibxWidget("option", {"defaultColConfig":{justify:"start", resizable:true}, "colMap":colMap});
 					grid.ibxWidget("removeAll");
 
+					var indentColumn = grid.ibxDataGrid("option", "indentColumn");
 					var rowCount = 0;
 					buildTree(testProps);
 					function buildTree(props, parentRow)
@@ -58,22 +69,10 @@
 
 							grid.ibxWidget("addRow", row);
 							var childRows = buildTree(prop.props, row);
-							row.ibxDataGridRow("addRow", childRows).ibxDataGridRow({"expanded":true});
+							row.ibxDataGridRow("addRow", childRows).ibxDataGridRow({"expanded":prop.expanded});
 						}
 						return rows;
 					}
-
-					var colMap = 
-					[
-						{"title":"displayName", "size":"150px"},
-						{"title":"displayValue"},
-						{"title":"name"},
-						{"title":"value"},
-						{"title":"type", "size":"50px"},
-						{"title":"uiType", "size":"75px"},
-						{"title":"expanded", "size":"100px", "flex":true, "justify":"center"},
-					];
-					grid.ibxWidget("option", {"defaultColConfig":{justify:"start", resizable:true}, "colMap":colMap});
 				});
 
 				$(".btn-load-grid").on("click", function(e)

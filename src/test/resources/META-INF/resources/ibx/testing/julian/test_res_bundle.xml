@@ -57,7 +57,7 @@
 					"displayValue":"White",
 					"name":"backgroundColor",
 					"value":"white",
-					"type":"string",
+					"dataType":"string",
 					"uiType":"colorPicker",
 					"expanded":false,
 				},
@@ -66,7 +66,7 @@
 					"displayValue":"1px solid black",
 					"name":"border",
 					"value":"1px solid black",
-					"type":"string",
+					"dataType":"string",
 					"uiType":"borderSelector",
 					"expanded":false,
 					"props":
@@ -76,7 +76,7 @@
 							"displayValue":"1px solid black",
 							"name":"left",
 							"value":"1px solid black",
-							"type":"string",
+							"dataType":"string",
 							"uiType":"borderSelector",
 							"expanded":false,
 							"props":
@@ -86,7 +86,7 @@
 									"displayValue":"1px",
 									"name":"width",
 									"value":"1px",
-									"type":"string",
+									"dataType":"string",
 									"uiType":"textField",
 								},
 								{
@@ -94,7 +94,7 @@
 									"displayValue":"Solid",
 									"name":"style",
 									"value":"solid",
-									"type":"string",
+									"dataType":"string",
 									"uiType":"select",
 									"values":
 									{
@@ -120,7 +120,7 @@
 									"displayValue":"red",
 									"name":"color",
 									"value":"red",
-									"type":"color",
+									"dataType":"color",
 									"uiType":"colorPicker",
 								},
 							]
@@ -130,7 +130,7 @@
 							"displayValue":"1px solid black",
 							"name":"left",
 							"value":"1px solid black",
-							"type":"string",
+							"dataType":"string",
 							"uiType":"borderSelector",
 							"expanded":false,
 							"props":
@@ -140,7 +140,7 @@
 									"displayValue":"1px",
 									"name":"width",
 									"value":"1px",
-									"type":"string",
+									"dataType":"string",
 									"uiType":"textField",
 								},
 								{
@@ -148,7 +148,7 @@
 									"displayValue":"Solid",
 									"name":"style",
 									"value":"solid",
-									"type":"string",
+									"dataType":"string",
 									"uiType":"select",
 									"values":
 									{
@@ -174,7 +174,7 @@
 									"displayValue":"red",
 									"name":"color",
 									"value":"red",
-									"type":"color",
+									"dataType":"color",
 									"uiType":"colorPicker",
 								},
 							]
