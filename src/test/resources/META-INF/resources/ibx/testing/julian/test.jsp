@@ -45,7 +45,7 @@
 							row.ibxDataGridRow("setParent", parentRow);
 							rows.push(row);
 
-							prop = props[i];
+							var prop = props[i];
 							for(var key in prop)
 							{
 								if(!(prop[key] instanceof Object))
@@ -56,9 +56,7 @@
 							}
 							grid.ibxWidget("addRow", row, null, null, false);
 							var childRows = buildTree(prop.props, row);
-							if(childRows.length)
-								row.ibxDataGridRow({"container":true});
-							row.ibxDataGridRow("refresh");
+							row.ibxDataGridRow("refresh", {"container": !!childRows.length, "expanded":prop.expanded});
 						}
 						return rows;
 					}
@@ -87,7 +85,7 @@
 					console.time("genRows");
 					for(var i = 0; i < nRows; ++i)
 					{
-						var row = $("<div></div>").ibxDataGridRow({"container":false, "title":i, "size":null}).ibxAddClass("row-" + i).on("dblclick", function(e)
+						var row = $("<div></div>").ibxDataGridRow({"container":true, "title":i, "size":null}).ibxAddClass("row-" + i).on("dblclick", function(e)
 						{
 							var row = $(e.currentTarget);
 							row.ibxDataGridRow("toggleExpand"); 
@@ -105,7 +103,6 @@
 						var childRow = $("<div></div>").ibxDataGridRow({"title":"CHILD"+i, "size":null}).ibxAddClass("child-row-" + i);
 						childRow.ibxDataGridRow("setParent", row);
 						rows.push(childRow);
-
 					}
 					console.timeEnd("genRows");
 

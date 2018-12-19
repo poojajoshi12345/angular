@@ -182,13 +182,14 @@ $.fn.ibxDataGridRow = $.ibi.ibxDataGridRow = function()
 				parent:null,
 				container:false,
 				header:$("<div>").attr({"tabindex": -1, "role":"rowheader"}),
+				headerSize:"css", //"dynamic" means calculate size on refresh...VERY SLOW USE WITH CAUTION
 				splitter:null,
 				title:"",
 				size:null,
 				rowClasses:["ibx-data-grid-row", "dgrid-row", "ibx-flexbox", "fbx-inline", "fbx-row", "fbx-align-items-stretch", "fbx-align-content-center"],
-				headerClasses:["dgrid-row", "dgrid-header-row", "ibx-flexbox", "fbx-inline", "fbx-row", "fbx-align-items-center", "fbx-justify-content-center"],
+				headerClasses:["dgrid-header-row", "dgrid-cell", "ibx-flexbox", "fbx-inline", "fbx-row", "fbx-align-items-center", "fbx-justify-content-center"],
 				containerClasses:["dgrid-cell-expandable", "ibx-flexbox", "fbx-inline", "fbx-row", "fbx-align-items-center"],
-				expanded:true,
+				expanded:false,
 
 				depth:function()
 				{
@@ -214,6 +215,7 @@ $.fn.ibxDataGridRow = $.ibi.ibxDataGridRow = function()
 				expand:function(expand)
 				{
 					this.expanded = expand && this.container;
+					this.element.ibxToggleClass("dgrid-row-expanded", this.expanded);
 					this.element.children(sformat(":nth-child({1})", this._indentColumn+1)).ibxToggleClass("dgrid-cell-expandable-expanded", this.expanded);
 					this.element.dispatchEvent(this.expanded ? "ibx_row_expand" : "ibx_row_collapse", null, false, false);
 				},
@@ -230,11 +232,6 @@ $.fn.ibxDataGridRow = $.ibi.ibxDataGridRow = function()
 						var expanded = e.type == "ibx_row_expand";
 						this.element.css("display", expanded ? "" : "none");
 						this.header.css("display", expanded ? "" : "none");
-						
-						//THIS SHOULD NOT BE NEEDED BUT FOR SOME REASON THE INITIAL UPDATE OF THE HEADER SIZE IS WRONT IN REFRESH!!!
-						if(expanded)
-							this.refresh();
-
 						if(this.expanded)
 						{
 							this.element.dispatchEvent(e.type, null, false, false);
@@ -245,35 +242,36 @@ $.fn.ibxDataGridRow = $.ibi.ibxDataGridRow = function()
 				refresh:function(options)
 				{
 					$.extend(this, options);
-					this.element.ibxAddClass(widget.rowClasses).ibxToggleClass("dgrid-row-expanded", this.expanded).data("ibxDataGridRow", widget);
+					this.element.ibxAddClass(widget.rowClasses).data("ibxDataGridRow", widget);
 					this.header.ibxAddClass(widget.headerClasses).data("ibxDataGridRow", widget).text(this.title);
-					this.header.css("visibility", "hidden");
 
-					var indentCell = this.element.children(sformat(":nth-child({1})", this._indentColumn+1));
 					var indentColumn = this.element.closest(".ibx-data-grid").ibxDataGrid("option", "indentColumn");
-					if(indentColumn != this._indentColum)
+					if(!isNaN(indentColumn) && (indentColumn != this._indentColumn))
 					{
+						var indentCell = this.element.children(sformat(":nth-child({1})", this._indentColumn+1));
 						indentCell.ibxRemoveClass("dgrid-cell-indent-padding");
 						indentCell.ibxRemoveClass(this.containerClasses).ibxRemoveClass("dgrid-cell-expandable-expanded").css("paddingLeft", "");
 
-						if(!isNaN(indentColumn))
-						{
-							var indentCell = this.element.children(sformat(":nth-child({1})", indentColumn+1));
-							indentCell.ibxAddClass("dgrid-cell-indent");
-							indentCell.ibxToggleClass(this.containerClasses, this.container)
-							indentCell.ibxToggleClass("dgrid-cell-indent-padding", !this.container);
-							indentCell.css("paddingLeft", (this.depth()+"em"));
-							this._indentColumn = indentColumn;
-						}
+						var indentCell = this.element.children(sformat(":nth-child({1})", indentColumn+1));
+						indentCell.ibxAddClass("dgrid-cell-indent");
+						indentCell.ibxToggleClass(this.containerClasses, this.container)
+						indentCell.ibxToggleClass("dgrid-cell-indent-padding", !this.container);
+						indentCell.css("paddingLeft", (this.depth()+"em"));
+
+						this._indentColumn = indentColumn;
 					}
 
 					this.expand(this.expanded);
 
-					//Much as I HATE timers...getting the height is EXTREMELY SLOW (causes a reflow)...so do it on a timer so ui is responsive.
-					window.setTimeout(function()
+					//Much as I HATE timers...There are times when the height of a row can be dynamic (text wrapping)
+					//So, in that case, you can make the row calculate its header size dynamically.
+					if(this.headerSize == "dynamic")
 					{
-						this.header.outerHeight(this.element.outerHeight()).css("visibility", "");
-					}.bind(this), 0);
+						window.setTimeout(function()
+						{
+							this.header.outerHeight(this.element.outerHeight()).css("visibility", "");
+						}.bind(this), 0);
+					}
 				},
 			};
 			widget.refresh(args[0]);//when constructing, only an 'options' object can be passed.
