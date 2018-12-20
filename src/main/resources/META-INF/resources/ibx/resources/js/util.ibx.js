@@ -1002,6 +1002,7 @@ WebApi.statics =
 		errorHandling:true,
 		jqNamespace:false,
 		eNamespace:"webapi",
+		ePreExec:"pre_exec",
 		ePreCall:"pre_call",
 		ePostCall:"post_call",
 		eSuccess:"success",
@@ -1077,8 +1078,10 @@ _p.exec = function exec(options)
 	exInfo.ajax.url =  options.url || sformat("{1}/{2}{3}", exInfo.appContext, exInfo.appName,  exInfo.relPath ? ("/" + exInfo.relPath) : "");
 	exInfo.ajax.async = exInfo.async;
 	exInfo.ajax.dataType = exInfo.dataType;
-	$.ajax(exInfo.ajax);
 
+	//give people a chance to monkey with the exInfo right before we actually commit to the send.
+	$(window).trigger(WebApi.genEventType(exInfo.ePreExec, exInfo), exInfo);
+	$.ajax(exInfo.ajax);
 	return exInfo;
 };
 
