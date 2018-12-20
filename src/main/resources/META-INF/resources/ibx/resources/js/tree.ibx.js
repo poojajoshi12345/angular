@@ -245,7 +245,6 @@ $.widget("ibi.ibxTreeNode", $.ibi.ibxVBox,
 			{
 				if(this.nodeLabel.ibxWidget("isEditing"))
 				{
-					console.log(e.keyCode);
 					e.stopPropagation();
 					return;
 				}
