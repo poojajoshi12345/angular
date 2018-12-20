@@ -140,25 +140,33 @@ $.widget("ibi.ibxDataGridSelectionManager", $.ibi.ibxSelectionManager,
 	_onKeyDown:function(e)
 	{
 		var options = this.options;
-		var cell = this.focus();
-		if(cell && options.navKeyRoot && [$.ui.keyCode.LEFT, $.ui.keyCode.RIGHT, $.ui.keyCode.UP, $.ui.keyCode.DOWN].indexOf(e.keyCode) != -1)
+		if(options.navKeyRoot && [$.ui.keyCode.LEFT, $.ui.keyCode.RIGHT, $.ui.keyCode.UP, $.ui.keyCode.DOWN].indexOf(e.keyCode) != -1)
 		{
+			var selector = sformat(".{1}:visible()", options.selectableChildren);
+			var cell = $(e.target).closest(selector);
 			var row = cell.parent();
-			var idxRow = row.parent().children().index(row[0]);
-			var idxCol = row.children().index(cell[0]);
 			if(e.keyCode == $.ui.keyCode.LEFT)
-				cell = options.grid.getCell(idxRow, idxCol-1);
+				cell = cell.prevAll(selector).first();
 			else
 			if(e.keyCode == $.ui.keyCode.RIGHT)
-				cell = options.grid.getCell(idxRow, idxCol+1);
+				cell = cell.nextAll(selector).first();
 			else
 			if(e.keyCode == $.ui.keyCode.UP)
-				cell = options.grid.getCell(idxRow-1, idxCol);
+			{
+				var cellIdx = row.children(selector).index(cell[0]);
+				row = cell.parent().prevAll(".dgrid-row:visible()").first();
+				cell = row.children(sformat(":nth-child({1})", cellIdx+1));
+			}
 			else
 			if(e.keyCode == $.ui.keyCode.DOWN)
-				cell = options.grid.getCell(idxRow+1, idxCol);
+			{
+				var cellIdx = row.children(selector).index(cell[0]);
+				row = cell.parent().nextAll(".dgrid-row:visible()").first();
+				cell = row.children(sformat(":nth-child({1})", cellIdx+1));
+			}
 
-			cell ? this.focus(cell, true) : this._super(e);
+			cell.focus();
+			//cell.length ? this.focus(cell, true) : this._super(e);
 			e.preventDefault();
 		}
 		else
@@ -181,7 +189,7 @@ $.fn.ibxDataGridRow = $.ibi.ibxDataGridRow = function()
 				element:el,
 				parent:null,
 				container:false,
-				header:$("<div>").attr({"tabindex": -1, "role":"rowheader"}),
+				header:$("<div>").attr({"tabindex": -1}),
 				headerSize:"css", //"dynamic" means calculate size on refresh...VERY SLOW USE WITH CAUTION
 				splitter:null,
 				title:"",
@@ -190,6 +198,7 @@ $.fn.ibxDataGridRow = $.ibi.ibxDataGridRow = function()
 				headerClasses:["dgrid-header-row", "dgrid-cell", "ibx-flexbox", "fbx-inline", "fbx-row", "fbx-align-items-center", "fbx-justify-content-center"],
 				containerClasses:["dgrid-cell-expandable", "ibx-flexbox", "fbx-inline", "fbx-row", "fbx-align-items-center"],
 				expanded:false,
+				singleClickExpand:false,
 
 				depth:function()
 				{
@@ -237,6 +246,43 @@ $.fn.ibxDataGridRow = $.ibi.ibxDataGridRow = function()
 				{
 					this.expand(!this.expanded);
 				},
+				_onExpandButtonClick:function(e)
+				{
+					this.toggleExpand();
+				},
+				_onIndentCellEvent:function(e)
+				{
+					var eType = e.type;
+					if((eType == "click" && this.singleClickExpand) || eType == "dblclick")
+						this.toggleExpand();
+					else
+					if(eType == "keydown" && this.container)
+					{
+						if(e.keyCode === $.ui.keyCode.ENTER)
+							this.toggleExpand();
+						else
+						if(e.keyCode === $.ui.keyCode.RIGHT && !this.expanded)
+						{
+							if(!this.expanded)
+							{
+								this.toggleExpand(true);
+								e.stopPropagation();
+								e.preventDefault();
+							}
+						}
+						else
+						if(e.keyCode === $.ui.keyCode.LEFT && this.expanded)
+						{
+							if(this.expanded)
+							{
+								this.toggleExpand(false);
+								e.stopPropagation();
+								e.preventDefault();
+							}
+						}
+
+					}
+				},
 				_onParentEvent:function(e)
 				{
 					if(e.type == "ibx_get_row_children")
@@ -250,6 +296,7 @@ $.fn.ibxDataGridRow = $.ibi.ibxDataGridRow = function()
 						var expanded = e.type == "ibx_row_expand";
 						this.element.css("display", expanded ? "" : "none");
 						this.header.css("display", expanded ? "" : "none");
+						this._updateAccessibility();
 						if(this.expanded)
 						{
 							this.element.dispatchEvent(e.type, null, false, false);
@@ -266,6 +313,18 @@ $.fn.ibxDataGridRow = $.ibi.ibxDataGridRow = function()
 					//then update all our children...and so on.
 					$(this.childRows()).ibxDataGridRow("updateIndent");
 				},
+				_updateAccessibility:function()
+				{
+					//THIS IS NOT CORRECT, OR FINISHED...MORE LIKE A STARTING POINT PLACEHOLDER!
+					var ariaOpts = 
+					{
+						"role":"row",
+						"aria-level":this.depth(),
+						"aria-hidden":!this.element.is(":visible"),
+					}
+					this.element.attr(ariaOpts);
+					this.header.attr({"role":"rowheader", "aria-hidden":ariaOpts["aria-hidden"]});
+				},
 				refresh:function(options)
 				{
 					$.extend(this, options);
@@ -275,15 +334,20 @@ $.fn.ibxDataGridRow = $.ibi.ibxDataGridRow = function()
 					var indentColumn = this.element.closest(".ibx-data-grid").ibxDataGrid("option", "indentColumn");
 					if(!isNaN(indentColumn) && (indentColumn != this._indentColumn))
 					{
+						//remove the current indent cell config.
 						var indentCell = this.element.children(sformat(":nth-child({1})", this._indentColumn+1));
+						indentCell.off("dblclick click keydown", this._onIndentCellEventBound);
 						indentCell.ibxRemoveClass("dgrid-cell-indent-padding");
 						indentCell.ibxRemoveClass(this.containerClasses).ibxRemoveClass("dgrid-cell-indent-column dgrid-cell-expandable-expanded").css("paddingLeft", "");
 
+						//config the new indent cell.
 						var indentCell = this.element.children(sformat(":nth-child({1})", indentColumn+1));
+						indentCell.on("dblclick click keydown", this._onIndentCellEventBound);
 						indentCell.ibxAddClass("dgrid-cell-indent-column").ibxToggleClass(this.containerClasses, this.container);
 						if(this.container)
 						{
-							var expandButton = this._expandButton = this._expandButton || $("<div class='dgrid-cell-expand-button'></div>");
+							//create the expand button, and move it to the current indent cell.
+							var expandButton = this._expandButton = this._expandButton || $("<div class='dgrid-cell-expand-button'></div>").on("click", this._onExpandButtonClick.bind(this));
 							expandButton.detach();
 							indentCell.prepend(expandButton);
 						}
@@ -291,6 +355,7 @@ $.fn.ibxDataGridRow = $.ibi.ibxDataGridRow = function()
 						this._indentColumn = indentColumn;
 
 						this.updateIndent(indentCell);
+						this._updateAccessibility();
 					}
 
 					this.expand(this.expanded);
@@ -306,6 +371,8 @@ $.fn.ibxDataGridRow = $.ibi.ibxDataGridRow = function()
 					}
 				},
 			};
+
+			widget._onIndentCellEventBound = widget._onIndentCellEvent.bind(widget);//need to save for event binding.
 			widget.refresh(args[0]);//when constructing, only an 'options' object can be passed.
 		}
 		else
@@ -365,7 +432,7 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 		/*accessibility stuff*/
 		aria:
 		{
-			role:"grid"
+			role:"treegrid"
 		}
 	},
 	_widgetClass:"ibx-data-grid",

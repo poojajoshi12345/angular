@@ -38,7 +38,7 @@
 						{"title":"uiType", "size":"75px"},
 						{"title":"expanded", "size":"100px", "flex":true, "justify":"center"},
 					];
-					grid.ibxWidget("option", {"defaultColConfig":{justify:"start", resizable:true}, "colMap":colMap});
+					grid.ibxWidget("option", {"indentColumn":0, "defaultColConfig":{justify:"start", resizable:true}, "colMap":colMap});
 					grid.ibxWidget("removeAll");
 
 					var indentColumn = grid.ibxDataGrid("option", "indentColumn");
@@ -61,11 +61,6 @@
 									row.append(cell);
 								}
 							}
-
-							row.children(sformat(":nth-child({1})", indentColumn+1)).on("dblclick", function(e)
-							{
-								this.ibxDataGridRow("toggleExpand");
-							}.bind(row));
 
 							grid.ibxWidget("addRow", row);
 							var childRows = buildTree(prop.props, row);
@@ -96,14 +91,6 @@
 
 							if(i == 0)
 								colMap.push($.extend({}, {"title":"Column " + j, "resizable":true}))
-
-							if(j == indentColumn)
-							{
-								cell.on("dblclick", function(e)
-								{
-									this.ibxDataGridRow("toggleExpand"); 
-								}.bind(row));								
-							}
 						}
 						rows.push(row);
 
@@ -118,7 +105,7 @@
 
 					console.time("popGrid");
 					grid.ibxWidget("removeAll");
-					grid.ibxWidget("option", {"colMap":colMap, "showColumnHeaders":showColH, "showRowHeaders":showRowH});
+					grid.ibxWidget("option", {"indentColumn":0, "colMap":colMap, "showColumnHeaders":showColH, "showRowHeaders":showRowH});
 					grid.ibxWidget("addRows", rows);
 					grid.ibxWidget("refresh");
 					console.timeEnd("popGrid");
@@ -188,7 +175,7 @@
 				<div tabindex="0" class="btn-row-headers" data-ibx-type="ibxCheckBoxSimple" data-ibxp-checked="true">Show Row Headings</div>
 			</div>
 
-			<div tabindex="0" class="test-grid" data-ibx-type="ibxDataGrid" data-ibxp-show-row-headers="true" data-ibxp-indent-column="0">
+			<div tabindex="0" class="test-grid" data-ibx-type="ibxDataGrid" data-ibxp-show-row-headers="true">
 				<div data-ibxp-grid-col-map>
 					<div data-ibxp-size="200px">First Name</div>
 					<div>Middle Name</div>
