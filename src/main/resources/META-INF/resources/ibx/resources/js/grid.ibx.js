@@ -210,10 +210,10 @@ $.fn.ibxDataGridRow = $.ibi.ibxDataGridRow = function()
 				},
 				setParent:function(parent)
 				{
-					$(this.parent).off("ibx_row_expand ibx_row_collapse ibx_get_row_children", this._boundParentEvent);
+					$(this.parent).off("ibx_expand ibx_collapse ibx_get_row_children", this._boundParentEvent);
 					this.parent = parent;
 					this._boundParentEvent = this._onParentEvent.bind(this);
-					$(this.parent).on("ibx_row_expand ibx_row_collapse ibx_get_row_children", this._boundParentEvent);
+					$(this.parent).on("ibx_expand ibx_collapse ibx_get_row_children", this._boundParentEvent);
 					this.updateIndent();
 				},
 				addRow:function(row)
@@ -235,10 +235,15 @@ $.fn.ibxDataGridRow = $.ibi.ibxDataGridRow = function()
 				{
 					if(!this.container)
 						return;
-					this.expanded = expand;
-					this.element.ibxToggleClass("dgrid-row-expanded", this.expanded);
-					this.element.children(sformat(":nth-child({1})", this._indentColumn+1)).ibxToggleClass("dgrid-cell-expandable-expanded", this.expanded);
-					this.element.dispatchEvent(this.expanded ? "ibx_row_expand" : "ibx_row_collapse", null, false, false);
+
+					var evt = this.element.dispatchEvent( expand ? "ibx_beforeexpand" : "ibx_beforecollapse", null, true, true);
+					if(!evt.isDefaultPrevented())
+					{
+						this.expanded = expand;
+						this.element.ibxToggleClass("dgrid-row-expanded", this.expanded);
+						this.element.children(sformat(":nth-child({1})", this._indentColumn+1)).ibxToggleClass("dgrid-cell-expandable-expanded", this.expanded);
+						this.element.dispatchEvent(this.expanded ? "ibx_expand" : "ibx_collapse", null, true, false);
+					}
 				},
 				toggleExpand:function()
 				{
@@ -291,9 +296,9 @@ $.fn.ibxDataGridRow = $.ibi.ibxDataGridRow = function()
 					}
 					else
 					{
-						var expanded = e.type == "ibx_row_expand";
-						this.element.ibxToggleClass("dgrid-row-hidden", !expanded);
-						this.header.ibxToggleClass("dgrid-row-hidden", !expanded);
+						var parentExpanded = e.type == "ibx_expand";
+						this.element.ibxToggleClass("dgrid-row-hidden", !parentExpanded);
+						this.header.ibxToggleClass("dgrid-row-hidden", !parentExpanded);
 						this._updateAccessibility();
 						if(this.expanded)
 							this.element.dispatchEvent(e.type, null, false, false);
@@ -327,7 +332,7 @@ $.fn.ibxDataGridRow = $.ibi.ibxDataGridRow = function()
 				{
 					$.extend(this, options);
 					this.element.ibxAddClass(widget.rowClasses).data("ibxDataGridRow", widget);
-					this.header.ibxAddClass(widget.headerClasses).data("ibxDataGridRow", widget).text(this.title);
+					this.header.ibxAddClass(widget.headerClasses).data("ibxDataGridRow", widget).text(".");
 
 					//configure the indent column (if changed) and cell...expand button/classes etc.
 					var indentColumn = this.element.closest(".ibx-data-grid").ibxDataGrid("option", "indentColumn");
@@ -521,19 +526,6 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 
 			var padding = $("<div style='flex:0 0 auto;'>").css({"width":"100px", height:"1px"});
 			this._colHeaderBar.append(padding);
-		}
-
-		if(which == "row" || which == "both")
-		{
-			var rHeaders = this._rowHeaderBar.children(sformat(".{1}", options.classes.rowHeaderClass));
-			for(var i = 0; i < rHeaders.length; ++i)
-			{
-				var rHeader = rHeaders[i];
-				//let people change the header
-				var event = this.element.dispatchEvent("ibx_gridheaderupdate", {"grid":this.element, "type":"row", "idx": i, "header":rHeader[0], "splitter":null});
-				if(!event.isDefaultPrevented())
-					rHeader.innerText = i;
-			}
 		}
 	},
 	getHeaders:function(row)

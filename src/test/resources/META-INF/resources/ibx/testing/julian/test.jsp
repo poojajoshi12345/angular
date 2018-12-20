@@ -33,6 +33,68 @@
 					$(".ibx-data-grid").ibxWidget("option", "indentColumn", val);
 				});
 
+				$(".btn-load-ibfs").on("click", function(e)
+				{
+					var listing = $.get("./test_ibfs_listing.html", null, null, "xml").done(function(xDoc, status, xhr)
+					{
+						var colMap = 
+						[
+							{"title":"Title",			"attr":"description"},
+							{"title":"Name",			"attr":"name"},
+							{"title":"Summary",			"attr":"",},
+							{"title":"Tags",			"attr":""},
+							{"title":"Last Modified",	"attr":"lastModified"},
+							{"title":"Created On",		"attr":"createdOn"},
+							{"title":"Size",			"attr":"length"},
+							{"title":"Owner",			"attr":"ownerName"},
+							{"title":"Published",		"attr":""},
+							{"title":"Shown",			"attr":""},
+						];
+
+						var grid = $(".ibx-data-grid");
+						grid.ibxWidget("removeAll");
+						grid.ibxWidget("option", {"defaultColConfig":{justify:"start", resizable:true}, "colMap":colMap});
+
+						var rootItems = xDoc.querySelectorAll("rootObject > item");
+						var rows = $(buildTree(rootItems));
+						grid.ibxWidget("addRows", rows).ibxWidget("updateHeaders", "both");
+						grid.ibxWidget("refresh");
+
+						function buildTree(items)
+						{
+							var rows = [];
+							for(var i = 0; i < items.length; ++i)
+							{
+								var item = items[i];
+								var container = item.hasAttribute("container");
+								var row = $("<div>").data("ibfsItem", item).ibxDataGridRow({"title":"", "container":container, "expanded":false});
+								row.on("ibx_beforeexpand", function(grid, e)
+								{
+									var row = $(e.target);
+									$(row.ibxDataGridRow("childRows")).detach();
+									
+									var item = row.data("ibfsItem");
+									var rows = buildTree(item.querySelectorAll("children > item"));
+									row.ibxDataGridRow("addRow", rows);
+									grid.ibxWidget("addRows", rows, row);
+									grid.ibxWidget("refresh");
+								}.bind(null, grid));
+								rows.push(row);
+
+								var cells = [];
+								$(colMap).map(function(idx, col)
+								{
+									var attr = item.getAttribute(col.attr);
+									var cell = $(sformat("<div tabindex='0'>{1}</div>", attr));
+									cells.push(cell);
+								});
+								row.append(cells);
+							}
+							return rows;
+						}
+					});
+				});
+
 				$(".btn-load-props").on("click", function(e)
 				{
 					var grid = $(".ibx-data-grid");
@@ -46,11 +108,9 @@
 						{"title":"uiType", "size":"75px"},
 						{"title":"expanded", "size":"100px", "flex":true, "justify":"center"},
 					];
-					grid.ibxWidget("option", {"indentColumn":0, "defaultColConfig":{justify:"start", resizable:true}, "colMap":colMap});
+					grid.ibxWidget("option", {"defaultColConfig":{justify:"start", resizable:true}, "colMap":colMap});
 					grid.ibxWidget("removeAll");
 
-					var indentColumn = grid.ibxDataGrid("option", "indentColumn");
-					var rowCount = 0;
 					buildTree(testProps);
 					function buildTree(props, parentRow)
 					{
@@ -171,6 +231,7 @@
 		<div class="del-command" data-ibx-type="ibxCommand" data-ibxp-id="cmdDelete" data-ibxp-shortcut="CTRL+SHIFT+DEL"></div>
 		<div class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="stretch" data-ibxp-justify="start" data-ibxp-command="cmdDelete">
 			<div class="tool-bar" data-ibx-type="ibxHBox" data-ibxp-align="center">
+				<div tabindex="0" class="btn-load-ibfs" data-ibx-type="ibxButton">Load IBFS</div>
 				<div tabindex="0" class="btn-load-props" data-ibx-type="ibxButton">Load Properties</div>
 				<div tabindex="0" class="btn-load-grid" data-ibx-type="ibxButton">Load Grid</div>
 				<div class="" data-ibx-type="ibxLabel" data-ibxp-for=".num-rows">Rows:</div>
