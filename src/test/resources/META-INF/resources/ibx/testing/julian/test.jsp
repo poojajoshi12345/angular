@@ -22,7 +22,7 @@
 			
 			ibx(function()
 			{
-				$(".text-entry").ibxWidget("startEditing", {selectAll:false, cancelKey:null, commitOnBlur:false});
+				$(".text-entry").ibxWidget("startEditing", {selectAll:false, cancelKey:null, commitOnBlur:false, commitKey:null});
 				$(".btn-col-headers").on("ibx_change", function(e){$(".ibx-data-grid").ibxWidget("option", "showColumnHeaders", $(e.target).ibxWidget("checked"));});
 				$(".btn-row-headers").on("ibx_change", function(e){$(".ibx-data-grid").ibxWidget("option", "showRowHeaders", $(e.target).ibxWidget("checked"));});
 				$(".btn-expand-all").on("click", function(e){$(".ibx-data-grid").ibxWidget("expandRow", null, true);});

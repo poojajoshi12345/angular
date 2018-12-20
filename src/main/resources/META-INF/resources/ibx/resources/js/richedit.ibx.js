@@ -301,6 +301,7 @@ $.widget("ibi.ibxEditable", $.Widget,
 	 * @property {boolean} options.autocomplete Should the element attempt to autocomplete while entering content.
 	 * @property {boolean} options.autocapitalize Should the element attempt to capitalize while entering content.
 	 * @property {boolean} options.autocorrect Should the element attempt to correct 'errors' while entering content.
+	 * @property {boolean} options.multiLine Allow enter key to create a new line.
 	 * @property {boolean} options.selectAll Should all contents be selected when entering edit mode.
 	 * @property {boolean} options.insertBrOnReturn Should element use a &lt;br> for line breaks.
 	 * @property {keycode} options.commitKey What key press should signify a commit of the current editing.
@@ -313,6 +314,7 @@ $.widget("ibi.ibxEditable", $.Widget,
 		"autocomplete":false,
 		"autocapitalize":false,
 		"autocorrect":false,
+		"multiLine":false,
 		"selectAll":true,
 		"insertBrOnReturn":true,
 		"commitKey":$.ui.keyCode.ENTER,
@@ -341,6 +343,8 @@ $.widget("ibi.ibxEditable", $.Widget,
 				e.preventDefault();
 				e.stopPropagation();
 			}
+			if(!options.multiLine && e.keyCode === $.ui.keyCode.ENTER)
+				e.preventDefault();
 			else
 			{
 				var value = this._lastValue = this.element.text();
