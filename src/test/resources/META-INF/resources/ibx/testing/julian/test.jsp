@@ -23,7 +23,15 @@
 			ibx(function()
 			{
 				$(".text-entry").ibxWidget("startEditing", {selectAll:false, cancelKey:null, commitOnBlur:false});
-				document.activeElement.blur();
+				$(".btn-col-headers").on("ibx_change", function(e){$(".ibx-data-grid").ibxWidget("option", "showColumnHeaders", $(e.target).ibxWidget("checked"));});
+				$(".btn-row-headers").on("ibx_change", function(e){$(".ibx-data-grid").ibxWidget("option", "showRowHeaders", $(e.target).ibxWidget("checked"));});
+				$(".btn-expand-all").on("click", function(e){$(".ibx-data-grid").ibxWidget("expandRow", null, true);});
+				$(".btn-collapse-all").on("click", function(e){$(".ibx-data-grid").ibxWidget("expandRow", null, false);});
+				$(".indent-col").on("ibx_widgetblur", function(e)
+				{
+					var val = parseInt($(e.target).text(), 10);
+					$(".ibx-data-grid").ibxWidget("option", "indentColumn", val);
+				});
 
 				$(".btn-load-props").on("click", function(e)
 				{
@@ -57,7 +65,7 @@
 							{
 								if(!(prop[key] instanceof Object))
 								{
-									var cell = $("<div>").text(prop[key]);
+									var cell = $("<div tabindex='0'>").text(prop[key]);
 									row.append(cell);
 								}
 							}
@@ -77,7 +85,6 @@
 					var nRows = parseInt($(".num-rows").text(), 10);
 					var nCols = parseInt($(".num-cols").text(), 10);
 					var grid = $(".ibx-data-grid");
-					var indentColumn = grid.ibxDataGrid("option", "indentColumn");
 
 					console.time("totalLoad");
 					console.time("genRows");
@@ -86,26 +93,19 @@
 						var row = $("<div></div>").ibxDataGridRow({"title":i, "size":null}).ibxAddClass("row-" + i);
 						for(var j = 0; j < nCols; ++j)
 						{
-							var cell = $(sformat("<div style='user-select:none;'>Cell ({1},{2})</div>", i+1, j+1));
+							var cell = $(sformat("<div tabindex='0' style='user-select:none;'>Cell ({1},{2})</div>", i+1, j+1));
 							row.append(cell)
 
 							if(i == 0)
 								colMap.push($.extend({}, {"title":"Column " + j, "resizable":true}))
 						}
 						rows.push(row);
-
-						var childRow = $("<div><div>Child Row</div></div>").ibxDataGridRow({"title":i+"a", "size":null}).ibxAddClass("child-row-" + i);
-						row.ibxDataGridRow("addRow", childRow);
-						rows.push(childRow);
 					}
 					console.timeEnd("genRows");
 
-					var showRowH = $(".btn-row-headers").ibxWidget("checked");
-					var showColH = $(".btn-col-headers").ibxWidget("checked");
-
 					console.time("popGrid");
 					grid.ibxWidget("removeAll");
-					grid.ibxWidget("option", {"indentColumn":0, "colMap":colMap, "showColumnHeaders":showColH, "showRowHeaders":showRowH});
+					grid.ibxWidget("option", {"colMap":colMap});
 					grid.ibxWidget("addRows", rows);
 					grid.ibxWidget("refresh");
 					console.timeEnd("popGrid");
@@ -126,6 +126,8 @@
 					}.bind(this, headers, grid));
 
 				});
+
+				document.activeElement.blur();
 			},
 			[{"src":"./test_res_bundle.xml", "loadContext":"app"}], true);
 		</script>
@@ -148,10 +150,14 @@
 			}
 			.text-entry
 			{
-				min-width:25px;
+				min-width:30px;
 				padding:3px;
 				border:1px solid #ccc;
 				border-radius:5px;
+			}
+			.text-entry > .ibx-label-text
+			{
+				flex:1 1 auto;
 			}
 			.test-grid
 			{
@@ -173,6 +179,11 @@
 				<div tabindex="0" class="text-entry num-cols" data-ibx-type="ibxLabel" data-ibxp-justify="center">10</div>
 				<div tabindex="0" class="btn-col-headers" data-ibx-type="ibxCheckBoxSimple" data-ibxp-checked="true">Show Column Headings</div>
 				<div tabindex="0" class="btn-row-headers" data-ibx-type="ibxCheckBoxSimple" data-ibxp-checked="true">Show Row Headings</div>
+				<div tabindex="0" class="btn-expand-all" data-ibx-type="ibxButton">Expand All</div>
+				<div tabindex="0" class="btn-collapse-all" data-ibx-type="ibxButton">Collapse All</div>
+				<div class="" data-ibx-type="ibxLabel" data-ibxp-for=".indent-col">Indent Column:</div>
+				<div tabindex="0" class="text-entry indent-col" data-ibx-type="ibxLabel" data-ibxp-justify="center">0</div>
+
 			</div>
 
 			<div tabindex="0" class="test-grid" data-ibx-type="ibxDataGrid" data-ibxp-show-row-headers="true">
@@ -184,13 +195,13 @@
 					<div>Age</div>
 				</div>
 				<div data-grid-row data-ibxp-title="1">
-					<div>Julian</div><div>Alexander</div><div>Hyman</div><div>Male</div><div>54</div>
+					<div tabindex="0">Julian</div><div tabindex="0">Alexander</div><div tabindex="0">Hyman</div><div tabindex="0">Male</div><div tabindex="0">54</div>
 				</div>
 				<div data-grid-row data-ibxp-title="2">
-					<div>James</div><div>Edward</div><div>Hyman</div><div>Male</div><div>59</div>
+					<div tabindex="0">James</div><div tabindex="0">Edward</div><div tabindex="0">Hyman</div><div tabindex="0">Male</div><div tabindex="0">59</div>
 				</div>
 				<div data-grid-row data-ibxp-title="3">
-					<div>Charles</div><div>Lewis</div><div>Hyman</div><div>Male</div><div>63</div>
+					<div tabindex="0">Charles</div><div tabindex="0">Lewis</div><div tabindex="0">Hyman</div><div tabindex="0">Male</div><div tabindex="0">63</div>
 				</div>
 			</div>
 		</div>

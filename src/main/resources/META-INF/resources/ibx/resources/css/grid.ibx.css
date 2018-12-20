@@ -80,6 +80,10 @@
 {
 	background-color:#efefef;
 }
+.dgrid-row-hidden
+{
+	display:none;
+}
 .dgrid-cell
 {
 	flex:0 0 auto;
@@ -97,28 +101,22 @@
 }
 .dgrid-cell.ibx-sm-selected
 {
-	background-color:#666;
 	color:white;
-}
-.dgrid-cell-indent-column
-{
-	background-color:#f8f8f8;
-}
-.dgrid-cell-expandable::xbefore
-{
-	flex:0 0 auto;
-	font-family:"Material Icons";
-	width:1em;
-	content:"\e145";
-}
-.dgrid-cell-expandable-expanded::xbefore
-{
-	content:"\e15b";
+	background-color:#999;
 }
 .dgrid-cell-expand-button
 {
-	font-family:"Material Icons";
+	flex:0 0 auto;
 	width:1em;
+	font-family:"Material Icons";
+}
+.dgrid-cell-expand-button::before
+{
+	content:"\e145";
+}
+.dgrid-cell-expandable-expanded > .dgrid-cell-expand-button::before
+{
+	content:"\e15b";
 }
 .dgrid-cell-indent-padding::before
 {

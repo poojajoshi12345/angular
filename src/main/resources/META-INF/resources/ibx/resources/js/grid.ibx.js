@@ -238,8 +238,6 @@ $.fn.ibxDataGridRow = $.ibi.ibxDataGridRow = function()
 					this.expanded = expand;
 					this.element.ibxToggleClass("dgrid-row-expanded", this.expanded);
 					this.element.children(sformat(":nth-child({1})", this._indentColumn+1)).ibxToggleClass("dgrid-cell-expandable-expanded", this.expanded);
-					console.error("YOU WERE GOING TO MAKE THE ADD/REMOVE INTO CLASSES SO THEY CAN BE DONE FROM CSS");
-					this._expandButton.text(this.expanded ? "remove" : "add");
 					this.element.dispatchEvent(this.expanded ? "ibx_row_expand" : "ibx_row_collapse", null, false, false);
 				},
 				toggleExpand:function()
@@ -294,13 +292,11 @@ $.fn.ibxDataGridRow = $.ibi.ibxDataGridRow = function()
 					else
 					{
 						var expanded = e.type == "ibx_row_expand";
-						this.element.css("display", expanded ? "" : "none");
-						this.header.css("display", expanded ? "" : "none");
+						this.element.ibxToggleClass("dgrid-row-hidden", !expanded);
+						this.header.ibxToggleClass("dgrid-row-hidden", !expanded);
 						this._updateAccessibility();
 						if(this.expanded)
-						{
 							this.element.dispatchEvent(e.type, null, false, false);
-						}
 					}
 				},
 				_indentColumn:-1,
@@ -320,8 +316,10 @@ $.fn.ibxDataGridRow = $.ibi.ibxDataGridRow = function()
 					{
 						"role":"row",
 						"aria-level":this.depth(),
-						"aria-hidden":!this.element.is(":visible"),
+						"aria-hidden":this.element.ibxHasClass("dgrid-row-hidden"),
 					}
+					var el = this.element[0];
+					ariaOpts["aria-hidden"] = (el.style.display == "none" || el.style.visibility == "hidden")
 					this.element.attr(ariaOpts);
 					this.header.attr({"role":"rowheader", "aria-hidden":ariaOpts["aria-hidden"]});
 				},
@@ -331,6 +329,7 @@ $.fn.ibxDataGridRow = $.ibi.ibxDataGridRow = function()
 					this.element.ibxAddClass(widget.rowClasses).data("ibxDataGridRow", widget);
 					this.header.ibxAddClass(widget.headerClasses).data("ibxDataGridRow", widget).text(this.title);
 
+					//configure the indent column (if changed) and cell...expand button/classes etc.
 					var indentColumn = this.element.closest(".ibx-data-grid").ibxDataGrid("option", "indentColumn");
 					if(!isNaN(indentColumn) && (indentColumn != this._indentColumn))
 					{
@@ -353,12 +352,11 @@ $.fn.ibxDataGridRow = $.ibi.ibxDataGridRow = function()
 						}
 						indentCell.ibxToggleClass("dgrid-cell-indent-padding", !this.container);
 						this._indentColumn = indentColumn;
-
 						this.updateIndent(indentCell);
-						this._updateAccessibility();
 					}
 
 					this.expand(this.expanded);
+					this._updateAccessibility();
 
 					//Much as I HATE timers...There are times when the height of a row can be dynamic (text wrapping)
 					//So, in that case, you can make the row calculate its header size dynamically.
@@ -647,7 +645,7 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 			if(cInfo)
 			{
 				cell.style.width = isNaN(cInfo.ui.curSize) ? cInfo.ui.curSize : cInfo.ui.curSize + "px";//if size is just a number assume pixels.
-				cell.setAttribute("tabindex", -1);
+				cell.setAttribute("tabindex", cell.tabIndex);
 				cell.classList.toggle(options.classes.gridSelectable, cInfo.selectable);
 				cell.classList.add(options.classes.gridCell);
 			}
