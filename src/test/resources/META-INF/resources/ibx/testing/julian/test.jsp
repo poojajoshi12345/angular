@@ -29,8 +29,8 @@
 				$(".btn-collapse-all").on("click", function(e){$(".ibx-data-grid").ibxWidget("expandRow", null, false);});
 				$(".indent-col").on("ibx_widgetblur", function(e)
 				{
-					var val = parseInt($(e.target).text(), 10);
-					$(".ibx-data-grid").ibxWidget("option", "indentColumn", val);
+					//var val = parseInt($(e.target).text(), 10);
+					//$(".ibx-data-grid").ibxWidget("option", "indentColumn", val);
 				});
 
 				$(".btn-load-ibfs").on("click", function(e)
@@ -53,13 +53,13 @@
 
 						var grid = $(".ibx-data-grid");
 						grid.ibxWidget("removeAll");
-						grid.ibxWidget("option", {"defaultColConfig":{justify:"start", resizable:true}, "colMap":colMap});
+						grid.ibxWidget("option", {"defaultColConfig":{justify:"start", resizable:true}, "indentColumn":0, "colMap":colMap});
 
 						var rootItems = xDoc.querySelectorAll("rootObject > item");
 						var rows = $(buildTree(rootItems));
 						grid.ibxWidget("addRows", rows).ibxWidget("updateHeaders", "both");
 						grid.ibxWidget("refresh");
-						console.error("You were figuring out why the files have a different line height than the folders?!");
+						console.warn("You were figuring out why the files have a different line height than the folders?!");
 						function buildTree(items)
 						{
 							var rows = [];
@@ -119,14 +119,14 @@
 					[
 						{"title":"displayName", "size":"150px"},
 						{"title":"displayValue"},
-						{"title":"name"},
-						{"title":"value"},
-						{"title":"type", "size":"50px"},
-						{"title":"uiType", "size":"75px"},
-						{"title":"expanded", "size":"100px", "flex":true, "justify":"center"},
+						//{"title":"name"},
+						//{"title":"value"},
+						//{"title":"type", "size":"50px"},
+						//{"title":"uiType", "size":"75px"},
+						//{"title":"expanded", "size":"100px", "flex":true, "justify":"center"},
 					];
-					grid.ibxWidget("option", {"defaultColConfig":{justify:"start", resizable:true}, "colMap":colMap});
 					grid.ibxWidget("removeAll");
+					grid.ibxWidget("option", {"defaultColConfig":{justify:"start", resizable:true}, "indentColumn":0, "colMap":colMap});
 
 					buildTree(testProps);
 					function buildTree(props, parentRow)
@@ -134,15 +134,22 @@
 						var rows = [];
 						for(var i = 0; props && i < props.length; ++i)
 						{
-							var row = $("<div>").ibxDataGridRow({"title":rowCount++});
-							rows.push(row);
-
 							var prop = props[i];
+							var row = $("<div>").ibxDataGridRow({"title":"Property"});
+
+							rows.push(row);
 							for(var key in prop)
 							{
 								if(!(prop[key] instanceof Object))
 								{
 									var cell = $("<div tabindex='0'>").text(prop[key]);
+									if(key == "displayValue")
+									{
+										cell.on("xxx", function(e)
+										{
+											$(e.currentTarget).ibxEditable().ibxEditable("startEditing");
+										})
+									}
 									row.append(cell);
 								}
 							}
@@ -182,7 +189,7 @@
 
 					console.time("popGrid");
 					grid.ibxWidget("removeAll");
-					grid.ibxWidget("option", {"colMap":colMap});
+					grid.ibxWidget("option", {"indentColumn":-1, "colMap":colMap});
 					grid.ibxWidget("addRows", rows);
 					grid.ibxWidget("refresh");
 					console.timeEnd("popGrid");
@@ -249,6 +256,7 @@
 			{
 				font-family: "Material Icons";
 				padding:0px 3px 0px 3px;
+				font-size:1.5em;
 			}
 		</style>
 	</head>
@@ -280,14 +288,29 @@
 					<div>Sex</div>
 					<div>Age</div>
 				</div>
-				<div data-grid-row data-ibxp-title="1">
-					<div tabindex="0">Julian</div><div tabindex="0">Alexander</div><div tabindex="0">Hyman</div><div tabindex="0">Male</div><div tabindex="0">54</div>
+				<div data-grid-row data-ibxp-title="Person">
+					<div tabindex="0">Jane</div><div tabindex="0">Susan</div><div tabindex="0">Aimes</div><div tabindex="0">Female</div><div tabindex="0">54</div>
 				</div>
-				<div data-grid-row data-ibxp-title="2">
-					<div tabindex="0">James</div><div tabindex="0">Edward</div><div tabindex="0">Hyman</div><div tabindex="0">Male</div><div tabindex="0">59</div>
+				<div data-grid-row data-ibxp-title="Person">
+					<div tabindex="0">Bruce</div><div tabindex="0">John</div><div tabindex="0">Aimes</div><div tabindex="0">Male</div><div tabindex="0">54</div>
 				</div>
-				<div data-grid-row data-ibxp-title="3">
-					<div tabindex="0">Charles</div><div tabindex="0">Lewis</div><div tabindex="0">Hyman</div><div tabindex="0">Male</div><div tabindex="0">63</div>
+				<div data-grid-row data-ibxp-title="Person">
+					<div tabindex="0">Robert</div><div tabindex="0">Michael</div><div tabindex="0">Aimes</div><div tabindex="0">Male</div><div tabindex="0">63</div>
+				</div>
+				<div data-grid-row data-ibxp-title="Person">
+					<div tabindex="0">Elizabeth</div><div tabindex="0">Ruth</div><div tabindex="0">Aimes</div><div tabindex="0">Female</div><div tabindex="0">59</div>
+				</div>
+				<div data-grid-row data-ibxp-title="Person">
+					<div tabindex="0">Erica</div><div tabindex="0">Betty</div><div tabindex="0">Barry</div><div tabindex="0">Female</div><div tabindex="0">54</div>
+				</div>
+				<div data-grid-row data-ibxp-title="Person">
+					<div tabindex="0">Donald</div><div tabindex="0">Jackson</div><div tabindex="0">Michaels</div><div tabindex="0">Male</div><div tabindex="0">54</div>
+				</div>
+				<div data-grid-row data-ibxp-title="Person">
+					<div tabindex="0">Jeanette</div><div tabindex="0">Rose</div><div tabindex="0">Smith</div><div tabindex="0">Male</div><div tabindex="0">59</div>
+				</div>
+				<div data-grid-row data-ibxp-title="Person">
+					<div tabindex="0">Achilles</div><div tabindex="0">Agamemmnon</div><div tabindex="0">Zavetakis</div><div tabindex="0">Male</div><div tabindex="0">63</div>
 				</div>
 			</div>
 		</div>

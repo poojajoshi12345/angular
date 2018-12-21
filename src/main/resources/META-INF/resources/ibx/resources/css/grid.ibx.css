@@ -94,6 +94,7 @@
 	border-right:1px solid #ccc;
 	border-bottom:1px solid #ccc;
 	box-sizing:border-box;
+	xheight:1em;
 }
 .dgrid-cell:hover
 {
@@ -110,11 +111,11 @@
 	width:1em;
 	font-family:"Material Icons";
 }
-.dgrid-cell-expand-button::before
+.dgrid-cell-indent-column > .dgrid-cell-expand-button::before
 {
 	content:"\e145";
 }
-.dgrid-cell-expandable-expanded > .dgrid-cell-expand-button::before
+.dgrid-row-expanded > .dgrid-cell-indent-column > .dgrid-cell-expand-button::before
 {
 	content:"\e15b";
 }

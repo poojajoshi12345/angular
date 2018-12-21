@@ -38,7 +38,7 @@
 			[
 				{
 					"displayName":"Test Property",
-					"expanded":true,
+					"expanded":false,
 					"props":
 					[
 						{
@@ -88,6 +88,7 @@
 									"value":"1px",
 									"dataType":"string",
 									"uiType":"textField",
+									"expanded":false,
 								},
 								{
 									"displayName":"Style",
@@ -96,6 +97,7 @@
 									"value":"solid",
 									"dataType":"string",
 									"uiType":"select",
+									"expanded":false,
 									"values":
 									{
 										"solid":
@@ -122,6 +124,7 @@
 									"value":"red",
 									"dataType":"color",
 									"uiType":"colorPicker",
+									"expanded":false,
 								},
 							]
 						},
@@ -142,6 +145,7 @@
 									"value":"1px",
 									"dataType":"string",
 									"uiType":"textField",
+									"expanded":false,
 								},
 								{
 									"displayName":"Style",
@@ -150,6 +154,7 @@
 									"value":"solid",
 									"dataType":"string",
 									"uiType":"select",
+									"expanded":false,
 									"values":
 									{
 										"solid":
@@ -176,6 +181,7 @@
 									"value":"red",
 									"dataType":"color",
 									"uiType":"colorPicker",
+									"expanded":false,
 								},
 							]
 						}

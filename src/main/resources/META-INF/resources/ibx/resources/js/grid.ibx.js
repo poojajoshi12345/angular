@@ -192,12 +192,12 @@ $.fn.ibxDataGridRow = $.ibi.ibxDataGridRow = function()
 				header:$("<div>").attr({"tabindex": -1}),
 				headerSize:"css", //"dynamic" means calculate size on refresh...VERY SLOW USE WITH CAUTION
 				splitter:null,
-				title:"",
+				title:null,
 				size:null,
-				rowClasses:["ibx-data-grid-row", "dgrid-row", "ibx-flexbox", "fbx-inline", "fbx-row", "fbx-align-items-stretch", "fbx-align-content-center"],
+				rowClasses:["ibx-data-grid-row", "dgrid-row", "ibx-flexbox", "fbx-inline", "fbx-row", "fbx-align-items-center", "fbx-align-content-center"],
 				headerClasses:["dgrid-header-row", "dgrid-cell", "ibx-flexbox", "fbx-inline", "fbx-row", "fbx-align-items-center", "fbx-justify-content-center"],
-				containerClasses:["dgrid-cell-expandable", "ibx-flexbox", "fbx-inline", "fbx-row", "fbx-align-items-center"],
-				expanded:false,
+				cellContainerClasses:["dgrid-cell-expandable", "ibx-flexbox", "fbx-inline", "fbx-row", "fbx-align-items-center"],
+				expanded:-1,
 				singleClickExpand:false,
 				
 				depth:function()
@@ -245,7 +245,6 @@ $.fn.ibxDataGridRow = $.ibi.ibxDataGridRow = function()
 					{
 						this.expanded = expand;
 						this.element.ibxToggleClass("dgrid-row-expanded", expand);
-						this.element.children(sformat(":nth-child({1})", this._indentColumn+1)).ibxToggleClass("dgrid-cell-expandable-expanded", expand);
 						this.element.dispatchEvent(expand ? "ibx_expand" : "ibx_collapse", null, true, false);
 					}
 				},
@@ -336,7 +335,7 @@ $.fn.ibxDataGridRow = $.ibi.ibxDataGridRow = function()
 				{
 					$.extend(this, options);
 					this.element.ibxAddClass(widget.rowClasses).data("ibxDataGridRow", widget);
-					this.header.ibxAddClass(widget.headerClasses).data("ibxDataGridRow", widget).text(".");
+					this.header.ibxAddClass(widget.headerClasses).data("ibxDataGridRow", widget).text(this.title || ".");
 
 					//configure the indent column (if changed) and cell...expand button/classes etc.
 					var indentColumn = this.element.closest(".ibx-data-grid").ibxDataGrid("option", "indentColumn");
@@ -346,12 +345,12 @@ $.fn.ibxDataGridRow = $.ibi.ibxDataGridRow = function()
 						var indentCell = this.element.children(sformat(":nth-child({1})", this._indentColumn+1));
 						indentCell.off("dblclick click keydown", this._onIndentCellEventBound);
 						indentCell.ibxRemoveClass("dgrid-cell-indent-padding");
-						indentCell.ibxRemoveClass(this.containerClasses).ibxRemoveClass("dgrid-cell-indent-column dgrid-cell-expandable-expanded").css("paddingLeft", "");
+						indentCell.ibxRemoveClass(this.cellContainerClasses).ibxRemoveClass("dgrid-cell-indent-column").css("paddingLeft", "");
 
 						//config the new indent cell.
 						var indentCell = this.element.children(sformat(":nth-child({1})", indentColumn+1));
 						indentCell.on("dblclick click keydown", this._onIndentCellEventBound);
-						indentCell.ibxAddClass("dgrid-cell-indent-column").ibxToggleClass(this.containerClasses, this.container);
+						indentCell.ibxAddClass("dgrid-cell-indent-column").ibxToggleClass(this.cellContainerClasses, this.container);
 						if(this.container)
 						{
 							//create the expand button, and move it to the current indent cell.
