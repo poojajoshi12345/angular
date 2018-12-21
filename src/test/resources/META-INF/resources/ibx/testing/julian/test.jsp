@@ -39,16 +39,16 @@
 					{
 						var colMap = 
 						[
-							{"title":"Title",			"attr":"description"},
-							{"title":"Name",			"attr":"name"},
-							{"title":"Summary",			"attr":"",},
-							{"title":"Tags",			"attr":""},
-							{"title":"Last Modified",	"attr":"lastModified"},
-							{"title":"Created On",		"attr":"createdOn"},
-							{"title":"Size",			"attr":"length"},
-							{"title":"Owner",			"attr":"ownerName"},
-							{"title":"Published",		"attr":""},
-							{"title":"Shown",			"attr":""},
+							{"title":"Title","size":"200px","attr":"description","hasIcon":true},
+							{"title":"Name","size":"200px","attr":"name"},
+							//{"title":"Summary","attr":""},
+							//{"title":"Tags","attr":""},
+							{"title":"Last Modified","size":"150px","attr":"lastModified","type":"date"},
+							{"title":"Created On","size":"150px","attr":"createdOn","type":"date"},
+							{"title":"Size","attr":"length","type":"size"},
+							//{"title":"Owner","attr":"ownerName"},
+							//{"title":"Published","attr":""},
+							//{"title":"Shown","attr":""},
 						];
 
 						var grid = $(".ibx-data-grid");
@@ -59,7 +59,7 @@
 						var rows = $(buildTree(rootItems));
 						grid.ibxWidget("addRows", rows).ibxWidget("updateHeaders", "both");
 						grid.ibxWidget("refresh");
-
+						console.error("You were figuring out why the files have a different line height than the folders?!");
 						function buildTree(items)
 						{
 							var rows = [];
@@ -84,8 +84,25 @@
 								var cells = [];
 								$(colMap).map(function(idx, col)
 								{
+									var cell = $("<div tabindex='0'></div>").ibxAddClass("ibfs-item-cell");
 									var attr = item.getAttribute(col.attr);
-									var cell = $(sformat("<div tabindex='0'>{1}</div>", attr));
+									if(col.type == "date")
+									{
+										date = new Date(Number(attr));
+										attr = sformat("{4}:{5} {1}/{2}/{3}", date.getMonth(), date.getDay(), date.getYear(), date.getHours(), date.getMinutes());
+									}
+									else
+									if(col.type == "size")
+										attr = container ? "" : Math.round((Math.max(Number(attr), 1024)/1024)) + "KB";
+									cell.text(attr);
+
+									if(col.hasIcon)
+									{
+										var icon = $("<span>").ibxAddClass("ibfs-item-icon");
+										icon.text(container ? "folder" : "insert_drive_file");
+										cell.prepend(icon);
+									}
+
 									cells.push(cell);
 								});
 								row.append(cells);
@@ -224,6 +241,14 @@
 				height:500px;
 				border:1px solid black;
 				margin:100px;
+			}
+			.ibfs-item-cell
+			{
+			}
+			.ibfs-item-icon
+			{
+				font-family: "Material Icons";
+				padding:0px 3px 0px 3px;
 			}
 		</style>
 	</head>

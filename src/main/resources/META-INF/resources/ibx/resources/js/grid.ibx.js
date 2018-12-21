@@ -199,7 +199,7 @@ $.fn.ibxDataGridRow = $.ibi.ibxDataGridRow = function()
 				containerClasses:["dgrid-cell-expandable", "ibx-flexbox", "fbx-inline", "fbx-row", "fbx-align-items-center"],
 				expanded:false,
 				singleClickExpand:false,
-
+				
 				depth:function()
 				{
 					var depth = 0;
@@ -231,18 +231,22 @@ $.fn.ibxDataGridRow = $.ibi.ibxDataGridRow = function()
 					var event = this.element.dispatchEvent("ibx_get_row_children", {"filter":filter, "children":[]}, false, false);
 					return event.data.children;
 				},
+				isExpanded:function()
+				{
+					return this.element.ibxHasClass("dgrid-row-expanded");
+				},
 				expand:function(expand)
 				{
-					if(!this.container)
+					if(!this.container || (this.isExpanded() == expand))
 						return;
 
 					var evt = this.element.dispatchEvent( expand ? "ibx_beforeexpand" : "ibx_beforecollapse", null, true, true);
 					if(!evt.isDefaultPrevented())
 					{
 						this.expanded = expand;
-						this.element.ibxToggleClass("dgrid-row-expanded", this.expanded);
-						this.element.children(sformat(":nth-child({1})", this._indentColumn+1)).ibxToggleClass("dgrid-cell-expandable-expanded", this.expanded);
-						this.element.dispatchEvent(this.expanded ? "ibx_expand" : "ibx_collapse", null, true, false);
+						this.element.ibxToggleClass("dgrid-row-expanded", expand);
+						this.element.children(sformat(":nth-child({1})", this._indentColumn+1)).ibxToggleClass("dgrid-cell-expandable-expanded", expand);
+						this.element.dispatchEvent(expand ? "ibx_expand" : "ibx_collapse", null, true, false);
 					}
 				},
 				toggleExpand:function()
@@ -309,7 +313,7 @@ $.fn.ibxDataGridRow = $.ibi.ibxDataGridRow = function()
 				{
 					//update our indent
 					var indentCell = (indentCell === undefined) ? this.element.children(sformat(":nth-child({1})", this._indentColumn+1)) : indentCell;
-					indentCell.css("paddingLeft", (this.depth()+"em"));
+					indentCell.css("paddingLeft", (this.depth() + 1 + "em"));
 					
 					//then update all our children...and so on.
 					$(this.childRows()).ibxDataGridRow("updateIndent");
