@@ -219,6 +219,7 @@ $.fn.ibxDataGridRow = $.ibi.ibxDataGridRow = function()
 				addRow:function(row)
 				{
 					var row = $(row).ibxDataGridRow("setParent", this.element);
+					row.ibxDataGridRow("show", this.isVisible());
 					this.container = row.length || this.container;
 				},
 				removeRow:function(row)
@@ -230,6 +231,18 @@ $.fn.ibxDataGridRow = $.ibi.ibxDataGridRow = function()
 					filter = filter || "*";
 					var event = this.element.dispatchEvent("ibx_get_row_children", {"filter":filter, "children":[]}, false, false);
 					return event.data.children;
+				},
+				show:function(show)
+				{
+					this.element.ibxToggleClass("dgrid-row-hidden", !show);
+					this.header.ibxToggleClass("dgrid-row-hidden", !show);
+					this._updateAccessibility();
+					if(this.isExpanded())
+						this.element.dispatchEvent(show ? "ibx_expand" : "ibx_collapse", null, false, false);
+				},
+				isVisible:function()
+				{
+					return this.element.ibxHasClass("dgrid-row-hidden");
 				},
 				isExpanded:function()
 				{
@@ -298,14 +311,7 @@ $.fn.ibxDataGridRow = $.ibi.ibxDataGridRow = function()
 							data.children.push(this.element[0]);
 					}
 					else
-					{
-						var parentExpanded = e.type == "ibx_expand";
-						this.element.ibxToggleClass("dgrid-row-hidden", !parentExpanded);
-						this.header.ibxToggleClass("dgrid-row-hidden", !parentExpanded);
-						this._updateAccessibility();
-						if(this.expanded)
-							this.element.dispatchEvent(e.type, null, false, false);
-					}
+						this.show(e.type == "ibx_expand");
 				},
 				_indentColumn:-1,
 				updateIndent:function(indentCell)
