@@ -418,7 +418,17 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 	options:
 	{
 		colMap:[],
-		defaultColConfig: {title:"Column", size:"100px", flex:false, justify:"center", resizable:true, selectable:true, visible:true},
+		defaultColConfig:
+		{
+			title:"",
+			size:"100px",
+			flex:false,
+			justify:"center",
+			resizable:true,
+			selectable:true,
+			visible:true,
+		},
+
 		defaultRowConfig: {},//not currently used.
 		showColumnHeaders:true,
 		showRowHeaders:true,
@@ -516,7 +526,7 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 
 				//make header
 				var cHeading = $(sformat("<div tabindex='-1' class='{1}'>", classes.colHeaderClass));
-				cHeading.ibxButtonSimple({justify:cInfo.justify || "start"}).attr("role", "columnheader");
+				cHeading.ibxButtonSimple({justify:cInfo.justify}).attr("role", "columnheader");
 
 				//make splitter
 				var splitter = $(sformat("<div class='{1}'>", classes.colHeaderSplitterClass));

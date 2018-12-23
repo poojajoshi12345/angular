@@ -126,7 +126,7 @@
 						//{"title":"expanded", "size":"100px", "flex":true, "justify":"center"},
 					];
 					grid.ibxWidget("removeAll");
-					grid.ibxWidget("option", {"defaultColConfig":{justify:"start", resizable:true}, "indentColumn":0, "colMap":colMap});
+					grid.ibxWidget("option", {"indentColumn":0, "colMap":colMap});
 
 					buildTree(testProps);
 					function buildTree(props, parentRow)
