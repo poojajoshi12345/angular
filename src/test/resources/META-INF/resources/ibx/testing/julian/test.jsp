@@ -117,8 +117,8 @@
 					var grid = $(".ibx-data-grid");
 					var colMap = 
 					[
-						{"title":"displayName", "size":"150px"},
-						{"title":"displayValue"},
+						{"title":"Property", "size":"150px"},
+						{"title":"Value"},
 						//{"title":"name"},
 						//{"title":"value"},
 						//{"title":"type", "size":"50px"},

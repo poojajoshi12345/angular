@@ -189,13 +189,14 @@ $.fn.ibxDataGridRow = $.ibi.ibxDataGridRow = function()
 				element:el,
 				parent:null,
 				container:false,
+				size:null,
 				header:$("<div>").attr({"tabindex": -1}),
-				headerSize:"css", //"dynamic" means calculate size on refresh...VERY SLOW USE WITH CAUTION
+				dynamicHeaderSize:false,//calculate row header size on refresh...VERY SLOW, USE WITH CAUTION!
 				splitter:null,
 				title:null,
 				size:null,
-				rowClasses:["ibx-data-grid-row", "dgrid-row", "ibx-flexbox", "fbx-inline", "fbx-row", "fbx-align-items-center", "fbx-align-content-center"],
-				headerClasses:["dgrid-header-row", "dgrid-cell", "ibx-flexbox", "fbx-inline", "fbx-row", "fbx-align-items-center", "fbx-justify-content-center"],
+				rowClasses:["ibx-data-grid-row", "dgrid-row", "ibx-flexbox", "fbx-inline", "fbx-row", "fbx-align-items-stretch", "fbx-align-content-stretch"],
+				headerClasses:["dgrid-header-row", "dgrid-row", "ibx-flexbox", "fbx-inline", "fbx-row", "fbx-align-items-center", "fbx-justify-content-center"],
 				cellContainerClasses:["dgrid-cell-expandable", "ibx-flexbox", "fbx-inline", "fbx-row", "fbx-align-items-center"],
 				expanded:-1,
 				singleClickExpand:false,
@@ -318,7 +319,7 @@ $.fn.ibxDataGridRow = $.ibi.ibxDataGridRow = function()
 				{
 					//update our indent
 					var indentCell = (indentCell === undefined) ? this.element.children(sformat(":nth-child({1})", this._indentColumn+1)) : indentCell;
-					indentCell.css("paddingLeft", (this.depth() + 1 + "em"));
+					indentCell.css("paddingLeft", (this.depth() + "em"));
 					
 					//then update all our children...and so on.
 					$(this.childRows()).ibxDataGridRow("updateIndent");
@@ -341,7 +342,7 @@ $.fn.ibxDataGridRow = $.ibi.ibxDataGridRow = function()
 				{
 					$.extend(this, options);
 					this.element.ibxAddClass(widget.rowClasses).data("ibxDataGridRow", widget);
-					this.header.ibxAddClass(widget.headerClasses).data("ibxDataGridRow", widget).text(this.title || ".");
+					this.header.ibxAddClass(widget.headerClasses).data("ibxDataGridRow", widget).text(this.title == null ? "." : this.title);
 
 					//configure the indent column (if changed) and cell...expand button/classes etc.
 					var indentColumn = this.element.closest(".ibx-data-grid").ibxDataGrid("option", "indentColumn");
@@ -374,7 +375,7 @@ $.fn.ibxDataGridRow = $.ibi.ibxDataGridRow = function()
 
 					//Much as I HATE timers...There are times when the height of a row can be dynamic (text wrapping)
 					//So, in that case, you can make the row calculate its header size dynamically.
-					if(this.headerSize == "dynamic")
+					if(this.dynamicHeaderSize)
 					{
 						window.setTimeout(function()
 						{

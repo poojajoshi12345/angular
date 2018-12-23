@@ -54,11 +54,13 @@
 	flex:0 0 auto;
 	padding:.5em;
 }
-.dgrid-header-row.dgrid-cell
+.dgrid-header-row
 {
+	flex:0 0 auto;
 	min-width:3em;
- 	border-right:0px transparent;
-}
+	padding:0px 1em 0px 1em;
+	border-bottom:1px solid #ccc;
+ }
 .dgrid-header-col-splitter
 {
 	min-width:0px;
@@ -73,8 +75,9 @@
 .dgrid-row
 {
 	flex:0 0 auto;
+	height:2.5em;
 	box-sizing:border-box;
-
+	border-bottom:1px solid #ccc;
 }
 .dgrid-row:hover
 {
@@ -92,9 +95,7 @@
 	text-overflow:ellipsis;
 	white-space:nowrap;
 	border-right:1px solid #ccc;
-	border-bottom:1px solid #ccc;
 	box-sizing:border-box;
-	xheight:1em;
 }
 .dgrid-cell:hover
 {
