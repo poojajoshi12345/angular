@@ -63,9 +63,9 @@
 				},
 				{
 					"displayName":"Border",
-					"displayValue":"1px solid black",
+					"displayValue":"1px solid red",
 					"name":"border",
-					"value":"1px solid black",
+					"value":"1px solid red",
 					"dataType":"string",
 					"uiType":"borderSelector",
 					"expanded":false,
@@ -73,9 +73,9 @@
 					[
 						{
 							"displayName":"Left",
-							"displayValue":"1px solid black",
+							"displayValue":"1px solid red",
 							"name":"left",
-							"value":"1px solid black",
+							"value":"1px solid red",
 							"dataType":"string",
 							"uiType":"borderSelector",
 							"expanded":false,
@@ -130,9 +130,9 @@
 						},
 						{
 							"displayName":"Top",
-							"displayValue":"1px solid black",
+							"displayValue":"1px solid red",
 							"name":"left",
-							"value":"1px solid black",
+							"value":"1px solid red",
 							"dataType":"string",
 							"uiType":"borderSelector",
 							"expanded":false,

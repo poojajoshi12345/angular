@@ -524,19 +524,20 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 				var cInfo = colMap[i];
 				var size = sformat("width:{1};flex:{2} 0 auto;", cInfo.size, cInfo.flex ? 1 : 0);
 
-				//make header
-				var cHeading = $(sformat("<div tabindex='-1' class='{1}'>", classes.colHeaderClass));
-				cHeading.ibxButtonSimple({justify:cInfo.justify}).attr("role", "columnheader");
+				//make header if one isn't supplied
+				var cHeading = $(cInfo.header);
+				if(!cHeading.length)
+				{
+					cHeading = $(sformat("<div tabindex='-1' class='{1}'>", classes.colHeaderClass));
+					cHeading.ibxButtonSimple({justify:cInfo.justify});
+					cHeading.ibxWidget("option", "text", cInfo.title);
+				}
+				cHeading.attr("role", "columnheader");
 
 				//make splitter
 				var splitter = $(sformat("<div class='{1}'>", classes.colHeaderSplitterClass));
 				splitter.ibxSplitter({locked:!cInfo.resizable || (i == colMap.length-1), resize:"first"}).on("ibx_resize ibx_reset", this._onSplitterResize.bind(this));
 
-				//let people change the header before adding it to the bar...reasign because if they did we want to use that...if they didn't then nothing will have changed.
-				var event = this.element.dispatchEvent("ibx_gridheaderupdate", {"grid":this.element, "type":"column", "info":cInfo, "idx": i, "header":cHeading[0], "splitter":splitter[0]});
-				if(!event.isDefaultPrevented())
-					cHeading.ibxWidget("option", "text", cInfo.title);
-				
 				//now add the column header and set the size as everything is in the dom.
 				cInfo.ui = {"idx":i, "header":cHeading, "splitter":splitter, "curSize":null};
 				cHeading.data("ibxDataGridCol", cInfo);
