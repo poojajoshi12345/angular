@@ -332,9 +332,9 @@ $.fn.ibxDataGridRow = $.ibi.ibxDataGridRow = function()
 						"role":"row",
 						"aria-level":this.depth(),
 						"aria-hidden":this.element.ibxHasClass("dgrid-row-hidden"),
-					}
+					};
 					var el = this.element[0];
-					ariaOpts["aria-hidden"] = (el.style.display == "none" || el.style.visibility == "hidden")
+					ariaOpts["aria-hidden"] = (el.style.display == "none" || el.style.visibility == "hidden");
 					this.element.attr(ariaOpts);
 					this.header.attr({"role":"rowheader", "aria-hidden":ariaOpts["aria-hidden"]});
 				},
@@ -409,6 +409,7 @@ $.fn.ibxDataGridRow = $.ibi.ibxDataGridRow = function()
 				return false;
 			}
 		}
+		return this;
 	}.bind(this, arguments));
 	return ret;
 };
