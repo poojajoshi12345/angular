@@ -325,7 +325,6 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 					this._dispatchEvent("ibx_selchange", {"selected":select, "items":el, "selModel":this, "anchor":this._elAnchor, "focus":this._elFocus}, true, false);
 				}
 			}
-			console.log("selchange", el)
 		}
 		else
 		{
