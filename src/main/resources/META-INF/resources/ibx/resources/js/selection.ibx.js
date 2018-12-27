@@ -312,14 +312,14 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 
 			if(el.length)
 			{
-				var evt = this._dispatchEvent("ibx_beforeselchange", {"selected":select, "items":el}, true, true);
+				var evt = this._dispatchEvent("ibx_beforeselchange", {"selected":select, "items":el, "selModel":this, "anchor":this._elAnchor, "focus":this._elFocus}, true, true);
 				if(!evt.isDefaultPrevented())
 				{
 					el = evt.data.items;
 					el.ibxAddClass("ibx-sm-selected");
 					if(anchor)
 						this._anchor(el.first());
-					this._dispatchEvent("ibx_selchange", {"selected":select, "items":el}, true, false);
+					this._dispatchEvent("ibx_selchange", {"selected":select, "items":el, "selModel":this, "anchor":this._elAnchor, "focus":this._elFocus}, true, false);
 				}
 			}
 		}
@@ -328,13 +328,13 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 			el = $(el).filter(".ibx-sm-selected");
 			if(el.length)
 			{
-				var evt = this._dispatchEvent("ibx_beforeselchange", {"selected":select, "items":el}, true, true);
+				var evt = this._dispatchEvent("ibx_beforeselchange",{"selected":select, "items":el, "selModel":this, "anchor":this._elAnchor, "focus":this._elFocus}, true, true);
 				if(!evt.isDefaultPrevented())
 				{
 					el.ibxRemoveClass("ibx-sm-selected");
 					if(anchor)
 						this._anchor(el.first());
-					this._dispatchEvent("ibx_selchange", {"selected":select, "items":el}, true, false);
+					this._dispatchEvent("ibx_selchange", {"selected":select, "items":el, "selModel":this, "anchor":this._elAnchor, "focus":this._elFocus}, true, false);
 				}
 			}
 		}

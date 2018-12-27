@@ -67,7 +67,7 @@
 							{
 								var item = items[i];
 								var container = item.hasAttribute("container");
-								var row = $("<div>").data("ibfsItem", item).ibxDataGridRow({"title":"", "container":container, "expanded":false});
+								var row = $("<div>").data("ibfsItem", item).ibxDataGridRow({"title":"IBFS Item", "container":container, "expanded":false});
 								row.on("ibx_beforeexpand", function(grid, e)
 								{
 									var row = $(e.target);

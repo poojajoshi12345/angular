@@ -468,7 +468,8 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 		var colHeaderBar = this._colHeaderBar = $("<div tabindex='0'>").ibxHBox({navKeyRoot:true}).ibxAddClass(classes.colHeaderBarClass).data({ibxCol:"2", ibxRow:"1"});
 		var rowHeaderBar = this._rowHeaderBar = $("<div tabindex='0'>").ibxVBox({navKeyRoot:true, align:"stretch"}).ibxAddClass(classes.rowHeaderBarClass).data({ibxCol:"1", ibxRow:"2"});
 		var grid = this._grid = $("<div tabindex='0'>").ibxVBox({align:"stretch"}).ibxAddClass(classes.gridClass).data({ibxCol:"2", ibxRow:"2"});
-		grid.on("scroll", this._onGridScroll.bind(this)).ibxDataGridSelectionManager({grid:this, selectableChildren:options.classes.gridSelectable});
+		grid.on("scroll", this._onGridScroll.bind(this));
+		grid.ibxDataGridSelectionManager({grid:this, selectableChildren:options.classes.gridSelectable}).on("ibx_beforeselchange", this._onGridSelChange.bind(this));
 
 		this.add([corner[0], colHeaderBar[0], rowHeaderBar[0], grid[0]]);
 		this._super();
@@ -561,6 +562,13 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 		var ret = null;
 		var row = this.getRow(idxRow);
 		return row.children(sformat(":nth-child({1})", idxCol + 1)) || null;
+	},
+	getCellPos:function(cell)
+	{
+		cell = $(cell);
+		var options = this.options;
+		var row = cell.closest("."+options.classes.gridRow);
+		return {"column":cell.index(), "row":row.index()}
 	},
 	getColumnCount:function()
 	{
@@ -711,6 +719,32 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 		var scrollY = this._grid.prop("scrollTop");
 		this._colHeaderBar.prop("scrollLeft", scrollX);
 		this._rowHeaderBar.prop("scrollTop", scrollY);
+	},
+	_onGridSelChange:function(e)
+	{
+		//Handle selction in rows and columns.
+		var eType = e.type;
+		var selInfo = e.originalEvent.data;
+		if(eType == "ibx_beforeselchange" && selInfo.selected)
+		{
+			var posFirst = this.getCellPos(selInfo.anchor);
+			var posLast = this.getCellPos(selInfo.items.last());
+			var selCol = (posFirst.column == posLast.column);
+			var selRow = (posFirst.row == posLast.row);
+			if(selCol || selRow)
+			{
+				selInfo.items = selInfo.items.map(function(idx, el)
+				{
+					var ret = null;
+					if(selCol && (this.getCellPos(el).column == posFirst.column))
+						ret = el;
+					else
+					if(selRow  && (this.getCellPos(el).row == posFirst.row))
+						ret = el;
+					return ret;
+				}.bind(this));
+			}
+		}
 	},
 	_setOption:function(key, value)
 	{
