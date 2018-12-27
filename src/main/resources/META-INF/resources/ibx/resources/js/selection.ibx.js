@@ -193,6 +193,9 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 			var selChildren = this.selectableChildren();
 			var selTarget = this.mapToSelectable(e.target);
 
+			//focus the target
+			this.focus(selTarget, true);
+
 			//don't deselect if clicking on scrollbar.
 			if(!this.element.clickOnScrollbar(e.clientX, e.clientY))
 			{
@@ -322,6 +325,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 					this._dispatchEvent("ibx_selchange", {"selected":select, "items":el, "selModel":this, "anchor":this._elAnchor, "focus":this._elFocus}, true, false);
 				}
 			}
+			console.log("selchange", el)
 		}
 		else
 		{
@@ -368,9 +372,13 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 		if(el === undefined)
 			return this._elAnchor[0];
 
-		this._elAnchor.ibxRemoveClass("ibx-sm-anchor");
-		this._elAnchor = $(el).first().ibxAddClass("ibx-sm-anchor");
-		var evt = this._dispatchEvent("ibx_anchored", {"items":this._elAnchor}, true, false);
+		if(!this._elAnchor.is(el))
+		{
+			this._elAnchor.ibxRemoveClass("ibx-sm-anchor");
+			this._elAnchor = $(el).first().ibxAddClass("ibx-sm-anchor");
+			var evt = this._dispatchEvent("ibx_anchored", {"anchor":this._elAnchor[0], "focus":this._elFocus[0], "selModel":this}, true, false);
+		}
+		return this._elAnchor[0];
 	},
 	_elFocus:$(),
 	focus:function(el, focus)
@@ -385,12 +393,15 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 	{
 		if(el === undefined)
 			return this._elFocus[0];
-
-		this._elFocus.ibxRemoveClass("ibx-sm-focused ibx-ie-pseudo-focus");
-		this._elFocus = $(el).first().ibxAddClass("ibx-sm-focused " + (ibxPlatformCheck.isIE ? "ibx-ie-pseudo-focus" : ""));
-		this._elFocus ? this.element.attr("aria-active-descendant", this._elFocus.prop("id")) : this.element.removeAttr("aria-active-descendant");
-		this._elFocus.focus();
-		this._dispatchEvent("ibx_focused", {"items":this._elFocus}, true, false);
+		
+		if(!this._elFocus.is(el))
+		{
+			this._elFocus.ibxRemoveClass("ibx-sm-focused ibx-ie-pseudo-focus");
+			this._elFocus = $(el).first().ibxAddClass("ibx-sm-focused " + (ibxPlatformCheck.isIE ? "ibx-ie-pseudo-focus" : ""));
+			this._elFocus ? this.element.attr("aria-active-descendant", this._elFocus.prop("id")) : this.element.removeAttr("aria-active-descendant");
+			this._elFocus.focus();
+			this._dispatchEvent("ibx_focused", {"focus":this._elFocus[0], "anchor":this._elAnchor[0], "selModel":this}, true, false);
+		}
 		return this._elFocus[0];
 	},
 	_active:false,

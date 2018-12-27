@@ -509,6 +509,10 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 		this.addRows(rows);
 		this.refresh();
 	},
+	getSelectionManager:function()
+	{
+		return this._grid.data("ibiIbxDataGridSelectionManager");
+	},
 	updateHeaders:function(which)
 	{
 		which = which || "both";
@@ -725,21 +729,21 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 		//Handle selction in rows and columns.
 		var eType = e.type;
 		var selInfo = e.originalEvent.data;
-		if(eType == "ibx_beforeselchange" && selInfo.selected)
+		if((eType == "ibx_beforeselchange") && (selInfo.anchor !== selInfo.focus))
 		{
-			var posFirst = this.getCellPos(selInfo.anchor);
-			var posLast = this.getCellPos(selInfo.items.last());
-			var selCol = (posFirst.column == posLast.column);
-			var selRow = (posFirst.row == posLast.row);
+			var posAnchor = this.getCellPos(selInfo.anchor);
+			var posFocus = this.getCellPos(selInfo.focus);
+			var selCol = (posAnchor.column == posFocus.column);
+			var selRow = (posAnchor.row == posFocus.row);
 			if(selCol || selRow)
 			{
 				selInfo.items = selInfo.items.map(function(idx, el)
 				{
 					var ret = null;
-					if(selCol && (this.getCellPos(el).column == posFirst.column))
+					if(selCol && (this.getCellPos(el).column == posAnchor.column))
 						ret = el;
 					else
-					if(selRow  && (this.getCellPos(el).row == posFirst.row))
+					if(selRow  && (this.getCellPos(el).row == posAnchor.row))
 						ret = el;
 					return ret;
 				}.bind(this));
