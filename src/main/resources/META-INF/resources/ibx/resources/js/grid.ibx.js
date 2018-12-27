@@ -706,7 +706,7 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 		row.each(function(idx, row)
 		{
 			var widget = $(row).detach().data("ibxDataGridRow");
-			widget.header.remove();
+			widget.header.detach();
 			widget.indentColumn = -1;
 		}.bind(this));
 	},
