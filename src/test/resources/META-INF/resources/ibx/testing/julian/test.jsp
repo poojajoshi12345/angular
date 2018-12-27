@@ -159,8 +159,8 @@
 				{
 					var colMap = [];
 					var rows = [];
-					var nRows = 1;//parseInt($(".num-rows").text(), 10);
-					var nCols = 100;//parseInt($(".num-cols").text(), 10);
+					var nRows = parseInt($(".num-rows").text(), 10);
+					var nCols = parseInt($(".num-cols").text(), 10);
 					var grid = $(".ibx-data-grid");
 
 					console.time("totalLoad");
@@ -261,7 +261,7 @@
 				<div tabindex="0" class="btn-load-props" data-ibx-type="ibxButton">Load Properties</div>
 				<div tabindex="0" class="btn-load-grid" data-ibx-type="ibxButton">Load Grid</div>
 				<div class="" data-ibx-type="ibxLabel" data-ibxp-for=".num-rows">Rows:</div>
-				<div tabindex="0" class="text-entry num-rows" data-ibx-type="ibxLabel" data-ibxp-justify="center">100</div>
+				<div tabindex="0" class="text-entry num-rows" data-ibx-type="ibxLabel" data-ibxp-justify="center">500</div>
 				<div data-ibx-type="ibxLabel" data-ibxp-for=".num-cols">Cols:</div>
 				<div tabindex="0" class="text-entry num-cols" data-ibx-type="ibxLabel" data-ibxp-justify="center">10</div>
 				<div tabindex="0" class="btn-col-headers" data-ibx-type="ibxCheckBoxSimple" data-ibxp-checked="true">Show Column Headings</div>
