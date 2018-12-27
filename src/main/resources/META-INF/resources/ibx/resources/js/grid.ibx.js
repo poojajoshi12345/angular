@@ -135,6 +135,7 @@ $.widget("ibi.ibxDataGridSelectionManager", $.ibi.ibxSelectionManager,
 		"toggleSelection":true,
 		"escClearSelection":true,
 		"selectableChildren":"dgrid-selectable", //can be elements/classes/etc.
+		"cacheSelectableChildren":true,
 	},
 	_widgetClass:"ibx-data-grid-selection-model",
 	_onKeyDown:function(e)
@@ -690,6 +691,9 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 		//padding has to be always added to the end of the bar.
 		var padding = this._rowHeaderPadding = this._rowHeaderPadding || $("<div>").css({"flex":"0 0 auto", "width":"1px", "height":"100px"});
 		this._rowHeaderBar.append(padding);
+		
+		//next time a selection happens on grid, reacquire the selectable children.
+		this.getSelectionManager().invalidateSelectableCache();
 	},
 	addRows:function(rows, sibling, before)
 	{

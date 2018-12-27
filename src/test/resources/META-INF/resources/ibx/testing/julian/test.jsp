@@ -39,12 +39,12 @@
 					{
 						var colMap = 
 						[
-							{"title":"Title","size":"200px","attr":"description","hasIcon":true},
-							{"title":"Name","size":"200px","attr":"name"},
+							{"title":"Title","size":"200","attr":"description","hasIcon":true},
+							{"title":"Name","size":"200","attr":"name"},
 							//{"title":"Summary","attr":""},
 							//{"title":"Tags","attr":""},
-							{"title":"Last Modified","size":"150px","attr":"lastModified","type":"date"},
-							{"title":"Created On","size":"150px","attr":"createdOn","type":"date"},
+							{"title":"Last Modified","size":"150","attr":"lastModified","type":"date"},
+							{"title":"Created On","size":"150","attr":"createdOn","type":"date"},
 							{"title":"Size","attr":"length","type":"size"},
 							//{"title":"Owner","attr":"ownerName"},
 							//{"title":"Published","attr":""},
@@ -117,13 +117,13 @@
 					var grid = $(".ibx-data-grid");
 					var colMap = 
 					[
-						{"title":"Property", "size":"150px"},
+						{"title":"Property", "size":"150"},
 						{"title":"Value"},
 						//{"title":"name"},
 						//{"title":"value"},
-						//{"title":"type", "size":"50px"},
-						//{"title":"uiType", "size":"75px"},
-						//{"title":"expanded", "size":"100px", "flex":true, "justify":"center"},
+						//{"title":"type", "size":"50"},
+						//{"title":"uiType", "size":"75"},
+						//{"title":"expanded", "size":"100", "flex":true, "justify":"center"},
 					];
 					grid.ibxWidget("removeAll");
 					grid.ibxWidget("option", {"indentColumn":0, "colMap":colMap});
@@ -159,8 +159,8 @@
 				{
 					var colMap = [];
 					var rows = [];
-					var nRows = parseInt($(".num-rows").text(), 10);
-					var nCols = parseInt($(".num-cols").text(), 10);
+					var nRows = 1;//parseInt($(".num-rows").text(), 10);
+					var nCols = 100;//parseInt($(".num-cols").text(), 10);
 					var grid = $(".ibx-data-grid");
 
 					console.time("totalLoad");
@@ -275,7 +275,7 @@
 
 			<div tabindex="0" class="test-grid" data-ibx-type="ibxDataGrid" data-ibxp-show-row-headers="true">
 				<div data-ibxp-grid-col-map>
-					<div data-ibxp-size="200px">First Name</div>
+					<div data-ibxp-size="200">First Name</div>
 					<div>Middle Name</div>
 					<div>Last Name</div>
 					<div>Sex</div>

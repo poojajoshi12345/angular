@@ -16,6 +16,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 		"rubberBand":false,					//selection by rubberband
 		"rubberBandPartialSelect":false,	//rubberband must fully enclose the item for selection
 		"selectableChildren":null,			//class for what children are selectable.
+		"cacheSelectableChildren":false,	//when true, save last retreived to save time
 	},
 	_widgetClass:"ibx-selection-manager",
 	_create:function()
@@ -263,17 +264,30 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 	{
 		return $(el);
 	},
+	_cachedSelectableChildren:null,
+	invalidateSelectableCache:function(selector)
+	{
+		this._cachedSelectableChildren = null;
+		return;
+	},
 	selectableChildren:function(selector)
 	{
 		var options = this.options;
-		var e = this._dispatchEvent("ibx_selectablechildren", {"items":null}, false, true, undefined, false);
-		var children = e.data.items ? $(e.data.items) : this.element.logicalChildren(".ibx-sm-selection-root, .ibx-sm-nav-key-root, .ibx-sm-focus-root, .ibx-sm-focus-default", ":ibxFocusable(-1)");			
+		var children = $();
+		if(options.cacheSelectableChildren && this._cachedSelectableChildren)
+			children = this._cachedSelectableChildren;
+		else
+		{
+			var e = this._dispatchEvent("ibx_selectablechildren", {"items":null}, false, true, undefined, false);
+			var children = e.data.items ? $(e.data.items) : this.element.logicalChildren(".ibx-sm-selection-root, .ibx-sm-nav-key-root, .ibx-sm-focus-root, .ibx-sm-focus-default", ":ibxFocusable(-1)");			
 
-		if(!selector && options.selectableChildren)
-			selector = "." + options.selectableChildren;
-		children =  selector ? children.filter(selector) : children;
-
-		return children.ibxAddClass("ibx-sm-selectable");
+			if(!selector && options.selectableChildren)
+				selector = "." + options.selectableChildren;
+			children =  selector ? children.filter(selector) : children;
+			children.ibxAddClass("ibx-sm-selectable");
+			this._cachedSelectableChildren = children;
+		}
+		return children;
 	},
 	isSelected:function(el){return $(el).hasClass("ibx-sm-selected");},
 	selected:function(el, select, anchor)
