@@ -109,8 +109,7 @@
 .dgrid-cell-expand-button
 {
 	flex:0 0 auto;
-	width:1em;
-	font-family:"Material Icons";
+	font-size:inherit;
 }
 .dgrid-cell-indent-column > .dgrid-cell-expand-button::before
 {

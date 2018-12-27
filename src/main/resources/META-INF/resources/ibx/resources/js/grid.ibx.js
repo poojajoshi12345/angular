@@ -361,7 +361,7 @@ $.fn.ibxDataGridRow = $.ibi.ibxDataGridRow = function()
 						if(this.container)
 						{
 							//create the expand button, and move it to the current indent cell.
-							var expandButton = this._expandButton = this._expandButton || $("<div class='dgrid-cell-expand-button'></div>").on("click", this._onExpandButtonClick.bind(this));
+							var expandButton = this._expandButton = this._expandButton || $("<div class='material-icons dgrid-cell-expand-button'></div>").on("click", this._onExpandButtonClick.bind(this));
 							expandButton.detach();
 							indentCell.prepend(expandButton);
 						}

@@ -98,7 +98,7 @@
 
 									if(col.hasIcon)
 									{
-										var icon = $("<span>").ibxAddClass("ibfs-item-icon");
+										var icon = $("<div>").ibxAddClass("material-icons ibfs-item-icon");
 										icon.text(container ? "folder" : "insert_drive_file");
 										cell.prepend(icon);
 									}
@@ -143,13 +143,6 @@
 								if(!(prop[key] instanceof Object))
 								{
 									var cell = $("<div tabindex='0'>").text(prop[key]);
-									if(key == "displayValue")
-									{
-										cell.on("xxx", function(e)
-										{
-											$(e.currentTarget).ibxEditable().ibxEditable("startEditing");
-										})
-									}
 									row.append(cell);
 								}
 							}
@@ -254,9 +247,9 @@
 			}
 			.ibfs-item-icon
 			{
-				font-family: "Material Icons";
-				padding:0px 3px 0px 3px;
-				font-size:1.5em;
+				flex:0 0 auto;
+				padding-right:3px;
+				font-size:inherit;
 			}
 		</style>
 	</head>
