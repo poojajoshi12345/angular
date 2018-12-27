@@ -467,7 +467,7 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 		var corner = this._corner = $("<div>").ibxAddClass("dgrid-corner").data({ibxCol:1, ibxRow:1});
 		var colHeaderBar = this._colHeaderBar = $("<div tabindex='0'>").ibxHBox({navKeyRoot:true}).ibxAddClass(classes.colHeaderBarClass).data({ibxCol:"2", ibxRow:"1"});
 		var rowHeaderBar = this._rowHeaderBar = $("<div tabindex='0'>").ibxVBox({navKeyRoot:true, align:"stretch"}).ibxAddClass(classes.rowHeaderBarClass).data({ibxCol:"1", ibxRow:"2"});
-		var grid = this._grid = $("<div tabindex='0'>").ibxVBox({align:"stretch"}).ibxAddClass(classes.gridClass).data({ibxCol:"2", ibxRow:"2"});
+		var grid = this._grid = $("<div tabindex='0'>").ibxVBox({align:"start"}).ibxAddClass(classes.gridClass).data({ibxCol:"2", ibxRow:"2"});
 		grid.on("scroll", this._onGridScroll.bind(this));
 		grid.ibxDataGridSelectionManager({grid:this, selectableChildren:options.classes.gridSelectable}).on("ibx_beforeselchange", this._onGridSelChange.bind(this));
 
@@ -572,7 +572,7 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 		cell = $(cell);
 		var options = this.options;
 		var row = cell.closest("."+options.classes.gridRow);
-		return {"column":cell.index(), "row":row.index()}
+		return {"column":cell.index(), "row":row.index()};
 	},
 	getColumnCount:function()
 	{
