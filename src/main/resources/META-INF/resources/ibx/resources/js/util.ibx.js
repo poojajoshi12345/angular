@@ -1080,7 +1080,7 @@ _p.exec = function exec(options)
 	exInfo.ajax.dataType = exInfo.dataType;
 
 	//give people a chance to monkey with the exInfo right before we actually commit to the send.
-	$(window).dispatchEvent(exInfo.ePreExec, exInfo, false, false);
+	$(window).dispatchEvent(WebApi.genEventType(exInfo.ePreExec, exInfo), exInfo, false, false);
 	$.ajax(exInfo.ajax);
 	return exInfo;
 };
@@ -1100,7 +1100,7 @@ _p._onBeforeSend = function(exInfo, xhr, settings)
 {
 	exInfo.xhr = xhr;
 	exInfo.tStart = new Date();
-	$(window).dispatchEvent(exInfo.ePreCall, exInfo, false, false);
+	$(window).dispatchEvent(WebApi.genEventType(exInfo.ePreCall, exInfo), exInfo, false, false);
 };
 _p._onSuccess = function(exInfo, res, status, xhr)
 {
