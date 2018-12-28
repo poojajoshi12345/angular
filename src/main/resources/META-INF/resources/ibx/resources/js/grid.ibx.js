@@ -429,6 +429,7 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 			resizable:true,
 			selectable:true,
 			visible:true,
+			ui:{},
 		},
 
 		defaultRowConfig: {},//not currently used.
@@ -509,6 +510,36 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 		//add rows and do another refresh so they will be configured correctly.
 		this.addRows(rows);
 		this.refresh();
+	},
+	initGrid:function(nRows, nCols, colConfig)
+	{
+		nRows = nRows || 0;
+		nCols = nCols || 0;
+		colConfig = colConfig || this.options.defaultColConfig;
+
+		var colMap = [];
+		var rows = [];
+		for(var i = 0; i < nRows; ++i)
+		{
+			var row = $("<div>").ibxDataGridRow({"title":i});
+			for(var j = 0; j < nCols; ++j)
+			{
+				var cell = $("<div tabindex='0'>");
+				row.append(cell);
+
+				//just do the columns for the first row.
+				if(i > 0)
+					continue;
+				var curColConfig = $.extend({}, colConfig);
+				curColConfig.title = "Column " + j;
+				colMap.push(curColConfig);
+			}
+			this.options.colMap = colMap;
+			rows.push(row);
+		}
+		this.updateHeaders();
+		this.removeRow();
+		this.addRows(rows);
 	},
 	getSelectionManager:function()
 	{
