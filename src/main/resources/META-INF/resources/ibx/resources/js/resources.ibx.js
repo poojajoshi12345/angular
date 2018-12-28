@@ -263,9 +263,12 @@ _p.getResPath = function(src, loadContext)
 	if(loadContext == "ibx")
 		loadContext = ibx.getPath();
 
-	//give interested parties the ability to modify the resource uri
+	//give interested parties the ability to modify the resource uri/loadContext info
 	evt = $(window).dispatchEvent("ibx_ibxresmgr_resolveuri", {"resourceMgr":this, "uri":src, "loadCtx":loadContext}, true, false);
-	var src = evt.data.uri;
+	src = evt.data.uri;
+	loadContext = evt.data.loadCtx;
+
+	//if the src is a root not a relative uri, then don't use the load context.
 	if(!(/^[/\\]/).test(src))
 		src = loadContext + src;
 	return src;
