@@ -264,31 +264,30 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 	{
 		return $(el);
 	},
-	_cachedSelectableChildren:null,
+	_cachedSelectableChildren:$(),
 	invalidateSelectableCache:function(selector)
 	{
-		this._cachedSelectableChildren = null;
+		this._cachedSelectableChildren = $();
 		return;
 	},
 	selectableChildren:function(selector)
 	{
 		var options = this.options;
 		var children = $();
-		if(options.cacheSelectableChildren && this._cachedSelectableChildren)
-		{
-			console.error("YOU WERE FIGURING OUT HOW TO CORRECTLY STORE THE CACHED CHILDREN...COMING IN WITH A SELECTOR DESTROYS IT!");
+		if(options.cacheSelectableChildren && this._cachedSelectableChildren.length)
 			children = this._cachedSelectableChildren;
-		}
 		else
 		{
 			var e = this._dispatchEvent("ibx_selectablechildren", {"items":null}, false, true, undefined, false);
 			var children = e.data.items ? $(e.data.items) : this.element.logicalChildren(".ibx-sm-selection-root, .ibx-sm-nav-key-root, .ibx-sm-focus-root, .ibx-sm-focus-default", ":ibxFocusable(-1)");			
 
-			if(!selector && options.selectableChildren)
-				selector = "." + options.selectableChildren;
-			children =  selector ? children.filter(selector) : children;
+			if(options.selectableChildren)
+				children =  children.filter("." + options.selectableChildren);
 			children.ibxAddClass("ibx-sm-selectable");
+
+			this._cachedSelectableChildren.ibxRemoveClass("ibx-sm-selectable");
 			this._cachedSelectableChildren = children;
+			children =  selector ? children.filter(selector) : children;
 		}
 		return children;
 	},
@@ -352,8 +351,8 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 				if(!evt.isDefaultPrevented())
 				{
 					el.ibxRemoveClass("ibx-sm-selected");
-					if(anchor)
-						this._anchor(el.first());
+					if(el.is(this._elAnchor))
+						this.anchor(null);
 					this._dispatchEvent("ibx_selchange", {"selected":select, "items":el, "selModel":this, "anchor":this._elAnchor, "focus":this._elFocus}, true, false);
 				}
 			}
@@ -380,7 +379,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 		//public interface needs to map nodes...think tree from ibxTreeNode to it's selectable label.
 		el = $(el, this.element);
 		el = this.mapToSelectable(el);
-		el = this._anchor(el[0]);
+		el = this._anchor(el[0] || null);
 		return el ? this.mapFromSelectable(el) : undefined;
 	},
 	_anchor:function(el)
@@ -402,10 +401,10 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 		//public interface needs to map nodes...think tree from ibxTreeNode to it's selectable label.
 		el = $(el, this.element);
 		el = this.mapToSelectable(el);
-		el = this._focus(el[0], focus);
+		el = this._focus(el[0] || null);
 		return el ? this.mapFromSelectable(el) : undefined;
 	},
-	_focus:function(el, focus)
+	_focus:function(el)
 	{
 		if(el === undefined)
 			return this._elFocus[0];
