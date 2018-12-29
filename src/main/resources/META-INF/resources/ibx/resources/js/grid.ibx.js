@@ -598,7 +598,7 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 	{
 		cell = $(cell);
 		var options = this.options;
-		var row = cell.closest("."+options.classes.gridRow);
+		var row = cell.closest("." + options.classes.gridRow);
 		return {"column":cell.index(), "row":row.index()};
 	},
 	getColumnCount:function()
@@ -759,12 +759,12 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 		//Handle selction in rows and columns.
 		var eType = e.type;
 		var selInfo = e.originalEvent.data;
-		if((eType == "ibx_beforeselchange") && (selInfo.anchor !== selInfo.focus))
+		if((eType == "ibx_beforeselchange") && (selInfo.anchor !== selInfo.focus) && selInfo.selected)
 		{
 			var posAnchor = this.getCellPos(selInfo.anchor);
 			var posFocus = this.getCellPos(selInfo.focus);
-			var selCol = (posAnchor.column == posFocus.column);
-			var selRow = (posAnchor.row == posFocus.row);
+			var selCol = (posAnchor.column == posFocus.column) && (posAnchor.column != -1) && (posFocus.column != -1);
+			var selRow = (posAnchor.row == posFocus.row) && (posAnchor.row != -1) && (posFocus.row != -1);
 			if(selCol || selRow)
 			{
 				selInfo.items = selInfo.items.map(function(idx, el)
