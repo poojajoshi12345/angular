@@ -39,19 +39,19 @@
 					{
 						var colMap = 
 						[
-							{"title":"Title","size":"200","attr":"description","hasIcon":true},
-							{"title":"Name","size":"200","attr":"name"},
+							{"title":"Title","size":"200px","attr":"description","hasIcon":true},
+							{"title":"Name","size":"200px","attr":"name"},
 							//{"title":"Summary","attr":""},
 							//{"title":"Tags","attr":""},
-							{"title":"Last Modified","size":"150","attr":"lastModified","type":"date"},
-							{"title":"Created On","size":"150","attr":"createdOn","type":"date"},
+							{"title":"Last Modified","size":"150px","attr":"lastModified","type":"date"},
+							{"title":"Created On","size":"150px","attr":"createdOn","type":"date"},
 							{"title":"Size","attr":"length","type":"size"},
 							//{"title":"Owner","attr":"ownerName"},
 							//{"title":"Published","attr":""},
 							//{"title":"Shown","attr":""},
 						];
 
-						var grid = $(".ibx-data-grid");
+						var grid = $(".test-grid");
 						grid.ibxWidget("removeAll");
 						grid.ibxWidget("option", {"defaultColConfig":{justify:"start", resizable:true}, "indentColumn":0, "colMap":colMap});
 
@@ -114,45 +114,8 @@
 
 				$(".btn-load-props").on("click", function(e)
 				{
-					var grid = $(".ibx-data-grid");
-					var colMap = 
-					[
-						{"title":"Property", "size":"150"},
-						{"title":"Value"},
-						//{"title":"name"},
-						//{"title":"value"},
-						//{"title":"type", "size":"50"},
-						//{"title":"uiType", "size":"75"},
-						//{"title":"expanded", "size":"100", "flex":true, "justify":"center"},
-					];
-					grid.ibxWidget("removeAll");
-					grid.ibxWidget("option", {"indentColumn":0, "colMap":colMap});
-
-					buildTree(testProps);
-					function buildTree(props, parentRow)
-					{
-						var rows = [];
-						for(var i = 0; props && i < props.length; ++i)
-						{
-							var prop = props[i];
-							var row = $("<div>").ibxDataGridRow({"title":"Property"});
-
-							rows.push(row);
-							for(var key in prop)
-							{
-								if(!(prop[key] instanceof Object))
-								{
-									var cell = $("<div tabindex='0'>").text(prop[key]);
-									row.append(cell);
-								}
-							}
-
-							grid.ibxWidget("addRow", row);
-							var childRows = buildTree(prop.props, row);
-							row.ibxDataGridRow("addRow", childRows).ibxDataGridRow({"expanded":prop.expanded});
-						}
-						return rows;
-					}
+					var grid = $(".test-prop-grid");
+					grid.ibxWidget("option", "props", testProps);
 				});
 
 				$(".btn-load-grid").on("click", function(e)
@@ -161,31 +124,10 @@
 					var rows = [];
 					var nRows = parseInt($(".num-rows").text(), 10);
 					var nCols = parseInt($(".num-cols").text(), 10);
-					var grid = $(".ibx-data-grid");
+					var grid = $(".test-grid");
 
 					console.time("totalLoad");
-					console.time("genRows");
-					for(var i = 0; i < nRows; ++i)
-					{
-						var row = $("<div></div>").ibxDataGridRow({"title":i, "size":null}).ibxAddClass("row-" + i);
-						for(var j = 0; j < nCols; ++j)
-						{
-							var cell = $(sformat("<div tabindex='0' style='user-select:none;'>Cell ({1},{2})</div>", i+1, j+1));
-							row.append(cell)
-
-							if(i == 0)
-								colMap.push($.extend({}, {"title":"Column " + j, "resizable":true}))
-						}
-						rows.push(row);
-					}
-					console.timeEnd("genRows");
-
-					console.time("popGrid");
-					grid.ibxWidget("removeAll");
-					grid.ibxWidget("option", {"indentColumn":-1, "colMap":colMap});
-					grid.ibxWidget("addRows", rows);
-					grid.ibxWidget("refresh");
-					console.timeEnd("popGrid");
+					grid.ibxWidget("initGrid", nRows, nCols);
 					console.timeEnd("totalLoad");
 
 					var headers = grid.ibxWidget("getHeaders");
@@ -236,11 +178,11 @@
 			{
 				flex:1 1 auto;
 			}
-			.test-grid
+			.test-grid, .test-prop-grid
 			{
 				height:500px;
 				border:1px solid black;
-				margin:100px;
+				margin:10px;
 			}
 			.ibfs-item-cell
 			{
@@ -273,9 +215,12 @@
 
 			</div>
 
+			<div tabindex="0" class="test-prop-grid" data-ibx-type="ibxPropertyGrid"></div>
+
+
 			<div tabindex="0" class="test-grid" data-ibx-type="ibxDataGrid" data-ibxp-show-row-headers="true">
 				<div data-ibxp-grid-col-map>
-					<div data-ibxp-size="200">First Name</div>
+					<div data-ibxp-size="200px" data-ibxp-flex="true">First Name</div>
 					<div>Middle Name</div>
 					<div>Last Name</div>
 					<div>Sex</div>

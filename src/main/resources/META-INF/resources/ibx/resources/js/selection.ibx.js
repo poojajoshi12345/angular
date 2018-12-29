@@ -275,7 +275,10 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 		var options = this.options;
 		var children = $();
 		if(options.cacheSelectableChildren && this._cachedSelectableChildren)
+		{
+			console.error("YOU WERE FIGURING OUT HOW TO CORRECTLY STORE THE CACHED CHILDREN...COMING IN WITH A SELECTOR DESTROYS IT!");
 			children = this._cachedSelectableChildren;
+		}
 		else
 		{
 			var e = this._dispatchEvent("ibx_selectablechildren", {"items":null}, false, true, undefined, false);

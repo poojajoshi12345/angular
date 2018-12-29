@@ -424,7 +424,6 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 		{
 			title:"",
 			size:"100px",
-			flex:false,
 			justify:"center",
 			resizable:true,
 			selectable:true,
@@ -436,7 +435,6 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 		showColumnHeaders:true,
 		showRowHeaders:true,
 		indentColumn:-1,
-		_curIndentColumn:-1,
 		
 		/*frame stuff*/
 		cols:"auto 1fr",
@@ -496,7 +494,9 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 			opts.title = col.innerText || opts.title;
 			colMap.push(opts);
 		}
-		this.option("colMap", colMap);
+
+		if(colMap.length)
+			this.option("colMap", colMap);
 
 		//make the rows from markup.
 		var rows = this.element.children("[data-grid-row]").detach();
@@ -527,7 +527,7 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 				var cell = $("<div tabindex='0'>");
 				row.append(cell);
 
-				//just do the columns for the first row.
+				//only need to build the colMap for the first row.
 				if(i > 0)
 					continue;
 				var curColConfig = $.extend({}, colConfig);
@@ -560,21 +560,16 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 			for(var i = 0; i < colMap.length; ++i)
 			{
 				var cInfo = colMap[i];
-				var size = sformat("width:{1};flex:{2} 0 auto;", cInfo.size, cInfo.flex ? 1 : 0);
-
+				
 				//make header if one isn't supplied
-				var cHeading = $(cInfo.header);
-				if(!cHeading.length)
-				{
-					cHeading = $(sformat("<div tabindex='-1' class='{1}'>", classes.colHeaderClass));
-					cHeading.ibxButtonSimple({justify:cInfo.justify});
-					cHeading.ibxWidget("option", "text", cInfo.title);
-				}
+				var cHeading = $(sformat("<div tabindex='-1' class='{1}'>", classes.colHeaderClass));
+				cHeading.ibxButtonSimple({justify:cInfo.justify});
+				cHeading.ibxWidget("option", "text", cInfo.title);
 				cHeading.attr("role", "columnheader");
 
 				//make splitter
 				var splitter = $(sformat("<div class='{1}'>", classes.colHeaderSplitterClass));
-				splitter.ibxSplitter({locked:!cInfo.resizable || (i == colMap.length-1), resize:"first"}).on("ibx_resize ibx_reset", this._onSplitterResize.bind(this));
+				splitter.ibxSplitter({locked:!cInfo.resizable, resize:"first"}).on("ibx_resize ibx_reset", this._onSplitterResize.bind(this));
 
 				//now add the column header and set the size as everything is in the dom.
 				cInfo.ui = {"idx":i, "header":cHeading, "splitter":splitter, "curSize":null};
@@ -583,7 +578,7 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 				this.setColumnWidth(i, cInfo.size);
 			}
 
-			var padding = $("<div style='flex:0 0 auto;'>").css({"width":"100px", height:"1px"});
+			var padding = $("<div>").css({"flex":"0 0 auto", "width":"100px", height:"1px"});
 			this._colHeaderBar.append(padding);
 		}
 	},
@@ -627,7 +622,7 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 			cInfo.ui.header.outerWidth(cInfo.ui.header.outerWidth() - cInfo.ui.splitter.outerWidth());
 
 			var cells = this.getColumn(idxCol);
-			cInfo.flex ? cells.css({flex:"1 0 auto", width:width}) : cells.outerWidth(width);
+			cells.outerWidth(width);
 		}
 	},
 	getColumn:function(col)
@@ -819,6 +814,59 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 	},
 });
 
+/******************************************************************************
+	PROPERTY GRID
+******************************************************************************/
+$.widget("ibi.ibxPropertyGrid", $.ibi.ibxDataGrid,
+{
+	options:
+	{
+		colMap:[{title:"Property", size:"150px", justify:"start"}, {title:"Value", size:"1000px", justify:"start"}],
+		showRowHeaders:false,
+		indentColumn:0,
+		props:null,
+	},
+	_widgetClass:"ibx-property-grid",
+	_create:function()
+	{
+		this._super();
+		this.element.data("ibiIbxDataGrid", this);
+		this.getSelectionManager().options.type = "nav";
+	},
+	_buildPropTree:function(props, parentRow)
+	{
+		var rows = [];
+		for(var i = 0; props && i < props.length; ++i)
+		{
+			var prop = props[i];
+			var row = $("<div>").ibxDataGridRow({"title":"Property"});
+
+			rows.push(row);
+			for(var key in prop)
+			{
+				if(!(prop[key] instanceof Object))
+				{
+					var cell = $("<div tabindex='0'>").text(prop[key]);
+					row.append(cell);
+				}
+			}
+
+			this.addRow(row);
+			var childRows = this._buildPropTree(prop.props, row);
+			row.ibxDataGridRow("addRow", childRows).ibxDataGridRow({"expanded":prop.expanded});
+		}
+		return rows;
+	},
+	_setOption:function(key, value)
+	{
+		this._super(key, value);
+		if(key == "props")
+		{
+			this.removeRow();
+			this._buildPropTree(value, null);
+		}
+	}
+});
 
 /******************************************************************************
 	FLEX GRID
