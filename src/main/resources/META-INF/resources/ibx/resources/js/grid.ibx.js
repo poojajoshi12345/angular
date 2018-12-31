@@ -282,7 +282,7 @@ $.fn.ibxDataGridRow = $.ibi.ibxDataGridRow = function()
 						if(e.keyCode === $.ui.keyCode.ENTER)
 							this.toggleExpand();
 						else
-						if(e.keyCode === $.ui.keyCode.RIGHT && !this.expanded)
+						if(e.keyCode === $.ui.keyCode.RIGHT && e.ctrlKey && !this.expanded)
 						{
 							if(!this.expanded)
 							{
@@ -292,7 +292,7 @@ $.fn.ibxDataGridRow = $.ibi.ibxDataGridRow = function()
 							}
 						}
 						else
-						if(e.keyCode === $.ui.keyCode.LEFT && this.expanded)
+						if(e.keyCode === $.ui.keyCode.LEFT && e.ctrlKey && this.expanded)
 						{
 							if(this.expanded)
 							{
@@ -825,6 +825,8 @@ $.widget("ibi.ibxPropertyGrid", $.ibi.ibxDataGrid,
 		showRowHeaders:false,
 		indentColumn:0,
 		props:null,
+		triggerKey:$.ui.keyCode.ENTER,
+		triggerEvent:"dblclick",
 	},
 	_widgetClass:"ibx-property-grid",
 	_create:function()
@@ -832,6 +834,7 @@ $.widget("ibi.ibxPropertyGrid", $.ibi.ibxDataGrid,
 		this._super();
 		this.element.data("ibiIbxDataGrid", this);
 		this.getSelectionManager().options.type = "nav";
+		this._boundEditTrigger = this._onEditTrigger.bind(this);
 	},
 	_buildPropTree:function(props, parentRow)
 	{
@@ -839,17 +842,14 @@ $.widget("ibi.ibxPropertyGrid", $.ibi.ibxDataGrid,
 		for(var i = 0; props && i < props.length; ++i)
 		{
 			var prop = props[i];
-			var row = $("<div>").ibxDataGridRow({"title":"Property"});
-
+			var row = $("<div>").ibxDataGridRow().ibxAddClass("pgrid-prop-row").data("ibxProp", prop);
 			rows.push(row);
-			for(var key in prop)
-			{
-				if(!(prop[key] instanceof Object))
-				{
-					var cell = $("<div tabindex='0'>").text(prop[key]);
-					row.append(cell);
-				}
-			}
+
+			var event = this.element.dispatchEvent("ibx_prop_create_ui", {"prop":prop, "ui":null}, false, false);
+			var ui = event.data.ui || this._createUI(prop, false);
+			$(ui.name).ibxAddClass("pgrid-cell-name").attr("tabindex", 0).data("ibxProp", prop);
+			$(ui.value).on("keypress", this._onEditTrigger.bind(this)).ibxAddClass("pgrid-cell-value").attr("tabindex", 0).data("ibxProp", prop);
+			row.append([ui.name, ui.value]);
 
 			this.addRow(row);
 			var childRows = this._buildPropTree(prop.props, row);
@@ -857,16 +857,62 @@ $.widget("ibi.ibxPropertyGrid", $.ibi.ibxDataGrid,
 		}
 		return rows;
 	},
+	_createUI:function(prop, editing)
+	{
+		var ui = {name:null, value:null};	
+		if(editing)
+		{
+
+		}
+		else
+		{
+			ui.name = $("<div>").text(prop.displayName);
+			ui.value = $("<div>").text(prop.displayValue);
+		}
+		return ui;
+	},
+	_onEditTrigger:function(e)
+	{
+		var cell = $(e.target).closest(".dgrid-cell");
+		var startEdit = (e.type == "keypress") ?  (e.keyCode == this.options.triggerKey) : cell.is(".pgrid-cell-value");
+		if(startEdit)
+		{
+			var prop = cell.data("ibxProp");
+			var event = this.element.dispatchEvent("ibx_prop_edit", {"cell":cell, "prop":prop}, false, true);
+			if(!event.isDefaultPrevented())
+			{
+				if(!prop.ui && -1 != $.ibi.ibxPropertyGrid.uiTypes.indexOf(prop.uiType))
+				{
+					debugger;
+				}
+			}
+		}
+	},
 	_setOption:function(key, value)
 	{
-		this._super(key, value);
+		var options = this.options;
 		if(key == "props")
 		{
 			this.removeRow();
 			this._buildPropTree(value, null);
 		}
-	}
+		else
+		if(key == "triggerEvent")
+		{
+			// var cells = this._grid.find(".pgrid-cell-value").off(options.triggerEvent, this._boundEditTrigger);
+			// cells.on(value, this._boundEditTrigger);
+
+			this.element.off(options.triggerEvent);
+			this.element.on(value, this._onEditTrigger.bind(this));
+		}			
+		this._super(key, value);
+	},
+	_refresh:function()
+	{
+		this._super();
+	},
 });
+$.ibi.ibxPropertyGrid.uiTypes = ["text", "radio", "check", "select", "colorPicker"];
 
 /******************************************************************************
 	FLEX GRID
