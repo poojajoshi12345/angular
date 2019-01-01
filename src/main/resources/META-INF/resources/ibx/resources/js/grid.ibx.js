@@ -821,7 +821,7 @@ $.widget("ibi.ibxPropertyGrid", $.ibi.ibxDataGrid,
 {
 	options:
 	{
-		colMap:[{title:"Property", size:"150px", justify:"start"}, {title:"Value", size:"1000px", justify:"start"}],
+		colMap:[{title:"Property", size:"150px", justify:"start"}, {title:"Value", size:"100px", justify:"start"}],
 		showRowHeaders:false,
 		indentColumn:0,
 		props:null,
@@ -845,11 +845,8 @@ $.widget("ibi.ibxPropertyGrid", $.ibi.ibxDataGrid,
 			var row = $("<div>").ibxDataGridRow().ibxAddClass("pgrid-prop-row").data("ibxProp", prop);
 			rows.push(row);
 
-			var event = this.element.dispatchEvent("ibx_prop_create_ui", {"prop":prop, "ui":null}, false, false);
-			var ui = event.data.ui || this._createUI(prop, false);
-			$(ui.name).ibxAddClass("pgrid-cell-name").attr("tabindex", 0).data("ibxProp", prop);
-			$(ui.value).on("keypress", this._onEditTrigger.bind(this)).ibxAddClass("pgrid-cell-value").attr("tabindex", 0).data("ibxProp", prop);
-			row.append([ui.name, ui.value]);
+			var ui = prop.ui = this._createUI(prop);
+			row.append([ui.nameCell, ui.valueCell, ui.editorCell]);
 
 			this.addRow(row);
 			var childRows = this._buildPropTree(prop.props, row);
@@ -857,36 +854,56 @@ $.widget("ibi.ibxPropertyGrid", $.ibi.ibxDataGrid,
 		}
 		return rows;
 	},
-	_createUI:function(prop, editing)
+	_createUI:function(prop)
 	{
-		var ui = {name:null, value:null};	
-		if(editing)
+		var ui = prop.ui = {"prop":prop, "nameCell":null, "valueCell":null, "editorCell":null};
+		var event = this.element.dispatchEvent("ibx_prop_create_ui", ui, false, false);	
+		if(!event.isDefaultPrevented())
 		{
+			var type = (-1 == $.ibi.ibxPropertyGrid.uiTypes.indexOf(prop.uiType)) ? null : prop.uiType;
+			switch(type)
+			{
+				case "xcolorPicker":
+				{
+					console.log("color");
+					break;
+				}
+				default://create the default UI if built in type
+				{
+					ui.nameCell = $("<div>").text(prop.displayName);
+					ui.valueCell = $("<div>").text(prop.displayValue);
+					ui.editorCell = $("<div>").text(prop.displayValue + " EDITING");
+				}
+			}
+		}
 
-		}
-		else
-		{
-			ui.name = $("<div>").text(prop.displayName);
-			ui.value = $("<div>").text(prop.displayValue);
-		}
+		$(ui.nameCell).ibxAddClass("pgrid-cell-name").attr("tabindex", 0).data("ibxProp", prop);
+		$(ui.valueCell).ibxAddClass("pgrid-cell-value").attr("tabindex", 0).data("ibxProp", prop);
+		$(ui.editorCell).ibxAddClass("pgrid-cell-editor").attr("tabindex", 0).data("ibxProp", prop);
 		return ui;
 	},
 	_onEditTrigger:function(e)
 	{
 		var cell = $(e.target).closest(".dgrid-cell");
 		var startEdit = (e.type == "keypress") ?  (e.keyCode == this.options.triggerKey) : cell.is(".pgrid-cell-value");
-		if(startEdit)
+		if(cell.length && startEdit)
+			this.startEditing(cell.data("ibxProp"));
+	},
+	startEditing:function(prop)
+	{
+		var event = this.element.dispatchEvent("ibx_prop_edit_start", prop, false, true);
+		if(!event.isDefaultPrevented())
 		{
-			var prop = cell.data("ibxProp");
-			var event = this.element.dispatchEvent("ibx_prop_edit", {"cell":cell, "prop":prop}, false, true);
-			if(!event.isDefaultPrevented())
-			{
-				if(!prop.ui && -1 != $.ibi.ibxPropertyGrid.uiTypes.indexOf(prop.uiType))
-				{
-					debugger;
-				}
-			}
+			var ui = prop.ui;
+			this._editCell = ui.editorCell;
+			ui.editorCell.ibxAddClass("pgrid-editing-cell").insertBefore(ui.valueCell);
 		}
+	},
+	stopEditing:function()
+	{
+		var event = this.element.dispatchEvent("ibx_prop_edit_end", {"cell":cell, "prop":prop}, false, false);
+		this.editCell.ibxRemoveClass("pgrid-editing-cell");
+		delete this._editCell;
 	},
 	_setOption:function(key, value)
 	{
@@ -899,9 +916,6 @@ $.widget("ibi.ibxPropertyGrid", $.ibi.ibxDataGrid,
 		else
 		if(key == "triggerEvent")
 		{
-			// var cells = this._grid.find(".pgrid-cell-value").off(options.triggerEvent, this._boundEditTrigger);
-			// cells.on(value, this._boundEditTrigger);
-
 			this.element.off(options.triggerEvent);
 			this.element.on(value, this._onEditTrigger.bind(this));
 		}			
@@ -912,7 +926,7 @@ $.widget("ibi.ibxPropertyGrid", $.ibi.ibxDataGrid,
 		this._super();
 	},
 });
-$.ibi.ibxPropertyGrid.uiTypes = ["text", "radio", "check", "select", "colorPicker"];
+$.ibi.ibxPropertyGrid.uiTypes = ["text", "radio", "check", "select", "colorPicker", "borderSelector"];
 
 /******************************************************************************
 	FLEX GRID

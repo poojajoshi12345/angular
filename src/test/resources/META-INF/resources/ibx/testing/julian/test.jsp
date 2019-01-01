@@ -117,7 +117,7 @@
 					var grid = $(".test-prop-grid");
 					grid.on("ibx_prop_edit ibx_prop_create_ui", function(e)
 					{
-						console.log(e.type, e.originalEvent.data);
+						//console.log(e.type, e.originalEvent.data);
 						
 					}).ibxWidget("option", "props", testProps);
 				});

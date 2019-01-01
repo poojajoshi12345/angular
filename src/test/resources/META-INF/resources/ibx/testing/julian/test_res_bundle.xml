@@ -87,7 +87,7 @@
 									"name":"width",
 									"value":"1px",
 									"dataType":"string",
-									"uiType":"textField",
+									"uiType":"text",
 									"expanded":false,
 								},
 								{
@@ -144,7 +144,7 @@
 									"name":"width",
 									"value":"1px",
 									"dataType":"string",
-									"uiType":"textField",
+									"uiType":"text",
 									"expanded":false,
 								},
 								{
