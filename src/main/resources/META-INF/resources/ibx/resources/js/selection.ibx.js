@@ -281,11 +281,10 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 			var e = this._dispatchEvent("ibx_selectablechildren", {"items":null}, false, true, undefined, false);
 			var children = e.data.items ? $(e.data.items) : this.element.logicalChildren(".ibx-sm-selection-root, .ibx-sm-nav-key-root, .ibx-sm-focus-root, .ibx-sm-focus-default", ":ibxFocusable(-1)");			
 
+			this._cachedSelectableChildren.ibxRemoveClass("ibx-sm-selectable");
 			if(options.selectableChildren)
 				children =  children.filter("." + options.selectableChildren);
 			children.ibxAddClass("ibx-sm-selectable");
-
-			this._cachedSelectableChildren.ibxRemoveClass("ibx-sm-selectable");
 			this._cachedSelectableChildren = children;
 			children =  selector ? children.filter(selector) : children;
 		}
