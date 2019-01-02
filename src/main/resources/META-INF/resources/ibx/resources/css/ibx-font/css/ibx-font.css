@@ -264,11 +264,41 @@
 .ibx-glyph-unlock:before {
   content: "\e97b";
 }
+.ibx-glyph-map-line:before {
+  content: "\ea0a";
+}
+.ibx-glyph-map-polygon-2:before {
+  content: "\ea0b";
+}
+.ibx-glyph-map-polygon:before {
+  content: "\ea0c";
+}
+.ibx-glyph-new-app:before {
+  content: "\ea07";
+}
+.ibx-glyph-add-verb:before {
+  content: "\ea04";
+}
+.ibx-glyph-verb-sum:before {
+  content: "\ea05";
+}
+.ibx-glyph-verb-print:before {
+  content: "\ea06";
+}
 .ibx-glyph-clear-filter:before {
   content: "\ea03";
 }
 .ibx-glyph-bar-chart:before {
   content: "\ea02";
+}
+.ibx-glyph-line-chart:before {
+  content: "\ea0d";
+}
+.ibx-glyph-pie-chart:before {
+  content: "\ea0e";
+}
+.ibx-glyph-scatter-chart:before {
+  content: "\ea0f";
 }
 .ibx-glyph-upload:before {
   content: "\e946";
@@ -302,6 +332,12 @@
 }
 .ibx-glyph-plus-thin:before {
   content: "\e9ef";
+}
+.ibx-glyph-route:before {
+  content: "\ea08";
+}
+.ibx-glyph-choropleth:before {
+  content: "\ea09";
 }
 .ibx-glyph-map-point-bubble:before {
   content: "\e9e0";
