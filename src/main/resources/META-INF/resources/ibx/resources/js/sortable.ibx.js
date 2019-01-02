@@ -24,6 +24,7 @@ $.widget("ibi.ibxSortable", $.Widget,
 		el.addEventListener("mousedown", this._onDragEvent.bind(this), true);
 		el.addEventListener("mouseup", this._onDragEvent.bind(this), true);
 		el.addEventListener("mousemove", this._onDragEvent.bind(this), true);
+		el.addEventListener("scroll", this._onDragEvent.bind(this), true);
 	},
 	_destroy:function()
 	{
@@ -87,11 +88,20 @@ $.widget("ibi.ibxSortable", $.Widget,
 					if(!evt.defaultPrevented)
 					{
 						this._inDrag = true;
-						var pos = de.position();
 						var ph = this._placeholder = this._createPlaceholder(de);
-						de.css({"zIndex":100000, "pointerEvents":"none", "position":"absolute", "left":pos.left, "top":pos.top, "width":de.outerWidth, "height":de.outerHeight});
-						de.ibxAddClass("ibx-sortable-dragging " + options.sortItemClasses);
 						ph.insertAfter(de);
+
+						var pos = de.position();
+						de.css(
+						{
+							"position":"absolute",
+							"z-index":100000,
+							"pointer-events":"none",
+							"left":pos.left + this.element.prop("scrollLeft"),
+							"top":pos.top + this.element.prop("scrollTop"),
+							"width":de.width(),
+							"height":de.height(),
+						}).ibxAddClass("ibx-sortable-dragging " + options.sortItemClasses);
 						this.element.ibxAutoScroll("start");
 					}
 				}
@@ -100,15 +110,18 @@ $.widget("ibi.ibxSortable", $.Widget,
 			if(this._inDrag && this._eLast)
 			{
 				var eLast = this._eLast
+				var dx = e.clientX - this._eLast.clientX;
+				var dy = e.clientY - this._eLast.clientY;
 				var pos = de.position();
-				var dx = e.clientX - eLast.clientX;
-				var dy = e.clientY - eLast.clientY;
+
+				pos.offsetLeft = pos.left + this.element.prop("scrollLeft") + dx;
+				pos.offsetTop = pos.top + this.element.prop("scrollTop") + dy;
 
 				//move within axis only if specified
 				if(options.lockDragAxis)
-					de.css({"left": pos.left + (horz ? dx : 0), "top": pos.top + (vert ? dy : 0)});
+					de.css({"left": (horz ? pos.offsetLeft : pos.left), "top": (vert ? pos.offsetTop : pos.top)});
 				else
-					de.css({"left": pos.left + dx, "top":  pos.top + dy});
+					de.css({"left": pos.offsetLeft, "top": pos.offsetTop});
 
 				if(!this.element.is(target) && !this._placeholder.is(target))
 				{
@@ -135,6 +148,14 @@ $.widget("ibi.ibxSortable", $.Widget,
 				}
 			}
 			this._eLast = e;
+		}
+		else
+		if(eType == "scroll")
+		{
+			var options = this.options;
+			var de = this._dragElement;
+			if(!de)
+				return;
 		}
 	},
 	_stopDrag:function()

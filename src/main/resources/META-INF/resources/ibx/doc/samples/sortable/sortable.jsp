@@ -81,18 +81,19 @@
 			.sort-parent-v
 			{
 				height:75%;
-				padding:3px;
+				padding:13px;
 				margin:5px;
 				overflow:auto;
 				border:1px solid #ccc;
 				box-sizing:border-box;
+				position:relative;
 			}
 			.sort-item-v
 			{
 				flex:0 0 auto;
 				width:300px;
 				height:25px;
-				margin:3px;
+				margin:10px;
 				padding:5px;
 				border:1px solid black;
 				background-color:#ddd;
