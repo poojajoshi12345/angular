@@ -216,7 +216,7 @@ $.widget("ibi.ibxCheckBoxSimple", $.ibi.ibxCheckBox,
 	_widgetClass: "ibx-check-box-simple",
 	_create: function ()
 	{
-		this._marker = $("<div>");
+		this._marker = $("<div>").appendTo(this.element);
 		this._super();
 	},
 	_setOption: function (key, value)
@@ -240,7 +240,6 @@ $.widget("ibi.ibxCheckBoxSimple", $.ibi.ibxCheckBox,
 		this.element.ibxRemoveClass("ibx-check-box");
 		this._marker.ibxRemoveClass(sformat("{1} {2}-check {3}-uncheck", this.options.markerClass, this.options.markerClass, this.options.markerClass));
 		this._marker.ibxAddClass(sformat((this.options.checked ? "{1} {2}-check" : "{1} {2}-uncheck"), this.options.markerClass, this.options.markerClass));
-		this.add(this._marker, this.children()[0], true);
 	}
 });
 
@@ -273,7 +272,7 @@ $.widget("ibi.ibxRadioButtonSimple", $.ibi.ibxRadioButton,
 	_widgetClass: "ibx-radio-button-simple",
 	_create: function ()
 	{
-		this._marker = $("<div>");
+		this._marker = $("<div>").appendTo(this.element);
 		this._super();
 	},
 	_setOption: function (key, value)
@@ -300,7 +299,6 @@ $.widget("ibi.ibxRadioButtonSimple", $.ibi.ibxRadioButton,
 
 		this._marker.ibxRemoveClass(sformat("{1} {2}-check {3}-uncheck", this.options.markerClass, this.options.markerClass, this.options.markerClass));
 		this._marker.ibxAddClass(sformat((this.options.checked ? "{1} {2}-check" : "{1} {2}-uncheck"), this.options.markerClass, this.options.markerClass));
-		this.add(this._marker, this.children()[0], true);
 	}
 });
 
