@@ -31,7 +31,7 @@ $.widget("ibi.ibxSortable", $.Widget,
 	_destroy:function()
 	{
 		this._super();
-		this.ibxRemoveClass(this._widgetClass);
+		this.element.ibxRemoveClass(this._widgetClass);
 	},
 	_createPlaceholder:function(dragElement)
 	{
