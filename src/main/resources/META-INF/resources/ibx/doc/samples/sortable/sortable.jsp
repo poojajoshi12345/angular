@@ -62,7 +62,7 @@
 			.sort-parent-h
 			{
 				width:75%;
-				padding:3px;
+				padding:5px;
 				margin:5px;
 				overflow:auto;
 				border:1px solid #ccc;
@@ -73,7 +73,7 @@
 				flex:0 0 auto;
 				width:100px;
 				height:25px;
-				margin:3px;
+				margin:5px;
 				padding:5px;
 				border:1px solid black;
 				background-color:#ddd;
@@ -81,7 +81,7 @@
 			.sort-parent-v
 			{
 				height:75%;
-				padding:13px;
+				padding:5px;
 				margin:5px;
 				overflow:auto;
 				border:1px solid #ccc;
@@ -93,7 +93,7 @@
 				flex:0 0 auto;
 				width:300px;
 				height:25px;
-				margin:10px;
+				margin:5px;
 				padding:5px;
 				border:1px solid black;
 				background-color:#ddd;
