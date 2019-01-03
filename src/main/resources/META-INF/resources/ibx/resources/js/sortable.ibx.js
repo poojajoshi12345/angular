@@ -43,6 +43,11 @@ $.widget("ibi.ibxSortable", $.Widget,
 	_inDrag: false,
 	_onDragEvent:function(e)
 	{
+		var options = this.options;
+		var de = this._dragElement;
+		var vert = this.options.direction == "vertical";
+		var horz = this.options.direction == "horizontal";
+		var both = !vert && !horz;
 		var target = $(e.target);
 		var eType = e.type;
 		if(eType == "mousedown")
@@ -70,13 +75,7 @@ $.widget("ibi.ibxSortable", $.Widget,
 		else
 		if(eType == "mousemove" && this._eMouseDown)
 		{
-			var options = this.options;
-			var de = this._dragElement;
-			var vert = this.options.direction == "vertical";
-			var horz = this.options.direction == "horizontal";
-			var both = !vert && !horz;
-
-			if(!this._inDrag && this._dragElement)
+			if(!this._inDrag && de)
 			{
 				var dx = Math.abs(e.clientX - this._eMouseDown.clientX);
 				var dy = Math.abs(e.clientY - this._eMouseDown.clientY);
@@ -110,19 +109,19 @@ $.widget("ibi.ibxSortable", $.Widget,
 			if(this._inDrag && this._eLast)
 			{
 				var eLast = this._eLast
-				var dx = e.clientX - this._eLast.clientX;
-				var dy = e.clientY - this._eLast.clientY;
 				var pos = de.position();
+				var dx = e.clientX - eLast.clientX;
+				var dy = e.clientY - eLast.clientY;
 
-				pos.offsetLeft = pos.left + this.element.prop("scrollLeft") + dx;
-				pos.offsetTop = pos.top + this.element.prop("scrollTop") + dy;
+				pos.offsetLeft = (pos.left + this.element.prop("scrollLeft")) + dx;
+				pos.offsetTop = (pos.top + this.element.prop("scrollTop")) + dy;
 
 				//move within axis only if specified
 				if(options.lockDragAxis)
 					de.css({"left": (horz ? pos.offsetLeft : pos.left), "top": (vert ? pos.offsetTop : pos.top)});
 				else
 					de.css({"left": pos.offsetLeft, "top": pos.offsetTop});
-
+				
 				if(!this.element.is(target) && !this._placeholder.is(target))
 				{
 					//can only sort direct children
@@ -150,12 +149,25 @@ $.widget("ibi.ibxSortable", $.Widget,
 			this._eLast = e;
 		}
 		else
-		if(eType == "scroll")
+		if(eType == "scroll" && de)
 		{
-			var options = this.options;
-			var de = this._dragElement;
-			if(!de)
-				return;
+			var scrollPos = {left:this.element.prop("scrollLeft"), top:this.element.prop("scrollTop")};
+			var lastScrollPos = this._lastScrollPos || scrollPos;
+			var dx = scrollPos.left - lastScrollPos.left;
+			var dy = scrollPos.top - lastScrollPos.top;
+			var pos = de.position();
+
+			//calculate the proper offset
+			pos.offsetLeft = pos.left + scrollPos.left + dx;
+			pos.offsetTop = pos.top + scrollPos.top + dy;
+
+			//move within axis only if specified
+			if(options.lockDragAxis)
+				de.css({"left": (horz ? pos.offsetLeft : pos.left), "top": (vert ? pos.offsetTop : pos.top)});
+			else
+				de.css({"left": pos.offsetLeft, "top": pos.offsetTop});
+			
+			this._lastScrollPos = scrollPos;
 		}
 	},
 	_stopDrag:function()
