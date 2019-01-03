@@ -66,7 +66,7 @@ $.widget("ibi.ibxAutoScroll", $.Widget,
 		if(this._lastMouseMove)
 		{
 			var options = this.options;
-			var borderBox = this.element.metrics().borderBox;
+			var borderBox = this.element[0].getBoundingClientRect();
 			var e = this._lastMouseMove;
 			
 			if(options.direction.search(/^all|^horizontal/) == 0)

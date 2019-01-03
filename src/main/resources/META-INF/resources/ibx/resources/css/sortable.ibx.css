@@ -8,13 +8,13 @@
 
 .ibx-sortable-dragging
 {
-	position: absolute;
-	pointer-events:none;
-	z-index:100000;
 }
 
 .ibx-sortable-drag-item
 {
+	position: absolute;
+	pointer-events:none;
+	z-index:100000;
 	user-select:none;
 	-moz-user-select:none;
 	-ms-user-select:none;

@@ -68,9 +68,8 @@ $.widget("ibi.ibxSortable", $.Widget,
 		{
 			if(this._inDrag)
 			{							
+				this._dragElement.insertAfter(this._placeholder);
 				var evt = this.element.dispatchEvent("ibx_sortend", {"sortElement":this._dragElement, "beforeElement":this._placeholder.prev(), "afterElement":this._placeholder.next(), "originalEvent":e}, false);
-				if(!evt.defaultPrevented)
-					this._dragElement.insertAfter(this._placeholder);
 			}
 			this._stopDrag();
 		}
@@ -99,8 +98,9 @@ $.widget("ibi.ibxSortable", $.Widget,
 							"top":pos.top + this.element.prop("scrollTop"),
 							"width":de.width(),
 							"height":de.height(),
-						}).ibxAddClass("ibx-sortable-dragging " + options.sortItemClasses);
+						}).ibxAddClass("ibx-sortable-drag-item " + options.sortItemClasses);
 						this.element.ibxAutoScroll("start");
+						this.element.ibxAddClass("ibx-sortable-dragging");
 					}
 				}
 			}
@@ -178,9 +178,9 @@ $.widget("ibi.ibxSortable", $.Widget,
 	},
 	_stopDrag:function()
 	{
-		this.element.ibxAutoScroll("stop");
+		this.element.ibxAutoScroll("stop").ibxRemoveClass("ibx-sortable-dragging");
 		if(this._dragElement)
-			this._dragElement.css({"width":"", "height":"", "left":"", "top":""}).ibxRemoveClass("ibx-sortable-dragging " + this.options.sortItemClasses);
+			this._dragElement.css({"width":"", "height":"", "left":"", "top":""}).ibxRemoveClass("ibx-sortable-drag-item " + this.options.sortItemClasses);
 		delete this._dragElement;
 		if(this._placeholder)
 			this._placeholder.remove();
