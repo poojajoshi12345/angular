@@ -93,9 +93,6 @@ $.widget("ibi.ibxSortable", $.Widget,
 						var pos = de.position();
 						de.css(
 						{
-							"position":"absolute",
-							"z-index":100000,
-							"pointer-events":"none",
 							"left":pos.left + this.element.prop("scrollLeft"),
 							"top":pos.top + this.element.prop("scrollTop"),
 							"width":de.width(),
@@ -109,18 +106,9 @@ $.widget("ibi.ibxSortable", $.Widget,
 			if(this._inDrag && this._eLast)
 			{
 				var eLast = this._eLast
-				var pos = de.position();
 				var dx = e.clientX - eLast.clientX;
 				var dy = e.clientY - eLast.clientY;
-
-				pos.offsetLeft = (pos.left + this.element.prop("scrollLeft")) + dx;
-				pos.offsetTop = (pos.top + this.element.prop("scrollTop")) + dy;
-
-				//move within axis only if specified
-				if(options.lockDragAxis)
-					de.css({"left": (horz ? pos.offsetLeft : pos.left), "top": (vert ? pos.offsetTop : pos.top)});
-				else
-					de.css({"left": pos.offsetLeft, "top": pos.offsetTop});
+				this._moveDragElement(dx, dy);
 				
 				if(!this.element.is(target) && !this._placeholder.is(target))
 				{
@@ -155,26 +143,37 @@ $.widget("ibi.ibxSortable", $.Widget,
 			var lastScrollPos = this._lastScrollPos || scrollPos;
 			var dx = scrollPos.left - lastScrollPos.left;
 			var dy = scrollPos.top - lastScrollPos.top;
+			this._moveDragElement(dx, dy);
+			this._lastScrollPos = scrollPos;
+		}
+	},
+	_moveDragElement:function(dx, dy)
+	{
+		var de = this._dragElement;
+		if(de)
+		{
+			var options = this.options;
+			var vert = options.direction == "vertical";
+			var horz = options.direction == "horizontal";
+			var both = !vert && !horz;
 			var pos = de.position();
 
 			//calculate the proper offset
-			pos.offsetLeft = pos.left + scrollPos.left + dx;
-			pos.offsetTop = pos.top + scrollPos.top + dy;
+			pos.offsetLeft = pos.left + this.element.prop("scrollLeft") + dx;
+			pos.offsetTop = pos.top + this.element.prop("scrollTop") + dy;
 
 			//move within axis only if specified
 			if(options.lockDragAxis)
 				de.css({"left": (horz ? pos.offsetLeft : pos.left), "top": (vert ? pos.offsetTop : pos.top)});
 			else
 				de.css({"left": pos.offsetLeft, "top": pos.offsetTop});
-			
-			this._lastScrollPos = scrollPos;
-		}
+		}			
 	},
 	_stopDrag:function()
 	{
 		this.element.ibxAutoScroll("stop");
 		if(this._dragElement)
-			this._dragElement.css({"zIndex":"", "pointerEvents":"", "position":"", "width":"", "height":"", "left":"", "top":""}).ibxRemoveClass("ibx-sortable-dragging " + this.options.sortItemClasses);
+			this._dragElement.css({"width":"", "height":"", "left":"", "top":""}).ibxRemoveClass("ibx-sortable-dragging " + this.options.sortItemClasses);
 		delete this._dragElement;
 		if(this._placeholder)
 			this._placeholder.remove();

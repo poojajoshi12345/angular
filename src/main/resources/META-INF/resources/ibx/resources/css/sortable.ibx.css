@@ -8,6 +8,9 @@
 
 .ibx-sortable-dragging
 {
+	position: absolute;
+	pointer-events:none;
+	z-index:100000;
 	outline:2px solid red;
 }
 
