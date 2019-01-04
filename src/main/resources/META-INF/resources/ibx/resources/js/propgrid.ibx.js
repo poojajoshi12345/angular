@@ -8,7 +8,7 @@ $.widget("ibi.ibxPropertyGrid", $.ibi.ibxDataGrid,
 {
 	options:
 	{
-		colMap:[{title:"Property", size:"150px", justify:"start"}, {title:"Value", size:"1000px", justify:"start"}],
+		colMap:[{title:"Property", size:"150px", justify:"start"}, {title:"Value", size:"300px", justify:"start"}],
 		showRowHeaders:false,
 		indentColumn:0,
 		props:null,
@@ -26,7 +26,7 @@ $.widget("ibi.ibxPropertyGrid", $.ibi.ibxDataGrid,
 		for(var i = 0; props && i < props.length; ++i)
 		{
 			var prop = props[i];
-			var row = $("<div>").ibxDataGridRow().ibxAddClass("pgrid-prop-row").data("ibxProp", prop);
+			var row = $("<div>").ibxDataGridRow().ibxAddClass("pgrid-row").data("ibxProp", prop);
 			rows.push(row);
 
 			var ui = prop.ui = this._createUI(prop);
@@ -87,7 +87,7 @@ $.ibi.ibxPropertyGrid.extendProperty = function(baseProp, propType, uiType)
 	var p = propType.prototype = new baseProp();
 	ibx.inPropCtor = false;
 	p.constructor = propType;
-	p.super = baseProp.prototype;
+	p._super = baseProp.prototype;
 	$.ibi.ibxPropertyGrid.uiTypes[uiType] = propType;
 	return p;
 }
@@ -102,8 +102,8 @@ function ibxProperty(prop, grid)
 
 	this.prop = prop;
 	this.grid = grid;
-	this.nameCell = $("<div>").text(prop.displayName).ibxAddClass("pgrid-name-cell").attr("tabindex", 0).data("ibxProp", prop);
-	this.valueCell = $("<div>").ibxHBox({align:"center"}).ibxAddClass("pgrid-value-cell").attr("tabindex", 0).data("ibxProp", prop);
+	this.nameCell = $("<div>").text(prop.displayName).ibxAddClass(["pgrid-cell","pgrid-name-cell"]).attr("tabindex", 0).data("ibxProp", prop);
+	this.valueCell = $("<div>").ibxHBox({align:"center"}).ibxAddClass(["pgrid-cell", "pgrid-value-cell"]).attr("tabindex", 0).data("ibxProp", prop);
 	this.displayValue = $("<div>").ibxHBox({align:"center"}).text(prop.displayValue).ibxAddClass("pgrid-display-value-cell").attr("tabindex", 0).data("ibxProp", prop);
 	this.editValue = $("<div>").ibxHBox({align:"center"}).ibxAddClass("pgrid-edit-value-cell").attr("tabindex", 0).data("ibxProp", prop);
 
@@ -124,7 +124,7 @@ _p.valueCell = null;
 _p.displayValue = null;
 _p.editValue = null;
 _p.isEditing = function(){return this.valueCell.is(".pgrid-prop-editing");};
-_p.isLosingFocus = function(e){return (e.relatedTarget && !$.contains(this.valueCell[0], e.relatedTarget));};
+_p.isValueLosingFocus = function(e){return (e.relatedTarget && !$.contains(this.valueCell[0], e.relatedTarget));};
 _p._onTriggerEvent = function(e)
 {
 	var isEditing = this.isEditing();
@@ -139,11 +139,8 @@ _p._onKeyEvent = function(e)
 };
 _p._onBlurEvent = function(e)
 {
-	if(this.isLosingFocus(e))
-	{
-		console.log(e.target, e.relatedTarget)
+	if(this.isValueLosingFocus(e))
 		this.stopEditing();
-	}
 };
 _p.valueChanged = function(value)
 {
@@ -200,7 +197,7 @@ function ibxColorPickerProperty(prop, grid)
 	this.displayValue.empty();
 	this._displaySwatch = $("<span tabindex='0'>").ibxAddClass("pgrid-color-picker-swatch").css("backgroundColor", this.prop.value);
 	this._displayLabel = $("<span tabindex='0'>").ibxAddClass("pgrid-color-picker-value").text(this.prop.displayValue);
-	this.displayValue.append(this._displaySwatch).append(this._displayLabel, this._switch);
+	this.displayValue.prepend(this._displaySwatch, this._displayLabel);
 	this.editValue = this.displayValue;
 
 	this._colorPicker = $("<div>").ibxColorPicker({setOpacity:false}).on("ibx_change", function(e, value)
@@ -213,16 +210,23 @@ function ibxColorPickerProperty(prop, grid)
 	}.bind(this));
 	this._popup = $("<div class='pgrid-color-picker-popup'>");
 	this._popup.ibxPopup({destroyOnClose:false, position:{my:"left top", at:"left bottom", of:this._displaySwatch}}).append(this._colorPicker);
+	this._popup.on("ibx_close", this._onPopupClose.bind(this));
 }
 var _p = $.ibi.ibxPropertyGrid.extendProperty(ibxProperty, ibxColorPickerProperty, "colorPicker");
 _p._popup = null;
 _p._onBlurEvent = function(e)
 {
 	if(!this._popup.is(e.relatedTarget))
-		this.super._onBlurEvent.call(this, e);
+		this._super._onBlurEvent.call(this, e);
+};
+_p._onPopupClose = function(e)
+{
+	//this makes sure when user clicks outside of popup this properly loses focus (stopEditing).
+	this.valueCell.focus();
 };
 _p._startEditing = function()
 {
+	//this._super._startEditing.call(this);
 	this._displaySwatch.on("click", function(e)
 	{
 		this._colorPicker.ibxColorPicker("option", "color", this.prop.value);

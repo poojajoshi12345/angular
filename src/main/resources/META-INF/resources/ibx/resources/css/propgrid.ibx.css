@@ -4,23 +4,38 @@
 /******************************************************************************
 	PROPERTY GRID
 ******************************************************************************/
+.pgrid-row
+{
+
+}
+.pgrid-row:hover
+{
+	background-color:inherit;
+}
+.pgrid-cell:hover
+{
+	background-color:inherit;
+}
+
 .pgrid-display-value-cell, .pgrid-edit-value-cell
 {
 	flex:1 1 auto;
 }
 .pgrid-prop-editing
 {
-	outline:2px solid red;
+	outline:1px solid black;
 }
 .pgrid-color-picker-swatch
 {
 	width:1em;
 	height:1em;
-	border:1px solid black;
 	margin:2px;
+	border:1px solid black;
 }
 .pgrid-color-picker-value
 {
+	flex:1 1 auto;
+	margin:2px;
 }
 .pgrid-color-picker-popup.ibx-popup
 {
