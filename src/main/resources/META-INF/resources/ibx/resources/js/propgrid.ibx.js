@@ -121,13 +121,13 @@ _p.editValue = null;
 _p.isEditing = function(){return this.valueCell.is(".pgrid-prop-editing");};
 _p._onTriggerEvent = function(e)
 {
-	var startEditing = (e.type == "keyup") ? e.keyCode == this._triggerKey : true;
+	var startEditing = (e.type == "keyup") ? e.keyCode == this.triggerKey : true;
 	if(startEditing)
 		this.startEditing()
 };
 _p._onKeyEvent = function(e)
 {
-	if(e.type == "keydown")
+	if(e.type == "keydown" && this.isEditing())
 		e.stopPropagation();
 };
 _p.valueChanged = function(value)
