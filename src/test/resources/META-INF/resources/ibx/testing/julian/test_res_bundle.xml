@@ -97,7 +97,7 @@
 							"displayName":"Top",
 							"displayValue":"1px solid black",
 							"name":"borderTop",
-							"value":"none",
+							"value":"1px solid black",
 							"dataType":"string",
 							"uiType":"borderSelector",
 							"expanded":false,

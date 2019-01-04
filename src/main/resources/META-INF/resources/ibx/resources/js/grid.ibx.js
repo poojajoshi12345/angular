@@ -821,7 +821,7 @@ $.widget("ibi.ibxPropertyGrid", $.ibi.ibxDataGrid,
 {
 	options:
 	{
-		colMap:[{title:"Property", size:"150px", justify:"start"}, {title:"Value", size:"100px", justify:"start"}],
+		colMap:[{title:"Property", size:"150px", justify:"start"}, {title:"Value", size:"1000px", justify:"start"}],
 		showRowHeaders:false,
 		indentColumn:0,
 		props:null,
@@ -879,18 +879,31 @@ $.widget("ibi.ibxPropertyGrid", $.ibi.ibxDataGrid,
 				ui._displaySwatch = $("<span>").ibxAddClass("pgrid-color-picker-display-value").css("backgroundColor", prop.value);
 				ui._displayLabel = $("<span>").text(prop.displayValue);
 				ui.displayValue.append(ui._displaySwatch).append(ui._displayLabel);
+				ui.editValue = ui.displayValue;
 				ui.startEditing = function(prop, pGrid)
 				{
-					var ui = prop.ui;
-					ui.editValue.text(prop.value);
-					ui.editValue.ibxEditable().ibxEditable("startEditing").on("ibx_changed", function(pGrid, e)
+					var ui = prop.ui
+					ui._displaySwatch.on("click", function(pGrid, e)
 					{
-						prop.value = e.originalEvent.data;
-						prop.displayValue = prop.value;
-						prop.ui._displaySwatch.css("backgroundColor", prop.value);
-						prop.ui._displayLabel.text(prop.displayValue);
-						pGrid.stopEditing(this.prop);
-					}.bind(ui, pGrid));
+						var ui = prop.ui;
+						if(!ui._popup)
+						{
+							ui._colorPicker = $("<div>").ibxColorPicker({setOpacity:false}).on("ibx_change", function(pGrid, e, value)
+							{
+								var prop = this.prop;
+								prop.value = value.text;
+								this._displaySwatch.css("backgroundColor", prop.value);
+								this._displayLabel.text(prop.value);
+								pGrid.propertyChanged(prop)
+							}.bind(ui, pGrid));
+
+							ui._popup = $("<div class='pgrid-color-picker-popup'>").ibxPopup({position:{my:"left top", at:"left bottom", of:ui._displaySwatch}}).append(ui._colorPicker);
+							ui._popup.ibxWidget({"destroyOnClose":false})
+						}
+						ui._colorPicker.ibxColorPicker("option", "color", prop.value);
+						ui._popup.ibxWidget("open");
+
+					}.bind(prop, pGrid));
 				};
 			}
 			else
@@ -946,6 +959,11 @@ $.widget("ibi.ibxPropertyGrid", $.ibi.ibxDataGrid,
 	cancelEditing:function()
 	{
 		//do something here
+	},
+	propertyChanged:function(prop)
+	{
+		var event = this.element.dispatchEvent("ibx_prop_changed", prop, false, true);
+		return event.isDefaultPrevented();
 	},
 	_setOption:function(key, value)
 	{
