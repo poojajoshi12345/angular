@@ -131,6 +131,84 @@
 									"expanded":false,
 								},
 							]
+						},
+						{
+							"displayName":"Right",
+							"displayValue":"1px solid black",
+							"name":"borderRight",
+							"value":"1px solid black",
+							"dataType":"string",
+							"uiType":"borderSelector",
+							"expanded":false,
+							"props":
+							[
+								{
+									"displayName":"Width",
+									"displayValue":"1px",
+									"name":"borderRightWidth",
+									"value":"1px",
+									"dataType":"string",
+									"uiType":"text",
+									"expanded":false,
+								},
+								{
+									"displayName":"Style",
+									"displayValue":"Solid",
+									"name":"borderRightStyle",
+									"value":"solid",
+									"dataType":"string",
+									"uiType":"select",
+									"expanded":false,
+								},
+								{
+									"displayName":"Color",
+									"displayValue":"black",
+									"name":"borderRightColor",
+									"value":"black",
+									"dataType":"color",
+									"uiType":"colorPicker",
+									"expanded":false,
+								},
+							]
+						},
+						{
+							"displayName":"Bottom",
+							"displayValue":"1px solid black",
+							"name":"borderBottom",
+							"value":"1px solid black",
+							"dataType":"string",
+							"uiType":"borderSelector",
+							"expanded":false,
+							"props":
+							[
+								{
+									"displayName":"Width",
+									"displayValue":"1px",
+									"name":"borderBottomWidth",
+									"value":"1px",
+									"dataType":"string",
+									"uiType":"text",
+									"expanded":false,
+								},
+								{
+									"displayName":"Style",
+									"displayValue":"Solid",
+									"name":"borderBottomStyle",
+									"value":"solid",
+									"dataType":"string",
+									"uiType":"select",
+									"expanded":false,
+								},
+								{
+									"displayName":"Color",
+									"displayValue":"black",
+									"name":"borderBottomColor",
+									"value":"black",
+									"dataType":"color",
+									"uiType":"colorPicker",
+									"expanded":false,
+								},
+							]
 						}
 
 					]
