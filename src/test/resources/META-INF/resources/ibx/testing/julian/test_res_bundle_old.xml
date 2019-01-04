@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ibx-res-bundle name="test_res_bundle.xml" loadContext="bundle">
+	<strings>
+		<string-file src="./test_res_strings.txt" default="false"/>
+		<string-bundle>
+			<![CDATA[
+			{
+				"language":"ibx_default",
+				"strings":
+				{
+				}
+			}
+		]]>
+		</string-bundle>
+	</strings>
+
+	<styles>
+		<style-file src="./test_res_styles.css"/>
+		<style-sheet>
+		<![CDATA[
+			.ibx-data-grid
+			{
+				overflow:auto;
+			}
+			.ibx-data-grid-heading-bar
+			{
+				padding:2px;
+				background-color:#ccc;
+				box-sizing:border-box;
+			}
+			.ibx-data-grid-heading
+			{
+				padding:3px;
+				border:1px outset;
+				box-sizing:border-box;
+			}
+			.ibx-data-grid-heading-splitter
+			{
+				min-width:0px;
+				width:2px;
+				background-color:transparent;
+				box-sizing:border-box;
+			}
+			.ibx-data-grid-cell
+			{
+				box-sizing:border-box;
+				border-right:1px solid #ccc;
+				border-bottom:1px solid #ccc;
+			}
+			.ibx-data-grid-cell-padding
+			{
+			}
+			.test-class
+			{
+				font-size:2em;
+			}
+		]]>
+		</style-sheet>
+	</styles>
+
+	<markup>
+		<markup-file src="./test_res_markup.xml"/>
+		<markup-block>
+		</markup-block>
+	</markup>
+
+	<scripts>
+		<script-file src="./test_res_script.js"/>
+		<script-file src="../../ibxtools/shared_resources/js/ibfs.js" loadContext="ibx"/>
+		<script-block>
+		<![CDATA[
+			var testProps = 
+			[
+				{
+					"displayName":"Background Color",
+					"displayValue":"White",
+					"name":"backgroundColor",
+					"value":"white",
+					"type":"string",
+					"uiType":"colorPicker",
+					"expanded":false,
+				},
+				{
+					"displayName":"Border",
+					"displayValue":"1px solid black",
+					"name":"border",
+					"value":"1px solid black",
+					"type":"string",
+					"uiType":"borderSelector",
+					"expanded":false,
+					"props":
+					[
+						{
+							"displayName":"Left",
+							"displayValue":"1px solid black",
+							"name":"left",
+							"value":"1px solid black",
+							"type":"string",
+							"uiType":"borderSelector",
+							"expanded":false,
+							"props":
+							[
+								{
+									"displayName":"Width",
+									"displayValue":"1px",
+									"name":"width",
+									"value":"1px",
+									"type":"string",
+									"uiType":"textField",
+								},
+								{
+									"displayName":"Style",
+									"displayValue":"Solid",
+									"name":"style",
+									"value":"solid",
+									"type":"string",
+									"uiType":"select",
+									"values":
+									{
+										"solid":
+										{
+											"displayName":"Solid",
+											"value":"solid",
+										},
+										"dashed":
+										{
+											"displayName":"Dashed",
+											"value":"dashed",
+										},
+										"dotted":
+										{
+											"displayName":"Dotted",
+											"value":"dotted",
+										},
+									},
+								},
+								{
+									"displayName":"Color",
+									"displayValue":"red",
+									"name":"color",
+									"value":"red",
+									"type":"color",
+									"uiType":"colorPicker",
+								},
+							]
+						}
+					]
+				}
+			];
+
+			$.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
+			{
+				options:
+				{
+					headingBarClass:"ibx-data-grid-heading-bar",
+					headingClass:"ibx-data-grid-heading",
+					headingSplitterClass:"ibx-data-grid-heading-splitter",
+					cellClass:"ibx-data-grid-cell",
+					columnMap:
+					[
+						{"title":"displayName", "size":"100px"},
+						{"title":"displayValue", "size":"100px"},
+						{"title":"name", "size":"75px"},
+						{"title":"value", "size":"75px"},
+						{"title":"type", "size":"75px"},
+						{"title":"uiType", "size":"75px"},
+						{"title":"expanded", "size":"*"},
+					],
+
+					align:"stretch",
+					alignContent:"start",
+				},
+				_widgetClass:"ibx-data-grid",
+				_create:function()
+				{
+					var options = this.options;
+					this._headingBar = $("<div>").ibxAddClass(options.headingBarClass).ibxHBox().data({ibxCol:"1/span " + options.columnMap.length});
+
+					for(var i = 0; i < options.columnMap.length; ++i)
+					{
+						var cInfo = options.columnMap[i];
+						var size = (cInfo.size == "*") ? "flex:1 1 auto" : "width:"+cInfo.size;
+						var cHeading = $(sformat("<div class='{1} {2}' style='{3};'>{4}</div>", options.headingClass, cInfo.headingClass, size, cInfo.title));
+						cHeading.ibxButtonSimple({justify:"start", alignText:cInfo.align});
+						this._headingBar.ibxWidget("add", cHeading);
+
+						if(i == options.columnMap.length-1)
+							continue;
+
+						var splitter = $(sformat("<div class='{1}'>", options.headingSplitterClass)).ibxSplitter({resize:"first"}).on("ibx_resize", this._onSplitterResize.bind(this));
+						this._headingBar.ibxWidget("add", splitter);
+					}
+					this.add(this._headingBar);
+					this._super();
+				},
+				columnCount:function()
+				{
+					return this.options.columnMap.length;
+				},
+				_calcColumnsFromHeaders:function()
+				{
+					var cols = "";
+					var splitterWidth = this._headingBar.ibxWidget("children", "."+this.options.headingSplitterClass).first().outerWidth();
+					var headers = this._headingBar.ibxWidget("children", "."+this.options.headingClass);
+					for(var i = 0; i < headers.length; ++i)
+					{
+						var header = $(headers[i]);
+						var isFlexing = parseInt(header.css("flexGrow"), 0);
+						cols += isFlexing ? "1fr " : header.outerWidth() + (splitterWidth || 0) + "px ";
+					}
+					return cols;
+				},
+				_onSplitterResize:function(e, resizeInfo)
+				{
+					this.refresh();
+				},
+				addRow:function(elRow, rowSibling, before, refresh)
+				{
+					var options = this.options;
+					var nCells = this.children("." + options.cellClass).length;
+					var idxRow = (1 + Math.floor(nCells/options.columnMap.length)) + 1;
+					var row = [];
+					for(var i = 0; i < options.columnMap.length; ++i)
+					{
+						var el = (elRow[i]) ? $(elRow[i]) : $("<div class='ibx-data-grid-cell-padding'></div>");
+						el.ibxAddClass(options.cellClass).data({ibxCol:i+1, ibxRow:idxRow});
+						row.push(el[0]);
+					}
+					this.add(row, rowSibling, before, refresh);
+
+				},
+				removeRow:function(row)
+				{
+				},
+				removeAll:function()
+				{
+					this.remove("." + this.options.cellClass);
+				},
+				_refresh:function()
+				{
+					var options = this.options;
+					options.cols = this._calcColumnsFromHeaders();
+					this._super();
+				}
+			});
+
+					
+			//# sourceURL=test_res_bundle.xml
+		]]>
+		</script-block>
+	</scripts>
+</ibx-res-bundle>

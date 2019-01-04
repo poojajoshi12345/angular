@@ -183,6 +183,7 @@ $Revision$:-->
 		<style-file src="./css/flexbox.ibx.css"/>
 		<style-file src="./css/iframe.ibx.css"/>
 		<style-file src="./css/grid.ibx.css"/>
+		<style-file src="./css/propgrid.ibx.css"/>
 		<style-file src="./css/tree.ibx.css"/>
 		<style-file src="./css/splitter.ibx.css"/>
 		<style-file src="./css/label.ibx.css"/>
@@ -238,6 +239,7 @@ $Revision$:-->
 		<script-file src="./js/iframe.ibx.js"/>
 		<script-file src="./js/flexbox.ibx.js"/>
 		<script-file src="./js/grid.ibx.js"/>
+		<script-file src="./js/propgrid.ibx.js"/>
 		<script-file src="./js/splitter.ibx.js"/>
 		<script-file src="./js/label.ibx.js"/>
 		<script-file src="./js/tree.ibx.js"/>
