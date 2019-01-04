@@ -128,9 +128,19 @@
 /******************************************************************************
 	PROPERTY GRID
 ******************************************************************************/
-.pgrid-editing-cell
+.pgrid-display-value-cell, .pgrid-edit-value-cell
 {
-	border:2px solid red;
+	flex:1 1 auto;
+}
+.pgrid-edit-value-cell
+{
+}
+.pgrid-color-picker-display-value
+{
+	width:1em;
+	height:1em;
+	border:1px solid black;
+	margin:5px;
 }
 /******************************************************************************
 	FLEX GRID

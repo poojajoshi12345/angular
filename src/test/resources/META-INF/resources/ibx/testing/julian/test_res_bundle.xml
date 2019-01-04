@@ -33,39 +33,22 @@
 		<script-file src="../../ibxtools/shared_resources/js/ibfs.js" loadContext="ibx"/>
 		<script-block>
 		<![CDATA[
-			/*
-			var testProps = 
-			[
-				{
-					"displayName":"Test Property",
-					"expanded":false,
-					"props":
-					[
-						{
-							"displayName":"Child Property",
-							"expanded":false,
-						}
-					]
-				}
-			]
-			*/
-
 			var testProps = 
 			[
 				{
 					"displayName":"Background Color",
-					"displayValue":"White",
+					"displayValue":"Transparent",
 					"name":"backgroundColor",
-					"value":"white",
+					"value":"transparent",
 					"dataType":"string",
 					"uiType":"colorPicker",
 					"expanded":false,
 				},
 				{
 					"displayName":"Border",
-					"displayValue":"1px solid red",
+					"displayValue":"1px solid black",
 					"name":"border",
-					"value":"1px solid red",
+					"value":"1px solid black",
 					"dataType":"string",
 					"uiType":"borderSelector",
 					"expanded":false,
@@ -73,9 +56,9 @@
 					[
 						{
 							"displayName":"Left",
-							"displayValue":"1px solid red",
-							"name":"left",
-							"value":"1px solid red",
+							"displayValue":"1px solid black",
+							"name":"borderLeft",
+							"value":"1px solid black",
 							"dataType":"string",
 							"uiType":"borderSelector",
 							"expanded":false,
@@ -84,7 +67,7 @@
 								{
 									"displayName":"Width",
 									"displayValue":"1px",
-									"name":"width",
+									"name":"borderLeftWidth",
 									"value":"1px",
 									"dataType":"string",
 									"uiType":"text",
@@ -93,35 +76,17 @@
 								{
 									"displayName":"Style",
 									"displayValue":"Solid",
-									"name":"style",
+									"name":"borderLeftStyle",
 									"value":"solid",
 									"dataType":"string",
-									"uiType":"select",
+									"uiType":"text",
 									"expanded":false,
-									"values":
-									{
-										"solid":
-										{
-											"displayName":"Solid",
-											"value":"solid",
-										},
-										"dashed":
-										{
-											"displayName":"Dashed",
-											"value":"dashed",
-										},
-										"dotted":
-										{
-											"displayName":"Dotted",
-											"value":"dotted",
-										},
-									},
 								},
 								{
 									"displayName":"Color",
-									"displayValue":"red",
-									"name":"color",
-									"value":"red",
+									"displayValue":"black",
+									"name":"borderLeftColor",
+									"value":"black",
 									"dataType":"color",
 									"uiType":"colorPicker",
 									"expanded":false,
@@ -130,9 +95,9 @@
 						},
 						{
 							"displayName":"Top",
-							"displayValue":"1px solid red",
-							"name":"left",
-							"value":"1px solid red",
+							"displayValue":"1px solid black",
+							"name":"borderTop",
+							"value":"none",
 							"dataType":"string",
 							"uiType":"borderSelector",
 							"expanded":false,
@@ -141,7 +106,7 @@
 								{
 									"displayName":"Width",
 									"displayValue":"1px",
-									"name":"width",
+									"name":"borderTopWidth",
 									"value":"1px",
 									"dataType":"string",
 									"uiType":"text",
@@ -150,35 +115,17 @@
 								{
 									"displayName":"Style",
 									"displayValue":"Solid",
-									"name":"style",
+									"name":"borderTopStyle",
 									"value":"solid",
 									"dataType":"string",
 									"uiType":"select",
 									"expanded":false,
-									"values":
-									{
-										"solid":
-										{
-											"displayName":"Solid",
-											"value":"solid",
-										},
-										"dashed":
-										{
-											"displayName":"Dashed",
-											"value":"dashed",
-										},
-										"dotted":
-										{
-											"displayName":"Dotted",
-											"value":"dotted",
-										},
-									},
 								},
 								{
 									"displayName":"Color",
-									"displayValue":"red",
-									"name":"color",
-									"value":"red",
+									"displayValue":"black",
+									"name":"borderTopColor",
+									"value":"black",
 									"dataType":"color",
 									"uiType":"colorPicker",
 									"expanded":false,

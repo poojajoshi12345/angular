@@ -835,6 +835,7 @@ $.widget("ibi.ibxPropertyGrid", $.ibi.ibxDataGrid,
 		this.element.data("ibiIbxDataGrid", this);
 		this.getSelectionManager().options.type = "nav";
 		this._boundEditTrigger = this._onEditTrigger.bind(this);
+		this.element.on("keyup", this._boundEditTrigger);
 	},
 	_buildPropTree:function(props, parentRow)
 	{
@@ -846,7 +847,7 @@ $.widget("ibi.ibxPropertyGrid", $.ibi.ibxDataGrid,
 			rows.push(row);
 
 			var ui = prop.ui = this._createUI(prop);
-			row.append([ui.nameCell, ui.valueCell, ui.editorCell]);
+			row.append([ui.nameCell, ui.valueCell]);
 
 			this.addRow(row);
 			var childRows = this._buildPropTree(prop.props, row);
@@ -856,54 +857,95 @@ $.widget("ibi.ibxPropertyGrid", $.ibi.ibxDataGrid,
 	},
 	_createUI:function(prop)
 	{
-		var ui = prop.ui = {"prop":prop, "nameCell":null, "valueCell":null, "editorCell":null};
+		var ui = prop.ui =
+		{
+			"prop":prop,
+			"nameCell":$("<div>").text(prop.displayName).ibxAddClass("pgrid-name-cell").attr("tabindex", 0).data("ibxProp", prop),
+			"valueCell":$("<div>").ibxHBox({align:"center"}).ibxAddClass("pgrid-value-cell").attr("tabindex", 0).data("ibxProp", prop),
+			"displayValue":$("<div>").ibxHBox({align:"center"}).text(prop.displayValue).ibxAddClass("pgrid-display-value-cell").attr("tabindex", 0).data("ibxProp", prop),
+			"editValue":$("<div>").ibxHBox({align:"center"}).ibxAddClass("pgrid-edit-value-cell").attr("tabindex", 0).data("ibxProp", prop),
+			"startEditing":$.noop,
+			"stopEditing":$.noop,
+		};
+		ui.valueCell.append(ui.displayValue);
+
 		var event = this.element.dispatchEvent("ibx_prop_create_ui", ui, false, false);	
 		if(!event.isDefaultPrevented())
 		{
 			var type = (-1 == $.ibi.ibxPropertyGrid.uiTypes.indexOf(prop.uiType)) ? null : prop.uiType;
-			switch(type)
+			if(type == "colorPicker")
 			{
-				case "xcolorPicker":
+				ui.displayValue.empty();
+				ui._displaySwatch = $("<span>").ibxAddClass("pgrid-color-picker-display-value").css("backgroundColor", prop.value);
+				ui._displayLabel = $("<span>").text(prop.displayValue);
+				ui.displayValue.append(ui._displaySwatch).append(ui._displayLabel);
+				ui.startEditing = function(prop, pGrid)
 				{
-					console.log("color");
-					break;
-				}
-				default://create the default UI if built in type
+					var ui = prop.ui;
+					ui.editValue.text(prop.value);
+					ui.editValue.ibxEditable().ibxEditable("startEditing").on("ibx_changed", function(pGrid, e)
+					{
+						prop.value = e.originalEvent.data;
+						prop.displayValue = prop.value;
+						prop.ui._displaySwatch.css("backgroundColor", prop.value);
+						prop.ui._displayLabel.text(prop.displayValue);
+						pGrid.stopEditing(this.prop);
+					}.bind(ui, pGrid));
+				};
+			}
+			else
+			{
+				ui.startEditing = function(prop, pGrid)
 				{
-					ui.nameCell = $("<div>").text(prop.displayName);
-					ui.valueCell = $("<div>").text(prop.displayValue);
-					ui.editorCell = $("<div>").text(prop.displayValue + " EDITING");
-				}
+					var ui = prop.ui;
+					ui.editValue.text(prop.value);
+					ui.editValue.ibxEditable().ibxEditable("startEditing").on("ibx_changed", function(pGrid, e)
+					{
+						prop.value = e.originalEvent.data;
+						prop.displayValue = prop.value;
+						this.displayValue.text(prop.value);
+						pGrid.stopEditing(this.prop);
+					}.bind(ui, pGrid));
+				};
 			}
 		}
-
-		$(ui.nameCell).ibxAddClass("pgrid-cell-name").attr("tabindex", 0).data("ibxProp", prop);
-		$(ui.valueCell).ibxAddClass("pgrid-cell-value").attr("tabindex", 0).data("ibxProp", prop);
-		$(ui.editorCell).ibxAddClass("pgrid-cell-editor").attr("tabindex", 0).data("ibxProp", prop);
 		return ui;
 	},
 	_onEditTrigger:function(e)
 	{
 		var cell = $(e.target).closest(".dgrid-cell");
-		var startEdit = (e.type == "keypress") ?  (e.keyCode == this.options.triggerKey) : cell.is(".pgrid-cell-value");
+		var startEdit = (e.type == "keyup") ?  (e.keyCode == this.options.triggerKey) : cell.is(".pgrid-value-cell");
 		if(cell.length && startEdit)
 			this.startEditing(cell.data("ibxProp"));
+
 	},
 	startEditing:function(prop)
 	{
-		var event = this.element.dispatchEvent("ibx_prop_edit_start", prop, false, true);
+		var event = this.element.dispatchEvent("ibx_start_prop_edit", prop, false, true);
 		if(!event.isDefaultPrevented())
 		{
 			var ui = prop.ui;
-			this._editCell = ui.editorCell;
-			ui.editorCell.ibxAddClass("pgrid-editing-cell").insertBefore(ui.valueCell);
+			ui.valueCell.ibxAddClass("pgrid-editing-cell");
+			ui.displayValue.detach();
+			ui.editValue.appendTo(ui.valueCell);
+			ui.startEditing(prop, this);
 		}
 	},
-	stopEditing:function()
+	stopEditing:function(prop)
 	{
-		var event = this.element.dispatchEvent("ibx_prop_edit_end", {"cell":cell, "prop":prop}, false, false);
-		this.editCell.ibxRemoveClass("pgrid-editing-cell");
-		delete this._editCell;
+		var event = this.element.dispatchEvent("ibx_end_prop_edit", prop, false, true);
+		if(!event.isDefaultPrevented())
+		{
+			var ui = prop.ui;
+			ui.valueCell.ibxRemoveClass("pgrid-editing-cell");
+			ui.editValue.detach();
+			ui.displayValue.appendTo(ui.valueCell);
+			ui.stopEditing(prop);
+		}
+	},
+	cancelEditing:function()
+	{
+		//do something here
 	},
 	_setOption:function(key, value)
 	{

@@ -115,10 +115,12 @@
 				$(".btn-load-props").on("click", function(e)
 				{
 					var grid = $(".test-prop-grid");
-					grid.on("ibx_prop_edit ibx_prop_create_ui", function(e)
+					grid.on("ibx_start_prop_edit ibx_end_prop_edit ibx_ ibx_prop_create_ui", function(e)
 					{
-						//console.log(e.type, e.originalEvent.data);
-						
+						var eType = e.type;
+						var prop = e.originalEvent.data;
+						if(eType == "ibx_end_prop_edit")
+							$(".test-grid").css(prop.name, prop.value);
 					}).ibxWidget("option", "props", testProps);
 				});
 
