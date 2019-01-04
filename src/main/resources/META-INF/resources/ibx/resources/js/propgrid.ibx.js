@@ -109,7 +109,7 @@ function ibxProperty(prop, grid)
 
 	this.valueCell.append(this.displayValue);
 	this.valueCell.on(this.triggerEvent, this._onTriggerEvent.bind(this));
-	this.valueCell.on("keyup", this._onTriggerEvent.bind(this));
+	this.valueCell.on("keyup keydown", this._onTriggerEvent.bind(this));
 	this.valueCell.on("keydown", this._onKeyEvent.bind(this));
 	this.valueCell.on("focusout", this._onBlurEvent.bind(this));
 	prop.ui = this;
@@ -117,6 +117,7 @@ function ibxProperty(prop, grid)
 var _p = ibxProperty.prototype = new Object();
 _p.triggerEvent = "click";
 _p.triggerKey = $.ui.keyCode.ENTER;
+_p.cancelKey = $.ui.keyCode.ESCAPE;
 _p.prop = null;
 _p.grid = null;
 _p.nameCell = null;
@@ -127,10 +128,18 @@ _p.isEditing = function(){return this.valueCell.is(".pgrid-prop-editing");};
 _p.isValueLosingFocus = function(e){return (e.relatedTarget && !$.contains(this.valueCell[0], e.relatedTarget));};
 _p._onTriggerEvent = function(e)
 {
+	var eType = e.type;
 	var isEditing = this.isEditing();
-	var startEditing = (e.type == "keyup") ? e.keyCode == this.triggerKey : true;
+	var startEditing = ((e.type == "keyup") && e.keyCode == this.triggerKey) || eType == this.triggerEvent;
 	if(startEditing && !isEditing)
 		this.startEditing()
+	else
+	if(eType == "keyup" && e.keyCode == this.cancelKey)
+		this.cancelEditing();
+	else
+	if(eType == "keydown" && isEditing)
+		e.stopPropagation();
+
 };
 _p._onKeyEvent = function(e)
 {
@@ -185,7 +194,11 @@ _p.stopEditing = function()
 _p._stopEditing = function()
 {
 };
-
+console.error("YOU WERE FIGURING OUT HOW TO DO THE CANCEL EDIT FUNCTIONALITY");
+_p.cancelEditing = function()
+{
+	console.log("cancel")
+};
 /********************************************************************************
  * IBX PROPERTY UI FOR COLOR PICKER
 ********************************************************************************/
