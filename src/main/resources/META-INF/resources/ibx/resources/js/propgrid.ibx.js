@@ -97,6 +97,7 @@ $.ibi.ibxPropertyGrid.extendProperty = function(baseProp, propType, uiType)
 ********************************************************************************/
 function ibxProperty(prop, grid)
 {
+console.error("YOU WERE FIGURING OUT HOW TO DO THE CANCEL EDIT FUNCTIONALITY");
 	Object.call(this);
 	if(ibx.inPropCtor) return;
 
@@ -194,7 +195,6 @@ _p.stopEditing = function()
 _p._stopEditing = function()
 {
 };
-console.error("YOU WERE FIGURING OUT HOW TO DO THE CANCEL EDIT FUNCTIONALITY");
 _p.cancelEditing = function()
 {
 	console.log("cancel")
