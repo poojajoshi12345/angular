@@ -8,8 +8,9 @@
 {
 	flex:1 1 auto;
 }
-.pgrid-edit-value-cell
+.pgrid-prop-editing
 {
+	xoutline:2px solid red;
 }
 .pgrid-color-picker-display-value
 {

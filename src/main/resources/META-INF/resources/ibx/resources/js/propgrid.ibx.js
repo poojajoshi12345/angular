@@ -12,8 +12,6 @@ $.widget("ibi.ibxPropertyGrid", $.ibi.ibxDataGrid,
 		showRowHeaders:false,
 		indentColumn:0,
 		props:null,
-		triggerKey:$.ui.keyCode.ENTER,
-		triggerEvent:"dblclick",
 	},
 	_widgetClass:"ibx-property-grid",
 	_create:function()
@@ -21,8 +19,6 @@ $.widget("ibi.ibxPropertyGrid", $.ibi.ibxDataGrid,
 		this._super();
 		this.element.data("ibiIbxDataGrid", this);
 		this.getSelectionManager().options.type = "nav";
-		this._boundEditTrigger = this._onEditTrigger.bind(this);
-		this.element.on("keyup", this._boundEditTrigger);
 	},
 	_buildPropTree:function(props, parentRow)
 	{
@@ -44,104 +40,20 @@ $.widget("ibi.ibxPropertyGrid", $.ibi.ibxDataGrid,
 	},
 	_createUI:function(prop)
 	{
-		var ui = prop.ui =
-		{
-			"prop":prop,
-			"nameCell":$("<div>").text(prop.displayName).ibxAddClass("pgrid-name-cell").attr("tabindex", 0).data("ibxProp", prop),
-			"valueCell":$("<div>").ibxHBox({align:"center"}).ibxAddClass("pgrid-value-cell").attr("tabindex", 0).data("ibxProp", prop),
-			"displayValue":$("<div>").ibxHBox({align:"center"}).text(prop.displayValue).ibxAddClass("pgrid-display-value-cell").attr("tabindex", 0).data("ibxProp", prop),
-			"editValue":$("<div>").ibxHBox({align:"center"}).ibxAddClass("pgrid-edit-value-cell").attr("tabindex", 0).data("ibxProp", prop),
-			"startEditing":$.noop,
-			"stopEditing":$.noop,
-		};
-		ui.valueCell.append(ui.displayValue);
-
-		var event = this.element.dispatchEvent("ibx_prop_create_ui", ui, false, false);	
+		var ui = null;
+		var event = this.element.dispatchEvent("ibx_prop_create_ui", prop, false, false);	
 		if(!event.isDefaultPrevented())
 		{
-			var type = (-1 == $.ibi.ibxPropertyGrid.uiTypes.indexOf(prop.uiType)) ? null : prop.uiType;
-			if(type == "colorPicker")
-			{
-				ui.displayValue.empty();
-				ui._displaySwatch = $("<span>").ibxAddClass("pgrid-color-picker-display-value").css("backgroundColor", prop.value);
-				ui._displayLabel = $("<span>").text(prop.displayValue);
-				ui.displayValue.append(ui._displaySwatch).append(ui._displayLabel);
-				ui.editValue = ui.displayValue;
-				ui.startEditing = function(prop, pGrid)
-				{
-					var ui = prop.ui
-					ui._displaySwatch.on("click", function(pGrid, e)
-					{
-						var ui = prop.ui;
-						if(!ui._popup)
-						{
-							ui._colorPicker = $("<div>").ibxColorPicker({setOpacity:false}).on("ibx_change", function(pGrid, e, value)
-							{
-								var prop = this.prop;
-								prop.value = value.text;
-								this._displaySwatch.css("backgroundColor", prop.value);
-								this._displayLabel.text(prop.value);
-								pGrid.propertyChanged(prop)
-							}.bind(ui, pGrid));
-
-							ui._popup = $("<div class='pgrid-color-picker-popup'>").ibxPopup({position:{my:"left top", at:"left bottom", of:ui._displaySwatch}}).append(ui._colorPicker);
-							ui._popup.ibxWidget({"destroyOnClose":false})
-						}
-						ui._colorPicker.ibxColorPicker("option", "color", prop.value);
-						ui._popup.ibxWidget("open");
-
-					}.bind(prop, pGrid));
-				};
-			}
-			else
-			{
-				ui.startEditing = function(prop, pGrid)
-				{
-					var ui = prop.ui;
-					ui.editValue.text(prop.value);
-					ui.editValue.ibxEditable().ibxEditable("startEditing").on("ibx_changed", function(pGrid, e)
-					{
-						prop.value = e.originalEvent.data;
-						prop.displayValue = prop.value;
-						this.displayValue.text(prop.value);
-						pGrid.stopEditing(this.prop);
-					}.bind(ui, pGrid));
-				};
-			}
+			var uiType = $.ibi.ibxPropertyGrid.uiTypes[prop.uiType] || ibxProperty;
+			ui = new uiType(prop, this.element);
 		}
 		return ui;
 	},
-	_onEditTrigger:function(e)
-	{
-		var cell = $(e.target).closest(".dgrid-cell");
-		var startEdit = (e.type == "keyup") ?  (e.keyCode == this.options.triggerKey) : cell.is(".pgrid-value-cell");
-		if(cell.length && startEdit)
-			this.startEditing(cell.data("ibxProp"));
-
-	},
 	startEditing:function(prop)
 	{
-		var event = this.element.dispatchEvent("ibx_start_prop_edit", prop, false, true);
-		if(!event.isDefaultPrevented())
-		{
-			var ui = prop.ui;
-			ui.valueCell.ibxAddClass("pgrid-editing-cell");
-			ui.displayValue.detach();
-			ui.editValue.appendTo(ui.valueCell);
-			ui.startEditing(prop, this);
-		}
 	},
 	stopEditing:function(prop)
 	{
-		var event = this.element.dispatchEvent("ibx_end_prop_edit", prop, false, true);
-		if(!event.isDefaultPrevented())
-		{
-			var ui = prop.ui;
-			ui.valueCell.ibxRemoveClass("pgrid-editing-cell");
-			ui.editValue.detach();
-			ui.displayValue.appendTo(ui.valueCell);
-			ui.stopEditing(prop);
-		}
 	},
 	cancelEditing:function()
 	{
@@ -160,12 +72,6 @@ $.widget("ibi.ibxPropertyGrid", $.ibi.ibxDataGrid,
 			this.removeRow();
 			this._buildPropTree(value, null);
 		}
-		else
-		if(key == "triggerEvent")
-		{
-			this.element.off(options.triggerEvent);
-			this.element.on(value, this._onEditTrigger.bind(this));
-		}			
 		this._super(key, value);
 	},
 	_refresh:function()
@@ -173,4 +79,133 @@ $.widget("ibi.ibxPropertyGrid", $.ibi.ibxDataGrid,
 		this._super();
 	},
 });
-$.ibi.ibxPropertyGrid.uiTypes = ["text", "radio", "check", "select", "colorPicker", "borderSelector"];
+
+$.ibi.ibxPropertyGrid.uiTypes = {"ibxProperty":ibxProperty};
+$.ibi.ibxPropertyGrid.extendProperty = function(baseProp, propType, uiType)
+{
+	ibx.inPropCtor = true;
+	var p = propType.prototype = new baseProp();
+	ibx.inPropCtor = false;
+	p.constructor = propType;
+	$.ibi.ibxPropertyGrid.uiTypes[uiType] = propType;
+	return p;
+}
+
+function ibxProperty(prop, grid)
+{
+	Object.call(this);
+	if(ibx.inPropCtor) return;
+
+	this.prop = prop;
+	this.grid = grid;
+	this.nameCell = $("<div>").text(prop.displayName).ibxAddClass("pgrid-name-cell").attr("tabindex", 0).data("ibxProp", prop);
+	this.valueCell = $("<div>").ibxHBox({align:"center"}).ibxAddClass("pgrid-value-cell").attr("tabindex", 0).data("ibxProp", prop);
+	this.displayValue = $("<div>").ibxHBox({align:"center"}).text(prop.displayValue).ibxAddClass("pgrid-display-value-cell").attr("tabindex", 0).data("ibxProp", prop);
+	this.editValue = $("<div>").ibxHBox({align:"center"}).ibxAddClass("pgrid-edit-value-cell").attr("tabindex", 0).data("ibxProp", prop);
+
+	this.valueCell.append(this.displayValue);
+	this.valueCell.on(this.triggerEvent, this._onTriggerEvent.bind(this));
+	this.valueCell.on("keyup", this._onTriggerEvent.bind(this));
+	this.valueCell.on("keydown", this._onKeyEvent.bind(this));
+	prop.ui = this;
+}
+var _p = ibxProperty.prototype = new Object();
+_p.triggerEvent = "dblclick";
+_p.triggerKey = $.ui.keyCode.ENTER;
+_p.prop = null;
+_p.grid = null;
+_p.nameCell = null;
+_p.valueCell = null;
+_p.displayValue = null;
+_p.editValue = null;
+_p.isEditing = function(){return this.valueCell.is(".pgrid-prop-editing");};
+_p._onTriggerEvent = function(e)
+{
+	var startEditing = (e.type == "keyup") ? e.keyCode == this._triggerKey : true;
+	if(startEditing)
+		this.startEditing()
+};
+_p._onKeyEvent = function(e)
+{
+	if(e.type == "keydown")
+		e.stopPropagation();
+};
+_p.valueChanged = function(value)
+{
+	var event = this.grid.dispatchEvent("ibx_prop_changed", this.prop, false, true);
+	return event.isDefaultPrevented();
+};
+_p.startEditing = function()
+{
+	var event = this.grid.dispatchEvent("ibx_start_prop_edit", this.prop, false, true);
+	if(!event.isDefaultPrevented())
+	{
+		this.displayValue.detach();
+		this.editValue.appendTo(this.valueCell);
+		this._startEditing();
+	}
+};
+_p._startEditing = function()
+{
+	var prop = this.prop;
+	this.valueCell.ibxAddClass("pgrid-prop-editing");
+	this.editValue.text(prop.value);
+	this.editValue.ibxEditable().ibxEditable("startEditing").on("ibx_changed", function(e)
+	{
+		prop.value = e.originalEvent.data;
+		prop.displayValue = prop.value;
+		this.displayValue.text(prop.value);
+		this.stopEditing();
+	}.bind(this));
+};
+_p.stopEditing = function()
+{
+	var event = this.grid.dispatchEvent("ibx_end_prop_edit", this.prop, false, true);
+	if(!event.isDefaultPrevented())
+	{
+		this.valueCell.ibxRemoveClass("pgrid-prop-editing");
+		this.editValue.detach();
+		this.displayValue.appendTo(this.valueCell);
+		this._stopEditing();
+	}
+}
+_p._stopEditing = function()
+{
+};
+
+function ibxColorPickerProperty(prop, grid)
+{
+	ibxProperty.call(this, prop, grid);
+	if(ibx.inPropCtor) return;
+
+	this.displayValue.empty();
+	this._displaySwatch = $("<span>").ibxAddClass("pgrid-color-picker-display-value").css("backgroundColor", this.prop.value);
+	this._displayLabel = $("<span>").text(this.prop.displayValue);
+	this.displayValue.append(this._displaySwatch).append(this._displayLabel);
+	this.editValue = this.displayValue;
+}
+var _p = $.ibi.ibxPropertyGrid.extendProperty(ibxProperty, ibxColorPickerProperty, "colorPicker");
+
+_p._startEditing = function()
+{
+	this._displaySwatch.on("click", function(e)
+	{
+		if(!this._popup)
+		{
+			this._colorPicker = $("<div>").ibxColorPicker({setOpacity:false}).on("ibx_change", function(e, value)
+			{
+				var prop = this.prop;
+				prop.value = value.text;
+				this._displaySwatch.css("backgroundColor", prop.value);
+				this._displayLabel.text(prop.value);
+				this.valueChanged();
+			}.bind(this));
+
+			this._popup = $("<div class='pgrid-color-picker-popup'>").ibxPopup({position:{my:"left top", at:"left bottom", of:this._displaySwatch}}).append(this._colorPicker);
+			this._popup.ibxWidget({"destroyOnClose":false})
+		}
+		this._colorPicker.ibxColorPicker("option", "color", this.prop.value);
+		this._popup.ibxWidget("open");
+
+	}.bind(this));
+};
