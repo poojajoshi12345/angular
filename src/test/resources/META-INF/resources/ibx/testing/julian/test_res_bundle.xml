@@ -37,7 +37,7 @@
 			[
 				{
 					"displayName":"Background Color",
-					"displayValue":"Transparent",
+					"displayValue":"transparent",
 					"name":"backgroundColor",
 					"value":"transparent",
 					"dataType":"string",

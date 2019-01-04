@@ -87,10 +87,14 @@ $.ibi.ibxPropertyGrid.extendProperty = function(baseProp, propType, uiType)
 	var p = propType.prototype = new baseProp();
 	ibx.inPropCtor = false;
 	p.constructor = propType;
+	p.super = baseProp.prototype;
 	$.ibi.ibxPropertyGrid.uiTypes[uiType] = propType;
 	return p;
 }
 
+/********************************************************************************
+ * BASE CLASS FOR IBX PROPERTY UI
+********************************************************************************/
 function ibxProperty(prop, grid)
 {
 	Object.call(this);
@@ -107,10 +111,11 @@ function ibxProperty(prop, grid)
 	this.valueCell.on(this.triggerEvent, this._onTriggerEvent.bind(this));
 	this.valueCell.on("keyup", this._onTriggerEvent.bind(this));
 	this.valueCell.on("keydown", this._onKeyEvent.bind(this));
+	this.valueCell.on("focusout", this._onBlurEvent.bind(this));
 	prop.ui = this;
 }
 var _p = ibxProperty.prototype = new Object();
-_p.triggerEvent = "dblclick";
+_p.triggerEvent = "click";
 _p.triggerKey = $.ui.keyCode.ENTER;
 _p.prop = null;
 _p.grid = null;
@@ -119,16 +124,26 @@ _p.valueCell = null;
 _p.displayValue = null;
 _p.editValue = null;
 _p.isEditing = function(){return this.valueCell.is(".pgrid-prop-editing");};
+_p.isLosingFocus = function(e){return (e.relatedTarget && !$.contains(this.valueCell[0], e.relatedTarget));};
 _p._onTriggerEvent = function(e)
 {
+	var isEditing = this.isEditing();
 	var startEditing = (e.type == "keyup") ? e.keyCode == this.triggerKey : true;
-	if(startEditing)
+	if(startEditing && !isEditing)
 		this.startEditing()
 };
 _p._onKeyEvent = function(e)
 {
 	if(e.type == "keydown" && this.isEditing())
 		e.stopPropagation();
+};
+_p._onBlurEvent = function(e)
+{
+	if(this.isLosingFocus(e))
+	{
+		console.log(e.target, e.relatedTarget)
+		this.stopEditing();
+	}
 };
 _p.valueChanged = function(value)
 {
@@ -140,15 +155,16 @@ _p.startEditing = function()
 	var event = this.grid.dispatchEvent("ibx_start_prop_edit", this.prop, false, true);
 	if(!event.isDefaultPrevented())
 	{
+		this.valueCell.ibxAddClass("pgrid-prop-editing");
 		this.displayValue.detach();
 		this.editValue.appendTo(this.valueCell);
+		this.editValue.focus();
 		this._startEditing();
 	}
 };
 _p._startEditing = function()
 {
 	var prop = this.prop;
-	this.valueCell.ibxAddClass("pgrid-prop-editing");
 	this.editValue.text(prop.value);
 	this.editValue.ibxEditable().ibxEditable("startEditing").on("ibx_changed", function(e)
 	{
@@ -173,39 +189,43 @@ _p._stopEditing = function()
 {
 };
 
+/********************************************************************************
+ * IBX PROPERTY UI FOR COLOR PICKER
+********************************************************************************/
 function ibxColorPickerProperty(prop, grid)
 {
 	ibxProperty.call(this, prop, grid);
 	if(ibx.inPropCtor) return;
 
 	this.displayValue.empty();
-	this._displaySwatch = $("<span>").ibxAddClass("pgrid-color-picker-display-value").css("backgroundColor", this.prop.value);
-	this._displayLabel = $("<span>").text(this.prop.displayValue);
-	this.displayValue.append(this._displaySwatch).append(this._displayLabel);
+	this._displaySwatch = $("<span tabindex='0'>").ibxAddClass("pgrid-color-picker-swatch").css("backgroundColor", this.prop.value);
+	this._displayLabel = $("<span tabindex='0'>").ibxAddClass("pgrid-color-picker-value").text(this.prop.displayValue);
+	this.displayValue.append(this._displaySwatch).append(this._displayLabel, this._switch);
 	this.editValue = this.displayValue;
+
+	this._colorPicker = $("<div>").ibxColorPicker({setOpacity:false}).on("ibx_change", function(e, value)
+	{
+		var prop = this.prop;
+		prop.value = value.text;
+		this._displaySwatch.css("backgroundColor", prop.value);
+		this._displayLabel.text(prop.value);
+		this.valueChanged();
+	}.bind(this));
+	this._popup = $("<div class='pgrid-color-picker-popup'>");
+	this._popup.ibxPopup({destroyOnClose:false, position:{my:"left top", at:"left bottom", of:this._displaySwatch}}).append(this._colorPicker);
 }
 var _p = $.ibi.ibxPropertyGrid.extendProperty(ibxProperty, ibxColorPickerProperty, "colorPicker");
-
+_p._popup = null;
+_p._onBlurEvent = function(e)
+{
+	if(!this._popup.is(e.relatedTarget))
+		this.super._onBlurEvent.call(this, e);
+};
 _p._startEditing = function()
 {
 	this._displaySwatch.on("click", function(e)
 	{
-		if(!this._popup)
-		{
-			this._colorPicker = $("<div>").ibxColorPicker({setOpacity:false}).on("ibx_change", function(e, value)
-			{
-				var prop = this.prop;
-				prop.value = value.text;
-				this._displaySwatch.css("backgroundColor", prop.value);
-				this._displayLabel.text(prop.value);
-				this.valueChanged();
-			}.bind(this));
-
-			this._popup = $("<div class='pgrid-color-picker-popup'>").ibxPopup({position:{my:"left top", at:"left bottom", of:this._displaySwatch}}).append(this._colorPicker);
-			this._popup.ibxWidget({"destroyOnClose":false})
-		}
 		this._colorPicker.ibxColorPicker("option", "color", this.prop.value);
 		this._popup.ibxWidget("open");
-
 	}.bind(this));
 };

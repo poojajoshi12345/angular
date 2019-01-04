@@ -10,14 +10,17 @@
 }
 .pgrid-prop-editing
 {
-	xoutline:2px solid red;
+	outline:2px solid red;
 }
-.pgrid-color-picker-display-value
+.pgrid-color-picker-swatch
 {
 	width:1em;
 	height:1em;
 	border:1px solid black;
-	margin:5px;
+	margin:2px;
+}
+.pgrid-color-picker-value
+{
 }
 .pgrid-color-picker-popup.ibx-popup
 {
