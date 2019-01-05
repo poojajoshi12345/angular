@@ -36,6 +36,29 @@
 			var testProps = 
 			[
 				{
+					"displayName":"Type = ibxTextProperty",
+					"displayValue":"Text Property",
+					"name":"text",
+					"value":"text_value",
+					"dataType":"string",
+					"uiType":"ibxTextProperty",
+					"expanded":false,
+				},
+				{
+					"displayName":"Type = ibxColorPickerProperty",
+					"displayValue":"Color Picker Property",
+					"name":"color",
+					"value":"transparent",
+					"dataType":"color",
+					"uiType":"colorPicker",
+					"expanded":false,
+				},
+			]
+
+
+			var testProps2 = 
+			[
+				{
 					"displayName":"Background Color",
 					"displayValue":"transparent",
 					"name":"backgroundColor",
