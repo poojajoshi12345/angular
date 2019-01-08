@@ -364,6 +364,7 @@ $.widget("ibi.ibxEditable", $.Widget,
 
 				if(value != newValue)
 				{
+					//let people know the value is changing...they can stop it from happening.
 					var event = this.element.dispatchEvent("ibx_textchanging", {"value":value, "newValue":newValue}, true, true);
 					if(event.isDefaultPrevented())
 						mr.target.textContent = value;//revert to current value
