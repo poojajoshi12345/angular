@@ -46,6 +46,32 @@
 					"expanded":false,
 				},
 				{
+					"displayName":"ibxCheckBoxProperty",
+					"displayValue":"Checkbox Property",
+					"tooltip":"Used setting booleans.",
+					"name":"check",
+					"value":true,
+					"dataType":"bool",
+					"uiType":"checkbox",
+					"expanded":false,
+				},
+				{
+					"displayName":"ibxRadioGroupProperty",
+					"displayValue":"Radio Group Property",
+					"tooltip":"Used for setting one of many.",
+					"name":"radio",
+					"value":"radio_1",
+					"dataType":"string",
+					"uiType":"radioGroup",
+					"expanded":false,
+					"values":
+					[
+						{"displayName":"Radio 1", "value":"radio_1"},
+						{"displayName":"Radio 2", "value":"radio_2"},
+						{"displayName":"Radio 3", "value":"radio_3"},
+					],
+				},
+				{
 					"displayName":"ibxColorPickerProperty",
 					"displayValue":"Color Picker Property",
 					"tooltip":"Used for setting generic color values.",

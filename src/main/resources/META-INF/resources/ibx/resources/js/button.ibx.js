@@ -137,7 +137,7 @@ $.widget("ibi.ibxCheckBox", $.ibi.ibxLabel,
 		$.ibi.ibxRadioGroup.removeControl(this.options.group, this.element[0]);
 		this._check.remove();
 		this._super();
-},
+	},
 	_init: function ()
 	{
 		this._super();

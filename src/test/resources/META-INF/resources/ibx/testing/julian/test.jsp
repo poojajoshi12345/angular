@@ -126,10 +126,14 @@
 					{
 					}
 					else
-					if(eType == "ibx_before_prop_update" || eType == "ibx_prop_updated")
+					if(eType == "ibx_before_prop_update")
+					{
+					}
+					else
+					if(eType == "ibx_prop_updated")
 					{
 						var prop = data.prop;
-						$(".test-grid").css(prop.name, prop.value);
+						console.log(data.prop.displayName, data.prop.value);
 					}
 				}).ibxWidget("option", "props", testProps);
 
