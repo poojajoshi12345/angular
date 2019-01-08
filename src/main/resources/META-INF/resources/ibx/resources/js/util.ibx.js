@@ -147,6 +147,7 @@ jQuery.expr[":"]["hasSubMenu"] = function(elem)
 };
 
 //Implement the native element classList api as alternate to jQuery...much faster than the jQuery add/removeClass functions.
+//of course, for IE...don't do anything fancy, as it is stinko.
 ibx.useCustomClassAPI = true;
 jQuery.fn.extend(
 {
@@ -167,7 +168,7 @@ jQuery.fn.extend(
 		{
 			if(ibxPlatformCheck.isIE)
 			{
-				for(var j = 0; j < args.length; ++j)
+				for(var j = 0; elem.classList && j < args.length; ++j)
 					elem.classList.add(args[j]);
 			}
 			else
@@ -193,7 +194,7 @@ jQuery.fn.extend(
 		{
 			if(ibxPlatformCheck.isIE)
 			{
-				for(var j = 0; j < args.length; ++j)
+				for(var j = 0; elem.classList && j < args.length; ++j)
 					elem.classList.remove(args[j]);
 			}
 			else
@@ -219,8 +220,11 @@ jQuery.fn.extend(
 			for(var j = 0; j < args.length; ++j)
 			{
 				var arg = args[j];
-				if(ibxPlatformCheck.isIE && (stateVal != undefined))
-					(!stateVal) ? elem.classList.remove(arg) : elem.classList.add(arg);//of course, IE doesn't handle toggle correctly (so, polyfill)
+				if(ibxPlatformCheck.isIE)
+				{
+					if(elem.classList && (stateVal != undefined))
+						(!stateVal) ? elem.classList.remove(arg) : elem.classList.add(arg);//of course, IE doesn't handle toggle correctly (so, polyfill)
+				}
 				else
 					elem.classList.toggle(arg, stateVal);
 			}
@@ -231,7 +235,15 @@ jQuery.fn.extend(
 	{
 		var i = 0;
 		while((elem = this[ i++ ]))
-			(ibxPlatformCheck.isIE) ? $(elem).removeClass(oldClass).addClass(newClass) : elem.classList.replace(oldClass, newClass);
+		{
+			if(ibxPlatformCheck.isIE)
+			{
+				if(elem.classList)
+					$(elem).removeClass(oldClass).addClass(newClass)
+			}
+			else
+				elem.classList.replace(oldClass, newClass);
+		}
 		return this;
 	},
 	ibxHasClass:function(className)
