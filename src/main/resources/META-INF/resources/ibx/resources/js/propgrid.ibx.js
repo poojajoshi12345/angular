@@ -8,7 +8,7 @@ $.widget("ibi.ibxPropertyGrid", $.ibi.ibxDataGrid,
 {
 	options:
 	{
-		colMap:[{title:"Property", size:"150px", justify:"start"}, {title:"Value", size:"300px", justify:"start"}],
+		colMap:[{title:"Property", size:"200px", justify:"start"}, {title:"Value", size:"300px", justify:"start"}],
 		showRowHeaders:false,
 		indentColumn:0,
 		props:null,
@@ -218,6 +218,21 @@ _p._onEditEvent = function(e)
 	};
 }
 /********************************************************************************
+ * IBX PROPERTY UI FOR BUTTON
+********************************************************************************/
+function ibxButtonProperty(prop, grid)
+{
+	ibxProperty.call(this, prop, grid);
+	if(ibx.inPropCtor) return;
+	this.displayValue.ibxButton({text:prop.displayValue}).ibxAddClass("pgrid-button").on("click", this._onButtonEvent.bind(this));
+	this.editValue = this.displayValue;
+}
+var _p = $.ibi.ibxPropertyGrid.extendProperty(ibxProperty, ibxButtonProperty, "button");
+_p._onButtonEvent = function(e)
+{
+	this.updatePropertyValue(this.prop.value);
+};
+/********************************************************************************
  * IBX PROPERTY UI FOR CHECK BUTTON
 ********************************************************************************/
 function ibxCheckBoxProperty(prop, grid)
@@ -291,7 +306,48 @@ _p._onChangeEvent = function(e)
 		var value = this.displayValue.ibxWidget("userValue");
 		this.updatePropertyValue(value);
 	}
-};/********************************************************************************
+};
+/********************************************************************************
+ * IBX PROPERTY UI FOR SELECT PICKER
+********************************************************************************/
+function ibxSelectProperty(prop, grid)
+{
+	ibxProperty.call(this, prop, grid);
+	if(ibx.inPropCtor) return;
+
+	this.displayValue.ibxSelect({multiSelect:prop.multiSelect}).ibxAddClass("pgrid-select").on("ibx_change", this._onSelectEvent.bind(this));
+	var openBtn = this.displayValue.find(".ibx-select-open-btn");
+	openBtn.ibxWidget("option", "iconPosition", "top");
+
+	var vals = prop.values;
+	for(var i = 0; i < vals.length; ++i)
+	{
+		var val = vals[i];
+		var selItem = null;
+		if(prop.multiSelect)
+			selItem = $("<div>").ibxSelectCheckItem({text:val.displayName, userValue:val.value});
+		else
+			selItem = $("<div>").ibxSelectItem({text:val.displayName, userValue:val.value});
+		this.displayValue.ibxWidget("addControlItem", selItem);
+	}
+	this.displayValue.ibxSelect("userValue", prop.value);
+	this.editValue = this.displayValue;
+}
+var _p = $.ibi.ibxPropertyGrid.extendProperty(ibxProperty, ibxSelectProperty, "select");
+_p.startEditing = function()
+{
+	var prop = this.prop;
+	this.editValue.ibxWidget("option", {"checked":prop.value});
+};
+_p.stopEditing = function()
+{
+};
+_p._onSelectEvent = function(e)
+{
+	var value = $(e.target).ibxWidget("userValue");
+	this.updatePropertyValue(value);
+};
+/********************************************************************************
  * IBX PROPERTY UI FOR COLOR PICKER
 ********************************************************************************/
 function ibxColorPickerProperty(prop, grid)

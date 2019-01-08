@@ -46,6 +46,16 @@
 					"expanded":false,
 				},
 				{
+					"displayName":"ibxButtonProperty",
+					"displayValue":"Button Property...",
+					"tooltip":"Used usually invoking secondary ui.",
+					"name":"button",
+					"value":"custom_dlg",
+					"dataType":"custom_dlg",
+					"uiType":"button",
+					"expanded":false,
+				},
+				{
 					"displayName":"ibxCheckBoxProperty",
 					"displayValue":"Checkbox Property",
 					"tooltip":"Used setting booleans.",
@@ -79,6 +89,40 @@
 						{"displayName":"Radio 1", "value":"radio_1"},
 						{"displayName":"Radio 2", "value":"radio_2"},
 						{"displayName":"Radio 3", "value":"radio_3"},
+					],
+				},
+				{
+					"displayName":"ibxSelectProperty - Single",
+					"displayValue":"Single Select Property",
+					"tooltip":"Used for selecting a value from many.",
+					"name":"select",
+					"value":"select_1",
+					"dataType":"string",
+					"multiSelect":false,
+					"uiType":"select",
+					"expanded":false,
+					"values":
+					[
+						{"displayName":"Select Item 1", "value":"select_1"},
+						{"displayName":"Select Item 2", "value":"select_2"},
+						{"displayName":"Select Item 3", "value":"select_3"},
+					],
+				},
+				{
+					"displayName":"ibxSelectProperty - Multi",
+					"displayValue":"Multi Select Property",
+					"tooltip":"Used for selecting multiple values from many.",
+					"name":"select",
+					"value":"select_1",
+					"dataType":"string",
+					"multiSelect":true,
+					"uiType":"select",
+					"expanded":false,
+					"values":
+					[
+						{"displayName":"Select Item 1", "value":"select_1"},
+						{"displayName":"Select Item 2", "value":"select_2"},
+						{"displayName":"Select Item 3", "value":"select_3"},
 					],
 				},
 				{

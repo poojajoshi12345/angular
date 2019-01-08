@@ -42,6 +42,10 @@
 	padding:10px;
 	border-radius:0px;
 }
+.pgrid-button
+{
+	flex:0 0 auto;
+}
 .pgrid-radio-button
 {
 	margin-right:5px;
@@ -50,4 +54,14 @@
 {
 	flex:0 0 auto;
 	width:3px;
+}
+
+.pgrid-select
+{
+	padding:0px;
+	flex:0 0 auto;
+}
+.pgrid-select .ibx-select-open-btn
+{
+	padding:0px 3px 0px 3px;
 }

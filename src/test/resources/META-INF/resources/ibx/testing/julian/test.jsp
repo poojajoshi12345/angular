@@ -133,6 +133,9 @@
 					if(eType == "ibx_prop_updated")
 					{
 						var prop = data.prop;
+						if(prop.dataType == "custom_dlg")
+							alert("I show some extended ui");
+							
 						console.log(data.prop.displayName, data.prop.value);
 					}
 				}).ibxWidget("option", "props", testProps);
