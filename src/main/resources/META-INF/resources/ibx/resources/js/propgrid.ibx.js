@@ -71,7 +71,7 @@ $.ibi.ibxPropertyGrid.extendProperty = function(baseProp, propType, uiType)
 	p._super = baseProp.prototype;
 	$.ibi.ibxPropertyGrid.uiTypes[uiType] = propType;
 	return p;
-}
+};
 
 /********************************************************************************
  * BASE CLASS FOR IBX PROPERTY UI
@@ -116,7 +116,7 @@ _p._onTriggerEvent = function(e)
 	var cancelEditing = isEditing && (eType == "keydown") && (e.keyCode == this.cancelKey);
 	var stopEditing = isEditing && (eType == "focusout") && (e.relatedTarget && !$.contains(this.valueCell[0], e.relatedTarget));
 	if(startEditing)
-		this._startEditing()
+		this._startEditing();
 	else
 	if(stopEditing)
 		this._stopEditing();
@@ -182,19 +182,20 @@ function ibxTextProperty(prop, grid)
 {
 	ibxProperty.call(this, prop, grid);
 	if(ibx.inPropCtor) return;
-	this.editValue.on("ibx_canceledit ibx_changed ibx_textchanging", this._onEditEvent.bind(this));
+	this.editValue.ibxEditable().on("ibx_canceledit ibx_changed ibx_textchanging", this._onEditEvent.bind(this));
 }
 var _p = $.ibi.ibxPropertyGrid.extendProperty(ibxProperty, ibxTextProperty, "text");
 _p.startEditing = function()
 {
 	var prop = this.prop;
 	this.editValue.text(prop.value);
-	this.editValue.ibxEditable().ibxEditable("startEditing")
+	this.editValue.ibxEditable("startEditing");
 };
 _p.stopEditing = function()
 {
+	this.editValue.ibxEditable("stopEditing");
 	this.displayValue.text(this.prop.value);
-}
+};
 _p._onEditEvent = function(e)
 {
 	var eType = e.type;
@@ -213,7 +214,7 @@ _p._onEditEvent = function(e)
 	{
 		this.prop.value = e.originalEvent.data;
 		this._cancelEditing();
-	}
+	};
 }
 /********************************************************************************
  * IBX PROPERTY UI FOR COLOR PICKER
@@ -245,13 +246,13 @@ _p._onSwatchClick = function(e)
 {
 	this._colorPicker.ibxColorPicker("option", "color", this.prop.value);
 	this._popup.ibxWidget("open");
-}
+};
 _p._onColorChange = function(e, data)
 {
 	this.updatePropertyValue(data.text);
 	this._displaySwatch.css("backgroundColor", this.prop.value);
 	this._displayLabel.text(this.prop.value);
-}
+};
 _p._onPopupClose = function(e)
 {
 	//this makes sure when user clicks outside of popup this properly loses focus (stopEditing).
