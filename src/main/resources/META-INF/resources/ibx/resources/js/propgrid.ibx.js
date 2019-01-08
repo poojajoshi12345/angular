@@ -242,6 +242,18 @@ _p._onCheckEvent = function(e)
 	this.updatePropertyValue(checked);
 };
 /********************************************************************************
+ * IBX PROPERTY UI FOR SWITCH
+********************************************************************************/
+function ibxSwitchProperty(prop, grid)
+{
+	ibxProperty.call(this, prop, grid);
+	if(ibx.inPropCtor) return;
+	this.displayValue.ibxSwitch({text:prop.displayValue, checked:prop.value}).ibxAddClass("pgrid-switch").on("ibx_change", this._onCheckEvent.bind(this));
+	this.editValue = this.displayValue;
+}
+var _p = $.ibi.ibxPropertyGrid.extendProperty(ibxCheckBoxProperty, ibxSwitchProperty, "switch");
+
+/********************************************************************************
  * IBX PROPERTY UI FOR RADIO GROUP
 ********************************************************************************/
 function ibxRadioGroupProperty(prop, grid)
@@ -249,34 +261,37 @@ function ibxRadioGroupProperty(prop, grid)
 	ibxProperty.call(this, prop, grid);
 	if(ibx.inPropCtor) return;
 
-	var grp = this.radioGroup = $("<div>").ibxRadioGroup();
-	var grpName = grp.ibxWidget("option", "name");
+	this.displayValue.ibxRadioGroup();
+	var grpName = this.displayValue.ibxWidget("option", "name");
 	var vals = prop.values;
 	for(var i = 0; i < vals.length; ++i)
 	{
 		var val = vals[i];
-		var btn = $("<div class='pgrid-radio-button' tabindex='0'>").ibxRadioButtonSimple({text:val.displayName, userValue:val.value, group:grpName});
-		this.displayValue.append(btn);
+		var btn = $("<div class='pgrid-radio-button' tabindex='0'>").ibxRadioButtonSimple({text:val.displayName, userValue:val.value});
+		this.displayValue.ibxWidget("add", btn);
 	}
-	this.radioGroup.ibxWidget("userValue", prop.value).on("ibx_change", this._onChangeEvent.bind(this));
+
+	this.displayValue.ibxRadioGroup("userValue", prop.value).on("ibx_change", this._onChangeEvent.bind(this));
 	this.editValue = this.displayValue.ibxWidget("option", {navKeyRoot:true});
 }
 var _p = $.ibi.ibxPropertyGrid.extendProperty(ibxProperty, ibxRadioGroupProperty, "radioGroup");
-_p.radioGroup = null;
 _p.startEditing = function()
 {
 	var prop = this.prop;
-	this.radioGroup.ibxWidget("userValue", prop.value);
+	this.displayValue.ibxWidget("userValue", prop.value);
 };
 _p.stopEditing = function()
 {
 };
 _p._onChangeEvent = function(e)
 {
-	var value = this.radioGroup.ibxWidget("userValue");
-	this.updatePropertyValue(value);
-};
-/********************************************************************************
+	//will get a lot of ibx_change events from the child radio buttons...th displayValue represents the actual button group.
+	if(this.displayValue.is(e.target))
+	{
+		var value = this.displayValue.ibxWidget("userValue");
+		this.updatePropertyValue(value);
+	}
+};/********************************************************************************
  * IBX PROPERTY UI FOR COLOR PICKER
 ********************************************************************************/
 function ibxColorPickerProperty(prop, grid)

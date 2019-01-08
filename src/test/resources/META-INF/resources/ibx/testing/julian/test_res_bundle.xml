@@ -56,6 +56,16 @@
 					"expanded":false,
 				},
 				{
+					"displayName":"ibxSwitchProperty",
+					"displayValue":"Switch Property",
+					"tooltip":"Used setting booleans.",
+					"name":"switch",
+					"value":true,
+					"dataType":"bool",
+					"uiType":"switch",
+					"expanded":false,
+				},
+				{
 					"displayName":"ibxRadioGroupProperty",
 					"displayValue":"Radio Group Property",
 					"tooltip":"Used for setting one of many.",

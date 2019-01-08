@@ -44,5 +44,10 @@
 }
 .pgrid-radio-button
 {
-	margin-right:3px;
+	margin-right:5px;
+}
+.pgrid-switch > .ibx-switch-spacer
+{
+	flex:0 0 auto;
+	width:3px;
 }
