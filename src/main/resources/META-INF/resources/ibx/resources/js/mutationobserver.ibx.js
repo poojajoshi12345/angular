@@ -56,6 +56,13 @@ $.widget("ibi.ibxMutationObserver", $.Widget,
 	{
 		return this.options.mutationObserver.takeRecords();
 	},
+	_setOption:function(key, value)
+	{
+		var changed = this.options[key] != value;
+		this._super(key, value);
+		if(changed)
+			this.refresh();
+	},
 	refresh:function()
 	{
 		var options = this.options;
