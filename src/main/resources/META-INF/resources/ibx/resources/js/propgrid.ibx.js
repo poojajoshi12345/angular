@@ -84,7 +84,10 @@ function ibxProperty(prop, grid)
 	this.prop = prop;
 	this.grid = grid;
 	this.nameCell = $("<div>").text(prop.displayName).ibxAddClass(["pgrid-cell","pgrid-name-cell"]).attr("tabindex", 0).data("ibxProp", prop);
+	this.nameCell.prop("title", prop.tooltip);
 	this.valueCell = $("<div>").ibxHBox({align:"center"}).ibxAddClass(["pgrid-cell", "pgrid-value-cell"]).attr("tabindex", 0).data("ibxProp", prop);
+	this.valueCell.prop("title", prop.tooltip);
+
 	this.displayValue = $("<div>").ibxHBox({align:"center"}).text(prop.displayValue).ibxAddClass("pgrid-display-value-cell").attr("tabindex", 0).data("ibxProp", prop);
 	this.editValue = $("<div>").ibxHBox({align:"center"}).ibxAddClass("pgrid-edit-value-cell").attr("tabindex", 0).data("ibxProp", prop);
 
@@ -156,16 +159,20 @@ _p._cancelEditing = function()
 	var event = this.grid.dispatchEvent("ibx_cancel_prop_edit", this.prop, false, true);
 	if(!event.isDefaultPrevented())
 	{
+		this.prop = this._propClean;
 		this._stopEditing();
 		this.cancelEditing();
 	}
 };
 _p.cancelEditing = $.noop;
-_p.updatePropertyValue = function(value)
+_p.updatePropertyValue = function(newValue)
 {
-	var event = this.grid.dispatchEvent("ibx_prop_updated", this.prop, false, true);
+	var event = this.grid.dispatchEvent("ibx_before_prop_update", {"prop":this.prop, "newValue":newValue}, false, true);
 	if(!event.isDefaultPrevented())
-		this.prop.value = value;
+	{
+		this.prop.value = newValue;
+		this.grid.dispatchEvent("ibx_prop_updated", {"prop":this.prop, "newValue":this.prop.value}, false, true);
+	}
 	return !event.isDefaultPrevented();
 };
 /********************************************************************************
@@ -175,7 +182,7 @@ function ibxTextProperty(prop, grid)
 {
 	ibxProperty.call(this, prop, grid);
 	if(ibx.inPropCtor) return;
-	this.editValue.ibxEditable().on("ibx_changed", this._onEditEvent.bind(this));
+	this.editValue.on("ibx_canceledit ibx_changed ibx_textchanging", this._onEditEvent.bind(this));
 }
 var _p = $.ibi.ibxPropertyGrid.extendProperty(ibxProperty, ibxTextProperty, "text");
 _p.startEditing = function()
@@ -190,8 +197,23 @@ _p.stopEditing = function()
 }
 _p._onEditEvent = function(e)
 {
-	this.updatePropertyValue(e.originalEvent.data);
-	this._stopEditing();
+	var eType = e.type;
+	if(eType == "ibx_textchanging")
+	{
+		var newValue = e.originalEvent.data.newValue;
+		var updated = this.updatePropertyValue(newValue);
+		if(!updated)
+			this.editValue.text(this.prop.value);
+	}
+	else
+	if(eType == "ibx_changed")
+		this._stopEditing();
+	else
+	if(eType == "ibx_canceledit")
+	{
+		this.prop.value = e.originalEvent.data;
+		this._cancelEditing();
+	}
 }
 /********************************************************************************
  * IBX PROPERTY UI FOR COLOR PICKER

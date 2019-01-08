@@ -36,17 +36,19 @@
 			var testProps = 
 			[
 				{
-					"displayName":"Type = ibxTextProperty",
+					"displayName":"ibxTextProperty",
 					"displayValue":"Text Property",
+					"tooltip":"Used for setting generic text values.",
 					"name":"text",
 					"value":"text_value",
 					"dataType":"string",
-					"uiType":"ibxTextProperty",
+					"uiType":"text",
 					"expanded":false,
 				},
 				{
-					"displayName":"Type = ibxColorPickerProperty",
+					"displayName":"ibxColorPickerProperty",
 					"displayValue":"Color Picker Property",
+					"tooltip":"Used for setting generic color values.",
 					"name":"color",
 					"value":"transparent",
 					"dataType":"color",

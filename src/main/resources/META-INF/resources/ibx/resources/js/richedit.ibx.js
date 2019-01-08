@@ -326,7 +326,8 @@ $.widget("ibi.ibxEditable", $.Widget,
 	{
 		this.element.data("ibiIbxWidget", this);//polymorphism to ibxWidget
 		this.element.ibxAddClass("ibx-editable");
-		this._onElementEventBound = this._onElementEvent.bind(this);
+		this.element.ibxMutationObserver({subtree:true, characterData:true, characterDataOldValue:true});
+		this.element.on("keydown blur ibx_nodemutated", this._onElementEvent.bind(this));
 		this._super();
 	},
 	_lastValue:null,
@@ -345,19 +346,29 @@ $.widget("ibi.ibxEditable", $.Widget,
 			}
 			if(!options.multiLine && e.keyCode === $.ui.keyCode.ENTER)
 				e.preventDefault();
-			else
-			{
-				var value = this._lastValue = this.element.text();
-				var event = this.element.dispatchEvent("ibx_textchanging", {"keyEvent":e.originalEvent, "text":value}, true, true);
-				if(event.isDefaultPrevented())
-					e.preventDefault();
-			}
 		}
 		else
 		if(e.type == "blur")
 		{
 			if(options.commitOnBlur)
 				this.stopEditing();
+		}
+		else
+		if(e.type == "ibx_nodemutated")
+		{
+			var mr = e.originalEvent.data[0];
+			if(mr.type == "characterData")
+			{
+				var value = mr.oldValue;
+				var newValue = mr.target.textContent;
+
+				if(value != newValue)
+				{
+					var event = this.element.dispatchEvent("ibx_textchanging", {"value":value, "newValue":newValue}, true, true);
+					if(event.isDefaultPrevented())
+						mr.target.textContent = value;//revert to current value
+				}
+			}
 		}
 	},
 	_preEditValue:null,
@@ -379,13 +390,13 @@ $.widget("ibi.ibxEditable", $.Widget,
 		if(!this.isEditing())
 		{
 			this._preEditValue = this.element.html();//save the current text for possible reversion.
-			this.element.on("keydown blur", this._onElementEventBound);
 
 			var options = $.extend({contentEditable:true}, this.options, editOptions); 
 			this.option(options);
 			this.element.prop(options).ibxAddClass("ibx-content-editing").focus();
 			if(options.selectAll)
 				document.getSelection().selectAllChildren(this.element[0]);
+			this.element.ibxMutationObserver("option", {listen:true});
 		}
 	},
 	/**
@@ -398,12 +409,14 @@ $.widget("ibi.ibxEditable", $.Widget,
 	{
 		if(this.isEditing())
 		{
+			this.element.ibxMutationObserver("option", {listen:false});
+
 			//if any seletion, remove it when finished editing.
 			var sel = document.getSelection();
 			sel.removeAllRanges();
 
 			//cleanup and let world know we're done.
-			this.element.off("keydown blur", this._onElementEventBound).prop("contentEditable", false).ibxRemoveClass("ibx-content-editing");
+			this.element.prop("contentEditable", false).ibxRemoveClass("ibx-content-editing");
 			this.element.focus();
 			if(revertToOriginal)
 			{

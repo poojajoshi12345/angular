@@ -114,16 +114,26 @@
 
 				$(".btn-load-props").on("click", function(e)
 				{
-					var grid = $(".test-prop-grid");
-					grid.on("ibx_start_prop_edit ibx_end_prop_edit ibx_prop_updated", function(e)
-					{
-						var eType = e.type;
-						var prop = e.originalEvent.data;
-						if(eType == "ibx_end_prop_edit" || eType == "ibx_prop_updated")
-							$(".test-grid").css(prop.name, prop.value);
-						console.log(e.type, prop);
-					}).ibxWidget("option", "props", testProps);
+					$(".test-prop-grid").ibxWidget("option", "props", testProps);
 				});
+
+				var grid = $(".test-prop-grid");
+				grid.on("ibx_start_prop_edit ibx_end_prop_edit ibx_before_prop_update ibx_prop_updated", function(e)
+				{
+					var eType = e.type;
+					var data = e.originalEvent.data;
+					if(eType == "ibx_end_prop_edit")
+					{
+					}
+					else
+					if(eType == "ibx_before_prop_update" || eType == "ibx_prop_updated")
+					{
+						var prop = data.prop;
+						$(".test-grid").css(prop.name, prop.value);
+					}
+				}).ibxWidget("option", "props", testProps);
+
+
 
 				$(".btn-load-grid").on("click", function(e)
 				{
