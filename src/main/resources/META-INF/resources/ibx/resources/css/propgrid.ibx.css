@@ -46,32 +46,37 @@
 {
 	flex:0 0 auto;
 }
-.pgrid-radio-button
+.pgrid-prop-radio-button
 {
 	margin-right:5px;
 }
-.pgrid-switch > .ibx-switch-spacer
+.pgrid-prop-switch > .ibx-switch-spacer
 {
 	flex:0 0 auto;
 	width:3px;
 }
-.pgrid-select
+.pgrid-prop-select
 {
 	padding:0px;
 	flex:0 0 auto;
 }
-.pgrid-select .ibx-select-open-btn
+.pgrid-prop-select .ibx-select-open-btn
 {
 	padding:0px 3px 0px 3px;
 }
-.pgrid-slider
+.pgrid-prop-slider
 {
 	width:150px;
 }
-.pgrid-slider-value
+.pgrid-prop-slider-value
 {
 	padding:3px;
 	min-width:3em;
 	height:1em;
+	border:1px solid #ccc;
+}
+.pgrid-prop-menu
+{
+	padding:2px;
 	border:1px solid #ccc;
 }

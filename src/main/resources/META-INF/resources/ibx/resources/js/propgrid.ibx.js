@@ -194,7 +194,7 @@ function ibxTextProperty(prop, grid)
 {
 	ibxProperty.call(this, prop, grid);
 	if(ibx.inPropCtor) return;
-	this.displayValue.text(prop.displayValue)	
+	this.displayValue.text(prop.displayValue);
 	this.editValue.ibxEditable().on("ibx_canceledit ibx_changed ibx_textchanging", this._onEditEvent.bind(this));
 }
 var _p = $.ibi.ibxPropertyGrid.extendProperty(ibxProperty, ibxTextProperty, "text");
@@ -227,8 +227,8 @@ _p._onEditEvent = function(e)
 	{
 		this.prop.value = e.originalEvent.data;
 		this._cancelEditing();
-	};
-}
+	}
+};
 /********************************************************************************
  * IBX PROPERTY UI FOR BUTTON
 ********************************************************************************/
@@ -275,7 +275,7 @@ function ibxSwitchProperty(prop, grid)
 {
 	ibxProperty.call(this, prop, grid);
 	if(ibx.inPropCtor) return;
-	this.displayValue.ibxSwitch({text:prop.displayValue, checked:prop.value}).ibxAddClass("pgrid-switch").on("ibx_change", this._onCheckEvent.bind(this));
+	this.displayValue.ibxSwitch({text:prop.displayValue, checked:prop.value}).ibxAddClass("pgrid-prop-switch").on("ibx_change", this._onCheckEvent.bind(this));
 	this.editValue = this.displayValue;
 }
 var _p = $.ibi.ibxPropertyGrid.extendProperty(ibxCheckBoxProperty, ibxSwitchProperty, "switch");
@@ -294,7 +294,7 @@ function ibxRadioGroupProperty(prop, grid)
 	for(var i = 0; i < vals.length; ++i)
 	{
 		var val = vals[i];
-		var btn = $("<div class='pgrid-radio-button' tabindex='0'>").ibxRadioButtonSimple({text:val.displayName, userValue:val.value});
+		var btn = $("<div class='pgrid-prop-radio-button' tabindex='0'>").ibxRadioButtonSimple({text:val.displayName, userValue:val.value});
 		this.displayValue.ibxWidget("add", btn);
 	}
 
@@ -327,7 +327,7 @@ function ibxSelectProperty(prop, grid)
 	ibxProperty.call(this, prop, grid);
 	if(ibx.inPropCtor) return;
 
-	this.displayValue.ibxSelect({multiSelect:prop.multiSelect}).ibxAddClass("pgrid-select").on("ibx_change", this._onSelectEvent.bind(this));
+	this.displayValue.ibxSelect({multiSelect:prop.multiSelect}).ibxAddClass("pgrid-prop-select").on("ibx_change", this._onSelectEvent.bind(this));
 	var openBtn = this.displayValue.find(".ibx-select-open-btn");
 	openBtn.ibxWidget("option", "iconPosition", "top");
 
@@ -360,6 +360,35 @@ _p._onSelectEvent = function(e)
 	this.updatePropertyValue(value);
 };
 /********************************************************************************
+ * IBX PROPERTY UI FOR MENU BUTTON
+********************************************************************************/
+function ibxMenuProperty(prop, grid)
+{
+	ibxProperty.call(this, prop, grid);
+	if(ibx.inPropCtor) return;
+
+	var menu = this.menu = $("<div>").ibxMenu().on("ibx_select", this._onMenuEvent.bind(this));
+	for(var i = 0; i < prop.values.length; ++i)
+	{
+		var value = prop.values[i];
+		var item = $("<div>").ibxMenuItem({labelOptions:{text:value.displayName}, userValue:value.value});
+		menu.ibxWidget("add", item);
+	}
+	var menuButton = this.menuButton = $("<div>").ibxMenuButton({"text":prop.value, "menu":menu}).ibxAddClass("pgrid-prop-menu");
+	this.displayValue.ibxWidget("add", menuButton);
+	this.editValue = this.displayValue;
+}
+var _p = $.ibi.ibxPropertyGrid.extendProperty(ibxProperty, ibxMenuProperty, "menu");
+_p._onMenuEvent = function(e, data)
+{
+	var item = $(data);
+	var value = item.ibxWidget("option", "userValue");
+	if(this.updatePropertyValue(value))
+	{
+		this.menuButton.ibxWidget("option", "text", value);
+	}
+};
+/********************************************************************************
  * IBX PROPERTY UI FOR SLIDER
 ********************************************************************************/
 function ibxSliderProperty(prop, grid)
@@ -367,7 +396,7 @@ function ibxSliderProperty(prop, grid)
 	ibxProperty.call(this, prop, grid);
 	if(ibx.inPropCtor) return;
 
-	var slider = this.slider = $("<div>").ibxSlider(
+	var slider = this.slider = $("<div>").ibxHSlider(
 	{
 		value:prop.value,
 		min:prop.valueMin,
@@ -376,8 +405,8 @@ function ibxSliderProperty(prop, grid)
 		minTextPos:"center",
 		maxTextPos:"center",
 		popupValue:false,
-	}).ibxAddClass("pgrid-slider").on("ibx_change", this._onSliderEvent.bind(this));
-	var sliderValue = this.sliderValue = $("<div>").ibxHBox({align:"center", justify:"center"}).ibxAddClass("pgrid-slider-value");
+	}).ibxAddClass("pgrid-prop-slider").on("ibx_change", this._onSliderEvent.bind(this));
+	var sliderValue = this.sliderValue = $("<div>").ibxHBox({align:"center", justify:"center"}).ibxAddClass("pgrid-prop-slider-value");
 	this.displayValue.ibxWidget("add", [sliderValue[0], slider[0]]);
 
 	this.editValue = this.displayValue;
@@ -392,8 +421,49 @@ _p.stopEditing = function()
 _p._onSliderEvent = function(e, data)
 {
 	var value = data.value;
-	this.sliderValue.text(value)
-	this.updatePropertyValue(value);
+	if(this.updatePropertyValue(value))
+		this.sliderValue.text(value);
+};
+/********************************************************************************
+ * IBX PROPERTY UI FOR RANGE SLIDER
+********************************************************************************/
+function ibxRangeSliderProperty(prop, grid)
+{
+	ibxProperty.call(this, prop, grid);
+	if(ibx.inPropCtor) return;
+
+	var slider = this.slider = $("<div>").ibxHRange(
+	{
+		value:prop.value.low,
+		value2:prop.value.high,
+		min:prop.valueMin,
+		max:prop.valueMax,
+		step:prop.step,
+		minTextPos:"center",
+		maxTextPos:"center",
+		popupValue:false,
+	}).ibxAddClass("pgrid-prop-slider").on("ibx_change", this._onSliderEvent.bind(this));
+	var sliderValueLow = this.sliderValueLow = $("<div>").ibxHBox({align:"center", justify:"center"}).ibxAddClass("pgrid-prop-slider-value pgrid-prop-slider-value-low");
+	var sliderValueHigh = this.sliderValueHigh = $("<div>").ibxHBox({align:"center", justify:"center"}).ibxAddClass("pgrid-prop-slider-value pgrid-prop-slider-value-high");
+	this.displayValue.ibxWidget("add", [sliderValueLow[0], slider[0], sliderValueHigh[0]]);
+
+	this.editValue = this.displayValue;
+}
+var _p = $.ibi.ibxPropertyGrid.extendProperty(ibxProperty, ibxRangeSliderProperty, "rangeSlider");
+_p.startEditing = function()
+{
+};
+_p.stopEditing = function()
+{
+};
+_p._onSliderEvent = function(e, data)
+{
+	var value = {"low":data.value, "high":data.value2};
+	if(this.updatePropertyValue(value))
+	{
+		this.sliderValueLow.text(value.low);
+		this.sliderValueHigh.text(value.high);
+	}
 };
 /********************************************************************************
  * IBX PROPERTY UI FOR COLOR PICKER
@@ -428,9 +498,11 @@ _p._onSwatchClick = function(e)
 };
 _p._onColorChange = function(e, data)
 {
-	this.updatePropertyValue(data.text);
-	this._displaySwatch.css("backgroundColor", this.prop.value);
-	this._displayLabel.text(this.prop.value);
+	if(this.updatePropertyValue(data.text))
+	{
+		this._displaySwatch.css("backgroundColor", this.prop.value);
+		this._displayLabel.text(this.prop.value);
+	}
 };
 _p._onPopupClose = function(e)
 {

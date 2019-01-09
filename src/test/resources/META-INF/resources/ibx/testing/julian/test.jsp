@@ -204,14 +204,13 @@
 			}
 			.test-grid, .test-prop-grid
 			{
-				height:100px;
-				height:1px;
+				height:300px;
 				border:1px solid black;
 				margin:10px;
 			}
 			.test-prop-grid
 			{
-				flex:3 0  auto;
+				flex:3 0 auto;
 			}
 			.ibfs-item-cell
 			{
