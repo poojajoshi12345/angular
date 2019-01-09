@@ -83,10 +83,10 @@ function ibxProperty(prop, grid)
 
 	this.prop = prop;
 	this.grid = grid;
-	this.nameCell = $("<div>").text(prop.displayName).ibxAddClass(["pgrid-cell","pgrid-name-cell"]).attr("tabindex", 0).data("ibxProp", prop);
-	this.nameCell.prop("title", prop.tooltip);
+	this.nameCell = $("<div>").ibxLabel({text:prop.displayName}).ibxAddClass(["pgrid-cell","pgrid-name-cell"]).attr("tabindex", 0).data("ibxProp", prop);
+	this.nameCell.prop("title", prop.nameTip);
 	this.valueCell = $("<div>").ibxHBox({align:"center"}).ibxAddClass(["pgrid-cell", "pgrid-value-cell"]).attr("tabindex", 0).data("ibxProp", prop);
-	this.valueCell.prop("title", prop.tooltip);
+	this.valueCell.prop("title", prop.valueTip);
 
 	this.displayValue = $("<div>").ibxHBox({align:"center"}).ibxAddClass("pgrid-display-value-cell").attr("tabindex", 0).data("ibxProp", prop);
 	this.editValue = $("<div>").ibxHBox({align:"center"}).ibxAddClass("pgrid-edit-value-cell").attr("tabindex", 0).data("ibxProp", prop);
@@ -175,6 +175,18 @@ _p.updatePropertyValue = function(newValue)
 	}
 	return !event.isDefaultPrevented();
 };
+/********************************************************************************
+ * IBX PROPERTY UI FOR BASIC LABEL/GROUPING/SEPARATING
+********************************************************************************/
+function ibxLabelProperty(prop, grid)
+{
+	ibxProperty.call(this, prop, grid);
+	if(ibx.inPropCtor) return;
+	this.displayValue.text(prop.displayValue).attr("tabindex", "");	
+	this.editValue.text(prop.editValue);
+}
+var _p = $.ibi.ibxPropertyGrid.extendProperty(ibxProperty, ibxLabelProperty, "label");
+_p._startEditing = $.noop;
 /********************************************************************************
  * IBX PROPERTY UI FOR BASIC TEXT ENTRY
 ********************************************************************************/

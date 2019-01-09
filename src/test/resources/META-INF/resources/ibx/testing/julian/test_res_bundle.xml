@@ -36,9 +36,21 @@
 			var testProps = 
 			[
 				{
+					"displayName":"ibxLabelProperty",
+					"displayValue":"Label Property",
+					"nameTip":"Used for grouping other properties, or separating them.",
+					"valueTip":undefined,
+					"name":"Label",
+					"value":"",
+					"dataType":"",
+					"uiType":"label",
+					"expanded":true,
+				},
+				{
 					"displayName":"ibxTextProperty",
 					"displayValue":"Text Property",
-					"tooltip":"Used for setting generic text values.",
+					"nameTip":"Used for setting generic text values.",
+					"valueTip":undefined,
 					"name":"text",
 					"value":"text_value",
 					"dataType":"string",
@@ -48,7 +60,8 @@
 				{
 					"displayName":"ibxButtonProperty",
 					"displayValue":"Button Property...",
-					"tooltip":"Used usually invoking secondary ui.",
+					"nameTip":"Used usually invoking secondary ui.",
+					"valueTip":undefined,
 					"name":"button",
 					"value":"custom_dlg",
 					"dataType":"custom_dlg",
@@ -58,7 +71,8 @@
 				{
 					"displayName":"ibxCheckBoxProperty",
 					"displayValue":"Checkbox Property",
-					"tooltip":"Used setting booleans.",
+					"nameTip":"Used setting booleans.",
+					"valueTip":undefined,
 					"name":"check",
 					"value":true,
 					"dataType":"bool",
@@ -68,7 +82,8 @@
 				{
 					"displayName":"ibxSwitchProperty",
 					"displayValue":"Switch Property",
-					"tooltip":"Used setting booleans.",
+					"nameTip":"Used setting booleans.",
+					"valueTip":undefined,
 					"name":"switch",
 					"value":true,
 					"dataType":"bool",
@@ -78,7 +93,8 @@
 				{
 					"displayName":"ibxRadioGroupProperty",
 					"displayValue":"Radio Group Property",
-					"tooltip":"Used for setting one of many.",
+					"nameTip":"Used for setting one of many.",
+					"valueTip":undefined,
 					"name":"radio",
 					"value":"radio_1",
 					"dataType":"string",
@@ -94,7 +110,8 @@
 				{
 					"displayName":"ibxSelectProperty - Single",
 					"displayValue":"Single Select Property",
-					"tooltip":"Used for selecting a value from many.",
+					"nameTip":"Used for selecting a value from many.",
+					"valueTip":undefined,
 					"name":"select",
 					"value":"select_1",
 					"dataType":"string",
@@ -111,7 +128,8 @@
 				{
 					"displayName":"ibxSelectProperty - Multi",
 					"displayValue":"Multi Select Property",
-					"tooltip":"Used for selecting multiple values from many.",
+					"nameTip":"Used for selecting multiple values from many.",
+					"valueTip":undefined,
 					"name":"select",
 					"value":"select_1",
 					"dataType":"string",
@@ -128,7 +146,8 @@
 				{
 					"displayName":"ibxColorPickerProperty",
 					"displayValue":"Color Picker Property",
-					"tooltip":"Used for setting generic color values.",
+					"nameTip":"Used for setting generic color values.",
+					"valueTip":undefined,
 					"name":"color",
 					"value":"transparent",
 					"dataType":"color",
