@@ -79,7 +79,9 @@
 							if(i == 0)
 								colMap.push({"title":"Column " + j, "size":"100px"});
 						}
-						rows.push(cols);
+						var row = $("<div>").ibxDataGridRow();
+						row.append(cols)
+						rows.push(row);
 					}
 
 					var grid = $(".ibx-data-grid");

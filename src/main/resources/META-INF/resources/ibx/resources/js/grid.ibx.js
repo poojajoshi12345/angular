@@ -198,7 +198,7 @@ $.fn.ibxDataGridRow = $.ibi.ibxDataGridRow = function()
 				size:null,
 				rowClasses:["ibx-data-grid-row", "dgrid-row", "ibx-flexbox", "fbx-inline", "fbx-row", "fbx-align-items-stretch", "fbx-align-content-stretch"],
 				headerClasses:["dgrid-header-row", "dgrid-row", "ibx-flexbox", "fbx-inline", "fbx-row", "fbx-align-items-center", "fbx-justify-content-center"],
-				cellContainerClasses:["dgrid-cell-expandable", "ibx-flexbox", "fbx-inline", "fbx-row", "fbx-align-items-center"],
+				cellContainerClasses:["ibx-flexbox", "fbx-inline", "fbx-row", "fbx-align-items-center"],
 				expanded:-1,
 				singleClickExpand:false,
 				
@@ -358,7 +358,7 @@ $.fn.ibxDataGridRow = $.ibi.ibxDataGridRow = function()
 						//config the new indent cell.
 						var indentCell = this.element.children(sformat(":nth-child({1})", indentColumn+1));
 						indentCell.on("dblclick click keydown", this._onIndentCellEventBound);
-						indentCell.ibxAddClass("dgrid-cell-indent-column").ibxToggleClass(this.cellContainerClasses, this.container);
+						indentCell.ibxAddClass("dgrid-cell-indent-column").ibxAddClass(this.cellContainerClasses, !indentCell.is(".ibx-flexbox") && this.container);
 						if(this.container)
 						{
 							//create the expand button, and move it to the current indent cell.
