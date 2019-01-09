@@ -30,7 +30,7 @@ $.widget("ibi.ibxPropertyGrid", $.ibi.ibxDataGrid,
 			rows.push(row);
 
 			var ui = prop.ui = this._createUI(prop);
-			row.append([ui.nameCell, ui.valueCell]);
+			row.append([ui._nameCell, ui._valueCell]);
 
 			this.addRow(row);
 			var childRows = this._buildPropTree(prop.props, row);
@@ -83,17 +83,17 @@ function ibxProperty(prop, grid)
 
 	this.prop = prop;
 	this.grid = grid;
-	this.nameCell = $("<div>").ibxLabel({text:prop.displayName}).ibxAddClass(["pgrid-cell","pgrid-name-cell"]).attr("tabindex", 0).data("ibxProp", prop);
-	this.nameCell.prop("title", prop.nameTip);
-	this.valueCell = $("<div>").ibxHBox({align:"center"}).ibxAddClass(["pgrid-cell", "pgrid-value-cell"]).attr("tabindex", 0).data("ibxProp", prop);
-	this.valueCell.prop("title", prop.valueTip);
+	this._nameCell = $("<div>").ibxLabel({text:prop.displayName}).ibxAddClass(["pgrid-cell","pgrid-name-cell"]).attr("tabindex", 0).data("ibxProp", prop);
+	this._nameCell.prop("title", prop.nameTip);
+	this._valueCell = $("<div>").ibxHBox({align:"center"}).ibxAddClass(["pgrid-cell", "pgrid-value-cell"]).attr("tabindex", 0).data("ibxProp", prop);
+	this._valueCell.prop("title", prop.valueTip);
 
 	this.displayValue = $("<div>").ibxHBox({align:"center"}).ibxAddClass("pgrid-display-value-cell").attr("tabindex", 0).data("ibxProp", prop);
 	this.editValue = $("<div>").ibxHBox({align:"center"}).ibxAddClass("pgrid-edit-value-cell").attr("tabindex", 0).data("ibxProp", prop);
 
-	this.valueCell.append(this.displayValue);
-	this.valueCell.on(this.editEvent, this._onTriggerEvent.bind(this));
-	this.valueCell.on("keyup keydown focusout", this._onTriggerEvent.bind(this));
+	this._valueCell.append(this.displayValue);
+	this._valueCell.on(this.editEvent, this._onTriggerEvent.bind(this));
+	this._valueCell.on("keyup keydown focusout", this._onTriggerEvent.bind(this));
 	prop.ui = this;
 }
 var _p = ibxProperty.prototype = new Object();
@@ -103,18 +103,18 @@ _p.cancelKey = $.ui.keyCode.ESCAPE;
 _p.prop = null;
 _p.propClean = null;
 _p.grid = null;
-_p.nameCell = null;
-_p.valueCell = null;
+_p._nameCell = null;
+_p._valueCell = null;
 _p.displayValue = null;
 _p.editValue = null;
-_p.isEditing = function(){return this.valueCell.is(".pgrid-prop-editing");};
+_p.isEditing = function(){return this._valueCell.is(".pgrid-prop-editing");};
 _p._onTriggerEvent = function(e)
 {
 	var eType = e.type;
 	var isEditing = this.isEditing();
 	var startEditing = !isEditing && ((e.type == "keydown") && (e.keyCode == this.editKey) || eType == this.editEvent);
 	var cancelEditing = isEditing && (eType == "keydown") && (e.keyCode == this.cancelKey);
-	var stopEditing = isEditing && (eType == "focusout") && (e.relatedTarget && !$.contains(this.valueCell[0], e.relatedTarget));
+	var stopEditing = isEditing && (eType == "focusout") && (e.relatedTarget && !$.contains(this._valueCell[0], e.relatedTarget));
 	if(startEditing)
 		this._startEditing();
 	else
@@ -133,9 +133,9 @@ _p._startEditing = function()
 	if(!event.isDefaultPrevented())
 	{
 		this._propClean = $.extend(true, {}, this.prop);
-		this.valueCell.ibxAddClass("pgrid-prop-editing");
+		this._valueCell.ibxAddClass("pgrid-prop-editing");
 		this.displayValue.detach();
-		this.editValue.appendTo(this.valueCell);
+		this.editValue.appendTo(this._valueCell);
 		this.editValue.focus();
 		this.startEditing();
 	}
@@ -147,9 +147,9 @@ _p._stopEditing = function()
 	if(!event.isDefaultPrevented())
 	{
 		this._propClean = null;
-		this.valueCell.ibxRemoveClass("pgrid-prop-editing");
+		this._valueCell.ibxRemoveClass("pgrid-prop-editing");
 		this.editValue.detach();
-		this.displayValue.appendTo(this.valueCell);
+		this.displayValue.appendTo(this._valueCell);
 		this.stopEditing();
 	}
 };
@@ -288,7 +288,7 @@ function ibxRadioGroupProperty(prop, grid)
 	ibxProperty.call(this, prop, grid);
 	if(ibx.inPropCtor) return;
 
-	this.displayValue.ibxRadioGroup();
+	this.displayValue.ibxRadioGroup({wrap:false});
 	var grpName = this.displayValue.ibxWidget("option", "name");
 	var vals = prop.values;
 	for(var i = 0; i < vals.length; ++i)
@@ -360,6 +360,42 @@ _p._onSelectEvent = function(e)
 	this.updatePropertyValue(value);
 };
 /********************************************************************************
+ * IBX PROPERTY UI FOR SLIDER
+********************************************************************************/
+function ibxSliderProperty(prop, grid)
+{
+	ibxProperty.call(this, prop, grid);
+	if(ibx.inPropCtor) return;
+
+	var slider = this.slider = $("<div>").ibxSlider(
+	{
+		value:prop.value,
+		min:prop.valueMin,
+		max:prop.valueMax,
+		step:prop.step,
+		minTextPos:"center",
+		maxTextPos:"center",
+		popupValue:false,
+	}).ibxAddClass("pgrid-slider").on("ibx_change", this._onSliderEvent.bind(this));
+	var sliderValue = this.sliderValue = $("<div>").ibxHBox({align:"center", justify:"center"}).ibxAddClass("pgrid-slider-value");
+	this.displayValue.ibxWidget("add", [sliderValue[0], slider[0]]);
+
+	this.editValue = this.displayValue;
+}
+var _p = $.ibi.ibxPropertyGrid.extendProperty(ibxProperty, ibxSliderProperty, "slider");
+_p.startEditing = function()
+{
+};
+_p.stopEditing = function()
+{
+};
+_p._onSliderEvent = function(e, data)
+{
+	var value = data.value;
+	this.sliderValue.text(value)
+	this.updatePropertyValue(value);
+};
+/********************************************************************************
  * IBX PROPERTY UI FOR COLOR PICKER
 ********************************************************************************/
 function ibxColorPickerProperty(prop, grid)
@@ -399,5 +435,5 @@ _p._onColorChange = function(e, data)
 _p._onPopupClose = function(e)
 {
 	//this makes sure when user clicks outside of popup this properly loses focus (stopEditing).
-	this.valueCell.focus();
+	this._valueCell.focus();
 };

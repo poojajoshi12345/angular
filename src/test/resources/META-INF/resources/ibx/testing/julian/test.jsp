@@ -204,9 +204,14 @@
 			}
 			.test-grid, .test-prop-grid
 			{
-				height:500px;
+				height:100px;
+				height:1px;
 				border:1px solid black;
 				margin:10px;
+			}
+			.test-prop-grid
+			{
+				flex:3 0  auto;
 			}
 			.ibfs-item-cell
 			{
@@ -220,7 +225,6 @@
 		</style>
 	</head>
 	<body class="ibx-root">
-		<div class="del-command" data-ibx-type="ibxCommand" data-ibxp-id="cmdDelete" data-ibxp-shortcut="CTRL+SHIFT+DEL"></div>
 		<div class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="stretch" data-ibxp-justify="start" data-ibxp-command="cmdDelete">
 			<div class="tool-bar" data-ibx-type="ibxHBox" data-ibxp-align="center">
 				<div tabindex="0" class="btn-load-ibfs" data-ibx-type="ibxButton">Load IBFS</div>
