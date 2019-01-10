@@ -681,6 +681,9 @@
 .ibx-glyph-align-control-right:before {
   content: "\e9aa";
 }
+.ibx-glyph-bars:before {
+  content: "\ea11";
+}
 .ibx-glyph-ellipsis-h-sm:before {
   content: "\e9e5";
 }
