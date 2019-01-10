@@ -148,7 +148,7 @@ _p._onTriggerEvent = function(e)
 };
 _p._startEditing = function()
 {
-	var event = this.grid.dispatchEvent("ibx_start_prop_edit", this.prop, false, true);
+	var event = this.grid.dispatchEvent("ibx_prop_start_edit", this.prop, false, true);
 	if(!event.isDefaultPrevented())
 	{
 		this._propClean = $.extend(true, {}, this.prop);
@@ -162,7 +162,7 @@ _p._startEditing = function()
 _p.startEditing = $.noop;
 _p._stopEditing = function()
 {
-	var event = this.grid.dispatchEvent("ibx_end_prop_edit", this.prop, false, true);
+	var event = this.grid.dispatchEvent("ibx_prop_end_edit", this.prop, false, true);
 	if(!event.isDefaultPrevented())
 	{
 		this._propClean = null;
@@ -175,7 +175,7 @@ _p._stopEditing = function()
 _p.stopEditing = $.noop;
 _p._cancelEditing = function()
 {
-	var event = this.grid.dispatchEvent("ibx_cancel_prop_edit", this.prop, false, true);
+	var event = this.grid.dispatchEvent("ibx_prop_cancel_edit", this.prop, false, true);
 	if(!event.isDefaultPrevented())
 	{
 		this.prop = this._propClean;
@@ -186,7 +186,7 @@ _p._cancelEditing = function()
 _p.cancelEditing = $.noop;
 _p.updatePropertyValue = function(newValue)
 {
-	var event = this.grid.dispatchEvent("ibx_before_prop_update", {"prop":this.prop, "newValue":newValue}, false, true);
+	var event = this.grid.dispatchEvent("ibx_prop_beforeupdate", {"prop":this.prop, "newValue":newValue}, false, true);
 	if(!event.isDefaultPrevented())
 	{
 		this.prop.value = newValue;

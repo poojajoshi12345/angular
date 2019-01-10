@@ -118,18 +118,10 @@
 				});
 
 				var grid = $(".test-prop-grid");
-				grid.on("ibx_start_prop_edit ibx_end_prop_edit ibx_before_prop_update ibx_prop_updated", function(e)
+				grid.on("ibx_prop_updated", function(e)
 				{
 					var eType = e.type;
 					var data = e.originalEvent.data;
-					if(eType == "ibx_end_prop_edit")
-					{
-					}
-					else
-					if(eType == "ibx_before_prop_update")
-					{
-					}
-					else
 					if(eType == "ibx_prop_updated")
 					{
 						var prop = data.prop;

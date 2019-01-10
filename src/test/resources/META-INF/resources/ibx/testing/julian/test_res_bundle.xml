@@ -207,8 +207,8 @@
 					"values":
 					[
 						{"displayName":"Menu Item 1", "value":"menu_1"},
-						{"displayName":"Menu Item 2 asdf asdf asd", "value":"menu_2"},
-						{"displayName":"Menu", "value":"menu_3"},
+						{"displayName":"Menu Item 2", "value":"menu_2"},
+						{"displayName":"Menu Item 3", "value":"menu_3"},
 					],
 				},
 				{
