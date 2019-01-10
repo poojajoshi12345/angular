@@ -77,6 +77,10 @@
 }
 .pgrid-prop-menu
 {
-	padding:2px;
+	padding:2px 0px 2px 5px;
 	border:1px solid #ccc;
+}
+.pgrid-prop-menu .pgrid-prop-menu-btn
+{
+	font-size:1.5em;
 }

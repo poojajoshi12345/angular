@@ -37,14 +37,64 @@
 			[
 				{
 					"displayName":"ibxLabelProperty",
-					"displayValue":"Label Property",
+					"displayValue":"I own sub properties",
 					"nameTip":"Used for grouping other properties, or separating them.",
 					"valueTip":undefined,
 					"name":"Label",
 					"value":"",
 					"dataType":"",
 					"uiType":"label",
-					"expanded":true,
+					"expanded":false,
+					"props":
+					[
+						{
+							"displayName":"Sub Property",
+							"displayValue":"some property value",
+							"nameTip":"Used for setting generic text values.",
+							"valueTip":undefined,
+							"name":"text",
+							"value":"some property value",
+							"dataType":"string",
+							"uiType":"text",
+							"expanded":false,
+						},
+						{
+							"displayName":"Sub Property",
+							"displayValue":"some property value",
+							"nameTip":"Used for setting generic text values.",
+							"valueTip":undefined,
+							"name":"text",
+							"value":"some property value",
+							"dataType":"string",
+							"uiType":"text",
+							"expanded":false,
+						},
+						{
+							"displayName":"Sub Property",
+							"displayValue":"some property value",
+							"nameTip":"Used for setting generic text values.",
+							"valueTip":undefined,
+							"name":"text",
+							"value":"some property value",
+							"dataType":"string",
+							"uiType":"text",
+							"expanded":false,
+							"props":
+							[
+								{
+									"displayName":"Another Sub Property",
+									"displayValue":"some property value",
+									"nameTip":"Used for setting generic text values.",
+									"valueTip":undefined,
+									"name":"text",
+									"value":"some property value",
+									"dataType":"string",
+									"uiType":"text",
+									"expanded":false,
+								},
+							]
+						},
+					]
 				},
 				{
 					"displayName":"ibxTextProperty",
@@ -157,8 +207,8 @@
 					"values":
 					[
 						{"displayName":"Menu Item 1", "value":"menu_1"},
-						{"displayName":"Menu Item 2", "value":"menu_2"},
-						{"displayName":"Menu Item 3", "value":"menu_3"},
+						{"displayName":"Menu Item 2 asdf asdf asd", "value":"menu_2"},
+						{"displayName":"Menu", "value":"menu_3"},
 					],
 				},
 				{

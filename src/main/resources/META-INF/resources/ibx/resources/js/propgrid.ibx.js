@@ -68,7 +68,7 @@ $.ibi.ibxPropertyGrid.extendProperty = function(baseProp, propType, uiType)
 	var p = propType.prototype = new baseProp();
 	ibx.inPropCtor = false;
 	p.constructor = propType;
-	p._super = baseProp.prototype;
+	propType.base = baseProp.prototype;
 	$.ibi.ibxPropertyGrid.uiTypes[uiType] = propType;
 	return p;
 };
@@ -80,20 +80,9 @@ function ibxProperty(prop, grid)
 {
 	Object.call(this);
 	if(ibx.inPropCtor) return;
-
 	this.prop = prop;
 	this.grid = grid;
-	this._nameCell = $("<div>").ibxLabel({text:prop.displayName}).ibxAddClass(["pgrid-cell","pgrid-name-cell"]).attr("tabindex", 0).data("ibxProp", prop);
-	this._nameCell.prop("title", prop.nameTip);
-	this._valueCell = $("<div>").ibxHBox({align:"center"}).ibxAddClass(["pgrid-cell", "pgrid-value-cell"]).attr("tabindex", 0).data("ibxProp", prop);
-	this._valueCell.prop("title", prop.valueTip);
-
-	this.displayValue = $("<div>").ibxHBox({align:"center"}).ibxAddClass("pgrid-display-value-cell").attr("tabindex", 0).data("ibxProp", prop);
-	this.editValue = $("<div>").ibxHBox({align:"center"}).ibxAddClass("pgrid-edit-value-cell").attr("tabindex", 0).data("ibxProp", prop);
-
-	this._valueCell.append(this.displayValue);
-	this._valueCell.on(this.editEvent, this._onTriggerEvent.bind(this));
-	this._valueCell.on("keyup keydown focusout", this._onTriggerEvent.bind(this));
+	this.createUI();
 	prop.ui = this;
 }
 var _p = ibxProperty.prototype = new Object();
@@ -108,6 +97,36 @@ _p._valueCell = null;
 _p.displayValue = null;
 _p.editValue = null;
 _p.isEditing = function(){return this._valueCell.is(".pgrid-prop-editing");};
+_p.createUI = function()
+{
+	var prop = this.prop;
+	this._nameCell = this.createNameCell().ibxAddClass(["pgrid-cell","pgrid-name-cell"]).attr("tabindex", 0).data("ibxProp", prop);
+	this._nameCell.prop("title", prop.nameTip);
+	this._valueCell = this.createValueCell().ibxAddClass(["pgrid-cell", "pgrid-value-cell"]).attr("tabindex", 0).data("ibxProp", prop);
+	this._valueCell.prop("title", prop.valueTip);
+	this._valueCell.on(this.editEvent, this._onTriggerEvent.bind(this));
+	this._valueCell.on("keyup keydown focusout", this._onTriggerEvent.bind(this));
+
+	this.editValue = this.createEditValue().attr("tabindex", 0).data("ibxProp", prop);
+	this.displayValue = this.createDisplayValue().attr("tabindex", 0).data("ibxProp", prop);
+	this._valueCell.append(this.displayValue);
+};
+_p.createNameCell = function()
+{
+	return $("<div>").ibxLabel({text:this.prop.displayName});
+};
+_p.createValueCell = function()
+{
+	return $("<div>").ibxHBox({align:"center"});
+};
+_p.createEditValue = function()
+{
+	return $("<div>").ibxHBox({align:"center"});
+};
+_p.createDisplayValue = function()
+{
+	return this.editValue;//by default edit and display are the same.
+};
 _p._onTriggerEvent = function(e)
 {
 	var eType = e.type;
@@ -236,10 +255,13 @@ function ibxButtonProperty(prop, grid)
 {
 	ibxProperty.call(this, prop, grid);
 	if(ibx.inPropCtor) return;
-	this.displayValue.ibxButton({text:prop.displayValue}).ibxAddClass("pgrid-button").on("click", this._onButtonEvent.bind(this));
-	this.editValue = this.displayValue;
+	this.displayValue = this.editValue;
 }
 var _p = $.ibi.ibxPropertyGrid.extendProperty(ibxProperty, ibxButtonProperty, "button");
+_p.createEditValue = function()
+{
+	return $("<div>").ibxButton({text:this.prop.displayValue, align:"center"}).ibxAddClass("pgrid-button").on("click", this._onButtonEvent.bind(this));
+};
 _p._onButtonEvent = function(e)
 {
 	this.updatePropertyValue(this.prop.value);
@@ -251,10 +273,13 @@ function ibxCheckBoxProperty(prop, grid)
 {
 	ibxProperty.call(this, prop, grid);
 	if(ibx.inPropCtor) return;
-	this.displayValue.ibxCheckBoxSimple({text:prop.displayValue, checked:prop.value}).on("ibx_change", this._onCheckEvent.bind(this));
-	this.editValue = this.displayValue;
+	this.displayValue = this.editValue;
 }
 var _p = $.ibi.ibxPropertyGrid.extendProperty(ibxProperty, ibxCheckBoxProperty, "checkbox");
+_p.createEditValue = function()
+{
+	return $("<div>").ibxCheckBoxSimple({text:this.prop.displayValue, checked:this.prop.value}).on("ibx_change", this._onCheckEvent.bind(this));
+};
 _p.startEditing = function()
 {
 	var prop = this.prop;
@@ -275,11 +300,13 @@ function ibxSwitchProperty(prop, grid)
 {
 	ibxProperty.call(this, prop, grid);
 	if(ibx.inPropCtor) return;
-	this.displayValue.ibxSwitch({text:prop.displayValue, checked:prop.value}).ibxAddClass("pgrid-prop-switch").on("ibx_change", this._onCheckEvent.bind(this));
-	this.editValue = this.displayValue;
+	this.displayValue = this.editValue;
 }
 var _p = $.ibi.ibxPropertyGrid.extendProperty(ibxCheckBoxProperty, ibxSwitchProperty, "switch");
-
+_p.createEditValue = function()
+{
+	return $("<div>").ibxSwitch({text:this.prop.displayValue, checked:this.prop.value}).ibxAddClass("pgrid-prop-switch").on("ibx_change", this._onCheckEvent.bind(this));
+};
 /********************************************************************************
  * IBX PROPERTY UI FOR RADIO GROUP
 ********************************************************************************/
@@ -287,21 +314,23 @@ function ibxRadioGroupProperty(prop, grid)
 {
 	ibxProperty.call(this, prop, grid);
 	if(ibx.inPropCtor) return;
-
-	this.displayValue.ibxRadioGroup({wrap:false});
-	var grpName = this.displayValue.ibxWidget("option", "name");
+	this.displayValue = this.editValue;
+}
+var _p = $.ibi.ibxPropertyGrid.extendProperty(ibxProperty, ibxRadioGroupProperty, "radioGroup");
+_p.createEditValue = function()
+{
+	var prop = this.prop;
+	var editValue = $("<div>").ibxRadioGroup({navKeyRoot:true, wrap:false}).on("ibx_change", this._onChangeEvent.bind(this));
+	var grpName = editValue.ibxWidget("option", "name");
 	var vals = prop.values;
 	for(var i = 0; i < vals.length; ++i)
 	{
 		var val = vals[i];
 		var btn = $("<div class='pgrid-prop-radio-button' tabindex='0'>").ibxRadioButtonSimple({text:val.displayName, userValue:val.value});
-		this.displayValue.ibxWidget("add", btn);
+		editValue.ibxWidget("add", btn);
 	}
-
-	this.displayValue.ibxRadioGroup("userValue", prop.value).on("ibx_change", this._onChangeEvent.bind(this));
-	this.editValue = this.displayValue.ibxWidget("option", {navKeyRoot:true});
-}
-var _p = $.ibi.ibxPropertyGrid.extendProperty(ibxProperty, ibxRadioGroupProperty, "radioGroup");
+	return editValue;
+};
 _p.startEditing = function()
 {
 	var prop = this.prop;
@@ -326,9 +355,14 @@ function ibxSelectProperty(prop, grid)
 {
 	ibxProperty.call(this, prop, grid);
 	if(ibx.inPropCtor) return;
-
-	this.displayValue.ibxSelect({multiSelect:prop.multiSelect}).ibxAddClass("pgrid-prop-select").on("ibx_change", this._onSelectEvent.bind(this));
-	var openBtn = this.displayValue.find(".ibx-select-open-btn");
+	this.displayValue = this.editValue;
+}
+var _p = $.ibi.ibxPropertyGrid.extendProperty(ibxProperty, ibxSelectProperty, "select");
+_p.createEditValue = function()
+{
+	var prop = this.prop;
+	var editValue = $("<div>").ibxSelect({multiSelect:prop.multiSelect}).ibxAddClass("pgrid-prop-select").on("ibx_change", this._onSelectEvent.bind(this));
+	var openBtn = editValue.find(".ibx-select-open-btn");
 	openBtn.ibxWidget("option", "iconPosition", "top");
 
 	var vals = prop.values;
@@ -340,12 +374,11 @@ function ibxSelectProperty(prop, grid)
 			selItem = $("<div>").ibxSelectCheckItem({text:val.displayName, userValue:val.value});
 		else
 			selItem = $("<div>").ibxSelectItem({text:val.displayName, userValue:val.value});
-		this.displayValue.ibxWidget("addControlItem", selItem);
+		editValue.ibxWidget("addControlItem", selItem);
 	}
-	this.displayValue.ibxSelect("userValue", prop.value);
-	this.editValue = this.displayValue;
-}
-var _p = $.ibi.ibxPropertyGrid.extendProperty(ibxProperty, ibxSelectProperty, "select");
+	editValue.ibxSelect("userValue", prop.value);
+	return editValue;
+};
 _p.startEditing = function()
 {
 	var prop = this.prop;
@@ -366,26 +399,32 @@ function ibxMenuProperty(prop, grid)
 {
 	ibxProperty.call(this, prop, grid);
 	if(ibx.inPropCtor) return;
-
-	var menu = this.menu = $("<div>").ibxMenu().on("ibx_select", this._onMenuEvent.bind(this));
+	this.displayValue = this.editValue;
+}
+var _p = $.ibi.ibxPropertyGrid.extendProperty(ibxProperty, ibxMenuProperty, "menu");
+_p.createEditValue = function()
+{
+	var prop = this.prop;
+	var selValue = prop.value;
+	var menu = $("<div>").ibxMenu().on("ibx_select", this._onMenuEvent.bind(this));
 	for(var i = 0; i < prop.values.length; ++i)
 	{
 		var value = prop.values[i];
-		var item = $("<div>").ibxMenuItem({labelOptions:{text:value.displayName}, userValue:value.value});
+		var item = $("<div>").ibxMenuItem({labelOptions:{text:value.displayName}, userValue:value});
 		menu.ibxWidget("add", item);
+		if(value.value == prop.value)
+			selValue = value.displayName;
 	}
-	var menuButton = this.menuButton = $("<div>").ibxMenuButton({"text":prop.value, "menu":menu}).ibxAddClass("pgrid-prop-menu");
-	this.displayValue.ibxWidget("add", menuButton);
-	this.editValue = this.displayValue;
-}
-var _p = $.ibi.ibxPropertyGrid.extendProperty(ibxProperty, ibxMenuProperty, "menu");
+	var menuButton = this.menuButton = $("<div tabindex='0'>").ibxMenuButton({"text":selValue, "menu":menu, "iconPosition":"right", "glyph":"arrow_drop_down", "glyphClasses":"material-icons pgrid-prop-menu-btn"}).ibxAddClass("pgrid-prop-menu");
+	return menuButton;
+},
 _p._onMenuEvent = function(e, data)
 {
 	var item = $(data);
 	var value = item.ibxWidget("option", "userValue");
-	if(this.updatePropertyValue(value))
+	if(this.updatePropertyValue(value.value))
 	{
-		this.menuButton.ibxWidget("option", "text", value);
+		this.menuButton.ibxWidget("option", "text", value.displayName);
 	}
 };
 /********************************************************************************
@@ -395,7 +434,12 @@ function ibxSliderProperty(prop, grid)
 {
 	ibxProperty.call(this, prop, grid);
 	if(ibx.inPropCtor) return;
-
+	this.displayValue = this.editValue;
+}
+var _p = $.ibi.ibxPropertyGrid.extendProperty(ibxProperty, ibxSliderProperty, "slider");
+_p.createEditValue = function()
+{
+	var prop = this.prop;
 	var slider = this.slider = $("<div>").ibxHSlider(
 	{
 		value:prop.value,
@@ -407,17 +451,10 @@ function ibxSliderProperty(prop, grid)
 		popupValue:false,
 	}).ibxAddClass("pgrid-prop-slider").on("ibx_change", this._onSliderEvent.bind(this));
 	var sliderValue = this.sliderValue = $("<div>").ibxHBox({align:"center", justify:"center"}).ibxAddClass("pgrid-prop-slider-value");
-	this.displayValue.ibxWidget("add", [sliderValue[0], slider[0]]);
-
-	this.editValue = this.displayValue;
-}
-var _p = $.ibi.ibxPropertyGrid.extendProperty(ibxProperty, ibxSliderProperty, "slider");
-_p.startEditing = function()
-{
-};
-_p.stopEditing = function()
-{
-};
+	var editValue = ibxSliderProperty.base.createEditValue.call(this);
+	editValue.ibxWidget("add", [sliderValue[0], slider[0]]);
+	return editValue;
+},
 _p._onSliderEvent = function(e, data)
 {
 	var value = data.value;
@@ -431,7 +468,12 @@ function ibxRangeSliderProperty(prop, grid)
 {
 	ibxProperty.call(this, prop, grid);
 	if(ibx.inPropCtor) return;
-
+	this.displayValue = this.editValue;
+}
+var _p = $.ibi.ibxPropertyGrid.extendProperty(ibxProperty, ibxRangeSliderProperty, "rangeSlider");
+_p.createEditValue = function()
+{
+	var prop = this.prop;
 	var slider = this.slider = $("<div>").ibxHRange(
 	{
 		value:prop.value.low,
@@ -443,26 +485,19 @@ function ibxRangeSliderProperty(prop, grid)
 		maxTextPos:"center",
 		popupValue:false,
 	}).ibxAddClass("pgrid-prop-slider").on("ibx_change", this._onSliderEvent.bind(this));
-	var sliderValueLow = this.sliderValueLow = $("<div>").ibxHBox({align:"center", justify:"center"}).ibxAddClass("pgrid-prop-slider-value pgrid-prop-slider-value-low");
-	var sliderValueHigh = this.sliderValueHigh = $("<div>").ibxHBox({align:"center", justify:"center"}).ibxAddClass("pgrid-prop-slider-value pgrid-prop-slider-value-high");
-	this.displayValue.ibxWidget("add", [sliderValueLow[0], slider[0], sliderValueHigh[0]]);
-
-	this.editValue = this.displayValue;
-}
-var _p = $.ibi.ibxPropertyGrid.extendProperty(ibxProperty, ibxRangeSliderProperty, "rangeSlider");
-_p.startEditing = function()
-{
-};
-_p.stopEditing = function()
-{
-};
+	var sliderValue = this.sliderValue = $("<div>").ibxHBox({align:"center", justify:"center"}).ibxAddClass("pgrid-prop-slider-value");
+	var sliderValue2 = this.sliderValue2 = $("<div>").ibxHBox({align:"center", justify:"center"}).ibxAddClass("pgrid-prop-slider-value");
+	var editValue = ibxRangeSliderProperty.base.createEditValue.call(this);
+	editValue.ibxWidget("add", [sliderValue[0], slider[0], sliderValue2[0]]);
+	return editValue;
+},
 _p._onSliderEvent = function(e, data)
 {
 	var value = {"low":data.value, "high":data.value2};
 	if(this.updatePropertyValue(value))
 	{
-		this.sliderValueLow.text(value.low);
-		this.sliderValueHigh.text(value.high);
+		this.sliderValue.text(value.low);
+		this.sliderValue2.text(value.high);
 	}
 };
 /********************************************************************************
@@ -472,36 +507,41 @@ function ibxColorPickerProperty(prop, grid)
 {
 	ibxProperty.call(this, prop, grid);
 	if(ibx.inPropCtor) return;
-
-	this.displayValue.empty();
-	this._displaySwatch = $("<span tabindex='0'>").ibxAddClass("pgrid-color-picker-swatch").css("backgroundColor", this.prop.value);
-	this._displaySwatch.on("click", this._onSwatchClick.bind(this));
-	this._displayLabel = $("<span tabindex='0'>").ibxAddClass("pgrid-color-picker-value").text(this.prop.displayValue);
-	this.displayValue.prepend(this._displaySwatch, this._displayLabel);
-	this.editValue = this.displayValue;
-	this._colorPicker = $("<div>").ibxColorPicker({setOpacity:false}).on("ibx_change", this._onColorChange.bind(this));
-	this._popup = $("<div class='pgrid-color-picker-popup'>");
-	this._popup.ibxPopup({destroyOnClose:false, position:{my:"left top", at:"left bottom", of:this._displaySwatch}}).append(this._colorPicker);
-	this._popup.on("ibx_close", this._onPopupClose.bind(this));
+	this.displayValue = this.editValue;
 }
 var _p = $.ibi.ibxPropertyGrid.extendProperty(ibxProperty, ibxColorPickerProperty, "colorPicker");
 _p._popup = null;
+_p.createEditValue = function()
+{
+	var displaySwatch = this.displaySwatch = $("<span tabindex='0'>").ibxAddClass("pgrid-color-picker-swatch").css("backgroundColor", this.prop.value);
+	displaySwatch.on("click", this._onSwatchClick.bind(this));
+	var displayLabel = this.displayLabel = $("<span tabindex='0'>").ibxAddClass("pgrid-color-picker-value").text(this.prop.displayValue);
+
+	var colorPicker = this.colorPicker = $("<div>").ibxColorPicker({setOpacity:false}).on("ibx_change", this._onColorChange.bind(this));
+	var popup = this.popup = $("<div class='pgrid-color-picker-popup'>");
+	popup.ibxPopup({destroyOnClose:false, position:{my:"left top", at:"left bottom", of:displaySwatch}}).append(colorPicker);
+	popup.on("ibx_close", this._onPopupClose.bind(this));
+
+	var editValue = ibxColorPickerProperty.base.createEditValue.call(this);
+	editValue.ibxWidget("add", [displaySwatch[0], displayLabel[0]]);
+	return editValue;
+};
 _p._onTriggerEvent = function(e)
 {
-	if(!this._popup.is(e.relatedTarget))
-		this._super._onTriggerEvent.call(this, e);
+	if(!this.popup.is(e.relatedTarget))
+		ibxColorPickerProperty.base._onTriggerEvent.call(this, e);
 };
 _p._onSwatchClick = function(e)
 {
-	this._colorPicker.ibxColorPicker("option", "color", this.prop.value);
-	this._popup.ibxWidget("open");
+	this.colorPicker.ibxColorPicker("option", "color", this.prop.value);
+	this.popup.ibxWidget("open");
 };
 _p._onColorChange = function(e, data)
 {
 	if(this.updatePropertyValue(data.text))
 	{
-		this._displaySwatch.css("backgroundColor", this.prop.value);
-		this._displayLabel.text(this.prop.value);
+		this.displaySwatch.css("backgroundColor", this.prop.value);
+		this.displayLabel.text(this.prop.value);
 	}
 };
 _p._onPopupClose = function(e)
