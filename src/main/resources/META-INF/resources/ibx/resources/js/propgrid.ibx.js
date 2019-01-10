@@ -140,7 +140,7 @@ _p.createEditor = function()
 {
 	var prop = this.prop;
 	var editor = ibxLabelProperty.base.createEditor.call(this);
-	editor.text(prop.editValue);
+	editor.text(prop.value);
 	return editor;
 }
 /********************************************************************************
@@ -154,11 +154,17 @@ function ibxTextProperty(prop, grid)
 var _p = $.ibi.ibxPropertyGrid.extendProperty(ibxProperty, ibxTextProperty, "text");
 _p.createEditor = function()
 {
-	return $("<div>").ibxEditable().text(this.prop.value).on("ibx_canceledit ibx_changed ibx_textchanging", this._onEditEvent.bind(this));
+	return $("<div>").ibxEditable().text(this.prop.value).on("focus blur ibx_canceledit ibx_changed ibx_textchanging", this._onEditEvent.bind(this));
 };
 _p._onEditEvent = function(e)
 {
 	var eType = e.type;
+	if(eType == "focus")
+		this.editor.ibxEditable("startEditing");
+	else
+	if(eType == "blur" && this.editor.ibxEditable("isEditing"))
+		this.editor.ibxEditable("stopEditing");
+	else
 	if(eType == "ibx_textchanging")
 	{
 		var newValue = e.originalEvent.data.newValue;
@@ -166,9 +172,6 @@ _p._onEditEvent = function(e)
 		if(!updated)
 			this.editValue.text(this.prop.value);
 	}
-	else
-	if(eType == "ibx_changed")
-		this._stopEditing();
 	else
 	if(eType == "ibx_canceledit")
 	{
@@ -439,5 +442,5 @@ _p._onColorChange = function(e, data)
 _p._onPopupClose = function(e)
 {
 	//this makes sure when user clicks outside of popup this properly loses focus (stopEditing).
-	this._valueCell.focus();
+	this.editor.focus();
 };

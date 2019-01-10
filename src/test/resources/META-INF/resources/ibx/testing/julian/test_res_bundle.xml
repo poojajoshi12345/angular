@@ -37,11 +37,11 @@
 			[
 				{
 					"displayName":"ibxLabelProperty",
-					"displayValue":"I own sub properties",
+					"displayValue":"",
 					"nameTip":"Used for grouping other properties, or separating them.",
 					"valueTip":undefined,
 					"name":"Label",
-					"value":"",
+					"value":"I own sub-properties",
 					"dataType":"",
 					"uiType":"label",
 					"expanded":false,

@@ -390,9 +390,7 @@ $.widget("ibi.ibxEditable", $.Widget,
 	{
 		if(!this.isEditing())
 		{
-			console.log("start");
 			this._preEditValue = this.element.html();//save the current text for possible reversion.
-
 			var options = $.extend({contentEditable:true}, this.options, editOptions); 
 			this.option(options);
 			this.element.prop(options).ibxAddClass("ibx-content-editing").focus();
@@ -411,7 +409,6 @@ $.widget("ibi.ibxEditable", $.Widget,
 	{
 		if(this.isEditing())
 		{
-			console.log("stop");
 			this.element.ibxMutationObserver("option", {listen:false});
 
 			//if any seletion, remove it when finished editing.
