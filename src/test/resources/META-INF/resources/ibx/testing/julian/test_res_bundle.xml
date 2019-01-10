@@ -37,7 +37,6 @@
 			[
 				{
 					"displayName":"ibxLabelProperty",
-					"displayValue":"",
 					"nameTip":"Used for grouping other properties, or separating them.",
 					"valueTip":undefined,
 					"name":"Label",
@@ -49,7 +48,6 @@
 					[
 						{
 							"displayName":"Sub Property",
-							"displayValue":"some property value",
 							"nameTip":"Used for setting generic text values.",
 							"valueTip":undefined,
 							"name":"text",
@@ -60,7 +58,6 @@
 						},
 						{
 							"displayName":"Sub Property",
-							"displayValue":"some property value",
 							"nameTip":"Used for setting generic text values.",
 							"valueTip":undefined,
 							"name":"text",
@@ -71,7 +68,6 @@
 						},
 						{
 							"displayName":"Sub Property",
-							"displayValue":"some property value",
 							"nameTip":"Used for setting generic text values.",
 							"valueTip":undefined,
 							"name":"text",
@@ -83,7 +79,6 @@
 							[
 								{
 									"displayName":"Another Sub Property",
-									"displayValue":"some property value",
 									"nameTip":"Used for setting generic text values.",
 									"valueTip":undefined,
 									"name":"text",
@@ -98,7 +93,6 @@
 				},
 				{
 					"displayName":"ibxTextProperty",
-					"displayValue":"Text Property",
 					"nameTip":"Used for setting generic text values.",
 					"valueTip":undefined,
 					"name":"text",
@@ -109,18 +103,16 @@
 				},
 				{
 					"displayName":"ibxButtonProperty",
-					"displayValue":"Button Property...",
 					"nameTip":"Used usually invoking secondary ui.",
 					"valueTip":undefined,
 					"name":"button",
-					"value":"custom_dlg",
+					"value":"Some Custom UI...",
 					"dataType":"custom_dlg",
 					"uiType":"button",
 					"expanded":false,
 				},
 				{
 					"displayName":"ibxCheckBoxProperty",
-					"displayValue":"Checkbox Property",
 					"nameTip":"Used setting booleans.",
 					"valueTip":undefined,
 					"name":"check",
@@ -131,7 +123,6 @@
 				},
 				{
 					"displayName":"ibxSwitchProperty",
-					"displayValue":"Switch Property",
 					"nameTip":"Used setting booleans.",
 					"valueTip":undefined,
 					"name":"switch",
@@ -142,7 +133,6 @@
 				},
 				{
 					"displayName":"ibxRadioGroupProperty",
-					"displayValue":"Radio Group Property",
 					"nameTip":"Used for setting one of many.",
 					"valueTip":undefined,
 					"name":"radio",
@@ -159,7 +149,6 @@
 				},
 				{
 					"displayName":"ibxSelectProperty - Single",
-					"displayValue":"Single Select Property",
 					"nameTip":"Used for selecting a value from many.",
 					"valueTip":undefined,
 					"name":"select",
@@ -177,11 +166,10 @@
 				},
 				{
 					"displayName":"ibxSelectProperty - Multi",
-					"displayValue":"Multi Select Property",
 					"nameTip":"Used for selecting multiple values from many.",
 					"valueTip":undefined,
 					"name":"select",
-					"value":"select_1",
+					"value":["select_1", "select_3"],
 					"dataType":"string",
 					"multiSelect":true,
 					"uiType":"select",
@@ -194,8 +182,7 @@
 					],
 				},
 				{
-					"displayName":"ibxMenuProperty",
-					"displayValue":"Menu Property",
+					"displayName":"ibxMenuProperty - Single",
 					"nameTip":"Used for selecting and item from a menu",
 					"valueTip":undefined,
 					"name":"menu",
@@ -212,8 +199,24 @@
 					],
 				},
 				{
+					"displayName":"ibxMenuProperty - Multi",
+					"nameTip":"Used for selecting and item from a menu",
+					"valueTip":undefined,
+					"name":"menu",
+					"value":["menu_1", "menu_3"],
+					"dataType":"string",
+					"multiSelect":true,
+					"uiType":"menu",
+					"expanded":false,
+					"values":
+					[
+						{"displayName":"Menu Item 1", "value":"menu_1"},
+						{"displayName":"Menu Item 2", "value":"menu_2"},
+						{"displayName":"Menu Item 3", "value":"menu_3"},
+					],
+				},
+				{
 					"displayName":"ibxSliderProperty",
-					"displayValue":"Slider Property",
 					"nameTip":"Used for selecting value using a slider",
 					"valueTip":undefined,
 					"name":"slider",
@@ -227,7 +230,6 @@
 				},
 				{
 					"displayName":"ibxRangeSliderProperty",
-					"displayValue":"Range Slider Property",
 					"nameTip":"Used for selecting range of values using a slider",
 					"valueTip":undefined,
 					"name":"slider",
@@ -241,7 +243,6 @@
 				},
 				{
 					"displayName":"ibxColorPickerProperty",
-					"displayValue":"Color Picker Property",
 					"nameTip":"Used for setting generic color values.",
 					"valueTip":undefined,
 					"name":"color",
