@@ -425,6 +425,7 @@ $.widget("ibi.ibxMenuButton", $.ibi.ibxButtonSimple,
 	{
 		"menu":null,
 		"menuOpen":false,
+		"showArrow":false,
 		"position":
 		{
 			/* for my/at position values see: http://api.jqueryui.com/position/ */
@@ -481,9 +482,15 @@ $.widget("ibi.ibxMenuButton", $.ibi.ibxButtonSimple,
 	},
 	_refresh:function()
 	{
-		$(this.options.menu).off("ibx_open ibx_close");
-		this.options.menu = $(this.options.menu);
-		this.options.menu.on("ibx_open ibx_close", this._onMenuButtonMenuOpenClose.bind(this));
+		var options = this.options;
+		$(options.menu).off("ibx_open ibx_close");
+		options.menu = $(this.options.menu);
+		options.menu.on("ibx_open ibx_close", this._onMenuButtonMenuOpenClose.bind(this));
+
+		options.iconPosition = options.showArrow ? "right" : options.iconPosition;
+		options.glyph = !options.glyph ? "arrow_drop_down" : options.glyph;
+		options.glyphClasses = options.showArrow ? "material-icons ibx-menu-button-arrow" : options.glyphClasses;
+
 		this._super();
 	}
 });
@@ -497,6 +504,11 @@ $.widget("ibi.ibxVMenuButton", $.ibi.ibxMenuButton,
 	{
 		if(e.keyCode == $.ui.keyCode.RIGHT)
 			this.element.trigger("click");
+	},
+	_refresh:function()
+	{
+		this._super();
+		this._glyph.ibxToggleClass("ibx-menu-button-arrow-right", this.options.showArrow);
 	}
 });
 
