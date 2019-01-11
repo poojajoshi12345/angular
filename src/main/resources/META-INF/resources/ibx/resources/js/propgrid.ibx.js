@@ -394,7 +394,6 @@ function ibxRangeSliderProperty(prop, grid)
 {
 	ibxProperty.call(this, prop, grid);
 	if(ibx.inPropCtor) return;
-	this.displayValue = this.editValue;
 }
 var _p = $.ibi.ibxPropertyGrid.extendProperty(ibxProperty, ibxRangeSliderProperty, "rangeSlider");
 _p.createEditor = function()
@@ -425,6 +424,33 @@ _p._onSliderEvent = function(e, data)
 		this.sliderValue.text(value.low);
 		this.sliderValue2.text(value.high);
 	}
+};
+/********************************************************************************
+ * IBX PROPERTY UI FOR SPINNER
+********************************************************************************/
+function ibxSpinnerProperty(prop, grid)
+{
+	ibxProperty.call(this, prop, grid);
+	if(ibx.inPropCtor) return;
+	this.displayValue = this.editValue;
+}
+var _p = $.ibi.ibxPropertyGrid.extendProperty(ibxProperty, ibxSpinnerProperty, "spinner");
+_p.createEditor = function()
+{
+	var prop = this.prop;
+	var editor = $("<div>").ibxSpinner(
+	{
+		value:prop.value,
+		min:prop.min,
+		max:prop.max,
+		step:prop.step,
+	}).ibxAddClass("pgrid-prop-spinner").on("ibx_change", this._onSpinnerEvent.bind(this));
+	return editor;
+};
+_p._onSpinnerEvent = function(e, data)
+{
+	var value = data.value;
+	this.updatePropertyValue(value);
 };
 /********************************************************************************
  * IBX PROPERTY UI FOR COLOR PICKER

@@ -84,3 +84,11 @@
 {
 	font-size:1.5em;
 }
+.pgrid-prop-spinner
+{
+	width:4em;
+}
+.pgrid-prop-spinner .ibx-spinner-btn-grp
+{
+	font-size:.75em;
+}
