@@ -319,6 +319,7 @@ $.widget("ibi.ibxEditable", $.Widget,
 		"insertBrOnReturn":true,
 		"commitKey":$.ui.keyCode.ENTER,
 		"cancelKey":$.ui.keyCode.ESCAPE,
+		"editOnFocus":false,
 		"commitOnBlur":true,
 	},
 	_onElementEventBound:null,
@@ -327,7 +328,7 @@ $.widget("ibi.ibxEditable", $.Widget,
 		this.element.data("ibiIbxWidget", this);//polymorphism to ibxWidget
 		this.element.ibxAddClass("ibx-editable");
 		this.element.ibxMutationObserver({subtree:true, characterData:true, characterDataOldValue:true});
-		this.element.on("keydown blur ibx_nodemutated", this._onElementEvent.bind(this));
+		this.element.on("keydown focus blur ibx_nodemutated", this._onElementEvent.bind(this));
 		this._super();
 	},
 	_lastValue:null,
@@ -346,6 +347,12 @@ $.widget("ibi.ibxEditable", $.Widget,
 			}
 			if(!options.multiLine && e.keyCode === $.ui.keyCode.ENTER)
 				e.preventDefault();
+		}
+		else
+		if(e.type == "focus")
+		{
+			if(options.editOnFocus)
+				this.startEditing();
 		}
 		else
 		if(e.type == "blur")
