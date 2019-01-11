@@ -323,6 +323,7 @@ $.widget("ibi.ibxCheckMenuItem", $.ibi.ibxMenuItem,
 	_refresh:function()
 	{
 		var options = this.options;
+		this.element.toggleClass("checked", options.checked);
 		this._startMarker.ibxRemoveClass("ibx-marker-uncheck ibx-marker-check");
 		this._startMarker.ibxAddClass(options.checked ? "ibx-marker-check" : "ibx-marker-uncheck");
 		this._super();
