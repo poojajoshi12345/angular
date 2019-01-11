@@ -419,7 +419,24 @@ var _p = $.ibi.ibxPropertyGrid.extendProperty(ibxProperty, ibxSliderProperty, "s
 _p._createEditor = function()
 {
 	var prop = this.prop;
-	var slider = this.slider = $("<div>").ibxHSlider(
+	var slider = this.slider = $("<div>").ibxHSlider().ibxAddClass("pgrid-prop-slider-ctrl").on("ibx_change", this._onSliderEvent.bind(this));
+	var sliderValue = this.sliderValue = $("<div>").ibxHBox({align:"center", justify:"center"}).ibxAddClass("pgrid-prop-slider-value");
+	var editor = ibxSliderProperty.base._createEditor.call(this);
+	editor.ibxAddClass("pgrid-prop-slider").ibxWidget("add", [sliderValue[0], slider[0]]);
+	return editor;
+};
+_p._onSliderEvent = function(e, data)
+{
+	var value = data.value;
+	if(this._updateValue(value))
+		this.sliderValue.text(value);
+};
+_p.update = function()
+{
+	ibxSliderProperty.base.update.call(this);
+
+	var prop = this.prop;
+	this.slider.ibxWidget("option",
 	{
 		value:prop.value,
 		min:prop.valueMin,
@@ -428,17 +445,8 @@ _p._createEditor = function()
 		minTextPos:"center",
 		maxTextPos:"center",
 		popupValue:false,
-	}).ibxAddClass("pgrid-prop-slider").on("ibx_change", this._onSliderEvent.bind(this));
-	var sliderValue = this.sliderValue = $("<div>").ibxHBox({align:"center", justify:"center"}).ibxAddClass("pgrid-prop-slider-value");
-	var editValue = ibxSliderProperty.base._createEditor.call(this);
-	editValue.ibxWidget("add", [sliderValue[0], slider[0]]);
-	return editValue;
-};
-_p._onSliderEvent = function(e, data)
-{
-	var value = data.value;
-	if(this._updateValue(value))
-		this.sliderValue.text(value);
+	});
+	this.sliderValue.text(prop.value)
 };
 /********************************************************************************
  * IBX PROPERTY UI FOR RANGE SLIDER
@@ -452,22 +460,12 @@ var _p = $.ibi.ibxPropertyGrid.extendProperty(ibxProperty, ibxRangeSliderPropert
 _p._createEditor = function()
 {
 	var prop = this.prop;
-	var slider = this.slider = $("<div>").ibxHRange(
-	{
-		value:prop.value.low,
-		value2:prop.value.high,
-		min:prop.valueMin,
-		max:prop.valueMax,
-		step:prop.step,
-		minTextPos:"center",
-		maxTextPos:"center",
-		popupValue:false,
-	}).ibxAddClass("pgrid-prop-slider").on("ibx_change", this._onSliderEvent.bind(this));
+	var slider = this.slider = $("<div>").ibxHRange().ibxAddClass("pgrid-prop-slider-ctrl").on("ibx_change", this._onSliderEvent.bind(this));
 	var sliderValue = this.sliderValue = $("<div>").ibxHBox({align:"center", justify:"center"}).ibxAddClass("pgrid-prop-slider-value");
 	var sliderValue2 = this.sliderValue2 = $("<div>").ibxHBox({align:"center", justify:"center"}).ibxAddClass("pgrid-prop-slider-value");
-	var editValue = ibxRangeSliderProperty.base._createEditor.call(this);
-	editValue.ibxWidget("add", [sliderValue[0], slider[0], sliderValue2[0]]);
-	return editValue;
+	var editor = ibxRangeSliderProperty.base._createEditor.call(this);
+	editor.ibxAddClass("pgrid-prop-slider").ibxWidget("add", [sliderValue[0], slider[0], sliderValue2[0]]);
+	return editor;
 };
 _p._onSliderEvent = function(e, data)
 {
@@ -477,6 +475,25 @@ _p._onSliderEvent = function(e, data)
 		this.sliderValue.text(value.low);
 		this.sliderValue2.text(value.high);
 	}
+};
+_p.update = function()
+{
+	ibxSliderProperty.base.update.call(this);
+
+	var prop = this.prop;
+	this.slider.ibxWidget("option",
+	{
+		value:prop.value.low,
+		value2:prop.value.high,
+		min:prop.valueMin,
+		max:prop.valueMax,
+		step:prop.step,
+		minTextPos:"center",
+		maxTextPos:"center",
+		popupValue:false,
+	});
+	this.sliderValue.text(prop.value.low);
+	this.sliderValue2.text(prop.value.high);
 };
 /********************************************************************************
  * IBX PROPERTY UI FOR SPINNER
@@ -490,20 +507,25 @@ function ibxSpinnerProperty(prop, grid)
 var _p = $.ibi.ibxPropertyGrid.extendProperty(ibxProperty, ibxSpinnerProperty, "spinner");
 _p._createEditor = function()
 {
-	var prop = this.prop;
-	var editor = $("<div>").ibxSpinner(
-	{
-		value:prop.value,
-		min:prop.min,
-		max:prop.max,
-		step:prop.step,
-	}).ibxAddClass("pgrid-prop-spinner").on("ibx_change", this._onSpinnerEvent.bind(this));
-	return editor;
+	return $("<div>").ibxSpinner().ibxAddClass("pgrid-prop-spinner").on("ibx_change", this._onSpinnerEvent.bind(this));
 };
 _p._onSpinnerEvent = function(e, data)
 {
 	var value = data.value;
 	this._updateValue(value);
+};
+_p.update = function()
+{
+	ibxSliderProperty.base.update.call(this);
+
+	var prop = this.prop;
+	this.editor.ibxWidget("option",
+	{
+		value:prop.value,
+		min:prop.valueMin,
+		max:prop.valueMax,
+		step:prop.step,
+	});
 };
 /********************************************************************************
  * IBX PROPERTY UI FOR COLOR PICKER
@@ -517,18 +539,17 @@ var _p = $.ibi.ibxPropertyGrid.extendProperty(ibxProperty, ibxColorPickerPropert
 _p._popup = null;
 _p._createEditor = function()
 {
-	var displaySwatch = this.displaySwatch = $("<span tabindex='0'>").ibxAddClass("pgrid-color-picker-swatch").css("backgroundColor", this.prop.value);
-	displaySwatch.on("click", this._onSwatchClick.bind(this));
-	var displayLabel = this.displayLabel = $("<span tabindex='0'>").ibxAddClass("pgrid-color-picker-value").text(this.prop.displayValue);
+	this.editSwatch = $("<span tabindex='0'>").ibxAddClass("pgrid-color-picker-swatch").on("click", this._onSwatchClick.bind(this));
+	this.editLabel = $("<span tabindex='0'>").ibxAddClass("pgrid-color-picker-value");
 
 	var colorPicker = this.colorPicker = $("<div>").ibxColorPicker({setOpacity:false}).on("ibx_change", this._onColorChange.bind(this));
 	var popup = this.popup = $("<div class='pgrid-color-picker-popup'>");
-	popup.ibxPopup({destroyOnClose:false, position:{my:"left top", at:"left bottom", of:displaySwatch}}).append(colorPicker);
+	popup.ibxPopup({destroyOnClose:false, position:{my:"left top", at:"left bottom", of:this.editSwatch}}).append(colorPicker);
 	popup.on("ibx_close", this._onPopupClose.bind(this));
 
-	var editValue = ibxColorPickerProperty.base._createEditor.call(this);
-	editValue.ibxWidget("add", [displaySwatch[0], displayLabel[0]]);
-	return editValue;
+	var editor = ibxColorPickerProperty.base._createEditor.call(this);
+	editor.ibxWidget("add", [this.editSwatch[0], this.editLabel[0]]);
+	return editor;
 };
 _p._onSwatchClick = function(e)
 {
@@ -539,12 +560,19 @@ _p._onColorChange = function(e, data)
 {
 	if(this._updateValue(data.text))
 	{
-		this.displaySwatch.css("backgroundColor", this.prop.value);
-		this.displayLabel.text(this.prop.value);
+		this.editSwatch.css("backgroundColor", this.prop.value);
+		this.editLabel.text(this.prop.value);
 	}
 };
 _p._onPopupClose = function(e)
 {
 	//this makes sure when user clicks outside of popup this properly loses focus (stopEditing).
 	this.editor.focus();
+};
+_p.update = function()
+{
+	ibxColorPickerProperty.base.update.call(this);
+	var prop = this.prop;
+	this.editSwatch.css("backgroundColor", this.prop.value);
+	this.editLabel.text(this.prop.displayValue);
 };
