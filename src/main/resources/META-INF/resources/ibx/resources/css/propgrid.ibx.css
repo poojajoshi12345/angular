@@ -72,17 +72,13 @@
 	padding:3px;
 	min-width:3em;
 	height:1em;
-	border:1px solid #ccc;
+	border:1px solid #ddd;
 }
 .pgrid-prop-menu
 {
 	max-width:200px;
 	padding:2px 0px 2px 5px;
 	border:1px solid #ccc;
-}
-.pgrid-prop-menu .pgrid-prop-menu-btn
-{
-	font-size:1.5em;
 }
 .pgrid-prop-spinner
 {
