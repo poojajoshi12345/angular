@@ -245,7 +245,7 @@ _p.createEditor = function()
 	for(var i = 0; i < vals.length; ++i)
 	{
 		var val = vals[i];
-		var btn = $("<div class='pgrid-prop-radio-button' tabindex='0'>").ibxRadioButtonSimple({text:val.displayName, userValue:val.value});
+		var btn = $("<div class='pgrid-prop-radio-button' tabindex='0'>").ibxRadioButtonSimple({text:val.displayValue, userValue:val.value});
 		editValue.ibxWidget("add", btn);
 	}
 	editValue.ibxWidget("userValue", prop.value).on("ibx_change", this._onChangeEvent.bind(this));
@@ -282,9 +282,9 @@ _p.createEditor = function()
 		var val = vals[i];
 		var selItem = null;
 		if(prop.multiSelect)
-			selItem = $("<div>").ibxSelectCheckItem({text:val.displayName, userValue:val.value});
+			selItem = $("<div>").ibxSelectCheckItem({text:val.displayValue, userValue:val.value});
 		else
-			selItem = $("<div>").ibxSelectItem({text:val.displayName, userValue:val.value});
+			selItem = $("<div>").ibxSelectItem({text:val.displayValue, userValue:val.value});
 		editValue.ibxWidget("addControlItem", selItem);
 	}
 	editValue.ibxSelect("userValue", prop.value);
@@ -308,20 +308,20 @@ _p.createEditor = function()
 {
 	var prop = this.prop;
 	var selValue = prop.value;
-	var menu = $("<div>").ibxMenu({multiSelect:prop.multiSelect}).on("ibx_select", this._onMenuEvent.bind(this));
+	var menu = this.menu = $("<div>").ibxMenu({multiSelect:prop.multiSelect}).on("ibx_select", this._onMenuEvent.bind(this));
 	for(var i = 0; i < prop.values.length; ++i)
 	{
 		var value = prop.values[i];
 		var menuItem = $("<div>");
 		prop.multiSelect ? menuItem.ibxCheckMenuItem() : menuItem.ibxMenuItem();
-		menuItem.ibxWidget("option", {labelOptions:{text:value.displayName}, userValue:value});
+		menuItem.ibxWidget("option", {labelOptions:{text:value.displayValue}, userValue:value});
 		
 		if(prop.multiSelect && -1 != prop.value.indexOf(value.value))
 			menuItem.ibxWidget("option", "checked", true);
 		
 		menu.ibxWidget("add", menuItem);
 		if(value.value == prop.value)
-			selValue = value.displayName;
+			selValue = value.displayValue;
 	}
 	var menuButton = this.menuButton = $("<div tabindex='0'>").ibxMenuButton({"text":selValue, "menu":menu, "iconPosition":"right", "glyph":"arrow_drop_down", "glyphClasses":"material-icons pgrid-prop-menu-btn"}).ibxAddClass("pgrid-prop-menu");
 	return menuButton;
@@ -330,15 +330,28 @@ _p._onMenuEvent = function(e, data)
 {
 	var prop = this.prop;
 	var menuItem = $(data);
-	var value = menuItem.ibxWidget("option", "userValue");
-	
+	var propVal = menuItem.ibxWidget("option", "userValue");
+	var value = propVal.value
+	var displayVal = propVal.displayValue;
+
 	if(prop.multiSelect)
 	{
+		displayVal = [];
+		value = []
+		var menuItems = this.menu.ibxWidget("children", ".checked");
+		for(var i = 0; i < menuItems.length; ++i)
+		{
+			let propVal = $(menuItems[i]).ibxWidget("option", "userValue");
+			displayVal.push(propVal.displayValue);
+			value.push(propVal.value);
+		}
+		displayVal = displayVal.join(" ,");
 	}
 
-	if(this.updatePropertyValue(value.value))
+	if(this.updatePropertyValue(value))
 	{
-		this.menuButton.ibxWidget("option", "text", value.displayName);
+		this.menuButton.ibxWidget("option", "text", displayVal);
+		this.editorCell.prop("title", prop.valueTip || displayVal);
 	}
 };
 /********************************************************************************

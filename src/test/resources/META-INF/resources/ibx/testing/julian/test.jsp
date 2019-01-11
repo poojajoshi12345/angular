@@ -196,7 +196,8 @@
 			}
 			.test-grid, .test-prop-grid
 			{
-				height:300px;
+				flex:1 1 auto;
+				height:100px;
 				border:1px solid black;
 				margin:10px;
 			}

@@ -37,6 +37,7 @@
 			[
 				{
 					"displayName":"ibxLabelProperty",
+					"displayValue":"",
 					"nameTip":"Used for grouping other properties, or separating them.",
 					"valueTip":undefined,
 					"name":"Label",
@@ -48,6 +49,7 @@
 					[
 						{
 							"displayName":"Sub Property",
+							"displayValue":"some property value",
 							"nameTip":"Used for setting generic text values.",
 							"valueTip":undefined,
 							"name":"text",
@@ -58,6 +60,7 @@
 						},
 						{
 							"displayName":"Sub Property",
+							"displayValue":"some property value",
 							"nameTip":"Used for setting generic text values.",
 							"valueTip":undefined,
 							"name":"text",
@@ -68,6 +71,7 @@
 						},
 						{
 							"displayName":"Sub Property",
+							"displayValue":"some property value",
 							"nameTip":"Used for setting generic text values.",
 							"valueTip":undefined,
 							"name":"text",
@@ -79,6 +83,7 @@
 							[
 								{
 									"displayName":"Another Sub Property",
+									"displayValue":"some property value",
 									"nameTip":"Used for setting generic text values.",
 									"valueTip":undefined,
 									"name":"text",
@@ -93,6 +98,7 @@
 				},
 				{
 					"displayName":"ibxTextProperty",
+					"displayValue":"Text Property",
 					"nameTip":"Used for setting generic text values.",
 					"valueTip":undefined,
 					"name":"text",
@@ -103,16 +109,18 @@
 				},
 				{
 					"displayName":"ibxButtonProperty",
+					"displayValue":"Button Property...",
 					"nameTip":"Used usually invoking secondary ui.",
 					"valueTip":undefined,
 					"name":"button",
-					"value":"Some Custom UI...",
+					"value":"custom_dlg",
 					"dataType":"custom_dlg",
 					"uiType":"button",
 					"expanded":false,
 				},
 				{
 					"displayName":"ibxCheckBoxProperty",
+					"displayValue":"Checkbox Property",
 					"nameTip":"Used setting booleans.",
 					"valueTip":undefined,
 					"name":"check",
@@ -123,6 +131,7 @@
 				},
 				{
 					"displayName":"ibxSwitchProperty",
+					"displayValue":"Switch Property",
 					"nameTip":"Used setting booleans.",
 					"valueTip":undefined,
 					"name":"switch",
@@ -133,6 +142,7 @@
 				},
 				{
 					"displayName":"ibxRadioGroupProperty",
+					"displayValue":"Radio Group Property",
 					"nameTip":"Used for setting one of many.",
 					"valueTip":undefined,
 					"name":"radio",
@@ -142,13 +152,14 @@
 					"expanded":false,
 					"values":
 					[
-						{"displayName":"Radio 1", "value":"radio_1"},
-						{"displayName":"Radio 2", "value":"radio_2"},
-						{"displayName":"Radio 3", "value":"radio_3"},
+						{"displayValue":"Radio 1", "value":"radio_1"},
+						{"displayValue":"Radio 2", "value":"radio_2"},
+						{"displayValue":"Radio 3", "value":"radio_3"},
 					],
 				},
 				{
 					"displayName":"ibxSelectProperty - Single",
+					"displayValue":"Single Select Property",
 					"nameTip":"Used for selecting a value from many.",
 					"valueTip":undefined,
 					"name":"select",
@@ -159,30 +170,32 @@
 					"expanded":false,
 					"values":
 					[
-						{"displayName":"Select Item 1", "value":"select_1"},
-						{"displayName":"Select Item 2", "value":"select_2"},
-						{"displayName":"Select Item 3", "value":"select_3"},
+						{"displayValue":"Select Item 1", "value":"select_1"},
+						{"displayValue":"Select Item 2", "value":"select_2"},
+						{"displayValue":"Select Item 3", "value":"select_3"},
 					],
 				},
 				{
 					"displayName":"ibxSelectProperty - Multi",
+					"displayValue":"Multi Select Property",
 					"nameTip":"Used for selecting multiple values from many.",
 					"valueTip":undefined,
 					"name":"select",
-					"value":["select_1", "select_3"],
+					"value":"select_1",
 					"dataType":"string",
 					"multiSelect":true,
 					"uiType":"select",
 					"expanded":false,
 					"values":
 					[
-						{"displayName":"Select Item 1", "value":"select_1"},
-						{"displayName":"Select Item 2", "value":"select_2"},
-						{"displayName":"Select Item 3", "value":"select_3"},
+						{"displayValue":"Select Item 1", "value":"select_1"},
+						{"displayValue":"Select Item 2", "value":"select_2"},
+						{"displayValue":"Select Item 3", "value":"select_3"},
 					],
 				},
 				{
 					"displayName":"ibxMenuProperty - Single",
+					"displayValue":"Menu Property",
 					"nameTip":"Used for selecting and item from a menu",
 					"valueTip":undefined,
 					"name":"menu",
@@ -193,13 +206,14 @@
 					"expanded":false,
 					"values":
 					[
-						{"displayName":"Menu Item 1", "value":"menu_1"},
-						{"displayName":"Menu Item 2", "value":"menu_2"},
-						{"displayName":"Menu Item 3", "value":"menu_3"},
+						{"displayValue":"Menu Item 1", "value":"menu_1"},
+						{"displayValue":"Menu Item 2", "value":"menu_2"},
+						{"displayValue":"Menu Item 3", "value":"menu_3"},
 					],
 				},
 				{
 					"displayName":"ibxMenuProperty - Multi",
+					"displayValue":"Menu Property",
 					"nameTip":"Used for selecting and item from a menu",
 					"valueTip":undefined,
 					"name":"menu",
@@ -210,13 +224,14 @@
 					"expanded":false,
 					"values":
 					[
-						{"displayName":"Menu Item 1", "value":"menu_1"},
-						{"displayName":"Menu Item 2", "value":"menu_2"},
-						{"displayName":"Menu Item 3", "value":"menu_3"},
+						{"displayValue":"Menu Item 1", "value":"menu_1"},
+						{"displayValue":"Menu Item 2", "value":"menu_2"},
+						{"displayValue":"Menu Item 3", "value":"menu_3"},
 					],
 				},
 				{
 					"displayName":"ibxSliderProperty",
+					"displayValue":"Slider Property",
 					"nameTip":"Used for selecting value using a slider",
 					"valueTip":undefined,
 					"name":"slider",
@@ -230,6 +245,7 @@
 				},
 				{
 					"displayName":"ibxRangeSliderProperty",
+					"displayValue":"Range Slider Property",
 					"nameTip":"Used for selecting range of values using a slider",
 					"valueTip":undefined,
 					"name":"slider",
@@ -243,6 +259,7 @@
 				},
 				{
 					"displayName":"ibxColorPickerProperty",
+					"displayValue":"Color Picker Property",
 					"nameTip":"Used for setting generic color values.",
 					"valueTip":undefined,
 					"name":"color",
