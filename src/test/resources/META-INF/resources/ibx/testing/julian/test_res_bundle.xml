@@ -148,7 +148,7 @@
 					"name":"radio",
 					"value":"radio_1",
 					"dataType":"string",
-					"uiType":"radioGroup",
+					"uiType":"radiogroup",
 					"expanded":false,
 					"values":
 					[
@@ -254,7 +254,7 @@
 					"valueMax":100,
 					"step":5,
 					"dataType":"number",
-					"uiType":"rangeSlider",
+					"uiType":"rangeslider",
 					"expanded":false,
 				},
 				{
@@ -279,7 +279,7 @@
 					"name":"color",
 					"value":"transparent",
 					"dataType":"color",
-					"uiType":"colorPicker",
+					"uiType":"colorpicker",
 					"expanded":false,
 				},
 				{
@@ -292,6 +292,17 @@
 					"format":"mm/dd/yy",
 					"dataType":"date",
 					"uiType":"date",
+					"expanded":false,
+				},
+				{
+					"displayName":"ibxCssBorderProperty",
+					"displayValue":"Css Border Property",
+					"nameTip":"Used for setting css border values.",
+					"valueTip":undefined,
+					"name":"date",
+					"value":{"width":"1px", "style":"solid", "color":"black"},
+					"dataType":"cssborder",
+					"uiType":"cssborder",
 					"expanded":false,
 				},
 			]
