@@ -152,6 +152,16 @@
 	content:"\e037";/*play arrow*/
 }
 
+/***********************************MENU BUTTON CLASSES***********************************/
+.ibx-menu-button-arrow
+{
+	font-size:1.5em;
+}
+.ibx-menu-button-arrow-right
+{
+	transform:rotate(-90deg);
+}
+
 /***********************************SPLIT MENU BUTTON CLASSES***********************************/
 .ibx-split-menu-button
 {
