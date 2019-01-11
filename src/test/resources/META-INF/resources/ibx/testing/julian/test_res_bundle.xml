@@ -282,6 +282,18 @@
 					"uiType":"colorPicker",
 					"expanded":false,
 				},
+				{
+					"displayName":"ibxDateProperty",
+					"displayValue":"Date Property",
+					"nameTip":"Used for setting dates.",
+					"valueTip":undefined,
+					"name":"date",
+					"value":"11/04/1964",
+					"format":"mm/dd/yy",
+					"dataType":"date",
+					"uiType":"date",
+					"expanded":false,
+				},
 			]
 
 

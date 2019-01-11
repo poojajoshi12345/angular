@@ -502,7 +502,6 @@ function ibxSpinnerProperty(prop, grid)
 {
 	ibxProperty.call(this, prop, grid);
 	if(ibx.inPropCtor) return;
-	this.displayValue = this.editValue;
 }
 var _p = $.ibi.ibxPropertyGrid.extendProperty(ibxProperty, ibxSpinnerProperty, "spinner");
 _p._createEditor = function()
@@ -575,4 +574,35 @@ _p.update = function()
 	var prop = this.prop;
 	this.editSwatch.css("backgroundColor", this.prop.value);
 	this.editLabel.text(this.prop.displayValue);
+};
+/********************************************************************************
+ * IBX PROPERTY UI FOR DATE
+********************************************************************************/
+function ibxDateProperty(prop, grid)
+{
+	ibxMenuProperty.call(this, prop, grid);
+	if(ibx.inPropCtor) return;
+}
+var _p = $.ibi.ibxPropertyGrid.extendProperty(ibxMenuProperty, ibxDateProperty, "date");
+_p._createEditor = function()
+{
+	var prop = this.prop;
+	var dp = this.datePicker = $("<div>").ibxDatePicker({type:"inline"}).on("ibx_change", this._onDateChange.bind(this));
+	var editor = ibxDateProperty.base._createEditor.call(this);
+	this.menu.ibxWidget("add", dp);
+	return editor;
+};
+_p._onDateChange = function(e, data)
+{
+	this._updateValue(data.date);
+	this.editor.ibxWidget("option", {text:data.date});
+},
+_p.update = function()
+{
+	var prop = this.prop;
+	ibxProperty.prototype.update.call(this);
+
+	var fmt = prop.format || "mm/dd/yy";
+	this.datePicker.ibxWidget("option", {date:prop.value, dateFormat:fmt});
+	this.editor.ibxWidget("option", {text:prop.value});
 };
