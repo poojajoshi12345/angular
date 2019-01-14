@@ -487,9 +487,9 @@ $.widget("ibi.ibxMenuButton", $.ibi.ibxButtonSimple,
 		options.menu = $(this.options.menu);
 		options.menu.on("ibx_open ibx_close", this._onMenuButtonMenuOpenClose.bind(this));
 
-		options.iconPosition = options.showArrow ? "right" : options.iconPosition;
-		options.glyph = !options.glyph ? "arrow_drop_down" : options.glyph;
-		options.glyphClasses = options.showArrow ? "material-icons ibx-menu-button-arrow" : options.glyphClasses;
+		//options.iconPosition = options.showArrow ? "right" : options.iconPosition;
+		//options.glyph = !options.glyph ? "arrow_drop_down" : options.glyph;
+		//options.glyphClasses = options.showArrow ? "material-icons ibx-menu-button-arrow" : options.glyphClasses;
 
 		this._super();
 	}
