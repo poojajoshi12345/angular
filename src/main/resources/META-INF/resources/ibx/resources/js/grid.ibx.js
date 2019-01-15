@@ -423,7 +423,7 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 		defaultColConfig:
 		{
 			title:"",
-			size:"100px",
+			size:"100px", //the last column can have a size of 'flex' indicating that column should take up empty space at end.
 			justify:"center",
 			resizable:true,
 			selectable:true,
@@ -556,6 +556,7 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 		{
 			this._colHeaderBar.ibxWidget("remove");
 
+			var flexing = false;
 			var colMap = options.colMap;
 			for(var i = 0; i < colMap.length; ++i)
 			{
@@ -575,11 +576,27 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 				cInfo.ui = {"idx":i, "header":cHeading, "splitter":splitter, "curSize":null};
 				cHeading.data("ibxDataGridCol", cInfo);
 				this._colHeaderBar.ibxWidget("add", [cHeading[0], splitter[0]]);
-				this.setColumnWidth(i, cInfo.size);
+				
+				if(cInfo.size == "flex")
+				{
+					this._grid.ibxWidget("option", "align", "stretch").css("overflow", "hidden");
+					cHeading.css("flex", "1 1 auto");
+					this.getColumn(i).css("flex", "1 1 auto");
+					flexing = true;
+				}
+				else
+				{
+					this._grid.ibxWidget("option", "align", "start").css("overflow", "");
+					cHeading.css("flex", "");
+					this.setColumnWidth(i, cInfo.size);
+				}
 			}
 
-			var padding = $("<div>").css({"flex":"0 0 auto", "width":"100px", height:"1px"});
-			this._colHeaderBar.append(padding);
+			if(!flexing)
+			{
+				var padding = $("<div>").css({"flex":"0 0 auto", "width":"100px", height:"1px"});
+				this._colHeaderBar.append(padding);
+			}
 		}
 	},
 	getHeaders:function(row)
