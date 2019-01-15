@@ -8,7 +8,7 @@ $.widget("ibi.ibxPropertyGrid", $.ibi.ibxDataGrid,
 {
 	options:
 	{
-		colMap:[{title:"Property", size:"200px", justify:"start"}, {title:"Value", size:"300px", justify:"start"}],
+		colMap:[{title:"Property", size:"15em", justify:"start"}, {title:"Value", size:"flex", justify:"start"}],
 		showRowHeaders:false,
 		indentColumn:0,
 		props:null,
@@ -56,6 +56,7 @@ $.widget("ibi.ibxPropertyGrid", $.ibi.ibxDataGrid,
 		{
 			this.removeRow();
 			this._buildPropTree(value, null);
+			this.updateHeaders();
 		}
 		this._super(key, value);
 	},
@@ -133,6 +134,7 @@ _p.update = function()
 	var prop = this.prop;
 	this.nameCell.ibxWidget({text:this.prop.displayName}).prop("title", prop.nameTip);
 	this.editorCell.prop("title", prop.valueTip);
+	this.editorCell.ibxWidget("option", "disabled", (prop.enabled === false) || false)
 };
 /********************************************************************************
  * IBX PROPERTY UI FOR BASIC LABEL/GROUPING/SEPARATING
@@ -149,6 +151,11 @@ _p._createEditor = function()
 	var editor = ibxLabelProperty.base._createEditor.call(this);
 	editor.text(prop.value);
 	return editor;
+};
+_p.update = function()
+{
+	ibxLabelProperty.base.update.call(this);
+	this.editor.attr("tabindex", "");
 };
 /********************************************************************************
  * IBX PROPERTY UI FOR BASIC TEXT ENTRY
