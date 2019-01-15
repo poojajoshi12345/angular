@@ -803,12 +803,14 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 		var options = this.options;
 		if(key == "colMap" && value)
 		{
-			//make sure passed configs have all missing values with defaults, and update cell widths.
-			var colMap = options.colMap = [];
+			//merge existing with new and default col info.
+			var colMap = [];
 			$.each(value, function(idx, colConfig)
 			{
-				colMap.push($.extend({}, options.defaultColConfig, colConfig));
+				var curColConfig = options.colMap[idx];
+				colMap.push($.extend({}, options.defaultColConfig, curColConfig, colConfig));
 			}.bind(this));
+			options.colMap = colMap;
 			this.updateHeaders("column");
 			return;
 		}
