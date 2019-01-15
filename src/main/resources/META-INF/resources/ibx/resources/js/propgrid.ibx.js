@@ -104,7 +104,7 @@ _p.createUI = function()
 	this.editorCell = this.__createEditorCell().ibxAddClass(["pgrid-cell", "pgrid-editor-cell"]);
 	this.editorCell.attr("tabindex", 0).data("ibxProp", prop).data("ibxProp", prop);
 
-	this.editor = this._createEditor().attr("tabindex", 0).data("ibxProp", prop);
+	this.editor = this._createEditor().attr("tabindex", 0).data("ibxProp", prop).css("flex", "0 0 auto");
 	this.editorCell.append(this.editor);
 };
 _p._createNameCell = function()
