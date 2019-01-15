@@ -810,6 +810,9 @@
 .ibx-glyph-grid-three-column:before {
   content: "\e93c";
 }
+.ibx-glyph-panel-in-panel:before {
+  content: "\ea10";
+}
 .ibx-glyph-explorer:before {
   content: "\e93d";
 }
