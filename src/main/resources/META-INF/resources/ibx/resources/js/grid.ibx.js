@@ -579,14 +579,14 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 				
 				if(cInfo.size == "flex")
 				{
-					this._grid.ibxWidget("option", "align", "stretch").css("overflowX", "hidden");
+					this._grid.ibxWidget("option", "align", "stretch").ibxAddClass("dgrid-grid-flexing");
 					cHeading.css("flex", "1 1 auto");
 					this.getColumn(i).css("flex", "1 1 auto");
 					flexing = true;
 				}
 				else
 				{
-					this._grid.ibxWidget("option", "align", "start").css("overflowX", "");
+					this._grid.ibxWidget("option", "align", "start").ibxRemoveClass("dgrid-grid-flexing");
 					cHeading.css("flex", "");
 					this.setColumnWidth(i, cInfo.size);
 				}

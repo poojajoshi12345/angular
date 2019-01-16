@@ -72,6 +72,10 @@
 {
 	overflow:auto;
 }
+.dgrid-grid-flexing
+{
+	overflow-x:hidden;
+}
 .dgrid-row
 {
 	flex:0 0 auto;
