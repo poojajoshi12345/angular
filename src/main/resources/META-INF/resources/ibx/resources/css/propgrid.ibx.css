@@ -28,13 +28,7 @@
 {
 	width:1em;
 	height:1em;
-	margin:2px;
 	border:1px solid black;
-}
-.pgrid-color-picker-value
-{
-	flex:1 1 auto;
-	margin:2px;
 }
 .pgrid-color-picker-popup.ibx-popup
 {
@@ -91,4 +85,8 @@
 .pgrid-prop-border-ctrl
 {
 	margin-right:3px;
+}
+.pgrid-prop-border-style
+{
+	margin:1px 0em 1px 0em;
 }

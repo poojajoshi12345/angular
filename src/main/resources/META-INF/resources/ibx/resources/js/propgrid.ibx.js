@@ -539,16 +539,10 @@ var _p = $.ibi.ibxPropertyGrid.extendProperty(ibxProperty, ibxColorPickerPropert
 _p._popup = null;
 _p._createEditor = function()
 {
-	this.editSwatch = $("<span tabindex='0'>").ibxAddClass("pgrid-color-picker-swatch").on("click", this._onSwatchClick.bind(this));
-	this.editLabel = $("<span tabindex='0'>").ibxAddClass("pgrid-color-picker-value");
-
 	var colorPicker = this.colorPicker = $("<div>").ibxColorPicker({setOpacity:false}).on("ibx_change", this._onColorChange.bind(this));
-	var popup = this.popup = $("<div class='pgrid-color-picker-popup'>");
-	popup.ibxPopup({destroyOnClose:false, position:{my:"left top", at:"left bottom", of:this.editSwatch}}).append(colorPicker);
-	popup.on("ibx_close", this._onPopupClose.bind(this));
-
-	var editor = ibxColorPickerProperty.base._createEditor.call(this);
-	editor.ibxWidget("add", [this.editSwatch[0], this.editLabel[0]]);
+	var menu = this.menu = $("<div class='pgrid-color-picker-menu'>").ibxMenu().ibxWidget("add", colorPicker).on("ibx_close", this._onMenuClose.bind(this));
+	var editor = $("<div>").ibxMenuButton({"menu":menu, "glyphClasses":"pgrid-color-picker-swatch"});
+	var swatch = this.swatch = editor.find(".ibx-label-glyph");
 	return editor.ibxAddClass("pgrid-prop-color-picker");
 };
 _p._onSwatchClick = function(e)
@@ -560,11 +554,12 @@ _p._onColorChange = function(e, data)
 {
 	if(this._updateValue(data.text))
 	{
-		this.editSwatch.css("backgroundColor", this.prop.value);
-		this.editLabel.text(this.prop.value);
+		var prop = this.prop;
+		this.editor.ibxWidget({text:prop.value})
+		this.swatch.css("backgroundColor", prop.value);
 	}
 };
-_p._onPopupClose = function(e)
+_p._onMenuClose = function(e)
 {
 	//this makes sure when user clicks outside of popup this properly loses focus (stopEditing).
 	this.editor.focus();
@@ -573,8 +568,9 @@ _p.update = function()
 {
 	ibxColorPickerProperty.base.update.call(this);
 	var prop = this.prop;
-	this.editSwatch.css("backgroundColor", this.prop.value);
-	this.editLabel.text(this.prop.value);
+	this.editor.ibxWidget({text:prop.value})
+	this.swatch.css("backgroundColor", prop.value);
+	var prop = this.prop;
 };
 /********************************************************************************
  * IBX PROPERTY UI FOR DATE
@@ -626,9 +622,11 @@ _p._createEditor = function()
 	var widget = editor.data("ibxWidget");
 	this.labelWidth = widget.labelWidth;
 	this.spinnerWidth = widget.spinnerWidth;
-	this.menuStyle = widget.menuStyle;
-	this.menuColor = widget.menuColor;
-
+	this.btnStyle = widget.btnStyle;
+	this.menuStyle = widget.menuStyle
+	this.btnColor = widget.btnColor;
+	this.menuColor = widget.menuColorPicker;
+	this.colorPicker = widget.colorPicker;
 	return editor.ibxAddClass("pgrid-prop-border");
 };
 _p._onDateChange = function(e, data)
