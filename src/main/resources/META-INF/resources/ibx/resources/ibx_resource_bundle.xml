@@ -158,6 +158,20 @@ $Revision$:-->
 				</custom_colors>
 			</palette>
 		</markup-block>
+
+		<markup-block>
+			<div class="pgrid-prop-border-editor-template">
+				<div tabindex="0" data-ibx-name="labelWidth" data-ibx-type="ibxLabel" data-ibxp-for=".pgrid-prop-border-width">Width</div>
+				<div tabindex="0" data-ibx-name="spinnerWidth" class="pgrid-prop-spinner pgrid-prop-border-width" data-ibx-type="ibxSpinner"></div>
+				
+				<!-- <div tabindex="0" data-ibx-name="lblStyle" data-ibx-type="ibxLabel" data-ibxp-for=".pgrid-prop-border-style">Style</div> -->
+				<div tabindex="0" data-ibx-name="menuStyle" class="pgrid-prop-border-style" data-ibx-type="ibxMenuButton" data-ibxp-show-arrow="true"></div>
+				
+				<!-- <div tabindex="0" data-ibx-name="lblColor" data-ibx-type="ibxLabel" data-ibxp-for=".pgrid-prop-border-color">Color</div> -->
+				<div tabindex="0" data-ibx-name="menuColor" class="pgrid-prop-border-color" data-ibx-type="ibxMenuButton" data-ibxp-show-arrow="true"></div>
+			</div>
+		</markup-block>
+
 	</markup>
 
 	<!--styles-->

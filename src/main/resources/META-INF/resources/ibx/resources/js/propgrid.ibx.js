@@ -117,7 +117,7 @@ _p.__createEditorCell = function()
 };
 _p._createEditor = function()
 {
-	return $("<div>").ibxHBox({align:"center"});
+	return $("<div>").ibxHBox({align:"center", nameRoot:true}).ibxAddClass("pgrid-prop");
 };
 _p._updateValue = function(newValue)
 {
@@ -150,7 +150,7 @@ _p._createEditor = function()
 	var prop = this.prop;
 	var editor = ibxLabelProperty.base._createEditor.call(this);
 	editor.text(prop.value);
-	return editor;
+	return editor.ibxAddClass("pgrid-prop-label");
 };
 _p.update = function()
 {
@@ -168,7 +168,7 @@ function ibxTextProperty(prop, grid)
 var _p = $.ibi.ibxPropertyGrid.extendProperty(ibxProperty, ibxTextProperty, "text");
 _p._createEditor = function()
 {
-	return $("<div>").ibxEditable({editOnFocus:true}).ibxAddClass("pgrid-prop-text").on("focus blur ibx_canceledit ibx_changed ibx_textchanging", this._onEditEvent.bind(this));
+	return $("<div>").ibxEditable({editOnFocus:true}).on("focus blur ibx_canceledit ibx_changed ibx_textchanging", this._onEditEvent.bind(this)).ibxAddClass("pgrid-prop-text");
 };
 _p._onEditEvent = function(e)
 {
@@ -204,7 +204,7 @@ function ibxButtonProperty(prop, grid)
 var _p = $.ibi.ibxPropertyGrid.extendProperty(ibxProperty, ibxButtonProperty, "button");
 _p._createEditor = function()
 {
-	return $("<div>").ibxButton({align:"center"}).ibxAddClass("pgrid-prop-button").on("click", this._onButtonEvent.bind(this));
+	return $("<div>").ibxButton({align:"center"}).on("click", this._onButtonEvent.bind(this)).ibxAddClass("pgrid-prop-button");
 };
 _p._onButtonEvent = function(e)
 {
@@ -227,7 +227,7 @@ function ibxCheckBoxProperty(prop, grid)
 var _p = $.ibi.ibxPropertyGrid.extendProperty(ibxProperty, ibxCheckBoxProperty, "checkbox");
 _p._createEditor = function()
 {
-	return $("<div>").ibxCheckBoxSimple().ibxAddClass("pgrid-prop-checkbox").on("ibx_change", this._onCheckEvent.bind(this));
+	return $("<div>").ibxCheckBoxSimple().on("ibx_change", this._onCheckEvent.bind(this)).ibxAddClass("pgrid-prop-checkbox");
 };
 _p._onCheckEvent = function(e)
 {
@@ -251,7 +251,7 @@ function ibxSwitchProperty(prop, grid)
 var _p = $.ibi.ibxPropertyGrid.extendProperty(ibxCheckBoxProperty, ibxSwitchProperty, "switch");
 _p._createEditor = function()
 {
-	return $("<div>").ibxSwitch().ibxAddClass("pgrid-prop-switch").on("ibx_change", this._onCheckEvent.bind(this));
+	return $("<div>").ibxSwitch().on("ibx_change", this._onCheckEvent.bind(this)).ibxAddClass("pgrid-prop-switch");
 };
 _p.update = function()
 {
@@ -270,7 +270,7 @@ function ibxRadioGroupProperty(prop, grid)
 var _p = $.ibi.ibxPropertyGrid.extendProperty(ibxProperty, ibxRadioGroupProperty, "radiogroup");
 _p._createEditor = function()
 {
-	return $("<div>").ibxRadioGroup({navKeyRoot:true, wrap:false}).ibxAddClass("pgrid-prop-radiogroup").on("ibx_change", this._onChangeEvent.bind(this));;
+	return $("<div>").ibxRadioGroup({navKeyRoot:true, wrap:false}).on("ibx_change", this._onChangeEvent.bind(this)).ibxAddClass("pgrid-prop-radiogroup");
 };
 _p._onChangeEvent = function(e)
 {
@@ -310,10 +310,10 @@ var _p = $.ibi.ibxPropertyGrid.extendProperty(ibxProperty, ibxSelectProperty, "s
 _p._createEditor = function()
 {
 	var prop = this.prop;
-	var editor = $("<div>").ibxSelect({multiSelect:prop.multiSelect}).ibxAddClass("pgrid-prop-select").on("ibx_change", this._onSelectEvent.bind(this));
+	var editor = $("<div>").ibxSelect({multiSelect:prop.multiSelect}).on("ibx_change", this._onSelectEvent.bind(this));
 	var openBtn = editor.find(".ibx-select-open-btn");
 	openBtn.ibxWidget("option", "iconPosition", "top");
-	return editor;
+	return editor.ibxAddClass("pgrid-prop-select");
 };
 _p._onSelectEvent = function(e)
 {
@@ -353,8 +353,8 @@ var _p = $.ibi.ibxPropertyGrid.extendProperty(ibxProperty, ibxMenuProperty, "men
 _p._createEditor = function()
 {
 	var menu = this.menu = $("<div>").ibxMenu().on("ibx_select", this._onMenuEvent.bind(this));
-	this.menuButton = $("<div tabindex='0'>").ibxMenuButton({"showArrow":true, "menu":menu}).ibxAddClass("pgrid-prop-menu");
-	return this.menuButton;
+	this.menuButton = $("<div tabindex='0'>").ibxMenuButton({"showArrow":true, "menu":menu});
+	return this.menuButton.ibxAddClass("pgrid-prop-menu");
 };
 _p._onMenuEvent = function(e, data)
 {
@@ -423,8 +423,8 @@ _p._createEditor = function()
 	var slider = this.slider = $("<div>").ibxHSlider().ibxAddClass("pgrid-prop-slider-ctrl").on("ibx_change", this._onSliderEvent.bind(this));
 	var sliderValue = this.sliderValue = $("<div>").ibxHBox({align:"center", justify:"center"}).ibxAddClass("pgrid-prop-slider-value");
 	var editor = ibxSliderProperty.base._createEditor.call(this);
-	editor.ibxAddClass("pgrid-prop-slider").ibxWidget("add", [sliderValue[0], slider[0]]);
-	return editor;
+	editor.ibxWidget("add", [sliderValue[0], slider[0]]);
+	return editor.ibxAddClass("pgrid-prop-slider");
 };
 _p._onSliderEvent = function(e, data)
 {
@@ -465,8 +465,8 @@ _p._createEditor = function()
 	var sliderValue = this.sliderValue = $("<div>").ibxHBox({align:"center", justify:"center"}).ibxAddClass("pgrid-prop-slider-value");
 	var sliderValue2 = this.sliderValue2 = $("<div>").ibxHBox({align:"center", justify:"center"}).ibxAddClass("pgrid-prop-slider-value");
 	var editor = ibxRangeSliderProperty.base._createEditor.call(this);
-	editor.ibxAddClass("pgrid-prop-slider").ibxWidget("add", [sliderValue[0], slider[0], sliderValue2[0]]);
-	return editor;
+	editor.ibxWidget("add", [sliderValue[0], slider[0], sliderValue2[0]]);
+	return editor.ibxAddClass("pgrid-prop-slider");
 };
 _p._onSliderEvent = function(e, data)
 {
@@ -507,7 +507,7 @@ function ibxSpinnerProperty(prop, grid)
 var _p = $.ibi.ibxPropertyGrid.extendProperty(ibxProperty, ibxSpinnerProperty, "spinner");
 _p._createEditor = function()
 {
-	return $("<div>").ibxSpinner().ibxAddClass("pgrid-prop-spinner").on("ibx_change", this._onSpinnerEvent.bind(this));
+	return $("<div>").ibxSpinner().on("ibx_change", this._onSpinnerEvent.bind(this)).ibxAddClass("pgrid-prop-spinner");
 };
 _p._onSpinnerEvent = function(e, data)
 {
@@ -549,7 +549,7 @@ _p._createEditor = function()
 
 	var editor = ibxColorPickerProperty.base._createEditor.call(this);
 	editor.ibxWidget("add", [this.editSwatch[0], this.editLabel[0]]);
-	return editor;
+	return editor.ibxAddClass("pgrid-prop-color-picker");
 };
 _p._onSwatchClick = function(e)
 {
@@ -591,7 +591,7 @@ _p._createEditor = function()
 	var dp = this.datePicker = $("<div>").ibxDatePicker({type:"inline"}).on("ibx_change", this._onDateChange.bind(this));
 	var editor = ibxDateProperty.base._createEditor.call(this);
 	this.menu.ibxWidget("add", dp);
-	return editor;
+	return editor.ibxAddClass("pgrid-prop-date");
 };
 _p._onDateChange = function(e, data)
 {
@@ -610,26 +610,26 @@ _p.update = function()
 /********************************************************************************
  * IBX PROPERTY UI FOR BORDER
 ********************************************************************************/
-function ibxCssBorderProperty(prop, grid)
+function ibxBorderProperty(prop, grid)
 {
 	ibxProperty.call(this, prop, grid);
 	if(ibx.inPropCtor) return;
 }
-var _p = $.ibi.ibxPropertyGrid.extendProperty(ibxProperty, ibxCssBorderProperty, "cssborder");
+var _p = $.ibi.ibxPropertyGrid.extendProperty(ibxProperty, ibxBorderProperty, "border");
 _p._createEditor = function()
 {
-	var width = this.width = $("<div>").ibxEditable().ibxAddClass("pgrid-prop-cssborder-width");
+	var editor = ibxBorderProperty.base._createEditor.call(this);
+	var ctrls = ibx.resourceMgr.getResource(".pgrid-prop-border-editor-template", false).children();
+	editor.ibxWidget("add", ctrls);
+	ibx.bindElements(editor);
 
-	var styleMenu = this.styleMenu = $("<div>").ibxMenu();
-	var styleBtn = this.styleBtn = $("<div>").ibxMenuButton({showArrow:true, menu:styleMenu}).ibxAddClass("pgrid-prop-cssborder-style");
+	var widget = editor.data("ibxWidget");
+	this.labelWidth = widget.labelWidth;
+	this.spinnerWidth = widget.spinnerWidth;
+	this.menuStyle = widget.menuStyle;
+	this.menuColor = widget.menuColor;
 
-	var cp = this.colorPicker = $("<div>").ibxColorPicker({}).ibxAddClass("pgrid-prop-cssborder-color");
-	var colorMenu = this.ColorMenu = $("<div>").ibxMenu().ibxWidget("add", cp);
-	var colorBtn = this.styleBtn = $("<div>").ibxMenuButton({showArrow:true, menu:colorMenu}).ibxAddClass("pgrid-prop-cssborder-color");
-	
-	var editor = ibxCssBorderProperty.base._createEditor.call(this);
-	editor.ibxWidget("add", [width[0], styleBtn[0], colorBtn[0]]);
-	return editor;
+	return editor.ibxAddClass("pgrid-prop-border");
 };
 _p._onDateChange = function(e, data)
 {
@@ -639,5 +639,5 @@ _p._onDateChange = function(e, data)
 _p.update = function()
 {
 	var prop = this.prop;
-	ibxCssBorderProperty.base.update.call(this);
+	ibxBorderProperty.base.update.call(this);
 };

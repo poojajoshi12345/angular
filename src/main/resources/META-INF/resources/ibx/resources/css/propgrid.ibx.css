@@ -82,9 +82,13 @@
 }
 .pgrid-prop-spinner
 {
-	width:4em;
+	min-width:4.5em;
 }
 .pgrid-prop-spinner .ibx-spinner-btn-grp
 {
 	font-size:.75em;
+}
+.pgrid-prop-border-ctrl
+{
+	margin-right:3px;
 }
