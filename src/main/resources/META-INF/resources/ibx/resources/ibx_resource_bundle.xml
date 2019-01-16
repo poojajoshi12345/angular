@@ -168,15 +168,15 @@ $Revision$:-->
 				<div tabindex="0" data-ibx-name="btnStyle" class="" data-ibx-type="ibxMenuButton" data-ibxp-show-arrow="true">Style
 					<div data-ibx-name="menuStyle" data-ibx-type="ibxMenu">
 						<div data-ibx-type="ibxMenuItem">None</div>
-						<div style="border:dashed" class="pgrid-prop-border-style" data-ibx-type="ibxMenuItem">Dashed</div>
-						<div style="border:dotted" class="pgrid-prop-border-style" data-ibx-type="ibxMenuItem">Dotted</div>
-						<div style="border:double" class="pgrid-prop-border-style" data-ibx-type="ibxMenuItem">Double</div>
-						<div style="border:groove" class="pgrid-prop-border-style" data-ibx-type="ibxMenuItem">Groove</div>
-						<div style="border:hidden" class="pgrid-prop-border-style" data-ibx-type="ibxMenuItem">Hidden</div>
-						<div style="border:inset" class="pgrid-prop-border-style" data-ibx-type="ibxMenuItem">Inset</div>
-						<div style="border:outset" class="pgrid-prop-border-style" data-ibx-type="ibxMenuItem">Outset</div>
-						<div style="border:ridge" class="pgrid-prop-border-style" data-ibx-type="ibxMenuItem">Ridge</div>
-						<div style="border:solid" class="pgrid-prop-border-style" data-ibx-type="ibxMenuItem">Solid</div>
+						<div style="border:dashed" class="pgrid-prop-border-style" data-ibx-type="ibxMenuItem" data-ibxp-user-value="dashed">Dashed</div>
+						<div style="border:dotted" class="pgrid-prop-border-style" data-ibx-type="ibxMenuItem" data-ibxp-user-value="dotted">Dotted</div>
+						<div style="border:double" class="pgrid-prop-border-style" data-ibx-type="ibxMenuItem" data-ibxp-user-value="double">Double</div>
+						<div style="border:groove" class="pgrid-prop-border-style" data-ibx-type="ibxMenuItem" data-ibxp-user-value="groove">Groove</div>
+						<div style="border:hidden" class="pgrid-prop-border-style" data-ibx-type="ibxMenuItem" data-ibxp-user-value="hidden">Hidden</div>
+						<div style="border:inset" class="pgrid-prop-border-style" data-ibx-type="ibxMenuItem" data-ibxp-user-value="inset">Inset</div>
+						<div style="border:outset" class="pgrid-prop-border-style" data-ibx-type="ibxMenuItem" data-ibxp-user-value="outset">Outset</div>
+						<div style="border:ridge" class="pgrid-prop-border-style" data-ibx-type="ibxMenuItem" data-ibxp-user-value="ridge">Ridge</div>
+						<div style="border:solid" class="pgrid-prop-border-style" data-ibx-type="ibxMenuItem" data-ibxp-user-value="solid">Solid</div>
 					</div>
 				</div>
 				

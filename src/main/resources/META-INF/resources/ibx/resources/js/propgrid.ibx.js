@@ -545,11 +545,6 @@ _p._createEditor = function()
 	var swatch = this.swatch = editor.find(".ibx-label-glyph");
 	return editor.ibxAddClass("pgrid-prop-color-picker");
 };
-_p._onSwatchClick = function(e)
-{
-	this.colorPicker.ibxColorPicker("option", "color", this.prop.value);
-	this.popup.ibxWidget("open");
-};
 _p._onColorChange = function(e, data)
 {
 	if(this._updateValue(data.text))
@@ -627,12 +622,25 @@ _p._createEditor = function()
 	this.btnColor = widget.btnColor;
 	this.menuColor = widget.menuColorPicker;
 	this.colorPicker = widget.colorPicker;
+
+	this.menuStyle.on("ibx_select", this._onStyleChange.bind(this));
+	this.colorPicker.on("ibx_change", this._onColorChange.bind(this));
+
+
 	return editor.ibxAddClass("pgrid-prop-border");
 };
-_p._onDateChange = function(e, data)
+_p._onStyleChange = function(e, data)
 {
-	this._updateValue(data.date);
-	this.editor.ibxWidget("option", {text:data.date});
+	var prop = this.prop;
+	var menuItem = $(data);
+	var value = menuItem.ibxWidget("option", "userValue");
+	if(this._updateValue(value))
+	{
+		this.btnStyle.ibxWidget("option", "text", menuItem.text()).css("border", value);
+	}
+},
+_p._onColorChange = function(e, data)
+{
 },
 _p.update = function()
 {
