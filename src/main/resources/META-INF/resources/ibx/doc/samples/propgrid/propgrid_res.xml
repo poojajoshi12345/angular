@@ -294,11 +294,25 @@
 					"displayValue":"Border Property",
 					"nameTip":"Used for setting border values.",
 					"valueTip":undefined,
-					"name":"date",
+					"name":"border",
 					"value":{"width":"1px", "style":"none", "color":"black"},
 					"dataType":"border",
 					"uiType":"border",
-					"expanded":false,
+					"expanded":true,
+					"props":
+					[
+						{
+							"displayName":"Top",
+							"displayValue":"Border Top",
+							"nameTip":"Set the values for the top border.",
+							"valueTip":undefined,
+							"name":"borderTop",
+							"value":{"width":"1px", "style":"none", "color":"black"},
+							"dataType":"border",
+							"uiType":"border",
+							"expanded":false,
+						},
+					]
 				},
 			]
 			//# sourceURL=propgrid_res.xml

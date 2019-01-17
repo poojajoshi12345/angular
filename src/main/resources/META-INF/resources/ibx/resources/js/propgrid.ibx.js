@@ -546,17 +546,15 @@ var _p = $.ibi.ibxPropertyGrid.extendProperty(ibxProperty, ibxDateProperty, "dat
 _p._createEditor = function()
 {
 	var prop = this.prop;
-	var editor = $("<div>").ibxSelectMenuButton({useValueAsText:true});
-	this.menu = editor.ibxWidget("option", "menu");
-
-	var dp = this.datePicker = $("<div>").ibxDatePicker({type:"inline"}).on("ibx_change", this._onDateChange.bind(this));
-	this.menu.ibxWidget("add", dp);
+	this.datePicker = $("<div>").ibxDatePicker({type:"inline"}).on("ibx_change", this._onDateChange.bind(this));
+	this.menu = $("<div>").ibxMenu().ibxWidget("add", this.datePicker);
+	var editor = $("<div>").ibxMenuButton({useValueAsText:true, showArrow:true, menu:this.menu});
 	return editor.ibxAddClass("pgrid-prop-date");
 };
 _p._onDateChange = function(e, data)
 {
 	this._updateValue(data.date);
-	this.editor.ibxWidget("userValue", data.date);
+	this.update();
 };
 _p.update = function()
 {
@@ -565,7 +563,7 @@ _p.update = function()
 
 	var fmt = prop.format || "mm/dd/yy";
 	this.datePicker.ibxWidget("option", {date:prop.value, dateFormat:fmt});
-	this.editor.ibxWidget("userValue", prop.value);
+	this.editor.ibxWidget("option", "text", prop.value);
 };
 /********************************************************************************
  * IBX PROPERTY UI FOR BORDER
