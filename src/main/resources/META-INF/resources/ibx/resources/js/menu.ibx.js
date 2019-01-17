@@ -426,6 +426,7 @@ $.widget("ibi.ibxMenuButton", $.ibi.ibxButtonSimple,
 		"menu":null,
 		"menuOpen":false,
 		"showArrow":false,
+		"justify":"start",
 		"position":
 		{
 			/* for my/at position values see: http://api.jqueryui.com/position/ */
@@ -616,7 +617,7 @@ $.widget("ibi.ibxSelectMenuButton", $.ibi.ibxMenuButton,
 		"defaultText":"",
 		"multiSelect":false,
 	},
-	_widgetClass: "ibx-menu-select",
+	_widgetClass: "ibx-select-menu-button",
 	_create:function()
 	{
 		this._super();
@@ -699,6 +700,23 @@ $.widget("ibi.ibxSelectMenuButton", $.ibi.ibxMenuButton,
 	}
 });
 
+//defined types mostly for markup readability
+$.widget("ibi.ibxHSelectMenuButton", $.ibi.ibxSelectMenuButton,{options:{},_widgetClass: "ibx-hselectmenu-button"});
+$.widget("ibi.ibxVSelectMenuButton", $.ibi.ibxSelectMenuButton,
+{
+	options:{position:{at:"right top"}},
+	_widgetClass: "ibx-vselectmenu-button",
+	_onMenuButtonKeyEvent:function(e)
+	{
+		if(e.keyCode == $.ui.keyCode.RIGHT)
+			this.element.trigger("click");
+	},
+	_refresh:function()
+	{
+		this._super();
+		this._glyph.ibxToggleClass("ibx-menu-button-arrow-right", this.options.showArrow);
+	}
+});
 
 
 //# sourceURL=menu.ibx.js

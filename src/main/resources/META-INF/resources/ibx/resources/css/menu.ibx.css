@@ -153,6 +153,10 @@
 }
 
 /***********************************MENU BUTTON CLASSES***********************************/
+.ibx-menu-button .ibx-label-text
+{
+	flex:1 1 auto;
+}
 .ibx-menu-button-arrow
 {
 	font-size:1.5em;
@@ -161,6 +165,22 @@
 {
 	transform:rotate(-90deg);
 }
+
+/*NOT SURE I WANT THESE AS THE DEFAULT STYLES
+.ibx-select-menu-button
+{
+	padding:1px 2px 1px 2px;
+	border:1px solid #ccc;
+	border-radius:.2em;
+}
+.ibx-select-menu-button .xibx-label-glyph
+{
+	font-size:1.2em;
+	font-weight:bold;
+	border:1px solid #ccc;
+	border-radius:.2em;
+}
+*/
 
 /***********************************SPLIT MENU BUTTON CLASSES***********************************/
 .ibx-split-menu-button
