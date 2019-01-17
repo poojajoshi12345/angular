@@ -298,7 +298,7 @@
 					"value":{"width":"1px", "style":"none", "color":"black"},
 					"dataType":"border",
 					"uiType":"border",
-					"expanded":true,
+					"expanded":false,
 					"props":
 					[
 						{
