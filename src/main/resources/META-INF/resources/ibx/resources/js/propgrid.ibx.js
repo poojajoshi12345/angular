@@ -134,7 +134,7 @@ _p.update = function()
 	var prop = this.prop;
 	this.nameCell.ibxWidget({text:this.prop.displayName}).prop("title", prop.nameTip);
 	this.editorCell.prop("title", prop.valueTip);
-	this.editorCell.ibxWidget("option", "disabled", (prop.enabled === false) || false)
+	this.editorCell.ibxWidget("option", "disabled", (prop.enabled === false) || false);
 };
 /********************************************************************************
  * IBX PROPERTY UI FOR BASIC LABEL/GROUPING/SEPARATING
@@ -414,7 +414,7 @@ _p.update = function()
 		maxTextPos:"center",
 		popupValue:false,
 	});
-	this.sliderValue.text(prop.value)
+	this.sliderValue.text(prop.value);
 };
 /********************************************************************************
  * IBX PROPERTY UI FOR RANGE SLIDER
@@ -517,7 +517,7 @@ _p._onColorChange = function(e, data)
 	if(this._updateValue(data.text))
 	{
 		var prop = this.prop;
-		this.editor.ibxWidget({text:prop.value})
+		this.editor.ibxWidget({text:prop.value});
 		this.swatch.css("backgroundColor", prop.value);
 	}
 };
@@ -530,7 +530,7 @@ _p.update = function()
 {
 	ibxColorPickerProperty.base.update.call(this);
 	var prop = this.prop;
-	this.editor.ibxWidget({text:prop.value})
+	this.editor.ibxWidget({text:prop.value});
 	this.swatch.css("backgroundColor", prop.value);
 	var prop = this.prop;
 };
@@ -557,7 +557,7 @@ _p._onDateChange = function(e, data)
 {
 	this._updateValue(data.date);
 	this.editor.ibxWidget("userValue", data.date);
-},
+};
 _p.update = function()
 {
 	var prop = this.prop;
@@ -597,7 +597,7 @@ _p._onWidthChange = function(e, data)
 	this.prop.value.width = data.value + "px";
 	this._updateValue(this.prop.value);
 	this.update();
-},
+};
 _p._onStyleChange = function(e)
 {
 	var value = e.originalEvent.data;
@@ -616,7 +616,7 @@ _p.update = function()
 	var prop = this.prop;
 	this.spinnerWidth.ibxWidget("option", {value:parseInt(prop.value.width, 10)});
 	this.btnStyle.ibxWidget("userValue", prop.value.style).css({borderStyle:prop.value.style, borderColor:prop.value.color});
-	this.btnColor.ibxWidget("option", {text:prop.value.color})
+	this.btnColor.ibxWidget("option", {text:prop.value.color});
 	this.swatch.css("backgroundColor", prop.value.color);
 	ibxBorderProperty.base.update.call(this);
 };

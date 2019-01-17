@@ -625,7 +625,7 @@ $.widget("ibi.ibxSelectMenuButton", $.ibi.ibxMenuButton,
 
 		options.defaultText = options.defaultText || options.text;
 		options.menu = options.menu.length ? options.length : $("<div>").ibxMenu();
-		var menuItems = this.element.children(".ibx-menu-item-check")
+		var menuItems = this.element.children(".ibx-menu-item-check");
 		options.menu.ibxWidget("add", menuItems);
 	},
 	_onMenuEvent:function(e, data)
@@ -633,10 +633,10 @@ $.widget("ibi.ibxSelectMenuButton", $.ibi.ibxMenuButton,
 		var options = this.options;
 		var menuItem = data;
 		if(!options.multiSelect)
-			options.menu.find(".ibx-menu-item-check").not(menuItem).ibxWidget("option", "checked", false)
+			options.menu.find(".ibx-menu-item-check").not(menuItem).ibxWidget("option", "checked", false);
 
 		var userVal = options.multiSelect ? [] : "";
-		var selItems = options.menu.find(".ibx-menu-item-check.checked")
+		var selItems = options.menu.find(".ibx-menu-item-check.checked");
 		if(options.multiSelect)
 		{
 			selItems.each(function(idx, el)
@@ -670,7 +670,7 @@ $.widget("ibi.ibxSelectMenuButton", $.ibi.ibxMenuButton,
 				var menu = $(options.menu);
 				var userValue = value;
 				var valueText = [];
-				var items = menu.find(".ibx-menu-item-check")
+				var items = menu.find(".ibx-menu-item-check");
 				items.each(function(idx, el)
 				{
 					var menuItem = $(el);
