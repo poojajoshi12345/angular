@@ -352,61 +352,28 @@ function ibxMenuProperty(prop, grid)
 var _p = $.ibi.ibxPropertyGrid.extendProperty(ibxProperty, ibxMenuProperty, "menu");
 _p._createEditor = function()
 {
-	var menu = this.menu = $("<div>").ibxMenu().on("ibx_select", this._onMenuEvent.bind(this));
-	this.menuButton = $("<div tabindex='0'>").ibxMenuButton({"showArrow":true, "menu":menu});
-	return this.menuButton.ibxAddClass("pgrid-prop-menu");
+	var editor = $("<div tabindex='0'>").ibxSelectMenuButton({useValueAsText:true}).on("ibx_change", this._onMenuChange.bind(this));
+	this.menu = editor.ibxWidget("option", "menu");
+	return editor.ibxAddClass("pgrid-prop-menu");
 };
-_p._onMenuEvent = function(e, data)
+_p._onMenuChange = function(e)
 {
 	var prop = this.prop;
-	var menuItem = $(data);
-	var propVal = menuItem.ibxWidget("option", "userValue");
-	var value = propVal.value
-	var displayVal = propVal.displayValue;
-
-	if(prop.multiSelect)
-	{
-		displayVal = [];
-		value = []
-		var menuItems = this.menu.ibxWidget("children", ".checked");
-		for(var i = 0; i < menuItems.length; ++i)
-		{
-			let propVal = $(menuItems[i]).ibxWidget("option", "userValue");
-			displayVal.push(propVal.displayValue);
-			value.push(propVal.value);
-		}
-		displayVal = displayVal.join(" ,");
-	}
-
-	if(this._updateValue(value))
-	{
-		this.menuButton.ibxWidget("option", "text", displayVal || prop.displayValue);
-		this.editorCell.prop("title", prop.valueTip || displayVal);
-	}
+	var value = e.originalEvent.data;
+	this._updateValue(value);
 };
 _p.update = function()
 {
 	ibxMenuProperty.base.update.call(this);
-
 	var prop = this.prop;
-	var selValue = prop.value;
 	var menu = this.menu.ibxWidget("remove");
 	for(var i = 0; i < prop.values.length; ++i)
 	{
-		var value = prop.values[i];
-		var menuItem = $("<div>");
-		prop.multiSelect ? menuItem.ibxCheckMenuItem() : menuItem.ibxMenuItem();
-		menuItem.ibxWidget("option", {labelOptions:{text:value.displayValue}, userValue:value});
-		
-		if(prop.multiSelect && -1 != prop.value.indexOf(value.value))
-			menuItem.ibxWidget("option", "checked", true);
-		
+		var propValue = prop.values[i];
+		var menuItem = $("<div>").ibxCheckMenuItem({labelOptions:{text:propValue.displayValue}, userValue:propValue.value});
 		menu.ibxWidget("add", menuItem);
-		if(value.value == prop.value)
-			selValue = value.displayValue;
 	}
-	menu.ibxWidget("option", {text:selValue, multiSelect:prop.multiSelect});
-	this.menuButton.ibxWidget("option", {text:selValue || prop.displayValue});
+	this.editor.ibxWidget("option", {defaultText:prop.displayValue, multiSelect:prop.multiSelect, userValue:prop.value});
 };
 /********************************************************************************
  * IBX PROPERTY UI FOR SLIDER
@@ -575,19 +542,21 @@ function ibxDateProperty(prop, grid)
 	ibxMenuProperty.call(this, prop, grid);
 	if(ibx.inPropCtor) return;
 }
-var _p = $.ibi.ibxPropertyGrid.extendProperty(ibxMenuProperty, ibxDateProperty, "date");
+var _p = $.ibi.ibxPropertyGrid.extendProperty(ibxProperty, ibxDateProperty, "date");
 _p._createEditor = function()
 {
 	var prop = this.prop;
+	var editor = $("<div>").ibxSelectMenuButton({useValueAsText:true});
+	this.menu = editor.ibxWidget("option", "menu");
+
 	var dp = this.datePicker = $("<div>").ibxDatePicker({type:"inline"}).on("ibx_change", this._onDateChange.bind(this));
-	var editor = ibxDateProperty.base._createEditor.call(this);
 	this.menu.ibxWidget("add", dp);
 	return editor.ibxAddClass("pgrid-prop-date");
 };
 _p._onDateChange = function(e, data)
 {
 	this._updateValue(data.date);
-	this.editor.ibxWidget("option", {text:data.date});
+	this.editor.ibxWidget("userValue", data.date);
 },
 _p.update = function()
 {
@@ -596,7 +565,7 @@ _p.update = function()
 
 	var fmt = prop.format || "mm/dd/yy";
 	this.datePicker.ibxWidget("option", {date:prop.value, dateFormat:fmt});
-	this.editor.ibxWidget("option", {text:prop.value});
+	this.editor.ibxWidget("userValue", prop.value);
 };
 /********************************************************************************
  * IBX PROPERTY UI FOR BORDER
@@ -615,35 +584,38 @@ _p._createEditor = function()
 	ibx.bindElements(editor);
 
 	var widget = editor.data("ibxWidget");
-	this.labelWidth = widget.labelWidth;
-	this.spinnerWidth = widget.spinnerWidth;
-	this.btnStyle = widget.btnStyle;
-	this.menuStyle = widget.menuStyle
+	this.spinnerWidth = widget.spinnerWidth.on("ibx_change", this._onWidthChange.bind(this));
+	this.btnStyle = widget.btnStyle.on("ibx_change", this._onStyleChange.bind(this));
 	this.btnColor = widget.btnColor;
-	this.menuColor = widget.menuColorPicker;
-	this.colorPicker = widget.colorPicker;
+	this.swatch = this.btnColor.find(".ibx-label-glyph");
 
-	this.menuStyle.on("ibx_select", this._onStyleChange.bind(this));
-	this.colorPicker.on("ibx_change", this._onColorChange.bind(this));
-
-
+	this.colorPicker = widget.colorPicker.on("ibx_change", this._onColorChange.bind(this));
 	return editor.ibxAddClass("pgrid-prop-border");
 };
-_p._onStyleChange = function(e, data)
+_p._onWidthChange = function(e, data)
 {
-	var prop = this.prop;
-	var menuItem = $(data);
-	var value = menuItem.ibxWidget("option", "userValue");
-	if(this._updateValue(value))
-	{
-		this.btnStyle.ibxWidget("option", "text", menuItem.text()).css("border", value);
-	}
+	this.prop.value.width = data.value + "px";
+	this._updateValue(this.prop.value);
+	this.update();
+},
+_p._onStyleChange = function(e)
+{
+	var value = e.originalEvent.data;
+	this.prop.value.style = value;
+	this._updateValue(this.prop.value);
 },
 _p._onColorChange = function(e, data)
 {
+	this.prop.value.color = data.text;
+	this._updateValue(this.prop.value);
+	this.update();
 },
 _p.update = function()
 {
 	var prop = this.prop;
+	this.spinnerWidth.ibxWidget("option", {value:parseInt(prop.value.width, 10)});
+//	this.btnStyle.ibxWidget("userValue", prop.value.style).css("border", prop.value.style);
+	this.btnColor.ibxWidget("option", {text:prop.value.color})
+	this.swatch.css("backgroundColor", prop.value.color);
 	ibxBorderProperty.base.update.call(this);
 };

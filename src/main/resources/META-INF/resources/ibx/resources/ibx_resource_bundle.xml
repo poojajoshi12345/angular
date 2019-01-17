@@ -161,29 +161,27 @@ $Revision$:-->
 
 		<markup-block>
 			<div class="pgrid-prop-border-editor-template">
-				<div tabindex="0" data-ibx-name="labelWidth" data-ibx-type="ibxLabel" data-ibxp-for=".pgrid-prop-border-width">Width</div>
-				<div tabindex="0" data-ibx-name="spinnerWidth" class="pgrid-prop-spinner" data-ibx-type="ibxSpinner"></div>
+				<div tabindex="0" class="pgrid-prop-border-ctrl" data-ibx-name="labelWidth" data-ibx-type="ibxLabel" data-ibxp-for=".pgrid-prop-border-width">Width</div>
+				<div tabindex="0" class="pgrid-prop-border-ctrl pgrid-prop-spinner pgrid-prop-border-width" data-ibx-name="spinnerWidth" data-ibx-type="ibxSpinner"></div>
 				
 				<!-- <div tabindex="0" data-ibx-name="lblStyle" data-ibx-type="ibxLabel" data-ibxp-for=".pgrid-prop-border-style">Style</div> -->
-				<div tabindex="0" data-ibx-name="btnStyle" class="" data-ibx-type="ibxMenuButton" data-ibxp-show-arrow="true">Style
-					<div data-ibx-name="menuStyle" data-ibx-type="ibxMenu">
-						<div data-ibx-type="ibxMenuItem">None</div>
-						<div style="border:dashed" class="pgrid-prop-border-style" data-ibx-type="ibxMenuItem" data-ibxp-user-value="dashed">Dashed</div>
-						<div style="border:dotted" class="pgrid-prop-border-style" data-ibx-type="ibxMenuItem" data-ibxp-user-value="dotted">Dotted</div>
-						<div style="border:double" class="pgrid-prop-border-style" data-ibx-type="ibxMenuItem" data-ibxp-user-value="double">Double</div>
-						<div style="border:groove" class="pgrid-prop-border-style" data-ibx-type="ibxMenuItem" data-ibxp-user-value="groove">Groove</div>
-						<div style="border:hidden" class="pgrid-prop-border-style" data-ibx-type="ibxMenuItem" data-ibxp-user-value="hidden">Hidden</div>
-						<div style="border:inset" class="pgrid-prop-border-style" data-ibx-type="ibxMenuItem" data-ibxp-user-value="inset">Inset</div>
-						<div style="border:outset" class="pgrid-prop-border-style" data-ibx-type="ibxMenuItem" data-ibxp-user-value="outset">Outset</div>
-						<div style="border:ridge" class="pgrid-prop-border-style" data-ibx-type="ibxMenuItem" data-ibxp-user-value="ridge">Ridge</div>
-						<div style="border:solid" class="pgrid-prop-border-style" data-ibx-type="ibxMenuItem" data-ibxp-user-value="solid">Solid</div>
-					</div>
+				<div tabindex="0" class="pgrid-prop-border-ctrl pgrid-prop-border-menu-button" data-ibx-name="btnStyle" data-ibx-type="ibxSelectMenuButton" data-ibxp-use-value-as-text="true">Style
+					<div style="border:none" class="pgrid-prop-border-style-menuitem"  data-ibx-type="ibxCheckMenuItem" data-ibxp-user-value="none">None</div>
+					<div style="border:dashed" class="pgrid-prop-border-style-menuitem" data-ibx-type="ibxCheckMenuItem" data-ibxp-user-value="dashed">Dashed</div>
+					<div style="border:dotted" class="pgrid-prop-border-style-menuitem" data-ibx-type="ibxCheckMenuItem" data-ibxp-user-value="dotted">Dotted</div>
+					<div style="border:double" class="pgrid-prop-border-style-menuitem" data-ibx-type="ibxCheckMenuItem" data-ibxp-user-value="double">Double</div>
+					<div style="border:groove" class="pgrid-prop-border-style-menuitem" data-ibx-type="ibxCheckMenuItem" data-ibxp-user-value="groove">Groove</div>
+					<div style="border:hidden" class="pgrid-prop-border-style-menuitem" data-ibx-type="ibxCheckMenuItem" data-ibxp-user-value="hidden">Hidden</div>
+					<div style="border:inset" class="pgrid-prop-border-style-menuitem" data-ibx-type="ibxCheckMenuItem" data-ibxp-user-value="inset">Inset</div>
+					<div style="border:outset" class="pgrid-prop-border-style-menuitem" data-ibx-type="ibxCheckMenuItem" data-ibxp-user-value="outset">Outset</div>
+					<div style="border:ridge" class="pgrid-prop-border-style-menuitem" data-ibx-type="ibxCheckMenuItem" data-ibxp-user-value="ridge">Ridge</div>
+					<div style="border:solid" class="pgrid-prop-border-style-menuitem" data-ibx-type="ibxCheckMenuItem" data-ibxp-user-value="solid">Solid</div>
 				</div>
 				
 				<!-- <div tabindex="0" data-ibx-name="lblColor" data-ibx-type="ibxLabel" data-ibxp-for=".pgrid-prop-border-color">Color</div> -->
-				<div tabindex="0" data-ibx-name="btnColor" class="" data-ibx-type="ibxMenuButton" data-ibxp-show-arrow="true">Color
-					<div data-ibx-name="menuColorPicker" data-ibx-type="ibxMenu">
-						<div data-ibx-name="colorPicker" data-ibx-type="ibxColorPicker"></div>
+				<div tabindex="0" class="pgrid-prop-border-ctrl pgrid-prop-border-menu-button" data-ibx-name="btnColor" data-ibx-type="ibxMenuButton" data-ibxp-use-value-as-text="true" data-ibxp-glyph-classes="pgrid-color-picker-swatch">Color
+					<div data-ibx-type="ibxMenu">
+						<div data-ibx-name="colorPicker" class="pgrid-color-picker-popup" data-ibx-type="ibxColorPicker" data-ibxp-set-opacity="false"></div>
 					</div>
 				</div>
 			</div>

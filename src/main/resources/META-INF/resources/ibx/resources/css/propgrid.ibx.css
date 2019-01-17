@@ -84,9 +84,13 @@
 }
 .pgrid-prop-border-ctrl
 {
-	margin-right:3px;
+	margin-right:5px;
 }
-.pgrid-prop-border-style
+.pgrid-prop-border-menu-button
+{
+	margin-left: 5px;
+}
+.pgrid-prop-border-style-menuitem
 {
 	margin:1px 0em 1px 0em;
 }

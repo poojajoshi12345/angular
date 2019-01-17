@@ -190,7 +190,7 @@
 				},
 				{
 					"displayName":"ibxMenuProperty - Single",
-					"displayValue":"Menu Property",
+					"displayValue":"Select Value",
 					"nameTip":"Used for selecting and item from a menu",
 					"valueTip":undefined,
 					"name":"menu",
@@ -208,7 +208,7 @@
 				},
 				{
 					"displayName":"ibxMenuProperty - Multi",
-					"displayValue":"Menu Property",
+					"displayValue":"Select Values",
 					"nameTip":"Used for selecting and item from a menu",
 					"valueTip":undefined,
 					"name":"menu",
