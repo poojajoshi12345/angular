@@ -610,6 +610,7 @@ $.widget("ibi.ibxSelectMenuButton", $.ibi.ibxMenuButton,
 {
 	options:
 	{
+		"showArrow":true,
 		"useValueAsText":false,
 		"valueText":"",
 		"defaultText":"",
