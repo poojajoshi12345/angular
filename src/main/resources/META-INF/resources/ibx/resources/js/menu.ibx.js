@@ -512,6 +512,10 @@ $.widget("ibi.ibxVMenuButton", $.ibi.ibxMenuButton,
 	}
 });
 
+/******************************************************************************
+	ibxSplitMenuButton
+	combination button/menu...pressing button will be equiv of selecting defaultMenuItem
+******************************************************************************/
 $.widget("ibi.ibxSplitMenuButton", $.ibi.ibxButtonSimple,
 {
 	options:
@@ -597,6 +601,91 @@ $.widget("ibi.ibxVSplitMenuButton", $.ibi.ibxSplitMenuButton,{options:{menuOptio
 
 //separator between menu buttons
 $.widget("ibi.ibxMenuButtonSeparator", $.ibi.ibxWidget,{options:{"aria":{"role":"separator", "hidden":true}},_widgetClass: "ibx-menu-button-separator",});
+
+/******************************************************************************
+	ibxMenuSelect
+	Let's you define a button that will show a menu and let you pick an item (or multiple)
+******************************************************************************/
+$.widget("ibi.ibxSelectMenuButton", $.ibi.ibxMenuButton,
+{
+	options:
+	{
+		"useValueAsText":false,
+		"valueText":"",
+		"defaultText":"",
+		"multiSelect":false,
+	},
+	_widgetClass: "ibx-menu-select",
+	_create:function()
+	{
+		this._super();
+		var options = this.options;
+		this._onMenuEventBound = this._onMenuEvent.bind(this);
+
+		options.defaultText = options.defaultText || options.text;
+		options.menu = options.menu.length ? options.length : $("<div>").ibxMenu();
+		var menuItems = this.element.children(".ibx-menu-item-check")
+		options.menu.ibxWidget("add", menuItems);
+	},
+	_onMenuEvent:function(e, data)
+	{
+		var options = this.options;
+		var menuItem = data;
+		if(!options.multiSelect)
+			options.menu.find(".ibx-menu-item-check").not(menuItem).ibxWidget("option", "checked", false)
+
+		var userVal = options.multiSelect ? [] : "";
+		var selItems = options.menu.find(".ibx-menu-item-check.checked")
+		if(options.multiSelect)
+		{
+			selItems.each(function(idx, el)
+			{
+				var menuItem = $(el);
+				userVal.push(menuItem.ibxWidget("userValue"));
+			}.bind(this));
+		}
+		else
+		if(selItems.length)
+			userVal = selItems.ibxWidget("option", "userValue");
+		this.userValue(userVal);
+	},
+	_setOption:function(key, value)
+	{
+		var options = this.options;
+		if(key == "menu")
+		{
+			var menu = $(options.menu);
+			menu.off("ibx_select", this._onMenuEventBound);
+			menu = $(value);
+			menu.on("ibx_select", this._onMenuEventBound);
+		}
+		else
+		if(key == "userValue")
+		{
+			var menu = $(options.menu);
+			var userValue = value;
+			var items = menu.find(".ibx-menu-item-check")
+			items.each(function(idx, el)
+			{
+				var menuItem = $(el);
+				var val = menuItem.ibxWidget("userValue");
+				menuItem.ibxWidget("checked", options.multiSelect ? (-1 != userValue.indexOf(val)) : (userValue == val));
+			}.bind(this));
+			this.element.dispatchEvent("ibx_change", userValue, true, false);
+			options.valueText = options.multiSelect ? userValue.join(", ") : userValue;
+		}
+		this._super(key, value);
+	},
+	_refresh:function()
+	{
+		var options = this.options;
+		options.menu.ibxWidget("option", {multiSelect:options.multiSelect});
+		this.element.ibxWidget("option", "text", (options.useValueAsText && options.valueText) ? options.valueText : options.defaultText);
+		this.element.prop("title", options.valueText);
+		this._super();
+	}
+});
+
 
 
 //# sourceURL=menu.ibx.js
