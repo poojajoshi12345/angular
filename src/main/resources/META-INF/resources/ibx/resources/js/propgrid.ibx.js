@@ -603,6 +603,7 @@ _p._onStyleChange = function(e)
 	var value = e.originalEvent.data;
 	this.prop.value.style = value;
 	this._updateValue(this.prop.value);
+	this.update();
 },
 _p._onColorChange = function(e, data)
 {
@@ -614,7 +615,7 @@ _p.update = function()
 {
 	var prop = this.prop;
 	this.spinnerWidth.ibxWidget("option", {value:parseInt(prop.value.width, 10)});
-//	this.btnStyle.ibxWidget("userValue", prop.value.style).css("border", prop.value.style);
+	this.btnStyle.ibxWidget("userValue", prop.value.style).css({borderStyle:prop.value.style, borderColor:prop.value.color});
 	this.btnColor.ibxWidget("option", {text:prop.value.color})
 	this.swatch.css("backgroundColor", prop.value.color);
 	ibxBorderProperty.base.update.call(this);

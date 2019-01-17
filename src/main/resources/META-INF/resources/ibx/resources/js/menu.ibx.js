@@ -653,6 +653,8 @@ $.widget("ibi.ibxSelectMenuButton", $.ibi.ibxMenuButton,
 	_setOption:function(key, value)
 	{
 		var options = this.options;
+		var changed = (options[key] != value);
+
 		if(key == "menu")
 		{
 			var menu = $(options.menu);
@@ -663,17 +665,27 @@ $.widget("ibi.ibxSelectMenuButton", $.ibi.ibxMenuButton,
 		else
 		if(key == "userValue")
 		{
-			var menu = $(options.menu);
-			var userValue = value;
-			var items = menu.find(".ibx-menu-item-check")
-			items.each(function(idx, el)
+			if(changed)
 			{
-				var menuItem = $(el);
-				var val = menuItem.ibxWidget("userValue");
-				menuItem.ibxWidget("checked", options.multiSelect ? (-1 != userValue.indexOf(val)) : (userValue == val));
-			}.bind(this));
-			this.element.dispatchEvent("ibx_change", userValue, true, false);
-			options.valueText = options.multiSelect ? userValue.join(", ") : userValue;
+				var menu = $(options.menu);
+				var userValue = value;
+				var valueText = [];
+				var items = menu.find(".ibx-menu-item-check")
+				items.each(function(idx, el)
+				{
+					var menuItem = $(el);
+					var val = menuItem.ibxWidget("userValue");
+					var check = options.multiSelect ? (-1 != userValue.indexOf(val)) : (userValue == val);
+					menuItem.ibxWidget("checked", check);
+					
+					if(check)
+						valueText.push(menuItem.ibxWidget("option", "labelOptions.text"));
+				}.bind(this));
+
+				options.userValue = userValue;
+				this.element.dispatchEvent("ibx_change", userValue, true, false);
+				options.valueText = valueText.join(", ");
+			}
 		}
 		this._super(key, value);
 	},

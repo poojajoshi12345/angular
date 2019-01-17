@@ -191,7 +191,7 @@
 				{
 					"displayName":"ibxMenuProperty - Single",
 					"displayValue":"Select Value",
-					"nameTip":"Used for selecting and item from a menu",
+					"nameTip":"Used for selecting an item from a menu",
 					"valueTip":undefined,
 					"name":"menu",
 					"value":"menu_1",
@@ -209,7 +209,7 @@
 				{
 					"displayName":"ibxMenuProperty - Multi",
 					"displayValue":"Select Values",
-					"nameTip":"Used for selecting and item from a menu",
+					"nameTip":"Used for selecting multiple items from a menu",
 					"valueTip":undefined,
 					"name":"menu",
 					"value":["menu_1", "menu_3"],
