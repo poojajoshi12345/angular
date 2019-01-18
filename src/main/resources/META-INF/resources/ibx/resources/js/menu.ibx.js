@@ -447,17 +447,19 @@ $.widget("ibi.ibxMenuButton", $.ibi.ibxButtonSimple,
 	_widgetClass: "ibx-menu-button",
 	_create:function()
 	{
-		this._super();
+
 		var options = this.options;
 		options.position.of = this.element[0];
 		this.element.on({"click": this._onMenuButtonMouseEvent.bind(this), "keyup": this._onMenuButtonKeyEvent.bind(this)});
 
-		var menuItems = this.element.children(".ibx-menu-item").detach();
 		options.menu = this.element.children(".ibx-popup")[0] || options.menu || $("<div>").ibxMenu()[0];
+		
+		var menuItems = this.element.children().not(options.menu).detach();
 		options.menu = $(options.menu);
 		options.menu.ibxAriaId();
 		this.add(menuItems);
 
+		this._super();
 	},
 	_setAccessibility:function(accessible, aria)
 	{
@@ -545,7 +547,7 @@ $.widget("ibi.ibxSelectMenuButton", $.ibi.ibxMenuButton,
 		"valueText":"",
 		"defaultText":"",
 		"multiSelect":false,
-
+		"selectStyle":false,
 		"aria":
 		{
 			"role":"combobox",//turn button into a combobox.
@@ -559,6 +561,11 @@ $.widget("ibi.ibxSelectMenuButton", $.ibi.ibxMenuButton,
 		this._onMenuEventBound = this._onMenuEvent.bind(this);
 		options.defaultText = options.defaultText || options.text;
 		options.menu.ibxWidget("option", "aria.role", "listbox");//turn menu into a list box
+		options.menu.on("ibx_beforeopen", this._onMenuOpenEvent.bind(this));
+	},
+	_onMenuOpenEvent:function(e)
+	{
+		this.options.menu.css("minWidth", this.element.width());
 	},
 	_onMenuEvent:function(e, data)
 	{
@@ -636,7 +643,7 @@ $.widget("ibi.ibxSelectMenuButton", $.ibi.ibxMenuButton,
 		var options = this.options;
 		options.menu.ibxWidget("option", {multiSelect:options.multiSelect});
 		this.element.ibxWidget("option", "text", (options.useValueAsText && options.valueText) ? options.valueText : options.defaultText);
-		this.element.prop("title", options.valueText);
+		this.element.prop("title", options.valueText).ibxToggleClass("ibx-select-style", options.selectStyle);
 		this._super();
 	}
 });

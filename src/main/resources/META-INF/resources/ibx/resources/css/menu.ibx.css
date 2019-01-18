@@ -166,21 +166,23 @@
 	transform:rotate(-90deg);
 }
 
-/*NOT SURE I WANT THESE AS THE DEFAULT STYLES
-.ibx-select-menu-button
+.ibx-select-menu-button.ibx-select-style
 {
 	padding:1px 2px 1px 2px;
 	border:1px solid #ccc;
 	border-radius:.2em;
 }
-.ibx-select-menu-button .xibx-label-glyph
+.ibx-select-menu-button.ibx-select-style .ibx-label-glyph
 {
 	font-size:1.2em;
 	font-weight:bold;
 	border:1px solid #ccc;
 	border-radius:.2em;
 }
-*/
+.ibx-select-menu-button.ibx-select-style .ibx-label-glyph.ibx-glyph-spacer
+{
+	margin-left:5px;
+}
 
 /***********************************SPLIT MENU BUTTON CLASSES***********************************/
 .ibx-split-menu-button
