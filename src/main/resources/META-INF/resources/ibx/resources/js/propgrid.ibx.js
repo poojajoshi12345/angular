@@ -547,7 +547,7 @@ _p._createEditor = function()
 {
 	var prop = this.prop;
 	this.datePicker = $("<div>").ibxDatePicker({type:"inline"}).on("ibx_change", this._onDateChange.bind(this));
-	var editor = $("<div>").ibxMenuButton({useValueAsText:true, showArrow:true});
+	var editor = $("<div>").ibxMenuButton({showArrow:true});
 	editor.ibxWidget("add", this.datePicker);
 	return editor.ibxAddClass("pgrid-prop-date");
 };

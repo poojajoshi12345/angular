@@ -47,18 +47,18 @@
 		</style>
 	</head>
 	<body class="ibx-root" data-ibx-type="ibxVBox" data-ibxp-align="center" data-ibxp-justify="center">
-		<div class="menu-btn single-select" data-ibx-type="ibxSelectMenuButton">ibxMenuSelect-single
+		<div tabindex="0" class="menu-btn single-select" data-ibx-type="ibxSelectMenuButton" data-ibxp-editable="true">ibxMenuSelect-single
 			<div data-ibx-type="ibxCheckMenuItem" data-ibxp-user-value="item1">Item 1</div>
 			<div data-ibx-type="ibxCheckMenuItem" data-ibxp-user-value="item2">Item 2</div>
 			<div data-ibx-type="ibxCheckMenuItem" data-ibxp-user-value="item3">Item 3</div>
 		</div>
-		<div class="menu-btn multi-select" data-ibx-type="ibxSelectMenuButton" data-ibxp-multi-select="true">ibxMenuSelect-multi
+		<div tabindex="0" class="menu-btn multi-select" data-ibx-type="ibxSelectMenuButton" data-ibxp-multi-select="true">ibxMenuSelect-multi
 			<div data-ibx-type="ibxCheckMenuItem" data-ibxp-user-value="item1">Item 1</div>
 			<div data-ibx-type="ibxCheckMenuItem" data-ibxp-user-value="item2">Item 2</div>
 			<div data-ibx-type="ibxCheckMenuItem" data-ibxp-user-value="item3">Item 3</div>
 		</div>
-		<div class="menu-btn date data-ibx-type="ibxMenuButton">Date...
-			<div data-ibx-type="ibxDatePicker" data-ibxp-inline="true"></div>
+		<div tabindex="0" class="menu-btn date" data-ibx-type="ibxMenuButton" data-ibxp-show-arrow="true">Date...
+			<div data-ibx-type="ibxDatePicker" data-ibxp-type="inline"></div>
 		</div>
 	</body>
 </html>
