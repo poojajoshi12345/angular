@@ -57,5 +57,8 @@
 			<div data-ibx-type="ibxCheckMenuItem" data-ibxp-user-value="item2">Item 2</div>
 			<div data-ibx-type="ibxCheckMenuItem" data-ibxp-user-value="item3">Item 3</div>
 		</div>
+		<div class="menu-btn date data-ibx-type="ibxMenuButton">Date...
+			<div data-ibx-type="ibxDatePicker" data-ibxp-inline="true"></div>
+		</div>
 	</body>
 </html>
