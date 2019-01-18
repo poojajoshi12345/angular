@@ -166,6 +166,12 @@
 	transform:rotate(-90deg);
 }
 
+.ibx-select-menu-button-label-editable
+{
+	outline:1px solid #dedede;
+	padding:1px;
+}
+
 .ibx-select-menu-button.ibx-select-style
 {
 	padding:1px 2px 1px 2px;

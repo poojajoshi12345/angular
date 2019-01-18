@@ -40,6 +40,7 @@
 			}
 			.menu-btn
 			{
+				width:150px;
 				padding:5px;
 				margin:5px;
 				border:1px solid #ccc;
@@ -47,12 +48,17 @@
 		</style>
 	</head>
 	<body class="ibx-root" data-ibx-type="ibxVBox" data-ibxp-align="center" data-ibxp-justify="center">
-		<div tabindex="0" class="menu-btn single-select" data-ibx-type="ibxSelectMenuButton" data-ibxp-editable="true">ibxMenuSelect-single
+		<select class="menu-btn">
+			<option>Item 1</option>
+			<option>Item 2</option>
+			<option>Item 3</option>
+		</select>
+		<div tabindex="0" class="menu-btn single-select" data-ibx-type="ibxSelectMenuButton" data-ibxp-editable="false" data-ibxp-use-value-as-text="true">ibxMenuSelect-single
 			<div data-ibx-type="ibxCheckMenuItem" data-ibxp-user-value="item1">Item 1</div>
 			<div data-ibx-type="ibxCheckMenuItem" data-ibxp-user-value="item2">Item 2</div>
 			<div data-ibx-type="ibxCheckMenuItem" data-ibxp-user-value="item3">Item 3</div>
 		</div>
-		<div tabindex="0" class="menu-btn multi-select" data-ibx-type="ibxSelectMenuButton" data-ibxp-multi-select="true">ibxMenuSelect-multi
+		<div tabindex="0" class="menu-btn multi-select" data-ibx-type="ibxSelectMenuButton" data-ibxp-multi-select="true" data-ibxp-use-value-as-text="true">ibxMenuSelect-multi
 			<div data-ibx-type="ibxCheckMenuItem" data-ibxp-user-value="item1">Item 1</div>
 			<div data-ibx-type="ibxCheckMenuItem" data-ibxp-user-value="item2">Item 2</div>
 			<div data-ibx-type="ibxCheckMenuItem" data-ibxp-user-value="item3">Item 3</div>

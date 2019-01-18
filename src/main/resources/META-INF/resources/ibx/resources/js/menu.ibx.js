@@ -663,6 +663,9 @@ $.widget("ibi.ibxSelectMenuButton", $.ibi.ibxMenuButton,
 		options.menu.ibxWidget("option", {multiSelect:options.multiSelect});
 		this.element.ibxWidget("option", "text", (options.useValueAsText && options.valueText) ? options.valueText : options.defaultText);
 		this.element.prop("title", options.valueText).ibxToggleClass("ibx-select-style", options.selectStyle);
+		
+		this._text.ibxToggleClass("ibx-select-menu-button-label-editable", options.editable);
+		
 		this._super();
 	}
 });
