@@ -394,7 +394,7 @@ ibx.parseCompoundOptions = function(props, value)
 	if(props.length)
 		options[prop] = ibx.parseCompoundOptions(props, value);
 	else
-		options[prop] = value;
+		options[prop] = ibx.coercePropVal(value);
 	return options;
 };
 
