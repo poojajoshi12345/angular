@@ -344,17 +344,17 @@ _p.update = function()
 /********************************************************************************
  * IBX PROPERTY UI FOR MENU BUTTON
 ********************************************************************************/
-function ibxMenuProperty(prop, grid)
+function ibxSelectMenuProperty(prop, grid)
 {
 	ibxProperty.call(this, prop, grid);
 	if(ibx.inPropCtor) return;
 }
-var _p = $.ibi.ibxPropertyGrid.extendProperty(ibxProperty, ibxMenuProperty, "menu");
+var _p = $.ibi.ibxPropertyGrid.extendProperty(ibxProperty, ibxSelectMenuProperty, "selectMenu");
 _p._createEditor = function()
 {
 	var editor = $("<div tabindex='0'>").ibxSelectMenuButton({useValueAsText:true}).on("ibx_change", this._onMenuChange.bind(this));
 	this.menu = editor.ibxWidget("option", "menu");
-	return editor.ibxAddClass("pgrid-prop-menu");
+	return editor.ibxAddClass("pgrid-prop-select-menu");
 };
 _p._onMenuChange = function(e)
 {
@@ -364,7 +364,7 @@ _p._onMenuChange = function(e)
 };
 _p.update = function()
 {
-	ibxMenuProperty.base.update.call(this);
+	ibxSelectMenuProperty.base.update.call(this);
 	var prop = this.prop;
 	var menu = this.menu.ibxWidget("remove");
 	for(var i = 0; i < prop.values.length; ++i)
@@ -539,7 +539,7 @@ _p.update = function()
 ********************************************************************************/
 function ibxDateProperty(prop, grid)
 {
-	ibxMenuProperty.call(this, prop, grid);
+	ibxProperty.call(this, prop, grid);
 	if(ibx.inPropCtor) return;
 }
 var _p = $.ibi.ibxPropertyGrid.extendProperty(ibxProperty, ibxDateProperty, "date");
@@ -547,8 +547,8 @@ _p._createEditor = function()
 {
 	var prop = this.prop;
 	this.datePicker = $("<div>").ibxDatePicker({type:"inline"}).on("ibx_change", this._onDateChange.bind(this));
-	this.menu = $("<div>").ibxMenu().ibxWidget("add", this.datePicker);
-	var editor = $("<div>").ibxMenuButton({useValueAsText:true, showArrow:true, menu:this.menu});
+	var editor = $("<div>").ibxMenuButton({useValueAsText:true, showArrow:true});
+	editor.ibxWidget("add", this.datePicker);
 	return editor.ibxAddClass("pgrid-prop-date");
 };
 _p._onDateChange = function(e, data)
