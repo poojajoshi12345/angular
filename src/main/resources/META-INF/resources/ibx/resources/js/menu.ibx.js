@@ -463,7 +463,6 @@ $.widget("ibi.ibxMenuButton", $.ibi.ibxButtonSimple,
 	{
 		var options = this.options;
 		aria = this._super(accessible, aria);
-		aria.haspopup = !!options.menu.length;
 		aria.controls = options.menu.prop("id");
 		aria.expanded = options.menu.ibxWidget("isOpen");
 		return aria;
@@ -549,7 +548,7 @@ $.widget("ibi.ibxSelectMenuButton", $.ibi.ibxMenuButton,
 
 		"aria":
 		{
-			"role":"combobox",
+			"role":"combobox",//turn button into a combobox.
 		}
 	},
 	_widgetClass: "ibx-select-menu-button",
@@ -559,6 +558,7 @@ $.widget("ibi.ibxSelectMenuButton", $.ibi.ibxMenuButton,
 		var options = this.options;
 		this._onMenuEventBound = this._onMenuEvent.bind(this);
 		options.defaultText = options.defaultText || options.text;
+		options.menu.ibxWidget("option", "aria.role", "listbox");//turn menu into a list box
 	},
 	_onMenuEvent:function(e, data)
 	{
@@ -581,6 +581,16 @@ $.widget("ibi.ibxSelectMenuButton", $.ibi.ibxMenuButton,
 		if(selItems.length)
 			userVal = selItems.ibxWidget("option", "userValue");
 		this.userValue(userVal);
+	},
+	add:function(el, elSibling, before, refresh)
+	{
+		this._super(el, elSibling, before, refresh);
+		$(el).attr("role", "option");
+	},
+	remove:function(el, destroy, refresh)
+	{
+		this._super(el, destroy, refresh);
+		$(el).attr("role", "menuitem");
 	},
 	_setOption:function(key, value)
 	{
