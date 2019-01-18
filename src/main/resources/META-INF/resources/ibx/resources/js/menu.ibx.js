@@ -542,6 +542,7 @@ $.widget("ibi.ibxSelectMenuButton", $.ibi.ibxMenuButton,
 {
 	options:
 	{
+		"editable":false,
 		"showArrow":true,
 		"useValueAsText":false,
 		"valueText":"",
@@ -562,6 +563,7 @@ $.widget("ibi.ibxSelectMenuButton", $.ibi.ibxMenuButton,
 		options.defaultText = options.defaultText || options.text;
 		options.menu.ibxWidget("option", "aria.role", "listbox");//turn menu into a list box
 		options.menu.on("ibx_beforeopen", this._onMenuOpenEvent.bind(this));
+		this._text.ibxEditable().on("click", this._onLabelClick.bind(this));
 	},
 	_onMenuOpenEvent:function(e)
 	{
@@ -598,6 +600,23 @@ $.widget("ibi.ibxSelectMenuButton", $.ibi.ibxMenuButton,
 	{
 		this._super(el, destroy, refresh);
 		$(el).attr("role", "menuitem");
+	},
+	isEditing:function()
+	{
+		return this._text.ibxEditable("isEditing");
+	},
+	_onLabelClick:function(e)
+	{
+		if(this.options.editable)
+		{
+			$(e.target).ibxEditable("startEditing");
+			e.stopPropagation();
+		}
+	},
+	_onKeyEvent:function(e)
+	{
+		if(!this.isEditing())
+			this._super(e)
 	},
 	_setOption:function(key, value)
 	{
