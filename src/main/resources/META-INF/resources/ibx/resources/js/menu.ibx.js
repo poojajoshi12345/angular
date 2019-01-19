@@ -452,11 +452,10 @@ $.widget("ibi.ibxMenuButton", $.ibi.ibxButtonSimple,
 		options.position.of = this.element[0];
 		this.element.on({"click": this._onMenuButtonMouseEvent.bind(this), "keyup": this._onMenuButtonKeyEvent.bind(this)});
 
-		options.menu = this.element.children(".ibx-popup")[0] || options.menu || $("<div>").ibxMenu()[0];
-		
+		var menu = options.menu = this.element.children(".ibx-popup")[0] || options.menu || $("<div>").ibxMenu()[0];
+		options.menu = $(menu).ibxAriaId();
+
 		var menuItems = this.element.children().not(options.menu).detach();
-		options.menu = $(options.menu);
-		options.menu.ibxAriaId();
 		this.add(menuItems);
 
 		this._super();
@@ -559,37 +558,16 @@ $.widget("ibi.ibxSelectMenuButton", $.ibi.ibxMenuButton,
 	{
 		this._super();
 		var options = this.options;
-		this._onMenuEventBound = this._onMenuEvent.bind(this);
 		options.defaultText = options.defaultText || options.text;
-		options.menu.ibxWidget("option", "aria.role", "listbox");//turn menu into a list box
-		options.menu.on("ibx_beforeopen", this._onMenuOpenEvent.bind(this));
 		this._text.ibxEditable().on("click", this._onLabelClick.bind(this));
+		options.menu.on("ibx_select", this._onMenuSelect.bind(this));
+		options.menu.on("ibx_beforeopen", this._onMenuBeforeOpen.bind(this));
 	},
-	_onMenuOpenEvent:function(e)
+	_setAccessibility:function(accessible, aria)
 	{
-		this.options.menu.css("minWidth", this.element.width());
-	},
-	_onMenuEvent:function(e, data)
-	{
-		var options = this.options;
-		var menuItem = data;
-		if(!options.multiSelect)
-			options.menu.find(".ibx-menu-item-check").not(menuItem).ibxWidget("option", "checked", false);
-
-		var userVal = options.multiSelect ? [] : "";
-		var selItems = options.menu.find(".ibx-menu-item-check.checked");
-		if(options.multiSelect)
-		{
-			selItems.each(function(idx, el)
-			{
-				var menuItem = $(el);
-				userVal.push(menuItem.ibxWidget("userValue"));
-			}.bind(this));
-		}
-		else
-		if(selItems.length)
-			userVal = selItems.ibxWidget("option", "userValue");
-		this.userValue(userVal);
+		this._super(accessible, aria);
+		this.options.menu.ibxWidget("option", "aria.role", "listbox");//turn menu into a list box
+		return aria;
 	},
 	add:function(el, elSibling, before, refresh)
 	{
@@ -613,6 +591,32 @@ $.widget("ibi.ibxSelectMenuButton", $.ibi.ibxMenuButton,
 			e.stopPropagation();
 		}
 	},
+	_onMenuBeforeOpen:function(e)
+	{
+		this.options.menu.css("minWidth", this.element.width());
+	},
+	_onMenuSelect:function(e, data)
+	{
+		var options = this.options;
+		var menuItem = data;
+		if(!options.multiSelect)
+			options.menu.find(".ibx-menu-item-check").not(menuItem).ibxWidget("option", "checked", false);
+
+		var userVal = options.multiSelect ? [] : "";
+		var selItems = options.menu.find(".ibx-menu-item-check.checked");
+		if(options.multiSelect)
+		{
+			selItems.each(function(idx, el)
+			{
+				var menuItem = $(el);
+				userVal.push(menuItem.ibxWidget("userValue"));
+			}.bind(this));
+		}
+		else
+		if(selItems.length)
+			userVal = selItems.ibxWidget("option", "userValue");
+		this.userValue(userVal);
+	},
 	_onKeyEvent:function(e)
 	{
 		if(!this.isEditing())
@@ -623,14 +627,6 @@ $.widget("ibi.ibxSelectMenuButton", $.ibi.ibxMenuButton,
 		var options = this.options;
 		var changed = (options[key] != value);
 
-		if(key == "menu")
-		{
-			var menu = $(options.menu);
-			menu.off("ibx_select", this._onMenuEventBound);
-			menu = $(value);
-			menu.on("ibx_select", this._onMenuEventBound);
-		}
-		else
 		if(key == "userValue")
 		{
 			if(changed)
