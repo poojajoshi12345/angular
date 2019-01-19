@@ -8,6 +8,7 @@ $.widget("ibi.ibxPopup", $.ibi.ibxWidget,
 		"focusRoot":true,
 		"focusDefault":".ibx-default-focused",
 		"modal":false,
+		"autoFocus":true,
 		"autoClose":true,
 		"movable":false,
 		"moveHandle":null,
@@ -135,9 +136,10 @@ $.widget("ibi.ibxPopup", $.ibi.ibxWidget,
 			this.element.ibxAddClass("pop-opening");
 			this._trigger("popup_mgr_open", null, this.element);
 
-			//we're visible so focus...auto-focusing of children now happens in ibxWidget.
+			//we're visible so focus, if desired...auto-focusing of children now happens in ibxWidget.
 			this.setAccessibility();
-			this.element.focus();
+			if(options.autoFocus)
+				this.element.focus();
 
 			//let people know we are fully open
 			this._trigger("open");
