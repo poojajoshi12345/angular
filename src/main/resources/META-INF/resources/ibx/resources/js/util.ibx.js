@@ -145,6 +145,11 @@ jQuery.expr[":"]["hasSubMenu"] = function(elem)
 	var subMenu = $(elem).data("ibxSubMenu") || $(elem).children(".ibx-menu").length;
 	return subMenu ? true : false;
 };
+jQuery.expr[':'].containsNoCase = function(a, i, m)
+{
+  return jQuery(a).text().toUpperCase().indexOf(m[3].toUpperCase()) != -1;
+};
+
 
 //Implement the native element classList api as alternate to jQuery...much faster than the jQuery add/removeClass functions.
 //of course, for IE...don't do anything fancy, as it is stinko.
