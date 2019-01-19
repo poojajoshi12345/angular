@@ -559,7 +559,7 @@ $.widget("ibi.ibxSelectMenuButton", $.ibi.ibxMenuButton,
 		this._super();
 		var options = this.options;
 		options.defaultText = options.defaultText || options.text;
-		this._text.ibxEditable().on("click", this._onLabelClick.bind(this));
+		this._text.ibxEditable().on("click", this._onLabelClick.bind(this)).on("ibx_textchanging", this._onTextChanging.bind(this));
 		options.menu.on("ibx_select", this._onMenuSelect.bind(this));
 		options.menu.on("ibx_beforeopen", this._onMenuBeforeOpen.bind(this));
 	},
@@ -585,11 +585,7 @@ $.widget("ibi.ibxSelectMenuButton", $.ibi.ibxMenuButton,
 	},
 	_onLabelClick:function(e)
 	{
-		if(this.options.editable)
-		{
-			$(e.target).ibxEditable("startEditing");
-			e.stopPropagation();
-		}
+		$(e.target).ibxEditable("startEditing");
 	},
 	_onMenuBeforeOpen:function(e)
 	{
@@ -621,6 +617,12 @@ $.widget("ibi.ibxSelectMenuButton", $.ibi.ibxMenuButton,
 	{
 		if(!this.isEditing())
 			this._super(e)
+	},
+	_onTextChanging:function(e)
+	{
+		var options = this.options;
+		var value = e.originalEvent.data.newValue;
+		var matchedItems = options.menu.ibxWidget("children", sformat(".ibx-menu-item:containsNoCase({1})", value));
 	},
 	_setOption:function(key, value)
 	{
@@ -661,7 +663,7 @@ $.widget("ibi.ibxSelectMenuButton", $.ibi.ibxMenuButton,
 		this.element.prop("title", options.valueText).ibxToggleClass("ibx-select-style", options.selectStyle);
 		
 		this._text.ibxToggleClass("ibx-select-menu-button-label-editable", options.editable);
-		
+		options.menu.ibxWidget("option", "autoFocus", !options.editable);
 		this._super();
 	}
 });
