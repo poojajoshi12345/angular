@@ -227,8 +227,13 @@ jQuery.fn.extend(
 				var arg = args[j];
 				if(ibxPlatformCheck.isIE)
 				{
-					if(elem.classList && (stateVal != undefined))
-						(!stateVal) ? elem.classList.remove(arg) : elem.classList.add(arg);//of course, IE doesn't handle toggle correctly (so, polyfill)
+					if(elem.classList)
+					{
+						if(stateVal === undefined)
+							elem.classList.toggle(arg);
+						else
+							(!stateVal) ? elem.classList.remove(arg) : elem.classList.add(arg);//of course, IE doesn't handle toggle correctly (so, polyfill)
+					}
 				}
 				else
 					elem.classList.toggle(arg, stateVal);
