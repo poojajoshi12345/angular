@@ -1,0 +1,463 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>ibx accessibility sample</title>
+		<meta http-equiv="X-UA-Compatible" content="IE=11" >
+		<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+		<meta http-equiv="Pragma" content="no-cache" />
+		<meta http-equiv="Expires" content="0" />
+		<meta name="google" value="notranslate">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+
+		<!--include this script...will boot ibx into the running state-->
+		<Script src="../../../resources/ibx.js" type="text/javascript"></script>
+		<script type="text/javascript">
+			ibx(function()
+			{
+				$(".btn-dialog").on("click", function(e)
+				{
+					$(".dlg").ibxWidget("open");
+				});
+
+				$(".btn-start-progress").on("click", function(e)
+				{
+					var options = 
+					{
+						"type":"std plain",
+						"buttons":"cancel",
+						"caption":"Uploading Files",
+						"message":"Starting upload...",
+						"aria":
+						{
+						}
+					};
+					var dlg = $.ibi.ibxDialog.createMessageDialog(options);
+					var contentBox = dlg.ibxWidget("member", "contentBox");
+					var msg = dlg.ibxWidget("member", "message");
+					var pBar = $("<div tabindex='-1' class='test-prog-bar'>").ibxProgressBar({aria:{describedby:msg.prop("id")}});
+					dlg.ibxWidget("add", pBar);
+					dlg.ibxWidget("open").on("ibx_close", function(e){window.clearInterval(prog_id);});
+					prog_id = window.setInterval(function(msg, pBar, timestamp)
+					{
+						var dlg = $(this);
+						var curVal = pBar.ibxWidget("option", "curVal") + 10;
+						if(curVal >= 100)
+						{
+							var btnCancel = this.ibxWidget("member", "btnCancel");
+							btnCancel.ibxWidget("option", "text", "Done");
+							window.clearInterval(prog_id);
+						}
+						pBar.ibxWidget("option", "curVal", curVal);
+						msg.ibxWidget("option", "text", sformat("Complete {1}%", curVal));
+					}.bind(dlg, msg, pBar), 500);
+				});
+
+				$(".btn-start-waiting").on("click", function(e)
+				{
+					var btn = $(this);
+					var date = new Date();
+					ibx.waitStart(null, "Waiting").on("ibx_waiting", function(startDate, e, wait)
+					{
+						wait = $(wait);
+						var date = new Date();
+						var elapsed = (5 - (date - startDate)/1000).toPrecision(1);
+						wait.ibxWidget("message", sformat("Waiting for {1} seconds.", elapsed));
+						if(elapsed <= 0)
+							ibx.waitStop();
+					}.bind(this, date))
+				});
+
+				var carousel = $(".test-carousel");
+				for(var i = 0; i < 25; ++i)
+				{
+					var w = GetRandomInt(50, 200);
+					var item = $("<div class='test-carousel-tile'>").css("width", w).attr("id", "item" + i).text("Carousel Item " + i);
+					carousel.ibxWidget("add", item);
+				}
+
+				var grid = $(".ibx-data-grid").ibxWidget("initGrid", 100, 4);
+				var rows = grid.ibxWidget("getRow");
+				for(var i = 0; i < rows.length; ++i)
+				{
+
+				}
+
+
+				$.each($.ibi.ibxCommand.cmds, function(key, cmd)
+				{
+					cmd.on("ibx_triggered ibx_checkchanged ibx_uservaluechanged", function(e)
+					{
+					});
+				});
+
+			}, null, true);
+		</script>
+		<style type="text/css">
+			body
+			{
+				position:absolute;
+				left:0px;
+				top:0px;
+				right:0px;
+				bottom:0px;
+				overflow:auto;
+			}
+			
+			.test-ctrl
+			{
+				flex:0 0 auto;
+				margin:5px;
+			}
+			.dlg
+			{
+				width:400px;
+				height:300px;
+			}
+			.dlg-ctl-label
+			{
+				margin:10px 0px 2px 0px;
+			}
+			.dlg-txt-body
+			{
+				flex:1 1 auto;
+			}
+
+			.test-r-slider, .test-h-slider
+			{
+				width:200px;
+			}
+
+			.test-tab-pane
+			{
+				width:300px;
+				height:200px;
+			}
+
+			.tab-content
+			{
+				position:absolute;
+				left:0px;
+				top:0px;
+				right:0px;
+				bottom:0px;
+				margin:10px;
+			}
+
+			.test-carousel
+			{
+				border:1px solid #aaa;
+				border-radius:.25em;
+				max-width:413px;
+				overflow:auto;
+			}
+			.test-carousel-tile
+			{
+				width:100px;
+				height:100px;
+				padding:5px;
+				border:1px solid #888;
+				border-radius:.25em;
+				box-shadow:3px 3px 3px 0px #aaa;
+				text-align:center;
+				margin:5px;
+			}
+			.test-grid
+			{
+				display:none;
+				width:400px;
+				height:400px;
+				border:1px solid #ccc;
+				font-size:11px;
+			}
+			.test-tree
+			{
+				padding:5px;
+				height:150px;
+				width:150px;
+				border:1px solid #ccc;
+				border-radius:5px;
+				overflow:auto;
+			}
+
+			.test-menubar
+			{
+				align-self:flex-start;
+				border:1px solid #aaa;
+				border-radius:.25em;
+			}
+
+			.rg-test *
+			{
+				margin-left:.1em;
+			}
+
+			.test-prog-bar
+			{
+				width:200px;
+				margin:5px 0px 5px 0px;
+			}
+
+			.test-select
+			{
+				width:150px;
+			}
+
+			.test-spinner
+			{
+				width:50px;
+			}
+
+			.test-text-ctrl
+			{
+				width:100px;
+			}
+		</style>
+	</head>
+	<body class="ibx-root" data-ibx-type="ibxVBox" data-ibxp-wrap="false">
+		<div class="cmd cmd-cut" data-ibx-type="ibxCommand" data-ibxp-id="cmdCut" data-ibxp-shortcut="Ctrl+X"></div>
+		<div class="cmd cmd-copy" data-ibx-type="ibxCommand" data-ibxp-id="cmdCopy" data-ibxp-shortcut="Ctrl+C"></div>
+		<div class="cmd cmd-paste" data-ibx-type="ibxCommand" data-ibxp-id="cmdPaste" data-ibxp-shortcut="Ctrl+V"></div>
+		<div class="cmd cmd-undo" data-ibx-type="ibxCommand" data-ibxp-id="cmdUndo" data-ibxp-shortcut="Ctrl+Z"></div>
+		<div class="cmd cmd-redo" data-ibx-type="ibxCommand" data-ibxp-id="cmdRedo" data-ibxp-shortcut="Ctrl+Y"></div>
+		
+		<div class="test-ctrl test-menubar" tabIndex="0" aria-label="Example IBX horizontal menu bar" data-ibx-type="ibxHMenuBar" data-ibxp-aria.label="Menus">
+			<div class="menu-btn-file" data-ibx-type="ibxMenuButton" data-ibxp-text="File">
+				<div data-ibx-type="ibxMenuItem" data-ibxp-label-options='{"glyph":"fiber_new", "glyphClasses":"material-icons"}'>New</div>
+				<div data-ibx-type="ibxMenuItem" data-ibxp-label-options='{"glyph":"open_in_new", "glyphClasses":"material-icons"}'>Open...</div>
+				<div data-ibx-type="ibxMenuSeparator"></div>
+				<div data-ibx-type="ibxMenuItem" data-ibxp-label-options='{"glyph":"save", "glyphClasses":"material-icons"}'>Save</div>
+				<div data-ibx-type="ibxMenuItem">Save As...</div>
+				<div data-ibx-type="ibxMenuSeparator"></div>
+				<div data-ibx-type="ibxMenuItem" data-ibxp-label-options='{"glyph":"exit_to_app", "glyphClasses":"material-icons"}'>Exit</div>
+			</div>
+			<div class="menu-btn-edit" data-ibx-type="ibxMenuButton" data-ibxp-text="Edit" data-ibxp-menu-options.multi-select="true">
+				<div data-ibx-type="ibxMenuItem" data-ibxp-command="cmdUndo" data-ibxp-label-options='{"glyph":"undo", "glyphClasses":"material-icons"}'>Undo</div>
+				<div data-ibx-type="ibxMenuItem" data-ibxp-command="cmdRedo" data-ibxp-label-options='{"glyph":"redo", "glyphClasses":"material-icons"}'>Redo</div>
+				<div data-ibx-type="ibxMenuSeparator"></div>
+				<div data-ibx-type="ibxMenuItem" data-ibxp-command="cmdCut" data-ibxp-label-options='{"glyph":"content_cut", "glyphClasses":"material-icons"}'>Cut</div>
+				<div data-ibx-type="ibxMenuItem" data-ibxp-command="cmdCopy" data-ibxp-label-options='{"glyph":"content_copy", "glyphClasses":"material-icons"}'>Copy</div>
+				<div data-ibx-type="ibxMenuItem" data-ibxp-command="cmdPaste" data-ibxp-label-options='{"glyph":"content_paste", "glyphClasses":"material-icons"}'>Paste</div>
+				<div data-ibx-type="ibxMenuSeparator"></div>
+				<div data-ibx-type="ibxMenuItem" data-ibxp-label-options='{"glyph":"find_in_page", "glyphClasses":"material-icons"}'>Find...</div>
+				<div data-ibx-type="ibxMenuSeparator"></div>
+				<div data-ibx-type="ibxCheckMenuItem" data-ibxp-command="cmdCheck" data-ibxp-label-options='{"glyph":"accessibility", "glyphClasses":"material-icons"}'>Check 1</div>
+				<div data-ibx-type="ibxCheckMenuItem" data-ibxp-label-options='{"glyph":"android", "glyphClasses":"material-icons"}'>Check 2</div>
+				<div data-ibx-type="ibxCheckMenuItem" data-ibxp-label-options='{"glyph":"face", "glyphClasses":"material-icons"}'>Check 3</div>
+			</div>
+			<div class="menu-btn-view" data-ibx-type="ibxMenuButton" data-ibxp-text="View">
+				<div class="rg-view-as" data-ibx-type="ibxRadioGroup" data-ibxp-name="rgViewAs" data-ibxp-command="cmdRadioMenu"></div>
+				<div class="cmd cmd-radio-menu" data-ibx-type="ibxCommand" data-ibxp-id="cmdRadioMenu"></div>
+				<div id="asList" data-ibx-type="ibxRadioMenuItem" data-ibxp-group="rgViewAs" data-ibxp-user-value="list" data-ibxp-label-options='{"glyph":"view_list", "glyphClasses":"material-icons"}' data-ibxp-checked="true">as List</div>
+				<div id="asIcons" data-ibx-type="ibxRadioMenuItem" data-ibxp-group="rgViewAs" data-ibxp-user-value="icons" data-ibxp-label-options='{"glyph":"picture_in_picture", "glyphClasses":"material-icons"}'>as Icons</div>
+				<div id="asDetails" data-ibx-type="ibxRadioMenuItem" data-ibxp-group="rgViewAs" data-ibxp-user-value="details" data-ibxp-label-options='{"glyph":"search", "glyphClasses":"material-icons"}'>as Details</div>
+				<div id="" data-ibx-type="ibxMenuSeparator"></div>
+				<div id="viewAsMagic" data-ibx-type="ibxMenuItem">
+					View as Magic
+					<div class="magic-menu" data-ibx-type="ibxMenu">
+						<div id="pullARabbit" data-ibx-type="ibxMenuItem" data-ibxp-label-options='{"glyph":"pets", "glyphClasses":"material-icons"}'>
+							Pull a Rabbit!
+							<div class="magic-submenu" data-ibx-type="ibxMenu">
+								<div id="outOfHat" data-ibx-type="ibxMenuItem" data-ibxp-label-options='{"glyphClasses":"fa fa-circle-o-notch fa-spin"}'>Out of Your Hat!</div>
+								<div id="orHere" data-ibx-type="ibxMenuItem" data-ibxp-label-options='{"glyphClasses":"fa fa-spinner fa-spin"}'>Or Here</div>
+								<div id="notThere" data-ibx-type="ibxMenuItem" data-ibxp-label-options='{"glyphClasses":"fa fa-cog fa-spin"}'>Not There</div>
+								<div id="lookBehind" data-ibx-type="ibxMenuItem" data-ibxp-label-options='{"glyphClasses":"fa fa-refresh fa-spin"}'>Look Behind You!</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div data-ibx-type="ibxMenuButtonSeparator"></div>
+			<div class="menu-btn-window" data-ibx-type="ibxMenuButton">
+				Window
+				<div data-ibx-type="ibxMenuItem">Cascade</div>
+				<div data-ibx-type="ibxMenuItem">Tile</div>
+				<div data-ibx-type="ibxMenuSeparator"></div>
+				<div data-ibx-type="ibxMenuItem">Maximize</div>
+				<div data-ibx-type="ibxMenuItem">Minimize</div>
+			</div>
+			<div class="menu-btn-help" title="Help" data-ibx-type="ibxMenuButton" data-ibxp-glyph="help_outline" data-ibxp-glyph-classes="material-icons md-14"></div>
+		</div>
+
+		<div tabindex="0" class="test-ctrl test-carousel" data-ibx-type="ibxHCarousel"></div>
+
+		<div tabindex="0" class="test-ctrl test-grid" data-ibx-type="ibxDataGrid" data-ibxp-indent-column="0"></div>
+
+		<div tabindex="0" class="test-ctrl test-tree" data-ibx-type="ibxTree">
+			<div data-ibx-type="ibxTreeNode" data-ibxp-expanded="true">Root Item
+				<div data-ibx-type="ibxTreeNode" data-ibxp-expanded="true">Folder 1
+					<div data-ibx-type="ibxTreeNode">Item 1</div>
+					<div data-ibx-type="ibxTreeNode">Item 2</div>
+					<div data-ibx-type="ibxTreeNode">Item 3</div>
+				</div>
+				<div data-ibx-type="ibxTreeNode" data-ibxp-expanded="true">Folder 2
+					<div data-ibx-type="ibxTreeNode">Item 1</div>
+					<div data-ibx-type="ibxTreeNode">Item 2</div>
+					<div data-ibx-type="ibxTreeNode">Item 3</div>
+				</div>
+			</div>
+		</div>
+
+		<div tabindex="0" class="test-ctrl test-tree" data-ibx-type="ibxTreeBrowser">
+			<div data-ibx-type="ibxTreeBrowserNode">Root Item
+				<div data-ibx-type="ibxTreeBrowserNode">Folder 1
+					<div data-ibx-type="ibxTreeBrowserNode">Item 1</div>
+					<div data-ibx-type="ibxTreeBrowserNode">Item 2</div>
+					<div data-ibx-type="ibxTreeBrowserNode">Item 3</div>
+				</div>
+				<div data-ibx-type="ibxTreeBrowserNode">Folder 2
+					<div data-ibx-type="ibxTreeBrowserNode">Item 1</div>
+					<div data-ibx-type="ibxTreeBrowserNode">Item 2</div>
+					<div data-ibx-type="ibxTreeBrowserNode">Item 3</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="test-ctrl btn-start-progress" tabIndex="0" data-ibx-type="ibxButton">Start Progress...</div>
+		<div class="test-ctrl btn-start-waiting" tabIndex="0" data-ibx-type="ibxButton">Start Waiting (5 Seconds)</div>
+
+		<button tabIndex="0" class="test-ctrl">Native</button>
+		<div tabIndex="0" class="test-ctrl test-button" data-ibx-type="ibxButton">Press Me!</div>
+		<div tabIndex="0" class="test-ctrl btn-dialog" data-ibx-type="ibxButton">Dialog
+			<div class="dlg" data-ibx-type="ibxDialog" data-ibxp-destroy-on-close="false" data-ibxp-auto-size="false" data-ibxp-resizable="true">
+				<div id="txtTitleLabel" class="dlg-ctl-label" data-ibx-type="ibxLabel">Enter Title:</div>
+				<div tabindex="0" class="txt-title" data-ibx-type="ibxTextField" data-ibxp-placeholder="Enter one line of text" data-ibxp-aria.labelled-By="txtTitleLabel"></div>
+				<div id="txtBodyLabel" class="dlg-ctl-label" data-ibx-type="ibxLabel">Enter Text Here:</div>
+				<div tabindex="0" class="dlg-txt-body" data-ibx-type="ibxTextArea"  data-ibxp-placeholder="Enter multiple line of text" data-ibxp-aria.labelled-by="txtBodyLabel" data-ibxp-aria.described-by="txtBodyLabel"></div>
+			</div>
+		</div>
+		<div class="test-ctrl split-menu-button" tabIndex="0" data-ibx-type="ibxHSplitMenuButton" data-ibxp-default-menu-item=".def-item" data-ibxp-glyph-classes="fa fa-12 fa-gears">
+			Split Horizontal
+			<div data-ibx-type="ibxMenu">
+				<div data-ibxp-aria.labelled-by="xx" data-ibx-type="ibxMenuItem">Menu Item</div>
+				<div class="def-item" data-ibx-type="ibxMenuItem">Default Menu Item</div>
+				<div data-ibx-type="ibxMenuItem">Menu Item</div>
+			</div>
+		</div>
+		<div class="test-ctrl split-menu-button" tabIndex="0" data-ibx-type="ibxVSplitMenuButton" data-ibxp-default-menu-item=".def-item" data-ibxp-glyph-classes="fa fa-12 fa-gears">
+			Split Vertical
+			<div data-ibx-type="ibxMenu">
+				<div class="def-item" data-ibx-type="ibxMenuItem">Default Menu Item</div>
+				<div data-ibx-type="ibxMenuItem">Menu Item</div>
+				<div data-ibx-type="ibxMenuItem">Menu Item</div>
+			</div>
+		</div>
+
+		<div><input tabIndex="0" class="test-ctrl" id="nativeCheckbox" type="checkbox" aria-label="Native"/><label for="nativeCheckbox">Native</label></div>
+		<div tabIndex="0" class="test-ctrl test-check" data-ibx-type="ibxCheckBoxSimple" data-ibxp-command="cmdCheck">Check 1</div>
+		<div tabIndex="0" class="test-ctrl" data-ibx-type="ibxCheckBoxSimple">Check 2</div>
+		<div tabIndex="0" class="test-ctrl" data-ibx-type="ibxCheckBoxSimple">Check 3</div>
+		<div tabIndex="0" class="test-ctrl" data-ibx-type="ibxCheckBox">Check Box</div>
+		<div id="switchLabel" class="test-ctrl" data-ibx-type="ibxLabel">Switch</div>
+		<div tabIndex="0" class="test-ctrl" data-ibx-type="ibxSwitch" data-ibxp-aria.labelledby="switchLabel"></div>
+
+		<div><input tabIndex="0" class="test-ctrl" id="nativeRadio" type="radio" aria-label="Native"/><label for="nativeRadio">Native</label></div>
+		<div tabIndex="0" class="test-ctrl" data-ibx-type="ibxRadioGroup" data-ibxp-name="rgTestBtns1" data-ibxp-command="cmdRadioBtns">
+			<div class="cmd-radio-btns" data-ibx-type="ibxCommand" data-ibxp-id="cmdRadioBtns"></div>
+			<div class="test-ctrl test-radio" data-ibx-type="ibxRadioButtonSimple" data-ibxp-group="rgTestBtns1" data-ibxp-user-value="r1">Radio 1</div>
+			<div class="test-ctrl test-radio" data-ibx-type="ibxRadioButtonSimple" data-ibxp-group="rgTestBtns1" data-ibxp-user-value="r2">Radio 2</div>
+			<div class="test-ctrl test-radio" data-ibx-type="ibxRadioButtonSimple" data-ibxp-group="rgTestBtns1" data-ibxp-user-value="r3">Radio 3</div>
+		</div>
+
+		<select class="test-ctrl" style="display:inline-block;">
+			<option>Option 1</option>
+			<option>Option 2</option>
+			<option>Option 3</option>
+			<option>Option 4</option>
+			<option>Option 5</option>
+		</select>
+		<div class="test-ctrl select-menu-button" tabIndex="0" data-ibx-type="ibxSelectMenuButton" data-ibxp-select-style="true" data-ibxp-use-value-as-text="true">
+			Select Menu Horizontal
+			<div data-ibx-type="ibxCheckMenuItem" data-ibxp-user-value="mi1">Select Item 1</div>
+			<div data-ibx-type="ibxCheckMenuItem" data-ibxp-user-value="mi2">Select Item 2</div>
+			<div data-ibx-type="ibxCheckMenuItem" data-ibxp-user-value="mi3">Select Item 3</div>
+		</div>
+		<div class="test-ctrl select-menu-button" tabIndex="0" data-ibx-type="ibxSelectMenuButton" data-ibxp-select-style="true" data-ibxp-multi-select="true" data-ibxp-use-value-as-text="true">
+			Select Menu Multi Horizontal
+			<div data-ibx-type="ibxCheckMenuItem" data-ibxp-user-value="mi1">Select Item 1</div>
+			<div data-ibx-type="ibxCheckMenuItem" data-ibxp-user-value="mi2">Select Item 2</div>
+			<div data-ibx-type="ibxCheckMenuItem" data-ibxp-user-value="mi3">Select Item 3</div>
+		</div>
+		<div class="test-ctrl select-menu-button" tabIndex="0" data-ibx-type="ibxVSelectMenuButton" data-ibxp-select-style="true" data-ibxp-use-value-as-text="true">
+			Select Menu Vertical
+			<div data-ibx-type="ibxCheckMenuItem" data-ibxp-user-value="mi1">Select Item 1</div>
+			<div data-ibx-type="ibxCheckMenuItem" data-ibxp-user-value="mi2">Select Item 2</div>
+			<div data-ibx-type="ibxCheckMenuItem" data-ibxp-user-value="mi3">Select Item 3</div>
+		</div>
+		<div class="test-ctrl select-menu-button" tabIndex="0" data-ibx-type="ibxVSelectMenuButton" data-ibxp-select-style="true" data-ibxp-multi-select="true" data-ibxp-use-value-as-text="true">
+			Select Menu Multi Vertical
+			<div data-ibx-type="ibxCheckMenuItem" data-ibxp-user-value="mi1">Select Item 1</div>
+			<div data-ibx-type="ibxCheckMenuItem" data-ibxp-user-value="mi2">Select Item 2</div>
+			<div data-ibx-type="ibxCheckMenuItem" data-ibxp-user-value="mi3">Select Item 3</div>
+		</div>
+		<div class="test-ctrl test-select" tabindex="0" data-ibx-type="ibxSelect">
+			<div data-ibx-type="ibxRadioGroup" data-ibxp-name="rgTestBtns2" data-ibxp-command="cmdRadioBtns"></div>
+			<div class="test-select-item" data-ibx-type="ibxSelectItem">Item s1</div>
+			<div data-ibx-type="ibxMenuSeparator"></div>
+			<div class="test-select-item" data-ibx-type="ibxSelectCheckItem" data-ibxp-command="cmdCheck">Item c1</div>
+			<div data-ibx-type="ibxMenuSeparator"></div>
+			<div class="test-select-item" data-ibx-type="ibxSelectRadioItem" data-ibxp-group="rgTestBtns2" data-ibxp-user-value="r1">Radio 1</div>
+			<div class="test-select-item" data-ibx-type="ibxSelectRadioItem" data-ibxp-group="rgTestBtns2" data-ibxp-user-value="r2">Radio 2</div>
+			<div class="test-select-item" data-ibx-type="ibxSelectRadioItem" data-ibxp-group="rgTestBtns2" data-ibxp-user-value="r3">Radio 3</div>
+		</div>
+		<div class="test-ctrl test-select test-select-list" tabindex="0" data-ibx-type="ibxSelect" data-ibxp-readonly="true">
+			<div data-ibx-type="ibxRadioGroup" data-ibxp-name="rgTestBtns3" data-ibxp-command="cmdRadioBtns"></div>
+			<div class="test-select-item" data-ibx-type="ibxSelectItem">Item s1</div>
+			<div data-ibx-type="ibxMenuSeparator"></div>
+			<div class="test-select-item" data-ibx-type="ibxSelectCheckItem" data-ibxp-command="cmdCheck">Item c1</div>
+			<div data-ibx-type="ibxMenuSeparator"></div>
+			<div class="test-select-item" data-ibx-type="ibxSelectRadioItem" data-ibxp-group="rgTestBtns3" data-ibxp-user-value="r1">Radio 1</div>
+			<div class="test-select-item" data-ibx-type="ibxSelectRadioItem" data-ibxp-group="rgTestBtns3" data-ibxp-user-value="r2">Radio 2</div>
+			<div class="test-select-item" data-ibx-type="ibxSelectRadioItem" data-ibxp-group="rgTestBtns3" data-ibxp-user-value="r3">Radio 3</div>
+		</div>
+		<div class="test-ctrl test-select test-select-paged" tabindex="0" data-ibx-type="ibxSelectPaged" data-ibxp-search="true" data-ibxp-selection-controls="true"
+			data-ibxp-enable-paging-trigger="0" data-ibxp-page-size="2">
+			<div class="test-select-item" data-ibx-type="ibxSelectItem">Item s1</div>
+			<div class="test-select-item" data-ibx-type="ibxSelectItem">Item s2</div>
+			<div class="test-select-item" data-ibx-type="ibxSelectItem">Item s3</div>
+			<div class="test-select-item" data-ibx-type="ibxSelectItem">Item s4</div>
+			<div class="test-select-item" data-ibx-type="ibxSelectItem">Item s5</div>
+		</div>
+		<div class="test-ctrl test-select test-select-paged" tabindex="0" data-ibx-type="ibxSelectItemList" data-ibxp-multi-select="true">
+			<div class="test-select-item" data-ibx-type="ibxSelectItem">Item s1</div>
+			<div class="test-select-item" data-ibx-type="ibxSelectItem">Item s2</div>
+			<div class="test-select-item" data-ibx-type="ibxSelectItem">Item s3</div>
+			<div class="test-select-item" data-ibx-type="ibxSelectItem">Item s4</div>
+			<div class="test-select-item" data-ibx-type="ibxSelectItem">Item s5</div>
+		</div>
+		<div class="test-ctrl test-select test-select-paged" tabindex="0" data-ibx-type="ibxSelectItemListPaged" data-ibxp-search="true" data-ibxp-selection-controls="true" data-ibxp-enable-paging-trigger="0" data-ibxp-page-size="2">
+			<div class="test-select-item" data-ibx-type="ibxSelectItem">Item s1</div>
+			<div class="test-select-item" data-ibx-type="ibxSelectItem">Item s2</div>
+			<div class="test-select-item" data-ibx-type="ibxSelectItem">Item s3</div>
+			<div class="test-select-item" data-ibx-type="ibxSelectItem">Item s4</div>
+			<div class="test-select-item" data-ibx-type="ibxSelectItem">Item s5</div>
+		</div>
+
+		<div class="test-ctrl test-h-slider" tabIndex="0" data-ibx-type="ibxHSlider" data-ibxp-value-text-pos="end" data-ibxp-min-text-pos="center" data-ibxp-max-text-pos="center"></div>
+		<div class="test-ctrl test-r-slider" tabIndex="0" data-ibx-type="ibxHRange" data-ibx-options="{value:25, value2:75, valueTextPos:'end', minTextPos:'center', maxTextPos:'center'}"></div>
+
+		<div class="test-ctrl test-spinner" tabIndex="0" data-ibx-type="ibxSpinner"></div>
+
+		<div id="test-ctrl txtFieldLabel" data-ibx-type="ibxLabel" data-ibxp-for=".test-text-field">Text Field Label:</div>
+		<div class="test-ctrl test-text-ctrl test-text-field" tabIndex="0" data-ibx-type="ibxTextField" data-ibxp-aria.labelledby="txtFieldLabel" data-ibxp-placeholder="Placeholder"></div>
+
+		<div id="test-ctrl txtAreaLabel" data-ibx-type="ibxLabel" data-ibxp-for=".test-text-area">Text Area Label:</div>
+		<div class="test-ctrl test-text-ctrl test-text-area" tabIndex="0" data-ibx-type="ibxTextArea" data-ibx-type="ibxTextField" data-ibxp-aria.labelledby="txtAreaLabel" data-ibxp-placeholder="Placeholder"></div>
+
+		<div class="test-ctrl test-tab-pane" tabIndex="0" data-ibx-type="ibxTabPane" data-ibxp-inline="true" data-ibxp-aria.label="Tabs">
+			<div class="tab-page-1" data-ibx-type="ibxTabPage">Page 1
+				<div class="tab-content" data-ibx-type="ibxVBox" data-ibxp-align="start" data-ibxp-justify="start">
+					<div>
+						<div tabIndex="0" data-ibx-type="ibxButton">Button1</div>
+						<div tabIndex="0" data-ibx-type="ibxButton">Button2</div>
+						<div tabIndex="0" data-ibx-type="ibxButton">Button3</div>
+					</div>
+				</div>
+			</div>
+			<div class="tab-page-2" data-ibx-type="ibxTabPage">Page 2
+				<div class="test-tab-content" data-ibx-type="ibxVBox" data-ibxp-align="center" data-ibxp-justify="center">
+					<div data-ibx-type="ibxLabel">Tab Page</div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
