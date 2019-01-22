@@ -53,7 +53,12 @@
 			<option>Item 2</option>
 			<option>Item 3</option>
 		</select>
-		<div tabindex="0" class="menu-btn single-select" data-ibxp-user-value="item1" data-ibx-type="ibxSelectMenuButton" data-ibxp-editable="true" data-ibxp-use-value-as-text="true">ibxMenuSelect-single
+		<div tabindex="0" class="menu-btn no-select" data-ibx-type="ibxMenuButton" data-ibxp-use-value-as-text="true">ibxMenuSelect-single
+			<div data-ibx-type="ibxCheckMenuItem" data-ibxp-user-value="item1">Item 1</div>
+			<div data-ibx-type="ibxCheckMenuItem" data-ibxp-user-value="item2">Item 2</div>
+			<div data-ibx-type="ibxCheckMenuItem" data-ibxp-user-value="item3">Item 3</div>
+		</div>
+		<div tabindex="0" class="menu-btn single-select" data-ibx-type="ibxSelectMenuButton" data-ibxp-editable="true" data-ibxp-use-value-as-text="true">ibxMenuSelect-single
 			<div data-ibx-type="ibxCheckMenuItem" data-ibxp-user-value="item1">Item 1</div>
 			<div data-ibx-type="ibxCheckMenuItem" data-ibxp-user-value="item2">Item 2</div>
 			<div data-ibx-type="ibxCheckMenuItem" data-ibxp-user-value="item3">Item 3</div>
