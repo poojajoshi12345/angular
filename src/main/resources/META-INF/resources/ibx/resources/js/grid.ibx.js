@@ -221,7 +221,7 @@ $.fn.ibxDataGridRow = $.ibi.ibxDataGridRow = function()
 				addRow:function(row)
 				{
 					var row = $(row).ibxDataGridRow("setParent", this.element);
-					row.ibxDataGridRow("show", this.isVisible());
+					row.ibxDataGridRow("show", this.isVisible() && this.isExpanded());
 					this.container = row.length || this.container;
 				},
 				removeRow:function(row)
@@ -244,7 +244,7 @@ $.fn.ibxDataGridRow = $.ibi.ibxDataGridRow = function()
 				},
 				isVisible:function()
 				{
-					return this.element.ibxHasClass("dgrid-row-hidden");
+					return !this.element.ibxHasClass("dgrid-row-hidden");
 				},
 				isExpanded:function()
 				{
@@ -332,10 +332,10 @@ $.fn.ibxDataGridRow = $.ibi.ibxDataGridRow = function()
 					{
 						"role":"row",
 						"aria-level":this.depth(),
-						"aria-hidden":this.element.ibxHasClass("dgrid-row-hidden"),
+						"aria-hidden":this.isVisible(),
+						"aria-expanded":this.isExpanded(),
 					};
 					var el = this.element[0];
-					ariaOpts["aria-hidden"] = (el.style.display == "none" || el.style.visibility == "hidden");
 					this.element.attr(ariaOpts);
 					this.header.attr({"role":"rowheader", "aria-hidden":ariaOpts["aria-hidden"]});
 				},
@@ -505,11 +505,25 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 			var row = rows[i];
 			var opts = ibx.getIbxMarkupOptions(row);
 			$(row).ibxDataGridRow(opts);
+			this.addRow(row);
+			this._buildTreeFromMarkup(row);
 		}
-
-		//add rows and do another refresh so they will be configured correctly.
-		this.addRows(rows);
 		this.refresh();
+	},
+	_buildTreeFromMarkup:function(parentRow)
+	{
+		parentRow = $(parentRow);
+		var children = !parentRow.length ? this.element.children("[data-grid-row]") : parentRow.children("[data-grid-row]");
+		children.detach();
+		for(var i = 0; i < children.length; ++i)
+		{
+			var childRow = children[i];
+			var opts = ibx.getIbxMarkupOptions(childRow);
+			$(childRow).ibxDataGridRow(opts);
+			this.addRow(childRow);
+			parentRow.ibxDataGridRow("addRow", childRow);
+			this._buildTreeFromMarkup(childRow);
+		}
 	},
 	initGrid:function(nRows, nCols, colConfig)
 	{
