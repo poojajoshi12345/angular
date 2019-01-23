@@ -452,7 +452,7 @@ $.widget("ibi.ibxMenuButton", $.ibi.ibxButtonSimple,
 	{
 		var options = this.options;
 		options.position.of = this.element[0];
-		this.element.on({"click": this._onButtonMouseEvent.bind(this), "keydown": this._onButtonKeyEvent.bind(this), "keyup": this._onButtonKeyEvent.bind(this)});
+		this.element.on({"click": this._onClickEvent.bind(this)});
 
 		//save bound functions in case someone resets the menu option...need to remove the event listeners.
 		this._onMenuOpenCloseBound = this._onMenuOpenClose.bind(this);
@@ -488,7 +488,7 @@ $.widget("ibi.ibxMenuButton", $.ibi.ibxButtonSimple,
 	{
 		this.options.menu.ibxWidget("remove", el, destroy, refresh);
 	},
-	_onButtonMouseEvent:function(e)
+	_onClickEvent:function(e)
 	{
 		//[HOME-584]...my bad.
 		var options = this.options;
@@ -499,7 +499,7 @@ $.widget("ibi.ibxMenuButton", $.ibi.ibxButtonSimple,
 		this.option("menu", menu);
 		options.menu.ibxWidget("option", {position:options.position}).ibxWidget("open");
 	},
-	_onButtonKeyEvent:function(e)
+	_onKeyEvent:function(e)
 	{
 		var eType = e.type;
 		//other keys - enter/space will trigger the click as a normal button will.
@@ -507,10 +507,12 @@ $.widget("ibi.ibxMenuButton", $.ibi.ibxButtonSimple,
 			this.element.trigger("click");
 		else
 		if(eType == "keydown" && e.keyCode == $.ui.keyCode.DOWN)
-			e.preventDefault();
+			e.preventDefault();//stops the body from scrolling
 		else
 		if(e.keyCode == $.ui.keyCode.ESCAPE)
 			this.options.menu.ibxWidget("close");
+
+		this._super(e);
 	},
 	_onMenuOpenClose:function(e)
 	{
@@ -549,10 +551,11 @@ $.widget("ibi.ibxVMenuButton", $.ibi.ibxMenuButton,
 {
 	options:{position:{at:"right top"}},
 	_widgetClass: "ibx-vmenu-button",
-	_onButtonKeyEvent:function(e)
+	_onKeyEvent:function(e)
 	{
 		if(e.keyCode == $.ui.keyCode.RIGHT)
 			this.element.trigger("click");
+		this._super(e);
 	},
 	_refresh:function()
 	{
@@ -570,7 +573,7 @@ $.widget("ibi.ibxSelectMenuButton", $.ibi.ibxMenuButton,
 	options:
 	{
 		"editable":false,
-		"filterValues":true,
+		"filterValues":false,
 		"filterNoCase":true,
 		"showArrow":true,
 		"useValueAsText":false,
@@ -589,8 +592,9 @@ $.widget("ibi.ibxSelectMenuButton", $.ibi.ibxMenuButton,
 		this._super();
 		var options = this.options;
 		options.defaultText = options.defaultText || options.text;
-		this._text.ibxEditable().on("click", this._onLabelClick.bind(this)).on("ibx_textchanging", this._onTextChanging.bind(this));
 		options.menu.on("ibx_beforeopen", this._onMenuBeforeOpen.bind(this));
+		this._text.ibxEditable({commitKey:null, cancelKey:null}).on("ibx_textchanging", this._onTextChanging.bind(this));
+		this.element.on("ibx_widgetfocus", this._onFocusEvent.bind(this));
 	},
 	_setAccessibility:function(accessible, aria)
 	{
@@ -612,18 +616,10 @@ $.widget("ibi.ibxSelectMenuButton", $.ibi.ibxMenuButton,
 	{
 		return this._text.ibxEditable("isEditing");
 	},
-	_onLabelClick:function(e)
+	_onFocusEvent:function(e)
 	{
-		$(e.target).ibxEditable("startEditing");
-	},
-	_onMenuBeforeOpen:function(e)
-	{
-		this.options.menu.css("minWidth", this.element.width());
-	},
-	_onMenuOpenClose:function(e)
-	{
-		if(e.type == "ibx_close")
-			this._text.focus();
+		if(this.options.editable && !this._text.is(e.relatedTarget))
+			this._text.ibxEditable("startEditing");
 	},
 	_onMenuSelect:function(e, data)
 	{
@@ -648,11 +644,23 @@ $.widget("ibi.ibxSelectMenuButton", $.ibi.ibxMenuButton,
 		this.userValue(userVal);
 		this._super(e, data);
 	},
+	_onMenuBeforeOpen:function(e)
+	{
+		this.options.menu.css("minWidth", this.element.width());
+	},
+	_onMenuOpenClose:function(e)
+	{
+		if(e.type == "ibx_close")
+			this.element.focus();
+	},
 	_onKeyEvent:function(e)
 	{
-		var isEditing = this.isEditing();
-		if(!isEditing)
-			this._super(e)
+		this._super(e);
+		return;
+		
+		var eType = e.type;
+		if(eType == "keydown" && e.keyCode == $.ui.keyCode.DOWN)
+			this.options.menu.focus();
 	},
 	_onTextChanging:function(e)
 	{
@@ -702,7 +710,7 @@ $.widget("ibi.ibxSelectMenuButton", $.ibi.ibxMenuButton,
 		this.element.ibxWidget("option", "text", (options.useValueAsText && options.valueText) ? options.valueText : options.defaultText);
 		this.element.prop("title", options.valueText).ibxToggleClass("ibx-select-style", options.selectStyle);
 		
-		this._text.ibxToggleClass("ibx-select-menu-button-label-editable", options.editable);
+		this._text.ibxToggleClass("ibx-select-menu-button-label-editable", options.editable).attr("tabindex", options.editable ? "-1" : null);
 		options.menu.ibxWidget("option", "autoFocus", !options.editable);
 		this._super();
 	}
@@ -714,10 +722,11 @@ $.widget("ibi.ibxVSelectMenuButton", $.ibi.ibxSelectMenuButton,
 {
 	options:{position:{at:"right top"}},
 	_widgetClass: "ibx-vselectmenu-button",
-	_onMenuButtonKeyEvent:function(e)
+	_onKeyEvent:function(e)
 	{
 		if(e.keyCode == $.ui.keyCode.RIGHT)
 			this.element.trigger("click");
+		this._super(e);
 	},
 	_refresh:function()
 	{
@@ -763,7 +772,7 @@ $.widget("ibi.ibxSplitMenuButton", $.ibi.ibxButtonSimple,
 		var menu = this.element.children(".ibx-popup");
 		var menuBtn = this._menuBtn = $("<div>").append(menu).ibxMenuButton().on("mousedown click", this._onMenuButtonMouseEvent.bind(this));
 		var separator = this._separator = $("<div class='split-separator'>");
-		this.element.append(separator, menuBtn).on({"click":this._onBtnClick.bind(this), "keydown":this._onBtnKeyEvent.bind(this), "keyup":this._onBtnKeyEvent.bind(this)});
+		this.element.append(separator, menuBtn).on({"click":this._onBtnClick.bind(this)});
 	},
 	menu:function(menu)
 	{
@@ -781,7 +790,7 @@ $.widget("ibi.ibxSplitMenuButton", $.ibi.ibxButtonSimple,
 		var defItem = menu.ibxWidget("children", ".ibx-split-button-default-item");
 		defItem.trigger("click");
 	},
-	_onBtnKeyEvent:function(e)
+	_onKeyEvent:function(e)
 	{
 		var eType = e.type;
 		if(eType == "keyup" && e.keyCode == $.ui.keyCode.DOWN)
@@ -789,6 +798,7 @@ $.widget("ibi.ibxSplitMenuButton", $.ibi.ibxButtonSimple,
 		else
 		if(eType == "keydown" &&  e.keyCode == $.ui.keyCode.DOWN)
 			e.preventDefault();
+		this._super(e);
 	},
 	_onMenuButtonMouseEvent:function(e)
 	{

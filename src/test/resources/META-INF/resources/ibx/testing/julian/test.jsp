@@ -28,11 +28,6 @@
 					var userValue = $(e.target).ibxWidget("userValue");
 					console.log(data, userValue);
 				})
-
-				$(".no-select").on("ibx_click", function(e)
-				{
-					e.menu = $(".test-menu");
-				});
 			},
 			[{"src":"./test_res_bundle.xml", "loadContext":"app"}], true);
 		</script>
@@ -61,6 +56,11 @@
 			<option>Item 3</option>
 		</select>
 		<div tabindex="0" class="menu-btn no-select" data-ibx-type="ibxMenuButton" data-ibxp-show-arrow="true" data-ibxp-use-value-as-text="true">ibxMenuButton
+			<div data-ibx-type="ibxMenuItem" data-ibxp-user-value="item1">Item 1</div>
+			<div data-ibx-type="ibxMenuItem" data-ibxp-user-value="item2">Item 2</div>
+			<div data-ibx-type="ibxMenuItem" data-ibxp-user-value="item3">Item 3</div>
+		</div>
+		<div tabindex="0" class="menu-btn no-select" data-ibx-type="ibxVMenuButton" data-ibxp-show-arrow="true" data-ibxp-use-value-as-text="true">ibxMenuButton
 			<div data-ibx-type="ibxMenuItem" data-ibxp-user-value="item1">Item 1</div>
 			<div data-ibx-type="ibxMenuItem" data-ibxp-user-value="item2">Item 2</div>
 			<div data-ibx-type="ibxMenuItem" data-ibxp-user-value="item3">Item 3</div>
