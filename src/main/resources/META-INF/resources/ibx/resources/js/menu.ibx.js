@@ -300,6 +300,7 @@ $.widget("ibi.ibxCheckMenuItem", $.ibi.ibxMenuItem,
 	{
 		aria = this._super(accessible, aria);
 		aria.checked = this.options.checked;
+		aria.selected = this.options.checked;
 		return aria;
 	},
 	_onMenuItemClick:function(e)
@@ -600,6 +601,7 @@ $.widget("ibi.ibxSelectMenuButton", $.ibi.ibxMenuButton,
 	{
 		this._super(accessible, aria);
 		this.options.menu.ibxWidget("option", "aria.role", "listbox");//turn menu into a list box
+		this.options.menu.ibxWidget("option", "aria.multiselectable", this.options.multiSelect);//turn menu into a list box
 		return aria;
 	},
 	add:function(el, elSibling, before, refresh)
