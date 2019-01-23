@@ -53,7 +53,7 @@ $.widget("ibi.ibxGridStack", $.ibi.ibxWidget,
 	},
 	removeCell: function (cell, detachNode)
 	{
-		var el = $(cell).parents('.grid-stack-item');
+		var el = $(cell).closest('.grid-stack-item');
 		if (el)
 		{
 			el.fadeOut(200, function ()
