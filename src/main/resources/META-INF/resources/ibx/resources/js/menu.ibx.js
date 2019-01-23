@@ -454,12 +454,17 @@ $.widget("ibi.ibxMenuButton", $.ibi.ibxButtonSimple,
 		options.position.of = this.element[0];
 		this.element.on({"click": this._onButtonMouseEvent.bind(this), "keydown": this._onButtonKeyEvent.bind(this), "keyup": this._onButtonKeyEvent.bind(this)});
 
-		var menu = options.menu = this.element.children(".ibx-popup")[0] || options.menu || $("<div>").ibxMenu()[0];
-		options.menu = $(menu).ibxAriaId().on("ibx_open ibx_close", this._onMenuOpenClose.bind(this));
+		//save bound functions in case someone resets the menu option...need to remove the event listeners.
+		this._onMenuOpenCloseBound = this._onMenuOpenClose.bind(this);
+		this._onMenuSelectBound = this._onMenuSelect.bind(this);
 
+		//get/make the menu...if we're creating a default menu, tuck it under this element for safe keeping.
+		var menu = options.menu = options.menu || this.element.children(".ibx-popup")[0] || $("<div class='ibx-menu-button-default-menu'>").ibxMenu().appendTo(this.element)[0];
+		this.option("menu", menu);
+
+		//find the other children and add them to the menu.
 		var menuItems = this.element.children().not(options.menu).detach();
 		this.add(menuItems);
-
 		this._super();
 	},
 	_setAccessibility:function(accessible, aria)
@@ -468,6 +473,7 @@ $.widget("ibi.ibxMenuButton", $.ibi.ibxButtonSimple,
 		aria = this._super(accessible, aria);
 		aria.controls = options.menu.prop("id");
 		aria.expanded = options.menu.ibxWidget("isOpen");
+		aria.controls = options.menu.prop("id");
 		return aria;
 	},
 	children:function(selector)
@@ -490,7 +496,8 @@ $.widget("ibi.ibxMenuButton", $.ibi.ibxButtonSimple,
 		event.type = "ibx_click";
 		this.element.trigger(event);
 		var menu = event.menu || options.menu;
-		$(menu).ibxWidget("option", {position:options.position}).ibxWidget("open");
+		this.option("menu", menu);
+		options.menu.ibxWidget("option", {position:options.position}).ibxWidget("open");
 	},
 	_onButtonKeyEvent:function(e)
 	{
@@ -509,6 +516,23 @@ $.widget("ibi.ibxMenuButton", $.ibi.ibxButtonSimple,
 	{
 		this.setAccessibility();
 	},
+	_onMenuSelect:function(e, menuItem)
+	{
+		this.element.dispatchEvent(e.type, menuItem, false, false);
+	},
+	_setOption:function(key, value)
+	{
+		var options = this.options;
+		if(key == "menu")
+		{
+			var menu = $(options.menu)
+			menu.off("ibx_open ibx_close", this._onMenuOpenCloseBound).off("ibx_select", this._onMenuSelectBound);
+			menu = $(value);
+			menu.ibxAriaId().on("ibx_open ibx_close", this._onMenuOpenCloseBound).on("ibx_select", this._onMenuSelectBound);
+			value = menu;
+		}
+		this._super(key, value);
+	},
 	_refresh:function()
 	{
 		var options = this.options;
@@ -516,7 +540,6 @@ $.widget("ibi.ibxMenuButton", $.ibi.ibxButtonSimple,
 		options.iconPosition = options.showArrow ? "right" : options.iconPosition;
 		options.glyph = options.showArrow  ? "arrow_drop_down" : options.glyph;
 		options.glyphClasses = options.showArrow ? "material-icons ibx-menu-button-arrow" : options.glyphClasses;
-
 		this._super();
 	}
 });
@@ -567,7 +590,6 @@ $.widget("ibi.ibxSelectMenuButton", $.ibi.ibxMenuButton,
 		var options = this.options;
 		options.defaultText = options.defaultText || options.text;
 		this._text.ibxEditable().on("click", this._onLabelClick.bind(this)).on("ibx_textchanging", this._onTextChanging.bind(this));
-		options.menu.on("ibx_select", this._onMenuSelect.bind(this));
 		options.menu.on("ibx_beforeopen", this._onMenuBeforeOpen.bind(this));
 	},
 	_setAccessibility:function(accessible, aria)
@@ -624,6 +646,7 @@ $.widget("ibi.ibxSelectMenuButton", $.ibi.ibxMenuButton,
 		if(selItems.length)
 			userVal = selItems.ibxWidget("option", "userValue");
 		this.userValue(userVal);
+		this._super(e, data);
 	},
 	_onKeyEvent:function(e)
 	{

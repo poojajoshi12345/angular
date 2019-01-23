@@ -22,10 +22,17 @@
 			
 			ibx(function()
 			{
-				$(".ibx-menu-select").on("ibx_change", function(e)
+				$(".ibx-menu-button").on("ibx_select", function(e)
 				{
-					console.log(e.type, e.originalEvent.data);
+					var data = $(e.originalEvent.data);
+					var userValue = $(e.target).ibxWidget("userValue");
+					console.log(data, userValue);
 				})
+
+				$(".no-select").on("ibx_click", function(e)
+				{
+					e.menu = $(".test-menu");
+				});
 			},
 			[{"src":"./test_res_bundle.xml", "loadContext":"app"}], true);
 		</script>
@@ -40,7 +47,7 @@
 			}
 			.menu-btn
 			{
-				width:150px;
+				width:200px;
 				padding:5px;
 				margin:5px;
 				border:1px solid #ccc;
@@ -53,23 +60,29 @@
 			<option>Item 2</option>
 			<option>Item 3</option>
 		</select>
-		<div tabindex="0" class="menu-btn no-select" data-ibx-type="ibxMenuButton" data-ibxp-use-value-as-text="true">ibxMenuSelect-single
+		<div tabindex="0" class="menu-btn no-select" data-ibx-type="ibxMenuButton" data-ibxp-show-arrow="true" data-ibxp-use-value-as-text="true">ibxMenuButton
+			<div data-ibx-type="ibxMenuItem" data-ibxp-user-value="item1">Item 1</div>
+			<div data-ibx-type="ibxMenuItem" data-ibxp-user-value="item2">Item 2</div>
+			<div data-ibx-type="ibxMenuItem" data-ibxp-user-value="item3">Item 3</div>
+		</div>
+		<div tabindex="0" class="menu-btn single-select" data-ibx-type="ibxSelectMenuButton" data-ibxp-editable="true" data-ibxp-use-value-as-text="true">ibxSelectMenuButton - single
 			<div data-ibx-type="ibxCheckMenuItem" data-ibxp-user-value="item1">Item 1</div>
 			<div data-ibx-type="ibxCheckMenuItem" data-ibxp-user-value="item2">Item 2</div>
 			<div data-ibx-type="ibxCheckMenuItem" data-ibxp-user-value="item3">Item 3</div>
 		</div>
-		<div tabindex="0" class="menu-btn single-select" data-ibx-type="ibxSelectMenuButton" data-ibxp-editable="true" data-ibxp-use-value-as-text="true">ibxMenuSelect-single
-			<div data-ibx-type="ibxCheckMenuItem" data-ibxp-user-value="item1">Item 1</div>
-			<div data-ibx-type="ibxCheckMenuItem" data-ibxp-user-value="item2">Item 2</div>
-			<div data-ibx-type="ibxCheckMenuItem" data-ibxp-user-value="item3">Item 3</div>
-		</div>
-		<div tabindex="0" class="menu-btn multi-select" data-ibx-type="ibxSelectMenuButton" data-ibxp-multi-select="true" data-ibxp-use-value-as-text="true">ibxMenuSelect-multi
+		<div tabindex="0" class="menu-btn multi-select" data-ibx-type="ibxSelectMenuButton" data-ibxp-multi-select="true" data-ibxp-use-value-as-text="true">ibxSelectMenuButton - multi
 			<div data-ibx-type="ibxCheckMenuItem" data-ibxp-user-value="item1">Item 1</div>
 			<div data-ibx-type="ibxCheckMenuItem" data-ibxp-user-value="item2">Item 2</div>
 			<div data-ibx-type="ibxCheckMenuItem" data-ibxp-user-value="item3">Item 3</div>
 		</div>
 		<div tabindex="0" class="menu-btn date" data-ibx-type="ibxMenuButton" data-ibxp-show-arrow="true">Date...
 			<div data-ibx-type="ibxDatePicker" data-ibxp-type="inline"></div>
+		</div>
+
+		<div class="test-menu" data-ibx-type="ibxMenu">
+			<div data-ibx-type="ibxMenuItem">Item</div>
+			<div data-ibx-type="ibxMenuItem">Item</div>
+			<div data-ibx-type="ibxMenuItem">Item</div>
 		</div>
 	</body>
 </html>
