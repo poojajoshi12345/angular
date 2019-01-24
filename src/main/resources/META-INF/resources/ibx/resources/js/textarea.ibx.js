@@ -29,7 +29,6 @@ $.widget("ibi.ibxTextArea", $.ibi.ibxFlexBox,
 
 		"aria":
 		{
-			"role":"textbox",
 			"multiline":true,
 		}
 	},
