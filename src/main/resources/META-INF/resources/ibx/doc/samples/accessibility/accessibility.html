@@ -79,6 +79,9 @@
 				var rows = grid.ibxWidget("getRow");
 				for(var i = 0; i < rows.length; ++i)
 				{
+					var cells = $(rows[i]).children(".dgrid-cell");
+					for(var j = 0; j < cells.length; ++j)
+						$(cells[j]).text(sformat("Cell {1},{2}", i, j));
 
 				}
 
@@ -279,7 +282,7 @@
 
 		<div tabindex="0" class="test-ctrl test-carousel" data-ibx-type="ibxHCarousel"></div>
 
-		<div tabindex="0" class="test-ctrl test-grid" data-ibx-type="ibxDataGrid" data-ibxp-indent-column="0"></div>
+		<div tabindex="0" class="test-ctrl test-grid" data-ibx-type="ibxDataGrid" data-ibxp-indent-column="-1"></div>
 
 		<div tabindex="0" class="test-ctrl test-tree" data-ibx-type="ibxTree">
 			<div data-ibx-type="ibxTreeNode" data-ibxp-expanded="true">Root Item

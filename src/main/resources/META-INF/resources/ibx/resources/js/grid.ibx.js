@@ -191,7 +191,7 @@ $.fn.ibxDataGridRow = $.ibi.ibxDataGridRow = function()
 				parent:null,
 				container:false,
 				size:null,
-				header:$("<div>").attr({"tabindex": -1}),
+				header:$("<div>").attr({"role":"rowheader", "tabindex": -1}),
 				dynamicHeaderSize:false,//calculate row header size on refresh...VERY SLOW, USE WITH CAUTION!
 				splitter:null,
 				title:null,
@@ -477,6 +477,7 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 	_setAccessibility:function(accessible, aria)
 	{
 		var options = this.options;
+		this.element.attr("role", (options.indentColumn == -1) ? "grid" : "treegrid");
 		return aria;
 	},
 	_init:function()
@@ -713,7 +714,7 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 	},
 	addRow:function(row, sibling, before)
 	{
-		row = $(row);
+		row = $(row).attr("role", "row");
 		var options = this.options;
 
 		//create extra cells if row has less than columns.
@@ -735,6 +736,9 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 			}
 			else
 				cell.classList.add("dgrid-col-hidden");
+
+			//aria stuff
+			cell.setAttribute("role", "gridcell");
 		}
 
 		//set row options and add to grid.
