@@ -259,7 +259,23 @@ ibx.accessible = function(accessible)
 };
 ibx._setAccessibility = function(accessible)
 {
-	accessible ? $(".ibx-root").attr("role", "application") : $(".ibx-root").removeAttr("role");
+	$(".ibx-root").each(function(idx, el)
+	{
+		var root = $(el);
+		var title = root.attr("aria-label") || "Application " + document.title;
+		if(accessible)
+		{
+			root.attr("role", "application");
+			root.attr("aria-label", title);
+			root.attr("tabindex", 0);
+		}
+		else
+		{
+			root.removeAttr("role", "application");
+			root.removeAttr("aria-label", title);
+			root.removeAttr("tabindex", 0);
+		}
+	}.bind(this));
 };
 
 //attach ibxWidgets to dom elements
