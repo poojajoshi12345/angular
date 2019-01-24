@@ -97,7 +97,6 @@ $.widget("ibi.ibxWidget", $.Widget,
 		this.element.append(children);
 		ibx.bindElements(children);
 	},				
-	ARIA_PROPS_IGNORE:{"role":true, "accessible":true},
 	setAccessibility:function(accessible)
 	{
 		var aria = $.extend(true, {}, this.options.aria);
@@ -123,7 +122,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 		//now set the aria- attributes.
 		for(var key in aria)
 		{
-			if(this.ARIA_PROPS_IGNORE[key])
+			if($.ibi.ibxWidget.ARIA_PROPS_IGNORE[key])
 				continue;
 			var ariaAttr = "aria-" + key;
 			accessible ? this.element.attr(ariaAttr, aria[key]) : this.element.removeAttr(ariaAttr);
@@ -424,6 +423,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 	}
 });
 $.ibi.ibxWidget.noRefresh = false; //globally turn off refresh to speed up various add/remove/update operations.
+$.ibi.ibxWidget.ARIA_PROPS_IGNORE = {"role":true, "accessible":true},
 $.ibi.ibxWidget.navKeys = [$.ui.keyCode.LEFT, $.ui.keyCode.RIGHT, $.ui.keyCode.UP, $.ui.keyCode.DOWN, $.ui.keyCode.HOME, $.ui.keyCode.END, $.ui.keyCode.PAGE_UP, $.ui.keyCode.PAGE_DOWN, 45/*INSERT*/];
 $.ibi.ibxWidget.isNavKey = function(keyCode)
 {
