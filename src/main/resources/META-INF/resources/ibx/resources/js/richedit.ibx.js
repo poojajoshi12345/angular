@@ -321,6 +321,11 @@ $.widget("ibi.ibxEditable", $.Widget,
 		"cancelKey":$.ui.keyCode.ESCAPE,
 		"editOnFocus":false,
 		"commitOnBlur":true,
+
+		"aria":
+		{
+			"role":"textbox"
+		}
 	},
 	_onElementEventBound:null,
 	_create:function()
@@ -330,6 +335,15 @@ $.widget("ibi.ibxEditable", $.Widget,
 		this.element.ibxMutationObserver({subtree:true, characterData:true, characterDataOldValue:true});
 		this.element.on("keydown focus blur ibx_nodemutated", this._onElementEvent.bind(this));
 		this._super();
+		this.refresh();
+	},
+	setAccessibility:$.ibi.ibxWidget.prototype.setAccessibility,
+	_setAccessibility:function(accessible, aria)
+	{
+		options = this.options;
+		aria.multiline = options.multiLine;
+		aria.autocomplete = options.autocomplete;
+		return aria;	
 	},
 	_lastValue:null,
 	_onElementEvent:function(e)
@@ -404,6 +418,7 @@ $.widget("ibi.ibxEditable", $.Widget,
 			if(options.selectAll)
 				document.getSelection().selectAllChildren(this.element[0]);
 			this.element.ibxMutationObserver("option", {listen:true});
+			this.refresh();
 		}
 	},
 	/**
@@ -431,6 +446,7 @@ $.widget("ibi.ibxEditable", $.Widget,
 			}
 			else
 				this.element.dispatchEvent("ibx_changed", this.element.text(), true, false);
+			this.refresh();
 		}
 	},
 	/**
@@ -454,6 +470,10 @@ $.widget("ibi.ibxEditable", $.Widget,
 	{
 		this.element.html(html);
 		this.element.dispatchEvent("ibx_changed", html, true, false);
-	}
+	},
+	refresh:function()
+	{
+		this.setAccessibility(ibx.accessible && this.isEditing);
+	},
 });
 //# sourceURL=richedit.ibx.js
