@@ -521,7 +521,7 @@ $.widget("ibi.ibxMenuButton", $.ibi.ibxButtonSimple,
 	},
 	_onMenuSelect:function(e, menuItem)
 	{
-		this.element.dispatchEvent(e.type, menuItem, false, false);
+		this.element.dispatchEvent("ibx_select", menuItem, false, false);
 	},
 	_setOption:function(key, value)
 	{
@@ -699,7 +699,7 @@ $.widget("ibi.ibxSelectMenuButton", $.ibi.ibxMenuButton,
 				}.bind(this));
 
 				options.userValue = userValue;
-				this.element.dispatchEvent("ibx_change", userValue, true, false);
+				this.element.dispatchEvent("ibx_selchange", userValue, true, false);
 				options.valueText = valueText.join(", ");
 			}
 		}

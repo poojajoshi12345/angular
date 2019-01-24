@@ -352,7 +352,7 @@ function ibxSelectMenuProperty(prop, grid)
 var _p = $.ibi.ibxPropertyGrid.extendProperty(ibxProperty, ibxSelectMenuProperty, "selectMenu");
 _p._createEditor = function()
 {
-	var editor = $("<div tabindex='0'>").ibxSelectMenuButton({useValueAsText:true}).on("ibx_change", this._onMenuChange.bind(this));
+	var editor = $("<div tabindex='0'>").ibxSelectMenuButton({useValueAsText:true}).on("ibx_selchange", this._onMenuChange.bind(this));
 	this.menu = editor.ibxWidget("option", "menu");
 	return editor.ibxAddClass("pgrid-prop-select-menu");
 };
@@ -583,7 +583,7 @@ _p._createEditor = function()
 
 	var widget = editor.data("ibxWidget");
 	this.spinnerWidth = widget.spinnerWidth.on("ibx_change", this._onWidthChange.bind(this));
-	this.btnStyle = widget.btnStyle.on("ibx_change", this._onStyleChange.bind(this));
+	this.btnStyle = widget.btnStyle.on("ibx_selchange", this._onStyleChange.bind(this));
 	this.btnColor = widget.btnColor;
 	this.swatch = this.btnColor.find(".ibx-label-glyph");
 
