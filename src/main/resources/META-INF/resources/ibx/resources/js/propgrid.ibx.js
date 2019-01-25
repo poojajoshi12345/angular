@@ -100,12 +100,12 @@ _p.createUI = function()
 {
 	var prop = this.prop;
 	this.nameCell = this._createNameCell().ibxAddClass(["pgrid-cell","pgrid-name-cell"]);
-	this.nameCell.attr("tabindex", 0).data("ibxProp", prop).data("ibxProp", prop);
+	this.nameCell.attr("tabindex", 0).data("ibxProp", prop);
 
 	this.editorCell = this.__createEditorCell().ibxAddClass(["pgrid-cell", "pgrid-editor-cell"]);
-	this.editorCell.attr("tabindex", 0).data("ibxProp", prop).data("ibxProp", prop);
+	this.editorCell.attr("tabindex", 0).data("ibxProp", prop);
 
-	this.editor = this._createEditor().attr("tabindex", 0).data("ibxProp", prop).css("flex", "0 0 auto");
+	this.editor = this._createEditor().attr("tabindex", -1).data("ibxProp", prop).css("flex", "0 0 auto");
 	this.editorCell.append(this.editor);
 };
 _p._createNameCell = function()
@@ -114,11 +114,19 @@ _p._createNameCell = function()
 };
 _p.__createEditorCell = function()
 {
-	return $("<div>").ibxHBox({focusDefault:true, align:"center"});
+	return $("<div>").ibxHBox({align:"center"}).on("keydown keyup", this._onEditorCellKeyEvent.bind(this));
 };
 _p._createEditor = function()
 {
 	return $("<div>").ibxHBox({align:"center", nameRoot:true}).ibxAddClass("pgrid-prop");
+};
+_p._onEditorCellKeyEvent = function(e)
+{
+	if(e.type == "keyup" && e.keyCode == $.ui.keyCode.ENTER)
+		this.editor.focus();
+	else
+	if(e.type == "keydown" && e.keyCode == $.ui.keyCode.ESCAPE)
+		this.editorCell.focus();
 };
 _p._updateValue = function(newValue)
 {
@@ -136,6 +144,8 @@ _p.update = function()
 	this.nameCell.ibxWidget({text:this.prop.displayName}).prop("title", prop.nameTip);
 	this.editorCell.prop("title", prop.valueTip);
 	this.editorCell.ibxWidget("option", "disabled", (prop.enabled === false) || false);
+	this.editorCell.ibxWidget("option", "aria.label", "Edit Property + " + (prop.valueTip || prop.nameTip));
+
 };
 /********************************************************************************
  * IBX PROPERTY UI FOR BASIC LABEL/GROUPING/SEPARATING
@@ -295,7 +305,7 @@ _p.update = function()
 	for(var i = 0; i < vals.length; ++i)
 	{
 		var val = vals[i];
-		var btn = $("<div class='pgrid-prop-radio-button' tabindex='0'>").ibxRadioButtonSimple({text:val.displayValue, userValue:val.value});
+		var btn = $("<div class='pgrid-prop-radio-button' tabindex='-1'>").ibxRadioButtonSimple({text:val.displayValue, userValue:val.value});
 		editor.ibxWidget("add", btn);
 	}
 };
@@ -345,15 +355,50 @@ _p.update = function()
 /********************************************************************************
  * IBX PROPERTY UI FOR MENU BUTTON
 ********************************************************************************/
+function ibxMenuProperty(prop, grid)
+{
+	ibxProperty.call(this, prop, grid);
+	if(ibx.inPropCtor) return;
+}
+var _p = $.ibi.ibxPropertyGrid.extendProperty(ibxProperty, ibxMenuProperty, "menu");
+_p._createEditor = function()
+{
+	var editor = $("<div>").ibxMenuButton({showArrow:true}).on("ibx_select", this._onMenuSelect.bind(this));
+	this.menu = editor.ibxWidget("option", "menu");
+	return editor.ibxAddClass("pgrid-prop-select-menu");
+};
+_p._onMenuSelect = function(e)
+{
+	var prop = this.prop;
+	var menuItem = $(e.originalEvent.data);
+	var value = menuItem.ibxWidget("userValue");
+	this._updateValue(value);
+};
+_p.update = function()
+{
+	ibxMenuProperty.base.update.call(this);
+	var prop = this.prop;
+	var menu = this.menu.ibxWidget("remove");
+	for(var i = 0; i < prop.values.length; ++i)
+	{
+		var propValue = prop.values[i];
+		var menuItem = $("<div>").ibxMenuItem({labelOptions:{text:propValue.displayValue}, userValue:propValue.value});
+		menu.ibxWidget("add", menuItem);
+	}
+	this.editor.ibxWidget("option", "text", prop.displayValue);
+};
+/********************************************************************************
+ * IBX PROPERTY UI FOR SELECT MENU BUTTON
+********************************************************************************/
 function ibxSelectMenuProperty(prop, grid)
 {
 	ibxProperty.call(this, prop, grid);
 	if(ibx.inPropCtor) return;
 }
-var _p = $.ibi.ibxPropertyGrid.extendProperty(ibxProperty, ibxSelectMenuProperty, "selectMenu");
+var _p = $.ibi.ibxPropertyGrid.extendProperty(ibxProperty, ibxSelectMenuProperty, "selectmenu");
 _p._createEditor = function()
 {
-	var editor = $("<div tabindex='0'>").ibxSelectMenuButton({useValueAsText:true}).on("ibx_selchange", this._onMenuChange.bind(this));
+	var editor = $("<div>").ibxSelectMenuButton({useValueAsText:true}).on("ibx_selchange", this._onMenuChange.bind(this));
 	this.menu = editor.ibxWidget("option", "menu");
 	return editor.ibxAddClass("pgrid-prop-select-menu");
 };
@@ -589,7 +634,7 @@ _p._createEditor = function()
 	this.swatch = this.btnColor.find(".ibx-label-glyph");
 
 	this.colorPicker = widget.colorPicker.on("ibx_change", this._onColorChange.bind(this));
-	return editor.ibxAddClass("pgrid-prop-border");
+	return editor.ibxAddClass("pgrid-prop-border").ibxWidget("option", {"focusDefault":true, "focusRoot":true});
 };
 _p._onWidthChange = function(e, data)
 {
