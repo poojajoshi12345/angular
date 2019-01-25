@@ -1,3 +1,6 @@
+	".woff":"font/woff",
+	".woff2":"font/woff2",
+	".ttf":"font/truetype"
 
 $._ajax = $.ajax;
 $.ajax = function()

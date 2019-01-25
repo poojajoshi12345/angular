@@ -193,11 +193,11 @@
 					"displayValue":"Select Value",
 					"nameTip":"Used for selecting an item from a menu",
 					"valueTip":undefined,
-					"name":"selectMenu",
+					"name":"selectmenu",
 					"value":"select_1",
 					"dataType":"string",
 					"multiSelect":false,
-					"uiType":"selectMenu",
+					"uiType":"selectmenu",
 					"expanded":false,
 					"values":
 					[
@@ -215,7 +215,7 @@
 					"value":["select_1", "select_3"],
 					"dataType":"string",
 					"multiSelect":true,
-					"uiType":"selectMenu",
+					"uiType":"selectmenu",
 					"expanded":false,
 					"values":
 					[
