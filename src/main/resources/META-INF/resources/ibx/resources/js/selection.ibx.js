@@ -457,6 +457,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 	},
 	_setOption:function(key, value)
 	{
+		var options = this.options;
 		if(key == "type" && value != this.options[key])
 			this.deselectAll(true);
 
@@ -480,8 +481,13 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 			if(value)
 				this.element.ibxRubberBand();
 		}
-
 		this._super(key, value);
+
+		var ariaOpts = 
+		{
+			"aria-multiselectable": (options.type == "multi"),
+		}
+		this.element.attr(ariaOpts);
 	},
 });
 

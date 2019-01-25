@@ -12,7 +12,43 @@
 		<script type="text/javascript">
 			ibx(function(e)
 			{
-				$(".ibx-editable").ibxEditable({editOnFocus:true});
+				var colMap = [{}, {}];
+
+				var grid = $(".test-grid-tree").ibxDataGrid("option", {"indentColumn":0, "colMap":colMap});
+				var nRows = 4;
+				var nCells = 1;
+				for(var i = 0; i < nRows; ++i)
+				{
+					var cells = [];
+					for(var j = 0; j < nCells; ++j)
+					{
+						var cell = $("<div>").text(sformat("Cell {1},{2}", i, j));
+						cells.push(cell);
+					}
+					
+					var row = $("<div>").ibxDataGridRow({title: i, expanded:true}).append(cells);
+					if(parentRow)
+						parentRow.ibxDataGridRow("addRow", row);
+					var parentRow = row;
+					grid.ibxWidget("addRow", row);
+				}
+				grid.ibxWidget("refresh");
+
+				return;
+				var grid = $(".test-grid").ibxDataGrid("option", {"colMap":colMap});
+				for(var i = 0; i < nRows; ++i)
+				{
+					var cells = [];
+					for(var j = 0; j < nCells; ++j)
+					{
+						var cell = $("<div>").text(sformat("Cell {1},{2}", i, j));
+						cells.push(cell);
+					}
+					var row = $("<div>").ibxDataGridRow({title: i}).append(cells);
+					grid.ibxWidget("addRow", row);
+				}
+				grid.ibxWidget("refresh");
+
 			},true);
 		</script>
 		<style type="text/css">
@@ -24,18 +60,17 @@
 				margin: 0px;
 				box-sizing: border-box;
 			}
-			.test-edit
+			.test-grid, .test-grid-tree
 			{
-				width:100px;
+				width:250px;
+				height:100px;
+				border:1px solid #ccc;
 			}
 		</style>
 	</head>
 	<body class="ibx-root" data-ibx-type="ibxVBox">
-		<div tabindex="0" class="test-edit ibx-editable">Julian</div>
-		<div tabindex="0" class="test-edit" data-ibx-type="ibxTextField">Julian</div>
-		<div tabindex="0" class="test-edit" data-ibx-type="ibxTextArea">Julian</div>
-		<!-- <div class="test-edit" data-ibx-type="ibx" data-ibxp-align="center" data-ibxp-justify="start">
-		</div> -->
+		<div tabindex="0" class="test-grid-tree" data-ibx-type="ibxDataGrid"></div>
+		<!-- <div tabindex="0" class="test-grid" data-ibx-type="ibxDataGrid"></div> -->
 	</body>
 </html>
 
