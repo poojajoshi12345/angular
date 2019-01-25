@@ -145,6 +145,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 			{
 				focusItem.focus();
 				e.preventDefault();
+				e.stopPropagation();//propagation can conflict with outer selection managers.
 			}
 		}
 
