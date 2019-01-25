@@ -261,6 +261,7 @@ $.fn.ibxDataGridRow = $.ibi.ibxDataGridRow = function()
 					{
 						this.expanded = expand;
 						this.element.ibxToggleClass("dgrid-row-expanded", expand);
+						this.updateAccessibility();
 						this.element.dispatchEvent(expand ? "ibx_expand" : "ibx_collapse", null, true, false);
 					}
 				},
@@ -363,11 +364,12 @@ $.fn.ibxDataGridRow = $.ibi.ibxDataGridRow = function()
 				getCell:function(nCol){return this.element.children(sformat(":nth-child({1})", nCol+1));},
 				updateAccessibility:function()
 				{
-					//THIS IS NOT CORRECT, OR FINISHED...MORE LIKE A STARTING POINT PLACEHOLDER!
 					var ariaOpts = 
 					{
 						"role":"row",
-						"aria-level":this.depth(),
+						"aria-posinset":1,
+						"aria-setsize":1,
+						"aria-level":this.depth() + 1,
 						"aria-hidden":!this.isVisible(),
 						"aria-expanded":this.isExpanded(),
 					};
@@ -490,6 +492,7 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 	},
 	_setAccessibility:function(accessible, aria)
 	{
+		aria = this._super(accessible, aria);
 		var options = this.options;
 		this.element.attr("role", (options.indentColumn == -1) ? "grid" : "treegrid");
 		return aria;

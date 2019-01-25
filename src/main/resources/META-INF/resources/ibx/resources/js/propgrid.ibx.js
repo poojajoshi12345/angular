@@ -26,6 +26,7 @@ $.widget("ibi.ibxPropertyGrid", $.ibi.ibxDataGrid,
 	},
 	_setAccessibility:function(accessible, aria)
 	{
+		aria = this._super(accessible, aria);
 		aria.label = ibx.resourceMgr.getString("IBX_PGRID_LABEL");
 		return aria;
 	},
