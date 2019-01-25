@@ -643,7 +643,7 @@ _p._createEditor = function()
 	this.swatch = this.btnColor.find(".ibx-label-glyph");
 
 	this.colorPicker = widget.colorPicker.on("ibx_change", this._onColorChange.bind(this));
-	return editor.ibxAddClass("pgrid-prop-border").ibxWidget("option", {"focusDefault":true, "focusRoot":true});
+	return editor.ibxAddClass("pgrid-prop-border").ibxWidget("option", {"focusDefault":true});
 };
 _p._onWidthChange = function(e, data)
 {
