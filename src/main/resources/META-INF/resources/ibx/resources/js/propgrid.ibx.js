@@ -20,21 +20,20 @@ $.widget("ibi.ibxPropertyGrid", $.ibi.ibxDataGrid,
 		this.element.data("ibiIbxDataGrid", this);
 		this.getSelectionManager().options.type = "nav";
 	},
-	_buildPropTree:function(props, parentRow)
+	_buildPropTree:function(props, allRows)
 	{
 		var rows = [];
 		for(var i = 0; props && i < props.length; ++i)
 		{
 			var prop = props[i];
 			var row = $("<div>").ibxDataGridRow().ibxAddClass("pgrid-row").data("ibxProp", prop);
-			rows.push(row);
-
 			var ui = prop.ui = this._createUI(prop);
 			row.append([ui.nameCell, ui.editorCell]);
+			rows.push(row);
+			allRows.push(row);
 
-			this.addRow(row);
-			var childRows = this._buildPropTree(prop.props, row);
-			row.ibxDataGridRow("addRow", childRows).ibxDataGridRow({"expanded":prop.expanded});
+			var children = this._buildPropTree(prop.props, allRows);
+			row.ibxDataGridRow("addRow", children).ibxDataGridRow({"expanded":prop.expanded});
 		}
 		return rows;
 	},
@@ -55,7 +54,9 @@ $.widget("ibi.ibxPropertyGrid", $.ibi.ibxDataGrid,
 		if(key == "props")
 		{
 			this.removeRow();
-			this._buildPropTree(value, null);
+			var allRows = [];
+			this._buildPropTree(value, allRows);
+			this.addRows(allRows);
 			this.updateHeaders();
 		}
 		this._super(key, value);

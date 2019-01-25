@@ -191,7 +191,7 @@ $.fn.ibxDataGridRow = $.ibi.ibxDataGridRow = function()
 				parent:null,
 				container:false,
 				size:null,
-				header:$("<div>").attr({"role":"rowheader", "tabindex": -1}),
+				header:$("<div>").attr({"tabindex": -1}),
 				dynamicHeaderSize:false,//calculate row header size on refresh...VERY SLOW, USE WITH CAUTION!
 				splitter:null,
 				title:null,
@@ -199,9 +199,10 @@ $.fn.ibxDataGridRow = $.ibi.ibxDataGridRow = function()
 				rowClasses:["ibx-data-grid-row", "dgrid-row", "ibx-flexbox", "fbx-inline", "fbx-row", "fbx-align-items-stretch", "fbx-align-content-stretch"],
 				headerClasses:["dgrid-header-row", "dgrid-row", "ibx-flexbox", "fbx-inline", "fbx-row", "fbx-align-items-center", "fbx-justify-content-center"],
 				cellContainerClasses:["ibx-flexbox", "fbx-inline", "fbx-row", "fbx-align-items-center"],
-				expanded:-1,
+				expanded:0,
 				singleClickExpand:false,
 				
+				getGrid:function(){return this.element.closest(".ibx-data-grid");},
 				depth:function()
 				{
 					var depth = 0;
@@ -216,13 +217,13 @@ $.fn.ibxDataGridRow = $.ibi.ibxDataGridRow = function()
 					this.parent = parent;
 					this._boundParentEvent = this._onParentEvent.bind(this);
 					$(this.parent).on("ibx_expand ibx_collapse ibx_get_row_children", this._boundParentEvent);
-					this.updateIndent();
+					this.refresh();
 				},
 				addRow:function(row)
 				{
 					var row = $(row).ibxDataGridRow("setParent", this.element);
+					this.container = !!row.length || this.container;
 					row.ibxDataGridRow("show", this.isVisible() && this.isExpanded());
-					this.container = row.length || this.container;
 				},
 				removeRow:function(row)
 				{
@@ -238,7 +239,7 @@ $.fn.ibxDataGridRow = $.ibi.ibxDataGridRow = function()
 				{
 					this.element.ibxToggleClass("dgrid-row-hidden", !show);
 					this.header.ibxToggleClass("dgrid-row-hidden", !show);
-					this._updateAccessibility();
+					this.updateAccessibility();
 					if(this.isExpanded())
 						this.element.dispatchEvent(show ? "ibx_expand" : "ibx_collapse", null, false, false);
 				},
@@ -248,11 +249,11 @@ $.fn.ibxDataGridRow = $.ibi.ibxDataGridRow = function()
 				},
 				isExpanded:function()
 				{
-					return this.element.ibxHasClass("dgrid-row-expanded");
+					return this.element.is(".dgrid-row-expanded");
 				},
 				expand:function(expand)
 				{
-					if(!this.container || (this.isExpanded() == expand))
+					if(this.isExpanded() == expand)
 						return;
 
 					var evt = this.element.dispatchEvent( expand ? "ibx_beforeexpand" : "ibx_beforecollapse", null, true, true);
@@ -316,23 +317,58 @@ $.fn.ibxDataGridRow = $.ibi.ibxDataGridRow = function()
 						this.show(e.type == "ibx_expand");
 				},
 				_indentColumn:-1,
-				updateIndent:function(indentCell)
+				setIndentColumn:function(indentColumn)
 				{
-					//update our indent
-					var indentCell = (indentCell === undefined) ? this.element.children(sformat(":nth-child({1})", this._indentColumn+1)) : indentCell;
-					indentCell.css("paddingLeft", (this.depth() + "em"));
-					
-					//then update all our children...and so on.
-					$(this.childRows()).ibxDataGridRow("updateIndent");
+					if(this._indentColumn != indentColumn)
+					{
+						//remove the current indent cell config.
+						var indentCell = this.getIndentCell();
+						indentCell.off("dblclick click keydown", this._onIndentCellEventBound);
+
+						if(!indentCell.is(".ibx-flexbox"))				
+							indentCell.ibxRemoveClass(this.cellContainerClasses)
+						indentCell.ibxRemoveClass("dgrid-cell-indent-column dgrid-cell-indent-padding").css("paddingLeft", "");
+
+						//now get and configure the NEW indent cell.
+						indentCell = this.getCell(indentColumn);
+						if(indentCell.length)
+						{
+							this._indentColumn = indentColumn;
+
+							//save new indentColumn
+							this._indentColumn = indentColumn;
+							indentCell.on("dblclick click keydown", this._onIndentCellEventBound);
+							indentCell.ibxAddClass("dgrid-cell-indent-column").ibxToggleClass("dgrid-cell-indent-padding", !this.container);
+							if(!indentCell.is(".ibx-flexbox"))
+								indentCell.ibxAddClass(this.cellContainerClasses);
+
+							if(this.container)
+							{
+								//create the expand button, and move it to the current indent cell.
+								var expandButton = this._expandButton = this._expandButton || $("<div class='material-icons dgrid-cell-expand-button'></div>").on("click", this._onExpandButtonClick.bind(this));
+								expandButton.detach();
+								indentCell.prepend(expandButton);
+							}
+							indentCell.ibxToggleClass("dgrid-cell-indent-padding", !this.container);
+
+							//update our indent
+							indentCell.css("paddingLeft", (this.depth() + "em"));
+							
+							//then update all our children...and so on.
+							$(this.childRows()).ibxDataGridRow("setIndentColumn", indentColumn);
+						}
+					}
 				},
-				_updateAccessibility:function()
+				getIndentCell:function(){return this.getCell(this._indentColumn);},
+				getCell:function(nCol){return this.element.children(sformat(":nth-child({1})", nCol+1));},
+				updateAccessibility:function()
 				{
 					//THIS IS NOT CORRECT, OR FINISHED...MORE LIKE A STARTING POINT PLACEHOLDER!
 					var ariaOpts = 
 					{
 						"role":"row",
 						"aria-level":this.depth(),
-						"aria-hidden":this.isVisible(),
+						"aria-hidden":!this.isVisible(),
 						"aria-expanded":this.isExpanded(),
 					};
 					var el = this.element[0];
@@ -345,34 +381,12 @@ $.fn.ibxDataGridRow = $.ibi.ibxDataGridRow = function()
 					this.element.ibxAddClass(widget.rowClasses).data("ibxDataGridRow", widget);
 					this.header.ibxAddClass(widget.headerClasses).data("ibxDataGridRow", widget).text(this.title == null ? "." : this.title);
 
-					//configure the indent column (if changed) and cell...expand button/classes etc.
-					var indentColumn = this.element.closest(".ibx-data-grid").ibxDataGrid("option", "indentColumn");
-					if(!isNaN(indentColumn) && (indentColumn != this._indentColumn))
-					{
-						//remove the current indent cell config.
-						var indentCell = this.element.children(sformat(":nth-child({1})", this._indentColumn+1));
-						indentCell.off("dblclick click keydown", this._onIndentCellEventBound);
-						indentCell.ibxRemoveClass("dgrid-cell-indent-padding");
-						indentCell.ibxRemoveClass(this.cellContainerClasses).ibxRemoveClass("dgrid-cell-indent-column").css("paddingLeft", "");
-
-						//config the new indent cell.
-						var indentCell = this.element.children(sformat(":nth-child({1})", indentColumn+1));
-						indentCell.on("dblclick click keydown", this._onIndentCellEventBound);
-						indentCell.ibxAddClass("dgrid-cell-indent-column").ibxAddClass(this.cellContainerClasses, !indentCell.is(".ibx-flexbox") && this.container);
-						if(this.container)
-						{
-							//create the expand button, and move it to the current indent cell.
-							var expandButton = this._expandButton = this._expandButton || $("<div class='material-icons dgrid-cell-expand-button'></div>").on("click", this._onExpandButtonClick.bind(this));
-							expandButton.detach();
-							indentCell.prepend(expandButton);
-						}
-						indentCell.ibxToggleClass("dgrid-cell-indent-padding", !this.container);
-						this._indentColumn = indentColumn;
-						this.updateIndent(indentCell);
-					}
-
+					//setup the indent column stuff.
+					var grid = this.getGrid();
+					var indentColumn = grid.length ? grid.ibxDataGrid("option", "indentColumn") : -1;
+					this.setIndentColumn(indentColumn);
 					this.expand(this.expanded);
-					this._updateAccessibility();
+					this.updateAccessibility();
 
 					//Much as I HATE timers...There are times when the height of a row can be dynamic (text wrapping)
 					//So, in that case, you can make the row calculate its header size dynamically.
@@ -422,7 +436,7 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 		colMap:[],
 		defaultColConfig:
 		{
-			title:"",
+			title:"Column",
 			size:"100px", //the last column can have a size of 'flex' indicating that column should take up empty space at end.
 			justify:"center",
 			resizable:true,
@@ -689,13 +703,7 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 	showRow:function(row, show)
 	{
 		var rows = this.getRow(row);
-		for(var i = 0; i < rows.length; ++i)
-		{
-			row = $(rows[i]);
-			rInfo = row.data("ibxDataGridRow");
-			row.ibxToggleClass("dgrid-row-hidden", !show);
-			rInfo.header.ibxToggleClass("dgrid-row-hidden", !show);
-		}
+		rows.ibxDataGridRow("show", show);
 	},
 	selectRow:function(row, select, addSelection)
 	{
@@ -712,9 +720,10 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 			this.getRow(row).ibxDataGridRow("expand", expand);
 		}
 	},
+	_cellId:0,
 	addRow:function(row, sibling, before)
 	{
-		row = $(row).attr("role", "row");
+		row = $(row);
 		var options = this.options;
 
 		//create extra cells if row has less than columns.
@@ -726,22 +735,18 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 		for(var i = 0; i < cells.length; ++i)
 		{
 			var cell = cells[i];
-			var cInfo = options.colMap[i];
-			if(cInfo)
-			{
-				cell.style.width = isNaN(cInfo.ui.curSize) ? cInfo.ui.curSize : cInfo.ui.curSize + "px";//if size is just a number assume pixels.
-				cell.setAttribute("tabindex", cell.tabIndex);
-				cell.classList.toggle(options.classes.gridSelectable, cInfo.selectable);
-				cell.classList.add(options.classes.gridCell);
-			}
-			else
-				cell.classList.add("dgrid-col-hidden");
+			var cInfo = options.colMap[i] || options.defaultColConfig;
+			cell.style.width = isNaN(cInfo.ui.curSize) ? cInfo.ui.curSize : cInfo.ui.curSize + "px";//if size is just a number assume pixels.
+			cell.setAttribute("tabindex", cell.tabIndex);
+			cell.classList.toggle(options.classes.gridSelectable, cInfo.selectable);
+			cell.classList.add(options.classes.gridCell);
 
 			//aria stuff
 			cell.setAttribute("role", "gridcell");
+			cell.id = "dgrid-cell-id-" + ++this._cellId;
 		}
 
-		//set row options and add to grid.
+		//set row options and add to grid...refresh so columnIndent is correct.
 		var rowData = row.data("ibxDataGridRow");
 		this._grid.ibxWidget("add", row, sibling, before);
 
