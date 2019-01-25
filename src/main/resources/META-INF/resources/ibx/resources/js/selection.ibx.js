@@ -169,10 +169,16 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 		}
 		else
 		if((e.keyCode == $.ui.keyCode.HOME) && ibxEventManager.isInputEventToIgnore(e))
+		{
 			this.selectableChildren().first().focus();
+			e.preventDefault();
+		}
 		else
 		if((e.keyCode == $.ui.keyCode.END) && ibxEventManager.isInputEventToIgnore(e))
+		{
 			this.selectableChildren().last().focus();
+			e.preventDefault();
+		}
 		else
 		if(e.keyCode == $.ui.keyCode.ESCAPE && options.escClearSelection)
 			this.deselectAll(true);
