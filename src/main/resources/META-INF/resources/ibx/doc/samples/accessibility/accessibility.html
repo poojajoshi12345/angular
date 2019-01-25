@@ -75,7 +75,7 @@
 					carousel.ibxWidget("add", item);
 				}
 
-				var grid = $(".ibx-data-grid").ibxWidget("initGrid", 100, 4);
+				var grid = $(".test-grid").ibxWidget("initGrid", 100, 4);
 				var rows = grid.ibxWidget("getRow");
 				for(var i = 0; i < rows.length; ++i)
 				{
@@ -85,6 +85,7 @@
 
 				}
 
+				$(".test-prop-grid").ibxWidget("option", {"colMap":[{"size":"17em"}, {}], "props":sampleProps});
 
 				$.each($.ibi.ibxCommand.cmds, function(key, cmd)
 				{
@@ -93,7 +94,7 @@
 					});
 				});
 
-			}, null, true);
+			}, [{"src":"./accessibility_res.xml", "loadContext":"app"}], true);
 		</script>
 		<style type="text/css">
 			body
@@ -148,10 +149,10 @@
 
 			.test-carousel
 			{
+				width:350px;
+				overflow:auto;
 				border:1px solid #aaa;
 				border-radius:.25em;
-				max-width:250px;
-				overflow:auto;
 			}
 			.test-carousel-tile
 			{
@@ -164,12 +165,12 @@
 				text-align:center;
 				margin:5px;
 			}
-			.test-grid
+			.test-grid, .test-prop-grid
 			{
-				width:250px;
+				width:350px;
 				height:200px;
 				border:1px solid #ccc;
-				font-size:11px;
+				font-size:10px;
 			}
 			.test-tree
 			{
@@ -281,8 +282,8 @@
 		</div>
 
 		<div tabindex="0" class="test-ctrl test-carousel" data-ibx-type="ibxHCarousel"></div>
-
-		<div tabindex="0" class="test-ctrl test-grid" data-ibx-type="ibxDataGrid" data-ibxp-indent-column="-1"></div>
+		<div tabindex="0" class="test-ctrl test-grid" data-ibx-type="ibxDataGrid"></div>
+		<div tabindex="0" class="test-ctrl test-prop-grid" data-ibx-type="ibxPropertyGrid"></div>
 
 		<div tabindex="0" class="test-ctrl test-tree" data-ibx-type="ibxTree">
 			<div data-ibx-type="ibxTreeNode" data-ibxp-expanded="true">Root Item
