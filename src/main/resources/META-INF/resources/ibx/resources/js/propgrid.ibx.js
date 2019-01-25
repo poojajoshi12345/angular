@@ -12,6 +12,10 @@ $.widget("ibi.ibxPropertyGrid", $.ibi.ibxDataGrid,
 		showRowHeaders:false,
 		indentColumn:0,
 		props:null,
+		aria:
+		{
+			label:"Property Grid"	
+		}
 	},
 	_widgetClass:"ibx-property-grid",
 	_create:function()
@@ -19,6 +23,11 @@ $.widget("ibi.ibxPropertyGrid", $.ibi.ibxDataGrid,
 		this._super();
 		this.element.data("ibiIbxDataGrid", this);
 		this.getSelectionManager().options.type = "nav";
+	},
+	_setAccessibility:function(accessible, aria)
+	{
+		aria.label = ibx.resourceMgr.getString("IBX_PGRID_LABEL");
+		return aria;
 	},
 	_buildPropTree:function(props, allRows)
 	{
@@ -144,7 +153,7 @@ _p.update = function()
 	this.nameCell.ibxWidget({text:this.prop.displayName}).prop("title", prop.nameTip);
 	this.editorCell.prop("title", prop.valueTip);
 	this.editorCell.ibxWidget("option", "disabled", (prop.enabled === false) || false);
-	this.editorCell.ibxWidget("option", "aria.label", "Edit Property + " + (prop.valueTip || prop.nameTip));
+	this.editorCell.ibxWidget("option", "aria.label", ibx.resourceMgr.getString("IBX_PGRID_EDIT_CELL_LABEL") + (prop.valueTip || prop.nameTip));
 
 };
 /********************************************************************************

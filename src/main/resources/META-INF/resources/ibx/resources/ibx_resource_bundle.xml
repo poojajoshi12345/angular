@@ -71,6 +71,9 @@ $Revision$:-->
 				"PP_TRANSPARENCY":"Opacity",
 				"PP_PAL_NAME_BASIC":"Basic",
 
+				"IBX_PGRID_LABEL":"Property Grid",
+				"IBX_PGRID_EDIT_CELL_LABEL":"Edit Property ",
+
 				"IBX_TERMINATING_STRING":""
 			}
 		}
