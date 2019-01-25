@@ -35,7 +35,7 @@
 					"displayValue":"",
 					"nameTip":"Used for grouping other properties, or separating them.",
 					"valueTip":undefined,
-					"name":"Label",
+					"name":"label",
 					"value":"I own sub-properties",
 					"dataType":"",
 					"uiType":"label",
@@ -151,6 +151,23 @@
 						{"displayValue":"Radio 2", "value":"radio_2"},
 						{"displayValue":"Radio 3", "value":"radio_3"},
 					],
+				},
+				{
+					"displayName":"ibxMenuProperty",
+					"displayValue":"Pick a Value",
+					"nameTip":"Used for selecting an item form a menu.",
+					"valueTip":undefined,
+					"name":"label",
+					"value":"",
+					"dataType":"string",
+					"uiType":"menu",
+					"expanded":false,
+					"values":
+					[
+						{"displayValue":"Menu Item 1", "value":"menu_item1"},
+						{"displayValue":"Menu Item 2", "value":"menu_item2"},
+						{"displayValue":"Menu Item 3", "value":"menu_item3"}
+					]
 				},
 				{
 					"displayName":"ibxSelectProperty - Single",
