@@ -503,16 +503,19 @@ $.widget("ibi.ibxMenuButton", $.ibi.ibxButtonSimple,
 	_onKeyEvent:function(e)
 	{
 		var eType = e.type;
+
 		//other keys - enter/space will trigger the click as a normal button will.
 		if(eType == "keyup" && e.keyCode == $.ui.keyCode.DOWN)
+		{
 			this.element.trigger("click");
+			e.stopPropagation();
+		}
 		else
 		if(eType == "keydown" && e.keyCode == $.ui.keyCode.DOWN)
+		{
 			e.preventDefault();//stops the body from scrolling
-		else
-		if(e.keyCode == $.ui.keyCode.ESCAPE)
-			this.options.menu.ibxWidget("close");
-
+			e.stopPropagation();
+		}
 		this._super(e);
 	},
 	_onMenuOpenClose:function(e)
