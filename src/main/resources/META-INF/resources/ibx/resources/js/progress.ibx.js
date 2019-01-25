@@ -26,7 +26,7 @@ $.widget("ibi.ibxProgressBar", $.ibi.ibxHBox,
 		"aria":
 		{
 			"role":"progressbar",
-			"live":"polite",
+			"live":"assertive",
 		},
 	},
 	_widgetClass:"ibx-progress-bar",
@@ -133,7 +133,7 @@ $.widget("ibi.ibxWaiting", $.ibi.ibxLabel,
 		"textAlign":"center",
 		"aria":
 		{
-			"role":"progressbar",
+			"role":"alert",
 			"live":"polite",
 			"relevant":"all",
 			"valuemin":0,
