@@ -51,8 +51,15 @@ $.widget("ibi.ibxLabel", $.ibi.ibxFlexBox,
 	},
 	_setAccessibility:function(accessible, aria)
 	{
+		var options = this.options;
 		aria = this._super(accessible, aria);
 		accessible ? this._glyph.attr("aria-hidden", true) : this._glyph.removeAttr("aria-hidden");
+		if(options.for)
+		{
+			var target = $(options.for);
+			var id = this.element.prop("id");
+			accessible ? target.attr("aria-labelledby", id) : target.removeAttr("aria-labelledby", id);
+		}
 		return aria;
 	},
 	_destroy:function()
