@@ -317,7 +317,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 		//only children that are direct descendants of this root can be manipulated.
 		el = this.element.logicalChildren(".ibx-sm-selection-root", el);
 
-		//by default set the anchor item
+		//by default set the anchor/focus item
 		anchor = (select && (anchor === undefined)) ? true : anchor;
 
 		if(select)
@@ -373,11 +373,13 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 	{
 		this.selected(this.selectableChildren(":not(.ibx-sm-selected)"), true);
 	},
-	deselectAll:function(andAnchor)
+	deselectAll:function(andAnchor, andFocus)
 	{
 		this.selected(this.selectableChildren(".ibx-sm-selected"), false);
 		if(andAnchor)
 			this.anchor(null);
+		if(andFocus)
+			this.focus(null);
 	},
 	_elAnchor:$(),
 	anchor:function(el)
