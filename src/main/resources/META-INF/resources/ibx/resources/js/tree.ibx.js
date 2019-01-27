@@ -169,9 +169,10 @@ $.widget("ibi.ibxTreeNode", $.ibi.ibxVBox,
 	},
 	_setAccessibility:function(accessible, aria)
 	{
+		aria = this._super(accessible, aria);
 		var options = this.options;
-		this.hasChildren() ? this._childBox.attr("role", "group") : this._childBox.removeAttr("role");
-		this.element.attr("aria-expanded", options.expanded);
+		aria.level = this.depth() + 1;
+		aria.expanded = this.expanded();
 		return aria;
 	},
 	_destroy:function()
@@ -385,7 +386,7 @@ $.widget("ibi.ibxTreeBrowser", $.ibi.ibxVBox,
 		
 		$(el).ibxAddClass("tnode-root");
 		this._super(el, elSibling, before, refresh);
-		this.element.ibxSelectionManager("deselectAll").ibxSelectionManager("selected", el, true).ibxSelectionManager("focus", el, true);
+		this.element.ibxSelectionManager("deselectAll", true, true).ibxSelectionManager("selected", el, true).ibxSelectionManager("focus", el, true);
 		$(el).ibxTreeNode("expanded", true).ibxTreeNode("refreshIndent", 0, true);
 		this.refresh();
 	},
