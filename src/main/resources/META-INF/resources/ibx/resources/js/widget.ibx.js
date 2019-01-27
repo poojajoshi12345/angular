@@ -130,7 +130,8 @@ $.widget("ibi.ibxWidget", $.Widget,
 	},
 	_setAccessibility:function(accessible, aria)
 	{
-		//do nothing.
+		var options = this.options;
+		options.ctxMenu ? (aria.haspopup = true) : null;
 		return aria;
 	},
 	destroyed:function(){return this._destroyed;},
