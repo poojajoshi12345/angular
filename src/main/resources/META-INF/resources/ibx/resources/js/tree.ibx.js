@@ -41,7 +41,6 @@ $.widget("ibi.ibxTree", $.ibi.ibxVBox,
 		"aria":
 		{
 			"role":"tree",
-			"readonly":true
 		}
 	},
 	_widgetClass:"ibx-tree",
@@ -133,10 +132,7 @@ $.widget("ibi.ibxTreeNode", $.ibi.ibxVBox,
 
 		"align":"stretch",
 
-		"aria":
-		{
-			"role":"treeitem",
-		}
+		"aria":{}
 	},
 	_widgetClass:"ibx-tree-node",
 	_createWidget:function(options, element)
@@ -171,8 +167,14 @@ $.widget("ibi.ibxTreeNode", $.ibi.ibxVBox,
 	{
 		aria = this._super(accessible, aria);
 		var options = this.options;
-		aria.level = this.depth() + 1;
-		aria.expanded = this.expanded();
+		var ariaOptions = 
+		{
+			"accessible": accessible,
+			"role":"treeitem",
+			"level": this.depth() + 1,
+		}
+		options.container ? (ariaOptions.expanded = this.expanded()) : null;
+		this.nodeLabel.ibxWidget("option", "aria", ariaOptions);
 		return aria;
 	},
 	_destroy:function()
@@ -324,6 +326,7 @@ $.widget("ibi.ibxTreeNode", $.ibi.ibxVBox,
 		var options = this.options;
 		var indent = (options.indent !== null) ? options.indent : $.ibi.ibxTreeNode.defaultIndent;
 		this.nodeLabel.css("paddingLeft", newDepth * indent);
+		this.setAccessibility();
 		if(withChildren)
 			this.children().ibxWidget("refreshIndent", depth, withChildren);
 	},
