@@ -1,10 +1,4 @@
-﻿<%-- Copyright 1996-2016 Information Builders, Inc. All rights reserved. 
- $Revision$:
---%><%
-	response.addHeader("Pragma", "no-cache");
-	response.addHeader("Cache-Control", "no-cache");
-%>
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 	<head>
 		<title>ibx accordion sample</title>
@@ -16,11 +10,9 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 
 		<!--include this script...will boot ibx into the running state-->
-		<Script src="<%=request.getContextPath()%>/ibx/resources/ibx.js" type="text/javascript"></script>
+		<Script src="../../../resources/ibx.js" type="text/javascript"></script>
 
 		<script type="text/javascript">
-			<jsp:include page="/WEB-INF/jsp/global/wf_globals.jsp" flush="false" />
-
 			ibx(function()
 			{
 				$(".prop-select").on("ibx_change", function(e)

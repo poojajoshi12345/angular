@@ -214,6 +214,11 @@
 			{
 				width:100px;
 			}
+			.test-acc-pane
+			{
+				width:200px;
+				height:150px;
+			}
 		</style>
 	</head>
 	<body class="ibx-root" data-ibx-type="ibxVBox" data-ibxp-wrap="false">
@@ -450,6 +455,12 @@
 
 		<div id="test-ctrl txtAreaLabel" data-ibx-type="ibxLabel" data-ibxp-for=".test-text-area">Text Area Label:</div>
 		<div class="test-ctrl test-text-ctrl test-text-area" tabIndex="0" data-ibx-type="ibxTextArea" data-ibx-type="ibxTextField" data-ibxp-aria.labelledby="txtAreaLabel" data-ibxp-placeholder="Placeholder"></div>
+
+		<div class="test-ctrl test-acc-pane" data-ibx-type="ibxAccordionPane" data-ibxp-inline="true">
+			<div class="acc-page1" data-ibx-type="ibxAccordionPage" data-ibxp-selected="false">Page 1<div tabindex="0" data-ibx-type="ibxButton">Button</div></div>
+			<div class="acc-page2" data-ibx-type="ibxAccordionPage" data-ibxp-selected="false">Page 2<div tabindex="0" data-ibx-type="ibxButton">Button</div></div>
+			<div class="acc-page3" data-ibx-type="ibxAccordionPage" data-ibxp-selected="false">Page 3<div tabindex="0" data-ibx-type="ibxButton">Button</div></div>
+		</div>
 
 		<div class="test-ctrl test-tab-pane" tabIndex="0" data-ibx-type="ibxTabPane" data-ibxp-inline="true" data-ibxp-aria.label="Tabs">
 			<div class="tab-page-1" data-ibx-type="ibxTabPage">Page 1
