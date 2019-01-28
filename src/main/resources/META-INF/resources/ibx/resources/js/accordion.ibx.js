@@ -9,6 +9,8 @@ $.widget("ibi.ibxAccordionPane", $.ibi.ibxFlexBox,
 {
 	options:
 	{
+		focusDefault:true,
+		navKeyRoot:true,
 		direction:"column",
 		align:"stretch",
 		pageStretch:false,
@@ -132,6 +134,7 @@ $.widget("ibi.ibxAccordionPane", $.ibi.ibxFlexBox,
 		this._super();
 		var options = this.options;
 		this.element.children(".ibx-accordion-page").ibxToggleClass("acc-pg-stretch", options.pageStretch).ibxToggleClass("acc-pg-auto-size", options.pageAutoSize);
+		this.element.data("ibiIbxSelectionManager").options.selectableChildren = "ibx-accordion-page-button";
 	}
 });
 $.widget("ibi.ibxHAccordionPane", $.ibi.ibxAccordionPane, {options:{direction:"row"}, _widgetClass:"ibx-accordion-pane-horizontal"});
@@ -181,10 +184,9 @@ $.widget("ibi.ibxAccordionPage", $.ibi.ibxFlexBox,
 		var content = this._content = $("<div class='ibx-accordion-page-content'>").ibxWidget(this.options.contentOptions);
 		content.on("transitionend", this._onTransition.bind(this))
 
-		var btn = this._button = $("<div tabIndex='0' class='ibx-accordion-page-button'>").on("click", this._onBtnChange.bind(this));
+		var btn = this._button = $("<div tabIndex='-1' class='ibx-accordion-page-button'>").on("click", this._onBtnChange.bind(this));
 		btn.data("accPage", this.element).ibxButton(this.options.btnOptions).ibxAddClass("ibx-accordion-button");
 
-		this.element.on("keydown", this._onPageKeyEvent.bind(this));
 		this.element.on("focus", this._onPageFocus.bind(this));
 		this.element.append(btn, content)
 		this.element.ibxAddClass("accordion-page-no-animate");
@@ -232,21 +234,6 @@ $.widget("ibi.ibxAccordionPage", $.ibi.ibxFlexBox,
 	_onPageFocus:function(e)
 	{
 		this._button.focus();
-	},
-	_onPageKeyEvent:function(e)
-	{
-		var keyCode = e.keyCode;
-		if(keyCode == 37 || keyCode == 38)
-		{
-			this.element.prev(".ibx-accordion-page").focus();
-			e.stopPropagation();
-		}
-		else
-		if(keyCode == 39 || keyCode == 40)
-		{
-			this.element.next(".ibx-accordion-page").focus();
-			e.stopPropagation();
-		}
 	},
 	selected:function(selected)
 	{

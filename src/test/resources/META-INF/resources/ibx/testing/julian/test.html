@@ -12,43 +12,21 @@
 		<script type="text/javascript">
 			ibx(function(e)
 			{
-				var colMap = [{}, {}];
-
-				var grid = $(".test-grid-tree").ibxDataGrid("option", {"indentColumn":0, "colMap":colMap});
-				var nRows = 4;
-				var nCells = 1;
-				for(var i = 0; i < nRows; ++i)
+				var testDiv = $(".test-div");
+				testDiv.on("pointerdown", function(e)
 				{
-					var cells = [];
-					for(var j = 0; j < nCells; ++j)
-					{
-						var cell = $("<div>").text(sformat("Cell {1},{2}", i, j));
-						cells.push(cell);
-					}
-					
-					var row = $("<div>").ibxDataGridRow({title: i, expanded:true}).append(cells);
-					if(parentRow)
-						parentRow.ibxDataGridRow("addRow", row);
-					var parentRow = row;
-					grid.ibxWidget("addRow", row);
-				}
-				grid.ibxWidget("refresh");
-
-				return;
-				var grid = $(".test-grid").ibxDataGrid("option", {"colMap":colMap});
-				for(var i = 0; i < nRows; ++i)
+					console.log(e.type);
+					this.setPointerCapture(e.pointerId);
+				});
+				testDiv.on("pointerup", function(e)
 				{
-					var cells = [];
-					for(var j = 0; j < nCells; ++j)
-					{
-						var cell = $("<div>").text(sformat("Cell {1},{2}", i, j));
-						cells.push(cell);
-					}
-					var row = $("<div>").ibxDataGridRow({title: i}).append(cells);
-					grid.ibxWidget("addRow", row);
-				}
-				grid.ibxWidget("refresh");
-
+					console.log(e.type);
+					this.releasePointerCapture(e.pointerId);
+				});
+				testDiv.on("pointermove", function(e)
+				{
+					console.log(e.type);
+				});
 			},true);
 		</script>
 		<style type="text/css">
@@ -60,7 +38,7 @@
 				margin: 0px;
 				box-sizing: border-box;
 			}
-			.test-grid, .test-grid-tree
+			.test-div
 			{
 				width:250px;
 				height:100px;
@@ -69,8 +47,7 @@
 		</style>
 	</head>
 	<body class="ibx-root" data-ibx-type="ibxVBox">
-		<div tabindex="0" class="test-grid-tree" data-ibx-type="ibxDataGrid"></div>
-		<!-- <div tabindex="0" class="test-grid" data-ibx-type="ibxDataGrid"></div> -->
+		<div tabindex="0" class="test-div" data-ibx-type="ibxDataGrid"></div>
 	</body>
 </html>
 
