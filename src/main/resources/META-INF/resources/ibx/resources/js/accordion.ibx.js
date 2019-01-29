@@ -17,6 +17,12 @@ $.widget("ibi.ibxAccordionPane", $.ibi.ibxFlexBox,
 		pageAutoSize:false,
 		selected: "",
 		wrap: false,
+
+		aria:
+		{
+			role:"tablist"
+		}
+
 	},
 	_widgetClass:"ibx-accordion-pane",
 	_create:function()
@@ -26,6 +32,17 @@ $.widget("ibi.ibxAccordionPane", $.ibi.ibxFlexBox,
 		this._group = $("<div>").uniqueId().appendTo(this.element);
 		this._group.ibxRadioGroup({name:this._group.prop("id")}).on("ibx_change", this._onPageChange.bind(this));
 		this.add(this.element.children());
+	},
+	_setAccessibility:function(accessible, aria)
+	{
+		aria = this._super(accessible, aria);
+		//setup the relationship between the accordion buttons and the accordion pane
+		this.element.find(".ibx-accordion-page-button").each(function(idx, el)
+		{
+			var id = el.id;
+			aria.owns += " " + id;
+		}.bind(this));
+		return aria;
 	},
 	children:function(selector)
 	{
@@ -181,7 +198,7 @@ $.widget("ibi.ibxAccordionPage", $.ibi.ibxFlexBox,
 		this._super();
 		var options = this.options;
 
-		var content = this._content = $("<div class='ibx-accordion-page-content'>").ibxWidget(this.options.contentOptions);
+		var content = this._content = $("<div tabindex='0' class='ibx-accordion-page-content'>").ibxWidget(this.options.contentOptions);
 		content.on("transitionend", this._onTransition.bind(this))
 
 		var btn = this._button = $("<div tabIndex='-1' class='ibx-accordion-page-button'>").on("click", this._onBtnChange.bind(this));
@@ -197,6 +214,22 @@ $.widget("ibi.ibxAccordionPage", $.ibi.ibxFlexBox,
 
 		//need this on timer so we can stop the initial animation for selected pages.
 		window.setTimeout(function(){this.element.ibxRemoveClass("accordion-page-no-animate");}.bind(this), 0);
+	},
+	_setAccessibility:function(accessible, aria)
+	{
+		aria = this._super(accessible, aria);
+		var options = this.options;
+		var contentId = this._content.prop("id");
+		btnOptions = 
+		{
+			role:"tab",
+			expanded: options.selected,
+			controls: contentId,
+			owns: contentId,
+		};
+		this._button.ibxWidget("setAccessibility", options.aria.accessible, btnOptions);
+		this._content.ibxWidget("setAccessibility", aria.accessible, {"role":"tabpanel"});
+		return aria;
 	},
 	_destroy:function()
 	{
@@ -220,7 +253,6 @@ $.widget("ibi.ibxAccordionPage", $.ibi.ibxFlexBox,
 	{
 		this._content.ibxWidget("remove", el, destroy, refresh);
 	},
-
 	/*Needed so this object can be part of an ibxRadioGroup.*/
 	getValue:$.noop,
 	checked:function(checked)
