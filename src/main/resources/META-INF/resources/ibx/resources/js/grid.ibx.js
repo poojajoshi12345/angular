@@ -367,14 +367,12 @@ $.fn.ibxDataGridRow = $.ibi.ibxDataGridRow = function()
 					var ariaOpts = 
 					{
 						"role":"row",
-						"aria-posinset":1,
-						"aria-setsize":1,
 						"aria-level":this.depth() + 1,
 						"aria-hidden":!this.isVisible(),
-						"aria-expanded":this.isExpanded(),
 					};
-					var el = this.element[0];
+					this.container ? ariaOpts["aria-expanded"] = this.isExpanded() : null;
 					this.element.attr(ariaOpts);
+					this.getIndentCell().attr(ariaOpts);
 					this.header.attr({"role":"rowheader", "aria-hidden":ariaOpts["aria-hidden"]});
 				},
 				refresh:function(options)
