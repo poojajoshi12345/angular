@@ -275,13 +275,12 @@ $.widget("ibi.ibxTabPage", $.ibi.ibxWidget,
 		var options = this.options;
 		btnOptions = 
 		{
-			accessible:options.aria.accessible,
 			role:"tab",
 			expanded: options.selected,
 			controls:this.element.prop("id"),
 			owns:this.element.prop("id"),
 		};
-		this._tabButton.ibxWidget("option", "aria", btnOptions);
+		this._tabButton.ibxWidget("setAccessibility", options.aria.accessible, btnOptions);
 		return aria;
 	},
 	_destroy:function()
