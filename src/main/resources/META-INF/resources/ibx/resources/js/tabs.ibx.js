@@ -42,9 +42,9 @@ $.widget("ibi.ibxTabPane", $.ibi.ibxFlexBox,
 	},
 	_init: function ()
 	{
-		this._super();
 		this._createTabBar();
 		this.add(this.element.children(".ibx-tab-page"));
+		this._super();
 	},
 	children:function(selector)
 	{
@@ -127,7 +127,6 @@ $.widget("ibi.ibxTabPane", $.ibi.ibxFlexBox,
 				break;
 
 		}
-
 		this.element.prepend(this._tabBar);
 	},
 	_removeTabBar: function ()
@@ -148,6 +147,7 @@ $.widget("ibi.ibxTabPane", $.ibi.ibxFlexBox,
 		var curSel = this.options.selected;
 		var tabButton = $(e.target).ibxWidget("selected");
 		var selected = tabButton.ibxWidget("option", "tabPage");
+		selected.ibxWidget("option", "selected", true);
 		this.element.children(".ibx-tab-page").not(selected).ibxAddClass("tpg-hidden").ibxRemoveClass("tpg-selected");
 		selected.ibxRemoveClass("tpg-hidden").ibxAddClass("tpg-selected");
 		this.options.selected = selected;
@@ -265,13 +265,24 @@ $.widget("ibi.ibxTabPage", $.ibi.ibxWidget,
 
 		//alternate to data-ibxp-text...direct text node children can be used to set the text.
 		options.tabOptions.text = options.tabOptions.text || this.element.textNodes().remove().text().replace(/^\s*|\s*$/g, "");
-		this._tabButton = $("<div class='ibx-tab-button'>").prop("tabIndex", -1).ibxRadioButton({"tabPage": this.element, "aria":{"role":"tab"}});
-		this.element.append(this._tabButton);
+		this._tabButton = $("<div class='ibx-tab-button'>").prop("tabIndex", -1).ibxRadioButton({"tabPage": this.element});
+		this.element.append(this._tabButton).attr({tabindex:0});
 
 	},
-	_setAccessible:function(accessible)
+	_setAccessibility:function(accessible, aria)
 	{
-		this._super(accessible);
+		aria = this._super(accessible, aria);
+		var options = this.options;
+		btnOptions = 
+		{
+			accessible:options.aria.accessible,
+			role:"tab",
+			expanded: options.selected,
+			controls:this.element.prop("id"),
+			owns:this.element.prop("id"),
+		};
+		this._tabButton.ibxWidget("option", "aria", btnOptions);
+		return aria;
 	},
 	_destroy:function()
 	{
@@ -335,15 +346,25 @@ $.widget("ibi.ibxHTabGroup", $.ibi.ibxHCarousel,
 	options:
 	{
 		position: "top",
-		aria:{role:"tablist"},
 		hideDisabledButtons:true,
 		showPageMarkers: false,
+		aria:
+		{
+			role:"null",
+			label:null,
+		}
 	},
 	_widgetClass:"ibx-tab-group",
 	_create: function ()
 	{
 		this._super();
 		this.element.ibxAddClass("ibx-tab-group-horizontal").prop("tabindex", -1);
+	},
+	_setAccessibility(accessible, aria)
+	{
+		aria = this._super(accessible, aria);
+		this._itemsBox.ibxWidget("option", "aria", {"role":"tablist", "label":null});
+		return aria;
 	},
 	_refresh: function ()
 	{
@@ -365,15 +386,25 @@ $.widget("ibi.ibxVTabGroup", $.ibi.ibxVCarousel,
 	options:
 	{
 		position: "left",
-		aria:{role:"tablist"},
 		hideDisabledButtons:true,
 		showPageMarkers: false,
+		aria:
+		{
+			role:"null",
+			label:null,
+		}
 	},
 	_widgetClass:"ibx-tab-group",
 	_create: function ()
 	{
 		this._super();
 		this.element.ibxAddClass("ibx-tab-group-vertical").prop("tabindex", -1);
+	},
+	_setAccessibility(accessible, aria)
+	{
+		aria = this._super(accessible, aria);
+		this._itemsBox.ibxWidget("option", "aria", {"role":"tablist", "label":null});
+		return aria;
 	},
 	_refresh: function ()
 	{
