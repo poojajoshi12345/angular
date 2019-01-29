@@ -97,9 +97,9 @@ $.widget("ibi.ibxWidget", $.Widget,
 		this.element.append(children);
 		ibx.bindElements(children);
 	},				
-	setAccessibility:function(accessible)
+	setAccessibility:function(accessible, aria)
 	{
-		var aria = $.extend(true, {}, this.options.aria);
+		var aria = this.options.aria = $.extend(true, {}, this.options.aria, aria);
 		aria.disabled = this.options.disabled;
 		aria.accessible = accessible = (accessible === undefined) ? aria.accessible : accessible;
 
