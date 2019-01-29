@@ -349,7 +349,7 @@ $.widget("ibi.ibxHTabGroup", $.ibi.ibxHCarousel,
 		showPageMarkers: false,
 		aria:
 		{
-			role:"null",
+			role:null,
 			label:null,
 		}
 	},
@@ -359,7 +359,7 @@ $.widget("ibi.ibxHTabGroup", $.ibi.ibxHCarousel,
 		this._super();
 		this.element.ibxAddClass("ibx-tab-group-horizontal").prop("tabindex", -1);
 	},
-	_setAccessibility(accessible, aria)
+	_setAccessibility:function(accessible, aria)
 	{
 		aria = this._super(accessible, aria);
 		this._itemsBox.ibxWidget("option", "aria", {"role":"tablist", "label":null});
@@ -399,7 +399,7 @@ $.widget("ibi.ibxVTabGroup", $.ibi.ibxVCarousel,
 		this._super();
 		this.element.ibxAddClass("ibx-tab-group-vertical").prop("tabindex", -1);
 	},
-	_setAccessibility(accessible, aria)
+	_setAccessibility:function(accessible, aria)
 	{
 		aria = this._super(accessible, aria);
 		this._itemsBox.ibxWidget("option", "aria", {"role":"tablist", "label":null});
