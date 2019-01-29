@@ -1018,7 +1018,7 @@
 			return;
 		}
 
-		var prefix = '.' + this.opts._class + ' .' + this.opts.itemClass;
+		var prefix = '.' + this.opts._class + ' > .' + this.opts.itemClass;
 		var self = this;
 		var getHeight;
 
@@ -1239,6 +1239,7 @@
 			cellWidth = self.cellWidth();
 			var strictCellHeight = Math.ceil(o.outerHeight() / o.attr('data-gs-height'));
 			cellHeight = self.container.height() / parseInt(self.container.attr('data-gs-current-height'));
+			cellHeight = strictCellHeight;
 			self.placeholder
                 .attr('data-gs-x', o.attr('data-gs-x'))
                 .attr('data-gs-y', o.attr('data-gs-y'))
