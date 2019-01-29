@@ -42,9 +42,9 @@ $.widget("ibi.ibxTabPane", $.ibi.ibxFlexBox,
 	},
 	_init: function ()
 	{
+		this._super();
 		this._createTabBar();
 		this.add(this.element.children(".ibx-tab-page"));
-		this._super();
 	},
 	children:function(selector)
 	{
