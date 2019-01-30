@@ -495,13 +495,16 @@ $.widget("ibi.ibxMenuButton", $.ibi.ibxButtonSimple,
 		var options = this.options;
 		var event = $.Event(e.origionalEvent);
 		event.type = "ibx_click";
+		event.menu = options.menu;
 		this.element.trigger(event);
-		var menu = event.menu || options.menu;
+
+		//menu might have changed...reset after event.
+		var menu = event.menu;
 		this.option("menu", menu);
 
 		//open the menu if it is a menu, and it has items, or is some other popup type.
-		if(!options.menu.is(".ibx-menu") || options.menu.ibxWidget("children", "*").length)
-			options.menu.ibxWidget("option", {position:options.position}).ibxWidget("open");
+		if(!menu.is(".ibx-menu") || menu.ibxWidget("children", "*").length)
+			menu.ibxWidget("option", {position:options.position}).ibxWidget("open");
 	},
 	_onKeyEvent:function(e)
 	{
