@@ -363,6 +363,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 				}
 			}
 		}
+		this.updateAccessibility();
 	},
 	toggleSelected:function(el, selected, anchor)
 	{
@@ -400,6 +401,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 			this._elAnchor.ibxRemoveClass("ibx-sm-anchor");
 			this._elAnchor = $(el).first().ibxAddClass("ibx-sm-anchor");
 			var evt = this._dispatchEvent("ibx_anchored", {"anchor":this._elAnchor[0], "focus":this._elFocus[0], "selModel":this}, true, false);
+			this.updateAccessibility();
 		}
 		return this._elAnchor[0];
 	},
@@ -421,9 +423,9 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 		{
 			this._elFocus.ibxRemoveClass("ibx-sm-focused ibx-ie-pseudo-focus");
 			this._elFocus = $(el).first().ibxAddClass("ibx-sm-focused " + (ibxPlatformCheck.isIE ? "ibx-ie-pseudo-focus" : ""));
-			this._elFocus ? this.element.attr("aria-active-descendant", this._elFocus.prop("id")) : this.element.removeAttr("aria-active-descendant");
 			this._elFocus.focus();
 			this._dispatchEvent("ibx_focused", {"focus":this._elFocus[0], "anchor":this._elAnchor[0], "selModel":this}, true, false);
+			this.updateAccessibility();
 		}
 		return this._elFocus[0];
 	},
@@ -458,6 +460,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 				//this.element.prop("tabIndex", this.element.data("ibxFocDefSavedTabIndex")).removeData("ibxFocDefSavedTabIndex");
 			}
 			this._active = active;
+			this.updateAccessibility();
 		}
 	},
 	option:function(key, value)
@@ -491,13 +494,20 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 				this.element.ibxRubberBand();
 		}
 		this._super(key, value);
-
-		var ariaOpts = 
+		this.updateAccessibility();
+	},
+	updateAccessibility:function()
+	{
+		var options = this.options;
+		var aria = 
 		{
 			"aria-multiselectable": (options.type == "multi"),
 		}
-		this.element.attr(ariaOpts);
-	},
+		this.element.attr(aria);
+		this._elFocus ? this.element.attr("aria-activedescendant", this._elFocus.prop("id")) : this.element.removeAttr("aria-activedescendant");
+		this.selectableChildren().attr("aria-selected", false);
+		this.selected().attr("aria-selected", true);
+	}
 });
 
 $.widget("ibi.ibxRubberBand", $.Widget, 
