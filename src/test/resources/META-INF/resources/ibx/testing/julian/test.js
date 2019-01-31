@@ -1,3 +1,18 @@
+this.bucketPopup.on("ibx_click", function(e)
+{
+	if(this.bucketPopup.ibxWidget("option", "menu").is('.ibx-menu-button-default-menu'))            
+	{
+		var menu = ibx.resourceMgr.getResource(".wfc-bucket-menu", false);
+		this.bucketPopup.ibxWidget("add", menu);
+		ibx.bindElements(this.bucketPopup[0]);
+		e.menu = menu;
+	}            
+}.bind(this));
+
+
+
+
+
 	".woff":"font/woff",
 	".woff2":"font/woff2",
 	".ttf":"font/truetype"
