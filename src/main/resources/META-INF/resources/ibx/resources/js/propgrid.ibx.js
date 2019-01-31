@@ -68,6 +68,7 @@ $.widget("ibi.ibxPropertyGrid", $.ibi.ibxDataGrid,
 			this._buildPropTree(value, allRows);
 			this.addRows(allRows);
 			this.updateHeaders();
+			this.refresh();
 		}
 		this._super(key, value);
 	},
