@@ -279,11 +279,16 @@ $.widget("ibi.ibxAccordionPage", $.ibi.ibxFlexBox,
 		else
 		if(this.options.selected != selected)
 		{
-			this.options.selected = selected;
-			this.refresh();
-			this._trigger( selected ? "open" : "close");
-			if(this.options.autoClose)
-				this._trigger("change");
+			var type = selected ? "open" : "close";
+			var event = this.element.dispatchEvent("ibx_before" + type)
+			if(!event.isDefaultPrevented())
+			{
+				this.options.selected = selected;
+				this.refresh();
+				this._trigger(type);
+				if(this.options.autoClose)
+					this._trigger("change");
+			}
 		}
 		return this;
 	},

@@ -31,7 +31,12 @@
 						option = "btnPosition";
 					page.ibxWidget("option", option, value);
 				});
-
+				$(".ibx-accordion-page").on("ibx_beforeopen ibx_beforeclose", function(e)
+				{
+					console.log(e.type);
+				//	if(e.type == "ibx_beforeclose")
+					//	e.preventDefault();
+				});
 			}, true);
 
 			function foo()
