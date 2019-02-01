@@ -505,8 +505,9 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 		}
 		this.element.attr(aria);
 		this._elFocus ? this.element.attr("aria-activedescendant", this._elFocus.prop("id")) : this.element.removeAttr("aria-activedescendant");
-		this.selectableChildren().attr("aria-selected", false);
-		this.selected().attr("aria-selected", true);
+		//had to back this out because it was VERY slow...need to revisit.
+		// this.selectableChildren().attr("aria-selected", false);
+		// this.selected().attr("aria-selected", true);
 	}
 });
 
