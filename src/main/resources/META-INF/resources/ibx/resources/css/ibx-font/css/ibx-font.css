@@ -264,6 +264,9 @@
 .ibx-glyph-unlock:before {
   content: "\e97b";
 }
+.ibx-glyph-case-sensitive:before {
+  content: "\ea12";
+}
 .ibx-glyph-map-line:before {
   content: "\ea0a";
 }
