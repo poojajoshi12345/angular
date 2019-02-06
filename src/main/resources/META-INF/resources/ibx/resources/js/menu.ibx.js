@@ -402,7 +402,6 @@ $.widget("ibi.ibxMenuBar", $.ibi.ibxHBox,
 		"aria":
 		{
 			"role":"menubar",
-			"orientation":"horizontal"
 		}
 	},
 	_widgetClass:"ibx-menu-bar",
@@ -444,7 +443,6 @@ $.widget("ibi.ibxMenuButton", $.ibi.ibxButtonSimple,
 		"aria":
 		{
 			"role":"menuitem",
-			"multiline":false,
 			"haspopup":true,
 		}
 	},
@@ -610,7 +608,7 @@ $.widget("ibi.ibxSelectMenuButton", $.ibi.ibxMenuButton,
 	{
 		this._super(accessible, aria);
 		this.options.menu.ibxWidget("option", "aria.role", "listbox");//turn menu into a list box
-		this.options.menu.ibxWidget("option", "aria.multiselectable", this.options.multiSelect);//turn menu into a list box
+		this.options.menu.ibxWidget("option", "aria.multiselectable", this.options.multiSelect ? true : null);//turn menu into a list box
 		return aria;
 	},
 	add:function(el, elSibling, before, refresh)

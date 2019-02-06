@@ -21,7 +21,7 @@ $.widget("ibi.ibxSelectBase", $.ibi.ibxTextField,
 			"aria":
 			{
 				"role":"combobox",
-				"multiline":false,
+				"multiline":null,
 				"haspopup":"listbox"
 			}
 		},

@@ -64,8 +64,8 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 		this._super(accessible, aria);
 		var options = this.options;
 
-		this._itemsBox.ibxWidget("option", "aria", {"role":"listbox", "label":ibx.resourceMgr.getString("IBX_CAROUSEL_ITEMS")}).ibxWidget("setAccessibility", this.options.aria.accessible);
-		this._pageMarkers.ibxWidget("option", "aria", {"role":"listbox", "label":ibx.resourceMgr.getString("IBX_CAROUSEL_PAGES")}).ibxWidget("setAccessibility", this.options.aria.accessible);
+		this._itemsBox.ibxWidget("option", "aria", {"role":"list", "label":ibx.resourceMgr.getString("IBX_CAROUSEL_ITEMS")}).ibxWidget("setAccessibility", this.options.aria.accessible);
+		this._pageMarkers.ibxWidget("option", "aria", {"role":"list", "label":ibx.resourceMgr.getString("IBX_CAROUSEL_PAGES")}).ibxWidget("setAccessibility", this.options.aria.accessible);
 		return aria;
 	},
 	_destroy:function()

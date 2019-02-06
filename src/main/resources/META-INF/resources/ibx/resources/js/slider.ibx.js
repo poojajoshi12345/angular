@@ -548,7 +548,6 @@ $.widget("ibi.ibxRange", $.ibi.ibxSlider,
 		"markerShape2": "",
 		"aria":
 		{
-			"orientation":"horizontal",
 			"label": ibx.resourceMgr.getString("IBX_STR_SLIDER_RANGE")
 		},
 
@@ -821,7 +820,7 @@ $.widget("ibi.ibxLeftRange", $.ibi.ibxRange,
 {
 	options:
 	{
-		aria:{orientation:"horizontal"}
+		aria:{}
 	},
 	_create: function ()
 	{

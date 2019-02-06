@@ -501,7 +501,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 		var options = this.options;
 		var aria = 
 		{
-			"aria-multiselectable": (options.type == "multi"),
+			"aria-multiselectable": (options.type == "multi") ? true : null,
 		}
 		this.element.attr(aria);
 		this._elFocus ? this.element.attr("aria-activedescendant", this._elFocus.prop("id")) : this.element.removeAttr("aria-activedescendant");

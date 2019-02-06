@@ -366,7 +366,6 @@ $.widget("ibi.ibxTreeBrowser", $.ibi.ibxVBox,
 		"aria":
 		{
 			"role":"tree",
-			"readonly":true
 		}
 	},
 	_widgetClass:"ibx-tree-browser",

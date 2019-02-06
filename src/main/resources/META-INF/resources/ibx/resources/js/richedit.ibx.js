@@ -341,7 +341,7 @@ $.widget("ibi.ibxEditable", $.Widget,
 	_setAccessibility:function(accessible, aria)
 	{
 		options = this.options;
-		aria.multiline = options.multiLine;
+		aria.multiline = options.multiLine ? true : null;
 		aria.autocomplete = options.autocomplete;
 		return aria;	
 	},
