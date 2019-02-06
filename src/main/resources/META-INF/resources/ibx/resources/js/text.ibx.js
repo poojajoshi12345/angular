@@ -30,6 +30,7 @@ $.widget("ibi.ibxTextField", $.ibi.ibxFlexBox,
 
 			"aria":
 			{
+				"labelledby":"",
 			}
 		},
 	_widgetClass: "ibx-text-field",
@@ -53,7 +54,7 @@ $.widget("ibi.ibxTextField", $.ibi.ibxFlexBox,
 	{
 		aria = this._super(accessible, aria);
 		accessible ? this._textInput.attr("role", "textbox").ibxAriaId() : this._textInput.removeAttr("role").removeIbxAriaId();
-		accessible ? this._textInput.attr("aria-labelledby", aria.labelledby) : this._textInput.removeAttr("aria-labelledby");
+		accessible ? this._textInput.attr("aria-labelledby", aria.labelledby || this.element.attr("title")) : this._textInput.removeAttr("aria-labelledby");
 		return aria;
 	},
 	_setValue: function (value, bFormat)

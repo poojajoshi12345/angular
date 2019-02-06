@@ -27,15 +27,14 @@ $.widget("ibi.ibxSpinner", $.ibi.ibxTextField,
 	_widgetClass:"ibx-spinner",
 	_create:function()
 	{
-		this._super();
 		this._btnUp = $("<div>").ibxButton().on("mousedown mouseup mouseout", this._onSpinBtnEvent.bind(this));
 		this._btnDown = $("<div>").ibxButton().on("mousedown mouseup mouseout", this._onSpinBtnEvent.bind(this));
-		this._btnBox = $("<div>").ibxVButtonGroup();
-		this._btnBox.append(this._btnUp);
-		this._btnBox.append(this._btnDown);
+		this._btnBox = $("<div>").ibxVButtonGroup().append(this._btnUp, this._btnDown);
+
+		this._super();
+		this._textInput.css('width', '1px');
 		this._textInput.ibxAddClass("ibx-spinner-text-input");
 		this.element.on("ibx_textchanging", this._onTextChanging.bind(this)).append(this._btnBox);
-		this._textInput.css('width', '1px');
 	},
 	_setAccessibility:function(accessible, aria)
 	{
@@ -49,6 +48,8 @@ $.widget("ibi.ibxSpinner", $.ibi.ibxTextField,
 			"aria-valuenow":options.value,
 		};
 		accessible ? this._textInput.attr(attr) : this._textInput.removeAttr("aria-valuemin aria-valuemax aria-valuenow");
+		this._btnUp.ibxButton("option", "aria.hidden", true);
+		this._btnDown.ibxButton("option", "aria.hidden", true);
 		return aria;
 	},
 	_init: function ()

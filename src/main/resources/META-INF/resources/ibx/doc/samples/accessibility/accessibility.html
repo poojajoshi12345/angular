@@ -81,7 +81,7 @@
 				{
 					var cells = $(rows[i]).children(".dgrid-cell");
 					for(var j = 0; j < cells.length; ++j)
-						$(cells[j]).text(sformat("Cell {1},{2}", i, j));
+						$(cells[j]).text("Item").prop("title", sformat("Cell {1},{2}", i, j));
 
 				}
 
@@ -450,10 +450,10 @@
 
 		<div class="test-ctrl test-spinner" tabIndex="0" data-ibx-type="ibxSpinner"></div>
 
-		<div id="test-ctrl txtFieldLabel" data-ibx-type="ibxLabel" data-ibxp-for=".test-text-field">Text Field Label:</div>
+		<div id="txtFieldLabel" class="test-ctrl" data-ibx-type="ibxLabel" data-ibxp-for=".test-text-field">Text Field Label:</div>
 		<div class="test-ctrl test-text-ctrl test-text-field" tabIndex="0" data-ibx-type="ibxTextField" data-ibxp-aria.labelledby="txtFieldLabel" data-ibxp-placeholder="Placeholder"></div>
 
-		<div id="test-ctrl txtAreaLabel" data-ibx-type="ibxLabel" data-ibxp-for=".test-text-area">Text Area Label:</div>
+		<div id="txtAreaLabel" class="test-ctrl" data-ibx-type="ibxLabel" data-ibxp-for=".test-text-area">Text Area Label:</div>
 		<div class="test-ctrl test-text-ctrl test-text-area" tabIndex="0" data-ibx-type="ibxTextArea" data-ibx-type="ibxTextField" data-ibxp-aria.labelledby="txtAreaLabel" data-ibxp-placeholder="Placeholder"></div>
 
 		<div tabindex="0" class="test-ctrl test-acc-pane" data-ibx-type="ibxAccordionPane" data-ibxp-inline="true">

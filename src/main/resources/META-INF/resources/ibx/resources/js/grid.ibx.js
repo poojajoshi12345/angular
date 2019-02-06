@@ -721,7 +721,6 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 			this.getRow(row).ibxDataGridRow("expand", expand);
 		}
 	},
-	_cellId:0,
 	addRow:function(row, sibling, before)
 	{
 		row = $(row);
@@ -744,7 +743,7 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 
 			//aria stuff
 			cell.setAttribute("role", "gridcell");
-			cell.id = "dgrid-cell-id-" + ++this._cellId;
+			cell.id = "dgrid-cell-id-" + (++$.ibi.ibxDataGrid._cellId);
 		}
 
 		//set row options and add to grid...refresh so columnIndent is correct.
@@ -856,7 +855,7 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 		this.getRow().ibxDataGridRow("refresh");
 	},
 });
-
+$.ibi.ibxDataGrid._cellId = 0;
 
 /******************************************************************************
 	FLEX GRID

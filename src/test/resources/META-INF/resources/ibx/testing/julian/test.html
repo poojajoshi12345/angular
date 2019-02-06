@@ -12,21 +12,6 @@
 		<script type="text/javascript">
 			ibx(function(e)
 			{
-				var testDiv = $(".test-div");
-				testDiv.on("pointerdown", function(e)
-				{
-					console.log(e.type);
-					this.setPointerCapture(e.pointerId);
-				});
-				testDiv.on("pointerup", function(e)
-				{
-					console.log(e.type);
-					this.releasePointerCapture(e.pointerId);
-				});
-				testDiv.on("pointermove", function(e)
-				{
-					console.log(e.type);
-				});
 			},true);
 		</script>
 		<style type="text/css">
@@ -47,7 +32,7 @@
 		</style>
 	</head>
 	<body class="ibx-root" data-ibx-type="ibxVBox">
-		<div tabindex="0" class="test-div" data-ibx-type="ibxDataGrid"></div>
+		<div tabindex="0" class="test-div" data-ibx-type="ibxMenuBar"></div>
 	</body>
 </html>
 

@@ -362,7 +362,8 @@ $.widget("ibi.ibxHTabGroup", $.ibi.ibxHCarousel,
 	_setAccessibility:function(accessible, aria)
 	{
 		aria = this._super(accessible, aria);
-		this._itemsBox.ibxWidget("option", "aria", {"role":"tablist", "label":null});
+		this._itemsBox.ibxWidget("setAccessibility", undefined, {"role":"tablist", "label":""});
+		//this._itemsBox.ibxWidget("option", "aria", {"role":"tablist", "label":""});
 		return aria;
 	},
 	_refresh: function ()

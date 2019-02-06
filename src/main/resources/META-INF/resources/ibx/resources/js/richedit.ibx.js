@@ -342,7 +342,7 @@ $.widget("ibi.ibxEditable", $.Widget,
 	{
 		options = this.options;
 		aria.multiline = options.multiLine ? true : null;
-		aria.autocomplete = options.autocomplete;
+		aria.autocomplete = options.autocomplete ? true : null;
 		return aria;	
 	},
 	_lastValue:null,

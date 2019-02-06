@@ -48,7 +48,7 @@ $.widget("ibi.ibxSelectBase", $.ibi.ibxTextField,
 		if (this.options.popup)
 		{
 			this.options.wrap = false;
-			this._dropButton = $("<div class='ibx-select-open-btn'>").ibxButton();
+			this._dropButton = $("<div class='ibx-select-open-btn'>").ibxButton({aria:{hidden:true}});
 			this.element.append(this._dropButton);
 			this._dropButton.on("mousedown", this._onButtonMouseDown.bind(this)).on("click", this._onButtonClick.bind(this));
 		}
@@ -1269,6 +1269,14 @@ $.widget("ibi.ibxSelectItemListPaged", $.ibi.ibxVBox,
 		this._pageBox.append(this._pageLeft, this._pageLabel, this._pageRight);
 
 		this.element.append(this._optionsBox, this._listControl, this._pageBox);
+	},
+	_setAccessibility(accessible, aria)
+	{
+		aria = this._super(accessible, aria);
+		this._searchBox.attr("title", ibx.resourceMgr.getString("IBX_SELECT_SEARCH_VALUES")).ibxWidget("refresh");
+		this._pageLeft.attr("title", ibx.resourceMgr.getString("IBX_SELECT_PAGE_PREV"));
+		this._pageRight.attr("title", ibx.resourceMgr.getString("IBX_SELECT_PAGE_NEXT"));
+		return aria;
 	},
 	_init: function ()
 	{
