@@ -30,7 +30,6 @@ $.widget("ibi.ibxTextArea", $.ibi.ibxFlexBox,
 		"aria":
 		{
 			"multiline":true,
-			"labelledby":"",
 		}
 	},
 	_widgetClass: "ibx-text-area",
@@ -49,8 +48,9 @@ $.widget("ibi.ibxTextArea", $.ibi.ibxFlexBox,
 	{
 		aria = this._super(accessible, aria);
 		accessible ? this._textArea.attr("role", "textbox") : this._textArea.removeAttr("role");
-		accessible ? this._textArea.attr("aria-labelledby", aria.labelledby || this.element.prop("title")) : this._textArea.removeAttr("aria-labelledby");
 		accessible ? this._textArea.attr("aria-multiline", true) : this._textArea.removeAttr("aria-multiline");
+		accessible ? this._textArea.attr("aria-label", aria.label || this.element.attr("title")) : this._textArea.removeAttr("aria-label");
+		accessible ? this._textArea.attr("aria-labelledby", aria.labelledby) : this._textArea.removeAttr("aria-label");
 		return aria;
 	},
 	_setOption: function (key, value)
