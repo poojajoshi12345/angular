@@ -30,6 +30,7 @@ $.widget("ibi.ibxTextField", $.ibi.ibxFlexBox,
 
 			"aria":
 			{
+				"label":" ",
 			}
 		},
 	_widgetClass: "ibx-text-field",

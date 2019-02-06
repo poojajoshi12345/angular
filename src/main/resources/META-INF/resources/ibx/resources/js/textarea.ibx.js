@@ -30,6 +30,7 @@ $.widget("ibi.ibxTextArea", $.ibi.ibxFlexBox,
 		"aria":
 		{
 			"multiline":true,
+			"label":" ",
 		}
 	},
 	_widgetClass: "ibx-text-area",
