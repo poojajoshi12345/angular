@@ -114,7 +114,6 @@ $.widget("ibi.ibxWidget", $.Widget,
 
 		//let derived adjust their attributes, and adjust labelledby
 		aria = this._setAccessibility(accessible, aria);
-		aria.label = aria.label || this.element.attr("title");
 		aria.label = (typeof(this.options.tooltip) === "string") ? this.options.tooltip : aria.label;
 
 		aria.labelledby = aria.label ? null : aria.labelledby; //can't have aria-label and aria-labelledby at same time...label wins.
