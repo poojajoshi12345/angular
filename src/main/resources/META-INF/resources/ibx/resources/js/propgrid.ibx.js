@@ -117,6 +117,7 @@ _p.createUI = function()
 	this.editorCell.attr("tabindex", 0).data("ibxProp", prop);
 
 	this.editor = this._createEditor().attr("tabindex", -1).data("ibxProp", prop).css("flex", "0 0 auto");
+	this.editor.on("keydown", this._onEditorKeyEvent.bind(this));
 	this.editorCell.append(this.editor);
 };
 _p._createNameCell = function()
@@ -139,6 +140,11 @@ _p._onEditorCellKeyEvent = function(e)
 	if(e.type == "keydown" && e.keyCode == $.ui.keyCode.ESCAPE)
 		this.editorCell.focus();
 };
+_p._onEditorKeyEvent = function(e)
+{
+	if(e.type == "keydown" && e.keyCode != $.ui.keyCode.ESCAPE)
+		e.stopPropagation();
+}
 _p._updateValue = function(newValue)
 {
 	var event = this.grid.dispatchEvent("ibx_prop_beforeupdate", {"prop":this.prop, "newValue":newValue}, false, true);
