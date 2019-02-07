@@ -372,7 +372,7 @@ $.fn.ibxDataGridRow = $.ibi.ibxDataGridRow = function()
 					};
 					this.container ? ariaOpts["aria-expanded"] = this.isExpanded() : null;
 					this.element.attr(ariaOpts);
-					this.getIndentCell().attr(ariaOpts);
+					//this.getIndentCell().attr(ariaOpts);
 					this.header.attr({"role":"rowheader", "aria-hidden":ariaOpts["aria-hidden"]});
 				},
 				refresh:function(options)
@@ -486,6 +486,8 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 		grid.ibxDataGridSelectionManager({grid:this, selectableChildren:options.classes.gridSelectable}).on("ibx_beforeselchange", this._onGridSelChange.bind(this));
 
 		this.add([corner[0], colHeaderBar[0], rowHeaderBar[0], grid[0]]);
+		this._colHeaderBar.ibxWidget("setAccessibility", undefined, {role:"row"});
+		this._rowHeaderBar.ibxWidget("setAccessibility", undefined, {role:"row"});
 		this._super();
 	},
 	_setAccessibility:function(accessible, aria)

@@ -143,7 +143,11 @@ _p._onEditorCellKeyEvent = function(e)
 _p._onEditorKeyEvent = function(e)
 {
 	if(e.type == "keydown" && e.keyCode != $.ui.keyCode.ESCAPE)
+	{
+		if(e.keyCode == $.ui.keyCode.SPACE)
+			e.preventDefault();
 		e.stopPropagation();
+	}
 }
 _p._updateValue = function(newValue)
 {
