@@ -442,7 +442,7 @@ $.widget("ibi.ibxMenuButton", $.ibi.ibxButtonSimple,
 		},
 		"aria":
 		{
-			"role":"menuitem",
+			"role":"button",
 			"haspopup":true,
 		}
 	},
@@ -457,8 +457,11 @@ $.widget("ibi.ibxMenuButton", $.ibi.ibxButtonSimple,
 		this._onMenuOpenCloseBound = this._onMenuOpenClose.bind(this);
 		this._onMenuSelectBound = this._onMenuSelect.bind(this);
 
-		//get/make the menu...if we're creating a default menu, tuck it under this element for safe keeping.
-		var menu = options.menu = options.menu || this.element.children(".ibx-popup")[0] || $("<div class='ibx-menu-button-default-menu'>").ibxMenu().appendTo(this.element)[0];
+		//get/make the menu...if menu isn't in the dom, tuck it under this element for safe keeping...must be in dom for accessibility.
+		var menu = options.menu = options.menu || this.element.children(".ibx-popup")[0] || $("<div class='ibx-menu-button-default-menu'>").ibxMenu();
+		if(!menu.parentElement)
+			this.element.append(menu);
+		
 		this.option("menu", menu);
 
 		//find the other children and add them to the menu.
@@ -470,9 +473,8 @@ $.widget("ibi.ibxMenuButton", $.ibi.ibxButtonSimple,
 	{
 		var options = this.options;
 		aria = this._super(accessible, aria);
-		aria.controls = options.menu.prop("id");
+		aria.owns = options.menu.prop("id");
 		aria.expanded = options.menu.ibxWidget("isOpen");
-		aria.controls = options.menu.prop("id");
 		return aria;
 	},
 	children:function(selector)
@@ -779,9 +781,14 @@ $.widget("ibi.ibxSplitMenuButton", $.ibi.ibxButtonSimple,
 
 		options.menuOptions.position.of = this.element;
 		var menu = this.element.children(".ibx-popup");
-		var menuBtn = this._menuBtn = $("<div>").append(menu).ibxMenuButton().on("mousedown click", this._onMenuButtonMouseEvent.bind(this));
+		var menuBtn = this._menuBtn = $("<div>").append(menu).ibxMenuButton().on("mousedown click", this._onMenuButtonMouseEvent.bind(this)).attr("title", ibx.resourceMgr.getString("IBX_SPLIT_BUTTONE_DOWN_ARROW_TITLE"));
 		var separator = this._separator = $("<div class='split-separator'>");
 		this.element.append(separator, menuBtn).on({"click":this._onBtnClick.bind(this)});
+	},
+	_setAccessibility(accessible, aria)
+	{
+		aria = this._super(accessible, aria);
+		return aria;
 	},
 	menu:function(menu)
 	{

@@ -65,7 +65,7 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 		var options = this.options;
 
 		this._itemsBox.ibxWidget("option", "aria", {"role":"list", "label":ibx.resourceMgr.getString("IBX_CAROUSEL_ITEMS")}).ibxWidget("setAccessibility", this.options.aria.accessible);
-		this._pageMarkers.ibxWidget("option", "aria", {"role":"list", "label":ibx.resourceMgr.getString("IBX_CAROUSEL_PAGES")}).ibxWidget("setAccessibility", this.options.aria.accessible);
+		this._pageMarkers.ibxWidget("option", "aria", {"role":"radiogroup", "label":ibx.resourceMgr.getString("IBX_CAROUSEL_PAGES")}).ibxWidget("setAccessibility", this.options.aria.accessible);
 		return aria;
 	},
 	_destroy:function()
@@ -281,12 +281,12 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 		for(var i = 0; i < pageInfo.pages; ++i)
 		{
 			var isCurPage = (i == pageInfo.curPage);
-			var pageMarker = $(sformat("<div role='option' class='{1} {2}' tabIndex='-1'>", this.options.pageMarkerClass, isCurPage ? this.options.pageMarkerSelectedClass : ""));
+			var pageMarker = $(sformat("<div class='{1} {2}' tabIndex='-1'>", this.options.pageMarkerClass, isCurPage ? this.options.pageMarkerSelectedClass : ""));
 			pageMarker.prop("title", sformat("{1} {2}", ibx.resourceMgr.getString("IBX_CAROUSEL_PAGE"), i+1));
 			pageMarker.data("ibxPageMarkerInfo", {"pageNo":i, "pageInfo":pageInfo}).on("click", this._onPageMarkerClick.bind(this)).on("keyup", this._onPageMarkerKeyEvent.bind(this));
 
 			if(this.options.aria.accessible)
-				pageMarker.attr({"role":"option", "aria-checked": isCurPage})
+				pageMarker.attr({"role":"radio", "aria-checked": isCurPage})
 			this._pageMarkers.append(pageMarker)
 		}
 

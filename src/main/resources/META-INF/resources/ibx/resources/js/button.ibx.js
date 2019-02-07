@@ -128,7 +128,7 @@ $.widget("ibi.ibxCheckBox", $.ibi.ibxLabel,
 	_setAccessibility:function(accessible, aria)
 	{
 		aria = this._super(accessible, aria);
-		aria.checked = this.options.checked ? true : null;
+		aria.checked = this.options.checked;
 		return aria;
 	},
 	_destroy:function()

@@ -228,7 +228,6 @@ $.widget("ibi.ibxAccordionPage", $.ibi.ibxFlexBox,
 			owns: contentId,
 		};
 		this._button.ibxWidget("setAccessibility", options.aria.accessible, btnOptions);
-		this._content.ibxWidget("setAccessibility", aria.accessible, {"role":"tabpanel"});
 		return aria;
 	},
 	_destroy:function()

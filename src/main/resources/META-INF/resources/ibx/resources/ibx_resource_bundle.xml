@@ -34,6 +34,10 @@ $Revision$:-->
 				"IBX_DLG_CAPTION_INF":"Information",
 				"IBX_DLG_CAPTION_QST":"Question",
 
+				"IBX_SPLIT_BUTTONE_DOWN_ARROW_TITLE":"Show Menu",
+
+				"IBX_TEXT_INPUT_LABEL":"Text Input",
+
 				"IBX_STR_SLIDER":"Slider",
 				"IBX_STR_SLIDER_DEF_LABEL":"Slider {1} to {2}",
 				"IBX_STR_SLIDER_RANGE":"Range",

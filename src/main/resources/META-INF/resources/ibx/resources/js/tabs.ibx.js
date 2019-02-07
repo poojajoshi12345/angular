@@ -148,7 +148,7 @@ $.widget("ibi.ibxTabPane", $.ibi.ibxFlexBox,
 		var tabButton = $(e.target).ibxWidget("selected");
 		var selected = tabButton.ibxWidget("option", "tabPage");
 		selected.ibxWidget("option", "selected", true);
-		this.element.children(".ibx-tab-page").not(selected).ibxAddClass("tpg-hidden").ibxRemoveClass("tpg-selected");
+		this.element.children(".ibx-tab-page").not(selected).ibxWidget("option", "selected", false).not(selected).ibxAddClass("tpg-hidden").ibxRemoveClass("tpg-selected");
 		selected.ibxRemoveClass("tpg-hidden").ibxAddClass("tpg-selected");
 		this.options.selected = selected;
 		selected.dispatchEvent("ibx_selected", null, true, false, curSel[0]);
@@ -253,7 +253,9 @@ $.widget("ibi.ibxTabPage", $.ibi.ibxWidget,
 	options:
 	{
 		selected: false,
-		tabOptions:{},
+		tabOptions:
+		{
+		},
 		aria:{role:"tabpanel"}
 	},
 	_widgetClass:"ibx-tab-page",
@@ -265,22 +267,14 @@ $.widget("ibi.ibxTabPage", $.ibi.ibxWidget,
 
 		//alternate to data-ibxp-text...direct text node children can be used to set the text.
 		options.tabOptions.text = options.tabOptions.text || this.element.textNodes().remove().text().replace(/^\s*|\s*$/g, "");
-		this._tabButton = $("<div class='ibx-tab-button'>").prop("tabIndex", -1).ibxRadioButton({"tabPage": this.element});
+		options.tabOptions.tabPage = this.element;		
+		this._tabButton = $("<div class='ibx-tab-button'>").prop("tabIndex", -1).ibxTabButton(options.tabOptions);
 		this.element.append(this._tabButton).attr({tabindex:0});
-
 	},
 	_setAccessibility:function(accessible, aria)
 	{
 		aria = this._super(accessible, aria);
-		var options = this.options;
-		btnOptions = 
-		{
-			role:"tab",
-			expanded: options.selected,
-			controls:this.element.prop("id"),
-			owns:this.element.prop("id"),
-		};
-		this._tabButton.ibxWidget("setAccessibility", options.aria.accessible, btnOptions);
+		this._tabButton.ibxWidget("setAccessibility");
 		return aria;
 	},
 	_destroy:function()
@@ -328,14 +322,38 @@ $.widget("ibi.ibxTabPage", $.ibi.ibxWidget,
 	},
 	_refresh: function ()
 	{
+		this._tabButton.ibxWidget("option", this.options.tabOptions).attr("title", this.options.tabOptions.title);
 		this._super();
-		this._tabButton.ibxWidget("option", this.options.tabOptions);
-		this._tabButton.attr("title", this.options.tabOptions.title);
 	}
 });
 $.ibi.ibxTabPage.statics = 
 {
 };
+
+/******************************************************************************
+	TAB BUTTON...just a radio button with some accessibility overrides.
+******************************************************************************/
+$.widget("ibi.ibxTabButton", $.ibi.ibxRadioButton,
+{
+	options:
+	{
+		tabPage:null,
+		aria:{role:"tab"}
+	},
+	_setAccessibility:function(accessible, aria)
+	{
+		aria = this._super(accessible, aria);
+		delete aria.checked;
+
+		var tabPage = this.options.tabPage;
+		var pageOptions = tabPage.ibxWidget("option");
+		aria.expanded = pageOptions.expanded;
+		aria.controls = tabPage.prop("id");
+		aria.owns = aria.controls;
+		aria.selected = pageOptions.selected;
+		return aria;
+	},
+});
 
 /******************************************************************************
 	TAB GROUP

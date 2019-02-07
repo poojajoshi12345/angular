@@ -26,13 +26,16 @@
 			.test-div
 			{
 				width:250px;
-				height:100px;
+				height:200px;
 				border:1px solid #ccc;
 			}
 		</style>
 	</head>
 	<body class="ibx-root" data-ibx-type="ibxVBox">
-		<div tabindex="0" class="test-div" data-ibx-type="ibxMenuBar"></div>
+		<div tabindex="0" class="test-div" data-ibx-type="ibxAccordionPane" data-ibxp-page-stretch="true">
+			<div class="tab1" data-ibx-type="ibxAccordionPage" data-ibxp-auto-close="false">Page1</div>
+			<div class="tab2" data-ibx-type="ibxAccordionPage" data-ibxp-auto-close="false">Page2</div>
+		</div>
 	</body>
 </html>
 
