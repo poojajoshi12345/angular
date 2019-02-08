@@ -116,7 +116,7 @@ _p.createUI = function()
 	this.editorCell = this.__createEditorCell().ibxAddClass(["pgrid-cell", "pgrid-editor-cell"]);
 	this.editorCell.attr("tabindex", 0).data("ibxProp", prop);
 
-	this.editor = this._createEditor().attr("tabindex", -1).data("ibxProp", prop).css("flex", "0 0 auto");
+	this.editor = this._createEditor().ibxAddClass("pgrid-editor").attr("tabindex", -1).data("ibxProp", prop).css("flex", "0 0 auto");
 	this.editor.on("keydown", this._onEditorKeyEvent.bind(this));
 	this.editorCell.append(this.editor);
 };
@@ -166,7 +166,6 @@ _p.update = function()
 	this.editorCell.prop("title", prop.valueTip);
 	this.editorCell.ibxWidget("option", "disabled", (prop.enabled === false) || false);
 	this.editorCell.ibxWidget("option", "aria.label", ibx.resourceMgr.getString("IBX_PGRID_EDIT_CELL_LABEL") + (prop.valueTip || prop.nameTip));
-
 };
 /********************************************************************************
  * IBX PROPERTY UI FOR BASIC LABEL/GROUPING/SEPARATING
@@ -454,10 +453,10 @@ var _p = $.ibi.ibxPropertyGrid.extendProperty(ibxProperty, ibxSliderProperty, "s
 _p._createEditor = function()
 {
 	var prop = this.prop;
-	var slider = this.slider = $("<div>").ibxHSlider().ibxAddClass("pgrid-prop-slider-ctrl").on("ibx_change", this._onSliderEvent.bind(this));
+	var slider = this.slider = $("<div tabindex='-1'>").ibxHSlider().ibxAddClass("pgrid-prop-slider-ctrl").on("ibx_change", this._onSliderEvent.bind(this));
 	var sliderValue = this.sliderValue = $("<div>").ibxHBox({align:"center", justify:"center"}).ibxAddClass("pgrid-prop-slider-value");
 	var editor = ibxSliderProperty.base._createEditor.call(this);
-	editor.ibxWidget("add", [sliderValue[0], slider[0]]);
+	editor.ibxWidget("option", {focusDefault:true}).ibxWidget("add", [sliderValue[0], slider[0]]);
 	return editor.ibxAddClass("pgrid-prop-slider");
 };
 _p._onSliderEvent = function(e, data)
@@ -495,11 +494,11 @@ var _p = $.ibi.ibxPropertyGrid.extendProperty(ibxProperty, ibxRangeSliderPropert
 _p._createEditor = function()
 {
 	var prop = this.prop;
-	var slider = this.slider = $("<div>").ibxHRange().ibxAddClass("pgrid-prop-slider-ctrl").on("ibx_change", this._onSliderEvent.bind(this));
+	var slider = this.slider = $("<div tabindex='-1'>").ibxHRange().ibxAddClass("pgrid-prop-slider-ctrl").on("ibx_change", this._onSliderEvent.bind(this));
 	var sliderValue = this.sliderValue = $("<div>").ibxHBox({align:"center", justify:"center"}).ibxAddClass("pgrid-prop-slider-value");
 	var sliderValue2 = this.sliderValue2 = $("<div>").ibxHBox({align:"center", justify:"center"}).ibxAddClass("pgrid-prop-slider-value");
 	var editor = ibxRangeSliderProperty.base._createEditor.call(this);
-	editor.ibxWidget("add", [sliderValue[0], slider[0], sliderValue2[0]]);
+	editor.ibxWidget("option", {focusDefault:true}).ibxWidget("add", [sliderValue[0], slider[0], sliderValue2[0]]);
 	return editor.ibxAddClass("pgrid-prop-slider");
 };
 _p._onSliderEvent = function(e, data)
@@ -562,46 +561,6 @@ _p.update = function()
 	});
 };
 /********************************************************************************
- * IBX PROPERTY UI FOR COLOR PICKER
-********************************************************************************/
-function ibxColorPickerProperty(prop, grid)
-{
-	ibxProperty.call(this, prop, grid);
-	if(ibx.inPropCtor) return;
-}
-var _p = $.ibi.ibxPropertyGrid.extendProperty(ibxProperty, ibxColorPickerProperty, "colorpicker");
-_p._popup = null;
-_p._createEditor = function()
-{
-	var colorPicker = this.colorPicker = $("<div>").ibxColorPicker({setOpacity:false}).on("ibx_change", this._onColorChange.bind(this));
-	var menu = this.menu = $("<div class='pgrid-color-picker-menu'>").ibxMenu().ibxWidget("add", colorPicker).on("ibx_close", this._onMenuClose.bind(this));
-	var editor = $("<div>").ibxMenuButton({"menu":menu, "glyphClasses":"pgrid-color-picker-swatch"});
-	var swatch = this.swatch = editor.find(".ibx-label-glyph");
-	return editor.ibxAddClass("pgrid-prop-color-picker");
-};
-_p._onColorChange = function(e, data)
-{
-	if(this._updateValue(data.text))
-	{
-		var prop = this.prop;
-		this.editor.ibxWidget({text:prop.value});
-		this.swatch.css("backgroundColor", prop.value);
-	}
-};
-_p._onMenuClose = function(e)
-{
-	//this makes sure when user clicks outside of popup this properly loses focus (stopEditing).
-	this.editor.focus();
-};
-_p.update = function()
-{
-	ibxColorPickerProperty.base.update.call(this);
-	var prop = this.prop;
-	this.editor.ibxWidget({text:prop.value});
-	this.swatch.css("backgroundColor", prop.value);
-	var prop = this.prop;
-};
-/********************************************************************************
  * IBX PROPERTY UI FOR DATE
 ********************************************************************************/
 function ibxDateProperty(prop, grid)
@@ -633,6 +592,46 @@ _p.update = function()
 	this.editor.ibxWidget("option", "text", prop.value);
 };
 /********************************************************************************
+ * IBX PROPERTY UI FOR COLOR PICKER
+********************************************************************************/
+function ibxColorPickerProperty(prop, grid)
+{
+	ibxProperty.call(this, prop, grid);
+	if(ibx.inPropCtor) return;
+}
+var _p = $.ibi.ibxPropertyGrid.extendProperty(ibxProperty, ibxColorPickerProperty, "colorpicker");
+_p._popup = null;
+_p._createEditor = function()
+{
+	var colorPicker = this.colorPicker = $("<div tabindex='0'>").ibxColorPicker({setOpacity:false}).on("ibx_change", this._onColorChange.bind(this));
+	var menu = this.menu = $("<div class='pgrid-color-picker-menu'>").ibxMenu().ibxWidget("add", colorPicker).on("ibx_close", this._onMenuClose.bind(this));
+	var editor = $("<div>").ibxMenuButton({"menu":menu, "glyphClasses":"pgrid-color-picker-swatch"});
+	var swatch = this.swatch = editor.find(".ibx-label-glyph");
+	return editor.ibxAddClass("pgrid-prop-color-picker");
+};
+_p._onColorChange = function(e, data)
+{
+	if(this._updateValue(data.text))
+	{
+		var prop = this.prop;
+		this.editor.ibxWidget({text:prop.value});
+		this.swatch.css("backgroundColor", prop.value);
+	}
+};
+_p._onMenuClose = function(e)
+{
+	//this makes sure when user clicks outside of popup this properly loses focus (stopEditing).
+	this.editor.focus();
+};
+_p.update = function()
+{
+	ibxColorPickerProperty.base.update.call(this);
+	var prop = this.prop;
+	this.editor.ibxWidget("option", "text", prop.value).attr("title", ibx.resourceMgr.getString("IBX_PGRID_COLOR_PICKER_LABEL") + prop.value);
+	this.swatch.css("backgroundColor", prop.value);
+	var prop = this.prop;
+};
+/********************************************************************************
  * IBX PROPERTY UI FOR BORDER
 ********************************************************************************/
 function ibxBorderProperty(prop, grid)
@@ -655,7 +654,7 @@ _p._createEditor = function()
 	this.swatch = this.btnColor.find(".ibx-label-glyph");
 
 	this.colorPicker = widget.colorPicker.on("ibx_change", this._onColorChange.bind(this));
-	return editor.ibxAddClass("pgrid-prop-border").ibxWidget("option", {"focusDefault":true});
+	return editor.ibxAddClass("pgrid-prop-border").ibxWidget("option", {"navKeyRoot":true, "focusDefault":true});
 };
 _p._onWidthChange = function(e, data)
 {
@@ -681,7 +680,9 @@ _p.update = function()
 	var prop = this.prop;
 	this.spinnerWidth.ibxWidget("option", {value:parseInt(prop.value.width, 10)});
 	this.btnStyle.ibxWidget("userValue", prop.value.style).css({borderStyle:prop.value.style, borderColor:prop.value.color});
-	this.btnColor.ibxWidget("option", {text:prop.value.color});
+
 	this.swatch.css("backgroundColor", prop.value.color);
+	this.btnColor.ibxWidget("option", {text:prop.value.color});
+	this.btnColor.attr("title", ibx.resourceMgr.getString("IBX_PGRID_COLOR_PICKER_LABEL") + prop.value.color);
 	ibxBorderProperty.base.update.call(this);
 };

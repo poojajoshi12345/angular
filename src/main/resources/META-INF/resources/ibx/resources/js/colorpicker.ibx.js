@@ -22,7 +22,7 @@ $.widget("ibi.ibxColorPicker", $.ibi.ibxVBox,
 		var options = this.options;
 		var infoBox = this._infoBox = $("<div class='cp-info-box'>").ibxHBox({"align":"stretch", "justify":"center"});
 		var swatch = this._swatch = $("<div class='cp-swatch'>");
-		var value = this._textValue = $("<div tabindex='-1' class='cp-text-value'>").ibxTextField().on("ibx_change", this._onTextChanged.bind(this));
+		var value = this._textValue = $("<div tabindex='0' class='cp-text-value'>").ibxTextField().on("ibx_change", this._onTextChanged.bind(this));
 		var ctrl = this._ctrl = $("<div class='cp-mixer'>");
 					
 		infoBox.append(swatch, value);
@@ -45,6 +45,12 @@ $.widget("ibi.ibxColorPicker", $.ibi.ibxVBox,
 		ctrl.minicolors({"control":options.style, "opacity":options.setOpacity, "swatches":swatches, "inline":true, "change": this._onColorChange.bind(this)});
 		ctrl.minicolors("value", options.color);
 
+	},
+	_setAccessibility:function(accessible, aria)
+	{
+		aria = this._super(accessible, aria);
+		this._textValue.ibxWidget("setAccessibility", undefined, {label: ibx.resourceMgr.getString("IBX_COLOR_PICKER_VALUE_LABEL") + this.options.color});
+		return aria;
 	},
 	_destroy: function ()
 	{

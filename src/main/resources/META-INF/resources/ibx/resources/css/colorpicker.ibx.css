@@ -20,6 +20,7 @@
 .cp-text-value
 {
 	width:85px;
+	height:1em;
 	padding:5px;
 	border:1px solid #ccc;
 }

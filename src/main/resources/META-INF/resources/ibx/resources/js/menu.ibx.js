@@ -781,7 +781,7 @@ $.widget("ibi.ibxSplitMenuButton", $.ibi.ibxButtonSimple,
 
 		options.menuOptions.position.of = this.element;
 		var menu = this.element.children(".ibx-popup");
-		var menuBtn = this._menuBtn = $("<div>").append(menu).ibxMenuButton().on("mousedown click", this._onMenuButtonMouseEvent.bind(this)).attr("title", ibx.resourceMgr.getString("IBX_SPLIT_BUTTONE_DOWN_ARROW_TITLE"));
+		var menuBtn = this._menuBtn = $("<div>").append(menu).ibxMenuButton().on("mousedown click", this._onMenuButtonMouseEvent.bind(this)).attr("title", ibx.resourceMgr.getString("IBX_SPLIT_BUTTON_DOWN_ARROW_TITLE"));
 		var separator = this._separator = $("<div class='split-separator'>");
 		this.element.append(separator, menuBtn).on({"click":this._onBtnClick.bind(this)});
 	},
