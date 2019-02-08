@@ -341,7 +341,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 				if(!evt.isDefaultPrevented())
 				{
 					el = evt.data.items;
-					el.ibxAddClass("ibx-sm-selected");
+					el.ibxAddClass("ibx-sm-selected").attr("aria-selected", true);
 					if(anchor)
 						this._anchor(el.first());
 					this._dispatchEvent("ibx_selchange", {"selected":select, "items":el, "selModel":this, "anchor":this._elAnchor, "focus":this._elFocus}, true, false);
@@ -356,14 +356,13 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 				var evt = this._dispatchEvent("ibx_beforeselchange",{"selected":select, "items":el, "selModel":this, "anchor":this._elAnchor, "focus":this._elFocus}, true, true);
 				if(!evt.isDefaultPrevented())
 				{
-					el.ibxRemoveClass("ibx-sm-selected");
+					el.ibxRemoveClass("ibx-sm-selected").attr("aria-selected", null);
 					if(el.is(this._elAnchor))
 						this.anchor(null);
 					this._dispatchEvent("ibx_selchange", {"selected":select, "items":el, "selModel":this, "anchor":this._elAnchor, "focus":this._elFocus}, true, false);
 				}
 			}
 		}
-		this.updateAccessibility();
 	},
 	toggleSelected:function(el, selected, anchor)
 	{
@@ -401,7 +400,6 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 			this._elAnchor.ibxRemoveClass("ibx-sm-anchor");
 			this._elAnchor = $(el).first().ibxAddClass("ibx-sm-anchor");
 			var evt = this._dispatchEvent("ibx_anchored", {"anchor":this._elAnchor[0], "focus":this._elFocus[0], "selModel":this}, true, false);
-			this.updateAccessibility();
 		}
 		return this._elAnchor[0];
 	},
@@ -425,7 +423,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 			this._elFocus = $(el).first().ibxAddClass("ibx-sm-focused " + (ibxPlatformCheck.isIE ? "ibx-ie-pseudo-focus" : ""));
 			this._elFocus.focus();
 			this._dispatchEvent("ibx_focused", {"focus":this._elFocus[0], "anchor":this._elAnchor[0], "selModel":this}, true, false);
-			this.updateAccessibility();
+			this.element.attr("aria-activedescendant", this._elFocus.prop("id"));
 		}
 		return this._elFocus[0];
 	},
@@ -460,7 +458,6 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 				//this.element.prop("tabIndex", this.element.data("ibxFocDefSavedTabIndex")).removeData("ibxFocDefSavedTabIndex");
 			}
 			this._active = active;
-			this.updateAccessibility();
 		}
 	},
 	option:function(key, value)
@@ -471,8 +468,10 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 	{
 		var options = this.options;
 		if(key == "type" && value != this.options[key])
+		{
+			this.element.attr("aria-multiselectable", (value == "multi") ? true : false),
 			this.deselectAll(true);
-
+		}
 		if(key == "type")
 			this.element.ibxToggleClass("ibx-sm-selection-root", (value != "none"));
 		else
@@ -494,21 +493,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 				this.element.ibxRubberBand();
 		}
 		this._super(key, value);
-		this.updateAccessibility();
 	},
-	updateAccessibility:function()
-	{
-		var options = this.options;
-		var aria = 
-		{
-			"aria-multiselectable": (options.type == "multi") ? true : null,
-		}
-		this.element.attr(aria);
-		this._elFocus ? this.element.attr("aria-activedescendant", this._elFocus.prop("id")) : this.element.removeAttr("aria-activedescendant");
-		//had to back this out because it was VERY slow...need to revisit.
-		// this.selectableChildren().attr("aria-selected", false);
-		// this.selected().attr("aria-selected", true);
-	}
 });
 
 $.widget("ibi.ibxRubberBand", $.Widget, 
