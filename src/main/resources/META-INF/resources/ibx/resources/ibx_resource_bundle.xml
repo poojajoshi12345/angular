@@ -176,10 +176,10 @@ $Revision$:-->
 
 		<markup-block>
 			<div class="pgrid-prop-border-editor-template">
-				<div class="pgrid-prop-border-ctrl" data-ibx-name="labelWidth" data-ibx-type="ibxLabel" data-ibxp-for=".pgrid-prop-border-width">Width</div>
-				<div tabindex="-1" class="pgrid-prop-border-ctrl pgrid-prop-spinner pgrid-prop-border-width" data-ibx-name="spinnerWidth" data-ibx-type="ibxSpinner"></div>
+				<div tabindex="0" class="pgrid-prop-border-ctrl" data-ibx-name="labelWidth" data-ibx-type="ibxLabel" data-ibxp-for=".pgrid-prop-border-width">Width</div>
+				<div tabindex="0" class="pgrid-prop-border-ctrl pgrid-prop-spinner pgrid-prop-border-width" data-ibx-name="spinnerWidth" data-ibx-type="ibxSpinner"></div>
 				
-				<div tabindex="-1" class="pgrid-prop-border-ctrl pgrid-prop-border-menu-button" data-ibx-name="btnStyle" data-ibx-type="ibxSelectMenuButton" data-ibxp-use-value-as-text="true">Style
+				<div tabindex="0" class="pgrid-prop-border-ctrl pgrid-prop-border-menu-button" data-ibx-name="btnStyle" data-ibx-type="ibxSelectMenuButton" data-ibxp-use-value-as-text="true">Style
 					<div style="border:none" class="pgrid-prop-border-style-menuitem"  data-ibx-type="ibxCheckMenuItem" data-ibxp-user-value="none">None</div>
 					<div style="border:dashed" class="pgrid-prop-border-style-menuitem" data-ibx-type="ibxCheckMenuItem" data-ibxp-user-value="dashed">Dashed</div>
 					<div style="border:dotted" class="pgrid-prop-border-style-menuitem" data-ibx-type="ibxCheckMenuItem" data-ibxp-user-value="dotted">Dotted</div>
@@ -192,7 +192,7 @@ $Revision$:-->
 					<div style="border:solid" class="pgrid-prop-border-style-menuitem" data-ibx-type="ibxCheckMenuItem" data-ibxp-user-value="solid">Solid</div>
 				</div>
 				
-				<div tabindex="-1" class="pgrid-prop-border-ctrl pgrid-prop-border-menu-button" data-ibx-name="btnColor" data-ibx-type="ibxMenuButton" data-ibxp-use-value-as-text="true" data-ibxp-glyph-classes="pgrid-color-picker-swatch">Color
+				<div tabindex="0" class="pgrid-prop-border-ctrl pgrid-prop-border-menu-button" data-ibx-name="btnColor" data-ibx-type="ibxMenuButton" data-ibxp-use-value-as-text="true" data-ibxp-glyph-classes="pgrid-color-picker-swatch">Color
 					<div data-ibx-type="ibxMenu" data-ibxp-destroy-on-close="false">
 						<div tabindex="0" class="ibx-menu-item pgrid-color-picker-popup" data-ibx-name="colorPicker" data-ibx-type="ibxColorPicker" data-ibxp-set-opacity="false"></div>
 					</div>
