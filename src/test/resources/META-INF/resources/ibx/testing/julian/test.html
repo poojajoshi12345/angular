@@ -12,6 +12,7 @@
 		<script type="text/javascript">
 			ibx(function(e)
 			{
+				$(".test-grid").ibxWidget("initGrid", 1, 2);
 			},true);
 		</script>
 		<style type="text/css">
@@ -21,21 +22,78 @@
 				width: 100%;
 				height: 100%;
 				margin: 0px;
-				box-sizing: border-box;
+				box-sizing: outline-box;
 			}
-			.test-div
+			:focus
 			{
-				width:250px;
-				height:200px;
-				border:1px solid #ccc;
+				outline-style:dotted !important;
+			}
+			div[role=grid]
+			{
+				outline:2px solid black;
+				margin:5px;
+			}
+			.dgrid-corner
+			{
+				margin:4px;
+			}
+			div[role=rowgroup], .dgrid-header-row-bar
+			{
+				margin:4px;
+				outline:2px solid red;
+			}
+			div[role=row]
+			{
+				margin:4px;
+				outline:2px solid cyan;
+			}
+			div[role=columnheader]
+			{
+				margin:4px;
+				outline:2px solid lime;
+			}
+			div[role=rowheader]
+			{
+				margin:4px;
+				outline:2px solid purple;
+			}
+			div[role=gridcell]
+			{
+				margin:4px;
+				outline:2px solid blue;
 			}
 		</style>
 	</head>
 	<body class="ibx-root" data-ibx-type="ibxVBox">
-		<div tabindex="0" class="test-div" data-ibx-type="ibxAccordionPane" data-ibxp-page-stretch="true">
-			<div class="tab1" data-ibx-type="ibxAccordionPage" data-ibxp-auto-close="false">Page1</div>
-			<div class="tab2" data-ibx-type="ibxAccordionPage" data-ibxp-auto-close="false">Page2</div>
+		<div tabindex="0" role="grid">
+
+			<div tabindex="-1" role="rowgroup">
+				<div id="row-columnheaders" tabindex="-1" role="row">
+					<div tabindex="0" role="columnheader">C1</div>
+					<div tabindex="0" role="columnheader">C2</div>
+					<div tabindex="0" role="columnheader">C3</div>
+				</div>
+			</div>
+			<div class="rowheaders">
+				<div id="rowheader1" tabindex="0" role="rowheader">first row</div>
+				<div id="rowheader2" tabindex="0" role="rowheader">second row</div>
+			</div>
+
+			<div tabindex="-1" role="rowgroup" class="rowgroup">
+				<div tabindex="-1" role="row" aria-owns="rowheader1">
+					<div tabindex="0" role="gridcell">cell</div>
+					<div tabindex="0" role="gridcell">cell</div>
+					<div tabindex="0" role="gridcell">cell</div>
+				</div>
+				<div tabindex="-1" role="row" aria-owns="rowheader2">
+					<div tabindex="0" role="gridcell">cell</div>
+					<div tabindex="0" role="gridcell">cell</div>
+					<div tabindex="0" role="gridcell">cell</div>
+				</div>
+			</div>
 		</div>
+
+		<div tabindex="0" class="test-grid" data-ibx-type="ibxDataGrid"></div>
 	</body>
 </html>
 
