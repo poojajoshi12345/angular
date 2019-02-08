@@ -59,19 +59,6 @@ body
 	visibility:visible;
 }
 
-/*when dragging, stop iframes from eating the mouse events*/
-.ibx-dragging iframe
-{
-	pointer-events:none;
-}
-
-.ibx-drag-image
-{
-	pointer-events:none;
-	opacity:.5;
-	z-index:2147483647;/*max z-index*/
-}
-
 input
 {
   font: inherit;

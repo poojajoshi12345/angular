@@ -11,6 +11,9 @@
 
 .ibx-drag-image
 {
+	pointer-events:none;
+	opacity:.5;
+	z-index:2147483647;/*max z-index*/
 }
 
 .ibx-dragging
@@ -19,4 +22,10 @@
 
 .ibx-external-drop-target
 {
+}
+
+/*when dragging, stop iframes from eating the mouse events*/
+.ibx-dragging iframe
+{
+	pointer-events:none;
 }
