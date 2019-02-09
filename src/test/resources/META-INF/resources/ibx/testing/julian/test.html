@@ -12,7 +12,15 @@
 		<script type="text/javascript">
 			ibx(function(e)
 			{
-				$(".test-grid").ibxWidget("initGrid", 1, 2);
+				$(".test-grid").ibxWidget("initGrid", 2, 3);
+				$(".dgrid-cell").each(function(idx, el)
+				{
+					$(el).text("cell");
+				});
+				$(".dgrid-header-row").each(function(idx, el)
+				{
+					$(el).text("R" + (idx + 1));
+				});
 			},true);
 		</script>
 		<style type="text/css">
@@ -30,6 +38,7 @@
 			}
 			div[role=grid]
 			{
+				width:400px;
 				outline:2px solid black;
 				margin:5px;
 			}
@@ -74,12 +83,12 @@
 					<div tabindex="0" role="columnheader">C3</div>
 				</div>
 			</div>
-			<div class="rowheaders">
-				<div id="rowheader1" tabindex="0" role="rowheader">first row</div>
-				<div id="rowheader2" tabindex="0" role="rowheader">second row</div>
+			<div class="rowheaders" role="row">
+				<div id="rowheader1" tabindex="0" role="rowheader">R1</div>
+				<div id="rowheader2" tabindex="0" role="rowheader">R2</div>
 			</div>
 
-			<div tabindex="-1" role="rowgroup" class="rowgroup">
+			<div tabindex="-1" xrole="rowgroup" class="rowgroup">
 				<div tabindex="-1" role="row" aria-owns="rowheader1">
 					<div tabindex="0" role="gridcell">cell</div>
 					<div tabindex="0" role="gridcell">cell</div>

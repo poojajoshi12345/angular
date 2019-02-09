@@ -369,6 +369,7 @@ $.fn.ibxDataGridRow = $.ibi.ibxDataGridRow = function()
 						"role":"row",
 						"aria-level":this.depth() + 1,
 						"aria-hidden":!this.isVisible(),
+						"aria-owns":this.header.prop("id")
 					};
 					this.container ? ariaOpts["aria-expanded"] = this.isExpanded() : null;
 					this.element.attr(ariaOpts);
@@ -379,7 +380,7 @@ $.fn.ibxDataGridRow = $.ibi.ibxDataGridRow = function()
 				{
 					$.extend(this, options);
 					this.element.ibxAddClass(widget.rowClasses).data("ibxDataGridRow", widget);
-					this.header.ibxAddClass(widget.headerClasses).data("ibxDataGridRow", widget).text(this.title == null ? "." : this.title);
+					this.header.ibxAddClass(widget.headerClasses).data("ibxDataGridRow", widget).ibxAriaId().text(this.title == null ? "." : this.title);
 
 					//setup the indent column stuff.
 					var grid = this.getGrid();
@@ -479,15 +480,15 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 		var options = this.options;
 		var classes = options.classes;
 		var corner = this._corner = $("<div>").ibxAddClass("dgrid-corner").data({ibxCol:1, ibxRow:1});
-		var colHeaderBar = this._colHeaderBar = $("<div tabindex='0'>").ibxHBox({navKeyRoot:true}).ibxAddClass(classes.colHeaderBarClass).data({ibxCol:"2", ibxRow:"1"});
-		var rowHeaderBar = this._rowHeaderBar = $("<div tabindex='0'>").ibxVBox({navKeyRoot:true, align:"stretch"}).ibxAddClass(classes.rowHeaderBarClass).data({ibxCol:"1", ibxRow:"2"});
 		var grid = this._grid = $("<div tabindex='0'>").ibxVBox({align:"start"}).ibxAddClass(classes.gridClass).data({ibxCol:"2", ibxRow:"2"});
-		grid.on("scroll", this._onGridScroll.bind(this));
 		grid.ibxDataGridSelectionManager({grid:this, selectableChildren:options.classes.gridSelectable}).on("ibx_beforeselchange", this._onGridSelChange.bind(this));
+		grid.on("scroll", this._onGridScroll.bind(this));
 
-		this.add([corner[0], colHeaderBar[0], rowHeaderBar[0], grid[0]]);
-		this._colHeaderBar.ibxWidget("setAccessibility", undefined, {role:"row"});
-		this._rowHeaderBar.ibxWidget("setAccessibility", undefined, {role:"row"});
+		var colHeaderBar = this._colHeaderBar = $("<div tabindex='0'>").ibxHBox({navKeyRoot:true, focusDefault:true}).ibxAddClass(classes.colHeaderBarClass);
+		var colHeaderBarGroup = this._colHeaderBarGroup = $("<div class='dgrid-header-col-bar-group'>").append(colHeaderBar).data({ibxCol:"2", ibxRow:"1"});
+		var rowHeaderBar = this._rowHeaderBar = $("<div tabindex='0'>").ibxVBox({navKeyRoot:true, focusDefault:true, align:"stretch"}).ibxAddClass(classes.rowHeaderBarClass).data({ibxCol:"1", ibxRow:"2"});
+
+		this.add([corner[0], colHeaderBarGroup[0], rowHeaderBar[0], grid[0]]);
 		this._super();
 	},
 	_setAccessibility:function(accessible, aria)
@@ -495,6 +496,9 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 		aria = this._super(accessible, aria);
 		var options = this.options;
 		this.element.attr("role", (options.indentColumn == -1) ? "grid" : "treegrid");
+		this._colHeaderBarGroup.attr("role", "rowgroup");
+		this._colHeaderBar.ibxWidget("setAccessibility", undefined, {"role":"row"});
+		this._grid.ibxWidget("setAccessibility", undefined, {"role":"rowgroup"});
 		return aria;
 	},
 	_init:function()
@@ -553,17 +557,17 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 		var rows = [];
 		for(var i = 0; i < nRows; ++i)
 		{
-			var row = $("<div>").ibxDataGridRow({"title":i});
+			var row = $("<div>").ibxDataGridRow({"title":i+1});
 			for(var j = 0; j < nCols; ++j)
 			{
-				var cell = $("<div tabindex='0'>");
+				var cell = $("<div>");
 				row.append(cell);
 
 				//only need to build the colMap for the first row.
 				if(i > 0)
 					continue;
 				var curColConfig = $.extend({}, colConfig);
-				curColConfig.title = "Column " + j;
+				curColConfig.title = "C " + (j+1);
 				colMap.push(curColConfig);
 			}
 			this.options.colMap = colMap;
@@ -596,9 +600,8 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 				
 				//make header if one isn't supplied
 				var cHeading = $(sformat("<div tabindex='-1' class='{1}'>", classes.colHeaderClass));
-				cHeading.ibxButtonSimple({justify:cInfo.justify});
+				cHeading.ibxButtonSimple({justify:cInfo.justify, aria:{role:"columnheader"}});
 				cHeading.ibxWidget("option", "text", cInfo.title);
-				cHeading.attr("role", "columnheader");
 
 				//make splitter
 				var splitter = $(sformat("<div class='{1}'>", classes.colHeaderSplitterClass));
