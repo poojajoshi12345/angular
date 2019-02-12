@@ -73,8 +73,9 @@
 			}
 		</style>
 	</head>
-	<body class="ibx-root" data-ibx-type="ibxVBox">
-		<div tabindex="0" role="grid">
+	<body class="ibx-root" data-ibx-type="ibxVBox" data-ibx-nav-root="true">
+		
+		<div tabindex="0" role="grid" data-ibx-nav-root="true" data-ibx-nav-point="{'index':0, 'label':'Go to Native Grid'}">
 
 			<div tabindex="-1" role="rowgroup">
 				<div id="row-columnheaders" tabindex="-1" role="row">
@@ -89,12 +90,12 @@
 			</div>
 
 			<div tabindex="-1" xrole="rowgroup" class="rowgroup">
-				<div tabindex="-1" role="row" aria-owns="rowheader1">
+				<div tabindex="-1" role="row" aria-owns="rowheader1" data-ibx-nav-point="{'index':0, 'label':'Go to Native Grid Row 1'}">
 					<div tabindex="0" role="gridcell">cell</div>
 					<div tabindex="0" role="gridcell">cell</div>
 					<div tabindex="0" role="gridcell">cell</div>
 				</div>
-				<div tabindex="-1" role="row" aria-owns="rowheader2">
+				<div tabindex="-1" role="row" aria-owns="rowheader2" data-ibx-nav-point="{'index':0, 'label':'Go to Native Grid Row 2'}">
 					<div tabindex="0" role="gridcell">cell</div>
 					<div tabindex="0" role="gridcell">cell</div>
 					<div tabindex="0" role="gridcell">cell</div>
@@ -102,7 +103,7 @@
 			</div>
 		</div>
 
-		<div tabindex="0" class="test-grid" data-ibx-type="ibxDataGrid"></div>
+		<div tabindex="0" class="test-grid" data-ibx-type="ibxDataGrid" data-ibx-nav-root="true" data-ibx-nav-point="{'index':0, 'label':'Go to IBX Data Grid'}"></div>
 	</body>
 </html>
 
