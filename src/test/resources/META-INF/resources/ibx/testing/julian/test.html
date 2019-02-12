@@ -12,7 +12,7 @@
 		<script type="text/javascript">
 			ibx(function(e)
 			{
-				$(".test-grid").ibxWidget("initGrid", 2, 3);
+				$(".test-ibx-grid").ibxWidget("initGrid", 2, 3);
 				$(".dgrid-cell").each(function(idx, el)
 				{
 					$(el).text("cell");
@@ -71,11 +71,39 @@
 				margin:4px;
 				outline:2px solid blue;
 			}
+
+			.test-box
+			{
+				border:1px solid black;
+				padding:5px;
+			}
+			.test-div
+			{
+				border:1px solid red;
+				padding:5px;
+			}
 		</style>
 	</head>
-	<body class="ibx-root" data-ibx-type="ibxVBox" data-ibx-nav-root="true">
-		
-		<div tabindex="0" role="grid" data-ibx-nav-root="true" data-ibx-nav-point="{'index':0, 'label':'Go to Native Grid'}">
+	<body class="ibx-root" data-ibx-type="ibxVBox" data-ibx-nav-map=".root-nav-map">
+		<div class="root-nav-map" data-ibx-type="ibxNavMap" data-ibxp-aria.label="Application Quick Navigation Menu">
+			<div data-ibx-type="ibxNavMapItem" data-ibx-nav-target=".test-box">Go to Test Box</div>
+			<div data-ibx-type="ibxNavMapItem" data-ibx-nav-target=".test-native-grid">Go to Native Grid</div>
+			<div data-ibx-type="ibxNavMapItem" data-ibx-nav-target=".test-ibx-grid">Go to IBX Grid</div>
+		</div>
+
+		<div tabindex="0" class="test-box" data-ibx-type="ibxVBox" data-ibxp-nav-key-root="true" data-ibxp-focus-default="true">
+			<div class="" tabindex="0" data-ibx-type="ibxLabel" data-ibxp-for=".tb1">Label for face button</div>
+			<div title="Title for button 1" class="tb1 test-div" tabindex="0" data-ibx-type="ibxButton" data-ibxp-glyph-classes="material-icons" data-ibxp-glyph="face"></div>
+			<div title="Title for button 2" class="test-div" tabindex="0" data-ibx-type="ibxButton">test button two</div>
+			<div title="Title for button 3" class="test-div" tabindex="0" data-ibx-type="ibxButton">test button three</div>
+		</div>
+
+
+		<div tabindex="0" class="test-native-grid" role="grid"  data-ibx-nav-map=".native-grid-nav-map">
+			<div class="native-grid-nav-map" data-ibx-type="ibxNavMap" data-ibxp-aria.label="Native Grid Navigation Menu">
+				<div data-ibx-type="ibxNavMapItem" data-ibx-nav-target=".native-grid-row-1">Go to Grid Row 1</div>
+				<div data-ibx-type="ibxNavMapItem" data-ibx-nav-target=".native-grid-row-2">Go to Grid Row 2</div>
+			</div>
 
 			<div tabindex="-1" role="rowgroup">
 				<div id="row-columnheaders" tabindex="-1" role="row">
@@ -90,12 +118,12 @@
 			</div>
 
 			<div tabindex="-1" xrole="rowgroup" class="rowgroup">
-				<div tabindex="-1" role="row" aria-owns="rowheader1" data-ibx-nav-point="{'index':0, 'label':'Go to Native Grid Row 1'}">
+				<div tabindex="-1" class="native-grid-row-1" role="row" aria-owns="rowheader1">
 					<div tabindex="0" role="gridcell">cell</div>
 					<div tabindex="0" role="gridcell">cell</div>
 					<div tabindex="0" role="gridcell">cell</div>
 				</div>
-				<div tabindex="-1" role="row" aria-owns="rowheader2" data-ibx-nav-point="{'index':0, 'label':'Go to Native Grid Row 2'}">
+				<div tabindex="-1" class="native-grid-row-2" role="row" aria-owns="rowheader2">
 					<div tabindex="0" role="gridcell">cell</div>
 					<div tabindex="0" role="gridcell">cell</div>
 					<div tabindex="0" role="gridcell">cell</div>
@@ -103,7 +131,7 @@
 			</div>
 		</div>
 
-		<div tabindex="0" class="test-grid" data-ibx-type="ibxDataGrid" data-ibx-nav-root="true" data-ibx-nav-point="{'index':0, 'label':'Go to IBX Data Grid'}"></div>
+		<div tabindex="0" class="test-ibx-grid" data-ibx-type="ibxDataGrid"></div>
 	</body>
 </html>
 
