@@ -251,6 +251,7 @@ $Revision$:-->
 		<style-file src="./css/sortable.ibx.css"/>
 		<style-file src="./css/colorpicker.ibx.css"/>
 		<style-file src="./css/diagram.ibx.css"/>
+		<style-file src="./css/navmap.ibx.css"/>
 
 		<!--inline styles-->
 		<style-sheet name="ibx_inline_bundle_styles">
@@ -307,6 +308,7 @@ $Revision$:-->
 		<script-file src="./js/datepicker.ibx.js"/>
 		<script-file src="./js/colorpicker.ibx.js"/>
 		<script-file src="./js/diagram.ibx.js"/>
+		<script-file src="./js/navmap.ibx.js"/>
 
 		<!--scripts-->
 		<script-block name="ibx_inline_bundle_scripts">
