@@ -85,22 +85,28 @@
 		</style>
 	</head>
 	<body class="ibx-root" data-ibx-type="ibxVBox" data-ibx-nav-map=".root-nav-map">
-		<div class="root-nav-map" data-ibx-type="ibxNavMap" data-ibxp-aria.label="Application Quick Navigation Menu">
+		<div class="root-nav-map" data-ibx-type="ibxNavMap" data-ibxp-aria.label="Application Quick Navigation">
 			<div data-ibx-type="ibxNavMapItem" data-ibx-nav-target=".test-box">Go to Test Box</div>
 			<div data-ibx-type="ibxNavMapItem" data-ibx-nav-target=".test-native-grid">Go to Native Grid</div>
 			<div data-ibx-type="ibxNavMapItem" data-ibx-nav-target=".test-ibx-grid">Go to IBX Grid</div>
 		</div>
 
-		<div tabindex="0" class="test-box" data-ibx-type="ibxVBox" data-ibxp-nav-key-root="true" data-ibxp-focus-default="true">
+		<div tabindex="0" class="test-box" data-ibx-type="ibxVBox" data-ibx-nav-map=".test-box-nav-map" data-ibxp-nav-key-root="true" data-ibxp-focus-default="true">
+			<div class="test-box-nav-map" data-ibx-type="ibxNavMap" data-ibxp-aria.label="Test Button Box Quick Navigation">
+				<div data-ibx-type="ibxNavMapItem" data-ibx-nav-target=".tb1">Go to Test Button 1</div>
+				<div data-ibx-type="ibxNavMapItem" data-ibx-nav-target=".tb2">Go to Test Button 2</div>
+				<div data-ibx-type="ibxNavMapItem" data-ibx-nav-target=".tb3">Go to Test Button 3</div>
+			</div>
+
 			<div class="" tabindex="0" data-ibx-type="ibxLabel" data-ibxp-for=".tb1">Label for face button</div>
 			<div title="Title for button 1" class="tb1 test-div" tabindex="0" data-ibx-type="ibxButton" data-ibxp-glyph-classes="material-icons" data-ibxp-glyph="face"></div>
-			<div title="Title for button 2" class="test-div" tabindex="0" data-ibx-type="ibxButton">test button two</div>
-			<div title="Title for button 3" class="test-div" tabindex="0" data-ibx-type="ibxButton">test button three</div>
+			<div title="Title for button 2" class="tb2 test-div" tabindex="0" data-ibx-type="ibxButton">test button two</div>
+			<div title="Title for button 3" class="tb3 test-div" tabindex="0" data-ibx-type="ibxButton">test button three</div>
 		</div>
 
 
 		<div tabindex="0" class="test-native-grid" role="grid"  data-ibx-nav-map=".native-grid-nav-map">
-			<div class="native-grid-nav-map" data-ibx-type="ibxNavMap" data-ibxp-aria.label="Native Grid Navigation Menu">
+			<div class="native-grid-nav-map" data-ibx-type="ibxNavMap" data-ibxp-aria.label="Native Grid Quick Navigation">
 				<div data-ibx-type="ibxNavMapItem" data-ibx-nav-target=".native-grid-row-1">Go to Grid Row 1</div>
 				<div data-ibx-type="ibxNavMapItem" data-ibx-nav-target=".native-grid-row-2">Go to Grid Row 2</div>
 			</div>
