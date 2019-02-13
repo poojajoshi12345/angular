@@ -719,7 +719,7 @@ $.widget("ibi.ibxSelectMenuButton", $.ibi.ibxMenuButton,
 		var options = this.options;
 		options.menu.ibxWidget("option", {focusOnOpen:!options.editable, multiSelect:options.multiSelect});
 		this.element.ibxWidget("option", "text", (options.useValueAsText && options.valueText) ? options.valueText : options.defaultText);
-		this.element.prop("title", options.valueText).ibxToggleClass("ibx-select-style", options.selectStyle);
+		this.element.ibxToggleClass("ibx-select-style", options.selectStyle);
 		
 		this._text.ibxToggleClass("ibx-select-menu-button-label-editable", options.editable).attr("tabindex", options.editable ? "-1" : null);
 		options.menu.ibxWidget("option", "autoFocus", !options.editable);
