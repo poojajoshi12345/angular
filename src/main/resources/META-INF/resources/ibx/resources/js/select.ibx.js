@@ -1270,7 +1270,7 @@ $.widget("ibi.ibxSelectItemListPaged", $.ibi.ibxVBox,
 
 		this.element.append(this._optionsBox, this._listControl, this._pageBox);
 	},
-	_setAccessibility(accessible, aria)
+	_setAccessibility:function(accessible, aria)
 	{
 		aria = this._super(accessible, aria);
 		this._searchBox.attr("title", ibx.resourceMgr.getString("IBX_SELECT_SEARCH_VALUES")).ibxWidget("refresh");

@@ -785,7 +785,7 @@ $.widget("ibi.ibxSplitMenuButton", $.ibi.ibxButtonSimple,
 		var separator = this._separator = $("<div class='split-separator'>");
 		this.element.append(separator, menuBtn).on({"click":this._onBtnClick.bind(this)});
 	},
-	_setAccessibility(accessible, aria)
+	_setAccessibility:function(accessible, aria)
 	{
 		aria = this._super(accessible, aria);
 		return aria;
