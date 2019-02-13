@@ -26,6 +26,7 @@
 			.ui-acx-comp
 			{
 				margin:1px;
+				padding:1px;
 				border:1px solid black;
 			}
 			.top-bar-comp
@@ -62,9 +63,9 @@
 			.search-files
 			{
 				flex:1 1 auto;
+				min-width:100px;
 				justify-self:space-around;
 				margin:0px 75px 0px 75px;
-				border:1px solid black;
 			}
 			.file-tile
 			{
@@ -77,8 +78,8 @@
 	</head>
 	<body tabindex="0" class="ibx-root" data-ibx-type="ibxVBox" data-ibxp-align="stretch" data-ibx-nav-map=".root-nav-map" aria-label="To activate quick navigation map, press ALT+M">
 		<div tabindex="-1" class="ui-acx-comp top-bar" data-ibx-type="ibxHBox" data-ibxp-justify="spaceBetween" data-ibxp-align="center">
-			<div tabindex="-1" class="ui-acx-comp top-bar-comp top-bar-logo">Logo</div>
-			<div tabindex="-1" class="ui-acx-comp top-bar-comp top-bar-nav" data-ibx-type="ibxHBox" data-ibxp-align="center" data-ibxp-nav-key-root="true" data-ibxp-focus-default="true">
+			<div tabindex="-1" class="ui-acx-comp top-bar-logo">Logo</div>
+			<div tabindex="-1" class="ui-acx-comp top-bar-nav" data-ibx-type="ibxHBox" data-ibxp-align="center" data-ibxp-nav-key-root="true" data-ibxp-focus-default="true">
 				<div tabindex="0" title="WebFOCUS Tools Menu" class="ui-acx-comp" data-ibx-type="ibxMenuButton" data-ibxp-glyph-classes="fa fa-question">
 					<div data-ibx-type="ibxMenu">
 						<div data-ibx-type="ibxMenuItem">Tools Menu Items</div>
@@ -105,12 +106,12 @@
 		<div class="content-box" data-ibx-type="ibxHBox" data-ibxp-align="stretch">
 	
 			<div tabindex="0" title="WebFOCUS content bookmarks" class="ui-acx-comp cbox-side-bar" data-ibx-type="ibxVBox" data-ibxp-align="stretch" data-ibxp-nav-key-root="true" data-ibxp-focus-default="true">
-				<div tabindex="-1" title="Bookmark" class="ui-acx-comp" data-ibx-type="ibxButton" data-ibxp-justify="start">Home</div>
-				<div tabindex="-1" title="Bookmark" class="ui-acx-comp" data-ibx-type="ibxButton" data-ibxp-justify="start">Favorites</div>
-				<div tabindex="-1" title="Bookmark" class="ui-acx-comp" data-ibx-type="ibxButton" data-ibxp-justify="start">My Workspace</div>
-				<div tabindex="-1" title="Bookmark" class="ui-acx-comp" data-ibx-type="ibxButton" data-ibxp-justify="start">Shared with me</div>
-				<div tabindex="-1" title="Bookmark" class="ui-acx-comp" data-ibx-type="ibxButton" data-ibxp-justify="start">Portals</div>
-				<div tabindex="-1" title="Bookmark" class="ui-acx-comp" data-ibx-type="ibxButton" data-ibxp-justify="start">Domains</div>
+				<div tabindex="-1" title="Bookmark" class="ui-acx-comp" data-ibx-type="ibxButton" data-ibxp-justify="start" data-ibxp-glyph-classes="fa fa-question">Home</div>
+				<div tabindex="-1" title="Bookmark" class="ui-acx-comp" data-ibx-type="ibxButton" data-ibxp-justify="start" data-ibxp-glyph-classes="fa fa-question">Favorites</div>
+				<div tabindex="-1" title="Bookmark" class="ui-acx-comp" data-ibx-type="ibxButton" data-ibxp-justify="start" data-ibxp-glyph-classes="fa fa-question">My Workspace</div>
+				<div tabindex="-1" title="Bookmark" class="ui-acx-comp" data-ibx-type="ibxButton" data-ibxp-justify="start" data-ibxp-glyph-classes="fa fa-question">Shared with me</div>
+				<div tabindex="-1" title="Bookmark" class="ui-acx-comp" data-ibx-type="ibxButton" data-ibxp-justify="start" data-ibxp-glyph-classes="fa fa-question">Portals</div>
+				<div tabindex="-1" title="Bookmark" class="ui-acx-comp" data-ibx-type="ibxButton" data-ibxp-justify="start" data-ibxp-glyph-classes="fa fa-question">Domains</div>
 
 				<div tabindex="0" title="collapse side bar" class="ui-acx-comp btn-collapse-sidebar" data-ibx-type="ibxButton" data-ibxp-glyph-classes="fa fa-angle-double-left"></div>
 			</div>
@@ -119,9 +120,9 @@
 
 			<div class="ui-acx-comp cbox-file-box" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
 
-				<div tabindex="-1" class="ui-acx-comp file-box-top-bar" data-ibx-type="ibxHBox" data-ibxp-align="center" data-ibxp-nav-key-root="true" data-ibxp-focus-default="true">
+				<div tabindex="-1" class="ui-acx-comp file-box-top-bar" data-ibx-type="ibxHBox" data-ibxp-align="center" data-ibxp-nav-key-root="true" data-ibxp-focus-default=".search-files">
 					<div tabindex="0" title="Create New File" class="ui-acx-comp" data-ibx-type="ibxButtonSimple" data-ibxp-glyph-classes="fa fa-question"></div>
-					<div tabindex="0" title="Search For Files" class="search-files ui-acx-comp" data-ibx-type="ibxSelectMenuButton"></div>
+					<div tabindex="0" title="Search For Files" class="ui-acx-comp search-files" data-ibx-type="ibxSelectMenuButton"></div>
 					<div tabindex="0" title="View Files As" class="ui-acx-comp" data-ibx-type="ibxMenuButton" data-ibxp-glyph-classes="fa fa-question">
 						<div data-ibx-type="ibxMenu">
 							<div data-ibx-type="ibxMenuItem">View Files As Menu Items</div>
@@ -133,7 +134,7 @@
 
 				<div class="ui-acx-comp file-box-recents" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
 					<div>Recent</div>
-					<div tabindex=0" title="Recent File List" class="ui-acx-comp files-box-recents" data-ibx-type="ibxHBox" data-ibxp-nav-key-root="true" data-ibxp-focus-default="false">
+					<div tabindex=0" title="Recent File List" class="ui-acx-comp file-box-recents" data-ibx-type="ibxHBox" data-ibxp-nav-key-root="true" data-ibxp-focus-default="false">
 						<div tabindex="-1" class="file-tile"></div>
 						<div tabindex="-1" class="file-tile"></div>
 						<div tabindex="-1" class="file-tile"></div>
@@ -141,7 +142,7 @@
 				</div>
 				<div class="ui-acx-comp file-box-recommended" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
 					<div>Recommended</div>
-					<div tabindex=0" title="Recommended File List" class="ui-acx-comp files-box-recommended" data-ibx-type="ibxHBox" data-ibxp-nav-key-root="true" data-ibxp-focus-default="false">
+					<div tabindex=0" title="Recommended File List" class="ui-acx-comp file-box-recommended" data-ibx-type="ibxHBox" data-ibxp-nav-key-root="true" data-ibxp-focus-default="false">
 						<div tabindex="-1" class="file-tile"></div>
 						<div tabindex="-1" class="file-tile"></div>
 						<div tabindex="-1" class="file-tile"></div>
@@ -159,9 +160,9 @@
 		</div>
 
 		<div class="root-nav-map" data-ibx-type="ibxNavMap" data-ibxp-aria.label="Home Page Quick Navigation.  Use up/down arrow keys to find quick navigation areas.">
-			<div data-ibx-type="ibxNavMapItem" data-ibx-nav-target=".top-box-bar-nav">Jump To Main Navigation</div>
+			<div data-ibx-type="ibxNavMapItem" data-ibx-nav-target=".top-bar-nav">Jump To Main Navigation</div>
 			<div data-ibx-type="ibxNavMapItem" data-ibx-nav-target=".cbox-side-bar">Jump To Content Bookmarks</div>
-			<div data-ibx-type="ibxNavMapItem" data-ibx-nav-target=".file-box-top-bar">Jump To Searching, and new file</div>
+			<div data-ibx-type="ibxNavMapItem" data-ibx-nav-target=".file-box-top-bar">Jump To Searching</div>
 			<div data-ibx-type="ibxNavMapItem" data-ibx-nav-target=".file-box-recents">Jump To Recently accessed files</div>
 			<div data-ibx-type="ibxNavMapItem" data-ibx-nav-target=".file-box-recommended">Jump To Recommended files</div>
 			<div data-ibx-type="ibxNavMapItem" data-ibx-nav-target=".file-box-learn">Jump To WebFOCUS learning center</div>

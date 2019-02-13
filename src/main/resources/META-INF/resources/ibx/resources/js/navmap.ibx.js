@@ -14,7 +14,7 @@ function ibxNavManager()
 
 ibxNavManager.options =
 {
-	triggerKey:"CTRL+M",
+	triggerKey:"ALT+M",
 }
 ibxNavManager._onKeyEvent = function(e)
 {
@@ -25,6 +25,9 @@ ibxNavManager._onKeyEvent = function(e)
 		var navMap = $(navRoot.attr("data-ibx-nav-map")).ibxWidget("open").on("ibx_select", function(e)
 		{
 			var navItem = e.originalEvent.target.getAttribute("data-ibx-nav-target");
+			//don't know why I need this, but the default focusing of the navKeyRoot isn't working after initial focusing
+			//it's focusing the default item and then focusing the root?
+			$(document.body).focus();
 			$(navItem).focus();
 		}).focus();
 	}
