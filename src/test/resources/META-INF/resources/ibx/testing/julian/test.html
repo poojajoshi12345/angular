@@ -12,15 +12,6 @@
 		<script type="text/javascript">
 			ibx(function(e)
 			{
-				$(".test-ibx-grid").ibxWidget("initGrid", 2, 3);
-				$(".dgrid-cell").each(function(idx, el)
-				{
-					$(el).text("cell");
-				});
-				$(".dgrid-header-row").each(function(idx, el)
-				{
-					$(el).text("R" + (idx + 1));
-				});
 			},true);
 		</script>
 		<style type="text/css">
@@ -32,112 +23,150 @@
 				margin: 0px;
 				box-sizing: outline-box;
 			}
-			:focus
+			.ui-acx-comp
 			{
-				outline-style:dotted !important;
-			}
-			div[role=grid]
-			{
-				width:400px;
-				outline:2px solid black;
-				margin:5px;
-			}
-			.dgrid-corner
-			{
-				margin:4px;
-			}
-			div[role=rowgroup], .dgrid-header-row-bar
-			{
-				margin:4px;
-				outline:2px solid red;
-			}
-			div[role=row]
-			{
-				margin:4px;
-				outline:2px solid cyan;
-			}
-			div[role=columnheader]
-			{
-				margin:4px;
-				outline:2px solid lime;
-			}
-			div[role=rowheader]
-			{
-				margin:4px;
-				outline:2px solid purple;
-			}
-			div[role=gridcell]
-			{
-				margin:4px;
-				outline:2px solid blue;
-			}
-
-			.test-box
-			{
+				margin:1px;
 				border:1px solid black;
-				padding:5px;
 			}
-			.test-div
+			.top-bar-comp
 			{
-				border:1px solid red;
-				padding:5px;
+				flex:0 0 auto;
+				height:1.5em;
+			}
+			.top-bar-logo
+			{	
+				width:3em;
+			}
+			.content-box
+			{
+				flex:1 1 auto;
+			}
+			.cbox-side-bar
+			{
+				position:relative;
+				flex:0 0 auto;
+				width:150px;
+			}
+			.cbox-file-box
+			{
+				flex:1 1 auto;
+				border:1px solid black;
+			}
+			.btn-collapse-sidebar
+			{
+				position:absolute;
+				bottom:0px;
+				right:0px;
+				margin:5px;				
+			}
+			.search-files
+			{
+				flex:1 1 auto;
+				justify-self:space-around;
+				margin:0px 75px 0px 75px;
+				border:1px solid black;
+			}
+			.file-tile
+			{
+				width:150px;
+				height:150px;
+				border:1px solid black;
+				margin:5px;
 			}
 		</style>
 	</head>
-	<body class="ibx-root" data-ibx-type="ibxVBox" data-ibx-nav-map=".root-nav-map">
-		<div class="root-nav-map" data-ibx-type="ibxNavMap" data-ibxp-aria.label="Application Quick Navigation">
-			<div data-ibx-type="ibxNavMapItem" data-ibx-nav-target=".test-box">Go to Test Box</div>
-			<div data-ibx-type="ibxNavMapItem" data-ibx-nav-target=".test-native-grid">Go to Native Grid</div>
-			<div data-ibx-type="ibxNavMapItem" data-ibx-nav-target=".test-ibx-grid">Go to IBX Grid</div>
-		</div>
-
-		<div tabindex="0" class="test-box" data-ibx-type="ibxVBox" data-ibx-nav-map=".test-box-nav-map" data-ibxp-nav-key-root="true" data-ibxp-focus-default="true">
-			<div class="test-box-nav-map" data-ibx-type="ibxNavMap" data-ibxp-aria.label="Test Button Box Quick Navigation">
-				<div data-ibx-type="ibxNavMapItem" data-ibx-nav-target=".tb1">Go to Test Button 1</div>
-				<div data-ibx-type="ibxNavMapItem" data-ibx-nav-target=".tb2">Go to Test Button 2</div>
-				<div data-ibx-type="ibxNavMapItem" data-ibx-nav-target=".tb3">Go to Test Button 3</div>
-			</div>
-
-			<div class="" tabindex="0" data-ibx-type="ibxLabel" data-ibxp-for=".tb1">Label for face button</div>
-			<div title="Title for button 1" class="tb1 test-div" tabindex="0" data-ibx-type="ibxButton" data-ibxp-glyph-classes="material-icons" data-ibxp-glyph="face"></div>
-			<div title="Title for button 2" class="tb2 test-div" tabindex="0" data-ibx-type="ibxButton">test button two</div>
-			<div title="Title for button 3" class="tb3 test-div" tabindex="0" data-ibx-type="ibxButton">test button three</div>
-		</div>
-
-
-		<div tabindex="0" class="test-native-grid" role="grid"  data-ibx-nav-map=".native-grid-nav-map">
-			<div class="native-grid-nav-map" data-ibx-type="ibxNavMap" data-ibxp-aria.label="Native Grid Quick Navigation">
-				<div data-ibx-type="ibxNavMapItem" data-ibx-nav-target=".native-grid-row-1">Go to Grid Row 1</div>
-				<div data-ibx-type="ibxNavMapItem" data-ibx-nav-target=".native-grid-row-2">Go to Grid Row 2</div>
-			</div>
-
-			<div tabindex="-1" role="rowgroup">
-				<div id="row-columnheaders" tabindex="-1" role="row">
-					<div tabindex="0" role="columnheader">C1</div>
-					<div tabindex="0" role="columnheader">C2</div>
-					<div tabindex="0" role="columnheader">C3</div>
+	<body tabindex="0" class="ibx-root" data-ibx-type="ibxVBox" data-ibxp-align="stretch" data-ibx-nav-map=".root-nav-map" aria-label="To activate quick navigation map, press ALT+M">
+		<div tabindex="-1" class="ui-acx-comp top-bar" data-ibx-type="ibxHBox" data-ibxp-justify="spaceBetween" data-ibxp-align="center">
+			<div tabindex="-1" class="ui-acx-comp top-bar-comp top-bar-logo">Logo</div>
+			<div tabindex="-1" class="ui-acx-comp top-bar-comp top-bar-nav" data-ibx-type="ibxHBox" data-ibxp-align="center" data-ibxp-nav-key-root="true" data-ibxp-focus-default="true">
+				<div tabindex="0" title="WebFOCUS Tools Menu" class="ui-acx-comp" data-ibx-type="ibxMenuButton" data-ibxp-glyph-classes="fa fa-question">
+					<div data-ibx-type="ibxMenu">
+						<div data-ibx-type="ibxMenuItem">Tools Menu Items</div>
+					</div>
 				</div>
-			</div>
-			<div class="rowheaders" role="row">
-				<div id="rowheader1" tabindex="0" role="rowheader">R1</div>
-				<div id="rowheader2" tabindex="0" role="rowheader">R2</div>
-			</div>
-
-			<div tabindex="-1" xrole="rowgroup" class="rowgroup">
-				<div tabindex="-1" class="native-grid-row-1" role="row" aria-owns="rowheader1">
-					<div tabindex="0" role="gridcell">cell</div>
-					<div tabindex="0" role="gridcell">cell</div>
-					<div tabindex="0" role="gridcell">cell</div>
+				<div tabindex="0" title="WebFOCUS Settings Menu" class="ui-acx-comp" data-ibx-type="ibxMenuButton" data-ibxp-glyph-classes="fa fa-question">
+					<div data-ibx-type="ibxMenu">
+						<div data-ibx-type="ibxMenuItem">Settings Menu Items</div>
+					</div>
 				</div>
-				<div tabindex="-1" class="native-grid-row-2" role="row" aria-owns="rowheader2">
-					<div tabindex="0" role="gridcell">cell</div>
-					<div tabindex="0" role="gridcell">cell</div>
-					<div tabindex="0" role="gridcell">cell</div>
+				<div tabindex="0" title="WebFOCUS Help Menu" class="ui-acx-comp" data-ibx-type="ibxMenuButton" data-ibxp-glyph-classes="fa fa-question">
+					<div data-ibx-type="ibxMenu">
+						<div data-ibx-type="ibxMenuItem">Help Menu Items</div>
+					</div>
+				</div>
+				<div tabindex="0" title="WebFOCUS Account Menu" class="ui-acx-comp" data-ibx-type="ibxMenuButton" data-ibxp-glyph-classes="fa fa-question">
+					<div data-ibx-type="ibxMenu">
+						<div data-ibx-type="ibxMenuItem">Account Menu Items</div>
+					</div>
 				</div>
 			</div>
 		</div>
 
-		<div tabindex="0" class="test-ibx-grid" data-ibx-type="ibxDataGrid"></div>
+		<div class="content-box" data-ibx-type="ibxHBox" data-ibxp-align="stretch">
+	
+			<div tabindex="0" title="WebFOCUS content bookmarks" class="ui-acx-comp cbox-side-bar" data-ibx-type="ibxVBox" data-ibxp-align="stretch" data-ibxp-nav-key-root="true" data-ibxp-focus-default="true">
+				<div tabindex="-1" title="Bookmark" class="ui-acx-comp" data-ibx-type="ibxButton" data-ibxp-justify="start">Home</div>
+				<div tabindex="-1" title="Bookmark" class="ui-acx-comp" data-ibx-type="ibxButton" data-ibxp-justify="start">Favorites</div>
+				<div tabindex="-1" title="Bookmark" class="ui-acx-comp" data-ibx-type="ibxButton" data-ibxp-justify="start">My Workspace</div>
+				<div tabindex="-1" title="Bookmark" class="ui-acx-comp" data-ibx-type="ibxButton" data-ibxp-justify="start">Shared with me</div>
+				<div tabindex="-1" title="Bookmark" class="ui-acx-comp" data-ibx-type="ibxButton" data-ibxp-justify="start">Portals</div>
+				<div tabindex="-1" title="Bookmark" class="ui-acx-comp" data-ibx-type="ibxButton" data-ibxp-justify="start">Domains</div>
+
+				<div tabindex="0" title="collapse side bar" class="ui-acx-comp btn-collapse-sidebar" data-ibx-type="ibxButton" data-ibxp-glyph-classes="fa fa-angle-double-left"></div>
+			</div>
+
+			<div data-ibx-type="ibxVSplitter"></div>
+
+			<div class="ui-acx-comp cbox-file-box" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
+
+				<div tabindex="-1" class="ui-acx-comp file-box-top-bar" data-ibx-type="ibxHBox" data-ibxp-align="center" data-ibxp-nav-key-root="true" data-ibxp-focus-default="true">
+					<div tabindex="0" title="Create New File" class="ui-acx-comp" data-ibx-type="ibxButtonSimple" data-ibxp-glyph-classes="fa fa-question"></div>
+					<div tabindex="0" title="Search For Files" class="search-files ui-acx-comp" data-ibx-type="ibxSelectMenuButton"></div>
+					<div tabindex="0" title="View Files As" class="ui-acx-comp" data-ibx-type="ibxMenuButton" data-ibxp-glyph-classes="fa fa-question">
+						<div data-ibx-type="ibxMenu">
+							<div data-ibx-type="ibxMenuItem">View Files As Menu Items</div>
+						</div>
+					</div>
+					<div tabindex="0" title="Refresh File Views" class="ui-acx-comp" data-ibx-type="ibxButtonSimple" data-ibxp-glyph-classes="fa fa-question"></div>
+					<div tabindex="0" title="Selected File Info" class="ui-acx-comp" data-ibx-type="ibxButtonSimple" data-ibxp-glyph-classes="fa fa-question"></div>
+				</div>
+
+				<div class="ui-acx-comp file-box-recents" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
+					<div>Recent</div>
+					<div tabindex=0" title="Recent File List" class="ui-acx-comp files-box-recents" data-ibx-type="ibxHBox" data-ibxp-nav-key-root="true" data-ibxp-focus-default="false">
+						<div tabindex="-1" class="file-tile"></div>
+						<div tabindex="-1" class="file-tile"></div>
+						<div tabindex="-1" class="file-tile"></div>
+					</div>
+				</div>
+				<div class="ui-acx-comp file-box-recommended" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
+					<div>Recommended</div>
+					<div tabindex=0" title="Recommended File List" class="ui-acx-comp files-box-recommended" data-ibx-type="ibxHBox" data-ibxp-nav-key-root="true" data-ibxp-focus-default="false">
+						<div tabindex="-1" class="file-tile"></div>
+						<div tabindex="-1" class="file-tile"></div>
+						<div tabindex="-1" class="file-tile"></div>
+					</div>
+				</div>
+				<div class="ui-acx-comp file-box-learn" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
+					<div>Learn WebFOCUS</div>
+					<div tabindex=0" title="WebFOCUS Learning Center" class="ui-acx-comp file-box-learn" data-ibx-type="ibxHBox" data-ibxp-nav-key-root="true" data-ibxp-focus-default="false">
+						<div tabindex="-1" class="file-tile"></div>
+						<div tabindex="-1" class="file-tile"></div>
+						<div tabindex="-1" class="file-tile"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="root-nav-map" data-ibx-type="ibxNavMap" data-ibxp-aria.label="Home Page Quick Navigation.  Use up/down arrow keys to find quick navigation areas.">
+			<div data-ibx-type="ibxNavMapItem" data-ibx-nav-target=".top-box-bar-nav">Jump To Main Navigation</div>
+			<div data-ibx-type="ibxNavMapItem" data-ibx-nav-target=".cbox-side-bar">Jump To Content Bookmarks</div>
+			<div data-ibx-type="ibxNavMapItem" data-ibx-nav-target=".file-box-top-bar">Jump To Searching, and new file</div>
+			<div data-ibx-type="ibxNavMapItem" data-ibx-nav-target=".file-box-recents">Jump To Recently accessed files</div>
+			<div data-ibx-type="ibxNavMapItem" data-ibx-nav-target=".file-box-recommended">Jump To Recommended files</div>
+			<div data-ibx-type="ibxNavMapItem" data-ibx-nav-target=".file-box-learn">Jump To WebFOCUS learning center</div>
+		</div>
+
 	</body>
 </html>
 
