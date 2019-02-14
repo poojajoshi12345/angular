@@ -445,7 +445,11 @@ $.widget("ibi.ibxEditable", $.Widget,
 				this.element.dispatchEvent("ibx_canceledit", this.element.text(), true, false);
 			}
 			else
-				this.element.dispatchEvent("ibx_changed", this.element.text(), true, false);
+			{
+				var event = this.element.dispatchEvent("ibx_changed", this.element.text(), true, true);
+				if(event.isDefaultPrevented())
+					this.element.html(this._preEditValue);
+			}
 			this.refresh();
 		}
 	},
