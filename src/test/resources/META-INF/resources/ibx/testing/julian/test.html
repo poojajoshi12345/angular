@@ -29,10 +29,9 @@
 				padding:1px;
 				border:1px solid black;
 			}
-			.top-bar-comp
+			.top-bar
 			{
-				flex:0 0 auto;
-				height:1.5em;
+				flex: 0 0 auto;
 			}
 			.top-bar-logo
 			{	
@@ -55,20 +54,33 @@
 			}
 			.btn-collapse-sidebar
 			{
+				font-size:1.5em;
 				position:absolute;
 				bottom:0px;
 				right:0px;
 				margin:5px;				
 			}
-			.search-files
+			.file-box-top-bar
+			{
+				flex:0 0 auto;
+			}
+			.file-box-search-files
 			{
 				flex:1 1 auto;
 				min-width:100px;
 				justify-self:space-around;
 				margin:0px 75px 0px 75px;
 			}
+			.file-section
+			{
+			}
+			.file-box 
+			{
+				overflow:auto;
+			}
 			.file-tile
 			{
+				flex:0 0 auto;
 				width:150px;
 				height:150px;
 				border:1px solid black;
@@ -76,7 +88,7 @@
 			}
 		</style>
 	</head>
-	<body tabindex="0" class="ibx-root" data-ibx-type="ibxVBox" data-ibxp-align="stretch" data-ibx-nav-map=".root-nav-map" aria-label="To activate quick navigation map, press ALT+M">
+	<body tabindex="0" class="ibx-root" data-ibx-type="ibxVBox" data-ibxp-align="stretch" data-ibx-nav-map=".root-nav-map" aria-label="To activate quick navigation map, press CTRL+ALT+M">
 		<div tabindex="-1" class="ui-acx-comp top-bar" data-ibx-type="ibxHBox" data-ibxp-justify="spaceBetween" data-ibxp-align="center">
 			<div tabindex="-1" class="ui-acx-comp top-bar-logo">Logo</div>
 			<div tabindex="-1" class="ui-acx-comp top-bar-nav" data-ibx-type="ibxHBox" data-ibxp-align="center" data-ibxp-nav-key-root="true" data-ibxp-focus-default="true">
@@ -118,39 +130,39 @@
 
 			<div data-ibx-type="ibxVSplitter"></div>
 
-			<div class="ui-acx-comp cbox-file-box" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
+			<div class="ui-acx-comp cbox-file-box" data-ibx-type="ibxVBox" data-ibxp-align="stretch" data-ibx-nav-map=".files-nav-map">
 
-				<div tabindex="-1" class="ui-acx-comp file-box-top-bar" data-ibx-type="ibxHBox" data-ibxp-align="center" data-ibxp-nav-key-root="true" data-ibxp-focus-default=".search-files">
-					<div tabindex="0" title="Create New File" class="ui-acx-comp" data-ibx-type="ibxButtonSimple" data-ibxp-glyph-classes="fa fa-question"></div>
-					<div tabindex="0" title="Search For Files" class="ui-acx-comp search-files" data-ibx-type="ibxSelectMenuButton"></div>
-					<div tabindex="0" title="View Files As" class="ui-acx-comp" data-ibx-type="ibxMenuButton" data-ibxp-glyph-classes="fa fa-question">
+				<div tabindex="-1" class="ui-acx-comp file-box-top-bar" data-ibx-type="ibxHBox" data-ibxp-align="center" data-ibxp-nav-key-root="true">
+					<div tabindex="0" title="Create New File" class="ui-acx-comp file-box-new" data-ibx-type="ibxButtonSimple" data-ibxp-glyph-classes="fa fa-question"></div>
+					<div tabindex="0" title="Search For Files" class="ui-acx-comp file-box-search-files" data-ibx-type="ibxSelectMenuButton"></div>
+					<div tabindex="0" title="View Files As" class="ui-acx-comp file-box-view-as" data-ibx-type="ibxMenuButton" data-ibxp-glyph-classes="fa fa-question">
 						<div data-ibx-type="ibxMenu">
 							<div data-ibx-type="ibxMenuItem">View Files As Menu Items</div>
 						</div>
 					</div>
-					<div tabindex="0" title="Refresh File Views" class="ui-acx-comp" data-ibx-type="ibxButtonSimple" data-ibxp-glyph-classes="fa fa-question"></div>
-					<div tabindex="0" title="Selected File Info" class="ui-acx-comp" data-ibx-type="ibxButtonSimple" data-ibxp-glyph-classes="fa fa-question"></div>
+					<div tabindex="0" title="Refresh File Views" class="ui-acx-comp file-box-refresh" data-ibx-type="ibxButtonSimple" data-ibxp-glyph-classes="fa fa-question"></div>
+					<div tabindex="0" title="Selected File Info" class="ui-acx-comp file-box-info" data-ibx-type="ibxButtonSimple" data-ibxp-glyph-classes="fa fa-question"></div>
 				</div>
 
-				<div class="ui-acx-comp file-box-recents" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
+				<div class="ui-acx-comp file-section file-box-recents" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
 					<div>Recent</div>
-					<div tabindex=0" title="Recent File List" class="ui-acx-comp file-box-recents" data-ibx-type="ibxHBox" data-ibxp-nav-key-root="true" data-ibxp-focus-default="false">
+					<div tabindex=0" title="Recent File List" class="ui-acx-comp file-box file-box-recents" data-ibx-type="ibxHBox" data-ibxp-nav-key-root="true" data-ibxp-focus-default="false" data-ibxp-wrap="true">
 						<div tabindex="-1" title="Recent file" class="file-tile">Cost of Goods</div>
 						<div tabindex="-1" title="Recent file" class="file-tile">Profit Margin</div>
 						<div tabindex="-1" title="Recent file" class="file-tile">Region Revenue Bar</div>
 					</div>
 				</div>
-				<div class="ui-acx-comp file-box-recommended" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
+				<div class="ui-acx-comp file-section file-box-recommended" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
 					<div>Recommended</div>
-					<div tabindex=0" title="Recommended File List" class="ui-acx-comp file-box-recommended" data-ibx-type="ibxHBox" data-ibxp-nav-key-root="true" data-ibxp-focus-default="false">
+					<div tabindex=0" title="Recommended File List" class="ui-acx-comp file-box file-box-recommended" data-ibx-type="ibxHBox" data-ibxp-nav-key-root="true" data-ibxp-focus-default="false" data-ibxp-wrap="true">
 						<div tabindex="-1" title="Recommended file" class="file-tile">Fintoso Financial</div>
 						<div tabindex="-1" title="Recommended file" class="file-tile">Collaberative Portal</div>
 						<div tabindex="-1" title="Recommended file" class="file-tile">KPI Dashboard</div>
 					</div>
 				</div>
-				<div class="ui-acx-comp file-box-learn" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
+				<div class="ui-acx-comp file-section file-box-learn" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
 					<div>Learn WebFOCUS</div>
-					<div tabindex=0" title="WebFOCUS Learning Center" class="ui-acx-comp file-box-learn" data-ibx-type="ibxHBox" data-ibxp-nav-key-root="true" data-ibxp-focus-default="false">
+					<div tabindex=0" title="WebFOCUS Learning Center" class="ui-acx-comp file-box file-box-learn" data-ibx-type="ibxHBox" data-ibxp-nav-key-root="true" data-ibxp-focus-default="false" data-ibxp-wrap="true">
 						<div tabindex="-1" title="WebFOCUS How To" class="file-tile">Connecting to new data</div>
 						<div tabindex="-1" title="WebFOCUS How To" class="file-tile">Visualizing your data</div>
 						<div tabindex="-1" title="WebFOCUS How To" class="file-tile">Blending multiple data sources</div>
@@ -159,15 +171,25 @@
 			</div>
 		</div>
 
-		<div class="root-nav-map" data-ibx-type="ibxNavMap" data-ibxp-aria.label="Home Page Quick Navigation.  Use up/down arrow keys to find quick navigation areas.">
+		<div class="root-nav-map" data-ibx-type="ibxNavMap" data-ibxp-aria.label="Quick Navigation - Home Page.  Use up/down arrow keys to find quick navigation areas.">
 			<div data-ibx-type="ibxNavMapItem" data-ibx-nav-target=".top-bar-nav">Jump To Main Navigation</div>
 			<div data-ibx-type="ibxNavMapItem" data-ibx-nav-target=".cbox-side-bar">Jump To Content Bookmarks</div>
-			<div data-ibx-type="ibxNavMapItem" data-ibx-nav-target=".file-box-top-bar">Jump To Searching</div>
+			<div data-ibx-type="ibxNavMapItem" data-ibx-nav-target=".file-box-search-files">Jump To Searching</div>
 			<div data-ibx-type="ibxNavMapItem" data-ibx-nav-target=".file-box-recents">Jump To Recently accessed files</div>
 			<div data-ibx-type="ibxNavMapItem" data-ibx-nav-target=".file-box-recommended">Jump To Recommended files</div>
 			<div data-ibx-type="ibxNavMapItem" data-ibx-nav-target=".file-box-learn">Jump To WebFOCUS learning center</div>
 		</div>
 
+		<div class="files-nav-map" data-ibx-type="ibxNavMap" data-ibxp-aria.label="Quick Navigation - Files and Content">
+			<div data-ibx-type="ibxNavMapItem" data-ibx-nav-target=".file-box-new">Jump To Create New File</div>
+			<div data-ibx-type="ibxNavMapItem" data-ibx-nav-target=".file-box-search-files">Jump To Search For Files</div>
+			<div data-ibx-type="ibxNavMapItem" data-ibx-nav-target=".file-box-view-as">Jump To View Files As</div>
+			<div data-ibx-type="ibxNavMapItem" data-ibx-nav-target=".file-box-refresh">Jump To Refresh File Views</div>
+			<div data-ibx-type="ibxNavMapItem" data-ibx-nav-target=".file-box-info">Jump To Get File Information</div>
+			<div data-ibx-type="ibxNavMapItem" data-ibx-nav-target=".file-box-recents">Jump To Recently accessed files</div>
+			<div data-ibx-type="ibxNavMapItem" data-ibx-nav-target=".file-box-recommended">Jump To Recommended files</div>
+			<div data-ibx-type="ibxNavMapItem" data-ibx-nav-target=".file-box-learn">Jump To WebFOCUS learning center</div>
+		</div>
 	</body>
 </html>
 
