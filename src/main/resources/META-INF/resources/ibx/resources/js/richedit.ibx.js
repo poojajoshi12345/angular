@@ -438,7 +438,7 @@ $.widget("ibi.ibxEditable", $.Widget,
 			sel.removeAllRanges();
 
 			//cleanup and let world know we're done.
-			this.element.prop("contentEditable", false).ibxRemoveClass("ibx-content-editing");
+			this.element.ibxRemoveClass("ibx-content-editing").prop("contentEditable", false);
 			if(revertToOriginal)
 			{
 				this.element.html(this._preEditValue);
