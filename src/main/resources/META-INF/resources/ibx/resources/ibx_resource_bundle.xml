@@ -34,6 +34,9 @@ $Revision$:-->
 				"IBX_DLG_CAPTION_INF":"Information",
 				"IBX_DLG_CAPTION_QST":"Question",
 
+				"IBX_NAV_MAP_LABEL":"Quick Navigation Map. Use up and down arrow keys to hear quick navigation areas.",
+				"IBX_NAV_MAP_UP_ON_LEVEL":"Navigate up one level...",
+
 				"IBX_SPLIT_BUTTON_DOWN_ARROW_TITLE":"Show Menu",
 
 				"IBX_TEXT_INPUT_LABEL":"Text Input",
@@ -76,15 +79,14 @@ $Revision$:-->
 
 				"IBX_COLOR_PICKER_VALUE_LABEL":"RGB Value ",
 
-				"PP_CUSTOM_COLORS":"Custom Colors",
-				"PP_NO_FILL":"No fill",
-				"PP_TRANSPARENCY":"Opacity",
-				"PP_PAL_NAME_BASIC":"Basic",
-
 				"IBX_PGRID_LABEL":"Property Grid",
 				"IBX_PGRID_EDIT_CELL_LABEL":"Edit Property ",
 				"IBX_PGRID_COLOR_PICKER_LABEL":"Color Picker, RGB Value ",
 
+				"PP_CUSTOM_COLORS":"Custom Colors",
+				"PP_NO_FILL":"No fill",
+				"PP_TRANSPARENCY":"Opacity",
+				"PP_PAL_NAME_BASIC":"Basic",
 
 				"IBX_TERMINATING_STRING":""
 			}
