@@ -23,13 +23,16 @@ $.widget("ibi.ibxNavMap", $.ibi.ibxMenu,
 	{
 		this._super();
 		this._sep = $("<div>").ibxMenuSeparator();
-		this._navToParent = $("<div>").ibxNavMapItem({labelOptions:{text:ibx.resourceMgr.getString("IBX_NAV_MAP_UP_ON_LEVEL")}});
+		this._navToParentItem = $("<div>").ibxNavMapItem({labelOptions:{text:ibx.resourceMgr.getString("IBX_NAV_MAP_UP_ON_LEVEL")}});
 	},
 	_onMenuItemClick:function(e)
 	{
-		if(this._navToParent.is(e.target))
-		{
+		if(this._navToParentItem.is(e.target))
 			$(this.options.navParent).ibxWidget("open");
+		else
+		{
+			var navTarget = $(e.target).ibxWidget("option", "navTarget");
+			$(navTarget).focus();
 		}
 		this._super(e);
 	},
@@ -37,11 +40,13 @@ $.widget("ibi.ibxNavMap", $.ibi.ibxMenu,
 	{
 		var options = this.options;
 		this._super();
-		if(options.navParent)
-			this._box.prepend(this._navToParent, this._sep);
+
+		var navParent = options.navParent = $(options.navRoot).parents("[data-ibx-nav-map]").first().attr("data-ibx-nav-map");
+		if(navParent)
+			this._box.prepend(this._navToParentItem, this._sep);
 		else
 		{
-			this._navToParent.detach();
+			this._navToParentItem.detach();
 			this._sep.detach();
 		}
 	}
@@ -50,10 +55,8 @@ $.widget("ibi.ibxNavMap", $.ibi.ibxMenu,
 //just listen for events to trigger the navigation management
 function ibxNavManager()
 {
-	
 	window.addEventListener("keydown", ibxNavManager._onKeyEvent.bind(this), true);
 }
-
 ibxNavManager.options =
 {
 	triggerKey:"CTRL+ALT+M",
@@ -64,22 +67,9 @@ ibxNavManager._onKeyEvent = function(e)
 	{
 		var target = $(e.target);
 		var navRoot = target.closest("[data-ibx-nav-map]");
-		var navMap = $(navRoot.attr("data-ibx-nav-map")).ibxWidget("open").off("ibx_select").on("ibx_select", ibxNavManager._onNavItemSelected.bind(this));
-
-		var navParent = navRoot.parents("[data-ibx-nav-map]").first();
-		navMap.ibxWidget("option", "navParent", navParent.attr("data-ibx-nav-map"));
+		$(navRoot.attr("data-ibx-nav-map")).ibxWidget("option", {"navRoot":navRoot}).ibxWidget("open");
 	}
 };
-
-ibxNavManager._onNavItemSelected = function(e)
-{
-	// var navItem = $(e.originalEvent.target);
-	// var navTarget = navItem.ibxWidget("option", "navTarget");
-	// //var navParent = navTarget.ibxWidget()
-	// $(navTarget).focus();
-	// console.log(navTarget);
-};
-
 ibx.navManager = new ibxNavManager();
 
 //# sourceURL=navmap.ibx.js
