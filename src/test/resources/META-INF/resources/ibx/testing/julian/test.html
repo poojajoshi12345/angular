@@ -15,8 +15,7 @@
 				var label = $(".test-label");
 				label.on("dblclick", function(e)
 				{
-					var label = $(e.currentTarget);
-					label.ibxWidget("startEditing");
+					
 				});
 				label.on("ibx_changed", function(e)
 				{
@@ -41,10 +40,72 @@
 				margin:10px;
 				padding:1em;
 			}
+			.wfc-line-select-item > .ibx-menu-item-marker
+			{
+				display:none;
+			}
+
+			.wfc-line-select-item.checked
+			{
+				background-color:red;
+			}
 		</style>
 	</head>
 	<body tabindex="0" class="ibx-root" data-ibx-type="ibxVBox" data-ibxp-align="start">
-		<div tabindex="0" class="test-label" data-ibx-type="ibxLabel">test</div>
+		<!-- <div class="wfc-line-dash" data-ibx-type="ibxMenuButton" data-ibx-name="lineStyle" data-ibxp-align="center" data-ibxp-justify="left">Style 
+			<div class="wfc-line-select-menu" data-ibx-type="ibxMenu" data-ibx-name="lineStyleMenu"> 
+				<div data-ibx-type="ibxRadioGroup" data-ibx-name="lineStyleGroup" data-ibxp-name="lineStyleGroup" data-ibxp-user-value="solid"></div> 
+				<div class="wfc-line-select-item wfc-linestyle-none" data-ibx-type="ibxRadioMenuItem" data-ibxp-group="lineStyleGroup" data-ibxp-user-value="none">None</div> 
+				<div class="wfc-line-select-item" data-ibx-type="ibxRadioMenuItem" data-ibxp-group="lineStyleGroup" data-ibxp-user-value="solid">solid</div> 
+				<div class="wfc-line-select-item" data-ibx-type="ibxRadioMenuItem" data-ibxp-group="lineStyleGroup" data-ibxp-user-value="dash">dash</div> 
+				<div class="wfc-line-select-item" data-ibx-type="ibxRadioMenuItem" data-ibxp-group="lineStyleGroup" data-ibxp-user-value="dash_dot">ddot</div> 
+				<div class="wfc-line-select-item" data-ibx-type="ibxRadioMenuItem" data-ibxp-group="lineStyleGroup" data-ibxp-user-value="dash_dot_dot">ddotdot</div> 
+				<div class="wfc-line-select-item" data-ibx-type="ibxRadioMenuItem" data-ibxp-group="lineStyleGroup" data-ibxp-user-value="dot">dot</div> 
+				<div class="wfc-line-select-item" data-ibx-type="ibxRadioMenuItem" data-ibxp-group="lineStyleGroup" data-ibxp-user-value="long_dash">ldash</div> 
+				<div class="wfc-line-select-item" data-ibx-type="ibxRadioMenuItem" data-ibxp-group="lineStyleGroup" data-ibxp-user-value="long_dash_dot">ldashdot</div> 
+				<div class="wfc-line-select-item" data-ibx-type="ibxRadioMenuItem" data-ibxp-group="lineStyleGroup" data-ibxp-user-value="short_dash">sdash</div> 
+				<div class="wfc-line-select-item" data-ibx-type="ibxRadioMenuItem" data-ibxp-group="lineStyleGroup" data-ibxp-user-value="short_dash_dot">sdashdot</div> 
+				<div class="wfc-line-select-item" data-ibx-type="ibxRadioMenuItem" data-ibxp-group="lineStyleGroup" data-ibxp-user-value="short_dash_dot_dot">sdashdotdot</div> 
+				<div class="wfc-line-select-item" data-ibx-type="ibxRadioMenuItem" data-ibxp-group="lineStyleGroup" data-ibxp-user-value="short_dot">sdot</div> 
+			</div> 
+		</div> -->
+			
+		<div tabindex="0" class="test-select" data-ibx-type="ibxSelectMenuButton" data-ibxp-multi-select="true" data-ibxp-user-value="dotted">Style
+			<div style="border:none" class="pgrid-prop-border-style-menuitem"  data-ibx-type="ibxRadioMenuItem" data-ibxp-user-value="none">None</div>
+			<div style="border:dashed" class="pgrid-prop-border-style-menuitem" data-ibx-type="ibxRadioMenuItem" data-ibxp-user-value="dashed">Dashed</div>
+			<div style="border:dotted" class="pgrid-prop-border-style-menuitem" data-ibx-type="ibxRadioMenuItem" data-ibxp-user-value="dotted">Dotted</div>
+			<div style="border:double" class="pgrid-prop-border-style-menuitem" data-ibx-type="ibxRadioMenuItem" data-ibxp-user-value="double">Double</div>
+			<div style="border:groove" class="pgrid-prop-border-style-menuitem" data-ibx-type="ibxRadioMenuItem" data-ibxp-user-value="groove">Groove</div>
+			<div style="border:hidden" class="pgrid-prop-border-style-menuitem" data-ibx-type="ibxRadioMenuItem" data-ibxp-user-value="hidden">Hidden</div>
+			<div style="border:inset" class="pgrid-prop-border-style-menuitem" data-ibx-type="ibxRadioMenuItem" data-ibxp-user-value="inset">Inset</div>
+			<div style="border:outset" class="pgrid-prop-border-style-menuitem" data-ibx-type="ibxRadioMenuItem" data-ibxp-user-value="outset">Outset</div>
+			<div style="border:ridge" class="pgrid-prop-border-style-menuitem" data-ibx-type="ibxRadioMenuItem" data-ibxp-user-value="ridge">Ridge</div>
+			<div style="border:solid" class="pgrid-prop-border-style-menuitem" data-ibx-type="ibxRadioMenuItem" data-ibxp-user-value="solid">Solid</div>
+		</div>
+		<!-- <div tabindex="0" class="test-select" data-ibx-type="ibxSelectMenuButton">Style
+			<div style="border:none" class="pgrid-prop-border-style-menuitem"  data-ibx-type="ibxCheckMenuItem" data-ibxp-user-value="none">None</div>
+			<div style="border:dashed" class="pgrid-prop-border-style-menuitem" data-ibx-type="ibxCheckMenuItem" data-ibxp-user-value="dashed">Dashed</div>
+			<div style="border:dotted" class="pgrid-prop-border-style-menuitem" data-ibx-type="ibxCheckMenuItem" data-ibxp-user-value="dotted">Dotted</div>
+			<div style="border:double" class="pgrid-prop-border-style-menuitem" data-ibx-type="ibxCheckMenuItem" data-ibxp-user-value="double">Double</div>
+			<div style="border:groove" class="pgrid-prop-border-style-menuitem" data-ibx-type="ibxCheckMenuItem" data-ibxp-user-value="groove">Groove</div>
+			<div style="border:hidden" class="pgrid-prop-border-style-menuitem" data-ibx-type="ibxCheckMenuItem" data-ibxp-user-value="hidden">Hidden</div>
+			<div style="border:inset" class="pgrid-prop-border-style-menuitem" data-ibx-type="ibxCheckMenuItem" data-ibxp-user-value="inset">Inset</div>
+			<div style="border:outset" class="pgrid-prop-border-style-menuitem" data-ibx-type="ibxCheckMenuItem" data-ibxp-user-value="outset">Outset</div>
+			<div style="border:ridge" class="pgrid-prop-border-style-menuitem" data-ibx-type="ibxCheckMenuItem" data-ibxp-user-value="ridge">Ridge</div>
+			<div style="border:solid" class="pgrid-prop-border-style-menuitem" data-ibx-type="ibxCheckMenuItem" data-ibxp-user-value="solid">Solid</div>
+		</div> -->
+		<div class="color-picker-button" data-ibx-type="ibxMenuButton">Color...
+			<div data-ibx-type="ibxPopup" data-ibxp-destroy-on-close="false">
+				<div tabindex="0" class="test-combined-picker" data-ibx-type="ibxTabPane">
+					<div data-ibx-type="ibxTabPage" data-ibxp-selected="true">Presets
+						<div tabindex="0" class="test-pal-picker" data-ibx-type="ibxPalettePicker"></div>
+					</div>
+					<div data-ibx-type="ibxTabPage">Palette
+						<div tabindex="0" class="test-color-picker pop-up" data-ibx-type="ibxColorPicker" data-ibxp-color="#ccc"></div>
+					</div>
+				</div>
+			</div>
+		</div>
 	</body>
 </html>
 

@@ -206,8 +206,10 @@ $.ibi.ibxRadioGroup.uniqueUserVal = 0;
 $.ibi.ibxRadioGroup.grps={};
 $.ibi.ibxRadioGroup.addControl=function(grpName, ctrl)
 {
+	//if you try to add a control to a group before the group is created we cache it in an array.  When the group is created, it will find that cache
+	//and add all the controls to itself.  From that point on, adding controls will directly interact with the group.
 	var grp = this.grps[grpName];
-	if(!grp)
+	if(!grp && grpName)
 		grp = this.grps[grpName] = [];
 
 	if(grp instanceof Array)
@@ -219,7 +221,7 @@ $.ibi.ibxRadioGroup.addControl=function(grpName, ctrl)
 $.ibi.ibxRadioGroup.removeControl=function(grpName, ctrl)
 {
 	var grp = this.grps[grpName];
-	if(grp)
+	if(grp && !(grp instanceof Array))
 		$(grp).ibxRadioGroup("removeControl", ctrl)
 }
 
