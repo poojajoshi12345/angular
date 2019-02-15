@@ -59,7 +59,7 @@ function ibxNavManager()
 }
 ibxNavManager.options =
 {
-	triggerKey:"CTRL+ALT+M",
+	triggerKey:"CTRL+SHIFT+F10",
 }
 ibxNavManager._onKeyEvent = function(e)
 {
