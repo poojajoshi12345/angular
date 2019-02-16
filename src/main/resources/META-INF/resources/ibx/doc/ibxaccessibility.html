@@ -24,14 +24,16 @@
 		Accessible web content falls into two broad categories:
 		<ul>
 			<li>Documents
-				<p>
-					The HTML content is used to represent something akin to a magazine article.  In this case the markup has semantic meaning.  For example an &lt;h1> tag is literally rendered in what a user would expect to be a heading. And assistive technologies, such as screen readers will understand the semantec meaning of the document structure and announce it accordingly.
-				</p>
+				<br>
+					Where the HTML content is used to represent something like a magazine article.  In this case the markup has semantic meaning.  For example an &lt;h1> tag is literally rendered in what a user would expect to be a heading. And assistive technologies, such as screen readers will understand the semantic meaning of the document structure and announce it accordingly.
+				</br>
 			</li>
-			<li>Applications</li>
-				<p>
-					The HTML content has no semantic meaning, and is used to create the illusion of a "fat client" UI/UX. In this case the assistive technology must be explicitly made aware of what is on the screen, what role it is representing (button/dialog/slider/etc.), and how it fits into the structure of the UI/UX.
-				</p>
+			<p></p>
+			<li>Applications
+				<br>
+					Where the HTML doesn't have to have any semantic meaning, and it's used to create the illusion of a "fat client" UI/UX. In this case the assistive technology must be explicitly made aware of what is on the screen, what role it is representing (button/dialog/slider/etc.), and how it fits into the structure of the UI/UX.
+				</br>
+			</li>
 		</ul> 
 		<p>
 			The applications you build using ibx fall squarely into the latter category. The ibx framework uses no document-centric tags or css.  Everthing is explicitly defined according to what it represents from a UI/UX perspective.
@@ -40,7 +42,11 @@
 			Because accessibility is built into the framework, most of the work is handled at that level.  In most cases you will simply have to defined readable labels and the overarching navigation of your UI.
 		</p>
 	</section>
-
+	<section>
+		<h4>ibxWidget and ARIA</h4>
+		Accessible web content falls into two broad categories:
+	</section>
+</article>
 	<!-- <p>
 		You might think this is an unreasonable burden to place on developers, and can't be accomplished in the real world.  The fact is it can be, and it's not even that difficult once you start thinking about it at a fundamental development level. You just have to take a moment to consider it like you would any other UI/UX issue.  In most cases it works like...
 	</p>
