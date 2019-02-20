@@ -2,6 +2,18 @@
 <!--$Revision$:-->
 <script type="text/javascript">
 </script>
+<style type="text/css">
+	pre
+	{
+		font-family:monospace;
+		user-select:text;
+		background-color:#efefef;
+		margin:5px 1em;
+		padding:5px;
+		overflow:auto;
+		-webkit-overflow-scrolling: touch;
+	}
+</style>
 <article>
 	<h1 data-title="ibx Accessibility">ibx and Accessibility (508 Compliance)</h1>
 		In 1990, President George H. Bush signed into law the <a href="https://en.wikipedia.org/wiki/Americans_with_Disabilities_Act_of_1990">Americans with Disabilities Act (ADA)</a>. The purpose of this law was to establish a clear and comprehensive prohibition of discrimination on the basis of disability.  
@@ -46,18 +58,17 @@
 	<section>
 		<h4>Accessible Rich Internet Applications</h4>
 		As stated in the above section, ibx applications are explicitly not documents.  They contain no semantic meaning in their markup.  Because of this, their constituent parts must make Readers aware of them.
-
 		<p>
-			This is accomplished via <a href="https://www.w3.org/TR/wai-aria-1.1/">Accessible Rich Internet Applications (ARIA)</a>.  Browsers allow Readers to access the markup so they can examine it to determine what is logically being rendered on the screen.
+			This is accomplished via <a href="https://www.w3.org/TR/wai-aria-1.1/">Accessible Rich Internet Applications (ARIA)</a>.  Browsers allow Readers to access the markup so they can examine it to determine what is <i>logically</i> being rendered on the screen.
 		</p>
 		<p>
-			For example, Reader's perspective, this markup:
+			For example, from a Reader's perspective, this markup:
 			<pre>
-				&lt;button tabindex="0">Press Me!&lt;/button>
+&lt;button tabindex="0">Press Me!&lt;/button>
 			</pre>
 			Is <b>exactly</b> the same as this markup:
 			<pre>
-				&lt;div tabindex="0" role="button">Press Me!&lt;/div>
+&lt;div tabindex="0" role="button">Press Me!&lt;/div>
 			</pre>
 			The browser does not pay attention to the <a href="https://www.w3.org/WAI/PF/aria-1.1/roles"><i>role</i></a> attribute.  It is there entirely for the Reader's benefit.  So, the second piece of markup will not render as a button, or allow a user to interact with it as such.  The ibx library takes care of all of that, so developers don't have to worry about it.
 		</p>
