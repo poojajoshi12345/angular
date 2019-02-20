@@ -36,38 +36,38 @@
 			</li>
 		</ul> 
 		<p>
-			The applications you build using ibx fall squarely into the latter category. The ibx framework uses no document-centric tags or css.  Everthing is explicitly defined according to what it represents from a UI/UX perspective.
+			Applications built using ibx fall squarely into the latter category. The ibx framework uses no document-centric tags or css.  Everthing is explicitly defined according to what it represents from a UI/UX perspective.
 		</p>
 		<p>
-			Because accessibility is built into the framework, most of the work is handled at that level.  In most cases you will simply have to defined readable labels and the overarching navigation of your UI.
+			Because accessibility is built into the framework, most of the work is handled at that level.  The goal is for the develop to simply create the UI/UX in a well thought-out thorough fashion, and a large part of the accessibility will be handled automatically.
+
 		</p>
 	</section>
 	<section>
-		<h4>ibxWidget and ARIA</h4>
-		Accessible web content falls into two broad categories:
+		<h4>Accessible Rich Internet Applications</h4>
+		As stated in the above section, ibx applications are explicitly not documents.  They contain no semantic meaning in their markup.  Because of this, their constituent parts must make Readers aware of them.
+
+		<p>
+			This is accomplished via <a href="https://www.w3.org/TR/wai-aria-1.1/">Accessible Rich Internet Applications (ARIA)</a>.  Browsers allow Readers to access the markup so they can examine it to determine what is logically being rendered on the screen.
+		</p>
+		<p>
+			For example, Reader's perspective, this markup:
+			<pre>
+				&lt;button tabindex="0">Press Me!&lt;/button>
+			</pre>
+			Is <b>exactly</b> the same as this markup:
+			<pre>
+				&lt;div tabindex="0" role="button">Press Me!&lt;/div>
+			</pre>
+			The browser does not pay attention to the <a href="https://www.w3.org/WAI/PF/aria-1.1/roles"><i>role</i></a> attribute.  It is there entirely for the Reader's benefit.  So, the second piece of markup will not render as a button, or allow a user to interact with it as such.  The ibx library takes care of all of that, so developers don't have to worry about it.
+		</p>
+	</section>
+	<section>
+		<h4>ibxWidgets and ARIA</h4>
+		The base widget for all of the ibx library is ibxWidget.  This has a function called <i>setAccessibility(accessible, aria)</i>.  This function is called at key points in the lifecycle of the widget.  Usually when its state changes.  The first parameter "accessible" is a boolean, and it tells the widget to either add or remove the properties specified in the second parameter, "aria".
+		<p>
+		The "aria parameter is a simple object which can contain any valid ARIA attribute name, such as - label/lebeleldby/owns/expanded/etc.  Whatever is in this object will be prefixed with "aria-" and added as attributes to the widget's element.
+		</p>
+
 	</section>
 </article>
-	<!-- <p>
-		You might think this is an unreasonable burden to place on developers, and can't be accomplished in the real world.  The fact is it can be, and it's not even that difficult once you start thinking about it at a fundamental development level. You just have to take a moment to consider it like you would any other UI/UX issue.  In most cases it works like...
-	</p>
-		
-	<p>
-		<i>"Where should I put this button, and what label should it have?"</i>...and...<i><b>how will the user get to it via the keyboard...how should it announce itself?</b></i>
-	</p>
-
-	<p>
-		The fact is, well designed UI/UX will generally support accessibility out of the box.  This is because the 
-	</p>
-	<p>
-		This is the challenge, we as developers are presented with, and it's not an easy task to accomplish.
-	</p>
-	<section>
-		<h4>Documents vs. Applications</h4>
-		Accessible web content falls into the two broad categories of documents, and applications.  Documents being wikipedia articles, pdf files, or what you are reading now, and applications being things like Google Docs, or WEbFOCUS. The two types of content deal with accessibility in very different ways.
-
-
-
-		<h5>
-			Symantecs
-		</h5>
-		<pre class="xfigure-helloworld-app"></pre> -->
