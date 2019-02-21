@@ -168,8 +168,8 @@
 
 .ibx-select-menu-button-label-editable
 {
-	outline:1px solid #dedede;
-	padding:1px;
+	xoutline:1px solid #dedede;
+	xpadding:1px;
 }
 
 .ibx-select-menu-button.ibx-select-style
@@ -189,6 +189,12 @@
 {
 	margin-left:5px;
 }
+
+.ibx-select-menu-item-highlighted
+{
+	background-color:#ccc;
+}
+
 
 /***********************************SPLIT MENU BUTTON CLASSES***********************************/
 .ibx-split-menu-button

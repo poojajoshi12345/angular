@@ -8,71 +8,80 @@
 		<meta http-equiv="Expires" content="0" />
 		<meta name="google" value="notranslate">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		<script type="text/javascript" src="../../resources/ibx.js"></script>
 		<script type="text/javascript">
-			$(function()
+			ibx(function(e)
 			{
-				$(".btn-move").on("click", function(e)
+				var label = $(".test-label");
+				label.on("dblclick", function(e)
 				{
-					var selectMulti = $(".select-multi");
-					var selectSingle = $(".select-single");
-					var selItems = selectMulti.val();
-					var inOrder = $(".btn-in-order").prop("checked");
-
-					var selectIsEmpty = (selectMulti.children("option").length == 0);
-					if(selectIsEmpty)
-						selectSingle.children("option").appendTo(selectMulti);
-					else
-					{
-						for(var i = 0; i < selItems.length; ++i)
-						{
-							var selValue = selItems[i];
-							var option = selectMulti.find("[value=" + selValue + "]");
-							if(inOrder)
-							{
-								var valPrev = option.attr("data-prev");
-								var valNext = option.attr("data-next");
-								var prevOption = selectSingle.children("[value= " + valPrev + "]");
-								var nextOption = selectSingle.children("[value= " + valNext + "]");
-								if(prevOption.length)
-									prevOption.after(option);
-								else
-								if(nextOption.length)
-									nextOption.before(option);
-								else
-									selectSingle.append(option);
-							}
-							else
-								selectSingle.append(option);
-						}
-					}
+					var label = $(e.currentTarget);
+					label.ibxWidget("startEditing");
 				});
-			});
+				label.on("ibx_changed", function(e)
+				{
+					var newValue = e.originalEvent.data;
+					if(!newValue)
+						e.preventDefault();
+				});
+
+				$(".test-button").on("click", function(e)
+				{
+					var select = $(".test-select");
+					select.ibxWidget("remove");
+					for(var i = 0; i < 100; ++i)
+					{
+						var item = $("<div>").ibxSelectMenuItem({userValue:"i"+i, labelOptions:{text:"Select Item " + i}});
+						select.ibxWidget("add", item);
+					}
+				})
+
+				$(".test-select").on("ibx_selchange", function(e)
+				{
+					var btn = $(e.target);
+					var userValue = btn.ibxWidget("userValue");
+					console.log(e.type, userValue)
+				});
+			},true);
 		</script>
 		<style type="text/css">
-			select, button
+			body
 			{
-				margin:20px;
-				width:150px;
+				position:absolute;
+				width: 100%;
+				height: 100%;
+				margin: 0px;
+				box-sizing: outline-box;
 			}
-			.btn-in-order
+			.test-select
 			{
-				display:block;
+				padding:5px;
+				margin:20px;
+				width:100px;
+				border:1px solid #ccc;
+
+			}
+			.select-menu-button-menu
+			{
+				overflow:auto;
+				max-height:200px;
+			}
+			.test-label
+			{
+				border:1px solid black;
+				margin:10px;
+				padding:1em;
 			}
 		</style>
 	</head>
-	<body tabindex="0" class="ibx-root">
-		<select class="select-multi" multiple="true">
-			<option value="v1"data-next="v2">One</option>
-			<option value="v2" data-prev="v1" data-next="v3">Two</option>
-			<option value="v3" data-prev="v2" data-next="v4">Three</option>
-			<option value="v4" data-prev="v3" data-next="v5">Four</option>
-			<option value="v5" data-prev="v4">Five</option>
-		</select>
-		<input type="checkbox" class="btn-in-order">Preserve Item Order</input>
-		<button class="btn-move">Move Option</button>
-		<select class="select-single">
-		</select>
+	<body tabindex="0" class="ibx-root" data-ibx-type="ibxVBox" data-ibxp-align="start">
+		<div tabindex="0" class="test-button" data-ibx-type="ibxButton">Load Select</div>
+		<div tabindex="0" class="test-select" data-ibx-type="ibxSelectMenuButton" data-ibxp-menu-options='{"class":"select-menu-button-menu"}' data-ibxp-use-value-as-text="true" data-ibxp-editable="true" data-ibxp-multi-select="true" data-xibxp-user-value="i2">Selct an Item
+			<div class="test-item" data-ibx-type="ibxSelectMenuItem">Julian</div>
+			<div class="test-item" data-ibx-type="ibxSelectMenuItem">Julian Alexander</div>
+			<div class="test-item" data-ibx-type="ibxSelectMenuItem">Julian Alexander Hyman</div>
+			<div class="test-item" data-ibx-type="ibxSelectMenuItem">James Hyman</div>
+		</div>
 	</body>
 </html>
 

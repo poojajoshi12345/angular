@@ -215,6 +215,13 @@ $.widget("ibi.ibxMenuItem", $.ibi.ibxHBox,
 		}
 		e.stopPropagation();
 	},
+	text:function(text)
+	{
+		if(text === undefined)
+			return this._label.ibxWidget("option", "text");
+		else
+			this._label.ibxWidget("option", "text", text);
+	},
 	parentMenu:function(){return this.element.parents(".ibx-menu").first() || null;},
 	subMenu:function()
 	{
@@ -463,10 +470,6 @@ $.widget("ibi.ibxMenuButton", $.ibi.ibxButtonSimple,
 			this.element.append(menu);
 		
 		this.option("menu", menu);
-
-		//find the other children and add them to the menu.
-		var menuItems = this.element.children().not(options.menu).detach();
-		this.add(menuItems);
 		this._super();
 	},
 	_setAccessibility:function(accessible, aria)
@@ -476,6 +479,12 @@ $.widget("ibi.ibxMenuButton", $.ibi.ibxButtonSimple,
 		aria.owns = options.menu.prop("id");
 		aria.expanded = options.menu.ibxWidget("isOpen");
 		return aria;
+	},
+	_init:function()
+	{
+		this._super();
+		var menuItems = this.element.children(".ibx-menu-item").detach();
+		this.add(menuItems);
 	},
 	children:function(selector)
 	{
@@ -613,15 +622,23 @@ $.widget("ibi.ibxSelectMenuButton", $.ibi.ibxMenuButton,
 		this.options.menu.ibxWidget("option", "aria.multiselectable", this.options.multiSelect ? true : null);//turn menu into a list box
 		return aria;
 	},
+	_init:function()
+	{
+		this._super();
+		var userValue = this.options.userValue;
+		this.userValue(userValue);
+	},
 	add:function(el, elSibling, before, refresh)
 	{
 		this._super(el, elSibling, before, refresh);
-		$(el).attr("role", "option");
+ 		$(el).attr("role", "option");
+		this._updateUserValue();
 	},
 	remove:function(el, destroy, refresh)
 	{
 		this._super(el, destroy, refresh);
 		$(el).attr("role", "menuitem");
+		this._updateUserValue();
 	},
 	isEditing:function()
 	{
@@ -676,12 +693,39 @@ $.widget("ibi.ibxSelectMenuButton", $.ibi.ibxMenuButton,
 	_onTextChanging:function(e)
 	{
 		var options = this.options;
-		if(options.filterValues)
+		var value = e.originalEvent.data.newValue;
+		var childItems = options.menu.ibxWidget("children");
+		for(var i = 0; i < childItems.length; ++i)
 		{
-			var value = e.originalEvent.data.newValue;
-			var matchedChildren = options.menu.ibxWidget("children", sformat(".ibx-menu-item:{2}({1})", value, options.filterNoCase ? "containsNoCase" : "contains"));
-			options.menu.ibxWidget("children", ".ibx-menu-item").css("display", "").not(matchedChildren).css("display", "none");
+			var item = $(childItems[i]);
+			var itemText = item.ibxWidget("text");
+			var pattern = sformat("^{1}", value);
+			var regx = new RegExp(pattern, "i");
+			var matches = regx.test(itemText);
+			console.log(pattern, value, matches);
+			if(options.filterValues)
+				item.css("display", matches);
+			else
+				item.ibxToggleClass("ibx-select-menu-item-highlighted", matches);
 		}
+	},
+	_updateUserValue:function(value)
+	{
+		var options = this.options;
+		var userVal = options.multiSelect ? [] : "";
+		var selItems = options.menu.find(".ibx-menu-item-check.checked");
+		if(options.multiSelect)
+		{
+			selItems.each(function(idx, el)
+			{
+				var menuItem = $(el);
+				userVal.push(menuItem.ibxWidget("userValue"));
+			}.bind(this));
+		}
+		else
+		if(selItems.length)
+			userVal = selItems.last().ibxWidget("option", "userValue");
+		this.userValue(userVal);
 	},
 	_setOption:function(key, value)
 	{
@@ -744,6 +788,31 @@ $.widget("ibi.ibxVSelectMenuButton", $.ibi.ibxSelectMenuButton,
 		this._super();
 		this._glyph.ibxToggleClass("ibx-menu-button-arrow-right", this.options.showArrow);
 	}
+});
+
+//Simple derived widget for select menu items.
+$.widget("ibi.ibxSelectMenuItem", $.ibi.ibxCheckMenuItem,
+{
+	options:{},
+	_widgetClass:"ibx-select-menu-item",
+	_setOption:function(key, value)
+	{
+		var changed = this.options[key] != value;
+		this._super(key, value);
+		if(key == "checked" && changed)
+		{
+			this._trigger("change", null, this.element);
+			this.doCommandAction("checked", value);
+		}
+	},
+	// _onMenuItemClick:function(e)
+	// {
+	// 	/*call menu item click if radio button already selected*/	
+	// 	if(this.options.checked)
+	// 		$.ibi.ibxMenuItem.prototype._onMenuItemClick.call(this, e);
+	// 	else
+	// 		this._super(e);
+	// },
 });
 
 /******************************************************************************
