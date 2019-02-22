@@ -378,18 +378,15 @@ $.widget("ibi.ibxEditable", $.Widget,
 		if(e.type == "ibx_nodemutated")
 		{
 			var mr = e.originalEvent.data[0];
-			if(mr.type == "characterData")
-			{
-				var value = mr.oldValue;
-				var newValue = mr.target.textContent;
+			var value = mr.oldValue;
+			var newValue = mr.target.textContent;
 
-				if(value != newValue)
-				{
-					//let people know the value is changing...they can stop it from happening.
-					var event = this.element.dispatchEvent("ibx_textchanging", {"value":value, "newValue":newValue}, true, true);
-					if(event.isDefaultPrevented())
-						mr.target.textContent = value;//revert to current value
-				}
+			if(value != newValue)
+			{
+				//let people know the value is changing...they can stop it from happening.
+				var event = this.element.dispatchEvent("ibx_textchanging", {"value":value, "newValue":newValue}, true, true);
+				if(event.isDefaultPrevented())
+					mr.target.textContent = value;//revert to current value
 			}
 		}
 	},

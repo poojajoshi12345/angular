@@ -436,16 +436,18 @@ $.widget("ibi.ibxMenuButton", $.ibi.ibxButtonSimple,
 		"menu":null,
 		"showArrow":false,
 		"justify":"start",
-		"menuOptions":{},
-		"position":
+		"menuOptions":
 		{
-			/* for my/at position values see: http://api.jqueryui.com/position/ */
-			"my":"left top",
-			"at":"left bottom",
-			"of":null,
-			"collision":"flip",
-			"using":null,
-			"within":null,
+			"position":
+			{
+				/* for my/at position values see: http://api.jqueryui.com/position/ */
+				"my":"left top",
+				"at":"left bottom",
+				"of":null,
+				"collision":"flip",
+				"using":null,
+				"within":null,
+			},
 		},
 		"aria":
 		{
@@ -457,7 +459,7 @@ $.widget("ibi.ibxMenuButton", $.ibi.ibxButtonSimple,
 	_create:function()
 	{
 		var options = this.options;
-		options.position.of = this.element[0];
+		options.menuOptions.position.of = this.element[0];
 		this.element.on({"click": this._onClickEvent.bind(this)});
 
 		//save bound functions in case someone resets the menu option...need to remove the event listeners.
@@ -498,6 +500,10 @@ $.widget("ibi.ibxMenuButton", $.ibi.ibxButtonSimple,
 	{
 		this.options.menu.ibxWidget("remove", el, destroy, refresh);
 	},
+	showMenu:function(show)
+	{
+		this.options.menu.ibxWidget(show ? "open" : "close");
+	},
 	_onClickEvent:function(e)
 	{
 		//[HOME-584]...my bad.
@@ -513,7 +519,7 @@ $.widget("ibi.ibxMenuButton", $.ibi.ibxButtonSimple,
 
 		//open the menu if it is a menu, and it has items, or is some other popup type.
 		if(!menu.is(".ibx-menu") || menu.ibxWidget("children", "*").length)
-			menu.ibxWidget("option", {position:options.position}).ibxWidget("open");
+			menu.ibxWidget("open");
 	},
 	_onKeyEvent:function(e)
 	{
@@ -679,35 +685,48 @@ $.widget("ibi.ibxSelectMenuButton", $.ibi.ibxMenuButton,
 	_onMenuOpenClose:function(e)
 	{
 		if(e.type == "ibx_close")
-			this.element.focus();
+			this.options.editable ? this._text.focus() : this.element.focus();
+	},
+	_onClickEvent:function(e)
+	{
+		this._super(e);
+		if(this._text.is(e.target) && options.editable)
+			this._text
 	},
 	_onKeyEvent:function(e)
 	{
 		this._super(e);
-		return;
-		
 		var eType = e.type;
-		if(eType == "keydown" && e.keyCode == $.ui.keyCode.DOWN)
-			this.options.menu.focus();
+		if(eType == "keydown")
+		{
+			if(e.keyCode == $.ui.keyCode.DOWN)
+				this.options.menu.focus();
+			else
+			if(e.keyCode == $.ui.keyCode.ESCAPE)
+				this.options.menu.ibxWidget("close");
+		}
 	},
 	_onTextChanging:function(e)
 	{
 		var options = this.options;
 		var value = e.originalEvent.data.newValue;
+		var pattern = sformat("^{1}", value);
 		var childItems = options.menu.ibxWidget("children");
+		console.log(pattern, value);
 		for(var i = 0; i < childItems.length; ++i)
 		{
 			var item = $(childItems[i]);
 			var itemText = item.ibxWidget("text");
-			var pattern = sformat("^{1}", value);
 			var regx = new RegExp(pattern, "i");
 			var matches = regx.test(itemText);
-			console.log(pattern, value, matches);
 			if(options.filterValues)
 				item.css("display", matches);
 			else
-				item.ibxToggleClass("ibx-select-menu-item-highlighted", matches);
+				item.ibxToggleClass("ibx-select-menu-item-highlighted", matches && value);
 		}
+
+		options.menu.ibxWidget("open");
+		this._text.focus();
 	},
 	_updateUserValue:function(value)
 	{
@@ -761,12 +780,10 @@ $.widget("ibi.ibxSelectMenuButton", $.ibi.ibxMenuButton,
 	_refresh:function()
 	{
 		var options = this.options;
-		options.menu.ibxWidget("option", {focusOnOpen:!options.editable, multiSelect:options.multiSelect});
+		options.menu.ibxWidget("option", {multiSelect:options.multiSelect});
 		this.element.ibxWidget("option", "text", (options.useValueAsText && options.valueText) ? options.valueText : options.defaultText);
 		this.element.ibxToggleClass("ibx-select-style", options.selectStyle);
-		
 		this._text.ibxToggleClass("ibx-select-menu-button-label-editable", options.editable).attr("tabindex", options.editable ? "-1" : null);
-		options.menu.ibxWidget("option", "autoFocus", !options.editable);
 		this._super();
 	}
 });
