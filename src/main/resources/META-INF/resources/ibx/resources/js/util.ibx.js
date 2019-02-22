@@ -387,7 +387,7 @@ jQuery.fn.directChild = function(el)
 //is there currently a scrollbar visible
 jQuery.fn.hasScrollbar = function(horizontal)
 {
-    return horizontal ? this.get(0).scrollWidth > this.width() : this.get(0).scrollHeight > this.height();
+    return horizontal ? this.get(0).scrollWidth > this.outerWidth() : this.get(0).scrollHeight > this.outerHeight();
 };
 
 jQuery.fn.clickOnScrollbar = function(clientX, clientY)

@@ -225,7 +225,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 				}
 				else
 				if(isMulti && !e.ctrlKey)
-					this.toggleSelected(selTarget, true);
+					this.toggleSelected(selTarget);//toggle the target!
 				else
 					this.toggleSelected(selTarget, (isMulti && e.ctrlKey) || options.toggleSelection ? undefined : true);
 			}
