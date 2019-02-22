@@ -372,7 +372,8 @@ $.widget("ibi.ibxWidget", $.Widget,
 				"navKeyDir": options.navKeyDir,
 				"focusResetOnBlur": options.navKeyResetFocusOnBlur,
 			};
-			this.element.ibxSelectionManager();
+			if(!this.element.is(".ibx-selection-manager"))
+				this.element.ibxSelectionManager();
 			this.element.ibxSelectionManager("option", mgrOptions);//need this or options won't get set properly.
 		}
 
