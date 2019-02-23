@@ -617,9 +617,23 @@ $.widget("ibi.ibxSelectMenuButton", $.ibi.ibxMenuButton,
 		this._super();
 		var options = this.options;
 		options.defaultText = options.defaultText || options.text;
-		options.menu.on("ibx_beforeopen", this._onMenuBeforeOpen.bind(this));
-		this._text.ibxEditable({commitKey:null, cancelKey:null}).on("ibx_textchanging", this._onTextChanging.bind(this));
+		options.menu.on("ibx_beforeopen ibx_beforeclose", this._onMenuBeforeMenuOpenClose.bind(this));
+		this._text.ibxEditable({commitKey:null, cancelKey:null}).on("ibx_textchanging", this._onTextChanging.bind(this)).on("keydown", this._onTextKeyDown.bind(this));
 		this.element.on("ibx_widgetfocus", this._onFocusEvent.bind(this));
+
+		this._sm = options.menu.ibxSelectionManager("instance");
+		console.warn("YOU NEED TO MAKE THIS WORK RIGHT!");
+		options.menu.on("ibx_selchange", function(e)
+		{
+			var userValue = this.options.multiSelect ? [] : "";
+			var selItems = this._sm.selected();
+			$.each(selItems, function(idx, el)
+			{
+				var uValue = $(el).ibxWidget("userValue");
+				this.options.multiSelect ? userValue.push(uValue) : userValue = uValue;
+			}.bind(this));
+			this.userValue(userValue);
+		}.bind(this));
 	},
 	_setAccessibility:function(accessible, aria)
 	{
@@ -652,8 +666,34 @@ $.widget("ibi.ibxSelectMenuButton", $.ibi.ibxMenuButton,
 	},
 	_onFocusEvent:function(e)
 	{
-		if(this.options.editable && !this._text.is(e.relatedTarget))
-			this._text.ibxEditable("startEditing");
+		this._text.ibxEditable("startEditing");
+	},
+	_onKeyEvent:function(e)
+	{
+		if(e.type == "keydown")
+		{
+			if(e.keyCode === $.ui.keyCode.ENTER)
+			{
+				this._text.ibxWidget("startEditing");
+				return;
+			}
+		}
+		this._super(e);
+	},
+	_onMenuBeforeMenuOpenClose:function(e)
+	{
+		var eType = e.type;
+		if(eType == "ibx_beforeopen")
+			this.options.menu.css("minWidth", this.element.width()); //make menu proper width
+		else
+		if(eType == "ibx_beforeclose")
+			this.options.menu.ibxWidget("children").ibxRemoveClass("ibx-select-menu-item-highlighted");
+	},
+	_onMenuOpenClose:function(e)
+	{
+		this._super(e);
+		if(e.type == "ibx_close")
+			this.options.editable ? this._text.focus() : this.element.focus();
 	},
 	_onMenuSelect:function(e, data)
 	{
@@ -669,42 +709,20 @@ $.widget("ibi.ibxSelectMenuButton", $.ibi.ibxMenuButton,
 			selItems.each(function(idx, el)
 			{
 				var menuItem = $(el);
-				userVal.push(menuItem.ibxWidget("userValue"));
+				var userValue = menuItem.ibxWidget("userValue");
+				if(userValue)
+					userVal.push(userValue);
 			}.bind(this));
 		}
 		else
 		if(selItems.length)
 			userVal = selItems.ibxWidget("option", "userValue");
-		this.userValue(userVal);
 		this._super(e, data);
 	},
-	_onMenuBeforeOpen:function(e)
+	_onTextKeyDown:function(e)
 	{
-		this.options.menu.css("minWidth", this.element.width());
-	},
-	_onMenuOpenClose:function(e)
-	{
-		if(e.type == "ibx_close")
-			this.options.editable ? this._text.focus() : this.element.focus();
-	},
-	_onClickEvent:function(e)
-	{
-		this._super(e);
-		if(this._text.is(e.target) && options.editable)
-			this._text
-	},
-	_onKeyEvent:function(e)
-	{
-		this._super(e);
-		var eType = e.type;
-		if(eType == "keydown")
-		{
-			if(e.keyCode == $.ui.keyCode.DOWN)
-				this.options.menu.focus();
-			else
-			if(e.keyCode == $.ui.keyCode.ESCAPE)
-				this.options.menu.ibxWidget("close");
-		}
+		if(e.keyCode == $.ui.keyCode.DOWN)
+			this.options.menu.focus();
 	},
 	_onTextChanging:function(e)
 	{
@@ -712,7 +730,6 @@ $.widget("ibi.ibxSelectMenuButton", $.ibi.ibxMenuButton,
 		var value = e.originalEvent.data.newValue;
 		var pattern = sformat("^{1}", value);
 		var childItems = options.menu.ibxWidget("children");
-		console.log(pattern, value);
 		for(var i = 0; i < childItems.length; ++i)
 		{
 			var item = $(childItems[i]);
@@ -765,7 +782,6 @@ $.widget("ibi.ibxSelectMenuButton", $.ibi.ibxMenuButton,
 					var val = menuItem.ibxWidget("userValue");
 					var check = options.multiSelect ? (-1 != userValue.indexOf(val)) : (userValue == val);
 					menuItem.ibxWidget("checked", check);
-					
 					if(check)
 						valueText.push(menuItem.ibxWidget("option", "labelOptions.text"));
 				}.bind(this));
@@ -780,7 +796,7 @@ $.widget("ibi.ibxSelectMenuButton", $.ibi.ibxMenuButton,
 	_refresh:function()
 	{
 		var options = this.options;
-		options.menu.ibxWidget("option", {multiSelect:options.multiSelect});
+		options.menu.ibxWidget("option", {selType: options.multiSelect ? "multi" : "single", multiSelect:options.multiSelect});
 		this.element.ibxWidget("option", "text", (options.useValueAsText && options.valueText) ? options.valueText : options.defaultText);
 		this.element.ibxToggleClass("ibx-select-style", options.selectStyle);
 		this._text.ibxToggleClass("ibx-select-menu-button-label-editable", options.editable).attr("tabindex", options.editable ? "-1" : null);
@@ -808,29 +824,7 @@ $.widget("ibi.ibxVSelectMenuButton", $.ibi.ibxSelectMenuButton,
 });
 
 //Simple derived widget for select menu items.
-$.widget("ibi.ibxSelectMenuItem", $.ibi.ibxCheckMenuItem,
-{
-	options:{},
-	_widgetClass:"ibx-select-menu-item",
-	_setOption:function(key, value)
-	{
-		var changed = this.options[key] != value;
-		this._super(key, value);
-		if(key == "checked" && changed)
-		{
-			this._trigger("change", null, this.element);
-			this.doCommandAction("checked", value);
-		}
-	},
-	// _onMenuItemClick:function(e)
-	// {
-	// 	/*call menu item click if radio button already selected*/	
-	// 	if(this.options.checked)
-	// 		$.ibi.ibxMenuItem.prototype._onMenuItemClick.call(this, e);
-	// 	else
-	// 		this._super(e);
-	// },
-});
+$.widget("ibi.ibxSelectMenuItem", $.ibi.ibxMenuItem, {_widgetClass:"ibx-select-menu-item"});
 
 /******************************************************************************
 	ibxSplitMenuButton

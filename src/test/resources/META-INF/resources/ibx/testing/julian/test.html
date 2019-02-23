@@ -27,27 +27,16 @@
 
 				$(".test-button").on("click", function(e)
 				{
-					var select = $(".test-select");
+					var select = $(".test-select.editable");
 					select.ibxWidget("remove");
 					for(var i = 0; i < 100; ++i)
 					{
 						var item = $("<div>").ibxSelectMenuItem({userValue:"i"+i, labelOptions:{text:"Select Item " + i}});
 						select.ibxWidget("add", item);
 					}
-
-					var tree = $(".test-tree");
-					var treeRoot = $("<div>TreeRoot</div>").ibxTreeBrowserNode({container:true});
-
-					var level1Node = $("<div>Level1</div>").ibxTreeBrowserNode({container:true});
-					treeRoot.ibxWidget("add", level1Node);
-					tree.ibxWidget("add", level1Node);
-
-					var level2Node = $("<div>Level2</div>").ibxTreeBrowserNode();
-					level1Node.ibxWidget("add", level2Node);
-
 				})
 
-				$(".test-select").on("ibx_selchange", function(e)
+				$(".test-select.editable").on("ibx_selchange", function(e)
 				{
 					var btn = $(e.target);
 					var userValue = btn.ibxWidget("userValue");
@@ -61,16 +50,19 @@
 				position:absolute;
 				width: 100%;
 				height: 100%;
-				margin: 0px;
+				margin:0px;
 				box-sizing: outline-box;
+			}
+			body > div
+			{
+				margin:10px;
 			}
 			.test-select
 			{
-				padding:5px;
-				margin:20px;
+				padding:2px;
 				width:100px;
 				border:1px solid #ccc;
-
+				border-radius:.25em;
 			}
 			.select-menu-button-menu
 			{
@@ -80,30 +72,19 @@
 			.test-label
 			{
 				border:1px solid black;
-				margin:10px;
 				padding:1em;
-			}
-			.test-tree
-			{
-				width:100px;
-				height:150px;
-				border:1px solid black;
 			}
 		</style>
 	</head>
 	<body tabindex="0" class="ibx-root" data-ibx-type="ibxVBox" data-ibxp-align="start">
 		<div tabindex="0" class="test-button" data-ibx-type="ibxButton">Load Select</div>
-
-		<div tabindex="0" class="test-tree" data-ibx-type="ibxTreeBrowser"></div>
-
-
-		<div tabindex="0" class="test-select" data-ibx-type="ibxSelectMenuButton" data-ibxp-menu-options='{"class":"select-menu-button-menu"}' data-ibxp-use-value-as-text="true" data-ibxp-editable="true" data-ibxp-multi-select="true" data-xibxp-user-value="i2">Selct an Item
-			<div class="test-item" data-ibx-type="ibxSelectMenuItem">Julian</div>
-			<div class="test-item" data-ibx-type="ibxSelectMenuItem">Julian Alexander</div>
-			<div class="test-item" data-ibx-type="ibxSelectMenuItem">Julian Alexander Hyman</div>
-			<div class="test-item" data-ibx-type="ibxSelectMenuItem">James Hyman</div>
+		<div tabindex="0" class="test-select editable" data-ibx-type="ibxSelectMenuButton" data-ibxp-menu-options='{"class":"select-menu-button-menu"}' data-ibxp-use-value-as-text="true" data-ibxp-editable="true" data-ibxp-multi-select="true" data-xibxp-user-value="i2">Selct an Item
+			<div class="test-item" data-ibx-type="ibxSelectMenuItem" data-ibxp-user-value="i1">Julian</div>
+			<div class="test-item" data-ibx-type="ibxSelectMenuItem" data-ibxp-user-value="i2">Julian Alexander</div>
+			<div class="test-item" data-ibx-type="ibxSelectMenuItem" data-ibxp-user-value="i3">Julian Alexander Hyman</div>
+			<div class="test-item" data-ibx-type="ibxSelectMenuItem" data-ibxp-user-value="i4">James Hyman</div>
 		</div>
-		<div tabindex="0" class="test-select" data-ibx-type="ibxMenuButton">Menu Button
+		<div tabindex="0" class="test-select" data-ibx-type="ibxMenuButton" data-ibxp-icon-position="top">Menu Button
 			<div class="test-item" data-ibx-type="ibxSelectMenuItem">Julian</div>
 			<div class="test-item" data-ibx-type="ibxSelectMenuItem">Julian Alexander</div>
 			<div class="test-item" data-ibx-type="ibxSelectMenuItem">Julian Alexander Hyman</div>
