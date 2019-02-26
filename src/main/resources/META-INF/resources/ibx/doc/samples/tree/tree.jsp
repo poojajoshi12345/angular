@@ -306,6 +306,7 @@
 		}
 		.test-tree
 		{
+			flex:1 1 1px;
 			height:25%;
 			overflow:auto;
 			border:1px solid #ccc;
@@ -488,6 +489,14 @@
 			</div>
 			<div class="content-box" data-ibx-type="ibxHBox" data-ibxp-align="stretch">
 				<div class="trees-box" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
+					<div tabindex="0" class="test-select" data-ibx-type="ibxSelect" data-ibxp-multi-select="true" data-ibxp-user-value="item1">
+						<div data-ibx-type="ibxSelectItem" data-ibxp-selected="true">Item</div>
+						<div data-ibx-type="ibxSelectItem">Item</div>
+						<div data-ibx-type="ibxSelectItem">Item</div>
+						<div data-ibx-type="ibxSelectItem">Item</div>
+						<div data-ibx-type="ibxSelectItem">Item</div>
+						<div data-ibx-type="ibxSelectItem">Item</div>
+					</div>
 					<div tabindex="0" class="tree test-tree" data-ibx-type="ibxTree" data-ibxp-show-root-nodes="true"></div>
 					<div data-ibx-type="ibxHSplitter"></div>
 					<div tabindex="0" class="tree test-tree-browser" data-ibx-type="ibxTreeBrowser"></div>
