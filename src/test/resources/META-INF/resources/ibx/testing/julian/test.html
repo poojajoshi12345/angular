@@ -42,6 +42,23 @@
 					var userValue = btn.ibxWidget("userValue");
 					console.log(e.type, userValue)
 				});
+
+				var root = $("<div>").ibxTreeNode({container:true, expanded:true, labelOptions:{text:"Root1"}});;
+				for(var i = 0; i < 100; ++i)
+				{
+					var item = $("<div>").ibxTreeNode({labelOptions:{text:"Item" + i}});
+					root.ibxWidget("add", item);
+				}
+				$(".test-tree1").ibxWidget("add", root).ibxWidget("refresh");
+
+				var root = $("<div>").ibxTreeNode({container:true, expanded:true, labelOptions:{text:"Root2"}});;
+				for(var i = 0; i < 100; ++i)
+				{
+					var item = $("<div>").ibxTreeNode({labelOptions:{text:"Item" + i}});
+					root.ibxWidget("add", item);
+				}
+				$(".test-tree2").ibxWidget("add", root).ibxWidget("refresh");
+
 			},true);
 		</script>
 		<style type="text/css">
@@ -56,6 +73,13 @@
 			body > div
 			{
 				margin:10px;
+			}
+			.test-tree
+			{
+				height:200px;
+				width:150px;
+				border:1px solid #ccc;
+				overflow:auto;
 			}
 			.test-select
 			{
@@ -84,6 +108,16 @@
 			<div class="test-item" data-ibx-type="ibxSelectMenuItem" data-ibxp-user-value="i3">Julian Alexander Hyman</div>
 			<div class="test-item" data-ibx-type="ibxSelectMenuItem" data-ibxp-user-value="i4">James Hyman</div>
 		</div>
+		
+		<div tabindex="0" class="test-tab" data-ibx-type="ibxTabPane">
+			<div class="page1" data-ibx-type="ibxTabPage" data-ibxp-user-value="page1" data-ibxp-selected="true">Tab1
+				<div tabindex="0" class="test-tree test-tree1" data-ibx-type="ibxTree"></div>
+			</div>
+			<div class="page2" data-ibx-type="ibxTabPage" data-ibxp-user-value="page2">Tab2
+				<div tabindex="0" class="test-tree test-tree2" data-ibx-type="ibxTree"></div>
+			</div>
+		</div>
+
 		<div tabindex="0" class="test-select" data-ibx-type="ibxMenuButton" data-ibxp-icon-position="top">Menu Button
 			<div class="test-item" data-ibx-type="ibxSelectMenuItem">Julian</div>
 			<div class="test-item" data-ibx-type="ibxSelectMenuItem">Julian Alexander</div>

@@ -181,7 +181,10 @@
 				border-radius:5px;
 				overflow:auto;
 			}
-
+			.test-tree-browser
+			{
+				xoverflow:hidden;
+			}
 			.test-menubar
 			{
 				align-self:flex-start;
@@ -297,7 +300,7 @@
 		<div tabindex="0" class="test-ctrl test-grid" data-ibx-type="ibxDataGrid"></div>
 		<div tabindex="0" class="test-ctrl test-prop-grid" data-ibx-type="ibxPropertyGrid"></div>
 
-		<div tabindex="0" class="test-ctrl test-tree" data-ibx-type="ibxTree">
+		<div tabindex="0" class="test-ctrl test-tree" data-ibx-type="ibxTree" data-ibxp-sel-type="multi">
 			<div data-ibx-type="ibxTreeNode" data-ibxp-expanded="true">Root Item
 				<div data-ibx-type="ibxTreeNode" data-ibxp-expanded="true">Folder 1
 					<div data-ibx-type="ibxTreeNode">Item 1</div>
@@ -312,17 +315,23 @@
 			</div>
 		</div>
 
-		<div tabindex="0" class="test-ctrl test-tree" data-ibx-type="ibxTreeBrowser">
+		<div tabindex="0" class="test-ctrl test-tree test-tree-browser" data-ibx-type="ibxTreeBrowser" data-ibxp-sel-type="multi">
 			<div data-ibx-type="ibxTreeBrowserNode">Root Item
 				<div data-ibx-type="ibxTreeBrowserNode">Folder 1
 					<div data-ibx-type="ibxTreeBrowserNode">Item 1</div>
 					<div data-ibx-type="ibxTreeBrowserNode">Item 2</div>
 					<div data-ibx-type="ibxTreeBrowserNode">Item 3</div>
 				</div>
-				<div data-ibx-type="ibxTreeBrowserNode">Folder 2
+				<div class="folder2" data-ibx-type="ibxTreeBrowserNode">Folder 2
 					<div data-ibx-type="ibxTreeBrowserNode">Item 1</div>
 					<div data-ibx-type="ibxTreeBrowserNode">Item 2</div>
 					<div data-ibx-type="ibxTreeBrowserNode">Item 3</div>
+
+						<div data-ibx-type="ibxTreeBrowserNode">Folder 3
+							<div data-ibx-type="ibxTreeBrowserNode">Item 1</div>
+							<div data-ibx-type="ibxTreeBrowserNode">Item 2</div>
+							<div data-ibx-type="ibxTreeBrowserNode">Item 3</div>
+						</div>
 				</div>
 			</div>
 		</div>

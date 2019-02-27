@@ -1,21 +1,9 @@
+$(".ibx-tree").css("overflow", "auto").ibxWidget("remove");
 
-describe('Post Resource', function() {
-  it('Creating a New Post', function() {
-    cy.visit('/posts/new')     // 1.
+var tree = $(".ibx-tree.wfc-mdfp-dimension-tree");
+for(var i = 0; i < 100; ++i)
+{
+	var item = $("<div>item</div>").ibxTreeNode();
+	//tree.ibxWidget("add", item);
+}
 
-    cy.get('input.post-title') // 2.
-      .type('My First Post')   // 3.
-
-    cy.get('input.post-body')  // 4.
-      .type('Hello, world!')   // 5.
-
-    cy.contains('Submit')      // 6.
-      .click()                 // 7.
-
-    cy.url()                   // 8.
-      .should('include', '/posts/my-first-post')
-
-    cy.get('h1')               // 9.
-      .should('contain', 'My First Post')
-  })
-})
