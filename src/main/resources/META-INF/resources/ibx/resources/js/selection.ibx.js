@@ -57,7 +57,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 		this._activate(true);
 
 		//do the default focusing when manager is directly focused - not one of its children, and not when clicked on its scrollbar.
-		var onScrollBar = this._eLastMouseDown ? this.element.clickOnScrollbar(this._eLastMouseDown.clientX, this._eLastMouseDown.clientY) : false;
+		var onScrollBar = this._eLastMouseDown ? ClickOnScrollbar(this.element[0], this._eLastMouseDown.clientX, this._eLastMouseDown.clientY) : false;
 		if(isTarget && !onScrollBar && !this._focusedOnScrollBar && !ownsRelTarget && options.focusDefault !== false)
 		{
 			var defItem = this._focus();
@@ -205,7 +205,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 			this.focus(selTarget, true);
 
 			//don't deselect if clicking on scrollbar.
-			if(!this.element.clickOnScrollbar(e.clientX, e.clientY))
+			if(!ClickOnScrollbar(e.target, e.clientX, e.clientY))
 			{
 				if(isTarget || (isMulti && !e.shiftKey && !e.ctrlKey && !this.isSelected(selTarget)))
 					this.deselectAll(true);

@@ -384,20 +384,6 @@ jQuery.fn.directChild = function(el)
 	return child[0];
 };
 
-//is there currently a scrollbar visible
-jQuery.fn.hasScrollbar = function(horizontal)
-{
-    return horizontal ? this.get(0).scrollWidth > this.outerWidth() : this.get(0).scrollHeight > this.outerHeight();
-};
-
-jQuery.fn.clickOnScrollbar = function(clientX, clientY)
-{
-	var rBounds = this[0].getBoundingClientRect();
-	var vBar = this.hasScrollbar(false);
-	var hBar = this.hasScrollbar(true);
-	var size = getScrollbarWidth();
-	return (vBar && (clientX > (rBounds.right - size))) || (hBar && (clientY > (rBounds.bottom - size)));
-};
 
 //force redraw/repaint element...I'm dubious about whether this actually works...got from:
 //https://stackoverflow.com/questions/3485365/how-can-i-force-webkit-to-redraw-repaint-to-propagate-style-changes
@@ -795,6 +781,22 @@ function getScrollbarWidth() {
 
     return this._scrollbarWidth = (widthNoScroll - widthWithScroll);
 }
+
+//is there currently a scrollbar visible
+function HasScrollbar(el, horizontal)
+{
+    return horizontal ? el.scrollWidth > el.clientWidth : el.scrollHeight > el.clientHeight;
+};
+
+//was an event on a scrollbar
+function ClickOnScrollbar(el, clientX, clientY)
+{
+	var rBounds = el.getBoundingClientRect();
+	var vBar = HasScrollbar(el, false);
+	var hBar = HasScrollbar(el, true);
+	var size = getScrollbarWidth();
+	return (vBar && (clientX > (rBounds.right - size))) || (hBar && (clientY > (rBounds.bottom - size)));
+};
 
 /**
 *
