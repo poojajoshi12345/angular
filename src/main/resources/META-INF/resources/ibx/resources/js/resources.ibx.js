@@ -169,7 +169,7 @@ _p.loadExternalResFile = function(elFile, bundle)
 		if(ibx.forceInlineResLoading || (elFile.attr("inline") == "true"))
 		{
 			$(window).dispatchEvent("ibx_ibxresmgr", {"hint":"fileloading", "loadDepth":this._loadDepth, "resMgr":this, "fileType":fileType, "fileNode":elFile[0], "src":src});
-			$.get({async:false, url:src, dataType:"text", error:this._resFileRetrievalError.bind(this, src)}).done(function(elFile, src, fileType, content, status, xhr)
+			$.get({async:false, url:src, dataType:"text", error:this._resFileRetrievalError.bind(this, elFile, src, fileType)}).done(function(elFile, src, fileType, content, status, xhr)
 			{
 				content = this.preProcessResource(content);//precompile the content...string substitutions, etc.
 				if(content)
@@ -246,9 +246,9 @@ _p.loadExternalResFile = function(elFile, bundle)
 };
 
 //if something bad happens while retrieving a source file in the bundle.
-_p._resFileRetrievalError = function(src, xhr, status, msg)
+_p._resFileRetrievalError = function(elFile, src, fileType, xhr, status, msg)
 {
-	$(window).dispatchEvent("ibx_ibxresmgr", {"hint":"fileloaderror", "loadDepth":this._loadDepth, "resMgr":this, "bundle":null, "src":src, "xhr":xhr, "status":status, "msg":msg});
+	$(window).dispatchEvent("ibx_ibxresmgr", {"hint":"fileloaderror", "loadDepth":this._loadDepth, "resMgr":this, "fileType":fileType, "fileNode":elFile[0], "bundle":null, "src":src, "xhr":xhr, "status":status, "msg":msg});
 };
 
 _p.getResPath = function(src, loadContext)

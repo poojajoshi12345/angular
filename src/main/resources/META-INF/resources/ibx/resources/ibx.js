@@ -544,6 +544,10 @@ _p._ibxSystemEvent = function(e)
 				"cache":{}
 			};
 		}
+
+		if(!bundleInfo)
+			return;
+
 		if(hint == "bundleloaded")
 		{
 			bundleInfo.loadTime = (new Date()) - bundleInfo.loadTime;
