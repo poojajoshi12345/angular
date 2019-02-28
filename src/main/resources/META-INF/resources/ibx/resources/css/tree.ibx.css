@@ -92,7 +92,6 @@
 .ibx-tree-browser-node .tnode-children
 {
 	flex:1 1 auto;
-	height:1px;
 	overflow:auto;
 }
 
