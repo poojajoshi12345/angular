@@ -89,6 +89,10 @@
 	flex:0 0 auto;
 }
 
+/*
+	Had height:1px to fix IE...however that is only a good fix when the tree has a height.  If it's in a box, with flex 1 1 then the 
+	children will have no intrinsic height and will shrink to 1px. IE will just not scroll right for now!
+*/
 .ibx-tree-browser-node .tnode-children
 {
 	flex:1 1 auto;
