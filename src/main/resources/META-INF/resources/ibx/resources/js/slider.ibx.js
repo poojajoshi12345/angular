@@ -56,7 +56,13 @@ $.widget("ibi.ibxSlider", $.ibi.ibxGrid,
 		this.element.on("mousedown", this._fnSliderMouseEvent);
 		this._slider.on("keydown", this._onSliderKeyDown.bind(this));
 		
-		window.setTimeout(this._initSlider.bind(this), 1);
+		window.setTimeout(
+		function()
+		{
+			this._initializingSlider = true;
+			this._initSlider();
+			this._initializingSlider = false;
+		}.bind(this), 1);
 	},
 	_setAccessibility:function(accessible, aria)
 	{
@@ -101,7 +107,8 @@ $.widget("ibi.ibxSlider", $.ibi.ibxGrid,
 	_setValue: function (value, data)
 	{
 		this.refresh();
-		this._trigger("change", null, data);
+		if(!this._initializingSlider)
+			this._trigger("change", null, data);
 	},
 	_onResize: function ()
 	{
