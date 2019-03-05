@@ -264,6 +264,45 @@
 .ibx-glyph-unlock:before {
   content: "\e97b";
 }
+.ibx-glyph-selection-freeform:before {
+  content: "\ea1c";
+}
+.ibx-glyph-selection-circle:before {
+  content: "\ea1d";
+}
+.ibx-glyph-selection-square:before {
+  content: "\ea1e";
+}
+.ibx-glyph-selection-pan:before {
+  content: "\ea1f";
+}
+.ibx-glyph-outline-filter-grid:before {
+  content: "\ea19";
+}
+.ibx-glyph-outline-section:before {
+  content: "\ea1a";
+}
+.ibx-glyph-outline-panel-group:before {
+  content: "\ea1b";
+}
+.ibx-glyph-view-presentation:before {
+  content: "\ea17";
+}
+.ibx-glyph-view-new-window:before {
+  content: "\ea18";
+}
+.ibx-glyph-outline-basic:before {
+  content: "\ea16";
+}
+.ibx-glyph-outline-tab:before {
+  content: "\ea13";
+}
+.ibx-glyph-outline-accordion:before {
+  content: "\ea14";
+}
+.ibx-glyph-outline-slider:before {
+  content: "\ea15";
+}
 .ibx-glyph-case-sensitive:before {
   content: "\ea12";
 }
@@ -467,6 +506,9 @@
 }
 .ibx-glyph-sort-alpha-asc:before {
   content: "\e98b";
+}
+.ibx-glyph-sort-alpha-desc:before {
+  content: "\ea20";
 }
 .ibx-glyph-sort-amount-asc:before {
   content: "\e98c";
