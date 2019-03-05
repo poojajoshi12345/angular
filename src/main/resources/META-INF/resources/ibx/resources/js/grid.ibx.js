@@ -742,6 +742,9 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 	addRow:function(row, sibling, before)
 	{
 		row = $(row);
+		if(!row.length)
+			return;
+
 		var options = this.options;
 
 		//create extra cells if row has less than columns.
