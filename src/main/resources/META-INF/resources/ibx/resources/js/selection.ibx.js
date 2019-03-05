@@ -37,6 +37,10 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 	},
 	_destroy:function()
 	{
+		if(this.element.is(".ibx-rubber-band"))
+			this.element.ibxRubberBand("destroy");
+
+		this.element.ibxRemoveClass([this._widgetClass, "ibx-sm-selection-root", "ibx-sm-focus-root", "ibx-sm-nav-key-root", "ibx-sm-focus-default"]);
 		this.element[0].removeEventListener("focusin", this._focusInBound, true);
 		this.element[0].removeEventListener("focusout", this._focusOutBound, true);
 		this.element[0].removeEventListener("mousedown", this._onMouseEventBound, false);
@@ -507,9 +511,10 @@ $.widget("ibi.ibxRubberBand", $.Widget,
 	{
 		this._super();
 		this.element.ibxAutoScroll().ibxAddClass("ibx-rubber-band");
-		this.element[0].addEventListener("mousedown", this._onMouseEvent.bind(this), false);
-		this.element[0].addEventListener("mouseup", this._onMouseEvent.bind(this), false);
-		this.element[0].addEventListener("mousemove", this._onMouseEvent.bind(this), false);
+		this._onMouseEventBound = this._onMouseEvent.bind(this);
+		this.element[0].addEventListener("mousedown", this._onMouseEventBound, false);
+		this.element[0].addEventListener("mouseup", this._onMouseEventBound, false);
+		this.element[0].addEventListener("mousemove", this._onMouseEventBound, false);
 	},
 	_init:function()
 	{
@@ -518,6 +523,9 @@ $.widget("ibi.ibxRubberBand", $.Widget,
 	_destroy:function()
 	{
 		this.element.ibxAutoScroll("destroy").ibxRemoveClass("ibx-rubber-band");
+		this.element[0].removeEventListener("mousedown", this._onMouseEventBound);
+		this.element[0].removeEventListener("mouseup", this._onMouseEventBound);
+		this.element[0].removeEventListener("mousemove", this._onMouseEventBound);
 		this._super();
 	},
 	_onMouseEvent:function(e)
