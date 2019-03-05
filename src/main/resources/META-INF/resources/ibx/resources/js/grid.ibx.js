@@ -176,10 +176,17 @@ $.widget("ibi.ibxDataGridSelectionManager", $.ibi.ibxSelectionManager,
 });
 
 //Super light weight jQuery widget wrapper around ibxDataGrid rows.
-$.fn.ibxDataGridRow = $.ibi.ibxDataGridRow = function()
+$.fn.ibxDataGridRow = $.ibi.ibxDataGridRow = function(opts, el)
 {
 	var ret = this;
-	this.each(function ibxDataGridRow_widget(args, idx, el)
+	var els = $();
+	if(el instanceof jQuery)
+		els = el;
+	else
+	if(this instanceof jQuery)
+		els = this;
+
+	els.each(function ibxDataGridRow_widget(args, idx, el)
 	{
 		el = $(el);
 		var widget = el.data("ibxDataGridRow");
@@ -520,7 +527,7 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 		if(colMap.length)
 			this.option("colMap", colMap);
 
-		//make the rows from markup.
+		//make the rows from markup...these are just divs with inner cell...I'll construct the ibxDataGridRow object.
 		var rows = this.element.children("[data-grid-row]").detach();
 		for(var i = 0; i < rows.length; ++i)
 		{
@@ -530,6 +537,12 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 			this.addRow(row);
 			this._buildTreeFromMarkup(row);
 		}
+
+		//make yet more rows from markup...these are already constructed ibxDataGridRow objects.
+		row = this.element.children(".ibx-data-grid-row").detach();
+		this.addRow(row);
+
+		//now visually clean up the grid.
 		this.refresh();
 	},
 	_buildTreeFromMarkup:function(parentRow)
@@ -674,7 +687,7 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 			cInfo.ui.header.outerWidth(cInfo.ui.header.outerWidth() - cInfo.ui.splitter.outerWidth());
 
 			var cells = this.getColumn(idxCol);
-			cells.outerWidth(width);
+			cells.outerWidth(cInfo.ui.header.outerWidth() + cInfo.ui.splitter.outerWidth());
 		}
 	},
 	getColumn:function(col)
