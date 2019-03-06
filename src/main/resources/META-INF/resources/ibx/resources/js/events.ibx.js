@@ -42,33 +42,25 @@ ibxEventManager._onTouchEvent = function(e)
 	if(eType == "touchstart")
 	{
 		ibxEventManager._hasSwiped = false;
-		if(ibxPlatformCheck.isIOS)
+		var me = ibxEventManager.createMouseEvent("mousedown", e);
+		e.target.dispatchEvent(me);
+		ibxEventManager._eLast = e;
+
+		ibxEventManager._ctxMenuTimer = window.setTimeout(function(e)
 		{
-			var me = ibxEventManager.createMouseEvent("mousedown", e);
+			var me = ibxEventManager.createMouseEvent("contextmenu", e);
 			e.target.dispatchEvent(me);
 			ibxEventManager._eLast = e;
-
-			ibxEventManager._ctxMenuTimer = window.setTimeout(function(e)
-			{
-				var me = ibxEventManager.createMouseEvent("contextmenu", e);
-				e.target.dispatchEvent(me);
-				ibxEventManager._eLast = e;
-			}.bind(ibxEventManager, e), ibxEventManager.msCtxMenu);
-		}
-		else
-			ibxEventManager._eLast = e;
+		}.bind(ibxEventManager, e), ibxEventManager.msCtxMenu);
 	}
 	else
 	if(eType == "touchend")
 	{
 		window.clearTimeout(ibxEventManager._ctxMenuTimer);//cancel context menu
 
-		if(ibxPlatformCheck.isIOS)
-		{
-			var me = ibxEventManager.createMouseEvent("mouseup", e);
-			e.target.dispatchEvent(me);
-			ibxEventManager._eLast = e;
-		}
+		var me = ibxEventManager.createMouseEvent("mouseup", e);
+		e.target.dispatchEvent(me);
+		ibxEventManager._eLast = e;
 
 		var dblClick = false;
 		if(ibxEventManager._eLast.type != "contextmenu")
