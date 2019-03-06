@@ -180,11 +180,11 @@ $.fn.ibxDataGridRow = $.ibi.ibxDataGridRow = function(opts, el)
 {
 	var ret = this;
 	var els = $();
-	if(el instanceof jQuery)
-		els = el;
-	else
 	if(this instanceof jQuery)
 		els = this;
+	else
+	if(el instanceof jQuery)
+		els = el;
 
 	els.each(function ibxDataGridRow_widget(args, idx, el)
 	{
