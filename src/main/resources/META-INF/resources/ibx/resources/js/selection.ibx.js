@@ -311,7 +311,8 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 		if(el === undefined)
 		{
 			select = (select !== false) ? ".ibx-sm-selected" : ":not(.ibx-sm-selected)";
-			return this.element.logicalChildren(".ibx-sm-selection-root", select);
+			var seItems = this.element.logicalChildren(".ibx-sm-selection-root", select);
+			return this.mapFromSelectable(selItems);
 		}
 		
 		//public interface needs to map nodes...think tree from ibxTreeNode to it's selectable label.
