@@ -147,6 +147,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 			//don't focus for just shift/ctrl keys
 			if(e.keyCode != 17 && e.keyCode != 16)
 			{
+				//focus the target
 				focusItem.focus();
 				e.preventDefault();
 				e.stopPropagation();//propagation can conflict with outer selection managers.
@@ -473,13 +474,16 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 	_setOption:function(key, value)
 	{
 		var options = this.options;
-		if(key == "type" && value != this.options[key])
-		{
-			this.element.attr("aria-multiselectable", (value == "multi") ? true : false),
-			this.deselectAll(true);
-		}
+		var changed = this.options[key] != value;
 		if(key == "type")
+		{
 			this.element.ibxToggleClass("ibx-sm-selection-root", (value != "none"));
+			if(changed)
+			{
+				this.element.attr("aria-multiselectable", (value == "multi") ? true : false),
+				this.deselectAll(true);
+			}
+		}
 		else
 		if(key == "focusRoot")
 			this.element.ibxToggleClass("ibx-sm-focus-root", value);
