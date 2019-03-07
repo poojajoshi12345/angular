@@ -329,6 +329,14 @@ $.widget("ibi.ibxSlider", $.ibi.ibxGrid,
 			this._popup = null;
 		}
 	},
+	_setOption:function(key, value)
+	{
+		var options = this.options;
+		var changed = options[key] != value;
+		this._super(key, value);
+		if(key == "value" && changed && !this._initializingSlider)
+			this._trigger("change", null, this.info());
+	},
 	_refresh: function ()
 	{
 		this._labelMin.ibxWidget('option', 'text', this._getFormattedText("min"));
@@ -768,6 +776,14 @@ $.widget("ibi.ibxRange", $.ibi.ibxSlider,
 	_destroy: function ()
 	{
 		this._super();
+	},
+	_setOption:function(key, value)
+	{
+		var options = this.options;
+		var changed = options[key] != value;
+		this._super(key, value);
+		if(key == "value2" && changed && !this._initializingSlider)
+			this._trigger("change", null, this.info());
 	},
 	_refresh: function ()
 	{
