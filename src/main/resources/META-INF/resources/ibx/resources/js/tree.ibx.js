@@ -219,7 +219,8 @@ $.widget("ibi.ibxTreeNode", $.ibi.ibxVBox,
 	},
 	parentNode:function()
 	{
-		return this.element.data("ibxTreeParent");
+		var parent = this.element.data("ibxTreeParent");
+		return parent ? parent : null;
 	},
 	hasChildren:function()
 	{
