@@ -307,6 +307,13 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 	isSelected:function(el){return $(el).hasClass("ibx-sm-selected");},
 	selected:function(el, select, anchor)
 	{
+		//return the selected children.
+		if(el === undefined)
+		{
+			select = (select !== false) ? ".ibx-sm-selected" : ":not(.ibx-sm-selected)";
+			return this.element.logicalChildren(".ibx-sm-selection-root", select);
+		}
+		
 		//public interface needs to map nodes...think tree from ibxTreeNode to it's selectable label.
 		el = $(el, this.element);
 		el = this.mapToSelectable(el);
@@ -315,13 +322,6 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 	},
 	_selected:function(el, select, anchor)
 	{
-		if(!el.length)
-		{
-			//return only the selected/non-selected children that are "logical" selectable children of this node.
-			select = (select !== false) ? ".ibx-sm-selected" : ":not(.ibx-sm-selected)";
-			return this.element.logicalChildren(".ibx-sm-selection-root", select);
-		}
-
 		//only children that are direct descendants of this root can be manipulated.
 		el = this.element.logicalChildren(".ibx-sm-selection-root", el);
 
@@ -379,11 +379,11 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 	},
 	selectAll:function(selector)
 	{
-		this.selected(this.selectableChildren(":not(.ibx-sm-selected)"), true);
+		this.selected(":not(.ibx-sm-selected)", true);
 	},
 	deselectAll:function(andAnchor, andFocus)
 	{
-		this.selected(this.selectableChildren(".ibx-sm-selected"), false);
+		this.selected(".ibx-sm-selected", false);
 		if(andAnchor)
 			this.anchor(null);
 		if(andFocus)
