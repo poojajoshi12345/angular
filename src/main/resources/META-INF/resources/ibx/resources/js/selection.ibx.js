@@ -287,11 +287,13 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 		var options = this.options;
 		var children = $();
 		if(options.cacheSelectableChildren && this._cachedSelectableChildren.length)
-			children = this._cachedSelectableChildren;
+			children = this._cachedSelectableChildren.filter(selector);
 		else
 		{
 			var e = this._dispatchEvent("ibx_selectablechildren", {"items":null}, false, true, undefined, false);
-			var children = e.data.items ? $(e.data.items) : this.element.logicalChildren(".ibx-sm-selection-root, .ibx-sm-nav-key-root, .ibx-sm-focus-root, .ibx-sm-focus-default", ":ibxFocusable(-1)");			
+			var children = e.data.items
+				? $(e.data.items)
+				: this.element.logicalChildren(".ibx-sm-selection-root, .ibx-sm-nav-key-root, .ibx-sm-focus-root, .ibx-sm-focus-default", ":ibxFocusable(-1)");			
 
 			this._cachedSelectableChildren.ibxRemoveClass("ibx-sm-selectable");
 			if(options.selectableChildren)
@@ -315,8 +317,9 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 	{
 		if(!el.length)
 		{
+			//return only the selected/non-selected children that are "logical" selectable children of this node.
 			select = (select !== false) ? ".ibx-sm-selected" : ":not(.ibx-sm-selected)";
-			return this.selectableChildren(select);
+			return this.element.logicalChildren(".ibx-sm-selection-root", select);
 		}
 
 		//only children that are direct descendants of this root can be manipulated.
