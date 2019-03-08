@@ -13,6 +13,8 @@ $.widget("ibi.ibxSpinner", $.ibi.ibxTextField,
 		"max" :100,
 		"step" :1,
 
+		"fnFormat":null,
+
 		"btnGroupClass":"ibx-spinner-btn-grp",
 		"btnUpClass":"ibx-spinner-btn-up",
 		"btnUpOptions":
