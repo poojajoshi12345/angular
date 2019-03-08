@@ -230,7 +230,7 @@ $.widget("ibi.ibxSlider", $.ibi.ibxGrid,
 			else if (mouseX >= posX + outerWidth)
 				value = flipLayout ? min : max;
 			else
-				value = Math.round((flipLayout ? (posX + outerWidth - mouseX) : (mouseX - posX)) * (max - min) / outerWidth + min);
+				value = (mouseX - posX) * (max - min) / outerWidth + min;
 		}
 		else
 		{
@@ -239,7 +239,7 @@ $.widget("ibi.ibxSlider", $.ibi.ibxGrid,
 			else if (mouseY >= posY + outerHeight)
 				value = flipLayout ? max : min;
 			else
-				value = Math.round((flipLayout ? (mouseY - posY) : (posY + outerHeight - mouseY)) * (max - min) / outerHeight + min);
+				value = (posY + outerHeight - mouseY) * (max - min) / outerHeight + min;
 		}
 
 		return this._adjustStep(value, min, max, this.options.step);
@@ -275,7 +275,7 @@ $.widget("ibi.ibxSlider", $.ibi.ibxGrid,
 	},
 	info: function ()
 	{
-		return { elem: this.element, value: parseInt(this.options.value, 10), min: parseInt(this.options.min, 10), max: parseInt(this.options.max, 10), step: parseInt(this.options.step, 10) };
+		return { elem: this.element, value: parseFloat(this.options.value, 10), min: parseFloat(this.options.min, 10), max: parseFloat(this.options.max, 10), step: parseFloat(this.options.step, 10) };
 	},
 	_adjustStep: function (val, min, max, step)
 	{
@@ -771,7 +771,8 @@ $.widget("ibi.ibxRange", $.ibi.ibxSlider,
 	},
 	info: function ()
 	{
-		return $.extend({}, this._super(), { value: parseInt(this.options.value, 10), value2: parseInt(this.options.value2, 10) });
+		return $.extend({}, this._super(), { value: parseFloat(this.options.value, 10), value2: parseFloat(this.options.value2, 10) });
+		//return $.extend({}, this._super(), { value: parseInt(this.options.value, 10), value2: parseInt(this.options.value2, 10) });
 	},
 	_destroy: function ()
 	{

@@ -24,6 +24,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 		"navKeyRoot":false,				//keep keyboard navigation to this container (not tabbing, more like arrows in trees/lists/etc.).
 		"navKeyDir":"both",				//horizontal = left/right, vertical = up/down, or both
 		"navKeyResetFocusOnBlur":true,	//when widget loses focus, reset the current active navKey child.
+		"selMgrOpts":{},				//extended selection manager options.
 
 		//ARIA (508)
 		"aria":
@@ -374,7 +375,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 			};
 			if(!this.element.is(".ibx-selection-manager"))
 				this.element.ibxSelectionManager();
-			this.element.ibxSelectionManager("option", mgrOptions);//need this or options won't get set properly.
+			this.element.ibxSelectionManager("option", $.extend({}, mgrOptions, options.selMgrOpts));//need this or options won't get set properly.
 		}
 
 		//now config accessibility

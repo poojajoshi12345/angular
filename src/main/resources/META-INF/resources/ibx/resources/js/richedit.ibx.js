@@ -375,7 +375,7 @@ $.widget("ibi.ibxEditable", $.Widget,
 				this.stopEditing();
 		}
 		else
-		if(e.type == "ibx_nodemutated")
+		if(e.type == "ibx_nodemutated" && this.isEditing())
 		{
 			var mr = e.originalEvent.data[0];
 			var value = mr.oldValue;
