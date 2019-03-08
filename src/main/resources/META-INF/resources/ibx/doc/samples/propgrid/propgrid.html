@@ -30,11 +30,11 @@
 				{
 					$(".event-log").ibxWidget("value", "");
 				});
-				$(".test-grid").on("ibx_prop_updated", function(e)
+				$(".test-grid").on("ibx_propupdated", function(e)
 				{
 					var eType = e.type;
 					var data = e.originalEvent.data;
-					if(eType == "ibx_prop_updated")
+					if(eType == "ibx_propupdated")
 					{
 						var prop = data.prop;
 						var log = $(".event-log");

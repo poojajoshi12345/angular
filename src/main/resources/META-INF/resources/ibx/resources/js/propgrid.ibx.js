@@ -37,7 +37,7 @@ $.widget("ibi.ibxPropertyGrid", $.ibi.ibxDataGrid,
 		{
 			var prop = props[i];
 			var row = $("<div>").ibxDataGridRow().ibxAddClass("pgrid-row").data("ibxProp", prop);
-			var ui = prop.ui = this._createUI(prop);
+			var ui = this._createUI(prop);
 			row.append([ui.nameCell, ui.editorCell]);
 			rows.push(row);
 			allRows.push(row);
@@ -50,12 +50,15 @@ $.widget("ibi.ibxPropertyGrid", $.ibi.ibxDataGrid,
 	_createUI:function(prop)
 	{
 		var ui = null;
-		var event = this.element.dispatchEvent("ibx_prop_create_ui", prop, false, false);	
+		var event = this.element.dispatchEvent("ibx_propcreate", prop, false, true);	
 		if(!event.isDefaultPrevented())
 		{
 			var uiType = $.ibi.ibxPropertyGrid.uiTypes[prop.uiType] || ibxTextProperty;
 			ui = new uiType(prop, this.element);
+			this.element.dispatchEvent("ibx_propcreated", prop, false, false);	
 		}
+		else
+			ui = event.data.ui;
 		return ui;
 	},
 	_setOption:function(key, value)
@@ -93,11 +96,11 @@ function ibxProperty(prop, grid)
 {
 	Object.call(this);
 	if(ibx.inPropCtor) return;
+	prop.ui = this;
 	this.prop = prop;
 	this.grid = grid;
 	this.createUI();
 	this.update();
-	prop.ui = this;
 }
 var _p = ibxProperty.prototype = new Object();
 _p.prop = null;
@@ -151,13 +154,15 @@ _p._onEditorKeyEvent = function(e)
 }
 _p._updateValue = function(newValue)
 {
-	var event = this.grid.dispatchEvent("ibx_prop_beforeupdate", {"prop":this.prop, "newValue":newValue}, false, true);
+	var event = this.grid.dispatchEvent("ibx_propbeforeupdate", {"prop":this.prop, "newValue":newValue}, false, true);
 	if(!event.isDefaultPrevented())
 	{
-		this.prop.value = newValue;
-		this.grid.dispatchEvent("ibx_prop_updated", {"prop":this.prop, "newValue":this.prop.value}, false, true);
+		this.prop.value = event.data.newValue;
+		this.grid.dispatchEvent("ibx_propupdated", {"prop":this.prop, "newValue":this.prop.value}, false, true);
 	}
-	return !event.isDefaultPrevented();
+	else
+		this.update();
+	return this.prop.value;
 };
 _p.update = function()
 {
@@ -207,9 +212,7 @@ _p._onEditEvent = function(e)
 	if(eType == "ibx_textchanging")
 	{
 		var newValue = e.originalEvent.data.newValue;
-		var updated = this._updateValue(newValue);
-		if(!updated)
-			this.update();
+		this._updateValue(newValue);
 	}
 	else
 	if(eType == "ibx_canceledit")
@@ -462,8 +465,8 @@ _p._createEditor = function()
 _p._onSliderEvent = function(e, data)
 {
 	var value = data.value;
-	if(this._updateValue(value))
-		this.sliderValue.text(value);
+	this._updateValue(value);
+	this.sliderValue.text(this.prop.value);
 };
 _p.update = function()
 {
@@ -504,11 +507,9 @@ _p._createEditor = function()
 _p._onSliderEvent = function(e, data)
 {
 	var value = {"low":data.value, "high":data.value2};
-	if(this._updateValue(value))
-	{
-		this.sliderValue.text(value.low);
-		this.sliderValue2.text(value.high);
-	}
+	this._updateValue(value);
+	this.sliderValue.text(value.low);
+	this.sliderValue2.text(value.high);
 };
 _p.update = function()
 {
@@ -604,19 +605,23 @@ _p._popup = null;
 _p._createEditor = function()
 {
 	var colorPicker = this.colorPicker = $("<div tabindex='0'>").ibxColorPicker({setOpacity:false}).on("ibx_change", this._onColorChange.bind(this));
-	var menu = this.menu = $("<div class='pgrid-color-picker-menu'>").ibxMenu().ibxWidget("add", colorPicker).on("ibx_close", this._onMenuClose.bind(this));
+	var menu = this.menu = $("<div class='pgrid-color-picker-menu'>").ibxMenu().ibxWidget("add", colorPicker);
+	menu.on("ibx_close", this._onMenuClose.bind(this)).on("ibx_beforeopen", this._onBeforeColorPickerOpen.bind(this));
 	var editor = $("<div>").ibxMenuButton({"menu":menu, "glyphClasses":"pgrid-color-picker-swatch"});
 	var swatch = this.swatch = editor.find(".ibx-label-glyph");
 	return editor.ibxAddClass("pgrid-prop-color-picker");
 };
+_p._onBeforeColorPickerOpen = function(e)
+{
+	var prop = this.prop;
+	this.colorPicker.ibxWidget("option", {"color":prop.value, "opacity": prop.opacity ? prop.opacity : 1, "setOpacity": prop.opacity});
+};
 _p._onColorChange = function(e, data)
 {
-	if(this._updateValue(data.text))
-	{
-		var prop = this.prop;
-		this.editor.ibxWidget({text:prop.value});
-		this.swatch.css("backgroundColor", prop.value);
-	}
+	this._updateValue(data.text)
+	var prop = this.prop;
+	this.editor.ibxWidget({text:prop.value});
+	this.swatch.css("backgroundColor", prop.value);
 };
 _p._onMenuClose = function(e)
 {
@@ -628,7 +633,7 @@ _p.update = function()
 	ibxColorPickerProperty.base.update.call(this);
 	var prop = this.prop;
 	this.editor.ibxWidget("option", "text", prop.value).attr("title", ibx.resourceMgr.getString("IBX_PGRID_COLOR_PICKER_LABEL") + prop.value);
-	this.swatch.css("backgroundColor", prop.value);
+	this.swatch.css({"backgroundColor": prop.value, "opacity": prop.opacity || 1});
 	var prop = this.prop;
 };
 /********************************************************************************
