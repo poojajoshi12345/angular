@@ -604,24 +604,27 @@ var _p = $.ibi.ibxPropertyGrid.extendProperty(ibxProperty, ibxColorPickerPropert
 _p._popup = null;
 _p._createEditor = function()
 {
-	var colorPicker = this.colorPicker = $("<div tabindex='0'>").ibxColorPicker({setOpacity:false}).on("ibx_change", this._onColorChange.bind(this));
+	var colorPicker = this.colorPicker = $("<div tabindex='0'>").ibxColorPicker({setOpacity:false}).on("ibx_colorchange", this._onColorChange.bind(this));
 	var menu = this.menu = $("<div class='pgrid-color-picker-menu'>").ibxMenu().ibxWidget("add", colorPicker);
-	menu.on("ibx_close", this._onMenuClose.bind(this)).on("ibx_beforeopen", this._onBeforeColorPickerOpen.bind(this));
+	menu.on("ibx_close", this._onMenuClose.bind(this)).on("ibx_beforeopen", this._onBeforeMenuOpen.bind(this));
 	var editor = $("<div>").ibxMenuButton({"menu":menu, "glyphClasses":"pgrid-color-picker-swatch"});
 	var swatch = this.swatch = editor.find(".ibx-label-glyph");
 	return editor.ibxAddClass("pgrid-prop-color-picker");
 };
-_p._onBeforeColorPickerOpen = function(e)
+_p._onBeforeMenuOpen = function(e)
 {
 	var prop = this.prop;
-	this.colorPicker.ibxWidget("option", {"color":prop.value, "opacity": prop.opacity ? prop.opacity : 1, "setOpacity": prop.opacity});
+	this.colorPicker.ibxWidget("option", {"color":prop.value.color, "opacity": prop.value.opacity ? prop.value.opacity : 1, "setOpacity": prop.value.opacity});
 };
-_p._onColorChange = function(e, data)
+_p._onColorChange = function(e)
 {
-	this._updateValue(data.text)
+	var data = e.originalEvent.data;
 	var prop = this.prop;
-	this.editor.ibxWidget({text:prop.value});
-	this.swatch.css("backgroundColor", prop.value);
+	prop.value.color = data.color;
+	prop.value.opacity = data.opacity;
+	this._updateValue(prop.value)
+	this.editor.ibxWidget({text:prop.value.color});
+	this.swatch.css({"backgroundColor": prop.value.color, "opacity": prop.value.opacity || 1});
 };
 _p._onMenuClose = function(e)
 {
@@ -632,8 +635,8 @@ _p.update = function()
 {
 	ibxColorPickerProperty.base.update.call(this);
 	var prop = this.prop;
-	this.editor.ibxWidget("option", "text", prop.value).attr("title", ibx.resourceMgr.getString("IBX_PGRID_COLOR_PICKER_LABEL") + prop.value);
-	this.swatch.css({"backgroundColor": prop.value, "opacity": prop.opacity || 1});
+	this.editor.ibxWidget("option", "text", prop.value.color).attr("title", ibx.resourceMgr.getString("IBX_PGRID_COLOR_PICKER_LABEL") + prop.value.color);
+	this.swatch.css({"backgroundColor": prop.value.color, "opacity": prop.value.opacity || 1});
 	var prop = this.prop;
 };
 /********************************************************************************
@@ -657,8 +660,9 @@ _p._createEditor = function()
 	this.btnStyle = widget.btnStyle.on("ibx_selchange", this._onStyleChange.bind(this));
 	this.btnColor = widget.btnColor;
 	this.swatch = this.btnColor.find(".ibx-label-glyph");
-
-	this.colorPicker = widget.colorPicker.on("ibx_change", this._onColorChange.bind(this));
+	this.colorMenu = widget.colorMenu;
+	this.colorMenu.on("ibx_close", this._onMenuClose.bind(this)).on("ibx_beforeopen", this._onBeforeMenuOpen.bind(this));
+	this.colorPicker = widget.colorPicker.on("ibx_colorchange", this._onColorChange.bind(this));
 	return editor.ibxAddClass("pgrid-prop-border");
 };
 _p._onWidthChange = function(e, data)
@@ -674,19 +678,35 @@ _p._onStyleChange = function(e)
 	this._updateValue(this.prop.value);
 	this.update();
 },
-_p._onColorChange = function(e, data)
+_p._onBeforeMenuOpen = function(e)
 {
-	this.prop.value.color = data.text;
-	this._updateValue(this.prop.value);
-	this.update();
-},
+	var prop = this.prop;
+	this.colorPicker.ibxWidget("option", {"color":prop.value.color, "opacity": prop.value.opacity ? prop.value.opacity : 1, "setOpacity": prop.value.opacity});
+};
+_p._onColorChange = function(e)
+{
+	var data = e.originalEvent.data;
+	var prop = this.prop;
+	prop.value.color = data.color;
+	prop.value.opacity = data.opacity;
+	this._updateValue(prop.value)
+	this.editor.ibxWidget({text:prop.value.color});
+	this.swatch.css({"backgroundColor": prop.value.color, "opacity": prop.value.opacity || 1});
+};
+_p._onMenuClose = function(e)
+{
+	//this makes sure when user clicks outside of popup this properly loses focus (stopEditing).
+	this.editor.focus();
+};
+
 _p.update = function()
 {
 	var prop = this.prop;
 	this.spinnerWidth.ibxWidget("option", {value:parseInt(prop.value.width, 10)});
 	this.btnStyle.ibxWidget("userValue", prop.value.style).css({borderStyle:prop.value.style, borderColor:prop.value.color});
 
-	this.swatch.css("backgroundColor", prop.value.color);
+
+	this.swatch.css({"backgroundColor": prop.value.color, "opacity": prop.value.opacity || 1});
 	this.btnColor.ibxWidget("option", {text:prop.value.color});
 	this.btnColor.attr("title", ibx.resourceMgr.getString("IBX_PGRID_COLOR_PICKER_LABEL") + prop.value.color);
 	ibxBorderProperty.base.update.call(this);

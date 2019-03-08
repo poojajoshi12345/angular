@@ -195,7 +195,7 @@ $Revision$:-->
 				</div>
 				
 				<div tabindex="0" class="pgrid-prop-border-ctrl pgrid-prop-border-menu-button" data-ibx-name="btnColor" data-ibx-type="ibxMenuButton" data-ibxp-use-value-as-text="true" data-ibxp-glyph-classes="pgrid-color-picker-swatch">Color
-					<div data-ibx-type="ibxMenu" data-ibxp-destroy-on-close="false">
+					<div data-ibx-type="ibxMenu" data-ibx-name="colorMenu" data-ibxp-destroy-on-close="false">
 						<div tabindex="0" class="ibx-menu-item pgrid-color-picker-popup" data-ibx-name="colorPicker" data-ibx-type="ibxColorPicker" data-ibxp-set-opacity="false"></div>
 					</div>
 				</div>
