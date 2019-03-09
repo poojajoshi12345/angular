@@ -270,7 +270,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 	},
 	mapToSelectable:function(el)
 	{
-		return $(el).closest(".ibx-sm-selectable");
+		return $(el).closest(".ibx-sm-selectable, " + this.options.selectableChildren);
 	},
 	mapFromSelectable:function(el)
 	{
@@ -297,7 +297,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 
 			this._cachedSelectableChildren.ibxRemoveClass("ibx-sm-selectable");
 			if(options.selectableChildren)
-				children =  children.filter("." + options.selectableChildren);
+				children =  children.filter(options.selectableChildren);
 			children.ibxAddClass("ibx-sm-selectable");
 			this._cachedSelectableChildren = children;
 			children =  selector ? children.filter(selector) : children;
@@ -305,15 +305,15 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 		return children;
 	},
 	isSelected:function(el){return $(el).hasClass("ibx-sm-selected");},
-	selected:function(el, select, anchor)
+	selected:function(el, select, anchor, focus)
 	{
 		//public interface needs to map nodes...think tree from ibxTreeNode to it's selectable label.
 		el = $(el, this.element);
 		el = this.mapToSelectable(el);
-		el = this._selected(el, select, anchor);
+		el = this._selected(el, select, anchor, focus);
 		return el ? this.mapFromSelectable(el) : undefined;
 	},
-	_selected:function(el, select, anchor)
+	_selected:function(el, select, anchor, focus)
 	{
 		//return the selected children.
 		if(!el.length)
@@ -327,6 +327,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 
 		//by default set the anchor/focus item
 		anchor = (select && (anchor === undefined)) ? true : anchor;
+		focus = (select && (focus === undefined)) ? true : focus;
 
 		if(select)
 		{
@@ -352,6 +353,8 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 					el.ibxAddClass("ibx-sm-selected").attr("aria-selected", true);
 					if(anchor)
 						this._anchor(el.first());
+					if(focus)
+						this._focus(el.first());
 					this._dispatchEvent("ibx_selchange", {"selected":select, "items":el, "selModel":this, "anchor":this._elAnchor, "focus":this._elFocus}, true, false);
 				}
 			}

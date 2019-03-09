@@ -134,7 +134,7 @@ $.widget("ibi.ibxDataGridSelectionManager", $.ibi.ibxSelectionManager,
 		"navKeyRoot":true,
 		"toggleSelection":true,
 		"escClearSelection":true,
-		"selectableChildren":"dgrid-selectable", //can be elements/classes/etc.
+		"selectableChildren":".dgrid-selectable", //can be elements/classes/etc.
 		"cacheSelectableChildren":true,
 	},
 	_widgetClass:"ibx-data-grid-selection-model",
@@ -143,8 +143,8 @@ $.widget("ibi.ibxDataGridSelectionManager", $.ibi.ibxSelectionManager,
 		var options = this.options;
 		if(options.navKeyRoot && [$.ui.keyCode.LEFT, $.ui.keyCode.RIGHT, $.ui.keyCode.UP, $.ui.keyCode.DOWN].indexOf(e.keyCode) != -1)
 		{
-			var selector = sformat(".{1}:visible()", options.selectableChildren);
-			var cell = $(e.target).closest(selector);
+			var selector = options.selectableChildren;
+			var cell = $(e.target).closest(selector).filter(":visible()");
 			var row = cell.parent();
 			if(e.keyCode == $.ui.keyCode.LEFT)
 				cell = cell.prevAll(selector).first();
@@ -469,7 +469,7 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 			rowHeaderBarClass:"dgrid-header-row-bar",
 			rowHeaderClass:"dgrid-header-row",
 			rowHeaderSplitterClass:"dgrid-header-row-splitter",
-			gridSelectable:"dgrid-selectable",
+			gridSelectable:".dgrid-selectable",
 			gridClass:"dgrid-grid",
 			gridRow:"dgrid-row",
 			gridCell:"dgrid-cell",
@@ -759,7 +759,7 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 			var cInfo = options.colMap[i] || options.defaultColConfig;
 			cell.style.width = isNaN(cInfo.ui.curSize) ? cInfo.ui.curSize : cInfo.ui.curSize + "px";//if size is just a number assume pixels.
 			cell.setAttribute("tabindex", cell.tabIndex);
-			cell.classList.toggle(options.classes.gridSelectable, cInfo.selectable);
+			cell.classList.toggle(options.classes.gridSelectable.replace(".", ""), cInfo.selectable);
 			cell.classList.add(options.classes.gridCell);
 
 			//aria stuff

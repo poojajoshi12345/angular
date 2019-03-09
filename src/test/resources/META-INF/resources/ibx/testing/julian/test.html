@@ -12,71 +12,39 @@
 		<script type="text/javascript">
 			ibx(function(e)
 			{
-				var testProps = 
-				[
-					{
-						"displayName":"ibxSliderProperty",
-						"displayValue":"Slider Property",
-						"nameTip":"Used for selecting value using a slider",
-						"valueTip":undefined,
-						"name":"slider",
-						"value":.50,
-						"valueMin":0,
-						"valueMax":1,
-						"step":.01,
-						"dataType":"number",
-						"uiType":"slider",
-						"expanded":false,
-					},
-					{
-						"displayName":"ibxRangeSliderProperty",
-						"displayValue":"Range Slider Property",
-						"nameTip":"Used for selecting range of values using a slider",
-						"valueTip":undefined,
-						"name":"slider",
-						"value":{"low":25, "high":75},
-						"valueMin":0,
-						"valueMax":100,
-						"step":1,
-						"dataType":"number",
-						"uiType":"rangeslider",
-						"expanded":false,
-					},
-					{
-						"displayName":"ibxSpinnerProperty",
-						"displayValue":"Spinner Property",
-						"nameTip":"Used for selecting value using a spinner",
-						"valueTip":undefined,
-						"name":"spinner",
-						"value":50,
-						"valueMin":0,
-						"valueMax":100,
-						"step":1,
-						"dataType":"number",
-						"uiType":"spinner",
-						"expanded":false,
-					},
-					{
-						"displayName":"ibxColorPickerProperty",
-						"displayValue":"Color Picker Property",
-						"nameTip":"Used for setting generic color values.",
-						"valueTip":undefined,
-						"name":"color",
-						"value":{"color":"#ff0000", "opacity":.5},
-						"dataType":"color",
-						"uiType":"colorpicker",
-						"expanded":false,
-					},
-				];
-
-				var testGrid = $(".test-grid");
-				$(".test-grid").ibxPropertyGrid("option", "props", testProps);
-
+				$(".test-select").on("ibx_selchange", function(e)
+				{
+					var btn = $(e.target);
+					var userValue = btn.ibxWidget("userValue");
+					console.log(e.type, userValue)
+				});
 
 				$(".test-slider").on("ibx_change", function(e, data)
 				{
-					console.log(data.value, data.value2);
+					console.log(e.type, data);
+				});
+
+				$(".test-button").on("click", function(e)
+				{
+					$(".test-collapse").ibxCollapsible("option", "direction", "top").ibxCollapsible("toggle");
 				})
+
+				$(".test-change-sel").on("click", function(e)
+				{
+					$(".test-tree").ibxSelectionManager("selected", ".xxx", true);
+				});
+
+				$(".test-tree").on("ibx_selchange", function(e)
+				{
+					var data = e.originalEvent.data;
+					console.log(data.selected, data.items);
+				});
+
+
+				$(".test-mbutton").on("ibx_select", function(e)
+				{
+					console.log(e.type);
+				});
 			},true);
 		</script>
 		<style type="text/css">
@@ -88,22 +56,71 @@
 				margin:0px;
 				box-sizing: outline-box;
 			}
-			.test-grid
+			body > div
 			{
 				margin:10px;
-				width:450px;
+			}
+			.ibx-tab-page
+			{
+				overflow:initial;
+			}
+			.test-tree
+			{
+				height:200px;
+				width:150px;
+				border:1px solid #ccc;
+				overflow:auto;
+			}
+
+			.test-select
+			{
+				padding:2px;
+				width:100px;
+				border:1px solid #ccc;
+				border-radius:.25em;
+			}
+			.select-menu-button-menu
+			{
+				overflow:auto;
+				max-height:200px;
+			}
+			.test-label
+			{
+				border:1px solid black;
+				padding:1em;
+			}
+
+			.test-grid
+			{
+				width:300px;
 				height:200px;
 				border:1px solid #ccc;
 			}
 			.test-slider
 			{
-				width:200px;
-				height:25px;
+				width:300px;
+				height:100px;
 			}
 		</style>
 	</head>
 	<body tabindex="0" class="ibx-root" data-ibx-type="ibxVBox" data-ibxp-align="start">
-		<div tabindex="0" class="test-grid" data-ibx-type="ibxPropertyGrid"></div>
+
+		<div tabindex="0" class="test-select" data-ibx-type="ibxSelectMenuButton" data-ibxp-use-value-as-text="true"  data-ibxp-editable="false" data-ibxp-multi-select="true">Selct an Item
+			<div class="test-item" data-ibx-type="ibxSelectMenuItem" data-ibxp-user-value="i1" data-ibxp-selected="true">Julian</div>
+			<div class="test-item" data-ibx-type="ibxSelectMenuItem" data-ibxp-user-value="i2">Julian Alexander</div>
+			<div class="test-item" data-ibx-type="ibxSelectMenuItem" data-ibxp-user-value="i3" data-ibxp-selected="true">Julian Alexander Hyman</div>
+			<div class="test-item" data-ibx-type="ibxSelectMenuItem" data-ibxp-user-value="i4">James Hyman</div>
+		</div>
+
+		<!-- <div tabindex="0" class="test-slider" data-ibx-type="ibxSlider" data-ibxp-value="25"></div>
+		<div tabindex="0" class="test-slider" data-ibx-type="ibxRange" data-ibxp-value2="75"></div> -->
+
+		<!-- <div tabindex="0" class="test-mbutton" data-ibx-type="ibxMenuButton" data-ibxp-icon-position="top">Menu Button
+			<div class="test-item" data-ibx-type="ibxSelectMenuItem">Julian</div>
+			<div class="test-item" data-ibx-type="ibxSelectMenuItem">Julian Alexander</div>
+			<div class="test-item" data-ibx-type="ibxSelectMenuItem">Julian Alexander Hyman</div>
+			<div class="test-item" data-ibx-type="ibxSelectMenuItem">James Hyman</div>
+		</div> -->
 	</body>
 </html>
 

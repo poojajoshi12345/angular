@@ -151,7 +151,7 @@ $.widget("ibi.ibxAccordionPane", $.ibi.ibxFlexBox,
 		this._super();
 		var options = this.options;
 		this.element.children(".ibx-accordion-page").ibxToggleClass("acc-pg-stretch", options.pageStretch).ibxToggleClass("acc-pg-auto-size", options.pageAutoSize);
-		this.element.data("ibiIbxSelectionManager").options.selectableChildren = "ibx-accordion-page-button";
+		this.element.data("ibiIbxSelectionManager").options.selectableChildren = ".ibx-accordion-page-button";
 	}
 });
 $.widget("ibi.ibxHAccordionPane", $.ibi.ibxAccordionPane, {options:{direction:"row"}, _widgetClass:"ibx-accordion-pane-horizontal"});
