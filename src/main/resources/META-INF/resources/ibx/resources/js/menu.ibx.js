@@ -601,11 +601,8 @@ $.widget("ibi.ibxSelectMenuButton", $.ibi.ibxMenuButton,
 		"filterValues":false,
 		"filterNoCase":true,
 		"showArrow":true,
-		"useValueAsText":true,
-		"valueText":"",
 		"defaultText":"",
 		"multiSelect":false,
-		"selectStyle":false,
 		"aria":
 		{
 			"role":"combobox",//turn button into a combobox.
@@ -621,7 +618,6 @@ $.widget("ibi.ibxSelectMenuButton", $.ibi.ibxMenuButton,
 		this.element.on("ibx_widgetfocus", this._onWidgetFocus.bind(this));
 		this._sm = options.menu.ibxSelectionManager("instance");
 		this._sm.element.on("ibx_selchange", this._onMenuSelChange.bind(this));
-
 	},
 	_setAccessibility:function(accessible, aria)
 	{
@@ -672,7 +668,21 @@ $.widget("ibi.ibxSelectMenuButton", $.ibi.ibxMenuButton,
 	},
 	_onMenuSelChange:function(e)
 	{
-		console.log(e.originalEvent.data);
+		var options = this.options;
+		var labelText = options.defaultText;
+		var selItems = this._sm.selected();
+		if(selItems.length)
+		{
+			labelText = [];
+			$(selItems).each(function(idx, el)
+			{
+				el = $(el);
+				labelText.push(el.ibxWidget("text"));
+			}.bind(this));
+			labelText = labelText.join(", ");
+		}
+		this.option("text", labelText)
+		this.element.attr("title", labelText);
 	},
 	_onBeforeMenuOpenClose:function(e)
 	{
@@ -683,15 +693,15 @@ $.widget("ibi.ibxSelectMenuButton", $.ibi.ibxMenuButton,
 		if(e.keyCode == $.ui.keyCode.DOWN)
 			this.options.menu.focus();
 	},
-	_setOption:function(key, value)
+	_setOption(key, value)
 	{
-		this._super(key, value);
 		var options = this.options;
-		var changed = (options[key] != value);
-	},
-	_updateSelection:function()
-	{
-		
+		var changed = options[key] != value;
+		this._super(key, value);
+
+		if(key == "multiSelect" && changed)
+		{
+		}
 	},
 	_refresh:function()
 	{
@@ -708,9 +718,6 @@ $.widget("ibi.ibxSelectMenuButton", $.ibi.ibxMenuButton,
 				focusResetOnBlur:false
 			}
 		});
-
-		this.element.ibxWidget("option", "text", (options.useValueAsText && options.valueText) ? options.valueText : options.defaultText);
-		this.element.ibxToggleClass("ibx-select-style", options.selectStyle);
 		this._text.ibxToggleClass("ibx-select-menu-button-label-editable", options.editable).attr("tabindex", options.editable ? "-1" : null);
 		this._super();
 	}
