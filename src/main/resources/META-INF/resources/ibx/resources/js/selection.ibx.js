@@ -157,7 +157,8 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 		//manage selection, and focus jumping
 		if(e.keyCode == $.ui.keyCode.ENTER || e.keyCode == $.ui.keyCode.SPACE)
 		{
-			if((options.type == "multi") && !e.shiftKey && !e.ctrlKey)
+			var isMulti = options.type == "multi";
+			if(isMulti && !e.shiftKey && !e.ctrlKey)
 				this.deselectAll(true);
 
 			if(e.shiftKey)
@@ -170,7 +171,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 				this.toggleSelected(selChildren.slice(idxStart, idxEnd + 1), true, false);
 			}
 			else
-				this.toggleSelected(this._focus());
+				this.toggleSelected(this._focus(), (isMulti && e.ctrlKey) || (options.toggleSelection ? undefined : true));
 		}
 		else
 		if((e.keyCode == $.ui.keyCode.HOME) && ibxEventManager.isInputEventToIgnore(e))
@@ -232,7 +233,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 				if(isMulti && !e.ctrlKey)
 					this.toggleSelected(selTarget);//toggle the target!
 				else
-					this.toggleSelected(selTarget, (isMulti && e.ctrlKey) || options.toggleSelection ? undefined : true);
+					this.toggleSelected(selTarget, (isMulti && e.ctrlKey) || (options.toggleSelection ? undefined : true));
 			}
 		}
 		else
