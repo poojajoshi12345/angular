@@ -619,9 +619,9 @@ $.widget("ibi.ibxSelectMenuButton", $.ibi.ibxMenuButton,
 		options.defaultText = options.defaultText || options.text;
 		this._text.ibxEditable({commitKey:null, cancelKey:null}).on("ibx_textchanging", this._onTextChanging.bind(this)).on("keydown", this._onTextKeyDown.bind(this));
 		this.element.on("ibx_widgetfocus", this._onWidgetFocus.bind(this));
+		this._sm = options.menu.ibxSelectionManager("instance");
+		this._sm.element.on("ibx_selchange", this._onMenuSelChange.bind(this));
 
-		this._onBeforeMenuOpenCloseBound = this._onBeforeMenuOpenClose.bind(this);
-		this._onMenuSelChangeBound = this._onMenuSelChange.bind(this);
 	},
 	_setAccessibility:function(accessible, aria)
 	{
@@ -630,26 +630,20 @@ $.widget("ibi.ibxSelectMenuButton", $.ibi.ibxMenuButton,
 		this.options.menu.ibxWidget("option", "aria.multiselectable", this.options.multiSelect ? true : null);//turn menu into a list box
 		return aria;
 	},
-	_init:function()
-	{
-		this._super();
-		this.children().each(function(idx, el)
-		{
-			var sel = $(el).ibxWidget("option", "selected");
-			this._sm.selected(el, sel, sel, sel);
-		}.bind(this));
-	},
 	add:function(el, elSibling, before, refresh)
 	{
 		this._super(el, elSibling, before, refresh);
- 		$(el).attr("role", "option");
-		this._updateSelection();
+ 		$(el).attr("role", "option").each(function(idx, el)
+		{
+			el = $(el);
+			var sel = el.ibxWidget("option", "selected");
+			this._sm.selected(el, sel, sel, sel);
+		}.bind(this));
 	},
 	remove:function(el, destroy, refresh)
 	{
 		this._super(el, destroy, refresh);
 		$(el).attr("role", "menuitem");
-		this._updateSelection();
 	},
 	isEditing:function()
 	{
@@ -678,7 +672,7 @@ $.widget("ibi.ibxSelectMenuButton", $.ibi.ibxMenuButton,
 	},
 	_onMenuSelChange:function(e)
 	{
-		this._updateSelection();
+		console.log(e.originalEvent.data);
 	},
 	_onBeforeMenuOpenClose:function(e)
 	{
@@ -694,14 +688,6 @@ $.widget("ibi.ibxSelectMenuButton", $.ibi.ibxMenuButton,
 		this._super(key, value);
 		var options = this.options;
 		var changed = (options[key] != value);
-
-		if(key == "menu" && options.menu)
-		{
-			if(this._sm)
-				this._sm.element.off("ibx_selchange", this._onMenuSelChangeBound);
-			this._sm = options.menu.ibxSelectionManager("instance");
-			this._sm.element.on("ibx_selchange", this._onMenuSelChangeBound);
-		}
 	},
 	_updateSelection:function()
 	{
@@ -712,7 +698,8 @@ $.widget("ibi.ibxSelectMenuButton", $.ibi.ibxMenuButton,
 		var options = this.options;
 		options.menu.ibxWidget("option",
 		{
-			multiSelect:options.multiSelect, selMgrOpts:
+			multiSelect:options.multiSelect,
+			selMgrOpts:
 			{
 				selectableChildren:".ibx-select-menu-item",
 				type: (options.multiSelect ? "multi" : "single"),
@@ -749,7 +736,21 @@ $.widget("ibi.ibxVSelectMenuButton", $.ibi.ibxSelectMenuButton,
 });
 
 //Simple derived widget for select menu items.
-$.widget("ibi.ibxSelectMenuItem", $.ibi.ibxMenuItem, {_widgetClass:"ibx-select-menu-item"});
+$.widget("ibi.ibxSelectMenuItem", $.ibi.ibxMenuItem,
+{
+	options:
+	{
+		selected:false,
+	},
+	_widgetClass:"ibx-select-menu-item",
+	selected:function(selected)
+	{
+		if(selected === undefined)
+			return this.options.selected;
+		this.option("selected", selected);
+		this.element.closest(".ibx-menu").ibxSelectionManager("selected", this.element, selected);
+	}
+});
 
 /******************************************************************************
 	ibxSplitMenuButton
