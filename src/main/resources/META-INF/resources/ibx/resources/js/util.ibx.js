@@ -1128,10 +1128,12 @@ _p._onBeforeSend = function(exInfo, xhr, settings)
 };
 _p._onSuccess = function(exInfo, res, status, xhr)
 {
+	$(window).dispatchEvent("webapi_success", exInfo);
 	/*default does nothing*/
 };
 _p._onError = function(exInfo, xhr, error, errorType)
 {
+	$(window).dispatchEvent("webapi_error", exInfo);
 	/*default does nothing*/
 };
 _p._onComplete = function(exInfo, xhr, status)
@@ -1153,6 +1155,7 @@ _p._onComplete = function(exInfo, xhr, status)
 		exInfo.deferred.reject(exInfo);
 		this._handleError(error, res, exInfo);
 	}
+	$(window).dispatchEvent("webapi_complete", exInfo);
 	$(window).dispatchEvent(WebApi.genEventType(exInfo.ePostCall, exInfo), exInfo);
 };
 _p._errorCheck = function(xhr, res, exInfo)
