@@ -638,6 +638,8 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 					cHeading.css("flex", "");
 					this.setColumnWidth(i, cInfo.size);
 				}
+
+				this.showColumn(i, cInfo.visible);
 			}
 
 			if(!flexing)
