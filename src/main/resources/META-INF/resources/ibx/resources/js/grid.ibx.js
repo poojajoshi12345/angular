@@ -147,10 +147,10 @@ $.widget("ibi.ibxDataGridSelectionManager", $.ibi.ibxSelectionManager,
 			var cell = $(e.target).closest(selector).filter(":visible()");
 			var row = cell.parent();
 			if(e.keyCode == $.ui.keyCode.LEFT)
-				cell = cell.prevAll(selector).first();
+				cell = cell.prevAll(selector + ":visible()").first();
 			else
 			if(e.keyCode == $.ui.keyCode.RIGHT)
-				cell = cell.nextAll(selector).first();
+				cell = cell.nextAll(selector + ":visible()").first();
 			else
 			if(e.keyCode == $.ui.keyCode.UP)
 			{
