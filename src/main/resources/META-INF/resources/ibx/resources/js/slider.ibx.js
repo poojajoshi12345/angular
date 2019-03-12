@@ -230,7 +230,7 @@ $.widget("ibi.ibxSlider", $.ibi.ibxGrid,
 			else if (mouseX >= posX + outerWidth)
 				value = flipLayout ? min : max;
 			else
-				value = Math.round((flipLayout ? (posX + outerWidth - mouseX) : (mouseX - posX)) * (max - min) / outerWidth + min);
+				value = ((mouseX - posX) * (max - min)) / outerWidth + min;
 		}
 		else
 		{
@@ -239,7 +239,7 @@ $.widget("ibi.ibxSlider", $.ibi.ibxGrid,
 			else if (mouseY >= posY + outerHeight)
 				value = flipLayout ? max : min;
 			else
-				value = Math.round((flipLayout ? (mouseY - posY) : (posY + outerHeight - mouseY)) * (max - min) / outerHeight + min);
+				value = ((posY + outerHeight - mouseY) * (max - min)) / outerHeight + min;
 		}
 
 		return this._adjustStep(value, min, max, this.options.step);
@@ -275,7 +275,10 @@ $.widget("ibi.ibxSlider", $.ibi.ibxGrid,
 	},
 	info: function ()
 	{
-		return { elem: this.element, value: parseInt(this.options.value, 10), min: parseInt(this.options.min, 10), max: parseInt(this.options.max, 10), step: parseInt(this.options.step, 10) };
+		var options = this.options;
+		var isFloat = (options.step % 1) 
+		var value =  isFloat ? options.value : parseInt(options.value, 10)
+		return { elem: this.element, value: value, min: this.options.min, max: this.options.max, step: this.options.step};
 	},
 	_adjustStep: function (val, min, max, step)
 	{
@@ -771,7 +774,11 @@ $.widget("ibi.ibxRange", $.ibi.ibxSlider,
 	},
 	info: function ()
 	{
-		return $.extend({}, this._super(), { value: parseInt(this.options.value, 10), value2: parseInt(this.options.value2, 10) });
+		var info = this._super();
+		var options = this.options;
+		var isFloat = (options.step % 1) 
+		info.value2 = isFloat ? options.value2 : parseInt(options.value2, 10);
+		return info;
 	},
 	_destroy: function ()
 	{
@@ -825,12 +832,12 @@ $.widget("ibi.ibxRange", $.ibi.ibxSlider,
 		if (this.options.orientation == "horizontal")
 		{
 			this._sliderRangeBody.css(flipLayout ? 'right' : 'left', this._slider.css(flipLayout ? 'right' : "left"));
-			this._sliderRangeBody.css('width', (parseInt(this._slider2.css(flipLayout ? 'right' : "left"), 10) + this._slider2.outerWidth() - parseInt(this._slider.css(flipLayout ? 'right' : "left"), 10)) + "px");
+			this._sliderRangeBody.css('width', (parseFloat(this._slider2.css(flipLayout ? 'right' : "left"), 10) + this._slider2.outerWidth() - parseFloat(this._slider.css(flipLayout ? 'right' : "left"), 10)) + "px");
 		}
 		else
 		{
 			this._sliderRangeBody.css(flipLayout ? 'top' : 'bottom', this._slider.css(flipLayout ? 'top' : "bottom"));
-			this._sliderRangeBody.css('height', (parseInt(this._slider2.css(flipLayout ? 'top' : "bottom"), 10) + this._slider2.outerHeight() - parseInt(this._slider.css(flipLayout ? 'top' : "bottom"), 10)) + "px");
+			this._sliderRangeBody.css('height', (parseFloat(this._slider2.css(flipLayout ? 'top' : "bottom"), 10) + this._slider2.outerHeight() - parseFloat(this._slider.css(flipLayout ? 'top' : "bottom"), 10)) + "px");
 		}
 
 	}
