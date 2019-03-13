@@ -47,7 +47,6 @@ $.widget("ibi.ibxTree", $.ibi.ibxVBox,
 	_create:function()
 	{
 		this._super();
-		this.element.on("ibx_collapse", this._onNodeEvent.bind(this));
 		this.element.ibxMutationObserver({"listen":true, "subtree":true}).on("ibx_nodemutated", this._onChildrenChange.bind(this));
 		this.element.ibxTreeSelectionManager();
 		this.add(this.children());
@@ -87,16 +86,6 @@ $.widget("ibi.ibxTree", $.ibi.ibxVBox,
 	treeNodes:function(selector)
 	{
 		return this.element.find(selector || ".ibx-tree-node");
-	},
-	_onNodeEvent:function(e)
-	{
-		var options = this.options;
-		var eType = e.type;
-		if(eType == "ibx_collapse")
-		{
-			var selNodes = $(e.target).ibxWidget("children").find(".ibx-sm-selected");
-			this.element.ibxSelectionManager("selected", selNodes, false);
-		}
 	},
 	refresh:function(withChildren)
 	{
