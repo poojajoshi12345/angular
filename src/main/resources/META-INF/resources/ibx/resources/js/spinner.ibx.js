@@ -12,7 +12,7 @@ $.widget("ibi.ibxSpinner", $.ibi.ibxTextField,
 		"min" :0,
 		"max" :100,
 		"step" :1,
-
+		"precision":3,
 		"fnFormat":null,
 
 		"btnGroupClass":"ibx-spinner-btn-grp",
@@ -61,11 +61,6 @@ $.widget("ibi.ibxSpinner", $.ibi.ibxTextField,
 		this._btnUp.ibxAddClass(options.btnUpClass);
 		this._btnDown.ibxAddClass(options.btnDownClass);
 		this._btnBox.ibxAddClass(options.btnGroupClass);
-		if (options.value > options.max)
-			options.value = options.max;
-		if (options.value < options.min)
-			options.value = options.min;
-		options.value = this._adjustStep(options.value, options.min, options.max, options.step);
 		this._setValue(options.value, true);
 	},
 	_destroy: function ()
@@ -108,13 +103,6 @@ $.widget("ibi.ibxSpinner", $.ibi.ibxTextField,
 	{
 		this._stepSpinner(this._bUp);
 	},
-	_setValue: function (value, bFormat)
-	{
-		this.options.value = $.isNumeric(value) ? parseInt(value, 10) : this.options.value;
-		this.options.text = bFormat && this.options.fnFormat ? this.options.fnFormat(value) : value;
-		this.refresh();
-		this._trigger("change", null, this._getInfo());
-	},
 	_onTextInputKeyDown: function (e)
 	{
 		this._super(e);
@@ -132,20 +120,9 @@ $.widget("ibi.ibxSpinner", $.ibi.ibxTextField,
 	},
 	_onTextInputBlur: function (e)
 	{
-		var value = this._textInput.val();
-		var numValue = parseInt(value, 10);
-		if (!$.isNumeric(numValue))
-			numValue = this.options.min;
-		if (numValue > this.options.max)
-			numValue = this.options.max;
-		if (numValue < this.options.min)
-			numValue = this.options.min;
-		var newValue = this._adjustStep(numValue, this.options.min, this.options.max, this.options.step);
-		if (this.options.value != newValue)
-		{
-			this._setValue(newValue, true);
+		var value = this._setValue(this._textInput.val(), true);
+		if (this.options.value != value)
 			this._trigger("textchanged", e, this.element);
-		}
 	},
 	_onTextChanging: function (e)
 	{
@@ -155,19 +132,7 @@ $.widget("ibi.ibxSpinner", $.ibi.ibxTextField,
 	_stepSpinner: function (bUp)
 	{
 		var info = this._getInfo();
-		if (bUp)
-		{
-			info.value += info.step;
-			if (info.value > info.max)
-				info.value = info.max;
-		}
-		else
-		{
-			info.value -= info.step;
-			if (info.value < info.min)
-				info.value = info.min;
-		}
-		info.value = this._adjustStep(info.value, info.min, info.max, info.step);
+		info.value += bUp ? info.step : -info.step;
 		this._setValue(info.value, true);
 		this.refresh();
 	},
@@ -181,15 +146,34 @@ $.widget("ibi.ibxSpinner", $.ibi.ibxTextField,
 		else
 			return higher;
 	},
+	_setValue: function (value, bFormat)
+	{
+		var options = this.options;
+		var curVal = options.value;
+		value =  Number(value)
+
+		if(isNaN(value))
+			value = options.min;
+
+		value = Math.max(value, options.min);
+		value = Math.min(value, options.max);
+		var value = this._adjustStep(value, options.min, options.max, options.step);
+
+		var isFloat = !!(options.step % 1) 
+		this.options.value = value = (isFloat ? Number(value.toFixed(options.precision)) : value);
+		this.options.text = bFormat && this.options.fnFormat ? this.options.fnFormat(value) : value;
+		this.refresh();
+		if(value != curVal)
+			this._trigger("change", null, this._getInfo());
+		return value;
+	},
 	_getInfo: function ()
 	{
-		return { elem: this.element, value: parseInt(this.options.value, 10), min: parseInt(this.options.min, 10), max: parseInt(this.options.max, 10), step: parseInt(this.options.step, 10) };
+		var options = this.options;
+		return { elem: this.element, value: options.value, min: this.options.min, max: this.options.max, step: this.options.step};
 	},
 	_refresh: function ()
 	{
-		var options = this.options;
-		options.value = this._adjustStep(options.value, options.min, options.max, options.step);
-		options.text = this.options.fnFormat ? this.options.fnFormat(options.value) : options.value;
 		this._super();
 		if (this._btnBox)
 			this._btnBox.ibxWidget('refresh');

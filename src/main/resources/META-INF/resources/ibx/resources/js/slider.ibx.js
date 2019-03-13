@@ -9,6 +9,7 @@ $.widget("ibi.ibxSlider", $.ibi.ibxGrid,
 		"min": 0,
 		"max": 100,
 		"step": 1,
+		"precision":3,
 		"lock": false,
 		"popupValue": false,
 		"orientation": "horizontal",
@@ -277,7 +278,7 @@ $.widget("ibi.ibxSlider", $.ibi.ibxGrid,
 	{
 		var options = this.options;
 		var isFloat = (options.step % 1) 
-		var value =  isFloat ? options.value : parseInt(options.value, 10)
+		var value =  isFloat ? Number(options.value.toFixed(options.precision)) : parseInt(options.value, 10)
 		return { elem: this.element, value: value, min: this.options.min, max: this.options.max, step: this.options.step};
 	},
 	_adjustStep: function (val, min, max, step)
@@ -777,7 +778,7 @@ $.widget("ibi.ibxRange", $.ibi.ibxSlider,
 		var info = this._super();
 		var options = this.options;
 		var isFloat = (options.step % 1) 
-		info.value2 = isFloat ? options.value2 : parseInt(options.value2, 10);
+		info.value2 = isFloat ? Number(options.value2.toFixed(options.precision)) : parseInt(options.value2, 10);
 		return info;
 	},
 	_destroy: function ()
