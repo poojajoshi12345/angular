@@ -119,7 +119,7 @@ _p.createUI = function()
 	this.editorCell = this.__createEditorCell().ibxAddClass(["pgrid-cell", "pgrid-editor-cell"]);
 	this.editorCell.attr("tabindex", 0).data("ibxProp", prop);
 
-	this.editor = this._createEditor().ibxAddClass("pgrid-editor").attr("tabindex", -1).data("ibxProp", prop).css("flex", "0 0 auto");
+	this.editor = this._createEditor().ibxAddClass("pgrid-editor").attr("tabindex", -1).data("ibxProp", prop);
 	this.editor.on("keydown", this._onEditorKeyEvent.bind(this));
 	this.editorCell.append(this.editor);
 };
@@ -146,11 +146,7 @@ _p._onEditorCellKeyEvent = function(e)
 _p._onEditorKeyEvent = function(e)
 {
 	if(e.type == "keydown" && e.keyCode != $.ui.keyCode.ESCAPE)
-	{
-		if(e.keyCode == $.ui.keyCode.SPACE)
-			e.preventDefault();
 		e.stopPropagation();
-	}
 }
 _p._updateValue = function(newValue)
 {

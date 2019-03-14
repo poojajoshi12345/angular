@@ -22,7 +22,6 @@
 }
 .pgrid-prop-editing
 {
-	xoutline:2px solid #aaa;
 }
 .pgrid-color-picker-swatch
 {
@@ -39,6 +38,12 @@
 {
 	flex:0 0 auto;
 }
+
+.pgrid-prop-text
+{
+	flex:1 1 auto;
+}
+
 .pgrid-prop-radio-button
 {
 	margin-right:5px;
