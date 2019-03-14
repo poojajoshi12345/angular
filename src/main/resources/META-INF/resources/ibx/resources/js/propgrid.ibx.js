@@ -551,10 +551,10 @@ _p.update = function()
 	var prop = this.prop;
 	this.editor.ibxWidget("option",
 	{
-		value:prop.value,
-		min:prop.valueMin,
-		max:prop.valueMax,
-		step:prop.step,
+		value:prop.value || 0,
+		min:prop.valueMin || 0,
+		max:prop.valueMax || 100,
+		step:prop.step || 1,
 	});
 };
 /********************************************************************************
