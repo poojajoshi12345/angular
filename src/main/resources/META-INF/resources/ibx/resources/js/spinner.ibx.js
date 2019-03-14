@@ -174,6 +174,9 @@ $.widget("ibi.ibxSpinner", $.ibi.ibxTextField,
 	},
 	_refresh: function ()
 	{
+		var options = this.options;
+		options.value = this._adjustStep(options.value, options.min, options.max, options.step);
+		options.text = this.options.fnFormat ? this.options.fnFormat(options.value) : options.value;
 		this._super();
 		if (this._btnBox)
 			this._btnBox.ibxWidget('refresh');
