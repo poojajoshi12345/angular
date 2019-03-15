@@ -161,6 +161,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 			if(isMulti && !e.shiftKey && !e.ctrlKey)
 				this.deselectAll(true);
 
+
 			if(e.shiftKey)
 			{
 				var selChildren = this.selectableChildren();
@@ -171,7 +172,11 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 				this.toggleSelected(selChildren.slice(idxStart, idxEnd + 1), true, false);
 			}
 			else
-				this.toggleSelected(this._focus(), (isMulti && e.ctrlKey) || (options.toggleSelection ? undefined : true));
+			if(isMulti && e.ctrlKey)
+				this.toggleSelected(this._focus());//toggle the target!
+			else
+				this.toggleSelected(this._focus(), (options.toggleSelection ? undefined : true));
+
 		}
 		else
 		if((e.keyCode == $.ui.keyCode.HOME) && ibxEventManager.isInputEventToIgnore(e))
@@ -230,10 +235,10 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 					this.toggleSelected(selChildren.slice(idxStart, idxEnd + 1), true, false);
 				}
 				else
-				if(isMulti && !e.ctrlKey)
+				if(isMulti && e.ctrlKey)
 					this.toggleSelected(selTarget);//toggle the target!
 				else
-					this.toggleSelected(selTarget, (isMulti && e.ctrlKey) || (options.toggleSelection ? undefined : true));
+					this.toggleSelected(selTarget, (options.toggleSelection ? undefined : true));
 			}
 		}
 		else
