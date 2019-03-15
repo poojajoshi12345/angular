@@ -299,7 +299,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 		var options = this.options;
 		var children = $();
 		if(options.cacheSelectableChildren && this._cachedSelectableChildren.length)
-			children = this._cachedSelectableChildren.filter(selector);
+			children = selector ? this._cachedSelectableChildren.filter(selector) : this._cachedSelectableChildren;
 		else
 		{
 			var e = this._dispatchEvent("ibx_selectablechildren", {"items":null}, false, true, undefined, false);
