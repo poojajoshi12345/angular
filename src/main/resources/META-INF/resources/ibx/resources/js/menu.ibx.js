@@ -597,12 +597,21 @@ $.widget("ibi.ibxSelectMenuButton", $.ibi.ibxMenuButton,
 {
 	options:
 	{
+		"userValue":[],
 		"editable":false,
 		"filterValues":false,
 		"filterNoCase":true,
 		"showArrow":true,
 		"defaultText":"",
 		"multiSelect":false,
+		"menuSelOptions":
+		{
+			selectableChildren:".ibx-select-menu-item",
+			type:"single",
+			toggleSelection: false,
+			escClearSelection:false,
+			focusResetOnBlur:false
+		},
 		"aria":
 		{
 			"role":"combobox",//turn button into a combobox.
@@ -616,7 +625,7 @@ $.widget("ibi.ibxSelectMenuButton", $.ibi.ibxMenuButton,
 		options.defaultText = options.defaultText || options.text;
 		this._text.ibxEditable({commitKey:null, cancelKey:null}).on("ibx_textchanging", this._onTextChanging.bind(this)).on("keydown", this._onTextKeyDown.bind(this));
 		this.element.on("ibx_widgetfocus", this._onWidgetFocus.bind(this));
-		this._sm = options.menu.ibxSelectionManager("instance");
+		this._sm = options.menu.ibxSelectionManager("option", options.menuSelOptions).ibxSelectionManager("instance");
 		this._sm.element.on("ibx_selchange", this._onMenuSelChange.bind(this));
 	},
 	_setAccessibility:function(accessible, aria)
@@ -624,7 +633,13 @@ $.widget("ibi.ibxSelectMenuButton", $.ibi.ibxMenuButton,
 		this._super(accessible, aria);
 		this.options.menu.ibxWidget("option", "aria.role", "listbox");//turn menu into a list box
 		this.options.menu.ibxWidget("option", "aria.multiselectable", this.options.multiSelect ? true : null);//turn menu into a list box
+		this.element.attr("title", this.options.text);
 		return aria;
+	},
+	_init:function()
+	{
+		this._super();
+		this.option("userValue", this.options.userValue);//have to set again to align user value with the selections.
 	},
 	add:function(el, elSibling, before, refresh)
 	{
@@ -633,7 +648,7 @@ $.widget("ibi.ibxSelectMenuButton", $.ibi.ibxMenuButton,
 		{
 			el = $(el);
 			var sel = el.ibxWidget("option", "selected");
-			this._sm.selected(el, sel, sel, sel);
+			this.selected(el, sel);
 		}.bind(this));
 	},
 	remove:function(el, destroy, refresh)
@@ -647,13 +662,9 @@ $.widget("ibi.ibxSelectMenuButton", $.ibi.ibxMenuButton,
 	},
 	startEditing:function()
 	{
-		if(this.options.editable)
-			this._super();
 	},
 	stopEditing:function()
 	{
-		if(this.options.editable)
-			this._super()
 	},
 	_onWidgetFocus:function(e)
 	{
@@ -666,9 +677,21 @@ $.widget("ibi.ibxSelectMenuButton", $.ibi.ibxMenuButton,
 	_onTextChanging:function(e)
 	{
 	},
+	selected:function(el, select)
+	{
+		if(el === undefined)
+			return this._sm.selected();
+
+		el = $(el);
+		this._sm.selected(el, select, select, select);
+	},
 	_onMenuSelChange:function(e)
 	{
+		if(this._inMenuSelChange)
+			return;
+
 		var options = this.options;
+		var userValue = [];
 		var labelText = options.defaultText;
 		var selItems = this._sm.selected();
 		if(selItems.length)
@@ -678,11 +701,14 @@ $.widget("ibi.ibxSelectMenuButton", $.ibi.ibxMenuButton,
 			{
 				el = $(el);
 				labelText.push(el.ibxWidget("text"));
+				userValue.push(el.ibxWidget("userValue"));
 			}.bind(this));
 			labelText = labelText.join(", ");
 		}
-		this.option("text", labelText)
-		this.element.attr("title", labelText);
+
+		this._inMenuSelChange = true;
+		this.option({"userValue":userValue, "text":labelText});
+		this._inMenuSelChange = false;
 	},
 	_onBeforeMenuOpenClose:function(e)
 	{
@@ -697,27 +723,38 @@ $.widget("ibi.ibxSelectMenuButton", $.ibi.ibxMenuButton,
 	{
 		var options = this.options;
 		var changed = options[key] != value;
-		this._super(key, value);
 
 		if(key == "multiSelect" && changed)
 		{
+			var x = 10;
 		}
+		else
+		if(key == "userValue")
+		{
+			if(!this._inMenuSelChange)
+			{
+				var selItems = [];
+				var items = this.children();
+				for(var i = 0; i < items.length; ++i)
+				{
+					var item = $(items[i]);
+					var itemValue = item.ibxWidget("userValue");
+					var sel = options.multiSelect ? (value.indexOf(itemValue) != -1) : (itemValue === value);
+					if(sel)
+						selItems.push(item[0]);
+				}
+				this._sm.deselectAll();
+				this._sm.selected(selItems, true, true, true);
+			}
+		}
+		this._super(key, value);
 	},
 	_refresh:function()
 	{
 		var options = this.options;
-		options.menu.ibxWidget("option",
-		{
-			multiSelect:options.multiSelect,
-			selMgrOpts:
-			{
-				selectableChildren:".ibx-select-menu-item",
-				type: (options.multiSelect ? "multi" : "single"),
-				toggleSelection: !!options.multiSelect,
-				escClearSelection:false,
-				focusResetOnBlur:false
-			}
-		});
+		options.menuSelOptions.type = (options.multiSelect ? "multi" : "single");
+		options.menuSelOptions.toggleSelection = !!options.multiSelect;
+		options.menu.ibxWidget("option",{multiSelect:options.multiSelect, selMgrOpts:options.menuSelOptions});
 		this._text.ibxToggleClass("ibx-select-menu-button-label-editable", options.editable).attr("tabindex", options.editable ? "-1" : null);
 		this._super();
 	}
@@ -755,7 +792,7 @@ $.widget("ibi.ibxSelectMenuItem", $.ibi.ibxMenuItem,
 		if(selected === undefined)
 			return this.options.selected;
 		this.option("selected", selected);
-		this.element.closest(".ibx-menu").ibxSelectionManager("selected", this.element, selected);
+		this.element.closest(".ibx-selection-manager").ibxSelectionManager("selected", this.element, selected);
 	}
 });
 
