@@ -15,7 +15,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 		"navKeyDir":"both",					//horizontal = left/right, vertical = up/down, or both
 		"rubberBand":false,					//selection by rubberband
 		"rubberBandPartialSelect":false,	//rubberband must fully enclose the item for selection
-		"selectableChildren":null,			//class for what children are selectable.
+		"selectableChildren":"*",			//class for what children are selectable.
 		"cacheSelectableChildren":false,	//when true, save last retreived to save time
 	},
 	_widgetClass:"ibx-selection-manager",
@@ -289,9 +289,10 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 		return $(el);
 	},
 	_cachedSelectableChildren:$(),
-	invalidateSelectableCache:function(selector)
+	updateSelectableCache:function(children)
 	{
-		this._cachedSelectableChildren = $();
+		this._cachedSelectableChildren.ibxRemoveClass("ibx-sm-selectable");
+		this._cachedSelectableChildren = $(children);
 		return;
 	},
 	selectableChildren:function(selector)
@@ -307,11 +308,11 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 				? $(e.data.items)
 				: this.element.logicalChildren(".ibx-sm-selection-root, .ibx-sm-nav-key-root, .ibx-sm-focus-root, .ibx-sm-focus-default", ":ibxFocusable(-1)");			
 
-			this._cachedSelectableChildren.ibxRemoveClass("ibx-sm-selectable");
 			if(options.selectableChildren)
 				children =  children.filter(options.selectableChildren);
 			children.ibxAddClass("ibx-sm-selectable");
-			this._cachedSelectableChildren = children;
+
+			this.updateSelectableCache(children);
 			children =  selector ? children.filter(selector) : children;
 		}
 		return children;

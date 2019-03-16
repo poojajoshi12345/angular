@@ -129,12 +129,13 @@ $.widget("ibi.ibxDataGridSelectionManager", $.ibi.ibxSelectionManager,
 	{
 		"grid":null,
 		"type":"multi",
+		"rowSelect":false,
 		"focusDefault":true,
 		"focusResetOnBlur":false,
 		"navKeyRoot":true,
 		"toggleSelection":true,
 		"escClearSelection":true,
-		"selectableChildren":".dgrid-selectable", //can be elements/classes/etc.
+		"selectableChildren":".dgrid-cell", //can be elements/classes/etc.
 		"cacheSelectableChildren":true,
 	},
 	_widgetClass:"ibx-data-grid-selection-model",
@@ -172,6 +173,17 @@ $.widget("ibi.ibxDataGridSelectionManager", $.ibi.ibxSelectionManager,
 		}
 		else
 			this._super(e);
+	},
+	option:function(key, value)
+	{
+		this._super(key, value);
+		if(key == "rowSelect")
+		{
+			this.deselectAll();
+			this.selectableChildren().ibxRemoveClass("ibx-sm-selectable");//.attr("tabindex", "");
+			this.updateSelectableCache();
+			this.options.selectableChildren = value ? ".dgrid-row" : ".dgrid-cell";
+		}
 	},
 });
 
@@ -453,8 +465,8 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 			ui:{},
 		},
 
-		multiSelect:true,
-		rowSelect:false,
+		selType:"multi",
+		rowSelect:false, 
 
 		defaultRowConfig: {},//not currently used.
 		showColumnHeaders:true,
@@ -472,7 +484,6 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 			rowHeaderBarClass:"dgrid-header-row-bar",
 			rowHeaderClass:"dgrid-header-row",
 			rowHeaderSplitterClass:"dgrid-header-row-splitter",
-			gridSelectable:".dgrid-selectable",
 			gridClass:"dgrid-grid",
 			gridRow:"dgrid-row",
 			gridCell:"dgrid-cell",
@@ -494,7 +505,7 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 		grid.on("ibx_beforeselchange", this._onGridSelChange.bind(this));
 		grid.on("scroll", this._onGridScroll.bind(this));
 
-		this._sm = grid.ibxDataGridSelectionManager({grid:this, selectableChildren:options.classes.gridSelectable});
+		this._sm = grid.ibxDataGridSelectionManager({grid:this});
 		this._sm = grid.ibxDataGridSelectionManager("instance");
 
 		var colHeaderBar = this._colHeaderBar = $("<div tabindex='0'>").ibxHBox({navKeyRoot:true, focusDefault:true}).ibxAddClass(classes.colHeaderBarClass);
@@ -766,9 +777,8 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 			var cell = cells[i];
 			var cInfo = options.colMap[i] || options.defaultColConfig;
 			cell.style.width = isNaN(cInfo.ui.curSize) ? cInfo.ui.curSize : cInfo.ui.curSize + "px";//if size is just a number assume pixels.
-			cell.setAttribute("tabindex", cell.tabIndex);
-			cell.classList.toggle(options.classes.gridSelectable.replace(".", ""), cInfo.selectable);
 			cell.classList.add(options.classes.gridCell);
+			cell.setAttribute("tabindex", -1);
 
 			//aria stuff
 			cell.setAttribute("role", "gridcell");
@@ -777,6 +787,7 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 
 		//set row options and add to grid...refresh so columnIndent is correct.
 		var rowData = row.data("ibxDataGridRow");
+		row.attr("tabindex", -1);
 		this._grid.ibxWidget("add", row, sibling, before);
 
 		//add header in correct location.
@@ -788,7 +799,7 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 		this._rowHeaderBar.append(padding);
 		
 		//next time a selection happens on grid, reacquire the selectable children.
-		this._sm.invalidateSelectableCache();
+		this._sm.updateSelectableCache();
 	},
 	addRows:function(rows, sibling, before)
 	{
@@ -869,6 +880,15 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 		else
 		if(key == "defaultColConfig")
 			value = $.extend({}, options.defaultColConfig, value);
+		else
+		if(key == "selType")
+		{
+			this._sm.option("type", value);
+			value = "none";
+		}
+		else
+		if(key == "rowSelect")
+			this._sm.option("rowSelect", value);
 		this._super(key, value);
 	},
 	refresh:function()

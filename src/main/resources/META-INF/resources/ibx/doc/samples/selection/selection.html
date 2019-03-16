@@ -71,7 +71,7 @@
 					parent.empty();
 					for(var i = 0; i < 50; ++i)
 					{
-						var child = $(sformat("<div tabindex='0' class='child child{1} ibx-draggable'>", i)).ibxAriaId();
+						var child = $(sformat("<div class='child child{1} ibx-draggable'>", i)).ibxAriaId();
 						child.ibxAddClass(i%2 ? "even" : "odd").prop("tabindex", i%2 ? 0 : -1);
 						parent.append(child);
 
