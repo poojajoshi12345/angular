@@ -453,6 +453,9 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 			ui:{},
 		},
 
+		multiSelect:true,
+		rowSelect:false,
+
 		defaultRowConfig: {},//not currently used.
 		showColumnHeaders:true,
 		showRowHeaders:true,
@@ -488,8 +491,11 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 		var classes = options.classes;
 		var corner = this._corner = $("<div>").ibxAddClass("dgrid-corner").data({ibxCol:1, ibxRow:1});
 		var grid = this._grid = $("<div tabindex='0'>").ibxVBox({align:"start"}).ibxAddClass(classes.gridClass).data({ibxCol:"2", ibxRow:"2"});
-		grid.ibxDataGridSelectionManager({grid:this, selectableChildren:options.classes.gridSelectable}).on("ibx_beforeselchange", this._onGridSelChange.bind(this));
+		grid.on("ibx_beforeselchange", this._onGridSelChange.bind(this));
 		grid.on("scroll", this._onGridScroll.bind(this));
+
+		this._sm = grid.ibxDataGridSelectionManager({grid:this, selectableChildren:options.classes.gridSelectable});
+		this._sm = grid.ibxDataGridSelectionManager("instance");
 
 		var colHeaderBar = this._colHeaderBar = $("<div tabindex='0'>").ibxHBox({navKeyRoot:true, focusDefault:true}).ibxAddClass(classes.colHeaderBarClass);
 		var colHeaderBarGroup = this._colHeaderBarGroup = $("<div class='dgrid-header-col-bar-group'>").append(colHeaderBar).data({ibxCol:"2", ibxRow:"1"});
@@ -592,7 +598,7 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 	},
 	getSelectionManager:function()
 	{
-		return this._grid.data("ibiIbxDataGridSelectionManager");
+		return this._sm;
 	},
 	updateHeaders:function(which)
 	{
@@ -782,7 +788,7 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 		this._rowHeaderBar.append(padding);
 		
 		//next time a selection happens on grid, reacquire the selectable children.
-		this.getSelectionManager().invalidateSelectableCache();
+		this._sm.invalidateSelectableCache();
 	},
 	addRows:function(rows, sibling, before)
 	{
