@@ -883,6 +883,7 @@ $.widget("ibi.ibxSplitMenuButton", $.ibi.ibxButtonSimple,
 		this._menuBtn.ibxWidget("option", options.menuOptions);
 
 		var menu = this._menuBtn.ibxWidget("option", "menu");
+		menu.ibxWidget("option", "position", options.menuOptions.position);
 		menu.css("minWidth", this.element.css("width"));
 
 		var menuItems = menu.ibxWidget("children");
