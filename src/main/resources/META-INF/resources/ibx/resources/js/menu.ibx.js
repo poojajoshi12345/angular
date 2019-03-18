@@ -719,7 +719,7 @@ $.widget("ibi.ibxSelectMenuButton", $.ibi.ibxMenuButton,
 		if(e.keyCode == $.ui.keyCode.DOWN)
 			this.options.menu.focus();
 	},
-	_setOption(key, value)
+	_setOption:function(key, value)
 	{
 		var options = this.options;
 		var changed = options[key] != value;
