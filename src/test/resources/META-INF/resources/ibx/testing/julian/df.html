@@ -51,6 +51,18 @@
 			{
 				flex:1 1 auto;
 			}
+			.resource-types
+			{
+				width:70px;
+			}
+			.resource-container-box, .settings-container-box
+			{
+				width:200px;
+			}
+			.resource-box
+			{
+				flex:1 1 auto;
+			}
 		</style>
 	</head>
 	<body class="ibx-root" data-ibx-type="ibxVBox" data-ibxp-align="stretch" data-ibx-nav-map=".root-nav-map" aria-label="To activate quick navigation map, press CTRL+ALT+M">
@@ -122,7 +134,7 @@
 
 		<div class="ui-wire-comp content-box" data-ibx-type="ibxHBox" data-ibxp-align="stretch">
 
-			<div tabindex="0" class="ui-wire-comp resources-radio-group" data-ibx-type="ibxVRadioGroup" data-ibxp-name="rgResourceType" data-ibxp-command="cmdResourceType" data-ibxp-align="stretch">
+			<div tabindex="0" class="ui-wire-comp resource-types" data-ibx-type="ibxVRadioGroup" data-ibxp-name="rgResourceType" data-ibxp-command="cmdResourceType" data-ibxp-align="stretch">
 				<div title="View Outline" class="ui-wire-comp btn-res-outline" data-ibxp-icon-position="top" data-ibx-type="ibxRadioButton" data-ibxp-glyph-classes="fa fa-sitemap">Outline</div>
 				<div title="View Fields" class="ui-wire-comp btn-res-fields" data-ibxp-icon-position="top" data-ibx-type="ibxRadioButton" data-ibxp-glyph-classes="fa fa-list">Fields</div>
 				<div title="Add containers" class="ui-wire-comp btn-res-container" data-ibxp-icon-position="top" data-ibx-type="ibxRadioButton" data-ibxp-glyph-classes="fa fa-window-maximize">Container</div>
@@ -134,6 +146,18 @@
 				<div title="Add backgroud image" class="ui-wire-comp btn-res-bkgnd" data-ibxp-icon-position="top" data-ibx-type="ibxRadioButton" data-ibxp-glyph-classes="fa fa-picture-o">Background</div>
 			</div>
 
+			<div class="ui-wire-comp resource-container-box" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
+				<div tabindex="0" class="ui-wire-comp resource-search" title="Search" data-ibx-type="ibxTextField">Search</div>
+				<div tabindex="0" class="ui-wire-comp resource-box" data-ibx-type="ibxVBox"></div>
+			</div>
+			<div data-ibx-type="ibxVSplitter"></div>
+			<div class="ui-wire-comp settings-container-box" data-ibx-type="ibxTabPane">
+				<div class="ui-wire-comp tab-page-settings" data-ibx-type="ibxTabPage">Settings
+				</div>
+				<div class="ui-wire-comp tab-page-format" data-ibx-type="ibxTabPage">Format
+				</div>
+			</div>
+			<div data-ibx-type="ibxVSplitter"></div>
 		</div>
 
 <!--
