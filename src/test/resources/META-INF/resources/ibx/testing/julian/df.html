@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>HTML Test File</title>
+		<meta http-equiv="X-UA-Compatible" content="IE=11">
+		<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+		<meta http-equiv="Pragma" content="no-cache" />
+		<meta http-equiv="Expires" content="0" />
+		<meta name="google" value="notranslate">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<script type="text/javascript" src="../../resources/ibx.js"></script>
+		<script type="text/javascript">
+			ibx(function(e)
+			{
+			},true);
+		</script>
+		<style type="text/css">
+			body
+			{
+				position:absolute;
+				width: 100%;
+				height: 100%;
+				margin: 0px;
+				box-sizing: outline-box;
+			}
+			:focus
+			{
+				box-shadow:0px 0px 10px 1px red;
+			}
+			.ui-wf-comp
+			{
+				margin:1px;
+				padding:1px;
+				border:1px solid black;
+			}
+			.top-bar
+			{
+				flex: 0 0 auto;
+			}
+			.top-bar-logo
+			{	
+				width:3em;
+			}
+			.content-box
+			{
+				flex:1 1 auto;
+			}
+			.cbox-side-bar
+			{
+				position:relative;
+				flex:0 0 auto;
+				width:150px;
+			}
+			.cbox-file-box
+			{
+				flex:1 1 auto;
+				border:1px solid black;
+			}
+			.btn-collapse-sidebar
+			{
+				font-size:1.5em;
+				position:absolute;
+				bottom:0px;
+				right:0px;
+				margin:5px;				
+			}
+			.file-box-top-bar
+			{
+				flex:0 0 auto;
+			}
+			.file-box-search-files
+			{
+				flex:1 1 auto;
+				min-width:100px;
+				justify-self:space-around;
+				margin:0px 75px 0px 75px;
+			}
+			.file-section
+			{
+			}
+			.file-box 
+			{
+				overflow:auto;
+			}
+			.file-tile
+			{
+				flex:0 0 auto;
+				width:150px;
+				height:150px;
+				border:1px solid black;
+				margin:5px;
+			}
+		</style>
+	</head>
+	<body class="ibx-root" data-ibx-type="ibxVBox" data-ibxp-align="stretch" data-ibx-nav-map=".root-nav-map" aria-label="To activate quick navigation map, press CTRL+ALT+M">
+		<div tabindex="-1" class="ui-wf-comp top-bar" data-ibx-type="ibxHBox" data-ibxp-justify="spaceBetween" data-ibxp-align="center">
+
+			<div tabindex="0" class="ui-wf-comp top-bar-file-menu" data-ibx-type="ibxMenuButton">Logo
+				<div data-ibx-type="ibxMenu">
+					<div data-ibx-type="ibxMenuItem" data-ibxp-command="cmdNew" data-ibxp-label-options.glyph-classes="fa fa-pencil">New</div>
+					<div data-ibx-type="ibxMenuItem" data-ibxp-command="cmdOpen" data-ibxp-label-options.glyph-classes="fa fa-file-o">Open</div>
+					<div data-ibx-type="ibxMenuItem" data-ibxp-command="cmdSave" data-ibxp-label-options.glyph-classes="fa fa-save">Save</div>
+					<div data-ibx-type="ibxMenuItem" data-ibxp-command="cmdSaveAs" data-ibxp-label-options.glyph-classes="fa fa-save">Save As...</div>
+					<div data-ibx-type="ibxMenuSeparator"></div>
+					<div data-ibx-type="ibxMenuItem" data-ibxp-command="cmdExportRawData">Export Raw Data</div>
+					<div data-ibx-type="ibxMenuItem" data-ibxp-command="cmdExportImage">Export Image</div>
+					<div data-ibx-type="ibxMenuItem" data-ibxp-command="cmdExportAs">Export As</div>
+					<div data-ibx-type="ibxMenuSeparator"></div>
+					<div data-ibx-type="ibxMenuItem" data-ibxp-command="cmdPreferences" data-ibxp-label-options.glyph-classes="fa fa-ellipsis-v">Preferences...</div>
+					<div data-ibx-type="ibxMenuItem" data-ibxp-command="cmdExportRawData" data-ibxp-label-options.glyph-classes="fa fa-times">Close</div>
+				</div>
+			</div>
+
+			<div tabindex="0" title="Save" class="ui-wf-comp btn-save" data-ibx-type="ibxButton" data-ibxp-command="cmdSave" data-ibxp-glyph-classes="fa fa-save"></div>
+			<div tabindex="0" title="Undo" class="ui-wf-comp btn-undo" data-ibx-type="ibxButton" data-ibxp-command="cmdUndo" data-ibxp-glyph-classes="fa fa-arrow-left"></div>
+			<div tabindex="0" title="Redo" class="ui-wf-comp btn-redo" data-ibx-type="ibxButton" data-ibxp-command="cmdRedo" data-ibxp-glyph-classes="fa fa-arrow-right"></div>
+			<div tabindex="0" title="Content Type" class="ui-wf-comp btn-content-type" data-ibx-type="ibxSplitMenuButton" data-ibxp-glyph-classes="fa fa-plus">Visualization
+				<div data-ibx-type="ibxRadioGroup" data-ibxp-name="rgContentType" data-ibxp-command="cmdContentType"></div>
+				<div data-ibx-type="ibxMenu">
+					<div data-ibx-type="ibxRadioMenuItem" data-ibxp-group="rgContentType">Visualization</div>
+					<div data-ibx-type="ibxRadioMenuItem" data-ibxp-group="rgContentType">Page</div>
+					<div data-ibx-type="ibxRadioMenuItem" data-ibxp-group="rgContentType">Portal</div>
+					<div data-ibx-type="ibxMenuSeparator"></div>
+					<div data-ibx-type="ibxRadioMenuItem" data-ibxp-group="rgContentType">Data</div>
+				</div>
+			</div> 
+
+			<div tabindex="-1" class="ui-wf-comp top-bar-nav" data-ibx-type="ibxHBox" data-ibxp-align="center" data-ibxp-nav-key-root="true" data-ibxp-focus-default="true">
+				<div tabindex="0" title="WebFOCUS Tools Menu" class="ui-wf-comp" data-ibx-type="ibxMenuButton" data-ibxp-glyph-classes="fa fa-question">
+					<div data-ibx-type="ibxMenu">
+						<div data-ibx-type="ibxMenuItem">Tools Menu Items</div>
+					</div>
+				</div>
+				<div tabindex="0" title="WebFOCUS Settings Menu" class="ui-wf-comp" data-ibx-type="ibxMenuButton" data-ibxp-glyph-classes="fa fa-question">
+					<div data-ibx-type="ibxMenu">
+						<div data-ibx-type="ibxMenuItem">Settings Menu Items</div>
+					</div>
+				</div>
+				<div tabindex="0" title="WebFOCUS Help Menu" class="ui-wf-comp" data-ibx-type="ibxMenuButton" data-ibxp-glyph-classes="fa fa-question">
+					<div data-ibx-type="ibxMenu">
+						<div data-ibx-type="ibxMenuItem">Help Menu Items</div>
+					</div>
+				</div>
+				<div tabindex="0" title="WebFOCUS Account Menu" class="ui-wf-comp" data-ibx-type="ibxMenuButton" data-ibxp-glyph-classes="fa fa-question">
+					<div data-ibx-type="ibxMenu">
+						<div data-ibx-type="ibxMenuItem">Account Menu Items</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+<!--
+		<div class="content-box" data-ibx-type="ibxHBox" data-ibxp-align="stretch">
+	
+			<div tabindex="0" title="WebFOCUS content bookmarks" class="ui-wf-comp cbox-side-bar" data-ibx-type="ibxVBox" data-ibxp-align="stretch" data-ibxp-nav-key-root="true" data-ibxp-focus-default="true">
+				<div tabindex="-1" title="Bookmark" class="ui-wf-comp" data-ibx-type="ibxButton" data-ibxp-justify="start" data-ibxp-glyph-classes="fa fa-question">Home</div>
+				<div tabindex="-1" title="Bookmark" class="ui-wf-comp" data-ibx-type="ibxButton" data-ibxp-justify="start" data-ibxp-glyph-classes="fa fa-question">Favorites</div>
+				<div tabindex="-1" title="Bookmark" class="ui-wf-comp" data-ibx-type="ibxButton" data-ibxp-justify="start" data-ibxp-glyph-classes="fa fa-question">My Workspace</div>
+				<div tabindex="-1" title="Bookmark" class="ui-wf-comp" data-ibx-type="ibxButton" data-ibxp-justify="start" data-ibxp-glyph-classes="fa fa-question">Shared with me</div>
+				<div tabindex="-1" title="Bookmark" class="ui-wf-comp" data-ibx-type="ibxButton" data-ibxp-justify="start" data-ibxp-glyph-classes="fa fa-question">Portals</div>
+				<div tabindex="-1" title="Bookmark" class="ui-wf-comp" data-ibx-type="ibxButton" data-ibxp-justify="start" data-ibxp-glyph-classes="fa fa-question">Domains</div>
+
+				<div tabindex="0" title="collapse side bar" class="ui-wf-comp btn-collapse-sidebar" data-ibx-type="ibxButton" data-ibxp-glyph-classes="fa fa-angle-double-left"></div>
+			</div>
+
+			<div data-ibx-type="ibxVSplitter"></div>
+
+			<div class="ui-wf-comp cbox-file-box" data-ibx-type="ibxVBox" data-ibxp-align="stretch" data-ibx-nav-map=".files-nav-map">
+
+				<div tabindex="-1" class="ui-wf-comp file-box-top-bar" data-ibx-type="ibxHBox" data-ibxp-align="center" data-ibxp-nav-key-root="true">
+					<div tabindex="0" title="Create New File" class="ui-wf-comp file-box-new" data-ibx-type="ibxButtonSimple" data-ibxp-glyph-classes="fa fa-question"></div>
+					<div tabindex="0" title="Search For Files" class="ui-wf-comp file-box-search-files" data-ibx-type="ibxSelectMenuButton"></div>
+					<div tabindex="0" title="View Files As" class="ui-wf-comp file-box-view-as" data-ibx-type="ibxMenuButton" data-ibxp-glyph-classes="fa fa-question">
+						<div data-ibx-type="ibxMenu">
+							<div data-ibx-type="ibxMenuItem">View Files As Menu Items</div>
+						</div>
+					</div>
+					<div tabindex="0" title="Refresh File Views" class="ui-wf-comp file-box-refresh" data-ibx-type="ibxButtonSimple" data-ibxp-glyph-classes="fa fa-question"></div>
+					<div tabindex="0" title="Selected File Info" class="ui-wf-comp file-box-info" data-ibx-type="ibxButtonSimple" data-ibxp-glyph-classes="fa fa-question"></div>
+				</div>
+
+				<div class="ui-wf-comp file-section file-box-recents" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
+					<div>Recent</div>
+					<div tabindex=0" title="Recent File List" class="ui-wf-comp file-box file-box-recents" data-ibx-type="ibxHBox" data-ibxp-nav-key-root="true" data-ibxp-focus-default="false" data-ibxp-wrap="true">
+						<div tabindex="-1" title="Recent file" class="file-tile">Cost of Goods</div>
+						<div tabindex="-1" title="Recent file" class="file-tile">Profit Margin</div>
+						<div tabindex="-1" title="Recent file" class="file-tile">Region Revenue Bar</div>
+					</div>
+				</div>
+				<div class="ui-wf-comp file-section file-box-recommended" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
+					<div>Recommended</div>
+					<div tabindex=0" title="Recommended File List" class="ui-wf-comp file-box file-box-recommended" data-ibx-type="ibxHBox" data-ibxp-nav-key-root="true" data-ibxp-focus-default="false" data-ibxp-wrap="true">
+						<div tabindex="-1" title="Recommended file" class="file-tile">Fintoso Financial</div>
+						<div tabindex="-1" title="Recommended file" class="file-tile">Collaberative Portal</div>
+						<div tabindex="-1" title="Recommended file" class="file-tile">KPI Dashboard</div>
+					</div>
+				</div>
+				<div class="ui-wf-comp file-section file-box-learn" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
+					<div>Learn WebFOCUS</div>
+					<div tabindex=0" title="WebFOCUS Learning Center" class="ui-wf-comp file-box file-box-learn" data-ibx-type="ibxHBox" data-ibxp-nav-key-root="true" data-ibxp-focus-default="false" data-ibxp-wrap="true">
+						<div tabindex="-1" title="WebFOCUS How To" class="file-tile">Connecting to new data</div>
+						<div tabindex="-1" title="WebFOCUS How To" class="file-tile">Visualizing your data</div>
+						<div tabindex="-1" title="WebFOCUS How To" class="file-tile">Blending multiple data sources</div>
+					</div>
+				</div>
+			</div>
+		</div>
+-->
+		<div class="root-nav-map" data-ibx-type="ibxNavMap">
+		</div>
+
+	</body>
+</html>
+
+
