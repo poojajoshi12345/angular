@@ -12,6 +12,11 @@
 		<script type="text/javascript">
 			ibx(function(e)
 			{
+				$(".cmd-shell").on("ibx_triggered ibx_uservaluechanged ibx_checkchanged", function(e)
+				{
+					var cmd = $(e.target);
+					console.log(e.type, cmd.ibxWidget("option", "id"));
+				});
 			},true);
 		</script>
 		<style type="text/css">
@@ -93,6 +98,21 @@
 		</style>
 	</head>
 	<body class="ibx-root" data-ibx-type="ibxVBox" data-ibxp-align="stretch" data-ibx-nav-map=".root-nav-map" aria-label="To activate quick navigation map, press CTRL+ALT+M">
+		<div class="cmd-shell cmd-new" data-ibx-type="ibxCommand" data-ibxp-id="cmdNew" data-ibxp-shortcut=""></div>
+		<div class="cmd-shell cmd-open" data-ibx-type="ibxCommand" data-ibxp-id="cmdOpen" data-ibxp-shortcut=""></div>
+		<div class="cmd-shell cmd-save" data-ibx-type="ibxCommand" data-ibxp-id="cmdSave" data-ibxp-shortcut=""></div>
+		<div class="cmd-shell cmd-save-as" data-ibx-type="ibxCommand" data-ibxp-id="cmdSaveAs" data-ibxp-shortcut=""></div>
+		<div class="cmd-shell cmd-exp-raw-data" data-ibx-type="ibxCommand" data-ibxp-id="cmdExportRawData" data-ibxp-shortcut=""></div>
+		<div class="cmd-shell cmd-exp-image" data-ibx-type="ibxCommand" data-ibxp-id="cmdExportImage" data-ibxp-shortcut=""></div>
+		<div class="cmd-shell cmd-exp-as" data-ibx-type="ibxCommand" data-ibxp-id="cmdExportAs" data-ibxp-shortcut=""></div>
+		<div class="cmd-shell cmd-prefs" data-ibx-type="ibxCommand" data-ibxp-id="cmdPreferences" data-ibxp-shortcut=""></div>
+		<div class="cmd-shell cmd-exit" data-ibx-type="ibxCommand" data-ibxp-id="cmdExit" data-ibxp-shortcut=""></div>
+
+		<div class="cmd-shell cmd-undo" data-ibx-type="ibxCommand" data-ibxp-id="cmdUndo" data-ibxp-shortcut=""></div>
+		<div class="cmd-shell cmd-redo" data-ibx-type="ibxCommand" data-ibxp-id="cmdRedo" data-ibxp-shortcut=""></div>
+		<div class="cmd-shell cmd-content-type" data-ibx-type="ibxCommand" data-ibxp-id="cmdContentType" data-ibxp-shortcut=""></div>
+
+
 		<div tabindex="-1" class="ui-wf-comp top-bar" data-ibx-type="ibxHBox" data-ibxp-justify="spaceBetween" data-ibxp-align="center">
 
 			<div tabindex="0" class="ui-wf-comp top-bar-file-menu" data-ibx-type="ibxMenuButton">Logo
@@ -107,7 +127,7 @@
 					<div data-ibx-type="ibxMenuItem" data-ibxp-command="cmdExportAs">Export As</div>
 					<div data-ibx-type="ibxMenuSeparator"></div>
 					<div data-ibx-type="ibxMenuItem" data-ibxp-command="cmdPreferences" data-ibxp-label-options.glyph-classes="fa fa-ellipsis-v">Preferences...</div>
-					<div data-ibx-type="ibxMenuItem" data-ibxp-command="cmdExportRawData" data-ibxp-label-options.glyph-classes="fa fa-times">Close</div>
+					<div data-ibx-type="ibxMenuItem" data-ibxp-command="cmdExit" data-ibxp-label-options.glyph-classes="fa fa-times">Close</div>
 				</div>
 			</div>
 
