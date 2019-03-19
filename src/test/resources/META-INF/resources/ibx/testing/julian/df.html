@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-		<title>HTML Test File</title>
+		<title>Designer Functional Wireframe</title>
 		<meta http-equiv="X-UA-Compatible" content="IE=11">
 		<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
 		<meta http-equiv="Pragma" content="no-cache" />
@@ -146,7 +146,7 @@
 				<div title="Add lines" class="ui-wire-comp btn-res-line" data-ibxp-icon-position="top" data-ibx-type="ibxRadioButton" data-ibxp-glyph-classes="fa fa-circle-o">Line</div>
 				<div title="Add backgroud image" class="ui-wire-comp btn-res-bkgnd" data-ibxp-icon-position="top" data-ibx-type="ibxRadioButton" data-ibxp-glyph-classes="fa fa-picture-o">Background</div>
 			</div>
-			<div tabindex="-1" class="ui-wire-comp resource-container-box" data-ibx-type="ibxVBox" data-ibxp-align="stretch" data-ibxp-focus-default=".resource-box">
+			<div tabindex="-1" class="ui-wire-comp resource-container-box" data-ibx-nav-map=".nav-map-res-outline" data-ibx-type="ibxVBox" data-ibxp-align="stretch" data-ibxp-focus-default=".resource-box">
 				<div tabindex="0" class="ui-wire-comp resource-search" title="Search" data-ibx-type="ibxTextField">Search</div>
 				<div tabindex="0" class="ui-wire-comp resource-box" data-ibx-type="ibxVBox"></div>
 			</div>
@@ -154,8 +154,10 @@
 			<div class="ui-wire-comp content-box-inner-split-box" data-ibx-type="ibxHBox" data-ibxp-align="stretch">
 				<div tabindex="-1" class="ui-wire-comp settings-container-box" data-ibx-type="ibxTabPane">
 					<div class="ui-wire-comp tab-page-settings" data-ibx-type="ibxTabPage">Settings
+						<div>Settings Here</div>
 					</div>
 					<div class="ui-wire-comp tab-page-format" data-ibx-type="ibxTabPage">Format
+						<div>Formatting Here</div>
 					</div>
 				</div>
 				<div data-ibx-type="ibxVSplitter"></div>
@@ -163,12 +165,12 @@
 			</div>
 
 			<div tabindex="0" title="Content Style" class="ui-wire-comp chart-picker chart-picker-collapsed" data-ibx-type="ibxVBox" data-ibxp-align="stretch" data-ibxp-nav-key-root="true" data-ibxp-focus-default="true">
-				<div tabindex="-1" title="Chart Type" class="ui-wire-comp chart-type-tile"></div>
-				<div tabindex="-1" title="Chart Type" class="ui-wire-comp chart-type-tile"></div>
-				<div tabindex="-1" title="Chart Type" class="ui-wire-comp chart-type-tile"></div>
-				<div tabindex="-1" title="Chart Type" class="ui-wire-comp chart-type-tile"></div>
-				<div tabindex="-1" title="Chart Type" class="ui-wire-comp chart-type-tile"></div>
-			
+				<div tabindex="-1" title="Chart Type" class="ui-wire-comp chart-type-tile">Chart Type</div>
+				<div tabindex="-1" title="Chart Type" class="ui-wire-comp chart-type-tile">Chart Type</div>
+				<div tabindex="-1" title="Chart Type" class="ui-wire-comp chart-type-tile">Chart Type</div>
+				<div tabindex="-1" title="Chart Type" class="ui-wire-comp chart-type-tile">Chart Type</div>
+				<div tabindex="-1" title="Chart Type" class="ui-wire-comp chart-type-tile">Chart Type</div>
+
 				<div tabindex="0" title="Toggle chart picker" class="ui-wire-comp btn-toggle-picker" data-ibx-type="ibxButton" data-ibxp-command="cmdTogglePicker" data-ibxp-glyph-classes="fa fa-angle-double-left"></div>
 			</div>
 		</div>
@@ -202,6 +204,10 @@
 			<div data-ibx-type="ibxNavMapItem" data-ibxp-nav-target=".settings-container-box">Settings and formatting</div>
 			<div data-ibx-type="ibxNavMapItem" data-ibxp-nav-target=".tool-content">Tool content</div>
 			<div data-ibx-type="ibxNavMapItem" data-ibxp-nav-target=".chart-picker">Chart picker</div>
+		</div>
+		<div class="nav-map-res-outline" data-ibx-type="ibxNavMap">
+			<div data-ibx-type="ibxNavMapItem" data-ibxp-nav-target=".resource-search">Search Outline</div>
+			<div data-ibx-type="ibxNavMapItem" data-ibxp-nav-target=".resource-box">Outline Tree</div>
 		</div>
 
 	</body>
