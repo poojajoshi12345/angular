@@ -560,8 +560,6 @@ $.widget("ibi.ibxRubberBand", $.Widget,
 		var eTrueX = e.offsetX + this.element.prop("scrollLeft");
 		var eTrueY = e.offsetY + this.element.prop("scrollTop");
 
-		console.log(e.offsetX, e.offsetY);
-
 		if(eType == "mousedown")
 		{
 			this.stop();
