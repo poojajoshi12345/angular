@@ -25,7 +25,7 @@
 				});
 
 				var grid = $(".test-grid");
-				grid.ibxWidget("initGrid", 5, 3).ibxWidget("showColumn", 1, true).on("click", function(e)
+				grid.ibxWidget("initGrid", 5, 13).ibxWidget("showColumn", 1, true).on("click", function(e)
 				{
 					
 				});
@@ -33,6 +33,10 @@
 				{
 					var colInfo = $(e.currentTarget).data("ibxDataGridCol");
 				});
+
+				var sm = grid.ibxWidget("getSelectionManager");
+				sm.option({"rubberBand":true, "rubberBandPartialSelect":true});
+
 
 				// grid.find(".dgrid-cell").attr("tabindex", "");
 				// grid.find(".dgrid-row").attr("tabindex", -1);
@@ -55,7 +59,7 @@
 			}
 			body > div
 			{
-				margin:10px;
+				xmargin:10px;
 			}
 
 			.test-select
@@ -76,21 +80,30 @@
 			}
 			.test-grid
 			{
+
+				margin:100px 0px 0px 100px;
 				width:400px;
 				height:500px;
 				border:1px solid #ccc;
 			}
 			.test-grid .ibx-sm-selected
 			{
-				border:3px solid red;
+				outline:2px solid black;
 			}
 		</style>
 	</head>
 	<body tabindex="0" class="ibx-root" data-ibx-type="ibxVBox" data-ibxp-align="start">
 
 
+		<div tabindex="0" class="test-grid" data-ibx-type="ibxDataGrid" data-ibxp-row-select="false"></div>
 
-		<div tabindex="0" class="test-grid" data-ibx-type="ibxDataGrid"></div>
+		<!-- <div tabindex="0" class="test-menuButton" data-ibx-type="ibxSplitMenuButton">SplitMenuButton
+			<div data-ibx-type="ibxMenu">
+				<div data-ibx-type="ibxMenuItem">Menu Item</div>
+			</div>
+		</div> -->
+
+		<!-- <div tabindex="0" class="test-grid" data-ibx-type="ibxDataGrid"></div> -->
 
 
 		<!-- <div tabindex="0" class="test-select" data-ibx-type="ibxSelectMenuButton" data-ibxp-multi-select="true" data-ibxp-user-value='["i2", "i4", "i6"]' data-ibxp-use-value-as-text="true"  data-ibxp-editable="false">Select an Item

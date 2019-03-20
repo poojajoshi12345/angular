@@ -529,15 +529,17 @@ $.widget("ibi.ibxRubberBand", $.Widget,
 {
 	options:
 	{
+		"startDistanceX":5,
+		"startDistanceY":5,
 	},
 	_create:function()
 	{
 		this._super();
 		this.element.ibxAutoScroll().ibxAddClass("ibx-rubber-band");
 		this._onMouseEventBound = this._onMouseEvent.bind(this);
-		this.element[0].addEventListener("mousedown", this._onMouseEventBound, false);
-		this.element[0].addEventListener("mouseup", this._onMouseEventBound, false);
-		this.element[0].addEventListener("mousemove", this._onMouseEventBound, false);
+		this.element[0].addEventListener("mousedown", this._onMouseEventBound);
+		this.element[0].addEventListener("mouseup", this._onMouseEventBound);
+		this.element[0].addEventListener("mousemove", this._onMouseEventBound);
 	},
 	_init:function()
 	{
@@ -554,12 +556,13 @@ $.widget("ibi.ibxRubberBand", $.Widget,
 	_onMouseEvent:function(e)
 	{
 		var eType = e.type;
+		var options = this.options;
 		var eTrueX = e.offsetX + this.element.prop("scrollLeft");
 		var eTrueY = e.offsetY + this.element.prop("scrollTop");
-		var options = this.options;
-		var isTarget = this.element.is(e.target);
 
-		if(eType == "mousedown" && isTarget)
+		console.log(e.offsetX, e.offsetY);
+
+		if(eType == "mousedown")
 		{
 			this.stop();
 
@@ -569,6 +572,10 @@ $.widget("ibi.ibxRubberBand", $.Widget,
 				var pos = this.element.css("position");
 				if(pos != "absolute")
 					this.element.css("position", "relative").data("ibxSelMgrRubberBandOrigPos", pos);
+
+				var isTarget = this.element.is(e.target);
+				var eTrueX = (isTarget ? 0 : e.target.offsetLeft) + e.offsetX;
+				var eTrueY = (isTarget ? 0 : e.target.offsetTop) + e.offsetY;
 				this._startPoint = {"x":eTrueX, "y":eTrueY};
 				this.element.ibxAddClass("ibx-sm-rubber-band-active");
 				this._rubberBand = $("<div class='ibx-sm-rubber-band'>").css({"left":eTrueX, "top":eTrueY}).appendTo(this.element);
