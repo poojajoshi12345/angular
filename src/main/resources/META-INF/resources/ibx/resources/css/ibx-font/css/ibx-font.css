@@ -327,6 +327,12 @@
 .ibx-glyph-verb-print:before {
   content: "\ea06";
 }
+.ibx-glyph-verb-list:before {
+  content: "\ea21";
+}
+.ibx-glyph-verb-count:before {
+  content: "\ea22";
+}
 .ibx-glyph-clear-filter:before {
   content: "\ea03";
 }
