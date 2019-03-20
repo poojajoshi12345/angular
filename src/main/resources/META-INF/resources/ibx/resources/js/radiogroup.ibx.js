@@ -216,13 +216,13 @@ $.ibi.ibxRadioGroup.addControl=function(grpName, ctrl)
 		grp.push(ctrl);
 	else
 	if(grp)
-		$(grp).ibxRadioGroup("addControl", ctrl)
+		$(grp).ibxWidget("addControl", ctrl)
 }
 $.ibi.ibxRadioGroup.removeControl=function(grpName, ctrl)
 {
 	var grp = this.grps[grpName];
 	if(grp && !(grp instanceof Array))
-		$(grp).ibxRadioGroup("removeControl", ctrl)
+		$(grp).ibxWidget("removeControl", ctrl)
 }
 
 $.widget("ibi.ibxHRadioGroup",$.ibi.ibxRadioGroup,{ options: { direction: "row" } });
