@@ -166,7 +166,10 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 					if(scrollInfo.infinite && !this._stopScrolling)
 						this.scroll(scrollInfo.steps, scrollInfo.scrollType, scrollInfo.scrollTime);
 					else
+					{
+						scrollInfo.pageInfo = this.getPageInfo();
 						this.element.dispatchEvent("ibx_endscroll", scrollInfo, false, false);
+					}
 					this.element.ibxRemoveClass("ibx-csl-scrolling");
 				}.bind(this, scrollInfo),
 			}, evt.data.animationOptions);
