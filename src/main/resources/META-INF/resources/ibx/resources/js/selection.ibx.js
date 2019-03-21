@@ -559,57 +559,65 @@ $.widget("ibi.ibxRubberBand", $.Widget,
 	_onMouseEvent:function(e)
 	{
 		var eType = e.type;
-		var options = this.options;
-		var eTrueX = e.offsetX + this.element.prop("scrollLeft");
-		var eTrueY = e.offsetY + this.element.prop("scrollTop");
-	
 		if(eType == "mousedown")
 		{
 			this.stop();
-
-			var event = this.element.dispatchEvent("ibx_beforerubberbandstart", null, true, true);
-			if(!event.isDefaultPrevented())
-			{
-				var pos = this.element.css("position");
-				if(pos != "absolute")
-					this.element.css("position", "relative").data("ibxSelMgrRubberBandOrigPos", pos);
-
-				var isTarget = this.element.is(e.target);
-				var eTrueX = (isTarget ? 0 : e.target.offsetLeft) + e.offsetX;
-				var eTrueY = (isTarget ? 0 : e.target.offsetTop) + e.offsetY;
-				this._startPoint = {"x":eTrueX, "y":eTrueY};
-				this.element.ibxAddClass("ibx-sm-rubber-band-active");
-				this._rubberBand = $("<div class='ibx-sm-rubber-band'>").css({"left":eTrueX, "top":eTrueY}).appendTo(this.element);
-				this.element.ibxAutoScroll("start");
-				this.element.dispatchEvent("ibx_rubberbandstart", null, true, false, this._rubberBand[0]);
-			}
+			this._startPoint = {"x":e.clientX, "y":e.clientY};
 		}
 		else
-		if(eType == "mouseup" && this._rubberBand)
+		if(eType == "mouseup")
 			this.stop();
 		else
-		if(eType == "mousemove" && this._rubberBand)
+		if(eType == "mousemove" && this._startPoint)
 		{
-			var left = Math.min(this._startPoint.x, eTrueX);
-			var top = Math.min(this._startPoint.y, eTrueY);
-			var width = Math.abs(this._startPoint.x - eTrueX);
-			var height = Math.abs(this._startPoint.y - eTrueY);
-			var rBounds = {"left": left, "top":top, "width":width, "height":height};
-			this._rubberBand.css(rBounds);
-			this.element.dispatchEvent("ibx_rubberbandchange", rBounds, true, false, this._rubberBand[0]);
+			var isActive = this.isActive();
+			var options = this.options;
+			if(!isActive && (Math.abs(this._startPoint.x - e.clientX) >= options.startDistanceX || Math.abs(this._startPoint.y - e.clientY) >= options.startDistanceY))
+			{
+				var event = this.element.dispatchEvent("ibx_beforerubberbandstart", null, true, true);
+				if(!event.isDefaultPrevented())
+				{
+					//start rubberbanding!
+					var pos = this.element.css("position");
+					if(pos != "absolute")
+						this.element.css("position", "relative").data("ibxSelMgrRubberBandOrigPos", pos);
+					this.element.ibxAddClass("ibx-sm-rubber-band-active");
+					this._rubberBand = $("<div class='ibx-sm-rubber-band'>").css({"left":eTrueX, "top":eTrueY}).appendTo(this.element);
+					this.element.ibxAutoScroll("start");
+					this.element.dispatchEvent("ibx_rubberbandstart", null, true, false, this._rubberBand[0]);
+
+					//have to recalculate the start point in terms of the grid, and not the target cell
+					var isTarget = this.element.is(e.target);
+					this._startPoint = {"x":(isTarget ? 0 : e.target.offsetLeft) + e.offsetX, "y":(isTarget ? 0 : e.target.offsetTop) + e.offsetY};
+				}
+			}
+			else
+			if(isActive)
+			{
+				var eTrueX = e.offsetX + this.element.prop("scrollLeft");
+				var eTrueY = e.offsetY + this.element.prop("scrollTop");
+				var left = Math.min(this._startPoint.x, eTrueX);
+				var top = Math.min(this._startPoint.y, eTrueY);
+				var width = Math.abs(this._startPoint.x - eTrueX);
+				var height = Math.abs(this._startPoint.y - eTrueY);
+				var rBounds = {"left": left, "top":top, "width":width, "height":height};
+				this._rubberBand.css(rBounds);
+				this.element.dispatchEvent("ibx_rubberbandchange", rBounds, true, false, this._rubberBand[0]);
+			}
 		}
 	},
 	stop:function(e)
 	{
 		if(this.isActive())
-		{
 			this.element.dispatchEvent("ibx_rubberbandend", null, true, false, this._rubberBand[0]);
-			this.element.ibxRemoveClass("ibx-sm-rubber-band-active").css("position", this.element.data("ibxSelMgrRubberBandOrigPos"));
-			this.element.ibxAutoScroll("stop");
+
+		this.element.ibxRemoveClass("ibx-sm-rubber-band-active").css("position", this.element.data("ibxSelMgrRubberBandOrigPos"));
+		this.element.ibxAutoScroll("stop");
+		delete this._startPoint;
+
+		if(this._rubberBand)
 			this._rubberBand.remove();
-			delete this._rubberBand;
-			delete this._startPoint;
-		}
+		delete this._rubberBand;
 	},
 	isActive:function()
 	{
