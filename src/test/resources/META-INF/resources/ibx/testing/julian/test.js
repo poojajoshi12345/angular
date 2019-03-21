@@ -1,190 +1,92 @@
-/*Copyright 1996-2016 Information Builders, Inc. All rights reserved.*/
-// $Revision$:
-
-/******************************************************************************
-	SPINNER
-******************************************************************************/
-$.widget("ibi.ibxSpinner", $.ibi.ibxTextField, 
-{
-	options:
+	_onMouseEvent:function(e)
 	{
-		"value": 0,
-		"min" :0,
-		"max" :100,
-		"step" :1,
-		"precision":3,
-		"fnFormat":null,
-
-		"btnGroupClass":"ibx-spinner-btn-grp",
-		"btnUpClass":"ibx-spinner-btn-up",
-		"btnUpOptions":
-		{
-		},
-		"btnDownClass":"ibx-spinner-btn-down",
-		"btnDownOptions":
-		{
-		},
-		"aria":{}
-	},
-	_widgetClass:"ibx-spinner",
-	_create:function()
-	{
-		this._btnUp = $("<div>").ibxButton().on("mousedown mouseup mouseout", this._onSpinBtnEvent.bind(this));
-		this._btnDown = $("<div>").ibxButton().on("mousedown mouseup mouseout", this._onSpinBtnEvent.bind(this));
-		this._btnBox = $("<div>").ibxVButtonGroup().append(this._btnUp, this._btnDown);
-
-		this._super();
-		this._textInput.css('width', '1px');
-		this._textInput.ibxAddClass("ibx-spinner-text-input");
-		this.element.on("ibx_textchanging", this._onTextChanging.bind(this)).append(this._btnBox);
-	},
-	_setAccessibility:function(accessible, aria)
-	{
+		var eType = e.type;
 		var options = this.options;
-		aria = this._super(accessible, aria);
-		var attr = 
+		var eTrueX = e.offsetX + this.element.prop("scrollLeft");
+		var eTrueY = e.offsetY + this.element.prop("scrollTop");
+		
+		if(eType == "mousedown")
 		{
-			"role":"spinbutton",
-			"aria-valuemin":options.min,
-			"aria-valuemax":options.max,
-			"aria-valuenow":options.value,
-		};
-		accessible ? this._textInput.attr(attr) : this._textInput.removeAttr("aria-valuemin aria-valuemax aria-valuenow");
-		this._btnUp.ibxButton("option", "aria.hidden", true);
-		this._btnDown.ibxButton("option", "aria.hidden", true);
-		return aria;
-	},
-	_init: function ()
-	{
-		this._super();
-		var options = this.options;
-		this._btnUp.ibxAddClass(options.btnUpClass);
-		this._btnDown.ibxAddClass(options.btnDownClass);
-		this._btnBox.ibxAddClass(options.btnGroupClass);
-		this._setValue(options.value, true);
-	},
-	_destroy: function ()
-	{
-		this._btnBox.remove();
-		this._super();
-	},
-	_intervalId: null,
-	_bUp: true,
-	_cleared: false,
-	_onSpinBtnEvent:function(e)
-	{
-		if(e.type == "mouseup" || e.type == "mouseout")
-		{
-			this.element.dispatchEvent("ibx_spinend", null, true, false);
-			clearInterval(this._intervalId);
-			this._intervalId = null;
-			this._cleared = true;
-		}
-		else
-		if(e.type == "mousedown")
-		{
-			this._onTextInputBlur(e); // just in case user typed a value
-			this.element.dispatchEvent("ibx_spinstart", null, true, false);
-			this._cleared = false;
-			this._bUp = $(e.currentTarget).hasClass(this.options.btnUpClass);
-			this._stepSpinner(this._bUp);
-			setTimeout(function(e)
+			this.stop();
+
+			var event = this.element.dispatchEvent("ibx_beforerubberbandstart", null, true, true);
+			if(!event.isDefaultPrevented())
 			{
-				if (!this._cleared)
+				var pos = this.element.css("position");
+				if(pos != "absolute")
+					this.element.css("position", "relative").data("ibxSelMgrRubberBandOrigPos", pos);
+
+				var isTarget = this.element.is(e.target);
+				var eTrueX = (isTarget ? 0 : e.target.offsetLeft) + e.offsetX;
+				var eTrueY = (isTarget ? 0 : e.target.offsetTop) + e.offsetY;
+				this._startPoint = {"x":eTrueX, "y":eTrueY};
+				this.element.ibxAddClass("ibx-sm-rubber-band-active");
+				this._rubberBand = $("<div class='ibx-sm-rubber-band'>").css({"left":eTrueX, "top":eTrueY}).appendTo(this.element);
+				this.element.ibxAutoScroll("start");
+				this.element.dispatchEvent("ibx_rubberbandstart", null, true, false, this._rubberBand[0]);
+			}
+		}
+		else
+		if(eType == "mouseup" && this._rubberBand)
+			this.stop();
+		else
+		if(eType == "mousemove" && this._rubberBand)
+		{
+			var left = Math.min(this._startPoint.x, eTrueX);
+			var top = Math.min(this._startPoint.y, eTrueY);
+			var width = Math.abs(this._startPoint.x - eTrueX);
+			var height = Math.abs(this._startPoint.y - eTrueY);
+			var rBounds = {"left": left, "top":top, "width":width, "height":height};
+			this._rubberBand.css(rBounds);
+			this.element.dispatchEvent("ibx_rubberbandchange", rBounds, true, false, this._rubberBand[0]);
+		}
+	},
+
+
+	_onMouseEvent:function(e)
+	{
+		var eType = e.type;
+		var options = this.options;
+		var eTrueX = e.offsetX + this.element.prop("scrollLeft");
+		var eTrueY = e.offsetY + this.element.prop("scrollTop");
+		
+		if(eType == "mousedown")
+		{
+			this.stop();
+			var pos = this.element.css("position");
+			if(pos != "absolute")
+				this.element.css("position", "relative").data("ibxSelMgrRubberBandOrigPos", pos);
+			var isTarget = this.element.is(e.target);
+			var eTrueX = (isTarget ? 0 : e.target.offsetLeft) + e.offsetX;//if not target have to offset because coords are relative to target until dragging (pointer-events:none while dragging).
+			var eTrueY = (isTarget ? 0 : e.target.offsetTop) + e.offsetY;//if not target have to offset because coords are relative to target until dragging (pointer-events:none while dragging).
+			this._startPoint = {"x":eTrueX, "y":eTrueY};
+		}
+		else
+		if(eType == "mouseup")
+			this.stop();
+		else
+		if(eType == "mousemove" && this._startPoint)
+		{
+			if(!this._rubberBand)
+			{
+				var event = this.element.dispatchEvent("ibx_beforerubberbandstart", null, true, true);
+				if(!event.isDefaultPrevented())
 				{
-					if (this._intervalId)
-						clearInterval(this._intervalId);
-					this._intervalId = setInterval(this._onPressTimer.bind(this), 100);
+					this.element.ibxAddClass("ibx-sm-rubber-band-active");
+					this._rubberBand = $("<div class='ibx-sm-rubber-band'>").css({"left":eTrueX, "top":eTrueY}).appendTo(this.element);
+					this.element.ibxAutoScroll("start");
+					this.element.dispatchEvent("ibx_rubberbandstart", null, true, false, this._rubberBand[0]);
 				}
-			}.bind(this), 200);
+			}
+			else
+			{
+				var left = Math.min(this._startPoint.x, eTrueX);
+				var top = Math.min(this._startPoint.y, eTrueY);
+				var width = Math.abs(this._startPoint.x - eTrueX);
+				var height = Math.abs(this._startPoint.y - eTrueY);
+				var rBounds = {"left": left, "top":top, "width":width, "height":height};
+				this._rubberBand.css(rBounds);
+				this.element.dispatchEvent("ibx_rubberbandchange", rBounds, true, false, this._rubberBand[0]);
+			}
 		}
 	},
-	_onPressTimer:function(e)
-	{
-		this._stepSpinner(this._bUp);
-	},
-	_onTextInputKeyDown: function (e)
-	{
-		this._super(e);
-		if(e.keyCode == $.ui.keyCode.UP)
-		{
-			this._stepSpinner(true);
-			e.preventDefault();
-		}
-		else
-		if(e.keyCode == $.ui.keyCode.DOWN)
-		{
-			this._stepSpinner(false);
-			e.preventDefault();
-		}
-	},
-	_onTextInputBlur: function (e)
-	{
-		var value = this._setValue(this._textInput.val(), true);
-		if (this.options.value != value)
-			this._trigger("textchanged", e, this.element);
-	},
-	_onTextChanging: function (e)
-	{
-		if (!jQuery.isNumeric(e.key) && e.which != 9 && e.which != 37 && e.which != 38 && e.which != 39 && e.which != 40 && e.which != 8 && e.which != 46 && e.which != 190)
-			e.preventDefault();
-	},
-	_stepSpinner: function (bUp)
-	{
-		var info = this._getInfo();
-		info.value += bUp ? info.step : -info.step;
-		this._setValue(info.value, true);
-		this.refresh();
-	},
-	_adjustStep: function (val, min, max, step)
-	{
-		var lower = Math.min(Math.floor((val - min) / step) * step + min, max);
-		var higher = Math.min(Math.ceil((val - min) / step) * step + min, max);
-
-		if (val - lower < higher - val)
-			return lower;
-		else
-			return higher;
-	},
-	_setValue: function (value, bFormat)
-	{
-		var options = this.options;
-		var curVal = options.value;
-		value =  Number(value)
-
-		if(isNaN(value))
-			value = options.min;
-
-		value = Math.max(value, options.min);
-		value = Math.min(value, options.max);
-		var value = this._adjustStep(value, options.min, options.max, options.step);
-
-		var isFloat = !!(options.step % 1) 
-		this.options.value = value = (isFloat ? Number(value.toFixed(options.precision)) : value);
-		this.options.text = bFormat && this.options.fnFormat ? this.options.fnFormat(value) : value;
-		this.refresh();
-		if(value != curVal)
-			this._trigger("change", null, this._getInfo());
-		return value;
-	},
-	_getInfo: function ()
-	{
-		var options = this.options;
-		return { elem: this.element, value: options.value, min: this.options.min, max: this.options.max, step: this.options.step};
-	},
-	_refresh: function ()
-	{
-		var options = this.options;
-		options.value = this._adjustStep(options.value, options.min, options.max, options.step);
-		options.text = this.options.fnFormat ? this.options.fnFormat(options.value) : options.value;
-		this._super();
-		if (this._btnBox)
-			this._btnBox.ibxWidget('refresh');
-	}
-});
-$.ibi.ibxSpinner.statics = 
-{
-};
-
-
-//# sourceURL=spinner.ibx.js

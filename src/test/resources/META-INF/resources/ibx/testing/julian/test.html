@@ -32,10 +32,10 @@
 				grid.ibxWidget("getHeaders").on("click", function(e)
 				{
 					var colInfo = $(e.currentTarget).data("ibxDataGridCol");
-				});
-
-				var sm = grid.ibxWidget("getSelectionManager");
-				sm.option({"rubberBand":true, "rubberBandPartialSelect":true});
+				})
+				
+				// var sm = grid.ibxWidget("getSelectionManager");
+				// sm.option({"rubberBand":true, "rubberBandPartialSelect":true});
 
 
 				// grid.find(".dgrid-cell").attr("tabindex", "");
@@ -61,7 +61,13 @@
 			{
 				xmargin:10px;
 			}
-
+			.test-tree
+			{
+				margin:50px;
+				width:150px;
+				height:200px;
+				border:1px solid #ccc;
+			}
 			.test-select
 			{
 				padding:2px;
@@ -88,14 +94,32 @@
 			}
 			.test-grid .ibx-sm-selected
 			{
-				outline:2px solid black;
+				outline:1px solid black;
+				background-color:#aaa;
+				color:white;
 			}
 		</style>
 	</head>
 	<body tabindex="0" class="ibx-root" data-ibx-type="ibxVBox" data-ibxp-align="start">
 
 
-		<div tabindex="0" class="test-grid" data-ibx-type="ibxDataGrid" data-ibxp-row-select="false"></div>
+		<div tabindex="0" class="test-ctrl test-tree" data-ibx-type="ibxTree" data-ibxp-sel-type="multi">
+			<div data-ibx-type="ibxTreeNode" data-ibxp-expanded="true">Root Item
+				<div data-ibx-type="ibxTreeNode" data-ibxp-expanded="true">Folder 1
+					<div data-ibx-type="ibxTreeNode" data-ibxp-draggable="true">Item 1</div>
+					<div data-ibx-type="ibxTreeNode" data-ibxp-draggable="true">Item 2</div>
+					<div data-ibx-type="ibxTreeNode" data-ibxp-draggable="true">Item 3</div>
+				</div>
+				<div data-ibx-type="ibxTreeNode" data-ibxp-expanded="true">Folder 2
+					<div data-ibx-type="ibxTreeNode">Item 1</div>
+					<div data-ibx-type="ibxTreeNode">Item 2</div>
+					<div data-ibx-type="ibxTreeNode">Item 3</div>
+				</div>
+			</div>
+		</div>
+
+
+		<!-- <div tabindex="0" class="test-grid" data-ibx-type="ibxDataGrid" data-ibxp-row-select="false"></div> -->
 
 		<!-- <div tabindex="0" class="test-menuButton" data-ibx-type="ibxSplitMenuButton">SplitMenuButton
 			<div data-ibx-type="ibxMenu">

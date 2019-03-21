@@ -8,6 +8,7 @@ $.widget("ibi.ibxPropertyGrid", $.ibi.ibxDataGrid,
 {
 	options:
 	{
+		selType:"nav",
 		colMap:[{title:"Property", size:"15em", justify:"start"}, {title:"Value", size:"flex", justify:"start"}],
 		showRowHeaders:false,
 		indentColumn:0,
@@ -22,7 +23,6 @@ $.widget("ibi.ibxPropertyGrid", $.ibi.ibxDataGrid,
 	{
 		this._super();
 		this.element.data("ibiIbxDataGrid", this);
-		this.getSelectionManager().options.type = "nav";
 	},
 	_setAccessibility:function(accessible, aria)
 	{

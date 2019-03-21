@@ -502,7 +502,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 			this.element.ibxToggleClass("ibx-sm-selection-root", (value != "none"));
 			if(changed)
 			{
-				this.element.attr("aria-multiselectable", (value == "multi") ? true : false),
+				(value == "multi") ? this.element.attr("aria-multiselectable", true) : (this.element.removeAttr("aria-multiselectable"));
 				this.deselectAll(true);
 			}
 		}
