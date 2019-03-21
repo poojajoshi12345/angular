@@ -134,6 +134,8 @@ $.widget("ibi.ibxDataGridSelectionManager", $.ibi.ibxSelectionManager,
 		"focusResetOnBlur":false,
 		"navKeyRoot":true,
 		"toggleSelection":true,
+		"rubberBand":true,
+		"rubberBandPartialSelect":true,
 		"escClearSelection":true,
 		"selectableChildren":".dgrid-cell", //can be elements/classes/etc.
 		"cacheSelectableChildren":true,
