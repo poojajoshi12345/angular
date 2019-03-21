@@ -240,7 +240,8 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 				else
 				if(isMulti)
 				{
-					this.deselectAll();
+					if(!this.isSelected(selTarget))
+						this.deselectAll();
 					this.toggleSelected(selTarget, true);
 				}
 				else
@@ -249,7 +250,9 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 		}
 		else
 		if(e.type == "mouseup")
+		{
 			this._eLastMouseDown = null;
+		}
 	},
 	_onRubberBandEvent:function(e)
 	{
@@ -559,7 +562,7 @@ $.widget("ibi.ibxRubberBand", $.Widget,
 		var options = this.options;
 		var eTrueX = e.offsetX + this.element.prop("scrollLeft");
 		var eTrueY = e.offsetY + this.element.prop("scrollTop");
-
+	
 		if(eType == "mousedown")
 		{
 			this.stop();
@@ -583,10 +586,7 @@ $.widget("ibi.ibxRubberBand", $.Widget,
 		}
 		else
 		if(eType == "mouseup" && this._rubberBand)
-		{
 			this.stop();
-			this.element.ibxAutoScroll("stop");
-		}
 		else
 		if(eType == "mousemove" && this._rubberBand)
 		{
@@ -601,14 +601,19 @@ $.widget("ibi.ibxRubberBand", $.Widget,
 	},
 	stop:function(e)
 	{
-		if(this._rubberBand)
+		if(this.isActive())
 		{
 			this.element.dispatchEvent("ibx_rubberbandend", null, true, false, this._rubberBand[0]);
 			this.element.ibxRemoveClass("ibx-sm-rubber-band-active").css("position", this.element.data("ibxSelMgrRubberBandOrigPos"));
+			this.element.ibxAutoScroll("stop");
 			this._rubberBand.remove();
 			delete this._rubberBand;
 			delete this._startPoint;
 		}
+	},
+	isActive:function()
+	{
+		return this.element.is(".ibx-sm-rubber-band-active");
 	},
 	_setOption:function(key, value)
 	{
