@@ -23,6 +23,7 @@ $.widget("ibi.ibxPropertyGrid", $.ibi.ibxDataGrid,
 	{
 		this._super();
 		this.element.data("ibiIbxDataGrid", this);
+		this._sm.option({rubberBand:false, rubberBandPartialSelect:false});
 	},
 	_setAccessibility:function(accessible, aria)
 	{
