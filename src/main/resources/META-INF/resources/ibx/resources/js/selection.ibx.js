@@ -15,7 +15,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 		"navKeyDir":"both",					//horizontal = left/right, vertical = up/down, or both
 		"rubberBand":false,					//selection by rubberband
 		"rubberBandPartialSelect":false,	//rubberband must fully enclose the item for selection
-		"selectableChildren":"*",			//class for what children are selectable.
+		"selectableChildren":null,			//class for what children are selectable.
 		"cacheSelectableChildren":false,	//when true, save last retreived to save time
 	},
 	_widgetClass:"ibx-selection-manager",
@@ -285,7 +285,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 	},
 	mapToSelectable:function(el)
 	{
-		return $(el).closest(".ibx-sm-selectable, " + this.options.selectableChildren);
+		return $(el).closest(".ibx-sm-selectable");
 	},
 	mapFromSelectable:function(el)
 	{
@@ -313,9 +313,9 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 
 			if(options.selectableChildren)
 				children =  children.filter(options.selectableChildren);
-			children.ibxAddClass("ibx-sm-selectable");
 
 			this.updateSelectableCache(children);
+			children.ibxAddClass("ibx-sm-selectable");
 			children =  selector ? children.filter(selector) : children;
 		}
 		return children;
