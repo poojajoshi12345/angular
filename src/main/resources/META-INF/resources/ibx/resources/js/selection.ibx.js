@@ -105,11 +105,10 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 
 			if(firstKid.length && lastKid.length)
 			{
-				var mappedTarget = this.mapToSelectable(e.target);
-				if((firstKid.is(mappedTarget) || $.contains(firstKid[0], mappedTarget)) && e.shiftKey)
+				if((firstKid.is(e.target) || $.contains(firstKid[0], e.target)) && e.shiftKey)
 					target = focusKids.last();
 				else
-				if((lastKid.is(mappedTarget) || $.contains(lastKid[0], mappedTarget)) && !e.shiftKey)
+				if((lastKid.is(e.target) || $.contains(lastKid[0], e.target)) && !e.shiftKey)
 					target = focusKids.first();
 			}
 
