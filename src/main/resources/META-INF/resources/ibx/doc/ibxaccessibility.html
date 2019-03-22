@@ -1,6 +1,10 @@
 <!--Copyright 1996-2016 Information Builders, Inc. All rights reserved.-->
 <!--$Revision$:-->
 <script type="text/javascript">
+	ibx(function()
+	{
+		ibx.bindElements(".acx-exp-main-frame");
+	});
 </script>
 <style type="text/css">
 	pre
@@ -12,6 +16,48 @@
 		padding:5px;
 		overflow:auto;
 		-webkit-overflow-scrolling: touch;
+	}
+	.acx-exp-main-frame
+	{
+		width:35em;
+		height:20em;
+	}
+	.acx-exp-tbar
+	{
+		flex:0 0 auto;
+	}
+	.acx-content-box
+	{
+		flex:1 1 auto;
+	}
+	.acx-exp-tree
+	{
+		flex:0 0 atuo;
+		width:10em;			}
+	.acx-exp-files-box
+	{
+		flex:1 1 auto;
+	}
+	.acx-exp-folder-list
+	{
+		flex:1 1 auto;
+	}
+	.acx-exp-file-list
+	{
+		flex:1 1 auto;
+	}
+	.acx-exp-ctrl
+	{
+		padding:2px;
+		margin:2px;
+		border:1px solid #ccc;
+	}
+	.acx-exp-file
+	{
+		height:20px;
+		margin:2px;
+		padding:1px;
+		border:1px solid #ccc;
 	}
 </style>
 <article>
@@ -70,15 +116,81 @@
 			<pre>
 &lt;div tabindex="0" role="button">Press Me!&lt;/div>
 			</pre>
-			The browser does not pay attention to the <a href="https://www.w3.org/WAI/PF/aria-1.1/roles"><i>role</i></a> attribute.  It is there entirely for the Reader's benefit.  So, the second piece of markup will not render as a button, or allow a user to interact with it as such.  The ibx library takes care of all of that, so developers don't have to worry about it.
+			The browser does not pay attention to the <a href="https://www.w3.org/WAI/PF/aria-1.1/roles"><i>role</i></a> attribute.  It is there entirely for the Reader's benefit.  So, the second piece of markup will not render as a button, or allow a user to interact with it as such.
+		</p>
+		<p>
+			The majority of widgets built into ibx are already ARIA aware and screen readers will render them properly.
 		</p>
 	</section>
 	<section>
-		<h4>ibxWidgets and ARIA</h4>																							+			
-		The base widget for all of the ibx library is ibxWidget.  This has a function called <i>setAccessibility(accessible, aria)</i>.  This function is called at key points in the lifecycle of the widget.  Usually when its state changes.  The first parameter "accessible" is a boolean, and it tells the widget to either add or remove the properties specified in the second parameter, "aria".
+		<h4>ibxWidgets and ARIA</h4>
+		The base widget for all of the ibx library is ibxWidget.  This has a function called:
+		
+<pre>
+setAccessibility(accessible, aria)</i>.
+</pre>	
+		This function is called at key points in the lifecycle of the widget.  Usually when its state changes.  The first parameter "accessible" is a boolean, and it tells the widget to either add or remove the properties specified in the second parameter, "aria".
 		<p>
 		The "aria parameter is a simple object which can contain any valid ARIA attribute name, such as - label/lebeleldby/owns/expanded/etc.  Whatever is in this object will be prefixed with "aria-" and added as attributes to the widget's element.
 		</p>
+		<p>
+		However, there are two special properties the aria object can have.  These are "role", and "accessible".
+		<ul>
+			<li>role
+				<br>
+					This is applied as the 'role' attribute for the element.  Roles are almost always set by ibx, but if you are creating a customized widget that needs a special role, you can set it here.
+				</br>
+			</li>
+			<p></p>
+			<li>accessible
+				<br>
+					This allows you to turn off all the accessibility for a given widget.  Probably never used.
+				</br>
+			</li>
+		</ul> 
+	</section>
 
+	<section>
+		<h4>Navigation</h4>
+		A large part of accessibility is exposing all parts of the UI to users via the keyboard.  Often, this means establishing a logical tab order through the UI.  But, tabbing is not the whole story.  Once certain parts of the UI are active their navigation would be via the arrow keys.
+		<p>
+			Let's look at the following explorer style UI and see how it would be navigated:
+
+		<div tabindex="0" class="acx-exp-ctrl acx-exp-main-frame" data-ibx-type="ibxVBox" data-ibxp-align="stretch" data-ibxp-focus-root="true" data-ibxp-focus-default="true">
+			<div class="acx-exp-ctrl acx-exp-tbar" data-ibx-type="ibxHBox" data-ibxp-align="center">
+				<div tabindex="0" title="Test button 1" class="acx-exp-ctrl" data-ibx-type="ibxButton" data-ibxp-glyph-classes="fa fa-question"></div>
+				<div tabindex="0" title="Test button 2" class="acx-exp-ctrl" data-ibx-type="ibxButton" data-ibxp-glyph-classes="fa fa-question"></div>
+				<div tabindex="0" title="Test button 3" class="acx-exp-ctrl" data-ibx-type="ibxButton" data-ibxp-glyph-classes="fa fa-question"></div>
+			</div>
+			<div class="acx-exp-ctrl acx-content-box" data-ibx-type="ibxHBox" data-ibxp-align="stretch">
+				<div tabindex="0" title="File System Tree" class="acx-exp-ctrl acx-exp-tree" data-ibx-type="ibxTree">
+					<div data-ibx-type="ibxTreeNode" data-ibxp-expanded="true">File System Root
+						<div data-ibx-type="ibxTreeNode" data-ibxp-expanded="true">Folder 1
+							<div data-ibx-type="ibxTreeNode">Folder A</div>
+							<div data-ibx-type="ibxTreeNode">Folder B</div>
+							<div data-ibx-type="ibxTreeNode">Folder C</div>
+						</div>
+					</div>
+				</div>
+				<div class="acx-exp-ctrl acx-exp-files-box" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
+					<div>Child Folders</div>
+					<div tabindex="0" title="File System Folder List" class="acx-exp-ctrl acx-exp-folder-list" data-ibxp-aria.role="list" data-ibx-type="ibxHBox" data-ibxp-wrap="true" data-ibxp-nav-key-root="true" data-ibxp-focus-default="true">
+						<div tabindex="-1" title="Folder" class="acx-exp-file" role="listitem">Item</div>
+						<div tabindex="-1" title="Folder" class="acx-exp-file" role="listitem">Item</div>
+						<div tabindex="-1" title="Folder" class="acx-exp-file" role="listitem">Item</div>
+						<div tabindex="-1" title="Folder" class="acx-exp-file" role="listitem">Item</div>
+						<div tabindex="-1" title="Folder" class="acx-exp-file" role="listitem">Item</div>
+					</div>
+					<div>Child Files</div>
+					<div tabindex="0" title="File System File List" class="acx-exp-ctrl acx-exp-file-list" data-ibxp-aria.role="list" data-ibx-type="ibxHBox" data-ibxp-wrap="true" data-ibxp-nav-key-root="true" data-ibxp-focus-default="true">
+						<div tabindex="-1" title="File 1" class="acx-exp-file" role="listitem">Item</div>
+						<div tabindex="-1" title="File 2" class="acx-exp-file" role="listitem">Item</div>
+						<div tabindex="-1" title="File 3" class="acx-exp-file" role="listitem">Item</div>
+						<div tabindex="-1" title="File 4" class="acx-exp-file" role="listitem">Item</div>
+						<div tabindex="-1" title="File 5" class="acx-exp-file" role="listitem">Item</div>
+					</div>
+				</div>
+			</div>
+		</div>
 	</section>
 </article>

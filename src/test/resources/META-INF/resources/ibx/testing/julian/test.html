@@ -43,6 +43,8 @@
 				// {
 				// 	"selectableChildren":".dgrid-row"
 				// });
+
+				var vBox = $("<div>").ibxVBox({align:"stretch"})
 			},true);
 		</script>
 		<style type="text/css">
@@ -96,7 +98,7 @@
 
 			.acx-exp-main-frame
 			{
-				width:50em;
+				width:35em;
 				height:20em;
 			}
 			.acx-exp-tbar
@@ -115,12 +117,28 @@
 			{
 				flex:1 1 auto;
 			}
+			.acx-exp-folder-list
+			{
+				flex:1 1 auto;
+			}
+			.acx-exp-file-list
+			{
+				flex:1 1 auto;
+			}
 			.acx-exp-ctrl
 			{
 				padding:2px;
 				margin:2px;
 				border:1px solid #ccc;
 			}
+			.acx-exp-file
+			{
+				height:20px;
+				margin:2px;
+				padding:1px;
+				border:1px solid #ccc;
+			}
+
 		</style>
 	</head>
 	<body class="ibx-root" data-ibx-type="ibxVBox" data-ibxp-align="start">
@@ -132,7 +150,7 @@
 				<div tabindex="0" title="Test button 3" class="acx-exp-ctrl" data-ibx-type="ibxButton" data-ibxp-glyph-classes="fa fa-question"></div>
 			</div>
 			<div class="acx-exp-ctrl acx-content-box" data-ibx-type="ibxHBox" data-ibxp-align="stretch">
-				<div tabindex="0" class="acx-exp-ctrl acx-exp-tree" data-ibx-type="ibxTree">
+				<div tabindex="0" title="File System Tree" class="acx-exp-ctrl acx-exp-tree" data-ibx-type="ibxTree">
 					<div data-ibx-type="ibxTreeNode" data-ibxp-expanded="true">File System Root
 						<div data-ibx-type="ibxTreeNode" data-ibxp-expanded="true">Folder 1
 							<div data-ibx-type="ibxTreeNode">Folder A</div>
@@ -142,10 +160,26 @@
 					</div>
 				</div>
 				<div class="acx-exp-ctrl acx-exp-files-box" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
+					<div>Child Folders</div>
+					<div tabindex="0" title="File System Folder List" class="acx-exp-ctrl acx-exp-folder-list" data-ibxp-aria.role="list" data-ibx-type="ibxHBox" data-ibxp-wrap="true" data-ibxp-nav-key-root="true" data-ibxp-focus-default="true">
+						<div tabindex="-1" title="Folder" class="acx-exp-file" role="listitem">Item</div>
+						<div tabindex="-1" title="Folder" class="acx-exp-file" role="listitem">Item</div>
+						<div tabindex="-1" title="Folder" class="acx-exp-file" role="listitem">Item</div>
+						<div tabindex="-1" title="Folder" class="acx-exp-file" role="listitem">Item</div>
+						<div tabindex="-1" title="Folder" class="acx-exp-file" role="listitem">Item</div>
+					</div>
+					<div>Child Files</div>
+					<div tabindex="0" title="File System File List" class="acx-exp-ctrl acx-exp-file-list" data-ibxp-aria.role="list" data-ibx-type="ibxHBox" data-ibxp-wrap="true" data-ibxp-nav-key-root="true" data-ibxp-focus-default="true">
+						<div tabindex="-1" title="File 1" class="acx-exp-file" role="listitem">Item</div>
+						<div tabindex="-1" title="File 2" class="acx-exp-file" role="listitem">Item</div>
+						<div tabindex="-1" title="File 3" class="acx-exp-file" role="listitem">Item</div>
+						<div tabindex="-1" title="File 4" class="acx-exp-file" role="listitem">Item</div>
+						<div tabindex="-1" title="File 5" class="acx-exp-file" role="listitem">Item</div>
+					</div>
 				</div>
 			</div>
 		</div>
-
+		<div tabindex="0">Julian</div>
 		<!-- <div tabindex="0" class="test-ctrl test-tree" data-ibx-type="ibxTree" data-ibxp-sel-type="multi">
 			<div data-ibx-type="ibxTreeNode" data-ibxp-expanded="true">Root Item
 				<div data-ibx-type="ibxTreeNode" data-ibxp-expanded="true">Folder 1
