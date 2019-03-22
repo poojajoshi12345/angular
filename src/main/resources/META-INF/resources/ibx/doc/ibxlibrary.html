@@ -8,12 +8,19 @@
 		window.location = href;
 	}
 
+	var ignoreWidget = 
+	{
+		ibxDataGridRow:true,
+	}
 	var sectionTemplate = $(".ibx-widget-info[data-ibx-no-bind]");
 	var temp = $("<div>");
 	var widgets = [];
 	var n = 0;
 	for(var name in $.ibi)
 	{
+		if(ignoreWidget[name])
+			continue;
+
 		try
 		{
 			var ctor = $.ibi[name];

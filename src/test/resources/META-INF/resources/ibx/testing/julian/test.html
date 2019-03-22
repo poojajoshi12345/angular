@@ -25,7 +25,7 @@
 				});
 
 				var grid = $(".test-grid");
-				grid.ibxWidget("initGrid", 5, 13).ibxWidget("showColumn", 1, true).on("click", function(e)
+				grid.ibxWidget("initGrid", 5, 5).ibxWidget("showColumn", 1, true).on("click", function(e)
 				{
 					
 				});
@@ -34,9 +34,7 @@
 					var colInfo = $(e.currentTarget).data("ibxDataGridCol");
 				})
 				
-				// var sm = grid.ibxWidget("getSelectionManager");
-				// sm.option({"rubberBand":true, "rubberBandPartialSelect":true});
-
+			//	$(".dgrid-cell").ibxLabel({text:"Julian", glyph:"accessible", glyphClasses:"material-icons"});
 
 				// grid.find(".dgrid-cell").attr("tabindex", "");
 				// grid.find(".dgrid-row").attr("tabindex", -1);
@@ -45,7 +43,6 @@
 				// {
 				// 	"selectableChildren":".dgrid-row"
 				// });
-
 			},true);
 		</script>
 		<style type="text/css">
@@ -59,7 +56,7 @@
 			}
 			body > div
 			{
-				xmargin:10px;
+				margin:10px;
 			}
 			.test-tree
 			{
@@ -86,8 +83,6 @@
 			}
 			.test-grid
 			{
-
-				margin:10px 0px 0px 10px;
 				width:400px;
 				height:500px;
 				border:1px solid #ccc;
@@ -98,10 +93,58 @@
 				background-color:#aaa;
 				color:white;
 			}
+
+			.acx-exp-main-frame
+			{
+				width:50em;
+				height:20em;
+			}
+			.acx-exp-tbar
+			{
+				flex:0 0 auto;
+			}
+			.acx-content-box
+			{
+				flex:1 1 auto;
+			}
+			.acx-exp-tree
+			{
+				flex:0 0 atuo;
+				width:10em;			}
+			.acx-exp-files-box
+			{
+				flex:1 1 auto;
+			}
+			.acx-exp-ctrl
+			{
+				padding:2px;
+				margin:2px;
+				border:1px solid #ccc;
+			}
 		</style>
 	</head>
-	<body tabindex="0" class="ibx-root" data-ibx-type="ibxVBox" data-ibxp-align="start">
+	<body class="ibx-root" data-ibx-type="ibxVBox" data-ibxp-align="start">
 
+		<div tabindex="0" class="acx-exp-ctrl acx-exp-main-frame" data-ibx-type="ibxVBox" data-ibxp-align="stretch" data-ibxp-focus-root="true" data-ibxp-focus-default="true">
+			<div class="acx-exp-ctrl acx-exp-tbar" data-ibx-type="ibxHBox" data-ibxp-align="center">
+				<div tabindex="0" title="Test button 1" class="acx-exp-ctrl" data-ibx-type="ibxButton" data-ibxp-glyph-classes="fa fa-question"></div>
+				<div tabindex="0" title="Test button 2" class="acx-exp-ctrl" data-ibx-type="ibxButton" data-ibxp-glyph-classes="fa fa-question"></div>
+				<div tabindex="0" title="Test button 3" class="acx-exp-ctrl" data-ibx-type="ibxButton" data-ibxp-glyph-classes="fa fa-question"></div>
+			</div>
+			<div class="acx-exp-ctrl acx-content-box" data-ibx-type="ibxHBox" data-ibxp-align="stretch">
+				<div tabindex="0" class="acx-exp-ctrl acx-exp-tree" data-ibx-type="ibxTree">
+					<div data-ibx-type="ibxTreeNode" data-ibxp-expanded="true">File System Root
+						<div data-ibx-type="ibxTreeNode" data-ibxp-expanded="true">Folder 1
+							<div data-ibx-type="ibxTreeNode">Folder A</div>
+							<div data-ibx-type="ibxTreeNode">Folder B</div>
+							<div data-ibx-type="ibxTreeNode">Folder C</div>
+						</div>
+					</div>
+				</div>
+				<div class="acx-exp-ctrl acx-exp-files-box" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
+				</div>
+			</div>
+		</div>
 
 		<!-- <div tabindex="0" class="test-ctrl test-tree" data-ibx-type="ibxTree" data-ibxp-sel-type="multi">
 			<div data-ibx-type="ibxTreeNode" data-ibxp-expanded="true">Root Item
@@ -119,7 +162,7 @@
 		</div> -->
 
 
-		<div tabindex="0" class="test-grid" data-ibx-type="ibxDataGrid" data-ibxp-row-select="false"></div>
+		<!-- <div tabindex="0" class="test-grid" data-ibx-type="ibxDataGrid" data-ibxp-row-select="false" data-ibxp-sel-type="multi"></div> -->
 
 		<!-- <div tabindex="0" class="test-menuButton" data-ibx-type="ibxSplitMenuButton">SplitMenuButton
 			<div data-ibx-type="ibxMenu">
@@ -137,8 +180,8 @@
 			<div class="test-item" data-ibx-type="ibxSelectMenuItem" data-ibxp-user-value="i4">James Hyman</div>
 			<div class="test-item" data-ibx-type="ibxSelectMenuItem" data-ibxp-user-value="i5" xdata-ibxp-selected="true">Basil Hyman</div>
 			<div class="test-item" data-ibx-type="ibxSelectMenuItem" data-ibxp-user-value="i6">Anne Hyman</div>
-		</div>
- -->
+		</div> -->
+
 		<!-- <div tabindex="0" class="test-grid" data-ibx-type="ibxDataGrid" data-ibxp-sortable-columns="true" data-ibxp-sortable-rows="true"></div>
 
 		<div tabindex="0" class="test-slider" data-ibx-type="ibxSlider"></div>
