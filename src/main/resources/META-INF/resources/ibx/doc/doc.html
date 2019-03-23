@@ -57,10 +57,18 @@
 							for(var i = 0; i < sections.length; ++i)
 							{
 								section = $(sections[i]);
-								var title = section.children("h1, h2, h3, h4, h5, h6").first();
-								var tocSection = $(sformat("<a class='toc-entry toc-sub-section' href='#{1}'>{2}</a>", section.prop("id"), title.text()));
-								section.data("tocEntry", tocSection);
-								toc.append(tocSection);
+								var titles = section.children("h1, h2, h3, h4, h5, h6");
+								titles.each(function(idx, el)
+								{
+									var tagName = el.tagName.toLowerCase();
+									el = $(el);
+									el.uniqueId();
+									var margin = 0;
+									var tocSection = $(sformat("<a class='toc-entry toc-sub-section' href='#{1}'>{2}</a>", el.prop("id"), el.text()));
+									tocSection.addClass(tagName);
+									section.data("tocEntry", tocSection);
+									toc.append(tocSection);
+								});
 							};
 						});
 					});
@@ -154,8 +162,14 @@
 			.toc-sub-section
 			{
 				font-weight:normal;
-				margin-left:1.5em;
 			}
+			.h1.toc-sub-section{margin-left:1.5em;}
+			.h2.toc-sub-section{margin-left:2em;}
+			.h3.toc-sub-section{margin-left:2.5em;}
+			.h4.toc-sub-section{margin-left:1.5em;}
+			.h5.toc-sub-section{margin-left:2.5em;}
+			.h6.toc-sub-section{margin-left:3.5em;}
+
 		</style>
 	</head>
 	<body class="ibx-root">

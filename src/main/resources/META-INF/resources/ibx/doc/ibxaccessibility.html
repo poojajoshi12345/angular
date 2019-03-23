@@ -236,16 +236,30 @@ setAccessibility(accessible, aria)</i>.
 &lt;/div>
 </pre>
 		</p>
+		<h5 data-title="tabbing">Tabbing</h5>
 		<p>
 			Here's what's going on with regards to accessibility:
 			<ul>
-				<li>There are tab indexes of 0 on all the major navigable components of the UI
+				<li>
+					There are tab indexes of 0 on all the major navigable components of the UI.  Although you <b>can</b> create tabbing contexts with values other than 0, it is rarely needed, and tabbing order should usually mirror the application structure.
 					<ul>
 						<li>Toolbar, and buttons</li>
 						<li>Explorer Tree</li>
 						<li>Explorer Folder List</li>
 						<li>Explorer File List</li>
 					</ul>
+				</li>
+				<li>
+					Title attributes on all accessible elements of the UI.  This will serve as both a tooltip, and cause Readers to announce the element with that text.  There are othe ways to title elements, such as <i>aria-label/labeledby</i>, but those .
+				</li>
+				<li>
+					Circular tabbing like you would find in a dialog.  Creates a tabbing context...this is something you generally don't want to do in a modeless context, as it will trap the keyboard user in that sub-section of the UI.
+				</li>
+				<li>
+					What's called <b>NavKey</b> access, which allows you to navigate using the arrow keys.
+				</li>
+				<li>
+					NavMap
 				</li>
 			</ul>
 		</p>
