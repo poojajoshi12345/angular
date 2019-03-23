@@ -152,12 +152,12 @@ setAccessibility(accessible, aria)</i>.
 
 	<section>
 		<h4>Navigation</h4>
-		A large part of accessibility is exposing all parts of the UI to users via the keyboard.  Often, this means establishing a logical tab order through the UI.  But, tabbing is not the whole story.  Once certain parts of the UI are active their navigation would be via the arrow keys.
+			A major aspect of accessibility is exposing all parts of the UI via the keyboard.  Often, this means establishing a logical tab order through the UI.  But, tabbing is not the whole story.  Once certain parts of the UI are active their navigation may done via the arrow keys, or special key sequences and or gestures.
 		<p>
-			Let's look at the following explorer style UI and see how it would be navigated:
+			Let's look at the following explorer style UI, and see how it would be navigated (it's live, so you can interact with it):
 
-		<div tabindex="0" class="acx-exp-ctrl acx-exp-main-frame" data-ibx-type="ibxVBox" data-ibxp-align="stretch" data-ibxp-focus-root="true" data-ibxp-focus-default="true">
-			<div class="acx-exp-ctrl acx-exp-tbar" data-ibx-type="ibxHBox" data-ibxp-align="center">
+		<div tabindex="0" class="acx-exp-ctrl acx-exp-main-frame" data-ibx-nav-map=".exp-nav-map" data-ibx-type="ibxVBox" data-ibxp-align="stretch" data-ibxp-focus-root="true" data-ibxp-focus-default="true">
+			<div tabindex="0" class="acx-exp-ctrl acx-exp-tbar" data-ibx-type="ibxHBox" data-ibxp-align="center" data-ibxp-focus-default="true">
 				<div tabindex="0" title="Test button 1" class="acx-exp-ctrl" data-ibx-type="ibxButton" data-ibxp-glyph-classes="fa fa-question"></div>
 				<div tabindex="0" title="Test button 2" class="acx-exp-ctrl" data-ibx-type="ibxButton" data-ibxp-glyph-classes="fa fa-question"></div>
 				<div tabindex="0" title="Test button 3" class="acx-exp-ctrl" data-ibx-type="ibxButton" data-ibxp-glyph-classes="fa fa-question"></div>
@@ -175,22 +175,79 @@ setAccessibility(accessible, aria)</i>.
 				<div class="acx-exp-ctrl acx-exp-files-box" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
 					<div>Child Folders</div>
 					<div tabindex="0" title="File System Folder List" class="acx-exp-ctrl acx-exp-folder-list" data-ibxp-aria.role="list" data-ibx-type="ibxHBox" data-ibxp-wrap="true" data-ibxp-nav-key-root="true" data-ibxp-focus-default="true">
-						<div tabindex="-1" title="Folder" class="acx-exp-file" role="listitem">Item</div>
-						<div tabindex="-1" title="Folder" class="acx-exp-file" role="listitem">Item</div>
-						<div tabindex="-1" title="Folder" class="acx-exp-file" role="listitem">Item</div>
-						<div tabindex="-1" title="Folder" class="acx-exp-file" role="listitem">Item</div>
-						<div tabindex="-1" title="Folder" class="acx-exp-file" role="listitem">Item</div>
+						<div tabindex="-1" title="Folder" class="acx-exp-file" role="listitem">Folder Item</div>
+						<div tabindex="-1" title="Folder" class="acx-exp-file" role="listitem">Folder Item</div>
 					</div>
 					<div>Child Files</div>
 					<div tabindex="0" title="File System File List" class="acx-exp-ctrl acx-exp-file-list" data-ibxp-aria.role="list" data-ibx-type="ibxHBox" data-ibxp-wrap="true" data-ibxp-nav-key-root="true" data-ibxp-focus-default="true">
-						<div tabindex="-1" title="File 1" class="acx-exp-file" role="listitem">Item</div>
-						<div tabindex="-1" title="File 2" class="acx-exp-file" role="listitem">Item</div>
-						<div tabindex="-1" title="File 3" class="acx-exp-file" role="listitem">Item</div>
-						<div tabindex="-1" title="File 4" class="acx-exp-file" role="listitem">Item</div>
-						<div tabindex="-1" title="File 5" class="acx-exp-file" role="listitem">Item</div>
+						<div tabindex="-1" title="File 1" class="acx-exp-file" role="listitem">File Item</div>
+						<div tabindex="-1" title="File 1" class="acx-exp-file" role="listitem">File Item</div>
 					</div>
 				</div>
 			</div>
+
+			<div class="exp-nav-map" data-ibx-type="ibxNavMap">
+				<div data-ibx-type="ibxNavMapItem" data-ibxp-nav-target=".acx-exp-tbar">Jump to the explorer toolbar</div>
+				<div data-ibx-type="ibxNavMapItem" data-ibxp-nav-target=".acx-exp-tree">Jump to the explorer folder tree</div>
+				<div data-ibx-type="ibxNavMapItem" data-ibxp-nav-target=".acx-exp-folder-list">Jump to the the explorer folder list</div>
+				<div data-ibx-type="ibxNavMapItem" data-ibxp-nav-target=".acx-exp-file-list">Jump to the explorer file list</div>
+			</div>
 		</div>
+		</p>
+		<p>
+			Here's the markup for the above applet:
+<pre>
+&lt;div tabindex="0" class="acx-exp-ctrl acx-exp-main-frame" data-ibx-nav-map=".exp-nav-map" data-ibx-type="ibxVBox" data-ibxp-align="stretch" data-ibxp-focus-root="true" data-ibxp-focus-default="true">
+	&lt;div tabindex="0" class="acx-exp-ctrl acx-exp-tbar" data-ibx-type="ibxHBox" data-ibxp-align="center" data-ibxp-focus-default="true">
+		&lt;div tabindex="0" title="Test button 1" class="acx-exp-ctrl" data-ibx-type="ibxButton" data-ibxp-glyph-classes="fa fa-question">&lt;/div>
+		&lt;div tabindex="0" title="Test button 2" class="acx-exp-ctrl" data-ibx-type="ibxButton" data-ibxp-glyph-classes="fa fa-question">&lt;/div>
+		&lt;div tabindex="0" title="Test button 3" class="acx-exp-ctrl" data-ibx-type="ibxButton" data-ibxp-glyph-classes="fa fa-question">&lt;/div>
+	&lt;/div>
+	&lt;div class="acx-exp-ctrl acx-content-box" data-ibx-type="ibxHBox" data-ibxp-align="stretch">
+		&lt;div tabindex="0" title="File System Tree" class="acx-exp-ctrl acx-exp-tree" data-ibx-type="ibxTree">
+			&lt;div data-ibx-type="ibxTreeNode" data-ibxp-expanded="true">File System Root
+				&lt;div data-ibx-type="ibxTreeNode" data-ibxp-expanded="true">Folder 1
+					&lt;div data-ibx-type="ibxTreeNode">Folder A&lt;/div>
+					&lt;div data-ibx-type="ibxTreeNode">Folder B&lt;/div>
+					&lt;div data-ibx-type="ibxTreeNode">Folder C&lt;/div>
+				&lt;/div>
+			&lt;/div>
+		&lt;/div>
+		&lt;div class="acx-exp-ctrl acx-exp-files-box" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
+			&lt;div>Child Folders&lt;/div>
+			&lt;div tabindex="0" title="File System Folder List" class="acx-exp-ctrl acx-exp-folder-list" data-ibxp-aria.role="list" data-ibx-type="ibxHBox" data-ibxp-wrap="true" data-ibxp-nav-key-root="true" data-ibxp-focus-default="true">
+				&lt;div tabindex="-1" title="Folder" class="acx-exp-file" role="listitem">Folder Item&lt;/div>
+				&lt;div tabindex="-1" title="Folder" class="acx-exp-file" role="listitem">Folder Item&lt;/div>
+			&lt;/div>
+			&lt;div>Child Files&lt;/div>
+			&lt;div tabindex="0" title="File System File List" class="acx-exp-ctrl acx-exp-file-list" data-ibxp-aria.role="list" data-ibx-type="ibxHBox" data-ibxp-wrap="true" data-ibxp-nav-key-root="true" data-ibxp-focus-default="true">
+				&lt;div tabindex="-1" title="File 1" class="acx-exp-file" role="listitem">File Item&lt;/div>
+				&lt;div tabindex="-1" title="File 1" class="acx-exp-file" role="listitem">File Item&lt;/div>
+			&lt;/div>
+		&lt;/div>
+	&lt;/div>
+
+	&lt;div class="exp-nav-map" data-ibx-type="ibxNavMap">
+		&lt;div data-ibx-type="ibxNavMapItem" data-ibxp-nav-target=".acx-exp-tbar">Jump to the explorer toolbar&lt;/div>
+		&lt;div data-ibx-type="ibxNavMapItem" data-ibxp-nav-target=".acx-exp-tree">Jump to the explorer folder tree&lt;/div>
+		&lt;div data-ibx-type="ibxNavMapItem" data-ibxp-nav-target=".acx-exp-folder-list">Jump to the the explorer folder list&lt;/div>
+		&lt;div data-ibx-type="ibxNavMapItem" data-ibxp-nav-target=".acx-exp-file-list">Jump to the explorer file list&lt;/div>
+	&lt;/div>
+&lt;/div>
+</pre>
+		</p>
+		<p>
+			Here's what's going on with regards to accessibility:
+			<ul>
+				<li>There are tab indexes of 0 on all the major navigable components of the UI
+					<ul>
+						<li>Toolbar, and buttons</li>
+						<li>Explorer Tree</li>
+						<li>Explorer Folder List</li>
+						<li>Explorer File List</li>
+					</ul>
+				</li>
+			</ul>
+		</p>
 	</section>
 </article>
