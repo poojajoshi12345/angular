@@ -235,33 +235,51 @@ setAccessibility(accessible, aria)</i>.
 	&lt;/div>
 &lt;/div>
 </pre>
-		</p>
-		<h5 data-title="tabbing">Tabbing</h5>
-		<p>
-			Here's what's going on with regards to accessibility:
-			<ul>
-				<li>
-					There are tab indexes of 0 on all the major navigable components of the UI.  Although you <b>can</b> create tabbing contexts with values other than 0, it is rarely needed, and tabbing order should usually mirror the application structure.
-					<ul>
-						<li>Toolbar, and buttons</li>
-						<li>Explorer Tree</li>
-						<li>Explorer Folder List</li>
-						<li>Explorer File List</li>
-					</ul>
-				</li>
-				<li>
-					Title attributes on all accessible elements of the UI.  This will serve as both a tooltip, and cause Readers to announce the element with that text.  There are othe ways to title elements, such as <i>aria-label/labeledby</i>, but those .
-				</li>
-				<li>
-					Circular tabbing like you would find in a dialog.  Creates a tabbing context...this is something you generally don't want to do in a modeless context, as it will trap the keyboard user in that sub-section of the UI.
-				</li>
-				<li>
-					What's called <b>NavKey</b> access, which allows you to navigate using the arrow keys.
-				</li>
-				<li>
-					NavMap
-				</li>
-			</ul>
-		</p>
+	Here's what's going on with regards to accessibility:
+	<h5>Tabbing</h5>
+	There are tab indexes of 0 on all the major navigable components of the UI.  Although you <b>can</b> create tabbing contexts with values other than 0, it is rarely needed, and tabbing order should usually mirror the application structure.
+	<ul>
+		<li>Toolbar, and buttons</li>
+		<li>Explorer Tree</li>
+		<li>Explorer Folder List</li>
+		<li>Explorer File List</li>
+	</ul>
+
+	<h5>Circular Tabbing</h5>
+	Circular tabbing allows you to create a closed context for tabbing between elements.  This is usually used in modal UIs, like a dailog box.  This is something you generally don't want to do in a modeless context, as it will trap the keyboard user in that sub-section of the UI.
+	<p>
+		To turn on circular tabbing:
+		<ul>
+			<li>
+				Add a tabindex of 0 to the containing element to which you want to constrain the tabbing.
+			<li>
+			<li>
+				Set the focusRoot option to true for the element you want to be the tabbing context.  The focusRoot option can be turned on via markup by adding the attribute "data-ibxp-focus-root='true'".
+			</li>
+			<li>
+				Set the focusDefault option of the focusRoot to true.  This will automatically focus the first focusable item within the focusRoot when the focusRoot gains focus.  You don't have to turn this feature on, if you want the focus root itself to be focusbale before the children.
+			</li>
+			</li>
+				Add tabindexes of 0 to the tabbable children within the containing element.  The children don't have to be direct descendents, as long as they aren't contained within
+				a deeper focusRoot, they will be navigated correctly.
+			</li>
+				Turning on circular tabbing is as simple as setting the option "focusRoot" to true on the container in which you want to keep the tabbing context.  The focus root must have a tab index of 0.
+				<p>
+					You can also set the option via markup using data-ibxp-focus-root="true".
+				</p>
+			</li>
+		</ul>
+	</p>
+
+	<li>
+			Title attributes on all accessible elements of the UI.  This will serve as both a tooltip, and cause Readers to announce the element with that text.  There are othe ways to title elements, such as <i>aria-label/labeledby</i>, but those .
+		</li>
+		<li>
+			What's called <b>NavKey</b> access, which allows you to navigate using the arrow keys.
+		</li>
+		<li>
+			NavMap
+		</li>
+	</ul>
 	</section>
 </article>
