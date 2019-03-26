@@ -264,8 +264,14 @@
 .ibx-glyph-unlock:before {
   content: "\e97b";
 }
-.ibx-glyph-selection-freeform:before {
+.ibx-glyph-selection-clear:before {
   content: "\ea1c";
+}
+.ibx-glyph-selection-polygon:before {
+  content: "\ea23";
+}
+.ibx-glyph-selection-polyline:before {
+  content: "\ea24";
 }
 .ibx-glyph-selection-circle:before {
   content: "\ea1d";
@@ -344,6 +350,9 @@
 }
 .ibx-glyph-pie-chart:before {
   content: "\ea0e";
+}
+.ibx-glyph-ring-pie-chart:before {
+  content: "\ea25";
 }
 .ibx-glyph-scatter-chart:before {
   content: "\ea0f";
