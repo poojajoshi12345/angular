@@ -68,7 +68,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 			if(!defItem)
 			{
 				var defItem = this.element.find(options.focusDefault);
-				defItem = defItem.length ? defItem : this.selectableChildren().first();
+				defItem = defItem.length ? defItem : this.selectableChildren(":visible").first();
 			}
 
 			//this will cuase _onFocusIn to recurse with the default item being the e.target element.
@@ -98,7 +98,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 		//manage circular tabbing if desired.
 		if(options.focusRoot && e.keyCode == $.ui.keyCode.TAB)
 		{
-			var focusKids = this.element.logicalChildren(".ibx-sm-focus-root", ":ibxFocusable");
+			var focusKids = this.element.logicalChildren(".ibx-sm-focus-root", ":ibxFocusable:visible");
 			var target = null;
 			var firstKid = focusKids.first();
 			var lastKid = focusKids.last();
@@ -125,7 +125,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 		//manage arrow navigation if desired.
 		if(options.navKeyRoot && [$.ui.keyCode.LEFT, $.ui.keyCode.RIGHT, $.ui.keyCode.UP, $.ui.keyCode.DOWN].indexOf(e.keyCode) != -1)
 		{
-			var navKids = this.selectableChildren();
+			var navKids = this.selectableChildren(":visible");
 			var focusedItem = this._focus();
 			var idxFocused = navKids.index(focusedItem);
 			var goPrev = (e.keyCode == $.ui.keyCode.LEFT || e.keyCode == $.ui.keyCode.UP);
@@ -163,7 +163,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 
 			if(e.shiftKey)
 			{
-				var selChildren = this.selectableChildren();
+				var selChildren = this.selectableChildren(":visible");
 				var idxAnchor = selChildren.index(this._anchor());
 				var idxSel = selChildren.index(this._focus());
 				var idxStart = Math.min(idxAnchor, idxSel);
@@ -180,13 +180,13 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 		else
 		if((e.keyCode == $.ui.keyCode.HOME) && ibxEventManager.isInputEventToIgnore(e))
 		{
-			this.selectableChildren().first().focus();
+			this.selectableChildren(":visible").first().focus();
 			e.preventDefault();
 		}
 		else
 		if((e.keyCode == $.ui.keyCode.END) && ibxEventManager.isInputEventToIgnore(e))
 		{
-			this.selectableChildren().last().focus();
+			this.selectableChildren(":visible").last().focus();
 			e.preventDefault();
 		}
 		else
@@ -208,7 +208,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 
 			var isTarget = this.element.is(e.target);
 			var isMulti = options.type == "multi";
-			var selChildren = this.selectableChildren();
+			var selChildren = this.selectableChildren(":visible");
 			var selTarget = this.mapToSelectable(e.target);
 
 			//focus the target
@@ -262,7 +262,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 			selBox.right = selBox.left + selBox.width;
 			selBox.bottom = selBox.top + selBox.height;
 
-			var selChildren = this.selectableChildren();
+			var selChildren = this.selectableChildren(":visible");
 			for(var i = 0; i < selChildren.length; ++i)
 			{
 				var child = selChildren[i];
