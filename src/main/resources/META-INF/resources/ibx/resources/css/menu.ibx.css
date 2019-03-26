@@ -196,7 +196,8 @@
 }
 .ibx-select-menu-item.ibx-sm-selected
 {
-	background-color:red;
+	background-color:#888;
+	color:white;
 }
 
 /***********************************SPLIT MENU BUTTON CLASSES***********************************/

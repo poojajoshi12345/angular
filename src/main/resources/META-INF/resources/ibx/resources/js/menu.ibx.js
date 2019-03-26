@@ -726,7 +726,6 @@ $.widget("ibi.ibxSelectMenuButton", $.ibi.ibxMenuButton,
 
 		if(key == "multiSelect" && changed)
 		{
-			var x = 10;
 		}
 		else
 		if(key == "userValue")
@@ -739,10 +738,12 @@ $.widget("ibi.ibxSelectMenuButton", $.ibi.ibxMenuButton,
 				{
 					var item = $(items[i]);
 					var itemValue = item.ibxWidget("userValue");
-					var sel = options.multiSelect ? (value.indexOf(itemValue) != -1) : (itemValue === value);
+					var sel = (value.indexOf(itemValue) != -1);
 					if(sel)
 						selItems.push(item[0]);
 				}
+				if(!options.multiSelect && selItems.length)
+					selItems.length = 1;
 				this._sm.deselectAll();
 				this._sm.selected(selItems, true, true, true);
 			}
