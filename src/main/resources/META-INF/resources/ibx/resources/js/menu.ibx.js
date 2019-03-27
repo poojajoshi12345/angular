@@ -628,6 +628,11 @@ $.widget("ibi.ibxSelectMenuButton", $.ibi.ibxMenuButton,
 		this._sm = options.menu.ibxSelectionManager("option", options.menuSelOptions).ibxSelectionManager("instance");
 		this._sm.element.on("ibx_selchange", this._onMenuSelChange.bind(this));
 	},
+	_init:function()
+	{
+		var x = 10;
+		this._super();
+	},
 	_setAccessibility:function(accessible, aria)
 	{
 		this._super(accessible, aria);
@@ -635,10 +640,6 @@ $.widget("ibi.ibxSelectMenuButton", $.ibi.ibxMenuButton,
 		this.options.menu.ibxWidget("option", "aria.multiselectable", this.options.multiSelect ? true : null);//turn menu into a list box
 		this.element.attr("title", this.options.text);
 		return aria;
-	},
-	_init:function()
-	{
-		this._super();
 	},
 	add:function(el, elSibling, before, refresh)
 	{
@@ -722,18 +723,21 @@ $.widget("ibi.ibxSelectMenuButton", $.ibi.ibxMenuButton,
 	{
 		var options = this.options;
 		var changed = options[key] != value;
-
+		if(key == "multiSelect")
+			console.log(key);
+		else
 		if(key == "userValue")
 		{
 			if(!this._inMenuSelChange)
 			{
+				var userValues = (value instanceof Array) ? value : [value];
 				var selItems = [];
 				var items = this.children();
 				for(var i = 0; i < items.length; ++i)
 				{
 					var item = $(items[i]);
 					var itemValue = item.ibxWidget("userValue");
-					var sel = (itemValue && (value.indexOf(itemValue) != -1));
+					var sel = (itemValue && (userValues.indexOf(itemValue) != -1));
 					if(sel)
 						selItems.push(item[0]);
 				}
@@ -785,7 +789,7 @@ $.widget("ibi.ibxSelectMenuItem", $.ibi.ibxMenuItem,
 	_widgetClass:"ibx-select-menu-item",
 	_create:function()
 	{
-		this.options.userValue = "selMenuItemValue_" + $.ibi.ibxSelectMenuItem.autoUserValue++;
+		this.options.userValue = "selMenuItemAutoUserValue_" + $.ibi.ibxSelectMenuItem.autoUserValue++;
 		this._super();
 	},
 	selected:function(selected)
