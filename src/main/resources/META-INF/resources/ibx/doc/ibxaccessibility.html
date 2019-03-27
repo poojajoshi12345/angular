@@ -259,19 +259,17 @@ setAccessibility(accessible, aria)</i>.
 			<li>
 				Set the focusDefault option of the focusRoot to true.  This will automatically focus the first focusable item within the focusRoot when the focusRoot gains focus.  You don't have to turn this feature on, if you want the focus root itself to be focusbale before the children.
 			</li>
-			</li>
+			<li>
 				Add tabindexes of 0 to the tabbable children within the containing element.  The children don't have to be direct descendents, as long as they aren't contained within
 				a deeper focusRoot, they will be navigated correctly.
-			</li>
-				Turning on circular tabbing is as simple as setting the option "focusRoot" to true on the container in which you want to keep the tabbing context.  The focus root must have a tab index of 0.
-				<p>
-					You can also set the option via markup using data-ibxp-focus-root="true".
-				</p>
 			</li>
 		</ul>
 	</p>
 
-	<li>
+	<h5>Arrow Key Selection</h5>
+	Along with the tab key, it is possible to create navigation contexts that use the arrow keys to change focus.  This is used in UI elements like trees/menus/radio buttons/etc.
+	<ul>
+		<li>
 			Title attributes on all accessible elements of the UI.  This will serve as both a tooltip, and cause Readers to announce the element with that text.  There are othe ways to title elements, such as <i>aria-label/labeledby</i>, but those .
 		</li>
 		<li>

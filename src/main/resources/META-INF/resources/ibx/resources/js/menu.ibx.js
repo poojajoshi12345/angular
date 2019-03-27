@@ -639,7 +639,6 @@ $.widget("ibi.ibxSelectMenuButton", $.ibi.ibxMenuButton,
 	_init:function()
 	{
 		this._super();
-		this.option("userValue", this.options.userValue);//have to set again to align user value with the selections.
 	},
 	add:function(el, elSibling, before, refresh)
 	{
@@ -691,7 +690,7 @@ $.widget("ibi.ibxSelectMenuButton", $.ibi.ibxMenuButton,
 			return;
 
 		var options = this.options;
-		var userValue = [];
+		var userValues = [];
 		var labelText = options.defaultText;
 		var selItems = this._sm.selected();
 		if(selItems.length)
@@ -701,13 +700,13 @@ $.widget("ibi.ibxSelectMenuButton", $.ibi.ibxMenuButton,
 			{
 				el = $(el);
 				labelText.push(el.ibxWidget("text"));
-				userValue.push(el.ibxWidget("userValue"));
+				userValues.push(el.ibxWidget("userValue"));
 			}.bind(this));
 			labelText = labelText.join(", ");
 		}
 
 		this._inMenuSelChange = true;
-		this.option({"userValue":userValue, "text":labelText});
+		this.option({"userValue":userValues, "text":labelText});
 		this._inMenuSelChange = false;
 	},
 	_onBeforeMenuOpenClose:function(e)
@@ -724,10 +723,6 @@ $.widget("ibi.ibxSelectMenuButton", $.ibi.ibxMenuButton,
 		var options = this.options;
 		var changed = options[key] != value;
 
-		if(key == "multiSelect" && changed)
-		{
-		}
-		else
 		if(key == "userValue")
 		{
 			if(!this._inMenuSelChange)
@@ -738,7 +733,7 @@ $.widget("ibi.ibxSelectMenuButton", $.ibi.ibxMenuButton,
 				{
 					var item = $(items[i]);
 					var itemValue = item.ibxWidget("userValue");
-					var sel = (value.indexOf(itemValue) != -1);
+					var sel = (itemValue && (value.indexOf(itemValue) != -1));
 					if(sel)
 						selItems.push(item[0]);
 				}
@@ -788,6 +783,11 @@ $.widget("ibi.ibxSelectMenuItem", $.ibi.ibxMenuItem,
 		selected:false,
 	},
 	_widgetClass:"ibx-select-menu-item",
+	_create:function()
+	{
+		this.options.userValue = "selMenuItemValue_" + $.ibi.ibxSelectMenuItem.autoUserValue++;
+		this._super();
+	},
 	selected:function(selected)
 	{
 		if(selected === undefined)
@@ -796,6 +796,7 @@ $.widget("ibi.ibxSelectMenuItem", $.ibi.ibxMenuItem,
 		this.element.closest(".ibx-selection-manager").ibxSelectionManager("selected", this.element, selected);
 	}
 });
+$.ibi.ibxSelectMenuItem.autoUserValue = 0;
 
 /******************************************************************************
 	ibxSplitMenuButton
