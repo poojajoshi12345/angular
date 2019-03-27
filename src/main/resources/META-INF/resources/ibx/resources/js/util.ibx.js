@@ -95,8 +95,6 @@ jQuery.expr[":"]["ibxFocusable"] = function(elem, idx, meta, stack)
 	tMax = isNaN(tMax) ? Infinity : tMax;
 
 	var tabIndex = parseInt(el.attr("tabIndex"), 10);
-	var visible = (el.css("visibility") != "hidden" && el.is(":visible") && !el.is(".ibx-widget-disabled"));
-	//var ret = (tabIndex >= tMin && tabIndex <= tMax && visible);
 	var ret = (tabIndex >= tMin && tabIndex <= tMax);
 	return ret;
 };
@@ -105,6 +103,11 @@ jQuery.expr[":"]["ibxNavFocusable"] = function(elem, idx, meta, stack)
 	var arrowsOnly = meta[3] ? (meta[3].toLowercase() == "true") : false;
 	return $(elem).is(":ibxFocusable(-1)");
 };
+jQuery.expr[":"]["ibxVisible"] = function(elem, idx, meta, stack)
+{
+	elem = $(elem);
+	return elem.is(":visible") && (elem.css("visibility") !== "hidden");
+}
 jQuery.expr[":"]["inViewport"] = function(elem, idx, meta, stack)
 {
 	console.warn("[ibx Not Implemented] This filter is not currently implemented!");
