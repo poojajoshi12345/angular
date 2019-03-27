@@ -791,15 +791,21 @@ $.widget("ibi.ibxSelectMenuItem", $.ibi.ibxMenuItem,
 	_widgetClass:"ibx-select-menu-item",
 	_create:function()
 	{
-		this.options.userValue = "selMenuItemAutoUserValue_" + $.ibi.ibxSelectMenuItem.autoUserValue++;
+		this.options.userValue = "smiAutoUserValue" + $.ibi.ibxSelectMenuItem.autoUserValue++;
 		this._super();
+	},
+	_setOption:function(key, value)
+	{
+		this._super(key, value);
+		var options = this.options;
+		if(key == "selected")
+			this.element.closest(".ibx-selection-manager").ibxSelectionManager("selected", this.element, options.selected);
 	},
 	selected:function(selected)
 	{
 		if(selected === undefined)
 			return this.options.selected;
 		this.option("selected", selected);
-		this.element.closest(".ibx-selection-manager").ibxSelectionManager("selected", this.element, selected);
 	}
 });
 $.ibi.ibxSelectMenuItem.autoUserValue = 0;
