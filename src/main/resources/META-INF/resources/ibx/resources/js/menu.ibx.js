@@ -722,9 +722,6 @@ $.widget("ibi.ibxSelectMenuButton", $.ibi.ibxMenuButton,
 	{
 		var options = this.options;
 		var changed = options[key] != value;
-		if(key == "multiSelect")
-			console.log(key);
-		else
 		if(key == "text")
 			this._defaultText = value;//save the text for when there's no selection.
 		else
