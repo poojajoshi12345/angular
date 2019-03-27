@@ -552,7 +552,7 @@ $.widget("ibi.ibxMenuButton", $.ibi.ibxButtonSimple,
 		var options = this.options;
 		if(key == "menu")
 		{
-			var menu = $(options.menu)
+			var menu = $(options.menu);
 			menu.off("ibx_beforeopen ibx_beforeclose", this._onBeforeMenuOpenCloseBound).off("ibx_select", this._onMenuSelectBound);
 			menu = $(value);
 			menu.ibxAriaId().on("ibx_beforeopen ibx_beforeclose", this._onBeforeMenuOpenCloseBound).on("ibx_select", this._onMenuSelectBound);
@@ -602,7 +602,6 @@ $.widget("ibi.ibxSelectMenuButton", $.ibi.ibxMenuButton,
 		"filterValues":false,
 		"filterNoCase":true,
 		"showArrow":true,
-		"defaultText":"",
 		"multiSelect":false,
 		"menuSelOptions":
 		{
@@ -707,7 +706,7 @@ $.widget("ibi.ibxSelectMenuButton", $.ibi.ibxMenuButton,
 		}
 
 		this._inMenuSelChange = true;
-		this.option({"userValue":userValues, "text":labelText});
+		this.option({"userValue":userValues, "text":labelText || this._defaultText});
 		this._inMenuSelChange = false;
 	},
 	_onBeforeMenuOpenClose:function(e)
@@ -725,6 +724,9 @@ $.widget("ibi.ibxSelectMenuButton", $.ibi.ibxMenuButton,
 		var changed = options[key] != value;
 		if(key == "multiSelect")
 			console.log(key);
+		else
+		if(key == "text")
+			this._defaultText = value;//save the text for when there's no selection.
 		else
 		if(key == "userValue")
 		{

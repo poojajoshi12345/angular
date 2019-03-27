@@ -20,16 +20,22 @@
 				position:absolute;
 				width: 100%;
 				height: 100%;
-				margin:0px;
+				xmargin:0px;
 				box-sizing: outline-box;
+			}
+			.test-select
+			{
+				border:1px solid #ccc;
+				border-radius:.25em;
+				padding:3px;
 			}
 	</style>
 	</head>
 	<body class="ibx-root" data-ibx-type="ibxVBox" data-ibxp-align="start">
-		<div tabindex="0" class="test-select" data-ibx-type="ibxSelectMenuButton" data-ibxp-multi-select="true" xdata-ibxp-user-value="l2">
+		<div tabindex="0" class="test-select" data-ibx-type="ibxSelectMenuButton" data-ibxp-multi-select="true" xdata-ibxp-user-value="l2">Select Item(s)
 			<div class="layer1" data-ibx-type="ibxSelectMenuItem" data-ibxp-user-value="l1" data-ibxp-selected="true">Layer 1</div>
-			<div class="layer2" data-ibx-type="ibxSelectMenuItem" data-ibxp-user-value="l2" data-ibxp-selected="true">Layer 2</div>
-			<div class="layer3" data-ibx-type="ibxSelectMenuItem" data-ibxp-user-value="l3" data-ibxp-selected="true">Layer 3</div>
+			<div class="layer2" data-ibx-type="ibxSelectMenuItem" data-ibxp-user-value="l2" xdata-ibxp-selected="true">Layer 2</div>
+			<div class="layer3" data-ibx-type="ibxSelectMenuItem" data-ibxp-user-value="l3" xdata-ibxp-selected="true">Layer 3</div>
 		</div>
 	</body>
 </html>
