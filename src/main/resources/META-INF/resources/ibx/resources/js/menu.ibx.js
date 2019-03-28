@@ -217,10 +217,7 @@ $.widget("ibi.ibxMenuItem", $.ibi.ibxHBox,
 	},
 	text:function(text)
 	{
-		if(text === undefined)
-			return this._label.ibxWidget("option", "text");
-		else
-			this._label.ibxWidget("option", "text", text);
+		return this.option("text", text);
 	},
 	parentMenu:function(){return this.element.parents(".ibx-menu").first() || null;},
 	subMenu:function()
@@ -260,6 +257,22 @@ $.widget("ibi.ibxMenuItem", $.ibi.ibxHBox,
 	_onSubMenuOpenClose:function(e)
 	{
 		this.setAccessibility();
+	},
+	option:function(key, value)
+	{
+		if(key == "text" && !value)
+			return this._label.ibxWidget("option", "text");
+		this._super(key, value);
+	},
+	_setOption:function(key, value)
+	{
+		var options = this.options;
+		if(key == "text")
+		{
+			if(value)
+				options.labelOptions.text = value;
+		}
+		this._super(key, value);
 	},
 	_refresh:function()
 	{
@@ -602,6 +615,8 @@ $.widget("ibi.ibxSelectMenuButton", $.ibi.ibxMenuButton,
 		"filterValues":false,
 		"filterNoCase":true,
 		"showArrow":true,
+		"useSelectionAsText":true,
+		"defaultText":"",
 		"multiSelect":false,
 		"menuSelOptions":
 		{
@@ -626,11 +641,6 @@ $.widget("ibi.ibxSelectMenuButton", $.ibi.ibxMenuButton,
 		this.element.on("ibx_widgetfocus", this._onWidgetFocus.bind(this));
 		this._sm = options.menu.ibxSelectionManager("option", options.menuSelOptions).ibxSelectionManager("instance");
 		this._sm.element.on("ibx_selchange", this._onMenuSelChange.bind(this));
-	},
-	_init:function()
-	{
-		var x = 10;
-		this._super();
 	},
 	_setAccessibility:function(accessible, aria)
 	{
@@ -695,18 +705,21 @@ $.widget("ibi.ibxSelectMenuButton", $.ibi.ibxMenuButton,
 		var selItems = this._sm.selected();
 		if(selItems.length)
 		{
-			labelText = [];
+			selText = [];
 			$(selItems).each(function(idx, el)
 			{
 				el = $(el);
-				labelText.push(el.ibxWidget("text"));
+				selText.push(el.ibxWidget("text"));
 				userValues.push(el.ibxWidget("userValue"));
 			}.bind(this));
-			labelText = labelText.join(", ");
+			selText = selText.join(", ");
 		}
 
 		this._inMenuSelChange = true;
-		this.option({"userValue":userValues, "text":labelText || this._defaultText});
+		console.warn("figure out how to let user format the display text");
+		selText = options.useSelectionAsText ? selText : this._defaultText;
+		this.option({"userValue":userValues, "text":selText});
+		this.element.dispatchEvent("ibx_selchange", e.originalEvent.data, false, false);
 		this._inMenuSelChange = false;
 	},
 	_onBeforeMenuOpenClose:function(e)
@@ -722,8 +735,16 @@ $.widget("ibi.ibxSelectMenuButton", $.ibi.ibxMenuButton,
 	{
 		var options = this.options;
 		var changed = options[key] != value;
-		if(key == "text")
-			this._defaultText = value;//save the text for when there's no selection.
+		if(key == "defaultText")
+			this.option("text", value, false);
+		else
+		if(key == "multiSelect" || key == "menuSelOptions")
+		{
+			var multiSelect = value;
+			options.menuSelOptions.type = (multiSelect ? "multi" : "single");
+			options.menuSelOptions.toggleSelection = !multiSelect;
+			options.menu.ibxWidget("option",{multiSelect:multiSelect, selMgrOpts:options.menuSelOptions});
+		}
 		else
 		if(key == "userValue")
 		{
@@ -751,9 +772,6 @@ $.widget("ibi.ibxSelectMenuButton", $.ibi.ibxMenuButton,
 	_refresh:function()
 	{
 		var options = this.options;
-		options.menuSelOptions.type = (options.multiSelect ? "multi" : "single");
-		options.menuSelOptions.toggleSelection = !!options.multiSelect;
-		options.menu.ibxWidget("option",{multiSelect:options.multiSelect, selMgrOpts:options.menuSelOptions});
 		this._text.ibxToggleClass("ibx-select-menu-button-label-editable", options.editable).attr("tabindex", options.editable ? "-1" : null);
 		this._super();
 	}
@@ -788,7 +806,7 @@ $.widget("ibi.ibxSelectMenuItem", $.ibi.ibxMenuItem,
 	_widgetClass:"ibx-select-menu-item",
 	_create:function()
 	{
-		this.options.userValue = "smiAutoUserValue" + $.ibi.ibxSelectMenuItem.autoUserValue++;
+		this.options.userValue = this.options.userValue || ("smiAutoUserValue" + $.ibi.ibxSelectMenuItem.autoUserValue++);
 		this._super();
 	},
 	_setOption:function(key, value)
