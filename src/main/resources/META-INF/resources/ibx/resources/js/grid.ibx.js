@@ -780,7 +780,10 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 			var cInfo = options.colMap[i] || options.defaultColConfig;
 			cell.style.width = isNaN(cInfo.ui.curSize) ? cInfo.ui.curSize : cInfo.ui.curSize + "px";//if size is just a number assume pixels.
 			cell.classList.add(options.classes.gridCell);
-			cell.setAttribute("tabindex", -1);
+			
+			//if the tabindex hasn't been set outside, then default to -1 (navkey/click access only...no tabbing between cells).
+			if(!cell.getAttribute("tabindex"))
+				cell.setAttribute("tabindex", -1);
 
 			//aria stuff
 			cell.setAttribute("role", "gridcell");
