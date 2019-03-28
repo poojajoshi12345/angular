@@ -416,9 +416,15 @@ function ibxSelectMenuProperty(prop, grid)
 	if(ibx.inPropCtor) return;
 }
 var _p = $.ibi.ibxPropertyGrid.extendProperty(ibxProperty, ibxSelectMenuProperty, "selectmenu");
+_p.__createEditorCell = function()
+{
+	var editorCell = ibxSelectMenuProperty.base.__createEditorCell.call(this);
+	editorCell.ibxWidget("option", "focusRoot", true);
+	return editorCell;
+};
 _p._createEditor = function()
 {
-	var editor = $("<div>").ibxSelectMenuButton({useValueAsText:true}).on("ibx_selchange", this._onMenuChange.bind(this));
+	var editor = $("<div>").ibxSelectMenuButton().on("ibx_selchange", this._onMenuChange.bind(this));
 	this.menu = editor.ibxWidget("option", "menu");
 	return editor.ibxAddClass("pgrid-prop-select-menu");
 };
@@ -426,7 +432,11 @@ _p._onMenuChange = function(e)
 {
 	var prop = this.prop;
 	var value = e.originalEvent.data;
-	this._updateValue(value);
+	if(prop.multiSelect)
+		this._updateValue(value);
+	else
+	if(value.selected)
+		this._updateValue(value);
 };
 _p.update = function()
 {
@@ -436,7 +446,7 @@ _p.update = function()
 	for(var i = 0; i < prop.values.length; ++i)
 	{
 		var propValue = prop.values[i];
-		var menuItem = $("<div>").ibxCheckMenuItem({labelOptions:{text:propValue.displayValue}, userValue:propValue.value});
+		var menuItem = $("<div>").ibxSelectMenuItem({text:propValue.displayValue, userValue:propValue.value});
 		menu.ibxWidget("add", menuItem);
 	}
 	this.editor.ibxWidget("option", {defaultText:prop.displayValue, multiSelect:prop.multiSelect, userValue:prop.value});
