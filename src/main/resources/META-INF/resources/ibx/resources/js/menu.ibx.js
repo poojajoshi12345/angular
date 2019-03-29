@@ -258,11 +258,11 @@ $.widget("ibi.ibxMenuItem", $.ibi.ibxHBox,
 	{
 		this.setAccessibility();
 	},
-	option:function(key, value)
+	option:function(key, value, refresh)
 	{
 		if(key == "text" && !value)
 			return this._label.ibxWidget("option", "text");
-		this._super(key, value);
+		return this._superApply(arguments);
 	},
 	_setOption:function(key, value)
 	{
@@ -650,6 +650,10 @@ $.widget("ibi.ibxSelectMenuButton", $.ibi.ibxMenuButton,
 		this.element.attr("title", this.options.text);
 		return aria;
 	},
+	_init:function()
+	{
+		this._super();
+	},
 	add:function(el, elSibling, before, refresh)
 	{
 		this._super(el, elSibling, before, refresh);
@@ -716,7 +720,6 @@ $.widget("ibi.ibxSelectMenuButton", $.ibi.ibxMenuButton,
 		}
 
 		this._inMenuSelChange = true;
-		console.warn("figure out how to let user format the display text");
 		selText = options.useSelectionAsText ? selText : this._defaultText;
 		this.option({"userValue":userValues, "text":selText});
 		this.element.dispatchEvent("ibx_selchange", e.originalEvent.data, false, false);
@@ -740,10 +743,12 @@ $.widget("ibi.ibxSelectMenuButton", $.ibi.ibxMenuButton,
 		else
 		if(key == "multiSelect" || key == "menuSelOptions")
 		{
-			var multiSelect = value;
-			options.menuSelOptions.type = (multiSelect ? "multi" : "single");
-			options.menuSelOptions.toggleSelection = !multiSelect;
-			options.menu.ibxWidget("option",{multiSelect:multiSelect, selMgrOpts:options.menuSelOptions});
+			if(key == "multiSelect")
+			{
+				options.menuSelOptions.type = (value ? "multi" : "single");
+				options.menuSelOptions.toggleSelection = value;
+			}
+			options.menu.ibxWidget("option",{multiSelect:value, selMgrOpts:options.menuSelOptions});
 		}
 		else
 		if(key == "userValue")
