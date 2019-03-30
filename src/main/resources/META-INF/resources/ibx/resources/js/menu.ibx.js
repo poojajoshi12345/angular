@@ -657,12 +657,15 @@ $.widget("ibi.ibxSelectMenuButton", $.ibi.ibxMenuButton,
 	add:function(el, elSibling, before, refresh)
 	{
 		this._super(el, elSibling, before, refresh);
- 		$(el).attr("role", "option").each(function(idx, el)
+		var userValue = this.options.userValue;
+		$(el).attr("role", "option").each(function(idx, el)
 		{
 			el = $(el);
 			var sel = el.ibxWidget("option", "selected");
-			this.selected(el, sel);
-		}.bind(this));
+			if(sel)
+				userValue.push(el.ibxWidget("userValue"));
+ 		}.bind(this));
+		this.option("userValue", userValue)
 	},
 	remove:function(el, destroy, refresh)
 	{
@@ -769,6 +772,7 @@ $.widget("ibi.ibxSelectMenuButton", $.ibi.ibxMenuButton,
 					selItems.length = 1;
 				this._sm.deselectAll();
 				this._sm.selected(selItems, true, true, true);
+				value = userValues;
 			}
 		}
 		this._super(key, value);
