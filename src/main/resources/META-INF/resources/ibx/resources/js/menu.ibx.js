@@ -707,21 +707,20 @@ $.widget("ibi.ibxSelectMenuButton", $.ibi.ibxMenuButton,
 		var userValues = [];
 		var labelText = options.defaultText;
 		var selItems = this._sm.selected();
-		if(selItems.length)
+		if(selItems.length && options.useSelectionAsText)
 		{
-			selText = [];
+			labelText = [];
 			$(selItems).each(function(idx, el)
 			{
 				el = $(el);
-				selText.push(el.ibxWidget("text"));
+				labelText.push(el.ibxWidget("text"));
 				userValues.push(el.ibxWidget("userValue"));
 			}.bind(this));
-			selText = selText.join(", ");
+			labelText = labelText.join(", ");
 		}
 
 		this._inMenuSelChange = true;
-		selText = options.useSelectionAsText ? selText : this._defaultText;
-		this.option({"userValue":userValues, "text":selText});
+		this.option({"userValue":userValues, "text":labelText});
 		this.element.dispatchEvent("ibx_selchange", e.originalEvent.data, false, false);
 		this._inMenuSelChange = false;
 	},
