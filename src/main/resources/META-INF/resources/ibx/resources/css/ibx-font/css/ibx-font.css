@@ -264,6 +264,12 @@
 .ibx-glyph-unlock:before {
   content: "\e97b";
 }
+.ibx-glyph-base-map:before {
+  content: "\ea26";
+}
+.ibx-glyph-selection-deselect:before {
+  content: "\ea27";
+}
 .ibx-glyph-selection-clear:before {
   content: "\ea1c";
 }
@@ -689,6 +695,9 @@
 }
 .ibx-glyph-check:before {
   content: "\e98e";
+}
+.ibx-glyph-minimize:before {
+  content: "\ea28";
 }
 .ibx-glyph-maximize:before {
   content: "\e967";
