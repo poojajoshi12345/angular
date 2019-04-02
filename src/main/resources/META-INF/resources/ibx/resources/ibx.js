@@ -47,6 +47,9 @@ function ibx()
 	if(typeof(a3) === "boolean")
 		autoBind = a3;
 
+	//if a main function was passed, then either add to load promise, or add to array for later processing (when ibx is loaded and running).
+	!ibx._loadPromise ? ibx._loadFuns.push(fn) : ibx._loadPromise.done(fn);
+
 	//resolve various ibx context values based on where we're loading from, and what we're loaded with.
 	if(!ibx._appInfoResolved)
 	{
@@ -80,6 +83,8 @@ function ibx()
 
 	if(!ibx._loaded && !ibx._isLoading)
 	{
+		ibx._isLoading = true;
+
 		//things to preload for ibx.  Everything else is in the root resource bundle
 		var scripts = 
 		[
@@ -176,19 +181,15 @@ function ibx()
 							if(ibx.loadProfile)
 								ibx.loadProfile.stop();
 						});
-						ibx._loadPromise.then(fn);
-						ibx._loadPromise.resolve(ibx);//let everyone know the system is booted.
+						
+						
+						//add main functions to load promise, resolve it, and then cleanup.
+						ibx._loadPromise.done(ibx._loadFuns).resolve(ibx);
+						delete ibx._loadFuns;//cleanup
 					});
 				});
 			}
 		}, 0);
-	}
-	else
-	if(typeof(fn) === "function")
-	{
-		if(!ibx._loaded)
-			throw("ibx subsystem is not loaded!");
-		ibx._loadPromise.done(fn);
 	}
 	return ibx;
 }
@@ -198,6 +199,7 @@ ibx.version = "0.9";		//ibx version...just a placeholder for now.
 ibx.loadTimeout = 10000;	//can't get preloads in running state by this interval, then bail!
 ibx._loaded = false;		//is ibx loaded.
 ibx._loadPromise = null;	//internal promise/deferred for ibx resource loading
+ibx._loadFuns = [];			//'main' functions to call after ibx is loaded...they get accumulated here if passed to ibx before the system is running.
 ibx.profiling = false;		//profile ibx load cycle
 ibx.loadProfile = null;		//profile for load cycle
 ibx.resourceMgr = null;		//ibx default resource manager	
