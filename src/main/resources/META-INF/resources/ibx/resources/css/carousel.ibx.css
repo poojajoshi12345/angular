@@ -122,3 +122,12 @@
 {
 	flex:0 0 auto;
 }
+
+/*
+Yes, I know !important is lame...but this is OK because it's a completely temporary class used only
+during the calculation phase of the carousel's item boxes true intrinsic size.
+*/
+.ibx-csl-items-box.ibx-csl-calc-size > *
+{
+	display:none !important;
+}

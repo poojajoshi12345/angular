@@ -99,12 +99,14 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 		if(this.options.sizeToFit)
 		{
 			var options = this.options;
+			this._itemsBox.ibxAddClass("ibx-csl-calc-size"); //children must be hidden to correctly determine the items box size
 			var pageInfo = this.getPageInfo();
+			this._itemsBox.ibxRemoveClass("ibx-csl-calc-size"); //restore the children now that the bounds have been retrieved.
 			var children = this.children();
 			children.each(function(idx, child)
 			{
 				child = $(child);
-				child.css({"width":pageInfo.pageWidth + "px", "height":pageInfo.pageHeight + "px"});
+				child.css({"margin":"0px", "width":pageInfo.pageWidth + "px", "height":pageInfo.pageHeight + "px"});
 			}.bind(this));
 			var curPage = this._pageMarkers.ibxWidget("children", "." + options.pageMarkerSelectedClass).data("ibxPageMarkerInfo");
 			curPage = curPage ? curPage.pageNo : 9999;
@@ -340,6 +342,10 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 			pageWidth:		this._itemsBox.prop("offsetWidth") || 1,
 			pageHeight:		this._itemsBox.prop("offsetHeight") || 1,
 		};
+
+		info.pageWidth = this._itemsBox.prop("offsetWidth") || 1;
+		info.pageHeight = this._itemsBox.prop("offsetHeight") || 1;
+		
 		info.pages = Math.round(info[props.scrollSize] / info[props.pageSize]) || 1;
 		info.curPage = Math.round(info[props.axis] / info[props.pageSize]);
 		info.scrollRight = info.scrollLeft + info.pageWidth;
@@ -349,6 +355,8 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 	option:function(key, value, refresh)
 	{
 		this._needsLayout = (key == "prevNextButtonPos" || key == "floatButtons" && value != this.options[key]);
+		if(key == "sizeToFit" && !value)
+			this.children().css({"margin":"", "width":"", "height":""});
 		return this._superApply(arguments);
 	},
 	_refresh:function()
