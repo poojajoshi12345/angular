@@ -264,6 +264,9 @@
 .ibx-glyph-unlock:before {
   content: "\e97b";
 }
+.ibx-glyph-highlight:before {
+  content: "\ea2e";
+}
 .ibx-glyph-base-map:before {
   content: "\ea26";
 }
