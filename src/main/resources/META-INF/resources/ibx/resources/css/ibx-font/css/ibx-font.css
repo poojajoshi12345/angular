@@ -354,6 +354,9 @@
 .ibx-glyph-line-chart:before {
   content: "\ea0d";
 }
+.ibx-glyph-area-chart:before {
+  content: "\ea2a";
+}
 .ibx-glyph-pie-chart:before {
   content: "\ea0e";
 }
@@ -362,6 +365,18 @@
 }
 .ibx-glyph-scatter-chart:before {
   content: "\ea0f";
+}
+.ibx-glyph-treemap-chart:before {
+  content: "\ea2b";
+}
+.ibx-glyph-grid-chart:before {
+  content: "\ea29";
+}
+.ibx-glyph-matrix-marker-chart:before {
+  content: "\ea2c";
+}
+.ibx-glyph-other-chart:before {
+  content: "\ea2d";
 }
 .ibx-glyph-upload:before {
   content: "\e946";
