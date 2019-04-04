@@ -8,6 +8,8 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 		"type":"none",						//none - no selection, nav - navigation only, single - single selection, multi - multiple selection
 		"toggleSelection":true,				//clicking on an item will select/deselect.
 		"escClearSelection":true,			//clear the selection on the escape key
+		"selectButtons":[0, 2],				//which buttons trigger a select 0 = left, 1 = middle, 2 = right
+		"selectKeys":[13, 32],				//which keys trigger a select 13 = ENTER, 32 = SPACE
 		"focusRoot":false,					//keep focus circular within this element
 		"focusDefault":false,				//focus the first item in root. (can be a select pattern).
 		"focusResetOnBlur":true,			//when widget loses focus, reset the current active navKey child.
@@ -154,7 +156,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 		}
 
 		//manage selection, and focus jumping
-		if(e.keyCode == $.ui.keyCode.ENTER || e.keyCode == $.ui.keyCode.SPACE)
+		if(options.selectKeys.indexOf(e.keyCode) != -1)
 		{
 			var isMulti = options.type == "multi";
 			if(isMulti && !e.shiftKey && !e.ctrlKey)
@@ -203,7 +205,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 			this._activate(true);//mousedown happens before focus, so make us active before anything.
 
 			//stop if we don't care about selection.
-			if(options.type == "nav" || options.type == "none")
+			if(options.type == "nav" || options.type == "none" || options.selectButtons.indexOf(e.button) == -1)
 				return;
 
 			var isTarget = this.element.is(e.target);
