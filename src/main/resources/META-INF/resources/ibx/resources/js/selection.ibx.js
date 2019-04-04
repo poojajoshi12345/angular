@@ -425,9 +425,10 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 
 		if(!this._elAnchor.is(el))
 		{
+			var relTarget = this._elAnchor[0];
 			this._elAnchor.ibxRemoveClass("ibx-sm-anchor");
 			this._elAnchor = $(el).first().ibxAddClass("ibx-sm-anchor");
-			var evt = this._dispatchEvent("ibx_anchored", {"anchor":this._elAnchor[0], "focus":this._elFocus[0], "selModel":this}, true, false);
+			var evt = this._dispatchEvent("ibx_anchored", {"anchor":this._elAnchor[0], "focus":this._elFocus[0], "selModel":this}, true, false, relTarget);
 		}
 		return this._elAnchor[0];
 	},
@@ -447,10 +448,11 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 		
 		if(!this._elFocus.is(el))
 		{
+			var relTarget = this._elFocus[0];
 			this._elFocus.ibxRemoveClass("ibx-sm-focused ibx-ie-pseudo-focus");
 			this._elFocus = $(el).first().ibxAddClass("ibx-sm-focused " + (ibxPlatformCheck.isIE ? "ibx-ie-pseudo-focus" : ""));
 			this._elFocus.focus();
-			this._dispatchEvent("ibx_focused", {"focus":this._elFocus[0], "anchor":this._elAnchor[0], "selModel":this}, true, false);
+			this._dispatchEvent("ibx_focused", {"focus":this._elFocus[0], "anchor":this._elAnchor[0], "selModel":this}, true, false, relTarget);
 			
 			var idFocus = this._elFocus.prop("id");
 			this.element.attr("aria-activedescendant", idFocus || null);
