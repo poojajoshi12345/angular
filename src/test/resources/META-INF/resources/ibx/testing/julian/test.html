@@ -12,31 +12,82 @@
 		<script type="text/javascript">
 			ibx(function(e)
 			{
+				$(".btn-big").on("click", function(e)
+				{
+					$(".outer-box").css({width:"600px", height:"600px"});
+				});
+				$(".btn-normal").on("click", function(e)
+				{
+					$(".outer-box").css({width:"", height:""});
+				});
+
+				$(".tool-bar").ibxCollapsible({direction:"top"});
+
+				$(".collapse-btn").on("click contextmenu", function(e)
+				{
+					$(".tool-bar").ibxCollapsible("toggle");
+				});
 			},true);
 		</script>
 		<style type="text/css">
 			body
 			{
 				position:absolute;
-				width: 100%;
-				height: 100%;
-				xmargin:0px;
-				box-sizing: outline-box;
+				width:100%;
+				height:100%;
+				margin:0px;
+				box-sizing:border-box;
 			}
-			.test-select
+
+			.ibx-widget
 			{
-				border:1px solid #ccc;
-				border-radius:.25em;
-				padding:3px;
+				margin:5px;
+				border:1px solid black;
 			}
-	</style>
+			.widget-frame
+			{
+				width:300px;
+				height:200px;
+				margin:10px;
+				overflow:hidden;
+				position:relative;
+			}
+			.tool-bar
+			{
+				flex:0 0 auto;
+				margin-bottom: 5px;
+			}
+			.map-frame
+			{
+				flex:1 1 auto;
+				margin-top:5px;
+			}
+			.collapse-btn
+			{
+				position:absolute;
+				right:0px;
+				top:0px;
+				padding:.25em;
+				margin:2px;
+				background-color:white;
+				z-index: 10000;
+				box-shadow:0px 0px 5px 0px gray;
+			}
+		</style>
 	</head>
-	<body class="ibx-root" data-ibx-type="ibxVBox" data-ibxp-align="start">
-		<div tabindex="0" class="test-select" data-ibx-type="ibxSelectMenuButton" data-ibxp-multi-select="true" data-ibxp-user-value="l1">Select Item(s)
-			<div class="layer1" data-ibx-type="ibxSelectMenuItem" data-ibxp-user-value="l1" data-ibxp-selected="false">Layer 1</div>
-			<div class="layer2" data-ibx-type="ibxSelectMenuItem" data-ibxp-user-value="l2" data-ibxp-selected="false">Layer 2</div>
-			<div class="layer3" data-ibx-type="ibxSelectMenuItem" data-ibxp-user-value="l3" data-ibxp-selected="true">Layer 3</div>
+	<body class="ibx-root">
+		<div class="widget-frame" data-ibx-type="ibxVBox" data-ibxp-inline="true" data-ibxp-align="stretch">
+			<div title="Collapse/Expand Toolbar" class="collapse-btn" data-ibx-type="ibxButtonSimple" data-ibxp-glyph-classes="fa fa-angle-double-up"></div>
+			<div class="tool-bar" data-ibx-type="ibxHBox" data-ibxp-align="center">
+				<div class="tb-btn" data-ibx-type="ibxButton">Button</div>
+				<div class="tb-btn" data-ibx-type="ibxButton">Button</div>
+				<div class="tb-btn" data-ibx-type="ibxButton">Button</div>
+			</div>
+			<div class="map-frame" data-ibx-type="ibxWidget">
+				I'm the map.
+			</div>
 		</div>
+
 	</body>
 </html>
 
