@@ -12,21 +12,14 @@
 		<script type="text/javascript">
 			ibx(function(e)
 			{
-				$(".btn-big").on("click", function(e)
-				{
-					$(".outer-box").css({width:"600px", height:"600px"});
-				});
-				$(".btn-normal").on("click", function(e)
-				{
-					$(".outer-box").css({width:"", height:""});
-				});
+				var grid = $(".test-grid");
+				grid.ibxWidget("initGrid", 10, 20);
 
-				$(".tool-bar").ibxCollapsible({direction:"top"});
-
-				$(".collapse-btn").on("click contextmenu", function(e)
+				$(".test-button").on("click", function(e)
 				{
-					$(".tool-bar").ibxCollapsible("toggle");
-				});
+					var rowSelect = grid.ibxWidget("option", "rowSelect");
+					grid.ibxWidget("option", "rowSelect", !rowSelect);
+				})
 			},true);
 		</script>
 		<style type="text/css">
@@ -35,59 +28,35 @@
 				position:absolute;
 				width:100%;
 				height:100%;
-				margin:0px;
+				xmargin:0px;
 				box-sizing:border-box;
 			}
-
-			.ibx-widget
+			.outer-box
 			{
-				margin:5px;
+				widows: 500px;
+				height:300px;
 				border:1px solid black;
 			}
-			.widget-frame
+			.outer-box > *
 			{
-				width:300px;
-				height:200px;
 				margin:10px;
-				overflow:hidden;
-				position:relative;
 			}
-			.tool-bar
+			.test-button
 			{
 				flex:0 0 auto;
-				margin-bottom: 5px;
 			}
-			.map-frame
+			.ibx-data-grid
 			{
 				flex:1 1 auto;
-				margin-top:5px;
-			}
-			.collapse-btn
-			{
-				position:absolute;
-				right:0px;
-				top:0px;
-				padding:.25em;
-				margin:2px;
-				background-color:white;
-				z-index: 10000;
-				box-shadow:0px 0px 5px 0px gray;
+				height:1px;
 			}
 		</style>
 	</head>
 	<body class="ibx-root">
-		<div class="widget-frame" data-ibx-type="ibxVBox" data-ibxp-inline="true" data-ibxp-align="stretch">
-			<div title="Collapse/Expand Toolbar" class="collapse-btn" data-ibx-type="ibxButtonSimple" data-ibxp-glyph-classes="fa fa-angle-double-up"></div>
-			<div class="tool-bar" data-ibx-type="ibxHBox" data-ibxp-align="center">
-				<div class="tb-btn" data-ibx-type="ibxButton">Button</div>
-				<div class="tb-btn" data-ibx-type="ibxButton">Button</div>
-				<div class="tb-btn" data-ibx-type="ibxButton">Button</div>
-			</div>
-			<div class="map-frame" data-ibx-type="ibxWidget">
-				I'm the map.
-			</div>
+		<div tabindex="0" class="outer-box" data-ibx-type="ibxVBox" data-ibxp-inline="true" data-ibxp-align="stretch" data-ibxp-nav-key-root="true">
+			<div tabindex="0" class="test-button" data-ibx-type="ibxButton">Button</div>
+			<div tabindex="0" class="test-grid" data-ibx-type="ibxDataGrid" data-ibxp-row-select="true"></div>
 		</div>
-
 	</body>
 </html>
 
