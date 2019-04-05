@@ -849,11 +849,11 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 	},
 	_onGridSelChange:function(e)
 	{
-		//Handle selction in rows and columns.
 		var eType = e.type;
 		var selInfo = e.originalEvent.data;
-		if((eType == "ibx_beforeselchange") && (selInfo.anchor !== selInfo.focus) && selInfo.selected)
+		if((eType == "ibx_beforeselchange") && !this.options.rowSelect && (selInfo.anchor !== selInfo.focus) && selInfo.selected)
 		{
+			//Handle selection in rows and columns...not done for rowSelect (obviously).
 			var posAnchor = this.getCellPos(selInfo.anchor);
 			var posFocus = this.getCellPos(selInfo.focus);
 			var selCol = (posAnchor.column == posFocus.column) && (posAnchor.column != -1) && (posFocus.column != -1);
