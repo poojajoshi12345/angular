@@ -144,7 +144,7 @@ $.widget("ibi.ibxDataGridSelectionManager", $.ibi.ibxSelectionManager,
 	_onKeyDown:function(e)
 	{
 		var options = this.options;
-		if(options.navKeyRoot && [$.ui.keyCode.LEFT, $.ui.keyCode.RIGHT, $.ui.keyCode.UP, $.ui.keyCode.DOWN].indexOf(e.keyCode) != -1)
+		if(!options.rowSelect && options.navKeyRoot && [$.ui.keyCode.LEFT, $.ui.keyCode.RIGHT, $.ui.keyCode.UP, $.ui.keyCode.DOWN].indexOf(e.keyCode) != -1)
 		{
 			var selector = options.selectableChildren;
 			var cell = $(e.target).closest(selector).filter(":visible()");
@@ -172,20 +172,28 @@ $.widget("ibi.ibxDataGridSelectionManager", $.ibi.ibxSelectionManager,
 			cell.focus();
 			//cell.length ? this.focus(cell, true) : this._super(e);
 			e.preventDefault();
+			e.stopPropagation();
 		}
 		else
 			this._super(e);
 	},
+	mapToSelectable:function(el)
+	{
+		if(this.options.rowSelect)
+			return $(el).closest(".dgrid-row");
+		else
+			return this._super(el);
+	},
 	option:function(key, value)
 	{
-		this._super(key, value);
 		if(key == "rowSelect")
 		{
 			this.deselectAll();
-			this.selectableChildren().ibxRemoveClass("ibx-sm-selectable");//.attr("tabindex", "");
+			this.selectableChildren().ibxRemoveClass("ibx-sm-selectable");
 			this.updateSelectableCache();
 			this.options.selectableChildren = value ? ".dgrid-row" : ".dgrid-cell";
 		}
+		this._super(key, value);
 	},
 });
 

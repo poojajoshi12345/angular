@@ -61,7 +61,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 
 		//make sure the manager is in the focused state.
 		this._activate(true);
-
+		
 		//do the default focusing when manager is directly focused - not one of its children, and not when clicked on its scrollbar.
 		var onScrollBar = this._eLastMouseDown ? ClickOnScrollbar(this.element[0], this._eLastMouseDown.clientX, this._eLastMouseDown.clientY) : false;
 		if(isTarget && !onScrollBar && !this._focusedOnScrollBar && !ownsRelTarget && options.focusDefault !== false)
@@ -80,7 +80,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 
 		//focus the selected item
 		if(!isTarget && ownsTarget)
-			this._focus(e.target, true);
+			this.focus(e.target, true);
 	},
 	_onFocusOut:function(e)
 	{
@@ -371,9 +371,9 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 					el = evt.data.items;
 					el.ibxAddClass("ibx-sm-selected").attr("aria-selected", true);
 					if(anchor)
-						this._anchor(el.first());
+						this.anchor(el.first());
 					if(focus)
-						this._focus(el.first());
+						this.focus(el.first());
 					this._dispatchEvent("ibx_selchange", {"selected":select, "items":el, "selModel":this, "anchor":this._elAnchor, "focus":this._elFocus}, true, false);
 				}
 			}
@@ -455,7 +455,6 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 			this._elFocus = $(el).first().ibxAddClass("ibx-sm-focused " + (ibxPlatformCheck.isIE ? "ibx-ie-pseudo-focus" : ""));
 			this._elFocus.focus();
 			this._dispatchEvent("ibx_focused", {"focus":this._elFocus[0], "anchor":this._elAnchor[0], "selModel":this}, true, false, relTarget);
-			
 			var idFocus = this._elFocus.prop("id");
 			this.element.attr("aria-activedescendant", idFocus || null);
 		}

@@ -91,6 +91,11 @@
 {
 	background-color:#efefef;
 }
+.dgrid-row.ibx-sm-selected
+{
+	color:white;
+	background-color:#999;
+}
 .dgrid-row-hidden
 {
 	display:none;
