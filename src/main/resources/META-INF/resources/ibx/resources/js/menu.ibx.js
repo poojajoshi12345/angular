@@ -745,12 +745,15 @@ $.widget("ibi.ibxSelectMenuButton", $.ibi.ibxMenuButton,
 		else
 		if(key == "multiSelect" || key == "menuSelOptions")
 		{
+			var multiSelect = options.multiSelect;
 			if(key == "multiSelect")
 			{
-				options.menuSelOptions.type = (value ? "multi" : "single");
-				options.menuSelOptions.toggleSelection = value;
+				multiSelect = value;
+				options.menuSelOptions.type = (multiSelect ? "multi" : "single");
+				options.menuSelOptions.toggleSelection = multiSelect;
 			}
-			options.menu.ibxWidget("option",{multiSelect:value, selMgrOpts:options.menuSelOptions});
+
+			options.menu.ibxWidget("option",{multiSelect:multiSelect, selMgrOpts:options.menuSelOptions});
 		}
 		else
 		if(key == "userValue")

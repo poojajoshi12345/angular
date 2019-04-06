@@ -31,31 +31,18 @@
 				xmargin:0px;
 				box-sizing:border-box;
 			}
-			.outer-box
+			.test-select
 			{
-				widows: 500px;
-				height:300px;
-				border:1px solid black;
-			}
-			.outer-box > *
-			{
-				margin:10px;
-			}
-			.test-button
-			{
-				flex:0 0 auto;
-			}
-			.ibx-data-grid
-			{
-				flex:1 1 auto;
-				height:1px;
+				padding:5px;
+				border:1px solid #ccc;
 			}
 		</style>
 	</head>
-	<body class="ibx-root">
-		<div tabindex="0" class="outer-box" data-ibx-type="ibxVBox" data-ibxp-inline="true" data-ibxp-align="stretch" data-ibxp-nav-key-root="true">
-			<div tabindex="0" class="test-button" data-ibx-type="ibxButton">Button</div>
-			<div tabindex="0" class="test-grid" data-ibx-type="ibxDataGrid" data-ibxp-row-select="true"></div>
+	<body class="ibx-root" data-ibx-type="ibxVBox" data-ibxp-align="center">
+		<div tabindex="0" class="test-select" data-ibx-type="ibxSelectMenuButton" data-ibxp-multi-select="true">Select Something
+			<div data-ibx-type="ibxSelectMenuItem" data-ibxp-user-value="i1">Item1</div>
+			<div data-ibx-type="ibxSelectMenuItem" data-ibxp-user-value="i2">Item2</div>
+			<div data-ibx-type="ibxSelectMenuItem" data-ibxp-user-value="i3">Item3</div>
 		</div>
 	</body>
 </html>
