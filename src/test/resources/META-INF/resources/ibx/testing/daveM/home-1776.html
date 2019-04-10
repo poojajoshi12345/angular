@@ -89,6 +89,28 @@
 				border:1px solid black;
 				margin:5px;
 			}
+			
+			.test-pane
+			{
+				flex:1 1 auto;
+				border:1px solid black;
+			}
+			.outer-box
+			{
+				width: 100%;
+				height: 100%;
+				box-sizing: border-box;
+			}
+			.label-box
+			{
+				flex:0 0 auto;
+				border:1px solid red;
+			}
+			.test-grid
+			{
+				flex:1 1 auto;
+				border:1px solid lime;
+			}
 		</style>
 	</head>
 	<body tabindex="0" class="ibx-root" data-ibx-type="ibxVBox" data-ibxp-align="stretch" data-ibx-nav-map=".root-nav-map" aria-label="To activate quick navigation map, press CTRL+ALT+M">
@@ -174,6 +196,26 @@
 						<div tabindex="-1" title="WebFOCUS How To" class="file-tile">Blending multiple data sources</div>
 					</div>
 				</div>
+
+				<div class="test-pane" data-ibx-type="ibxTabPane">
+					<div class="test-page" data-ibx-type="ibxTabPage">Page1
+						<div class="outer-box" data-ibx-type="ibxVBox">
+							<div class="label-box" data-ibx-type="ibxHBox">
+								<div>Some Labelor page 1</div>
+							</div>
+							<div class="test-grid" data-ibx-type="ibxDataGrid"></div>
+						</div>
+					</div>
+					<div class="test-page" data-ibx-type="ibxTabPage">Page2
+						<div class="outer-box" data-ibx-type="ibxVBox">
+							<div class="label-box" data-ibx-type="ibxHBox">
+								<div>Some Label for page 2</div>
+							</div>
+							<div class="test-grid" data-ibx-type="ibxDataGrid"></div>
+						</div>
+					</div>
+				</div>
+				
 			</div>
 		</div>
 
