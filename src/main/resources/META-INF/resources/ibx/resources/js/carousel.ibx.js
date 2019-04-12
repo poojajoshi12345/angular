@@ -14,6 +14,7 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 		align:"stretch",
 		allowDragScrolling:true,
 		showPageMarkers:true,
+		showSinglePageMarker:false,
 		pageMarkersPos:"end",
 		pageMarkerClass:"ibx-csl-page-marker",
 		pageMarkerSelectedClass:"ibx-csl-page-selected",
@@ -294,6 +295,8 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 				pageMarker.attr({"role":"radio", "aria-checked": isCurPage})
 			this._pageMarkers.append(pageMarker)
 		}
+
+		this._pageMarkers.css("visibility", (!this.options.showSinglePageMarker && pageInfo.pages <= 1) ? "hidden" : ""); 
 
 		var options = this.options;
 		var disabled = pageInfo[options.scrollProps.axis] <= 0;
