@@ -225,6 +225,11 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 		}
 		return delta;
 	},
+	getSelectionManager:function()
+	{
+		var sm = this._itemsBox.ibxSelectionManager("instance");
+		return sm;
+	},
 	_onItemsBoxScroll:function(e)
 	{
 		this._adjustPageMarkers();
@@ -366,8 +371,12 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 	{
 		this._super();
 		var options = this.options;
+		
+		//set various options for the items box...along with how selections work.
 		this._itemsBox.ibxDragScrolling("option", "disabled", !options.allowDragScrolling);
 		this._itemsBox.ibxWidget("option", "align", options.alignChildren);
+		this.getSelectionManager().option("type", options.selType);
+
 		this._prevBtn.css("display", options.showPrevButton ? "" : "none");
 		this._nextBtn.css("display", options.showNextButton ? "" : "none");
 
