@@ -1,80 +1,93 @@
 <!--Copyright 1996-2016 Information Builders, Inc. All rights reserved.-->
 <!--$Revision$:-->
 <script type="text/javascript">
-	ibx(function()
-	{
+	ibx(function() {
 		ibx.bindElements(".acx-exp-main-frame");
 	});
 </script>
 <style type="text/css">
-	pre
-	{
-		font-family:monospace;
-		user-select:text;
-		background-color:#efefef;
-		margin:5px 1em;
-		padding:5px;
-		overflow:auto;
+	pre {
+		font-family: monospace;
+		user-select: text;
+		background-color: #efefef;
+		margin: 5px 1em;
+		padding: 5px;
+		overflow: auto;
 		-webkit-overflow-scrolling: touch;
 	}
-	.acx-exp-main-frame
-	{
-		width:35em;
-		height:20em;
+
+	.acx-exp-main-frame {
+		width: 35em;
+		height: 20em;
 	}
-	.acx-exp-tbar
-	{
-		flex:0 0 auto;
+
+	.acx-exp-tbar {
+		flex: 0 0 auto;
 	}
-	.acx-content-box
-	{
-		flex:1 1 auto;
+
+	.acx-content-box {
+		flex: 1 1 auto;
 	}
-	.acx-exp-tree
-	{
-		flex:0 0 atuo;
-		width:10em;			}
-	.acx-exp-files-box
-	{
-		flex:1 1 auto;
+
+	.acx-exp-tree {
+		flex: 0 0 atuo;
+		width: 10em;
 	}
-	.acx-exp-folder-list
-	{
-		flex:1 1 auto;
+
+	.acx-exp-files-box {
+		flex: 1 1 auto;
 	}
-	.acx-exp-file-list
-	{
-		flex:1 1 auto;
+
+	.acx-exp-folder-list {
+		flex: 1 1 auto;
 	}
-	.acx-exp-ctrl
-	{
-		padding:2px;
-		margin:2px;
-		border:1px solid #ccc;
+
+	.acx-exp-file-list {
+		flex: 1 1 auto;
 	}
-	.acx-exp-file
-	{
-		height:20px;
-		margin:2px;
-		padding:1px;
-		border:1px solid #ccc;
+
+	.acx-exp-ctrl {
+		padding: 2px;
+		margin: 2px;
+		border: 1px solid #ccc;
+	}
+
+	.acx-exp-file {
+		height: 20px;
+		margin: 2px;
+		padding: 1px;
+		border: 1px solid #ccc;
 	}
 </style>
 <article>
 	<h1 data-title="ibx Accessibility">ibx and Accessibility (508 Compliance)</h1>
-		In 1990, President George H. Bush signed into law the <a href="https://en.wikipedia.org/wiki/Americans_with_Disabilities_Act_of_1990">Americans with Disabilities Act (ADA)</a>. The purpose of this law was to establish a clear and comprehensive prohibition of discrimination on the basis of disability.  
+	In 1990, President George H. Bush signed into law the <a
+		href="https://en.wikipedia.org/wiki/Americans_with_Disabilities_Act_of_1990">Americans with Disabilities Act
+		(ADA)</a>. The purpose of this law was to establish a clear and comprehensive prohibition of discrimination on
+	the basis of disability.
 
 	<p>
-		The ADA has had a far-reaching impact upon the software industry.  In fact, the law mandated that any piece of software must be <b>fully</b> usable by any person, regardless of their disability, whether physical or cognitive.  Further more, this must be accomplished without any distinction in the user interface.  Developers cannot force a user into a separate "accessible" mode, or create a version of an application with an accessible-specific feature (sub)set.
+		The ADA has had a far-reaching impact upon the software industry. In fact, the law mandated that any piece of
+		software must be <b>fully</b> usable by any person, regardless of their disability, whether physical or
+		cognitive. Further more, this must be accomplished without any distinction in the user interface. Developers
+		cannot force a user into a separate "accessible" mode, or create a version of an application with an
+		accessible-specific feature (sub)set.
 	</p>
 	<p>
-		There is a tendency for developers to think of accessible users as just being profoundly blind. However, this is only a small portion of the user base, as accessibility includes any deficit a user might have in the visual/touch/auditory realm. 
+		There is a tendency for developers to think of accessible users as just being profoundly blind. However, this is
+		only a small portion of the user base, as accessibility includes any deficit a user might have in the
+		visual/touch/auditory realm.
 	</p>
 	<p>
-		You might think supporting all levels of users is an unreasonable burden to place on a developer. And, that it couldn't even be accomplished in the real world.  The fact is it can be.  It's not even that difficult once you start thinking about it at a fundamental development level.
+		You might think supporting all levels of users is an unreasonable burden to place on a developer. And, that it
+		couldn't even be accomplished in the real world. The fact is it can be. It's not even that difficult once you
+		start thinking about it at a fundamental development level.
 	</p>
 	<p>
-		The ibx architecture has support for accessibility built into its core, at the ibxWidget level.  Additionally, the built in ibx widget library has been made fully <a href="https://www.w3.org/WAI/standards-guidelines/wcag/">WCAG</a> compliant, and can be used out of the box to assemble RIA accessible applications.
+		The ibx architecture has support for accessibility built into its core, at the ibxWidget level. Additionally,
+		the built in ibx widget library has been made fully <a
+			href="https://www.w3.org/WAI/standards-guidelines/wcag/">WCAG</a> compliant, and can be used out of the box
+		to assemble RIA accessible applications.
 	</p>
 
 	<section>
@@ -83,29 +96,42 @@
 		<ul>
 			<li>Documents
 				<br>
-					Where the HTML content is used to represent something like a magazine article.  In this case the markup has semantic meaning.  For example an &lt;h1> tag is literally rendered in what a user would expect to be a heading. And assistive technologies, such as screen readers will understand the semantic meaning of the document structure and announce it accordingly.
+				Where the HTML content is used to represent something like a magazine article. In this case the markup
+				has semantic meaning. For example an &lt;h1> tag is literally rendered in what a user would expect to be
+				a heading. And assistive technologies, such as screen readers will understand the semantic meaning of
+				the document structure and announce it accordingly.
 				</br>
 			</li>
 			<p></p>
 			<li>Applications
 				<br>
-					Where the HTML doesn't have to have any semantic meaning, and it's used to create the illusion of a "fat client" UI/UX. In this case the assistive technology must be explicitly made aware of what is on the screen, what role it is representing (button/dialog/slider/etc.), and how it fits into the structure of the UI/UX.
+				Where the HTML doesn't have to have any semantic meaning, and it's used to create the illusion of a "fat
+				client" UI/UX. In this case the assistive technology must be explicitly made aware of what is on the
+				screen, what role it is representing (button/dialog/slider/etc.), and how it fits into the structure of
+				the UI/UX.
 				</br>
 			</li>
-		</ul> 
+		</ul>
 		<p>
-			Applications built using ibx fall squarely into the latter category. The ibx framework uses no document-centric tags or css.  Everthing is explicitly defined according to what it represents from a UI/UX perspective.
+			Applications built using ibx fall squarely into the latter category. The ibx framework uses no
+			document-centric tags or css. Everthing is explicitly defined according to what it represents from a UI/UX
+			perspective.
 		</p>
 		<p>
-			Because accessibility is built into the framework, most of the work is handled at that level.  The goal is for the develop to simply create the UI/UX in a well thought-out thorough fashion, and a large part of the accessibility will be handled automatically.
+			Because accessibility is built into the framework, most of the work is handled at that level. The goal is
+			for the develop to simply create the UI/UX in a well thought-out thorough fashion, and a large part of the
+			accessibility will be handled automatically.
 
 		</p>
 	</section>
 	<section>
 		<h4>Accessible Rich Internet Applications</h4>
-		As stated in the above section, ibx applications are explicitly not documents.  They contain no semantic meaning in their markup.  Because of this, their constituent parts must make Readers aware of them.
+		As stated in the above section, ibx applications are explicitly not documents. They contain no semantic meaning
+		in their markup. Because of this, their constituent parts must make Readers aware of them.
 		<p>
-			This is accomplished via <a href="https://www.w3.org/TR/wai-aria-1.1/">Accessible Rich Internet Applications (ARIA)</a> HTML tags.  Browsers allow Readers to access the markup so they can examine it to determine what is <i>logically</i> being rendered on the screen.
+			This is accomplished via <a href="https://www.w3.org/TR/wai-aria-1.1/">Accessible Rich Internet Applications
+				(ARIA)</a> HTML tags. Browsers allow Readers to access the markup so they can examine it to determine
+			what is <i>logically</i> being rendered on the screen.
 		</p>
 		<p>
 			For example, from a Reader's perspective, this markup:
@@ -116,7 +142,10 @@
 			<pre>
 &lt;div tabindex="0" role="button">Press Me!&lt;/div>
 			</pre>
-			The browser does not pay attention to the <a href="https://www.w3.org/WAI/PF/aria-1.1/roles"><i>role</i></a> attribute.  It is there entirely for the Reader's benefit.  So, the second piece of markup will not render as a button, or allow a user to interact with it as such.  That's up to the developer to implement via javascript and CSS.
+			The browser does not pay attention to the <a href="https://www.w3.org/WAI/PF/aria-1.1/roles"><i>role</i></a>
+			attribute. It is there entirely for the Reader's benefit. So, the second piece of markup will not render as
+			a button, or allow a user to interact with it as such. That's up to the developer to implement via
+			javascript and CSS.
 		</p>
 		<p>
 			The majority of widgets built into ibx are already ARIA aware, and screen readers will render them properly.
@@ -124,79 +153,102 @@
 	</section>
 	<section>
 		<h4>ibxWidgets and ARIA</h4>
-		The base widget for all of the ibx library is ibxWidget.  This has a function called:
-		
-<pre>
+		The base widget for all of the ibx library is ibxWidget. This has a function called:
+
+		<pre>
 setAccessibility(accessible, aria)</i>.
-</pre>	
-		This function is called at key points in the lifecycle of the widget.  Usually when its state changes.  The first parameter "accessible" is a boolean, and it tells the widget to either add or remove the properties specified in the second parameter, "aria".
+</pre>
+		This function is called at key points in the lifecycle of the widget. Usually when its state changes. The first
+		parameter "accessible" is a boolean, and it tells the widget to either add or remove the properties specified in
+		the second parameter, "aria".
 		<p>
-		The "aria parameter is a simple object which can contain any valid ARIA attribute name, such as - label/lebeleldby/owns/expanded/etc.  Whatever is in this object will be prefixed with "aria-" and added as attributes to the widget's element.
+			The "aria parameter is a simple object which can contain any valid ARIA attribute name, such as -
+			label/lebeleldby/owns/expanded/etc. Whatever is in this object will be prefixed with "aria-" and added as
+			attributes to the widget's element.
 		</p>
 		<p>
-		However, there are two special properties the aria object can have.  These are "role", and "accessible".
-		<ul>
-			<li>role
-				<br>
-					This is applied as the 'role' attribute for the element.  Roles are almost always set by ibx, but if you are creating a customized widget that needs a specific role, you can set it here.
-				</br>
-			</li>
-			<p></p>
-			<li>accessible
-				<br>
-					This allows you to turn off all the accessibility for a given widget.  Probably never used.
-				</br>
-			</li>
-		</ul> 
+			However, there are two special properties the aria object can have. These are "role", and "accessible".
+			<ul>
+				<li>role
+					<br>
+					This is applied as the 'role' attribute for the element. Roles are almost always set by ibx, but if
+					you are creating a customized widget that needs a specific role, you can set it here.
+					</br>
+				</li>
+				<p></p>
+				<li>accessible
+					<br>
+					This allows you to turn off all the accessibility for a given widget. Probably never used.
+					</br>
+				</li>
+			</ul>
 	</section>
 
 	<section>
 		<h4>Navigation</h4>
-			A major aspect of accessibility is exposing all parts of the UI via the keyboard.  Often, this means establishing a logical tab order through the UI.  But, tabbing is not the whole story.  Once certain parts of the UI are active their navigation may done via the arrow keys, or special key sequences and/or gestures.
+		A major aspect of accessibility is exposing all parts of the UI via the keyboard. Often, this means establishing
+		a logical tab order through the UI. But, tabbing is not the whole story. Once certain parts of the UI are active
+		their navigation may done via the arrow keys, or special key sequences and/or gestures.
 		<p>
-			Let's look at the following explorer style UI, and see how it would be navigated (it's live, so you can interact with it):
+			Let's look at the following explorer style UI, and see how it would be navigated (it's live, so you can
+			interact with it):
 
-		<div tabindex="0" class="acx-exp-ctrl acx-exp-main-frame" data-ibx-nav-map=".exp-nav-map" data-ibx-type="ibxVBox" data-ibxp-align="stretch" data-ibxp-focus-root="true" data-ibxp-focus-default="true">
-			<div tabindex="0" class="acx-exp-ctrl acx-exp-tbar" data-ibx-type="ibxHBox" data-ibxp-align="center" data-ibxp-focus-default="true">
-				<div tabindex="0" title="Test button 1" class="acx-exp-ctrl" data-ibx-type="ibxButton" data-ibxp-glyph-classes="fa fa-question"></div>
-				<div tabindex="0" title="Test button 2" class="acx-exp-ctrl" data-ibx-type="ibxButton" data-ibxp-glyph-classes="fa fa-question"></div>
-				<div tabindex="0" title="Test button 3" class="acx-exp-ctrl" data-ibx-type="ibxButton" data-ibxp-glyph-classes="fa fa-question"></div>
-			</div>
-			<div class="acx-exp-ctrl acx-content-box" data-ibx-type="ibxHBox" data-ibxp-align="stretch">
-				<div tabindex="0" title="File System Tree" class="acx-exp-ctrl acx-exp-tree" data-ibx-type="ibxTree">
-					<div data-ibx-type="ibxTreeNode" data-ibxp-expanded="true">File System Root
-						<div data-ibx-type="ibxTreeNode" data-ibxp-expanded="true">Folder 1
-							<div data-ibx-type="ibxTreeNode">Folder A</div>
-							<div data-ibx-type="ibxTreeNode">Folder B</div>
-							<div data-ibx-type="ibxTreeNode">Folder C</div>
+			<div tabindex="0" class="acx-exp-ctrl acx-exp-main-frame" data-ibx-nav-map=".exp-nav-map"
+				data-ibx-type="ibxVBox" data-ibxp-align="stretch" data-ibxp-focus-root="true"
+				data-ibxp-focus-default="true">
+				<div tabindex="0" class="acx-exp-ctrl acx-exp-tbar" data-ibx-type="ibxHBox" data-ibxp-align="center"
+					data-ibxp-focus-default="true">
+					<div tabindex="0" title="Test button 1" class="acx-exp-ctrl" data-ibx-type="ibxButton"
+						data-ibxp-glyph-classes="fa fa-question"></div>
+					<div tabindex="0" title="Test button 2" class="acx-exp-ctrl" data-ibx-type="ibxButton"
+						data-ibxp-glyph-classes="fa fa-question"></div>
+					<div tabindex="0" title="Test button 3" class="acx-exp-ctrl" data-ibx-type="ibxButton"
+						data-ibxp-glyph-classes="fa fa-question"></div>
+				</div>
+				<div class="acx-exp-ctrl acx-content-box" data-ibx-type="ibxHBox" data-ibxp-align="stretch">
+					<div tabindex="0" title="File System Tree" class="acx-exp-ctrl acx-exp-tree"
+						data-ibx-type="ibxTree">
+						<div data-ibx-type="ibxTreeNode" data-ibxp-expanded="true">File System Root
+							<div data-ibx-type="ibxTreeNode" data-ibxp-expanded="true">Folder 1
+								<div data-ibx-type="ibxTreeNode">Folder A</div>
+								<div data-ibx-type="ibxTreeNode">Folder B</div>
+								<div data-ibx-type="ibxTreeNode">Folder C</div>
+							</div>
+						</div>
+					</div>
+					<div class="acx-exp-ctrl acx-exp-files-box" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
+						<div>Child Folders</div>
+						<div tabindex="0" title="File System Folder List" class="acx-exp-ctrl acx-exp-folder-list"
+							data-ibxp-aria.role="list" data-ibx-type="ibxHBox" data-ibxp-wrap="true"
+							data-ibxp-nav-key-root="true" data-ibxp-focus-default="true">
+							<div tabindex="-1" title="Folder" class="acx-exp-file" role="listitem">Folder Item</div>
+							<div tabindex="-1" title="Folder" class="acx-exp-file" role="listitem">Folder Item</div>
+						</div>
+						<div>Child Files</div>
+						<div tabindex="0" title="File System File List" class="acx-exp-ctrl acx-exp-file-list"
+							data-ibxp-aria.role="list" data-ibx-type="ibxHBox" data-ibxp-wrap="true"
+							data-ibxp-nav-key-root="true" data-ibxp-focus-default="true">
+							<div tabindex="-1" title="File 1" class="acx-exp-file" role="listitem">File Item</div>
+							<div tabindex="-1" title="File 1" class="acx-exp-file" role="listitem">File Item</div>
 						</div>
 					</div>
 				</div>
-				<div class="acx-exp-ctrl acx-exp-files-box" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
-					<div>Child Folders</div>
-					<div tabindex="0" title="File System Folder List" class="acx-exp-ctrl acx-exp-folder-list" data-ibxp-aria.role="list" data-ibx-type="ibxHBox" data-ibxp-wrap="true" data-ibxp-nav-key-root="true" data-ibxp-focus-default="true">
-						<div tabindex="-1" title="Folder" class="acx-exp-file" role="listitem">Folder Item</div>
-						<div tabindex="-1" title="Folder" class="acx-exp-file" role="listitem">Folder Item</div>
+
+				<div class="exp-nav-map" data-ibx-type="ibxNavMap">
+					<div data-ibx-type="ibxNavMapItem" data-ibxp-nav-target=".acx-exp-tbar">Jump to the explorer toolbar
 					</div>
-					<div>Child Files</div>
-					<div tabindex="0" title="File System File List" class="acx-exp-ctrl acx-exp-file-list" data-ibxp-aria.role="list" data-ibx-type="ibxHBox" data-ibxp-wrap="true" data-ibxp-nav-key-root="true" data-ibxp-focus-default="true">
-						<div tabindex="-1" title="File 1" class="acx-exp-file" role="listitem">File Item</div>
-						<div tabindex="-1" title="File 1" class="acx-exp-file" role="listitem">File Item</div>
-					</div>
+					<div data-ibx-type="ibxNavMapItem" data-ibxp-nav-target=".acx-exp-tree">Jump to the explorer folder
+						tree</div>
+					<div data-ibx-type="ibxNavMapItem" data-ibxp-nav-target=".acx-exp-folder-list">Jump to the the
+						explorer folder list</div>
+					<div data-ibx-type="ibxNavMapItem" data-ibxp-nav-target=".acx-exp-file-list">Jump to the explorer
+						file list</div>
 				</div>
 			</div>
-
-			<div class="exp-nav-map" data-ibx-type="ibxNavMap">
-				<div data-ibx-type="ibxNavMapItem" data-ibxp-nav-target=".acx-exp-tbar">Jump to the explorer toolbar</div>
-				<div data-ibx-type="ibxNavMapItem" data-ibxp-nav-target=".acx-exp-tree">Jump to the explorer folder tree</div>
-				<div data-ibx-type="ibxNavMapItem" data-ibxp-nav-target=".acx-exp-folder-list">Jump to the the explorer folder list</div>
-				<div data-ibx-type="ibxNavMapItem" data-ibxp-nav-target=".acx-exp-file-list">Jump to the explorer file list</div>
-			</div>
-		</div>
 		</p>
 		<p>
 			Here's the markup for the above applet:
-<pre>
+			<pre>
 &lt;div tabindex="0" class="acx-exp-ctrl acx-exp-main-frame" data-ibx-nav-map=".exp-nav-map" data-ibx-type="ibxVBox" data-ibxp-align="stretch" data-ibxp-focus-root="true" data-ibxp-focus-default="true">
 	&lt;div tabindex="0" class="acx-exp-ctrl acx-exp-tbar" data-ibx-type="ibxHBox" data-ibxp-align="center" data-ibxp-focus-default="true">
 		&lt;div tabindex="0" title="Test button 1" class="acx-exp-ctrl" data-ibx-type="ibxButton" data-ibxp-glyph-classes="fa fa-question">&lt;/div>
@@ -235,49 +287,61 @@ setAccessibility(accessible, aria)</i>.
 	&lt;/div>
 &lt;/div>
 </pre>
-	Here's what's going on with regards to accessibility:
-	<h5>Tabbing</h5>
-	There are tab indexes of 0 on all the major navigable components of the UI.  Although you <b>can</b> create tabbing contexts with values other than 0, it is rarely needed, and tabbing order should usually mirror the application structure.
-	<ul>
-		<li>Toolbar, and buttons</li>
-		<li>Explorer Tree</li>
-		<li>Explorer Folder List</li>
-		<li>Explorer File List</li>
-	</ul>
+			Here's what's going on with regards to accessibility:
+			<h5>Tabbing</h5>
+			There are tab indexes of 0 on all the major navigable components of the UI. Although you <b>can</b> create
+			tabbing contexts with values other than 0, it is rarely needed, and tabbing order should usually mirror the
+			application structure.
+			<ul>
+				<li>Toolbar, and buttons</li>
+				<li>Explorer Tree</li>
+				<li>Explorer Folder List</li>
+				<li>Explorer File List</li>
+			</ul>
 
-	<h5>Circular Tabbing</h5>
-	Circular tabbing allows you to create a closed context for tabbing between elements.  This is usually used in modal UIs, like a dailog box.  This is something you generally don't want to do in a modeless context, as it will trap the keyboard user in that sub-section of the UI.
-	<p>
-		To turn on circular tabbing:
-		<ul>
-			<li>
-				Add a tabindex of 0 to the containing element to which you want to constrain the tabbing.
-			<li>
-			<li>
-				Set the focusRoot option to true for the element you want to be the tabbing context.  The focusRoot option can be turned on via markup by adding the attribute "data-ibxp-focus-root='true'".
-			</li>
-			<li>
-				Set the focusDefault option of the focusRoot to true.  This will automatically focus the first focusable item within the focusRoot when the focusRoot gains focus.  You don't have to turn this feature on, if you want the focus root itself to be focusbale before the children.
-			</li>
-			<li>
-				Add tabindexes of 0 to the tabbable children within the containing element.  The children don't have to be direct descendents, as long as they aren't contained within
-				a deeper focusRoot, they will be navigated correctly.
-			</li>
-		</ul>
-	</p>
+			<h5>Circular Tabbing</h5>
+			Circular tabbing allows you to create a closed context for tabbing between elements. This is usually used in
+			modal UIs, like a dailog box. This is something you generally don't want to do in a modeless context, as it
+			will trap the keyboard user in that sub-section of the UI.
+			<p>
+				To turn on circular tabbing:
+				<ul>
+					<li>
+						Add a tabindex of 0 to the containing element to which you want to constrain the tabbing.
+					<li>
+					<li>
+						Set the focusRoot option to true for the element you want to be the tabbing context. The
+						focusRoot option can be turned on via markup by adding the attribute
+						"data-ibxp-focus-root='true'".
+					</li>
+					<li>
+						Set the focusDefault option of the focusRoot to true. This will automatically focus the first
+						focusable item within the focusRoot when the focusRoot gains focus. You don't have to turn this
+						feature on, if you want the focus root itself to be focusbale before the children.
+					</li>
+					<li>
+						Add tabindexes of 0 to the tabbable children within the containing element. The children don't
+						have to be direct descendents, as long as they aren't contained within
+						a deeper focusRoot, they will be navigated correctly.
+					</li>
+				</ul>
+			</p>
 
-	<h5>Arrow Key Selection</h5>
-	Along with the tab key, it is possible to create navigation contexts that use the arrow keys to change focus.  This is used in UI elements like trees/menus/radio buttons/etc.
-	<ul>
-		<li>
-			Title attributes on all accessible elements of the UI.  This will serve as both a tooltip, and cause Readers to announce the element with that text.  There are othe ways to title elements, such as <i>aria-label/labeledby</i>, but those .
-		</li>
-		<li>
-			What's called <b>NavKey</b> access, which allows you to navigate using the arrow keys.
-		</li>
-		<li>
-			NavMap
-		</li>
-	</ul>
+			<h5>Arrow Key Selection</h5>
+			Along with the tab key, it is possible to create navigation contexts that use the arrow keys to change
+			focus. This is used in UI elements like trees/menus/radio buttons/etc.
+			<ul>
+				<li>
+					Title attributes on all accessible elements of the UI. This will serve as both a tooltip, and cause
+					Readers to announce the element with that text. There are othe ways to title elements, such as
+					<i>aria-label/labeledby</i>, but those .
+				</li>
+				<li>
+					What's called <b>NavKey</b> access, which allows you to navigate using the arrow keys.
+				</li>
+				<li>
+					NavMap
+				</li>
+			</ul>
 	</section>
 </article>
