@@ -21,12 +21,18 @@
                                   }
                            }
                            
+                          $(".split-menu-button").hover(function(e)
+                          {
+                          		$(e.currentTarget).find(".split-separator").css("border-left-color","rgba(0, 0, 0, 0.1)");
+                          });
+
                            function makeTile(title, summary)
                            {
                                   var info = title + " - " + summary + "<div class='item-last-access'>Last accessed: January 1, 2019</div>";
                                   var tile = $("<div class='test-item'>").ibxVBox({align:"stretch"});
-                                  var thumb = $("<div tabindex='-1' class='item-thumb'>");
-                                  var info = $("<div tabindex='0' class='item-label'>").ibxLabel({textWrap:true, textIsHtml:true, text:info, glyph:"face", glyphClasses:"material-icons"});
+                                 // var thumb = $("<div tabindex='-1' class='item-thumb'>");
+                                  var thumb = $("<img tabindex='-1' draggable='false' class='item-thumb' src='/ibi_apps/wfirs/ibfs/WFC/Repository/Retail_Samples/Charts/Sales_Insights?IBFS_action=getAssocImage&amp;IBFS_epoc=1508186011126'>");
+                                  var info = $("<div tabindex='-1' class='item-label'>").ibxLabel({textWrap:true, textIsHtml:true, text:info, glyph:"face", glyphClasses:"material-icons"});
                                   tile.ibxWidget("add", [thumb[0], info[0]]);
                                   
                                   info.on("focusin", function(tile, e)
@@ -105,7 +111,7 @@
                      .file-box-top-bar
                      {
                            flex:0 0 auto;
-                           height:40px;
+                           padding-top:20px;
                            padding-bottom:40px;
                      }
                      .file-box-search-files
@@ -115,9 +121,22 @@
                            justify-self:space-around;
                            margin:0px 75px 0px 75px;
                      }
-                     .xxx
+                     .split-menu-button
                      {
+                     	   min-width:100px;
+                     	   font-size:14px;
                            margin-left:15px;
+                           color:white;
+                           height:40px;
+                           background-color: #03A6EC;
+                     }
+                     .split-menu-button:hover
+                     {
+                     	background-color: rgba(0, 0, 0, 0.1);  /* 10% transparent */
+                     }
+                     .split-menu-button .split-separator
+                     {
+                     	border-left-color: #03A6EC;
                      }
                      .file-section
                      {
@@ -199,6 +218,7 @@
 					{
 						border: 0px;
 						padding-top: 12px;
+						font-size: 26px;
 					}
 					.test-pane .ibx-tab-group
 					{
@@ -214,8 +234,13 @@
 					}
                      .test-item
                      {
-                           width: 150px;
+                           width: 200px;
                            margin:10px;
+                     }
+                     .test-item .ibx-label-text
+                     {
+                     	font-weight: 600; 
+                     	font-size:14px;                  
                      }
                      .test-item:focus
                      {
@@ -223,11 +248,13 @@
                      }
                      .item-thumb
                      {
-                           max-width:150px;
-                           height:100px;
+                     	   background-color:white;
+                           max-width:200px;
+                           height:150px;
                            margin-bottom:5px;
                            border:1px solid #ccc;
                            box-shadow:1px 1px 3px silver;
+                           
                      }
                      .item-thumb.ibx-sm-selected
                      {
@@ -239,7 +266,7 @@
                      }
                      .item-last-access
                      {
-                           font-size:.8em;
+                           font-size:1em;
                            color:silver;
                      }
               </style>
@@ -276,7 +303,7 @@
 
               <div class="ui-acx-comp cbox-file-box" data-ibx-type="ibxVBox" data-ibxp-align="stretch" data-ibx-nav-map=".files-nav-map">
                      <div tabindex="-1" class="ui-acx-comp file-box-top-bar" data-ibx-type="ibxHBox" data-ibxp-align="center" data-ibxp-nav-key-root="true">
-                           <div class="xxx test-ctrl split-menu-button" tabIndex="0" data-ibx-type="ibxHSplitMenuButton" data-ibxp-default-menu-item=".def-item">
+                           <div class="split-menu-button" tabIndex="0" data-ibx-type="ibxHSplitMenuButton" data-ibxp-justify="start" data-ibxp-default-menu-item=".def-item">
                                   Data
                                   <div data-ibx-type="ibxMenu">
                                          <div data-ibxp-aria.labelled-by="xx" data-ibx-type="ibxMenuItem">Item</div>
@@ -285,7 +312,7 @@
                                   </div>
                            </div>
 
-                           <div class="xxx test-ctrl split-menu-button" tabIndex="0" data-ibx-type="ibxHSplitMenuButton" data-ibxp-default-menu-item=".def-item">
+                           <div class="split-menu-button" tabIndex="0" data-ibx-type="ibxHSplitMenuButton" data-ibxp-justify="start" data-ibxp-default-menu-item=".def-item">
                                   Visualization
                                   <div data-ibx-type="ibxMenu">
                                          <div data-ibxp-aria.labelled-by="xx" data-ibx-type="ibxMenuItem">Item</div>
@@ -294,7 +321,7 @@
                                   </div>
                            </div>
 
-                           <div class="xxx test-ctrl split-menu-button" tabIndex="0" data-ibx-type="ibxHSplitMenuButton" data-ibxp-default-menu-item=".def-item">
+                           <div class="split-menu-button" tabIndex="0" data-ibx-type="ibxHSplitMenuButton" data-ibxp-justify="start" data-ibxp-default-menu-item=".def-item">
                                   Tools
                                   <div data-ibx-type="ibxMenu">
                                          <div data-ibxp-aria.labelled-by="xx" data-ibx-type="ibxMenuItem">Item</div>
@@ -313,7 +340,7 @@
                      <div class="test-pane" data-ibx-type="ibxTabPane">
                            <div class="test-page" data-ibx-type="ibxTabPage" data-ibxp-selected="true">Home
                                   <div class="ui-acx-comp file-section file-box-recents" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
-                                        <div class='csl-label csl-recents-label'>Recent</div>
+                                        <div class='csl-label csl-recents-label'>Recents</div>
                                         <div tabindex="0" title="Recent File List" class="ui-acx-comp file-box csl-recents" data-ibx-type="ibxHCarousel" data-ibxp-nav-key-root="true" data-ibxp-focus-default="true" data-ibxp-scroll-type="page" data-ibxp-show-page-markers="false" data-ibxp-float-buttons="true" data-ibxp-sel-type="multi">
                                         </div>
                                   </div>
