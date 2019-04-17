@@ -25,7 +25,10 @@
                           {
                           		$(e.currentTarget).find(".split-separator").css("border-left-color","rgba(0, 0, 0, 0.1)");
                           });
-
+                          $(".split-menu-button").mouseout(function(e)
+                          {
+                          		$(e.currentTarget).find(".split-separator").css("border-left-color","#03A6EC");
+                          });
                            function makeTile(title, summary)
                            {
                                   var info = title + " - " + summary + "<div class='item-last-access'>Last accessed: January 1, 2019</div>";
