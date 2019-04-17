@@ -35,6 +35,18 @@
                                   }.bind(this, thumb));
                                   return tile;
                            }
+	 	                    var carousel = $(".csl-recents");
+							var sm = carousel.ibxWidget("getSelectionManager");
+							sm.options.selectableChildren = ".item-thumb";
+	                     
+	 	                    var carousel = $(".csl-favs");
+							var sm = carousel.ibxWidget("getSelectionManager");
+							sm.options.selectableChildren = ".item-thumb";
+	                     
+	 	                    var carousel = $(".csl-portals");
+							var sm = carousel.ibxWidget("getSelectionManager");
+							sm.options.selectableChildren = ".item-thumb";
+                     
                      
                            addTilesToCarousel($('.csl-recents'), 'Recent ', 'item ');
                            addTilesToCarousel($('.csl-favs'), 'Favorite ', 'item ');
@@ -93,6 +105,8 @@
                      .file-box-top-bar
                      {
                            flex:0 0 auto;
+                           height:40px;
+                           padding-bottom:40px;
                      }
                      .file-box-search-files
                      {
@@ -112,6 +126,14 @@
                      .file-box 
                      {
                            overflow:auto;
+                     }
+                     .file-box-recents
+                     {
+                     	background-color: rgba(43, 45, 50, 0.15);  /* 15% transparent */
+                     }
+                     .file-box-favs, .file-box-portals
+                     {
+                     	background-color: #F2F2F2;
                      }
                      .file-tile
                      {
@@ -145,8 +167,9 @@
                            padding-right: 24px;
                            padding-top: 15px;
                            padding-bottom: 15px;
+                           height:1px;
                            
-                           overflow-y: auto;
+                           xoverflow-y: auto;
                      }
                      .test-grid
                      {
@@ -167,6 +190,28 @@
                            padding-top: 30px;
                            padding-bottom: 20px;
                      }
+                     .csl-favs-label, .csl-portals-label
+                     {
+                           padding-top: 24px;
+                           padding-bottom: 24px;
+                     }
+					.test-pane .ibx-tab-button
+					{
+						border: 0px;
+						padding-top: 12px;
+					}
+					.test-pane .ibx-tab-group
+					{
+						border-bottom: 3px solid #eee;
+					}
+					
+					.test-pane .ibx-tab-button.ibx-check-box.checked
+					{
+						border-top: 0px;
+						border-left: 0px;
+						border-right: 0px;
+						border-bottom: 3px solid #07a1df;
+					}
                      .test-item
                      {
                            width: 150px;
@@ -268,18 +313,18 @@
                      <div class="test-pane" data-ibx-type="ibxTabPane">
                            <div class="test-page" data-ibx-type="ibxTabPage" data-ibxp-selected="true">Home
                                   <div class="ui-acx-comp file-section file-box-recents" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
-                                                <div class='csl-label csl-recents-label'>Recent</div>
-                                                <div tabindex=0" title="Recent File List" class="ui-acx-comp file-box csl-recents" data-ibx-type="ibxHCarousel" data-ibxp-nav-key-root="true" data-ibxp-focus-default="false" data-ibxp-scroll-type="page" data-ibxp-show-page-markers="false" data-ibxp-float-buttons="true" data-ibxp-sel-type="multi">
-                                                </div>
+                                        <div class='csl-label csl-recents-label'>Recent</div>
+                                        <div tabindex="0" title="Recent File List" class="ui-acx-comp file-box csl-recents" data-ibx-type="ibxHCarousel" data-ibxp-nav-key-root="true" data-ibxp-focus-default="true" data-ibxp-scroll-type="page" data-ibxp-show-page-markers="false" data-ibxp-float-buttons="true" data-ibxp-sel-type="multi">
+                                        </div>
                                   </div>
                                   <div class="ui-acx-comp file-section file-box-favs" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
-                                         <div class='csl-label csl-recents-label'>Favorites</div>
-                                         <div tabindex=0" title="Recommended File List" class="ui-acx-comp file-box csl-favs" data-ibx-type="ibxHCarousel" data-ibxp-nav-key-root="true" data-ibxp-focus-default="false" data-ibxp-scroll-type="page" data-ibxp-show-page-markers="false" data-ibxp-float-buttons="true" data-ibxp-sel-type="multi">
+                                         <div class='csl-label csl-favs-label'>Favorites</div>
+                                         <div tabindex="0" title="Recommended File List" class="ui-acx-comp file-box csl-favs" data-ibx-type="ibxHCarousel" data-ibxp-nav-key-root="true" data-ibxp-focus-default="true" data-ibxp-scroll-type="page" data-ibxp-show-page-markers="false" data-ibxp-float-buttons="true" data-ibxp-sel-type="multi">
                                          </div>
                                   </div>
                                   <div class="ui-acx-comp file-section file-box-portals" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
-                                         <div class='csl-label csl-recents-label'>Portals</div>
-                                         <div tabindex=0" title="WebFOCUS Learning Center" class="ui-acx-comp file-box csl-portals" data-ibx-type="ibxHCarousel" data-ibxp-nav-key-root="true" data-ibxp-focus-default="false" data-ibxp-scroll-type="page" data-ibxp-show-page-markers="false" data-ibxp-float-buttons="true" data-ibxp-sel-type="multi">
+                                         <div class='csl-label csl-portals-label'>Portals</div>
+                                         <div tabindex="0" title="WebFOCUS Learning Center" class="ui-acx-comp file-box csl-portals" data-ibx-type="ibxHCarousel" data-ibxp-nav-key-root="true" data-ibxp-focus-default="true" data-ibxp-scroll-type="page" data-ibxp-show-page-markers="false" data-ibxp-float-buttons="true" data-ibxp-sel-type="multi">
                                          </div>
                                   </div>
                            </div>
@@ -287,7 +332,7 @@
                            <div class="test-page1" data-ibx-type="ibxTabPage">My Workspace
                                   <div class="ui-acx-comp file-section file-box-recents" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
                                                 <div>Recent</div>
-                                                <div tabindex=0" title="Recent File List" class="ui-acx-comp file-box file-box-recents" data-ibx-type="ibxHBox" data-ibxp-nav-key-root="true" data-ibxp-focus-default="false" data-ibxp-wrap="true">
+                                                <div tabindex="0" title="Recent File List" class="ui-acx-comp file-box file-box-recents" data-ibx-type="ibxHBox" data-ibxp-nav-key-root="true" data-ibxp-focus-default="false" data-ibxp-wrap="true">
                                                        <div tabindex="-1" title="Recent file" class="file-tile">Cost of Goods</div>
                                                        <div tabindex="-1" title="Recent file" class="file-tile">Profit Margin</div>
                                                        <div tabindex="-1" title="Recent file" class="file-tile">Region Revenue Bar</div>
@@ -295,7 +340,7 @@
                                   </div>
                                   <div class="ui-acx-comp file-section file-box-recommended" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
                                          <div>Recommended</div>
-                                         <div tabindex=0" title="Recommended File List" class="ui-acx-comp file-box file-box-recommended" data-ibx-type="ibxHBox" data-ibxp-nav-key-root="true" data-ibxp-focus-default="false" data-ibxp-wrap="true">
+                                         <div tabindex="0" title="Recommended File List" class="ui-acx-comp file-box file-box-recommended" data-ibx-type="ibxHBox" data-ibxp-nav-key-root="true" data-ibxp-focus-default="false" data-ibxp-wrap="true">
                                                 <div tabindex="-1" title="Recommended file" class="file-tile">Fintoso Financial</div>
                                                 <div tabindex="-1" title="Recommended file" class="file-tile">Collaberative Portal</div>
                                                 <div tabindex="-1" title="Recommended file" class="file-tile">KPI Dashboard</div>
@@ -309,9 +354,9 @@
                      <div data-ibx-type="ibxNavMapItem" data-ibxp-nav-target=".top-bar-nav">Go To Main Navigation</div>
                      <div data-ibx-type="ibxNavMapItem" data-ibxp-nav-target=".cbox-side-bar">Go To Content Bookmarks</div>
                      <div data-ibx-type="ibxNavMapItem" data-ibxp-nav-target=".file-box-search-files">Go To Searching</div>
-                     <div data-ibx-type="ibxNavMapItem" data-ibxp-nav-target=".file-box-recents">Go To Recently accessed files</div>
-                     <div data-ibx-type="ibxNavMapItem" data-ibxp-nav-target=".file-box-recommended">Go To Recommended files</div>
-                     <div data-ibx-type="ibxNavMapItem" data-ibxp-nav-target=".file-box-learn">Go To WebFOCUS learning center</div>
+                     <div data-ibx-type="ibxNavMapItem" data-ibxp-nav-target=".csl-recents">Go To Recently accessed files</div>
+                     <div data-ibx-type="ibxNavMapItem" data-ibxp-nav-target=".csl-favs">Go To Recommended files</div>
+                     <div data-ibx-type="ibxNavMapItem" data-ibxp-nav-target=".csl-portals">Go To WebFOCUS learning center</div>
               </div>
        </body>
 </html>
