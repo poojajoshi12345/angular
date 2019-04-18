@@ -12,14 +12,30 @@
 		<script type="text/javascript">
 			ibx(function(e)
 			{
-				var grid = $(".test-grid");
-				grid.ibxWidget("initGrid", 10, 20);
+				var carousel = $(".test-carousel");
+				var sm = carousel.ibxWidget("getSelectionManager");
+				sm.options.selectableChildren = ".item-thumb";
 
-				$(".test-button").on("click", function(e)
+				for(var i = 0;i < 20; ++i)
 				{
-					var rowSelect = grid.ibxWidget("option", "rowSelect");
-					grid.ibxWidget("option", "rowSelect", !rowSelect);
-				})
+					var tile = makeTile("Item " + i, "This is item " + i);
+					carousel.ibxWidget("add", tile);
+				}
+
+				function makeTile(title, summary)
+				{
+					var info = title + " - " + summary + "<div class='item-last-access'>Last accessed: January 1, 2019</div>";
+					var tile = $("<div class='test-item'>").ibxVBox({align:"stretch"});
+					var thumb = $("<div tabindex='-1' class='item-thumb'>");
+					var info = $("<div tabindex='-1' class='item-label'>").ibxLabel({textWrap:true, textIsHtml:true, text:info, glyph:"face", glyphClasses:"material-icons"});
+					tile.ibxWidget("add", [thumb[0], info[0]]);
+					
+					info.on("focusin", function(tile, e)
+					{
+						thumb.focus();
+					}.bind(this, thumb));
+					return tile;
+				}
 			},true);
 		</script>
 		<style type="text/css">
@@ -28,22 +44,47 @@
 				position:absolute;
 				width:100%;
 				height:100%;
-				xmargin:0px;
 				box-sizing:border-box;
 			}
-			.test-select
+			.test-carousel
 			{
-				padding:5px;
+				margin:10px;
+				width:600px;
 				border:1px solid #ccc;
+			}
+			.test-item
+			{
+				margin:10px;
+			}
+			.test-item:focus
+			{
+				outline:none;
+			}
+			.item-thumb
+			{
+				max-width:150px;
+				height:100px;
+				margin-bottom:5px;
+				border:1px solid #ccc;oh yea
+				box-shadow:1px 1px 3px silver;
+			}
+			.item-thumb.ibx-sm-selected
+			{
+				outline:2px solid lime;
+			}
+			.item-thumb:hover
+			{
+				background-color:#ccc;
+			}
+			.item-last-access
+			{
+				font-size:.8em;
+				color:silver;
 			}
 		</style>
 	</head>
 	<body class="ibx-root" data-ibx-type="ibxVBox" data-ibxp-align="center">
-		<div tabindex="0" class="test-select" data-ibx-type="ibxSelectMenuButton" data-ibxp-multi-select="true">Select Something
-			<div data-ibx-type="ibxSelectMenuItem" data-ibxp-user-value="i1">Item1</div>
-			<div data-ibx-type="ibxSelectMenuItem" data-ibxp-user-value="i2">Item2</div>
-			<div data-ibx-type="ibxSelectMenuItem" data-ibxp-user-value="i3">Item3</div>
-		</div>
+		<div tabindex="0" class="test-carousel" data-ibx-type="ibxCarousel" data-ibxp-scroll-type="page" data-ibxp-show-page-markers="false" data-ibxp-float-buttons="true" data-ibxp-sel-type="multi"></div>
 	</body>
 </html>
 
