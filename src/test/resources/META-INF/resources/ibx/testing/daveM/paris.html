@@ -16,7 +16,7 @@
                            {
                                   for(var i = 0;i < 20; ++i)
                                   {
-                                         var tile = makeTile(prefix + title + i, "Summary of " + prefix +  i);
+                                         var tile = makeTile(prefix + title + i);
                                          carousel.ibxWidget("add", tile);
                                   }
                            }
@@ -29,12 +29,12 @@
                           {
                           		$(e.currentTarget).find(".split-separator").css("border-left-color","#03A6EC");
                           });
-                           function makeTile(title, summary)
+                           function makeTile(title)
                            {
-                                  var info = title + " - " + summary + "<div class='item-last-access'>Last accessed: January 1, 2019</div>";
+                                  var info = title + "<div class='item-last-access'>Last accessed: January 1, 2019</div>";
                                   var tile = $("<div class='test-item'>").ibxVBox({align:"stretch"});
-                                 // var thumb = $("<div tabindex='-1' class='item-thumb'>");
-                                  var thumb = $("<img tabindex='-1' draggable='false' class='item-thumb' src='/ibi_apps/wfirs/ibfs/WFC/Repository/Retail_Samples/Charts/Sales_Insights?IBFS_action=getAssocImage&amp;IBFS_epoc=1508186011126'>");
+								  var uri = sformat('/{1}/wfirs/ibfs/WFC/Repository/Retail_Samples/Charts/Sales_Insights?IBFS_action=getAssocImage&amp;IBFS_epoc=1508186011126', window.location.pathname.split('/')[1]);
+								  var thumb = $("<img tabindex='-1' draggable='false' class='item-thumb' src=" + uri+">");
                                   var info = $("<div tabindex='-1' class='item-label'>").ibxLabel({textWrap:true, textIsHtml:true, text:info, glyph:"face", glyphClasses:"material-icons"});
                                   tile.ibxWidget("add", [thumb[0], info[0]]);
                                   
@@ -182,7 +182,16 @@
                            flex:0 0 auto;
                            border:1px solid red;
                      }
-                     
+                     .item-label
+                     {
+                     	margin-top:20px;
+                     }
+                     .item-label .ibx-label-glyph
+                     {
+                     	font-size:24px;
+                     	padding-left:4px;
+                     	padding-bottom:8px;
+                     }
                      .test-page
                      {
                            padding-left: 24px;
@@ -242,8 +251,12 @@
                      }
                      .test-item .ibx-label-text
                      {
-                     	font-weight: 600; 
-                     	font-size:14px;                  
+                     	font-weight:600; 
+                     	font-size:14px;
+                     	line-height: 20px;
+                     	padding-bottom:10px;
+                     	padding-left:10px;
+                     	padding-right:24px;                 
                      }
                      .test-item:focus
                      {
@@ -269,8 +282,10 @@
                      }
                      .item-last-access
                      {
-                           font-size:1em;
+                           font-size:12px;
                            color:silver;
+                           line-height: 18px;
+                           
                      }
               </style>
        </head>
@@ -348,25 +363,31 @@
                                         </div>
                                   </div>
                                   <div class="ui-acx-comp file-section file-box-favs" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
+                                      <div tabindex="-1" class="ui-acx-comp top-bar" data-ibx-type="ibxHBox" data-ibxp-justify="spaceBetween" data-ibxp-align="center">   
                                          <div class='csl-label csl-favs-label'>Favorites</div>
-                                         <div tabindex="0" title="Recommended File List" class="ui-acx-comp file-box csl-favs" data-ibx-type="ibxHCarousel" data-ibxp-nav-key-root="true" data-ibxp-focus-default="true" data-ibxp-scroll-type="page" data-ibxp-show-page-markers="false" data-ibxp-float-buttons="true" data-ibxp-sel-type="multi">
-                                         </div>
+                                         <div tabindex="0" class="favs-refresh-btn" data-ibx-type="ibxButton" data-ibxp-glyph-classes="ibx-icons ibx-glyph-refresh" title="refresh"></div>
+                                      </div>
+                                      <div tabindex="0" title="Recommended File List" class="ui-acx-comp file-box csl-favs" data-ibx-type="ibxHCarousel" data-ibxp-nav-key-root="true" data-ibxp-focus-default="true" data-ibxp-scroll-type="page" data-ibxp-show-page-markers="false" data-ibxp-float-buttons="true" data-ibxp-sel-type="multi">
+                                      </div>
                                   </div>
                                   <div class="ui-acx-comp file-section file-box-portals" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
-                                         <div class='csl-label csl-portals-label'>Portals</div>
-                                         <div tabindex="0" title="WebFOCUS Learning Center" class="ui-acx-comp file-box csl-portals" data-ibx-type="ibxHCarousel" data-ibxp-nav-key-root="true" data-ibxp-focus-default="true" data-ibxp-scroll-type="page" data-ibxp-show-page-markers="false" data-ibxp-float-buttons="true" data-ibxp-sel-type="multi">
-                                         </div>
+                                     <div tabindex="-1" class="ui-acx-comp top-bar" data-ibx-type="ibxHBox" data-ibxp-justify="spaceBetween" data-ibxp-align="center">   
+                                         <div class='csl-label csl-favs-label'>Portals</div>
+                                         <div tabindex="0" class="favs-refresh-btn" data-ibx-type="ibxButton" data-ibxp-glyph-classes="ibx-icons ibx-glyph-refresh" title="refresh"></div>
+                                      </div>
+                                      <div tabindex="0" title="WebFOCUS Learning Center" class="ui-acx-comp file-box csl-portals" data-ibx-type="ibxHCarousel" data-ibxp-nav-key-root="true" data-ibxp-focus-default="true" data-ibxp-scroll-type="page" data-ibxp-show-page-markers="false" data-ibxp-float-buttons="true" data-ibxp-sel-type="multi">
+                                      </div>
                                   </div>
                            </div>
                                   
-                           <div class="test-page1" data-ibx-type="ibxTabPage">My Workspace
+                           <div class="test-page" data-ibx-type="ibxTabPage">My Workspace
                                   <div class="ui-acx-comp file-section file-box-recents" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
-                                                <div>Recent</div>
-                                                <div tabindex="0" title="Recent File List" class="ui-acx-comp file-box file-box-recents" data-ibx-type="ibxHBox" data-ibxp-nav-key-root="true" data-ibxp-focus-default="false" data-ibxp-wrap="true">
-                                                       <div tabindex="-1" title="Recent file" class="file-tile">Cost of Goods</div>
-                                                       <div tabindex="-1" title="Recent file" class="file-tile">Profit Margin</div>
-                                                       <div tabindex="-1" title="Recent file" class="file-tile">Region Revenue Bar</div>
-                                                </div>
+                                         <div>Recent</div>
+                                         <div tabindex="0" title="Recent File List" class="ui-acx-comp file-box file-box-recents" data-ibx-type="ibxHBox" data-ibxp-nav-key-root="true" data-ibxp-focus-default="false" data-ibxp-wrap="true">
+                                                <div tabindex="-1" title="Recent file" class="file-tile">Cost of Goods</div>
+                                                <div tabindex="-1" title="Recent file" class="file-tile">Profit Margin</div>
+                                                <div tabindex="-1" title="Recent file" class="file-tile">Region Revenue Bar</div>
+                                         </div>
                                   </div>
                                   <div class="ui-acx-comp file-section file-box-recommended" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
                                          <div>Recommended</div>
@@ -377,6 +398,26 @@
                                          </div>
                                   </div>
                            </div>
+                           
+                           <div class="test-page2" data-ibx-type="ibxTabPage">All Content
+                                  <div class="ui-acx-comp file-section file-box-recents" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
+                                        <div>Recent</div>
+                                        <div tabindex="0" title="Recent File List" class="ui-acx-comp file-box file-box-recents" data-ibx-type="ibxHBox" data-ibxp-nav-key-root="true" data-ibxp-focus-default="false" data-ibxp-wrap="true">
+                                               <div tabindex="-1" title="Recent file" class="file-tile">Cost of Goods</div>
+                                               <div tabindex="-1" title="Recent file" class="file-tile">Profit Margin</div>
+                                               <div tabindex="-1" title="Recent file" class="file-tile">Region Revenue Bar</div>
+                                        </div>
+                                  </div>
+                                  <div class="ui-acx-comp file-section file-box-recommended" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
+                                         <div>Recommended</div>
+                                         <div tabindex="0" title="Recommended File List" class="ui-acx-comp file-box file-box-recommended" data-ibx-type="ibxHBox" data-ibxp-nav-key-root="true" data-ibxp-focus-default="false" data-ibxp-wrap="true">
+                                                <div tabindex="-1" title="Recommended file" class="file-tile">Fintoso Financial</div>
+                                                <div tabindex="-1" title="Recommended file" class="file-tile">Collaberative Portal</div>
+                                                <div tabindex="-1" title="Recommended file" class="file-tile">KPI Dashboard</div>
+                                         </div>
+                                  </div>
+                           </div>
+                           
                      </div>
               </div>
 
