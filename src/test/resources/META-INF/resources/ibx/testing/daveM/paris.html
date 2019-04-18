@@ -126,9 +126,10 @@
                      }
                      .split-menu-button
                      {
-                     	   min-width:100px;
+                     	   min-width:125px;
+                     	   width: 125px;
                      	   font-size:14px;
-                           margin-left:15px;
+                           margin-left:16px;
                            color:white;
                            height:40px;
                            background-color: #03A6EC;
@@ -224,7 +225,7 @@
                      .csl-favs-label, .csl-portals-label
                      {
                            padding-top: 24px;
-                           padding-bottom: 24px;
+                           padding-bottom: 10px;
                      }
 					.test-pane .ibx-tab-button
 					{
@@ -268,7 +269,7 @@
                      .item-thumb
                      {
                      	   background-color:white;
-                           max-width:200px;
+                           max-width:225px;
                            height:150px;
                            margin-bottom:5px;
                            border:1px solid #ccc;
@@ -289,6 +290,21 @@
                            color:silver;
                            line-height: 18px;
                            
+                     }                    
+                     .favs-refresh-btn, .portals-refresh-btn
+                     {
+                     	font-size: 16px;
+                     	color: rgba(43, 45, 50, 0.87);
+                     	xpadding-top: 50px;
+                     	margin-top: 20px;
+                     	border: none;
+                     }
+                     .label-underline
+                     {
+                     	border-top: 1px solid rgba(43, 45, 50, 0.30);
+                     	height: 1px;
+                     	padding-bottom:24px;
+                     	xbackground-color:rgba(43, 45, 50, 0.30);
                      }
               </style>
        </head>
@@ -365,19 +381,21 @@
                                         <div tabindex="0" title="Recent File List" class="ui-acx-comp file-box csl-recents" data-ibx-type="ibxHCarousel" data-ibxp-nav-key-root="true" data-ibxp-focus-default="true" data-ibxp-scroll-type="page" data-ibxp-show-page-markers="false" data-ibxp-float-buttons="true" data-ibxp-sel-type="multi">
                                         </div>
                                   </div>
-                                  <div class="ui-acx-comp file-section file-box-favs" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
-                                      <div tabindex="-1" class="ui-acx-comp top-bar" data-ibx-type="ibxHBox" data-ibxp-justify="spaceBetween" data-ibxp-align="center">   
+                                  <div class="file-section file-box-favs" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
+                                      <div tabindex="-1" class="top-bar" data-ibx-type="ibxHBox" data-ibxp-justify="spaceBetween" data-ibxp-align="center">   
                                          <div class='csl-label csl-favs-label'>Favorites</div>
                                          <div tabindex="0" class="favs-refresh-btn" data-ibx-type="ibxButton" data-ibxp-glyph-classes="ibx-icons ibx-glyph-refresh" title="refresh"></div>
                                       </div>
+                                      <div class="label-underline" data-ibx-type="ibxHBox"></div>   
                                       <div tabindex="0" title="Recommended File List" class="ui-acx-comp file-box csl-favs" data-ibx-type="ibxHCarousel" data-ibxp-nav-key-root="true" data-ibxp-focus-default="true" data-ibxp-scroll-type="page" data-ibxp-show-page-markers="false" data-ibxp-float-buttons="true" data-ibxp-sel-type="multi">
                                       </div>
                                   </div>
-                                  <div class="ui-acx-comp file-section file-box-portals" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
-                                     <div tabindex="-1" class="ui-acx-comp top-bar" data-ibx-type="ibxHBox" data-ibxp-justify="spaceBetween" data-ibxp-align="center">   
-                                         <div class='csl-label csl-favs-label'>Portals</div>
-                                         <div tabindex="0" class="favs-refresh-btn" data-ibx-type="ibxButton" data-ibxp-glyph-classes="ibx-icons ibx-glyph-refresh" title="refresh"></div>
+                                  <div class="file-section file-box-portals" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
+                                     <div tabindex="-1" class="top-bar" data-ibx-type="ibxHBox" data-ibxp-justify="spaceBetween" data-ibxp-align="center">   
+                                         <div class='csl-label csl-portals-label'>Portals</div>
+                                         <div tabindex="0" class="portals-refresh-btn" data-ibx-type="ibxButton" data-ibxp-glyph-classes="ibx-icons ibx-glyph-refresh" title="refresh"></div>
                                       </div>
+                                         <div class="label-underline" data-ibx-type="ibxHBox"></div>   
                                       <div tabindex="0" title="WebFOCUS Learning Center" class="ui-acx-comp file-box csl-portals" data-ibx-type="ibxHCarousel" data-ibxp-nav-key-root="true" data-ibxp-focus-default="true" data-ibxp-scroll-type="page" data-ibxp-show-page-markers="false" data-ibxp-float-buttons="true" data-ibxp-sel-type="multi">
                                       </div>
                                   </div>
