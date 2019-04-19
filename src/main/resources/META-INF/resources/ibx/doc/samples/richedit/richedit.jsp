@@ -345,7 +345,7 @@
 			</div>
 		</div>
 
-		<!-- <div class="re-ctx-menu" data-ibx-type="ibxMenu" data-ibxp-refocus-last-active-on-close="true">
+		<div class="re-ctx-menu" data-ibx-type="ibxMenu" data-ibxp-refocus-last-active-on-close="true">
 			<div data-ibx-type="ibxMenuItem" data-ibxp-command="cmdUndo" data-ibxp-label-options='{"glyph":"undo", "glyphClasses":"material-icons"}'>Undo</div>
 			<div data-ibx-type="ibxMenuItem" data-ibxp-command="cmdRedo" data-ibxp-label-options='{"glyph":"redo", "glyphClasses":"material-icons"}'>Redo</div>
 			<div data-ibx-type="ibxMenuSeparator"></div>
@@ -393,7 +393,7 @@
 			</div>
 			<div data-ibx-type="ibxMenuSeparator"></div>
 			<div data-ibx-type="ibxMenuItem" data-ibxp-command="cmdRemoveFormat" data-ibxp-label-options='{"glyph":"format_clear", "glyphClasses":"material-icons"}'>Remove All Formatting</div>
-		</div> -->
+		</div>
 
 		<div class="cp-menu-template" data-ibx-type="ibxMenuItem" data-ibx-no-bind="true">Example Color Picker
 			<div data-ibx-type="ibxMenu">
@@ -430,6 +430,7 @@
 		<div class="rg-justify" data-ibx-type="ibxRadioGroup" data-ibxp-name="rgAlign" data-ibxp-command="cmdAlign"></div>
 		<div class="re-cmd cmd-justify" data-ibx-type="ibxCommand" data-ibxp-id="cmdAlign" data-ibxp-re-cmd="justify" data-ibxp-user-value="left"></div>
 
+		<div class="rg-font-size" data-ibx-type="ibxRadioGroup" data-ibxp-name="rgFontSize" data-ibxp-command="cmdFontSize"></div>
 		<div class="re-cmd cmd-font-size" data-ibx-type="ibxCommand" data-ibxp-id="cmdFontSize" data-ibxp-re-cmd="fontSize" data-ibxp-user-value="3"></div>
 		<div class="re-cmd cmd-font-name" data-ibx-type="ibxCommand" data-ibxp-id="cmdFontName" data-ibxp-re-cmd="fontName" data-ibxp-user-value="monospace"></div>
 		<div class="re-cmd cmd-fore-color" data-ibx-type="ibxCommand" data-ibxp-id="cmdForeColor" data-ibxp-user-value="foreColor"></div>
