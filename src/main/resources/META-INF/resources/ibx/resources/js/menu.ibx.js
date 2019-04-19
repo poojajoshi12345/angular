@@ -703,29 +703,19 @@ $.widget("ibi.ibxSelectMenuButton", $.ibi.ibxMenuButton,
 	},
 	_onMenuSelChange:function(e)
 	{
-		if(this._inMenuSelChange)
+		//selection changing from _setOption, so don't do this!
+		if(this._inSetOption)
 			return;
 
-		var options = this.options;
+		//on menu selection set the control's userValue based on selected item(s).
 		var userValues = [];
-		var labelText = options.defaultText;
-		var selItems = this._sm.selected();
-		if(selItems.length && options.useSelectionAsText)
+		$(this._sm.selected()).each(function(idx, el)
 		{
-			labelText = [];
-			$(selItems).each(function(idx, el)
-			{
-				el = $(el);
-				labelText.push(el.ibxWidget("text"));
-				userValues.push(el.ibxWidget("userValue"));
-			}.bind(this));
-			labelText = labelText.join(", ");
-		}
-
-		this._inMenuSelChange = true;
-		this.option({"userValue":userValues, "text":labelText});
+			el = $(el);
+			userValues.push(el.ibxWidget("userValue"));
+		}.bind(this));
+		this.option("userValue", userValues);
 		this.element.dispatchEvent("ibx_selchange", e.originalEvent.data, false, false);
-		this._inMenuSelChange = false;
 	},
 	_onBeforeMenuOpenClose:function(e)
 	{
@@ -739,7 +729,7 @@ $.widget("ibi.ibxSelectMenuButton", $.ibi.ibxMenuButton,
 	_setOption:function(key, value)
 	{
 		var options = this.options;
-		var changed = options[key] != value;
+
 		if(key == "defaultText")
 			this.option("text", value, false);
 		else
@@ -752,31 +742,39 @@ $.widget("ibi.ibxSelectMenuButton", $.ibi.ibxMenuButton,
 				options.menuSelOptions.type = (multiSelect ? "multi" : "single");
 				options.menuSelOptions.toggleSelection = multiSelect;
 			}
-
 			options.menu.ibxWidget("option",{multiSelect:multiSelect, selMgrOpts:options.menuSelOptions});
 		}
 		else
 		if(key == "userValue")
 		{
-			if(!this._inMenuSelChange)
+			var labelText = [];
+			var selItems = [];
+			var items = this.children();
+
+			value = (value instanceof Array) ? value : [value];//value has to be an array.
+			for(var i = 0; i < items.length; ++i)
 			{
-				var userValues = (value instanceof Array) ? value : [value];
-				var selItems = [];
-				var items = this.children();
-				for(var i = 0; i < items.length; ++i)
+				var item = $(items[i]);
+				var itemValue = item.ibxWidget("userValue");
+				var sel = (itemValue && (value.indexOf(itemValue) != -1));
+				if(sel)
 				{
-					var item = $(items[i]);
-					var itemValue = item.ibxWidget("userValue");
-					var sel = (itemValue && (userValues.indexOf(itemValue) != -1));
-					if(sel)
-						selItems.push(item[0]);
+					selItems.push(item[0]);
+					labelText.push(item.ibxWidget("text"));
 				}
-				if(!options.multiSelect && selItems.length)
-					selItems.length = 1;
-				this._sm.deselectAll();
-				this._sm.selected(selItems, true, true, true);
-				value = userValues;
 			}
+			if(!options.multiSelect && selItems.length)
+				selItems.length = labelText.length = 1;
+
+			labelText = labelText.length ? labelText.join(", ") : options.defaultText;
+			this.option("text", labelText);
+
+			this._inSetOption = true;
+			this._sm.deselectAll();
+			this._sm.selected(selItems, true, true, true);
+			this._super(key, value);//need to call super so attached ibxCommand will trigger uservalue update event.
+			this._inSetOption = false;
+			return;
 		}
 		this._super(key, value);
 	},

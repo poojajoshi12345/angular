@@ -189,7 +189,6 @@ $.widget("ibi.ibxRadioGroup",$.ibi.ibxFlexBox,
 			}.bind(this, value));
 
 			this.element.dispatchEvent("ibx_change", null, false);
-			this.doCommandAction("uservalue", value);
 		}
 
 		this._settingOption = false;

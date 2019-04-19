@@ -323,6 +323,13 @@ $.widget("ibi.ibxWidget", $.Widget,
 			this.refresh();
 		return ret;
 	},
+	_setOption:function(key, value)
+	{
+		var changed = (this.options[key] != value);
+		this._super(key, value);
+		if(changed && key == "userValue")
+			this.doCommandAction("uservalue", value);
+	},
 	_setOptionDisabled:function(value)
 	{
 		//only do this if the state is changing.
