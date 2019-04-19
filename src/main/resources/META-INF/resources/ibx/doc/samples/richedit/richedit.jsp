@@ -52,7 +52,6 @@
 				
 				function updateUI()
 				{
-					return;
 					window._updatingUI = true;
 					var re = $(".rich-edit").ibxWidget("instance");
 					var state = re.cmdState();
@@ -93,7 +92,7 @@
 					var fontName = $(".cmd-font-name").ibxWidget("userValue");
 					var strSample = ibx.resourceMgr.getString("IBX_STR_SAMPLE");
 					var strFmt = sformat("Start Text<p/>{1}<p/>{1}<p/>{1}<p/>End Text</p>", strSample);
-					$(richEdit).ibxWidget("html",  strFmt).ibxWidget("selectAll").ibxWidget("fontName", fontName).ibxWidget("deselectAll");
+					$(richEdit).ibxWidget("html",  strFmt).ibxWidget("selectAll").ibxWidget("fontName", "monospace").ibxWidget("deselectAll");
 				});
 				
 				$(".rich-edit").on("selectionchange", function(e)
