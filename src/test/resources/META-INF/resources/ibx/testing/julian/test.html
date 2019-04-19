@@ -12,30 +12,8 @@
 		<script type="text/javascript">
 			ibx(function(e)
 			{
-				var carousel = $(".test-carousel");
-				var sm = carousel.ibxWidget("getSelectionManager");
-				sm.options.selectableChildren = ".item-thumb";
-
-				for(var i = 0;i < 20; ++i)
-				{
-					var tile = makeTile("Item " + i, "This is item " + i);
-					carousel.ibxWidget("add", tile);
-				}
-
-				function makeTile(title, summary)
-				{
-					var info = title + " - " + summary + "<div class='item-last-access'>Last accessed: January 1, 2019</div>";
-					var tile = $("<div class='test-item'>").ibxVBox({align:"stretch"});
-					var thumb = $("<div tabindex='-1' class='item-thumb'>");
-					var info = $("<div tabindex='-1' class='item-label'>").ibxLabel({textWrap:true, textIsHtml:true, text:info, glyph:"face", glyphClasses:"material-icons"});
-					tile.ibxWidget("add", [thumb[0], info[0]]);
-					
-					info.on("focusin", function(tile, e)
-					{
-						thumb.focus();
-					}.bind(this, thumb));
-					return tile;
-				}
+				//$(".cmd-test").ibxWidget("userValue", 2);
+				//$(".test-select").ibxWidget("userValue", 2);
 			},true);
 		</script>
 		<style type="text/css">
@@ -46,45 +24,20 @@
 				height:100%;
 				box-sizing:border-box;
 			}
-			.test-carousel
-			{
-				margin:10px;
-				width:600px;
-				border:1px solid #ccc;
-			}
-			.test-item
-			{
-				margin:10px;
-			}
-			.test-item:focus
-			{
-				outline:none;
-			}
-			.item-thumb
-			{
-				max-width:150px;
-				height:100px;
-				margin-bottom:5px;
-				border:1px solid #ccc;oh yea
-				box-shadow:1px 1px 3px silver;
-			}
-			.item-thumb.ibx-sm-selected
-			{
-				outline:2px solid lime;
-			}
-			.item-thumb:hover
-			{
-				background-color:#ccc;
-			}
-			.item-last-access
-			{
-				font-size:.8em;
-				color:silver;
-			}
 		</style>
 	</head>
 	<body class="ibx-root" data-ibx-type="ibxVBox" data-ibxp-align="center">
-		<div tabindex="0" class="test-carousel" data-ibx-type="ibxCarousel" data-ibxp-scroll-type="page" data-ibxp-show-page-markers="false" data-ibxp-float-buttons="true" data-ibxp-sel-type="multi"></div>
+		<div class="cmd-test" data-ibx-type="ibxCommand" data-ibxp-id="cmdTest" data-ibxp-re-cmd="xxx"></div>
+		<div tabindex="0" class="test-select" title="Test Select" data-ibx-type="ibxSelectMenuButton" data-ibxp-command="cmdTest" data-ibxp-user-value="2">
+			<div class="size-select-item" data-ibx-type="ibxSelectMenuItem" data-ibxp-user-value="1">One</div>
+			<div class="size-select-item" data-ibx-type="ibxSelectMenuItem" data-ibxp-user-value="2">Two</div>
+			<!-- <div class="size-select-item" data-ibx-type="ibxSelectMenuItem" data-ibxp-group="rgFontSize" data-ibxp-user-value="2">x-small</div>
+			<div class="size-select-item" data-ibx-type="ibxSelectMenuItem" data-ibxp-group="rgFontSize" data-ibxp-user-value="3">small</div>
+			<div class="size-select-item" data-ibx-type="ibxSelectMenuItem" data-ibxp-group="rgFontSize" data-ibxp-user-value="4">medium</div>
+			<div class="size-select-item" data-ibx-type="ibxSelectMenuItem" data-ibxp-group="rgFontSize" data-ibxp-user-value="5">large</div>
+			<div class="size-select-item" data-ibx-type="ibxSelectMenuItem" data-ibxp-group="rgFontSize" data-ibxp-user-value="6">x-large</div>
+			<div class="size-select-item" data-ibx-type="ibxSelectMenuItem" data-ibxp-group="rgFontSize" data-ibxp-user-value="7">xx-large</div> -->
+		</div>
 	</body>
 </html>
 
