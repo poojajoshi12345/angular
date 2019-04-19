@@ -166,6 +166,13 @@
 	transform:rotate(-90deg);
 }
 
+.ibx-select-menu-button
+{
+	border:1px solid #ccc;
+	border-radius:.25em;
+	padding:2px;
+}
+
 .ibx-select-menu-button-label-editable
 {
 	border:1px solid #dedede;
