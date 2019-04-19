@@ -28,6 +28,15 @@ $.widget("ibi.ibxCommand", $.ibi.ibxWidget,
 		document.documentElement.removeEventListener("keydown", this._onCommandKeyEventBound, true);
 		delete $.ibi.ibxCommand.cmds[this.options.id];
 	},
+	_init:function()
+	{
+		//need to do this so that if created from markup the id will be set first so userValue/etc will correctly be set on associated widgets.
+		//_setOption relies on id being set first.
+		var markupOpts = ibx.getIbxMarkupOptions(this.element);
+		if(markupOpts.id)
+			this.option("id", markupOpts.id);
+		this._super();
+	},
 	doAction:function(action, data, src)
 	{
 		var ret = true;
@@ -50,38 +59,55 @@ $.widget("ibi.ibxCommand", $.ibi.ibxWidget,
 		if(eventMatchesShortcut(this.options.shortcut, e))
 			this.doAction("trigger", null, e.target);
 	},
-	_setOptionDisabled:function(value)
-	{
-		this._super(value);
-		this._refresh()
-	},
 	_setOption:function(key, value)
 	{
+		var options = this.options;
+		var idOld = options.id;
 		var changed = this.options[key] != value;
-
-		if(changed && key == "id")
-			delete $.ibi.ibxCommand.cmds[this.options.id];
-
+		
+		//calls base
 		this._super(key, value);
 
-		if(changed && key == "checked")
-			this.element.dispatchEvent("ibx_checkchanged", value, false, false, this._relTarget);
-		if(changed && key == "userValue")
-			this.element.dispatchEvent("ibx_uservaluechanged", value, false, false, this._relTarget);
+		if(key == "id")
+		{
+			delete $.ibi.ibxCommand.cmds[idOld];//remove old entry
+			$.ibi.ibxCommand.cmds[value] = this.element;//add new entry
+			this.updateState();//update all the states of connected widgets.
+		}
+		else
+		if(changed && (key == "disabled" || key == "checked" || key == "userValue"))
+		{
+			if(key == "disabled")
+				this.updateState(key);
+			else
+			if(key == "checked")
+				this.updateState(key);
+			else
+			if(key == "userValue")
+				this.updateState(key);
+		}
 	},
-	_refresh:function()
+	updateState:function(state)
 	{
-		this._super();
 		var options = this.options;
+		var widgets = $(sformat(".ibx-widget[data-ibx-command='{1}']", options.id)); //widgets attached to this command.
+		if(state == "disabled" || !state)
+		{
+			widgets.ibxWidget(options.disabled ? "disable" : "enable");
+			this.element.dispatchEvent("ibx_disabledchanged", options.disabled, false, false, this._relTarget);
+		}
 
-		//configure associated widgets
-		var widgets = $(sformat(".ibx-widget[data-ibx-command='{1}']", options.id))
-		widgets.ibxWidget(options.disabled ? "disable" : "enable");
-		widgets.ibxWidget("userValue", options.userValue);
-		widgets.filter(".ibx-can-toggle").ibxWidget("checked", options.checked);
+		if(state == "checked" || !state)
+		{
+			widgets.filter(".ibx-can-toggle").ibxWidget("checked", options.checked);
+			this.element.dispatchEvent("ibx_checkchanged", options.checked, false, false, this._relTarget);
+		}
 
-		if(options.id)
-			$.ibi.ibxCommand.cmds[options.id] = this.element;
+		if(state == "userValue" || !state)
+		{
+			widgets.ibxWidget("userValue", options.userValue);
+			this.element.dispatchEvent("ibx_uservaluechanged", options.userValue, false, false, this._relTarget);
+		}
 	}
 });
 $.ibi.ibxCommand.cmds = {};
