@@ -92,10 +92,6 @@ $.widget("ibi.ibxLabel", $.ibi.ibxFlexBox,
 			e.preventDefault();
 		}
 	},
-	_setOption:function(key, value)
-	{
-		this._super(key, value);
-	},
 	_refresh:function()
 	{
 		var options = this.options;
