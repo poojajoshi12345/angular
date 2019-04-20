@@ -419,7 +419,6 @@ var _p = $.ibi.ibxPropertyGrid.extendProperty(ibxProperty, ibxSelectMenuProperty
 _p.__createEditorCell = function()
 {
 	var editorCell = ibxSelectMenuProperty.base.__createEditorCell.call(this);
-	editorCell.ibxWidget("option", "focusRoot", true);
 	return editorCell;
 };
 _p._createEditor = function()
@@ -687,18 +686,18 @@ _p._onStyleChange = function(e)
 },
 _p._onBeforeMenuOpen = function(e)
 {
-	var prop = this.prop;
-	this.colorPicker.ibxWidget("option", {"color":prop.value.color, "opacity": prop.value.opacity ? prop.value.opacity : 1, "setOpacity": prop.value.opacity});
+	var cInfo = this.prop.value.color;
+	this.colorPicker.ibxWidget("option", {"color":cInfo.color, "opacity": cInfo.opacity ? cInfo.opacity : 1, "setOpacity": cInfo.opacity});
 };
 _p._onColorChange = function(e)
 {
 	var data = e.originalEvent.data;
-	var prop = this.prop;
-	prop.value.color = data.color;
-	prop.value.opacity = data.opacity;
-	this._updateValue(prop.value)
-	this.editor.ibxWidget({text:prop.value.color});
-	this.swatch.css({"backgroundColor": prop.value.color, "opacity": prop.value.opacity || 1});
+	var cInfo = this.prop.value.color;
+	cInfo.color = data.color;
+	cInfo.color.opacity = data.opacity;
+	this._updateValue(this.prop.value)
+	this.editor.ibxWidget({text:cInfo.color});
+	this.swatch.css({"backgroundColor": cInfo.color, "opacity": cInfo.opacity || 1});
 };
 _p._onMenuClose = function(e)
 {
@@ -712,9 +711,9 @@ _p.update = function()
 	this.spinnerWidth.ibxWidget("option", {value:parseInt(prop.value.width, 10)});
 	this.btnStyle.ibxWidget("userValue", prop.value.style).css({borderStyle:prop.value.style, borderColor:prop.value.color});
 
-
-	this.swatch.css({"backgroundColor": prop.value.color, "opacity": prop.value.opacity || 1});
-	this.btnColor.ibxWidget("option", {text:prop.value.color});
-	this.btnColor.attr("title", ibx.resourceMgr.getString("IBX_PGRID_COLOR_PICKER_LABEL") + prop.value.color);
+	var cInfo = prop.value.color;
+	this.swatch.css({"backgroundColor": cInfo.color, "opacity": cInfo.opacity || 1});
+	this.btnColor.ibxWidget("option", {text:cInfo.color});
+	this.btnColor.attr("title", ibx.resourceMgr.getString("IBX_PGRID_COLOR_PICKER_LABEL") + cInfo.color);
 	ibxBorderProperty.base.update.call(this);
 };
