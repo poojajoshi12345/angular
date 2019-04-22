@@ -1346,14 +1346,25 @@ $.widget("ibi.ibxSelectItemListPaged", $.ibi.ibxVBox,
 			this._values.forEach(function (value){
 				value.checked = false;
 			});
-		}		
-		var item = this.element.find(".sel-anchor");
-		if (item && item.length == 1)
-		{
-			var obj = item.ibxWidget("option", "valObj");
-			var checked = item.ibxWidget("option", "checked");
-			obj.checked = checked;
+		
+			var item = this.element.find(".sel-anchor");
+			if (item && item.length == 1)
+			{
+				var obj = item.ibxWidget("option", "valObj");
+				var checked = item.ibxWidget("option", "checked");
+				obj.checked = checked;
+			}
 		}
+		else
+		{
+			var items = this.element.find(".checked");
+			items.each(function(idx, el)
+			{
+				var obj = $(el).ibxWidget("option", "valObj");
+				obj.checked = true;
+			});
+		}
+
 		this._trigger("change", e, data);
 	},
 	getText: function ()
