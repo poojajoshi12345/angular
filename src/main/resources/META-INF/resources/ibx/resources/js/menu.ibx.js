@@ -616,7 +616,7 @@ $.widget("ibi.ibxSelectMenuButton", $.ibi.ibxMenuButton,
 		"filterNoCase":true,
 		"showArrow":true,
 		"useSelectionAsText":true,
-		"defaultText":"",
+		"placeholder":"",
 		"multiSelect":false,
 		"menuSelOptions":
 		{
@@ -636,7 +636,7 @@ $.widget("ibi.ibxSelectMenuButton", $.ibi.ibxMenuButton,
 	{
 		this._super();
 		var options = this.options;
-		options.defaultText = options.defaultText || options.text;
+		options.placeholder = options.placeholder || options.text;
 		this._text.ibxEditable({commitKey:null, cancelKey:null}).on("ibx_textchanging", this._onTextChanging.bind(this)).on("keydown", this._onTextKeyDown.bind(this));
 		this.element.on("ibx_widgetfocus", this._onWidgetFocus.bind(this));
 		this._sm = options.menu.ibxSelectionManager("option", options.menuSelOptions).ibxSelectionManager("instance");
@@ -672,6 +672,10 @@ $.widget("ibi.ibxSelectMenuButton", $.ibi.ibxMenuButton,
 		this._super(el, destroy, refresh);
 		$(el).attr("role", "menuitem");
 	},
+	_onWidgetFocus:function(e)
+	{
+		this.startEditing();
+	},
 	isEditing:function()
 	{
 		return this._text.ibxEditable("isEditing");
@@ -682,13 +686,14 @@ $.widget("ibi.ibxSelectMenuButton", $.ibi.ibxMenuButton,
 	stopEditing:function()
 	{
 	},
-	_onWidgetFocus:function(e)
-	{
-		this.startEditing();
-	},
 	_onKeyEvent:function(e)
 	{
 		this._super(e);
+	},
+	_onTextKeyDown:function(e)
+	{
+		if(e.keyCode == $.ui.keyCode.DOWN)
+			this.options.menu.focus();
 	},
 	_onTextChanging:function(e)
 	{
@@ -700,6 +705,10 @@ $.widget("ibi.ibxSelectMenuButton", $.ibi.ibxMenuButton,
 
 		el = $(el);
 		this._sm.selected(el, select, select, select);
+	},
+	_onBeforeMenuOpenClose:function(e)
+	{
+		this._super(e);
 	},
 	_onMenuSelChange:function(e)
 	{
@@ -717,20 +726,11 @@ $.widget("ibi.ibxSelectMenuButton", $.ibi.ibxMenuButton,
 		this.option("userValue", userValues);
 		this.element.dispatchEvent("ibx_selchange", e.originalEvent.data, false, false);
 	},
-	_onBeforeMenuOpenClose:function(e)
-	{
-		this._super(e);
-	},
-	_onTextKeyDown:function(e)
-	{
-		if(e.keyCode == $.ui.keyCode.DOWN)
-			this.options.menu.focus();
-	},
 	_setOption:function(key, value)
 	{
 		var options = this.options;
 
-		if(key == "defaultText")
+		if(key == "placeholder")
 			this.option("text", value, false);
 		else
 		if(key == "multiSelect" || key == "menuSelOptions")
@@ -766,7 +766,7 @@ $.widget("ibi.ibxSelectMenuButton", $.ibi.ibxMenuButton,
 			if(!options.multiSelect && selItems.length)
 				selItems.length = labelText.length = 1;
 
-			labelText = labelText.length ? labelText.join(", ") : options.defaultText;
+			labelText = labelText.length ? labelText.join(", ") : options.placeholder;
 			this.option("text", labelText);
 
 			this._inSetOption = true;
