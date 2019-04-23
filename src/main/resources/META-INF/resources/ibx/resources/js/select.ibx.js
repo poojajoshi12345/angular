@@ -1341,29 +1341,31 @@ $.widget("ibi.ibxSelectItemListPaged", $.ibi.ibxVBox,
 	{
 		if (e.target !== this._listControl[0] || this._inSetPage)
 			return;
+
+		//if not multiselect, then deselect all items before adjusting selection below.
 		if (!this.options.multiSelect)
 		{
 			this._values.forEach(function (value){
 				value.checked = false;
 			});
-		
-			var item = this.element.find(".sel-anchor");
-			if (item && item.length == 1)
-			{
-				var obj = item.ibxWidget("option", "valObj");
-				var checked = item.ibxWidget("option", "checked");
-				obj.checked = checked;
-			}
 		}
-		else
+
+		//adjust the anchor node (that which was clicked on).
+		var item = this.element.find(".sel-anchor");
+		if (item && item.length == 1)
 		{
-			var items = this.element.find(".checked");
-			items.each(function(idx, el)
-			{
-				var obj = $(el).ibxWidget("option", "valObj");
-				obj.checked = true;
-			});
+			var obj = item.ibxWidget("option", "valObj");
+			var checked = item.ibxWidget("option", "checked");
+			obj.checked = checked;
 		}
+
+		//adjust all the checked items
+		var items = this.element.find(".checked");
+		items.each(function(idx, el)
+		{
+			var obj = $(el).ibxWidget("option", "valObj");
+			obj.checked = true;
+		});
 
 		this._trigger("change", e, data);
 	},
