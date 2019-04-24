@@ -5,6 +5,7 @@ $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame,
 	options:
 	{
 		"defaultDropHandling":true,
+		"defaultFont":null,
 		"aria":
 		{
 			"role":"region",
@@ -27,6 +28,10 @@ $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame,
 	{
 		this._super();
 	},
+	_init:function()
+	{
+		this._super();
+	},
 	_onIFrameEvent:function(e)
 	{
 		this._super(e);
@@ -36,6 +41,8 @@ $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame,
 			cd.designMode = "On";
 			cd.body.contentEditable = true;
 			cd.body.spellcheck = false;
+			cd.body.style.fontFamily = this.options.defaultFont;
+
 			$(cd).on("focusin selectionchange", this._onRichEditDocEvent.bind(this));
 
 			//set the content if this is created from markup and there is html inside the ibxRichEdit markup.

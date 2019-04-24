@@ -80,8 +80,10 @@
 
 				$(".rich-edit-iframe").ibxWidget("ready", function(richEdit)
 				{
+					richEdit = $(richEdit);
+
 					var select = $(".tb-select-font-name");
-					var fonts = ["monospace", "arial", "arial black", "bookman", "comic sans ms", "courier", "courier new", "georgia", "garamond", "helvetica", "palatino", "times", "times new roman", "trebuchet ms", "verdana"];
+					var fonts = ["arial", "arial black", "bookman", "comic sans ms", "courier", "courier new", "georgia", "garamond", "helvetica", "monospace", "palatino", "times", "times new roman", "trebuchet ms", "verdana"];
 					for(var i = 0; i < fonts.length; ++i)
 					{
 						var selected = (i == 1);
@@ -92,7 +94,9 @@
 					var fontName = $(".cmd-font-name").ibxWidget("userValue");
 					var strSample = ibx.resourceMgr.getString("IBX_STR_SAMPLE");
 					var strFmt = sformat("Start Text<p/>{1}<p/>{1}<p/>{1}<p/>End Text</p>", strSample);
-					$(richEdit).ibxWidget("html",  strFmt).ibxWidget("selectAll").ibxWidget("fontName", "monospace").ibxWidget("deselectAll");
+					richEdit.ibxWidget("html",  strFmt);//.ibxWidget("selectAll").ibxWidget("fontName", "monospace").ibxWidget("deselectAll");
+					var cd = richEdit.ibxWidget("contentDocument");
+
 				});
 				
 				$(".rich-edit").on("selectionchange", function(e)
@@ -341,7 +345,7 @@
 				<div tabindex="0" class="rich-edit rich-edit-div" data-ibx-type="ibxRichEdit2" data-ibxp-ctx-menu=".re-ctx-menu"></div>
 				<div data-ibx-type="ibxHSplitter"></div>
 				-->
-				<div tabindex="0" class="rich-edit rich-edit-iframe" data-ibx-type="ibxRichEdit" data-ibxp-ctx-menu=".re-ctx-menu"></div>
+				<div tabindex="0" class="rich-edit rich-edit-iframe" data-ibx-type="ibxRichEdit" data-ibxp-default-font="monospace" data-ibxp-ctx-menu=".re-ctx-menu"></div>
 			</div>
 		</div>
 
