@@ -317,6 +317,7 @@ $.widget("ibi.ibxEditable", $.Widget,
 	 */
 	options:
 	{
+		"startEditing":false,
 		"spellcheck":false,
 		"autocomplete":false,
 		"autocapitalize":false,
@@ -351,6 +352,14 @@ $.widget("ibi.ibxEditable", $.Widget,
 		aria.multiline = options.multiLine ? true : null;
 		aria.autocomplete = options.autocomplete ? true : null;
 		return aria;	
+	},
+	_init:function()
+	{
+		this._super();
+		var options = $.extend(true, {}, this.options, ibx.getIbxMarkupOptions(this.element));
+		this.option(options);
+		if(this.options.startEditing)
+			this.startEditing();
 	},
 	_lastValue:null,
 	_onElementEvent:function(e)
