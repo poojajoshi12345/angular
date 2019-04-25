@@ -5,7 +5,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 {
 	options:
 	{
-		"type":"none",						//none - no selection, nav - navigation only, single - single selection, multi - multiple selection
+		"type":"none",						//none - no selection, single - single selection, multi - multiple selection
 		"toggleSelection":true,				//clicking on an item will select/deselect.
 		"escClearSelection":true,			//clear the selection on the escape key
 		"selectButtons":[0, 2],				//which buttons trigger a select 0 = left, 1 = middle, 2 = right
@@ -205,7 +205,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 			this._activate(true);//mousedown happens before focus, so make us active before anything.
 
 			//stop if we don't care about selection.
-			if(options.type == "nav" || options.type == "none" || options.selectButtons.indexOf(e.button) == -1)
+			if(options.type == "none" || options.selectButtons.indexOf(e.button) == -1)
 				return;
 
 			var isTarget = this.element.is(e.target);

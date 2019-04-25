@@ -8,7 +8,7 @@ $.widget("ibi.ibxPropertyGrid", $.ibi.ibxDataGrid,
 {
 	options:
 	{
-		selType:"nav",
+		selType:"none",
 		colMap:[{title:"Property", size:"15em", justify:"start"}, {title:"Value", size:"flex", justify:"start"}],
 		showRowHeaders:false,
 		indentColumn:0,
@@ -123,6 +123,11 @@ _p.createUI = function()
 	this.editor = this._createEditor().ibxAddClass("pgrid-editor").attr("tabindex", -1).data("ibxProp", prop);
 	this.editor.on("keydown", this._onEditorKeyEvent.bind(this));
 	this.editorCell.append(this.editor);
+
+	this.editor.on("blur", function(e)
+	{
+		console.log(e.type);
+	});
 };
 _p._createNameCell = function()
 {
@@ -658,6 +663,8 @@ var _p = $.ibi.ibxPropertyGrid.extendProperty(ibxProperty, ibxBorderProperty, "b
 _p._createEditor = function()
 {
 	var editor = ibxBorderProperty.base._createEditor.call(this);
+	editor.ibxWidget("option", "focusDefault", true);
+
 	var ctrls = ibx.resourceMgr.getResource(".pgrid-prop-border-editor-template", false).children();
 	editor.ibxWidget("add", ctrls);
 	ibx.bindElements(editor);
