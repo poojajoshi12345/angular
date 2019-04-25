@@ -384,6 +384,9 @@ $.widget("ibi.ibxWidget", $.Widget,
 				this.element.ibxSelectionManager();
 			this.element.ibxSelectionManager("option", $.extend({}, mgrOptions, options.selMgrOpts));//need this or options won't get set properly.
 		}
+		else
+		if(this.element.is(".ibx-selection-manager"))
+			this.element.ibxSelectionManager("destroy");
 
 		//now config accessibility
 		this.setAccessibility();
