@@ -745,7 +745,7 @@ $.widget("ibi.ibxSelectMenuButton", $.ibi.ibxMenuButton,
 			options.menu.ibxWidget("option",{multiSelect:multiSelect, selMgrOpts:options.menuSelOptions});
 		}
 		else
-		if(key == "userValue")
+		if(key == "userValue" && !this._inSetOption)
 		{
 			var labelText = [];
 			var selItems = [];

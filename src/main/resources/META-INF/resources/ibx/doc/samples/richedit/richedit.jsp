@@ -113,16 +113,20 @@
 					var	reCmd = cmd.ibxWidget("option", "reCmd");
 					var val = cmd.ibxWidget("userValue");
 
-					if(cmd.is(".cmd-font-name") || cmd.is("cmd-font-size"))
-						val = val[0];
-					else
-					if(cmd.is(".cmd-fore-color, .cmd-back-color") && isUserValue)
+					if(e.type == "ibx_uservaluechanged")
 					{
-						val = cmd.ibxWidget("userValue");
-						if(val.search(/^rgb\(/i) == 0)
-							val = rgbToHex(val);
-						reCmd = cmd.is(".cmd-fore-color") ? "foreColor" : "backColor";
+						if(cmd.is(".cmd-font-name") || cmd.is("cmd-font-size"))
+							val = val[0];
+						else
+						if(cmd.is(".cmd-fore-color, .cmd-back-color") && isUserValue)
+						{
+							val = cmd.ibxWidget("userValue");
+							if(val.search(/^rgb\(/i) == 0)
+								val = rgbToHex(val);
+							reCmd = cmd.is(".cmd-fore-color") ? "foreColor" : "backColor";
+						}
 					}
+					
 					if(cmd.is(".cmd-insert-ordered-list"))
 						val = "true";
 					

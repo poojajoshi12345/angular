@@ -14,15 +14,6 @@
 			{
 				//$(".cmd-test").ibxWidget("userValue", 2);
 				//$(".test-select").ibxWidget("userValue", 2);
-
-				var values = [];
-				for(var i = 0; i < 25; ++i)
-				{
-					var value = {display:"item " + i, checked:false}
-					values.push(value)
-				}
-				$(".test-select").ibxWidget("values", values);
-
 			},true);
 		</script>
 		<style type="text/css">
@@ -31,17 +22,21 @@
 				position:absolute;
 				width:100%;
 				height:100%;
-				margin:0px;
 				box-sizing:border-box;
-			}
-			.test-select
-			{
-				height:200px;
 			}
 		</style>
 	</head>
 	<body class="ibx-root" data-ibx-type="ibxVBox" data-ibxp-align="center">
-		<div tabindex="0" class="test-select" title="Test Select" data-ibx-type="ibxSelectItemListPaged" data-ibxp-selection-controls="true" data-ibxp-multi-select="true" data-ibxp-enable-paging-trigger="10"></div>
+		<div class="test-cmd" data-ibx-type="ibxCommand" data-ibxp-id="cmdTest" data-ibxp-re-cmd="xxx"></div>
+		<div tabindex="0" class="test-select" title="Test Select" data-ibx-type="ibxSelectMenuButton" data-ibxp-multi-select="true" data-ibxp-command="cmdTest" data-ibxp-user-value="2">
+			<div class="size-select-item" data-ibx-type="ibxSelectMenuItem" data-ibxp-group="rgFontSize" data-ibxp-user-value="1">xx-small</div>
+			<div class="size-select-item" data-ibx-type="ibxSelectMenuItem" data-ibxp-group="rgFontSize" data-ibxp-user-value="2">x-small</div>
+			<div class="size-select-item" data-ibx-type="ibxSelectMenuItem" data-ibxp-group="rgFontSize" data-ibxp-user-value="3">small</div>
+			<div class="size-select-item" data-ibx-type="ibxSelectMenuItem" data-ibxp-group="rgFontSize" data-ibxp-user-value="4">medium</div>
+			<div class="size-select-item" data-ibx-type="ibxSelectMenuItem" data-ibxp-group="rgFontSize" data-ibxp-user-value="5">large</div>
+			<div class="size-select-item" data-ibx-type="ibxSelectMenuItem" data-ibxp-group="rgFontSize" data-ibxp-user-value="6">x-large</div>
+			<div class="size-select-item" data-ibx-type="ibxSelectMenuItem" data-ibxp-group="rgFontSize" data-ibxp-user-value="7">xx-large</div>
+		</div>
 	</body>
 </html>
 
