@@ -130,7 +130,8 @@ _p._createNameCell = function()
 };
 _p.__createEditorCell = function()
 {
-	return $("<div>").ibxHBox({align:"center"}).on("keydown keyup", this._onEditorCellKeyEvent.bind(this));
+	//by default focus the actual editor when cell get's focus.
+	return $("<div>").ibxHBox({focusDefault:true, align:"center"}).on("keydown keyup", this._onEditorCellKeyEvent.bind(this));
 };
 _p._createEditor = function()
 {
@@ -301,7 +302,7 @@ function ibxRadioGroupProperty(prop, grid)
 var _p = $.ibi.ibxPropertyGrid.extendProperty(ibxProperty, ibxRadioGroupProperty, "radiogroup");
 _p._createEditor = function()
 {
-	return $("<div>").ibxRadioGroup({navKeyRoot:true, wrap:false}).on("ibx_change", this._onChangeEvent.bind(this)).ibxAddClass("pgrid-prop-radiogroup");
+	return $("<div>").ibxRadioGroup({wrap:false}).on("ibx_change", this._onChangeEvent.bind(this)).ibxAddClass("pgrid-prop-radiogroup");
 };
 _p._onChangeEvent = function(e)
 {
