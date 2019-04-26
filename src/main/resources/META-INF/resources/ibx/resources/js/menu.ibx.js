@@ -652,6 +652,10 @@ $.widget("ibi.ibxSelectMenuButton", $.ibi.ibxMenuButton,
 	},
 	_init:function()
 	{
+		//have to set multiselect from markup before setting userValue or it won't process markup userValue properly.
+		var markupOpts = ibx.getIbxMarkupOptions(this.element);
+		if(markupOpts.multiSelect !== undefined)
+			this.option("multiSelect", markupOpts.multiSelect);
 		this._super();
 	},
 	add:function(el, elSibling, before, refresh)
@@ -777,13 +781,16 @@ $.widget("ibi.ibxSelectMenuButton", $.ibi.ibxMenuButton,
 
 			//adjust selection model, and save value as normal.
 			this._inSetOption = true;
-			this._sm.deselectAll();
 			this._sm.selected(selItems, true, true, true);
 			this._super(key, value);//so events will be triggered...both widget, and command.
 			this._inSetOption = false;
 			return;
 		}
 		this._super(key, value);
+	},
+	getSelectionManager:function()
+	{
+		return this._sm;
 	},
 	_refresh:function()
 	{

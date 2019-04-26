@@ -33,7 +33,7 @@ $.widget("ibi.ibxCommand", $.ibi.ibxWidget,
 		//need to do this so that if created from markup the id will be set first so userValue/etc will correctly be set on associated widgets.
 		//_setOption relies on id being set first.
 		var markupOpts = ibx.getIbxMarkupOptions(this.element);
-		if(markupOpts.id)
+		if(markupOpts.id !== undefined)
 			this.option("id", markupOpts.id);
 		this._super();
 	},
