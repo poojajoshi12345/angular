@@ -31,20 +31,22 @@
 				box-shadow:0px 0px 4px 2px red;
 			}
 
-			.ibx-sm-selected
+			.ibx-selection-manager .ibx-sm-selected
 			{
-				background-color:lime;
+				color:black;
+				background-color: lightgreen;
+			}
+			.ibx-selection-manager .ibx-sm-anchor:before
+			{
+				font-size:.85em;
+				content:"Anchor ";
+			}
+			.ibx-selection-manager .ibx-sm-focused:after
+			{
+				font-size:.85em;
+				content:" Focus";
 			}
 
-			.dgrid-cell.ibx-sm-anchor:after
-			{
-				content:"ANCHOR";
-				background-color:lime;
-			}
-			.ibx-sm-focused:after
-			{
-				content:"FOCUSED";
-			}
 			.top-box
 			{
 				display:inline-block;
