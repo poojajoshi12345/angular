@@ -666,7 +666,7 @@ _p._createEditor = function()
 
 	var widget = editor.data("ibxWidget");
 	this.spinnerWidth = widget.spinnerWidth.on("ibx_change", this._onWidthChange.bind(this));
-	this.btnStyle = widget.btnStyle.on("ibx_selchange", this._onStyleChange.bind(this));
+	this.btnStyle = widget.btnStyle.on("ibx_uservaluechanged", this._onStyleChange.bind(this));
 	this.btnColor = widget.btnColor;
 	this.swatch = this.btnColor.find(".ibx-label-glyph");
 	this.colorMenu = widget.colorMenu;
@@ -699,6 +699,7 @@ _p._onColorChange = function(e)
 	cInfo.color = data.color;
 	cInfo.color.opacity = data.opacity;
 	this._updateValue(this.prop.value)
+	this.update();
 	this.editor.ibxWidget({text:cInfo.color});
 	this.swatch.css({"backgroundColor": cInfo.color, "opacity": cInfo.opacity || 1});
 };
@@ -711,10 +712,10 @@ _p._onMenuClose = function(e)
 _p.update = function()
 {
 	var prop = this.prop;
-	this.spinnerWidth.ibxWidget("option", {value:parseInt(prop.value.width, 10)});
-	this.btnStyle.ibxWidget("userValue", prop.value.style).css({borderStyle:prop.value.style, borderColor:prop.value.color});
-
 	var cInfo = prop.value.color;
+	this.spinnerWidth.ibxWidget("option", {value:parseInt(prop.value.width, 10)});
+	this.btnStyle.ibxWidget("userValue", prop.value.style).css({borderStyle:prop.value.style, borderColor:cInfo.color, borderWidth:"2px"});
+
 	this.swatch.css({"backgroundColor": cInfo.color, "opacity": cInfo.opacity || 1});
 	this.btnColor.ibxWidget("option", {text:cInfo.color});
 	this.btnColor.attr("title", ibx.resourceMgr.getString("IBX_PGRID_COLOR_PICKER_LABEL") + cInfo.color);
