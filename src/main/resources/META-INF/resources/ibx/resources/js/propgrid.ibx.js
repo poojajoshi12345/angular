@@ -123,11 +123,6 @@ _p.createUI = function()
 	this.editor = this._createEditor().ibxAddClass("pgrid-editor").attr("tabindex", -1).data("ibxProp", prop);
 	this.editor.on("keydown", this._onEditorKeyEvent.bind(this));
 	this.editorCell.append(this.editor);
-
-	this.editor.on("blur", function(e)
-	{
-		console.log(e.type);
-	});
 };
 _p._createNameCell = function()
 {

@@ -56,7 +56,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 	{
 		var options = this.options;
 		var isTarget = this.element.is(e.target);
-		var ownsTarget = $.contains(this.element[0], e.target);
+		var ownsTarget = $.contains(this.element[0], e.target) && $(e.target).closest(".ibx-selection-manager").is(this.element);
 		var ownsRelTarget = $.contains(this.element[0], e.relatedTarget);
 
 		//make sure the manager is in the focused state.
@@ -78,9 +78,22 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 			return;
 		}
 
+		// if(this.element.is(".dgrid-grid, .pgrid-editor-cell"))
+		// {
+		// 	console.log("isTarget", isTarget, "ownsTarget", ownsTarget);
+		// 	console.log("selManager", this.element[0]);
+		// 	console.log("target", e.target);
+		// }
+
 		//focus the selected item
 		if(!isTarget && ownsTarget)
+		{
 			this.focus(e.target, true);
+			console.log("isTarget", isTarget, "ownsTarget", ownsTarget);
+			console.log("selManager", this.element[0]);
+			console.log("target", e.target);
+			console.log("activeElement", document.activeElement);
+		}
 	},
 	_onFocusOut:function(e)
 	{
