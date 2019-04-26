@@ -763,16 +763,23 @@ $.widget("ibi.ibxSelectMenuButton", $.ibi.ibxMenuButton,
 					labelText.push(item.ibxWidget("text"));
 				}
 			}
-			if(!options.multiSelect && selItems.length)
-				selItems.length = labelText.length = 1;
 
+			//single select turn uservalue into single value, not array.
+			if(!options.multiSelect)
+			{
+				selItems.length = labelText.length = 1;
+				value = value[0];
+			}
+
+			//set label
 			labelText = labelText.length ? labelText.join(", ") : options.placeholder;
 			this.option("text", labelText);
 
+			//adjust selection model, and save value as normal.
 			this._inSetOption = true;
 			this._sm.deselectAll();
 			this._sm.selected(selItems, true, true, true);
-			this._super(key, value);//need to call super so attached ibxCommand will trigger uservalue update event.
+			this._super(key, value);//so events will be triggered...both widget, and command.
 			this._inSetOption = false;
 			return;
 		}
