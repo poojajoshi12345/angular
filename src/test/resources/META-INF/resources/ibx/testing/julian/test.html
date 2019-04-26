@@ -12,34 +12,102 @@
 		<script type="text/javascript">
 			ibx(function(e)
 			{
-				//$(".cmd-test").ibxWidget("userValue", 2);
-				//$(".test-select").ibxWidget("userValue", 2);
+				$(".test-grid").ibxWidget("initGrid", 3, 3);
 			},true);
 		</script>
 		<style type="text/css">
 			body
 			{
+				margin:0px;
 				position:absolute;
 				width:100%;
 				height:100%;
 				box-sizing:border-box;
 			}
+
+			:focus
+			{
+				outline:none;
+				box-shadow:0px 0px 4px 2px red;
+			}
+
+			.ibx-sm-selected
+			{
+				background-color:lime;
+			}
+
+			.dgrid-cell.ibx-sm-anchor:after
+			{
+				content:"ANCHOR";
+				background-color:lime;
+			}
+			.ibx-sm-focused:after
+			{
+				content:"FOCUSED";
+			}
+			.top-box
+			{
+				display:inline-block;
+				margin:10px;
+				padding:10px;
+				border:2px solid black;
+			}
+
+			.inner-box
+			{
+				display:inline-block;
+				margin:10px;
+				padding:10px;
+				border:2px solid green;
+			}
+
+			.child-box
+			{
+				display:inline-block;
+				width:20px;
+				height:20px;
+				margin:10px;
+				border:2px solid #ccc;
+			}
 		</style>
 	</head>
-	<body class="ibx-root" data-ibx-type="ibxVBox" data-ibxp-align="center">
-		<testtag></testtag>
-		<div class="test-div"></div>
+	<body class="ibx-root">
+
+		<div tabindex="0" class="test-grid" data-ibx-type="ibxDataGrid" data-ibxp-inline="true"></div>
 
 		<div class="test-cmd" data-ibx-type="ibxCommand" data-ibxp-id="cmdTest" data-ibxp-re-cmd="xxx"></div>
-		<div tabindex="0" class="test-select" title="Test Select" data-ibx-type="ibxSelectMenuButton" data-ibxp-multi-select="true" data-ibxp-command="cmdTest" data-ibxp-user-value="2">
-			<div class="size-select-item" data-ibx-type="ibxSelectMenuItem" data-ibxp-group="rgFontSize" data-ibxp-user-value="1">xx-small</div>
-			<div class="size-select-item" data-ibx-type="ibxSelectMenuItem" data-ibxp-group="rgFontSize" data-ibxp-user-value="2">x-small</div>
-			<div class="size-select-item" data-ibx-type="ibxSelectMenuItem" data-ibxp-group="rgFontSize" data-ibxp-user-value="3">small</div>
-			<div class="size-select-item" data-ibx-type="ibxSelectMenuItem" data-ibxp-group="rgFontSize" data-ibxp-user-value="4">medium</div>
-			<div class="size-select-item" data-ibx-type="ibxSelectMenuItem" data-ibxp-group="rgFontSize" data-ibxp-user-value="5">large</div>
-			<div class="size-select-item" data-ibx-type="ibxSelectMenuItem" data-ibxp-group="rgFontSize" data-ibxp-user-value="6">x-large</div>
-			<div class="size-select-item" data-ibx-type="ibxSelectMenuItem" data-ibxp-group="rgFontSize" data-ibxp-user-value="7">xx-large</div>
+		<div tabindex="0" class="test-select" title="Test Select" data-ibx-type="ibxSelectMenuButton" data-ibxp-multi-select="true" data-ibxp-command="cmdTest" data-ibxp-user-value="[1, 7]">
+			<div id="si1" class="size-select-item" data-ibx-type="ibxSelectMenuItem" data-ibxp-group="rgFontSize" data-ibxp-user-value="1">xx-small</div>
+			<div id="si2" class="size-select-item" data-ibx-type="ibxSelectMenuItem" data-ibxp-group="rgFontSize" data-ibxp-user-value="2">x-small</div>
+			<div id="si3" class="size-select-item" data-ibx-type="ibxSelectMenuItem" data-ibxp-group="rgFontSize" data-ibxp-user-value="3">small</div>
+			<div id="si4" class="size-select-item" data-ibx-type="ibxSelectMenuItem" data-ibxp-group="rgFontSize" data-ibxp-user-value="4">medium</div>
+			<div id="si5" class="size-select-item" data-ibx-type="ibxSelectMenuItem" data-ibxp-group="rgFontSize" data-ibxp-user-value="5">large</div>
+			<div id="si6" class="size-select-item" data-ibx-type="ibxSelectMenuItem" data-ibxp-group="rgFontSize" data-ibxp-user-value="6">x-large</div>
+			<div id="si7" class="size-select-item" data-ibx-type="ibxSelectMenuItem" data-ibxp-group="rgFontSize" data-ibxp-user-value="7">xx-large</div>
 		</div>
+
+		<!-- <div id="topBox" tabindex="0" class="top-box" data-ibx-type="ibxWidget" data-ibxp-focus-default="true">
+
+			<div id="iBox1" tabindex="0" class="inner-box" data-ibx-type="ibxWidget" data-ibxp-sel-type="multi" data-ibxp-nav-key-root="true" data-ibxp-focus-default="true">
+				<div id="cBox1" tabindex="-1" class="child-box"></div>
+				<div id="cBox2" tabindex="-1" class="child-box"></div>
+				<div id="cBox3" tabindex="-1" class="child-box"></div>
+			</div>
+
+			<div id="iBox2" tabindex="0" class="inner-box" data-ibx-type="ibxWidget" data-ibxp-nav-key-root="true" data-ibxp-focus-default="true">
+				<div id="cBox1" tabindex="-1" class="child-box"></div>
+				<div id="cBox2" tabindex="-1" class="child-box"></div>
+				<div id="cBox3" tabindex="-1" class="child-box"></div>
+			</div>
+
+			<div id="iBox3" tabindex="0" class="inner-box" data-ibx-type="ibxWidget" data-ibxp-nav-key-root="true" data-ibxp-focus-default="true">
+				<div id="cBox1" tabindex="-1" class="child-box"></div>
+				<div id="cBox2" tabindex="-1" class="child-box"></div>
+				<div id="cBox3" tabindex="-1" class="child-box"></div>
+			</div>
+
+		</div> -->
+
 	</body>
 </html>
 

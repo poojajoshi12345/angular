@@ -20,14 +20,13 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 		"selectableChildren":null,			//class for what children are selectable.
 		"cacheSelectableChildren":false,	//when true, save last retreived to save time
 	},
-	_widgetClass:"ibx-selection-manager",
 	_create:function()
 	{
 		this._super();
 		$.extend(true, this.options, ibx.getIbxMarkupOptions(this.element));//we aren't an ibxWidget, so get the markup options.
 		this.option(this.options);//force initial update.
 
-		this.element.ibxAddClass(this._widgetClass);
+		this.element.ibxAddClass("ibx-selection-manager");
 		this.element.data("ibiIbxSelectionManager", this);//plymorphism
 		this.element[0].addEventListener("focusin", this._focusInBound = this._onFocusIn.bind(this), true);
 		this.element[0].addEventListener("focusout", this._focusOutBound = this._onFocusOut.bind(this), true);
@@ -162,7 +161,6 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 			if(isMulti && !e.shiftKey && !e.ctrlKey)
 				this.deselectAll(true);
 
-
 			if(e.shiftKey)
 			{
 				var selChildren = this.selectableChildren(":ibxVisible");
@@ -177,7 +175,6 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 				this.toggleSelected(this._focus());//toggle the target!
 			else
 				this.toggleSelected(this._focus(), (options.toggleSelection ? undefined : true));
-
 		}
 		else
 		if((e.keyCode == $.ui.keyCode.HOME) && ibxEventManager.isInputEventToIgnore(e))
@@ -373,7 +370,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 					if(anchor)
 						this.anchor(el.first());
 					if(focus)
-						this.focus(el.first());
+						this.focus(el.last());
 					this._dispatchEvent("ibx_selchange", {"selected":select, "items":el, "selModel":this, "anchor":this._elAnchor, "focus":this._elFocus}, true, false);
 				}
 			}
@@ -394,10 +391,10 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 			}
 		}
 	},
-	toggleSelected:function(el, selected, anchor)
+	toggleSelected:function(el, selected, anchor, focus)
 	{
 		selected = (selected === undefined) ? !this.isSelected(el) : selected;
-		this.selected(el, selected, anchor);
+		this.selected(el, selected, anchor, focus);
 	},
 	selectAll:function(selector)
 	{
@@ -417,7 +414,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 		//public interface needs to map nodes...think tree from ibxTreeNode to it's selectable label.
 		el = $(el, this.element);
 		el = this.mapToSelectable(el);
-		el = this._anchor(el[0] || null);
+		el = this._anchor(el[0] || undefined);
 		return el ? this.mapFromSelectable(el) : undefined;
 	},
 	_anchor:function(el)
@@ -440,14 +437,14 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 		//public interface needs to map nodes...think tree from ibxTreeNode to it's selectable label.
 		el = $(el, this.element);
 		el = this.mapToSelectable(el);
-		el = this._focus(el[0] || null);
+		el = this._focus(el[0] || undefined);
 		return el ? this.mapFromSelectable(el) : undefined;
 	},
 	_focus:function(el)
 	{
 		if(el === undefined)
 			return this._elFocus[0];
-		
+
 		if(!this._elFocus.is(el))
 		{
 			var relTarget = this._elFocus[0];
@@ -484,7 +481,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 			else
 			{
 				if(this.options.focusResetOnBlur)
-					this._focus(null, false);
+					this._focus(null);
 				this.element.ibxRemoveClass("ibx-sm-active");
 
 				//put this element back in the tab order...so that next tab into will will do auto-focus.

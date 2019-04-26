@@ -140,7 +140,6 @@ $.widget("ibi.ibxDataGridSelectionManager", $.ibi.ibxSelectionManager,
 		"selectableChildren":".dgrid-cell", //can be elements/classes/etc.
 		"cacheSelectableChildren":true,
 	},
-	_widgetClass:"ibx-data-grid-selection-model",
 	_onKeyDown:function(e)
 	{
 		var options = this.options;
@@ -671,7 +670,8 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 
 			if(!flexing)
 			{
-				var padding = $("<div>").css({"flex":"0 0 auto", "width":"100px", height:"1px"});
+				//need padding so horizontal scrolling works correctly...need to have at least a scrollbar's width.
+				var padding = $("<div>").css({"flex":"0 0 auto", "width":"50px", height:"1px"});
 				this._colHeaderBar.append(padding);
 			}
 		}
