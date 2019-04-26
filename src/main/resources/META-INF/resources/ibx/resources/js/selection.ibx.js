@@ -78,22 +78,9 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 			return;
 		}
 
-		// if(this.element.is(".dgrid-grid, .pgrid-editor-cell"))
-		// {
-		// 	console.log("isTarget", isTarget, "ownsTarget", ownsTarget);
-		// 	console.log("selManager", this.element[0]);
-		// 	console.log("target", e.target);
-		// }
-
 		//focus the selected item
 		if(!isTarget && ownsTarget)
-		{
 			this.focus(e.target, true);
-			console.log("isTarget", isTarget, "ownsTarget", ownsTarget);
-			console.log("selManager", this.element[0]);
-			console.log("target", e.target);
-			console.log("activeElement", document.activeElement);
-		}
 	},
 	_onFocusOut:function(e)
 	{
