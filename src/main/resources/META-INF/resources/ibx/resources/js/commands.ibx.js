@@ -106,7 +106,7 @@ $.widget("ibi.ibxCommand", $.ibi.ibxWidget,
 		if(state == "userValue" || !state)
 		{
 			widgets.ibxWidget("userValue", options.userValue);
-			this.element.dispatchEvent("ibx_uservaluechanged", options.userValue, false, false, this._relTarget);
+			//don't need to dispatch uservaluechanged event because the base widget will do that when the option changes.
 		}
 	}
 });

@@ -328,7 +328,10 @@ $.widget("ibi.ibxWidget", $.Widget,
 		var changed = (this.options[key] != value);
 		this._super(key, value);
 		if(changed && key == "userValue")
+		{
 			this.doCommandAction("uservalue", value);
+			this.element.dispatchEvent("ibx_uservaluechanged", this.options.userValue, false, false);
+		}
 	},
 	_setOptionDisabled:function(value)
 	{
