@@ -168,6 +168,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 				var idxSel = selChildren.index(this._focus());
 				var idxStart = Math.min(idxAnchor, idxSel);
 				var idxEnd = Math.max(idxAnchor, idxSel);
+				this.deselectAll();
 				this.toggleSelected(selChildren.slice(idxStart, idxEnd + 1), true, false);
 			}
 			else
@@ -230,6 +231,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 					var idxSel = selChildren.index(selTarget[0]);
 					var idxStart = Math.min(idxAnchor, idxSel);
 					var idxEnd = Math.max(idxAnchor, idxSel);
+					this.deselectAll();
 					this.toggleSelected(selChildren.slice(idxStart, idxEnd + 1), true, false);
 				}
 				else
