@@ -159,7 +159,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 		{
 			var isMulti = options.type == "multi";
 			if(isMulti && !e.shiftKey && !e.ctrlKey)
-				this.deselectAll(true);
+				this.deselectAll(true, false);
 
 			if(e.shiftKey)
 			{
@@ -168,7 +168,6 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 				var idxSel = selChildren.index(this._focus());
 				var idxStart = Math.min(idxAnchor, idxSel);
 				var idxEnd = Math.max(idxAnchor, idxSel);
-				this.deselectAll();
 				this.toggleSelected(selChildren.slice(idxStart, idxEnd + 1), true, false);
 			}
 			else
@@ -231,8 +230,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 					var idxSel = selChildren.index(selTarget[0]);
 					var idxStart = Math.min(idxAnchor, idxSel);
 					var idxEnd = Math.max(idxAnchor, idxSel);
-					this.deselectAll();
-					this.toggleSelected(selChildren.slice(idxStart, idxEnd + 1), true, false);
+					this.toggleSelected(selChildren.slice(idxStart, idxEnd + 1), true, false, false);
 				}
 				else
 				if(isMulti && e.ctrlKey)
@@ -386,8 +384,10 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 				if(!evt.isDefaultPrevented())
 				{
 					el.ibxRemoveClass("ibx-sm-selected").attr("aria-selected", null);
-					if(el.is(this._elAnchor))
+					if(anchor && el.is(this._elAnchor))
 						this.anchor(null);
+					if(focus && el.is(this._elFocus))
+						this.focus(null);
 					this._dispatchEvent("ibx_selchange", {"selected":select, "items":el, "selModel":this, "anchor":this._elAnchor, "focus":this._elFocus}, true, false);
 				}
 			}
@@ -404,6 +404,9 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 	},
 	deselectAll:function(andAnchor, andFocus)
 	{
+		andAnchor = (andAnchor == undefined) ? true : andAnchor;
+		andFocus = (andFocus == undefined) ? true : andFocus;
+		
 		this.selected(".ibx-sm-selected", false);
 		if(andAnchor)
 			this.anchor(null);
@@ -414,9 +417,11 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 	anchor:function(el)
 	{
 		//public interface needs to map nodes...think tree from ibxTreeNode to it's selectable label.
-		el = $(el, this.element);
-		el = this.mapToSelectable(el);
-		el = this._anchor(el[0] || undefined);
+		// el = $(el, this.element);
+		// el = this.mapToSelectable(el);
+		// el = this._anchor(el[0]);
+		el = el ? this.mapToSelectable(el)[0] : el;
+		el = this._anchor(el);
 		return el ? this.mapFromSelectable(el) : undefined;
 	},
 	_anchor:function(el)
@@ -434,12 +439,15 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 		return this._elAnchor[0];
 	},
 	_elFocus:$(),
-	focus:function(el, focus)
+	focus:function(el)
 	{
 		//public interface needs to map nodes...think tree from ibxTreeNode to it's selectable label.
-		el = $(el, this.element);
-		el = this.mapToSelectable(el);
-		el = this._focus(el[0] || undefined);
+		// el = $(el, this.element);
+		// el = this.mapToSelectable(el);
+		// el = this._focus(el[0] || undefined);
+		// return el ? this.mapFromSelectable(el) : undefined;
+		el = el ? this.mapToSelectable(el)[0] : el;
+		el = this._focus(el);
 		return el ? this.mapFromSelectable(el) : undefined;
 	},
 	_focus:function(el)
