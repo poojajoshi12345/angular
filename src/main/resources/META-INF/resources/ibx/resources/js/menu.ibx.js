@@ -661,7 +661,7 @@ $.widget("ibi.ibxSelectMenuButton", $.ibi.ibxMenuButton,
 	add:function(el, elSibling, before, refresh)
 	{
 		this._super(el, elSibling, before, refresh);
-		var userValue = this.options.userValue;
+		var userValue = this.options.userValue || [];
 		$(el).attr("role", "option").each(function(idx, el)
 		{
 			el = $(el);
