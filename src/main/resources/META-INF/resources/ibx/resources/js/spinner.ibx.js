@@ -126,7 +126,7 @@ $.widget("ibi.ibxSpinner", $.ibi.ibxTextField,
 	},
 	_onTextChanging: function (e)
 	{
-		if (!jQuery.isNumeric(e.key) && e.which != 9 && e.which != 37 && e.which != 38 && e.which != 39 && e.which != 40 && e.which != 8 && e.which != 46 && e.which != 190)
+		if (!jQuery.isNumeric(e.key) && e.which != 9 && e.which != 37 && e.which != 38 && e.which != 39 && e.which != 40 && e.which != 8 && e.which != 46 && e.which != 189 && e.which != 190)
 			e.preventDefault();
 	},
 	_stepSpinner: function (bUp)
