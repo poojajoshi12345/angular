@@ -610,7 +610,7 @@ $.widget("ibi.ibxSelectMenuButton", $.ibi.ibxMenuButton,
 {
 	options:
 	{
-		"userValue":[],
+		"userValue":null,
 		"editable":false,
 		"filterValues":false,
 		"filterNoCase":true,
@@ -652,16 +652,17 @@ $.widget("ibi.ibxSelectMenuButton", $.ibi.ibxMenuButton,
 	},
 	_init:function()
 	{
-		//have to set multiselect from markup before setting userValue or it won't process markup userValue properly.
-		var markupOpts = ibx.getIbxMarkupOptions(this.element);
-		if(markupOpts.multiSelect !== undefined)
-			this.option("multiSelect", markupOpts.multiSelect);
+		// have to set multiselect from markup before setting userValue or it won't process userValue properly (from markup or js)
+		var markupOpts = ibx.getIbxMarkupOptions(this.element);//unfortunately redundant, but for some reason js is processing userValue before multiSelect option.
+		var multiSelect = markupOpts.multiSelect || this.options.multiSelect;
+		this.options.multiSelect = undefined;
+		this.option("multiSelect", multiSelect);
 		this._super();
 	},
 	add:function(el, elSibling, before, refresh)
 	{
 		this._super(el, elSibling, before, refresh);
-		var userValue = this.options.userValue || [];
+		var userValue = this.options.multiSelect ? this.options.userValue : [this.options.userValue];//if multiselect, then possibly add to existing selection.
 		$(el).attr("role", "option").each(function(idx, el)
 		{
 			el = $(el);
@@ -743,6 +744,7 @@ $.widget("ibi.ibxSelectMenuButton", $.ibi.ibxMenuButton,
 			if(key == "multiSelect")
 			{
 				multiSelect = value;
+				options.value = multiSelect ? [] : null;
 				options.menuSelOptions.type = (multiSelect ? "multi" : "single");
 				options.menuSelOptions.toggleSelection = multiSelect;
 			}
