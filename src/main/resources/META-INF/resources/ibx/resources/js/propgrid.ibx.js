@@ -482,10 +482,10 @@ _p.update = function()
 	var prop = this.prop;
 	this.slider.ibxWidget("option",
 	{
-		value:prop.value,
 		min:prop.valueMin,
 		max:prop.valueMax,
 		step:prop.step,
+		value:prop.value, //must be set after min/max/step, or spinner will always round value to whole number.
 		minTextPos:"center",
 		maxTextPos:"center",
 		popupValue:false,
