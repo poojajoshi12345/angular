@@ -166,7 +166,7 @@ _p.update = function()
 {
 	var prop = this.prop;
 	this.nameCell.ibxWidget({text:this.prop.displayName}).prop("title", prop.nameTip);
-	this.editorCell.prop("title", prop.valueTip);
+	this.editorCell.prop("title", prop.valueTip || prop.value);
 	this.editorCell.ibxWidget("option", "disabled", (prop.enabled === false) || false);
 	this.editorCell.ibxWidget("option", "aria.label", ibx.resourceMgr.getString("IBX_PGRID_EDIT_CELL_LABEL") + (prop.valueTip || prop.nameTip));
 };

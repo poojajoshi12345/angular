@@ -276,7 +276,7 @@
 					"valueTip":undefined,
 					"name":"spinner",
 					"value":50,
-					"valueMin":0,
+					"valueMin":-100,
 					"valueMax":100,
 					"step":1,
 					"dataType":"number",
