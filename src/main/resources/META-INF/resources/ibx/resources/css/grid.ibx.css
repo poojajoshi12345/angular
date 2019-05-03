@@ -45,7 +45,7 @@
 {
 	border-right:1px solid #888;
 }
-.ibx-data-grid > .dgrid-header-bar-hidden
+.ibx-data-grid  .dgrid-header-bar-hidden
 {
 	display:none;
 }

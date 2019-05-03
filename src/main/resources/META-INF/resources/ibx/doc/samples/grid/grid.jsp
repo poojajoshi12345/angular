@@ -62,7 +62,6 @@
 				$(".btn-load").on("click", function(e)
 				{
 					var rows = [];
-					var colMap = [];
 					var nRows = parseInt($(".num-rows").text(), 10);
 					var nCols = parseInt($(".num-cols").text(), 10);
 					for(var i = 0; i < nRows; ++i)
@@ -76,8 +75,6 @@
 								$(e.target).ibxEditable("startEditing");
 							})
 							cols.push(cell[0]);
-							if(i == 0)
-								colMap.push({"title":"Column " + j, "size":"100px"});
 						}
 						var row = $("<div>").ibxDataGridRow();
 						row.append(cols)
@@ -86,16 +83,22 @@
 
 					var grid = $(".ibx-data-grid");
 					console.time("totalLoad");
-					updateDataGridSettings(colMap);
+					updateDataGridSettings();
 					grid.ibxWidget("removeAll");
 					grid.ibxWidget("addRows", rows, null, null);
 					console.timeEnd("totalLoad");
 				});
 
-				function updateDataGridSettings(colMap)
+				function updateDataGridSettings()
 				{
+					var grid = $(".ibx-data-grid");
 					var hideCols = $(".btn-hide-cols").ibxWidget("checked");
 					var hideRows = $(".btn-hide-rows").ibxWidget("checked");
+					var colMap = [];
+					var nCols = parseInt($(".num-cols").text(), 10);
+					for(var i = 0; i < nCols; ++i)
+						colMap.push({"title":"Column " + i, "size":"100px"});
+
 					var grid = $(".ibx-data-grid").ibxWidget("option",
 					{
 						"colMap":colMap,

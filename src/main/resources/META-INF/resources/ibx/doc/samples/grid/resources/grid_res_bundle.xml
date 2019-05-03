@@ -30,6 +30,12 @@
 			.toolbar-item
 			{
 			}
+			.num-rows, .num-cols
+			{
+				border:2px solid #ccc;
+				border-radius:.25em;
+				padding:2px;
+			}
 			.grid-label
 			{
 				margin-left:10px;
