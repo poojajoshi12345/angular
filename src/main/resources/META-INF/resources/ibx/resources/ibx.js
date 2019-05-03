@@ -85,26 +85,8 @@ function ibx()
 	{
 		ibx._isLoading = true;
 
-		//things to preload for ibx.  Everything else is in the root resource bundle
-		var scripts = 
-		[
-			"<link type='text/css' rel='stylesheet' href='" + ibx._path + "./css/base.ibx.css'/>",
-			"<sc" + "ript type='text/javascript' src='" + ibx._path + "./etc/jquery/jquery-3.3.1.js'></sc" + "ript>",
-			"<sc" + "ript type='text/javascript' src='" + ibx._path + "./etc/jquery/jquery-ui-1.12.1/jquery-ui.js'></sc" + "ript>",
-			"<sc" + "ript type='text/javascript' src='" + ibx._path + "./js/util.ibx.js'></sc" + "ript>",
-			"<sc" + "ript type='text/javascript' src='" + ibx._path + "./js/preload.ibx.js'></sc" + "ript>",
-			"<sc" + "ript type='text/javascript' src='" + ibx._path + "./js/resources.ibx.js'></sc" + "ript>"
-		];
-
-		//[IBX-122] don't load jQuery/jQueryUI if already loaded
-		if(window.jQuery)
-			scripts[1] = "";
-		if(window.jQuery && window.jQuery.ui)
-			scripts[2] = "";
-
-		document.open();
-		document.write(scripts.join(""));
-		document.close();
+		//bootstrap ibx...will work differently if ibx is running embedded vs. standalone.
+		ibx._bootstrap((document.readyState == "complete"));
 
 		//wait for jQuery/jQueryUI to be loaded...then boot ibx
 		var dateStart = ibx._loadStart = new Date();
@@ -192,6 +174,79 @@ function ibx()
 		}, 0);
 	}
 	return ibx;
+}
+
+/***
+ * Load all of ibx's bootstrap files so we can then load ibx and application.
+ * The files can be loaded via document.write when ibx is loaded at document load time (stops flicker of unbound markup on page load).
+ * The files can be loaded after document load via injecting elements into the head...we don't care about flicker in this scenario.
+ */
+ibx._bootstrap = function(isEmbedded)
+{
+	if(isEmbedded)
+	{
+		var preLoadCss = [ibx._path + "./css/base.ibx.css"];
+		var preLoadScript = 
+		[
+			ibx._path + "./etc/jquery/jquery-3.3.1.js",
+			ibx._path + "./etc/jquery/jquery-ui-1.12.1/jquery-ui.js",
+			ibx._path + "./js/util.ibx.js",
+			ibx._path + "./js/preload.ibx.js",
+			ibx._path + "./js/resources.ibx.js",
+		];
+
+		// //[IBX-122] don't load jQuery/jQueryUI if already loaded
+		if(window.jQuery)
+			scripts[1] = null;
+		if(window.jQuery && window.jQuery.ui)
+			scripts[2] = null;
+
+		//add the css files to the document.
+		preLoadCss.forEach(function(css)
+		{
+			if(!css)
+				return;
+			var element = document.createElement("link")
+			element.href = css;
+			element.rel = "stylesheet";
+			element.type = "text/css";
+			document.head.appendChild(element);
+		});
+
+		// //add the script files to the document.
+		preLoadScript.forEach(function(script)
+		{
+			if(!script)
+				return;
+			var element = document.createElement("script")
+			element.src = script;
+			element.type = "text/javascript";
+			element.async = false;
+			document.head.appendChild(element);
+		})
+	}
+	else
+	{
+		var scripts = 
+		[
+			"<link type='text/css' rel='stylesheet' href='" + ibx._path + "./css/base.ibx.css'/>",
+			"<sc" + "ript type='text/javascript' src='" + ibx._path + "./etc/jquery/jquery-3.3.1.js'></sc" + "ript>",
+			"<sc" + "ript type='text/javascript' src='" + ibx._path + "./etc/jquery/jquery-ui-1.12.1/jquery-ui.js'></sc" + "ript>",
+			"<sc" + "ript type='text/javascript' src='" + ibx._path + "./js/util.ibx.js'></sc" + "ript>",
+			"<sc" + "ript type='text/javascript' src='" + ibx._path + "./js/preload.ibx.js'></sc" + "ript>",
+			"<sc" + "ript type='text/javascript' src='" + ibx._path + "./js/resources.ibx.js'></sc" + "ript>"
+		];
+
+		//[IBX-122] don't load jQuery/jQueryUI if already loaded
+		if(window.jQuery)
+			scripts[1] = "";
+		if(window.jQuery && window.jQuery.ui)
+			scripts[2] = "";
+
+		document.open();
+		document.write(scripts.join(""));
+		document.close();
+	}
 }
 
 //various static resources.
