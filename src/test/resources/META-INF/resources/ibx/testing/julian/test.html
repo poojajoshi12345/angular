@@ -12,32 +12,48 @@
 		<script type="text/javascript">
 			ibx(function(e)
 			{
+				callDone = false;
 				$(".test-button").on("click", function(e)
 				{
-					var waiting = ibx.waitStart();
-					waiting.on("ibx_waiting", function(e)
+					window.setTimeout(function()
 					{
-						var waiting = $(e.target);
-						var btn = waiting.data("btnAbort");
-						var startDate = waiting.ibxWidget("startDate");
-						var curDate = new Date();
-						if(!btn && ((curDate - startDate) > 1000))
+						if(callDone)
 						{
-							btn = $("<div class='abort-button'>Abort This Action...</div>").ibxButtonSimple();
-							btn.on("click", function(waiting, e)
-							{
-								ibx.waitStop();
-							}.bind(this, waiting));
-
-							waiting.ibxWidget("add", btn);
-							waiting.data("btnAbort", btn);
+							callDone = false;
+							return;
 						}
+
+						var waiting = ibx.waitStart();
+						waiting.on("ibx_waiting", function(e)
+						{
+							var waiting = $(e.target);
+							var btn = waiting.data("btnAbort");
+							var startDate = waiting.ibxWidget("startDate");
+							var curDate = new Date();
+							if(!btn && ((curDate - startDate) > 1000))
+							{
+								btn = $("<div class='abort-button'>Abort This Action...</div>").ibxButtonSimple();
+								btn.on("click", function(waiting, e)
+								{
+									ibx.waitStop();
+									callDone = false;
+								}.bind(this, waiting));
+
+								waiting.ibxWidget("add", btn);
+								waiting.data("btnAbort", btn);
+							}
+						});
+					}, 0);
+
+					$(".test-stop").on("click", function(e)
+					{
+						callDone = true;
 					});
 				})
 			},true);
 		</script>
 		<style type="text/css">
-			body
+			xbody
 			{
 				margin:0px;
 				position:absolute;
@@ -53,11 +69,22 @@
 				border:2px solid red;
 				border-radius:.25em;
 			}
-
+			.test-area
+			{
+				position:absolute;
+				left:100px;
+				top:100px;
+				width:200px;
+				height:200px;
+				border:2px solid red;
+			}
 		</style>
 	</head>
 	<body class="ibx-root">
 		<div class="test-button" data-ibx-type="ibxButton">Start</div>
+		<div class="test-stop" data-ibx-type="ibxButton">No Wait (within 750ms)</div>
+		<div class="test-area">
+		</div>
 	</body>
 </html>
 

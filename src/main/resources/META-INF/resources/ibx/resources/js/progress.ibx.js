@@ -174,23 +174,47 @@ $.widget("ibi.ibxWaiting", $.ibi.ibxLabel,
 		else
 			return this.options.text;
 	},
+	_waitElement:null,
 	_startDate:null,
 	startDate:function()
 	{
 		return this._startDate;
 	},
-	start:function(el)
+	start:function(el, message)
 	{
-		this._waitElement = el;
+		this.stop();
+
+		el = $(el || this._waitElement || document.body);
+
+		//kill any existing wait on the specified element.
+		var waitInfo = el.data("ibxWaitingInfo");
+		if(waitInfo)
+			waitInfo.ibxWaiting.ibxWidget("stop");
+
+		//create and attach new waitInfo to new element.
+		waitInfo = {initPos:el[0].style.position,	ibxWaiting:this.element};
+		if(waitInfo.initPos == "static")
+			el.css("position", "relative");
+		el.data("ibxWaitingInfo", waitInfo).append(this.element);
+
+		this._waitElement = el[0];
 		this.options.waiting = true;
 		this._startDate = new Date();
+		this.option("text", message);
 		window.requestAnimationFrame(this._doWait.bind(this));
 	},
 	stop:function()
 	{
+		this.element.detach();
+		var waitElem = $(this._waitElement);
+		if(waitElem.length)
+		{
+			var waitInfo = waitElem.data("ibxWaitingInfo");
+			waitElem.css("position", waitInfo.initPos).removeData("ibxWaitingInfo");
+		}
+
 		this.options.waiting = false;
 		this._startDate = null;
-		this._waitElement = null;
 	},
 	_doWait:function(timestampe)
 	{
@@ -199,7 +223,7 @@ $.widget("ibi.ibxWaiting", $.ibi.ibxLabel,
 		{
 			var event = this.element.dispatchEvent("ibx_waiting", this._startDate, false, true);
 			if(event.isDefaultPrevented())
-				ibx.waitStop(this._waitElement);
+				this.waitStop();
 			else
 				window.requestAnimationFrame(this._doWait.bind(this));
 		}
@@ -249,31 +273,21 @@ ibx.waitStart = function(el, message)
 		//kill any current waiting with this element.
 		ibx.waitStop(el);
 
-		options = (typeof(message) === "string") ? {text:message} : message;//overload message to allow string/object.
-		var waitTemp = $("<div>").ibxAddClass(global ? "ibx-waiting-global" : null).ibxWaiting(options);
-		var waitInfo = {posInline:el[0].style.position,	ibxWaiting:waitTemp};
-
-		if(!el.is("body") && el.css("position") == "static")
-			el.css("position", "relative");
-
-		el.data("ibxWaitingInfo", waitInfo).append(waitTemp);
-		waitTemp.ibxWidget("start", el);
+		//make a new wait widget and start 'er up!
+		var waitTemp = $("<div>").ibxAddClass(global ? "ibx-waiting-global" : null).ibxWaiting();
+		waitTemp.ibxWidget("start", el, message);
 		waiting = waiting.add(waitTemp);
 	}.bind(this, message));
 	return waiting;
 };
 ibx.waitStop = function(el)
 {
-	var waiting = $();
 	$(el || "body").filter(":data('ibxWaitingInfo')").each(function(idx, el)
 	{
 		el = $(el);
 		var waitInfo = el.data("ibxWaitingInfo");
-		waitInfo.ibxWaiting.ibxWidget("stop").detach();
-		el.css("position", waitInfo.posInline);
-		el.removeData("ibxWaitingInfo");
+		waitInfo.ibxWaiting.ibxWidget("stop");
 	});
-	return waiting;
 };
 
 //# sourceURL=progress.ibx.js
