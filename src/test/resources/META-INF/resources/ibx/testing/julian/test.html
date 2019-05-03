@@ -12,7 +12,28 @@
 		<script type="text/javascript">
 			ibx(function(e)
 			{
-				$(".test-grid").ibxWidget("initGrid", 5,5);
+				$(".test-button").on("click", function(e)
+				{
+					var waiting = ibx.waitStart();
+					waiting.on("ibx_waiting", function(e)
+					{
+						var waiting = $(e.target);
+						var btn = waiting.data("btnAbort");
+						var startDate = waiting.ibxWidget("startDate");
+						var curDate = new Date();
+						if(!btn && ((curDate - startDate) > 1000))
+						{
+							btn = $("<div class='abort-button'>Abort This Action...</div>").ibxButtonSimple();
+							btn.on("click", function(waiting, e)
+							{
+								ibx.waitStop();
+							}.bind(this, waiting));
+
+							waiting.ibxWidget("add", btn);
+							waiting.data("btnAbort", btn);
+						}
+					});
+				})
 			},true);
 		</script>
 		<style type="text/css">
@@ -24,59 +45,19 @@
 				height:100%;
 				box-sizing:border-box;
 			}
-
-			:focus
+			.abort-button
 			{
-				outline:none;
-				box-shadow:0px 0px 4px 2px red;
+				margin:5px;
+				padding:5px;
+				font-size:2em;
+				border:2px solid red;
+				border-radius:.25em;
 			}
 
-			.ibx-selection-manager .ibx-sm-selected
-			{
-				color:black;
-				background-color: lightgreen;
-			}
-			.ibx-selection-manager .ibx-sm-anchor:before
-			{
-				font-size:.85em;
-				content:"Anchor ";
-			}
-			.ibx-selection-manager .ibx-sm-focused:after
-			{
-				font-size:.85em;
-				content:" Focus";
-			}
-
-			.top-box
-			{
-				display:inline-block;
-				margin:10px;
-				padding:10px;
-				border:2px solid black;
-			}
-
-			.inner-box
-			{
-				display:inline-block;
-				margin:10px;
-				padding:10px;
-				border:2px solid green;
-			}
-
-			.child-box
-			{
-				display:inline-block;
-				width:20px;
-				height:20px;
-				margin:10px;
-				border:2px solid #ccc;
-			}
 		</style>
 	</head>
 	<body class="ibx-root">
-
-		<iframe
-
+		<div class="test-button" data-ibx-type="ibxButton">Start</div>
 	</body>
 </html>
 

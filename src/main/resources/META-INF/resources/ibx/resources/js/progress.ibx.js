@@ -174,22 +174,32 @@ $.widget("ibi.ibxWaiting", $.ibi.ibxLabel,
 		else
 			return this.options.text;
 	},
-	start:function()
+	_startDate:null,
+	startDate:function()
 	{
+		return this._startDate;
+	},
+	start:function(el)
+	{
+		this._waitElement = el;
 		this.options.waiting = true;
+		this._startDate = new Date();
 		window.requestAnimationFrame(this._doWait.bind(this));
 	},
 	stop:function()
 	{
 		this.options.waiting = false;
+		this._startDate = null;
+		this._waitElement = null;
 	},
 	_doWait:function(timestampe)
 	{
 		var options = this.options;
 		if(options.waiting)
 		{
-			if(!this._trigger("waiting", null, this.element))
-				this.stop();
+			var event = this.element.dispatchEvent("ibx_waiting", this._startDate, false, true);
+			if(event.isDefaultPrevented())
+				ibx.waitStop(this._waitElement);
 			else
 				window.requestAnimationFrame(this._doWait.bind(this));
 		}
@@ -247,7 +257,7 @@ ibx.waitStart = function(el, message)
 			el.css("position", "relative");
 
 		el.data("ibxWaitingInfo", waitInfo).append(waitTemp);
-		waitTemp.ibxWidget("start");
+		waitTemp.ibxWidget("start", el);
 		waiting = waiting.add(waitTemp);
 	}.bind(this, message));
 	return waiting;
