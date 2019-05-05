@@ -41,12 +41,7 @@ $.widget("ibi.ibxCommand", $.ibi.ibxWidget,
 	{
 		var relTarget = this._relTarget = src;
 		if(action == "trigger" && !this.options.disabled)
-		{
-			relTarget = $(relTarget);
-			var userValue = relTarget.is(":ibxWidget") ? relTarget.ibxWidget("userValue") : undefined;
-			this.option("userValue", userValue);
 			event = this.element.dispatchEvent("ibx_triggered", data, false, false, src);
-		}
 		else
 		if(action == "disabled")
 			this.option("disabled", data);
