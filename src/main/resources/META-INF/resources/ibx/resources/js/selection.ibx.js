@@ -79,7 +79,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 
 		//focus the selected item
 		if(!isTarget && ownsTarget)
-			this.focus(e.target, true);
+			this._focus(e.target);
 	},
 	_onFocusOut:function(e)
 	{
@@ -417,9 +417,6 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 	anchor:function(el)
 	{
 		//public interface needs to map nodes...think tree from ibxTreeNode to it's selectable label.
-		// el = $(el, this.element);
-		// el = this.mapToSelectable(el);
-		// el = this._anchor(el[0]);
 		el = el ? this.mapToSelectable(el)[0] : el;
 		el = this._anchor(el);
 		return el ? this.mapFromSelectable(el) : undefined;
@@ -442,10 +439,6 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 	focus:function(el)
 	{
 		//public interface needs to map nodes...think tree from ibxTreeNode to it's selectable label.
-		// el = $(el, this.element);
-		// el = this.mapToSelectable(el);
-		// el = this._focus(el[0] || undefined);
-		// return el ? this.mapFromSelectable(el) : undefined;
 		el = el ? this.mapToSelectable(el)[0] : el;
 		el = this._focus(el);
 		return el ? this.mapFromSelectable(el) : undefined;
