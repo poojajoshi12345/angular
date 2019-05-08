@@ -45,7 +45,8 @@ _p.setDragImage = function(img, xOffset, yOffset)
 	{
 		this._dragImage.style.position = "";
 		this._dragImage.classList.remove(ibxDragDropManager.dragImageClass);
-		this._dragImage.remove();
+		if(this._dragImage.parentNode)
+			this._dragImage.parentNode.removeChild(this._dragImage);
 	}
 	
 	this._dragImage = img ? img : this._dragImage;
