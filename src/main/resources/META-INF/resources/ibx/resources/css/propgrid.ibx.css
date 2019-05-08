@@ -43,6 +43,9 @@
 {
 	flex:1 1 auto;
 	min-height:1.25em;
+	border:1px solid #ccc;
+	border-radius:.2em;
+	padding:.2em;
 }
 
 .pgrid-prop-radio-button
