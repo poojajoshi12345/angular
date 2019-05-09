@@ -498,7 +498,7 @@ $.widget("ibi.ibxMenuButton", $.ibi.ibxButtonSimple,
 	_init:function()
 	{
 		this._super();
-		var menuItems = this.element.children(".ibx-menu-item").detach();
+		var menuItems = this.element.children(".ibx-menu-item, .ibx-menu-separator").detach();
 		this.add(menuItems);
 	},
 	children:function(selector)
