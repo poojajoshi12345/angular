@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ibx-res-bundle name="tool1.res.xml" loadContext="bundle">
+	<strings>
+		<string-bundle>
+			<![CDATA[
+			{
+				"language":"ibx_default",
+				"strings":
+				{
+				}
+			}
+		]]>
+		</string-bundle>
+	</strings>
+
+	<styles>
+		<style-sheet>
+		<![CDATA[
+		]]>
+		</style-sheet>
+	</styles>
+
+	<markup>
+		<markup-block class="tool-ui">
+			<div class="cmd-about" data-ibx-type="ibxCommand" data-ibxp-id="cmdToolAbout"></div>
+			<div class="cmd-help" data-ibx-type="ibxCommand" data-ibxp-id="cmdToolHelp"></div>
+			<div class="cmd-new-shape" data-ibx-type="ibxCommand" data-ibxp-id="cmdNewShape"></div>
+			<div class="cmd-del-shape" data-ibx-type="ibxCommand" data-ibxp-id="cmdDelShape"></div>
+			<div class="tool-menubar" data-ibx-type="ibxMenuBar">
+				<div data-ibx-type="ibxMenuButton">Edit
+					<div data-ibx-type="ibxMenuItem" data-ibxp-command="cmdNewShape" data-ibxp-label-options.glyph-classes="fa fa-square">Add Square</div>
+					<div data-ibx-type="ibxMenuItem" data-ibxp-command="cmdDelShape" data-ibxp-label-options.glyph-classes="fa fa-trash">Delete Squares</div>
+				</div>
+			</div>
+			<div class="tool-help-menu" data-ibx-type="ibxMenuButton">Help
+				<div data-ibx-type="ibxMenuItem" data-ibxp-command="cmdToolAbout">About Squares</div>
+				<div data-ibx-type="ibxMenuItem" data-ibxp-command="cmdToolHelp">Squares Help...</div>
+			</div>
+			<div class="tool-toolbar" data-ibx-type="ibxHBox" data-ibxp-align="center">
+				<div tabindex="0" class="tbar-btn-new" data-ibx-type="ibxButton" data-ibxp-command="cmdNewShape" data-ibxp-glyph-classes="fa fa-square">Add Square</div>
+				<div tabindex="0" class="tbar-btn-delete" data-ibx-type="ibxButton" data-ibxp-command="cmdDelShape" data-ibxp-glyph-classes="fa fa-trash">Delete Squares</div>
+			</div>
+		</markup-block>
+	</markup>
+
+	<scripts>
+		<script-file src="./shell.ibx.js"/>
+		<script-block>
+		<![CDATA[
+			//# sourceURL=shell.ibx.tool1.res.xml
+		]]>
+		</script-block>
+	</scripts>
+</ibx-res-bundle>

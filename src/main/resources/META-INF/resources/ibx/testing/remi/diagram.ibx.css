@@ -1,0 +1,40 @@
+/*Copyright 1996-2016 Information Builders, Inc. All rights reserved.*/
+/* $Revision: 1.7 $: */
+
+.ibx-diagram {
+	position: relative;
+}
+
+.ibx-diagram-node {
+	position: absolute;
+	outline: none;
+}
+
+.ibx-diagram-canvas {
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	pointer-events: none;
+	fill: none;
+	stroke: black;
+	stroke-width: 1px;
+}
+
+.ibx-diagram-connection {
+	stroke: black;
+	stroke-width: 1px;
+}
+
+.ibx-diagram-annotation {
+	position: absolute;
+}
+
+.ui-selecting, .ui-selected {
+	border: 1px solid #8787e4 !important;
+}
+
+.ui-selectable-helper {
+	border: 1px solid #666;
+	border-style: dashed;
+	background-color: rgba(0, 0, 0, 0.03);
+}

@@ -1,5 +1,5 @@
 /*Copyright 1996-2017 Information Builders, Inc. All rights reserved.*/
-// $Revision$:
+// $Revision: 1.9 $:
 
 
 function buildviews(item_container, grid_container, folderlist, itemlist, columns, sortedorder, sortedvalue, sortedvaluetype,

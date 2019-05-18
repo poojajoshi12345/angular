@@ -1,5 +1,5 @@
 /*Copyright 1996-2016 Information Builders, Inc. All rights reserved.*/
-// $Revision$:
+// $Revision: 1.139 $:
 
 
 /****
@@ -404,7 +404,7 @@ ibx.bindElements = function(elements, bindInfo)
 	return elBind;
 };
 
-ibx.getIbxMarkupOptions = function(el)
+ibx.getIbxMarkupOptions = function(el, attrPattern)
 {
 	el = $(el);
 
@@ -413,14 +413,15 @@ ibx.getIbxMarkupOptions = function(el)
 	var options = ibxOptions ? this.parseOptions(ibxOptions) : {};
 
 	//then overlay any specific options on top.
+	attrPattern = attrPattern || "data-ibxp-";
 	var attrs = el.prop("attributes");
 	for(var i = 0; i < attrs.length; ++i)
 	{
 		var attr = attrs[i];
 		var name = attr.name;
-		if(name.search("data-ibxp-") == 0)
+		if(name.search(attrPattern) == 0)
 		{
-			var props = name.replace("data-ibxp-", "").split(".");
+			var props = name.replace(attrPattern, "").split(".");
 			var prop = $.camelCase(props.shift());
 			if(props.length)
 			{

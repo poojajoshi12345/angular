@@ -12,79 +12,36 @@
 		<script type="text/javascript">
 			ibx(function(e)
 			{
-				callDone = false;
-				$(".test-button").on("click", function(e)
+				//$(".cmd-test").ibxWidget("userValue", 2);
+				//$(".test-select").ibxWidget("userValue", 2);
+
+				var values = [];
+				for(var i = 0; i < 25; ++i)
 				{
-					window.setTimeout(function()
-					{
-						if(callDone)
-						{
-							callDone = false;
-							return;
-						}
+					var value = {display:"item " + i, checked:false}
+					values.push(value)
+				}
+				$(".test-select").ibxWidget("values", values);
 
-						var waiting = ibx.waitStart();
-						waiting.on("ibx_waiting", function(e)
-						{
-							var waiting = $(e.target);
-							var btn = waiting.data("btnAbort");
-							var startDate = waiting.ibxWidget("startDate");
-							var curDate = new Date();
-							if(!btn && ((curDate - startDate) > 1000))
-							{
-								btn = $("<div class='abort-button'>Abort This Action...</div>").ibxButtonSimple();
-								btn.on("click", function(waiting, e)
-								{
-									ibx.waitStop();
-									callDone = false;
-								}.bind(this, waiting));
-
-								waiting.ibxWidget("add", btn);
-								waiting.data("btnAbort", btn);
-							}
-						});
-					}, 750);
-
-					$(".test-stop").on("click", function(e)
-					{
-						callDone = true;
-					});
-				})
 			},true);
 		</script>
 		<style type="text/css">
-			xbody
+			body
 			{
-				margin:0px;
 				position:absolute;
 				width:100%;
 				height:100%;
+				margin:0px;
 				box-sizing:border-box;
 			}
-			.abort-button
+			.test-select
 			{
-				margin:5px;
-				padding:5px;
-				font-size:2em;
-				border:2px solid red;
-				border-radius:.25em;
-			}
-			.test-area
-			{
-				position:absolute;
-				left:100px;
-				top:100px;
-				width:200px;
 				height:200px;
-				border:2px solid red;
 			}
 		</style>
 	</head>
-	<body class="ibx-root">
-		<div class="test-button" data-ibx-type="ibxButton">Start</div>
-		<div class="test-stop" data-ibx-type="ibxButton">No Wait (within 750ms)</div>
-		<div class="test-area">
-		</div>
+	<body class="ibx-root" data-ibx-type="ibxVBox" data-ibxp-align="center">
+		<div tabindex="0" class="test-select" title="Test Select" data-ibx-type="ibxSelectItemListPaged" data-ibxp-selection-controls="true" data-ibxp-multi-select="true" data-ibxp-enable-paging-trigger="10"></div>
 	</body>
 </html>
 

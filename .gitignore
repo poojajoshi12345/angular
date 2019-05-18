@@ -1,0 +1,7 @@
+/target/
+/.settings/
+/cypress/
+/node/
+/node_modules/
+.project
+.classpath

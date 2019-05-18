@@ -120,7 +120,7 @@ try {
                 final def RECIPIENTS = [[$class: 'DevelopersRecipientProvider'], [$class: 'RequesterRecipientProvider'],
                                         [$class: 'CulpritsRecipientProvider'], [$class: 'UpstreamComitterRecipientProvider']]
 
-                def subject = "${buildStatus}: Build ${env.JOB_NAME} ${env.BUILD_NUMBER} status is now ${buildStatus}"
+                def subject = "${buildStatus}: Build ${env.JOB_NAME} #${env.BUILD_NUMBER} status is now ${buildStatus}"
                 def details = """The build status changed to ${buildStatus}. For details see ${env.BUILD_URL}"""
 
                 echo "Subject: ${subject}"

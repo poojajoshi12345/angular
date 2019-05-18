@@ -1,5 +1,5 @@
 /*Copyright 1996-2016 Information Builders, Inc. All rights reserved.*/
-// $Revision$:
+// $Revision: 1.58 $:
 
 $.widget("ibi.ibxTextField", $.ibi.ibxFlexBox,
 {
@@ -41,7 +41,6 @@ $.widget("ibi.ibxTextField", $.ibi.ibxFlexBox,
 		this._textInput = $('<input tabIndex="-1" type="' + this.options.ctrlType + '"></input>');
 		this._textInput.on("blur", this._onTextInputBlur.bind(this)).on("focus", this._onTextInputFocus.bind(this));
 		this._textInput.on("keydown", this._onTextInputKeyDown.bind(this)).on("input", this._onTextInputInput.bind(this));
-		this._setValue(this.options.text, true);
 		this.element.append(this._textInput);
 		this.element.on("ibx_change", function(e)
 		{
@@ -57,6 +56,11 @@ $.widget("ibi.ibxTextField", $.ibi.ibxFlexBox,
 		accessible ? this._textInput.attr("aria-label", aria.label || options.text || this.element.attr("title") || ibx.resourceMgr.getString("IBX_TEXT_INPUT_LABEL")) : this._textInput.removeAttr("aria-label");
 		accessible ? this._textInput.attr("aria-labelledby", aria.labelledby) : this._textInput.removeAttr("aria-label");
 		return aria;
+	},
+	_init:function()
+	{
+		this._super();
+		this._setValue(this.options.text, true);
 	},
 	_setValue: function (value, bFormat)
 	{

@@ -1,0 +1,19 @@
+.md-label
+{
+	background-color: #f2f2f2;
+	border: 1px solid #ddd;
+	height: 25px;
+	min-height: 25px;
+	max-height: 25px;
+	flex: 1 1 auto;
+}
+
+.id-fields-panel
+{
+	border: 1px solid black;
+}
+
+.md-tree-area
+{
+	overflow:auto;
+}

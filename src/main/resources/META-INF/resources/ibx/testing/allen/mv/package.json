@@ -1,0 +1,30 @@
+{
+  "name": "MV-Page-Manager",
+  "license": "UNLICENSED",
+  "version": "0.1.0",
+  "description": "",
+  "author": "Information Builders (PMF Team)",
+  "devDependencies": {
+    "fs": "0.0.1-security",
+    "gulp": "^3.9.1",
+    "gulp-inline": "^0.1.3",
+    "gulp-inline-source": "^3.1.0",
+    "gulp-minify-css": "^1.2.4",
+    "gulp-rename": "^1.2.2",
+    "gulp-replace": "^0.6.1",
+    "gulp-typescript": "^3.2.4",
+    "gulp-uglify": "^3.0.0",
+    "gulp-watch": "^5.0.0",
+    "parallelshell": "^3.0.2",
+    "typescript": "^2.6.2"
+  },
+  "engines": {
+    "node": ">=0.10.0"
+  },
+  "dependencies": {
+    "grunt-rollup": "^8.1.0"
+  },
+  "scripts": {
+    "dev": "parallelshell \"tsc -w\" \"rollup -c -w\""
+  }
+}

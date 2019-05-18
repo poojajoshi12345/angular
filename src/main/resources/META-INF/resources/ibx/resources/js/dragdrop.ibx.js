@@ -1,5 +1,5 @@
 /*Copyright 1996-2016 Information Builders, Inc. All rights reserved.*/
-// $Revision$:
+// $Revision: 1.10 $:
 
 function ibxDataTransfer()
 {
@@ -326,7 +326,6 @@ $.widget("ibi.ibxDragScrolling", $.Widget,
 		this.element.on("wheel", function(e)
 		{
 			this._onDragScroll(e);
-			e.preventDefault();
 		}.bind(this));
 
 		//on mobile let the device do the scrolling...otherwise we handle it.
@@ -374,6 +373,11 @@ $.widget("ibi.ibxDragScrolling", $.Widget,
 			var dx = (e.originalEvent.deltaX * -1) * (ibxPlatformCheck.isFirefox ? 100 : 1);
 			var dy = (e.originalEvent.deltaY * -1) * (ibxPlatformCheck.isFirefox ? 100 : 1);
 			this._scroll(dx, dy);
+
+			//if we don't allow y scrolling then we aren't handling it...and we are not gonna prevent default;
+			if(this.options.overflowY != "hidden")
+				e.preventDefault();
+
 		}
 	},
 	_scroll:function(dx, dy)

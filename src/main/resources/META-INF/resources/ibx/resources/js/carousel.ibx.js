@@ -1,5 +1,5 @@
 /*Copyright 1996-2016 Information Builders, Inc. All rights reserved.*/
-// $Revision$:
+// $Revision: 1.120 $:
 
 /******************************************************************************
 Simple Carousel (Kind of a placeholder for when I have more time to do a better one!)
@@ -373,7 +373,7 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 		var options = this.options;
 		
 		//set various options for the items box...along with how selections work.
-		this._itemsBox.ibxDragScrolling("option", "disabled", !options.allowDragScrolling);
+		this._itemsBox.ibxDragScrolling("option", {"disabled":!options.allowDragScrolling, "overflowX":"auto", "overflowY":"hidden"});
 		this._itemsBox.ibxWidget("option", "align", options.alignChildren);
 		this.getSelectionManager().option("type", options.selType);
 
@@ -434,7 +434,7 @@ $.widget("ibi.ibxVCarousel", $.ibi.ibxCarousel,
 	{
 		this._super();
 		this._itemsContainer.ibxWidget("option", "direction", "column");
-		this._itemsBox.ibxWidget("option", {"navKeyDir":"vertical", "direction":"column"}).ibxDragScrolling({overflowX:"hidden", overflowY:"auto"});
+		this._itemsBox.ibxWidget("option", {"navKeyDir":"vertical", "direction":"column"});
 		this._pageMarkers.ibxWidget("option", "direction", "column");
 		this._prevBtn.ibxWidget("option", {"iconPosition": "top"});
 		this._nextBtn.ibxWidget("option", {"iconPosition": "top"});
@@ -467,6 +467,11 @@ $.widget("ibi.ibxVCarousel", $.ibi.ibxCarousel,
 		}
 		return childBox;
 	},
+	_refresh:function()
+	{
+		this._super();
+		this._itemsBox.ibxDragScrolling("option", {"overflowX":"hidden", "overflowY":"auto"});
+	}
 });
 
 //# sourceURL=carousel.ibx.js

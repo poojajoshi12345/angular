@@ -1,5 +1,5 @@
 /*Copyright 1996-2017 Information Builders, Inc. All rights reserved.*/
-// $Revision$:
+// $Revision: 1.12 $:
 
 $( document ).on( "addanitem", function(e, item)
 {																	

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>ibx Shell Tool 1</title>
+		<meta http-equiv="X-UA-Compatible" content="IE=11">
+		<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+		<meta http-equiv="Pragma" content="no-cache" />
+		<meta http-equiv="Expires" content="0" />
+		<meta name="google" value="notranslate">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<script type="text/javascript" src="../../../resources/ibx.js"></script>
+		<script type="text/javascript">
+			ibx(function(e)
+			{
+				var appParms = ibx.getAppParms();
+				_ibxShellTool = new ibxShellTool(appParms.ibxShellToolId);
+				window.addEventListener(ibxShellTool.msgGetShellToolResources, function(e)
+				{
+					var resources = ibx.resourceMgr.getResource(".tool-ui");
+					var ui = 
+					{
+						commands: resources.find(".ibx-command"),
+						toolbar: resources.find(".tool-toolbar"),
+						menubar: resources.find(".tool-menubar"),
+						helpmenu: resources.find(".tool-help-menu"),
+						properties: resources.find(".tool-properties"),
+					};
+					resources.find(".cmd-new-shape").on("ibx_triggered", function(e)
+					{
+						var shape = $("<div tabindex='0' class='tool-shape'>").ibxWidget().uniqueId().on("focusin focusout", function(e)
+						{
+							//do some ui switch here.
+						});
+						$("body").append(shape);
+					});
+					resources.find(".cmd-del-shape").on("ibx_triggered", function(e)
+					{
+						var sm = $("body").ibxSelectionManager("instance");
+						selItems = sm.selected();
+						selItems.remove();
+					});
+					resources.find(".cmd-about").on("ibx_triggered", function(e)
+					{
+						alert("Tool for Drawing Squares!");
+					});
+					resources.find(".cmd-help").on("ibx_triggered", function(e)
+					{
+						alert("Open Square tool help page!");
+					});
+					e.data = ui;
+				})
+
+				window.addEventListener(ibxShellTool.msgSerialize, function(e)
+				{
+					if(!e.data.read)//writing out
+					{
+						var data = {};
+						var items = $(".tool-shape");
+						items.each(function(idx, el)
+						{
+							var style = window.getComputedStyle(el);
+							var item = {};
+							item.type = "square",
+							item.width = style.width;
+							item.height = style.height;
+							item.border = style.border;
+							item.background = style.backgroundColor;
+							data[el.id] = item;
+						});
+						e.data = JSON.stringify(data);
+
+					}
+					else//reading in
+					{
+					}
+				});
+
+				$("body").on("focusin", function(e)
+				{
+					_ibxShellTool.activate(true);
+				});
+				$("body").on("ibx_selchange", function(e)
+				{
+					var data = e.originalEvent.data;
+					var ids = data.selModel.selected().map(function(idx, item)
+					{
+						return item.id;
+					});
+					_ibxShellTool.activate(true, true, {"selectedItems":ids.toArray()})
+					console.log(data.items);
+				});
+			}, [{src:"./shell.ibx.tool1.res.xml", loadContext:"app"}], true);
+		</script>
+		<style type="text/css">
+			body
+			{
+				margin:0px;
+				position:absolute;
+				width:100%;
+				height:100%;
+				box-sizing:border-box;
+			}
+			.tool-shape
+			{
+				outline:none;
+				flex:0 0 auto;
+				width:50px;
+				height:50px;
+				border:2px solid green;
+				background-color:white;
+				margin:5px;
+			}
+			.tool-shape.ibx-sm-selected
+			{
+				background-color:lightgreen;
+			}
+		</style>
+	</head>
+	<body class="ibx-root" data-ibx-type="ibxHBox" data-ibxp-sel-type="multi" data-ibxp-wrap="true" data-ibxp-rubber-band="true" data-ibxp-rubber-band-partial-select="true">
+	</body>
+</html>
+
+

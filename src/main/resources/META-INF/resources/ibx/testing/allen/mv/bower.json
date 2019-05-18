@@ -1,0 +1,21 @@
+{
+  "name": "MV page manager",
+  "version": "0.0.1",
+  "description": "lightweight page manager using ibx",
+  "main": "slp.htm",
+  "authors": [
+    "Information Builders (Allen K. Williams)"
+  ],
+  "license": "Private",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "lib",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "jQuery#~2.1.4"
+  }
+}

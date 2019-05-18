@@ -1,0 +1,36 @@
+.id-canvas
+{
+	flex: 1 1 auto;
+}
+.full-container
+{
+	border: 1px solid gray;
+	flex: 1 1 auto;
+}
+
+.heading-area
+{
+	border: 1px solid gray;
+}
+
+.chart-area
+{
+	flex: 1 1 auto;
+	position: relative;
+}
+
+.chart-sample
+{
+	opacity: .5;
+}
+
+.drop-label
+{
+	position: absolute;
+	opacity: .5;
+}
+
+.drop-label > .ibx-label-glyph
+{
+	opacity: .5;
+}

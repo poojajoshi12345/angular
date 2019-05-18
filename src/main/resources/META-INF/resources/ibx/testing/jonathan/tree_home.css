@@ -1,0 +1,62 @@
+/*Copyright 1996-2017 Information Builders, Inc. All rights reserved.*/
+/* $Revision: 1.1 $: */
+
+.ibx-label.ibfs-item:focus {
+    box-shadow: none;
+}
+
+.ibfs-item {
+    line-height: 16px;
+    padding: 6px;
+    border-bottom: 1px solid rgb(221, 221, 221);
+    font-size: 11px;
+}
+
+.ibfs-item:hover {
+    background-color: #eee;
+}
+
+/*
+.ibfs_folder:before {
+    font-size: 14px;
+    font-family: "Material Icons";
+    font-weight: bold;
+    margin-right: 3px;
+    content: "\E315";
+}
+
+.ibfs_file:before {
+    font-size: 14px;
+    font-family: "Material Icons";
+    font-weight: bold;
+    margin-right: 3px;
+    content: "\E069";
+}
+
+.ibfs_folder.fld-open:before {
+    font-size: 14px;
+    font-family: "Material Icons";
+    font-weight: bold;
+    margin-right: 3px;
+    content: "\E313";
+}
+*/
+
+.ibfs-label > .ibx-label-glyph {
+    font-size: 16px;
+}
+
+.ibfs-label > .ibx-label-glyph.ibx-glyph-spacer
+{
+	margin-left:5px;
+	margin-right:5px;
+}
+
+.ibfs-children {
+}
+
+.ibfs-folder-ctx-menu {
+}
+
+.ibfs-label > .ibx-label-text {
+}

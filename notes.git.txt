@@ -1,0 +1,11 @@
+Git config —global core.editor
+Git log -p, git log -stat, git log —graph, git log -s
+Git commit —ammend
+Git reset —hard
+Git checkout — filename (see stashing)
+Git remote -v, git remote show name
+Git fetch remotename (pull does fetch and merge)
+Git tag -a name -m message (checksum for retro tag), git tag -d name, git checkout tag name -b to create branch
+git config --list --show-origin (find out where settings are set)
+git remote update --prune (updates local with remote branches...prune remove defunct branches)
+

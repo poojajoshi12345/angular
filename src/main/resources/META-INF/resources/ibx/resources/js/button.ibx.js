@@ -1,5 +1,5 @@
 /*Copyright 1996-2016 Information Builders, Inc. All rights reserved.*/
-// $Revision$:
+// $Revision: 1.77 $:
 
 //////////////////////////////////////////////////////////////////////////
 $.widget("ibi.ibxButton", $.ibi.ibxLabel,

@@ -1,5 +1,5 @@
 ﻿<%-- Copyright 1996-2019 Information Builders, Inc. All rights reserved. --%>
-<%-- $Revision$--%><%@ page language="java" contentType="text/html" pageEncoding="UTF-8"%>
+<%-- $Revision: 1.1 $--%><%@ page language="java" contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <jsp:useBean id="resourceBean" class="com.ibi.web.res.ResourceBundleBean" scope="request"><jsp:setProperty name="resourceBean" property="request" value="<%= request %>" /></jsp:useBean>
 <jsp:useBean id="browser" class="com.ibi.web.bean.WFDetectBrowserBean" scope="request"><jsp:setProperty name="browser" property="request" value="<%= request %>" /><jsp:setProperty name="browser" property="response" value="<%= response %>" /></jsp:useBean>

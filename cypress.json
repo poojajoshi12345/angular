@@ -1,0 +1,18 @@
+{
+    "chromeWebSecurity": false,
+    "hostPortPath": null,
+    "reporter": "junit",
+    "pageLoadTimeout" : 100000,
+    "defaultCommandTimeout" : 10000,
+    "responseTimeout" : 100000,
+    "reporterOptions": {
+        "mochaFile": "cypress/junitreport.xml",
+        "toConsole": true
+    },
+    "integrationFolder": "./src/test/resources/cypress/integration",
+    "fixturesFolder": "./src/test/resources/cypress/fixtures",
+    "env" : {
+        "wfuser" : "admin",
+        "wfpassword" : "admin"
+    }
+}

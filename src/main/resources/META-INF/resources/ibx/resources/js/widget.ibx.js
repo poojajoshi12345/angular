@@ -1,5 +1,5 @@
 /*Copyright 1996-2016 Information Builders, Inc. All rights reserved.*/
-// $Revision$:
+// $Revision: 1.231 $:
 $.widget("ibi.ibxWidget", $.Widget, 
 {
 	options:
@@ -166,6 +166,11 @@ $.widget("ibi.ibxWidget", $.Widget,
 	},
 	_init:function()
 	{
+		//some elements can already have aria- attributes when created, so we need to transfer them to the internal
+		//options.aria object so they will be properly set in setAccessibility.
+		var ariaOptions = ibx.getIbxMarkupOptions(this.element, "aria-");
+		this.options.aria = $.extend(true, this.options.aria, ariaOptions);
+
 		var options = $.extend(true, {}, this.options, ibx.getIbxMarkupOptions(this.element));
 		this.option(options);
 	},

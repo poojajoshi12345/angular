@@ -1,5 +1,5 @@
 /*Copyright 1996-2017 Information Builders, Inc. All rights reserved.*/
-// $Revision$:
+// $Revision: 1.15 $:
 
 	$.widget("ibi.sharewith", $.ibi.ibxDialog,
 	{

@@ -1,7 +1,7 @@
 ﻿<%-- Copyright 1996-2016 Information Builders, Inc. All rights reserved.
- $Revision$:
+ $Revision: 1.3 $:
 --%><%-- Copyright 1996-2016 Information Builders, Inc. All rights reserved.
- $Revision$:
+ $Revision: 1.3 $:
 --%><%
 	response.addHeader("Pragma", "no-cache");
 	response.addHeader("Cache-Control", "no-cache");

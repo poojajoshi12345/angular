@@ -1,5 +1,5 @@
 <%-- Copyright 1996-2016 Information Builders, Inc. All rights reserved.
---%><%-- $Revision$
+--%><%-- $Revision: 1.6 $
 --%><%@ page pageEncoding="UTF-8"
 %><%@ page import="com.ibi.util.StringEscapeUtils,
 					com.ibi.ibt.WFLicense,

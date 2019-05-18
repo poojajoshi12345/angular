@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ibx-res-bundle name="home_bundle.xml">
+	<res-bundles>
+	</res-bundles>
+	
+	<strings>
+		<string-bundle>
+			<![CDATA[
+			]]>
+		</string-bundle>
+	</strings>
+
+	<styles>
+		<style-sheet>
+			<![CDATA[
+				.test-notify-popup-content
+				{
+					padding:10px;
+				}
+				.test-notify-popup.ibx-popup.pop-effect-fade, .test-notify-popup.ibx-popup.pop-effect-fade.pop-closed
+				{
+					transition:opacity 1s, visibility 1s;
+				}
+			]]>
+		</style-sheet>
+	</styles>
+
+	<markup>
+		<markup-block>
+			<div class="content-title-label-files" data-ibx-type="ibxLabel" data-ibxp-text="Files" ></div>
+			<div class="content-title-label-folders" data-ibx-type="ibxLabel" data-ibxp-text="Folders" ></div>	
+			<div class="edit-menu" data-ibx-name-root="true" data-ibx-type="ibxContextMenu" data-ibxp-destroy-on-close="false">
+				<div data-ibx-type="ibxMenuItem" data-ibx-name="mimenuitemrun" data-ibxp-text="Run/View" data-ibxp-glyph="content_cut" data-ibxp-glyph-classes="material-icons"></div>
+				<div data-ibx-type="ibxMenuSeparator"></div>
+				<div data-ibx-type="ibxMenuItem" data-ibx-name="mimenuitemedit" data-ibxp-text="Edit" data-ibxp-glyph="content_copy" data-ibxp-glyph-classes="material-icons"></div>
+				<div data-ibx-type="ibxMenuSeparator"></div>
+				<div data-ibx-type="ibxMenuItem" data-ibx-name="mimenuitemdelete" data-ibxp-text="Delete" data-ibxp-glyph="content_copy" data-ibxp-glyph-classes="material-icons"></div>
+			</div>
+			<div class="folder-menu" data-ibx-name-root="true" data-ibx-type="ibxContextMenu" data-ibxp-destroy-on-close="false">
+				<div data-ibx-type="ibxMenuItem" data-ibx-name="fomenuitemopen" data-ibxp-text="Open" data-ibxp-glyph="content_cut" data-ibxp-glyph-classes="material-icons"></div>
+				<div data-ibx-type="ibxMenuSeparator"></div>
+				<div data-ibx-type="ibxMenuItem" data-ibx-name="fomenuitemdelete" data-ibxp-text="Delete" data-ibxp-glyph="content_copy" data-ibxp-glyph-classes="material-icons"></div>
+		        <div data-ibx-type="ibxMenuItem" data-ibx-name="fomenuitemchangetitle" data-ibxp-text="Change Title" data-ibxp-glyph="content_copy" data-ibxp-glyph-classes="material-icons"></div>
+		        <div data-ibx-type="ibxMenuItem" data-ibx-name="fomenuitemrefresh" data-ibxp-text="Refresh" data-ibxp-glyph="content_copy" data-ibxp-glyph-classes="material-icons"></div>		
+			</div>
+			<div class='cell-col1 flex-grid-cell list-icon-col    ' data-ibx-col='1' ></div>
+			<div class='cell-col1-2' data-ibx-type='ibxLabel' ></div>
+			
+			<div class='cell-col2 flex-grid-cell' data-ibx-col='2' data-ibx-type='ibxLabel' data-ibxp-text='Common'></div>
+			<div class='cell-col3 flex-grid-cell' data-ibx-col='3' data-ibx-type='ibxLabel' data-ibxp-text='None'></div>
+			<div class='cell-col4 flex-grid-cell' data-ibx-col='4' data-ibx-type='ibxLabel' data-ibxp-text='5/17/2016  4:48:15 PM'></div>
+			<div class='cell-col5 flex-grid-cell cell-image' data-ibxp-glyph-classes='fa fa-ellipsis-v' data-ibx-type='ibxLabel' data-ibx-col='5' onclick= ' foldermenu (this, "Common");'>
+			</div>	
+			<div class="title-form" >
+				<div class="form-title" data-ibx-type="ibxLabel" data-ibxp-text="Create New Folder"></div>															
+				<div class="title-form-grid" data-ibx-type="ibxGrid" data-ibxp-cols="50% 50%" data-ibxp-rows="auto auto auto auto" >								
+						<div class="form-field-title" data-ibx-type="ibxLabel" data-ibxp-text="Title:" data-ibx-col="1" data-ibx-row="1"></div>
+						<div tabindex="1" class="form-field-text" data-ibx-type="ibxTextField" data-ibxp-placeholder="Enter Title Here" data-ibx-col="2" data-ibx-row="1"></div>
+						<div class="form-field-filler" data-ibx-row="2" data-ibx-type="ibxLabel" data-ibxp-text="" data-ibx-col="1"></div>
+						<div class="form-field-filler" data-ibx-row="2" data-ibx-type="ibxLabel" data-ibxp-text="" data-ibx-col="2"></div>
+						<div class="form-field-filler" data-ibx-row="3" data-ibx-type="ibxLabel" data-ibxp-text="" data-ibx-col="1"></div>
+						<div class="form-field-filler" data-ibx-row="3" data-ibx-type="ibxLabel" data-ibxp-text="" data-ibx-col="2"></div>
+						<div tabindex="2" class="form-ok-button" data-ibx-type="ibxButton" data-ibxp-text="Create"  data-ibx-col="1" data-ibx-row="4" data-ibx-justify="end"></div>
+						<div tabindex="3" class="form-cancel-button" data-ibx-type="ibxButton" data-ibxp-text="Cancel"  data-ibx-col="2" data-ibx-row="4" data-ibx-justify="start"></div>
+				</div>						
+										
+			</div>							
+		</markup-block>
+	</markup>
+
+	<scripts>
+		<script-block name="popups_script_block">
+			<![CDATA[
+				//# sourceURL=popups_bundle_script
+			]]>
+		</script-block>
+	</scripts>
+</ibx-res-bundle>

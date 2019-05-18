@@ -1,5 +1,5 @@
 <%-- Copyright 1996-2017 Information Builders, Inc. All rights reserved. --%>
-<%-- $Revision$--%><%@ page language="java" contentType="text/html" pageEncoding="UTF-8"%>
+<%-- $Revision: 1.1 $--%><%@ page language="java" contentType="text/html" pageEncoding="UTF-8"%>
 <jsp:useBean id="resourceBean" class="com.ibi.web.res.ResourceBundleBean" scope="request"><jsp:setProperty name="resourceBean" property="request" value="<%= request %>" /></jsp:useBean>              
 <%
 

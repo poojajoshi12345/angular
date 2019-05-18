@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--Copyright 1996-2018 Information Builders, Inc. All rights reserved. $Revision: 1.5 $:-->
+<ibx-res-bundle name="texteditor_bundle.xml">
+	<ibx-package src="{context}/ibxtools/shared_resources/shared_resource_bundle.xml"/> <!-- Server Access -->	
+	<ibx-package src="{context}/ibxtools/explore/explore_open_dialog.xml"/> <!-- Open/Save Dialog -->	
+	<strings>
+		<string-file src="{res}/com.ibi.intl.shared_resources.shared_resources" default="true"/>	
+		<string-file src="{res}/com.ibi.intl.bip_editor.bip_editor"  default="true"/>
+		<string-file src="{res}/com.ibi.intl.bip_editor.bip_RTeditor"  default="true"/>	
+		<string-bundle>
+		<![CDATA[
+		]]>
+		</string-bundle>
+	</strings>
+	<styles>
+		<style-file src="{context}/css/wf_ace_editor.css" loadContext="bundle"/>
+	</styles>	
+	<scripts>
+		<script src="{context}/3rdparty_resources/ace/1.3.3/src/ace.js" type="text/javascript" charset="utf-8"></script>
+		<script-file src="{context}/ibxtools/shared_resources/js/serveraccess.js" loadContext="bundle"/>
+		<script-file src="{context}/tools/shared_resources/source/shared_constants.js" loadContext="bundle"/>
+		<script-file src="./js/wf_ace_editor.js" loadContext="bundle"/>		
+	</scripts>
+	<markup>
+		<markup-block>			
+			<div class="te-search-panel" data-ibx-type="ibxHBox" data-ibx-name="_searchPanel" data-ibxp-justify="start" data-ibxp-align="left">			
+				<div data-ibx-type="ibxHBox" data-ibxp-justify="start" data-ibxp-align="start">				
+					<div data-ibx-type="ibxHBox" data-ibxp-justify="start" data-ibxp-align="center">
+						<div class="findLbl" data-ibx-type="ibxLabel">@ibxString('bid_findTextLbl')</div>
+						<div class="findText" data-ibx-name="_findText" data-ibx-type="ibxTextField"></div>
+					</div>					
+					<div data-ibx-type="ibxHBox" data-ibxp-justify="start" data-ibxp-align="center">					
+						<div class="replaceLbl" data-ibx-type="ibxLabel">@ibxString('bid_replaceTextLbl')</div>
+						<div class="replaceText" data-ibx-name="_replaceText" data-ibx-type="ibxTextField"></div>
+					</div>
+				</div>			
+				<div data-ibx-type="ibxHBox" data-ibxp-justify="start" data-ibxp-align="center">							
+					<div data-ibx-type="ibxVBox" data-ibxp-justify="start" data-ibxp-align="left">
+						<div class="cbMatchCase" data-ibx-name="_cbMatchCase" data-ibx-type="ibxCheckBoxSimple">@ibxString('bid_matchCase')</div>
+						<div class="cbMatchWholeWord" data-ibx-name="_cbMatchWholeWord" data-ibx-type="ibxCheckBoxSimple">@ibxString('bid_matchWholeWord')</div>
+						<div class="cbWrapAround" data-ibx-name="_cbWrapAround" data-ibx-type="ibxCheckBoxSimple">@ibxString('bid_wrapAround')</div>
+					</div>
+					<div data-ibx-type="ibxVBox" data-ibxp-justify="start" data-ibxp-align="center">
+						<div class="ibx-default btnFindNext" data-ibx-name="_btnFindNext" data-ibx-type="ibxButton" data-ibxp-justify="center">@ibxString('bid_findBtnLbl')</div>
+						<div class="ibx-default btnReplaceNext" data-ibx-name="_btnReplaceNext" data-ibx-type="ibxButton" data-ibxp-justify="center">@ibxString('bid_replaceNextBtnLbl')</div>							
+						<div class="ibx-default btnReplaceAll" data-ibx-name="_btnReplaceAll" data-ibx-type="ibxButton" data-ibxp-justify="center">@ibxString('bid_replaceAllBtnLbl')</div>
+					</div>
+				</div>
+			</div>					
+			<div class="editor-misc-resources">
+				<div class="te-edit-menu" data-ibx-type="ibxMenu">
+					<div data-ibx-type="ibxMenuItem" class="menu-edit-copy" data-ibx-name="_editCopy" data-ibxp-label-options='{"glyphClasses":"fa fa-copy"}'>@ibxString('bid_menu_edit_copy')</div>
+					<div data-ibx-type="ibxMenuItem" class="menu-edit-cut" data-ibx-name="_editCut" data-ibxp-label-options='{"glyphClasses":"fa fa-cut"}'>@ibxString('bid_menu_edit_cut')</div>
+					<div data-ibx-type="ibxMenuItem" class="menu-edit-paste"  data-ibx-name="_editPaste" data-ibxp-label-options='{"glyphClasses":"fa fa-paste"}'>@ibxString('bid_menu_edit_paste')</div>				
+					<div data-ibx-type="ibxMenuItem" class="menu-edit-selectall" data-ibx-name="_editSelectAll">@ibxString('bid_menu_edit_selectall')</div>
+					<div data-ibx-type="ibxMenuItem" class="menu-edit-clear" data-ibx-name="_editClear">@ibxString('bid_menu_edit_clear')</div>
+					<div data-ibx-type="ibxMenuSeparator"></div>
+					<div data-ibx-type="ibxMenuItem" class="menu-edit-undo" data-ibx-name="_editUndo" data-ibxp-label-options='{"glyphClasses":"ibx-icons ibx-glyph-arrow-left"}'>@ibxString('bid_menu_edit_undo')</div>
+					<div data-ibx-type="ibxMenuItem" class="menu-edit-redo" data-ibx-name="_editRedo" data-ibxp-label-options='{"glyphClasses":"ibx-icons ibx-glyph-arrow-right"}'>@ibxString('bid_menu_edit_redo')</div>					
+					<div data-ibx-type="ibxMenuSeparator"></div>
+					<div data-ibx-type="ibxMenuItem" class="menu-edit-uppercase" data-ibx-name="_editUpperCase">@ibxString('bid_menu_edit_uppercase')</div>
+					<div data-ibx-type="ibxMenuItem" class="menu-edit-lowercase" data-ibx-name="_editLowerCase">@ibxString('bid_menu_edit_lowercase')</div>
+					<div data-ibx-type="ibxMenuItem" class="menu-edit-comment" data-ibx-name="_editComment">@ibxString('bid_menu_edit_comment')</div>
+					<div data-ibx-type="ibxMenuSeparator"></div>													
+					<div data-ibx-type="ibxMenuItem" class="menu-edit-lookup-help" data-ibx-name="_editLookupHelp">@ibxString('bid_menu_edit_lookuphelp')</div>
+					<div data-ibx-type="ibxMenuSeparator"></div>													
+					<div data-ibx-type="ibxMenuItem" class="menu-edit-run" data-ibx-name="_editRun" data-ibxp-label-options='{"glyph":"play_arrow", "glyphClasses":"material-icons"}'>@ibxString('bid_menu_edit_run')</div>					
+				</div>
+			</div>					
+			<div class="text-editor-resources" data-ibx-type="textEditor" data-ibx-name="_textEditor" data-ibx-name-root="true">
+	  		  <div class="main-box" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
+					<div class="te-menu-bar" data-ibx-type="ibxMenuBar" data-ibxp-justify="stretch" data-ibxp-align="stretch">
+						<div class="te-menu-button te-menu-file" data-ibx-type="ibxMenuButton" data-ibx-name="_menuFile" data-ibxp-icon="./resources/img/app-logo-ted.png">
+							<div class="te-file-menu ibx-menu-no-icons te-menu" data-ibx-type="ibxMenu">
+								<div data-ibx-type="ibxMenuItem" data-ibx-name="_fileNew">@ibxString('bid_menu_file_new')								
+									<div class="te-file-menu sub-menu ibx-menu-no-icons te-menu" data-ibx-type="ibxMenu" data-ibx-name="_fileNewSubmenu"></div>
+								</div>
+								<div class="te-menu-item" data-ibx-type="ibxMenuItem" data-ibx-name="_fileOpen">@ibxString('bid_menu_file_open')</div>
+								<div class="te-menu-item" data-ibx-type="ibxMenuItem" data-ibx-name="_fileSave">@ibxString('bid_menu_file_save')</div>
+								<div class="te-menu-item" data-ibx-type="ibxMenuItem" data-ibx-name="_fileSaveAs">@ibxString('bid_menu_file_saveas')</div>
+								<!-- div class="te-menu-item" data-ibx-type="ibxMenuItem" data-ibx-name="_filePreferences">@ibxString('bid_menu_file_preferences')</div -->
+								<div class="te-menu-item" data-ibx-type="ibxMenuItem" data-ibx-name="_fileClose">@ibxString('bid_menu_file_close')</div>
+								<div class="te-menu-item" data-ibx-type="ibxMenuItem" data-ibx-name="_fileExit">@ibxString('bid_menu_file_exit')</div>
+							</div>
+						</div>
+						<div class="te-menu-button" data-ibx-type="ibxMenuButton" data-ibx-name="_menuSave" data-ibxp-glyph-classes="ibx-icons ibx-glyph-floppy"></div>
+						<div class="te-menu-button" data-ibx-type="ibxMenuButton" data-ibx-name="_menuClearSelected" data-menu-cmd="menuClearSelected" data-ibxp-glyph="close" data-ibxp-glyph-classes="material-icons md-18"></div>								
+						<div class="editor-tb-separator"></div>
+						<div class="te-menu-button" data-ibx-type="ibxMenuButton" data-ibx-name="_menuUndo" data-menu-cmd="menuUndo" data-ibxp-glyph-classes="ibx-icons ibx-glyph-arrow-left"></div>
+						<div class="te-menu-button" data-ibx-type="ibxMenuButton" data-ibx-name="_menuRedo" data-menu-cmd="menuRedo" data-ibxp-glyph-classes="ibx-icons ibx-glyph-arrow-right"></div>						
+						<div class="editor-tb-separator"></div>
+						<div class="te-menu-button" data-ibx-type="ibxMenuButton" data-ibx-name="_menuCopy" data-menu-cmd="menuCopy" data-ibxp-glyph-classes="fa fa-copy"></div>
+						<div class="te-menu-button" data-ibx-type="ibxMenuButton" data-ibx-name="_menuCut" data-menu-cmd="menuCut" data-ibxp-glyph-classes="fa fa-cut"></div>
+						<div class="te-menu-button" data-ibx-type="ibxMenuButton" data-ibx-name="_menuPaste" data-menu-cmd="menuPaste" data-ibxp-glyph-classes="fa fa-paste"></div>
+						<div class="editor-tb-separator"></div>
+						<div class="te-menu-button" data-ibx-type="ibxMenuButton" data-ibx-name="_menuRun" data-menu-cmd="menuRun" data-ibxp-glyph-classes="ibx-icons ibx-glyph-preview"></div>
+						<div class="editor-tb-separator"></div>
+						<div class="te-menu-button" data-ibx-type="ibxMenuButton" data-ibx-name="_menuSearch" data-menu-cmd="menuSearch" data-ibxp-glyph-classes="fa fa-search"></div>
+						<div class="te-menu-button" data-ibx-type="ibxMenuButton" data-ibx-name="_menuOptions" data-menu-cmd="menuOptions" data-ibxp-glyph-classes="ibx-icons ibx-glyph-layout">
+							<div class="te-options-menu ibx-menu-no-icons te-menu" data-ibx-type="ibxMenu">
+								<div class="te-menu-item" data-ibx-type="ibxCheckMenuItem" data-ibx-name="_optionsLineNumbering" data-ibxp-checked="true">@ibxString('bid_menu_options_line_numbering')</div>
+								<div class="te-menu-item" data-ibx-type="ibxCheckMenuItem" data-ibx-name="_optionsAutocomplete" data-ibxp-checked="true">@ibxString('bid_menu_options_autocomplete')</div>
+								<div class="te-menu-item" data-ibx-type="ibxCheckMenuItem" data-ibx-name="_optionsStatusBar" data-ibxp-checked="true">@ibxString('bid_menu_options_status_bar')</div>
+							</div>						
+						</div>
+						<!-- div class="te-menu-button" data-ibx-type="ibxMenuButton" data-ibx-name="_menuMore" data-menu-cmd="menuMore" data-ibxp-glyph-classes="fa fa-ellipsis-v"></div -->
+						<div class="te-menu-separator4" data-ibx-type="ibxLabel" data-ibxp-justify="center" data-ibxp-align="stretch"></div>
+						<div class="te-menu-button-help" data-ibx-type="ibxMenuButton" data-ibx-name="_menuHelp" data-menu-cmd="menuHelp" data-ibxp-glyph-classes="fa fa-question"></div>
+					</div>
+					<div class="te-tab-pane" data-ibx-name="_editorTabPane" data-ibx-type="ibxTabPane"></div>
+					<div class="te-status-bar" data-ibx-type="ibxHBox" data-ibx-name="_statusBar" data-ibxp-justify="start" data-ibxp-align="center">				
+						<div class="te-sb-length-marker-label" data-ibx-type="ibxLabel">@ibxString('bid_length')</div>
+						<div class="te-sb-length-marker-value te-lengthLbl" data-ibx-name="_lengthLbl" data-ibx-type="ibxLabel"></div>
+						<div class="te-sb-lines-marker-label" data-ibx-type="ibxLabel">@ibxString('bid_lines')</div>
+						<div class="te-sb-lines-marker-value te-linesLbl" data-ibx-name="_linesLbl" data-ibx-type="ibxLabel"></div>														
+						<div class="te-sb-line-marker-label" data-ibx-type="ibxLabel">@ibxString('bid_line')</div>
+						<div class="te-sb-line-marker-value te-linePosLbl" data-ibx-name="_linePosLbl" data-ibx-type="ibxLabel"></div>
+						<div class="te-sb-column-marker-label" data-ibx-type="ibxLabel">@ibxString('bid_column')</div>
+						<div class="te-sb-column-marker-value te-columnPosLbl" data-ibx-name="_columnPosLbl" data-ibx-type="ibxLabel"></div>
+						<div class="te-sb-insert-marker-label" data-ibx-type="ibxLabel">@ibxString('bid_insert')</div>
+						<div class="te-sb-insert-marker-value te-insertLbl" data-ibx-name="_insertLbl" data-ibx-type="ibxLabel"></div>					
+					</div>
+			  </div>
+			</div>		
+		</markup-block>
+	</markup>
+</ibx-res-bundle>

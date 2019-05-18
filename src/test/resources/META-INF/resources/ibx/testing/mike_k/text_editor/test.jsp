@@ -1,5 +1,5 @@
 <%-- Copyright 1996-2017 Information Builders, Inc. All rights reserved. 
- $Revision$:
+ $Revision: 1.6 $:
 --%><!DOCTYPE html>
 <jsp:useBean id="WEBFOCUS_SECURITY_SETTING" class="com.ibi.webapp.security.config.WFSecuritySetting" scope="request"></jsp:useBean><jsp:useBean 
 id="wflicense" class="com.ibi.web.bean.WFLicenseRedirectBean" scope="request"></jsp:useBean><jsp:useBean 

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ibx-res-bundle name="test_res_bundle.xml" loadContext="bundle">
+    <strings>
+        <string-bundle>
+            <![CDATA[
+			{
+				"language":"ibx_default",
+				"strings":
+				{
+					"A_TEST_STRING_INLINE":"INLINE -> String with ' apostrophy and a \" quote",
+					"A_TEST_STRING_XML":"XML -> String with ' apostrophy and a \" quote",
+					"A_TEST_STRING_JSON":"JSON String with ' apostrophy and a \" quote"
+				}
+			}
+		]]>
+        </string-bundle>
+    </strings>
+
+    <styles>
+        <style-file src="./css/styles.css"></style-file>
+    </styles>
+
+    <scripts>
+
+        <script-file src="../../../../../ibxtools/shared_resources/js/ibfs.js"/>
+        <script-file src="./js/wfcontent.js"></script-file>
+        <script-file src="./js/sidebarWidget.js"></script-file>
+        <!--<script-block>-->
+            <!--<![CDATA[-->
+
+		<!--]]>-->
+        <!--</script-block>-->
+    </scripts>
+</ibx-res-bundle>

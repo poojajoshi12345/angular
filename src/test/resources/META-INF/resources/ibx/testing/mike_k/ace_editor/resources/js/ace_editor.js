@@ -1,5 +1,5 @@
 /*Copyright 1996-2018 Information Builders, Inc. All rights reserved.*/
-// $Revision$:
+// $Revision: 1.1 $:
 
 
 $.widget("ibi.textEditor", $.ibi.ibxDialog, 

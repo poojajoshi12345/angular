@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--Copyright 1996-2018 Information Builders, Inc. All rights reserved. $Revision: 1.1 $:-->
+<ibx-res-bundle loadContext="bundle">
+
+	<styles>
+		<style-file src="fieldPill.css"/>
+	</styles>
+	
+	<scripts>
+		<script-file src="fieldPill.js" />		
+	</scripts>	
+	
+	<markup>
+		<markup-block>
+			<div class="pill-box-container">
+				<div class="pill-box" data-ibx-type="ibxHBox" data-ibxp-align="stretch">
+					<div class="field-pill-button" data-ibx-type="ibxButton">Button</div>
+					<div class="field-pill-label" data-ibx-name="pillLabel" data-ibx-type="ibxLabel"></div>
+					<div class="field-pill-delete" data-ibx-name="pillDelete" data-ibx-type="ibxButton" data-ibxp-glyph-classes="fa fa-times remove"></div>
+				</div>
+			</div>
+		</markup-block>
+	</markup>		
+</ibx-res-bundle>

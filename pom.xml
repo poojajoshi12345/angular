@@ -1,134 +1,155 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.ibi</groupId>
-    <artifactId>webfocus-webjars-ibx</artifactId>
-    <version>HEAD-SNAPSHOT</version>
-    <packaging>jar</packaging>
+	<groupId>com.ibi</groupId>
+	<artifactId>webfocus-webjars-ibx</artifactId>
+	<version>HEAD-SNAPSHOT</version>
+	<packaging>jar</packaging>
 
-    <name>webfocus-webjars-ibx</name>
-    <url>https://www.informationbuilders.com</url>
+	<name>webfocus-webjars-ibx</name>
+	<url>https://www.informationbuilders.com</url>
 
-    <properties>
-        <com.fasterxml.jackson.version>2.9.8</com.fasterxml.jackson.version>
-        <derby.version>10.14.2.0</derby.version>
-        <jacoco.maven.plugin.version>0.8.3</jacoco.maven.plugin.version>
-        <javax.servlet.api.version>3.1.0</javax.servlet.api.version>
-        <javax.servlet.jsp.api.version>2.3.3</javax.servlet.jsp.api.version>
-        <junit.version>4.12</junit.version>
-        <maven.assembly.plugin.version>3.1.0</maven.assembly.plugin.version>
-        <maven.checkstyle.plugin.version>3.0.0</maven.checkstyle.plugin.version>
-        <maven.compiler.plugin.version>3.8.0</maven.compiler.plugin.version>
-        <bytecode.version>1.8</bytecode.version>
-        <maven.compiler.source>${bytecode.version}</maven.compiler.source>
-        <maven.compiler.target>${bytecode.version}</maven.compiler.target>
-        <maven.dependency.plugin.version>3.1.1</maven.dependency.plugin.version>
-        <maven.jar.plugin.version>3.1.0</maven.jar.plugin.version>
-        <maven.jxr.plugin.version>3.0.0</maven.jxr.plugin.version>
-        <maven.pmd.plugin.version>3.10.0</maven.pmd.plugin.version>
-        <maven.project.info.reports.plugin.version>3.0.0</maven.project.info.reports.plugin.version>
+	<properties>
+		<com.fasterxml.jackson.version>2.9.8</com.fasterxml.jackson.version>
+		<derby.version>10.14.2.0</derby.version>
+		<jacoco.maven.plugin.version>0.8.3</jacoco.maven.plugin.version>
+		<javax.servlet.api.version>3.1.0</javax.servlet.api.version>
+		<javax.servlet.jsp.api.version>2.3.3</javax.servlet.jsp.api.version>
+		<junit.version>4.12</junit.version>
+		<maven.assembly.plugin.version>3.1.0</maven.assembly.plugin.version>
+		<maven.checkstyle.plugin.version>3.0.0</maven.checkstyle.plugin.version>
+		<maven.compiler.plugin.version>3.8.0</maven.compiler.plugin.version>
+		<bytecode.version>1.8</bytecode.version>
+		<maven.compiler.source>${bytecode.version}</maven.compiler.source>
+		<maven.compiler.target>${bytecode.version}</maven.compiler.target>
+		<maven.dependency.plugin.version>3.1.1</maven.dependency.plugin.version>
+		<maven.jar.plugin.version>3.1.0</maven.jar.plugin.version>
+		<maven.jxr.plugin.version>3.0.0</maven.jxr.plugin.version>
+		<maven.pmd.plugin.version>3.10.0</maven.pmd.plugin.version>
+		<maven.project.info.reports.plugin.version>3.0.0</maven.project.info.reports.plugin.version>
 		<maven.release.plugin.version>2.5.3</maven.release.plugin.version>
-        <maven.site.plugin.version>3.7.1</maven.site.plugin.version>
-        <maven.source.plugin.version>3.0.1</maven.source.plugin.version>
-        <maven.surefire.plugin.version>3.0.0-M2</maven.surefire.plugin.version>
-        <maven.surefire.report.plugin.version>3.0.0-M2</maven.surefire.report.plugin.version>
-        <maven.test.skip>false</maven.test.skip>
-        <org.apache.logging.log4j.version>2.11.1</org.apache.logging.log4j.version>
-        <org.ow2.asm.version>6.1.1</org.ow2.asm.version>
-        <org.sonarsource.scanner.maven.version>3.5.0.1254</org.sonarsource.scanner.maven.version>
-        <org.springframework.security.version>3.2.10.RELEASE</org.springframework.security.version>
-        <org.springframework.version>3.2.18.RELEASE</org.springframework.version>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <skipTests>false</skipTests>
-        <sonar.jacoco.reportPaths>${project.build.directory}/jacoco.exec</sonar.jacoco.reportPaths>
-        <sonar.java.checkstyle.reportPaths>${project.build.directory}/checkstyle-result.xml</sonar.java.checkstyle.reportPaths>
-        <sonar.java.pmd.reportPaths>${project.build.directory}/pmd.xml</sonar.java.pmd.reportPaths>
-        <sonar.java.spotbugs.reportPaths>${project.build.directory}/spotbugsXml.xml</sonar.java.spotbugs.reportPaths>
-        <sonar.junit.reportPaths>${project.build.directory}/surefire-reports</sonar.junit.reportPaths>
-        <spotbugs.maven.plugin.version>3.1.11</spotbugs.maven.plugin.version>
-        <testFailureIgnore>true</testFailureIgnore>
-    </properties>
+		<maven.site.plugin.version>3.7.1</maven.site.plugin.version>
+		<maven.source.plugin.version>3.0.1</maven.source.plugin.version>
+		<maven.surefire.plugin.version>3.0.0-M2</maven.surefire.plugin.version>
+		<maven.surefire.report.plugin.version>3.0.0-M2</maven.surefire.report.plugin.version>
+		<maven.test.skip>false</maven.test.skip>
+		<org.apache.logging.log4j.version>2.11.1</org.apache.logging.log4j.version>
+		<org.ow2.asm.version>6.1.1</org.ow2.asm.version>
+		<org.sonarsource.scanner.maven.version>3.5.0.1254</org.sonarsource.scanner.maven.version>
+		<org.springframework.security.version>3.2.10.RELEASE</org.springframework.security.version>
+		<org.springframework.version>3.2.18.RELEASE</org.springframework.version>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<skipTests>false</skipTests>
+		<sonar.jacoco.reportPaths>${project.build.directory}/jacoco.exec</sonar.jacoco.reportPaths>
+		<sonar.java.checkstyle.reportPaths>${project.build.directory}/checkstyle-result.xml</sonar.java.checkstyle.reportPaths>
+		<sonar.java.pmd.reportPaths>${project.build.directory}/pmd.xml</sonar.java.pmd.reportPaths>
+		<sonar.java.spotbugs.reportPaths>${project.build.directory}/spotbugsXml.xml</sonar.java.spotbugs.reportPaths>
+		<sonar.junit.reportPaths>${project.build.directory}/surefire-reports</sonar.junit.reportPaths>
+		<spotbugs.maven.plugin.version>3.1.11</spotbugs.maven.plugin.version>
+		<testFailureIgnore>true</testFailureIgnore>
+	</properties>
 
-    <dependencies>
-        <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>javax.servlet-api</artifactId>
-            <version>${javax.servlet.api.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.ibi</groupId>
-            <artifactId>webfocus-ibfs-core</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.ibi</groupId>
-            <artifactId>webfocus-web-util</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.ibi</groupId>
-            <artifactId>webfocus-web-core</artifactId>
-            <version>${project.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>jstl</artifactId>
-            <version>1.2</version>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>
+	<dependencies>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<version>${javax.servlet.api.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.ibi</groupId>
+			<artifactId>webfocus-ibfs-core</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.ibi</groupId>
+			<artifactId>webfocus-web-util</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.ibi</groupId>
+			<artifactId>webfocus-web-core</artifactId>
+			<version>${project.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>jstl</artifactId>
+			<version>1.2</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
 
-    <build>
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <groupId>org.sonarsource.scanner.maven</groupId>
-                    <artifactId>sonar-maven-plugin</artifactId>
-                    <version>${org.sonarsource.scanner.maven.version}</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-site-plugin</artifactId>
-                    <version>${maven.site.plugin.version}</version>
-                </plugin>
-            </plugins>
-        </pluginManagement>
-    </build>
+	<build>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<excludes>
+					<exclude>**/doc/**</exclude>
+					<exclude>**/findbugs_ignore.xml</exclude>
+				</excludes>
+			</resource>
+		</resources>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.sonarsource.scanner.maven</groupId>
+					<artifactId>sonar-maven-plugin</artifactId>
+					<version>${org.sonarsource.scanner.maven.version}</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-site-plugin</artifactId>
+					<version>${maven.site.plugin.version}</version>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>${maven.jar.plugin.version}</version>
+				<configuration>
+					<excludes>
+						<exclude>**/*.js_closure</exclude>
+					</excludes>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
 
-    <repositories>
-        <repository>
-            <id>maven-public</id>
-            <url>http://wfmaven.ibi.com:8081/repository/maven-public/</url>
-        </repository>
-    </repositories>
+	<repositories>
+		<repository>
+			<id>maven-public</id>
+			<url>http://wfmaven.ibi.com:8081/repository/maven-public/</url>
+		</repository>
+	</repositories>
 
-    <pluginRepositories>
-        <pluginRepository>
-            <id>maven-plugin-public</id>
-            <url>http://wfmaven.ibi.com:8081/repository/maven-public/</url>
-        </pluginRepository>
-    </pluginRepositories>
+	<pluginRepositories>
+		<pluginRepository>
+			<id>maven-plugin-public</id>
+			<url>http://wfmaven.ibi.com:8081/repository/maven-public/</url>
+		</pluginRepository>
+	</pluginRepositories>
 
-    <distributionManagement>
-        <repository>
-            <id>maven-releases</id>
-            <name>IBI Internal Release Repository</name>
-            <url>http://wfmaven.ibi.com:8081/repository/maven-releases/</url>
-        </repository>
-        <snapshotRepository>
-            <id>maven-snapshots</id>
-            <name>IBI Internal Snapshot Repository</name>
-            <url>http://wfmaven.ibi.com:8081/repository/maven-snapshots/</url>
-        </snapshotRepository>
-    </distributionManagement>
+	<distributionManagement>
+		<repository>
+			<id>maven-releases</id>
+			<name>IBI Internal Release Repository</name>
+			<url>http://wfmaven.ibi.com:8081/repository/maven-releases/</url>
+		</repository>
+		<snapshotRepository>
+			<id>maven-snapshots</id>
+			<name>IBI Internal Snapshot Repository</name>
+			<url>http://wfmaven.ibi.com:8081/repository/maven-snapshots/</url>
+		</snapshotRepository>
+	</distributionManagement>
 
-    <profiles>
-    	<profile>
+	<profiles>
+		<profile>
 			<id>compress</id>
 			<build>
 				<plugins>
@@ -150,14 +171,17 @@
 											value="${project.build.directory}/classes/META-INF/resources" />
 										<property name="closure.class"
 											value="com.ibi.testing.utils.WFJSClosureCompilerRunner" />
-										<property name="compilation.level" value="WHITESPACE_ONLY" />
+										<property name="compilation.level"
+											value="WHITESPACE_ONLY" />
 										<echo message="fileset.dir: ${fileset.dir}" />
 										<echo message="closure.class: ${closure.class}" />
 										<echo message="compilation.level: ${compilation.level}" />
-										
+
 										<java classname="${closure.class}"
 											classpathref="maven.plugin.classpath" fork="true"
 											failonerror="true">
+											<sysproperty key="IBI_Log_Directory"
+												value="${project.build.directory}" />
 											<arg value="--compilation_level" />
 											<arg value="${compilation.level}" />
 											<arg value="--js_dir" />
@@ -181,22 +205,22 @@
 										<for param="file" parallel="false">
 											<path>
 												<fileset dir="${fileset.dir}">
-													<include name="**/*.min.js"/>
-													<include name="**/*-min.js"/>
-													<include name="**/*_min.js"/>
-													<include name="**/*.htm"/>
-													<include name="**/*.html"/>
-													<include name="**/*.css"/>
-													<include name="**/*.xml"/>
+													<include name="**/*.min.js" />
+													<include name="**/*-min.js" />
+													<include name="**/*_min.js" />
+													<include name="**/*.htm" />
+													<include name="**/*.html" />
+													<include name="**/*.css" />
+													<include name="**/*.xml" />
 												</fileset>
 											</path>
 											<sequential>
 												<echo message="file: @{file}" />
 												<property name="source" value="@{file}" />
 												<property name="target" value="@{file}.gz" />
-												<gzip src="${source}" destfile="${target}"/>
-												<var name="source" unset="true"/>
-												<var name="target" unset="true"/>
+												<gzip src="${source}" destfile="${target}" />
+												<var name="source" unset="true" />
+												<var name="target" unset="true" />
 											</sequential>
 										</for>
 									</target>
@@ -230,7 +254,7 @@
 				</plugins>
 			</build>
 		</profile>
-        <profile>
+		<profile>
 			<id>cypress</id>
 			<properties>
 				<http.port>8080</http.port>
@@ -460,131 +484,131 @@
 				</plugins>
 			</build>
 		</profile>
-        <profile>
-            <id>java-sources</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-source-plugin</artifactId>
-                        <version>${maven.source.plugin.version}</version>
-                        <executions>
-                            <execution>
-                                <id>attach-sources</id>
-                                <goals>
-                                    <goal>jar-no-fork</goal>
-                                </goals>
-                            </execution>
-                            <execution>
-                                <id>attach-test-sources</id>
-                                <goals>
-                                    <goal>test-jar-no-fork</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-        <profile>
-            <id>maven-jdk10</id>
-            <activation>
-                <property>
-                    <name>jdk.version</name>
-                </property>
-            </activation>
-            <dependencies>
-                <dependency>
-                    <groupId>javax.xml.bind</groupId>
-                    <artifactId>jaxb-api</artifactId>
-                    <version>2.3.0</version>
-                </dependency>
-                <dependency>
-                    <groupId>org.glassfish.jaxb</groupId>
-                    <artifactId>jaxb-runtime</artifactId>
-                    <version>2.3.0</version>
-                    <scope>runtime</scope>
-                </dependency>
-                <dependency>
-                    <groupId>javax.activation</groupId>
-                    <artifactId>javax.activation-api</artifactId>
-                    <version>1.2.0</version>
-                </dependency>
-            </dependencies>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-compiler-plugin</artifactId>
-                        <version>${maven.compiler.plugin.version}</version>
-                        <configuration>
-                            <release>${jdk.version}</release>
-                        </configuration>
-                        <dependencies>
-                            <dependency>
-                                <groupId>org.ow2.asm</groupId>
-                                <artifactId>asm</artifactId>
-                                <version>${org.ow2.asm.version}</version>
-                            </dependency>
-                        </dependencies>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-surefire-plugin</artifactId>
-                        <version>${maven.surefire.plugin.version}</version>
-                        <configuration>
-                            <forkCount>0</forkCount>
-                        </configuration>
-                        <dependencies>
-                            <dependency>
-                                <groupId>org.ow2.asm</groupId>
-                                <artifactId>asm</artifactId>
-                                <version>${org.ow2.asm.version}</version>
-                            </dependency>
-                        </dependencies>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-        <profile>
-            <id>only-eclipse</id>
-            <activation>
-                <property>
-                    <name>m2e.version</name>
-                </property>
-            </activation>
-            <build>
-                <pluginManagement>
-                    <plugins>
-                        <plugin>
-                            <groupId>org.eclipse.m2e</groupId>
-                            <artifactId>lifecycle-mapping</artifactId>
-                            <version>1.0.0</version>
-                            <configuration>
-                                <lifecycleMappingMetadata>
-                                    <pluginExecutions>
-                                        <pluginExecution>
-                                            <pluginExecutionFilter>
-                                                <groupId>org.apache.maven.plugins</groupId>
-                                                <artifactId>maven-antrun-plugin</artifactId>
-                                                <versionRange> [1.8,)</versionRange>
-                                                <goals>
-                                                    <goal>run</goal>
-                                                </goals>
-                                            </pluginExecutionFilter>
-                                            <action>
-                                                <execute />
-                                            </action>
-                                        </pluginExecution>
-                                    </pluginExecutions>
-                                </lifecycleMappingMetadata>
-                            </configuration>
-                        </plugin>
-                    </plugins>
-                </pluginManagement>
-            </build>
-        </profile>
-        <profile>
+		<profile>
+			<id>java-sources</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-source-plugin</artifactId>
+						<version>${maven.source.plugin.version}</version>
+						<executions>
+							<execution>
+								<id>attach-sources</id>
+								<goals>
+									<goal>jar-no-fork</goal>
+								</goals>
+							</execution>
+							<execution>
+								<id>attach-test-sources</id>
+								<goals>
+									<goal>test-jar-no-fork</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<id>maven-jdk10</id>
+			<activation>
+				<property>
+					<name>jdk.version</name>
+				</property>
+			</activation>
+			<dependencies>
+				<dependency>
+					<groupId>javax.xml.bind</groupId>
+					<artifactId>jaxb-api</artifactId>
+					<version>2.3.0</version>
+				</dependency>
+				<dependency>
+					<groupId>org.glassfish.jaxb</groupId>
+					<artifactId>jaxb-runtime</artifactId>
+					<version>2.3.0</version>
+					<scope>runtime</scope>
+				</dependency>
+				<dependency>
+					<groupId>javax.activation</groupId>
+					<artifactId>javax.activation-api</artifactId>
+					<version>1.2.0</version>
+				</dependency>
+			</dependencies>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-compiler-plugin</artifactId>
+						<version>${maven.compiler.plugin.version}</version>
+						<configuration>
+							<release>${jdk.version}</release>
+						</configuration>
+						<dependencies>
+							<dependency>
+								<groupId>org.ow2.asm</groupId>
+								<artifactId>asm</artifactId>
+								<version>${org.ow2.asm.version}</version>
+							</dependency>
+						</dependencies>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-surefire-plugin</artifactId>
+						<version>${maven.surefire.plugin.version}</version>
+						<configuration>
+							<forkCount>0</forkCount>
+						</configuration>
+						<dependencies>
+							<dependency>
+								<groupId>org.ow2.asm</groupId>
+								<artifactId>asm</artifactId>
+								<version>${org.ow2.asm.version}</version>
+							</dependency>
+						</dependencies>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<id>only-eclipse</id>
+			<activation>
+				<property>
+					<name>m2e.version</name>
+				</property>
+			</activation>
+			<build>
+				<pluginManagement>
+					<plugins>
+						<plugin>
+							<groupId>org.eclipse.m2e</groupId>
+							<artifactId>lifecycle-mapping</artifactId>
+							<version>1.0.0</version>
+							<configuration>
+								<lifecycleMappingMetadata>
+									<pluginExecutions>
+										<pluginExecution>
+											<pluginExecutionFilter>
+												<groupId>org.apache.maven.plugins</groupId>
+												<artifactId>maven-antrun-plugin</artifactId>
+												<versionRange> [1.8,)</versionRange>
+												<goals>
+													<goal>run</goal>
+												</goals>
+											</pluginExecutionFilter>
+											<action>
+												<execute />
+											</action>
+										</pluginExecution>
+									</pluginExecutions>
+								</lifecycleMappingMetadata>
+							</configuration>
+						</plugin>
+					</plugins>
+				</pluginManagement>
+			</build>
+		</profile>
+		<profile>
 			<id>dependency-analyze</id>
 			<build>
 				<plugins>
@@ -649,13 +673,13 @@
 				</plugins>
 			</build>
 		</profile>
-    </profiles>
-    
-    <scm>
+	</profiles>
+
+	<scm>
 		<connection>scm:git:http://wfbucket.ibi.com:7990/scm/wp/${project.artifactId}.git</connection>
 		<developerConnection>scm:git:http://wfbucket.ibi.com:7990/scm/wp/${project.artifactId}.git</developerConnection>
 		<url>http://wfbucket.ibi.com:7990/scm/wp/${project.artifactId}.git</url>
-	    <tag>HEAD</tag>
-    </scm>
+		<tag>HEAD</tag>
+	</scm>
 
 </project>

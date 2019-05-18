@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ibx-res-bundle name="test_res_bundle.xml" loadContext="bundle">
+	<strings>
+		<string-file src="./test_res_strings.txt" default="false"/>
+		<string-bundle>
+			<![CDATA[
+			{
+				"language":"ibx_default",
+				"strings":
+				{
+					"A_TEST_STRING_INLINE":"INLINE -> String with ' apostrophy and a \" quote",
+					"A_TEST_STRING_XML":"XML -> String with ' apostrophy and a \" quote",
+					"A_TEST_STRING_JSON":"JSON String with ' apostrophy and a \" quote"
+				}
+			}
+		]]>
+		</string-bundle>
+	</strings>
+
+	<styles>
+		<style-file src="./test_res_styles.css"/>
+		<style-sheet>
+			<![CDATA[
+			.test-widget
+			{
+				text-align:center;
+				border-radius:5px;
+			}
+			.test-widget-drag-over
+			{
+				background-color:pink;
+			}
+
+			.test-widget-label
+			{
+				width: 100px;
+			}
+		]]>
+		</style-sheet>
+	</styles>
+
+	<markup>
+		<markup-file src="./test_res_markup.xml"/>
+		<markup-block>
+			<div class="test-res-label" data-ibx-type="ibxLabel">@ibxString(A_TEST_STRING_INLINE)</div>
+			<div class="test-res-label" data-ibx-type="ibxLabel" data-ibxp-text="@ibxStringXml(A_TEST_STRING_XML)"></div>
+			<div class="test-res-label" data-ibx-type="ibxLabel" data-ibx-options='{text:"@ibxStringJson(A_TEST_STRING_JSON)"}'></div>
+		</markup-block>
+	</markup>
+
+	<scripts>
+		<script-file src="../../../../ibxtools/shared_resources/js/ibfs.js"/>
+		<script-block>
+			<![CDATA[
+			$.widget("ibi.testWidget", $.ibi.ibxVBox, 
+			{
+				options:
+				{
+				},
+				_widgetClass:"test-widget",
+				_create:function()
+				{
+					this._super();
+				},
+				_destroy:function()
+				{
+					this._super();
+				},
+				_refresh:function()
+				{
+					this._super();
+				}
+			});
+			//# sourceURL=test_res_bundle.xml
+		]]>
+		</script-block>
+	</scripts>
+</ibx-res-bundle>
