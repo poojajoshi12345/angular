@@ -12,6 +12,67 @@
 		<script type="text/javascript">
 			ibx(function(e)
 			{
+				//Shape object
+				function Shape()
+				{
+					this.draw = function()
+					{
+						console.log("Shape.this.draw");
+					};
+				}
+				var _p = Shape.prototype = new Shape();
+				_p.draw = function()
+				{
+					console.log("Shape.prototype.draw");
+				};
+				_p._width = 0;
+				_p._height = 0;
+				_p.setArea = function(width, height)
+				{
+					this._width = width;
+					this._height = height;
+					console.log("Shape.prototype.setArea", width, height);
+				}
+
+				//Circle object
+				function Circle()
+				{
+					this.draw = function()
+					{
+						console.log("Circle.this.draw");
+					};
+				}
+				var _p = Circle.prototype = new Shape();
+				_p.draw = function()
+				{
+					console.log("Circle.prototype.draw");
+					Shape.prototype.draw.apply(this);
+				}
+				_p.setArea = function(size)
+				{
+					console.log("Circle.prototype.setArea", size);
+					Shape.prototype.setArea.call(this, size, size);
+				}
+				var c = new Circle();
+				c.setArea(10);
+				c.draw();
+
+
+				$(".test-edit").on("click", function(e)
+				{
+					$(e.currentTarget).ibxWidget("startEditing");
+				}).on("ibx_changed", function(e)
+				{
+					var data = e.originalEvent.data;
+					if(data == "")
+					{
+						var editor = $(e.target);
+						var preEditValue = editor.ibxWidget("preEditValue");
+						editor.ibxWidget("text", preEditValue);
+					}
+					console.log(data);
+				});
+
 			},true);
 		</script>
 		<style type="text/css">
@@ -35,6 +96,7 @@
 		</style>
 	</head>
 	<body class="ibx-root">
+		<div tabindex="0" class="test-edit" data-ibx-type="ibxLabel">Edit Me...</div>
 		<div tabindex="0" class="test-label" data-ibx-type="ibxLabel" data-ibxp-for=".test-text">Username:</div>
 		<div tabindex="0" class="test-text" data-ibx-type="ibxTextField" data-xibxp-placeholder="Username" data-ibxp-text="Julian"></div>
 	</body>
