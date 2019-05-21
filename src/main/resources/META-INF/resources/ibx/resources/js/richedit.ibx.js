@@ -409,6 +409,15 @@ $.widget("ibi.ibxEditable", $.Widget,
 	_preEditValue:null,
 	/**
 	 * @memberof ibi.ibxEditable.prototype
+	 * @description Get the original value before editing.
+	 */
+	preEditValue:function()
+	{
+		return _preEditValue;
+	},
+
+	/**
+	 * @memberof ibi.ibxEditable.prototype
 	 * @description Is this control in edit mode.
 	 */
 	isEditing:function()
