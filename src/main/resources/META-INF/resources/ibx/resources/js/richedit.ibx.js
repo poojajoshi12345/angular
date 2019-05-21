@@ -413,9 +413,8 @@ $.widget("ibi.ibxEditable", $.Widget,
 	 */
 	preEditValue:function()
 	{
-		return _preEditValue;
+		return this._preEditValue;
 	},
-
 	/**
 	 * @memberof ibi.ibxEditable.prototype
 	 * @description Is this control in edit mode.
