@@ -122,6 +122,10 @@
                             <addBuildEnvironmentEntries>true</addBuildEnvironmentEntries>
               				<addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
             			</manifest>
+                        <manifestEntries>
+                            <Build-Number>${build.number}</Build-Number>
+                            <Build-Id>${build.id}</Build-Id>
+                        </manifestEntries>
           			</archive>
 				</configuration>
 			</plugin>
