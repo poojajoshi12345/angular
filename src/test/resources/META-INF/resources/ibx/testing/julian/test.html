@@ -12,36 +12,93 @@
 		<script type="text/javascript">
 			ibx(function(e)
 			{
-				//$(".cmd-test").ibxWidget("userValue", 2);
-				//$(".test-select").ibxWidget("userValue", 2);
-
-				var values = [];
-				for(var i = 0; i < 25; ++i)
+				//Shape object
+				function Shape()
 				{
-					var value = {display:"item " + i, checked:false}
-					values.push(value)
+					this.draw = function()
+					{
+						console.log("Shape.this.draw");
+					};
 				}
-				$(".test-select").ibxWidget("values", values);
+				var _p = Shape.prototype = new Shape();
+				_p.draw = function()
+				{
+					console.log("Shape.prototype.draw");
+				};
+				_p._width = 0;
+				_p._height = 0;
+				_p.setArea = function(width, height)
+				{
+					this._width = width;
+					this._height = height;
+					console.log("Shape.prototype.setArea", width, height);
+				}
+
+				//Circle object
+				function Circle()
+				{
+					this.draw = function()
+					{
+						console.log("Circle.this.draw");
+					};
+				}
+				var _p = Circle.prototype = new Shape();
+				_p.draw = function()
+				{
+					console.log("Circle.prototype.draw");
+					Shape.prototype.draw.apply(this);
+				}
+				_p.setArea = function(size)
+				{
+					console.log("Circle.prototype.setArea", size);
+					Shape.prototype.setArea.call(this, size, size);
+				}
+				var c = new Circle();
+				c.setArea(10);
+				c.draw();
+
+
+				$(".test-edit").on("click", function(e)
+				{
+					$(e.currentTarget).ibxWidget("startEditing");
+				}).on("ibx_changed", function(e)
+				{
+					var data = e.originalEvent.data;
+					if(data == "")
+					{
+						var editor = $(e.target);
+						var preEditValue = editor.ibxWidget("preEditValue");
+						editor.ibxWidget("text", preEditValue);
+					}
+					console.log(data);
+				});
 
 			},true);
 		</script>
 		<style type="text/css">
 			body
 			{
+				margin:0px;
 				position:absolute;
 				width:100%;
 				height:100%;
-				margin:0px;
 				box-sizing:border-box;
 			}
-			.test-select
+			.test-text
 			{
-				height:200px;
+				width:100px;
+				border:1px solid black;
+			}
+			.test-spinner
+			{
+				width:125px;
 			}
 		</style>
 	</head>
-	<body class="ibx-root" data-ibx-type="ibxVBox" data-ibxp-align="center">
-		<div tabindex="0" class="test-select" title="Test Select" data-ibx-type="ibxSelectItemListPaged" data-ibxp-selection-controls="true" data-ibxp-multi-select="true" data-ibxp-enable-paging-trigger="10"></div>
+	<body class="ibx-root">
+		<div tabindex="0" class="test-edit" data-ibx-type="ibxLabel">Edit Me...</div>
+		<div tabindex="0" class="test-label" data-ibx-type="ibxLabel" data-ibxp-for=".test-text">Username:</div>
+		<div tabindex="0" class="test-text" data-ibx-type="ibxTextField" data-xibxp-placeholder="Username" data-ibxp-text="Julian"></div>
 	</body>
 </html>
 
