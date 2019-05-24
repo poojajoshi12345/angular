@@ -123,9 +123,9 @@
               				<addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
             			</manifest>
                         <manifestEntries>
-                            <Build-Number>${build.number}</Build-Number>
-                            <Build-Tag>${build.tag}</Build-Tag>
-                            <Build-Timestamp>${build.timestamp}</Build-Timestamp>
+                            <Build-Number>${wf.build.number}</Build-Number>
+                            <Build-Tag>${wf.build.tag}</Build-Tag>
+                            <Build-Timestamp>${wf.build.timestamp}</Build-Timestamp>
                         </manifestEntries>
           			</archive>
 				</configuration>
