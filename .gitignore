@@ -5,3 +5,4 @@
 /node_modules/
 .project
 .classpath
+src/main/resources/META-INF/resources/ibx/testing

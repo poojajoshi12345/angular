@@ -1,9 +1,0 @@
-.pill-box, .field-pill-button, .field-pill-label, .field-pill-delete
-{
-	border: 1px solid black;
-}
-
-.field-pill-label
-{
-	flex: 1 1 auto;
-}

@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!--Copyright 1996-2016 Information Builders, Inc. All rights reserved.
-$Revision: 1.2 $:-->
-<markup>
-	<markup-block>
-		<div class="test-res-markup-label" data-ibx-type="ibxLabel">Bundle Markup Label</div>
-	</markup-block>
-</markup>
