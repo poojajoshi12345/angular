@@ -1,130 +1,548 @@
 <!DOCTYPE html>
-<html lang="en">
-	<head>
-		<title>HTML Test File</title>
-		<meta http-equiv="X-UA-Compatible" content="IE=11">
-		<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-		<meta http-equiv="Pragma" content="no-cache" />
-		<meta http-equiv="Expires" content="0" />
-		<meta name="google" value="notranslate">
-		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<script type="text/javascript" src="../../resources/ibx.js"></script>
-		<script type="text/javascript">
-			ibx(function(e)
-			{
-				//Shape object
-				function Shape()
-				{
-					this.draw = function()
-					{
-						console.log("Shape.this.draw");
-					};
-				}
-				var _p = Shape.prototype = new Shape();
-				_p.draw = function()
-				{
-					console.log("Shape.prototype.draw");
-				};
-				_p._width = 0;
-				_p._height = 0;
-				_p.setArea = function(width, height)
-				{
-					this._width = width;
-					this._height = height;
-					console.log("Shape.prototype.setArea", width, height);
-				}
+<html>
 
-				//Circle object
-				function Circle()
-				{
-					this.draw = function()
-					{
-						console.log("Circle.this.draw");
-					};
-				}
-				var _p = Circle.prototype = new Shape();
-				_p.draw = function()
-				{
-					console.log("Circle.prototype.draw");
-					Shape.prototype.draw.apply(this);
-				}
-				_p.setArea = function(size)
-				{
-					console.log("Circle.prototype.setArea", size);
-					Shape.prototype.setArea.call(this, size, size);
-				}
-				var c = new Circle();
-				c.setArea(10);
-				c.draw();
+<head>
+    <style>
+        html,
+        body,
+        .container {
+
+            width:100%;
+			height: 100%;
+            margin: 0px;
+			box-sizing:border-box;
+			border:2px solid red;
+        }
+
+        body {
+            color: #000;
+        }
+
+        div {
+            display: flex;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: row;
+        }
+
+        .left {
+            display: flex;
+            flex-direction: column;
+			align-items:stretch;
+            flex: 4;
+            background-color: lightgray;
+        }
+
+        .right {
+            display: flex;
+            flex-direction: column;
+            flex: 0 0 auto;
+            background-color: gray;
+            justify-content: space-between;
+        }
+
+        .canvas {
+            background-color: white;
+            height: 100%;
+            margin: 20px;
+            border: 1px solid black;
+            overflow:scroll;
+        }
+
+        .canvasContent {
+            height:5000px;
+            width: 5000px;
+            position: relative;
+        }
+
+        .button {
+            display: flex;
+            flex-direction: column;
+			width:70px;
+            padding: 10px;
+            margin-left: 20px;
+            margin-right: 20px;
+            background-color: lightgray;
+            border: 1px black solid;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .button:hover {
+            background-color: darkgray;
+        }
+
+        .shapesGroup {
+            display: flex;
+            flex-direction: column;
+            /* margin-top:20px; */
+            flex-wrap: wrap;
+            flex: 2;
+            justify-content: space-between;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+
+        .optionsGroup {
+            display: flex;
+            flex-direction: column;
+            margin-top: 20px;
+
+            flex-wrap: wrap;
+            justify-content: space-between;
+
+        }
+
+        .optionButton {
+            margin-bottom: 20px;
+            background-color: rgb(119, 119, 119);
+        }
 
 
-				$(".test-edit").on("click", function(e)
-				{
-					$(e.currentTarget).ibxWidget("startEditing");
-				}).on("ibx_changed", function(e)
-				{
-					var data = e.originalEvent.data;
-					if(data == "")
-					{
-						var editor = $(e.target);
-						var preEditValue = editor.ibxWidget("preEditValue");
-						editor.ibxWidget("text", preEditValue);
-					}
-					console.log(data);
-				});
 
-			},true);
+        .selected {
+            border: 2px white solid;
+        }
 
-			//ABBA, BABA => ABA
-			function findSubString(s1, s2)
-			{
-				var strOut = "";
-				for(var i = 0; i < s1.length; ++i)
-				{
-					for(var j = i; j < s2.length; ++j)
-					{
-						if((s1[i] == s2[j]))
-						{
-							strOut += s1[i];
-							break;
-						}
-					}
-				}
-				return strOut;
-			}
+        .oval,
+        .circle {
+            border-radius: 50%;
+        }
 
+        .marker {
+            position: absolute;
+            background-color: red;
+            width: 2px;
+            height: 2px;
+        }
+
+        .shape {
+            position: absolute;
+        }
+
+        .clicked {
+            background-color: rgb(155, 100, 100);
+        }
+
+        .clicked:hover {
+            background-color: rgb(124, 63, 63);
+        }
+
+        /* .input {
+            text-align: center;
+            margin-bottom: 20px;
+            margin-right: 20px;
+            background-color:white;
+        }
+
+        .label{
+            margin-bottom: 20px;
+            margin-left: 20px;
+        } */
+
+		.hidden
+		{
+			display:none;
+		}
+    </style>
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+    <script>
+        //JavaScript Objects
+        function Shape(width, height) {
+            this.width(width);
+            this.height(height);
+
+            this._elem = document.createElement("div");
+            this._elem.className = "shape";
+        }
+
+        var _p = Shape.prototype = new Object();
+        _p._unit = "px";
+
+        _p._width = 50;
         _p.width = function (width) {
-            Shape.prototype.width.call(this, width);
-            Shape.prototype.height.call(this, width);
+            if (width === undefined) {
+                return this._width;
+            }
+
+            this._width = (isNaN(width) || width < 0) ? 0 : width;
+        };
+
+        _p._height = 50;
+        _p.height = function (height) {
+            if (height === undefined) {
+                return this._height;
+            }
+            this._height = (isNaN(height) || height < 0) ? 0 : height;
+        };
+
+        _p.setSize = function (width, height) {
+            this.width(width);
+            this.height(height);
+        };
+
+        _p._positionX = 0;
+        _p.positionX = function (x) {
+            if (x === undefined) {
+                return this._positionX;
+            }
+
+            this._positionX = isNaN(x) ? 0 : x;
+        };
+
+        _p._positionY = 0;
+        _p.positionY = function (y) {
+            if (y === undefined) {
+                return this._positionY;
+            }
+            this._positionY = isNaN(y) ? 0 : y;
+        };
+
+        _p.setPosition = function (x, y) {
+            this.positionX(x);
+            this.positionY(y);
+        };
+
+        _p.setBounds = function (x, y, width, height) {
+            this.positionX(x);
+            this.positionY(y);
+            this.width(width);
+            this.height(height);
+        };
+
+        _p._backgroundColor = "gray";
+        _p.backgroundColor = function (color) {
+            if (color === undefined) {
+                return this._backgroundColor;
+            }
+            this._backgroundColor = color;
+        };
+
+        _p._borderWidth = "1px";
+        _p.borderWidth = function (width) {
+            if (width === undefined) {
+                return this._borderWidth;
+            }
+            this._borderWidth = width;
+        };
+
+        _p._borderColor = "black";
+        _p.borderColor = function (color) {
+            if (color === undefined) {
+                return this._borderColor;
+            }
+            this._borderColor = color;
+        };
+
+        _p._borderStyle = "solid";
+        _p.borderStyle = function (style) {
+            if (style === undefined) {
+                return this._borderStyle;
+            }
+            this._borderStyle = style;
+        };
+
+        _p.setBorder = function (width, color, style) {
+            this.borderWidth(width);
+            this.borderColor(color);
+            this.borderStyle(style);
+        };
+
+        // _p._centered = false;
+        // _p.centered = function (bool) {
+        //     if (bool === undefined) {
+        //         return this._centered;
+        //     }
+        //     this._centered = (bool === true || bool === false) ? bool : false;
+        // }
+
+        _p.draw = function () {
+            this._elem.style.width = this.width() + this._unit;
+            this._elem.style.height = this.height() + this._unit;
+
+            this._elem.style.backgroundColor = this.backgroundColor();
+
+            this._elem.style.borderColor = this.borderColor();
+            this._elem.style.borderStyle = this.borderStyle();
+            this._elem.style.borderWidth = this.borderWidth();
+
+            try {
+                var marker = document.querySelectorAll(".marker");
+                var x = marker[0].style.left;
+                var y = marker[0].style.top;
+
+                x = x.substring(0, x.length - 2);
+                y = y.substring(0, y.length - 2);
+                this.setPosition(x, y);
+            }
+            catch (e) {
+
+            }
+
+            if (document.querySelectorAll(".centerButton")[0].classList.contains("clicked")) {
+                this.positionY(this.positionY() - this.height() / 2);
+                this.positionX(this.positionX() - this.width() / 2);
+            }
+
+            this._elem.style.top = this.positionY() + this._unit;
+            this._elem.style.left = this.positionX() + this._unit;
+
+            //Removes the marker
+            for (var i = 0; i < marker.length; i++) {
+                marker[i].parentNode.removeChild(marker[i]);
+            }
+
+            document.querySelector(".canvasContent").appendChild(this._elem);
+        };
+
+        _p.serialize = function (read, data) {
+            //do something
         };
 
 
-		</script>
-		<style type="text/css">
-			body
-			{
-				margin:0px;
-				position:absolute;
-				width:100%;
-				height:100%;
-				box-sizing:border-box;
-			}
-			.test-text
-			{
-				width:100px;
-				border:1px solid black;
-			}
-			.test-spinner
-			{
-				width:125px;
-			}
-		</style>
-	</head>
-	<body class="ibx-root">
-		<div tabindex="0" class="test-edit" data-ibx-type="ibxLabel">Edit Me...</div>
-		<div tabindex="0" class="test-label" data-ibx-type="ibxLabel" data-ibxp-for=".test-text">Username:</div>
-		<div tabindex="0" class="test-text" data-ibx-type="ibxTextField" data-xibxp-placeholder="Username" data-ibxp-text="Julian"></div>
-	</body>
-</html>
+        //Oval
+        function Oval(width, height) {
+            Shape.call(this, width, height);
+            this._elem.className += " oval";
+        }
+
+        var _p = Oval.prototype = new Shape();
 
 
+
+        //Circle
+        function Circle(radius) {
+            Oval.call(this, radius, radius);
+            this._elem.className += " circle";
+        }
+
+        var _p = Circle.prototype = new Oval();
+
+        _p.width = function (width) {
+            if (width === undefined) {
+                return this._width;
+            }
+            Oval.prototype.width.call(this, width);
+            Oval.prototype.height.call(this, width);
+        };
+
+        _p.height = function (height) {
+            if (height === undefined) {
+                return this._height;
+            }
+            Oval.prototype.height.call(this, height);
+            Oval.prototype.width.call(this, height);
+        };
+
+        _p.setSize = function (size) {
+            Oval.prototype.setSize.call(this, size, size);
+        };
+
+
+
+
+        //Triangle
+        function Triangle(width, height) {
+            Shape.call(this, width, height);
+            this._elem.className += " triangle";
+        }
+
+        var _p = Triangle.prototype = new Shape();
+
+        _p.draw = function () {
+            Shape.prototype.draw.call(this);
+            this._elem.style.borderWidth = "0px";
+            this._elem.style.height = "0px";
+            this._elem.style.width = "0px";
+            this._elem.style.backgroundColor = "transparent";
+            this._elem.style.borderBottom = this.width() + this._unit + " solid " + this._backgroundColor;
+            this._elem.style.borderLeft = this.height() + this._unit + " solid transparent";
+            this._elem.style.borderRight = this.height() + this._unit + " solid transparent";
+
+
+            if (document.querySelectorAll(".centerButton")[0].classList.contains("clicked")) {
+
+                this.positionX(this.positionX() - this.width() / 4);
+                this.positionY(this.positionY() - this.height() / 4);
+            }
+
+            this._elem.style.left = this.positionX() + this._unit;
+            this._elem.style.top = this.positionY() + this._unit;
+        };
+
+
+        //Rectangle
+        function Rectangle(width, height) {
+            Shape.call(this, width, height);
+            this._elem.className += " rectangle";
+        }
+
+        var _p = Rectangle.prototype = new Shape();
+
+
+
+        //Square
+        function Square(side) {
+            Rectangle.call(this, side, side);
+            this._elem.className += " square";
+        }
+
+        var _p = Square.prototype = new Rectangle();
+
+        _p.width = function (width) {
+            if (width === undefined) {
+                return this._width;
+            }
+            Rectangle.prototype.width.call(this, width);
+            Rectangle.prototype.height.call(this, width);
+        };
+
+        _p.height = function (height) {
+            if (height === undefined) {
+                return this._height;
+            }
+            Rectangle.prototype.height.call(this, height);
+            Rectangle.prototype.width.call(this, height);
+        };
+
+        _p.setSize = function (size) {
+            Rectangle.prototype.setSize.call(this, size, size);
+        };
+
+
+
+
+        document.addEventListener("DOMContentLoaded", function () {
+            document.querySelectorAll(".canvasContent")[0].addEventListener("click", markCoordinates)
+
+            document.querySelectorAll(".shapeButton")[0].addEventListener("click", createShape);
+
+            document.querySelectorAll(".circleButton")[0].addEventListener("click", createCircle);
+            document.querySelectorAll(".ovalButton")[0].addEventListener("click", createOval);
+            document.querySelectorAll(".triangleButton")[0].addEventListener("click", createTriangle);
+            document.querySelectorAll(".squareButton")[0].addEventListener("click", createSquare);
+            document.querySelectorAll(".rectangleButton")[0].addEventListener("click", createRectangle);
+
+            document.querySelectorAll(".clearAllButton")[0].addEventListener("click", clearAll);
+            document.querySelectorAll(".deleteButton")[0].addEventListener("click", deleteSelected);
+
+            document.querySelectorAll(".centerButton")[0].addEventListener("click", toggleCenter);
+        });
+
+
+        function createShape() {
+            var shape = new Shape(50, 50);
+            shape.draw();
+
+            console.log(shape);
+        }
+
+        function createOval() {
+            var oval = new Oval(100, 50);
+            oval.draw();
+            console.log(oval);
+        }
+
+        function createCircle() {
+            var circle = new Circle(60);
+            circle.draw();
+            console.log(circle);
+        }
+
+        function createTriangle() {
+            var triangle = new Triangle(80, 70);
+            triangle.draw();
+            console.log(triangle);
+        }
+
+        function createRectangle() {
+            var rectangle = new Rectangle(70, 50);
+            rectangle.draw();
+            console.log(rectangle);
+        }
+
+        function createSquare() {
+            var square = new Square(100);
+            square.draw();
+            console.log(square);
+        }
+
+
+        function clearAll() {
+            var e = document.querySelectorAll(".shape");
+            for (var i = 0; i < e.length; i++) {
+                e[i].parentNode.removeChild(e[i]);
+            }
+        }
+
+        function deleteSelected() {
+            alert("Nothing yet");
+        }
+
+        function markCoordinates(event) {
+            //Removes previous marker
+            var canvas = document.querySelector(".canvasContent");
+            var e = document.querySelectorAll(".marker");
+            for (var i = 0; i < e.length; i++) {
+                e[i].parentNode.removeChild(e[i]);
+            }
+
+            var bound = event.target.getBoundingClientRect();
+ 
+            console.log("X: " + (event.clientX - bound.left) + " Y: " + (event.clientY - bound.top));
+
+            var marker = document.createElement("div");
+            marker.className = "marker";
+
+            marker.style.left = event.clientX - bound.left + "px";
+            marker.style.top = event.clientY - bound.top + "px";
+            canvas.appendChild(marker);
+
+
+        }
+
+        function toggleCenter() {
+            var e = document.querySelectorAll(".centerButton")[0];
+            if (!e.classList.contains("clicked")) {
+                e.className += " clicked";
+                e.innerHTML = ("Center = ON");
+            }
+            else {
+                e.classList.remove("clicked");
+                e.innerHTML = ("Center = OFF");
+            }
+        }
+
+
+
+    </script>
+</head>
+
+<body>
+    <div class="container">
+        <div class="left">
+            <div class="canvas">
+                <div class="hidden canvasContent"></div>
+            </div>
+            <div class="button optionButton clearAllButton">Clear All</div>
+        </div>
+        <div class="right">
+            <div class="shapesGroup">
+                <div class="button shapeButton">Shape</div>
+                <div class="button ovalButton">Oval</div>
+                <div class="button circleButton">Circle</div>
+                <div class="button triangleButton">Triangle</div>
+                <div class="button rectangleButton">Rectangle</div>
+                <div class="button squareButton">Square</div>
+            </div>
+            <div class="optionsGroup">
+                <div class="button optionButton centerButton">Center = OFF</div>
+                <div class="button optionButton deleteButton">Delete</div>
+            </div>
+        </div>
+    </div>
+</body>

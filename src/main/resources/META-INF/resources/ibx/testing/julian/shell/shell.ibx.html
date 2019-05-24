@@ -114,58 +114,31 @@
 				var toolInfo = wnd.data("ibxShellTool") || {id:null};
 				return toolInfo;
 			};
-
-			function activatePlugin(idTool, updateUI, data)
+			function updateToolUI(add, toolInfo, data)
 			{
-				//see if the tool is currently running...and window isn't already the active one.
-				var toolInfo = window._ibxShellApp.runningTools[idTool];
-				var wnd = $(toolInfo.host).closest(".tool-window");
-				if(!wnd.is(".wnd-active"))
+				if(add)
 				{
-					//deactivate the currently active tool
-					var toolInfoActive = activeTool();
-					deactivatePlugin(toolInfoActive.id);
-				}
-
-				//merge the tool's ui if requested.
-				if((updateUI === undefined) || updateUI)
-				{
-					console.log("activatePlugin", data ? data.type : "no type", data);
-
-					wnd.ibxAddClass("wnd-active");
-					var toolInfo = wnd.data("ibxShellTool");
 					var manifest = window._ibxShellApp.config.tools[toolInfo.type];
-					var shellUI = manifest.shellUI || window._ibxShellApp.config.shellUI;
-					shellUI = toolInfo.tool.getResources(jQuery, shellUI, data);
-
-					$(".help-menu").ibxWidget("option", "menu").ibxWidget("add", shellUI.menuHelp.ibxWidget("children").addClass("ibx-plugin-help-item"));
-					$(".main-menubar").ibxWidget("add", shellUI.menuBar, ".help-menu", true); 
-					$(".main-toolbar").append(shellUI.toolBar); 
+					var ui = manifest.shellUI || window._ibxShellApp.config.shellUI;
+					ui = toolInfo.ui = toolInfo.tool.getResources(jQuery, ui, data);
+					$(".help-menu").ibxWidget("option", "menu").ibxWidget("add", ui.menuHelp.ibxWidget("children").addClass("ibx-plugin-menu-item"));
+					$(".main-menubar").ibxWidget("add", ui.menuBar, ".help-menu", true); 
+					$(".main-toolbar").append(ui.toolBar); 
 
 					//must add commands into the static array on activation
-					shellUI.commands.each(function(idx, cmd)
+					ui.commands.each(function(idx, cmd)
 					{
 						cmd = $(cmd);
 						var id = cmd.ibxWidget("option", "id");
 						$.ibi.ibxCommand.cmds[id] = cmd;
 					});
 				}
-			}
-			function deactivatePlugin(idTool)
-			{
-				return;
-				var toolInfo = window._ibxShellApp.tools[idTool];
-				var wnd = toolInfo ? toolInfo.wnd : $();
-				if(!wnd.is(".wnd-active"))
-					return;
-
-				wnd.ibxRemoveClass("wnd-active");
-				var toolInfo = wnd.data("ibxShellTool");
-				if(toolInfo)
+				else
 				{
-					toolInfo.ui.helpmenu.ibxWidget("add", $(".ibx-plugin-help-item"));
-					toolInfo.ui.menubar.detach();
-					toolInfo.ui.toolbar.detach();
+					$(".help-menu .ibx-plugin-help-item").detach();
+					toolInfo.shellMenu.detach();
+					toolInfo.ui.menuBar.detach();
+					toolInfo.ui.toolBar.detach();
 
 					//must remove commands from static array on deactivation
 					toolInfo.ui.commands.each(function(idx, cmd)
@@ -173,7 +146,29 @@
 						var id = $(cmd).ibxWidget("option", "id");
 						delete $.ibi.ibxCommand.cmds[id]
 					});
+					delete toolinfo.ui;
 				}
+			}
+			function activatePlugin(idTool, updateUI, data)
+			{
+				var toolInfoActive = activeTool();
+				if(toolInfoActive)
+					deactivatePlugin(toolInfoActive.id);
+
+				var toolInfo = window._ibxShellApp.runningTools[idTool];
+				var wnd = $(toolInfo.host).closest(".tool-window");
+				wnd.ibxAddClass("wnd-active");
+				updateToolUI(true, toolInfo, data);
+			}
+			function deactivatePlugin(idTool, data)
+			{
+				var toolInfo = window._ibxShellApp.runningTools[idTool];
+				if(!toolInfo)
+					return;
+
+				var wnd = $(toolInfo.host).closest(".tool-window");
+				wnd.ibxRemoveClass("wnd-active");
+				updateToolUI(false, toolInfo, data);
 			}
 
 			function initShell(shellConfig)
