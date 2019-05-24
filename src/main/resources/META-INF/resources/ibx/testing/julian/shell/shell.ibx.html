@@ -16,53 +16,65 @@
 				var shell = ibx.resourceMgr.getResource(".app-ui", true).children();
 				$("body").append(shell);
 
-				//figure out which tools are supported.
-				var toolsManifest = {}
-				var loadTools = ibx.getAppParms().tools.split(",");
-				if(loadTools.indexOf("tool1") != -1)
+				var activeTools = ibx.getAppParms().tools.split(",");
+				var shellConfig = 
 				{
-					toolsManifest.tool1 = 
+					//ui resources tool can donate (general)...tools can override.
+					shellUI:
 					{
-						title:"Squares",
-						icon:"something.whatever",
-						class:"squares-plugin",
-						host:"iframe",
-						src:"./shell.ibx.tool1.html",
-					};
-				}
-				if(loadTools.indexOf("tool2") != -1)
-				{
-					toolsManifest.tool2 = 
+						commands:null,
+						shellMenu:null,
+						menuHelp:null,
+						menuBar:null,
+						toolBar:null
+					},
+
+					//configured shell tools (plugins)
+					tools:
 					{
-						title:"Circles",
-						icon:"something.whatever",
-						class:"squares-plugin",
-						host:"iframe",
-						src:"./shell.ibx.tool2.html",
-					};
+						tool1:
+						{
+							active: (activeTools.indexOf("tool1") != -1),
+							title:"Squares",
+							icon:"something.whatever",
+							class:"squares-plugin",
+							host:"iframe",
+							src:"./shell.ibx.tool1.html",
+						},
+						tool2:
+						{
+							active: (activeTools.indexOf("tool2") != -1),
+							title:"Circles",
+							icon:"something.whatever",
+							class:"squares-plugin",
+							host:"iframe",
+							src:"./shell.ibx.tool2.html",
+						}
+					}
 				}
 
 				//get everything up and running
-				_ibxShell = new ibxShellApp(toolsManifest);
-				initShell(toolsManifest);
+				window._ibxShellApp = new ibxShellApp(shellConfig);
+				initShell(shellConfig);
 
 				//attach our commands.
 				$(".cmd-new").on("ibx_triggered", function(e)
 				{
 					var type = $(e.relatedTarget).ibxWidget("option", "tool");
-					var toolInfo = _ibxShell.createTool(type);
-					var wnd = makeToolWindow().ibxAddClass(toolInfo.manifest.class).data("ibxShellTool", toolInfo);
+					var tool = window._ibxShellApp.config.tools[type];
+					var toolInfo = window._ibxShellApp.createTool(type);
+					var wnd = makeToolWindow().ibxAddClass(tool.class).data("ibxShellTool", toolInfo);
+
 					wnd.find(".tool-content").append(toolInfo.host);
 					$(".tool-area").append(wnd);
 					toolInfo.createDeferred.then(function()
 					{
-						var caption = sformat("{1} ({2})", toolInfo.manifest.title, $("."+toolInfo.manifest.class).length)
+						var caption = sformat("{1} ({2})", tool.title, $("." + tool.class).length)
 						wnd.find(".title-caption").ibxWidget("option", "text", caption);
 						wnd.ibxRemoveClass("creating");
-						activatePlugin(wnd);
+						activatePlugin(toolInfo.id);
 					});
 				});
-
 				$(".cmd-save, .cmd.save-as").on("ibx_triggered", function(e)
 				{
 					var wnd = $(".wnd-active");
@@ -78,22 +90,108 @@
 				{
 					alert("ibxShellApp Example...let's you get plugged in!");
 				});
+
+				$(".tool-area").on("focus", function(e)
+				{
+					var toolInfo = activeTool();
+					deactivatePlugin(toolInfo.id);
+				});
+
+				window.addEventListener(ibxShellApp.msgActivateTool, function(e)
+				{
+					var activateInfo = e.data;
+					activatePlugin(activateInfo.id, false, activateInfo);
+				});
+				window.addEventListener(ibxShellApp.msgUpdateToolUI, function(e)
+				{
+					var updateInfo = e.data;
+					activatePlugin(updateInfo.id, true, updateInfo);
+				});
 			},[{"src":"./shell.ibx.res.xml", "loadContext":"app"}], true);
+			function activeTool()
+			{
+				var wnd = $(".wnd-active");
+				var toolInfo = wnd.data("ibxShellTool") || {id:null};
+				return toolInfo;
+			};
 
+			function activatePlugin(idTool, updateUI, data)
+			{
+				//see if the tool is currently running...and window isn't already the active one.
+				var toolInfo = window._ibxShellApp.runningTools[idTool];
+				var wnd = $(toolInfo.host).closest(".tool-window");
+				if(!wnd.is(".wnd-active"))
+				{
+					//deactivate the currently active tool
+					var toolInfoActive = activeTool();
+					deactivatePlugin(toolInfoActive.id);
+				}
 
-			function initShell(manifest)
+				//merge the tool's ui if requested.
+				if((updateUI === undefined) || updateUI)
+				{
+					console.log("activatePlugin", data ? data.type : "no type", data);
+
+					wnd.ibxAddClass("wnd-active");
+					var toolInfo = wnd.data("ibxShellTool");
+					var manifest = window._ibxShellApp.config.tools[toolInfo.type];
+					var shellUI = manifest.shellUI || window._ibxShellApp.config.shellUI;
+					shellUI = toolInfo.tool.getResources(jQuery, shellUI, data);
+
+					$(".help-menu").ibxWidget("option", "menu").ibxWidget("add", shellUI.menuHelp.ibxWidget("children").addClass("ibx-plugin-help-item"));
+					$(".main-menubar").ibxWidget("add", shellUI.menuBar, ".help-menu", true); 
+					$(".main-toolbar").append(shellUI.toolBar); 
+
+					//must add commands into the static array on activation
+					shellUI.commands.each(function(idx, cmd)
+					{
+						cmd = $(cmd);
+						var id = cmd.ibxWidget("option", "id");
+						$.ibi.ibxCommand.cmds[id] = cmd;
+					});
+				}
+			}
+			function deactivatePlugin(idTool)
+			{
+				return;
+				var toolInfo = window._ibxShellApp.tools[idTool];
+				var wnd = toolInfo ? toolInfo.wnd : $();
+				if(!wnd.is(".wnd-active"))
+					return;
+
+				wnd.ibxRemoveClass("wnd-active");
+				var toolInfo = wnd.data("ibxShellTool");
+				if(toolInfo)
+				{
+					toolInfo.ui.helpmenu.ibxWidget("add", $(".ibx-plugin-help-item"));
+					toolInfo.ui.menubar.detach();
+					toolInfo.ui.toolbar.detach();
+
+					//must remove commands from static array on deactivation
+					toolInfo.ui.commands.each(function(idx, cmd)
+					{
+						var id = $(cmd).ibxWidget("option", "id");
+						delete $.ibi.ibxCommand.cmds[id]
+					});
+				}
+			}
+
+			function initShell(shellConfig)
 			{
 				var menu = $(".new-tool-menu");
 				var tbar = $(".tbar");
-				$.each(manifest, function(key, toolInfo)
+				$.each(shellConfig.tools, function(key, tool)
 				{
-					var menuItem = $("<div>").text(toolInfo.title).ibxMenuItem({"command":"cmdNew", "tool":key});
+					if(!tool.active)
+						return;
+
+					var menuItem = $("<div>").text(tool.title).ibxMenuItem({"command":"cmdNew", "tool":key});
 					menu.ibxWidget("add", menuItem);
 
-					var tbButton = $("<div tabindex='0' class='tbar-btn new-plugin' title='New Tool Window'>").text(sformat("New {1}", toolInfo.title)).ibxButton({"command":"cmdNew", "tool":key});
+					var tbButton = $("<div tabindex='0' class='tbar-btn shell-tool-tb-btn' title='New Tool Window'>").text(sformat("New {1}", tool.title)).ibxButton({"command":"cmdNew", "tool":key});
 					tbar.ibxWidget("add", tbButton);
 				});
-				if($(".new-plugin").length)
+				if($(".shell-tool-tb-btn").length)
 					tbar.ibxWidget("add", $("<div class='tbar-sep'>"));
 			}
 
@@ -111,58 +209,18 @@
 				wnd.find(".title-close").on("click", function(e)
 				{
 					var wnd = $(e.target).closest(".tool-window");
-					deactivatePlugin(wnd);
+					var toolInfo = wnd.data("ibxShellTool");
+					deactivatePlugin(toolInfo.id);
 					wnd.remove();
 				});
 				wnd.on("mousedown focusin", function(e)
 				{
-					var wnd = $(e.currentTarget);
-					activatePlugin(wnd);
+					var wnd = $(e.target).closest(".tool-window");
+					var toolInfo = wnd.data("ibxShellTool");
+					activatePlugin(toolInfo.id);
 				});
 				return wnd;
 			}
-
-			function activatePlugin(wnd)
-			{
-				if(wnd.is(".wnd-active"))
-					return;
-
-				deactivatePlugin($(".wnd-active"));
-				wnd.ibxAddClass("wnd-active").css("zIndex", 2000);
-				var toolInfo = wnd.data("ibxShellTool");
-				var helpMenu = $(".help-menu").ibxWidget("option", "menu");
-
-				helpMenu.ibxWidget("add", toolInfo.ui.helpmenu.ibxWidget("children").addClass("ibx-plugin-help-item"));
-				$(".main-menubar").ibxWidget("add", toolInfo.ui.menubar, ".help-menu", true); 
-				$(".main-toolbar").append(toolInfo.ui.toolbar); 
-
-				//must add commands into the static array on activation
-				toolInfo.ui.commands.each(function(idx, cmd)
-				{
-					cmd = $(cmd);
-					var id = cmd.ibxWidget("option", "id");
-					$.ibi.ibxCommand.cmds[id] = cmd;
-				});
-			}
-			function deactivatePlugin(wnd)
-			{
-				wnd.ibxRemoveClass("wnd-active").css("zIndex", "");
-				var toolInfo = wnd.data("ibxShellTool");
-				if(toolInfo)
-				{
-					toolInfo.ui.helpmenu.ibxWidget("add", $(".ibx-plugin-help-item"));
-					toolInfo.ui.menubar.detach();
-					toolInfo.ui.toolbar.detach();
-
-					//must remove commands from static array on deactivation
-					toolInfo.ui.commands.each(function(idx, cmd)
-					{
-						var id = $(cmd).ibxWidget("option", "id");
-						delete $.ibi.ibxCommand.cmds[id]
-					});
-				}
-			}
-
 		</script>
 		<style type="text/css">
 		</style>

@@ -210,9 +210,6 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 			var selChildren = this.selectableChildren(":ibxVisible");
 			var selTarget = this.mapToSelectable(e.target);
 
-			//focus the target
-			this.focus(selTarget, true);
-
 			//don't deselect if clicking on scrollbar.
 			if(!ClickOnScrollbar(e.target, e.clientX, e.clientY))
 			{
@@ -220,6 +217,9 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 					this.deselectAll(true);
 			}
 				
+			//focus the target
+			this.focus(selTarget, true);
+
 			//event could happen on child element...map back to something we know can be selected
 			//and can actually be selected by this selection manager.
 			if(selChildren.index(selTarget) != -1)
@@ -453,8 +453,11 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 			var relTarget = this._elFocus[0];
 			this._elFocus.ibxRemoveClass("ibx-sm-focused ibx-ie-pseudo-focus");
 			this._elFocus = $(el).first().ibxAddClass("ibx-sm-focused " + (ibxPlatformCheck.isIE ? "ibx-ie-pseudo-focus" : ""));
-			this._elFocus.focus();
-			this._dispatchEvent("ibx_focused", {"focus":this._elFocus[0], "anchor":this._elAnchor[0], "selModel":this}, true, false, relTarget);
+			if(!this._elFocus.is(document.activeElement))
+			{
+				this._elFocus.focus();
+				this._dispatchEvent("ibx_focused", {"focus":this._elFocus[0], "anchor":this._elAnchor[0], "selModel":this}, true, false, relTarget);
+			}
 			var idFocus = this._elFocus.prop("id");
 			this.element.attr("aria-activedescendant", idFocus || null);
 		}

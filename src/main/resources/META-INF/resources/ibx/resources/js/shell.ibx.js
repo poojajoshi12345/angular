@@ -3,81 +3,82 @@
 /*****************************************************************************/
 /* ibxShellApp - container for ibxShellTools */
 /*****************************************************************************/
-function ibxShellApp(manifest)
+function ibxShellApp(config)
 {
 	if(window._ibxShellApp)
 		return window._ibxShellApp;
 
-	this.manifest = manifest
-	window.addEventListener("message", this._onToolMessage.bind(this));
-
+	this.config = config || {};
+	this.runningTools = {};
 	window._ibxShellApp = this;
 	window.getIbxShellApp = function(){return window._ibxShellApp};
+	window.addEventListener("message", this._onToolMessage.bind(this));
 }
 var _p = ibxShellApp.prototype = new Object();
+ibxShellApp.msgActivateTool = "ibx_activatetool";
+ibxShellApp.msgUpdateToolUI = "ibx_updatetoolui";
 ibxShellApp.idTool = 0;
-ibxShellApp.tools = {};
 
 _p._onToolMessage = function(e)
 {
 	var mType = e.data.type;
 	if(mType == ibxShellTool.msgToolLoaded)
 	{
-		var toolInfo = ibxShellApp.tools[e.data.id];
+		var toolInfo = this.runningTools[e.data.id];
 		var host = toolInfo.host;
-		if(toolInfo.manifest.host == "iframe")
+		if($(toolInfo.host).is("iframe"))
 		{
 			var wnd = host.contentWindow;
-			var tool = toolInfo.tool = wnd.getIbxShellTool();
+			toolInfo.tool = wnd.getIbxShellTool();
 			toolInfo.createDeferred.resolve(toolInfo);
 		}
 	}
 	else
 	if(mType == ibxShellTool.msgActivate)
-		this.activateTool(e.data.id, e.data.activate, e.data.updateUI, e.data.data);
+		this.activateTool(e.data);
 	else
 	if(mType == ibxShellTool.msgUpdateUI)
-		this.updateToolUI(e.data.id, e.data.data);
+		this.updateToolUI(e.data);
 };
 
+_p.config = null;
+_p.runningTools = null;
 _p.createTool = function(tType)
 {
-	var manifest = this.manifest[tType];
-	if(!manifest)
+	var tool = this.config.tools[tType];
+	if(!tool)
 		return console.error("[ibxShellApp] No registered ibxShellTool type: " + tType);
 
-	var tool = null;
+	var host = null;
 	var toolId = sformat("idShellTool{1}", ++ibxShellApp.idTool);
-	if(manifest.host == "iframe")
-		tool = $("<iframe tabindex='-1' class='ibx-shell-tool-frame'>").prop("src", manifest.src + "?ibxShellToolId=" + toolId)[0];
+	if(tool.host == "iframe")
+		host = $("<iframe tabindex='-1' class='ibx-shell-tool-frame'>").prop("src", tool.src + "?ibxShellToolId=" + toolId)[0];
 
-	tool = ibxShellApp.tools[toolId] = {"id":toolId, "host":tool, "manifest":manifest, "createDeferred":new $.Deferred()};
-	return tool;
+	var toolInfo = this.runningTools[toolId] = {"id":toolId, "type":tType, "host":host, "createDeferred":new $.Deferred()};
+	return toolInfo;
 };
 
-_p.activateTool = function(id, activate, updateUI, data)
+_p.activateTool = function(activateInfo)
 {
-	var toolInfo = ibxShellApp.tools[id];
-	activate ? toolInfo.host.focus() : toolInfo.host.blur();
-	if(updateUI)
-		this.updateToolUI(id, data);
+	var event = $(window).dispatchEvent(ibxShellApp.msgActivateTool, activateInfo, true, false);
+	if(activateInfo.updateUI)
+		this.updateToolUI(activateInfo);
 };
 
-_p.updateToolUI = function(id, data)
+_p.updateToolUI = function(updateInfo)
 {
-	/*DO SOMETHING*/
+	var event = $(window).dispatchEvent(ibxShellApp.msgUpdateToolUI, updateInfo, true, false);
 };
 
 /*****************************************************************************/
 /* ibxShellTool - plugin for ibx shell application */
 /*****************************************************************************/
-function ibxShellTool(id, resources)
+function ibxShellTool(id)
 {
 	if(window._ibxShellTool)
 		return window._ibxShellTool;
 
 	this._id = id;
-	this._resources = (typeof(resources) == "string") ? ibx.resourceMgr.getResource(resources, false) : resources;
 	ibx(this._onAppLoaded.bind(this));
 
 	window._ibxShellTool = this;
@@ -91,14 +92,15 @@ ibxShellTool.msgUpdateUI = "ibx_shelltoolupdateui";
 ibxShellTool.msgSerialize = "ibx_shelltoolserialize";
 
 _p._id = null;
-_p.getResources = function(jqShell, data)
+_p.resources = null;
+_p.getResources = function(jqShell, shellUI, data)
 {
 	var curjQuery = window.jQuery;
 	window.jQuery = window.$ = jqShell;
-	var event = $(window).dispatchEvent(ibxShellTool.msgGetShellToolResources, data, true, false);
+	var event = $(window).dispatchEvent(ibxShellTool.msgGetShellToolResources, {"shellUI":shellUI, "data":data}, true, false);
 	window.jQuery = window.$ = curjQuery;
-	this.resources = event.data;
-	return event.data;
+	shellUI = event.data.shellUI;
+	return shellUI;
 };
 _p._onAppLoaded = function()
 {
@@ -106,6 +108,7 @@ _p._onAppLoaded = function()
 };
 _p.activate = function(activate, updateUI, data)
 {
+	updateUI = (updateUI != undefined) ? updateUI : activate;
 	window.parent.postMessage({"type":ibxShellTool.msgActivate, "id":this._id, "activate":activate, "updateUI":updateUI, "data":data}, "*");
 };
 _p.updateUI = function(data)

@@ -44,7 +44,6 @@
 	</markup>
 
 	<scripts>
-		<script-file src="./shell.ibx.js"/>
 		<script-block>
 		<![CDATA[
 			//# sourceURL=shell.ibx.tool1.res.xml

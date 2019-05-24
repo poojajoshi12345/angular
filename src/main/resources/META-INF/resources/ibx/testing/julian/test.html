@@ -74,6 +74,31 @@
 				});
 
 			},true);
+
+			//ABBA, BABA => ABA
+			function findSubString(s1, s2)
+			{
+				var strOut = "";
+				for(var i = 0; i < s1.length; ++i)
+				{
+					for(var j = i; j < s2.length; ++j)
+					{
+						if((s1[i] == s2[j]))
+						{
+							strOut += s1[i];
+							break;
+						}
+					}
+				}
+				return strOut;
+			}
+
+        _p.width = function (width) {
+            Shape.prototype.width.call(this, width);
+            Shape.prototype.height.call(this, width);
+        };
+
+
 		</script>
 		<style type="text/css">
 			body
