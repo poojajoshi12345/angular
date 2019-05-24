@@ -124,7 +124,8 @@
             			</manifest>
                         <manifestEntries>
                             <Build-Number>${build.number}</Build-Number>
-                            <Build-Id>${build.id}</Build-Id>
+                            <Build-Tag>${build.tag}</Build-Tag>
+                            <Build-Timestamp>${build.timestamp}</Build-Timestamp>
                         </manifestEntries>
           			</archive>
 				</configuration>
