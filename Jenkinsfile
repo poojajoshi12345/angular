@@ -98,7 +98,7 @@ try {
                     deleteDir()
                     unstash 'sources'
                     withEnv(["JAVA_HOME=${ tool 'JDK8' }"]) {
-                        executeMvnCmd(".", "clean deploy -DdeployAtEnd ${_mvnOptsSkipTests} -P compress")
+                        executeMvnCmd(".", "clean deploy -Dwf.build.number=${env.BUILD_NUMBER} -Dwf.build.tag=${env.BUILD_TAG} -Dwf.build.timestamp=${currentBuild.startTimeInMillis} -DdeployAtEnd ${_mvnOptsSkipTests} -P compress")
                     }                
                 }
             }
