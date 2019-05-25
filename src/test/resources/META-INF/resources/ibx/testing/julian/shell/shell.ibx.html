@@ -127,7 +127,7 @@
 					$(".main-toolbar").append(ui.toolBar); 
 
 					//must add commands into the static array on activation
-					ui.commands.each(function(idx, cmd)
+					$(ui.commands).each(function(idx, cmd)
 					{
 						cmd = $(cmd);
 						var id = cmd.ibxWidget("option", "id");
@@ -137,17 +137,17 @@
 				else
 				{
 					$(".help-menu .ibx-plugin-help-item").detach();
-					toolInfo.shellMenu.detach();
-					toolInfo.ui.menuBar.detach();
-					toolInfo.ui.toolBar.detach();
+					$(toolInfo.ui.shellMenu).detach();
+					$(toolInfo.ui.menuBar).detach();
+					$(toolInfo.ui.toolBar).detach();
 
 					//must remove commands from static array on deactivation
-					toolInfo.ui.commands.each(function(idx, cmd)
+					$(toolInfo.ui.commands).each(function(idx, cmd)
 					{
 						var id = $(cmd).ibxWidget("option", "id");
 						delete $.ibi.ibxCommand.cmds[id]
 					});
-					delete toolinfo.ui;
+					delete toolInfo.ui;
 				}
 			}
 			function activatePlugin(idTool, updateUI, data)
