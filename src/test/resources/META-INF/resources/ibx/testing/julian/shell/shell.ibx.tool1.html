@@ -16,6 +16,11 @@
 				window._ibxShellTool = new ibxShellTool(appParms.ibxShellToolId);
 				window.addEventListener(ibxShellTool.msgGetShellToolResources, function(e)
 				{
+					//return cached resrouces if already retrieved.
+					if(window._ibxShellTool.shellUI)
+						return window._ibxShellTool.shellUI;
+
+					//get and setup the tools shared resources.
 					var data = e.data.data; 
 					var shellUI = e.data.shellUI;
 					var shellRes = ibx.resourceMgr.getResource(".tool-ui");
@@ -23,7 +28,6 @@
 					shellUI.menuHelp = shellRes.find(".tool-help-menu"),
 					shellUI.menuBar = shellRes.find(".tool-menubar"),
 					shellUI.toolBar = shellRes.find(".tool-toolbar"),
-
 					shellUI.commands.filter(".cmd-new-shape").on("ibx_triggered", function(e)
 					{
 						var shape = $("<div tabindex='0' class='tool-shape'>").ibxWidget().uniqueId().on("focusin focusout", function(e)
@@ -85,7 +89,10 @@
 					{
 						return item.id;
 					});
-					window._ibxShellTool.activate(true, true, {"hint":"selchange", "selected":data.selected, "items":ids.toArray()})
+					ids = ids.toArray();
+					console.log("ids", ids)
+					window._ibxShellTool.shellUI.commands.filter(".cmd-del-shape").ibxWidget("option", "disabled", !ids.length);
+					window._ibxShellTool.activate(true, true, {"hint":"selchange", "selected":data.selected, "items":ids})
 				});
 			}, [{src:"./shell.ibx.tool1.res.xml", loadContext:"app"}], true);
 		</script>

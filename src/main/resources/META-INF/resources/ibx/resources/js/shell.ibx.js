@@ -99,7 +99,7 @@ _p.getResources = function(jqShell, shellUI, data)
 	window.jQuery = window.$ = jqShell;
 	var event = $(window).dispatchEvent(ibxShellTool.msgGetShellToolResources, {"shellUI":shellUI, "data":data}, true, false);
 	window.jQuery = window.$ = curjQuery;
-	shellUI = event.data.shellUI;
+	this.shellUI = (event.data.shellUI || shellUI);
 	return shellUI;
 };
 _p._onAppLoaded = function()
