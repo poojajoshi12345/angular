@@ -276,6 +276,7 @@ $Revision: 1.123 $:-->
 		<script-file src="./js/selection.ibx.js"/>
 		<script-file src="./js/dragdrop.ibx.js"/>
 		<script-file src="./js/mutationobserver.ibx.js"/>
+		<script-file src="./js/shell.ibx.js"/>
 		<script-file src="./js/widget.ibx.js"/>
 		<script-file src="./js/commands.ibx.js"/>
 		<script-file src="./js/autoscroll.ibx.js"/>

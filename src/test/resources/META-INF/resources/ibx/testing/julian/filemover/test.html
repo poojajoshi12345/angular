@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Document</title>
+
+	<script type="text/javascript">
+		var args = {};
+		if(document.location.search)
+		{
+			var parms = document.location.search.replace(/^\?/, "").split("&");
+			for(var i = 0; i < parms.length; ++i)
+			{
+				parm = parms[i].split("=");
+				args[parm[0]] = parm[1];
+			}
+		}
+
+		var index = {};
+		var workTree = {};
+	
+		var flags = 
+		{
+			"clean":0x00000000,
+			"modified":0x00000001,
+			"added":0x00000002,
+			"deleted":0x00000004,
+			"renamed":0x00000006,
+			"copied":0x00000008
+		};
+
+		var 
+		debugger;
+	</script>
+</head>
+<body>
+	
+</body>
+</html>

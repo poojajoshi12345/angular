@@ -69,6 +69,7 @@
 			.tool-window.wnd-active
 			{
 				box-shadow:0px 0px 15px 5px gray;
+				z-index:2000;
 			}
 			.tool-window.wnd-active .title-bar
 			{
@@ -138,7 +139,7 @@
 			</div>
 
 			<!-- content area where tools are created -->
-			<div class="tool-area"></div>
+			<div tabindex="-1" class="tool-area"></div>
 
 			<!-- template for tool windows -->
 			<div tabindex="-1" class="wf-ui tool-window-template tool-window" data-ibx-no-bind="true" data-ibx-type="ibxVBox" data-ibxp-inline="true" data-ibxp-align="stretch">
@@ -153,7 +154,6 @@
 	</markup>
 
 	<scripts>
-		<script-file src="./shell.ibx.js"/>
 		<script-block>
 		<![CDATA[
 			//# sourceURL=shell.ibx.res.xml

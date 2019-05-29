@@ -49,6 +49,11 @@
 				{
 					$("#mypickerlabel").ibxWidget('option', 'text', 'You selected ' + info.date);
 				});
+				$("#myinlinepicker").on("ibx_changemonthyear", function (event, info)
+				{
+					var picker = $(event.target);
+					$("#mypickerlabel").ibxWidget('option', 'text', 'You selected ' + info.newDate);
+				});
 
 				$(".ibx-datepicker").ibxWidget("option", {"changeYear":true, "changeMonth":true});
 			};
@@ -98,10 +103,10 @@
 		<div class="box" data-ibx-type="ibxHBox">
 			<div class="innerbox" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
 				<div id="mypickerlabel" class="label" data-ibx-type="ibxLabel"></div>
-				<div id="myinlinepicker" class="inline" data-ibx-type="ibxDatePickerInline" data-ibxp-date="February 5, 2017"></div>
+				<div id="myinlinepicker" class="inline" data-ibx-type="ibxDatePickerInline" data-ibxp-date="February 5, 2017" data-ibxp-adjust-for-month-year="true"></div>
 			</div>
 			<div class="control" data-ibx-type="ibxDatePickerSimple"></div>
-			<div id="mydate" class="control" data-ibx-type="ibxDatePicker"></div>
+			<div id="mydate" class="control" data-ibx-type="ibxDatePicker" data-ibxp-adjust-for-month-year="true"></div>
 		</div>
 
 		<div class="box" data-ibx-type="ibxHBox">
