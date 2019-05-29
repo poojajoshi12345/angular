@@ -13,19 +13,22 @@
 			ibx(function(e)
 			{
 				var appParms = ibx.getAppParms();
-				_ibxShellTool = new ibxShellTool(appParms.ibxShellToolId);
+				window._ibxShellTool = new ibxShellTool(appParms.ibxShellToolId);
 				window.addEventListener(ibxShellTool.msgGetShellToolResources, function(e)
 				{
-					var resources = ibx.resourceMgr.getResource(".tool-ui");
-					var ui = 
-					{
-						commands: resources.find(".ibx-command"),
-						toolbar: resources.find(".tool-toolbar"),
-						menubar: resources.find(".tool-menubar"),
-						helpmenu: resources.find(".tool-help-menu"),
-						properties: resources.find(".tool-properties"),
-					};
-					resources.find(".cmd-new-shape").on("ibx_triggered", function(e)
+					//return cached resrouces if already retrieved.
+					if(window._ibxShellTool.shellUI)
+						return window._ibxShellTool.shellUI;
+
+					//get and setup the tools shared resources.
+					var data = e.data.data; 
+					var shellUI = e.data.shellUI;
+					var shellRes = ibx.resourceMgr.getResource(".tool-ui");
+					shellUI.commands = shellRes.find(".ibx-command"),
+					shellUI.menuHelp = shellRes.find(".tool-help-menu"),
+					shellUI.menuBar = shellRes.find(".tool-menubar"),
+					shellUI.toolBar = shellRes.find(".tool-toolbar"),
+					shellUI.commands.filter(".cmd-new-shape").on("ibx_triggered", function(e)
 					{
 						var shape = $("<div tabindex='0' class='tool-shape'>").ibxWidget().uniqueId().on("focusin focusout", function(e)
 						{
@@ -33,21 +36,20 @@
 						});
 						$("body").append(shape);
 					});
-					resources.find(".cmd-del-shape").on("ibx_triggered", function(e)
+					shellUI.commands.filter(".cmd-del-shape").on("ibx_triggered", function(e)
 					{
 						var sm = $("body").ibxSelectionManager("instance");
 						selItems = sm.selected();
 						selItems.remove();
 					});
-					resources.find(".cmd-about").on("ibx_triggered", function(e)
+					shellUI.commands.filter(".cmd-about").on("ibx_triggered", function(e)
 					{
 						alert("Tool for Drawing Squares!");
 					});
-					resources.find(".cmd-help").on("ibx_triggered", function(e)
+					shellUI.commands.filter(".cmd-help").on("ibx_triggered", function(e)
 					{
 						alert("Open Square tool help page!");
 					});
-					e.data = ui;
 				})
 
 				window.addEventListener(ibxShellTool.msgSerialize, function(e)
@@ -77,7 +79,8 @@
 
 				$("body").on("focusin", function(e)
 				{
-					_ibxShellTool.activate(true);
+					if(!e.relatedTarget)
+						window._ibxShellTool.activate(true, true, {"hint":"focusin"});
 				});
 				$("body").on("ibx_selchange", function(e)
 				{
@@ -86,8 +89,10 @@
 					{
 						return item.id;
 					});
-					_ibxShellTool.activate(true, true, {"selectedItems":ids.toArray()})
-					console.log(data.items);
+					ids = ids.toArray();
+					console.log("ids", ids)
+					window._ibxShellTool.shellUI.commands.filter(".cmd-del-shape").ibxWidget("option", "disabled", !ids.length);
+					window._ibxShellTool.activate(true, true, {"hint":"selchange", "selected":data.selected, "items":ids})
 				});
 			}, [{src:"./shell.ibx.tool1.res.xml", loadContext:"app"}], true);
 		</script>

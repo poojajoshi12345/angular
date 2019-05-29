@@ -13,7 +13,7 @@
 			ibx(function(e)
 			{
 				var appParms = ibx.getAppParms();
-				_ibxShellTool = new ibxShellTool(appParms.ibxShellToolId, ".tool-ui");
+				window.ibxShellTool = new ibxShellTool(appParms.ibxShellToolId, ".tool-ui");
 				window.addEventListener(ibxShellTool.msgGetShellToolResources, function(e)
 				{
 					var resources = ibx.resourceMgr.getResource(".tool-ui");
@@ -73,7 +73,7 @@
 
 				$("body").on("focusin", function(e)
 				{
-					_ibxShellTool.activate(true);
+					window.ibxShellTool.activate(true);
 				});
 			}, [{src:"./shell.ibx.tool2.res.xml", loadContext:"app"}], true);
 		</script>
