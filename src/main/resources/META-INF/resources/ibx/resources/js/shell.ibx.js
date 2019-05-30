@@ -25,13 +25,13 @@ _p._onToolMessage = function(e)
 	if(mType == ibxShellTool.msgToolLoaded)
 	{
 		var toolInfo = this.runningTools[e.data.id];
-		var host = toolInfo.host;
-		if($(toolInfo.host).is("iframe"))
+		var host = $(toolInfo.host);
+		if(host.is("iframe"))
 		{
-			var wnd = host.contentWindow;
+			var wnd = host[0].contentWindow;
 			toolInfo.tool = wnd.getIbxShellTool();
-			toolInfo.createDeferred.resolve(toolInfo);
 		}
+		toolInfo.createDeferred.resolve(toolInfo);
 	}
 	else
 	if(mType == ibxShellTool.msgActivate)
@@ -49,12 +49,18 @@ _p.createTool = function(tType)
 	if(!tool)
 		return console.error("[ibxShellApp] No registered ibxShellTool type: " + tType);
 
-	var host = null;
 	var toolId = sformat("idShellTool{1}", ++ibxShellApp.idTool);
+	var host = $().data("ibxShellToolId", toolId);
 	if(tool.host == "iframe")
-		host = $("<iframe tabindex='-1' class='ibx-shell-tool-frame'>").prop("src", tool.src + "?ibxShellToolId=" + toolId)[0];
+		host = $("<iframe tabindex='-1' class='ibx-shell-tool-host'>").prop("src", tool.src + "?ibxShellToolId=" + toolId);
+	else
+	if(tool.host == "div")
+	{
+		var shellTool = tool.shellType ? toolShellType.call() : new ibxShellTool(toolId);
+		host = $("<div tabindex='1' class='ibx-shell-tool-host'>").data("ibxShellTool", tool);
+	}
 
-	var toolInfo = this.runningTools[toolId] = {"id":toolId, "type":tType, "host":host, "createDeferred":new $.Deferred()};
+	var toolInfo = this.runningTools[toolId] = {"id":toolId, "type":tType, "tool":shellTool, "host":host[0], "createDeferred":new $.Deferred()};
 	return toolInfo;
 };
 
@@ -104,8 +110,12 @@ _p.getResources = function(jqShell, shellUI, data)
 };
 _p._onAppLoaded = function()
 {
-	window.parent.postMessage({"type":ibxShellTool.msgToolLoaded, "id":this._id}, "*");
+	this.toolLoaded();
 };
+_p.toolLoaded = function(data)
+{
+	window.parent.postMessage({"type":ibxShellTool.msgToolLoaded, "id":this._id, "data":data}, "*");
+},
 _p.activate = function(activate, updateUI, data)
 {
 	updateUI = (updateUI != undefined) ? updateUI : activate;
