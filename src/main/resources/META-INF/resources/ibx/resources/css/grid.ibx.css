@@ -95,6 +95,7 @@
 {
 	color:white;
 	background-color:#999;
+	z-index:1;
 }
 .dgrid-row-hidden
 {
@@ -118,6 +119,7 @@
 {
 	color:white;
 	background-color:#999;
+	z-index:1;
 }
 .dgrid-cell-expand-button
 {
