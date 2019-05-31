@@ -12,49 +12,91 @@
 		<script type="text/javascript">
 			ibx(function(e)
 			{
-				var appParms = ibx.getAppParms();
-				window._ibxShellTool = new ibxShellTool(appParms.ibxShellToolId);
-				window.addEventListener(ibxShellTool.msgGetShellToolResources, function(e)
+				var appParms = false;//ibx.getAppParms();
+				if(appParms.ibxShellToolId)
 				{
-					//return cached resrouces if already retrieved.
-					if(window._ibxShellTool.shellUI)
-						return window._ibxShellTool.shellUI;
+					window._ibxShellTool = new ibxShellTool(appParms.ibxShellToolId);
+					window.addEventListener(ibxShellTool.msgGetShellToolResources, function(e)
+					{
+						//return cached resrouces if already retrieved.
+						if(window._ibxShellTool.shellUI)
+							return window._ibxShellTool.shellUI;
 
-					//get and setup the tools shared resources.
-					var data = e.data.data; 
-					var shellUI = e.data.shellUI;
-					var shellRes = ibx.resourceMgr.getResource(".tool-ui");
-					shellUI.commands = shellRes.find(".ibx-command"),
-					shellUI.menuHelp = shellRes.find(".tool-help-menu"),
-					shellUI.menuBar = shellRes.find(".tool-menubar"),
-					shellUI.toolBar = shellRes.find(".tool-toolbar"),
-					shellUI.commands.filter(".cmd-new-shape").on("ibx_triggered", function(e)
+						//get and setup the tools shared resources.
+						var data = e.data.data; 
+						var shellUI = e.data.shellUI;
+						var shellRes = ibx.resourceMgr.getResource(".tool-container");
+						shellUI.commands = shellRes.find(".ibx-command"),
+						shellUI.menuHelp = shellRes.find(".tool-help-menu"),
+						shellUI.menuBar = shellRes.find(".tool-menubar"),
+						shellUI.toolBar = shellRes.find(".tool-toolbar"),
+						shellUI.commands.filter(".cmd-new-shape").on("ibx_triggered", onNewShape);
+						shellUI.commands.filter(".cmd-del-shape").on("ibx_triggered", onDeleteShape);
+						shellUI.commands.filter(".cmd-about").on("ibx_triggered", onAppAbout);
+						shellUI.commands.filter(".cmd-help").on("ibx_triggered", onAppHelp);
+					})
+					window.addEventListener(ibxShellTool.msgSerialize, function(e)
 					{
-						var shape = $("<div tabindex='0' class='tool-shape'>").ibxWidget().uniqueId().on("focusin focusout", function(e)
-						{
-							//do some ui switch here.
-						});
-						$("body").append(shape);
+						var data = serialize(e.data.read);
 					});
-					shellUI.commands.filter(".cmd-del-shape").on("ibx_triggered", function(e)
+					$("body").on("focusin", function(e)
 					{
-						var sm = $("body").ibxSelectionManager("instance");
-						selItems = sm.selected();
-						selItems.remove();
+						if(!e.relatedTarget)
+							window._ibxShellTool.activate(true, true, {"hint":"focusin"});
 					});
-					shellUI.commands.filter(".cmd-about").on("ibx_triggered", function(e)
+					$(".shape-container").on("ibx_selchange", function(e)
 					{
-						alert("Tool for Drawing Squares!");
+						var items = getSelectedItems();
+						window._ibxShellTool.shellUI.commands.filter(".cmd-del-shape").ibxWidget("option", "disabled", !ids.length);
+						window._ibxShellTool.activate(true, true, {"hint":"selchange", "selected":data.selected, "items":ids})
 					});
-					shellUI.commands.filter(".cmd-help").on("ibx_triggered", function(e)
-					{
-						alert("Open Square tool help page!");
-					});
-				})
-
-				window.addEventListener(ibxShellTool.msgSerialize, function(e)
+				}
+				else
 				{
-					if(!e.data.read)//writing out
+					var tool = ibx.resourceMgr.getResource(".tool-container", true);
+					tool.find(".cmd-new-shape").on("ibx_triggered", onNewShape);
+					tool.find(".cmd-del-shape").on("ibx_triggered", onDeleteShape);
+					tool.find(".cmd-about").on("ibx_triggered", onAppAbout);
+					tool.find(".cmd-help").on("ibx_triggered", onAppHelp);
+					tool.find(".shape-container").on("ibx_selchange", function(e)
+					{
+						var selItems = getSelectedItems();
+						$(".cmd-del-shape").ibxWidget("option", "disabled", !selItems.length);
+					});
+					$("body").append(tool);
+				}
+
+				function onNewShape(e)
+				{
+					var shape = $("<div tabindex='0' class='tool-shape'>").ibxWidget().uniqueId();
+					$(".shape-container").append(shape);
+				}
+				function onDeleteShape(e)
+				{
+					var sm = $(".shape-container").ibxSelectionManager("instance");
+					selItems = sm.selected();
+					selItems.remove();
+				};
+				function onAppAbout(e)
+				{
+					alert("Tool for Drawing Squares!");
+				};
+				function onAppHelp(e)
+				{
+					alert("Open Square tool help page!");
+				};
+				function getSelectedItems()
+				{
+					var sm = $(".shape-container").ibxSelectionManager("instance");
+					var ids = sm.selected().map(function(idx, item)
+					{
+						return item.id;
+					});
+					return ids.toArray();
+				}
+				function serialize(read)
+				{
+					if(!read)//writing out
 					{
 						var data = {};
 						var items = $(".tool-shape");
@@ -69,41 +111,38 @@
 							item.background = style.backgroundColor;
 							data[el.id] = item;
 						});
-						e.data = JSON.stringify(data);
+						return JSON.stringify(data);
 
 					}
 					else//reading in
 					{
 					}
-				});
-
-				$("body").on("focusin", function(e)
-				{
-					if(!e.relatedTarget)
-						window._ibxShellTool.activate(true, true, {"hint":"focusin"});
-				});
-				$("body").on("ibx_selchange", function(e)
-				{
-					var data = e.originalEvent.data;
-					var ids = data.selModel.selected().map(function(idx, item)
-					{
-						return item.id;
-					});
-					ids = ids.toArray();
-					console.log("ids", ids)
-					window._ibxShellTool.shellUI.commands.filter(".cmd-del-shape").ibxWidget("option", "disabled", !ids.length);
-					window._ibxShellTool.activate(true, true, {"hint":"selchange", "selected":data.selected, "items":ids})
-				});
+				}
 			}, [{src:"./shell.ibx.tool1.res.xml", loadContext:"app"}], true);
 		</script>
 		<style type="text/css">
-			body
+			body, .tool-container
 			{
 				margin:0px;
 				position:absolute;
 				width:100%;
 				height:100%;
 				box-sizing:border-box;
+			}
+			.tool-menubar
+			{
+				flex:0 0 auto;
+				border-bottom:1px solid #ccc;
+			}
+			.tool-toolbar
+			{
+				flex:0 0 auto;
+				padding:3px;
+				border-bottom:1px solid #ccc;
+			}
+			.shape-container
+			{
+				flex: 1 1 auto;
 			}
 			.tool-shape
 			{
@@ -121,7 +160,7 @@
 			}
 		</style>
 	</head>
-	<body class="ibx-root" data-ibx-type="ibxHBox" data-ibxp-sel-type="multi" data-ibxp-wrap="true" data-ibxp-rubber-band="true" data-ibxp-rubber-band-partial-select="true">
+	<body class="ibx-root">
 	</body>
 </html>
 
