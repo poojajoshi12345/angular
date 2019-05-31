@@ -79,8 +79,8 @@
 						var tool = toolInfo.host.innerText = "DIV TOOL";
 						toolInfo.tool.toolLoaded();
 					}
-					var wnd = makeToolWindow().ibxAddClass(tool.class).data("ibxShellTool", toolInfo);
 
+					var wnd = makeToolWindow().ibxAddClass(tool.class).data("ibxShellTool", toolInfo);
 					wnd.find(".tool-content").append(toolInfo.host);
 					wnd.ibxRemoveClass("creating");
 
@@ -161,7 +161,8 @@
 					//must remove commands from static array on deactivation
 					$(toolInfo.ui.commands).each(function(idx, cmd)
 					{
-						var id = $(cmd).ibxWidget("option", "id");
+						var cmd = $(cmd);
+						var id = cmd.ibxWidget("option", "id");
 						delete $.ibi.ibxCommand.cmds[id]
 					});
 					delete toolInfo.ui;

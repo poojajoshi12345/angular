@@ -21,21 +21,24 @@
 					{
 						//return cached resrouces if already retrieved.
 						if(window._ibxShellTool.shellUI)
-							return window._ibxShellTool.shellUI;
+						{
+							e.data.shellUI = window._ibxShellTool.shellUI;
+							return;
+						}
 
 						var data = e.data.data; 
-						var shellUI = e.data.shellUI;
+						var shellUI = window._ibxShellTool.shellUI = e.data.shellUI;
 						var shellRes = ibx.resourceMgr.getResource(".tool-container", false);
 
 						shellRes = ibx.bindElements(shellRes);
 						shellUI.commands = shellRes.find(".ibx-command");
-						shellUI.menuHelp = shellRes.find(".tool-help-menu");
+						shellUI.menuHelp = shellRes.find(".tool-help-menu").detach();
 						shellUI.menuBar = shellRes.find(".tool-menubar");
 						shellUI.toolBar = shellRes.find(".tool-toolbar");
-						shellUI.commands.filter(".cmd-new-shape").on("ibx_triggered", onNewShape);
-						shellUI.commands.filter(".cmd-del-shape").on("ibx_triggered", onDeleteShape);
-						shellUI.commands.filter(".cmd-about").on("ibx_triggered", onAppAbout);
-						shellUI.commands.filter(".cmd-help").on("ibx_triggered", onAppHelp);
+						shellUI.commands.filter(".cmd-new-shape").on("ibx_triggered", onNewShape).addClass(window._ibxShellTool._id);
+						shellUI.commands.filter(".cmd-del-shape").on("ibx_triggered", onDeleteShape).addClass(window._ibxShellTool._id);
+						shellUI.commands.filter(".cmd-about").on("ibx_triggered", onAppAbout).addClass(window._ibxShellTool._id);
+						shellUI.commands.filter(".cmd-help").on("ibx_triggered", onAppHelp).addClass(window._ibxShellTool._id);
 					})
 					window.addEventListener(ibxShellTool.msgSerialize, function(e)
 					{

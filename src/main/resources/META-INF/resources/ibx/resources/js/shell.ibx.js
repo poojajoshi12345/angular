@@ -98,14 +98,15 @@ ibxShellTool.msgUpdateUI = "ibx_shelltoolupdateui";
 ibxShellTool.msgSerialize = "ibx_shelltoolserialize";
 
 _p._id = null;
-_p.resources = null;
+_p.shellUI = null;
 _p.getResources = function(jqShell, shellUI, data)
 {
+	shellUI = $.extend(true, {}, shellUI);
 	var curjQuery = window.jQuery;
 	window.jQuery = window.$ = jqShell;
 	var event = $(window).dispatchEvent(ibxShellTool.msgGetShellToolResources, {"shellUI":shellUI, "data":data}, true, false);
 	window.jQuery = window.$ = curjQuery;
-	this.shellUI = (event.data.shellUI || shellUI);
+	this.shellUI = shellUI = event.data.shellUI;
 	return shellUI;
 };
 _p._onAppLoaded = function()
