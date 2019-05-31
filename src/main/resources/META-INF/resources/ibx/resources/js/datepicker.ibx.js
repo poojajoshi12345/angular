@@ -15,6 +15,7 @@ $.widget("ibi.ibxDatePicker", $.ibi.ibxVBox,
 			"date": '',
 			"numberOfMonths": 1,
 			"initDate": true, // set date to the current date
+			"adjustForMonthYear":false
 	},
 	_widgetClass: "ibx-datepicker",
 	_create: function ()
@@ -42,6 +43,7 @@ $.widget("ibi.ibxDatePicker", $.ibi.ibxVBox,
 			"dayNamesMin" : (eval(ibx.resourceMgr.getString("IBX_DP_DAYS_MIN"))),
 			"buttonText" : ibx.resourceMgr.getString("IBX_DP_BUTTON_TEXT"),
 			"onSelect": this._onSelect.bind(this),
+			"onChangeMonthYear": this._onChangeMonthYear.bind(this)
 		});
 		this._pickerOptions = {
 			"closeText" : ibx.resourceMgr.getString("IBX_DP_CLOSE_TEXT"),
@@ -89,6 +91,25 @@ $.widget("ibi.ibxDatePicker", $.ibi.ibxVBox,
 		this.options.date = value;
 		this._trigger("change", null, { 'date': value });
 		this._input.ibxWidget('option', 'text', $.datepicker.formatDate(this.options.outDateFormat, this._datePicker.datepicker('getDate'), this._pickerOptions));
+	},
+	_onChangeMonthYear:function(year, month, picker)
+	{
+		if(this._inChange)
+			return;
+		this._inChange = true;
+
+		var curDate = this._datePicker.datepicker('getDate');
+		var newDate = curDate;
+		newDate.setMonth(month-1);
+		newDate.setYear(year);
+		var data = { 'curDate': curDate, "newDate":$.datepicker.formatDate(this.options.dateFormat,newDate), "newYear":year, "newMonth":month };
+		var defaultPrevented = !this._trigger("changemonthyear", null, data);
+		if(!defaultPrevented && this.options.adjustForMonthYear)
+		{
+			this.option("date", data.newDate);
+			this.refresh();
+		}
+		this._inChange = false;
 	},
 	_showPopup: function ()
 	{
