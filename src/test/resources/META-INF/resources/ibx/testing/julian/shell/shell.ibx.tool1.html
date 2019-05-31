@@ -29,7 +29,7 @@
 
 						shellRes = ibx.bindElements(shellRes);
 						shellUI.commands = shellRes.find(".ibx-command");
-						shellUI.menuHelp = shellRes.find(".tool-help-menu");//.ibxWidget("children"),
+						shellUI.menuHelp = shellRes.find(".tool-help-menu");
 						shellUI.menuBar = shellRes.find(".tool-menubar");
 						shellUI.toolBar = shellRes.find(".tool-toolbar");
 						shellUI.commands.filter(".cmd-new-shape").on("ibx_triggered", onNewShape);
