@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-		<title>ibx Shell Tool 1</title>
+		<title>ibx Shell Tool 1 STANDALONE</title>
 		<meta http-equiv="X-UA-Compatible" content="IE=11">
 		<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
 		<meta http-equiv="Pragma" content="no-cache" />
@@ -12,9 +12,10 @@
 		<script type="text/javascript">
 			ibx(function(e)
 			{
-				var appParms = false;//ibx.getAppParms();
+				var appParms = ibx.getAppParms();
 				if(appParms.ibxShellToolId)
 				{
+					//setup tool for running as plugin
 					window._ibxShellTool = new ibxShellTool(appParms.ibxShellToolId);
 					window.addEventListener(ibxShellTool.msgGetShellToolResources, function(e)
 					{
@@ -22,12 +23,11 @@
 						if(window._ibxShellTool.shellUI)
 							return window._ibxShellTool.shellUI;
 
-						//get and setup the tools shared resources.
 						var data = e.data.data; 
 						var shellUI = e.data.shellUI;
-						var shellRes = ibx.resourceMgr.getResource(".tool-container");
+						var shellRes = ibx.resourceMgr.getResource(".tool-container", false);
 						shellUI.commands = shellRes.find(".ibx-command"),
-						shellUI.menuHelp = shellRes.find(".tool-help-menu"),
+						shellUI.menuHelp = shellRes.find(".tool-help-menu").ibxWidget("children"),
 						shellUI.menuBar = shellRes.find(".tool-menubar"),
 						shellUI.toolBar = shellRes.find(".tool-toolbar"),
 						shellUI.commands.filter(".cmd-new-shape").on("ibx_triggered", onNewShape);
@@ -38,6 +38,7 @@
 					window.addEventListener(ibxShellTool.msgSerialize, function(e)
 					{
 						var data = serialize(e.data.read);
+						e.data.data;
 					});
 					$("body").on("focusin", function(e)
 					{
@@ -53,6 +54,7 @@
 				}
 				else
 				{
+					//Setup tool for running standalone
 					var tool = ibx.resourceMgr.getResource(".tool-container", true);
 					tool.find(".cmd-new-shape").on("ibx_triggered", onNewShape);
 					tool.find(".cmd-del-shape").on("ibx_triggered", onDeleteShape);
@@ -64,8 +66,13 @@
 						$(".cmd-del-shape").ibxWidget("option", "disabled", !selItems.length);
 					});
 					$("body").append(tool);
+
 				}
 
+
+				/**************************************************************
+				 * GENERAL COMMAND HANDLERS REGARDLESS OF HOW TOOL IS RUNNING *
+				**************************************************************/
 				function onNewShape(e)
 				{
 					var shape = $("<div tabindex='0' class='tool-shape'>").ibxWidget().uniqueId();

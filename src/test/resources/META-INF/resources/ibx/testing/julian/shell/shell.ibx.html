@@ -82,6 +82,8 @@
 					var wnd = makeToolWindow().ibxAddClass(tool.class).data("ibxShellTool", toolInfo);
 
 					wnd.find(".tool-content").append(toolInfo.host);
+					wnd.ibxRemoveClass("creating");
+
 					$(".tool-area").append(wnd);
 					toolInfo.createDeferred.then(function()
 					{
