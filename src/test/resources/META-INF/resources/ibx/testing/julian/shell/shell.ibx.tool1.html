@@ -26,10 +26,12 @@
 						var data = e.data.data; 
 						var shellUI = e.data.shellUI;
 						var shellRes = ibx.resourceMgr.getResource(".tool-container", false);
-						shellUI.commands = shellRes.find(".ibx-command"),
-						shellUI.menuHelp = shellRes.find(".tool-help-menu").ibxWidget("children"),
-						shellUI.menuBar = shellRes.find(".tool-menubar"),
-						shellUI.toolBar = shellRes.find(".tool-toolbar"),
+
+						shellRes = ibx.bindElements(shellRes);
+						shellUI.commands = shellRes.find(".ibx-command");
+						shellUI.menuHelp = shellRes.find(".tool-help-menu");//.ibxWidget("children"),
+						shellUI.menuBar = shellRes.find(".tool-menubar");
+						shellUI.toolBar = shellRes.find(".tool-toolbar");
 						shellUI.commands.filter(".cmd-new-shape").on("ibx_triggered", onNewShape);
 						shellUI.commands.filter(".cmd-del-shape").on("ibx_triggered", onDeleteShape);
 						shellUI.commands.filter(".cmd-about").on("ibx_triggered", onAppAbout);
@@ -40,16 +42,19 @@
 						var data = serialize(e.data.read);
 						e.data.data;
 					});
-					$("body").on("focusin", function(e)
+					$("body", document).on("focusin", function(e)
 					{
 						if(!e.relatedTarget)
 							window._ibxShellTool.activate(true, true, {"hint":"focusin"});
 					});
-					$(".shape-container").on("ibx_selchange", function(e)
+
+					var shapeContainer = ibx.resourceMgr.getResource(".shape-container");
+					shapeContainer.appendTo("body").on("ibx_selchange", function(e)
 					{
+						var data = e.originalEvent.data;
 						var items = getSelectedItems();
-						window._ibxShellTool.shellUI.commands.filter(".cmd-del-shape").ibxWidget("option", "disabled", !ids.length);
-						window._ibxShellTool.activate(true, true, {"hint":"selchange", "selected":data.selected, "items":ids})
+						window._ibxShellTool.shellUI.commands.filter(".cmd-del-shape").ibxWidget("option", "disabled", !items.length);
+						window._ibxShellTool.activate(true, true, {"hint":"selchange", "selected":data.selected, "items":items})
 					});
 				}
 				else
@@ -150,6 +155,9 @@
 			.shape-container
 			{
 				flex: 1 1 auto;
+				width:100%;
+				height:100%;
+				box-sizing:border-box;
 			}
 			.tool-shape
 			{
