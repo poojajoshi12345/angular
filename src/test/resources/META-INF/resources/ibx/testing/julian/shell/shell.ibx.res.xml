@@ -93,7 +93,7 @@
 				flex:1 1 auto;
 				overflow:hidden;
 			}
-			.tool-window .ibx-shell-tool-frame
+			.tool-window .ibx-shell-tool-host
 			{
 				width:100%;
 				height:100%;

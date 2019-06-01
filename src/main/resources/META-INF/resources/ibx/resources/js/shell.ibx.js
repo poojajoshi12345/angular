@@ -81,11 +81,11 @@ _p.manageCss = function(toolId, add)
 		var css = tool.ui.css;
 		if(add)
 		{
-			var style = $("<style type='text/css'>").prop("id", toolId).text(css);
+			var style = $("<style type='text/css'>").ibxAddClass(toolId).text(css);
 			$(document.head).append(style);
 		}
 		else
-			$("style#"+toolId).remove();
+			$("."+toolId).remove();
 	}
 };
 /*****************************************************************************/

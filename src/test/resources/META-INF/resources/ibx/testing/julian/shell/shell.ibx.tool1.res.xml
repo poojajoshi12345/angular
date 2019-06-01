@@ -87,8 +87,8 @@
 				</div>
 
 				<div class="tool-toolbar" data-ibx-type="ibxHBox" data-ibxp-align="center">
-					<div tabindex="0" title="New Shape" class="tbar-btn tbar-btn-new" data-ibx-type="ibxButton" data-ibxp-command="cmdNewShape" data-ibxp-glyph-classes="fas fa-square">Add Square</div>
-					<div tabindex="0" title="Delete Shape" class="tbar-btn tbar-btn-delete" data-ibx-type="ibxButton" data-ibxp-command="cmdDelShape" data-ibxp-glyph-classes="fas fa-trash">Delete Squares</div>
+					<div tabindex="0" title="New Shape" class="tbar-btn tbar-btn-new" data-ibx-type="ibxButton" data-ibxp-command="cmdNewShape" data-ibxp-glyph-classes="fas fa-plus-square"></div>
+					<div tabindex="0" title="Delete Shape" class="tbar-btn tbar-btn-delete" data-ibx-type="ibxButton" data-ibxp-command="cmdDelShape" data-ibxp-glyph-classes="fas fa-trash"></div>
 					<div class="tbar-sep"></div>
 					<div tabindex="0" title="Toggle Command Palette" class="tbar-btn tbar-btn-palette" data-ibx-type="ibxButton" data-ibxp-command="cmdShowPalette" data-ibxp-glyph-classes="fas fa-tools"></div>
 				</div>
