@@ -141,10 +141,11 @@
 					var ui = manifest.shellUI || window._ibxShellApp.config.shellUI;
 					ui = toolInfo.ui = toolInfo.tool.getResources(jQuery, ui, data);
 
-					window._ibxShellApp.manageCss(true, ui.css);//let the shell manage the css
 					$(".help-menu").ibxWidget("option", "menu").ibxWidget("add", ui.menuHelp.ibxWidget("children").addClass("ibx-plugin-help-item"));
 					$(".main-menubar").ibxWidget("add", ui.menuBar, ".help-menu", true); 
 					$(".main-toolbar").append(ui.toolBar); 
+
+					window._ibxShellApp.manageCss(toolInfo.id, true);//let the shell manage the css
 
 					//must add commands into the static array on activation
 					$(ui.commands).each(function(idx, cmd)
@@ -160,6 +161,8 @@
 					$(toolInfo.ui.shellMenu).detach();
 					$(toolInfo.ui.menuBar).detach();
 					$(toolInfo.ui.toolBar).detach();
+
+					window._ibxShellApp.manageCss(toolInfo.id, false);//let the shell manage the css
 
 					//must remove commands from static array on deactivation
 					$(toolInfo.ui.commands).each(function(idx, cmd)

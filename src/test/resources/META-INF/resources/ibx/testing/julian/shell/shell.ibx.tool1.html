@@ -35,7 +35,7 @@
 						shellUI.menuBar = shellRes.find(".tool-menubar");
 						shellUI.toolBar = shellRes.find(".tool-toolbar");
 						shellUI.cmdPalette = shellRes.find(".cmd-palette");
-						shellUI.css = ibx.resourceMgr.getResource(".tool-styles").html();
+						shellUI.css = ibx.resourceMgr.getResource(".shared-styles").html();
 
 						//add standard command handlers
 						shellUI.commands.filter(".cmd-new-shape").on("ibx_triggered", onNewShape);

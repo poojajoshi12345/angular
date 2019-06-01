@@ -67,18 +67,25 @@ _p._activateTool = function(activateInfo)
 {
 	var event = $(window).dispatchEvent(ibxShellApp.msgActivateTool, activateInfo, true, false);
 	if(activateInfo.updateUI)
-		this.updateToolUI(activateInfo);
+		this._updateToolUI(activateInfo);
 };
 _p._updateToolUI = function(updateInfo)
 {
 	var event = $(window).dispatchEvent(ibxShellApp.msgUpdateToolUI, updateInfo, true, false);
 };
-_p.manageCss = function(add, css)
+_p.manageCss = function(toolId, add)
 {
-	if(typeof(css) == "string")
+	var tool = this.runningTools[toolId];
+	if(tool && tool.ui && tool.ui.css)
 	{
-		var style = $("<style type='text/css'>").text(css);
-		$(document.head).append(style);
+		var css = tool.ui.css;
+		if(add)
+		{
+			var style = $("<style type='text/css'>").prop("id", toolId).text(css);
+			$(document.head).append(style);
+		}
+		else
+			$("style#"+toolId).remove();
 	}
 };
 /*****************************************************************************/
