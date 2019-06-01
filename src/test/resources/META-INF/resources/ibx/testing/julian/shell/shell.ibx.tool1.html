@@ -34,6 +34,7 @@
 						shellUI.menuHelp = shellRes.find(".tool-help-menu").detach();
 						shellUI.menuBar = shellRes.find(".tool-menubar");
 						shellUI.toolBar = shellRes.find(".tool-toolbar");
+						shellUI.cmdPalette = shellRes.find(".cmd-palette");
 
 						//add standard command handlers
 						shellUI.commands.filter(".cmd-new-shape").on("ibx_triggered", onNewShape);
@@ -96,7 +97,8 @@
 				};
 				function onShowPalette(e)
 				{
-					alert("show palette");
+					var pal = (window._ibxShellTool) ? 	window._ibxShellTool.shellUI.cmdPalette : $(".cmd-palette");
+					pal.ibxWidget("open");
 				}
 				function onSelChange(e)
 				{
