@@ -66,6 +66,11 @@
 				border:1px solid black;
 				border-radius:0px
 			}
+			.cmd-palette-header
+			{
+				padding:3px;
+				margin-bottom:3px;
+			}
 			.pal-btn
 			{
 				flex:1 0 auto;
@@ -115,12 +120,15 @@
 					<div class="cmd-show-palette" data-ibx-type="ibxCommand" data-ibxp-id="cmdShowPalette"></div>
 				</div>
 
-				<div class="cmd-palette" data-ibx-type="ibxPopup" data-ibxp-destroy-on-close="false">
-					<div data-ibx-type="ibxHBox" data-ibxp-align="stretch" data-ibxp-wrap="true">
-						<div class="pal-btn" data-ibx-type="ibxButtonSimple" data-ibxp-glyph-classes="fas fa-anchor"></div>
-						<div class="pal-btn" data-ibx-type="ibxButtonSimple" data-ibxp-glyph-classes="fas fa-anchor"></div>
-						<div class="pal-btn" data-ibx-type="ibxButtonSimple" data-ibxp-glyph-classes="fas fa-anchor"></div>
-						<div class="pal-btn" data-ibx-type="ibxButtonSimple" data-ibxp-glyph-classes="fas fa-anchor"></div>
+				<div class="cmd-palette" data-ibx-type="ibxPopup" data-ibxp-destroy-on-close="false" data-ibxp-auto-close="false">
+					<div data-ibx-type="ibxVBox" data-ibxp-align="stretch">
+						<div class="cmd-palette-header" data-ibx-type="ibxLabel">Command Palette</div>
+						<div data-ibx-type="ibxHBox" data-ibxp-align="stretch" data-ibxp-wrap="true">
+							<div class="pal-btn" data-ibx-type="ibxButtonSimple" data-ibxp-glyph-classes="fas fa-anchor"></div>
+							<div class="pal-btn" data-ibx-type="ibxButtonSimple" data-ibxp-glyph-classes="fas fa-anchor"></div>
+							<div class="pal-btn" data-ibx-type="ibxButtonSimple" data-ibxp-glyph-classes="fas fa-anchor"></div>
+							<div class="pal-btn" data-ibx-type="ibxButtonSimple" data-ibxp-glyph-classes="fas fa-anchor"></div>
+						</div>
 					</div>
 				</div>
 			</div>
