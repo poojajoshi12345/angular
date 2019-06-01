@@ -26,22 +26,24 @@
 							return;
 						}
 
-						var data = e.data.data; 
+						//donate ui to shell
 						var shellUI = window._ibxShellTool.shellUI = e.data.shellUI;
 						var shellRes = ibx.resourceMgr.getResource(".tool-container");
-
 						shellRes = ibx.bindElements(shellRes);
 						shellUI.commands = shellRes.find(".ibx-command");
 						shellUI.menuHelp = shellRes.find(".tool-help-menu").detach();
 						shellUI.menuBar = shellRes.find(".tool-menubar");
 						shellUI.toolBar = shellRes.find(".tool-toolbar");
-						shellUI.commands.filter(".cmd-new-shape").on("ibx_triggered", onNewShape).addClass(window._ibxShellTool._id);
-						shellUI.commands.filter(".cmd-del-shape").on("ibx_triggered", onDeleteShape).addClass(window._ibxShellTool._id);
-						shellUI.commands.filter(".cmd-about").on("ibx_triggered", onAppAbout).addClass(window._ibxShellTool._id);
-						shellUI.commands.filter(".cmd-help").on("ibx_triggered", onAppHelp).addClass(window._ibxShellTool._id);
+
+						//add standard command handlers
+						shellUI.commands.filter(".cmd-new-shape").on("ibx_triggered", onNewShape);
+						shellUI.commands.filter(".cmd-del-shape").on("ibx_triggered", onDeleteShape);
+						shellUI.commands.filter(".cmd-about").on("ibx_triggered", onAppAbout);
+						shellUI.commands.filter(".cmd-help").on("ibx_triggered", onAppHelp);
+						shellUI.commands.filter(".cmd-show-palette").on("ibx_triggered", onShowPalette);
 					});
 
-					//plugin specific functions...just communicating with the shell
+					//plugin specific message handlers...just communicating with the shell
 					window.addEventListener(ibxShellTool.msgSerialize, function(e)
 					{
 						var data = serialize(e.data.read);
@@ -65,6 +67,7 @@
 					tool.find(".cmd-del-shape").on("ibx_triggered", onDeleteShape);
 					tool.find(".cmd-about").on("ibx_triggered", onAppAbout);
 					tool.find(".cmd-help").on("ibx_triggered", onAppHelp);
+					tool.find(".cmd-show-palette").on("ibx_triggered", onShowPalette);
 					tool.find(".shape-container").on("ibx_selchange", onSelChange);
 					$("body").append(tool);
 				}
@@ -91,6 +94,10 @@
 				{
 					alert("Open Square tool help page!");
 				};
+				function onShowPalette(e)
+				{
+					alert("show palette");
+				}
 				function onSelChange(e)
 				{
 					var selItems = getSelectedItems();
