@@ -28,7 +28,7 @@
 
 						var data = e.data.data; 
 						var shellUI = window._ibxShellTool.shellUI = e.data.shellUI;
-						var shellRes = ibx.resourceMgr.getResource(".tool-container", false);
+						var shellRes = ibx.resourceMgr.getResource(".tool-container");
 
 						shellRes = ibx.bindElements(shellRes);
 						shellUI.commands = shellRes.find(".ibx-command");
