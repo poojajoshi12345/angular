@@ -27,7 +27,8 @@
 						shellMenu:null,
 						menuHelp:null,
 						menuBar:null,
-						toolBar:null
+						toolBar:null,
+						css:null,
 					},
 
 					//configured shell tools (plugins)
@@ -139,6 +140,8 @@
 					var manifest = window._ibxShellApp.config.tools[toolInfo.type];
 					var ui = manifest.shellUI || window._ibxShellApp.config.shellUI;
 					ui = toolInfo.ui = toolInfo.tool.getResources(jQuery, ui, data);
+
+					window._ibxShellApp.manageCss(true, ui.css);//let the shell manage the css
 					$(".help-menu").ibxWidget("option", "menu").ibxWidget("add", ui.menuHelp.ibxWidget("children").addClass("ibx-plugin-help-item"));
 					$(".main-menubar").ibxWidget("add", ui.menuBar, ".help-menu", true); 
 					$(".main-toolbar").append(ui.toolBar); 

@@ -35,10 +35,10 @@ _p._onToolMessage = function(e)
 	}
 	else
 	if(mType == ibxShellTool.msgActivate)
-		this.activateTool(e.data);
+		this._activateTool(e.data);
 	else
 	if(mType == ibxShellTool.msgUpdateUI)
-		this.updateToolUI(e.data);
+		this._updateToolUI(e.data);
 };
 
 _p.config = null;
@@ -63,19 +63,24 @@ _p.createTool = function(tType)
 	var toolInfo = this.runningTools[toolId] = {"id":toolId, "type":tType, "tool":shellTool, "host":host[0], "createDeferred":new $.Deferred()};
 	return toolInfo;
 };
-
-_p.activateTool = function(activateInfo)
+_p._activateTool = function(activateInfo)
 {
 	var event = $(window).dispatchEvent(ibxShellApp.msgActivateTool, activateInfo, true, false);
 	if(activateInfo.updateUI)
 		this.updateToolUI(activateInfo);
 };
-
-_p.updateToolUI = function(updateInfo)
+_p._updateToolUI = function(updateInfo)
 {
 	var event = $(window).dispatchEvent(ibxShellApp.msgUpdateToolUI, updateInfo, true, false);
 };
-
+_p.manageCss = function(add, css)
+{
+	if(typeof(css) == "string")
+	{
+		var style = $("<style type='text/css'>").text(css);
+		$(document.head).append(style);
+	}
+};
 /*****************************************************************************/
 /* ibxShellTool - plugin for ibx shell application */
 /*****************************************************************************/

@@ -7,7 +7,7 @@
 function ibxResourceManager(ctxPath)
 {
 	if(_jsDerivingClass)return;
-	this._resBundle = $($.parseXML("<ibx-res-bundle><markup></markup></ibx-res-bundle>"));
+	this._resBundle = $($.parseXML("<ibx-res-bundle><styles></styles><markup></markup></ibx-res-bundle>"));
 	this._styleSheet = $("<style type='text/css'>").ibxAddClass("ibxResourceManager_inline_styles").appendTo("head");
 	
 	this.loadedBundles = {};
@@ -336,6 +336,9 @@ _p.loadBundle = function(xResDoc)
 				var styleNode = $("<style type='text/css'>").attr("data-ibx-src", src).text(content);
 				head.append(styleNode);
 				$(window).dispatchEvent("ibx_ibxresmgr", {"hint":"cssinlineloaded", "loadDepth":this._loadDepth, "resMgr":this, "bundle":bundle[0]});
+				
+				styleBlock = styleBlock.clone().text(content);
+				this._resBundle.find("ibx-res-bundle > styles").first().append(styleBlock);//save sheet in res document
 			}
 		}.bind(this));
 

@@ -14,8 +14,54 @@
 	</strings>
 
 	<styles>
-		<style-sheet>
+		<style-sheet class="tool-styles">
 		<![CDATA[
+			body, .tool-container
+			{
+				margin:0px;
+				position:absolute;
+				width:100%;
+				height:100%;
+				box-sizing:border-box;
+			}
+			.tool-menubar
+			{
+				flex:0 0 auto;
+				border-bottom:1px solid #ccc;
+			}
+			.tool-toolbar
+			{
+				flex:0 0 auto;
+				padding:3px;
+				border-bottom:1px solid #ccc;
+			}
+			.shape-container
+			{
+				flex: 1 1 auto;
+				width:100%;
+				height:100%;
+				box-sizing:border-box;
+			}
+			.tool-shape
+			{
+				outline:none;
+				flex:0 0 auto;
+				width:50px;
+				height:50px;
+				border:2px solid green;
+				background-color:white;
+				margin:5px;
+			}
+			.tool-shape.ibx-sm-selected
+			{
+				background-color:lightgreen;
+			}
+			.cmd-palette
+			{
+				width:100px;
+				border:1px solid black;
+				border-radius:0px
+			}
 		]]>
 		</style-sheet>
 	</styles>
@@ -56,7 +102,12 @@
 				</div>
 
 				<div class="cmd-palette" data-ibx-type="ibxPopup" data-ibxp-destroy-on-close="false">
-					Hi, I'm a command palette...
+					<div data-ibx-type="ibxHBox" data-ibxp-align="stretch">
+						<div class="pal-btn" data-ibx-type="ibxButtonSimple" data-ibxp-glyph-classes="fas fa-anchor"></div>
+						<div class="pal-btn" data-ibx-type="ibxButtonSimple" data-ibxp-glyph-classes="fas fa-anchor"></div>
+						<div class="pal-btn" data-ibx-type="ibxButtonSimple" data-ibxp-glyph-classes="fas fa-anchor"></div>
+						<div class="pal-btn" data-ibx-type="ibxButtonSimple" data-ibxp-glyph-classes="fas fa-anchor"></div>
+					</div>
 				</div>
 			</div>
 		</markup-block>
