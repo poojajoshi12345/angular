@@ -39,7 +39,9 @@
 						shellUI.commands.filter(".cmd-del-shape").on("ibx_triggered", onDeleteShape).addClass(window._ibxShellTool._id);
 						shellUI.commands.filter(".cmd-about").on("ibx_triggered", onAppAbout).addClass(window._ibxShellTool._id);
 						shellUI.commands.filter(".cmd-help").on("ibx_triggered", onAppHelp).addClass(window._ibxShellTool._id);
-					})
+					});
+
+					//plugin specific functions...just communicating with the shell
 					window.addEventListener(ibxShellTool.msgSerialize, function(e)
 					{
 						var data = serialize(e.data.read);
@@ -51,14 +53,9 @@
 							window._ibxShellTool.activate(true, true, {"hint":"focusin"});
 					});
 
+					//moving the main app area to the body, as it's the only ui the app has when running as plugin.
 					var shapeContainer = ibx.resourceMgr.getResource(".shape-container");
-					shapeContainer.appendTo("body").on("ibx_selchange", function(e)
-					{
-						var data = e.originalEvent.data;
-						var items = getSelectedItems();
-						window._ibxShellTool.shellUI.commands.filter(".cmd-del-shape").ibxWidget("option", "disabled", !items.length);
-						window._ibxShellTool.activate(true, true, {"hint":"selchange", "selected":data.selected, "items":items})
-					});
+					shapeContainer.appendTo("body").on("ibx_selchange", onSelChange);
 				}
 				else
 				{
@@ -68,15 +65,9 @@
 					tool.find(".cmd-del-shape").on("ibx_triggered", onDeleteShape);
 					tool.find(".cmd-about").on("ibx_triggered", onAppAbout);
 					tool.find(".cmd-help").on("ibx_triggered", onAppHelp);
-					tool.find(".shape-container").on("ibx_selchange", function(e)
-					{
-						var selItems = getSelectedItems();
-						$(".cmd-del-shape").ibxWidget("option", "disabled", !selItems.length);
-					});
+					tool.find(".shape-container").on("ibx_selchange", onSelChange);
 					$("body").append(tool);
-
 				}
-
 
 				/**************************************************************
 				 * GENERAL COMMAND HANDLERS REGARDLESS OF HOW TOOL IS RUNNING *
@@ -99,6 +90,18 @@
 				function onAppHelp(e)
 				{
 					alert("Open Square tool help page!");
+				};
+				function onSelChange(e)
+				{
+					var selItems = getSelectedItems();
+					$(".cmd-del-shape").ibxWidget("option", "disabled", !selItems.length);
+
+					//running as plugin...communicate with the shell.
+					if(window._ibxShellTool)
+					{
+						window._ibxShellTool.shellUI.commands.filter(".cmd-del-shape").ibxWidget("option", "disabled", !selItems.length);
+						window._ibxShellTool.activate(true, true, {"hint":"selchange", "items":selItems});
+					}
 				};
 				function getSelectedItems()
 				{
