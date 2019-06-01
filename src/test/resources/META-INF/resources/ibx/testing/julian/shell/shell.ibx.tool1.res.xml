@@ -66,6 +66,16 @@
 				border:1px solid black;
 				border-radius:0px
 			}
+			.pal-btn
+			{
+				flex:1 0 auto;
+				width:24px;
+				height:24px;
+				padding:5px;
+				font-size:1.5em;
+				border:1px solid #ccc;
+				box-model:border-box;
+			}
 		]]>
 		</style-sheet>
 	</styles>
@@ -78,7 +88,7 @@
 						<div data-ibx-type="ibxMenuItem" data-ibxp-command="cmdNewShape" data-ibxp-label-options.glyph-classes="fas fa-square">Add Square</div>
 						<div data-ibx-type="ibxMenuItem" data-ibxp-command="cmdDelShape" data-ibxp-label-options.glyph-classes="fas fa-trash">Delete Squares</div>
 						<div data-ibx-type="ibxMenuSeparator"></div>
-						<div data-ibx-type="ibxMenuItem" data-ibxp-command="cmdShowPalette" data-ibxp-label-options.glyph-classes="fas fa-tools">Comamand Palette</div>
+						<div data-ibx-type="ibxMenuItem" data-ibxp-command="cmdShowPalette" data-ibxp-label-options.glyph-classes="fas fa-palette">Comamand Palette</div>
 					</div>
 					<div class="tool-help-menu" data-ibx-type="ibxMenuButton">Help
 						<div data-ibx-type="ibxMenuItem" data-ibxp-command="cmdToolAbout">About Squares</div>
@@ -90,7 +100,7 @@
 					<div tabindex="0" title="New Shape" class="tbar-btn tbar-btn-new" data-ibx-type="ibxButton" data-ibxp-command="cmdNewShape" data-ibxp-glyph-classes="fas fa-plus-square"></div>
 					<div tabindex="0" title="Delete Shape" class="tbar-btn tbar-btn-delete" data-ibx-type="ibxButton" data-ibxp-command="cmdDelShape" data-ibxp-glyph-classes="fas fa-trash"></div>
 					<div class="tbar-sep"></div>
-					<div tabindex="0" title="Toggle Command Palette" class="tbar-btn tbar-btn-palette" data-ibx-type="ibxButton" data-ibxp-command="cmdShowPalette" data-ibxp-glyph-classes="fas fa-tools"></div>
+					<div tabindex="0" title="Toggle Command Palette" class="tbar-btn tbar-btn-palette" data-ibx-type="ibxButton" data-ibxp-command="cmdShowPalette" data-ibxp-glyph-classes="fas fa-palette"></div>
 				</div>
 
 				<div class="shape-container" data-ibx-type="ibxHBox" data-ibxp-sel-type="multi" data-ibxp-wrap="true" data-ibxp-rubber-band="true" data-ibxp-rubber-band-partial-select="true">
@@ -106,7 +116,7 @@
 				</div>
 
 				<div class="cmd-palette" data-ibx-type="ibxPopup" data-ibxp-destroy-on-close="false">
-					<div data-ibx-type="ibxHBox" data-ibxp-align="stretch">
+					<div data-ibx-type="ibxHBox" data-ibxp-align="stretch" data-ibxp-wrap="true">
 						<div class="pal-btn" data-ibx-type="ibxButtonSimple" data-ibxp-glyph-classes="fas fa-anchor"></div>
 						<div class="pal-btn" data-ibx-type="ibxButtonSimple" data-ibxp-glyph-classes="fas fa-anchor"></div>
 						<div class="pal-btn" data-ibx-type="ibxButtonSimple" data-ibxp-glyph-classes="fas fa-anchor"></div>
