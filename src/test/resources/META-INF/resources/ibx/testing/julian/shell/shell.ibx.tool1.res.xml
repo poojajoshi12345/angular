@@ -70,12 +70,14 @@
 			{
 				padding:3px;
 				margin-bottom:3px;
+				background-color:#ccc;
 			}
 			.pal-btn
 			{
 				flex:1 0 auto;
 				width:24px;
 				height:24px;
+				margin:2px;
 				padding:5px;
 				font-size:1.5em;
 				border:1px solid #ccc;
@@ -122,7 +124,7 @@
 
 				<div class="cmd-palette" data-ibx-type="ibxPopup" data-ibxp-destroy-on-close="false" data-ibxp-auto-close="false">
 					<div data-ibx-type="ibxVBox" data-ibxp-align="stretch">
-						<div class="cmd-palette-header" data-ibx-type="ibxLabel">Command Palette</div>
+						<div class="cmd-palette-header" data-ibx-type="ibxLabel">Commands</div>
 						<div data-ibx-type="ibxHBox" data-ibxp-align="stretch" data-ibxp-wrap="true">
 							<div class="pal-btn" data-ibx-type="ibxButtonSimple" data-ibxp-glyph-classes="fas fa-anchor"></div>
 							<div class="pal-btn" data-ibx-type="ibxButtonSimple" data-ibxp-glyph-classes="fas fa-anchor"></div>

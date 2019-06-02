@@ -98,6 +98,7 @@
 				};
 				function onShowPalette(e)
 				{
+					console.warn("iframes are disabled when popups are open...this is a problem!");
 					var pal = (window._ibxShellTool) ? 	window._ibxShellTool.shellUI.cmdPalette : $(".cmd-palette");
 					var isOpen = pal.ibxWidget("isOpen");
 					pal.ibxWidget(isOpen ? "close" : "open");

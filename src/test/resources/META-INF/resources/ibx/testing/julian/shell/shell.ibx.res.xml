@@ -120,14 +120,14 @@
 							<div class="new-tool-menu" data-ibx-type="ibxMenu"></div>
 						</div>
 						<div data-ibx-type="ibxMenuSeparator"></div>
-						<div data-ibx-type="ibxMenuItem" data-ibxp-command="cmdSave" data-ibxp-label-options.glyph-classes="fa fa-save">Save</div>
+						<div data-ibx-type="ibxMenuItem" data-ibxp-command="cmdSave" data-ibxp-label-options.glyph-classes="fas fa-save">Save</div>
 						<div data-ibx-type="ibxMenuItem" data-ibxp-command="cmdSaveAs">Save As...</div>
 						<div data-ibx-type="ibxMenuSeparator"></div>
 						<div data-ibx-type="ibxMenuItem" data-ibxp-command="cmdQuit">Quit</div>
 					</div>
 				</div>
 				<div class="help-menu" data-ibx-type="ibxMenuButton">Help
-					<div data-ibx-type="ibxMenuItem" data-ibxp-label-options.glyph-classes="fa fa-help" data-ibxp-command="cmdAbout">About Plugin Shell</div>
+					<div data-ibx-type="ibxMenuItem" data-ibxp-label-options.glyph-classes="fas fa-question-circle" data-ibxp-command="cmdAbout">About Plugin Shell</div>
 					<div data-ibx-type="ibxMenuSeparator"></div>
 				</div>
 			</div>
