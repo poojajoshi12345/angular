@@ -49,7 +49,7 @@ _p.createTool = function(tType)
 	if(!tool)
 		return console.error("[ibxShellApp] No registered ibxShellTool type: " + tType);
 
-	var toolId = sformat("idShellTool{1}", ++ibxShellApp.idTool);
+	var toolId = sformat("ibxShellToolId{1}", ++ibxShellApp.idTool);
 	var host = $().data("ibxShellToolId", toolId);
 	if(tool.host == "iframe")
 		host = $("<iframe tabindex='-1' class='ibx-shell-tool-host'>").prop("src", tool.src + "?ibxShellToolId=" + toolId);
