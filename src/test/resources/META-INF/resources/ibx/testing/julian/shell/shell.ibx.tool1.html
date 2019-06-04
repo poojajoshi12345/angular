@@ -12,13 +12,13 @@
 		<script type="text/javascript">
 			ibx(function(e)
 			{
-				var shellTool = getIbxShellTool();
+				var shellTool = ibxShellTool.getShellTool();
 				if(shellTool)
 				{
 					//setup tool for running as plugin
 					window.addEventListener(ibxShellTool.msgGetShellToolResources, function(e)
 					{
-						var shellTool = getIbxShellTool();
+						var shellTool = ibxShellTool.getShellTool();
 
 						//return cached resrouces if already retrieved.
 						if(shellTool.shellUI)
@@ -55,7 +55,7 @@
 					$("body", document).on("focusin", function(e)
 					{
 						if(!e.relatedTarget)
-							getIbxShellTool().activate(true, true, {"hint":"focusin"});
+							ibxShellTool.getShellTool().activate(true, true, {"hint":"focusin"});
 					});
 
 					//moving the main app area to the body, as it's the only ui the app has when running as plugin.
@@ -100,7 +100,7 @@
 				function onShowPalette(e)
 				{
 					console.warn("iframes are disabled when popups are open...this is a problem!");
-					var shellTool = getIbxShellTool();
+					var shellTool = ibxShellTool.getShellTool();
 					var pal = (shellTool) ? shellTool.shellUI.cmdPalette : $(".cmd-palette");
 					var isOpen = pal.ibxWidget("isOpen");
 					pal.ibxWidget(isOpen ? "close" : "open");
@@ -111,7 +111,7 @@
 					$(".cmd-del-shape").ibxWidget("option", "disabled", !selItems.length);
 
 					//running as plugin...communicate with the shell.
-					var shellTool = getIbxShellTool();
+					var shellTool = ibxShellTool.getShellTool();
 					if(shellTool)
 					{
 						shellTool.shellUI.commands.filter(".cmd-del-shape").ibxWidget("option", "disabled", !selItems.length);

@@ -30,7 +30,7 @@ _p._onToolMessage = function(e)
 		if(host.is("iframe"))
 		{
 			var wnd = host[0].contentWindow;
-			toolInfo.tool = wnd.getIbxShellTool();
+			toolInfo.tool = wnd.ibxShellTool.getShellTool();
 		}
 		toolInfo.createDeferred.resolve(toolInfo);
 	}
@@ -94,30 +94,33 @@ _p.manageCss = function(toolId, add)
 /*****************************************************************************/
 function ibxShellTool(id)
 {
-	if(window._ibxShellTool)
-		return window._ibxShellTool;
-
+	var singletonTool = ibxShellTool.getShellTool();
+	if(singletonTool)
+		return singletonTool;
 	this._id = id;
-	ibx(this._onAppLoaded.bind(this));
-
-	window._ibxShellTool = this;
-	window.getIbxShellTool = function(){return window._ibxShellTool};
 }
 var _p = ibxShellTool.prototype = new Object();
 ibxShellTool.msgToolLoaded = "ibx_shelltoolloaded";
 ibxShellTool.msgGetShellToolResources = "ibx_shelltoolbindresources";
 ibxShellTool.msgActivate = "ibx_shelltoolactivate";
 ibxShellTool.msgUpdateUI = "ibx_shelltoolupdateui";
-ibxShellTool.msgSerialize = "ibx_shelltoolserialize";
 
-window.getIbxShellTool = function()
+//statically manage the shell tool.
+ibxShellTool.msgSerialize = "ibx_shelltoolserialize";
+ibxShellTool._shellTool = undefined;
+ibxShellTool.getShellTool = function()
 {
-	var tool = window._ibxShellTool;
-	if(window._ibxShellTool === undefined)
+	var tool = ibxShellTool._shellTool;
+	if(ibxShellTool._shellTool === undefined)
 	{
 		var ibxShellToolId = window.frameElement ? window.frameElement.getAttribute(ibxShellApp.attrShellToolId) : null;
-		if(ibxShellToolId != null)
-			tool = window._ibxShellTool = new ibxShellTool(ibxShellToolId);
+		if(ibxShellToolId != null && !this._inctor)
+		{
+			this._inctor = true;
+			tool = ibxShellTool._shellTool = new ibxShellTool(ibxShellToolId);
+			this._inctor = false;
+			window.parent.postMessage({"type":ibxShellTool.msgToolLoaded, "id":ibxShellToolId}, "*");
+		}
 	}
 	return tool;	
 };
@@ -134,14 +137,6 @@ _p.getResources = function(jqShell, shellUI, data)
 	this.shellUI = shellUI = event.data.shellUI;
 	return shellUI;
 };
-_p._onAppLoaded = function()
-{
-	this.toolLoaded();
-};
-_p.toolLoaded = function(data)
-{
-	window.parent.postMessage({"type":ibxShellTool.msgToolLoaded, "id":this._id, "data":data}, "*");
-},
 _p.activate = function(activate, updateUI, data)
 {
 	updateUI = (updateUI != undefined) ? updateUI : activate;
