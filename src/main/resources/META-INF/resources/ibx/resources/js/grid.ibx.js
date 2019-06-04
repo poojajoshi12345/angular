@@ -748,6 +748,10 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 		var filter = isNaN(row) ? row : sformat(".{1}:nth-child({2})", this.options.classes.gridRow, row + 1);
 		return this._grid.children(filter);
 	},
+	getRowIndex:function(row)
+	{
+		return this.getRow().index(row);
+	},
 	showRow:function(row, show)
 	{
 		var rows = this.getRow(row);
