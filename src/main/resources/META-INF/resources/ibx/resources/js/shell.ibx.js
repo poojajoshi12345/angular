@@ -17,6 +17,7 @@ function ibxShellApp(config)
 var _p = ibxShellApp.prototype = new Object();
 ibxShellApp.msgActivateTool = "ibx_activatetool";
 ibxShellApp.msgUpdateToolUI = "ibx_updatetoolui";
+ibxShellApp.attrShellToolId = "data-ibx-shell-tool-id";
 ibxShellApp.idTool = 0;
 
 _p._onToolMessage = function(e)
@@ -52,7 +53,7 @@ _p.createTool = function(tType)
 	var toolId = sformat("ibxShellToolId{1}", ++ibxShellApp.idTool);
 	var host = $().data("ibxShellToolId", toolId);
 	if(tool.host == "iframe")
-		host = $("<iframe tabindex='-1' class='ibx-shell-tool-host'>").prop("src", tool.src + "?ibxShellToolId=" + toolId);
+		host = $("<iframe tabindex='-1' class='ibx-shell-tool-host'>").attr(ibxShellApp.attrShellToolId, toolId).attr("src", tool.src);
 	else
 	if(tool.host == "div")
 	{
@@ -108,6 +109,18 @@ ibxShellTool.msgGetShellToolResources = "ibx_shelltoolbindresources";
 ibxShellTool.msgActivate = "ibx_shelltoolactivate";
 ibxShellTool.msgUpdateUI = "ibx_shelltoolupdateui";
 ibxShellTool.msgSerialize = "ibx_shelltoolserialize";
+
+window.getIbxShellTool = function()
+{
+	var tool = window._ibxShellTool;
+	if(window._ibxShellTool === undefined)
+	{
+		var ibxShellToolId = window.frameElement ? window.frameElement.getAttribute(ibxShellApp.attrShellToolId) : null;
+		if(ibxShellToolId != null)
+			tool = window._ibxShellTool = new ibxShellTool(ibxShellToolId);
+	}
+	return tool;	
+};
 
 _p._id = null;
 _p.shellUI = null;

@@ -12,22 +12,23 @@
 		<script type="text/javascript">
 			ibx(function(e)
 			{
-				var appParms = ibx.getAppParms();
-				if(appParms.ibxShellToolId)
+				var shellTool = getIbxShellTool();
+				if(shellTool)
 				{
 					//setup tool for running as plugin
-					window._ibxShellTool = new ibxShellTool(appParms.ibxShellToolId);
 					window.addEventListener(ibxShellTool.msgGetShellToolResources, function(e)
 					{
+						var shellTool = getIbxShellTool();
+
 						//return cached resrouces if already retrieved.
-						if(window._ibxShellTool.shellUI)
+						if(shellTool.shellUI)
 						{
-							e.data.shellUI = window._ibxShellTool.shellUI;
+							e.data.shellUI = shellTool.shellUI;
 							return;
 						}
 
 						//donate ui to shell
-						var shellUI = window._ibxShellTool.shellUI = e.data.shellUI;
+						var shellUI = shellTool.shellUI = e.data.shellUI;
 						var shellRes = ibx.resourceMgr.getResource(".tool-container");
 						shellRes = ibx.bindElements(shellRes);
 						shellUI.commands = shellRes.find(".ibx-command");
@@ -54,7 +55,7 @@
 					$("body", document).on("focusin", function(e)
 					{
 						if(!e.relatedTarget)
-							window._ibxShellTool.activate(true, true, {"hint":"focusin"});
+							getIbxShellTool().activate(true, true, {"hint":"focusin"});
 					});
 
 					//moving the main app area to the body, as it's the only ui the app has when running as plugin.
@@ -99,7 +100,8 @@
 				function onShowPalette(e)
 				{
 					console.warn("iframes are disabled when popups are open...this is a problem!");
-					var pal = (window._ibxShellTool) ? 	window._ibxShellTool.shellUI.cmdPalette : $(".cmd-palette");
+					var shellTool = getIbxShellTool();
+					var pal = (shellTool) ? shellTool.shellUI.cmdPalette : $(".cmd-palette");
 					var isOpen = pal.ibxWidget("isOpen");
 					pal.ibxWidget(isOpen ? "close" : "open");
 				}
@@ -109,10 +111,11 @@
 					$(".cmd-del-shape").ibxWidget("option", "disabled", !selItems.length);
 
 					//running as plugin...communicate with the shell.
-					if(window._ibxShellTool)
+					var shellTool = getIbxShellTool();
+					if(shellTool)
 					{
-						window._ibxShellTool.shellUI.commands.filter(".cmd-del-shape").ibxWidget("option", "disabled", !selItems.length);
-						window._ibxShellTool.activate(true, true, {"hint":"selchange", "items":selItems});
+						shellTool.shellUI.commands.filter(".cmd-del-shape").ibxWidget("option", "disabled", !selItems.length);
+						shellTool.activate(true, true, {"hint":"selchange", "items":selItems});
 					}
 				};
 				function getSelectedItems()
