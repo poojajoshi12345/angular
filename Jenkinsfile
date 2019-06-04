@@ -121,16 +121,15 @@ try {
                                         [$class: 'CulpritsRecipientProvider'], [$class: 'UpstreamComitterRecipientProvider']]
 
                 def subject = "${buildStatus}: Build ${env.JOB_NAME} #${env.BUILD_NUMBER} status is now ${buildStatus}"
-                def details = """The build status changed to ${buildStatus}. For details see ${env.BUILD_URL}"""
-
+ 
                 echo "Subject: ${subject}"
-                echo "Message: ${details}"
-
+                
                 emailext (
-                    subject: subject,
-                    body: details,
-                    recipientProviders: RECIPIENTS
-                )
+	            	mimeType: 'text/html',
+	                subject: subject,
+	                body: '''${SCRIPT, template="groovy-html.template"}''',
+	                recipientProviders: RECIPIENTS
+	            )
             }
         }
     }
