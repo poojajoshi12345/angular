@@ -145,18 +145,18 @@ $.widget("ibi.ibxPalettePicker", $.ibi.ibxVBox,
 		"sliderOptions":{},
 		"navKeyRoot":true,
 		"navKeyDir":"both",
-		"selType":"single",
 		"nameRoot":true,
 		"focusDefault":true,
 		"justify":"center",
 		"align":"stretch",
+		"selType":"single",
 	},
 	_widgetClass: "ibx-palette-picker",
 	_create: function ()
 	{
 		this._super();
 		this._loadWidgetTemplate(".ibx-palette-picker-template");
-		this.element.on("ibx_selectablechildren ibx_selchange", this._selManagerEvent.bind(this));
+		this.element.on("ibx_selchange", this._selManagerEvent.bind(this));
 		this._palSelect.on("ibx_change", this._onPalSelectChange.bind(this));
 		this._transSlider.on("ibx_change", this._onTransSliderChange.bind(this)).ibxWidget("option", "fnFormat", this._formatSliderVals.bind(this));
 
@@ -171,14 +171,12 @@ $.widget("ibi.ibxPalettePicker", $.ibi.ibxVBox,
 	{
 		this._inInit = true;
 		this._super();
+		this.element.ibxSelectionManager("option", "selectableChildren", ".pp-swatch");//IBX-390
 		this._inInit = false;
 	},
 	_selManagerEvent:function(e)
 	{
 		var info = e.originalEvent.data;
-		if(e.type == "ibx_selectablechildren")
-			info.items = this.element.find(".pp-swatch");
-		else
 		if(e.type == "ibx_selchange" && info.selected == true)
 		{
 			var swatch = $(info.items[0]);
