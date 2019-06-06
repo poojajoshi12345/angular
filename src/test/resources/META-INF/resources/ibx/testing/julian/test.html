@@ -12,67 +12,44 @@
 		<script type="text/javascript">
 			ibx(function(e)
 			{
-				//Shape object
-				function Shape()
+				var grid = $(".test-grid");
+				var colMap = 
+				[
+					{title:"Col 1", size:"100px", visible:true},
+					{title:"Col 2", size:"200px", visible:true},
+					{title:"Col 3", size:"100px", visible:true},
+				]
+				grid.ibxWidget("option", "colMap", colMap);
+
+				var rows =  [];
+				for(var i = 0; i < 5; ++i)
 				{
-					this.draw = function()
+					var row = $("<div>").ibxDataGridRow();
+					rows.push(row);
+
+					$.each(colMap, function(idx, colInfo)
 					{
-						console.log("Shape.this.draw");
-					};
+						var cell = $("<div>").text(sformat("Cell {1}/{2}", i, idx));
+						row.append(cell);
+					});
 				}
-				var _p = Shape.prototype = new Shape();
-				_p.draw = function()
-				{
-					console.log("Shape.prototype.draw");
-				};
-				_p._width = 0;
-				_p._height = 0;
-				_p.setArea = function(width, height)
-				{
-					this._width = width;
-					this._height = height;
-					console.log("Shape.prototype.setArea", width, height);
-				}
-
-				//Circle object
-				function Circle()
-				{
-					this.draw = function()
-					{
-						console.log("Circle.this.draw");
-					};
-				}
-				var _p = Circle.prototype = new Shape();
-				_p.draw = function()
-				{
-					console.log("Circle.prototype.draw");
-					Shape.prototype.draw.apply(this);
-				}
-				_p.setArea = function(size)
-				{
-					console.log("Circle.prototype.setArea", size);
-					Shape.prototype.setArea.call(this, size, size);
-				}
-				var c = new Circle();
-				c.setArea(10);
-				c.draw();
+				grid.ibxWidget("addRows", rows).ibxWidget("updateHeaders");			
 
 
-				$(".test-edit").on("click", function(e)
+				$(".test-check").on("click", function(e)
 				{
-					$(e.currentTarget).ibxWidget("startEditing");
-				}).on("ibx_changed", function(e)
-				{
-					var data = e.originalEvent.data;
-					if(data == "")
-					{
-						var editor = $(e.target);
-						var preEditValue = editor.ibxWidget("preEditValue");
-						editor.ibxWidget("text", preEditValue);
-					}
-					console.log(data);
-				});
+					var btn = $(e.currentTarget);
+					var checked = btn.ibxWidget("checked");
+					var grid = $(".test-grid");
 
+
+					var colMap = grid.ibxWidget("option", "colMap");
+					colMap[0].visible = checked;
+					grid.ibxWidget("option", "colMap", colMap);
+
+					grid.ibxWidget("removeAll");
+					grid.ibxWidget("addRows", rows);
+				})
 			},true);
 		</script>
 		<style type="text/css">
@@ -84,21 +61,18 @@
 				height:100%;
 				box-sizing:border-box;
 			}
-			.test-text
+			.test-grid
 			{
-				width:100px;
+				margin:20px;
+				width: 500px;
+				height: 200px;
 				border:1px solid black;
-			}
-			.test-spinner
-			{
-				width:125px;
 			}
 		</style>
 	</head>
 	<body class="ibx-root">
-		<div tabindex="0" class="test-edit" data-ibx-type="ibxLabel">Edit Me...</div>
-		<div tabindex="0" class="test-label" data-ibx-type="ibxLabel" data-ibxp-for=".test-text">Username:</div>
-		<div tabindex="0" class="test-text" data-ibx-type="ibxTextField" data-xibxp-placeholder="Username" data-ibxp-text="Julian"></div>
+		<div class="test-check" data-ibx-type="ibxCheckBoxSimple" data-ibxp-checked="true">Show Col 0</div>
+		<div tabindex="0" class="test-grid" data-ibx-type="ibxDataGrid" data-ibxp-show-row-headers="false" data-ibxp-row-select="true"></div>
 	</body>
 </html>
 
