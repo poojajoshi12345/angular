@@ -27,7 +27,8 @@
 						shellMenu:null,
 						menuHelp:null,
 						menuBar:null,
-						toolBar:null
+						toolBar:null,
+						css:null,
 					},
 
 					//configured shell tools (plugins)
@@ -42,15 +43,23 @@
 							host:"iframe",
 							src:"./shell.ibx.tool1.html",
 						},
-						tool2:
-						{
-							active: (activeTools.indexOf("tool2") != -1),
-							title:"Circles",
-							icon:"something.whatever",
-							class:"squares-plugin",
-							host:"iframe",
-							src:"./shell.ibx.tool2.html",
-						}
+						// tool2:
+						// {
+						// 	active: (activeTools.indexOf("tool2") != -1),
+						// 	title:"Circles",
+						// 	icon:"something.whatever",
+						// 	class:"squares-plugin",
+						// 	host:"iframe",
+						// 	src:"./shell.ibx.tool2.html",
+						// },
+						// toolx:
+						// {
+						// 	active: (activeTools.indexOf("toolx") != -1),
+						// 	title:"DIV Tool",
+						// 	icon:"something.whatever",
+						// 	class:"squares-plugin",
+						// 	host:"div",
+						// }
 					}
 				}
 
@@ -64,9 +73,18 @@
 					var type = $(e.relatedTarget).ibxWidget("option", "tool");
 					var tool = window._ibxShellApp.config.tools[type];
 					var toolInfo = window._ibxShellApp.createTool(type);
-					var wnd = makeToolWindow().ibxAddClass(tool.class).data("ibxShellTool", toolInfo);
 
+					/*SOMETHING HAPPENS HERE TO CREATE YOUR INLINE TOOL AND THEN YOU CALL TOOLLOADED WHEN DONE*/
+					if(type == "toolx")
+					{
+						var tool = toolInfo.host.innerText = "DIV TOOL";
+						toolInfo.tool.toolLoaded();
+					}
+
+					var wnd = makeToolWindow().ibxAddClass(tool.class).data("ibxShellTool", toolInfo);
 					wnd.find(".tool-content").append(toolInfo.host);
+					wnd.ibxRemoveClass("creating");
+
 					$(".tool-area").append(wnd);
 					toolInfo.createDeferred.then(function()
 					{
@@ -122,9 +140,12 @@
 					var manifest = window._ibxShellApp.config.tools[toolInfo.type];
 					var ui = manifest.shellUI || window._ibxShellApp.config.shellUI;
 					ui = toolInfo.ui = toolInfo.tool.getResources(jQuery, ui, data);
-					$(".help-menu").ibxWidget("option", "menu").ibxWidget("add", ui.menuHelp.ibxWidget("children").addClass("ibx-plugin-menu-item"));
+
+					$(".help-menu").ibxWidget("option", "menu").ibxWidget("add", ui.menuHelp.ibxWidget("children").addClass("ibx-plugin-help-item"));
 					$(".main-menubar").ibxWidget("add", ui.menuBar, ".help-menu", true); 
 					$(".main-toolbar").append(ui.toolBar); 
+
+					window._ibxShellApp.manageCss(toolInfo.id, true);//let the shell manage the css
 
 					//must add commands into the static array on activation
 					$(ui.commands).each(function(idx, cmd)
@@ -136,15 +157,18 @@
 				}
 				else
 				{
-					$(".help-menu .ibx-plugin-help-item").detach();
+					$(toolInfo.ui.menuHelp).ibxWidget("add", $(".help-menu .ibx-plugin-help-item"));//remove merged menu items and put them back under tools menu.
 					$(toolInfo.ui.shellMenu).detach();
 					$(toolInfo.ui.menuBar).detach();
 					$(toolInfo.ui.toolBar).detach();
 
+					window._ibxShellApp.manageCss(toolInfo.id, false);//let the shell manage the css
+
 					//must remove commands from static array on deactivation
 					$(toolInfo.ui.commands).each(function(idx, cmd)
 					{
-						var id = $(cmd).ibxWidget("option", "id");
+						var cmd = $(cmd);
+						var id = cmd.ibxWidget("option", "id");
 						delete $.ibi.ibxCommand.cmds[id]
 					});
 					delete toolInfo.ui;
