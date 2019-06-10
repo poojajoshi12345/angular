@@ -132,10 +132,14 @@ _p.getResources = function(jqShell, shellUI, data)
 	shellUI = $.extend(true, {}, shellUI);
 	var curjQuery = window.jQuery;
 	window.jQuery = window.$ = jqShell;
-	var event = $(window).dispatchEvent(ibxShellTool.msgGetShellToolResources, {"shellUI":shellUI, "data":data}, true, false);
+	shellUI = this._getResources(shellUI, data);
 	window.jQuery = window.$ = curjQuery;
-	this.shellUI = shellUI = event.data.shellUI;
 	return shellUI;
+};
+_p._getResources = function(shellUI, data)
+{
+	var event = $(window).dispatchEvent(ibxShellTool.msgGetShellToolResources, {"shellUI":shellUI, "data":data}, true, false);
+	return event.data.shellUI;
 };
 _p.activate = function(activate, updateUI, data)
 {

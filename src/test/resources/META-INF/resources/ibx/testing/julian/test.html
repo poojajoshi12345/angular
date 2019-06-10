@@ -50,6 +50,16 @@
 					grid.ibxWidget("removeAll");
 					grid.ibxWidget("addRows", rows);
 				})
+
+				$(".test-btn-up, .test-btn-down").on("click", function(e)
+				{
+					var grid = $(".test-grid");
+					var selItems = grid.ibxWidget("getSelectionManager").selected();
+					var up = $(e.currentTarget).is(".test-btn-up");
+					var target = up ? selItems.first().prev() : selItems.last().next();
+					grid.ibxWidget("addRows", selItems, target, up);	
+				});
+
 			},true);
 		</script>
 		<style type="text/css">
@@ -72,6 +82,8 @@
 	</head>
 	<body class="ibx-root">
 		<div class="test-check" data-ibx-type="ibxCheckBoxSimple" data-ibxp-checked="true">Show Col 0</div>
+		<div class="test-btn-up" data-ibx-type="ibxButton" data-ibxp-checked="true">Move Up</div>
+		<div class="test-btn-down" data-ibx-type="ibxButton" data-ibxp-checked="true">Move Down</div>
 		<div tabindex="0" class="test-grid" data-ibx-type="ibxDataGrid" data-ibxp-show-row-headers="false" data-ibxp-row-select="true"></div>
 	</body>
 </html>
