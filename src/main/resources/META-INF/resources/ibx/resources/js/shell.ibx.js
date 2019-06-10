@@ -17,6 +17,7 @@ function ibxShellApp(config)
 var _p = ibxShellApp.prototype = new Object();
 ibxShellApp.msgActivateTool = "ibx_activatetool";
 ibxShellApp.msgUpdateToolUI = "ibx_updatetoolui";
+ibxShellApp.attrShellToolId = "data-ibx-shell-tool-id";
 ibxShellApp.idTool = 0;
 
 _p._onToolMessage = function(e)
@@ -25,20 +26,20 @@ _p._onToolMessage = function(e)
 	if(mType == ibxShellTool.msgToolLoaded)
 	{
 		var toolInfo = this.runningTools[e.data.id];
-		var host = toolInfo.host;
-		if($(toolInfo.host).is("iframe"))
+		var host = $(toolInfo.host);
+		if(host.is("iframe"))
 		{
-			var wnd = host.contentWindow;
-			toolInfo.tool = wnd.getIbxShellTool();
-			toolInfo.createDeferred.resolve(toolInfo);
+			var wnd = host[0].contentWindow;
+			toolInfo.tool = wnd.ibxShellTool.getShellTool();
 		}
+		toolInfo.createDeferred.resolve(toolInfo);
 	}
 	else
 	if(mType == ibxShellTool.msgActivate)
-		this.activateTool(e.data);
+		this._activateTool(e.data);
 	else
 	if(mType == ibxShellTool.msgUpdateUI)
-		this.updateToolUI(e.data);
+		this._updateToolUI(e.data);
 };
 
 _p.config = null;
@@ -49,62 +50,96 @@ _p.createTool = function(tType)
 	if(!tool)
 		return console.error("[ibxShellApp] No registered ibxShellTool type: " + tType);
 
-	var host = null;
-	var toolId = sformat("idShellTool{1}", ++ibxShellApp.idTool);
+	var toolId = sformat("ibxShellToolId{1}", ++ibxShellApp.idTool);
+	var host = $().data("ibxShellToolId", toolId);
 	if(tool.host == "iframe")
-		host = $("<iframe tabindex='-1' class='ibx-shell-tool-frame'>").prop("src", tool.src + "?ibxShellToolId=" + toolId)[0];
+		host = $("<iframe tabindex='-1' class='ibx-shell-tool-host'>").attr(ibxShellApp.attrShellToolId, toolId).attr("src", tool.src);
+	else
+	if(tool.host == "div")
+	{
+		var shellTool = tool.shellType ? toolShellType.call() : new ibxShellTool(toolId);
+		host = $("<div tabindex='1' class='ibx-shell-tool-host'>").data("ibxShellTool", tool);
+	}
 
-	var toolInfo = this.runningTools[toolId] = {"id":toolId, "type":tType, "host":host, "createDeferred":new $.Deferred()};
+	var toolInfo = this.runningTools[toolId] = {"id":toolId, "type":tType, "tool":shellTool, "host":host[0], "createDeferred":new $.Deferred()};
 	return toolInfo;
 };
-
-_p.activateTool = function(activateInfo)
+_p._activateTool = function(activateInfo)
 {
 	var event = $(window).dispatchEvent(ibxShellApp.msgActivateTool, activateInfo, true, false);
 	if(activateInfo.updateUI)
-		this.updateToolUI(activateInfo);
+		this._updateToolUI(activateInfo);
 };
-
-_p.updateToolUI = function(updateInfo)
+_p._updateToolUI = function(updateInfo)
 {
 	var event = $(window).dispatchEvent(ibxShellApp.msgUpdateToolUI, updateInfo, true, false);
 };
-
+_p.manageCss = function(toolId, add)
+{
+	var tool = this.runningTools[toolId];
+	if(tool && tool.ui && tool.ui.css)
+	{
+		var css = tool.ui.css;
+		if(add)
+		{
+			var style = $("<style type='text/css'>").ibxAddClass(toolId).text(css);
+			$(document.head).append(style);
+		}
+		else
+			$("."+toolId).remove();
+	}
+};
 /*****************************************************************************/
 /* ibxShellTool - plugin for ibx shell application */
 /*****************************************************************************/
 function ibxShellTool(id)
 {
-	if(window._ibxShellTool)
-		return window._ibxShellTool;
-
+	var singletonTool = ibxShellTool.getShellTool();
+	if(singletonTool)
+		return singletonTool;
 	this._id = id;
-	ibx(this._onAppLoaded.bind(this));
-
-	window._ibxShellTool = this;
-	window.getIbxShellTool = function(){return window._ibxShellTool};
 }
 var _p = ibxShellTool.prototype = new Object();
 ibxShellTool.msgToolLoaded = "ibx_shelltoolloaded";
 ibxShellTool.msgGetShellToolResources = "ibx_shelltoolbindresources";
 ibxShellTool.msgActivate = "ibx_shelltoolactivate";
 ibxShellTool.msgUpdateUI = "ibx_shelltoolupdateui";
+
+//statically manage the shell tool.
 ibxShellTool.msgSerialize = "ibx_shelltoolserialize";
+ibxShellTool._shellTool = undefined;
+ibxShellTool.getShellTool = function()
+{
+	var tool = ibxShellTool._shellTool;
+	if(ibxShellTool._shellTool === undefined)
+	{
+		var ibxShellToolId = window.frameElement ? window.frameElement.getAttribute(ibxShellApp.attrShellToolId) : null;
+		if(ibxShellToolId != null && !this._inctor)
+		{
+			this._inctor = true;
+			tool = ibxShellTool._shellTool = new ibxShellTool(ibxShellToolId);
+			this._inctor = false;
+			window.parent.postMessage({"type":ibxShellTool.msgToolLoaded, "id":ibxShellToolId}, "*");
+		}
+	}
+	return tool;	
+};
 
 _p._id = null;
-_p.resources = null;
+_p.shellUI = null;
 _p.getResources = function(jqShell, shellUI, data)
 {
+	shellUI = $.extend(true, {}, shellUI);
 	var curjQuery = window.jQuery;
 	window.jQuery = window.$ = jqShell;
-	var event = $(window).dispatchEvent(ibxShellTool.msgGetShellToolResources, {"shellUI":shellUI, "data":data}, true, false);
+	shellUI = this._getResources(shellUI, data);
 	window.jQuery = window.$ = curjQuery;
-	this.shellUI = (event.data.shellUI || shellUI);
 	return shellUI;
 };
-_p._onAppLoaded = function()
+_p._getResources = function(shellUI, data)
 {
-	window.parent.postMessage({"type":ibxShellTool.msgToolLoaded, "id":this._id}, "*");
+	var event = $(window).dispatchEvent(ibxShellTool.msgGetShellToolResources, {"shellUI":shellUI, "data":data}, true, false);
+	return event.data.shellUI;
 };
 _p.activate = function(activate, updateUI, data)
 {

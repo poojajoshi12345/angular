@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>ibx Shell Tool 1 STANDALONE</title>
+		<meta http-equiv="X-UA-Compatible" content="IE=11">
+		<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+		<meta http-equiv="Pragma" content="no-cache" />
+		<meta http-equiv="Expires" content="0" />
+		<meta name="google" value="notranslate">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<script type="text/javascript" src="../../../resources/ibx.js"></script>
+		<script type="text/javascript">
+			ibx(function(e)
+			{
+				var shellTool = ibxShellTool.getShellTool();
+				if(shellTool)
+				{
+					//setup tool for running as plugin
+					window.addEventListener(ibxShellTool.msgGetShellToolResources, function(e)
+					{
+						var shellTool = ibxShellTool.getShellTool();
+
+						//return cached resrouces if already retrieved.
+						if(shellTool.shellUI)
+						{
+							e.data.shellUI = shellTool.shellUI;
+							return;
+						}
+
+						//donate ui to shell
+						var shellUI = shellTool.shellUI = e.data.shellUI;
+						var shellRes = ibx.resourceMgr.getResource(".tool-container");
+						shellRes = ibx.bindElements(shellRes);
+						shellUI.commands = shellRes.find(".ibx-command");
+						shellUI.menuHelp = shellRes.find(".tool-help-menu").detach();
+						shellUI.menuBar = shellRes.find(".tool-menubar");
+						shellUI.toolBar = shellRes.find(".tool-toolbar");
+						shellUI.cmdPalette = shellRes.find(".cmd-palette").draggable({"handle":".cmd-palette-header"});
+						shellUI.css = ibx.resourceMgr.getResource(".shared-styles").html();
+
+						//add standard command handlers
+						shellUI.commands.filter(".cmd-new-shape").on("ibx_triggered", onNewShape);
+						shellUI.commands.filter(".cmd-del-shape").on("ibx_triggered", onDeleteShape);
+						shellUI.commands.filter(".cmd-about").on("ibx_triggered", onAppAbout);
+						shellUI.commands.filter(".cmd-help").on("ibx_triggered", onAppHelp);
+						shellUI.commands.filter(".cmd-show-palette").on("ibx_triggered", onShowPalette);
+					});
+
+					//plugin specific message handlers...just communicating with the shell
+					window.addEventListener(ibxShellTool.msgSerialize, function(e)
+					{
+						var data = serialize(e.data.read);
+						e.data.data;
+					});
+					$("body", document).on("focusin", function(e)
+					{
+						if(!e.relatedTarget)
+							ibxShellTool.getShellTool().activate(true, true, {"hint":"focusin"});
+					});
+
+					//moving the main app area to the body, as it's the only ui the app has when running as plugin.
+					var shapeContainer = ibx.resourceMgr.getResource(".shape-container");
+					shapeContainer.appendTo("body").on("ibx_selchange", onSelChange);
+				}
+				else
+				{
+					//Setup tool for running standalone
+					var tool = ibx.resourceMgr.getResource(".tool-container", true);
+					tool.find(".cmd-new-shape").on("ibx_triggered", onNewShape);
+					tool.find(".cmd-del-shape").on("ibx_triggered", onDeleteShape);
+					tool.find(".cmd-about").on("ibx_triggered", onAppAbout);
+					tool.find(".cmd-help").on("ibx_triggered", onAppHelp);
+					tool.find(".cmd-show-palette").on("ibx_triggered", onShowPalette);
+					tool.find(".shape-container").on("ibx_selchange", onSelChange);
+					$("body").append(tool);
+				}
+
+				/**************************************************************
+				 * GENERAL COMMAND HANDLERS REGARDLESS OF HOW TOOL IS RUNNING *
+				**************************************************************/
+				function onNewShape(e)
+				{
+					var shape = $("<div tabindex='0' class='tool-shape'>").ibxWidget().uniqueId();
+					$(".shape-container").append(shape);
+				}
+				function onDeleteShape(e)
+				{
+					var sm = $(".shape-container").ibxSelectionManager("instance");
+					selItems = sm.selected();
+					selItems.remove();
+				};
+				function onAppAbout(e)
+				{
+					alert("Tool for Drawing Squares!");
+				};
+				function onAppHelp(e)
+				{
+					alert("Open Square tool help page!");
+				};
+				function onShowPalette(e)
+				{
+					console.warn("iframes are disabled when popups are open...this is a problem!");
+					var shellTool = ibxShellTool.getShellTool();
+					var pal = (shellTool) ? shellTool.shellUI.cmdPalette : $(".cmd-palette");
+					var isOpen = pal.ibxWidget("isOpen");
+					pal.ibxWidget(isOpen ? "close" : "open");
+				}
+				function onSelChange(e)
+				{
+					var selItems = getSelectedItems();
+					$(".cmd-del-shape").ibxWidget("option", "disabled", !selItems.length);
+
+					//running as plugin...communicate with the shell.
+					var shellTool = ibxShellTool.getShellTool();
+					if(shellTool)
+					{
+						shellTool.shellUI.commands.filter(".cmd-del-shape").ibxWidget("option", "disabled", !selItems.length);
+						shellTool.activate(true, true, {"hint":"selchange", "items":selItems});
+					}
+				};
+				function getSelectedItems()
+				{
+					var sm = $(".shape-container").ibxSelectionManager("instance");
+					var ids = sm.selected().map(function(idx, item)
+					{
+						return item.id;
+					});
+					return ids.toArray();
+				}
+				function serialize(read)
+				{
+					if(!read)//writing out
+					{
+						var data = {};
+						var items = $(".tool-shape");
+						items.each(function(idx, el)
+						{
+							var style = window.getComputedStyle(el);
+							var item = {};
+							item.type = "square",
+							item.width = style.width;
+							item.height = style.height;
+							item.border = style.border;
+							item.background = style.backgroundColor;
+							data[el.id] = item;
+						});
+						return JSON.stringify(data);
+
+					}
+					else//reading in
+					{
+					}
+				}
+			}, [{src:"./shell.tool1.res.xml", loadContext:"app"}], true);
+		</script>
+		<style type="text/css">
+		</style>
+	</head>
+	<body class="ibx-root">
+	</body>
+</html>
+
+
