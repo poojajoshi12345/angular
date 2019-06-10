@@ -191,6 +191,7 @@ $.widget("ibi.ibxDataGridSelectionManager", $.ibi.ibxSelectionManager,
 			this.selectableChildren().ibxRemoveClass("ibx-sm-selectable");
 			this.updateSelectableCache();
 			this.options.selectableChildren = value ? ".dgrid-row" : ".dgrid-cell";
+			this.element.ibxToggleClass("dgrid-sm-row-select", value);
 		}
 		this._super(key, value);
 	},
