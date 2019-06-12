@@ -8,48 +8,12 @@
 		<meta http-equiv="Expires" content="0" />
 		<meta name="google" value="notranslate">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<script type="text/javascript" src="../../resources/etc/jquery/jquery-3.3.1.js"></script>
+		<script type="text/javascript" src="../../resources/ibx.js"></script>
 		<script type="text/javascript">
-				function foo(o)
-				{
-					var a = "xxx"
-					console.log("a is ${a}");
-				}
-
-			window.addEventListener("load", function(e)
+			ibx(function()
 			{
-				$(".btn-new").on("click", function(e)
-				{
-					var shape = new Shape(100, 100, 100, 200);
-					var elem = shape.getElem();
-					elem.on("click", function(e)
-					{
-						selectShape(e.target);
-					})
-					$("body").append(elem);
-				});
-
-				function selectShape(shapeElem)
-				{
-					var shape = shapeElem._shape;
-					shape.selected();
-				}
-				function Shape(x, y, w, h)
-				{
-					this._elem = $("<div class='shape'>").css({left:x, top:y, width:w, height:h});
-					this._elem[0]._shape = this;
-				}
-				var _p = Shape.prototype = new Object();
-				_p_elem = null;
-				_p.getElem = function()
-				{
-					return this._elem;
-				};
-				_p.selected = function(sel)
-				{
-					this.getElem().toggleClass("selected");
-				};
-			});
+				var tool = ibxShellTool.getShellTool("test_tool");
+			}, true);
 		</script>
 		<style type="text/css">
 			body
@@ -60,23 +24,22 @@
 				height:100%;
 				box-sizing:border-box;
 			}
-			.shape
+			.wf-ui
 			{
-				position:absolute;
-				width:100px;
-				height:100px;
+				padding:2px;
+				margin:2px;
 				border:1px solid black;
-				background-color:white;
-			}
-			.selected
-			{
-				background-color:pink;
-				border:2px solid red;
 			}
 		</style>
 	</head>
 	<body class="ibx-root">
-		<button class="btn-new">New Shape</button>
+		<div tabindex="0" class="wf-ui">Before UI</div>
+		<div tabindex="0" class="wf-ui" data-ibx-type="ibxRadioGroup" data-ibxp-nav-key-reset-focus-on-blur="false">
+			<div tabindex="-1" class="wf-ui" data-ibx-type="ibxRadioButton">Button</div>
+			<div tabindex="-1" class="wf-ui" data-ibx-type="ibxRadioButton">Button</div>
+			<div tabindex="-1" class="wf-ui" data-ibx-type="ibxRadioButton">Button</div>
+		</div>
+		<div tabindex="0" class="wf-ui">After UI</div>
 	</body>
 </html>
 
