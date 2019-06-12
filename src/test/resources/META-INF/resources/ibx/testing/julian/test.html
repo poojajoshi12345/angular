@@ -10,57 +10,10 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<script type="text/javascript" src="../../resources/ibx.js"></script>
 		<script type="text/javascript">
-			ibx(function(e)
+			ibx(function()
 			{
-				var grid = $(".test-grid");
-				var colMap = 
-				[
-					{title:"Col 1", size:"100px", visible:true},
-					{title:"Col 2", size:"200px", visible:true},
-					{title:"Col 3", size:"100px", visible:true},
-				]
-				grid.ibxWidget("option", "colMap", colMap);
-
-				var rows =  [];
-				for(var i = 0; i < 5; ++i)
-				{
-					var row = $("<div>").ibxDataGridRow();
-					rows.push(row);
-
-					$.each(colMap, function(idx, colInfo)
-					{
-						var cell = $("<div>").text(sformat("Cell {1}/{2}", i, idx));
-						row.append(cell);
-					});
-				}
-				grid.ibxWidget("addRows", rows).ibxWidget("updateHeaders");			
-
-
-				$(".test-check").on("click", function(e)
-				{
-					var btn = $(e.currentTarget);
-					var checked = btn.ibxWidget("checked");
-					var grid = $(".test-grid");
-
-
-					var colMap = grid.ibxWidget("option", "colMap");
-					colMap[0].visible = checked;
-					grid.ibxWidget("option", "colMap", colMap);
-
-					grid.ibxWidget("removeAll");
-					grid.ibxWidget("addRows", rows);
-				})
-
-				$(".test-btn-up, .test-btn-down").on("click", function(e)
-				{
-					var grid = $(".test-grid");
-					var selItems = grid.ibxWidget("getSelectionManager").selected();
-					var up = $(e.currentTarget).is(".test-btn-up");
-					var target = up ? selItems.first().prev() : selItems.last().next();
-					grid.ibxWidget("addRows", selItems, target, up);	
-				});
-
-			},true);
+				var tool = ibxShellTool.getShellTool("test_tool");
+			}, true);
 		</script>
 		<style type="text/css">
 			body
@@ -71,20 +24,22 @@
 				height:100%;
 				box-sizing:border-box;
 			}
-			.test-grid
+			.wf-ui
 			{
-				margin:20px;
-				width: 500px;
-				height: 200px;
+				padding:2px;
+				margin:2px;
 				border:1px solid black;
 			}
 		</style>
 	</head>
 	<body class="ibx-root">
-		<div class="test-check" data-ibx-type="ibxCheckBoxSimple" data-ibxp-checked="true">Show Col 0</div>
-		<div class="test-btn-up" data-ibx-type="ibxButton" data-ibxp-checked="true">Move Up</div>
-		<div class="test-btn-down" data-ibx-type="ibxButton" data-ibxp-checked="true">Move Down</div>
-		<div tabindex="0" class="test-grid" data-ibx-type="ibxDataGrid" data-ibxp-show-row-headers="false" data-ibxp-row-select="true"></div>
+		<div tabindex="0" class="wf-ui">Before UI</div>
+		<div tabindex="0" class="wf-ui" data-ibx-type="ibxRadioGroup" data-ibxp-nav-key-reset-focus-on-blur="false">
+			<div tabindex="-1" class="wf-ui" data-ibx-type="ibxRadioButton">Button</div>
+			<div tabindex="-1" class="wf-ui" data-ibx-type="ibxRadioButton">Button</div>
+			<div tabindex="-1" class="wf-ui" data-ibx-type="ibxRadioButton">Button</div>
+		</div>
+		<div tabindex="0" class="wf-ui">After UI</div>
 	</body>
 </html>
 

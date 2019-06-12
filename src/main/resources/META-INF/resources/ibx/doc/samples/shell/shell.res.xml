@@ -146,7 +146,7 @@
 				<div class="wf-ui title-bar" data-ibx-type="ibxHBox" data-ibxp-align="center">
 					<div class="title-caption" data-ibx-type="ibxLabel" data-ibxp-glyph-classes="fa fa-gear">Tool Window</div>
 					<div style="flex:1 1 auto;"></div>
-					<div class="wf-ui title-close" data-ibx-type="ibxButtonSimple" data-ibxp-glyph-classes="fa fa-close"></div>
+					<div class="wf-ui title-close" data-ibx-type="ibxButtonSimple" data-ibxp-glyph-classes="fas fa-times"></div>
 				</div>
 				<div class="wf-ui tool-content" data-ibx-type="ibxWidget" data-ibxp-align="stretch"></div>
 			</div>

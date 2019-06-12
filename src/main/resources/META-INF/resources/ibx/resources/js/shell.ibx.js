@@ -94,7 +94,7 @@ _p.manageCss = function(toolId, add)
 /*****************************************************************************/
 function ibxShellTool(id)
 {
-	var singletonTool = ibxShellTool.getShellTool();
+	var singletonTool = ibxShellTool.getShellTool(id);
 	if(singletonTool)
 		return singletonTool;
 	this._id = id;
@@ -108,12 +108,12 @@ ibxShellTool.msgUpdateUI = "ibx_shelltoolupdateui";
 //statically manage the shell tool.
 ibxShellTool.msgSerialize = "ibx_shelltoolserialize";
 ibxShellTool._shellTool = undefined;
-ibxShellTool.getShellTool = function()
+ibxShellTool.getShellTool = function(id)
 {
 	var tool = ibxShellTool._shellTool;
 	if(ibxShellTool._shellTool === undefined)
 	{
-		var ibxShellToolId = window.frameElement ? window.frameElement.getAttribute(ibxShellApp.attrShellToolId) : null;
+		var ibxShellToolId = window.frameElement ? window.frameElement.getAttribute(ibxShellApp.attrShellToolId) : id;
 		if(ibxShellToolId != null && !this._inctor)
 		{
 			this._inctor = true;
