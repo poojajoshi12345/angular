@@ -113,7 +113,7 @@ ibxShellTool.getShellTool = function(id)
 	var tool = ibxShellTool._shellTool;
 	if(ibxShellTool._shellTool === undefined)
 	{
-		var ibxShellToolId = window.frameElement ? window.frameElement.getAttribute(ibxShellApp.attrShellToolId) : id;
+		var ibxShellToolId = (window.frameElement && !id) ? window.frameElement.getAttribute(ibxShellApp.attrShellToolId) : id;
 		if(ibxShellToolId != null && !this._inctor)
 		{
 			this._inctor = true;
