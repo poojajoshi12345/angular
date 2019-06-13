@@ -94,11 +94,11 @@
 						<div tabindex="0" class="text-entry num-cols" data-ibx-type="ibxLabel" data-ibxp-justify="center">10</div>
 						<div class="" data-ibx-type="ibxLabel" data-ibxp-for=".num-rows">Rows:</div>
 						<div tabindex="0" class="text-entry num-rows" data-ibx-type="ibxLabel" data-ibxp-justify="center">100</div>
+						<div tabindex="0" class="btn-row-select" data-ibx-type="ibxCheckBoxSimple" data-ibxp-checked="false">Row Select</div>
 						<div tabindex="0" class="btn-col-headers" data-ibx-type="ibxCheckBoxSimple" data-ibxp-checked="true">Show Column Headings</div>
 						<div tabindex="0" class="btn-row-headers" data-ibx-type="ibxCheckBoxSimple" data-ibxp-checked="true">Show Row Headings</div>
-						<div tabindex="0" class="btn-row-select" data-ibx-type="ibxCheckBoxSimple" data-ibxp-checked="false">Select Rows</div>
-						<div tabindex="0" class="btn-hide-cols" data-ibx-type="ibxCheckBoxSimple" data-ibxp-checked="false">Hide Even Columns</div>
-						<div tabindex="0" class="btn-hide-rows" data-ibx-type="ibxCheckBoxSimple" data-ibxp-checked="false">Hide Even Rows</div>
+						<div tabindex="0" class="btn-hide-cols" data-ibx-type="ibxButton">Toggle Even Columns</div>
+						<div tabindex="0" class="btn-hide-rows" data-ibx-type="ibxButton">Toggle Even Rows</div>
 					</div>
 					<div tabindex="0" class="test-grid" style="border:1px solid #ccc;margin:5px;height:500px;" data-ibx-type="ibxDataGrid"></div>
 				</div>
