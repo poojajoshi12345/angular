@@ -115,6 +115,10 @@
 {
 	background-color:thistle;
 }
+.dgrid-grid.dgrid-sm-row-select .dgrid-cell:hover
+{
+	background-color:inherit;
+}
 .dgrid-cell.ibx-sm-selected
 {
 	color:white;
