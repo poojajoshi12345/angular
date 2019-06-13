@@ -92,11 +92,12 @@ _p.manageCss = function(toolId, add)
 /*****************************************************************************/
 /* ibxShellTool - plugin for ibx shell application */
 /*****************************************************************************/
-function ibxShellTool()
+function ibxShellTool(id)
 {
 	var singletonTool = ibxShellTool.getShellTool();
 	if(singletonTool)
 		return singletonTool;
+	this._id = id;
 }
 var _p = ibxShellTool.prototype = new Object();
 ibxShellTool.msgToolLoaded = "ibx_shelltoolloaded";
