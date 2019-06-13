@@ -16,6 +16,7 @@
 	<properties>
 		<com.fasterxml.jackson.version>2.9.8</com.fasterxml.jackson.version>
 		<derby.version>10.14.2.0</derby.version>
+        <ibi.doc.root>${project.build.directory}/ibi-doc-root</ibi.doc.root>
 		<jacoco.maven.plugin.version>0.8.3</jacoco.maven.plugin.version>
 		<javax.servlet.api.version>3.1.0</javax.servlet.api.version>
 		<javax.servlet.jsp.api.version>2.3.3</javax.servlet.jsp.api.version>
@@ -359,7 +360,7 @@
 											<version>${project.version}</version>
 											<classifier>bin</classifier>
 											<type>zip</type>
-											<outputDirectory>${project.build.directory}/ibi-doc-root</outputDirectory>
+											<outputDirectory>${ibi.doc.root}</outputDirectory>
 										</artifactItem>
 										<artifactItem>
 											<groupId>com.ibi</groupId>
@@ -367,7 +368,7 @@
 											<version>${project.version}</version>
 											<classifier>bin</classifier>
 											<type>zip</type>
-											<outputDirectory>${project.build.directory}/ibi-doc-root</outputDirectory>
+											<outputDirectory>${ibi.doc.root}</outputDirectory>
 										</artifactItem>
 										<artifactItem>
 											<groupId>com.ibi</groupId>
@@ -404,15 +405,15 @@
 							<systemProperties>
 								<systemProperty>
 									<name>IBI_DOCUMENT_ROOT</name>
-									<value>${project.build.directory}/ibi-doc-root</value>
+									<value>${ibi.doc.root}</value>
 								</systemProperty>
 								<systemProperty>
 									<name>webfocus_connection_path</name>
-									<value>${project.build.directory}/ibi-doc-root/client/wfc/etc</value>
+									<value>${ibi.doc.root}/client/wfc/etc</value>
 								</systemProperty>
 								<systemProperty>
 									<name>IBI_Log_Directory</name>
-									<value>${project.build.directory}/ibi-doc-root/logs</value>
+									<value>${ibi.doc.root}/logs</value>
 								</systemProperty>
 								<systemProperty>
 									<name>JUNIT_CONFIG_NAME</name>
