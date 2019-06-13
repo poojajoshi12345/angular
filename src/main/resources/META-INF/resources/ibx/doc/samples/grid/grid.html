@@ -47,11 +47,24 @@
 					}
 				});
 
-				$(".btn-col-headers, .btn-row-headers, .btn-hide-cols, .btn-hide-rows").on("ibx_change", function(e)
+				$(".btn-col-headers, .btn-row-headers, .btn-row-select").on("ibx_change", function(e)
 				{
 					updateDataGridSettings();
 				});
-
+				$(".btn-hide-cols, .btn-hide-rows").on("click", function(e)
+				{
+					var grid = $(".test-grid");
+					var hideCols = $(e.currentTarget).is(".btn-hide-cols");
+					if(hideCols)
+					{
+						this._showEvenCols = !this._showEvenCols;
+						var nCols = grid.ibxWidget("getColumnCount");
+						for(var i = 0; i < nCols; ++i)
+							grid.ibxWidget("showColumn", i, (i%2 == 0) ? this._showEvenCols : true);
+					}
+					else
+						grid.ibxWidget("showRow", ":even", (this._showEvenRows = !this._showEvenRows))
+				});
 				$(".btn-load").on("click", function(e)
 				{
 					var rows = [];
@@ -85,8 +98,6 @@
 				function updateDataGridSettings()
 				{
 					var grid = $(".ibx-data-grid");
-					var hideCols = $(".btn-hide-cols").ibxWidget("checked");
-					var hideRows = $(".btn-hide-rows").ibxWidget("checked");
 					var colMap = [];
 					var nCols = parseInt($(".num-cols").text(), 10);
 					for(var i = 0; i < nCols; ++i)
@@ -97,6 +108,7 @@
 						"colMap":colMap,
 						"showColumnHeaders":$(".btn-col-headers").ibxWidget("checked"),
 						"showRowHeaders":$(".btn-row-headers").ibxWidget("checked"),
+						"rowSelect":$(".btn-row-select").ibxWidget("checked"),
 						"defaultColConfig":{"resizable":true}
 					});
 				}
