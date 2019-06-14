@@ -2,7 +2,7 @@
 <!--$Revision: 1.9 $:-->
 <script type="text/javascript">
 	var path = "./samples/helloworld/"
-	var app = $.get(path + "helloworld.jsp").done(function(path, content, status, xhr)
+	var app = $.get(path + "helloworld.html").done(function(path, content, status, xhr)
 	{
 		content = content.replace(/</g, "&lt;");
 		$(".figure-helloworld-app").append(content);
