@@ -13,7 +13,7 @@
 			ibx(function()
 			{
 				var grid = $(".test-grid");
-				var nCols = 5;
+				var nCols = 3;
 				var nRows = 10;
 				var colMap = [];
 				var rows = [];
@@ -29,7 +29,7 @@
 						if(i > 0)
 							continue;
 
-						var colInfo = {title:"col " + j, size:"100px"}
+						var colInfo = {title:"col " + j, size:"50px"}
 						colMap.push(colInfo);
 					}
 				}
@@ -67,8 +67,6 @@
 	</head>
 	<body class="ibx-root" data-ibx-type="ibxHBox" data-ibxp-align="center">
 		<div tabindex="0" class="wf-ui test-grid" data-ibx-type="ibxDataGrid"></div>
-		<div class="test-splitter" data-ibx-type="ibxSplitter" data-ibxp-el1=".test-grid" data-ibxp-el2=".test-label"></div>
-		<div class="wf-ui test-label" data-ibx-type="ibxLabel">TEST LABEL</div>
 	</body>
 </html>
 
