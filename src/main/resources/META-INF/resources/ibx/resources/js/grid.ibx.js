@@ -656,6 +656,7 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 				{
 					cHeading.css("flex", "1 1 auto");
 					this.getColumn(i).css("flex", "1 1 auto");
+					splitter.detach(); //flex columns don't have splitters
 					flexing = true;
 				}
 				else
