@@ -12,7 +12,30 @@
 		<script type="text/javascript">
 			ibx(function()
 			{
-				var tool = ibxShellTool.getShellTool("test_tool");
+				var grid = $(".test-grid");
+				var nCols = 5;
+				var nRows = 10;
+				var colMap = [];
+				var rows = [];
+				for(var i = 0; i < nRows; ++i)
+				{
+					var row = $("<div>").ibxDataGridRow();
+					rows.push(row);
+
+					for(var j = 0; j < nCols; ++j)
+					{
+						var cell = $(sformat("<div>Cell {1}/{2}</div>", i, j));
+						row.append(cell);
+						if(i > 0)
+							continue;
+
+						var colInfo = {title:"col " + j, size:"100px"}
+						colMap.push(colInfo);
+					}
+				}
+				grid.ibxWidget("addRows", rows);
+				grid.ibxWidget("option", "colMap", colMap);
+				grid.ibxWidget("updateHeaders");
 			}, true);
 		</script>
 		<style type="text/css">
@@ -26,20 +49,26 @@
 			}
 			.wf-ui
 			{
+				width:1px;
 				padding:2px;
 				margin:2px;
 				border:1px solid black;
 			}
+			.test-grid
+			{
+				flex:3 3 auto;
+				height:300px;
+			}
+			.test-label
+			{
+				flex:1 1 auto;
+			}
 		</style>
 	</head>
-	<body class="ibx-root">
-		<div tabindex="0" class="wf-ui">Before UI</div>
-		<div tabindex="0" class="wf-ui" data-ibx-type="ibxRadioGroup" data-ibxp-nav-key-reset-focus-on-blur="false">
-			<div tabindex="-1" class="wf-ui" data-ibx-type="ibxRadioButton">Button</div>
-			<div tabindex="-1" class="wf-ui" data-ibx-type="ibxRadioButton">Button</div>
-			<div tabindex="-1" class="wf-ui" data-ibx-type="ibxRadioButton">Button</div>
-		</div>
-		<div tabindex="0" class="wf-ui">After UI</div>
+	<body class="ibx-root" data-ibx-type="ibxHBox" data-ibxp-align="center">
+		<div tabindex="0" class="wf-ui test-grid" data-ibx-type="ibxDataGrid"></div>
+		<div class="test-splitter" data-ibx-type="ibxSplitter" data-ibxp-el1=".test-grid" data-ibxp-el2=".test-label"></div>
+		<div class="wf-ui test-label" data-ibx-type="ibxLabel">TEST LABEL</div>
 	</body>
 </html>
 

@@ -939,7 +939,7 @@ MediaQuery.removeQuery = function (name)
 MediaQuery._onMediaQueryListEvent = function(mql)
 {
 	var mql = (mql.target) ? mql.target : mql;
-	$(window).trigger(MediaQuery.EVENT_MEDIA_CHANGE, mql);
+	$(window).dispatchEvent(MediaQuery.EVENT_MEDIA_CHANGE, mql, false, false);
 };
 MediaQuery.setViewPort = function(vpInfo)
 {

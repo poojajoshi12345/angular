@@ -16,7 +16,11 @@
 				font-weight:bold;
 				padding:10px;
 			}
-
+			.grid-tabs
+			{
+				width:100%;
+				box-sizing:border-box;
+			}
 			.toolbar
 			{
 				margin-bottom:5px;
@@ -40,38 +44,31 @@
 			{
 				margin-left:10px;
 			}
-
 			.grid-tabs > .ibx-tab-page
 			{
 				padding:10px;
 			}
-
 			.grid-tool-bar
 			{
 				padding:3px;
 				border:1px solid #ccc;
 			}
-
 			.grid, .flex-grid
 			{
 				border:1px solid black;
 			}
-
 			.cell-label, .grid-label, .button-group
 			{
 				margin-right:3px;
 			}
-
 			.chk-box-inline
 			{
 				margin-left:3px;
 			}
-
 			.grid-cell, .flex-grid-cell
 			{
 				border:1px solid red;
 			}
-
 			.cell
 			{
 				border:1px solid black;
