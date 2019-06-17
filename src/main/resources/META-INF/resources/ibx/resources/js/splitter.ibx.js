@@ -9,6 +9,8 @@ $.widget("ibi.ibxSplitter", $.ibi.ibxWidget,
 		"resize":"both",
 		"locked":false,
 		"autoReset":true,
+		"el1":null,
+		"el2":null,
 	},
 	_widgetClass:"ibx-splitter",
 	_create:function()
@@ -19,29 +21,31 @@ $.widget("ibi.ibxSplitter", $.ibi.ibxWidget,
 	},
 	_onSplitterMouseEvent:function(e)
 	{
-		var bVertical = (this.options.orientation == "vertical");
+		var options = this.options;
+		var bVertical = (options.orientation == "vertical");
 		var eType = e.type;
 
 		//locked so no action taken.
-		if(this.options.locked)
+		if(options.locked)
 			return;
+
+		var el1 = options.el1 ? $(options.el1) : this.element.prevAll(":visible").first();
+		var el2 = options.el2 ? $(options.el2) : this.element.nextAll(":visible").first()
 
 		if(eType == "mousedown")
 		{
 			if(!this._initialized)
 			{
 				//save initial sizes for dblclick reset.
-				var e1 = this.element.prevAll(":visible").first();
-				this._e1Info = {el:e1, width:e1.width(), height:e1.height()};
-				var e2 = this.element.nextAll(":visible").first();
-				this._e2Info =  {el:e2, width:e2.width(), height:e2.height()};
+				this._e1Info = {el:el1, width:el1.width(), height:el1.height()};
+				this._e2Info =  {el:el2, width:el2.width(), height:el2.height()};
 				this._initialized = true;
 			}
 
 			$(document.body).ibxAddClass(bVertical ? "ibx-body-splitter-v" : "ibx-body-splitter-h").css("pointerEvents", "none");
 			$(document).on("mouseup mousemove", this._fnSplitterMouseEvent);
 			this._eLast = e;
-			this._trigger("resizestart", null, { "el1": this.element.prev(), "el2": this.element.next() });
+			this._trigger("resizestart", null, { "el1":el1, "el2":el2});
 		}
 		else
 		if(eType == "mouseup")
@@ -49,15 +53,12 @@ $.widget("ibi.ibxSplitter", $.ibi.ibxWidget,
 			$(document.body).ibxRemoveClass("ibx-body-splitter-v ibx-body-splitter-h").css("pointerEvents", "");
 			$(document).off("mouseup mousemove", this._fnSplitterMouseEvent);
 			delete this._eLast;
-			this._trigger("resizeend", null, { "el1": this.element.prev(), "el2": this.element.next() });
+			this._trigger("resizeend", null, { "el1":el1, "el2":el2});
 		}
 		else
 		if(eType == "mousemove")
 		{
-			var options = this.options
 			var oe = e.originalEvent;
-			var el1 = this.element.prevAll(":visible").first();
-			var el2= this.element.nextAll(":visible").first();
 			var s1= bVertical ? el1.width() : el1.height();
 			var s2 = bVertical ? el2.width() : el2.height();
 			var m1 = parseInt(el1.css(bVertical ? "min-width" : "min-height"), 10);
@@ -77,10 +78,10 @@ $.widget("ibi.ibxSplitter", $.ibi.ibxWidget,
 
 			//set the actual widths
 			if(options.resize == "both" || options.resize == "first")
-				bVertical ? el1.width(s1Val) : el1.height(s1Val);
+				bVertical ? el1.width(s1Val).css("flex", "0 0 auto") : el1.height(s1Val).css("flex", "0 0 auto");
 
 			if(options.resize == "both" || options.resize == "second")
-				bVertical ? el2.width(s2Val) : el2.height(s2Val);
+				bVertical ? el2.width(s2Val).css("flex", "0 0 auto") : el2.height(s2Val).css("flex", "0 0 auto");
 
 			this._trigger("resize", null, { "el1": el1, "el2": el2, "dx": dx, "dy": dy });
 			this._eLast = e;

@@ -55,8 +55,10 @@
 }
 .dgrid-header-col
 {
+	position:relative;
 	flex:0 0 auto;
 	padding:.5em;
+	border-right:1px solid #ccc;
 }
 .dgrid-header-row
 {
@@ -65,12 +67,16 @@
 	padding:0px 1em 0px 1em;
 	border-bottom:1px solid #ccc;
  }
-.dgrid-header-col-splitter
+.dgrid-header-col-splitter.ibx-splitter
 {
+	position: absolute;
+	right:0px;
+	top:0px;
+	bottom:0px;
 	min-width:0px;
 	width:5px;
 	background-color:transparent;
-	border-right:1px solid #ccc;
+	z-index: 1;
 }
 .dgrid-grid
 {

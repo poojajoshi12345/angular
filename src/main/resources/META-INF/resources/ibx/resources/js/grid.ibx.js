@@ -630,6 +630,7 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 
 		if(which == "column" || which == "both")
 		{
+			//this._colHeaderBar.empty();
 			this._colHeaderBar.ibxWidget("remove");
 
 			var flexing = false;
@@ -645,23 +646,22 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 
 				//make splitter
 				var splitter = $(sformat("<div class='{1}'>", classes.colHeaderSplitterClass));
-				splitter.ibxSplitter({locked:!cInfo.resizable, resize:"first"}).on("ibx_resize ibx_reset", this._onSplitterResize.bind(this));
+				splitter.ibxSplitter({locked:!cInfo.resizable, resize:"first", el1:cHeading}).on("ibx_resize ibx_reset", this._onSplitterResize.bind(this));
+				splitter.on("click", function(e){e.stopPropagation()});//click on splitter not click on header!
 
 				//now add the column header and set the size as everything is in the dom.
-				cInfo.ui = {"idx":i, "header":cHeading, "splitter":splitter, "curSize":null};
-				cHeading.data("ibxDataGridCol", cInfo);
-				this._colHeaderBar.ibxWidget("add", [cHeading[0], splitter[0]]);
-				
+				cInfo.ui = {"idx":i, "header":cHeading, "curSize":null};
+				cHeading.append(splitter).data("ibxDataGridCol", cInfo);
+				this._colHeaderBar.ibxWidget("add", cHeading[0]);
 				if(cInfo.size == "flex")
 				{
-					this._grid.ibxWidget("option", "align", "stretch").ibxAddClass("dgrid-grid-flexing");
 					cHeading.css("flex", "1 1 auto");
 					this.getColumn(i).css("flex", "1 1 auto");
+					splitter.detach(); //flex columns don't have splitters
 					flexing = true;
 				}
 				else
 				{
-					this._grid.ibxWidget("option", "align", "start").ibxRemoveClass("dgrid-grid-flexing");
 					cHeading.css("flex", "");
 					this.setColumnWidth(i, cInfo.size);
 				}
@@ -669,9 +669,10 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 				this.showColumn(i, cInfo.visible);
 			}
 
+			//adjust the grid options and padding based on flexing.
+			this._grid.ibxWidget("option", "align", flexing ? "stretch" : "start").ibxToggleClass("dgrid-grid-flexing", flexing);
 			if(!flexing)
 			{
-				//need padding so horizontal scrolling works correctly...need to have at least a scrollbar's width.
 				var padding = $("<div>").css({"flex":"0 0 auto", "width":"50px", height:"1px"});
 				this._colHeaderBar.append(padding);
 			}
@@ -703,7 +704,7 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 	getColumnWidth:function(idxCol)
 	{
 		var cInfo = this.options.colMap[idxCol];
-		return (cInfo && cInfo.ui && cInfo.ui.header) ? cInfo.ui.header.outerWidth() + cInfo.ui.splitter.outerWidth() : cInfo.size;
+		return (cInfo && cInfo.ui && cInfo.ui.header) ? cInfo.ui.header.outerWidth() : cInfo.size;
 	},
 	setColumnWidth:function(idxCol, width)
 	{
@@ -714,10 +715,10 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 			//actual width...AND THEN...we need to subtract out the splitter width...oy vey!
 			cInfo.ui.curSize = width;
 			cInfo.ui.header.outerWidth(width);
-			cInfo.ui.header.outerWidth(cInfo.ui.header.outerWidth() - cInfo.ui.splitter.outerWidth());
+			cInfo.ui.header.outerWidth(cInfo.ui.header.outerWidth());
 
 			var cells = this.getColumn(idxCol);
-			cells.outerWidth(cInfo.ui.header.outerWidth() + cInfo.ui.splitter.outerWidth());
+			cells.outerWidth(cInfo.ui.header.outerWidth());
 		}
 	},
 	getColumn:function(col)
@@ -729,8 +730,12 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 	{
 		var cells = this.getColumn(idxCol);
 		var cInfo = this.options.colMap[idxCol];
-		if(cInfo && cInfo.ui)
-			cells = cells.add(cInfo.ui.header).add(cInfo.ui.splitter);
+		if(cInfo)
+		{
+			cInfo.visible = show;
+			if(cInfo.ui)
+				cells = cells.add(cInfo.ui.header);
+		}
 		cells.ibxToggleClass("dgrid-col-hidden", !show);
 	},
 	selectColumn:function(idxCol, select, addSelection)
@@ -840,10 +845,10 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 	},
 	_onSplitterResize:function(e, resizeInfo)
 	{
-		var sWidth = $(e.target).outerWidth();
 		var el1Width = resizeInfo.el1.outerWidth();
 		var cInfo = resizeInfo.el1.data("ibxDataGridCol");
-		this.setColumnWidth(cInfo.ui.idx, sWidth + el1Width);
+		if(cInfo)
+			this.setColumnWidth(cInfo.ui.idx, el1Width);
 	},
 	_onGridScroll:function(e)
 	{
