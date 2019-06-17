@@ -647,6 +647,7 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 				//make splitter
 				var splitter = $(sformat("<div class='{1}'>", classes.colHeaderSplitterClass));
 				splitter.ibxSplitter({locked:!cInfo.resizable, resize:"first", el1:cHeading}).on("ibx_resize ibx_reset", this._onSplitterResize.bind(this));
+				splitter.on("click", function(e){e.stopPropagation()});//click on splitter not click on header!
 
 				//now add the column header and set the size as everything is in the dom.
 				cInfo.ui = {"idx":i, "header":cHeading, "curSize":null};
