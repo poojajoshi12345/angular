@@ -899,6 +899,7 @@ $.widget("ibi.ibxSplitMenuButton", $.ibi.ibxButtonSimple,
 		if(menu === undefined)
 			return this._menuBtn.ibxWidget("option", "menu");
 		this._menuBtn.ibxWidget("option", "menu", menu);
+		this.refresh();
 	},
 	_onBtnClick:function(e)
 	{
