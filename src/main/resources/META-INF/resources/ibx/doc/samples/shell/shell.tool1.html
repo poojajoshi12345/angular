@@ -44,6 +44,25 @@
 						shellUI.commands.filter(".cmd-about").on("ibx_triggered", onAppAbout);
 						shellUI.commands.filter(".cmd-help").on("ibx_triggered", onAppHelp);
 						shellUI.commands.filter(".cmd-show-palette").on("ibx_triggered", onShowPalette);
+
+						shellUI.toolBar.find(".test-menu-btn").on("ibx_menubuttonmousedown", function(e)
+						{
+							var shellTool = ibxShellTool.getShellTool();
+							shellTool.setResContext(true);
+							var menu = ibx.resourceMgr.getResource(".test-menu");
+							menu.ibxWidget("children").on("click", function(e)
+							{
+								//if you want to call widget functions on the menu items...
+								shellTool.setResContext(true);
+								alert("Menu item " + $(e.currentTarget).ibxWidget("userValue"));
+								shellTool.setResContext(false);
+
+								//if you don't want to call widget functions on the menu items...
+								//alert("Menu item " + $(e.currentTarget).attr("data-user-value"));
+							});
+							$(e.currentTarget).ibxWidget("menu", menu);
+							shellTool.setResContext(false);
+						});
 					});
 
 					//plugin specific message handlers...just communicating with the shell
