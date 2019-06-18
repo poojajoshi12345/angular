@@ -98,12 +98,15 @@ function ibxShellTool(id)
 	if(singletonTool)
 		return singletonTool;
 	this._id = id;
+	this._jqTool = window.jQuery;
 }
 var _p = ibxShellTool.prototype = new Object();
 ibxShellTool.msgToolLoaded = "ibx_shelltoolloaded";
 ibxShellTool.msgGetShellToolResources = "ibx_shelltoolbindresources";
 ibxShellTool.msgActivate = "ibx_shelltoolactivate";
 ibxShellTool.msgUpdateUI = "ibx_shelltoolupdateui";
+
+
 
 //statically manage the shell tool.
 ibxShellTool.msgSerialize = "ibx_shelltoolserialize";
@@ -125,21 +128,29 @@ ibxShellTool.getShellTool = function()
 	return tool;	
 };
 
-_p._id = null;
 _p.shellUI = null;
+_p._id = null;
+_p._jqTool = null;
+_p._jqShell = null;
 _p.getResources = function(jqShell, shellUI, data)
 {
 	shellUI = $.extend(true, {}, shellUI);
-	var curjQuery = window.jQuery;
-	window.jQuery = window.$ = jqShell;
+	this.setResContext(true, jqShell);
 	shellUI = this._getResources(shellUI, data);
-	window.jQuery = window.$ = curjQuery;
+	this.setResContext(false);
 	return shellUI;
 };
 _p._getResources = function(shellUI, data)
 {
 	var event = $(window).dispatchEvent(ibxShellTool.msgGetShellToolResources, {"shellUI":shellUI, "data":data}, true, false);
 	return event.data.shellUI;
+};
+_p.setResContext = function(shell, jqShell)
+{
+	if(shell)
+		this._jqShell = window.jQuery = window.$ = (jqShell || this._jqShell);
+	else
+		window.jQuery = window.$ = this._jqTool;		
 };
 _p.activate = function(activate, updateUI, data)
 {

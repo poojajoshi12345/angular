@@ -89,6 +89,11 @@
 
 	<markup>
 		<markup-block>
+			<div class="test-menu" data-ibx-type="ibxMenu">
+				<div class="test-item" data-ibx-type="ibxMenuItem" data-ibxp-user-value="1">Menu Item</div>
+				<div class="test-item" data-ibx-type="ibxMenuItem" data-ibxp-user-value="1">Menu Item</div>
+				<div class="test-item" data-ibx-type="ibxMenuItem" data-ibxp-user-value="1">Menu Item</div>
+			</div>
 			<div class="tool-container" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
 				<div class="tool-menubar" data-ibx-type="ibxMenuBar">
 					<div data-ibx-type="ibxMenuButton">Edit
@@ -104,6 +109,7 @@
 				</div>
 
 				<div class="tool-toolbar" data-ibx-type="ibxHBox" data-ibxp-align="center">
+					<div tabindex="0" title="Test menu button" class="tbar-btn test-menu-btn" data-ibx-type="ibxSplitMenuButton">Test Menu Button</div>
 					<div tabindex="0" title="New Shape" class="tbar-btn tbar-btn-new" data-ibx-type="ibxButton" data-ibxp-command="cmdNewShape" data-ibxp-glyph-classes="fas fa-plus-square"></div>
 					<div tabindex="0" title="Delete Shape" class="tbar-btn tbar-btn-delete" data-ibx-type="ibxButton" data-ibxp-command="cmdDelShape" data-ibxp-glyph-classes="fas fa-trash"></div>
 					<div class="tbar-sep"></div>

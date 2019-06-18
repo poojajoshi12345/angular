@@ -899,6 +899,7 @@ $.widget("ibi.ibxSplitMenuButton", $.ibi.ibxButtonSimple,
 		if(menu === undefined)
 			return this._menuBtn.ibxWidget("option", "menu");
 		this._menuBtn.ibxWidget("option", "menu", menu);
+		this.refresh();
 	},
 	_onBtnClick:function(e)
 	{
@@ -924,6 +925,9 @@ $.widget("ibi.ibxSplitMenuButton", $.ibi.ibxButtonSimple,
 	{
 		if(e.type == "mousedown")
 		{
+			var event = $.Event(e.origionalEvent);
+			event.type = "ibx_menubuttonmousedown";
+			this.element.trigger(event);
 			var menu = this._menuBtn.ibxWidget("option", "menu");
 			menu.css("minWidth", this.element.css("width"));
 		}
