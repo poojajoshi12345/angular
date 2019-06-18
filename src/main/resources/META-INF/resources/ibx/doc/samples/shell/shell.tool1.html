@@ -52,9 +52,13 @@
 							var menu = ibx.resourceMgr.getResource(".test-menu");
 							menu.ibxWidget("children").on("click", function(e)
 							{
+								//if you want to call widget functions on the menu items...
 								shellTool.setResContext(true);
 								alert("Menu item " + $(e.currentTarget).ibxWidget("userValue"));
 								shellTool.setResContext(false);
+
+								//if you don't want to call widget functions on the menu items...
+								//alert("Menu item " + $(e.currentTarget).attr("data-user-value"));
 							});
 							$(e.currentTarget).ibxWidget("menu", menu);
 							shellTool.setResContext(false);

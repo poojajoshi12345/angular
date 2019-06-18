@@ -90,9 +90,9 @@
 	<markup>
 		<markup-block>
 			<div class="test-menu" data-ibx-type="ibxMenu">
-				<div class="test-item" data-ibx-type="ibxMenuItem" data-ibxp-user-value="1">Menu Item</div>
-				<div class="test-item" data-ibx-type="ibxMenuItem" data-ibxp-user-value="1">Menu Item</div>
-				<div class="test-item" data-ibx-type="ibxMenuItem" data-ibxp-user-value="1">Menu Item</div>
+				<div class="item1 test-item" data-ibx-type="ibxMenuItem" data-ibxp-user-value="1" data-user-value="1">Menu Item 1</div>
+				<div class="test-item" data-ibx-type="ibxMenuItem" data-ibxp-user-value="2" data-user-value="1">Menu Item 2</div>
+				<div class="test-item" data-ibx-type="ibxMenuItem" data-ibxp-user-value="3" data-user-value="1">Menu Item 3</div>
 			</div>
 			<div class="tool-container" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
 				<div class="tool-menubar" data-ibx-type="ibxMenuBar">
