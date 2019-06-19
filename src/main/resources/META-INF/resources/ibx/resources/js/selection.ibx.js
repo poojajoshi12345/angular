@@ -362,7 +362,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 
 			if(el.length)
 			{
-				var evt = this._dispatchEvent("ibx_beforeselchange", {"selected":select, "items":el, "selModel":this, "anchor":this._elAnchor, "focus":this._elFocus}, true, true);
+				var evt = this._dispatchEvent("ibx_beforeselchange", {"selected":select, "items":el, "selMgr":this, "anchor":this._elAnchor, "focus":this._elFocus}, true, true);
 				if(!evt.isDefaultPrevented())
 				{
 					el = evt.data.items;
@@ -371,7 +371,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 						this.anchor(el.first());
 					if(focus)
 						this.focus(el.last());
-					this._dispatchEvent("ibx_selchange", {"selected":select, "items":el, "selModel":this, "anchor":this._elAnchor, "focus":this._elFocus}, true, false);
+					this._dispatchEvent("ibx_selchange", {"selected":select, "items":el, "selMgr":this, "anchor":this._elAnchor, "focus":this._elFocus}, true, false);
 				}
 			}
 		}
@@ -380,7 +380,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 			el = $(el).filter(".ibx-sm-selected");
 			if(el.length)
 			{
-				var evt = this._dispatchEvent("ibx_beforeselchange",{"selected":select, "items":el, "selModel":this, "anchor":this._elAnchor, "focus":this._elFocus}, true, true);
+				var evt = this._dispatchEvent("ibx_beforeselchange",{"selected":select, "items":el, "selMgr":this, "anchor":this._elAnchor, "focus":this._elFocus}, true, true);
 				if(!evt.isDefaultPrevented())
 				{
 					el.ibxRemoveClass("ibx-sm-selected").attr("aria-selected", null);
@@ -388,7 +388,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 						this.anchor(null);
 					if(focus && el.is(this._elFocus))
 						this.focus(null);
-					this._dispatchEvent("ibx_selchange", {"selected":select, "items":el, "selModel":this, "anchor":this._elAnchor, "focus":this._elFocus}, true, false);
+					this._dispatchEvent("ibx_selchange", {"selected":select, "items":el, "selMgr":this, "anchor":this._elAnchor, "focus":this._elFocus}, true, false);
 				}
 			}
 		}
@@ -431,7 +431,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 			var relTarget = this._elAnchor[0];
 			this._elAnchor.ibxRemoveClass("ibx-sm-anchor");
 			this._elAnchor = $(el).first().ibxAddClass("ibx-sm-anchor");
-			var evt = this._dispatchEvent("ibx_anchored", {"anchor":this._elAnchor[0], "focus":this._elFocus[0], "selModel":this}, true, false, relTarget);
+			var evt = this._dispatchEvent("ibx_anchored", {"anchor":this._elAnchor[0], "focus":this._elFocus[0], "selMgr":this}, true, false, relTarget);
 		}
 		return this._elAnchor[0];
 	},
@@ -456,7 +456,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 			if(!this._elFocus.is(document.activeElement))
 			{
 				this._elFocus.focus();
-				this._dispatchEvent("ibx_focused", {"focus":this._elFocus[0], "anchor":this._elAnchor[0], "selModel":this}, true, false, relTarget);
+				this._dispatchEvent("ibx_focused", {"focus":this._elFocus[0], "anchor":this._elAnchor[0], "selMgr":this}, true, false, relTarget);
 			}
 			var idFocus = this._elFocus.prop("id");
 			this.element.attr("aria-activedescendant", idFocus || null);
