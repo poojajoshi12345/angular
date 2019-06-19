@@ -13,4 +13,4 @@ rd /S /Q %wfpath%\ibx_testing
 
 REM make the new links
 MKLINK /D %wfpath%\ibx %CD%\src\main\resources\META-INF\resources\ibx
-MKLINK /D %wfpath%\ibx_testing %CD%..\ibx_testing\src\test\resources\META-INF\resources\ibx\testing
+MKLINK /D %wfpath%\ibx_testing %CD%\..\ibx_testing\src\test\resources\META-INF\resources\ibx\testing
