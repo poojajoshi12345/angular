@@ -87,7 +87,7 @@ ibxDragDropManager.getDefaultDragImage = function(el)
 	//clone the node and make sure the width/height are preserved so it lays out correctly.
 	el = $(el);
 	var width = el.outerWidth();
-	var height = el.outerWidth();
+	var height = el.outerHeight();
 	var clone = el.clone().css({"width":width + "px", "height":height + "px", "margin":"0px"}).removeAttr("id");
 	return clone[0];
 };
