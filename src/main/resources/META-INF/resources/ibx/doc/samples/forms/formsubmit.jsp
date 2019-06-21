@@ -1,4 +1,4 @@
-﻿<%-- Copyright 1996-2016 Information Builders, Inc. All rights reserved. $Revision: 1.1 $:--%>
+<%-- Copyright 1996-2016 Information Builders, Inc. All rights reserved. $Revision: 1.1 $:--%>
 <%
 	response.addHeader("Pragma", "no-cache");
 	response.addHeader("Cache-Control", "no-cache");
