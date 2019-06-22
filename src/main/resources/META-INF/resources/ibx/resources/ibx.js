@@ -188,7 +188,7 @@ ibx._bootstrap = function(isEmbedded)
 		var preLoadCss = [ibx._path + "./css/base.ibx.css"];
 		var preLoadScript = 
 		[
-			ibx._path + "./etc/jquery/jquery-3.3.1.js",
+			ibx._path + "./etc/jquery/jquery.js",
 			ibx._path + "./etc/jquery/jquery-ui-1.12.1/jquery-ui.js",
 			ibx._path + "./js/util.ibx.js",
 			ibx._path + "./js/preload.ibx.js",
@@ -230,7 +230,7 @@ ibx._bootstrap = function(isEmbedded)
 		var scripts = 
 		[
 			"<link type='text/css' rel='stylesheet' href='" + ibx._path + "./css/base.ibx.css'/>",
-			"<sc" + "ript type='text/javascript' src='" + ibx._path + "./etc/jquery/jquery-3.3.1.js'></sc" + "ript>",
+			"<sc" + "ript type='text/javascript' src='" + ibx._path + "./etc/jquery/jquery.js'></sc" + "ript>",
 			"<sc" + "ript type='text/javascript' src='" + ibx._path + "./etc/jquery/jquery-ui-1.12.1/jquery-ui.js'></sc" + "ript>",
 			"<sc" + "ript type='text/javascript' src='" + ibx._path + "./js/util.ibx.js'></sc" + "ript>",
 			"<sc" + "ript type='text/javascript' src='" + ibx._path + "./js/preload.ibx.js'></sc" + "ript>",
