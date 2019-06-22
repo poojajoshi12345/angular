@@ -832,7 +832,7 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 	removeRow:function(row)
 	{
 		var row = (row instanceof Object) ? row : this.getRow(row);
-		row.each(function(idx, row)
+		$(row).each(function(idx, row)
 		{
 			var widget = $(row).detach().data("ibxDataGridRow");
 			widget.header.detach();
