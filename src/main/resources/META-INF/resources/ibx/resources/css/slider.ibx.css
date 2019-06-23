@@ -100,18 +100,9 @@
 }
 
 .ibx-slider-popup {
-    background-color: white;
-    border: 1px solid #eee;
-    pointer-events: none;
-    display: inline-block;
-    position: absolute;
-    padding: 3px;
-    padding-left: 10px;
-    padding-right: 10px;
-    border-radius: 3px;
+    padding: 3px 10px 3px 10px;
     margin-top: 5px;
     text-align: center;
     box-shadow: 3px 3px 5px #aaa;
-    z-index: 10000;
-}
+ }
 

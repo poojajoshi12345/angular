@@ -315,8 +315,11 @@ $.widget("ibi.ibxSlider", $.ibi.ibxGrid,
 		if (!this.options.popupValue)
 			return;
 
-		if (!this._popup)
-			this._popup = $('<div class="ibx-slider-popup"></div>').appendTo("body");
+		if(this.options.newStyle)
+			this._popup = this._popup || $('<div class="ibx-slider-popup"></div>').ibxPopup({autoClose:false}).ibxPopup("open");
+		else
+			this._popup = this._popup || $('<div class="ibx-slider-popup"></div>').appendTo("body");
+
 		var my = this.options.orientation == 'horizontal' ? 'center bottom' : 'left center';
 		var at = this.options.orientation == 'horizontal' ? 'center top-10px' : 'right+10px center';
 		this._popup.position({ 'my': my, 'at': at, 'of': this._activeSlider });
