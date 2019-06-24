@@ -319,7 +319,9 @@ $.widget("ibi.ibxSlider", $.ibi.ibxGrid,
 		var my = this.options.orientation == 'horizontal' ? 'center bottom' : 'left center';
 		var at = this.options.orientation == 'horizontal' ? 'center top-10px' : 'right+10px center';
 		this._popup.position({ 'my': my, 'at': at, 'of': this._activeSlider });
-		this._popup.html(((this._activeSlider == this._slider) ? this.options.value : this.options.value2));
+
+		var info = this.info();
+		this._popup.html(((this._activeSlider == this._slider) ? info.value : info.value2));
 		this._popup.ibxPopup("open")
 	},
 	_hidePopup: function ()
