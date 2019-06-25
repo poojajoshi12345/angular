@@ -315,12 +315,18 @@ $.widget("ibi.ibxSlider", $.ibi.ibxGrid,
 		if (!this.options.popupValue)
 			return;
 
+		//create and open the popup...has to be opened before positioned.
 		this._popup = this._popup || $('<div class="ibx-slider-popup"></div>').ibxPopup({autoClose:false, destroyOnClose:false});
+		this._popup.ibxPopup("open")
+
+		//put it at the right spot
 		var my = this.options.orientation == 'horizontal' ? 'center bottom' : 'left center';
 		var at = this.options.orientation == 'horizontal' ? 'center top-10px' : 'right+10px center';
 		this._popup.position({ 'my': my, 'at': at, 'of': this._activeSlider });
-		this._popup.html(((this._activeSlider == this._slider) ? this.options.value : this.options.value2));
-		this._popup.ibxPopup("open")
+
+		//set its value correctly.
+		var info = this.info();
+		this._popup.html(((this._activeSlider == this._slider) ? info.value : info.value2));
 	},
 	_hidePopup: function ()
 	{
