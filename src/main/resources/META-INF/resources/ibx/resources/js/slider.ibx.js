@@ -45,8 +45,8 @@ $.widget("ibi.ibxSlider", $.ibi.ibxGrid,
 
 		this._sliderWrapper = $('<div class="ibx-slider-wrapper">');
 
-		this._sliderBodyStart = $('<div class="ibx-slider-body-start">');
-		this._sliderBodyEnd = $('<div class="ibx-slider-body-end">');
+		this._sliderBodyStart = $('<div class="ibx-slider-body ibx-slider-body-start">');
+		this._sliderBodyEnd = $('<div class="ibx-slider-body ibx-slider-body-end">');
 		this._sliderWrapper.append(this._sliderBodyStart, this._sliderBodyEnd);
 		this._slider = $('<div tabindex="0" class="ibx-slider-marker ibx-slider-marker-one">');
 		this._slider.hide();
@@ -513,12 +513,12 @@ $.widget("ibi.ibxSlider", $.ibi.ibxGrid,
 			this._labelMax.ibxAddClass('ibx-slider-horizontal');
 			this._labelValue.ibxRemoveClass('ibx-slider-vertical');
 			this._labelValue.ibxAddClass('ibx-slider-horizontal');
-			this._sliderBodyStart.ibxRemoveClass('ibx-slider-body-vertical-start');
-			this._sliderBodyStart.ibxAddClass('ibx-slider-body-horizontal-start');
+			this._sliderBodyStart.ibxRemoveClass('ibx-slider-body ibx-slider-body-vertical-start');
+			this._sliderBodyStart.ibxAddClass('ibx-slider-body ibx-slider-body-horizontal-start');
 			this._sliderBodyStart.css('top', Math.ceil((this._sliderWrapper.outerHeight() - this._sliderBodyStart.outerHeight()) / 2) + "px");
 			this._sliderBodyStart.css(flipLayout ? 'right' : 'left', this._sliderWrapper.outerWidth() - middleValue);
-			this._sliderBodyEnd.ibxRemoveClass('ibx-slider-body-vertical-end');
-			this._sliderBodyEnd.ibxAddClass('ibx-slider-body-horizontal-end');
+			this._sliderBodyEnd.ibxRemoveClass('ibx-slider-body ibx-slider-body-vertical-end');
+			this._sliderBodyEnd.ibxAddClass('ibx-slider-body ibx-slider-body-horizontal-end');
 			this._sliderBodyEnd.css('top', Math.ceil((this._sliderWrapper.outerHeight() - this._sliderBodyEnd.outerHeight()) / 2) + "px");
 			this._sliderBodyEnd.css(flipLayout ? 'right' : 'left', middleValue);
 		}
@@ -539,12 +539,12 @@ $.widget("ibi.ibxSlider", $.ibi.ibxGrid,
 			this._labelMax.ibxAddClass('ibx-slider-vertical');
 			this._labelValue.ibxRemoveClass('ibx-slider-horizontal');
 			this._labelValue.ibxAddClass('ibx-slider-vertical');
-			this._sliderBodyStart.ibxRemoveClass('ibx-slider-body-horizontal-start');
-			this._sliderBodyStart.ibxAddClass('ibx-slider-body-vertical-start');
+			this._sliderBodyStart.ibxRemoveClass('ibx-slider-body ibx-slider-body-horizontal-start');
+			this._sliderBodyStart.ibxAddClass('ibx-slider-body ibx-slider-body-vertical-start');
 			this._sliderBodyStart.css('left', Math.ceil((this._sliderWrapper.outerWidth() - this._sliderBodyStart.outerWidth()) / 2) + "px");
 			this._sliderBodyStart.css(flipLayout ? 'top' : 'bottom', this._sliderWrapper.outerWidth() - middleValue);
-			this._sliderBodyEnd.ibxRemoveClass('ibx-slider-body-horizontal-end');
-			this._sliderBodyEnd.ibxAddClass('ibx-slider-body-vertical-end');
+			this._sliderBodyEnd.ibxRemoveClass('ibx-slider-body ibx-slider-body-horizontal-end');
+			this._sliderBodyEnd.ibxAddClass('ibx-slider-body ibx-slider-body-vertical-end');
 			this._sliderBodyEnd.css('left', Math.ceil((this._sliderWrapper.outerWidth() - this._sliderBodyEnd.outerWidth()) / 2) + "px");
 			this._sliderBodyEnd.css(flipLayout ? 'top' : 'bottom', middleValue);
 		}
@@ -585,7 +585,7 @@ $.widget("ibi.ibxRange", $.ibi.ibxSlider,
 	_create: function ()
 	{
 		this._super();
-		this._sliderRangeBody = $('<div class="ibx-slider-range-body">');
+		this._sliderRangeBody = $('<div class="ibx-slider-body ibx-slider-range-body">');
 		this._sliderRangeBody.insertBefore(this._slider);
 		this._slider2 = $('<div tabindex="0" class="ibx-slider-marker ibx-slider-marker-two">');
 		this._slider2.hide();
@@ -810,16 +810,16 @@ $.widget("ibi.ibxRange", $.ibi.ibxSlider,
 		{
 			this._slider2.css(flipLayout ? 'right' : 'left', Math.ceil((info.value2 - info.min) * (this._sliderWrapper.outerWidth() - (this.options.edge == "center" ? 0 : this._slider2.outerWidth())) / (info.max - info.min) - (this.options.edge == "center" ? (this._slider2.outerWidth() / 2) : 0)) + 'px');
 			this._slider2.css('top', Math.ceil((this._sliderWrapper.outerHeight() - this._slider2.outerHeight()) / 2) + "px");
-			this._sliderRangeBody.ibxRemoveClass('ibx-slider-range-body-vertical');
-			this._sliderRangeBody.ibxAddClass('ibx-slider-range-body-horizontal');
+			this._sliderRangeBody.ibxRemoveClass('ibx-slider-body ibx-slider-range-body-vertical');
+			this._sliderRangeBody.ibxAddClass('ibx-slider-body ibx-slider-range-body-horizontal');
 			this._sliderRangeBody.css('top', Math.ceil((this._sliderWrapper.outerHeight() - this._sliderRangeBody.outerHeight()) / 2) + "px");
 		}
 		else
 		{
 			this._slider2.css(flipLayout ? 'top' : 'bottom', Math.ceil((info.value2 - info.min) * (this._sliderWrapper.outerHeight() - (this.options.edge == "center" ? 0 : this._slider2.outerHeight())) / (info.max - info.min) - (this.options.edge == "center" ? (this._slider2.outerHeight() / 2) : 0)) + 'px');
 			this._slider2.css('left', Math.ceil((this._sliderWrapper.outerWidth() - this._slider2.outerWidth()) / 2) + "px");
-			this._sliderRangeBody.ibxRemoveClass('ibx-slider-range-body-horizontal');
-			this._sliderRangeBody.ibxAddClass('ibx-slider-range-body-vertical');
+			this._sliderRangeBody.ibxRemoveClass('ibx-slider-body ibx-slider-range-body-horizontal');
+			this._sliderRangeBody.ibxAddClass('ibx-slider-body ibx-slider-range-body-vertical');
 			this._sliderRangeBody.css('left', Math.ceil((this._sliderWrapper.outerWidth() - this._sliderRangeBody.outerWidth()) / 2) + "px");
 		}
 
