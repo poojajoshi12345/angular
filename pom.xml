@@ -40,7 +40,7 @@
 		<maven.test.skip>false</maven.test.skip>
 		<org.apache.logging.log4j.version>2.11.1</org.apache.logging.log4j.version>
 		<org.ow2.asm.version>6.1.1</org.ow2.asm.version>
-		<org.sonarsource.scanner.maven.version>3.5.0.1254</org.sonarsource.scanner.maven.version>
+		<org.sonarsource.scanner.maven.version>3.6.0.1398</org.sonarsource.scanner.maven.version>
 		<org.springframework.security.version>3.2.10.RELEASE</org.springframework.security.version>
 		<org.springframework.version>3.2.18.RELEASE</org.springframework.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
