@@ -22,6 +22,9 @@ $.widget("ibi.ibxPropertyGrid", $.ibi.ibxDataGrid,
 	_create:function()
 	{
 		this._super();
+		this.options.colMap[0].title = ibx.resourceMgr.getString("IBX_PGRID_COL_TITLE");
+		this.options.colMap[1].title = ibx.resourceMgr.getString("IBX_PGRID_COL_VALUE");
+		
 		this.element.data("ibiIbxDataGrid", this);
 		this._sm.option({focusResetOnBlur:true, rubberBand:false, rubberBandPartialSelect:false});
 	},

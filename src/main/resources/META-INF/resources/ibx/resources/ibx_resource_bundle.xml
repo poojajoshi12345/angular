@@ -80,6 +80,8 @@ $Revision: 1.123 $:-->
 				"IBX_COLOR_PICKER_VALUE_LABEL":"RGB Value ",
 
 				"IBX_PGRID_LABEL":"Property Grid",
+				"IBX_PGRID_COL_TITLE":"Property",
+				"IBX_PGRID_COL_VALUE":"Value",
 				"IBX_PGRID_EDIT_CELL_LABEL":"Edit Property ",
 				"IBX_PGRID_COLOR_PICKER_LABEL":"Color Picker, RGB Value ",
 
