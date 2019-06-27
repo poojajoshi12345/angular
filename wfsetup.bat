@@ -30,9 +30,9 @@ git clone http://wfbucket.ibi.com:7990/scm/wp/webfocus-webjars-3rdparty-resource
 MKLINK /D %wfpath%\3rdparty_resources %CD%\..\3rdparty_resources\src\main\resources\META-INF\resources\3rdparty_resources
 
 REM make the new intl properties/strings resources link
-rename %wfpath%\WEB-INF\lib\webfocus-webjars-intl-HEAD-SNAPSHOT.jar webfocus-webjars-intl-HEAD-SNAPSHOT.jar_
-rd /S /Q %wfpath%\WEB-INF\classes\com\ibi\intl
-git clone http://wfbucket.ibi.com:7990/scm/wp/webfocus-webjars-intl.git ..\wf_intl
+rename %wfpath%\WEB-INF\lib\webfocus-intl-HEAD-SNAPSHOT.jar webfocus-intl-HEAD-SNAPSHOT.jar_
+git clone http://wfbucket.ibi.com:7990/scm/wp/webfocus-intl.git ..\wf_intl
+mkdir %wfpath%\WEB-INF\classes\com\ibi
 MKLINK /D %wfpath%\WEB-INF\classes\com\ibi\intl %CD%\..\wf_intl\src\main\resources\com\ibi\intl
 
 REM copy un-minified jquery into install
