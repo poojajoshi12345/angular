@@ -29,6 +29,13 @@ rd /S /Q %wfpath%\3rdparty_resources
 git clone http://wfbucket.ibi.com:7990/scm/wp/webfocus-webjars-3rdparty-resources.git ..\3rdparty_resources
 MKLINK /D %wfpath%\3rdparty_resources %CD%\..\3rdparty_resources\src\main\resources\META-INF\resources\3rdparty_resources
 
+REM make the new intl properties/strings resources link
+rename %wfpath%\WEB-INF\lib\webfocus-intl-HEAD-SNAPSHOT.jar webfocus-intl-HEAD-SNAPSHOT.jar_
+git clone http://wfbucket.ibi.com:7990/scm/wp/webfocus-intl.git ..\intl
+mkdir %wfpath%\WEB-INF\classes\com\ibi
+rd /S /Q %wfpath%\WEB-INF\classes\com\ibi\intl
+MKLINK /D %wfpath%\WEB-INF\classes\com\ibi\intl %CD%\..\intl\src\main\resources\com\ibi\intl
+
 REM copy un-minified jquery into install
 copy /y %CD%\src\main\resources\META-INF\resources\ibx\resources\etc\jquery\jquery.js %wfpath%\3rdparty_resources\jquery\js\jquery-3.3.1.min.js
 copy /y %CD%\src\main\resources\META-INF\resources\ibx\resources\etc\jquery\jquery-ui-1.12.1\jquery-ui.js %wfpath%\3rdparty_resources\jquery\js\jquery-ui-1.12.1.min.js
