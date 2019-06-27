@@ -17,7 +17,7 @@
 		<com.fasterxml.jackson.version>2.9.8</com.fasterxml.jackson.version>
 		<derby.version>10.14.2.0</derby.version>
         <ibi.doc.root>${project.build.directory}/ibi-doc-root</ibi.doc.root>
-		<jacoco.maven.plugin.version>0.8.3</jacoco.maven.plugin.version>
+		<jacoco.maven.plugin.version>0.8.4</jacoco.maven.plugin.version>
 		<javax.servlet.api.version>3.1.0</javax.servlet.api.version>
 		<javax.servlet.jsp.api.version>2.3.3</javax.servlet.jsp.api.version>
 		<junit.version>4.12</junit.version>
@@ -40,7 +40,7 @@
 		<maven.test.skip>false</maven.test.skip>
 		<org.apache.logging.log4j.version>2.11.1</org.apache.logging.log4j.version>
 		<org.ow2.asm.version>6.1.1</org.ow2.asm.version>
-		<org.sonarsource.scanner.maven.version>3.5.0.1254</org.sonarsource.scanner.maven.version>
+		<org.sonarsource.scanner.maven.version>3.6.0.1398</org.sonarsource.scanner.maven.version>
 		<org.springframework.security.version>3.2.10.RELEASE</org.springframework.security.version>
 		<org.springframework.version>3.2.18.RELEASE</org.springframework.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -51,7 +51,7 @@
 		<sonar.java.pmd.reportPaths>${project.build.directory}/pmd.xml</sonar.java.pmd.reportPaths>
 		<sonar.java.spotbugs.reportPaths>${project.build.directory}/spotbugsXml.xml</sonar.java.spotbugs.reportPaths>
 		<sonar.junit.reportPaths>${project.build.directory}/surefire-reports</sonar.junit.reportPaths>
-		<spotbugs.maven.plugin.version>3.1.11</spotbugs.maven.plugin.version>
+		<spotbugs.maven.plugin.version>3.1.12</spotbugs.maven.plugin.version>
 		<testFailureIgnore>true</testFailureIgnore>
 	</properties>
 
