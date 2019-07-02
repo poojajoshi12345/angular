@@ -132,39 +132,39 @@
 					});
 				}
 
-				gridTabs.rgCellsJustify.on("ibx_change", function(e, rg)
+				gridTabs.rgCellsJustify.on("ibx_change", function(e)
 				{
-					rg = $(rg);
+					rg = $(e.target);
 					var value = rg.ibxWidget("userValue");
 					$(".grid").ibxWidget("option", "justify", value);
 				});
-				gridTabs.rgCellsAlign.on("ibx_change", function(e, rg)
+				gridTabs.rgCellsAlign.on("ibx_change", function(e)
 				{
-					rg = $(rg);
+					rg = $(e.target);
 					var value = rg.ibxWidget("userValue");
 					$(".grid").ibxWidget("option", "align", value);
 				});
-				gridTabs.rgGridJustify.on("ibx_change", function(e, rg)
+				gridTabs.rgGridJustify.on("ibx_change", function(e)
 				{
-					rg = $(rg);
+					rg = $(e.target);
 					var value = rg.ibxWidget("userValue");
 					$(".grid").ibxWidget("option", "justifyContent", value);
 				});
-				gridTabs.rgGridAlign.on("ibx_change", function(e, rg)
+				gridTabs.rgGridAlign.on("ibx_change", function(e)
 				{
-					rg = $(rg);
+					rg = $(e.target);
 					var value = rg.ibxWidget("userValue");
 					$(".grid").ibxWidget("option", "alignContent", value);
 				});	
 
-				gridTabs.chkInline.on("ibx_change", function(e, chkBox)
+				gridTabs.chkInline.on("ibx_change", function(e)
 				{
-					var checked = $(chkBox).ibxWidget("checked");
+					var checked = $(e.currentTarget).ibxWidget("checked");
 					$(".grid").ibxWidget("option", "inline", checked);
 				});
 
 				var gridMenu = ibx.resourceMgr.getResource(".grid-menu").data("ibxWidget");
-				gridMenu.rgSelfJustify.on("ibx_change", function(e, target)
+				gridMenu.rgSelfJustify.on("ibx_change", function(e)
 				{
 					rg = $(e.target);
 					var value = rg.ibxWidget("userValue");
@@ -172,7 +172,7 @@
 					$(cell).data("ibxJustify", value);
 					$(".grid").ibxWidget("refresh");
 				});
-				gridMenu.rgSelfAlign.on("ibx_change", function(e, target)
+				gridMenu.rgSelfAlign.on("ibx_change", function(e)
 				{
 					rg = $(e.target);
 					var value = rg.ibxWidget("userValue");
