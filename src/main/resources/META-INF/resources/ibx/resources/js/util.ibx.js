@@ -658,6 +658,22 @@ function GetRandomInt(min, max)
 	return Math.floor(Math.random() * (max - min)) + min; //The maximum is exclusive and the minimum is inclusive
 }
 
+//find the current screen dpu based on unit
+function dpu(unit, dir)
+{
+	var sizeRef = $("<div>").appendTo("body");
+	sizeRef.css({width:"1"+unit, height:"1"+unit});
+	var pxSize = {dpuH:Math.round(sizeRef.width()), dpuV:Math.round(sizeRef.height())};
+	sizeRef.detach();
+
+	if(dir == "horizontal")
+		pxSize = pxSize.dpuH;
+	else
+	if(dir == "vertical")
+		pxSize = pxSize.dpuV;
+	return pxSize;
+}
+
 /*
 //just returns metrics/info for an element.
 function GetElementInfo(element, withMargin)
