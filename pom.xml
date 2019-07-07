@@ -22,7 +22,7 @@
 		<javax.servlet.jsp.api.version>2.3.3</javax.servlet.jsp.api.version>
 		<junit.version>4.12</junit.version>
 		<maven.assembly.plugin.version>3.1.0</maven.assembly.plugin.version>
-		<maven.checkstyle.plugin.version>3.0.0</maven.checkstyle.plugin.version>
+		<maven.checkstyle.plugin.version>3.1.0</maven.checkstyle.plugin.version>
 		<maven.compiler.plugin.version>3.8.0</maven.compiler.plugin.version>
 		<bytecode.version>1.8</bytecode.version>
 		<maven.compiler.source>${bytecode.version}</maven.compiler.source>
