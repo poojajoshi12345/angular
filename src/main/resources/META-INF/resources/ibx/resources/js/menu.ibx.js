@@ -718,7 +718,7 @@ $.widget("ibi.ibxSelectMenuButton", $.ibi.ibxMenuButton,
 	_onMenuSelChange:function(e)
 	{
 		//selection changing from _setOption, so don't do this!
-		if(this._inSetOption)
+		if(this._inSetOption || !e.originalEvent.data.selected)
 			return;
 
 		//on menu selection set the control's userValue based on selected item(s).
