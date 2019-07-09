@@ -86,7 +86,7 @@ function ibx()
 		ibx._isLoading = true;
 
 		//bootstrap ibx...will work differently if ibx is running embedded vs. standalone.
-		ibx._bootstrap((document.readyState == "complete"));
+		ibx._bootstrap((document.readyState != "loading"));
 
 		//wait for jQuery/jQueryUI to be loaded...then boot ibx
 		var dateStart = ibx._loadStart = new Date();
