@@ -133,7 +133,7 @@ $.widget("ibi.ibxDataGridSelectionManager", $.ibi.ibxSelectionManager,
 		"focusDefault":true,
 		"focusResetOnBlur":false,
 		"navKeyRoot":true,
-		"toggleSelection":true,
+		"toggleSelection":false,
 		"rubberBand":true,
 		"rubberBandPartialSelect":true,
 		"escClearSelection":true,
@@ -169,7 +169,6 @@ $.widget("ibi.ibxDataGridSelectionManager", $.ibi.ibxSelectionManager,
 			}
 
 			cell.focus();
-			//cell.length ? this.focus(cell, true) : this._super(e);
 			e.preventDefault();
 			e.stopPropagation();
 		}
@@ -475,8 +474,10 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 			ui:{},
 		},
 
+		//selection manager option passthroughs.
 		selType:"multi",
 		rowSelect:false, 
+		toggleSelection:false,
 
 		defaultRowConfig: {},//not currently used.
 		showColumnHeaders:true,
@@ -912,6 +913,9 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 		else
 		if(key == "rowSelect")
 			this._sm.option("rowSelect", value);
+		else
+		if(key == "toggleSelection")
+			this._sm.option("toggleSelection", value);
 		this._super(key, value);
 	},
 	refresh:function()

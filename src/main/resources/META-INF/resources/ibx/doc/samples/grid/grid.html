@@ -16,21 +16,21 @@
 				var gridTabs = ibx.resourceMgr.getResource(".grid-tabs").data("ibxWidget");
 				$("body").append(gridTabs.element);
 
-				var mql = MediaQuery.addQuery("grid_sample", "(max-width: 550px)")
-				mql.addListener(function(e)
-				{
-					var grid = $(".test-grid");
-					var colCount = grid.ibxWidget("getColumnCount");
-					for(var i = 2; i < colCount; ++i)
-						grid.ibxWidget("showColumn", i, !e.matches);
+				// var mql = MediaQuery.addQuery("grid_sample", "(max-width: 550px)")
+				// mql.addListener(function(e)
+				// {
+				// 	var grid = $(".test-grid");
+				// 	var colCount = grid.ibxWidget("getColumnCount");
+				// 	for(var i = 2; i < colCount; ++i)
+				// 		grid.ibxWidget("showColumn", i, !e.matches);
 
-					var colMap = grid.ibxWidget("option", "colMap");
-					if(colMap.length)
-					{
-						colMap[1].size = e.matches ? "flex" : "100px";
-						grid.ibxWidget("updateHeaders");
-					}
-				});
+				// 	var colMap = grid.ibxWidget("option", "colMap");
+				// 	if(colMap.length)
+				// 	{
+				// 		colMap[1].size = e.matches ? "flex" : "100px";
+				// 		grid.ibxWidget("updateHeaders");
+				// 	}
+				// });
 
 				$(".text-entry").on("ibx_widgetfocus ibx_widgetblur", function(e)
 				{
@@ -63,7 +63,7 @@
 					}
 				});
 
-				$(".btn-col-headers, .btn-row-headers, .btn-row-select").on("ibx_change", function(e)
+				$(".grid-option").on("ibx_change", function(e)
 				{
 					loadGrid();
 				});
@@ -97,7 +97,7 @@
 						for(var j = 0; j < nCols; ++j)
 						{
 							var cell = $(sformat("<div style='user-select:none;'>Cell {1}/{2}</div>", i, j));
-							cell.ibxAddClass("ibx-flexbox fbx-inline fbx-row fbx-align-items-center fbx-aligncontent-center").on("dblclick", function(e)
+							cell.ibxAddClass("ibx-flexbox fbx-inline fbx-row fbx-align-items-center fbx-aligncontent-center").ibxEditable().on("dblclick", function(e)
 							{
 								$(e.target).ibxEditable("startEditing");
 							})
@@ -127,7 +127,9 @@
 						"colMap":colMap,
 						"showColumnHeaders":$(".btn-col-headers").ibxWidget("checked"),
 						"showRowHeaders":$(".btn-row-headers").ibxWidget("checked"),
+						"selType": $(".btn-multi-select").ibxWidget("checked") ? "multi" : "single",
 						"rowSelect":$(".btn-row-select").ibxWidget("checked"),
+						"toggleSelection":$(".btn-toggle-select").ibxWidget("checked"),
 						"defaultColConfig":{"resizable":true}
 					});
 				}

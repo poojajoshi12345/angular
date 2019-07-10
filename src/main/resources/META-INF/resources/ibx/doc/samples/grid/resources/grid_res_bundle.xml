@@ -29,6 +29,7 @@
 			}
 			.toolbar > div
 			{
+				flex:0 0  auto;
 				margin:3px;
 			}
 			.toolbar-item
@@ -85,17 +86,19 @@
 				<div data-ibx-type="ibxRadioGroup" data-ibx-name="rgGridJustify" data-ibxp-name="rgGridJustify"></div>
 				<div data-ibx-type="ibxRadioGroup" data-ibx-name="rgGridAlign" data-ibxp-name="rgGridAlign"></div>
 				<div class="data-grid-tab" data-ibx-name="tabGrid" data-ibx-type="ibxTabPage" data-ibxp-selected="true" data-ibxp-tab-options="{'text':'ibxDataGrid'}">
-					<div class="toolbar" data-ibx-type="ibxHBox" data-ibxp-align="center">
+					<div class="toolbar" data-ibx-type="ibxHBox" data-ibxp-align="center" data-ibxp-wrap="true">
 						<div tabindex="0" class="btn-load" data-ibx-type="ibxButton">Load Grid</div>
 						<div data-ibx-type="ibxLabel" data-ibxp-for=".num-cols">Cols:</div>
 						<div tabindex="0" class="text-entry num-cols" data-ibx-type="ibxLabel" data-ibxp-justify="center">10</div>
 						<div class="" data-ibx-type="ibxLabel" data-ibxp-for=".num-rows">Rows:</div>
 						<div tabindex="0" class="text-entry num-rows" data-ibx-type="ibxLabel" data-ibxp-justify="center">100</div>
-						<div tabindex="0" class="btn-row-select" data-ibx-type="ibxCheckBoxSimple" data-ibxp-checked="false">Row Select</div>
-						<div tabindex="0" class="btn-col-headers" data-ibx-type="ibxCheckBoxSimple" data-ibxp-checked="true">Show Column Headings</div>
-						<div tabindex="0" class="btn-row-headers" data-ibx-type="ibxCheckBoxSimple" data-ibxp-checked="true">Show Row Headings</div>
-						<div tabindex="0" class="btn-hide-cols" data-ibx-type="ibxButton">Toggle Even Columns</div>
-						<div tabindex="0" class="btn-hide-rows" data-ibx-type="ibxButton">Toggle Even Rows</div>
+						<div tabindex="0" class="grid-option btn-multi-select" data-ibx-type="ibxCheckBoxSimple" data-ibxp-checked="false">Multi Select</div>
+						<div tabindex="0" class="grid-option btn-row-select" data-ibx-type="ibxCheckBoxSimple" data-ibxp-checked="false">Row Select</div>
+						<div tabindex="0" class="grid-option btn-toggle-select" data-ibx-type="ibxCheckBoxSimple" data-ibxp-checked="false">Toggle Select</div>
+						<div tabindex="0" class="grid-option btn-col-headers" data-ibx-type="ibxCheckBoxSimple" data-ibxp-checked="true">Column Headings</div>
+						<div tabindex="0" class="grid-option btn-row-headers" data-ibx-type="ibxCheckBoxSimple" data-ibxp-checked="true">Row Headings</div>
+						<div tabindex="0" class="grid-option btn-hide-cols" data-ibx-type="ibxButton">Toggle Even Columns</div>
+						<div tabindex="0" class="grid-option btn-hide-rows" data-ibx-type="ibxButton">Toggle Even Rows</div>
 					</div>
 					<div tabindex="0" class="test-grid" style="border:1px solid #ccc;margin:5px;height:500px;" data-ibx-type="ibxDataGrid"></div>
 				</div>
