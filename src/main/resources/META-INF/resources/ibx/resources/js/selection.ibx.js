@@ -157,8 +157,9 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 		//manage selection, and focus jumping
 		if(options.selectKeys.indexOf(e.keyCode) != -1)
 		{
+			var focusedItem = this._focus();
 			var isMulti = options.type == "multi";
-			if(isMulti && !e.shiftKey && !e.ctrlKey)
+			if(isMulti && !e.shiftKey && !e.ctrlKey && !this.isSelected(focusedItem) && !options.toggleSelection)
 				this.deselectAll(true, false);
 
 			if(e.shiftKey)
@@ -172,9 +173,9 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 			}
 			else
 			if(isMulti && e.ctrlKey)
-				this.toggleSelected(this._focus());//toggle the target!
+				this.toggleSelected(focusedItem);//toggle the target!
 			else
-				this.toggleSelected(this._focus(), (options.toggleSelection ? undefined : true));
+				this.toggleSelected(focusedItem, (options.toggleSelection ? undefined : true));
 		}
 		else
 		if((e.keyCode == $.ui.keyCode.HOME) && ibxEventManager.isInputEventToIgnore(e))
@@ -213,7 +214,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 			//don't deselect if clicking on scrollbar.
 			if(!ClickOnScrollbar(e.target, e.clientX, e.clientY))
 			{
-				if(isTarget || (isMulti && !e.shiftKey && !e.ctrlKey && !this.isSelected(selTarget)))
+				if(isTarget || (isMulti && !e.shiftKey && !e.ctrlKey && !this.isSelected(selTarget) && !options.toggleSelection))
 					this.deselectAll(true);
 			}
 				
@@ -236,12 +237,8 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 				if(isMulti && e.ctrlKey)
 					this.toggleSelected(selTarget);//toggle the target!
 				else
-				if(isMulti)
-				{
-					if(!this.isSelected(selTarget))
-						this.deselectAll();
+				if(isMulti && !options.toggleSelection)
 					this.toggleSelected(selTarget, true);
-				}
 				else
 					this.toggleSelected(selTarget, (options.toggleSelection ? undefined : true));
 			}
