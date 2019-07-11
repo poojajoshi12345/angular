@@ -365,44 +365,46 @@ $.widget("ibi.ibxEditable", $.Widget,
 	_onElementEvent:function(e)
 	{
 		var options = this.options;
-		if(e.type == "keydown")
-		{
-			var isCancel = e.keyCode == options.cancelKey;
-			var isCommit = e.keyCode == options.commitKey;
-			if(isCancel || isCommit)
-			{
-				this.stopEditing(isCancel);
-				e.preventDefault();
-				e.stopPropagation();
-			}
-			if(!options.multiLine && e.keyCode === $.ui.keyCode.ENTER)
-				e.preventDefault();
-		}
-		else
-		if(e.type == "focus")
-		{
-			if(options.editOnFocus)
-				this.startEditing();
-		}
-		else
-		if(e.type == "blur")
-		{
-			if(options.commitOnBlur)
-				this.stopEditing();
-		}
-		else
-		if(e.type == "ibx_nodemutated" && this.isEditing())
-		{
-			var mr = e.originalEvent.data[0];
-			var value = mr.oldValue;
-			var newValue = mr.target.textContent;
+		var isEditing = this.isEditing();
 
-			if(value != newValue)
+		if(e.type == "focus" && !isEditing && options.editOnFocus)
+			this.startEditing();
+		else
+		if(isEditing)
+		{
+			if(e.type == "keydown")
 			{
-				//let people know the value is changing...they can stop it from happening.
-				var event = this.element.dispatchEvent("ibx_textchanging", {"value":value, "newValue":newValue}, true, true);
-				if(event.isDefaultPrevented())
-					mr.target.textContent = value;//revert to current value
+				var isCancel = e.keyCode == options.cancelKey;
+				var isCommit = e.keyCode == options.commitKey;
+				if(isCancel || isCommit)
+				{
+					this.stopEditing(isCancel);
+					e.preventDefault();
+					e.stopPropagation();
+				}
+				if(!options.multiLine && e.keyCode === $.ui.keyCode.ENTER)
+					e.preventDefault();
+			}
+			else
+			if(e.type == "blur")
+			{
+				if(options.commitOnBlur)
+					this.stopEditing();
+			}
+			else
+			if(e.type == "ibx_nodemutated")
+			{
+				var mr = e.originalEvent.data[0];
+				var value = mr.oldValue;
+				var newValue = mr.target.textContent;
+
+				if(value != newValue)
+				{
+					//let people know the value is changing...they can stop it from happening.
+					var event = this.element.dispatchEvent("ibx_textchanging", {"value":value, "newValue":newValue}, true, true);
+					if(event.isDefaultPrevented())
+						mr.target.textContent = value;//revert to current value
+				}
 			}
 		}
 	},
