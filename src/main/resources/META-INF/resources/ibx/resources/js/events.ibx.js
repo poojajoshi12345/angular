@@ -38,6 +38,9 @@ ibxEventManager.createMouseEvent = function(eType, e)
 	return event;
 };
 
+/***
+ * Translate touch events into mouse events.
+ */
 ibxEventManager._onTouchEvent = function(e)
 {
 	//cancel any pending context menu by clearing the timer.
@@ -83,33 +86,29 @@ ibxEventManager._onTouchEvent = function(e)
 	else
 	if(eType == "touchmove")
 	{
-		//do swiping - just put out one swipe message.
-		//if(!ibxEventManager._hasSwiped)
+		//do swiping
+		var touch = e.touches[0];
+		var tElapsed = e.timeStamp - ibxEventManager._eLastTouch.timeStamp;
+		var dx = touch.clientX - ibxEventManager._eLastTouch.touches[0].clientX;
+		var dy = touch.clientY - ibxEventManager._eLastTouch.touches[0].clientY;
+		if(tElapsed <= ibxEventManager.msSwipe && (Math.abs(dx) >= ibxEventManager.deltaSwipe || Math.abs(dy) >= ibxEventManager.deltaSwipe))
 		{
-			var touch = e.touches[0];
-			var tElapsed = e.timeStamp - ibxEventManager._eLastTouch.timeStamp;
-			var dx = touch.clientX - ibxEventManager._eLastTouch.touches[0].clientX;
-			var dy = touch.clientY - ibxEventManager._eLastTouch.touches[0].clientY;
-			if(tElapsed <= ibxEventManager.msSwipe && (Math.abs(dx) >= ibxEventManager.deltaSwipe || Math.abs(dy) >= ibxEventManager.deltaSwipe))
+			var dir = ""
+			if(dy > ibxEventManager.deltaSwipe)
+				dir += "down";
+			if(dy < -ibxEventManager.deltaSwipe)
+				dir += "up";
+			if(dx > ibxEventManager.deltaSwipe)
+				dir += "right";
+			if(dx < -ibxEventManager.deltaSwipe)
+				dir += "left";
+			
+			if(dir)
 			{
-				var sEvent = "swipe";
-				if(dy > ibxEventManager.deltaSwipe)
-					sEvent += "down";
-				if(dy < -ibxEventManager.deltaSwipe)
-					sEvent += "up";
-				if(dx > ibxEventManager.deltaSwipe)
-					sEvent += "right";
-				if(dx < -ibxEventManager.deltaSwipe)
-					sEvent += "left";
-				
-				console.log(sEvent, dx, dy);
-
-				if(sEvent != "swipe")
-				{
-					var se = ibxEventManager.createMouseEvent(sEvent, e);
-					ibxEventManager._hasSwiped = true;
-					e.target.dispatchEvent(se);
-				}
+				var se = ibxEventManager.createMouseEvent("swipe", e);
+				se.data = dir;
+				ibxEventManager._hasSwiped = true;
+				e.target.dispatchEvent(se);
 			}
 		}
 
