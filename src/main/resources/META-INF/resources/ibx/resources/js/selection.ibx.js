@@ -196,7 +196,6 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 	_eLastMouseDown:null,//used to know if click is on scrollbar for focusin
 	_onMouseEvent:function(e)
 	{
-		console.log(e.type);
 		var options = this.options;
 		if(e.type == "mousedown")
 		{
