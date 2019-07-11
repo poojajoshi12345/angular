@@ -10,7 +10,7 @@
 	padding: .5em;
 }
 
-.ibx-dialog.std:not(.dlg-auto-size) > .ibx-dialog-main-box
+.ibx-dialog:not(.dlg-auto-size) > .ibx-dialog-main-box
 {
 	position:absolute;
 	left:0px;
