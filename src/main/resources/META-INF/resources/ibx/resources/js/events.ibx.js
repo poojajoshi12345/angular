@@ -47,12 +47,11 @@ ibxEventManager._onTouchEvent = function(e)
 	{
 		var me = ibxEventManager.createMouseEvent("mousedown", e);
 		e.target.dispatchEvent(me);
-		ibxEventManager._eLast = e;
+		ibxEventManager._eLastTouch = e;
 		ibxEventManager._ctxMenuTimer = window.setTimeout(function(e)
 		{
 			var me = ibxEventManager.createMouseEvent("contextmenu", e);
 			e.target.dispatchEvent(me);
-			ibxEventManager._eLast = e;
 		}.bind(ibxEventManager, e), ibxEventManager.msCtxMenu);
 	}
 	else
@@ -61,27 +60,22 @@ ibxEventManager._onTouchEvent = function(e)
 		//do mouseup
 		var me = ibxEventManager.createMouseEvent("mouseup", e);
 		e.target.dispatchEvent(me);
-		ibxEventManager._eLast = e;
 
 		//do click
 		var me = ibxEventManager.createMouseEvent("click", e);
 		e.target.dispatchEvent(me);
 
 		//do double click
-		if(ibxEventManager._eLast.type != "contextmenu")
+		var dt = ibxEventManager._eLastClick ? (e.timeStamp - ibxEventManager._eLastClick.timeStamp) : Infinity;
+		if(dt < ibxEventManager.msDblClick)
 		{
-			var dt = ibxEventManager._eLastClick ? (e.timeStamp - ibxEventManager._eLastClick.timeStamp) : Infinity;
-			if(dt < ibxEventManager.msDblClick)
-			{
-				var me = ibxEventManager.createMouseEvent("dblclick", e);
-				e.target.dispatchEvent(me);
-			}
-			ibxEventManager._eLast = e;
-			ibxEventManager._eLastClick = e;
+			var me = ibxEventManager.createMouseEvent("dblclick", e);
+			e.target.dispatchEvent(me);
 		}
 
 		//save info, and prevent default so browser won't generate its own native mouse events.
-		ibxEventManager._eLast = null;
+		ibxEventManager._eLastClick = e;
+		ibxEventManager._eLastTouch = null;
 		ibxEventManager._hasSwiped = false;
 		e.preventDefault();
 	}
@@ -92,8 +86,8 @@ ibxEventManager._onTouchEvent = function(e)
 		if(!ibxEventManager._hasSwiped)
 		{
 			var touch = e.touches[0];
-			var tElapsed = e.timeStamp - ibxEventManager._eLast.timeStamp;
-			var dx = touch.clientX - ibxEventManager._eLast.touches[0].clientX;
+			var tElapsed = e.timeStamp - ibxEventManager._eLastTouch.timeStamp;
+			var dx = touch.clientX - ibxEventManager._eLastTouch.touches[0].clientX;
 			var sEvent = null;
 			if(dx > ibxEventManager.deltaSwipe)
 				sEvent = "swiperight";
@@ -108,7 +102,7 @@ ibxEventManager._onTouchEvent = function(e)
 				e.target.dispatchEvent(se);
 			}
 
-			var dy = touch.clientY - ibxEventManager._eLast.touches[0].clientY;
+			var dy = touch.clientY - ibxEventManager._eLastTouch.touches[0].clientY;
 			sEvent = null;
 			if(dy > ibxEventManager.deltaSwipe)
 				sEvent = "swipedown";
@@ -127,7 +121,6 @@ ibxEventManager._onTouchEvent = function(e)
 		//do mouse move
 		var me = ibxEventManager.createMouseEvent("mousemove", e);
 		e.target.dispatchEvent(me);
-		ibxEventManager._eLast = e;
 	}
 };
 
