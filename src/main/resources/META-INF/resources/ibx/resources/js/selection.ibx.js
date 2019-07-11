@@ -6,7 +6,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 	options:
 	{
 		"type":"none",						//none - no selection, single - single selection, multi - multiple selection
-		"toggleSelection":true,				//clicking on an item will select/deselect.
+		"toggleSelection":false,			//clicking on an item will select/deselect.
 		"escClearSelection":true,			//clear the selection on the escape key
 		"selectButtons":[0, 2],				//which buttons trigger a select 0 = left, 1 = middle, 2 = right
 		"selectKeys":[13, 32],				//which keys trigger a select 13 = ENTER, 32 = SPACE
@@ -196,6 +196,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 	_eLastMouseDown:null,//used to know if click is on scrollbar for focusin
 	_onMouseEvent:function(e)
 	{
+		console.log(e.type);
 		var options = this.options;
 		if(e.type == "mousedown")
 		{
