@@ -6,13 +6,13 @@ function ibxEventManager()
 	if(ibx.eventMgr)
 		return;
 
-	window.addEventListener("touchstart", ibxEventManager._onTouchEvent.bind(this), true);
-	window.addEventListener("touchend", ibxEventManager._onTouchEvent, true);
-	window.addEventListener("touchmove", ibxEventManager._onTouchEvent, true);
-	window.addEventListener("contextmenu", ibxEventManager._onContextMenu);
-	window.addEventListener("keydown", ibxEventManager._onKeyDown);
+	window.addEventListener("touchstart", ibxEventManager._onTouchEvent.bind(this), {passive:false, capture:true});
+	window.addEventListener("touchend", ibxEventManager._onTouchEvent, {passive:false, capture:true});
+	window.addEventListener("touchmove", ibxEventManager._onTouchEvent, {passive:false, capture:true});
 
-	document.body.addEventListener("touchstart", ibxEventManager._onNoScrollTouchEvent);
+	window.addEventListener("keydown", ibxEventManager._onKeyDown);
+	window.addEventListener("contextmenu", ibxEventManager._onContextMenu);
+	window.addEventListener("touchstart", ibxEventManager._onNoScrollTouchEvent, {passive:false, capture:false});
 }
 ibxEventManager.noBrowserCtxMenu = true;
 ibxEventManager.noBackspaceNavigate = true;
@@ -35,10 +35,11 @@ ibxEventManager.createMouseEvent = function(eType, e)
 	return event;
 };
 
-
 ibxEventManager._onTouchEvent = function(e)
 {
 	var eType = e.type;
+	e.preventDefault();
+
 	if(eType == "touchstart")
 	{
 		ibxEventManager._hasSwiped = false;
@@ -71,13 +72,17 @@ ibxEventManager._onTouchEvent = function(e)
 			ibxEventManager._eLastClick = e;
 		}
 
+		//do the click
+		var me = ibxEventManager.createMouseEvent("click", e);
+		e.target.dispatchEvent(me);
+
 		if(dblClick)
 		{
 			var me = ibxEventManager.createMouseEvent("dblclick", e);
 			e.target.dispatchEvent(me);
 			e.preventDefault();//[IBX-40]stop double tap zoom on ios.
 		}
-
+		
 		ibxEventManager._eLast = null;
 		ibxEventManager._hasMoved = false;
 	}
@@ -179,8 +184,8 @@ ibxEventManager._onKeyDown = function(event)
 ibxEventManager._onNoScrollTouchEvent = function(e)
 {
 	//THIS IS NOT WORKING CORRECTLY YET...DO NOT UNCOMMENT!!!!
-	//if(ibxPlatformCheck.isIOS && ibxEventManager.noIOSBodyScroll && e.target === document.body)
-	//	e.preventDefault();
+	// if(ibxPlatformCheck.isIOS && ibxEventManager.noIOSBodyScroll && e.target === document.body)
+	// 	e.preventDefault();
 };
 
 //singleton event manager object.
