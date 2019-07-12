@@ -6,20 +6,23 @@ function ibxEventManager()
 	if(ibx.eventMgr)
 		return;
 
-	window.addEventListener("touchstart", ibxEventManager._onTouchEvent.bind(this), true);
-	window.addEventListener("touchend", ibxEventManager._onTouchEvent, true);
-	window.addEventListener("touchmove", ibxEventManager._onTouchEvent, true);
-	window.addEventListener("contextmenu", ibxEventManager._onContextMenu);
-	window.addEventListener("keydown", ibxEventManager._onKeyDown);
+	window.addEventListener("touchstart", ibxEventManager._onTouchEvent.bind(this), {passive:false, capture:true});
+	window.addEventListener("touchend", ibxEventManager._onTouchEvent, {passive:false, capture:true});
+	window.addEventListener("touchmove", ibxEventManager._onTouchEvent, {passive:false, capture:true});
 
-	document.body.addEventListener("touchstart", ibxEventManager._onNoScrollTouchEvent);
+	window.addEventListener("keydown", ibxEventManager._onKeyDown);
+	window.addEventListener("contextmenu", ibxEventManager._onContextMenu);
+	window.addEventListener("touchstart", ibxEventManager._onNoScrollTouchEvent, {passive:false, capture:true});
 }
 ibxEventManager.noBrowserCtxMenu = true;
 ibxEventManager.noBackspaceNavigate = true;
 ibxEventManager.noSpaceScroll = true;
 ibxEventManager.noIOSBodyScroll = false;
-ibxEventManager.msDblClick = 300;
-ibxEventManager.msCtxMenu = 500;
+ibxEventManager.msCtxMenu = 500;	//context menu timer length
+ibxEventManager.msDblClick = 300;	//time between touches to trigger doubleclick
+ibxEventManager.msSwipe = 300;		//time for touch movement before swipe event
+ibxEventManager.deltaSwipe = 30;	//distance for touch move to trigger a swipe event
+
 ibxEventManager.createMouseEvent = function(eType, e)
 {
 	var touch = (e instanceof TouchEvent) ? e.touches[0] : null;
@@ -35,97 +38,83 @@ ibxEventManager.createMouseEvent = function(eType, e)
 	return event;
 };
 
-
+/***
+ * Translate touch events into mouse events.
+ */
 ibxEventManager._onTouchEvent = function(e)
 {
+	//cancel any pending context menu by clearing the timer.
+	window.clearTimeout(ibxEventManager._ctxMenuTimer);
+
 	var eType = e.type;
 	if(eType == "touchstart")
 	{
-		ibxEventManager._hasSwiped = false;
 		var me = ibxEventManager.createMouseEvent("mousedown", e);
 		e.target.dispatchEvent(me);
-		ibxEventManager._eLast = e;
-
+		ibxEventManager._eLastTouch = e;
 		ibxEventManager._ctxMenuTimer = window.setTimeout(function(e)
 		{
 			var me = ibxEventManager.createMouseEvent("contextmenu", e);
 			e.target.dispatchEvent(me);
-			ibxEventManager._eLast = e;
 		}.bind(ibxEventManager, e), ibxEventManager.msCtxMenu);
 	}
 	else
 	if(eType == "touchend")
 	{
-		window.clearTimeout(ibxEventManager._ctxMenuTimer);//cancel context menu
-
+		//do mouseup
 		var me = ibxEventManager.createMouseEvent("mouseup", e);
 		e.target.dispatchEvent(me);
-		ibxEventManager._eLast = e;
 
-		var dblClick = false;
-		if(ibxEventManager._eLast.type != "contextmenu")
-		{
-			var dt = ibxEventManager._eLastClick ? (e.timeStamp - ibxEventManager._eLastClick.timeStamp) : Infinity;
-			dblClick = (dt < ibxEventManager.msDblClick);
-			ibxEventManager._eLast = e;
-			ibxEventManager._eLastClick = e;
-		}
+		//do click
+		var me = ibxEventManager.createMouseEvent("click", e);
+		e.target.dispatchEvent(me);
 
-		if(dblClick)
+		//do double click
+		var dt = ibxEventManager._eLastClick ? (e.timeStamp - ibxEventManager._eLastClick.timeStamp) : Infinity;
+		if(dt < ibxEventManager.msDblClick)
 		{
 			var me = ibxEventManager.createMouseEvent("dblclick", e);
 			e.target.dispatchEvent(me);
-			e.preventDefault();//[IBX-40]stop double tap zoom on ios.
 		}
 
-		ibxEventManager._eLast = null;
-		ibxEventManager._hasMoved = false;
+		//save info, and prevent default so browser won't generate its own native mouse events.
+		ibxEventManager._eLastClick = e;
+		ibxEventManager._eLastTouch = null;
+		ibxEventManager._hasSwiped = false;
+		e.preventDefault();
 	}
 	else
 	if(eType == "touchmove")
 	{
-		window.clearTimeout(ibxEventManager._ctxMenuTimer);//cancel context menu
-
-		//figure out swiping
+		//do swiping
 		var touch = e.touches[0];
-		if(!ibxEventManager._hasSwiped)
+		var tElapsed = e.timeStamp - ibxEventManager._eLastTouch.timeStamp;
+		var dx = touch.clientX - ibxEventManager._eLastTouch.touches[0].clientX;
+		var dy = touch.clientY - ibxEventManager._eLastTouch.touches[0].clientY;
+		if(tElapsed <= ibxEventManager.msSwipe && (Math.abs(dx) >= ibxEventManager.deltaSwipe || Math.abs(dy) >= ibxEventManager.deltaSwipe))
 		{
-			var tElapsed = e.timeStamp - ibxEventManager._eLast.timeStamp;
-			var dx = touch.clientX - ibxEventManager._eLast.touches[0].clientX;
-			var dy = touch.clientY - ibxEventManager._eLast.touches[0].clientY;
-			var sEvent = null;
-			if(dx > 30)
-				sEvent = "swiperight";
-			else
-			if(dx < -30)
-				sEvent = "swipeleft";
-
-			if(sEvent && tElapsed <= 300)
-			{
-				var se = ibxEventManager.createMouseEvent(sEvent, e);
-				ibxEventManager._hasSwiped = true;
-				e.target.dispatchEvent(se);
-			}
-
-			sEvent = null;
-			if(dy > 30)
-				sEvent = "swipedown";
-			else
-			if(dy < -30)
-				sEvent = "swipeup";
+			var dir = ""
+			if(dy > ibxEventManager.deltaSwipe)
+				dir += "down";
+			if(dy < -ibxEventManager.deltaSwipe)
+				dir += "up";
+			if(dx > ibxEventManager.deltaSwipe)
+				dir += "right";
+			if(dx < -ibxEventManager.deltaSwipe)
+				dir += "left";
 			
-			if(sEvent && tElapsed <= 300)
+			if(dir)
 			{
-				var se = ibxEventManager.createMouseEvent(sEvent, e);
+				var se = ibxEventManager.createMouseEvent("swipe", e);
+				se.data = dir;
 				ibxEventManager._hasSwiped = true;
 				e.target.dispatchEvent(se);
 			}
 		}
 
+		//do mouse move
 		var me = ibxEventManager.createMouseEvent("mousemove", e);
 		e.target.dispatchEvent(me);
-		ibxEventManager._eLast = e;
-		ibxEventManager._hasMoved = true;//stop possible dblclick on touchend
 	}
 };
 
@@ -178,9 +167,9 @@ ibxEventManager._onKeyDown = function(event)
 //ios has an annoying habit of attempting to scroll the body element even when it has nothing to scroll.  This stops that!
 ibxEventManager._onNoScrollTouchEvent = function(e)
 {
-	//THIS IS NOT WORKING CORRECTLY YET...DO NOT UNCOMMENT!!!!
-	//if(ibxPlatformCheck.isIOS && ibxEventManager.noIOSBodyScroll && e.target === document.body)
-	//	e.preventDefault();
+	// THIS IS NOT WORKING CORRECTLY YET...DO NOT UNCOMMENT!!!!
+	// if(ibxPlatformCheck.isIOS && ibxEventManager.noIOSBodyScroll && e.target === document.body)
+	// 	e.preventDefault();
 };
 
 //singleton event manager object.
