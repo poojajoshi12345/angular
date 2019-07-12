@@ -242,6 +242,7 @@ $Revision: 1.123 $:-->
 		<style-file src="./css/slider.ibx.css"/>
 		<style-file src="./css/popup.ibx.css"/>
 		<style-file src="./css/dialog.ibx.css"/>
+		<style-file src="./css/wizard.ibx.css"/>
 		<style-file src="./css/tooltip.ibx.css"/>
 		<style-file src="./css/form.ibx.css"/>
 		<style-file src="./css/tabs.ibx.css"/>
@@ -310,6 +311,7 @@ $Revision: 1.123 $:-->
 		<script-file src="./js/select.ibx.js"/>
 		<script-file src="./js/carousel.ibx.js"/>
 		<script-file src="./js/tabs.ibx.js"/>
+		<script-file src="./js/wizard.ibx.js"/>
 		<script-file src="./js/datepicker.ibx.js"/>
 		<script-file src="./js/colorpicker.ibx.js"/>
 		<script-file src="./js/diagram.ibx.js"/>
