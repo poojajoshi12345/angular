@@ -14,7 +14,6 @@
 	<url>https://www.informationbuilders.com</url>
 
 	<properties>
-		<com.fasterxml.jackson.version>2.9.8</com.fasterxml.jackson.version>
 		<derby.version>10.14.2.0</derby.version>
         <ibi.doc.root>${project.build.directory}/ibi-doc-root</ibi.doc.root>
 		<jacoco.maven.plugin.version>0.8.4</jacoco.maven.plugin.version>
