@@ -110,10 +110,10 @@ $Revision: 1.123 $:-->
 					<div class="ibx-dialog-content" data-ibx-type="ibxVBox" data-ibx-name="contentBox" data-ibxp-align="stretch"></div>
 					<div class='ibx-dialog-button-box' data-ibx-type='ibxHBox' data-ibx-name='btnBox' data-ibxp-align='stretch'>
 						<div class="ibx-dialog-button-padding" data-ibx-type="ibxNull" data-ibx-name="btnPadding"></div>
-						<div class='ibx-dialog-ok-button' data-ibx-type='ibxButton' data-ibx-name='btnOK' data-ibxp-text='@ibxString("IBX_STR_OK")' tabIndex='0'></div>
-						<div class='ibx-dialog-no-button' data-ibx-type='ibxButton' data-ibx-name='btnNo' data-ibxp-text='@ibxString("IBX_STR_NO")' tabIndex='0'></div>
-						<div class='ibx-dialog-apply-button' data-ibx-type='ibxButton' data-ibx-name='btnApply' data-ibxp-text='@ibxString("IBX_STR_APPLY")' tabIndex='0'></div>
-						<div class='ibx-dialog-cancel-button' data-ibx-type='ibxButton' data-ibx-name='btnCancel' data-ibxp-text='@ibxString("IBX_STR_CANCEL")' tabIndex='0'></div>
+						<div class='ibx-dialog-button ibx-dialog-ok-button' data-ibx-type='ibxButton' data-ibx-name='btnOK' data-ibxp-text='@ibxString("IBX_STR_OK")' tabIndex='0'></div>
+						<div class='ibx-dialog-button ibx-dialog-no-button' data-ibx-type='ibxButton' data-ibx-name='btnNo' data-ibxp-text='@ibxString("IBX_STR_NO")' tabIndex='0'></div>
+						<div class='ibx-dialog-button ibx-dialog-apply-button' data-ibx-type='ibxButton' data-ibx-name='btnApply' data-ibxp-text='@ibxString("IBX_STR_APPLY")' tabIndex='0'></div>
+						<div class='ibx-dialog-button ibx-dialog-cancel-button' data-ibx-type='ibxButton' data-ibx-name='btnCancel' data-ibxp-text='@ibxString("IBX_STR_CANCEL")' tabIndex='0'></div>
 					</div>
 				</div>
 			</div>
@@ -242,6 +242,7 @@ $Revision: 1.123 $:-->
 		<style-file src="./css/slider.ibx.css"/>
 		<style-file src="./css/popup.ibx.css"/>
 		<style-file src="./css/dialog.ibx.css"/>
+		<style-file src="./css/wizard.ibx.css"/>
 		<style-file src="./css/tooltip.ibx.css"/>
 		<style-file src="./css/form.ibx.css"/>
 		<style-file src="./css/tabs.ibx.css"/>
@@ -310,6 +311,7 @@ $Revision: 1.123 $:-->
 		<script-file src="./js/select.ibx.js"/>
 		<script-file src="./js/carousel.ibx.js"/>
 		<script-file src="./js/tabs.ibx.js"/>
+		<script-file src="./js/wizard.ibx.js"/>
 		<script-file src="./js/datepicker.ibx.js"/>
 		<script-file src="./js/colorpicker.ibx.js"/>
 		<script-file src="./js/diagram.ibx.js"/>
