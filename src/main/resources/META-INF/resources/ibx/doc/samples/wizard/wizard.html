@@ -21,9 +21,19 @@
 					wiz.ibxWidget("open");
 				});
 
+				$(".wiz-page-button-test").on("ibx_change", function(e)
+				{
+					var checked = $(e.currentTarget).ibxWidget("option", "checked");
+					$(".test-wiz").ibxWidget("allowNext", checked);
+				});
+
 				$(".test-wiz").on("ibx_beforewizardpagechange ibx-wizardpagechange ibx_beforeclose", function(e, hint)
 				{
 					console.log(e.type, hint)
+					if(e.type == "ibx_beforeclose")
+					{
+						alert("You finished the wizard!");
+					}
 				});
 			}, [{"src":"./wizard_res.xml", "loadContext":"app"}], true);
 		</script>
@@ -42,6 +52,10 @@
 				height:200px;
 				padding:10px;
 			}
+			.wiz-page-button-test
+			{
+				margin:5px;
+			}
 		</style>
 	</head>
 	<body class="ibx-root" data-ibx-type="ibxVBox" data-ibxp-wrap="false">
@@ -49,13 +63,22 @@
 
 		<div class="test-wiz" data-ibx-type="ibxWizard" data-ibxp-destroy-on-close="false">
 			<div class="test-page p1" data-ibx-type="ibxWizardPage" data-ibxp-selected="true" data-ibxp-tab-options="{text:' Wizard Step 1'}">
-				<div class="wiz-page-content">Step 1 options</div>
+				<div class="wiz-page-content">
+					<div class="test-label">Step 1...</div>
+					<div tabindex="0" class="wiz-page-button-test" data-ibx-type="ibxCheckBoxSimple">Check me to continue</div>
+				</div>
 			</div>
 			<div class="test-page p2" data-ibx-type="ibxWizardPage" data-ibxp-tab-options="{text:'Wizard Step 2'}">
-				<div class="wiz-page-content">Step 2 options</div>
+				<div class="wiz-page-content">
+					<div class="test-label">Step 12...</div>
+					<div tabindex="0" class="wiz-page-button-test" data-ibx-type="ibxCheckBoxSimple">Check me to continue</div>
+				</div>
 			</div>
 			<div class="test-page p3" data-ibx-type="ibxWizardPage" data-ibxp-tab-options="{text:'Wizard Step 3'}">
-				<div class="wiz-page-content">Step 3 options</div>
+				<div class="wiz-page-content">
+					<div class="test-label">Step 3...</div>
+					<div tabindex="0" class="wiz-page-button-test" data-ibx-type="ibxCheckBoxSimple">Check me to continue</div>
+				</div>
 			</div>
 		</div>
 	</body>
