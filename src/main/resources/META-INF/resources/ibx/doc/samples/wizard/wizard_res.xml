@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ibx-res-bundle name="resbundle.xml" loadContext="bundle">
+
+	<res-bundles>
+		<ibx-res-bundle src="../propgrid/propgrid_res.xml"/>
+	</res-bundles>
+
+	<strings>
+		<string-bundle>
+		<![CDATA[
+			{
+				"language":"en",
+				"strings":
+				{
+				}
+			}
+		]]>
+		</string-bundle>
+	</strings>
+
+	<styles>
+		<style-sheet>
+		<![CDATA[
+		]]>
+		</style-sheet>
+	</styles>
+
+	<markup>
+	</markup>
+
+	<scripts>
+		<script-block>
+		</script-block>
+	</scripts>
+</ibx-res-bundle>
