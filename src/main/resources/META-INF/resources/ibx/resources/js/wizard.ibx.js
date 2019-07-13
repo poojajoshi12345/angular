@@ -16,9 +16,9 @@ $.widget("ibi.ibxWizard", $.ibi.ibxDialog,
 	{
 		this._super();
 
-		this.btnPrev = $("<div tabindex='0' class='ibx-dialog-button ibx-wizard-back-button'>").ibxButton({text:"Back", glyphClasses:"material-icons", "glyph":"navigate_before"}).on("click", this.goBack.bind(this));
-		this.btnNext = $("<div tabindex='0' class='ibx-dialog-button ibx-wizard-next-button'>").ibxButton({text:"Next", glyphClasses:"material-icons", "glyph":"navigate_next", iconPosition:"right"}).on("click", this.goNext.bind(this));
-		this.btnFinish = $("<div tabindex='0' class='ibx-dialog-button ibx-wizard-finish-button hidden'>").ibxButton({text:"Finnish"}).on("click", this.close.bind(this, "finish"));
+		this.btnPrev = $("<div tabindex='0' class='ibx-dialog-button ibx-wizard-back-button'>").ibxButton({text:ibx.resourceMgr.getString("IBX_WIZ_BTN_PREV"), glyphClasses:"material-icons", "glyph":"navigate_before"}).on("click", this.goBack.bind(this));
+		this.btnNext = $("<div tabindex='0' class='ibx-dialog-button ibx-wizard-next-button'>").ibxButton({text:ibx.resourceMgr.getString("IBX_WIZ_BTN_NEXT"), glyphClasses:"material-icons", "glyph":"navigate_next", iconPosition:"right"}).on("click", this.goNext.bind(this));
+		this.btnFinish = $("<div tabindex='0' class='ibx-dialog-button ibx-wizard-finish-button hidden'>").ibxButton({text:ibx.resourceMgr.getString("IBX_WIZ_BTN_FINISH")}).on("click", this.close.bind(this, "finish"));
 		this.btnBox.ibxWidget("remove", ".ibx-dialog-ok-button, .ibx-dialog-apply-button, .ibx-dialog-no-button");
 		this.btnBox.ibxWidget("add", [this.btnPrev[0], this.btnNext[0], this.btnFinish[0]], this.btnCancel, true);
 		this._tabPane = $("<div class='ibx-wiz-tab-pane'>").ibxTabPane().ibxWidget("instance");
@@ -112,7 +112,7 @@ $.widget("ibi.ibxWizard", $.ibi.ibxDialog,
 				this._tabPane.selected(info.nextPage);
 				var pageOptions = $(info.nextPage).ibxWidget("option");
 
-				var title = sformat("{1} ({2} of {3})", pageOptions.tabOptions.text, info.idxNext + 1, info.pages.length);
+				var title = sformat(ibx.resourceMgr.getString("IBX_WIZ_DEF_TITLE"), pageOptions.tabOptions.text, info.idxNext + 1, info.pages.length);
 				info.title = title;
 				this.element.dispatchEvent("ibx_wizardpagechange", info, true, false);
 				this.title(info.title);

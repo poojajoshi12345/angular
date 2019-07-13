@@ -90,6 +90,11 @@ $Revision: 1.123 $:-->
 				"PP_TRANSPARENCY":"Opacity",
 				"PP_PAL_NAME_BASIC":"Basic",
 
+				"IBX_WIZ_DEF_TITLE":"{1} ({2} of {3})",
+				"IBX_WIZ_BTN_PREV":"Back",
+				"IBX_WIZ_BTN_NEXT":"Next",
+				"IBX_WIZ_BTN_FINISH":"Finish",
+
 				"IBX_TERMINATING_STRING":""
 			}
 		}
