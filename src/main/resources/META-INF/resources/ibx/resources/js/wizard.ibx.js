@@ -5,7 +5,6 @@ $.widget("ibi.ibxWizard", $.ibi.ibxDialog,
 	options:
 	{
 		"type":"std wiz",
-		"buttons":"prevnextcancel",
 		"captionOptions":
 		{
 			"text":"ibxWizard"
