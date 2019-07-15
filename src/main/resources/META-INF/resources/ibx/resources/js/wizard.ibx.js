@@ -91,7 +91,6 @@ $.widget("ibi.ibxWizard", $.ibi.ibxDialog,
 		var info = 
 		{
 			"pages":pages,
-			"goIdx":false,
 			"idxCur":idx,
 			"curPage":pages[idx],
 			"idxNext":idxNext,
@@ -113,6 +112,12 @@ $.widget("ibi.ibxWizard", $.ibi.ibxDialog,
 
 				var title = sformat(ibx.resourceMgr.getString("IBX_WIZ_DEF_TITLE"), pageOptions.tabOptions.text, info.idxNext + 1, info.pages.length);
 				info.title = title;
+				info.curPage = info.nextPage;
+				info.idxCur = info.idxNext;
+				
+				delete info.idxNext;
+				delete info.nextPage;
+
 				this.element.dispatchEvent("ibx_wizardpagechange", info, true, false);
 				this.title(info.title);
 
@@ -130,6 +135,10 @@ $.widget("ibi.ibxWizard", $.ibi.ibxDialog,
 		if(caption === undefined)
 			return this.options.captionOptions.text;
 		this.option("captionOptions.text", caption);
+	},
+	page:function()
+	{
+		return this._tabPane.selected();
 	},
 	_setOption:function(key, value)
 	{
