@@ -27,12 +27,17 @@
 					$(".test-wiz").ibxWidget("allowNext", checked);
 				});
 
-				$(".test-wiz").on("ibx_beforewizardpagechange ibx-wizardpagechange ibx_beforeclose", function(e, hint)
+				$(".test-wiz").on("ibx_beforewizardpagechange ibx_wizardpagechange ibx_beforeclose", function(e, hint)
 				{
 					console.log(e.type, hint)
 					if(e.type == "ibx_beforeclose")
-					{
 						alert("You finished the wizard!");
+					else
+					if(e.type == "ibx_wizardpagechange")
+					{
+						var info = e.originalEvent.data;
+						var checked = $(info.curPage).find(".wiz-page-button-test").ibxWidget("option", "checked");
+						info.allowNext = checked;
 					}
 				});
 			}, [{"src":"./wizard_res.xml", "loadContext":"app"}], true);
@@ -70,7 +75,7 @@
 			</div>
 			<div class="test-page p2" data-ibx-type="ibxWizardPage" data-ibxp-tab-options="{text:'Wizard Step 2'}">
 				<div class="wiz-page-content">
-					<div class="test-label">Step 12...</div>
+					<div class="test-label">Step 2...</div>
 					<div tabindex="0" class="wiz-page-button-test" data-ibx-type="ibxCheckBoxSimple">Check me to continue</div>
 				</div>
 			</div>
