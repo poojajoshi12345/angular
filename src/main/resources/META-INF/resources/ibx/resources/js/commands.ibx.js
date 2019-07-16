@@ -104,7 +104,8 @@ $.widget("ibi.ibxCommand", $.ibi.ibxWidget,
 
 		if(state == "userValue" || !state)
 		{
-			widgets.ibxWidget("userValue", options.userValue);
+			//turning this off...don't think the command should set all the connected widget's to have the same user value.
+			//widgets.ibxWidget("userValue", options.userValue);
 			//don't need to dispatch uservaluechanged event because the base widget will do that when the option changes.
 		}
 	}
