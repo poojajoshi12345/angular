@@ -30,10 +30,10 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 		this.element.data("ibiIbxSelectionManager", this);//plymorphism
 		this.element[0].addEventListener("focusin", this._focusInBound = this._onFocusIn.bind(this), true);
 		this.element[0].addEventListener("focusout", this._focusOutBound = this._onFocusOut.bind(this), true);
-		this.element[0].addEventListener("mousedown", this._onMouseEventBound = this._onMouseEvent.bind(this), false);
-		this.element[0].addEventListener("mouseup", this._onMouseEventBound, false);
-		this.element[0].addEventListener("keydown", this._onKeyDownBound = this._onKeyDown.bind(this), false);
-		this.element[0].addEventListener("ibx_rubberbandchange", this._onRubberBandEventBound = this._onRubberBandEvent.bind(this), false);
+		this.element[0].addEventListener("mousedown", this._onMouseEventBound = this._onMouseEvent.bind(this), true);
+		this.element[0].addEventListener("mouseup", this._onMouseEventBound, true);
+		this.element[0].addEventListener("keydown", this._onKeyDownBound = this._onKeyDown.bind(this), true);
+		this.element[0].addEventListener("ibx_rubberbandchange", this._onRubberBandEventBound = this._onRubberBandEvent.bind(this), true);
 
 	},
 	_destroy:function()
@@ -44,11 +44,11 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 		this.element.ibxRemoveClass([this._widgetClass, "ibx-sm-selection-root", "ibx-sm-focus-root", "ibx-sm-nav-key-root", "ibx-sm-focus-default"]);
 		this.element[0].removeEventListener("focusin", this._focusInBound, true);
 		this.element[0].removeEventListener("focusout", this._focusOutBound, true);
-		this.element[0].removeEventListener("mousedown", this._onMouseEventBound, false);
-		this.element[0].removeEventListener("mouseup", this._onMouseEventBound, false);
-		this.element[0].removeEventListener("mouseup", this._onMouseUpBound, false);
-		this.element[0].removeEventListener("keydown", this._onKeyDownBound, false);
-		this.element[0].removeEventListener("ibx_rubberbandchange", this._onRubberBandEventBound, false);
+		this.element[0].removeEventListener("mousedown", this._onMouseEventBound, true);
+		this.element[0].removeEventListener("mouseup", this._onMouseEventBound, true);
+		this.element[0].removeEventListener("mouseup", this._onMouseUpBound, true);
+		this.element[0].removeEventListener("keydown", this._onKeyDownBound, true);
+		this.element[0].removeEventListener("ibx_rubberbandchange", this._onRubberBandEventBound, true);
 		this._super();
 	},
 	_onFocusIn:function(e)
