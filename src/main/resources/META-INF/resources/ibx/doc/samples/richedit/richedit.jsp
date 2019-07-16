@@ -116,7 +116,7 @@
 					if(e.type == "ibx_uservaluechanged")
 					{
 						if(cmd.is(".cmd-font-name") || cmd.is("cmd-font-size"))
-							val = val[0];
+							val = val;
 						else
 						if(cmd.is(".cmd-fore-color, .cmd-back-color") && isUserValue)
 						{

@@ -102,11 +102,14 @@ $.widget("ibi.ibxCommand", $.ibi.ibxWidget,
 			this.element.dispatchEvent("ibx_checkchanged", options.checked, false, false, this._relTarget);
 		}
 
-		if(state == "userValue" || !state)
-		{
-			widgets.ibxWidget("userValue", options.userValue);
-			//don't need to dispatch uservaluechanged event because the base widget will do that when the option changes.
-		}
+		/***
+		 * I'M TURNING THIS OFF FOR NOW, AS I DON'T THINK THE WIDGETS SHOULD ALL CHANGE THEIR userValue TO BE WHAT THE COMMAND HAS.
+		 */
+		// if(state == "userValue" || !state)
+		// {
+		// 	widgets.ibxWidget("userValue", options.userValue);
+		// 	//don't need to dispatch uservaluechanged event because the base widget will do that when the option changes.
+		// }
 	}
 });
 $.ibi.ibxCommand.cmds = {};
