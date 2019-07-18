@@ -9,6 +9,17 @@ $.widget("ibi.ibxTreeSelectionManager", $.ibi.ibxSelectionManager,
 		"toggleSelection":false,
 		"escClearSelection":true,
 	},
+	_onMouseEvent:function(e)
+	{
+		var target = $(e.target);
+		if(!target.is(".tnode-btn"))
+			this._super(e);
+	},
+	_onKeyDown:function(e)
+	{
+		if([$.ui.keyCode.LEFT, $.ui.keyCode.RIGHT].indexOf(e.keyCode) == -1)
+			this._super(e);
+	},
 	mapToSelectable:function(el)
 	{
 		el = $(el).map(function(idx, el)
@@ -332,7 +343,7 @@ $.widget("ibi.ibxTreeNode", $.ibi.ibxVBox,
 		this.nodeLabel.ibxWidget("option", options.labelOptions).css("display", !showLabel ? "none" : "");
 		this.element.ibxToggleClass("tnode-virtual-parent", options.virtualParent).ibxToggleClass("tnode-is-container", options.container).ibxToggleClass("tnode-expanded", options.expanded);
 		this.element.ibxToggleClass("tnode-has-parent", !!this.element.data("ibxTreeParent"));
-		this.btnExpand.ibxToggleClass("tnode-btn-root", this.isRoot()).ibxRemoveClass(options.btnCollapsed).ibxRemoveClass(options.btnExpanded);
+		this.btnExpand.ibxToggleClass("tnode-btn-root", this.isRoot()).ibxRemoveClass([options.btnCollapsed, options.btnExpanded]);
 		if(options.container)
 			(options.expanded) ? this.btnExpand.ibxAddClass(options.btnExpanded) : this.btnExpand.ibxAddClass(options.btnCollapsed);
 	}
