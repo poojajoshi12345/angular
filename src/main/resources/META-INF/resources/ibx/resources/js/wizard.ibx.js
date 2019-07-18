@@ -5,6 +5,7 @@ $.widget("ibi.ibxWizard", $.ibi.ibxDialog,
 	options:
 	{
 		"type":"std wiz",
+		"titlePageSteps":true,
 		"captionOptions":
 		{
 			"text":"ibxWizard"
@@ -66,6 +67,7 @@ $.widget("ibi.ibxWizard", $.ibi.ibxDialog,
 	},
 	go:function(where)
 	{
+		var options = this.options;
 		var pages = this.children();
 
 		where = isNaN(where) ? pages.index(where) : where;
@@ -110,7 +112,7 @@ $.widget("ibi.ibxWizard", $.ibi.ibxDialog,
 				this._tabPane.selected(info.nextPage);
 				var pageOptions = $(info.nextPage).ibxWidget("option");
 
-				var title = sformat(ibx.resourceMgr.getString("IBX_WIZ_DEF_TITLE"), pageOptions.tabOptions.text, info.idxNext + 1, info.pages.length);
+				var title = options.titlePageSteps ? sformat(ibx.resourceMgr.getString("IBX_WIZ_DEF_TITLE"), pageOptions.tabOptions.text, info.idxNext + 1, info.pages.length) : pageOptions.tabOptions.text;
 				info.title = title;
 				info.curPage = info.nextPage;
 				info.idxCur = info.idxNext;
