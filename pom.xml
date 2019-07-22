@@ -17,6 +17,13 @@
 		<derby.version>10.14.2.0</derby.version>
         <ibi.doc.root>${project.build.directory}/ibi-doc-root</ibi.doc.root>
 		<jacoco.maven.plugin.version>0.8.4</jacoco.maven.plugin.version>
+        <jacoco.maven.ratio.classRatio>1.00</jacoco.maven.ratio.classRatio>
+        <jacoco.maven.ratio.instructionRatio>0.90</jacoco.maven.ratio.instructionRatio>
+        <jacoco.maven.ratio.methodRatio>0.95</jacoco.maven.ratio.methodRatio>
+        <jacoco.maven.ratio.branchRatio>0.85</jacoco.maven.ratio.branchRatio>
+        <jacoco.maven.ratio.complexityRatio>0.85</jacoco.maven.ratio.complexityRatio>
+        <jacoco.maven.ratio.lineRatio>0.90</jacoco.maven.ratio.lineRatio>
+        <jacoco.maven.haltOnFailure>false</jacoco.maven.haltOnFailure>
 		<javax.servlet.api.version>3.1.0</javax.servlet.api.version>
 		<javax.servlet.jsp.api.version>2.3.3</javax.servlet.jsp.api.version>
 		<junit.version>4.12</junit.version>
