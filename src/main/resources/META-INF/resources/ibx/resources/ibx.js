@@ -477,6 +477,11 @@ ibx.coercePropVal = function (val)
 		if(tempVal == "false")
 			val = false;
 		else
+		if(tempVal == "null")
+			val = null;
+		else
+		if(tempVal == "undefined")
+			val = undefined;
 		if($.isNumeric(val))
 			val = Number(tempVal);
 	}
