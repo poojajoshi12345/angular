@@ -51,9 +51,9 @@ $.widget("ibi.ibxGrid", $.ibi.ibxWidget,
 			rows = rows.replace(/(repeat\(([^,]*)[ |,]*([^\)]*)\)*)/g, "($3)[$2]")	
 
 			//can't use this stuff with IE.
-			if((options.autoCols || options.autoRows || options.autoFlow  || options.areas) && !this._ieHasWarned)
+			if((options.autoCols || options.autoRows || options.autoFlow  || options.areas || options.rowGap || options.colGap) && !this._ieHasWarned)
 			{
-				console.warn("[ibxGrid] IE does not support autoRows/autoCols/autoFlow/areas for css grids.");
+				console.warn("[ibxGrid] IE does not support autoRows/autoCols/autoFlow/areas/rowGap/colGap for css grids.");
 				this._ieHasWarned = true;
 			}
 		}
