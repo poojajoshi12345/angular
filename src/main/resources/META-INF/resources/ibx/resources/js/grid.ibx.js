@@ -36,21 +36,38 @@ $.widget("ibi.ibxGrid", $.ibi.ibxWidget,
 	{
 		this._super();
 	},
+	_ieHasWarned:false,
 	_refresh: function ()
 	{
 		this._super();
 		var options = this.options;
+		var cols = options.cols;
+		var rows = options.rows;
+
+		//Polyfill for IE repeats, just different syntax...coerce normal syntax.
+		if(ibxPlatformCheck.isIE)
+		{
+			cols = cols.replace(/(repeat\(([^,]*)[ |,]*([^\)]*)\)*)/g, "($3)[$2]")			
+			rows = rows.replace(/(repeat\(([^,]*)[ |,]*([^\)]*)\)*)/g, "($3)[$2]")	
+
+			//can't use this stuff with IE.
+			if((options.autoCols || options.autoRows || options.autoFlow  || options.areas) && !this._ieHasWarned)
+			{
+				console.warn("[ibxGrid] IE does not support autoRows/autoCols/autoFlow/areas for css grids.");
+				this._ieHasWarned = true;
+			}
+		}
 
 		var gridCss = 
 		{
 			//IE...do before so standard CSS can override in compliant browsers
-			"-ms-grid-columns":			options.cols,
-			"-ms-grid-rows":			options.rows,
+			"-ms-grid-columns":			cols,
+			"-ms-grid-rows":			rows,
 
 			//Standard CSS
-			"grid-template-columns":	options.cols,
+			"grid-template-columns":	cols,
 			"grid-auto-columns":		options.autoCols,
-			"grid-template-rows":		options.rows,
+			"grid-template-rows":		rows,
 			"grid-auto-rows":			options.autoRows,
 			"grid-template-areas":		options.areas,				//each line must be quoted, ex: " 'a1 a1 a1''a2 . a2''a3 . a3' "
 			"grid-auto-flow":			options.autoFlow,
