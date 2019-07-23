@@ -107,6 +107,12 @@
 				<directory>src/test/resources</directory>
 			</testResource>
 			<testResource>
+				<directory>src/main/resources</directory>
+				<includes>
+					<include>**/doc/**</include>
+				</includes>
+			</testResource>
+			<testResource>
 				<directory>${project.basedir}</directory>
 				<includes>
 					<include>*.json</include>
