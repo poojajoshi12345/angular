@@ -36,6 +36,7 @@ $.widget("ibi.ibxGrid", $.ibi.ibxWidget,
 	{
 		this._super();
 	},
+	_ieHasWarned:false,
 	_refresh: function ()
 	{
 		this._super();
@@ -43,11 +44,18 @@ $.widget("ibi.ibxGrid", $.ibi.ibxWidget,
 		var cols = options.cols;
 		var rows = options.rows;
 
-		//IE has repeats, just different syntax...coerce normal syntax.
+		//Polyfill for IE repeats, just different syntax...coerce normal syntax.
 		if(ibxPlatformCheck.isIE)
 		{
 			cols = cols.replace(/(repeat\(([^,]*)[ |,]*([^\)]*)\)*)/g, "($3)[$2]")			
 			rows = rows.replace(/(repeat\(([^,]*)[ |,]*([^\)]*)\)*)/g, "($3)[$2]")	
+
+			//can't use this stuff with IE.
+			if((options.autoCols || options.autoRows || options.autoFlow  || options.areas) && !this._ieHasWarned)
+			{
+				console.warn("[ibxGrid] IE does not support autoRows/autoCols/autoFlow/areas for css grids.");
+				this._ieHasWarned = true;
+			}
 		}
 
 		var gridCss = 
