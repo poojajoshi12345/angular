@@ -47,8 +47,8 @@ $.widget("ibi.ibxGrid", $.ibi.ibxWidget,
 		//Polyfill for IE repeats, just different syntax...coerce normal syntax.
 		if(ibxPlatformCheck.isIE)
 		{
-			cols = cols.replace(/(repeat\(([^,]*)[ |,]*([^\)]*)\)*)/g, "($3)[$2]")			
-			rows = rows.replace(/(repeat\(([^,]*)[ |,]*([^\)]*)\)*)/g, "($3)[$2]")	
+			cols = cols.replace(/repeat\((\d+)\W+(.*?)\)/g, "($2)[$1]");			
+			rows = rows.replace(/repeat\((\d+)\W+(.*?)\)/g, "($2)[$1]");	
 
 			//can't use this stuff with IE.
 			if((options.autoCols || options.autoRows || options.autoFlow  || options.areas || options.rowGap || options.colGap) && !this._ieHasWarned)
