@@ -6,6 +6,7 @@ $.widget("ibi.ibxDatePicker", $.ibi.ibxVBox,
 	options:
 		{
 			"type": "popup", // valid values: "popup", "simple", "inline"
+			"autoOpen":true, //show datepicker when focused
 			"dateFormat": '', // used as internal formatting
 			"outDateFormat": '', // used to format what's shown in the associated label
 			"wrap": "false",
@@ -24,13 +25,13 @@ $.widget("ibi.ibxDatePicker", $.ibi.ibxVBox,
 		this.options.outDateFormat = this.options.outDateFormat || ibx.resourceMgr.getString("IBX_DP_DATE_OUTPUT_FORMAT");
 		this.options.date = this.options.date || $.datepicker.formatDate($.ibi.ibxDatePicker.statics.defaultDateFormat, new Date());
 		this._super();
-		this.element.on("focus", this._showPopup.bind(this));
+		this.element.on("focus keydown", this._onFocusKeyEvent.bind(this));
 		this._input = $('<div class="ibx-datepicker-input">').ibxLabel({glyphClasses:"fa fa-calendar", 'align': 'stretch'}).on('click', this._showPopup.bind(this));
 		this._clear = $('<div class="ibx-datepicker-clear">').ibxButtonSimple({glyphClasses:"fa fa-times"}).on('click', this._onClear.bind(this)).hide();
 		this._inputWrapper = $('<div>').ibxHBox({align: 'center'}).ibxAddClass('ibx-datepicker-input-wrapper');
 		this._inputWrapper.append(this._input, this._clear);
 		this._dateWrapper = $('<div>').ibxFlexBox({ 'wrap': false });
-		this._datePicker = $('<div>').datepicker({
+		this._datePicker = $('<div tabindex="-1">').datepicker({
 			"closeText" : ibx.resourceMgr.getString("IBX_DP_CLOSE_TEXT"),
 			"prevText" : ibx.resourceMgr.getString("IBX_DP_PREV_TEXT"),
 			"nextText" : ibx.resourceMgr.getString("IBX_DP_NEXT_TEXT"),
@@ -45,6 +46,15 @@ $.widget("ibi.ibxDatePicker", $.ibi.ibxVBox,
 			"onSelect": this._onSelect.bind(this),
 			"onChangeMonthYear": this._onChangeMonthYear.bind(this)
 		});
+
+		//Need this because teh datepicker is not accessible by default...only uses anchors...and the selection manager won't tab/move between them by default.
+		this._datePicker.ibxSelectionManager({type:"single", navKeyRoot:true, focusDefault:".ui-datepicker-current-day", focusResetOnBlur:false}).on("ibx_selectablechildren", function(e)
+		{
+			var dp = $(e.target);
+			e.originalEvent.data.items = dp.find("a").attr("tabindex", 0);
+		});
+
+		//setup the strings.
 		this._pickerOptions = {
 			"closeText" : ibx.resourceMgr.getString("IBX_DP_CLOSE_TEXT"),
 			"prevText" : ibx.resourceMgr.getString("IBX_DP_PREV_TEXT"),
@@ -59,7 +69,7 @@ $.widget("ibi.ibxDatePicker", $.ibi.ibxVBox,
 			"buttonText" : ibx.resourceMgr.getString("IBX_DP_BUTTON_TEXT")};
 		this._dateWrapper.append(this._datePicker).ibxAddClass('ibx-datepicker-date-wrapper');
 		this.element.append(this._inputWrapper, this._dateWrapper);
-		this._popup = $('<div class="ibx-datepicker-popup">').ibxPopup({'destroyOnClose': false});
+		this._popup = $('<div class="ibx-datepicker-popup">').ibxPopup({'focusDefault':true, 'focusRoot':true, 'destroyOnClose': false});
 	},
 	_init: function ()
 	{
@@ -98,6 +108,8 @@ $.widget("ibi.ibxDatePicker", $.ibi.ibxVBox,
 			return;
 		this._inChange = true;
 
+		//this._datePicker.find("a").attr("tabindex", 0);
+
 		var curDate = this._datePicker.datepicker('getDate');
 		var newDate = curDate;
 		newDate.setMonth(month-1);
@@ -111,13 +123,21 @@ $.widget("ibi.ibxDatePicker", $.ibi.ibxVBox,
 		}
 		this._inChange = false;
 	},
+	_onFocusKeyEvent:function(e)
+	{
+		if(this.options.autoOpen)
+			this._showPopup();
+		else
+		if(e.type == "keydown" && (e.keyCode == $.ui.keyCode.DOWN || e.keyCode == $.ui.keyCode.ENTER || e.keyCode == $.ui.keyCode.SPACE))
+			this._showPopup();
+	},
 	_showPopup: function ()
 	{
 		switch (this.options.type)
 		{
 			case 'popup':
 				if (!this._popup.ibxWidget('isOpen'))
-					this._popup.ibxWidget('open');
+					this._popup.ibxWidget('open');//.find("a").attr("tabindex", 0);
 				break;
 			default:
 				break;
