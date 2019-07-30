@@ -93,7 +93,10 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 	_onKeyDown:function(e)
 	{
 		var options = this.options;
-		if(!options.focusRoot && !options.navKeyRoot)
+		var ownsTarget = $.contains(this.element[0], e.target) && $(e.target).closest(".ibx-selection-manager").is(this.element); //is there a deeper selection manager?!
+
+		//this aint the selectionmanager you're looking for...get out of Dodge!
+		if((!options.focusRoot && !options.navKeyRoot) || !ownsTarget)
 			return;
 
 		//manage circular tabbing if desired.
@@ -238,9 +241,9 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 					this.toggleSelected(selTarget);//toggle the target!
 				else
 				if(isMulti && !options.toggleSelection)
-					this.toggleSelected(selTarget, true);
+					this.toggleSelected(selTarget, options.toggleSelection ? undefined : true);
 				else
-					this.toggleSelected(selTarget, (options.toggleSelection ? undefined : true));
+					this.toggleSelected(selTarget, true);
 			}
 		}
 		else
