@@ -52,6 +52,7 @@
 	position:absolute;
 	outline:1px dotted black;
 	pointer-events:none;
+	z-index:1000000;
 }
 
 .ibx-sm-rubber-band-active *
