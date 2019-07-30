@@ -256,19 +256,29 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 	{
 		if(e.type == "ibx_rubberbandchange")
 		{
+			var focus = null;
+			var anchor = null;
 			var options = this.options;
 			var selBox = e.data;
 			selBox.right = selBox.left + selBox.width;
 			selBox.bottom = selBox.top + selBox.height;
 
-			var selChildren = this.selectableChildren(":ibxVisible");
-			for(var i = 0; i < selChildren.length; ++i)
+			var selChildren = [];
+			var children = this.selectableChildren(":ibxVisible");
+			for(var i = 0; i < children.length; ++i)
 			{
-				var child = selChildren[i];
+				var child = children[i];
 				var inBox = $(child).visInfo("borderBox", selBox);
 				var select = options.rubberBandPartialSelect ? inBox.partial : inBox.total;
-				this.selected(child, select, select && !this.anchor());
+				if(select)
+					selChildren.push(child);
 			}
+
+			selChildren = $(selChildren);
+			this.deselectAll();
+			this.selected(selChildren, true, false, false);
+			this.anchor(selChildren.first());
+			this.focus(selChildren.last());
 		}
 	},
 	preDispacthEvent:function(eventInfo){return eventInfo;},
