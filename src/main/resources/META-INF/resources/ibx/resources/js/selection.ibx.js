@@ -55,7 +55,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 	{
 		var options = this.options;
 		var isTarget = this.element.is(e.target);
-		var ownsTarget = $.contains(this.element[0], e.target) && $(e.target).closest(".ibx-selection-manager").is(this.element);
+		var ownsTarget = $.contains(this.element[0], e.target) && $(e.target.parentElement).closest(".ibx-selection-manager").is(this.element);
 		var ownsRelTarget = $.contains(this.element[0], e.relatedTarget);
 
 		//make sure the manager is in the focused state.
@@ -93,7 +93,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 	_onKeyDown:function(e)
 	{
 		var options = this.options;
-		var ownsTarget = $.contains(this.element[0], e.target) && $(e.target).closest(".ibx-selection-manager").is(this.element); //is there a deeper selection manager?!
+		var ownsTarget = $.contains(this.element[0], e.target) && $(e.target.parentElement).closest(".ibx-selection-manager").is(this.element); //is there a deeper selection manager?!
 
 		//this aint the selectionmanager you're looking for...get out of Dodge!
 		if((!options.focusRoot && !options.navKeyRoot) || !ownsTarget)
@@ -200,6 +200,12 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 	_onMouseEvent:function(e)
 	{
 		var options = this.options;
+		var ownsTarget = $.contains(this.element[0], e.target) && $(e.target.parentElement).closest(".ibx-selection-manager").is(this.element); //is there a deeper selection manager?!
+
+		//if we don't directly own the target, then, Neo, you aren't the one.
+		if(!ownsTarget)
+			return;
+
 		if(e.type == "mousedown")
 		{
 			this._eLastMouseDown = e;//save last mousedown so on activate we can check to see if it's on the scrollbar and not do focusDefault.
