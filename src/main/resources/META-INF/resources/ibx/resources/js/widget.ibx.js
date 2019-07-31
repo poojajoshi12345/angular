@@ -376,24 +376,28 @@ $.widget("ibi.ibxWidget", $.Widget,
 		this.element.ibxToggleClass("ibx-draggable", options.draggable);
 		this.element.ibxToggleClass("ibx-external-drop-target", options.externalDropTarget);
 
-		if(options.focusRoot || options.navKeyRoot || options.focusDefault || options.selType != "none")
+		//config the widget's selection manager, unless it's a custom job...then don't muck with it!
+		if(options.selType !== "custom")
 		{
-			var mgrOptions = 
+			if(options.focusRoot || options.navKeyRoot || options.focusDefault || options.selType != "none")
 			{
-				"type": options.selType,
-				"focusDefault": options.focusDefault,
-				"focusRoot": options.focusRoot,
-				"navKeyRoot": options.navKeyRoot,
-				"navKeyDir": options.navKeyDir,
-				"focusResetOnBlur": options.navKeyResetFocusOnBlur,
-			};
-			if(!this.element.is(".ibx-selection-manager"))
-				this.element.ibxSelectionManager();
-			this.element.ibxSelectionManager("option", $.extend({}, mgrOptions, options.selMgrOpts));//need this or options won't get set properly.
+				var mgrOptions = 
+				{
+					"type": options.selType,
+					"focusDefault": options.focusDefault,
+					"focusRoot": options.focusRoot,
+					"navKeyRoot": options.navKeyRoot,
+					"navKeyDir": options.navKeyDir,
+					"focusResetOnBlur": options.navKeyResetFocusOnBlur,
+				};
+				if(!this.element.is(".ibx-selection-manager"))
+					this.element.ibxSelectionManager();
+				this.element.ibxSelectionManager("option", $.extend({}, mgrOptions, options.selMgrOpts));//need this or options won't get set properly.
+			}
+			else
+			if(this.element.is(".ibx-selection-manager"))
+				this.element.ibxSelectionManager("destroy");
 		}
-		else
-		if(this.element.is(".ibx-selection-manager"))
-			this.element.ibxSelectionManager("destroy");
 
 		//now config accessibility
 		this.setAccessibility();
@@ -439,7 +443,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 			shrink.prop("scrollLeft", 100000);
 			shrink.prop("scrollTop", 100000);
 		}
-	}
+	},
 });
 $.ibi.ibxWidget.noRefresh = false; //globally turn off refresh to speed up various add/remove/update operations.
 $.ibi.ibxWidget.ARIA_PROPS_IGNORE = {"role":true, "accessible":true},
