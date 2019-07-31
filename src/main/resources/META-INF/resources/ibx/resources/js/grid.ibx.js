@@ -157,6 +157,7 @@ $.widget("ibi.ibxDataGridSelectionManager", $.ibi.ibxSelectionManager,
 		"selectableChildren":".dgrid-cell", //can be elements/classes/etc.
 		"cacheSelectableChildren":true,
 	},
+	_widgetClass:"ibx-data-grid-selection-manager",
 	_onKeyDown:function(e)
 	{
 		var options = this.options;
@@ -529,7 +530,7 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 		var options = this.options;
 		var classes = options.classes;
 		var corner = this._corner = $("<div>").ibxAddClass("dgrid-corner").data({ibxCol:1, ibxRow:1});
-		var grid = this._grid = $("<div tabindex='0'>").ibxVBox({align:"start"}).ibxAddClass(classes.gridClass).data({ibxCol:"2", ibxRow:"2"});
+		var grid = this._grid = $("<div tabindex='0'>").ibxVBox({align:"start", selType:"custom"}).ibxAddClass(classes.gridClass).data({ibxCol:"2", ibxRow:"2"});
 		grid.on("ibx_beforeselchange", this._onGridSelChange.bind(this));
 		grid.on("scroll", this._onGridScroll.bind(this));
 
@@ -934,10 +935,6 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 		if(key == "toggleSelection")
 			this._sm.option("toggleSelection", value);
 		this._super(key, value);
-	},
-	refresh:function()
-	{
-		this._super();
 	},
 	_refresh:function()
 	{
