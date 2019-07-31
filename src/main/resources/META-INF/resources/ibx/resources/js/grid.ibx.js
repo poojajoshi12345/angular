@@ -489,7 +489,7 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 			resizable:true,
 			selectable:true,
 			visible:true,
-			ui:{},
+			ui:null,
 		},
 
 		//selection manager option passthroughs.
@@ -658,10 +658,11 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 			{
 				var cInfo = colMap[i];
 				
-				//make header if one isn't supplied
-				var cHeading = $(sformat("<div tabindex='-1' class='{1}'>", classes.colHeaderClass));
-				cHeading.ibxButtonSimple({justify:cInfo.justify, aria:{role:"columnheader"}});
-				cHeading.ibxWidget("option", "text", cInfo.title);
+				//make default header if one isn't supplied
+				var cHeading = $(cInfo.ui);
+				if(!cHeading.length)
+					cHeading = $("<div>").ibxButtonSimple({justify:cInfo.justify, text:cInfo.title});
+				cHeading.ibxAddClass(classes.colHeaderClass).attr({tabindex:-1, role:"columnheader"});
 
 				//make splitter
 				var splitter = $(sformat("<div class='{1}'>", classes.colHeaderSplitterClass));
@@ -669,7 +670,7 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 				splitter.on("click", function(e){e.stopPropagation()});//click on splitter not click on header!
 
 				//now add the column header and set the size as everything is in the dom.
-				cInfo.ui = {"idx":i, "header":cHeading, "curSize":null};
+				cInfo._ui = {"idx":i, "header":cHeading, "curSize":null};
 				cHeading.append(splitter).data("ibxDataGridCol", cInfo);
 				this._colHeaderBar.ibxWidget("add", cHeading[0]);
 				if(cInfo.size == "flex")
@@ -723,21 +724,21 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 	getColumnWidth:function(idxCol)
 	{
 		var cInfo = this.options.colMap[idxCol];
-		return (cInfo && cInfo.ui && cInfo.ui.header) ? cInfo.ui.header.outerWidth() : cInfo.size;
+		return (cInfo && cInfo._ui && cInfo._ui.header) ? cInfo._ui.header.outerWidth() : cInfo.size;
 	},
 	setColumnWidth:function(idxCol, width)
 	{
 		var cInfo = this.options.colMap[idxCol];
-		if(cInfo && cInfo.ui)
+		if(cInfo && cInfo._ui)
 		{
 			//this looks weird because the 'width' parm can be a string like "100px", and that has to be set, then we need the 
 			//actual width...AND THEN...we need to subtract out the splitter width...oy vey!
-			cInfo.ui.curSize = width;
-			cInfo.ui.header.outerWidth(width);
-			cInfo.ui.header.outerWidth(cInfo.ui.header.outerWidth());
+			cInfo._ui.curSize = width;
+			cInfo._ui.header.outerWidth(width);
+			cInfo._ui.header.outerWidth(cInfo._ui.header.outerWidth());
 
 			var cells = this.getColumn(idxCol);
-			cells.outerWidth(cInfo.ui.header.outerWidth());
+			cells.outerWidth(cInfo._ui.header.outerWidth());
 		}
 	},
 	getColumn:function(col)
@@ -752,8 +753,8 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 		if(cInfo)
 		{
 			cInfo.visible = show;
-			if(cInfo.ui)
-				cells = cells.add(cInfo.ui.header);
+			if(cInfo._ui)
+				cells = cells.add(cInfo._ui.header);
 		}
 		cells.ibxToggleClass("dgrid-col-hidden", !show);
 	},
@@ -815,7 +816,7 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 		{
 			var cell = cells[i];
 			var cInfo = options.colMap[i] || options.defaultColConfig;
-			cell.style.width = isNaN(cInfo.ui.curSize) ? cInfo.ui.curSize : cInfo.ui.curSize + "px";//if size is just a number assume pixels.
+			cell.style.width = isNaN(cInfo._ui.curSize) ? cInfo._ui.curSize : cInfo._ui.curSize + "px";//if size is just a number assume pixels.
 			cell.classList.add(options.classes.gridCell);
 			
 			//if the tabindex hasn't been set outside, then default to -1 (navkey/click access only...no tabbing between cells).
@@ -867,7 +868,7 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 		var el1Width = resizeInfo.el1.outerWidth();
 		var cInfo = resizeInfo.el1.data("ibxDataGridCol");
 		if(cInfo)
-			this.setColumnWidth(cInfo.ui.idx, el1Width);
+			this.setColumnWidth(cInfo._ui.idx, el1Width);
 	},
 	_onGridScroll:function(e)
 	{
