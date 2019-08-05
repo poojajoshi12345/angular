@@ -96,7 +96,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 		var ownsTarget = $.contains(this.element[0], e.target) && $(e.target.parentElement).closest(".ibx-selection-manager").is(this.element); //is there a deeper selection manager?!
 
 		//this aint the selectionmanager you're looking for...get out of Dodge!
-		if((!options.focusRoot && !options.navKeyRoot) || !ownsTarget)
+		if(!ownsTarget)
 			return;
 
 		//manage circular tabbing if desired.
@@ -158,7 +158,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 		}
 
 		//manage selection, and focus jumping
-		if(options.selectKeys.indexOf(e.keyCode) != -1)
+		if((options.type != "none") && options.selectKeys.indexOf(e.keyCode) != -1)
 		{
 			var focusedItem = this._focus();
 			var isMulti = options.type == "multi";
