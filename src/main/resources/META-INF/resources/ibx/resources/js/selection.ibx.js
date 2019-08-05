@@ -202,6 +202,10 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 		var options = this.options;
 		var ownsTarget = $.contains(this.element[0], e.target) && $(e.target.parentElement).closest(".ibx-selection-manager").is(this.element); //is there a deeper selection manager?!
 
+		//deselect all when clicking on whitespace.
+		if(e.type == "mousedown" && this.element.is(e.target))
+			this.deselectAll()
+
 		//if we don't directly own the target, then, Neo, you aren't the one.
 		if(!ownsTarget)
 			return;
