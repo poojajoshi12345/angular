@@ -130,7 +130,8 @@ $.widget("ibi.ibxPopup", $.ibi.ibxWidget,
 
 			//move the popup to the body so it can be top level...and position it correctly.
 			this.element.data("ibxPopupParent", this.element.parent()).appendTo(document.body);
-			this.element.position(options.position);
+			if(options.position)
+				this.element.position(options.position);
 
 			//tell manager to open the popup.
 			this.element.ibxAddClass("pop-opening");
@@ -176,7 +177,7 @@ $.widget("ibi.ibxPopup", $.ibi.ibxWidget,
 				else
 				{
 					var parent = this.element.data("ibxPopupParent") || document.body;
-					this.element.appendTo(parent).css({top:"", left:""});
+					this.element.appendTo(parent);
 					this.element.ibxRemoveClass("pop-closing").off("transitionend");
 				}
 				
