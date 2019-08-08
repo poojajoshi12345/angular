@@ -21,6 +21,7 @@ $.widget("ibi.ibxPopup", $.ibi.ibxWidget,
 		"closeOnTimer":-1,
 		"refocusLastActiveOnClose":true,
 
+		"autoPosition":false,
 		"position":
 		{
 			/* for my/at position values see: http://api.jqueryui.com/position/ */
@@ -130,8 +131,13 @@ $.widget("ibi.ibxPopup", $.ibi.ibxWidget,
 
 			//move the popup to the body so it can be top level...and position it correctly.
 			this.element.data("ibxPopupParent", this.element.parent()).appendTo(document.body);
-			if(options.position)
-				this.element.position(options.position);
+
+			//if not autoPosition, first time position, next leave where last closed.
+			var curPos = this.element.data("ibxPopupLastPos");
+			if(options.autoPosition || !curPos)
+				this.element.position(options.position)
+			else
+				this.element.css({top:curPos.top, left:curPos.left});
 
 			//tell manager to open the popup.
 			this.element.ibxAddClass("pop-opening");
@@ -176,8 +182,8 @@ $.widget("ibi.ibxPopup", $.ibi.ibxWidget,
 				}
 				else
 				{
-					var parent = this.element.data("ibxPopupParent") || document.body;
-					this.element.appendTo(parent);
+					this.element.data("ibxPopupLastPos", this.element.position()).css({top:"", left:""});
+					this.element.appendTo(this.element.data("ibxPopupParent") || document.body);
 					this.element.ibxRemoveClass("pop-closing").off("transitionend");
 				}
 				
