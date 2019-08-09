@@ -42,6 +42,8 @@ $.widget("ibi.ibxSplitter", $.ibi.ibxWidget,
 				this._initialized = true;
 			}
 
+			el1.ibxAddClass("ibx-splitter-sizing");
+			el2.ibxAddClass("ibx-splitter-sizing");
 			$(document.body).ibxAddClass(bVertical ? "ibx-body-splitter-v" : "ibx-body-splitter-h").css("pointerEvents", "none");
 			$(document).on("mouseup mousemove", this._fnSplitterMouseEvent);
 			this._eLast = e;
@@ -50,6 +52,8 @@ $.widget("ibi.ibxSplitter", $.ibi.ibxWidget,
 		else
 		if(eType == "mouseup")
 		{
+			el1.ibxRemoveClass("ibx-splitter-sizing");
+			el2.ibxRemoveClass("ibx-splitter-sizing");
 			$(document.body).ibxRemoveClass("ibx-body-splitter-v ibx-body-splitter-h").css("pointerEvents", "");
 			$(document).off("mouseup mousemove", this._fnSplitterMouseEvent);
 			delete this._eLast;
@@ -58,6 +62,7 @@ $.widget("ibi.ibxSplitter", $.ibi.ibxWidget,
 		else
 		if(eType == "mousemove")
 		{
+			
 			var oe = e.originalEvent;
 			var s1= bVertical ? el1.width() : el1.height();
 			var s2 = bVertical ? el2.width() : el2.height();

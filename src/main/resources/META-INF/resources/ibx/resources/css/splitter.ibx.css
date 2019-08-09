@@ -43,3 +43,7 @@
 	cursor:ns-resize;
 }
 
+.ibx-splitter-sizing
+{
+	overflow:hidden !important;
+}
