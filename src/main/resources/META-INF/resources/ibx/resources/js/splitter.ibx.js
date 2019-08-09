@@ -37,8 +37,8 @@ $.widget("ibi.ibxSplitter", $.ibi.ibxWidget,
 			if(!this._initialized)
 			{
 				//save initial sizes for dblclick reset.
-				this._e1Info = {el:el1, width:el1.width(), height:el1.height()};
-				this._e2Info =  {el:el2, width:el2.width(), height:el2.height()};
+				this._e1Info = {el:el1, width:el1.outerWidth(), height:el1.outerHeight()};
+				this._e2Info =  {el:el2, width:el2.outerWidth(), height:el2.outerHeight()};
 				this._initialized = true;
 			}
 
