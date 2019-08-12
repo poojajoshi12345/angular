@@ -21,7 +21,7 @@ $.widget("ibi.ibxPopup", $.ibi.ibxWidget,
 		"closeOnTimer":-1,
 		"refocusLastActiveOnClose":true,
 
-		"autoPosition":false,
+		"autoPosition":true,
 		"position":
 		{
 			/* for my/at position values see: http://api.jqueryui.com/position/ */
