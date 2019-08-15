@@ -204,11 +204,13 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 		var ownsTarget = $.contains(this.element[0], e.target) && $(e.target.parentElement).closest(".ibx-selection-manager").is(this.element); //is there a deeper selection manager?!
 
 		//deselect all when clicking on whitespace...BUT, not on scrollbar!
-		if(e.type == "mousedown" && isTarget && !ClickOnScrollbar(e.target, e.clientX, e.clientY) && !options.toggleSelection)
-			this.deselectAll()
+		// if(e.type == "mousedown" && isTarget && !ClickOnScrollbar(e.target, e.clientX, e.clientY) && !options.toggleSelection)
+		// 	this.deselectAll()
+		if(isTarget && ClickOnScrollbar(e.target, e.clientX, e.clientY))
+			return;
 
 		//if we don't directly own the target, then, Neo, you aren't the one.
-		if(!ownsTarget)
+		if(!ownsTarget && !isTarget)
 			return;
 
 		if(e.type == "mousedown")
@@ -224,7 +226,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 			var selChildren = this.selectableChildren(":ibxVisible");
 			var selTarget = this.mapToSelectable(e.target);
 
-			if(isMulti && !e.shiftKey && !e.ctrlKey && !this.isSelected(selTarget))
+			if(isTarget || (isMulti && !e.shiftKey && !e.ctrlKey && !options.toggleSelection && !this.isSelected(selTarget)))
 				this.deselectAll(true);
 
 			//focus the target
