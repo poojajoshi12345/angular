@@ -221,7 +221,7 @@ _p.loadExternalResFile = function(elFile, bundle)
 			else
 			{
 				var el = document.createElement("script");
-				el.type = "text/javascript";
+				el.type = elFile.attr("type") || "text/javascript";
 				el.async = false;
 				el.src = src;
 				el._loadPromise = elFile[0]._loadPromise;
