@@ -51,6 +51,8 @@ try {
                     if(!env.BRANCH_NAME.startsWith("PR-")) {
                         publishMavenReports()
                     }                    
+                    
+                    cleanWs cleanWhenFailure: false, notFailBuild: true
                 }  
             }
         }
@@ -72,6 +74,9 @@ try {
                         currentBuild.result = 'FAILED: sonar'
                         throw e
                     } 
+                    finally {
+                         cleanWs cleanWhenFailure: false, notFailBuild: true
+                    }
                 }
             }
             else {
@@ -97,9 +102,15 @@ try {
                     echo "NODE_NAME = ${env.NODE_NAME}"
                     deleteDir()
                     unstash 'sources'
-                    withEnv(["JAVA_HOME=${ tool 'JDK8' }"]) {
-                        executeMvnCmd(".", "clean deploy -Dwf.build.number=${env.BUILD_NUMBER} -Dwf.build.tag=${env.BUILD_TAG} -Dwf.build.timestamp=${currentBuild.startTimeInMillis} -DdeployAtEnd ${_mvnOptsSkipTests} -P compress")
-                    }                
+                    
+                    try {
+                        withEnv(["JAVA_HOME=${ tool 'JDK8' }"]) {
+                            executeMvnCmd(".", "clean deploy -Dwf.build.number=${env.BUILD_NUMBER} -Dwf.build.tag=${env.BUILD_TAG} -Dwf.build.timestamp=${currentBuild.startTimeInMillis} -DdeployAtEnd ${_mvnOptsSkipTests} -P compress")
+                        }   
+                    }
+                    finally {
+                        cleanWs cleanWhenFailure: false, notFailBuild: true
+                    }              
                 }
             }
         }
