@@ -117,10 +117,7 @@ $.widget("ibi.ibxDatePicker", $.ibi.ibxVBox,
 		var data = { 'curDate': curDate, "newDate":$.datepicker.formatDate(this.options.dateFormat,newDate), "newYear":year, "newMonth":month };
 		var defaultPrevented = !this._trigger("changemonthyear", null, data);
 		if(!defaultPrevented && this.options.adjustForMonthYear)
-		{
 			this.option("date", data.newDate);
-			this.refresh();
-		}
 		this._inChange = false;
 	},
 	_onFocusKeyEvent:function(e)
@@ -157,8 +154,12 @@ $.widget("ibi.ibxDatePicker", $.ibi.ibxVBox,
 		this._datePicker.datepicker('setDate', dateObj);
 		this._input.ibxWidget('option', 'text', $.datepicker.formatDate(this.options.outDateFormat, this._datePicker.datepicker('getDate'), this._pickerOptions));
 		this._super();
-		if (this._popup.ibxWidget('isOpen'))
-			this._popup.ibxWidget('close');
+
+		//[IBX-434] don't see why we close the popup on the refresh...take out and see what happens!
+		//if (this._popup.ibxWidget('isOpen'))
+		//	this._popup.ibxWidget('close');
+
+
 		switch (this.options.type)
 		{
 			default:
