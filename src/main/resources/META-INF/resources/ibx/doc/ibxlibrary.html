@@ -111,8 +111,8 @@
 				var events = fnString.match(regx);
 				$(events).each(function(idx, event)
 				{
-					var isTrigger = event.search(/(_trigger|trigger)/g) != -1;
-					var evt = (isTrigger ? "ibx_" : "") + event.replace(regx, "$3");
+					var uiTrigger = event.search(/_trigger\(/g) != -1;
+					var evt = (uiTrigger ? "ibx_" : "") + event.replace(regx, "$3");
 					var infoRow = $(sformat("<a class='name event-info' href=''>{1}</a>", evt));
 					infoRow.data("widgetInfo", {"type":"event", "ctor":ctor, "method":method, "fn":value});
 					arEvents.push(infoRow);
