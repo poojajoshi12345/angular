@@ -113,7 +113,7 @@
 				{
 					var isTrigger = event.search(/(_trigger|trigger)/g) != -1;
 					var evt = (isTrigger ? "ibx_" : "") + event.replace(regx, "$3");
-					var infoRow = $(sformat("<a class='name event-info' href='' data-ibx-col-span='6'>{1}</a><a class='value event-info' href='' data-ibx-col-span='6'>{2}</a>", evt, method));
+					var infoRow = $(sformat("<a class='name event-info' href=''>{1}</a>", evt));
 					infoRow.data("widgetInfo", {"type":"event", "ctor":ctor, "method":method, "fn":value});
 					arEvents.push(infoRow);
 				}.bind(this));
@@ -250,6 +250,10 @@
 		border-radius:5px;
 		margin:5px;
 	}
+	.widget-member-box.events
+	{
+		flex:0 1 20%;
+	}
 	.ibx-widget-info .heading
 	{
 		font-size:1.25em;
@@ -330,10 +334,9 @@
 				<div class="col-heading name" data-ibx-col-span="6">Name</div>
 				<div class="col-heading value" data-ibx-col-span="6">Parameters</div>
 			</div>
-			<div class="widget-member-box events" data-ibx-type="ibxFlexGrid" data-ibxp-align="stretch">
-				<div class="heading" data-ibx-col-span="12">Events</div>
-				<div class="col-heading name" data-ibx-col-span="6">Event</div>
-				<div class="col-heading value" data-ibx-col-span="6">Dispatching Function</div>
+			<div class="widget-member-box events" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
+				<div class="heading" data-ibx-col-span="12">ibx Events</div>
+				<div class="col-heading name">Name</div>
 			</div>
 		</div>
 		<div class="widget-member-box parent-widgets" data-ibx-type="ibxHBox" data-ibxp-align="baseline" data-ibxp-wrap="true">
