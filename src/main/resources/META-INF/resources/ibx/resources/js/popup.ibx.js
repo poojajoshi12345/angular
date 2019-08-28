@@ -72,7 +72,7 @@ $.widget("ibi.ibxPopup", $.ibi.ibxWidget,
 	},
 	_onPopupWindowResize:function(e)
 	{
-		if(this.isOpen() && (window === e.target))
+		if(this.isOpen() && this.options.autoPosition && (window === e.target))
 			this.element.position(this.options.position);
 	},
 	isClosing:function()
@@ -134,10 +134,10 @@ $.widget("ibi.ibxPopup", $.ibi.ibxWidget,
 
 			//if not autoPosition, first time position, next leave where last closed.
 			var curPos = this.element.data("ibxPopupLastPos");
-			if(options.autoPosition || !curPos)
-				this.element.position(options.position)
-			else
+			if(!options.autoPosition && curPos)
 				this.element.css({top:curPos.top, left:curPos.left});
+			else
+				this.element.position(options.position);
 
 			//tell manager to open the popup.
 			this.element.ibxAddClass("pop-opening");
