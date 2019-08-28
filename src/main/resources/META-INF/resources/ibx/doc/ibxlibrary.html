@@ -89,18 +89,34 @@
 			});
 			section.find(".widget-member-box.options").append(arOptions);
 
-			arMethods = [];
+			var arEvents = [];
+			var arMethods = [];
 			$.each(ctor._proto, function(method, value)
 			{
-				if(method.search(/^_/) != -1 || typeof(value) != "function")
+				if(typeof(value) != "function")
 					return;
-							
-				var sig = value.toString();
-				sig = sig.substring(sig.indexOf("("), sig.indexOf(")")+1)
-							
-				var infoRow = $(sformat("<a class='name method-info' href='' data-ibx-col-span='6'>{1}</a><a class='value method-info' href='' data-ibx-col-span='6'>{2}</a>", method, sig));
-				infoRow.data("widgetInfo", {"ctor":ctor, "method":method, "fn":value});
-				arMethods.push(infoRow);
+
+				if(method.search(/^_/) == -1)
+				{
+					var sig = value.toString();
+					sig = sig.substring(sig.indexOf("("), sig.indexOf(")")+1)
+								
+					var infoRow = $(sformat("<a class='name method-info' href='' data-ibx-col-span='6'>{1}</a><a class='value method-info' href='' data-ibx-col-span='6'>{2}</a>", method, sig));
+					infoRow.data("widgetInfo", {"type":"method", "ctor":ctor, "method":method, "fn":value});
+					arMethods.push(infoRow);
+				}
+
+				var fnString = value.toString();
+				var regx = (/(_trigger|trigger|\.dispatchEvent)\(("|')(.[^"']+)/g);
+				var events = fnString.match(regx);
+				$(events).each(function(idx, event)
+				{
+					var isTrigger = event.search(/(_trigger|trigger)/g) != -1;
+					var evt = (isTrigger ? "ibx_" : "") + event.replace(regx, "$3");
+					var infoRow = $(sformat("<a class='name event-info' href='' data-ibx-col-span='6'>{1}</a><a class='value event-info' href='' data-ibx-col-span='6'>{2}</a>", evt, method));
+					infoRow.data("widgetInfo", {"type":"event", "ctor":ctor, "method":method, "fn":value});
+					arEvents.push(infoRow);
+				}.bind(this));
 			});
 			arMethods.sort(function(r1, r2)
 			{
@@ -111,6 +127,17 @@
 				return 0;
 			});
 			section.find(".widget-member-box.methods").append(arMethods);
+
+			arEvents.sort(function(r1, r2)
+			{
+				var n1 = r1[0].textContent.toLowerCase();
+				var n2 = r2[0].textContent.toLowerCase();
+				if(n1 < n2) return -1;
+				if(n2 < n1) return 1;
+				return 0;
+			});
+			section.find(".widget-member-box.events").append(arEvents);
+
 
 			var widgetInfo = 
 			{
@@ -145,14 +172,18 @@
 	}
 
 	$(".prop-object").on("mouseenter mouseleave", _onPropObjectMouseEvent);
-	$(".method-info").on("click", _onMethodInfoMouseEvent);
+	$(".method-info, .event-info").on("click", _onMethodInfoMouseEvent);
 	function _onMethodInfoMouseEvent(e)
 	{
 		var widgetInfo = $(e.target).data("widgetInfo");
 		var popup = $(".info-popup").resizable();
-
+		var isEvent = widgetInfo.type == "event";
 		var title = popup.find(".title");
-		title.text(sformat("Method: {1}.{2}", widgetInfo.ctor.prototype.widgetName, widgetInfo.method));
+
+		if(isEvent)
+			title.text(sformat("Dispatching Method: {1}.{2}", widgetInfo.ctor.prototype.widgetName, widgetInfo.method));
+		else
+			title.text(sformat("Method: {1}.{2}", widgetInfo.ctor.prototype.widgetName, widgetInfo.method));
 
 		var content = popup.find(".content");
 		content.text(widgetInfo.fn.toString().replace("function ", "function " + widgetInfo.method));
@@ -298,6 +329,11 @@
 				<div class="heading" data-ibx-col-span="12">Methods</div>
 				<div class="col-heading name" data-ibx-col-span="6">Name</div>
 				<div class="col-heading value" data-ibx-col-span="6">Parameters</div>
+			</div>
+			<div class="widget-member-box events" data-ibx-type="ibxFlexGrid" data-ibxp-align="stretch">
+				<div class="heading" data-ibx-col-span="12">Events</div>
+				<div class="col-heading name" data-ibx-col-span="6">Event</div>
+				<div class="col-heading value" data-ibx-col-span="6">Dispatching Function</div>
 			</div>
 		</div>
 		<div class="widget-member-box parent-widgets" data-ibx-type="ibxHBox" data-ibxp-align="baseline" data-ibxp-wrap="true">
