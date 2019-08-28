@@ -18,7 +18,12 @@ $.widget("ibi.ibxTreeSelectionManager", $.ibi.ibxSelectionManager,
 	_onKeyDown:function(e)
 	{
 		if([$.ui.keyCode.LEFT, $.ui.keyCode.RIGHT].indexOf(e.keyCode) == -1)
-			this._super(e);
+		{
+			var nodeLabel = this.mapToSelectable(e.target);
+			var isEditing = nodeLabel.ibxWidget("isEditing");
+			if(!isEditing)
+				this._super(e);
+		}
 	},
 	mapToSelectable:function(el)
 	{
