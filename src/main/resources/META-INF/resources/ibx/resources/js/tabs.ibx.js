@@ -284,12 +284,9 @@ $.widget("ibi.ibxTabPage", $.ibi.ibxWidget,
 	},
 	_setOptionDisabled:function(value)
 	{
-		if(this.options.disabled != !!value)
-		{
-			this._super(value);
-			if(this._tabButton)
-				this._tabButton.ibxWidget("option", "disabled", value);
-		}
+		if(this._tabButton)
+			this._tabButton.ibxWidget("option", "disabled", value);
+		this._super(value);
 	},
 	button: function () { return this._tabButton; },
 	selected: function (value)
