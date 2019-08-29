@@ -52,6 +52,7 @@ module.exports = function (grunt) {
             options: {  
                 compress: true,
                 sourceMap: true,
+                sourceMapRoot: './target/classes/META-INF/resources/',
                 sourceMapName: './target/classes/META-INF/resources/ibx/resources/js/ibx-all-min.map'
             },  
             ibx_js_package: {
