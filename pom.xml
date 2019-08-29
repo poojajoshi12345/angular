@@ -199,9 +199,53 @@
 
 	<profiles>
 		<profile>
-			<id>compress</id>
+			<id>compile-css-javascript</id>
+			<properties>
+				<frontend.maven.plugin.version>1.6</frontend.maven.plugin.version>
+			</properties>
 			<build>
 				<plugins>
+					<plugin>
+						<groupId>com.github.eirslett</groupId>
+						<artifactId>frontend-maven-plugin</artifactId>
+						<version>${frontend.maven.plugin.version}</version>
+						<executions>
+							<execution>
+								<id>grunt-install-node-and-npm</id>
+								<goals>
+									<goal>install-node-and-npm</goal>
+								</goals>
+							</execution>
+							<execution>
+								<id>grunt-npm-install</id>
+								<phase>generate-resources</phase>
+								<goals>
+									<goal>npm</goal>
+								</goals>
+								<configuration>
+									<arguments>install</arguments>
+								</configuration>
+							</execution>
+							<execution>
+								<id>grunt-build</id>
+								<phase>compile</phase>
+								<goals>
+									<goal>grunt</goal>
+								</goals>
+								<configuration>
+									<arguments>--verbose</arguments>
+								</configuration>
+							</execution>
+						</executions>
+						<configuration>
+							<nodeVersion>v8.11.1</nodeVersion>
+							<npmVersion>5.6.0</npmVersion>
+							<installDirectory>${basedir}</installDirectory>
+							<workingDirectory>${basedir}</workingDirectory>
+							<nodeDownloadRoot>http://wfmaven.ibi.com:8081/repository/nodejs-org/</nodeDownloadRoot>
+							<npmDownloadRoot>http://wfmaven.ibi.com:8081/repository/npm-all/npm/-/</npmDownloadRoot>
+						</configuration>
+					</plugin>
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-antrun-plugin</artifactId>
@@ -320,13 +364,13 @@
 						<version>${frontend.maven.plugin.version}</version>
 						<executions>
 							<execution>
-								<id>install node and npm</id>
+								<id>install-node-and-npm</id>
 								<goals>
 									<goal>install-node-and-npm</goal>
 								</goals>
 							</execution>
 							<execution>
-								<id>npm install cypress</id>
+								<id>npm-install</id>
 								<goals>
 									<goal>npm</goal>
 								</goals>
@@ -335,7 +379,7 @@
 								</configuration>
 							</execution>
 							<execution>
-								<id>npm run cypress</id>
+								<id>npm-run-cypress</id>
 								<phase>integration-test</phase>
 								<goals>
 									<goal>npm</goal>
