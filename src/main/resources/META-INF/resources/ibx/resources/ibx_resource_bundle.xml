@@ -213,7 +213,7 @@ $Revision: 1.123 $:-->
 
 	<!--styles-->
 	<styles>
-		<!--EXTERNAL ASSETS-->
+		<!--EXTERNAL CSS ASSETS-->
 		<style-file src="./etc/jquery/jquery-ui-1.12.1/jquery-ui.css"/>
 		<style-file src="./etc/gridstack/gridstack.css"/>
 		<style-file src="./etc/jquery-minicolors/jquery.minicolors.css"/>
@@ -224,8 +224,9 @@ $Revision: 1.123 $:-->
 		<style-file src="./etc/google/css/open-sans.css" nocompile="true"/>
 		<style-file src="./etc/google/css/roboto.css" nocompile="true"/>
 
-		<!--IBX ASSETS-->
+		<!--IBX FONT ASSETS-->
 		<style-file src="./css/ibx-font/css/ibx-font.css" nocompile="true"/>
+		<!--IBX CSS ASSETS-->
 		<style-file src="./css/widget.ibx.css"/>
 		<style-file src="./css/events.ibx.css"/>
 		<style-file src="./css/selection.ibx.css"/>
@@ -272,14 +273,14 @@ $Revision: 1.123 $:-->
 
 	<!--scripts-->
 	<scripts>
-		<!--EXTERNAL ASSETS-->
+		<!--EXTERNAL JS ASSETS-->
 		<script-file src="./etc/resizepolyfill/ResizeSensor.js"/>
 		<script-file src="./etc/scrollwidthpolyfill/scrollwidthpolyfill.js"/>
 		<script-file src="./etc/gridstack/underscore.js"/>
 		<script-file src="./etc/gridstack/gridstack.js"/>
 		<script-file src="./etc/jquery-minicolors/jquery.minicolors.js"/>
 
-		<!--IBX ASSETS-->
+		<!--IBX JS ASSETS-->
 		<script-file src="./js/events.ibx.js"/>
 		<script-file src="./js/selection.ibx.js"/>
 		<script-file src="./js/dragdrop.ibx.js"/>
@@ -322,7 +323,7 @@ $Revision: 1.123 $:-->
 		<script-file src="./js/diagram.ibx.js"/>
 		<script-file src="./js/navmap.ibx.js"/>
 
-		<!--scripts-->
+		<!--inline scripts-->
 		<script-block name="ibx_inline_bundle_scripts">
 		<![CDATA[
 		]]>
