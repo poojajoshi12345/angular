@@ -199,6 +199,57 @@
 
 	<profiles>
 		<profile>
+			<id>grunt</id>
+			<properties>
+				<frontend.maven.plugin.version>1.6</frontend.maven.plugin.version>
+			</properties>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>com.github.eirslett</groupId>
+						<artifactId>frontend-maven-plugin</artifactId>
+						<version>${frontend.maven.plugin.version}</version>
+						<executions>
+							<execution>
+								<id>install node and npm</id>
+								<goals>
+									<goal>install-node-and-npm</goal>
+								</goals>
+							</execution>
+							<execution>
+								<id>npm install</id>
+								<phase>generate-resources</phase>
+								<goals>
+									<goal>npm</goal>
+								</goals>
+								<configuration>
+									<arguments>install</arguments>
+								</configuration>
+							</execution>
+							<execution>
+								<id>grunt build</id>
+								<phase>compile</phase>
+								<goals>
+									<goal>grunt</goal>
+								</goals>
+								<configuration>
+									<arguments>--verbose</arguments>
+								</configuration>
+							</execution>
+						</executions>
+						<configuration>
+							<nodeVersion>v8.11.1</nodeVersion>
+							<npmVersion>5.6.0</npmVersion>
+							<installDirectory>${basedir}</installDirectory>
+							<workingDirectory>${basedir}</workingDirectory>
+							<nodeDownloadRoot>http://wfmaven.ibi.com:8081/repository/nodejs-org/</nodeDownloadRoot>
+							<npmDownloadRoot>http://wfmaven.ibi.com:8081/repository/npm-all/npm/-/</npmDownloadRoot>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
 			<id>compress</id>
 			<build>
 				<plugins>

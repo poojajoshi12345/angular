@@ -17,7 +17,7 @@ try {
         node {
             echo "NODE_NAME = ${env.NODE_NAME}"
             checkout scm
-            stash name: 'sources', includes: 'pom.xml,*.json,src/'
+            stash name: 'sources', includes: 'pom.xml,*.js,*.json,src/'
         }
     }
 
