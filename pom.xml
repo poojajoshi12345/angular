@@ -302,8 +302,8 @@
     									
     									<echo message="Use ibx-all.min.js to replace IBX JS ASSETS" />
     									<replaceregexp flags="is" byline="false">
-    										<regexp pattern="&lt;!--IBX JS ASSETS--&gt;(.+?)&lt;!--inline scripts--&gt;"/>
-    										<substitution expression="&lt;!--IBX JS ASSETS--&gt;${line.separator}${two.tab.separator}&lt;script-file src=&quot;./js/ibx-all.min.js&quot;/&gt;${line.separator}${line.separator}${two.tab.separator}&lt;!--inline scripts--&gt;"/>
+    										<regexp pattern="&lt;!--EXTERNAL JS ASSETS--&gt;(.+?)&lt;!--inline scripts--&gt;"/>
+    										<substitution expression="&lt;!--JS ASSETS--&gt;${line.separator}${two.tab.separator}&lt;script-file src=&quot;./js/ibx-all.min.js&quot;/&gt;${line.separator}${line.separator}${two.tab.separator}&lt;!--inline scripts--&gt;"/>
     										<fileset file="${project.build.directory}/classes/META-INF/resources/ibx/resources/ibx_resource_bundle.xml"/>
     									</replaceregexp>
 									</tasks>
