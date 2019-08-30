@@ -52,11 +52,11 @@ module.exports = function (grunt) {
             options: {  
                 compress: true,
                 sourceMap: true,
-                sourceMapName: './target/classes/META-INF/resources/ibx/resources/js/ibx-all-min.map'
+                sourceMapName: './target/classes/META-INF/resources/ibx/resources/js/ibx-all.min.map'
             },  
             ibx_js_package: {
             	files: {
-            		'./target/classes/META-INF/resources/ibx/resources/js/ibx-all-min.js': [  
+            		'./target/classes/META-INF/resources/ibx/resources/js/ibx-all.min.js': [  
             			//EXTERNAL ASSETS
 	                	'./target/classes/META-INF/resources/ibx/resources/etc/resizepolyfill/ResizeSensor.js',
 	            		'./target/classes/META-INF/resources/ibx/resources/etc/scrollwidthpolyfill/scrollwidthpolyfill.js',
