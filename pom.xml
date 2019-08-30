@@ -648,7 +648,7 @@
 			</build>
 		</profile>
 		<profile>
-			<id>maven-jdk10</id>
+			<id>maven-jdk-x</id>
 			<activation>
 				<property>
 					<name>jdk.version</name>
