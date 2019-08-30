@@ -9,7 +9,7 @@
     "cypress:run": "cypress run"
   },
   "author": "Information Builders, Inc.",
-  "license": "ISC",
+  "license": "EULA",
   "dependencies": {
     "cypress": "^3.1.4",
     "grunt": "^1.0.3",
