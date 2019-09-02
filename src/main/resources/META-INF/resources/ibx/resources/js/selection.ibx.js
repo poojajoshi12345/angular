@@ -99,6 +99,19 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 		if(!ownsTarget)
 			return;
 
+		//back tabbing with focus default means find outer prev sibling that's tabbable
+		if(!options.focusRoot && options.focusDefault && e.keyCode == $.ui.keyCode.TAB && e.shiftKey)
+		{
+			var isFirstChild = $(e.target).is(":first-child");
+			var prev = this.element.prevAll("[tabindex]").first();
+			if(isFirstChild && prev.length)
+			{
+				prev.focus();
+				e.preventDefault();
+			}
+		}
+
+
 		//manage circular tabbing if desired.
 		if(options.focusRoot && e.keyCode == $.ui.keyCode.TAB)
 		{
