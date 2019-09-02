@@ -60,10 +60,10 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 
 		//make sure the manager is in the focused state.
 		this._activate(true);
-		
+
 		//do the default focusing when manager is directly focused - not one of its children, and not when clicked on its scrollbar.
 		var onScrollBar = this._eLastMouseDown ? ClickOnScrollbar(this.element[0], this._eLastMouseDown.clientX, this._eLastMouseDown.clientY) : false;
-		if(isTarget && !onScrollBar && !this._focusedOnScrollBar && !ownsRelTarget && options.focusDefault !== false)
+		if(isTarget && !onScrollBar && !ownsRelTarget && options.focusDefault !== false)
 		{
 			var defItem = this._focus();
 			if(!defItem)
@@ -110,7 +110,6 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 				e.preventDefault();
 			}
 		}
-
 
 		//manage circular tabbing if desired.
 		if(options.focusRoot && e.keyCode == $.ui.keyCode.TAB)
