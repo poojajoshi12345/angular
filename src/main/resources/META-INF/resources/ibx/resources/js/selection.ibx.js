@@ -60,10 +60,10 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 
 		//make sure the manager is in the focused state.
 		this._activate(true);
-		
+
 		//do the default focusing when manager is directly focused - not one of its children, and not when clicked on its scrollbar.
 		var onScrollBar = this._eLastMouseDown ? ClickOnScrollbar(this.element[0], this._eLastMouseDown.clientX, this._eLastMouseDown.clientY) : false;
-		if(isTarget && !onScrollBar && !this._focusedOnScrollBar && !ownsRelTarget && options.focusDefault !== false)
+		if(isTarget && !onScrollBar && !ownsRelTarget && options.focusDefault !== false)
 		{
 			var defItem = this._focus();
 			if(!defItem)
@@ -98,6 +98,18 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 		//this aint the selectionmanager you're looking for...get out of Dodge!
 		if(!ownsTarget)
 			return;
+
+		//back tabbing with focus default means find outer prev sibling that's tabbable
+		if(!options.focusRoot && options.focusDefault && e.keyCode == $.ui.keyCode.TAB && e.shiftKey)
+		{
+			var isFirstChild = $(e.target).is(":first-child");
+			var prev = this.element.prevAll("[tabindex]").first();
+			if(isFirstChild && prev.length)
+			{
+				prev.focus();
+				e.preventDefault();
+			}
+		}
 
 		//manage circular tabbing if desired.
 		if(options.focusRoot && e.keyCode == $.ui.keyCode.TAB)
