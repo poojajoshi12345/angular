@@ -192,7 +192,7 @@ $.widget("ibi.ibxWaiting", $.ibi.ibxLabel,
 			waitInfo.ibxWaiting.ibxWidget("stop");
 
 		//create and attach new waitInfo to new element.
-		waitInfo = {initPos:el[0].style.position,	ibxWaiting:this.element};
+		waitInfo = {initPos:el.css("position"),	ibxWaiting:this.element};
 		if(waitInfo.initPos == "static")
 			el.css("position", "relative");
 		el.data("ibxWaitingInfo", waitInfo).append(this.element);
