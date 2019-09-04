@@ -17,7 +17,7 @@ try {
         node {
             echo "NODE_NAME = ${env.NODE_NAME}"
             checkout scm
-            stash name: 'sources', includes: 'pom.xml,*.json,src/'
+            stash name: 'sources', includes: '*.*,src/'
         }
     }
 
@@ -31,7 +31,7 @@ try {
                 try {
                     if("master" == env.BRANCH_NAME) {
                            withEnv(["JAVA_HOME=${ tool 'JDK8' }"]) {                                                               
-                            executeMvnCmd(".", "clean install site ${_mvnOpts} -P compress")
+                            executeMvnCmd(".", "clean install site ${_mvnOpts} -P compile-css-javascript")
                         } 
                     }
                     else if(env.BRANCH_NAME.startsWith("PR-")) {
@@ -41,7 +41,7 @@ try {
                     }
                     else {
                         withEnv(["JAVA_HOME=${ tool 'JDK8' }"]) {
-                            executeMvnCmd(".", "clean install site ${_mvnOpts} -P compress")
+                            executeMvnCmd(".", "clean install site ${_mvnOpts} -P compile-css-javascript")
                         }
                     }
                 }catch(Exception e) {
@@ -105,7 +105,7 @@ try {
                     
                     try {
                         withEnv(["JAVA_HOME=${ tool 'JDK8' }"]) {
-                            executeMvnCmd(".", "clean deploy -Dwf.build.number=${env.BUILD_NUMBER} -Dwf.build.tag=${env.BUILD_TAG} -Dwf.build.timestamp=${currentBuild.startTimeInMillis} -DdeployAtEnd ${_mvnOptsSkipTests} -P compress")
+                            executeMvnCmd(".", "clean deploy -Dwf.build.number=${env.BUILD_NUMBER} -Dwf.build.tag=${env.BUILD_TAG} -Dwf.build.timestamp=${currentBuild.startTimeInMillis} -DdeployAtEnd ${_mvnOptsSkipTests} -P compile-css-javascript")
                         }   
                     }
                     finally {

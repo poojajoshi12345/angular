@@ -199,9 +199,53 @@
 
 	<profiles>
 		<profile>
-			<id>compress</id>
+			<id>compile-css-javascript</id>
+			<properties>
+				<frontend.maven.plugin.version>1.6</frontend.maven.plugin.version>
+			</properties>
 			<build>
 				<plugins>
+					<plugin>
+						<groupId>com.github.eirslett</groupId>
+						<artifactId>frontend-maven-plugin</artifactId>
+						<version>${frontend.maven.plugin.version}</version>
+						<executions>
+							<execution>
+								<id>grunt-install-node-and-npm</id>
+								<goals>
+									<goal>install-node-and-npm</goal>
+								</goals>
+							</execution>
+							<execution>
+								<id>grunt-npm-install</id>
+								<phase>generate-resources</phase>
+								<goals>
+									<goal>npm</goal>
+								</goals>
+								<configuration>
+									<arguments>install</arguments>
+								</configuration>
+							</execution>
+							<execution>
+								<id>grunt-build</id>
+								<phase>compile</phase>
+								<goals>
+									<goal>grunt</goal>
+								</goals>
+								<configuration>
+									<arguments>--verbose</arguments>
+								</configuration>
+							</execution>
+						</executions>
+						<configuration>
+							<nodeVersion>v8.11.1</nodeVersion>
+							<npmVersion>5.6.0</npmVersion>
+							<installDirectory>${basedir}</installDirectory>
+							<workingDirectory>${basedir}</workingDirectory>
+							<nodeDownloadRoot>http://wfmaven.ibi.com:8081/repository/nodejs-org/</nodeDownloadRoot>
+							<npmDownloadRoot>http://wfmaven.ibi.com:8081/repository/npm-all/npm/-/</npmDownloadRoot>
+						</configuration>
+					</plugin>
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-antrun-plugin</artifactId>
@@ -240,6 +284,32 @@
 								</configuration>
 							</execution>
 							<execution>
+								<id>inject-min-css-js</id>
+								<phase>prepare-package</phase>
+								<goals>
+									<goal>run</goal>
+								</goals>
+								<configuration>
+									<tasks>
+										<property name="two.tab.separator" value="&#x9;&#x9;" />
+										
+										<echo message="Use ibx-all.min.css to replace IBX CSS ASSETS" />										
+										<replaceregexp flags="is" byline="false">
+    										<regexp pattern="&lt;!--IBX CSS ASSETS--&gt;(.+?)&lt;!--inline styles--&gt;"/>
+    										<substitution expression="&lt;!--IBX CSS ASSETS--&gt;${line.separator}${two.tab.separator}&lt;style-file src=&quot;./css/ibx-all.min.css&quot;/&gt;${line.separator}${line.separator}${two.tab.separator}&lt;!--inline styles--&gt;"/>
+    										<fileset file="${project.build.directory}/classes/META-INF/resources/ibx/resources/ibx_resource_bundle.xml"/>
+    									</replaceregexp>
+    									
+    									<echo message="Use ibx-all.min.js to replace IBX JS ASSETS" />
+    									<replaceregexp flags="is" byline="false">
+    										<regexp pattern="&lt;!--EXTERNAL JS ASSETS--&gt;(.+?)&lt;!--inline scripts--&gt;"/>
+    										<substitution expression="&lt;!--JS ASSETS--&gt;${line.separator}${two.tab.separator}&lt;script-file src=&quot;./js/ibx-all.min.js&quot;/&gt;${line.separator}${line.separator}${two.tab.separator}&lt;!--inline scripts--&gt;"/>
+    										<fileset file="${project.build.directory}/classes/META-INF/resources/ibx/resources/ibx_resource_bundle.xml"/>
+    									</replaceregexp>
+									</tasks>
+								</configuration>
+							</execution>
+							<execution>
 								<id>ant-compress</id>
 								<phase>prepare-package</phase>
 								<goals>
@@ -274,7 +344,7 @@
 										</for>
 									</target>
 								</configuration>
-							</execution>
+							</execution>							
 						</executions>
 						<dependencies>
 							<dependency>
@@ -293,6 +363,16 @@
 								<artifactId>ant-nodeps</artifactId>
 								<version>1.8.1</version>
 							</dependency>
+							<dependency>
+    							<groupId>org.apache.ant</groupId>
+    							<artifactId>ant-apache-regexp</artifactId>
+    							<version>1.10.6</version>
+							</dependency>
+							<dependency>
+    							<groupId>jakarta-regexp</groupId>
+    							<artifactId>jakarta-regexp</artifactId>
+    							<version>1.4</version>
+							</dependency>							
 							<dependency>
 								<groupId>com.ibi</groupId>
 								<artifactId>webfocus-testing</artifactId>
@@ -320,13 +400,13 @@
 						<version>${frontend.maven.plugin.version}</version>
 						<executions>
 							<execution>
-								<id>install node and npm</id>
+								<id>install-node-and-npm</id>
 								<goals>
 									<goal>install-node-and-npm</goal>
 								</goals>
 							</execution>
 							<execution>
-								<id>npm install cypress</id>
+								<id>npm-install</id>
 								<goals>
 									<goal>npm</goal>
 								</goals>
@@ -335,7 +415,7 @@
 								</configuration>
 							</execution>
 							<execution>
-								<id>npm run cypress</id>
+								<id>npm-run-cypress</id>
 								<phase>integration-test</phase>
 								<goals>
 									<goal>npm</goal>
@@ -568,7 +648,7 @@
 			</build>
 		</profile>
 		<profile>
-			<id>maven-jdk10</id>
+			<id>maven-jdk-x</id>
 			<activation>
 				<property>
 					<name>jdk.version</name>
