@@ -150,7 +150,9 @@ $.widget("ibi.ibxSpinner", $.ibi.ibxTextField,
 	{
 		var options = this.options;
 		var curVal = options.value;
-		value = Number(String(value).replace(/[^0-9.]*/g, ""));
+		value = Number(String(value).replace(/[^0-9.-]*/g, ""));
+
+console.log(value);
 
 		if(isNaN(value))
 			value = options.min;
