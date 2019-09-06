@@ -150,6 +150,7 @@ $.widget("ibi.ibxSpinner", $.ibi.ibxTextField,
 		var options = this.options;
 		var curVal = options.value;
 
+		//this is clearly not a real solution (doesn't localize, nor even correctly pull out the number), but it'll do for now.
 		value = Number(String(value).replace(/[^0-9.+\-]*/g, ""));
 		if(value === NaN)
 			value = options.min;
