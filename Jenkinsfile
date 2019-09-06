@@ -1,4 +1,4 @@
-def _mvnOpts = "-V -U -B -e -Dmaven.test.failure.ignore"
+def _mvnOpts = "-V -U -B -e -Dmaven.test.failure.ignore -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn"
 def _mvnOptsSkipTests = "-DskipTests=true ${_mvnOpts}"
 def _mvnSpotBugsOpts = "-Dspotbugs.effort=Min -Dspotbugs.fork=false -Dspotbugs.threshold=High -Dorg.xml.sax.driver=com.sun.org.apache.xerces.internal.parsers.SAXParser ${_mvnOpts}"
 
