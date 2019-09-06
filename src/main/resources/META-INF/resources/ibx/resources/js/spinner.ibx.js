@@ -14,7 +14,6 @@ $.widget("ibi.ibxSpinner", $.ibi.ibxTextField,
 		"step" :1,
 		"precision":3,
 		"fnFormat":null,
-
 		"btnGroupClass":"ibx-spinner-btn-grp",
 		"btnUpClass":"ibx-spinner-btn-up",
 		"btnUpOptions":
@@ -150,9 +149,9 @@ $.widget("ibi.ibxSpinner", $.ibi.ibxTextField,
 	{
 		var options = this.options;
 		var curVal = options.value;
-		value = Number(String(value).replace(/[^0-9.-]*/g, ""));
 
-		if(isNaN(value))
+		value = Number(String(value).replace(/[^0-9.+\-]*/g, ""));
+		if(value === NaN)
 			value = options.min;
 
 		value = Math.max(value, options.min);
