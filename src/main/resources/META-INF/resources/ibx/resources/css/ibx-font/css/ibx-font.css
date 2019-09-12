@@ -92,9 +92,6 @@
 .ibx-glyph-number:before {
   content: "\e985";
 }
-.ibx-glyph-workbook:before {
-  content: "\e947";
-}
 .ibx-glyph-file-ely:before {
   content: "\e9c8";
   color: #000;
@@ -264,122 +261,14 @@
 .ibx-glyph-unlock:before {
   content: "\e97b";
 }
-.ibx-glyph-highlight:before {
-  content: "\ea2e";
-}
-.ibx-glyph-base-map:before {
-  content: "\ea26";
-}
-.ibx-glyph-selection-deselect:before {
-  content: "\ea27";
-}
-.ibx-glyph-selection-clear:before {
-  content: "\ea1c";
-}
-.ibx-glyph-selection-polygon:before {
-  content: "\ea23";
-}
-.ibx-glyph-selection-polyline:before {
-  content: "\ea24";
-}
-.ibx-glyph-selection-circle:before {
-  content: "\ea1d";
-}
-.ibx-glyph-selection-square:before {
-  content: "\ea1e";
-}
-.ibx-glyph-selection-pan:before {
-  content: "\ea1f";
-}
-.ibx-glyph-outline-filter-grid:before {
-  content: "\ea19";
-}
-.ibx-glyph-outline-section:before {
-  content: "\ea1a";
-}
-.ibx-glyph-outline-panel-group:before {
-  content: "\ea1b";
-}
-.ibx-glyph-view-presentation:before {
-  content: "\ea17";
-}
-.ibx-glyph-view-new-window:before {
-  content: "\ea18";
-}
-.ibx-glyph-outline-basic:before {
-  content: "\ea16";
-}
-.ibx-glyph-outline-tab:before {
-  content: "\ea13";
-}
-.ibx-glyph-outline-accordion:before {
-  content: "\ea14";
-}
-.ibx-glyph-outline-slider:before {
-  content: "\ea15";
-}
-.ibx-glyph-case-sensitive:before {
-  content: "\ea12";
-}
-.ibx-glyph-map-line:before {
-  content: "\ea0a";
-}
-.ibx-glyph-map-polygon-2:before {
-  content: "\ea0b";
-}
-.ibx-glyph-map-polygon:before {
-  content: "\ea0c";
-}
-.ibx-glyph-new-app:before {
-  content: "\ea07";
-}
-.ibx-glyph-add-verb:before {
-  content: "\ea04";
-}
-.ibx-glyph-verb-sum:before {
-  content: "\ea05";
-}
-.ibx-glyph-verb-print:before {
-  content: "\ea06";
-}
-.ibx-glyph-verb-list:before {
-  content: "\ea21";
-}
-.ibx-glyph-verb-count:before {
-  content: "\ea22";
-}
-.ibx-glyph-clear-filter:before {
+.ibx-glyph-exclamation:before {
   content: "\ea03";
 }
-.ibx-glyph-bar-chart:before {
+.ibx-glyph-chevron-first:before {
+  content: "\e947";
+}
+.ibx-glyph-chevron-last:before {
   content: "\ea02";
-}
-.ibx-glyph-line-chart:before {
-  content: "\ea0d";
-}
-.ibx-glyph-area-chart:before {
-  content: "\ea2a";
-}
-.ibx-glyph-pie-chart:before {
-  content: "\ea0e";
-}
-.ibx-glyph-ring-pie-chart:before {
-  content: "\ea25";
-}
-.ibx-glyph-scatter-chart:before {
-  content: "\ea0f";
-}
-.ibx-glyph-treemap-chart:before {
-  content: "\ea2b";
-}
-.ibx-glyph-grid-chart:before {
-  content: "\ea29";
-}
-.ibx-glyph-matrix-marker-chart:before {
-  content: "\ea2c";
-}
-.ibx-glyph-other-chart:before {
-  content: "\ea2d";
 }
 .ibx-glyph-upload:before {
   content: "\e946";
@@ -413,12 +302,6 @@
 }
 .ibx-glyph-plus-thin:before {
   content: "\e9ef";
-}
-.ibx-glyph-route:before {
-  content: "\ea08";
-}
-.ibx-glyph-choropleth:before {
-  content: "\ea09";
 }
 .ibx-glyph-map-point-bubble:before {
   content: "\e9e0";
@@ -545,9 +428,6 @@
 }
 .ibx-glyph-sort-alpha-asc:before {
   content: "\e98b";
-}
-.ibx-glyph-sort-alpha-desc:before {
-  content: "\ea20";
 }
 .ibx-glyph-sort-amount-asc:before {
   content: "\e98c";
@@ -714,9 +594,6 @@
 .ibx-glyph-check:before {
   content: "\e98e";
 }
-.ibx-glyph-minimize:before {
-  content: "\ea28";
-}
 .ibx-glyph-maximize:before {
   content: "\e967";
 }
@@ -768,8 +645,8 @@
 .ibx-glyph-align-control-right:before {
   content: "\e9aa";
 }
-.ibx-glyph-bars:before {
-  content: "\ea11";
+.ibx-glyph-trash:before {
+  content: "\f014";
 }
 .ibx-glyph-ellipsis-h-sm:before {
   content: "\e9e5";
@@ -896,9 +773,6 @@
 }
 .ibx-glyph-grid-three-column:before {
   content: "\e93c";
-}
-.ibx-glyph-panel-in-panel:before {
-  content: "\ea10";
 }
 .ibx-glyph-explorer:before {
   content: "\e93d";
