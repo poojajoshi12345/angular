@@ -15,6 +15,7 @@ $.widget("ibi.ibxSpinner", $.ibi.ibxTextField,
 		"precision":3,
 		"fnFormat":null,
 		"fnUnformat":null,
+		"validKeys":[9, 37, 38, 39, 40, 8, 46, 187, 189, 190],
 		"btnGroupClass":"ibx-spinner-btn-grp",
 		"btnUpClass":"ibx-spinner-btn-up",
 		"btnUpOptions":
@@ -126,8 +127,7 @@ $.widget("ibi.ibxSpinner", $.ibi.ibxTextField,
 	},
 	_onTextChanging: function(e, text)
 	{
-		var validKeys = [9, 37, 38, 39, 40, 8, 46, 187, 189, 190];
-		if(!jQuery.isNumeric(e.key) && validKeys.indexOf(e.keyCode) == -1)
+		if(!jQuery.isNumeric(e.key) && this.options.validKeys.indexOf(e.keyCode) == -1)
 			e.preventDefault();
 	},
 	_stepSpinner: function (bUp)
@@ -155,8 +155,8 @@ $.widget("ibi.ibxSpinner", $.ibi.ibxTextField,
 	{
 		var options = this.options;
 		var curVal = options.value;
-		var fnFormat = options.fnFormat || this._fnFormat;
-		var fnUnformat = options.fnUnformat || this._fnUnformat;
+		var fnFormat = options.fnFormat || this._fnFormat.bind(this);
+		var fnUnformat = options.fnUnformat || this._fnUnformat.bind(this);
 
 		value = fnUnformat(value);
 		if(value == options.value)
