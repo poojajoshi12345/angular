@@ -124,9 +124,10 @@ $.widget("ibi.ibxSpinner", $.ibi.ibxTextField,
 		if (this.options.value != value)
 			this._trigger("textchanged", e, this.element);
 	},
-	_onTextChanging: function (e)
+	_onTextChanging: function(e, text)
 	{
-		if (!jQuery.isNumeric(e.key) && e.which != 9 && e.which != 37 && e.which != 38 && e.which != 39 && e.which != 40 && e.which != 8 && e.which != 46 && e.which != 189 && e.which != 190)
+		var validKeys = [9, 37, 38, 39, 40, 8, 46, 187, 189, 190];
+		if(!jQuery.isNumeric(e.key) && validKeys.indexOf(e.keyCode) == -1)
 			e.preventDefault();
 	},
 	_stepSpinner: function (bUp)
@@ -158,7 +159,7 @@ $.widget("ibi.ibxSpinner", $.ibi.ibxTextField,
 		var fnUnformat = options.fnUnformat || this._fnUnformat;
 
 		value = fnUnformat(value);
-		if(value === options.value)
+		if(value == options.value)
 			return;
 		else
 		if(value === NaN)
