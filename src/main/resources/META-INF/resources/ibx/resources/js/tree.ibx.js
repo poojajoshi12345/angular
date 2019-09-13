@@ -11,8 +11,11 @@ $.widget("ibi.ibxTreeSelectionManager", $.ibi.ibxSelectionManager,
 	},
 	_onMouseEvent:function(e)
 	{
+		//clicking on the node's button...or if the node is editing...then don't do normal selection stuff!
 		var target = $(e.target);
-		if(!target.is(".tnode-btn"))
+		var nodeBtn = target.is(".tnode-btn");
+		var isEditing = this.mapToSelectable(e.target).ibxWidget("isEditing");
+		if(!nodeBtn && !isEditing)
 			this._super(e);
 	},
 	_onKeyDown:function(e)
