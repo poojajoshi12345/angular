@@ -207,6 +207,10 @@ $.widget("ibi.ibxTreeNode", $.ibi.ibxVBox,
 		if(refresh)
 			this.refresh();
 	},
+	isEditing:function()
+	{
+		return this.nodeLabel.is(".ibx-content-editing");
+	},
 	startEditing:function(editOptions)
 	{
 		this.nodeLabel.data("ibxWidget")._text.ibxEditable().ibxEditable("startEditing", editOptions);
