@@ -14,6 +14,8 @@ $.widget("ibi.ibxSpinner", $.ibi.ibxTextField,
 		"step" :1,
 		"precision":3,
 		"fnFormat":null,
+		"fnUnformat":null,
+		"validKeys":[9, 37, 38, 39, 40, 8, 46, 187, 189, 190],
 		"btnGroupClass":"ibx-spinner-btn-grp",
 		"btnUpClass":"ibx-spinner-btn-up",
 		"btnUpOptions":
@@ -60,7 +62,7 @@ $.widget("ibi.ibxSpinner", $.ibi.ibxTextField,
 		this._btnUp.ibxAddClass(options.btnUpClass);
 		this._btnDown.ibxAddClass(options.btnDownClass);
 		this._btnBox.ibxAddClass(options.btnGroupClass);
-		this._setValue(options.value, true);
+		this._setValue(options.value);
 	},
 	_destroy: function ()
 	{
@@ -119,20 +121,20 @@ $.widget("ibi.ibxSpinner", $.ibi.ibxTextField,
 	},
 	_onTextInputBlur: function (e)
 	{
-		var value = this._setValue(this._textInput.val(), true);
+		var value = this._setValue(this._textInput.val());
 		if (this.options.value != value)
 			this._trigger("textchanged", e, this.element);
 	},
-	_onTextChanging: function (e)
+	_onTextChanging: function(e, text)
 	{
-		if (!jQuery.isNumeric(e.key) && e.which != 9 && e.which != 37 && e.which != 38 && e.which != 39 && e.which != 40 && e.which != 8 && e.which != 46 && e.which != 189 && e.which != 190)
+		if(!jQuery.isNumeric(e.key) && this.options.validKeys.indexOf(e.keyCode) == -1)
 			e.preventDefault();
 	},
 	_stepSpinner: function (bUp)
 	{
 		var info = this._getInfo();
 		info.value += bUp ? info.step : -info.step;
-		this._setValue(info.value, true);
+		this._setValue(info.value);
 		this.refresh();
 	},
 	_adjustStep: function (val, min, max, step)
@@ -145,13 +147,21 @@ $.widget("ibi.ibxSpinner", $.ibi.ibxTextField,
 		else
 			return higher;
 	},
-	_setValue: function (value, bFormat)
+	setValue:function(value)
+	{
+		this.setValue(value);
+	},
+	_setValue: function(value)
 	{
 		var options = this.options;
 		var curVal = options.value;
+		var fnFormat = options.fnFormat || this._fnFormat.bind(this);
+		var fnUnformat = options.fnUnformat || this._fnUnformat.bind(this);
 
-		//this is clearly not a real solution (doesn't localize, nor even correctly pull out the number), but it'll do for now.
-		value = Number(String(value).replace(/[^0-9.+\-]*/g, ""));
+		value = fnUnformat(value);
+		if(value == options.value)
+			return;
+		else
 		if(value === NaN)
 			value = options.min;
 
@@ -161,7 +171,7 @@ $.widget("ibi.ibxSpinner", $.ibi.ibxTextField,
 
 		var isFloat = !!(options.step % 1) 
 		this.options.value = value = (isFloat ? Number(value.toFixed(options.precision)) : value);
-		this.options.text = bFormat && this.options.fnFormat ? this.options.fnFormat(value) : value;
+		this.options.text = fnFormat(value);
 		this.refresh();
 		if(value != curVal)
 			this._trigger("change", null, this._getInfo());
@@ -172,11 +182,23 @@ $.widget("ibi.ibxSpinner", $.ibi.ibxTextField,
 		var options = this.options;
 		return { elem: this.element, value: options.value, min: this.options.min, max: this.options.max, step: this.options.step};
 	},
+	_fnFormat:function(value)
+	{
+		return value;
+	},
+	_fnUnformat:function(value)
+	{
+		return Number(String(value).replace(/[^0-9.+\-]*/g, ""));
+	},
+	_setOption:function(key, value)
+	{
+		this._super(key, value);
+		if(key == "value")
+			this._setValue(value);
+	},
 	_refresh: function ()
 	{
 		var options = this.options;
-		options.value = this._adjustStep(options.value, options.min, options.max, options.step);
-		options.text = this.options.fnFormat ? this.options.fnFormat(options.value) : options.value;
 		this._super();
 		if (this._btnBox)
 			this._btnBox.ibxWidget('refresh');
