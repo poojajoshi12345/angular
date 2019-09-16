@@ -5,11 +5,11 @@
 {
 	-ms-user-select:text;
 	-moz-user-select:text;
-	user-select:text;
 }
 
 .ibx-editable.ibx-content-editing
 {
 	cursor:text;
 	text-overflow:unset;
+	user-select:auto;
 }
