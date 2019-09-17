@@ -87,8 +87,8 @@
 					for(var i = 0; i < fonts.length; ++i)
 					{
 						var selected = (i == 1);
-						var selectItem = $("<div class='select-font-name'>").ibxSelectMenuItem({"text":fonts[i], "group":"rgFontName", "userValue":fonts[i]});
-						select.ibxWidget("add", selectItem);
+						var selectItem = $("<div class='select-font-name'>").ibxSelectItem({"text":fonts[i], "group":"rgFontName", "userValue":fonts[i]});
+						select.ibxWidget("addControlItem", selectItem);
 					}
 
 					var fontName = $(".cmd-font-name").ibxWidget("userValue");
@@ -307,15 +307,15 @@
 				<div tabindex="0" class="tb-button" title="Paste" data-ibx-type="ibxButtonSimple" data-ibxp-command="cmdPaste" data-ibxp-glyph="content_paste" data-ibxp-glyph-classes="material-icons"></div>
 				<div tabindex="0" class="tb-button" title="Clear" data-ibx-type="ibxButtonSimple" data-ibxp-command="cmdDelete" data-ibxp-glyph="clear" data-ibxp-glyph-classes="material-icons"></div>
 				<div class="tb-separator"></div>
-				<div tabindex="0" class="xxx tb-select tb-select-font-name" title="Font Name" data-ibx-type="ibxSelectMenuButton" data-ibxp-command="cmdFontName" data-ibxp-default-text="Font Name"></div>
-				<div tabindex="0" class="tb-select tb-select-font-size" title="Font Size" data-ibx-type="ibxSelectMenuButton" data-ibxp-command="cmdFontSize" data-ibxp-default-text="Font Size">
-					<div class="size-select-item" data-ibx-type="ibxSelectMenuItem" data-ibxp-group="rgFontSize" data-ibxp-user-value="1">xx-small</div>
-					<div class="size-select-item" data-ibx-type="ibxSelectMenuItem" data-ibxp-group="rgFontSize" data-ibxp-user-value="2">x-small</div>
-					<div class="size-select-item" data-ibx-type="ibxSelectMenuItem" data-ibxp-group="rgFontSize" data-ibxp-user-value="3">small</div>
-					<div class="size-select-item" data-ibx-type="ibxSelectMenuItem" data-ibxp-group="rgFontSize" data-ibxp-user-value="4">medium</div>
-					<div class="size-select-item" data-ibx-type="ibxSelectMenuItem" data-ibxp-group="rgFontSize" data-ibxp-user-value="5">large</div>
-					<div class="size-select-item" data-ibx-type="ibxSelectMenuItem" data-ibxp-group="rgFontSize" data-ibxp-user-value="6">x-large</div>
-					<div class="size-select-item" data-ibx-type="ibxSelectMenuItem" data-ibxp-group="rgFontSize" data-ibxp-user-value="7">xx-large</div>
+				<div tabindex="0" class="tb-select tb-select-font-name" title="Font Name" data-ibx-type="ibxSelect" data-ibxp-command="cmdFontName" data-ibxp-readonly="true"></div>
+				<div tabindex="0" class="tb-select tb-select-font-size" title="Font Size" data-ibx-type="ibxSelect" data-ibxp-command="cmdFontSize" data-ibxp-readonly="true">
+					<div class="size-select-item" data-ibx-type="ibxSelectRadioItem" data-ibxp-group="rgFontSize" data-ibxp-user-value="1">xx-small</div>
+					<div class="size-select-item" data-ibx-type="ibxSelectRadioItem" data-ibxp-group="rgFontSize" data-ibxp-user-value="2">x-small</div>
+					<div class="size-select-item" data-ibx-type="ibxSelectRadioItem" data-ibxp-group="rgFontSize" data-ibxp-user-value="3">small</div>
+					<div class="size-select-item" data-ibx-type="ibxSelectRadioItem" data-ibxp-group="rgFontSize" data-ibxp-user-value="4">medium</div>
+					<div class="size-select-item" data-ibx-type="ibxSelectRadioItem" data-ibxp-group="rgFontSize" data-ibxp-user-value="5">large</div>
+					<div class="size-select-item" data-ibx-type="ibxSelectRadioItem" data-ibxp-group="rgFontSize" data-ibxp-user-value="6">x-large</div>
+					<div class="size-select-item" data-ibx-type="ibxSelectRadioItem" data-ibxp-group="rgFontSize" data-ibxp-user-value="7">xx-large</div>
 				</div>
 				<div class="tb-separator"></div>
 				<div tabindex="0" class="tb-button" title="Bold" data-ibx-type="ibxCheckBox" data-ibxp-command="cmdBold" data-ibxp-glyph="format_bold" data-ibxp-glyph-classes="material-icons"></div>
