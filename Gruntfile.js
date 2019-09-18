@@ -50,11 +50,13 @@ module.exports = function (grunt) {
         },  
         uglify: {  
             options: {  
-                compress: true,
-                sourceMap: true,
-                sourceMapName: './target/classes/META-INF/resources/ibx/resources/js/ibx-all.min.map'
+                compress: true
             },  
             ibx_js_package: {
+            	options: {  
+                    sourceMap: true,
+                    sourceMapName: './target/classes/META-INF/resources/ibx/resources/js/ibx-all.min.map'
+                },
             	files: {
             		'./target/classes/META-INF/resources/ibx/resources/js/ibx-all.min.js': [  
             			//EXTERNAL ASSETS
