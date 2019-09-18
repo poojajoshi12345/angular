@@ -327,8 +327,6 @@
 													<include name="**/*.min.js" />
 													<include name="**/*-min.js" />
 													<include name="**/*_min.js" />
-													<include name="**/*.htm" />
-													<include name="**/*.html" />
 													<include name="**/*.css" />
 													<include name="**/*.xml" />
 												</fileset>
@@ -446,6 +444,7 @@
 			<id>ci-setup</id>
 			<properties>
 				<jetty.version>9.4.15.v20190215</jetty.version>
+				<jetty.log.level>OFF</jetty.log.level>
 				<jetty.resource.bases>${project.basedir}/src/main/webapp</jetty.resource.bases>
 				<http.port>8080</http.port>
 				<http.stop.port>8008</http.stop.port>
@@ -467,7 +466,6 @@
 									<goal>unpack</goal>
 								</goals>
 								<configuration>
-									<skip>${skipTests}</skip>
 									<artifactItems>
 										<artifactItem>
 											<groupId>com.ibi</groupId>
@@ -498,23 +496,43 @@
 						</executions>
 					</plugin>
 					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-antrun-plugin</artifactId>
+						<version>1.8</version>
+						<executions>
+							<execution>
+								<id>create-war-for-cypress</id>
+								<phase>pre-integration-test</phase>
+								<goals>
+									<goal>run</goal>
+								</goals>
+								<configuration>
+									<target>
+										<copy file="${project.build.directory}/${project.artifactId}-${project.version}-tests.jar" 
+											todir="${project.build.directory}/webfocus-webapp/WEB-INF/lib" />
+										<zip destfile="${project.build.directory}/webapp/webfocus-webapp.war" 
+											basedir="${project.build.directory}/webfocus-webapp" update="true" />
+									</target>
+								</configuration>
+							</execution>
+						</executions>						
+					</plugin>
+					<plugin>
 						<groupId>org.eclipse.jetty</groupId>
 						<artifactId>jetty-maven-plugin</artifactId>
 						<version>${jetty.version}</version>
 						<configuration>
 							<webApp>
 								<contextPath>${http.context}</contextPath>
-								<resourceBases>
-									<baseResource>${project.build.directory}/webfocus-webapp</baseResource>
-									<baseResource>${basedir}/src/main/resources/META-INF/resources</baseResource>
-								</resourceBases>
 							</webApp>
+							<war>${project.build.directory}/webapp/webfocus-webapp.war</war>
 							<supportedPackagings>
 								<supportedPackaging>jar</supportedPackaging>
 							</supportedPackagings>
 							<httpConnector>
 								<port>${http.port}</port>
 							</httpConnector>
+							<dumpOnStart>false</dumpOnStart>
 							<stopKey>webfocus-webjars</stopKey>
 							<stopPort>${http.stop.port}</stopPort>
 							<systemProperties>
@@ -577,10 +595,11 @@
 								<id>start-jetty</id>
 								<phase>pre-integration-test</phase>
 								<goals>
-									<goal>start</goal>
+									<goal>deploy-war</goal>
 								</goals>
 								<configuration>
 									<scanIntervalSeconds>0</scanIntervalSeconds>
+									<daemon>true</daemon>
 								</configuration>
 							</execution>
 							<execution>
@@ -593,12 +612,6 @@
 						</executions>
 						<dependencies>
 							<dependency>
-								<groupId>com.ibi</groupId>
-								<artifactId>webfocus-webapp</artifactId>
-								<version>${project.version}</version>
-								<type>war</type>
-							</dependency>
-							<dependency>
 								<groupId>org.apache.derby</groupId>
 								<artifactId>derby</artifactId>
 								<version>${derby.version}</version>
@@ -609,6 +622,30 @@
 								<version>${derby.version}</version>
 							</dependency>
 						</dependencies>
+					</plugin>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>properties-maven-plugin</artifactId>
+						<version>1.0.0</version>
+						<executions>
+							<execution>
+								<goals>
+									<goal>set-system-properties</goal>
+								</goals>
+								<configuration>
+									<properties>
+										<property>
+											<name>org.eclipse.jetty.util.log.class</name>
+											<value>org.eclipse.jetty.util.log.StdErrLog</value>
+										</property>
+										<property>
+											<name>org.eclipse.jetty.LEVEL</name>
+											<value>${jetty.log.level}</value>
+										</property>
+									</properties>
+								</configuration>
+							</execution>
+						</executions>
 					</plugin>
 				</plugins>
 			</build>
