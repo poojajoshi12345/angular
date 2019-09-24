@@ -502,4 +502,150 @@ _p.preProcessResource = function(resource, language)
 	return resource;
 };
 
+
+/******************************************************************************
+ibxResourceCompiler - used to package ibx application into single html file.
+******************************************************************************/
+function ibxResourceCompiler(ctxPath, config)
+{
+	ibxResourceManager.call(this);
+	this._config = config;
+	this._resBundle = $($.get({"url":this._contextPath + "./ibx_compiler_bundle.xml", "async":false, "dataType":"xml"}).responseXML);
+	var bootRes = this._resBundle.find("ibx-boot-resources").detach();
+	if(config.bootable)
+	{
+		bootRes.find("ibx-boot-files").children().each(function(idx, file)
+		{
+			var filePath = file.getAttribute("src");
+			var xhr = $.get({"url":this._contextPath + file.getAttribute("src"), "async":false, "dataType":"text"});
+			if(file.nodeName == "style-file")
+			{
+				var fileBlock = this._makeResBlock("style-sheet", filePath, xhr.responseText).attr("ibx-boot-file", true);
+				this._resBundle.find("styles").append(fileBlock);
+			}
+			else
+			if(file.nodeName == "script-file")
+			{
+				var isIbx = (filePath.search("/ibx.js") != -1);
+				var content = xhr.responseText;
+				if(isIbx)
+					content += "\nibx._preCompiled = true;\n";
+				fileBlock = this._makeResBlock("script-block", filePath, content).attr("ibx-boot-file", true);
+				this._resBundle.find("scripts").append(fileBlock);
+			}
+		}.bind(this));
+
+		this.loadBundle(($.get({"url":this._contextPath + "./ibx_resource_bundle.xml", "async":false, "dataType":"xml"}).responseXML));
+	}
+	this._resBundle[0].documentElement.setAttribute("ibx-bootable", config.bootable);
+}
+var _p = ibxResourceCompiler.prototype = new ibxResourceManager();
+
+_p._makeResBlock = function(type, src, content)
+{
+	console.log("ADDING RESOURCE:", type, "BUNDLE:", this._bundlePath, "PATH: ", src);
+
+	content = content.replace(/<!\[CDATA\[/g, "");
+	content = content.replace(/]]>/g, "");
+
+	var cdata = this._resBundle[0].createCDATASection(content);
+	var block = sformat("<{1} src='{2}'></{1}>", type, src);
+	block = $(block, this._resBundle);
+	block.append(cdata);
+	return block;
+};
+
+_p.getBundle = function()
+{
+	return this._resBundle[0];
+};
+_p.getBundleAsString = function()
+{
+	var bundle = this.getBundle();
+	var serializer = new XMLSerializer();
+	return serializer.serializeToString(bundle);
+};
+
+_p.linkBundle = function(outDoc)
+{
+	outDoc = $(outDoc);
+
+	var bootFiles = this._resBundle.find("[data-boot-file]").detach();
+	var bootScript = $(sformat("<script type='text/javascript'>")).text(bootFiles.not("style-sheet").text());
+	var bootStyle = $(sformat("<style type='text/css'>")).text(bootFiles.not("script-block").text());
+	var bundle = sformat("<sc" + "ript class='ibx-precompiled-res-bundle' type='text/xml'>{1}</sc" +"ript>", this.getBundleAsString());
+	var head = outDoc.find("head");
+	var firstStyle = outDoc.find("style");
+	var firstScript = outDoc.find("script");
+	
+	if(firstStyle.length)
+		firstStyle.before(bootStyle);
+	else
+		head.append(bootStyle);
+
+	if(firstScript.length)
+	{
+		firstScript.before(bundle);
+		if(this._config.bootable)
+			firstScript.before(bootScript);
+	}
+	else
+	{
+		head.append(bundle);
+		if(this._config.bootable)
+			head.append(bootScript);
+	}
+	var body = outDoc.find("body");
+	return outDoc[0];
+};
+
+_p.addStringBundle = function(strBundle)
+{
+	var section = this._resBundle.find("strings");
+	var strings = this._makeResBlock("string-bundle", "inline", JSON.stringify(strBundle));
+	section.append(strings);
+}
+
+_p.loadExternalResFile = function(elFile)
+{
+	$(elFile).each(function(idx, file)
+	{
+		var file = $(file);
+		var type = file.prop("nodeName");
+		var src = this.getResPath(file.attr("src"), file.closest("[loadContext]").attr("loadContext"));
+		var xhr = $.get({"url": src, "async":false, "dataType":"text"});
+		var content = xhr.responseText;
+		var noCompile = (file.attr("nocompile") == "true");
+
+		//do not compile into internal resource bundle.
+		if(type == "string-file")
+		{	
+			var block = noCompile ? this._resBundle[0].importNode(file[0]) : this._makeResBlock("string-bundle", src, content);
+			this._resBundle.find("strings").append(block);
+		}
+		else
+		if(type == "style-file")
+		{
+			var block = noCompile ? this._resBundle[0].importNode(file[0]) : this._makeResBlock("style-sheet", src, content);
+			this._resBundle.find("styles").append(block);
+		}
+		else
+		if(type == "markup-file")
+		{
+			var block = noCompile ? this._resBundle[0].importNode(file[0]) : this._makeResBlock("markup-block", src, content);
+			this._resBundle.find("markup").append(block);
+		}
+		else
+		if(type == "script-file")
+		{
+			var block = noCompile ? this._resBundle[0].importNode(file[0]) : this._makeResBlock("script-block", src, content);
+			this._resBundle.find("scripts").append(block);
+		}
+
+		//resolve the promise for this file.
+		if(file[0]._loadPromise)
+			file[0]._loadPromise.resolve();			
+
+	}.bind(this));
+}
 //# sourceURL=resources.ibx.js
