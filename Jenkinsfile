@@ -105,7 +105,7 @@ try {
                     
                     try {
                         withEnv(["JAVA_HOME=${ tool 'JDK8' }"]) {
-                            executeMvnCmd(".", "clean deploy -Dwf.build.number=${env.BUILD_NUMBER} -Dwf.build.tag=${env.BUILD_TAG} -Dwf.build.timestamp=${currentBuild.startTimeInMillis} -DdeployAtEnd ${_mvnOptsSkipTests} -P compile-css-javascript")
+                            executeMvnCmd(".", "clean deploy -Dwf.build.number=${env.BUILD_NUMBER} -Dwf.build.tag=${env.BUILD_TAG} -Dwf.build.timestamp=${currentBuild.startTimeInMillis} -DdeployAtEnd ${_mvnOptsSkipTests} -P compile-css-javascript,java-sources")
                         }   
                     }
                     finally {
