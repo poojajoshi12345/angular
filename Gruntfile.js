@@ -1,10 +1,21 @@
 module.exports = function (grunt) {  
+	var getBanner = function() {
+		var label = 
+			  '/*!\n'
+			+ ' * WebFOCUS <%= pkg.name %> v<%= pkg.version %>\n'
+			+ ' * Copyright 2018-2019 <%= pkg.author %>\n'
+			+ ' * Licensed under <%= pkg.license %>\n'
+			+ ' */';
+		return label;
+	};
+	
     grunt.initConfig({  
         pkg: grunt.file.readJSON('package.json'),  
         cssmin: {  
         	ibx_css_package: {  
-                options: {  
-                    banner: '/* IBX minified css file */'  
+                options: {                  	
+                    banner: getBanner(),
+                    sourceMap: true
                 },  
                 files: {
                 	'./target/classes/META-INF/resources/ibx/resources/css/ibx-all.min.css': [
@@ -54,6 +65,7 @@ module.exports = function (grunt) {
             },  
             ibx_js_package: {
             	options: {  
+            		banner: getBanner(),
                     sourceMap: true,
                     sourceMapName: './target/classes/META-INF/resources/ibx/resources/js/ibx-all.min.map'
                 },
@@ -110,11 +122,34 @@ module.exports = function (grunt) {
 	                ]
             	}
             }  
-        }  
+        },
+        replace: {
+        	ibx_css_target: {
+        		src: ['./target/classes/META-INF/resources/ibx/resources/ibx_resource_bundle.xml'],
+        		overwrite: true,
+				replacements: [
+					{
+						from: new RegExp('<!--IBX CSS ASSETS-->(?:\r|\n|.)+<!--inline styles-->', 'm'),
+						to: '<!--IBX CSS ASSETS--> \n<style-file src="./css/ibx-all.min.css"/>\n<!--inline styles-->'
+					}
+				]
+        	},
+        	ibx_js_target: {
+        		src: ['./target/classes/META-INF/resources/ibx/resources/ibx_resource_bundle.xml'],
+        		overwrite: true,
+        		replacements: [
+					{
+						from: new RegExp('<!--EXTERNAL JS ASSETS-->(?:\r|\n|.)+<!--inline scripts-->', 'm'),
+						to: '<script-file src="./js/ibx-all.min.js"/>\n<!--inline scripts-->'
+					}
+				]
+        	}
+        }
     });      
     grunt.loadNpmTasks('grunt-contrib-cssmin');
     grunt.loadNpmTasks('grunt-contrib-uglify');
+    grunt.loadNpmTasks('grunt-text-replace');
     
     //Default task.
-    grunt.registerTask('default', ['uglify', 'cssmin']);  
+    grunt.registerTask('default', ['uglify', 'cssmin', 'replace']);  
 };

@@ -282,33 +282,7 @@
 										</java>
 									</target>
 								</configuration>
-							</execution>
-							<execution>
-								<id>inject-min-css-js</id>
-								<phase>prepare-package</phase>
-								<goals>
-									<goal>run</goal>
-								</goals>
-								<configuration>
-									<tasks>
-										<property name="two.tab.separator" value="&#x9;&#x9;" />
-										
-										<echo message="Use ibx-all.min.css to replace IBX CSS ASSETS" />										
-										<replaceregexp flags="is" byline="false">
-    										<regexp pattern="&lt;!--IBX CSS ASSETS--&gt;(.+?)&lt;!--inline styles--&gt;"/>
-    										<substitution expression="&lt;!--IBX CSS ASSETS--&gt;${line.separator}${two.tab.separator}&lt;style-file src=&quot;./css/ibx-all.min.css&quot;/&gt;${line.separator}${line.separator}${two.tab.separator}&lt;!--inline styles--&gt;"/>
-    										<fileset file="${project.build.directory}/classes/META-INF/resources/ibx/resources/ibx_resource_bundle.xml"/>
-    									</replaceregexp>
-    									
-    									<echo message="Use ibx-all.min.js to replace IBX JS ASSETS" />
-    									<replaceregexp flags="is" byline="false">
-    										<regexp pattern="&lt;!--EXTERNAL JS ASSETS--&gt;(.+?)&lt;!--inline scripts--&gt;"/>
-    										<substitution expression="&lt;!--JS ASSETS--&gt;${line.separator}${two.tab.separator}&lt;script-file src=&quot;./js/ibx-all.min.js&quot;/&gt;${line.separator}${line.separator}${two.tab.separator}&lt;!--inline scripts--&gt;"/>
-    										<fileset file="${project.build.directory}/classes/META-INF/resources/ibx/resources/ibx_resource_bundle.xml"/>
-    									</replaceregexp>
-									</tasks>
-								</configuration>
-							</execution>
+							</execution>							
 							<execution>
 								<id>ant-compress</id>
 								<phase>prepare-package</phase>
