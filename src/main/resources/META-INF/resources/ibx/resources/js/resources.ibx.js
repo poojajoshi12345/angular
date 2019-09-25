@@ -506,14 +506,23 @@ _p.preProcessResource = function(resource, language)
 /******************************************************************************
 ibxResourceCompiler - used to package ibx application into single html file.
 ******************************************************************************/
-function ibxResourceCompiler(ctxPath, config)
+function ibxResourceCompiler(ctxPath)
 {
-	ibxResourceManager.call(this);
-	this._config = config;
+	ibxResourceManager.call(this, ctxPath);
+}
+var _p = ibxResourceCompiler.prototype = new ibxResourceManager();
+
+_p.compile = function(bundles, config)
+{
+	bundles = (bundles instanceof Array) ? bundles : [{"src":bundles, "loadContext":"ibx"}];
+
+	this.config = $.extend({bootable:false, includeIbx:false}, config);
+	var config = this.config;
+
 	this._resBundle = $($.get({"url":this._contextPath + "./ibx_compiler_bundle.xml", "async":false, "dataType":"xml"}).responseXML);
-	var bootRes = this._resBundle.find("ibx-boot-resources").detach();
 	if(config.bootable)
 	{
+		var bootRes = this._resBundle.find("ibx-boot-resources").detach();
 		bootRes.find("ibx-boot-files").children().each(function(idx, file)
 		{
 			var filePath = file.getAttribute("src");
@@ -534,12 +543,16 @@ function ibxResourceCompiler(ctxPath, config)
 				this._resBundle.find("scripts").append(fileBlock);
 			}
 		}.bind(this));
-
-		this.loadBundle(($.get({"url":this._contextPath + "./ibx_resource_bundle.xml", "async":false, "dataType":"xml"}).responseXML));
+		this._resBundle[0].documentElement.setAttribute("ibx-bootable", config.bootable);
 	}
-	this._resBundle[0].documentElement.setAttribute("ibx-bootable", config.bootable);
-}
-var _p = ibxResourceCompiler.prototype = new ibxResourceManager();
+	if(config.includeIbx)
+	{
+		bundles.unshift({"src":"./ibx_resource_bundle.xml", "loadContext":"ibx"});
+		this._resBundle[0].documentElement.setAttribute("ibx-included", true);
+	}
+
+	return this.addBundles(bundles);
+};
 
 _p._makeResBlock = function(type, src, content)
 {
