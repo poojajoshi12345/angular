@@ -1,0 +1,15 @@
+{
+	"contexts":
+	{
+		"root":"c:/ibi/WebFOCUS82/webapps/webfocus",
+		"ibx":"c:/ibi/WebFOCUS82/webapps/webfocus/ibx/resources"
+	},
+	"bundles":
+	[
+		{
+			"appContext":"C:/dev/wf/ibx_testing/src/test/resources/META-INF/resources/ibx/testing/julian",
+			"src":"C:/dev/wf/ibx_testing/src/test/resources/META-INF/resources/ibx/testing/julian/test_res_bundle.xml",
+			"dest":""
+		}
+	]
+}
