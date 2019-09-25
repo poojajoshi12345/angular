@@ -14,7 +14,6 @@ module.exports = function (grunt) {
         cssmin: {  
         	ibx_css_package: {  
                 options: {                  	
-                    banner: getBanner(),
                     sourceMap: true
                 },  
                 files: {

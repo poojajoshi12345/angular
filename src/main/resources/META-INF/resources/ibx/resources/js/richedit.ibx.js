@@ -185,7 +185,7 @@ $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame,
 		//now do the actual insertion
 		var selection = doc.getSelection();
 		var range = null;
-		if(selection.rangeCount)
+		if(selection && selection.rangeCount)
 			range = selection.getRangeAt(0);
 		else
 		{

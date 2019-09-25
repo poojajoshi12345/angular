@@ -44,7 +44,7 @@
 		<maven.surefire.plugin.version>3.0.0-M2</maven.surefire.plugin.version>
 		<maven.surefire.report.plugin.version>3.0.0-M2</maven.surefire.report.plugin.version>
 		<maven.test.skip>false</maven.test.skip>
-		<org.apache.logging.log4j.version>2.12.0</org.apache.logging.log4j.version>
+		<org.apache.logging.log4j.version>2.12.1</org.apache.logging.log4j.version>
 		<org.ow2.asm.version>6.1.1</org.ow2.asm.version>
 		<org.sonarsource.scanner.maven.version>3.6.0.1398</org.sonarsource.scanner.maven.version>
 		<org.springframework.security.version>3.2.10.RELEASE</org.springframework.security.version>
