@@ -619,7 +619,8 @@ _p.loadExternalResFile = function(elFile)
 
 		//do not compile into internal resource bundle.
 		if(type == "string-file")
-		{	
+		{
+			content = content.replace(/\/\*[\s\S]*?\*\/|([^:]|^)\/\/.*$/g, "");//remove comments.
 			var block = noCompile ? this._resBundle[0].importNode(file[0]) : this._makeResBlock("string-bundle", src, content);
 			this._resBundle.find("strings").append(block);
 		}

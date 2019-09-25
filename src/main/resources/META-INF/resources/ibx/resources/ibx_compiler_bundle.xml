@@ -5,12 +5,12 @@ $Revision: 1.123 $:-->
 
 	<ibx-boot-resources>
 		<ibx-boot-files>
-			<style-file src="./css/base.ibx.css"/>
+			<!-- <style-file src="./css/base.ibx.css"/>
 			<script-file src="./etc/jquery/jquery.js"/>
 			<script-file src="./etc/jquery/jquery-ui-1.12.1/jquery-ui.js"/>
 			<script-file src="./js/util.ibx.js"/>
 			<script-file src="./js/preload.ibx.js"/>
-			<script-file src="./js/resources.ibx.js"/>
+			<script-file src="./js/resources.ibx.js"/> -->
 		</ibx-boot-files>
 	</ibx-boot-resources>
 
