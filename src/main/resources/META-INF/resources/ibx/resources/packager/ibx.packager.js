@@ -1,7 +1,11 @@
 /*Copyright 1996-2019 Information Builders, Inc. All rights reserved.*/
 const fs = require("fs");
 const EventEmitter = require("events");
-const xml2js = require("xml2js"); 
+
+//XML DOM support: https://www.npmjs.com/package/xmldom
+const xmldom = require("xmldom");
+const DOMParser = xmldom.DOMParser;
+const XMLSerializer = xmldom.XMLSerializer;
 
 function log()
 {
@@ -39,28 +43,24 @@ class ibxPackager extends EventEmitter
 
 class ibxResourceBundle extends EventEmitter
 {
-	constructor(bundleInfo, config)
+	constructor(bundleInfo, config, xPackageBundle)
 	{
 		super();
 		this._bundleInfo = bundleInfo;
 		this._config = config;
+		this._parentBundle;
+		this._xBundle = null;
+		this._xPackageBundle = xPackageBundle;
 		this._init();
 		this._package();
 	}
 	_init()
 	{
-		let template = fs.readFileSync(this._bundleInfo.template || this._config.template, "utf8");
-		xml2js.parseString(template, {trim:true}, (err, result)=>
-		{
-			this._bundleInfo._oTemplate = result;
-			let bundle = fs.readFileSync(this._bundleInfo.src, "utf8");
-			xml2js.parseString(bundle, {trim:true}, (err, result)=>
-			{
-				this._bundleInfo._oBundle = JSON.parse(JSON.stringify(result));
+		let template = this._template = fs.readFileSync(this._bundleInfo.template || this._config.template, "utf8");
+		this._xPackageBundle = this._xPackageBundle || new DOMParser().parseFromString(template);
 
-				debugger;
-			})
-		});		
+		let bundle = this._bundle = fs.readFileSync(this._getResPath(this._bundleInfo.src, this._bundleInfo.loadContext), "utf8");
+		this._xBundle = new DOMParser().parseFromString(bundle);
 	}
 	_getResPath(src, loadContext)
 	{
@@ -73,10 +73,25 @@ class ibxResourceBundle extends EventEmitter
 		else
 		if(loadContext == "bundle")
 			path = this._config.src.substr(0, this._config.src.lastIndexOf("/"));
-		return path + src;
+		return path + "/" + src;
 	}
 	_package()
 	{
+		let parentNode = this._xPackageBundle.getElementsByTagName("scripts")[0];
+		let items = this._xBundle.getElementsByTagName("script-file");
+		for(var i = 0; i < items.length; ++i)
+		{
+			var item = items[i];
+			var cData = parentNode.ownerDocument.createCDATASection("Src: " + item.getAttribute("src") + ", LoadContext: " + item.getAttribute("loadContext"));
+			parentNode.appendChild(cData);
+		}
+
+
+		//dump file for debug.
+		let xs = new XMLSerializer();
+		let strBundle = xs.serializeToString(this._xPackageBundle);
+		console.clear();
+		console.log(strBundle);
 
 	}
 }
