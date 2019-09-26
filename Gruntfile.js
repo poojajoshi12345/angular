@@ -14,7 +14,7 @@ module.exports = function (grunt) {
         cssmin: {  
         	ibx_css_package: {  
                 options: {                  	
-                    sourceMap: true
+                    sourceMap: false
                 },  
                 files: {
                 	'./target/classes/META-INF/resources/ibx/resources/css/ibx-all.min.css': [
