@@ -1,4 +1,5 @@
 {
+	"bundleTemplate":"ibx.packager.bundle.template.xml",
 	"contexts":
 	{
 		"webroot":"c:/ibi/WebFOCUS82/webapps/webfocus",
