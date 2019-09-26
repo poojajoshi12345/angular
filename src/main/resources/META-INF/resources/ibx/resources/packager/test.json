@@ -1,0 +1,65 @@
+{
+	"ibx-res-bundle": {
+		"$": {
+			"name": "test_res_bundle.xml",
+			"loadContext": "bundle"
+		},
+		"strings": [
+			{
+				"string-file": [
+					{
+						"$": {
+							"src": "./test_res_strings.txt",
+							"default": "false"
+						}
+					}
+				],
+				"string-bundle": [
+					"{\r\n\t\t\t\t\"language\":\"ibx_default\",\r\n\t\t\t\t\"strings\":\r\n\t\t\t\t{\r\n\t\t\t\t}\r\n\t\t\t}"
+				]
+			}
+		],
+		"styles": [
+			{
+				"style-file": [
+					{
+						"$": {
+							"src": "./test_res_styles.css"
+						}
+					}
+				],
+				"style-sheet": [
+					""
+				]
+			}
+		],
+		"markup": [
+			{
+				"markup-file": [
+					{
+						"$": {
+							"src": "./test_res_markup.xml"
+						}
+					}
+				],
+				"markup-block": [
+					"\r\n\t\t"
+				]
+			}
+		],
+		"scripts": [
+			{
+				"script-file": [
+					{
+						"$": {
+							"src": "./test_res_script.js"
+						}
+					}
+				],
+				"script-block": [
+					"//# sourceURL=test_res_bundle.xml"
+				]
+			}
+		]
+	}
+}

@@ -1,6 +1,7 @@
 /*Copyright 1996-2019 Information Builders, Inc. All rights reserved.*/
 const fs = require("fs");
 const EventEmitter = require("events");
+const xml2js = require("xml2js"); 
 
 function log()
 {
@@ -9,26 +10,6 @@ function log()
 		str += arguments[i];
 	console.dir(str);
 }
-
-// process.stdin.setEncoding("utf8");
-// process.stdin.on('readable', function()
-// {
-// 	let chunk;
-// 	while ((chunk = process.stdin.read()) !== null)
-// 	{
-// 		chunk = chunk.replace(/[\n\r]*/g, "");
-// 		if(chunk == "cls")
-// 			console.clear();
-// 		else
-// 		if(chunk == "q" || chunk == "quit" || chunk == "exit")
-// 		{
-// 			for(let id in fileMovers)
-// 				fileMovers[id].stop();
-// 			process.exit(1);
-// 		}			
-// 	}
-
-// });
 class ibxPackager extends EventEmitter
 {
 	constructor()
@@ -36,30 +17,71 @@ class ibxPackager extends EventEmitter
 		super();
 		this._bundles = {};
 	}
-
 	package(config)
 	{
+		let ibxBundle = 
+		{
+			"includeIbx":false,
+			"loadContext":"ibx",
+			"src":"./ibx_resource_bundle.xml",
+		}
+		this._ibxBundle = new ibxResourceBundle(ibxBundle, config);
+
+		return;
 		this._config = config;
 		for(let i = 0; i < config.bundles.length; ++i)
 		{
 			let bundle = config.bundles[i];
-			this._bundles[bundle.src] = new ibxResrouceBundle(bundle);
+			this._bundles[bundle.src] = new ibxResouceBundle(bundle, config);
 		}
 	}
 }
 
-class ibxResrouceBundle extends EventEmitter
+class ibxResourceBundle extends EventEmitter
 {
-	constructor(bundle)
+	constructor(bundleInfo, config)
 	{
 		super();
-		this._bundle = bundle;
-		console.log(bundle.src);
+		this._bundleInfo = bundleInfo;
+		this._config = config;
+		this._init();
+		this._package();
+	}
+	_init()
+	{
+		let template = fs.readFileSync(this._bundleInfo.template || this._config.template, "utf8");
+		xml2js.parseString(template, {trim:true}, (err, result)=>
+		{
+			this._bundleInfo._oTemplate = result;
+			let bundle = fs.readFileSync(this._bundleInfo.src, "utf8");
+			xml2js.parseString(bundle, {trim:true}, (err, result)=>
+			{
+				this._bundleInfo._oBundle = JSON.parse(JSON.stringify(result));
+
+				debugger;
+			})
+		});		
+	}
+	_getResPath(src, loadContext)
+	{
+		var path = this._config.contexts.webRoot;
+		if(loadContext == "ibx")
+			path = this._config.contexts.ibx;
+		else
+		if(loadContext == "app")
+			path = this._bundleInfo.appContext;
+		else
+		if(loadContext == "bundle")
+			path = this._config.src.substr(0, this._config.src.lastIndexOf("/"));
+		return path + src;
+	}
+	_package()
+	{
+
 	}
 }
 
-
-//create the file movers for each watch in the config file.
+//read config...kick off packaging.
 let argv = process.argv.slice(2);
 let config = fs.readFileSync(process.cwd() + "/" + argv[0]);
 config = JSON.parse(config);
