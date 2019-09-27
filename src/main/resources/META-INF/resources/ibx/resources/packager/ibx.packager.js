@@ -87,6 +87,11 @@ class ibxResourceBundle extends EventEmitter
 			path = this._config.src.substr(0, this._config.src.lastIndexOf("/"));
 		return path + "/" + src;
 	}
+	_getResFile(src)
+	{
+		let content = this._bundle = fs.readFileSync(src, "utf8");
+		return content;
+	}
 	_createInlineBlock(type, content, src)
 	{
 		var cData = this._xPackageBundle.createCDATASection(content);
@@ -102,10 +107,17 @@ class ibxResourceBundle extends EventEmitter
 		for(var i = 0; i < items.length; ++i)
 		{
 			let item = items[i];
+			if(item.getAttribute("nopackage") == "true")
+				continue;
+
 			let src = item.getAttribute("src");
 			let path = this._getResPath(src, this._getLoadContext(item));
-			var element = this._createInlineBlock("script-block", src, path);
-			parentNode.appendChild(element);
+			let content = this._getResFile(path);
+			if(content)
+			{
+				let element = this._createInlineBlock("script-block", content, path);
+				parentNode.appendChild(element);
+			}
 		}
 
 
