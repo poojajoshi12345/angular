@@ -48,7 +48,7 @@ class ibxResourceBundle extends EventEmitter
 		this._config = config;
 		this._bundleInfo = bundleInfo;
 		this.bundle = null;
-		this.resMap = parentResBundle ? parentResBundle.loadedFiles : {};
+		this.resMap = parentResBundle ? parentResBundle.resMap : {};
 		this.pkg = parentResBundle ? parentResBundle.pkg : null;
 		this._init();
 	}
@@ -107,37 +107,57 @@ class ibxResourceBundle extends EventEmitter
 		let parentNode = pkg.getElementsByTagName("scripts")[0];
 		let items = this.bundle.getElementsByTagName("script-file");
 
+		if(this._bundleInfo.includeIbx)
+		{
+			let bundleInfo = {includeIbx:false, loadContext:"ibx", src:"ibx_resource_bundle.xml"};
+			let ibxBundle = new ibxResourceBundle(bundleInfo, this._config, this);
+			ibxBundle.package();
+		}
+
 		for(var i = 0; i < items.length; ++i)
 		{
 			let item = items[i];
 			let src = item.getAttribute("src");
 			let path = this._getResPath(src, this._getLoadContext(item));
 
-			//resource was already processed, or specifically should not be packaged.
-			if(this.resMap[path] !== undefined || (item.getAttribute("nopackage") == "true"))
-				continue;
-
-			try
+			//resource was already processed
+			if(this.resMap[path] !== undefined)
 			{
-				let content = this._getResFile(path);
-				if(content)
-				{
-					let element = this._createInlineBlock("script-block", content, path);
-					parentNode.appendChild(element);
-				}
-				let msg = sformat("Package File: {1}\n",path);
-				this.resMap[path] = "packaged";
-				console.log(msg);
+				console.log(sformat("DUPLICATE RESOURCE: {1}", path));
+				continue;	
 			}
-			catch(ex)
-			{
-				let element = pkg.importNode(item, true);
-				element.setAttribute("ibx-packager-fail", ex.msg);
 
+			if(item.getAttribute("nopackage") == "true")
+			{
+				//nopackage means add the existing link to file
+				let element = pkg.importNode(item, true);
 				parentNode.appendChild(element);
-				let msg = sformat("Package Error: ({1}) {2}\n", ex.code, path);
-				this.resMap[path] = "referenced";
-				console.log(msg);
+			}
+			else
+			{
+				//try to inline the file.
+				try
+				{
+					let content = this._getResFile(path);
+					if(content)
+					{
+						let element = this._createInlineBlock("script-block", content, path);
+						parentNode.appendChild(element);
+					}
+					let msg = sformat("Package File: {1}",path);
+					this.resMap[path] = "packaged";
+					console.log(msg);
+				}
+				catch(ex)
+				{
+					let element = pkg.importNode(item, true);
+					element.setAttribute("ibx-packager-fail", ex.msg);
+
+					parentNode.appendChild(element);
+					let msg = sformat("Package Error: ({1}) {2}", ex.code, path);
+					this.resMap[path] = "referenced";
+					console.log(msg);
+				}
 			}
 		}
 		return pkg;
@@ -150,7 +170,7 @@ class ibxResourceBundle extends EventEmitter
 		let fileExt = fsPath.extname(src);
 		let fileName = fsPath.basename(src, fileExt);
 		let fullPath = fsPath.resolve(sformat("{1}/{2}.ibxpackaged{3}", filePath, fileName, fileExt));
-		let outFile = fs.writeFileSync(fullPath, xs.serializeToString(this.pkg))
+		fs.writeFileSync(fullPath, xs.serializeToString(this.pkg))
 	}
 }
 ibxResourceBundle.typeMap = 
