@@ -52,7 +52,7 @@ try {
                         publishMavenReports()
                     }                    
                     
-                    cleanWs cleanWhenFailure: false, notFailBuild: true
+                    cleanWs cleanWhenAborted: false, cleanWhenFailure: false, cleanWhenNotBuilt: false, cleanWhenUnstable: false
                 }  
             }
         }
@@ -75,7 +75,7 @@ try {
                         throw e
                     } 
                     finally {
-                         cleanWs cleanWhenFailure: false, notFailBuild: true
+                         cleanWs cleanWhenAborted: false, cleanWhenFailure: false, cleanWhenNotBuilt: false, cleanWhenUnstable: false
                     }
                 }
             }
@@ -109,7 +109,7 @@ try {
                         }   
                     }
                     finally {
-                        cleanWs cleanWhenFailure: false, notFailBuild: true
+                        cleanWs cleanWhenAborted: false, cleanWhenFailure: false, cleanWhenNotBuilt: false, cleanWhenUnstable: false
                     }              
                 }
             }
