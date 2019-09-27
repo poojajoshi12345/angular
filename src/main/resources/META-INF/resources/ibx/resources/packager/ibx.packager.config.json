@@ -2,19 +2,16 @@
 	"template":"ibx.packager.bundle.template.xml",
 	"contexts":
 	{
-		"loadContext":"webRoot",
 		"webRoot":"c:/ibi/WebFOCUS82/webapps/webfocus",
-		"ibx":"c:/ibi/WebFOCUS82/webapps/webfocus/ibx/resources"
+		"ibx":"./ibx/resources"
 	},
+	"outputDir":"*",
 	"bundles":
 	[
 		{
-			"combineFiles":false,
-			"compactFiles":false,
-			"obfuscateFiles":false,
 			"includeIbx":true,
-			"appContext":"/ibx_testing/testing/julian",
-			"src":"/ibx_testing/testing/julian/test_res_bundle.xml",
+			"appContext":"ibx_testing/julian",
+			"src":"ibx_testing/julian/test_res_bundle.xml",
 			"dest":""
 		}
 	]
