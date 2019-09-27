@@ -62,6 +62,18 @@ class ibxResourceBundle extends EventEmitter
 		let bundle = this._bundle = fs.readFileSync(this._getResPath(this._bundleInfo.src, this._bundleInfo.loadContext), "utf8");
 		this._xBundle = new DOMParser().parseFromString(bundle);
 	}
+	_getLoadContext(element)
+	{
+		var loadContext = null;
+		while(element)
+		{
+			var loadContext = element.getAttribute("loadcontext");
+			if(loadContext)
+				break;
+			element = element.parentNode;
+		}
+		return loadContext;
+	}
 	_getResPath(src, loadContext)
 	{
 		var path = this._config.contexts.webRoot;
@@ -75,15 +87,25 @@ class ibxResourceBundle extends EventEmitter
 			path = this._config.src.substr(0, this._config.src.lastIndexOf("/"));
 		return path + "/" + src;
 	}
+	_createInlineBlock(type, content, src)
+	{
+		var cData = this._xPackageBundle.createCDATASection(content);
+		var element = this._xPackageBundle.createElement(type);
+		element.setAttribute("src", src);
+		element.appendChild(cData);
+		return element;
+	}
 	_package()
 	{
 		let parentNode = this._xPackageBundle.getElementsByTagName("scripts")[0];
 		let items = this._xBundle.getElementsByTagName("script-file");
 		for(var i = 0; i < items.length; ++i)
 		{
-			var item = items[i];
-			var cData = parentNode.ownerDocument.createCDATASection("Src: " + item.getAttribute("src") + ", LoadContext: " + item.getAttribute("loadContext"));
-			parentNode.appendChild(cData);
+			let item = items[i];
+			let src = item.getAttribute("src");
+			let path = this._getResPath(src, this._getLoadContext(item));
+			var element = this._createInlineBlock("script-block", src, path);
+			parentNode.appendChild(element);
 		}
 
 
@@ -92,7 +114,6 @@ class ibxResourceBundle extends EventEmitter
 		let strBundle = xs.serializeToString(this._xPackageBundle);
 		console.clear();
 		console.log(strBundle);
-
 	}
 }
 

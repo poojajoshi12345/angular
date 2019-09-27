@@ -1,0 +1,47 @@
+Console was cleared
+<?xml version="1.0" encoding="UTF-8"?>
+<!--Copyright 1996-2016 Information Builders, Inc. All rights reserved.
+$Revision: 1.123 $:-->
+<ibx-res-bundle name="ibx_resourece_bundle.xml" loadContext="ibx">
+
+	<ibx-boot-resources>
+		<ibx-boot-files>
+			<!-- <style-file src="./css/base.ibx.css"/>
+			<script-file src="./etc/jquery/jquery.js"/>
+			<script-file src="./etc/jquery/jquery-ui-1.12.1/jquery-ui.js"/>
+			<script-file src="./js/util.ibx.js"/>
+			<script-file src="./js/preload.ibx.js"/>
+			<script-file src="./js/resources.ibx.js"/> -->
+		</ibx-boot-files>
+	</ibx-boot-resources>
+
+	<!--strings-->
+	<strings>
+	</strings>
+
+	<!--markup-->
+	<markup>
+	</markup>
+
+	<!--styles-->
+	<styles>
+	</styles>
+
+	<!--scripts-->
+	<scripts>
+	<script-block src="c:/ibi/WebFOCUS82/webapps/webfocus/ibx/resources/./etc/resizepolyfill/ResizeSensor.js">
+		<![CDATA[
+			./etc/resizepolyfill/ResizeSensor.js
+		]]>
+	</script-block>
+	<script-block src="c:/ibi/WebFOCUS82/webapps/webfocus/ibx/resources/./etc/scrollwidthpolyfill/scrollwidthpolyfill.js"><![CDATA[./etc/scrollwidthpolyfill/scrollwidthpolyfill.js]]></script-block><script-block src="c:/ibi/WebFOCUS82/webapps/webfocus/ibx/resources/./etc/gridstack/underscore.js"><![CDATA[./etc/gridstack/underscore.js]]></script-block><script-block src="c:/ibi/WebFOCUS82/webapps/webfocus/ibx/resources/./etc/gridstack/gridstack.js"><![CDATA[./etc/gridstack/gridstack.js]]></script-block><script-block src="c:/ibi/WebFOCUS82/webapps/webfocus/ibx/resources/./etc/jquery-minicolors/jquery.minicolors.js"><![CDATA[./etc/jquery-minicolors/jquery.minicolors.js]]></script-block><script-block src="c:/ibi/WebFOCUS82/webapps/webfocus/ibx/resources/./js/events.ibx.js"><![CDATA[./js/events.ibx.js]]></script-block><script-block src="c:/ibi/WebFOCUS82/webapps/webfocus/ibx/resources/./js/selection.ibx.js"><![CDATA[./js/selection.ibx.js]]></script-block><script-block src="c:/ibi/WebFOCUS82/webapps/webfocus/ibx/resources/./js/dragdrop.ibx.js"><![CDATA[./js/dragdrop.ibx.js]]></script-block><script-block src="c:/ibi/WebFOCUS82/webapps/webfocus/ibx/resources/./js/mutationobserver.ibx.js"><![CDATA[./js/mutationobserver.ibx.js]]></script-block><script-block src="c:/ibi/WebFOCUS82/webapps/webfocus/ibx/resources/./js/shell.ibx.js"><![CDATA[./js/shell.ibx.js]]></script-block><script-block src="c:/ibi/WebFOCUS82/webapps/webfocus/ibx/resources/./js/widget.ibx.js"><![CDATA[./js/widget.ibx.js]]></script-block><script-block src="c:/ibi/WebFOCUS82/webapps/webfocus/ibx/resources/./js/commands.ibx.js"><![CDATA[./js/commands.ibx.js]]></script-block><script-block src="c:/ibi/WebFOCUS82/webapps/webfocus/ibx/resources/./js/autoscroll.ibx.js"><![CDATA[./js/autoscroll.ibx.js]]></script-block><script-block src="c:/ibi/WebFOCUS82/webapps/webfocus/ibx/resources/./js/sortable.ibx.js"><![CDATA[./js/sortable.ibx.js]]></script-block><script-block src="c:/ibi/WebFOCUS82/webapps/webfocus/ibx/resources/./js/collapsible.ibx.js"><![CDATA[./js/collapsible.ibx.js]]></script-block><script-block src="c:/ibi/WebFOCUS82/webapps/webfocus/ibx/resources/./js/iframe.ibx.js"><![CDATA[./js/iframe.ibx.js]]></script-block><script-block src="c:/ibi/WebFOCUS82/webapps/webfocus/ibx/resources/./js/flexbox.ibx.js"><![CDATA[./js/flexbox.ibx.js]]></script-block><script-block src="c:/ibi/WebFOCUS82/webapps/webfocus/ibx/resources/./js/grid.ibx.js"><![CDATA[./js/grid.ibx.js]]></script-block><script-block src="c:/ibi/WebFOCUS82/webapps/webfocus/ibx/resources/./js/propgrid.ibx.js"><![CDATA[./js/propgrid.ibx.js]]></script-block><script-block src="c:/ibi/WebFOCUS82/webapps/webfocus/ibx/resources/./js/splitter.ibx.js"><![CDATA[./js/splitter.ibx.js]]></script-block><script-block src="c:/ibi/WebFOCUS82/webapps/webfocus/ibx/resources/./js/label.ibx.js"><![CDATA[./js/label.ibx.js]]></script-block><script-block src="c:/ibi/WebFOCUS82/webapps/webfocus/ibx/resources/./js/tree.ibx.js"><![CDATA[./js/tree.ibx.js]]></script-block><script-block src="c:/ibi/WebFOCUS82/webapps/webfocus/ibx/resources/./js/progress.ibx.js"><![CDATA[./js/progress.ibx.js]]></script-block><script-block src="c:/ibi/WebFOCUS82/webapps/webfocus/ibx/resources/./js/text.ibx.js"><![CDATA[./js/text.ibx.js]]></script-block><script-block src="c:/ibi/WebFOCUS82/webapps/webfocus/ibx/resources/./js/textarea.ibx.js"><![CDATA[./js/textarea.ibx.js]]></script-block><script-block src="c:/ibi/WebFOCUS82/webapps/webfocus/ibx/resources/./js/richedit.ibx.js"><![CDATA[./js/richedit.ibx.js]]></script-block><script-block src="c:/ibi/WebFOCUS82/webapps/webfocus/ibx/resources/./js/spinner.ibx.js"><![CDATA[./js/spinner.ibx.js]]></script-block><script-block src="c:/ibi/WebFOCUS82/webapps/webfocus/ibx/resources/./js/button.ibx.js"><![CDATA[./js/button.ibx.js]]></script-block><script-block src="c:/ibi/WebFOCUS82/webapps/webfocus/ibx/resources/./js/slider.ibx.js"><![CDATA[./js/slider.ibx.js]]></script-block><script-block src="c:/ibi/WebFOCUS82/webapps/webfocus/ibx/resources/./js/popup.ibx.js"><![CDATA[./js/popup.ibx.js]]></script-block><script-block src="c:/ibi/WebFOCUS82/webapps/webfocus/ibx/resources/./js/dialog.ibx.js"><![CDATA[./js/dialog.ibx.js]]></script-block><script-block src="c:/ibi/WebFOCUS82/webapps/webfocus/ibx/resources/./js/tooltip.ibx.js"><![CDATA[./js/tooltip.ibx.js]]></script-block><script-block src="c:/ibi/WebFOCUS82/webapps/webfocus/ibx/resources/./js/radiogroup.ibx.js"><![CDATA[./js/radiogroup.ibx.js]]></script-block><script-block src="c:/ibi/WebFOCUS82/webapps/webfocus/ibx/resources/./js/form.ibx.js"><![CDATA[./js/form.ibx.js]]></script-block><script-block src="c:/ibi/WebFOCUS82/webapps/webfocus/ibx/resources/./js/accordion.ibx.js"><![CDATA[./js/accordion.ibx.js]]></script-block><script-block src="c:/ibi/WebFOCUS82/webapps/webfocus/ibx/resources/./js/menu.ibx.js"><![CDATA[./js/menu.ibx.js]]></script-block><script-block src="c:/ibi/WebFOCUS82/webapps/webfocus/ibx/resources/./js/groupbox.ibx.js"><![CDATA[./js/groupbox.ibx.js]]></script-block><script-block src="c:/ibi/WebFOCUS82/webapps/webfocus/ibx/resources/./js/gridstack.ibx.js"><![CDATA[./js/gridstack.ibx.js]]></script-block><script-block src="c:/ibi/WebFOCUS82/webapps/webfocus/ibx/resources/./js/select.ibx.js"><![CDATA[./js/select.ibx.js]]></script-block><script-block src="c:/ibi/WebFOCUS82/webapps/webfocus/ibx/resources/./js/carousel.ibx.js"><![CDATA[./js/carousel.ibx.js]]></script-block><script-block src="c:/ibi/WebFOCUS82/webapps/webfocus/ibx/resources/./js/tabs.ibx.js"><![CDATA[./js/tabs.ibx.js]]></script-block><script-block src="c:/ibi/WebFOCUS82/webapps/webfocus/ibx/resources/./js/wizard.ibx.js"><![CDATA[./js/wizard.ibx.js]]></script-block><script-block src="c:/ibi/WebFOCUS82/webapps/webfocus/ibx/resources/./js/datepicker.ibx.js"><![CDATA[./js/datepicker.ibx.js]]></script-block><script-block src="c:/ibi/WebFOCUS82/webapps/webfocus/ibx/resources/./js/colorpicker.ibx.js"><![CDATA[./js/colorpicker.ibx.js]]></script-block><script-block src="c:/ibi/WebFOCUS82/webapps/webfocus/ibx/resources/./js/diagram.ibx.js"><![CDATA[./js/diagram.ibx.js]]></script-block><script-block src="c:/ibi/WebFOCUS82/webapps/webfocus/ibx/resources/./js/navmap.ibx.js"><![CDATA[./js/navmap.ibx.js]]></script-block></scripts>
+
+	<!--dependent resource bundles this bundle needs-->
+	<res-bundles>
+	</res-bundles>
+
+	<!--RARELY USED - FORWARD REFERENCED BUNDLES - PROBABLY SHOULD BE A 'res-bundle'...default external bundles to be loaded AFTER this bundles is fully loaded and running-->
+	<packages>
+	</packages>
+
+</ibx-res-bundle>
