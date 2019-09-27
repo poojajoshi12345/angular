@@ -53,11 +53,14 @@ class ibxResourceBundle extends EventEmitter
 	}
 	_init()
 	{
+		var bundlePath = this._bundleInfo.fullPath = this._getResPath(this._bundleInfo.src, this._bundleInfo.loadContext);
+		let bundle = fs.readFileSync(bundlePath, "utf8");
+		this.bundle = new DOMParser().parseFromString(bundle);
+
 		let template = this._template = fs.readFileSync(this._config.template, "utf8");
 		this.pkg = this.pkg || new DOMParser().parseFromString(template);
-
-		let bundle = fs.readFileSync(this._getResPath(this._bundleInfo.src, this._bundleInfo.loadContext), "utf8");
-		this.bundle = new DOMParser().parseFromString(bundle);
+		this.pkg.documentElement.setAttribute("name", this.bundle.documentElement.getAttribute("name"))
+		this.pkg.documentElement.setAttribute("loadContext", this.bundle.documentElement.getAttribute("loadContext"))
 	}
 	_getLoadContext(element)
 	{
@@ -67,15 +70,17 @@ class ibxResourceBundle extends EventEmitter
 			var loadContext = element.getAttribute("loadContext");
 			if(loadContext)
 				break;
+
 			element = element.parentNode;
-			if(!element)
-				loadContext = this._config.contexts.loadContext;
+
+			if(element && !element.tagName)//root element
+				element = null;
 		}
 		return loadContext;
 	}
 	_getResPath(src, loadContext)
 	{
-		var ctxPath = "";
+		let ctxPath = "";
 		if(loadContext == "ibx")
 			ctxPath = this._config.contexts.ibx;
 		else
@@ -83,8 +88,11 @@ class ibxResourceBundle extends EventEmitter
 			ctxPath = this._bundleInfo.appContext;
 		else
 		if(loadContext == "bundle")
-			ctxPath = this._bundleInfo.src.substr(0, this._bundleInfo.src.lastIndexOf("/"));
-		return sformat("{1}/{2}/{3}", this._config.contexts.webRoot, ctxPath, src);
+			ctxPath = fsPath.dirname(this._bundleInfo.fullPath);
+		
+		//only adjust path if the src is not an absolute path from root.
+		let resPath = fsPath.resolve(this._config.contexts.webRoot, ctxPath, src);
+		return resPath;
 	}
 	_getResFile(src)
 	{
@@ -101,6 +109,7 @@ class ibxResourceBundle extends EventEmitter
 	}
 	package(andSave)
 	{
+		//should ibx be embedded in this package
 		if(this._bundleInfo.includeIbx)
 		{
 			let bundleInfo = {includeIbx:false, loadContext:"ibx", src:"ibx_resource_bundle.xml"};
@@ -108,8 +117,8 @@ class ibxResourceBundle extends EventEmitter
 			ibxBundle.package();
 		}
 
+		//now add the assets into the package
 		let pkg = this.pkg;
-		let rootNode = pkg.documentElement;
 		let parentNode = pkg.getElementsByTagName("scripts")[0];
 		let items = this.bundle.getElementsByTagName("script-file");
 		for(var i = 0; i < items.length; ++i)
@@ -123,9 +132,9 @@ class ibxResourceBundle extends EventEmitter
 			if(this.resMap[path] !== undefined)
 				continue;	
 
-			if(item.getAttribute("nopackage") == "true")
+			//nodes that don't get packaged...just copied.
+			if(item.getAttribute("nopackage") == "true" || (/{context}|{res}/g).test(src))
 			{
-				//nopackage means add the existing link to file
 				let element = pkg.importNode(item, true);
 				parentNode.appendChild(element);
 				howPackaged = "reference";
@@ -148,7 +157,7 @@ class ibxResourceBundle extends EventEmitter
 					let element = pkg.importNode(item, true);
 					element.setAttribute("ibx-packager-import-fail", ex.message);
 					parentNode.appendChild(element);
-					howPackaged = "reference due to error: " + ex.message;
+					howPackaged = "reference due to import error: " + ex.message;
 				}
 			}
 

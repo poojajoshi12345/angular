@@ -274,7 +274,7 @@ $Revision: 1.123 $:-->
 	<!--scripts-->
 	<scripts>
 		<!--EXTERNAL JS ASSETS-->
-		<script-file src="./etc/resizepolyfill/ResizeSensor.js" nopackage="true" loadContext="ibx"/>
+		<script-file src="./etc/resizepolyfill/ResizeSensor.js"/>
 		<script-file src="./etc/scrollwidthpolyfill/scrollwidthpolyfill.js"/>
 		<script-file src="./etc/gridstack/underscore.js"/>
 		<script-file src="./etc/gridstack/gridstack.js"/>
