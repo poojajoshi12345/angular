@@ -35,20 +35,21 @@ class ibxPackager extends EventEmitter
 		{
 			let bundleInfo = config.bundles[i];
 			let resBundle = this._resBundles[bundleInfo.src] = new ibxResourceBundle(bundleInfo, config);
-			let pkg = resBundle.package();
+			resBundle.package();
+			resBundle.save();
 		}
 	}
 }
-
 class ibxResourceBundle extends EventEmitter
 {
-	constructor(bundleInfo, config, pkgParent)
+	constructor(bundleInfo, config, parentResBundle)
 	{
 		super();
-		this._bundleInfo = bundleInfo;
 		this._config = config;
+		this._bundleInfo = bundleInfo;
 		this.bundle = null;
-		this.pkg = pkgParent;
+		this.resMap = parentResBundle ? parentResBundle.loadedFiles : {};
+		this.pkg = parentResBundle ? parentResBundle.pkg : null;
 		this._init();
 	}
 	_init()
@@ -105,17 +106,17 @@ class ibxResourceBundle extends EventEmitter
 		let rootNode = pkg.documentElement;
 		let parentNode = pkg.getElementsByTagName("scripts")[0];
 		let items = this.bundle.getElementsByTagName("script-file");
-		let log = "PACKAGING INFO:\n";
 
 		for(var i = 0; i < items.length; ++i)
 		{
 			let item = items[i];
-			if(item.getAttribute("nopackage") == "true")
-				continue;
-
 			let src = item.getAttribute("src");
 			let path = this._getResPath(src, this._getLoadContext(item));
-			
+
+			//resource was already processed, or specifically should not be packaged.
+			if(this.resMap[path] !== undefined || (item.getAttribute("nopackage") == "true"))
+				continue;
+
 			try
 			{
 				let content = this._getResFile(path);
@@ -125,6 +126,7 @@ class ibxResourceBundle extends EventEmitter
 					parentNode.appendChild(element);
 				}
 				let msg = sformat("Package File: {1}\n",path);
+				this.resMap[path] = "packaged";
 				console.log(msg);
 			}
 			catch(ex)
@@ -134,11 +136,21 @@ class ibxResourceBundle extends EventEmitter
 
 				parentNode.appendChild(element);
 				let msg = sformat("Package Error: ({1}) {2}\n", ex.code, path);
+				this.resMap[path] = "referenced";
 				console.log(msg);
-				log += msg; 
 			}
 		}
 		return pkg;
+	}
+	save()
+	{
+		let xs = new XMLSerializer();
+		let src = this._bundleInfo.src;
+		let filePath = this._getResPath("", "bundle");
+		let fileExt = fsPath.extname(src);
+		let fileName = fsPath.basename(src, fileExt);
+		let fullPath = fsPath.resolve(sformat("{1}/{2}.ibxpackaged{3}", filePath, fileName, fileExt));
+		let outFile = fs.writeFileSync(fullPath, xs.serializeToString(this.pkg))
 	}
 }
 ibxResourceBundle.typeMap = 
