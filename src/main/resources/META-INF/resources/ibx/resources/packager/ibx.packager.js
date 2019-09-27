@@ -67,10 +67,12 @@ class ibxResourceBundle extends EventEmitter
 		var loadContext = null;
 		while(element)
 		{
-			var loadContext = element.getAttribute("loadcontext");
+			var loadContext = element.getAttribute("loadContext");
 			if(loadContext)
 				break;
 			element = element.parentNode;
+			if(!element)
+				loadContext = this._config.contexts.loadContext;
 		}
 		return loadContext;
 	}
@@ -104,6 +106,7 @@ class ibxResourceBundle extends EventEmitter
 	{
 		let parentNode = this._xPackageBundle.getElementsByTagName("scripts")[0];
 		let items = this._xBundle.getElementsByTagName("script-file");
+		
 		for(var i = 0; i < items.length; ++i)
 		{
 			let item = items[i];
@@ -119,7 +122,10 @@ class ibxResourceBundle extends EventEmitter
 				parentNode.appendChild(element);
 			}
 		}
-
+		// _packageFile()
+		// {
+		// 	if()
+		// }
 
 		//dump file for debug.
 		let xs = new XMLSerializer();
@@ -128,6 +134,14 @@ class ibxResourceBundle extends EventEmitter
 		console.log(strBundle);
 	}
 }
+ibxResourceBundle.typeMap = 
+{
+	"script-file":"script-block",
+	"style-file":"style-block",
+	"markup-file":"markup-block",
+	"string-file":"string-bundle"
+}
+
 
 //read config...kick off packaging.
 let argv = process.argv.slice(2);

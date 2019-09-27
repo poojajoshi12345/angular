@@ -2,14 +2,17 @@
 	"template":"ibx.packager.bundle.template.xml",
 	"contexts":
 	{
+		"loadContext":"webRoot",
 		"webRoot":"c:/ibi/WebFOCUS82/webapps/webfocus",
 		"ibx":"c:/ibi/WebFOCUS82/webapps/webfocus/ibx/resources"
 	},
 	"bundles":
 	[
 		{
+			"combineFiles":false,
+			"compactFiles":false,
+			"obfuscateFiles":false,
 			"includeIbx":true,
-			"loadContext":"webroot",
 			"appContext":"/ibx_testing/testing/julian",
 			"src":"/ibx_testing/testing/julian/test_res_bundle.xml",
 			"dest":""
