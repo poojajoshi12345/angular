@@ -35,8 +35,7 @@ class ibxPackager extends EventEmitter
 		{
 			let bundleInfo = config.bundles[i];
 			let resBundle = this._resBundles[bundleInfo.src] = new ibxResourceBundle(bundleInfo, config);
-			resBundle.package();
-			resBundle.save();
+			resBundle.package(true);
 		}
 	}
 }
@@ -54,10 +53,10 @@ class ibxResourceBundle extends EventEmitter
 	}
 	_init()
 	{
-		let template = this._template = fs.readFileSync(this._bundleInfo.template || this._config.template, "utf8");
+		let template = this._template = fs.readFileSync(this._config.template, "utf8");
 		this.pkg = this.pkg || new DOMParser().parseFromString(template);
 
-		let bundle = this._bundle = fs.readFileSync(this._getResPath(this._bundleInfo.src, this._bundleInfo.loadContext), "utf8");
+		let bundle = fs.readFileSync(this._getResPath(this._bundleInfo.src, this._bundleInfo.loadContext), "utf8");
 		this.bundle = new DOMParser().parseFromString(bundle);
 	}
 	_getLoadContext(element)
@@ -100,13 +99,8 @@ class ibxResourceBundle extends EventEmitter
 		element.appendChild(cData);
 		return element;
 	}
-	package()
+	package(andSave)
 	{
-		let pkg = this.pkg;
-		let rootNode = pkg.documentElement;
-		let parentNode = pkg.getElementsByTagName("scripts")[0];
-		let items = this.bundle.getElementsByTagName("script-file");
-
 		if(this._bundleInfo.includeIbx)
 		{
 			let bundleInfo = {includeIbx:false, loadContext:"ibx", src:"ibx_resource_bundle.xml"};
@@ -114,24 +108,27 @@ class ibxResourceBundle extends EventEmitter
 			ibxBundle.package();
 		}
 
+		let pkg = this.pkg;
+		let rootNode = pkg.documentElement;
+		let parentNode = pkg.getElementsByTagName("scripts")[0];
+		let items = this.bundle.getElementsByTagName("script-file");
 		for(var i = 0; i < items.length; ++i)
 		{
 			let item = items[i];
 			let src = item.getAttribute("src");
 			let path = this._getResPath(src, this._getLoadContext(item));
+			let howPackaged = "";
 
 			//resource was already processed
 			if(this.resMap[path] !== undefined)
-			{
-				console.log(sformat("DUPLICATE RESOURCE: {1}", path));
 				continue;	
-			}
 
 			if(item.getAttribute("nopackage") == "true")
 			{
 				//nopackage means add the existing link to file
 				let element = pkg.importNode(item, true);
 				parentNode.appendChild(element);
+				howPackaged = "reference";
 			}
 			else
 			{
@@ -139,41 +136,46 @@ class ibxResourceBundle extends EventEmitter
 				try
 				{
 					let content = this._getResFile(path);
-					if(content)
-					{
-						let element = this._createInlineBlock("script-block", content, path);
-						parentNode.appendChild(element);
-					}
-					let msg = sformat("Package File: {1}",path);
-					this.resMap[path] = "packaged";
-					console.log(msg);
+					let element = this._createInlineBlock("script-block", content, path);
+					parentNode.appendChild(element);
+					howPackaged = "inline";
 				}
 				catch(ex)
 				{
-					let element = pkg.importNode(item, true);
-					element.setAttribute("ibx-packager-fail", ex.msg);
+					if(!this._config.addUnresolvedLinks)
+						continue;
 
+					let element = pkg.importNode(item, true);
+					element.setAttribute("ibx-packager-import-fail", ex.message);
 					parentNode.appendChild(element);
-					let msg = sformat("Package Error: ({1}) {2}", ex.code, path);
-					this.resMap[path] = "referenced";
-					console.log(msg);
+					howPackaged = "reference due to error: " + ex.message;
 				}
 			}
+
+			//add to resource map.
+			this.resMap[path] = howPackaged;
 		}
+
+		if(andSave)
+			this.save();
 		return pkg;
+	}
+	serialize()
+	{
+		let xs = new XMLSerializer();
+		return xs.serializeToString(this.pkg);
 	}
 	save()
 	{
-		let xs = new XMLSerializer();
 		let src = this._bundleInfo.src;
 		let filePath = this._getResPath("", "bundle");
 		let fileExt = fsPath.extname(src);
 		let fileName = fsPath.basename(src, fileExt);
 		let fullPath = fsPath.resolve(sformat("{1}/{2}.ibxpackaged{3}", filePath, fileName, fileExt));
-		fs.writeFileSync(fullPath, xs.serializeToString(this.pkg))
+		fs.writeFileSync(fullPath, this.serialize(false))
 	}
 }
-ibxResourceBundle.typeMap = 
+ibxResourceBundle.resTypeMap = 
 {
 	"script-file":"script-block",
 	"style-file":"style-block",
