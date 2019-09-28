@@ -33,6 +33,9 @@ class ibxPackager extends EventEmitter
 	}
 	package(config)
 	{
+		var tStart = new Date();
+		console.log("ibx packagine started: " + tStart);
+
 		this._config = config;
 		for(let i = 0; i < config.bundles.length; ++i)
 		{
@@ -40,6 +43,8 @@ class ibxPackager extends EventEmitter
 			let resBundle = this._resBundles[bundleInfo.src] = new ibxResourceBundle(bundleInfo, config);
 			resBundle.package(true);
 		}
+
+		console.log(sformat("ibx packaging finished: {1}ms", (new Date()) - tStart));
 	}
 }
 class ibxResourceBundle extends EventEmitter
@@ -123,14 +128,21 @@ class ibxResourceBundle extends EventEmitter
 		//now add the assets into the package
 		let pkg = this.pkg;
 
-		//external scripts
+		//strings
 		this._importItems(Array.from(this.bundle.getElementsByTagName("string-file")));
 		this._importItems(Array.from(this.bundle.getElementsByTagName("string-bundle")));
 
+		//styles
+		this._importItems(Array.from(this.bundle.getElementsByTagName("style-file")));
+		this._importItems(Array.from(this.bundle.getElementsByTagName("style-sheet")));
 
-		//external scripts
-		//let items = Array.from(this.bundle.getElementsByTagName("script-file"));
-		//this._packageItems(items);
+		//markup
+		this._importItems(Array.from(this.bundle.getElementsByTagName("markup-file")));
+		this._importItems(Array.from(this.bundle.getElementsByTagName("markup-block")));
+
+		//scripts
+		this._importItems(Array.from(this.bundle.getElementsByTagName("script-file")));
+		this._importItems(Array.from(this.bundle.getElementsByTagName("script-block")));
 
 		if(andSave)
 			this.save();
@@ -139,7 +151,6 @@ class ibxResourceBundle extends EventEmitter
 	_importItems(items)
 	{
 		let pkg = this.pkg;
-		let parentNode = pkg.getElementsByTagName("scripts")[0];
 		items = (items instanceof Array) ? items : [items];
 		for(var i = 0; i < items.length; ++i)
 		{
@@ -148,10 +159,11 @@ class ibxResourceBundle extends EventEmitter
 			let importInfo = ibxResourceBundle.importTypeMap[itemType];
 			let src = item.getAttribute("src");
 			let path = this._getResPath(src, this._getLoadContext(item));
+			let parentNode = pkg.getElementsByTagName(importInfo.group)[0] || pkg.documentElement;
 			let howPackaged = "";
 
 			//resource was already processed...no duplicate entries
-			if(!this._config.allowDuplicates && (this.resMap[path] !== undefined))
+			if(!this._config.allowDuplicates && importInfo.importType == "file" && (this.resMap[path] !== undefined))
 				continue;	
 
 			//nodes that don't get packaged...just copied.
@@ -165,6 +177,7 @@ class ibxResourceBundle extends EventEmitter
 			if(importInfo.importType == "inline")
 			{
 				let element = pkg.importNode(item, true);
+				element.setAttribute("src", this._bundleInfo.src);
 				parentNode.appendChild(element);
 				howPackaged = "inline";
 			}
@@ -185,6 +198,7 @@ class ibxResourceBundle extends EventEmitter
 						continue;
 
 					let element = pkg.importNode(item, true);
+					element.setAttribute("src", src);
 					element.setAttribute("ibx-packager-import-fail", ex.message);
 					parentNode.appendChild(element);
 					howPackaged = "reference due to import error: " + ex.message;
@@ -212,14 +226,14 @@ class ibxResourceBundle extends EventEmitter
 }
 ibxResourceBundle.importTypeMap = 
 {
-	"string-file":{"importType":"file", "nodeType":"string-bundle"},
-	"string-bundle":{"importType":"inline", "nodeType":"string-bundle"},
-	"style-file":{"importType":"file", "nodeType":"style-sheet"},
-	"style-sheet":{"importType":"inline", "nodeType":"script-sheet"},
-	"script-file":{"importType":"file", "nodeType":"script-block"},
-	"script-block":{"importType":"inline", "nodeType":"script-block"},
-	"markup-file":{"importType":"file", "nodeType":"markup-block"},
-	"markup-block":{"importType":"inline", "nodeType":"markup-block"},
+	"string-file":{"importType":"file", "nodeType":"string-bundle", "group":"strings"},
+	"string-bundle":{"importType":"inline", "nodeType":"string-bundle", "group":"strings"},
+	"style-file":{"importType":"file", "nodeType":"style-sheet", "group":"styles"},
+	"style-sheet":{"importType":"inline", "nodeType":"script-sheet", "group":"styles"},
+	"script-file":{"importType":"file", "nodeType":"script-block", "group":"scripts"},
+	"script-block":{"importType":"inline", "nodeType":"script-block", "group":"scripts"},
+	"markup-file":{"importType":"file", "nodeType":"markup-block", "group":"markup"},
+	"markup-block":{"importType":"inline", "nodeType":"markup-block", "group":"markup"},
 };
 
 
