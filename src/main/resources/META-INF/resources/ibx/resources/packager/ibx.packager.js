@@ -26,7 +26,7 @@ function sformat()
 function log(str, depth)
 {
 	var padding = ("  ").repeat(depth || 0);
-	console.log(padding + str);
+	console.log(padding + sformat(str, arguments));
 }
 class ibxPackager extends EventEmitter
 {
@@ -45,10 +45,22 @@ class ibxPackager extends EventEmitter
 		{
 			let bundleInfo = config.bundles[i];
 			let resBundle = this._resBundles[bundleInfo.src] = new ibxResourceBundle(bundleInfo, config);
-			resBundle.package(true);
+			resBundle.package()
+			this.saveBundle(resBundle);
 		}
 
 		log(sformat("ibx packaging finished: {1}ms", (new Date()) - tStart));
+	}
+	saveBundle(resBundle)
+	{
+		let src = resBundle.bundleInfo.src;
+		let filePath = resBundle.getResPath("", "bundle");
+		let fileExt = fsPath.extname(src);
+		let fileName = fsPath.basename(src, fileExt);
+		let fullPath = fsPath.resolve(sformat("{1}/{2}.ibxpackaged{3}", filePath, fileName, fileExt));
+		let strBundle = resBundle.serialize();
+		fs.writeFileSync(fullPath, strBundle);
+		log(sformat("**SAVED {1} ==> {2}", src, fullPath), resBundle.depth);
 	}
 }
 class ibxResourceBundle extends EventEmitter
@@ -57,8 +69,8 @@ class ibxResourceBundle extends EventEmitter
 	{
 		super();
 		this._config = config;
-		this._bundleInfo = bundleInfo;
-		this._depth = parentResBundle ? parentResBundle._depth + 1 : 1;
+		this.bundleInfo = bundleInfo;
+		this.depth = parentResBundle ? parentResBundle.depth + 1 : 1;
 		this.bundle = null;
 		this.resMap = parentResBundle ? parentResBundle.resMap : {};
 		this.pkg = parentResBundle ? parentResBundle.pkg : null;
@@ -66,7 +78,7 @@ class ibxResourceBundle extends EventEmitter
 	}
 	_init()
 	{
-		var bundlePath = this._bundleInfo.fullPath = this._getResPath(this._bundleInfo.src, this._bundleInfo.loadContext);
+		var bundlePath = this.bundleInfo.fullPath = this.getResPath(this.bundleInfo.src, this.bundleInfo.loadContext);
 		let bundle = fs.readFileSync(bundlePath, "utf8");
 		this.bundle = new DOMParser().parseFromString(bundle);
 
@@ -91,23 +103,23 @@ class ibxResourceBundle extends EventEmitter
 		}
 		return loadContext;
 	}
-	_getResPath(src, loadContext)
+	getResPath(src, loadContext)
 	{
 		let ctxPath = "";
 		if(loadContext == "ibx")
 			ctxPath = this._config.contexts.ibx;
 		else
 		if(loadContext == "app")
-			ctxPath = this._bundleInfo.appContext;
+			ctxPath = this.bundleInfo.appContext;
 		else
 		if(loadContext == "bundle")
-			ctxPath = fsPath.dirname(this._bundleInfo.fullPath);
+			ctxPath = fsPath.dirname(this.bundleInfo.fullPath);
 		
 		//only adjust path if the src is not an absolute path from root.
 		let resPath = fsPath.resolve(this._config.contexts.webRoot, ctxPath, src);
 		return resPath;
 	}
-	_getResFile(src)
+	getResFile(src)
 	{
 		let content = this._bundle = fs.readFileSync(src, "utf8");
 		return content;
@@ -120,16 +132,16 @@ class ibxResourceBundle extends EventEmitter
 		element.appendChild(cData);
 		return element;
 	}
-	package(andSave)
+	package()
 	{
 		//now add the assets into the package
 		let pkg = this.pkg;
 		let bundleRoot = this.bundle.documentElement;
 
-		log(`Start ibxResourceBundle ${this._bundleInfo.fullPath}`, this._depth)
+		log(`**Start ibxResourceBundle ${this.bundleInfo.fullPath}`, this.depth)
 
 		//should ibx be embedded in this package
-		if(this._bundleInfo.includeIbx)
+		if(this.bundleInfo.includeIbx)
 		{
 			let ibxNode = this.bundle.createElement("ibx-res-bundle");
 			ibxNode.setAttribute("src", "./ibx_resource_bundle.xml");
@@ -161,10 +173,7 @@ class ibxResourceBundle extends EventEmitter
 		//recurse bundles forward dependencies
 		this._importItems(Array.from(bundleRoot.getElementsByTagName("res-packages")));
 
-		log(`End ibxResourceBundle ${this._bundleInfo.fullPath}`, this._depth)
-
-		if(andSave)
-			this.save();
+		log(`**End ibxResourceBundle ${this.bundleInfo.fullPath}`, this.depth)
 		return pkg;
 	}
 	_importItems(items)
@@ -177,7 +186,7 @@ class ibxResourceBundle extends EventEmitter
 			let itemType = item.tagName;
 			let importInfo = ibxResourceBundle.importTypeMap[itemType];
 			let src = item.getAttribute("src");
-			let path = this._getResPath(src, this._getLoadContext(item));
+			let path = this.getResPath(src, this._getLoadContext(item));
 			let parentNode = pkg.documentElement.getElementsByTagName(importInfo.group)[0] || pkg.documentElement;
 			let howPackaged = "";
 			let tStart = new Date();
@@ -204,7 +213,7 @@ class ibxResourceBundle extends EventEmitter
 			if(importInfo.importType == "inline")
 			{
 				let element = pkg.importNode(item, true);
-				element.setAttribute("src", this._bundleInfo.src);
+				element.setAttribute("src", this.bundleInfo.src);
 				parentNode.appendChild(element);
 				howPackaged = "inline";
 			}
@@ -214,7 +223,7 @@ class ibxResourceBundle extends EventEmitter
 				//try to inline the file.
 				try
 				{
-					let content = this._getResFile(path);
+					let content = this.getResFile(path);
 					let element = this._createInlineBlock(importInfo.nodeType, content, path);
 					parentNode.appendChild(element);
 					howPackaged = "inline";
@@ -234,22 +243,13 @@ class ibxResourceBundle extends EventEmitter
 
 			//add to resource map.
 			this.resMap[path] = howPackaged;
-			log(sformat("Packaged {1}: {2} ({3} {4}ms)", itemType, path, howPackaged, (new Date())-tStart), this._depth+1);
+			log(sformat("Packaged {1}: {2} ({3} {4}ms)", itemType, path, howPackaged, (new Date())-tStart), this.depth+1);
 		}
 	}
 	serialize()
 	{
 		let xs = new XMLSerializer();
 		return xs.serializeToString(this.pkg);
-	}
-	save()
-	{
-		let src = this._bundleInfo.src;
-		let filePath = this._getResPath("", "bundle");
-		let fileExt = fsPath.extname(src);
-		let fileName = fsPath.basename(src, fileExt);
-		let fullPath = fsPath.resolve(sformat("{1}/{2}.ibxpackaged{3}", filePath, fileName, fileExt));
-		fs.writeFileSync(fullPath, this.serialize(false))
 	}
 }
 ibxResourceBundle.logIndent = "  ";
