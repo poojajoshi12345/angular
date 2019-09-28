@@ -11,6 +11,9 @@ const xmldom = require("xmldom");
 const DOMParser = xmldom.DOMParser;
 const XMLSerializer = xmldom.XMLSerializer;
 
+//compression/obfuscation
+var UglifyJS = require("uglify-es");
+
 //Simple string formatting function
 function sformat()
 {
@@ -224,6 +227,11 @@ class ibxResourceBundle extends EventEmitter
 				try
 				{
 					let content = this.getResFile(path);
+					if(itemType == "script-file" && true)
+					{
+						let result = UglifyJS.minify(content);
+						content = result.code;
+					}
 					let element = this._createInlineBlock(importInfo.nodeType, content, path);
 					parentNode.appendChild(element);
 					howPackaged = "inline";

@@ -10,6 +10,8 @@
 	"bundles":
 	[
 		{
+			"minify":true,
+			"obfuscate":true,
 			"includeIbx":true,
 			"appContext":"ibx_testing/julian",
 			"src":"ibx_testing/julian/test_res_bundle.xml"
