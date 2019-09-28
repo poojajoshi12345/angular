@@ -23,7 +23,11 @@ function sformat()
 	}
     return s;
 }
-
+function log(str, depth)
+{
+	var padding = ("  ").repeat(depth || 0);
+	console.log(padding + str);
+}
 class ibxPackager extends EventEmitter
 {
 	constructor()
@@ -34,7 +38,7 @@ class ibxPackager extends EventEmitter
 	package(config)
 	{
 		var tStart = new Date();
-		console.log("ibx packagine started: " + tStart);
+		log("ibx packaging started: " + tStart);
 
 		this._config = config;
 		for(let i = 0; i < config.bundles.length; ++i)
@@ -44,7 +48,7 @@ class ibxPackager extends EventEmitter
 			resBundle.package(true);
 		}
 
-		console.log(sformat("ibx packaging finished: {1}ms", (new Date()) - tStart));
+		log(sformat("ibx packaging finished: {1}ms", (new Date()) - tStart));
 	}
 }
 class ibxResourceBundle extends EventEmitter
@@ -54,6 +58,7 @@ class ibxResourceBundle extends EventEmitter
 		super();
 		this._config = config;
 		this._bundleInfo = bundleInfo;
+		this._depth = parentResBundle ? parentResBundle._depth + 1 : 1;
 		this.bundle = null;
 		this.resMap = parentResBundle ? parentResBundle.resMap : {};
 		this.pkg = parentResBundle ? parentResBundle.pkg : null;
@@ -117,32 +122,46 @@ class ibxResourceBundle extends EventEmitter
 	}
 	package(andSave)
 	{
+		//now add the assets into the package
+		let pkg = this.pkg;
+		let bundleRoot = this.bundle.documentElement;
+
+		log(`Start ibxResourceBundle ${this._bundleInfo.fullPath}`, this._depth)
+
 		//should ibx be embedded in this package
 		if(this._bundleInfo.includeIbx)
 		{
-			let bundleInfo = {includeIbx:false, loadContext:"ibx", src:"ibx_resource_bundle.xml"};
-			let ibxBundle = new ibxResourceBundle(bundleInfo, this._config, this);
-			ibxBundle.package();
+			let ibxNode = this.bundle.createElement("ibx-res-bundle");
+			ibxNode.setAttribute("src", "./ibx_resource_bundle.xml");
+			ibxNode.setAttribute("loadContext", "ibx");
+
+			let parentNode = bundleRoot.getElementsByTagName(ibxResourceBundle.importTypeMap["ibx-res-bundle"].group)[0] || this.bundle.documentElement;
+			parentNode.appendChild(ibxNode);
 		}
 
-		//now add the assets into the package
-		let pkg = this.pkg;
-
-		//strings
-		this._importItems(Array.from(this.bundle.getElementsByTagName("string-file")));
-		this._importItems(Array.from(this.bundle.getElementsByTagName("string-bundle")));
-
-		//styles
-		this._importItems(Array.from(this.bundle.getElementsByTagName("style-file")));
-		this._importItems(Array.from(this.bundle.getElementsByTagName("style-sheet")));
+		//recurse bundles dependent
+		this._importItems(Array.from(bundleRoot.getElementsByTagName("ibx-res-bundle")));
 
 		//markup
-		this._importItems(Array.from(this.bundle.getElementsByTagName("markup-file")));
-		this._importItems(Array.from(this.bundle.getElementsByTagName("markup-block")));
+		this._importItems(Array.from(bundleRoot.getElementsByTagName("markup-file")));
+		this._importItems(Array.from(bundleRoot.getElementsByTagName("markup-block")));
+
+		//strings
+		this._importItems(Array.from(bundleRoot.getElementsByTagName("string-file")));
+		this._importItems(Array.from(bundleRoot.getElementsByTagName("string-bundle")));
+
+		//styles
+		this._importItems(Array.from(bundleRoot.getElementsByTagName("style-file")));
+		this._importItems(Array.from(bundleRoot.getElementsByTagName("style-sheet")));
 
 		//scripts
-		this._importItems(Array.from(this.bundle.getElementsByTagName("script-file")));
-		this._importItems(Array.from(this.bundle.getElementsByTagName("script-block")));
+		this._importItems(Array.from(bundleRoot.getElementsByTagName("script-file")));
+		this._importItems(Array.from(bundleRoot.getElementsByTagName("script-block")));
+
+		//recurse bundles forward dependencies
+		this._importItems(Array.from(bundleRoot.getElementsByTagName("res-packages")));
+
+		log(`End ibxResourceBundle ${this._bundleInfo.fullPath}`, this._depth)
 
 		if(andSave)
 			this.save();
@@ -159,8 +178,9 @@ class ibxResourceBundle extends EventEmitter
 			let importInfo = ibxResourceBundle.importTypeMap[itemType];
 			let src = item.getAttribute("src");
 			let path = this._getResPath(src, this._getLoadContext(item));
-			let parentNode = pkg.getElementsByTagName(importInfo.group)[0] || pkg.documentElement;
+			let parentNode = pkg.documentElement.getElementsByTagName(importInfo.group)[0] || pkg.documentElement;
 			let howPackaged = "";
+			let tStart = new Date();
 
 			//resource was already processed...no duplicate entries
 			if(!this._config.allowDuplicates && importInfo.importType == "file" && (this.resMap[path] !== undefined))
@@ -172,6 +192,13 @@ class ibxResourceBundle extends EventEmitter
 				let element = pkg.importNode(item, true);
 				parentNode.appendChild(element);
 				howPackaged = "reference";
+			}
+			else
+			if(importInfo.importType == "ibxresbundle")
+			{
+				let bundleInfo = {loadContext:"ibx", src:path};
+				let subBundle = new ibxResourceBundle(bundleInfo, this._config, this);
+				subBundle.package();
 			}
 			else
 			if(importInfo.importType == "inline")
@@ -207,6 +234,7 @@ class ibxResourceBundle extends EventEmitter
 
 			//add to resource map.
 			this.resMap[path] = howPackaged;
+			log(sformat("Packaged {1}: {2} ({3} {4}ms)", itemType, path, howPackaged, (new Date())-tStart), this._depth+1);
 		}
 	}
 	serialize()
@@ -224,6 +252,7 @@ class ibxResourceBundle extends EventEmitter
 		fs.writeFileSync(fullPath, this.serialize(false))
 	}
 }
+ibxResourceBundle.logIndent = "  ";
 ibxResourceBundle.importTypeMap = 
 {
 	"string-file":{"importType":"file", "nodeType":"string-bundle", "group":"strings"},
@@ -234,6 +263,8 @@ ibxResourceBundle.importTypeMap =
 	"script-block":{"importType":"inline", "nodeType":"script-block", "group":"scripts"},
 	"markup-file":{"importType":"file", "nodeType":"markup-block", "group":"markup"},
 	"markup-block":{"importType":"inline", "nodeType":"markup-block", "group":"markup"},
+	"ibx-res-bundle":{"importType":"ibxresbundle", "nodeType":"ibx-res-bundle", "group":"res-bundles"},
+	"ibx-res-package":{"importType":"ibxresbundle", "nodeType":"ibx-res-package", "group":"res-packages"},
 };
 
 

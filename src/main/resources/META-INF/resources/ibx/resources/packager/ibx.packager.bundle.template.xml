@@ -14,13 +14,17 @@ $Revision: 1.123 $:-->
 		</ibx-boot-files>
 	</ibx-boot-resources>
 
-	<!--strings-->
-	<strings>
-	</strings>
+	<!--dependent resource bundles this bundle needs-->
+	<res-bundles>
+	</res-bundles>
 
 	<!--markup-->
 	<markup>
 	</markup>
+
+	<!--strings-->
+	<strings>
+	</strings>
 
 	<!--styles-->
 	<styles>
@@ -30,12 +34,8 @@ $Revision: 1.123 $:-->
 	<scripts>
 	</scripts>
 
-	<!--dependent resource bundles this bundle needs-->
-	<res-bundles>
-	</res-bundles>
-
 	<!--RARELY USED - FORWARD REFERENCED BUNDLES - PROBABLY SHOULD BE A 'res-bundle'...default external bundles to be loaded AFTER this bundles is fully loaded and running-->
-	<packages>
-	</packages>
+	<res-packages>
+	</res-packages>
 
 </ibx-res-bundle>
