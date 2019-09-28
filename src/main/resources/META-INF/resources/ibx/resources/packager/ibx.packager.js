@@ -60,7 +60,7 @@ class ibxPackager extends EventEmitter
 		let fullPath = fsPath.resolve(sformat("{1}/{2}.ibxpackaged{3}", filePath, fileName, fileExt));
 		let strBundle = resBundle.serialize();
 		fs.writeFileSync(fullPath, strBundle);
-		log(sformat("**SAVED {1} ==> {2}", src, fullPath), resBundle.depth);
+		log(sformat("[SAVED {1} ==> {2}]", src, fullPath), resBundle.depth);
 	}
 }
 class ibxResourceBundle extends EventEmitter
@@ -138,7 +138,7 @@ class ibxResourceBundle extends EventEmitter
 		let pkg = this.pkg;
 		let bundleRoot = this.bundle.documentElement;
 
-		log(`**Start ibxResourceBundle ${this.bundleInfo.fullPath}`, this.depth)
+		log(`>>START packagaing ibx resoure bundle ${this.bundleInfo.fullPath}`, this.depth)
 
 		//should ibx be embedded in this package
 		if(this.bundleInfo.includeIbx)
@@ -173,7 +173,7 @@ class ibxResourceBundle extends EventEmitter
 		//recurse bundles forward dependencies
 		this._importItems(Array.from(bundleRoot.getElementsByTagName("res-packages")));
 
-		log(`**End ibxResourceBundle ${this.bundleInfo.fullPath}`, this.depth)
+		log(`<<END packaging ibxResourceBundle ${this.bundleInfo.fullPath}`, this.depth)
 		return pkg;
 	}
 	_importItems(items)
