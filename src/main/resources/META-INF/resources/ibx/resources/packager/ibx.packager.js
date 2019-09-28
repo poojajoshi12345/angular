@@ -1,4 +1,7 @@
 /*Copyright 1996-2019 Information Builders, Inc. All rights reserved.*/
+
+"use strict";
+
 const fs = require("fs");
 const fsPath = require("path");
 const EventEmitter = require("events");
@@ -11,11 +14,11 @@ const XMLSerializer = xmldom.XMLSerializer;
 //Simple string formatting function
 function sformat()
 {
-    var s = arguments[0];
-	var i = arguments.length;
+    let s = arguments[0];
+	let i = arguments.length;
     while (i--)
 	{
-		val = (arguments[i] === undefined || arguments[i] === null) ? "" : arguments[i];
+		let val = (arguments[i] === undefined || arguments[i] === null) ? "" : arguments[i];
         s = s.replace(new RegExp('\\{' + i + '\\}', 'gm'), val);
 	}
     return s;
@@ -119,17 +122,36 @@ class ibxResourceBundle extends EventEmitter
 
 		//now add the assets into the package
 		let pkg = this.pkg;
+
+		//external scripts
+		this._importItems(Array.from(this.bundle.getElementsByTagName("string-file")));
+		this._importItems(Array.from(this.bundle.getElementsByTagName("string-bundle")));
+
+
+		//external scripts
+		//let items = Array.from(this.bundle.getElementsByTagName("script-file"));
+		//this._packageItems(items);
+
+		if(andSave)
+			this.save();
+		return pkg;
+	}
+	_importItems(items)
+	{
+		let pkg = this.pkg;
 		let parentNode = pkg.getElementsByTagName("scripts")[0];
-		let items = this.bundle.getElementsByTagName("script-file");
+		items = (items instanceof Array) ? items : [items];
 		for(var i = 0; i < items.length; ++i)
 		{
 			let item = items[i];
+			let itemType = item.tagName;
+			let importInfo = ibxResourceBundle.importTypeMap[itemType];
 			let src = item.getAttribute("src");
 			let path = this._getResPath(src, this._getLoadContext(item));
 			let howPackaged = "";
 
-			//resource was already processed
-			if(this.resMap[path] !== undefined)
+			//resource was already processed...no duplicate entries
+			if(!this._config.allowDuplicates && (this.resMap[path] !== undefined))
 				continue;	
 
 			//nodes that don't get packaged...just copied.
@@ -140,12 +162,20 @@ class ibxResourceBundle extends EventEmitter
 				howPackaged = "reference";
 			}
 			else
+			if(importInfo.importType == "inline")
+			{
+				let element = pkg.importNode(item, true);
+				parentNode.appendChild(element);
+				howPackaged = "inline";
+			}
+			else
+			if(importInfo.importType == "file")
 			{
 				//try to inline the file.
 				try
 				{
 					let content = this._getResFile(path);
-					let element = this._createInlineBlock("script-block", content, path);
+					let element = this._createInlineBlock(importInfo.nodeType, content, path);
 					parentNode.appendChild(element);
 					howPackaged = "inline";
 				}
@@ -164,10 +194,6 @@ class ibxResourceBundle extends EventEmitter
 			//add to resource map.
 			this.resMap[path] = howPackaged;
 		}
-
-		if(andSave)
-			this.save();
-		return pkg;
 	}
 	serialize()
 	{
@@ -184,13 +210,17 @@ class ibxResourceBundle extends EventEmitter
 		fs.writeFileSync(fullPath, this.serialize(false))
 	}
 }
-ibxResourceBundle.resTypeMap = 
+ibxResourceBundle.importTypeMap = 
 {
-	"script-file":"script-block",
-	"style-file":"style-block",
-	"markup-file":"markup-block",
-	"string-file":"string-bundle"
-}
+	"string-file":{"importType":"file", "nodeType":"string-bundle"},
+	"string-bundle":{"importType":"inline", "nodeType":"string-bundle"},
+	"style-file":{"importType":"file", "nodeType":"style-sheet"},
+	"style-sheet":{"importType":"inline", "nodeType":"script-sheet"},
+	"script-file":{"importType":"file", "nodeType":"script-block"},
+	"script-block":{"importType":"inline", "nodeType":"script-block"},
+	"markup-file":{"importType":"file", "nodeType":"markup-block"},
+	"markup-block":{"importType":"inline", "nodeType":"markup-block"},
+};
 
 
 //read config...kick off packaging.

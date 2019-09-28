@@ -1,5 +1,5 @@
 {
-	"noDuplicateResources":true,
+	"allowDuplicates":false,
 	"addUnresolvedLinks":true,
 	"template":"ibx.packager.bundle.template.xml",
 	"contexts":
