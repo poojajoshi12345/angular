@@ -244,9 +244,6 @@
 							<workingDirectory>${basedir}</workingDirectory>
 							<nodeDownloadRoot>http://wfmaven.ibi.com:8081/repository/nodejs-org/</nodeDownloadRoot>
 							<npmDownloadRoot>http://wfmaven.ibi.com:8081/repository/npm-all/npm/-/</npmDownloadRoot>
-							<environmentVariables>
-								<CYPRESS_CACHE_FOLDER>${basedir}/cypresscache</CYPRESS_CACHE_FOLDER>
-							</environmentVariables>
 						</configuration>
 					</plugin>
 					<plugin>
