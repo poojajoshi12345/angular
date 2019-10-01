@@ -43,7 +43,7 @@ class ibxPackager extends EventEmitter
 		var tStart = new Date();
 		log("ibx packaging started: " + tStart);
 
-		this._config = config;
+		this.config = config;
 		for(let i = 0; i < config.bundles.length; ++i)
 		{
 			let bundleInfo = config.bundles[i];
@@ -68,34 +68,59 @@ class ibxPackager extends EventEmitter
 }
 class ibxResourceBundle extends EventEmitter
 {
-	constructor(bundleInfo, config, parentResBundle)
+	constructor(bundleInfo, globalConfig, parentResBundle)
 	{
 		super();
-		this._config = config;
+		this.globalConfig = globalConfig;
 		this.bundleInfo = bundleInfo;
-		this.depth = parentResBundle ? parentResBundle.depth + 1 : 1;
 		this.bundle = null;
+		this.depth = parentResBundle ? parentResBundle.depth + 1 : 1;
 		this.resMap = parentResBundle ? parentResBundle.resMap : {};
 		this.pkg = parentResBundle ? parentResBundle.pkg : null;
+		this.parentResBundle = parentResBundle;
 		this._init();
 	}
 	_init()
 	{
-		var bundlePath = this.bundleInfo.fullPath = this.getResPath(this.bundleInfo.src, this.bundleInfo.loadContext);
+		let bundlePath = this.bundleInfo.fullPath = this.getResPath(this.bundleInfo.src, this.bundleInfo.loadContext);
 		let bundle = fs.readFileSync(bundlePath, "utf8");
 		this.bundle = new DOMParser().parseFromString(bundle);
 
-		let template = this._template = fs.readFileSync(this._config.template, "utf8");
+		let parentBundle = this.parentResBundle;
+		while(parentBundle)
+		{
+			let parentBundleInfo = parentBundle.bundleInfo;
+			this.bundleInfo = Object.assign({}, parentBundleInfo, this.bundleInfo);
+			parentBundle = parentBundle.parentResBundle;
+		}
+
+		let template = this._template = fs.readFileSync(this.globalConfig.template, "utf8");
 		this.pkg = this.pkg || new DOMParser().parseFromString(template);
 		this.pkg.documentElement.setAttribute("name", this.bundle.documentElement.getAttribute("name"))
 		this.pkg.documentElement.setAttribute("loadContext", this.bundle.documentElement.getAttribute("loadContext"))
+	}
+	_elementToObject(element)
+	{
+		let oRet = {};
+		for(var i = 0; i < element.attributes.length; ++i)
+		{
+			let attr = element.attributes[i];
+			let val = attr.value;
+			if(val == "true" || val == "false")
+				val = (val == "true") ? true : false;
+			else
+			if(!isNaN(val))
+				val = Number(val);
+			oRet[attr.nodeName.replace("pkg-", "")] = val;
+		}
+		return oRet;
 	}
 	_getLoadContext(element)
 	{
 		var loadContext = null;
 		while(element)
 		{
-			var loadContext = element.getAttribute("loadContext");
+			loadContext = element.getAttribute("loadContext");
 			if(loadContext)
 				break;
 
@@ -110,7 +135,7 @@ class ibxResourceBundle extends EventEmitter
 	{
 		let ctxPath = "";
 		if(loadContext == "ibx")
-			ctxPath = this._config.contexts.ibx;
+			ctxPath = this.globalConfig.contexts.ibx;
 		else
 		if(loadContext == "app")
 			ctxPath = this.bundleInfo.appContext;
@@ -119,7 +144,7 @@ class ibxResourceBundle extends EventEmitter
 			ctxPath = fsPath.dirname(this.bundleInfo.fullPath);
 		
 		//only adjust path if the src is not an absolute path from root.
-		let resPath = fsPath.resolve(this._config.contexts.webRoot, ctxPath, src);
+		let resPath = fsPath.resolve(this.globalConfig.contexts.webRoot, ctxPath, src);
 		return resPath;
 	}
 	getResFile(src)
@@ -135,6 +160,15 @@ class ibxResourceBundle extends EventEmitter
 		element.appendChild(cData);
 		return element;
 	}
+	_preprocessFileContent(type, content)
+	{
+		if(type == "script-file" || type == "script-block")
+		{
+			content = content.replace(/\"<!\[CDATA\"/gmi, "\"\"");
+			content = content.replace(/\"\]\]>\"/gmi, "\"\"");
+		}
+		return content;
+	}
 	package()
 	{
 		//now add the assets into the package
@@ -143,19 +177,17 @@ class ibxResourceBundle extends EventEmitter
 
 		log(`>>START packagaing ibx resoure bundle ${this.bundleInfo.fullPath}`, this.depth)
 
-		//should ibx be embedded in this package
-		if(this.bundleInfo.includeIbx)
+		//do recursived dependency bundles first...add ibx once, if required.
+		let resBundles = Array.from(bundleRoot.getElementsByTagName("ibx-res-bundle"));
+		if(this.bundleInfo.includeIbx && !this.bundleInfo.ibxIncluded)
 		{
-			let ibxNode = this.bundle.createElement("ibx-res-bundle");
-			ibxNode.setAttribute("src", "./ibx_resource_bundle.xml");
-			ibxNode.setAttribute("loadContext", "ibx");
-
-			let parentNode = bundleRoot.getElementsByTagName(ibxResourceBundle.importTypeMap["ibx-res-bundle"].group)[0] || this.bundle.documentElement;
-			parentNode.appendChild(ibxNode);
+			let ibxBundle = this.bundle.createElement("ibx-res-bundle");
+			ibxBundle.setAttribute("src", "./ibx_resource_bundle.xml");
+			ibxBundle.setAttribute("loadContext", "ibx");
+			resBundles.unshift(ibxBundle);
+			this.bundleInfo.ibxIncluded = true;
 		}
-
-		//recurse bundles dependent
-		this._importItems(Array.from(bundleRoot.getElementsByTagName("ibx-res-bundle")));
+		this._importItems(resBundles);
 
 		//markup
 		this._importItems(Array.from(bundleRoot.getElementsByTagName("markup-file")));
@@ -189,27 +221,32 @@ class ibxResourceBundle extends EventEmitter
 			let itemType = item.tagName;
 			let importInfo = ibxResourceBundle.importTypeMap[itemType];
 			let src = item.getAttribute("src");
-			let path = this.getResPath(src, this._getLoadContext(item));
+			let loadContext = this._getLoadContext(item);
+			let path = this.getResPath(src, loadContext);
 			let parentNode = pkg.documentElement.getElementsByTagName(importInfo.group)[0] || pkg.documentElement;
 			let howPackaged = "";
 			let tStart = new Date();
 
 			//resource was already processed...no duplicate entries
-			if(!this._config.allowDuplicates && importInfo.importType == "file" && (this.resMap[path] !== undefined))
+			if(!this.globalConfig.allowDuplicates && importInfo.importType == "file" && (this.resMap[path] !== undefined))
 				continue;	
 
 			//nodes that don't get packaged...just copied.
 			if(item.getAttribute("nopackage") == "true" || (/{context}|{res}/g).test(src))
 			{
 				let element = pkg.importNode(item, true);
+
+				if(!(/{context}|{res}/g).test(src))
+					element.setAttribute("loadContext", loadContext);
+	
 				parentNode.appendChild(element);
 				howPackaged = "reference";
 			}
 			else
 			if(importInfo.importType == "ibxresbundle")
 			{
-				let bundleInfo = {loadContext:"ibx", src:path};
-				let subBundle = new ibxResourceBundle(bundleInfo, this._config, this);
+				let bundleInfo = Object.assign({}, this.bundleInfo, this._elementToObject(item));//copy our bundle info...overlay item's values.
+				let subBundle = new ibxResourceBundle(bundleInfo, this.globalConfig, this);
 				subBundle.package();
 			}
 			else
@@ -227,18 +264,20 @@ class ibxResourceBundle extends EventEmitter
 				try
 				{
 					let content = this.getResFile(path);
-					if(itemType == "script-file" && true)
+					if(itemType == "script-file" && this.bundleInfo.minify)
 					{
 						let result = UglifyJS.minify(content);
 						content = result.code;
 					}
+
+					content = this._preprocessFileContent(itemType, content);
 					let element = this._createInlineBlock(importInfo.nodeType, content, path);
 					parentNode.appendChild(element);
 					howPackaged = "inline";
 				}
 				catch(ex)
 				{
-					if(!this._config.addUnresolvedLinks)
+					if(!this.globalConfig.addUnresolvedLinks)
 						continue;
 
 					let element = pkg.importNode(item, true);
