@@ -232,13 +232,11 @@ class ibxResourceBundle extends EventEmitter
 				continue;	
 
 			//nodes that don't get packaged...just copied.
-			if(item.getAttribute("nopackage") == "true" || (/{context}|{res}/g).test(src))
+			if(item.getAttribute("nopackage") == "true" || (/{res}/g).test(src))
 			{
 				let element = pkg.importNode(item, true);
-
-				if(!(/{context}|{res}/g).test(src))
-					element.setAttribute("loadContext", loadContext);
-	
+				element.setAttribute("src", src);
+				element.setAttribute("loadContext", loadContext);
 				parentNode.appendChild(element);
 				howPackaged = "reference";
 			}
@@ -267,11 +265,11 @@ class ibxResourceBundle extends EventEmitter
 					if(itemType == "script-file" && this.bundleInfo.minify)
 					{
 						let result = UglifyJS.minify(content);
-						content = result.code;
+						content = result.code + "//# sourceURL=" + fsPath.basename(path);//add source mapping back in for debuggin.
 					}
 
 					content = this._preprocessFileContent(itemType, content);
-					let element = this._createInlineBlock(importInfo.nodeType, content, path);
+					let element = this._createInlineBlock(importInfo.nodeType, content, src);
 					parentNode.appendChild(element);
 					howPackaged = "inline";
 				}

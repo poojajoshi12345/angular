@@ -129,7 +129,7 @@ function ibx()
 					var inlineStyles = $("head > style");//save the pre-ibx styles so they can be moved to the end after load.
 					var packages = ibx._loadPromise._resPackages;
 					
-					if(!packages[0].ibxIncluded)
+					if(!packages.length || !packages[0].ibxIncluded)
 						packages.unshift("./ibx_resource_bundle.xml");
 
 					$(window).dispatchEvent("ibx_ibxevent", {"hint":"resourcesloadstart", "ibx":ibx});
