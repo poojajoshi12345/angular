@@ -133,6 +133,8 @@ class ibxResourceBundle extends EventEmitter
 	}
 	getResPath(src, loadContext)
 	{
+		src = src.replace(/{context}/gm, this.globalConfig.contexts.webRoot);
+			
 		let ctxPath = "";
 		if(loadContext == "ibx")
 			ctxPath = this.globalConfig.contexts.ibx;
@@ -145,6 +147,7 @@ class ibxResourceBundle extends EventEmitter
 		
 		//only adjust path if the src is not an absolute path from root.
 		let resPath = fsPath.resolve(this.globalConfig.contexts.webRoot, ctxPath, src);
+
 		return resPath;
 	}
 	getResFile(src)
@@ -164,8 +167,8 @@ class ibxResourceBundle extends EventEmitter
 	{
 		if(type == "script-file" || type == "script-block")
 		{
-			content = content.replace(/\"<!\[CDATA\"/gmi, "\"\"");
-			content = content.replace(/\"\]\]>\"/gmi, "\"\"");
+			content = content.replace(/<!\[CDATA/gmi, "");
+			content = content.replace(/\]\]>/gmi, "");
 		}
 		return content;
 	}
@@ -246,6 +249,7 @@ class ibxResourceBundle extends EventEmitter
 				let bundleInfo = Object.assign({}, this.bundleInfo, this._elementToObject(item));//copy our bundle info...overlay item's values.
 				let subBundle = new ibxResourceBundle(bundleInfo, this.globalConfig, this);
 				subBundle.package();
+				howPackaged = "imported";
 			}
 			else
 			if(importInfo.importType == "inline")
