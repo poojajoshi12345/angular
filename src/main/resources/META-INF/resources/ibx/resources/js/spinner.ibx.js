@@ -159,7 +159,7 @@ $.widget("ibi.ibxSpinner", $.ibi.ibxTextField,
 	},
 	setValue:function(value)
 	{
-		this.setValue(value);
+		this._setValue(value);
 	},
 	_setValue: function(value)
 	{
