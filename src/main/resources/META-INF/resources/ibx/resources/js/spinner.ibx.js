@@ -13,6 +13,7 @@ $.widget("ibi.ibxSpinner", $.ibi.ibxTextField,
 		"max" :100,
 		"step" :1,
 		"precision":3,
+		"circularStep" : true,
 		"fnFormat":null,
 		"fnUnformat":null,
 		"validKeys":[9, 37, 38, 39, 40, 8, 46, 187, 189, 190],
@@ -134,7 +135,16 @@ $.widget("ibi.ibxSpinner", $.ibi.ibxTextField,
 	{
 		var info = this._getInfo();
 		info.value += bUp ? info.step : -info.step;
-		this._setValue(info.value);
+		var setValue = info.value;
+		if(this.options.circularStep){
+			if(info.value > this.options.max)
+				setValue = this.options.min;
+
+			else if(info.value < this.options.min)
+				setValue = this.options.max;
+		}
+
+		this._setValue(setValue);
 		this.refresh();
 	},
 	_adjustStep: function (val, min, max, step)
