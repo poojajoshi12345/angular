@@ -65,7 +65,7 @@ module.exports = function (grunt) {
             ibx_js_package: {
             	options: {  
             		banner: getBanner(),
-                    sourceMap: true
+                    sourceMap: false
                 },
             	files: {
             		'./target/classes/META-INF/resources/ibx/resources/js/ibx-all.min.js': [  
