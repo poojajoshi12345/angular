@@ -186,7 +186,7 @@ class ibxResourceBundle extends EventEmitter
 		let pkg = this.pkg;
 		let bundleRoot = this.bundle.documentElement;
 
-		log(`>>START packagaing ibx resoure bundle ${this.bundleInfo.fullPath}`, this.depth)
+		log(`>>START packaging ibx resoure bundle ${this.bundleInfo.fullPath}`, this.depth)
 
 		//do recursived dependency bundles first...add ibx once, if required.
 		let resBundles = Array.from(bundleRoot.getElementsByTagName("ibx-res-bundle"));
