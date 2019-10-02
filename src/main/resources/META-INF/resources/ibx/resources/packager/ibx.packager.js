@@ -265,6 +265,21 @@ class ibxResourceBundle extends EventEmitter
 			{
 				let element = pkg.importNode(item, true);
 				element.setAttribute("src", this.bundleInfo.src);
+
+				if((itemType == "script-block" || itemType == "style-sheet") && itemInfo.minify)
+				{
+					var content = item.textContent;
+					if(itemType == "script-block")
+					{
+						let result = UglifyJS.minify(content);
+						content = result.code + "//# sourceURL=" + item.getAttribute("name");//add source mapping back in for debuggin.
+					}
+					else
+					if(itemType == "style-sheet")
+						content = UglifyCSS.processString(content);
+					element = this._createInlineBlock(importInfo.nodeType, content, src);
+				}
+
 				parentNode.appendChild(element);
 				howPackaged = "inline";
 			}
@@ -282,9 +297,7 @@ class ibxResourceBundle extends EventEmitter
 					}
 					else
 					if(itemType == "style-file")
-					{
 						content = UglifyCSS.processString(content);
-					}
 
 					content = this._preprocessFileContent(itemType, content);
 					let element = this._createInlineBlock(importInfo.nodeType, content, src);
