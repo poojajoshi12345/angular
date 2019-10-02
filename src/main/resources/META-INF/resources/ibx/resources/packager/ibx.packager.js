@@ -59,9 +59,16 @@ class ibxPackager extends EventEmitter
 		let src = resBundle.bundleInfo.src;
 		let filePath = resBundle.getResPath("", "bundle");
 		let fileExt = fsPath.extname(src);
-		let fileName = fsPath.basename(src, fileExt);
-		let fullPath = fsPath.resolve(sformat("{1}/{2}.ibxpackaged{3}", filePath, fileName, fileExt));
+		let fileName = fsPath.basename(src, fileExt) + ".ibxpackaged";
+
+		let dest = resBundle.bundleInfo.dest;
+		let destPath = fsPath.resolve(filePath, fsPath.dirname(dest));
+		let destExt = fsPath.extname(dest) || fileExt;
+		let destName = fsPath.basename(dest, destExt) || fileName;
+
+		let fullPath = fsPath.resolve(sformat("{1}/{2}{3}", destPath, destName, destExt));
 		let strBundle = resBundle.serialize();
+
 		fs.writeFileSync(fullPath, strBundle);
 		log(sformat("[SAVED {1} ==> {2}]", src, fullPath), resBundle.depth);
 	}
@@ -209,7 +216,7 @@ class ibxResourceBundle extends EventEmitter
 		this._importItems(Array.from(bundleRoot.getElementsByTagName("script-block")));
 
 		//recurse bundles forward dependencies
-		this._importItems(Array.from(bundleRoot.getElementsByTagName("res-packages")));
+		this._importItems(Array.from(bundleRoot.getElementsByTagName("ibx-res-package")));
 
 		log(`<<END packaging ibxResourceBundle ${this.bundleInfo.fullPath}`, this.depth)
 		return pkg;
@@ -222,6 +229,7 @@ class ibxResourceBundle extends EventEmitter
 		{
 			let item = items[i];
 			let itemType = item.tagName;
+			let itemInfo = Object.assign({}, this.bundleInfo, this._elementToObject(item));//copy our bundle info...overlay item's values.
 			let importInfo = ibxResourceBundle.importTypeMap[itemType];
 			let src = item.getAttribute("src");
 			let loadContext = this._getLoadContext(item);
@@ -235,7 +243,7 @@ class ibxResourceBundle extends EventEmitter
 				continue;	
 
 			//nodes that don't get packaged...just copied.
-			if(item.getAttribute("nopackage") == "true" || (/{res}/g).test(src))
+			if(itemInfo.nopackage || (/{res}/g).test(src))
 			{
 				let element = pkg.importNode(item, true);
 				element.setAttribute("src", src);
@@ -266,7 +274,7 @@ class ibxResourceBundle extends EventEmitter
 				try
 				{
 					let content = this.getResFile(path);
-					if(itemType == "script-file" && this.bundleInfo.minify)
+					if(itemType == "script-file" && itemInfo.minify)
 					{
 						let result = UglifyJS.minify(content);
 						content = result.code + "//# sourceURL=" + fsPath.basename(path);//add source mapping back in for debuggin.
