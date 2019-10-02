@@ -13,6 +13,7 @@ const XMLSerializer = xmldom.XMLSerializer;
 
 //compression/obfuscation
 var UglifyJS = require("uglify-es");
+var UglifyCSS = require("uglifycss");
 
 //Simple string formatting function
 function sformat()
@@ -278,6 +279,11 @@ class ibxResourceBundle extends EventEmitter
 					{
 						let result = UglifyJS.minify(content);
 						content = result.code + "//# sourceURL=" + fsPath.basename(path);//add source mapping back in for debuggin.
+					}
+					else
+					if(itemType == "style-file")
+					{
+						content = UglifyCSS.processString(content);
 					}
 
 					content = this._preprocessFileContent(itemType, content);
