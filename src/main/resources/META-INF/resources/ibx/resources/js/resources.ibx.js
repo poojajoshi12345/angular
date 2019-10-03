@@ -501,5 +501,4 @@ _p.preProcessResource = function(resource, language)
 
 	return resource;
 };
-
 //# sourceURL=resources.ibx.js

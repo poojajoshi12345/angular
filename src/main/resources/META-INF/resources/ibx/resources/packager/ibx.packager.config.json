@@ -1,0 +1,22 @@
+{
+	"allowDuplicates":false,
+	"addUnresolvedLinks":true,
+	"template":"ibx.packager.bundle.template.xml",
+	"contexts":
+	{
+		"webRoot":"c:/ibi/WebFOCUS82/webapps/webfocus",
+		"ibx":"./ibx/resources"
+	},
+	"bundles":
+	[
+		{
+			"minify":true,
+			"obfuscate":false,
+			"includeIbx":false,
+			"appContext":"",
+			"loadContext":"ibx",
+			"src":"./ibx_resource_bundle.xml",
+			"dest":"./ibx_resource_bundle.pkgd.xml"
+		}
+	]
+}
