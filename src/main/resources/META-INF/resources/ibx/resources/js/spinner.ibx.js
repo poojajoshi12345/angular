@@ -131,10 +131,15 @@ $.widget("ibi.ibxSpinner", $.ibi.ibxTextField,
 		if(!jQuery.isNumeric(e.key) && this.options.validKeys.indexOf(e.keyCode) == -1)
 			e.preventDefault();
 	},
-	_stepSpinner: function (bUp)
+	stepSpinner:function(bUp, nSteps){
+		this._stepSpinner(bUp, nSteps);
+	},
+	_stepSpinner: function (bUp, nSteps)
 	{
+		if(nSteps === undefined)
+			nSteps = 1;
 		var info = this._getInfo();
-		info.value += bUp ? info.step : -info.step;
+		info.value += bUp ? info.step*nSteps : -info.step*nSteps;
 	
 		var setValue = info.value;
 		if(this.options.circularStep){
