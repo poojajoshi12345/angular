@@ -71,7 +71,7 @@ $.widget("ibi.ibxSpinner", $.ibi.ibxTextField,
 		this._super();
 	},
 	_intervalId: null,
-	_bUp: true,
+	_bUp: undefined,
 	_cleared: false,
 	_onSpinBtnEvent:function(e)
 	{
@@ -88,7 +88,7 @@ $.widget("ibi.ibxSpinner", $.ibi.ibxTextField,
 			this._onTextInputBlur(e); // just in case user typed a value
 			this.element.dispatchEvent("ibx_spinstart", null, true, false);
 			this._cleared = false;
-			this._bUp = $(e.currentTarget).hasClass(this.options.btnUpClass);
+			this._bUp = $(e.currentTarget).hasClass(this.options.btnUpClass) ? $.ibi.ibxSpinner.DIR_UP : $.ibi.ibxSpinner.DIR_DOWN;
 			this._stepSpinner(this._bUp);
 			setTimeout(function(e)
 			{
@@ -110,19 +110,19 @@ $.widget("ibi.ibxSpinner", $.ibi.ibxTextField,
 		this._super(e);
 		if(e.keyCode == $.ui.keyCode.UP)
 		{
-			this._stepSpinner(true);
+			this._stepSpinner($.ibi.ibxSpinner.DIR_UP);
 			e.preventDefault();
 		}
 		else
 		if(e.keyCode == $.ui.keyCode.DOWN)
 		{
-			this._stepSpinner(false);
+			this._stepSpinner($.ibi.ibxSpinner.DIR_DOWN);
 			e.preventDefault();
 		}
 	},
 	_onTextInputBlur: function (e)
 	{
-		var value = this._setValue(this._textInput.val());
+		var value = this._setValue(this._textInput.val(), false);
 		if (this.options.value != value)
 			this._trigger("textchanged", e, this.element);
 	},
@@ -135,6 +135,7 @@ $.widget("ibi.ibxSpinner", $.ibi.ibxTextField,
 	{
 		var info = this._getInfo();
 		info.value += bUp ? info.step : -info.step;
+	
 		var setValue = info.value;
 		if(this.options.circularStep){
 			if(info.value > this.options.max)
@@ -144,7 +145,7 @@ $.widget("ibi.ibxSpinner", $.ibi.ibxTextField,
 				setValue = this.options.max;
 		}
 
-		this._setValue(setValue);
+		this._setValue(setValue, true);
 		this.refresh();
 	},
 	_adjustStep: function (val, min, max, step)
@@ -161,7 +162,7 @@ $.widget("ibi.ibxSpinner", $.ibi.ibxTextField,
 	{
 		this._setValue(value);
 	},
-	_setValue: function(value)
+	_setValue: function(value, stepped)
 	{
 		var options = this.options;
 		var curVal = options.value;
@@ -183,8 +184,12 @@ $.widget("ibi.ibxSpinner", $.ibi.ibxTextField,
 		this.options.value = value = (isFloat ? Number(value.toFixed(options.precision)) : value);
 		this.options.text = fnFormat(value);
 		this.refresh();
-		if(value != curVal)
-			this._trigger("change", null, this._getInfo());
+		if(value != curVal){
+			var info = this._getInfo();
+			info.stepped = stepped;
+			info.prevValue = curVal;
+			this._trigger("change", null, info);
+		}
 		return value;
 	},
 	_getInfo: function ()
@@ -214,9 +219,8 @@ $.widget("ibi.ibxSpinner", $.ibi.ibxTextField,
 			this._btnBox.ibxWidget('refresh');
 	}
 });
-$.ibi.ibxSpinner.statics = 
-{
-};
-
+$.ibi.ibxSpinner.DIR_NONE = -1;
+$.ibi.ibxSpinner.DIR_DOWN = 0;
+$.ibi.ibxSpinner.DIR_UP = 1;
 
 //# sourceURL=spinner.ibx.js
