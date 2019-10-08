@@ -175,9 +175,7 @@ $.widget("ibi.ibxSpinner", $.ibi.ibxTextField,
 		var fnUnformat = options.fnUnformat || this._fnUnformat.bind(this);
 
 		value = fnUnformat(value);
-		if(value == options.value)
-			return;
-		else
+
 		if(value === NaN)
 			value = options.min;
 
