@@ -47,10 +47,8 @@ $.widget("ibi.ibxTimePicker", $.ibi.ibxHBox, {
         this.element.ibxWidget("add", this._secondSpinner);
         this.element.ibxWidget("add", this._colonDivSecond);
         this.element.ibxWidget("add", this._meridianSpinner);
-
-
-
     },
+
 
     _init: function () {
         this._super(); 
@@ -94,6 +92,8 @@ $.widget("ibi.ibxTimePicker", $.ibi.ibxHBox, {
 
         // this.element.on("ibx_change", this._timeChange.bind(this));
     },
+
+
     _setOption: function (key, value) {
         this._super(key, value);
 
@@ -158,7 +158,6 @@ $.widget("ibi.ibxTimePicker", $.ibi.ibxHBox, {
             this._meridianSpinner.ibxWidget("option", "text", value);
             this.options.meridian = this._meridianSpinner.ibxWidget("option", "text");
         }
-
     },
 
 
@@ -201,9 +200,9 @@ $.widget("ibi.ibxTimePicker", $.ibi.ibxHBox, {
         //Second Change
         else if (ctrl.is(".ibx-time-picker-spinner-second")) {
             
+            //Check if value changed
             var prev = this.options.second;
             this.options.second = this._secondSpinner.ibxWidget("option", "value");
-
             changed = prev === this.options.second ? false : true;
 
             if (this.options.synchronizedStepping) {
@@ -232,7 +231,6 @@ $.widget("ibi.ibxTimePicker", $.ibi.ibxHBox, {
         }
 
     },
-
 
 
     //------- Formatting -------//

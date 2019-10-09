@@ -4,26 +4,21 @@
     padding: 0.1em;
 }
 
-
 .ibx-time-picker-spinner > .ibx-spinner-text-input{
     padding: 0px;
     width: 1.25em;
     flex: 0 0 auto;
 }
 
-
 .ibx-time-picker-spinner-meridian > .ibx-spinner-text-input{
     width: 1.6em;
 }
-
-
 
 .ibx-time-picker-spinner > .ibx-spinner-text-input,
 .ibx-time-picker-spinner > .ibx-spinner-text-input:hover,
 .ibx-time-picker-spinner .ibx-spinner-btn-grp>.ibx-button{
     border: none;
 }
-
 
 .ibx-time-picker-colon{
     margin: 0 0.2em 0 0.2em;
