@@ -3,7 +3,7 @@
     border-radius: 0.2em;
     padding: 0.1em;
     align-items: center;
-    justify-content: space-evenly;
+    justify-content: center;
 }
 
 .ibx-timepicker-spinner > .ibx-spinner-text-input{
