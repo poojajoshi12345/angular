@@ -29,9 +29,9 @@
 				});
 
 
-				$(".ibx-time-picker").on("ibx_change", function(event){
-					console.log(event);
-				});
+				// $(".ibx-time-picker").on("ibx_change", function(event){
+				// 	console.log(event);
+				// });
 
 			}, packages, true);
 		</script>
