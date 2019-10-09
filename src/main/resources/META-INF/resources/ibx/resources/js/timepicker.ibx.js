@@ -109,7 +109,7 @@ $.widget("ibi.ibxTimePicker", $.ibi.ibxHBox, {
             var hourOffset = 0;
 
             //Convert 12hour to 24hour
-            if (value && this.options.meridian === "PM" && this.options.hour !== 12) {
+            if ((value && this.options.meridian === "PM" && this.options.hour !== 12) || (value && this.options.meridian === "AM" && this.options.hour === 12)) {
                 hourOffset = 12;
             }
             //Convert 24hour to 12hour 
