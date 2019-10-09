@@ -14,8 +14,8 @@ $.widget("ibi.ibxTimePicker", $.ibi.ibxHBox, {
         "meridian": "AM",
 
         "circularStep": true, //ability to cycle through values in spinners
-        "militaryTime": false,  //24 hour clock
-        "synchronizedStepping": true, //adjusts hour, minute and meridian as it changes
+        "24hour": false,  //24 hour clock
+        "synchronizedStepping": false, //adjusts hour, minute and meridian as it changes
 
         "showHour": true,
         "showMinute": true,
@@ -24,20 +24,20 @@ $.widget("ibi.ibxTimePicker", $.ibi.ibxHBox, {
         "showColon": true
     },
 
-    _widgetClass: "ibx-time-picker",
+    _widgetClass: "ibx-timepicker",
 
     _create: function () {
         this._super();
 
         //Create Spinners
-        this._hourSpinner = $('<div class="ibx-time-picker-spinner ibx-time-picker-spinner-hour">').ibxSpinner();
-        this._minuteSpinner = $('<div class="ibx-time-picker-spinner ibx-time-picker-spinner-minute">').ibxSpinner();
-        this._secondSpinner = $('<div class="ibx-time-picker-spinner ibx-time-picker-spinner-second">').ibxSpinner();
-        this._meridianSpinner = $('<div class="ibx-time-picker-spinner ibx-time-picker-spinner-meridian">').ibxSpinner();
+        this._hourSpinner = $('<div class="ibx-timepicker-spinner ibx-timepicker-spinner-hour">').ibxSpinner();
+        this._minuteSpinner = $('<div class="ibx-timepicker-spinner ibx-timepicker-spinner-minute">').ibxSpinner();
+        this._secondSpinner = $('<div class="ibx-timepicker-spinner ibx-timepicker-spinner-second">').ibxSpinner();
+        this._meridianSpinner = $('<div class="ibx-timepicker-spinner ibx-timepicker-spinner-meridian">').ibxSpinner();
 
         //Create Colon Divs
-        this._minuteColon = $('<div class="ibx-time-picker-colon ibx-time-picker-colon-minute">:</div>');
-        this._secondColon = $('<div class="ibx-time-picker-colon ibx-time-picker-colon-second">:</div>');
+        this._minuteColon = $('<div class="ibx-timepicker-colon ibx-timepicker-colon-minute">:</div>');
+        this._secondColon = $('<div class="ibx-timepicker-colon ibx-timepicker-colon-second">:</div>');
 
         //Add Parts to Element
         this.element.ibxWidget("add", this._hourSpinner);
@@ -98,10 +98,11 @@ $.widget("ibi.ibxTimePicker", $.ibi.ibxHBox, {
         this._super(key, value);
 
         if (key === "circularStep") {
-            this._minuteSpinner.ibxWidget("option", "circularStep", value);
             this._hourSpinner.ibxWidget("option", "circularStep", value);
+            this._minuteSpinner.ibxWidget("option", "circularStep", value);
+            this._secondSpinner.ibxWidget("option", "circularStep", value);
         }
-        else if (key === "militaryTime") {
+        else if (key === "24hour") {
             value ? this._hourSpinner.ibxWidget("option", "min", 0) : this._hourSpinner.ibxWidget("option", "min", 1);
             value ? this._hourSpinner.ibxWidget("option", "max", 23) : this._hourSpinner.ibxWidget("option", "max", 12);
             value ? this._meridianSpinner.css("display", "none") : this._meridianSpinner.css("display", "");
@@ -177,7 +178,7 @@ $.widget("ibi.ibxTimePicker", $.ibi.ibxHBox, {
         var changed = false;
 
         //Hour Change
-        if (ctrl.is(".ibx-time-picker-spinner-hour")) {
+        if (ctrl.is(".ibx-timepicker-spinner-hour")) {
             var prev = this.options.hour;
             this.options.hour = this._hourSpinner.ibxWidget("option", "value");
 
@@ -186,10 +187,13 @@ $.widget("ibi.ibxTimePicker", $.ibi.ibxHBox, {
             if (this.options.synchronizedStepping && info.prevValue === 11 && this.options.hour === 12) {
                 this._meridianSpinner.ibxWidget("stepSpinner", true, 1);
             }
+            else if (this.options.synchronizedStepping && info.prevValue === 12 && this.options.hour === 11) {
+                this._meridianSpinner.ibxWidget("stepSpinner", false, 1);
+            }
         }
 
         //Minute Change
-        else if (ctrl.is(".ibx-time-picker-spinner-minute")) {
+        else if (ctrl.is(".ibx-timepicker-spinner-minute")) {
             var prev = this.options.minute;
             this.options.minute = this._minuteSpinner.ibxWidget("option", "value");
 
@@ -208,7 +212,7 @@ $.widget("ibi.ibxTimePicker", $.ibi.ibxHBox, {
         }
 
         //Second Change
-        else if (ctrl.is(".ibx-time-picker-spinner-second")) {
+        else if (ctrl.is(".ibx-timepicker-spinner-second")) {
             
             //Check if value changed
             var prev = this.options.second;
@@ -229,7 +233,7 @@ $.widget("ibi.ibxTimePicker", $.ibi.ibxHBox, {
         }
 
         //Meridian Change
-        else if (ctrl.is(".ibx-time-picker-spinner-meridian")) {
+        else if (ctrl.is(".ibx-timepicker-spinner-meridian")) {
             changed = this.options.meridian === this._meridianSpinner.ibxWidget("option", "text") ? false : true;
             this.options.meridian = this._meridianSpinner.ibxWidget("option", "text");
         }
@@ -280,9 +284,9 @@ $.widget("ibi.ibxTimePicker", $.ibi.ibxHBox, {
             return ret;
         }
 
-        this._hourSpinner.ibxWidget("setValue", data.hour);
-        this._minuteSpinner.ibxWidget("setValue", data.minute);
-        this._secondSpinner.ibxWidget("setValue", data.second);
-        this._meridianSpinner.ibxWidget("option", "text", data.meridian);
+        this._hourSpinner.ibxWidget("setValue", date.hour);
+        this._minuteSpinner.ibxWidget("setValue", date.minute);
+        this._secondSpinner.ibxWidget("setValue", date.second);
+        this._meridianSpinner.ibxWidget("option", "text", date.meridian);
     }
 });

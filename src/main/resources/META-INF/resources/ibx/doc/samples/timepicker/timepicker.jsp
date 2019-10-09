@@ -23,10 +23,10 @@
 			{			
 
 
-				$(".change-time-mode-btn").on("click", function(event){
-					var value = $(".ibx-time-picker").ibxWidget("option", "militaryTime");
-					$(".ibx-time-picker").ibxWidget("option", "militaryTime", !value);
-				});
+				// $(".change-time-mode-btn").on("click", function(event){
+				// 	var value = $(".ibx-time-picker").ibxWidget("option", "militaryTime");
+				// 	$(".ibx-time-picker").ibxWidget("option", "militaryTime", !value);
+				// });
 
 
 				// $(".ibx-time-picker").on("ibx_change", function(event){
@@ -52,7 +52,10 @@
 				<!-- <div class="time-picker-demo" data-ibx-type="ibxTimePicker" ></div> -->
 				<div class="time-picker-demo" data-ibx-type="ibxTimePicker" data-ibxp-hour="7" data-ibxp-minute="6" data-ibxp-second="0" data-ibxp-meridian="PM"></div>
 
-				<div class="change-time-mode-btn" data-ibx-type="ibxButton">Change Time Mode</div>
+				<div data-ibx-type="ibxHbox">
+					<!-- <div class="change-time-mode-btn" data-ibx-type="ibxButton">Change Time Mode</div> -->
+					
+				</div>
 		</div>
 
 	</body>	

@@ -1,0 +1,145 @@
+<!--Copyright 1996-2017 Information Builders, Inc. All rights reserved. -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>ibx timepicker sample</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=EDGE">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <style type="text/css">
+        .timepicker-demo-flex.options{
+            align-items: stretch;
+            flex-wrap: wrap;
+        }
+    
+        .timepicker-demo-checkbox {
+            margin-right: 1em;
+        }
+
+        .line{
+            border-top: 1px solid black;
+            width: 100%;
+            margin: 1em 0 1em 0;
+        }
+        body{
+            font-size: 20px;
+        }
+
+    </style>
+
+    <Script src="../../../resources/ibx.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        var packages = [
+
+        ];
+
+        ibx(function () {
+            var timepicker = $(".timepicker-demo-control");
+
+            //Set Defaults
+            $(".circular").ibxWidget("option", "checked", timepicker.ibxWidget("option", "circularStep"));
+            $(".24hour").ibxWidget("option", "checked", timepicker.ibxWidget("option", "24hour"));
+            $(".synchronized").ibxWidget("option", "checked", timepicker.ibxWidget("option", "synchronizedStepping"));
+
+            $(".hour").ibxWidget("option", "checked", timepicker.ibxWidget("option", "showHour"));
+            $(".minute").ibxWidget("option", "checked", timepicker.ibxWidget("option", "showMinute"));
+            $(".second").ibxWidget("option", "checked", timepicker.ibxWidget("option", "showSecond"));
+            $(".meridian").ibxWidget("option", "checked", timepicker.ibxWidget("option", "showMeridian"));
+
+            $(".colon").ibxWidget("option", "checked", timepicker.ibxWidget("option", "showColon"));
+
+
+            //Event Handler
+            $(".circular").on("ibx_change", settingChange.bind(this));
+            $(".24hour").on("ibx_change", settingChange.bind(this));
+            $(".synchronized").on("ibx_change", settingChange.bind(this));
+
+            $(".hour").on("ibx_change", settingChange.bind(this));
+            $(".minute").on("ibx_change", settingChange.bind(this));
+            $(".second").on("ibx_change", settingChange.bind(this));
+            $(".meridian").on("ibx_change", settingChange.bind(this));
+
+            $(".colon").on("ibx_change", settingChange.bind(this));
+
+            $(".default").on("click", function(event){
+                var date = new Date();
+                var hour = date.getHours();
+                var minute = date.getMinutes();
+                var second = date.getSeconds();
+                var meridian = (hour >= 12) ? "PM" : "AM";
+
+                var dateJSON = {
+                    "hour": hour,
+                    "minute": minute,
+                    "second": second,
+                    "meridian": meridian
+                };
+
+                timepicker.ibxWidget("time", dateJSON);
+            });
+
+            function settingChange(event) {
+                var ctrl = $(event.target);
+
+                if (ctrl.is(".circular")) {
+                    timepicker.ibxWidget("option", "circularStep", ctrl.ibxWidget("option", "checked"));
+                }
+                else if (ctrl.is(".24hour")) {
+                    timepicker.ibxWidget("option", "24hour", ctrl.ibxWidget("option", "checked"));
+                }
+                else if (ctrl.is(".synchronized")) {
+                    timepicker.ibxWidget("option", "synchronizedStepping", ctrl.ibxWidget("option", "checked"));
+                }
+                else if (ctrl.is(".hour")) {
+                    timepicker.ibxWidget("option", "showHour", ctrl.ibxWidget("option", "checked"));
+                }
+                else if (ctrl.is(".minute")) {
+                    timepicker.ibxWidget("option", "showMinute", ctrl.ibxWidget("option", "checked"));
+                }
+                else if (ctrl.is(".second")) {
+                    timepicker.ibxWidget("option", "showSecond", ctrl.ibxWidget("option", "checked"));
+                }
+                else if (ctrl.is(".meridian")) {
+                    timepicker.ibxWidget("option", "showMeridian", ctrl.ibxWidget("option", "checked"));
+                }
+                else if (ctrl.is(".colon")) {
+                    timepicker.ibxWidget("option", "showColon", ctrl.ibxWidget("option", "checked"));
+                }
+            }
+
+
+
+        }, packages, true);
+    </script>
+
+
+</head>
+
+<body class="ibx-root">
+    <div data-ibx-type="ibxVBox">
+        <div class="timepicker-demo-flex options" data-ibx-type="ibxHBox">
+            <div class="timepicker-demo-checkbox circular" data-ibx-type="ibxCheckBoxSimple">Circular Step</div>
+            <div class="timepicker-demo-checkbox 24hour" data-ibx-type="ibxCheckBoxSimple">24 Hour</div>
+            <div class="timepicker-demo-checkbox synchronized" data-ibx-type="ibxCheckBoxSimple">Synchronized Stepping
+            </div>
+
+            <div class="timepicker-demo-checkbox hour" data-ibx-type="ibxCheckBoxSimple">Show Hour</div>
+            <div class="timepicker-demo-checkbox minute" data-ibx-type="ibxCheckBoxSimple">Show Minute</div>
+            <div class="timepicker-demo-checkbox second" data-ibx-type="ibxCheckBoxSimple">Show Second</div>
+            <div class="timepicker-demo-checkbox meridian" data-ibx-type="ibxCheckBoxSimple">Show Meridian</div>
+
+            <div class="timepicker-demo-checkbox colon" data-ibx-type="ibxCheckBoxSimple">Show Colon</div>
+
+            <div class="timepicker-demo-button default" data-ibx-type="ibxButton">Set Current Time</div>
+        </div>
+        <div class="line"></div>
+        <div class="timepicker-demo-control" data-ibx-type="ibxTimePicker"></div>
+    </div>
+
+</body>
+
+</html>
