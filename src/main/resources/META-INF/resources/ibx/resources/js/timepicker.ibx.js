@@ -284,9 +284,12 @@ $.widget("ibi.ibxTimePicker", $.ibi.ibxHBox, {
             return ret;
         }
 
-        this._hourSpinner.ibxWidget("setValue", date.hour);
+        var hourOffset = (date.hour > 12) ? -12 : 12;
+
+        this._hourSpinner.ibxWidget("setValue", date.hour + hourOffset);
         this._minuteSpinner.ibxWidget("setValue", date.minute);
         this._secondSpinner.ibxWidget("setValue", date.second);
-        this._meridianSpinner.ibxWidget("option", "text", date.meridian);
+
+        (date.meridian === "AM") ? this._meridianSpinner.ibxWidget("setValue", "AM") : this._meridianSpinner.ibxWidget("setValue", "PM");
     }
 });
