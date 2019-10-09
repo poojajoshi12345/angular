@@ -154,6 +154,7 @@ $.widget("ibi.ibxTimePicker", $.ibi.ibxHBox, {
             this.options.second = this._secondSpinner.ibxWidget("option", "text");
         }
         else if (key === "meridian") {
+            value === "AM" ? this._meridianSpinner.ibxWidget("option", "value", 0) : this._meridianSpinner.ibxWidget("option", "value", 1);
             this._meridianSpinner.ibxWidget("option", "text", value);
             this.options.meridian = this._meridianSpinner.ibxWidget("option", "text");
         }
