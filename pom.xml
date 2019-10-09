@@ -34,6 +34,7 @@
 		<maven.compiler.source>${bytecode.version}</maven.compiler.source>
 		<maven.compiler.target>${bytecode.version}</maven.compiler.target>
 		<maven.dependency.plugin.version>3.1.1</maven.dependency.plugin.version>
+		<maven.deploy.plugin.version>3.0.0-M1</maven.deploy.plugin.version>
 		<maven.jar.plugin.version>3.1.1</maven.jar.plugin.version>
 		<maven.jxr.plugin.version>3.0.0</maven.jxr.plugin.version>
 		<maven.pmd.plugin.version>3.12.0</maven.pmd.plugin.version>
@@ -118,6 +119,11 @@
 					<groupId>org.sonarsource.scanner.maven</groupId>
 					<artifactId>sonar-maven-plugin</artifactId>
 					<version>${org.sonarsource.scanner.maven.version}</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-deploy-plugin</artifactId>
+					<version>${maven.deploy.plugin.version}</version>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
