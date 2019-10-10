@@ -818,7 +818,10 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 			var cInfo = options.colMap[i] || options.defaultColConfig;
 			cell.style.width = isNaN(cInfo._ui.curSize) ? cInfo._ui.curSize : cInfo._ui.curSize + "px";//if size is just a number assume pixels.
 			cell.classList.add(options.classes.gridCell);
-			
+
+			//set visibility based on column visibility.
+			cell.classList.toggle("dgrid-col-hidden", !cInfo.visible);
+
 			//if the tabindex hasn't been set outside, then default to -1 (navkey/click access only...no tabbing between cells).
 			if(!cell.getAttribute("tabindex"))
 				cell.setAttribute("tabindex", -1);
