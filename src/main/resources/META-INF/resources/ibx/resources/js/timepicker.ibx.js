@@ -51,7 +51,7 @@ $.widget("ibi.ibxTimePicker", $.ibi.ibxHBox, {
 
 
     _init: function () {
-        this._super(); 
+        this._super();
 
         //Hour Set Up
         this._hourSpinner.ibxWidget("option", "fnFormat", this._formatTime.bind(this));
@@ -110,25 +110,25 @@ $.widget("ibi.ibxTimePicker", $.ibi.ibxHBox, {
             var hourOffset = 0;
 
             //Convert 12hour to 24hour
-            if(value){
-                if(this.options.meridian === "PM" && this.options.hour !== 12){
+            if (value) {
+                if (this.options.meridian === "PM" && this.options.hour !== 12) {
                     hourOffset = 12;
                 }
                 //Midnight
-                else if(this.options.meridian === "AM" && this.options.hour === 12){
+                else if (this.options.meridian === "AM" && this.options.hour === 12) {
                     hourOffset = -12;
                 }
             }
 
             //Convert 24hour to 12hour 
-            else{
+            else {
                 this.options.meridian = (this.options.hour > 12) ? "PM" : this.options.meridian;
                 this._meridianSpinner.ibxWidget("option", "text", this.options.meridian);
 
                 if (this.options.hour > 12) {
                     hourOffset = -12;
                 }
-                else if (this.options.hour === 0){
+                else if (this.options.hour === 0) {
                     hourOffset = 12;
                 }
             }
@@ -213,7 +213,7 @@ $.widget("ibi.ibxTimePicker", $.ibi.ibxHBox, {
 
         //Second Change
         else if (ctrl.is(".ibx-timepicker-spinner-second")) {
-            
+
             //Check if value changed
             var prev = this.options.second;
             this.options.second = this._secondSpinner.ibxWidget("option", "value");
@@ -284,12 +284,30 @@ $.widget("ibi.ibxTimePicker", $.ibi.ibxHBox, {
             return ret;
         }
 
-        var hourOffset = (date.hour > 12) ? -12 : 12;
+        var hourOffset = 0;
+
+        //Consideration for hour and meridian
+        if (this.options["24hour"]) {
+
+            //This is in case of a user passing in an invalid meridian based on the hour and 24hour option
+            (date.hour > 12) ? this._meridianSpinner.ibxWidget("value", "PM") : this._meridianSpinner.ibxWidget("value", "AM");
+        }
+        else {
+
+            //Consideration for midnight
+            if (date.hour === 0) {
+                hourOffset = 12;
+                this._meridianSpinner.ibxWidget("value", "AM");
+            }
+            else{
+                hourOffset = (date.hour > 12) ? -12 : 0;
+                (date.hour > 12) ? this._meridianSpinner.ibxWidget("value", "PM") : this._meridianSpinner.ibxWidget("value", date.meridian);    
+            }
+        }
+
 
         this._hourSpinner.ibxWidget("setValue", date.hour + hourOffset);
         this._minuteSpinner.ibxWidget("setValue", date.minute);
         this._secondSpinner.ibxWidget("setValue", date.second);
-
-        (date.meridian === "AM") ? this._meridianSpinner.ibxWidget("setValue", "AM") : this._meridianSpinner.ibxWidget("setValue", "PM");
     }
 });
