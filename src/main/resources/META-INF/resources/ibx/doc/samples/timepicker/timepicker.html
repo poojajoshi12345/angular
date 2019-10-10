@@ -50,6 +50,12 @@
 
             $(".colon").ibxWidget("option", "checked", timepicker.ibxWidget("option", "showColon"));
 
+            $(".enable-hour").ibxWidget("option", "checked", timepicker.ibxWidget("option", "enableHour"));
+            $(".enable-minute").ibxWidget("option", "checked", timepicker.ibxWidget("option", "enableMinute"));
+            $(".enable-second").ibxWidget("option", "checked", timepicker.ibxWidget("option", "enableSecond"));
+            $(".enable-meridian").ibxWidget("option", "checked", timepicker.ibxWidget("option", "enableMeridian"));
+
+
 
             //Event Handler
             $(".circular").on("ibx_change", settingChange.bind(this));
@@ -62,6 +68,11 @@
             $(".meridian").on("ibx_change", settingChange.bind(this));
 
             $(".colon").on("ibx_change", settingChange.bind(this));
+
+            $(".enable-hour").on("ibx_change", settingChange.bind(this));
+            $(".enable-minute").on("ibx_change", settingChange.bind(this));
+            $(".enable-second").on("ibx_change", settingChange.bind(this));
+            $(".enable-meridian").on("ibx_change", settingChange.bind(this));
 
             $(".default").on("click", function(event){
                 var date = new Date();
@@ -107,6 +118,22 @@
                 else if (ctrl.is(".colon")) {
                     timepicker.ibxWidget("option", "showColon", ctrl.ibxWidget("option", "checked"));
                 }
+
+                else if (ctrl.is(".enable-hour")) {
+                    timepicker.ibxWidget("option", "enableHour", ctrl.ibxWidget("option", "checked"));
+                }
+                else if (ctrl.is(".enable-minute")) {
+                    timepicker.ibxWidget("option", "enableMinute", ctrl.ibxWidget("option", "checked"));
+                }
+                else if (ctrl.is(".enable-second")) {
+                    timepicker.ibxWidget("option", "enableSecond", ctrl.ibxWidget("option", "checked"));
+                }
+                else if (ctrl.is(".enable-meridian")) {
+                    timepicker.ibxWidget("option", "enableMeridian", ctrl.ibxWidget("option", "checked"));
+                }
+                else if (ctrl.is(".enable-colon")) {
+                    timepicker.ibxWidget("option", "enableColon", ctrl.ibxWidget("option", "checked"));
+                }
             }
 
 
@@ -131,6 +158,11 @@
             <div class="timepicker-demo-checkbox meridian" data-ibx-type="ibxCheckBoxSimple">Show Meridian</div>
 
             <div class="timepicker-demo-checkbox colon" data-ibx-type="ibxCheckBoxSimple">Show Colon</div>
+
+            <div class="timepicker-demo-checkbox enable-hour" data-ibx-type="ibxCheckBoxSimple">Enable Hour</div>
+            <div class="timepicker-demo-checkbox enable-minute" data-ibx-type="ibxCheckBoxSimple">Enable Minute</div>
+            <div class="timepicker-demo-checkbox enable-second" data-ibx-type="ibxCheckBoxSimple">Enable Second</div>
+            <div class="timepicker-demo-checkbox enable-meridian" data-ibx-type="ibxCheckBoxSimple">Enable Meridian</div>
 
             <div class="timepicker-demo-button default" data-ibx-type="ibxButton">Set Current Time</div>
         </div>

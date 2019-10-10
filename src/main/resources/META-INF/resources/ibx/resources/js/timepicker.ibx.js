@@ -21,7 +21,12 @@ $.widget("ibi.ibxTimePicker", $.ibi.ibxHBox, {
         "showMinute": true,
         "showSecond": true,
         "showMeridian": true,
-        "showColon": true
+        "showColon": true,
+
+        "enableHour": true,
+        "enableMinute": true,
+        "enableSecond": true,
+        "enableMeridian": true
     },
 
     _widgetClass: "ibx-timepicker",
@@ -90,7 +95,6 @@ $.widget("ibi.ibxTimePicker", $.ibi.ibxHBox, {
         this._meridianSpinner.ibxWidget("option", "fnFormat", this._formatMeridian.bind(this)); //Number to meridian
         this._meridianSpinner.on("ibx_change", this._timeChange.bind(this));
 
-        // this.element.on("ibx_change", this._timeChange.bind(this));
     },
 
 
@@ -152,6 +156,18 @@ $.widget("ibi.ibxTimePicker", $.ibi.ibxHBox, {
             //Hour
             this.options.showHour ? this._hourSpinner.css("display", "") && this.options.showColon : this._hourSpinner.css("display", "none");
         }
+        else if(key === "enableHour"){
+            this._hourSpinner.ibxWidget("option","disabled", !value);
+        }
+        else if(key === "enableMinute"){
+            this._minuteSpinner.ibxWidget("option","disabled", !value);
+        }
+        else if(key === "enableSecond"){
+            this._secondSpinner.ibxWidget("option","disabled", !value);
+        }
+        else if(key === "enableMeridian"){
+            this._meridianSpinner.ibxWidget("option","disabled", !value);
+        }
         else if (key === "hour") {
             this._hourSpinner.ibxWidget("setValue", value);
             this.options.hour = this._hourSpinner.ibxWidget("option", "text");
@@ -189,6 +205,9 @@ $.widget("ibi.ibxTimePicker", $.ibi.ibxHBox, {
             }
             else if (this.options.synchronizedStepping && info.prevValue === 12 && this.options.hour === 11) {
                 this._meridianSpinner.ibxWidget("stepSpinner", false, 1);
+            }
+            else if (this.options["24hour"]) {
+                (this.options.hour < 12) ? this._meridianSpinner.ibxWidget("setValue", "AM") : this._meridianSpinner.ibxWidget("setValue", "PM");
             }
         }
 
@@ -299,9 +318,9 @@ $.widget("ibi.ibxTimePicker", $.ibi.ibxHBox, {
                 hourOffset = 12;
                 this._meridianSpinner.ibxWidget("value", "AM");
             }
-            else{
+            else {
                 hourOffset = (date.hour > 12) ? -12 : 0;
-                (date.hour > 12) ? this._meridianSpinner.ibxWidget("value", "PM") : this._meridianSpinner.ibxWidget("value", date.meridian);    
+                (date.hour > 12) ? this._meridianSpinner.ibxWidget("value", "PM") : this._meridianSpinner.ibxWidget("value", date.meridian);
             }
         }
 
