@@ -210,7 +210,7 @@ $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame,
 		}
 		
 		//OK, so...IE and Chrome are fine with addRange causing a selection of new node...Firefox needs to collapse the range, as it seems to add it automatically...OMG what a nightmare!
-		if(select)
+		if(select && selection)
 			selection.addRange(range);
 		else
 			range.collapse(false);
