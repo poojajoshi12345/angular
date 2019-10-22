@@ -77,9 +77,9 @@ _p._updateToolUI = function(updateInfo)
 _p.manageCss = function(toolId, add)
 {
 	var tool = this.runningTools[toolId];
-	if(tool && tool.shellUI && tool.shellUI.css)
+	if(tool && tool.ui && tool.ui.css)
 	{
-		var css = tool.shellUI.css;
+		var css = tool.ui.css;
 		if(add)
 		{
 			var style = $("<style type='text/css'>").ibxAddClass(toolId).text(css);
