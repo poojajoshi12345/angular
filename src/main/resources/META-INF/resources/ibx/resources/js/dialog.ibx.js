@@ -33,6 +33,7 @@ $.widget("ibi.ibxDialog", $.ibi.ibxPopup,
 		options.moveHandle = this.titleBox;
 		this.element.on("keydown", this._onDialogKeyDown.bind(this));
 		this.titleClose.on("click", this.close.bind(this, "cancel"));
+		this.btnCustom.on("click", this.custom.bind(this));
 		this.btnApply.on("click", this.apply.bind(this));
 		this.btnCancel.on("click", this.close.bind(this, "cancel"));
 		this.btnOK.on("click", this.close.bind(this, "ok"));
@@ -77,7 +78,11 @@ $.widget("ibi.ibxDialog", $.ibi.ibxPopup,
 	},
 	apply:function(e)
 	{
-		this._trigger("apply");
+		this.element.dispatchEvent("ibx_apply");
+	},
+	custom:function(e)
+	{
+		this.element.dispatchEvent("ibx_custom");
 	},
 	_onDialogKeyDown:function(e)
 	{
@@ -86,7 +91,7 @@ $.widget("ibi.ibxDialog", $.ibi.ibxPopup,
 		{
 			var target = this.element.find(defAction);
 			if(!target.ibxWidget("option", "disabled"))
-				target.trigger("click");
+				target.dispatchEvent("click");
 		}
 	},
 	_refresh:function()
@@ -122,6 +127,7 @@ $.widget("ibi.ibxDialog", $.ibi.ibxPopup,
 		this.btnNo.css("display", options.buttons.search("no") != -1 ? "" : "none");
 		this.btnCancel.css("display", options.buttons.search("cancel") != -1 ? "" : "none");
 		this.btnApply.css("display", options.buttons.search("apply") != -1 ? "" : "none");
+		this.btnCustom.css("display", options.buttons.search("custom") != -1 ? "" : "none");
 		this.element.find(".ibx-dlg-default-action").ibxRemoveClass("ibx-dlg-default-action");
 		this.element.find(options.defaultAction).ibxAddClass("ibx-dlg-default-action");
 		this.element.ibxAddClass(options.type);
