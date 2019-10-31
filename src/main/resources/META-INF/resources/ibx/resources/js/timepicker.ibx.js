@@ -224,7 +224,7 @@ $.widget("ibi.ibxTimePicker", $.ibi.ibxHBox, {
                     this._hourSpinner.ibxWidget("stepSpinner", true, 1);
                 }
                 //Decrease the Hour
-                else if (info.stepped && info.prevValue === 00 && info.value === 59) {
+                else if (info.stepped && info.prevValue === 0 && info.value === 59) {
                     this._hourSpinner.ibxWidget("stepSpinner", false, 1);
                 }
             }
