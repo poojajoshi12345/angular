@@ -445,7 +445,7 @@ ibx.getIbxMarkupOptions = function(el, attrPattern, doCoerce)
 	}
 
 	//go through the options, if desired, and make sure the true/false/1/0 strings are turned into native types.
-	doCorece = (doCoerce === undefined) ? true : doCoerce;
+	doCoerce = (doCoerce === undefined) ? true : doCoerce;
 	if(doCoerce)
 	{
 		$.each(options, function(name, value)
