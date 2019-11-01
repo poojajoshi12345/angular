@@ -406,7 +406,7 @@ ibx.bindElements = function(elements, bindInfo)
 	return elBind;
 };
 
-ibx.getIbxMarkupOptions = function(el, attrPattern)
+ibx.getIbxMarkupOptions = function(el, attrPattern, doCoerce)
 {
 	el = $(el);
 
@@ -444,11 +444,15 @@ ibx.getIbxMarkupOptions = function(el, attrPattern)
 		}
 	}
 
-	//go through the options and make sure the true/false/1/0 strings are turned into native types.
-	$.each(options, function(name, value)
+	//go through the options, if desired, and make sure the true/false/1/0 strings are turned into native types.
+	doCorece = (doCoerce === undefined) ? true : doCoerce;
+	if(doCoerce)
 	{
-		this[name] = ibx.coercePropVal(value);
-	}.bind(options));
+		$.each(options, function(name, value)
+		{
+			this[name] = ibx.coercePropVal(value);
+		}.bind(options));
+	}
 	return options;
 };
 
