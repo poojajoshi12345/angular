@@ -11,10 +11,10 @@
   "author": "Information Builders, Inc.",
   "license": "EULA",
   "devDependencies": {
-    "cypress": "^3.1.4"    
+    "cypress": "^3.1.4"
   },
   "dependencies": {
-  	"grunt": "^1.0.3",
+    "grunt": "^1.0.3",
     "grunt-cli": "^1.3.2",
     "grunt-contrib-cssmin": "^3.0.0",
     "grunt-contrib-qunit": "^3.1.0",

@@ -246,8 +246,11 @@ module.exports = function(grunt) {
 			var task = {
 					options: {
 						banner: label,
-						compress: true,
-	                    sourceMap: false
+						compress: false,
+	                    sourceMap: false,
+	                    output: {
+	                    	comments: /# sourceURL=\S+\s*$/
+	                    }
 	                },
 					files: {}
 			};
