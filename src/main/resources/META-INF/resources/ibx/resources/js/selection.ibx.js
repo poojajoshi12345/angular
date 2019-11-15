@@ -103,7 +103,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 		if(!options.focusRoot && options.focusDefault && e.keyCode == $.ui.keyCode.TAB && e.shiftKey)
 		{
 			var isFirstChild = $(e.target).is(":first-child");
-			var prev = this.element.prevAll("[tabindex]").first();
+			var prev = this.element.prevAll("[tabindex]:ibxVisible").first();
 			if(isFirstChild && prev.length)
 			{
 				prev.focus();
