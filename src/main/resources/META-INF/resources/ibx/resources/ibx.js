@@ -311,7 +311,7 @@ ibx.accessible = function(accessible)
 	widgets.each(function(idx, el)
 	{
 		//need to check destroyed, as some widgets destroy others when refreshing.
-		var widget = $(el).data("ibxWidget");]
+		var widget = $(el).data("ibxWidget");
 		if(widget && !widget.destroyed())
 			$(el).ibxWidget("option", "aria.accessible", accessible);
 	});
