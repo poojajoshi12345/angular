@@ -311,7 +311,7 @@ ibx.accessible = function(accessible)
 	widgets.each(function(idx, el)
 	{
 		//need to check destroyed, as some widgets destroy others when refreshing.
-		var widget = $(el).data("ibxWidget");
+		var widget = $(el).data("ibxWidget");]
 		if(widget && !widget.destroyed())
 			$(el).ibxWidget("option", "aria.accessible", accessible);
 	});
@@ -322,7 +322,7 @@ ibx._setAccessibility = function(accessible)
 	{
 		var root = $(el);
 		var title = root.attr("aria-label") || "Application " + document.title;
-		accessible ? root.attr({"role":"application", "aria-label":title, "tabindex":0}) : root.removeAttr("role aria-label tabindex");
+		accessible ? root.attr({"role":"application", "aria-label":title}) : root.removeAttr("role aria-label tabindex");
 	}.bind(this));
 };
 
