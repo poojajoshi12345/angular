@@ -252,11 +252,12 @@ $.widget("ibi.ibxTabPage", $.ibi.ibxWidget,
 {
 	options:
 	{
+		focusDefault: true,
 		selected: false,
 		tabOptions:
 		{
 		},
-		aria:{role:"tabpanel"}
+		aria:{role:"tabpanel"},
 	},
 	_widgetClass:"ibx-tab-page",
 	getValue: $.noop,
