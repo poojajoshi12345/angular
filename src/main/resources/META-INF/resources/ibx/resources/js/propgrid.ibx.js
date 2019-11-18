@@ -562,14 +562,16 @@ _p.update = function()
 {
 	ibxSliderProperty.base.update.call(this);
 
+	//must set min/max before value.
 	var prop = this.prop;
 	this.editor.ibxWidget("option",
 	{
-		value:prop.value || 0,
 		min:prop.valueMin || 0,
 		max:prop.valueMax || 100,
 		step:prop.step || 1,
 	});
+	this.editor.ibxWidget("option", "value", prop.value || 0);
+
 };
 /********************************************************************************
  * IBX PROPERTY UI FOR DATE
