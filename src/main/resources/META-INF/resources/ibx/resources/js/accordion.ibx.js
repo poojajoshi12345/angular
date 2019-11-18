@@ -190,6 +190,7 @@ $.widget("ibi.ibxAccordionPage", $.ibi.ibxFlexBox,
 		},
 		contentOptions:
 		{
+			focusDefault: true,
 		},
 	},
 	_widgetClass:"ibx-accordion-page",
@@ -201,7 +202,7 @@ $.widget("ibi.ibxAccordionPage", $.ibi.ibxFlexBox,
 		var content = this._content = $("<div tabindex='0' class='ibx-accordion-page-content'>").ibxWidget(this.options.contentOptions);
 		content.on("transitionend", this._onTransition.bind(this))
 
-		var btn = this._button = $("<div tabIndex='-1' class='ibx-accordion-page-button'>").on("click", this._onBtnChange.bind(this));
+		var btn = this._button = $("<div tabIndex='0' class='ibx-accordion-page-button'>").on("click", this._onBtnChange.bind(this));
 		btn.data("accPage", this.element).ibxButton(this.options.btnOptions).ibxAddClass("ibx-accordion-button");
 
 		this.element.on("focus", this._onPageFocus.bind(this));
