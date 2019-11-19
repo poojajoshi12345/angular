@@ -35,10 +35,10 @@ $.widget("ibi.ibxTimePicker", $.ibi.ibxHBox, {
         this._super();
 
         //Create Spinners
-        this._hourSpinner = $('<div class="ibx-timepicker-spinner ibx-timepicker-spinner-hour">').ibxSpinner();
-        this._minuteSpinner = $('<div class="ibx-timepicker-spinner ibx-timepicker-spinner-minute">').ibxSpinner();
-        this._secondSpinner = $('<div class="ibx-timepicker-spinner ibx-timepicker-spinner-second">').ibxSpinner();
-        this._meridianSpinner = $('<div class="ibx-timepicker-spinner ibx-timepicker-spinner-meridian">').ibxSpinner();
+        this._hourSpinner = $('<div class="ibx-timepicker-spinner ibx-timepicker-spinner-hour" tabindex="0">').ibxSpinner();
+        this._minuteSpinner = $('<div class="ibx-timepicker-spinner ibx-timepicker-spinner-minute" tabindex="0">').ibxSpinner();
+        this._secondSpinner = $('<div class="ibx-timepicker-spinner ibx-timepicker-spinner-second" tabindex="0">').ibxSpinner();
+        this._meridianSpinner = $('<div class="ibx-timepicker-spinner ibx-timepicker-spinner-meridian" tabindex="0">').ibxSpinner();
 
         //Create Colon Divs
         this._minuteColon = $('<div class="ibx-timepicker-colon ibx-timepicker-colon-minute">:</div>');
