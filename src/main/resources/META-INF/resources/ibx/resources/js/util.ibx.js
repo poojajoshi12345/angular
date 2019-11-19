@@ -96,7 +96,7 @@ jQuery.expr[":"]["ibxFocusable"] = function(elem, idx, meta, stack)
 
 	var tabIndex = parseInt(el.attr("tabIndex"), 10);
 	var ret = (tabIndex >= tMin && tabIndex <= tMax);
-	return ret;
+	return ret && el.is(":ibxVisible:ibxEnabled");
 };
 jQuery.expr[":"]["ibxNavFocusable"] = function(elem, idx, meta, stack)
 {
@@ -107,6 +107,11 @@ jQuery.expr[":"]["ibxVisible"] = function(elem, idx, meta, stack)
 {
 	elem = $(elem);
 	return elem.is(":visible") && (elem.css("visibility") !== "hidden");
+}
+jQuery.expr[":"]["ibxEnabled"] = function(elem, idx, meta, stack)
+{
+	elem = $(elem);
+	return !elem.is(".ibx-widget-disabled");
 }
 jQuery.expr[":"]["inViewport"] = function(elem, idx, meta, stack)
 {

@@ -69,7 +69,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 			if(!defItem)
 			{
 				var defItem = this.element.find(options.focusDefault);
-				defItem = defItem.length ? defItem : this.selectableChildren(":ibxVisible").first();
+				defItem = defItem.length ? defItem : this.selectableChildren(":ibxNavFocusable()").first();
 			}
 
 			//this will cuase _onFocusIn to recurse with the default item being the e.target element.
@@ -114,7 +114,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 		//manage circular tabbing if desired.
 		if(options.focusRoot && e.keyCode == $.ui.keyCode.TAB)
 		{
-			var focusKids = this.element.logicalChildren(".ibx-sm-focus-root", ":ibxFocusable:ibxVisible");
+			var focusKids = this.element.logicalChildren(".ibx-sm-focus-root", ":ibxFocusable");
 			var target = null;
 			var firstKid = focusKids.first();
 			var lastKid = focusKids.last();
