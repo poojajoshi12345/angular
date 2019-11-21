@@ -432,14 +432,18 @@ ibx.getIbxMarkupOptions = function(el, attrPattern, doCoerce)
 			}
 			else
 			{
-				var option = (attr.value[0] == "{" || attr.value[0] == "[") ? ibx.parseOptions(attr.value) : null; //check for '{' to see if we parse as object.
-				if(option instanceof Array)
-					options[prop] = option;
-				else
-				if(option instanceof Object)
-					options[prop] = $.extend(true, options[prop], option);
-				else
-					options[prop] = attr.value;
+				//[IBX-473] Was trying to parse all attributes into objects/arrays.  But, this is not really a good fix either, as there's no reason
+				//you should be able to have a data-ibxp-attr="[xxx]" attribute, and this will still fail.  For now, this will have to do.
+				options[prop] = attr.value;
+				if(attr.name.search("data-ibxp-") != -1)
+				{
+					var option = (attr.value[0] == "{" || attr.value[0] == "[") ? ibx.parseOptions(attr.value) : null; //check for '{' to see if we parse as object.
+					if(option instanceof Array)
+						options[prop] = option;
+					else
+					if(option instanceof Object)
+						options[prop] = $.extend(true, options[prop], option);
+				}
 			}
 		}
 	}
