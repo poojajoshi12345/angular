@@ -172,6 +172,7 @@ _p.update = function()
 	this.editorCell.prop("title", prop.valueTip || prop.value);
 	this.editorCell.ibxWidget("option", "disabled", (prop.enabled === false) || false);
 	this.editorCell.ibxWidget("option", "aria.label", ibx.resourceMgr.getString("IBX_PGRID_EDIT_CELL_LABEL") + (prop.valueTip || prop.nameTip));
+	this.editor.ibxAddClass(prop.editorClass);//you can add custom classes to your editor to config it as you like.
 };
 /********************************************************************************
  * IBX PROPERTY UI FOR BASIC LABEL/GROUPING/SEPARATING
