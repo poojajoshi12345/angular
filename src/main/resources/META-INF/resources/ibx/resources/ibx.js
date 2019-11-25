@@ -95,7 +95,7 @@ function ibx()
 			if((new Date()) - dateStart > ibx.loadTimeout)
 			{
 				window.clearInterval(ibx._loadTimer);
-				throw("Error loading pre ibx resources: " + scripts);
+				throw("Error loading pre ibx resources.");
 			}
 			if(window.jQuery && window.jQuery.widget && window.ibxResourceManager)
 			{
