@@ -349,7 +349,7 @@ $.widget("ibi.ibxSelect", $.ibi.ibxSelectBase,
 	},
 	controlItems: function (selector)
 	{
-		this._control.ibxWidget("children", selector);
+		return this._control.ibxWidget("children", selector);
 	},
 	selected: function (element)
 	{
