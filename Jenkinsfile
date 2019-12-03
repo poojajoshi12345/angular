@@ -57,33 +57,33 @@ try {
             }
         }
     },
-    sonar: {
-        stage("Sonar") {
-            if("master" == env.BRANCH_NAME) {
-                node {
-                    echo "NODE_NAME = ${env.NODE_NAME}"
-                    deleteDir()
-                    unstash 'sources'
-                    try {
-                        withSonarQubeEnv('SQ2') {
-                            withEnv(["JAVA_HOME=${ tool 'JDK8' }"]) {
-                                executeMvnCmd(".", "clean package spotbugs:spotbugs pmd:pmd checkstyle:checkstyle sonar:sonar")
-                            }    
-                        }                                       
-                    }catch(Exception e) {
-                        currentBuild.result = 'FAILED: sonar'
-                        throw e
-                    } 
-                    finally {
-                         cleanWs cleanWhenAborted: false, cleanWhenFailure: false, cleanWhenNotBuilt: false, cleanWhenUnstable: false
-                    }
-                }
-            }
-            else {
-                echo "Skip Sonar: ${env.BUILD_ID} on ${env.JENKINS_URL} for branch ${env.BRANCH_NAME}"
-            }
-        }
-    },
+//    sonar: {
+//        stage("Sonar") {
+//            if("master" == env.BRANCH_NAME) {
+//                node {
+//                    echo "NODE_NAME = ${env.NODE_NAME}"
+//                    deleteDir()
+//                    unstash 'sources'
+//                    try {
+//                        withSonarQubeEnv('SQ2') {
+//                            withEnv(["JAVA_HOME=${ tool 'JDK8' }"]) {
+//                                executeMvnCmd(".", "clean package spotbugs:spotbugs pmd:pmd checkstyle:checkstyle sonar:sonar")
+//                            }    
+//                        }                                       
+//                    }catch(Exception e) {
+//                        currentBuild.result = 'FAILED: sonar'
+//                        throw e
+//                    } 
+//                    finally {
+//                         cleanWs cleanWhenAborted: false, cleanWhenFailure: false, cleanWhenNotBuilt: false, cleanWhenUnstable: false
+//                    }
+//                }
+//            }
+//            else {
+//                echo "Skip Sonar: ${env.BUILD_ID} on ${env.JENKINS_URL} for branch ${env.BRANCH_NAME}"
+//            }
+//        }
+//    },
     jdk10: {
         stage("JDK 10") {
             echo 'Not implemented yet!'                      
