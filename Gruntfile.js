@@ -247,10 +247,7 @@ module.exports = function(grunt) {
 					options: {
 						banner: label,
 						compress: false,
-	                    sourceMap: false,
-	                    output: {
-	                    	comments: /# sourceURL=\S+\s*$/
-	                    }
+	                    sourceMap: true
 	                },
 					files: {}
 			};
