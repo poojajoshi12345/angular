@@ -279,6 +279,7 @@ module.exports = function(grunt) {
 						js_output_file: jsData.minfile,
 						compilation_level: 'WHITESPACE_ONLY',
 						strict_mode_input: false,
+						warningLevel: 'VERBOSE',
 						create_source_map: jsData.minfile + '.map',
 						output_wrapper: banner + '\n%output%\n//# sourceMappingURL=' + getFileName(jsData.minfile) + '.map'
 					}
