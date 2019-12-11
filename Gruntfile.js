@@ -1,7 +1,20 @@
 module.exports = function(grunt) {
+	
+	require('google-closure-compiler').grunt(grunt);
+	
 	grunt.initConfig({
 		pkg : grunt.file.readJSON('package.json'),
 		replace: {
+			ibx_map_target: {
+        		src: ['./target/classes/META-INF/resources/ibx/resources/js/ibx-all.min.js.map'],
+        		overwrite: true,
+        		replacements: [
+					{
+						from: './target/classes/META-INF/resources/ibx/resources/js/',
+						to: ''
+					}
+				]
+        	},
         	ibx_css_target: {
         		src: ['./target/classes/META-INF/resources/ibx/resources/ibx_resource_bundle.xml'],
         		overwrite: true,
@@ -27,6 +40,22 @@ module.exports = function(grunt) {
 
 	var log = function(data) {
 		console.log(data);
+	};
+	
+	var getFileName = function(name) {
+		var index = name.lastIndexOf('/');
+		if(index != -1) {
+			return name.substring(index + 1);
+		}
+		return name;
+	};
+	
+	var getFilePath = function(name) {
+		var index = name.lastIndexOf('/');
+		if(index != -1) {
+			return name.substring(0, index + 1);
+		}
+		return name;
 	};
 	
 	var getTargetBundlePath = function(file) {
@@ -240,18 +269,21 @@ module.exports = function(grunt) {
 
 	var getJSMinTasks = function(list) {
 		var jsTasks = {};
+		var banner = getBanner();
 		for (var i = 0; i < list.length; i++) {
 			var jsData = list[i];
 			var label = getBanner();
 			var task = {
 					options: {
-						banner: label,
-						compress: false,
-	                    sourceMap: true
-	                },
-					files: {}
+						js: jsData.files,
+						js_output_file: jsData.minfile,
+						compilation_level: 'WHITESPACE_ONLY',
+						strict_mode_input: false,
+						warningLevel: 'VERBOSE',
+						create_source_map: jsData.minfile + '.map',
+						output_wrapper: banner + '\n%output%\n//# sourceMappingURL=' + getFileName(jsData.minfile) + '.map'
+					}
 			};
-			task.files[jsData.minfile] = jsData.files;
 			jsTasks[jsData.minfile] = task;
 		}
 		return jsTasks;
@@ -277,6 +309,24 @@ module.exports = function(grunt) {
 	
 	var getReplaceTasks = function(list) {
 		var replaceTasks = {};
+		
+		for (var i = 0; i < list.length; i++) {
+			var data = list[i];
+			var fromRegex = '';
+			var toString = '';
+			if(data.minfile.endsWith('.js')) {
+				fromString = getFilePath(data.minfile);
+				//fromString = './target/classes/META-INF/resources';
+				toString = '';
+				var task = {
+						src: [data.minfile + '.map'],
+						overwrite: true,
+						replacements: [{from: fromString, to: toString}]
+				};
+				replaceTasks['Target-map-' + i] = task;
+			}
+		}
+		
 		for (var i = 0; i < list.length; i++) {
 			var data = list[i];
 			var fromRegex = '';
@@ -319,14 +369,13 @@ module.exports = function(grunt) {
 	});
 	
 	grunt.config('cssmin', getCSSMinTasks(cssDataList));
-	grunt.config('uglify', getJSMinTasks(jsDataList));
+	grunt.config('closure-compiler', getJSMinTasks(jsDataList));
 	//grunt.config('replace', getReplaceTasks(cssDataList.concat(jsDataList)));
 
 	grunt.loadNpmTasks('grunt-contrib-cssmin');
-	grunt.loadNpmTasks('grunt-contrib-uglify');
 	grunt.loadNpmTasks('grunt-text-replace');
 
 	// Default task.
-	grunt.registerTask('default', ['cssmin', 'uglify', 'replace']);
+	grunt.registerTask('default', ['cssmin', 'closure-compiler', 'replace']);
 
 };
