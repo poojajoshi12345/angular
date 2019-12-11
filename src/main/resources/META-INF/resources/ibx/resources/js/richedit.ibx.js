@@ -177,7 +177,7 @@ $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame,
 			return;
 		}
 
-		//nice...ie must have body focused for selections to work...awesome Microsoft!
+		//nice...ie must have something focused for selections to work.
 		var focusItem = document.activeElement || this.element[0];
 		if(ibxPlatformCheck.isIE)
 			this.element[0].focus();
