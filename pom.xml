@@ -278,8 +278,11 @@
 
 										<java classname="${closure.class}" classpathref="maven.plugin.classpath" fork="true" failonerror="true">
 											<sysproperty key="IBI_Log_Directory" value="${project.build.directory}" />
+											<sysproperty key="failonerror" value="true" />
 											<arg value="--compilation_level" />
 											<arg value="${compilation.level}" />
+											<arg value="--warning_level" />
+											<arg value="VERBOSE" />
 											<arg value="--js_dir" />
 											<arg value="${fileset.dir}" />
 										</java>
@@ -337,16 +340,6 @@
 								<artifactId>ant-nodeps</artifactId>
 								<version>1.8.1</version>
 							</dependency>
-							<dependency>
-    							<groupId>org.apache.ant</groupId>
-    							<artifactId>ant-apache-regexp</artifactId>
-    							<version>1.10.6</version>
-							</dependency>
-							<dependency>
-    							<groupId>jakarta-regexp</groupId>
-    							<artifactId>jakarta-regexp</artifactId>
-    							<version>1.4</version>
-							</dependency>							
 							<dependency>
 								<groupId>com.ibi</groupId>
 								<artifactId>webfocus-testing</artifactId>
