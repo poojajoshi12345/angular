@@ -23,6 +23,7 @@ $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame,
 		if(createContent)
 			this.insertHTML(createContent);
 		this._iFrame.on("focusin", this._onIFrameEvent.bind(this));
+		this._iFrame.on("unload", this._onIFrameEvent.bind(this));
 	},
 	_destroy:function()
 	{
@@ -52,6 +53,13 @@ $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame,
 				this.insertHTML(content.content, content.isHTML, content.replace, content.select);
 				this.element.removeData("createContent");
 			}
+		}
+		else
+		if(e.type == "unload")
+		{
+			//if you move this iframe in the dom, then IE will invalidate the current selection (of course)...so kill it!
+			if(ibx.ibxPlatformCheck.isIE)
+				this._currange = null;
 		}
 		else
 		if(e.type == "focusin" && this._iFrame.is(e.target))
