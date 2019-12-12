@@ -23,7 +23,6 @@ $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame,
 		if(createContent)
 			this.insertHTML(createContent);
 		this._iFrame.on("focusin", this._onIFrameEvent.bind(this));
-		this._iFrame.on("unload", this._onIFrameEvent.bind(this));
 	},
 	_destroy:function()
 	{
@@ -36,15 +35,16 @@ $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame,
 	_onIFrameEvent:function(e)
 	{
 		this._super(e);
-		var cd = this.contentDocument();
 		if(e.type == "load")
 		{
+			var cd = this.contentDocument();
 			cd.designMode = "On";
 			cd.body.contentEditable = true;
 			cd.body.spellcheck = false;
 			cd.body.style.fontFamily = this.options.defaultFont;
 
 			$(cd).on("focusin selectionchange", this._onRichEditDocEvent.bind(this));
+			this.contentWindow().addEventListener("unload", this._onIFrameEvent.bind(this));
 
 			//set the content if this is created from markup and there is html inside the ibxRichEdit markup.
 			var content = this.element.data("createContent");
@@ -58,12 +58,15 @@ $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame,
 		if(e.type == "unload")
 		{
 			//if you move this iframe in the dom, then IE will invalidate the current selection (of course)...so kill it!
-			if(ibx.ibxPlatformCheck.isIE)
+			if(ibxPlatformCheck.isIE)
 				this._currange = null;
 		}
 		else
 		if(e.type == "focusin" && this._iFrame.is(e.target))
+		{
+			var cd = this.contentDocument();
 			cd.body.focus();
+		}
 	},
 	_currange:null,
 	selection:function(nStart, nEnd)
