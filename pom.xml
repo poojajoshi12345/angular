@@ -210,7 +210,7 @@
 		<profile>
 			<id>compile-css-javascript</id>
 			<properties>
-				<frontend.maven.plugin.version>1.6</frontend.maven.plugin.version>
+				<frontend.maven.plugin.version>1.8.0</frontend.maven.plugin.version>
 			</properties>
 			<build>
 				<plugins>
@@ -357,7 +357,7 @@
 				<http.context>/ibi_apps</http.context>
 				<cypress.baseurl>http://localhost:${http.port}${http.context}</cypress.baseurl>
 				<cypress.action>run</cypress.action>
-				<frontend.maven.plugin.version>1.6</frontend.maven.plugin.version>
+				<frontend.maven.plugin.version>1.8.0</frontend.maven.plugin.version>
 			</properties>
 			<build>
 				<plugins>
