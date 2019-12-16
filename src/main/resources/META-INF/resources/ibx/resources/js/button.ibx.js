@@ -341,7 +341,7 @@ $.widget("ibi.ibxButtonGroup", $.ibi.ibxFlexBox,
 	{
 		role: "group",
 		navKeyRoot:true,
-
+		focusDefault:true,
 
 		name: "",
 		form: "",
