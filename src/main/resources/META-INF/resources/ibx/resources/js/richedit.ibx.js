@@ -15,7 +15,7 @@ $.widget("ibi.ibxRichEdit", $.ibi.ibxIFrame,
 	_create:function()
 	{
 		//save any content before super, so we can set it as the text of the rich edit after create.
-		var createContent = this.element.html();
+		var createContent = this.element.html().trim();
 		this.element.empty();
 		this._super();
 
