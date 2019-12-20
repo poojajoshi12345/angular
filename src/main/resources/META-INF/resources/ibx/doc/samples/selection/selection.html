@@ -61,14 +61,15 @@
 						"rubberBand": $(".rubber-band").ibxWidget("checked"),
 						"rubberBandPartialSelect": $(".rubber-band-partial").ibxWidget("checked"),
 					}
-					$(".sel-parent").ibxSelectionManager("option", options);
+					$(".sel-parent").ibxSelectionManager("option", options).ibxSelectionManager("selectableChildren");
+
 				};
 
 				function reset()
 				{
 					$(".drop-target").empty();
 
-					var parent = $(".sel-parent").ibxSelectionManager();
+					var parent = $(".sel-parent");
 					parent.empty();
 					for(var i = 0; i < 50; ++i)
 					{
@@ -86,8 +87,9 @@
 					}
 				}
 
-				reset();
+				$(".sel-parent").ibxSelectionManager();
 				configSelMgr();
+				reset();
 			}, true);
 		</script>
 		<style type="text/css">
