@@ -264,8 +264,17 @@ $.widget("ibi.ibxDateRange", $.ibi.ibxDatePicker,
 
 		if (v <= from)
 		{
-			// extend from
-			this.options.dateFrom = $.datepicker.formatDate(this.options.dateFormat, value);
+			if (v == from && this.options.dateFrom != ''){
+			 	if (this.options.dateTo != this.options.dateFrom)
+					// Second click on from - set one day range
+					this.options.dateTo = $.datepicker.formatDate(this.options.dateFormat, value);
+				else
+					// Clikc on 1 day range - reset to
+					this.options.dateTo = '';
+			}
+			else			
+				// extend from
+				this.options.dateFrom = $.datepicker.formatDate(this.options.dateFormat, value);
 		}
 		else if (v >= to)
 		{
