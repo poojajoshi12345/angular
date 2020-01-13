@@ -4,7 +4,7 @@ def _mvnSpotBugsOpts = "-Dspotbugs.effort=Min -Dspotbugs.fork=false -Dspotbugs.t
 
 def projectProperties = [[
     $class: 'BuildDiscarderProperty',
-    strategy: [$class: 'LogRotator', daysToKeepStr: '5', numToKeepStr: '5']
+    strategy: [$class: 'LogRotator', daysToKeepStr: '7', artifactNumToKeepStr: '1']
 ]]
 properties(projectProperties)
 
