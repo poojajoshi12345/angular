@@ -12,7 +12,7 @@ function ibxBusy(config)
 			"<div class='ibx-busy-btn-box'>"+
 			"</div>"+
 			"",
-		"image":"./loader_small.gif",
+		"image":"",
 		"message":"Loading..."
 	}
 	this._element = document.createElement("div");
@@ -26,7 +26,7 @@ function ibxBusy(config)
 
 		this._config.image = config.image || this._config.image;
 		var elImage = this._element.querySelector(".ibx-busy-img");
-		elImage.style.backgroundImage = "url('" + this._config.image + "')";
+		this._config.image ? elImage.style.backgroundImage = "url('" + this._config.image + "')" : null;
 		
 		this._config.message = config.message || this._config.message;
 		var elMsg = this._element.querySelector(".ibx-busy-msg");
