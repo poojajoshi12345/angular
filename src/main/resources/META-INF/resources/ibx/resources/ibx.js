@@ -187,9 +187,14 @@ ibx._bootstrap = function(isEmbedded)
 {
 	if(isEmbedded)
 	{
+		var preLoadCss = [ibx._path + "./css/busy.ibx.css"];
 		var preLoadCss = [ibx._path + "./css/base.ibx.css"];
 		var preLoadScript = 
 		[
+			/*xtra lightweight busy widget so we can show loading before anything else.*/
+			ibx._path + "./js/busy.ibx.js",
+
+			/*standard ibx bootstrap assets*/
 			ibx._path + "./etc/jquery/jquery.js",
 			ibx._path + "./etc/jquery/jquery-ui-1.12.1/jquery-ui.js",
 			ibx._path + "./js/util.ibx.js",
@@ -231,6 +236,11 @@ ibx._bootstrap = function(isEmbedded)
 	{
 		var scripts = 
 		[
+			/*xtra lightweight busy widget so we can show loading before anything else.*/
+			"<link type='text/css' rel='stylesheet' href='" + ibx._path + "./css/busy.ibx.css'/>",
+			"<sc" + "ript type='text/javascript' src='" + ibx._path + "./js/busy.ibx.js'></sc" + "ript>",
+
+			/*standard ibx bootstrap assets*/
 			"<link type='text/css' rel='stylesheet' href='" + ibx._path + "./css/base.ibx.css'/>",
 			"<sc" + "ript type='text/javascript' src='" + ibx._path + "./etc/jquery/jquery.js'></sc" + "ript>",
 			"<sc" + "ript type='text/javascript' src='" + ibx._path + "./etc/jquery/jquery-ui-1.12.1/jquery-ui.js'></sc" + "ript>",
@@ -249,6 +259,7 @@ ibx._bootstrap = function(isEmbedded)
 		document.write(scripts.join(""));
 		document.close();
 	}
+
 }
 
 //various static resources.

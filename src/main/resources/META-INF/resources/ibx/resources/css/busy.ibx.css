@@ -1,0 +1,40 @@
+/*Copyright 1996-2016 Information Builders, Inc. All rights reserved.*/
+
+.ibx-busy-parent
+{
+	position:relative !important;
+	pointer-events:none !important;
+	opacity:.8;
+}
+
+.ibx-busy-container
+{
+	position:absolute;
+	display:flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	top:0px;
+	left:0px;
+	width:100%;
+	height:100%;
+	box-sizing:border-box;
+	background-color:transparent;
+	opacity:1;
+	user-select: none;
+}
+
+.ibx-busy-msg-box
+{
+	display:flex;
+	align-items:center;
+	justify-content:center;
+	margin-top:5px;
+	border:1px solid red;
+}
+
+.ibx-busy-msg
+{
+	font-family: Arial, Helvetica, sans-serif;
+	font-size:10pt;
+}
