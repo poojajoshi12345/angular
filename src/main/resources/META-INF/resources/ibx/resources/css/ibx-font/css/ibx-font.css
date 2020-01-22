@@ -1,12 +1,9 @@
-/*Copyright 1996-2016 Information Builders, Inc. All rights reserved.*/
-/* $Revision: 1.33 $: */
-
 /*------ Do not changed ------*/
 @font-face {
   font-family: 'ibx Icons';
   src:  url('../fonts/ibx-font.eot?z4id0a');
   src:  url('../fonts/ibx-font.eot?z4id0a#iefix') format('embedded-opentype'),
-    url('../fonts/ibx-font.woff2?z4id0a') format('woff2'),
+/*    url('../fonts/ibx-font.woff2?z4id0a') format('woff2'),*/
     url('../fonts/ibx-font.ttf?z4id0a') format('truetype'),
     url('../fonts/ibx-font.woff?z4id0a') format('woff'),
     url('../fonts/ibx-font.svg?z4id0a#ibx-fonts') format('svg');
@@ -40,7 +37,6 @@
 }
 /*------ Do not changed ------*/
 
-/*------ Update Classes Below ------*/
 .ibx-glyph-filter-small:before {
   content: "\e9ca";
 }
@@ -683,6 +679,9 @@
 }
 .ibx-glyph-align-right:before {
   content: "\e94d";
+}
+.ibx-glyph-align-justify:before {
+  content: "\ea3b";
 }
 .ibx-glyph-cell-merge:before {
   content: "\e931";
