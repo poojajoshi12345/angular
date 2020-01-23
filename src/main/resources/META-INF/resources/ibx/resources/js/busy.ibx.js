@@ -14,7 +14,7 @@ function ibxBusy(config)
 			"",
 		"css":null,
 		"image":"",
-		"message":"Loading...",
+		"message":"",
 		"buttons":[]
 	};
 	this._element = document.createElement("div");
