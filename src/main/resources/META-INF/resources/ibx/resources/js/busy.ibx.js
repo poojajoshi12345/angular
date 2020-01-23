@@ -11,10 +11,26 @@
  */
 
 /**
+* This event will be dispatched by the window as soon as the file 'busy.ibx.js' is loaded. The detail member of the event will
+* be a reference to the {@link ibxBusy.busy} static widget instance.
+* @event ibx_busyready
+* @example
+* window.addEventListener("ibx_busyready", function(e)
+* {
+*     var busyWidget = e.detail;
+*     busyWidget.show(true,
+*     {
+*          "message":"I'm currently busy loading!"
+*     });
+* });
+*/
+
+/**
  * A widget to indicate a portion of the screen is currently busy (or in a modal state).
  * @constructor
  * @param {ibxBusyConfig} [config] Configuration options for the widget.
- */
+ * @fires ibx_busyready
+*/
 function ibxBusy(config)
 {
 	this._config =
@@ -147,26 +163,17 @@ function ibxBusy(config)
  * Static global instance of the ibxBusy widget.  If you only have a single place on the screen that's busy, you can use this, rather than constructing
  * a new widget each time.
  * @static
+ * @example
+ * //in async function...
+ * ibxBusy.busy.show(true, document.querySelector(".my-data-container"), {"message":"Getting Data..."});
+ * let data = await webApp.getSomeData();
+ * ibxBusy.busy.show(false);
+ * ...
  */
 ibxBusy.busy = new ibxBusy();
 
 (function()
 {
-	/**
-	 * When 'busy.ibx.js' is loaded, this event is dispatched from 'window'.  You can use it to know the earliest possible time to display the {@link ibxBusy} widget.
-	 * The event object's detail member will have be a reference to the static {@link ibxBusy.busy} widget.
-	 * @global
-	 * @fires ibx_busyready
-	 * @example
-	 * window.addEventListener("ibx_busyready", function(e)
-	 * {
-	 *     var busyWidget = e.detail;
-	 *     busyWidget.show(true,
-	 *     {
-	 *          "message":"I'm currently busy loading!"
-	 *     });
-	 * });
-	 */
 	var event = document.createEvent("CustomEvent");
 	event.initCustomEvent("ibx_busyready", false, false, ibxBusy.busy);
 	window.dispatchEvent(event);
