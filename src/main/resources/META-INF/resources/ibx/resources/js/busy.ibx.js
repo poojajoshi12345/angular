@@ -1,5 +1,20 @@
 /*Copyright 1996-2016 Information Builders, Inc. All rights reserved.*/
 
+/**
+ * Configuration object for ibxBusy widget.
+ * @typedef {object} ibxBusyConfig
+ * @property {string} [template] The HTML template to use for the busy widget.
+ * @property {string} [css] Inline css class definitiations
+ * @property {url} [image] The url to the image you want displayed. There is a default image embedded in the css file.
+ * @property {string} [message] The message to display with the image.
+ * @property {array} [buttons] An array of HTML elements to display under the message...generally buttons, or button-like elements.
+ */
+
+/**
+ * A widget to indicate a portion of the screen is currently busy (or in a modal state).
+ * @constructor
+ * @param {ibxBusyConfig} [config] Configuration options for the widget.
+ */
 function ibxBusy(config)
 {
 	this._config =
@@ -20,6 +35,11 @@ function ibxBusy(config)
 	this._element = document.createElement("div");
 	this._element.classList.add("ibx-busy-container");
 
+	/**
+	 * Initialize the ibxBusy widget.
+	 * @param {ibxBusyConfig} [config] Configuration options for the widget.  You can pass only the options you want to override from the defaults.
+	 * @returns {ibxBusyConfig} The current configuration object for the widget.
+	 */
 	this.init = function(config)
 	{
 		config = config || {};
@@ -52,21 +72,41 @@ function ibxBusy(config)
 			this._config.buttons = config.buttons || this._config.buttons;
 			btnBox.innerHTML = this._config.buttons.join(" ");
 		}
+		return this._config;
 	};
 	this.init(config);
 
+	/**
+	 * Is the widget currently visible.
+	 * @returns {boolean} Indicating if the widget is visible.
+	 */
 	this.isVisible = function()
 	{
 		return this._element.parentElement ? true : false;
 	};
 
+	/**
+	 * Get the widget's element.
+	 * @returns {DOMElement} The div element that represents the widget.
+	 */
 	this.getElement = function()
 	{
 		return this._element;
 	};
 
+	/**
+	 * Show/Hide the widget.
+	 * @param {boolean} bShow=true Show, or hide, the widget.
+	 * @param {DOMElement} [elParent=document.documentElement] The widget's parent element
+	 * @param {ibxBusyConfig} [config] The widget's config options.
+	 *//**
+	 * @param {boolean} bShow=true Show, or hide, the widget.
+	 * @param {ibxBusyConfig} [config] The widget's config options.
+	 */
 	this.show = function(bShow, elParent, config)
 	{
+		bShow = (bShow === undefined) ? true : bShow;
+
 		//overloaded so elParent can be config and elParent defaults to documentElement.
 		config = (elParent instanceof HTMLElement) ? config : elParent;
 		elParent = (elParent instanceof HTMLElement) ? elParent : document.documentElement;
@@ -75,8 +115,8 @@ function ibxBusy(config)
 		{
 			this.init(config);
 			document.head.appendChild(this._css);
-			elParent.classList.add("ibx-busy-parent");
 			elParent.appendChild(this._element);
+			elParent.classList.add("ibx-busy-parent");
 		}
 		else
 		if(this._element.parentElement)
@@ -88,6 +128,11 @@ function ibxBusy(config)
 		return this._element;
 	};
 
+	/**
+	 * Get/Set the widget's message.
+	 * @param {string} [msg=undefined] Pass a value to set the message, or nothing to retrieve it.
+	 * @returns {string} The current value for the widget's message.
+	 */
 	this.message = function(msg)
 	{
 		var elMsg = this._element.querySelector(".ibx-busy-msg");
@@ -97,12 +142,32 @@ function ibxBusy(config)
 		return elMsg.innerText;
 	};
 }
+
+/**
+ * Static global instance of the ibxBusy widget.  If you only have a single place on the screen that's busy, you can use this, rather than constructing
+ * a new widget each time.
+ * @static
+ */
 ibxBusy.busy = new ibxBusy();
 
 (function()
 {
+	/**
+	 * When 'busy.ibx.js' is loaded, then this event is dispatched from 'window'.  You can use it to know the earlies possible time to display the {@link ibxBusy} widget.
+	 * @global
+	 * @fires ibx_busyready
+	 * @example
+	 * window.addEventListener("ibx_busyready", function(e)
+	 * {
+	 *     var busyWidget = e.detail;
+	 *     busyWidget.show(true,
+	 *     {
+	 *          "message":"I'm currently busy loading!"
+	 *     });
+	 * });
+	 */
 	var event = document.createEvent("CustomEvent");
-	event.initCustomEvent("ibxbusyready", false, false, null);
+	event.initCustomEvent("ibx_busyready", false, false, ibxBusy.busy);
 	window.dispatchEvent(event);
 })()
 
