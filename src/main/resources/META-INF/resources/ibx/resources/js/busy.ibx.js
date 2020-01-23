@@ -3,20 +3,20 @@
 function ibxBusy(config)
 {
 	this._config =
-	{
-		"template":
-			"<div class='ibx-busy-img'></div>"+
-			"<div class='ibx-busy-msg-box'>"+
-				"<div class='ibx-busy-msg'></div>"+
-			"</div>"+
-			"<div class='ibx-busy-btn-box'>"+
-			"</div>"+
-			"",
-		"css":null,
-		"image":"",
-		"message":"",
-		"buttons":[]
-	};
+{
+	"template":
+		"<div class='ibx-busy-img'></div>"+
+		"<div class='ibx-busy-msg-box'>"+
+			"<div class='ibx-busy-msg'></div>"+
+		"</div>"+
+		"<div class='ibx-busy-btn-box'>"+
+		"</div>"+
+		"",
+	"css":"",
+	"image":"",
+	"message":"",
+	"buttons":[]
+};
 	this._element = document.createElement("div");
 	this._element.classList.add("ibx-busy-container");
 
