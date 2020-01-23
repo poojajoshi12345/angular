@@ -12,6 +12,7 @@ function ibxBusy(config)
 			"<div class='ibx-busy-btn-box'>"+
 			"</div>"+
 			"",
+		"css":null,
 		"image":"",
 		"message":"Loading..."
 	}
@@ -22,7 +23,13 @@ function ibxBusy(config)
 	{
 		config = config || {};
 		this._config.template = config.template || this._config.template;
+		this._config.css = config.css || this._config.css;
 		this._element.innerHTML = this._config.template;
+
+		this._css = document.createElement("style");
+		this._css.setAttribute("type", "text/css");
+		this._css.classList.add("ibx-busy-styles");
+		this._css.innerText = this._config.css;
 
 		this._config.image = config.image || this._config.image;
 		var elImage = this._element.querySelector(".ibx-busy-img");
@@ -47,12 +54,14 @@ function ibxBusy(config)
 
 		if(bShow)
 		{
+			document.head.appendChild(this._css);
 			elParent.classList.add("ibx-busy-parent");
 			elParent.appendChild(this._element);
 		}
 		else
 		if(this._element.parentElement)
 		{
+			document.head.removeChild(document.querySelector(".ibx-busy-styles"));
 			this._element.parentElement.classList.remove("ibx-busy-parent");
 			this._element.parentElement.removeChild(this._element);
 		}
