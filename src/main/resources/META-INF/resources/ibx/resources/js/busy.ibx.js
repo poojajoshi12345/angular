@@ -153,7 +153,8 @@ ibxBusy.busy = new ibxBusy();
 (function()
 {
 	/**
-	 * When 'busy.ibx.js' is loaded, then this event is dispatched from 'window'.  You can use it to know the earlies possible time to display the {@link ibxBusy} widget.
+	 * When 'busy.ibx.js' is loaded, this event is dispatched from 'window'.  You can use it to know the earliest possible time to display the {@link ibxBusy} widget.
+	 * The event object's detail member will have be a reference to the static {@link ibxBusy.busy} widget.
 	 * @global
 	 * @fires ibx_busyready
 	 * @example
