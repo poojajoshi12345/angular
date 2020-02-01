@@ -252,8 +252,6 @@ $.widget("ibi.ibxWidget", $.Widget,
 		var eType = e.type;
 		if(eType == "mouseover" && !this._ttPopup)
 		{
-			console.warn("[ibxWidget] Don't use options.tooltip, not fully supported, use element's 'title' attribute.");
-
 			//let the user stop/modify the tooltip
 			var tt = this.options.tooltip;
 			var event = this.element.dispatchEvent("ibx_beforeshowtooltip", tt, true, true);
@@ -269,6 +267,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 
 			if(tt)
 			{
+				console.warn("[ibxWidget] Don't use options.tooltip, not fully supported, use element's 'title' attribute.");
 				var ttWidget = tt.data("ibxWidget");
 				var delay = ttWidget.options.delay;
 				this._ttTimer = window.setTimeout(function(ttWidget)
