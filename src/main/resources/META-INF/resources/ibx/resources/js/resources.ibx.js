@@ -120,7 +120,7 @@ _p._onBundleFileLoaded = function(xDoc, status, xhr)
 	//successfully loaded...move needed stuff to the xDoc for loading.
 	xDoc.resLoaded = xhr.resLoaded;
 	xDoc.src = xhr.src;
-	xDoc.path = xDoc.src.substring(0, xDoc.src.lastIndexOf("/") + 1);
+	xDoc.path = xDoc.src.substring(0, xDoc.src.lastIndexOf("/") + 1).replace(/\.[\/\\]/g, "");
 	this.loadBundle(xDoc);
 };
 _p._onBundleFileProgress = function()
@@ -130,6 +130,7 @@ _p._onBundleFileLoadError = function(xhr, status, msg)
 {
 	$(window).dispatchEvent("ibx_ibxresmgr", {"hint":"load_error", "loadDepth":this._loadDepth, "resMgr":this, "bundle":null, "xhr":xhr, "status":status, "msg":msg});
 	console.error(sformat("[ibx Error] {1}\n{2}", xhr.statusText, msg));
+	xhr.resLoaded.resolve();
 };
 
 _p.loadExternalResFile = function(elFile, bundle)

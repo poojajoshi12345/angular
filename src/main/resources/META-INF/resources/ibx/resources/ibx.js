@@ -130,7 +130,7 @@ function ibx()
 					var packages = ibx._loadPromise._resPackages;
 					
 					if(!packages.length || !packages[0].ibxIncluded)
-						packages.unshift("./ibx_resource_bundle.xml");
+						packages.unshift(ibx.resBundlePath);
 
 					$(window).dispatchEvent("ibx_ibxevent", {"hint":"resourcesloadstart", "ibx":ibx});
 					ibx.resourceMgr.addBundles(packages).done(function ibx_addBundlesDone()
@@ -273,6 +273,7 @@ ibx.loadProfile = null;		//profile for load cycle
 ibx.resourceMgr = null;		//ibx default resource manager	
 ibx.forceLinkLoading = true;//[IBX-152] will force asynchronous loading of javascript via script tags.
 ibx.forceInlineresLoaded = false;//[ACT-1571]Needed a way to package ibx into single file...this forces all script/css to be inline.
+ibx.resBundlePath = {src:"./ibx_resource_bundle.xml", loadContext:"ibx"};//default resource bundle for ibx.
 
 //where ibx.js loaded from
 ibx._path = "";
