@@ -13,7 +13,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 		"externalDropTarget":false,		//can you drop external things on this (like native OS files).
 		"wantResize":false,
 		"opaque":false,					//add iframe behind to stop pdf from bleading through.
-		"tooltip":null,
+		"tooltip":null,					//DON'T USE THIS OPTION...NOT FULLY SUPPORTED...use element's 'title' attribute instead.
 
 		//for selection and keyboard naviation (circular tabbing/arrow keys)
 		//These are just passthrough options for the attached ibxSelectionManager widget.
@@ -267,6 +267,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 
 			if(tt)
 			{
+				console.warn("[ibxWidget] Don't use options.tooltip, not fully supported, use element's 'title' attribute.");
 				var ttWidget = tt.data("ibxWidget");
 				var delay = ttWidget.options.delay;
 				this._ttTimer = window.setTimeout(function(ttWidget)
