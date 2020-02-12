@@ -1,5 +1,41 @@
 /*Copyright 1996-2016 Information Builders, Inc. All rights reserved.*/
 
+if (typeof Object.assign !== 'function')
+{
+	// Must be writable: true, enumerable: false, configurable: true
+	Object.defineProperty(Object, "assign",
+	{
+		value: function assign(target, varArgs)
+		{
+			'use strict';
+			if (target === null || target === undefined)
+			{
+				throw new TypeError('Cannot convert undefined or null to object');
+			}
+
+			var to = Object(target);
+			for (var index = 1; index < arguments.length; index++)
+			{
+				var nextSource = arguments[index];
+				if (nextSource !== null && nextSource !== undefined)
+				{ 
+					for (var nextKey in nextSource)
+					{
+						// Avoid bugs when hasOwnProperty is shadowed
+						if (Object.prototype.hasOwnProperty.call(nextSource, nextKey))
+						{
+						to[nextKey] = nextSource[nextKey];
+						}
+					}
+				}
+			}
+			return to;
+		},
+		writable: true,
+		configurable: true
+	});
+}
+
 /**
  * Configuration object for ibxBusy widget.
  * @typedef {object} ibxBusyConfig
@@ -33,21 +69,6 @@
 */
 function ibxBusy(config)
 {
-	this._config =
-	{
-		"template":
-			"<div class='ibx-busy-msg-box'>"+
-				"<div class='ibx-busy-msg'></div>"+
-			"</div>"+
-			"<div class='ibx-busy-img'></div>"+
-			"<div class='ibx-busy-btn-box'>"+
-			"</div>"+
-			"",
-		"css":"",
-		"image":"",
-		"message":"",
-		"buttons":[]
-	};
 	this._element = document.createElement("div");
 	this._element.classList.add("ibx-busy-container");
 
@@ -58,39 +79,32 @@ function ibxBusy(config)
 	 */
 	this.init = function(config)
 	{
-		config = config || {};
-		this._config.template = config.template || this._config.template;
-		this._config.css = config.css || this._config.css;
-		this._element.innerHTML = this._config.template;
+		config = Object.assign(ibxBusy.config, config);
+		this._element.innerHTML = config.template;
 
 		this._css = document.createElement("style");
 		this._css.setAttribute("type", "text/css");
 		this._css.classList.add("ibx-busy-styles");
-		this._css.innerText = this._config.css;
+		this._css.innerText = config.css;
 
 		var elImage = this._element.querySelector(".ibx-busy-img");
 		if(elImage)
 		{
-			this._config.image = config.image || this._config.image;
-			this._config.image ? elImage.style.backgroundImage = "url('" + this._config.image + "')" : null;
+			elImage.className = "ibx-busy-img " + config.imageClass;
+			config.image ? elImage.style.backgroundImage = "url('" + config.image + "')" : null;
 		}
 
 		var elMsg = this._element.querySelector(".ibx-busy-msg");
 		if(elMsg)
-		{
-			this._config.message = config.message || this._config.message;
-			elMsg.innerText = this._config.message;
-		}
+			elMsg.innerText = config.message;
 
 		var btnBox = this._element.querySelector(".ibx-busy-btn-box");
 		if(btnBox)
 		{
-			this._config.buttons = config.buttons || this._config.buttons;
-			btnBox.innerHTML = this._config.buttons.join(" ");
+			btnBox.innerHTML = config.buttons.join(" ");
 		}
-		return this._config;
+		return config;
 	};
-	this.init(config);
 
 	/**
 	 * Is the widget currently visible.
@@ -129,7 +143,7 @@ function ibxBusy(config)
 
 		if(bShow)
 		{
-			this.init(config);
+			var config = this.init(config);
 			document.head.appendChild(this._css);
 			elParent.appendChild(this._element);
 			elParent.classList.add("ibx-busy-parent");
@@ -158,6 +172,45 @@ function ibxBusy(config)
 		return elMsg.innerText;
 	};
 }
+ibxBusy.config = 
+{
+	"template":
+		"<div class='ibx-busy-msg-box'>"+
+			"<div class='ibx-busy-msg'></div>"+
+		"</div>"+
+		"<div class='ibx-busy-img'></div>"+
+		"<div class='ibx-busy-btn-box'>"+
+		"</div>"+
+		"",
+	"css":"",
+	"imageClass":"svg-purple-rings",
+	"image":"",
+	"message":"",
+	"buttons":[]
+};
+
+(function()
+{
+	var event = document.createEvent("CustomEvent");
+	event.initCustomEvent("ibx_busyready", false, false, ibxBusy.busy);
+	window.dispatchEvent(event);
+})()
+
+
+function ibxBusyCancel(config)
+{
+	var config = 
+	{
+		"message":"Busy Cancel",
+		"buttons":
+		[
+			"<button class='btn-cancel'>Cancel</button>",
+		]
+	};
+	ibxBusy.call(this, config);
+}
+ibxBusyCancel.prototype = Object.create(ibxBusy);
+
 
 /**
  * Static global instance of the ibxBusy widget.  If you only have a single place on the screen that's busy, you can use this, rather than constructing
@@ -170,13 +223,12 @@ function ibxBusy(config)
  * ibxBusy.busy.show(false);
  * ...
  */
-ibxBusy.busy = new ibxBusy();
-
-(function()
+ibxBusy.busy = 
 {
-	var event = document.createEvent("CustomEvent");
-	event.initCustomEvent("ibx_busyready", false, false, ibxBusy.busy);
-	window.dispatchEvent(event);
-})()
+	"generic": new ibxBusy(),
+	"cancel": new ibxBusyCancel()
+};
+
+
 
 //# sourceURL=busy.ibx.js
