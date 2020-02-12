@@ -58,11 +58,6 @@
 	align-items:center;
 	justify-content:center;
 	pointer-events: all;
-	margin-top:5px;
-}
-
-.ibx-busy-btn-box > *
-{
 	margin-top:.5em;
 }
 
@@ -71,10 +66,18 @@
 	border-radius:4px;
 	border:1px solid #3455db;
 	padding:.85em;
+	margin:0px .25em 0px .25em;
 	outline:none;
 	font-size:.8em;
 	font-weight:900;
 	color:#3455db;
+}
+
+.ibx-busy-btn-box > button:hover
+{
+	border:1px solid #142772;
+	color:#ffff;
+	background:#142772;
 }
 
 .ibx-busy-img

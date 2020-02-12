@@ -37,16 +37,6 @@ if (typeof Object.assign !== 'function')
 }
 
 /**
- * Configuration object for ibxBusy widget.
- * @typedef {object} ibxBusyConfig
- * @property {string} [template] The HTML template to use for the busy widget.
- * @property {string} [css] Inline css class definitiations
- * @property {url} [image] The url to the image you want displayed. There is a default image embedded in the css file.
- * @property {string} [message] The message to display with the image.
- * @property {array} [buttons] An array of HTML elements to display under the message...generally buttons, or button-like elements.
- */
-
-/**
 * This event will be dispatched by the window as soon as the file 'busy.ibx.js' is loaded. The detail member of the event will
 * be a reference to the {@link ibxBusy.busy} static widget instance.
 * @event ibx_busyready
@@ -172,6 +162,17 @@ function ibxBusy(config)
 		return elMsg.innerText;
 	};
 }
+
+/**
+ * Configuration object for ibxBusy widget.
+ * @typedef {object} ibxBusyConfig
+ * @property {string} [template] The HTML template to use for the busy widget.
+ * @property {string} [css] Inline css class definitiations
+ * @property {string} [imageClasses] The css classes to apply to the image (great place to add an embedded image from css). 
+ * @property {url} [image] The url to the image you want displayed. There is a default image embedded in the css file.
+ * @property {string} [message] The message to display with the image.
+ * @property {array} [buttons] An array of HTML elements to display under the message...generally buttons, or button-like elements.
+ */
 ibxBusy.defaultConfig = 
 {
 	"template":
