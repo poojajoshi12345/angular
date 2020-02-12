@@ -175,11 +175,13 @@ function ibxBusy(config)
 ibxBusy.defaultConfig = 
 {
 	"template":
-		"<div class='ibx-busy-msg-box'>"+
-			"<div class='ibx-busy-msg'></div>"+
-		"</div>"+
-		"<div class='ibx-busy-img'></div>"+
-		"<div class='ibx-busy-btn-box'>"+
+		"<div class='ibx-busy-content-box'>"+
+			"<div class='ibx-busy-msg-box'>"+
+				"<div class='ibx-busy-msg'></div>"+
+			"</div>"+
+			"<div class='ibx-busy-img'></div>"+
+			"<div class='ibx-busy-btn-box'>"+
+			"</div>"+
 		"</div>"+
 		"",
 	"css":"",
