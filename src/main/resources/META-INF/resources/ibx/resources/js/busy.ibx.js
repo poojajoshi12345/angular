@@ -138,7 +138,7 @@ function ibxBusy(config)
 		bShow = (bShow === undefined) ? true : bShow;
 
 		//overloaded so elParent can be config and elParent defaults to documentElement.
-		config = (elParent instanceof HTMLElement) ? config : elParent;
+		config = (config === undefined && !(elParent instanceof HTMLElement)) ? elParent : config
 		elParent = (elParent instanceof HTMLElement) ? elParent : document.documentElement;
 
 		if(bShow)
