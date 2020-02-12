@@ -79,7 +79,7 @@ function ibxBusy(config)
 	 */
 	this.init = function(config)
 	{
-		config = Object.assign(ibxBusy.config, config);
+		config = Object.assign({}, ibxBusy.defaultConfig, config);
 		this._element.innerHTML = config.template;
 
 		this._css = document.createElement("style");
@@ -172,7 +172,7 @@ function ibxBusy(config)
 		return elMsg.innerText;
 	};
 }
-ibxBusy.config = 
+ibxBusy.defaultConfig = 
 {
 	"template":
 		"<div class='ibx-busy-msg-box'>"+
@@ -189,31 +189,8 @@ ibxBusy.config =
 	"buttons":[]
 };
 
-(function()
-{
-	var event = document.createEvent("CustomEvent");
-	event.initCustomEvent("ibx_busyready", false, false, ibxBusy.busy);
-	window.dispatchEvent(event);
-})()
-
-
-function ibxBusyCancel(config)
-{
-	var config = 
-	{
-		"message":"Busy Cancel",
-		"buttons":
-		[
-			"<button class='btn-cancel'>Cancel</button>",
-		]
-	};
-	ibxBusy.call(this, config);
-}
-ibxBusyCancel.prototype = Object.create(ibxBusy);
-
-
 /**
- * Static global instance of the ibxBusy widget.  If you only have a single place on the screen that's busy, you can use this, rather than constructing
+ * Static global instances of the ibxBusy widget.  If you only have a single place on the screen that's busy, you can use this, rather than constructing
  * a new widget each time.
  * @static
  * @example
@@ -223,12 +200,13 @@ ibxBusyCancel.prototype = Object.create(ibxBusy);
  * ibxBusy.busy.show(false);
  * ...
  */
-ibxBusy.busy = 
+ibxBusy.busy = new ibxBusy();
+
+(function()
 {
-	"generic": new ibxBusy(),
-	"cancel": new ibxBusyCancel()
-};
-
-
+	var event = document.createEvent("CustomEvent");
+	event.initCustomEvent("ibx_busyready", false, false, ibxBusy.busy);
+	window.dispatchEvent(event);
+})()
 
 //# sourceURL=busy.ibx.js
