@@ -1,14 +1,40 @@
 /*Copyright 1996-2016 Information Builders, Inc. All rights reserved.*/
 
-/**
- * Configuration object for ibxBusy widget.
- * @typedef {object} ibxBusyConfig
- * @property {string} [template] The HTML template to use for the busy widget.
- * @property {string} [css] Inline css class definitiations
- * @property {url} [image] The url to the image you want displayed. There is a default image embedded in the css file.
- * @property {string} [message] The message to display with the image.
- * @property {array} [buttons] An array of HTML elements to display under the message...generally buttons, or button-like elements.
- */
+if (typeof Object.assign !== 'function')
+{
+	// Must be writable: true, enumerable: false, configurable: true
+	Object.defineProperty(Object, "assign",
+	{
+		value: function assign(target, varArgs)
+		{
+			'use strict';
+			if (target === null || target === undefined)
+			{
+				throw new TypeError('Cannot convert undefined or null to object');
+			}
+
+			var to = Object(target);
+			for (var index = 1; index < arguments.length; index++)
+			{
+				var nextSource = arguments[index];
+				if (nextSource !== null && nextSource !== undefined)
+				{ 
+					for (var nextKey in nextSource)
+					{
+						// Avoid bugs when hasOwnProperty is shadowed
+						if (Object.prototype.hasOwnProperty.call(nextSource, nextKey))
+						{
+						to[nextKey] = nextSource[nextKey];
+						}
+					}
+				}
+			}
+			return to;
+		},
+		writable: true,
+		configurable: true
+	});
+}
 
 /**
 * This event will be dispatched by the window as soon as the file 'busy.ibx.js' is loaded. The detail member of the event will
@@ -33,21 +59,6 @@
 */
 function ibxBusy(config)
 {
-	this._config =
-	{
-		"template":
-			"<div class='ibx-busy-msg-box'>"+
-				"<div class='ibx-busy-msg'></div>"+
-			"</div>"+
-			"<div class='ibx-busy-img'></div>"+
-			"<div class='ibx-busy-btn-box'>"+
-			"</div>"+
-			"",
-		"css":"",
-		"image":"",
-		"message":"",
-		"buttons":[]
-	};
 	this._element = document.createElement("div");
 	this._element.classList.add("ibx-busy-container");
 
@@ -58,39 +69,32 @@ function ibxBusy(config)
 	 */
 	this.init = function(config)
 	{
-		config = config || {};
-		this._config.template = config.template || this._config.template;
-		this._config.css = config.css || this._config.css;
-		this._element.innerHTML = this._config.template;
+		config = Object.assign({}, ibxBusy.defaultConfig, config);
+		this._element.innerHTML = config.template;
 
 		this._css = document.createElement("style");
 		this._css.setAttribute("type", "text/css");
 		this._css.classList.add("ibx-busy-styles");
-		this._css.innerText = this._config.css;
+		this._css.innerText = config.css;
 
 		var elImage = this._element.querySelector(".ibx-busy-img");
 		if(elImage)
 		{
-			this._config.image = config.image || this._config.image;
-			this._config.image ? elImage.style.backgroundImage = "url('" + this._config.image + "')" : null;
+			elImage.className = "ibx-busy-img " + config.imageClass;
+			config.image ? elImage.style.backgroundImage = "url('" + config.image + "')" : null;
 		}
 
 		var elMsg = this._element.querySelector(".ibx-busy-msg");
 		if(elMsg)
-		{
-			this._config.message = config.message || this._config.message;
-			elMsg.innerText = this._config.message;
-		}
+			elMsg.innerText = config.message;
 
 		var btnBox = this._element.querySelector(".ibx-busy-btn-box");
 		if(btnBox)
 		{
-			this._config.buttons = config.buttons || this._config.buttons;
-			btnBox.innerHTML = this._config.buttons.join(" ");
+			btnBox.innerHTML = config.buttons.join(" ");
 		}
-		return this._config;
+		return config;
 	};
-	this.init(config);
 
 	/**
 	 * Is the widget currently visible.
@@ -124,12 +128,12 @@ function ibxBusy(config)
 		bShow = (bShow === undefined) ? true : bShow;
 
 		//overloaded so elParent can be config and elParent defaults to documentElement.
-		config = (elParent instanceof HTMLElement) ? config : elParent;
+		config = (config === undefined && !(elParent instanceof HTMLElement)) ? elParent : config
 		elParent = (elParent instanceof HTMLElement) ? elParent : document.documentElement;
 
 		if(bShow)
 		{
-			this.init(config);
+			var config = this.init(config);
 			document.head.appendChild(this._css);
 			elParent.appendChild(this._element);
 			elParent.classList.add("ibx-busy-parent");
@@ -160,7 +164,42 @@ function ibxBusy(config)
 }
 
 /**
- * Static global instance of the ibxBusy widget.  If you only have a single place on the screen that's busy, you can use this, rather than constructing
+ * Configuration object for ibxBusy widget.
+ * @typedef {object} ibxBusyConfig
+ * @property {string} [template] The HTML template to use for the busy widget.
+ * @property {string} [css] Inline css class definitiations
+ * @property {string} [imageClasses] The css classes to apply to the image (great place to add an embedded image from css). 
+ * @property {url} [image] The url to the image you want displayed. There is a default image embedded in the css file.
+ * @property {string} [message] The message to display with the image.
+ * @property {array} [buttons] An array of HTML elements to display under the message...generally buttons, or button-like elements.
+ */
+
+/**
+ * The default configuration options for ibxBusy widgets.
+ * @type ibxBusyConfig
+ * @memberof ibxBusy
+ */
+ibxBusy.defaultConfig = 
+{
+	"template":
+		"<div class='ibx-busy-content-box'>"+
+			"<div class='ibx-busy-msg-box'>"+
+				"<div class='ibx-busy-msg'></div>"+
+			"</div>"+
+			"<div class='ibx-busy-img'></div>"+
+			"<div class='ibx-busy-btn-box'>"+
+			"</div>"+
+		"</div>"+
+		"",
+	"css":"",
+	"imageClass":"svg-purple-rings",
+	"image":"",
+	"message":"",
+	"buttons":[]
+};
+
+/**
+ * Static global instances of the ibxBusy widget.  If you only have a single place on the screen that's busy, you can use this, rather than constructing
  * a new widget each time.
  * @static
  * @example
