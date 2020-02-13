@@ -173,6 +173,12 @@ function ibxBusy(config)
  * @property {string} [message] The message to display with the image.
  * @property {array} [buttons] An array of HTML elements to display under the message...generally buttons, or button-like elements.
  */
+
+/**
+ * The default configuration options for ibxBusy widgets.
+ * @type ibxBusyConfig
+ * @memberof ibxBusy
+ */
 ibxBusy.defaultConfig = 
 {
 	"template":
