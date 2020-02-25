@@ -401,10 +401,40 @@ $.ibi.ibxRadioMenuItem.statics =
 };
 
 /******************************************************************************
-	ibxMenuSeparator
+	ibxMenuSeparator/ibxMenuSeparatorLabel
 	Just a utility widget for handling a menu separator...really just sets the class on the div.
+	And separator that let's you apply a label.
 ******************************************************************************/
 $.widget("ibi.ibxMenuSeparator", $.ibi.ibxWidget,{options:{"aria":{"role":"separator", "hidden":true}},_widgetClass: "ibx-menu-separator",});
+$.widget("ibi.ibxMenuSeparatorLabel", $.ibi.ibxHBox,
+{
+	options:
+	{
+		text:"",
+		align:"center"
+	},
+	_widgetClass:"ibx-menu-separator-label",
+	_create:function()
+	{
+		this._super();
+
+		var options = this.options;
+		//alternate to data-ibxp-text...direct text node children can be used to set the text.
+		options.text = options.text || this.element.textNodes().remove().text().replace(/^\s*|\s*$/g, "");
+		this._lineStart = $("<span class='ibx-menu-separator-line-start'></span>");
+		this._text = $("<span class='ibx-menu-separator-label-text'></span>");
+		this._lineEnd = $("<span class='ibx-menu-separator-line-end'></span>");
+		this.add($([this._lineStart[0], this._text[0], this._lineEnd[0]]));
+		this.element.ibxAddClass("ibx-menu-separator")
+	},
+	_refresh:function()
+	{
+		this._super();
+		var options = this.options;
+		this._text.text(options.text);
+	}
+});
+
 
 /******************************************************************************
 	ibxMenuBar

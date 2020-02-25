@@ -267,3 +267,31 @@
 }
 
 
+/***********************************MENU SEPARATOR WITH LABEL***********************************/
+.ibx-menu-separator-label
+{
+	border:none;
+}
+.ibx-menu-separator-label-text
+{
+	font-size:.7em;
+	font-weight: bold;
+	color:#888;
+}
+.ibx-menu-separator-line-start
+{
+	flex:0 0 auto;
+	width:1em;
+	margin-right:.4em;
+	border-top:1px solid #ccc;
+}
+.ibx-menu-separator-line-end
+{
+	flex:1 1 auto;
+	width:1em;
+	margin-left:.4em;
+	border-top:1px solid #ccc;
+}
+
+
+
