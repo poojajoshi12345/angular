@@ -14,18 +14,24 @@
 	align-items: center;
 	justify-content: center;
 	position:absolute;
-	top:0px;
-	left:0px;
+	top:0;
+	left:0;
 	width:100%;
 	height:100%;
 	z-index: 1000000;
 	box-sizing:border-box;
 	overflow:hidden;
-	background-color:transparent;
 	opacity:1;
 	user-select: none;
 	pointer-events:all;
 	font-family:Arial, "sans-serif";
+
+	-webkit-backdrop-filter: blur(2px);
+	backdrop-filter: blur(2px);
+
+	/*for ie 11 - */
+	background-color: rgba(255, 255, 255, .8);
+
 }
 
 .ibx-busy-content-box
@@ -40,7 +46,7 @@
 	display:flex;
 	align-items:center;
 	justify-content:center;
-	margin-top:.5em;
+	margin-bottom:1em;
 	font-size:1.5em;
 	font-weight:900;
 	color: #34515e;
@@ -58,7 +64,7 @@
 	align-items:center;
 	justify-content:center;
 	pointer-events: all;
-	margin-top:.5em;
+	margin-top:1em;
 }
 
 .ibx-busy-btn-box > button
