@@ -228,6 +228,9 @@ $Revision: 1.123 $:-->
 
 		<!--IBX FONT ASSETS-->
 		<style-file src="./css/ibx-font/css/ibx-font.css" pkg-nopackage="true"/>
+		<style-file src="./css/ds-font/style.css" pkg-nopackage="true"/>
+
+
 		<!--IBX CSS ASSETS-->
 		<style-file src="./css/widget.ibx.css"/>
 		<style-file src="./css/events.ibx.css"/>
