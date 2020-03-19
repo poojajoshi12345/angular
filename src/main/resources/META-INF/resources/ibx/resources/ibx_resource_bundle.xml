@@ -227,8 +227,7 @@ $Revision: 1.123 $:-->
 		<style-file src="./etc/google/css/roboto-v20.css" pkg-nopackage="true"/>
 
 		<!--IBX FONT ASSETS-->
-		<!-- <style-file src="./css/ibx-font/css/ibx-font.css" pkg-nopackage="true"/> -->
-
+		<style-file src="./css/ibx-font/css/ibx-font.css" pkg-nopackage="true"/>
 		<style-file src="./css/ds-font/style.css" pkg-nopackage="true"/>
 
 
