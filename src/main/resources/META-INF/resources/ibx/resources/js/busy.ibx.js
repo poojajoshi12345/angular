@@ -122,6 +122,7 @@ function ibxBusy(config)
 	 *//**
 	 * @param {boolean} bShow=true Show, or hide, the widget.
 	 * @param {ibxBusyConfig} [config] The widget's config options.
+	 * @returns {HTMLElement} The parsed HTML representing the template.
 	 */
 	this.show = function(bShow, elParent, config)
 	{
