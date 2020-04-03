@@ -6,6 +6,7 @@ $.widget("ibi.ibxButton", $.ibi.ibxLabel,
 {
 	options:
 	{
+		"triggerCmdOnDblClick":false,
 		"iconPosition": "left",
 		"justify":"center",
 		"aria":{"role":"button"}
@@ -22,7 +23,8 @@ $.widget("ibi.ibxButton", $.ibi.ibxLabel,
 	},
 	_onButtonClickEvent:function(e)
 	{
-		this.doCommandAction("trigger");
+		if(e.detail === 1 || (e.detail === 2 && this.options.triggerCmdOnDblClick))
+			this.doCommandAction("trigger");
 	},
 	_onKeyEvent: function (e)
 	{
