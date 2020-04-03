@@ -187,8 +187,7 @@ ibx._bootstrap = function(isEmbedded)
 {
 	if(isEmbedded)
 	{
-		var preLoadCss = [ibx._path + "./css/busy.ibx.css"];
-		var preLoadCss = [ibx._path + "./css/base.ibx.css"];
+		var preLoadCss = [ibx._path + "./css/busy.ibx.css", ibx._path + "./css/base.ibx.css"];
 		var preLoadScript = 
 		[
 			/*xtra lightweight busy widget so we can show loading before anything else.*/
