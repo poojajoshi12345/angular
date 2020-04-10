@@ -445,7 +445,7 @@ $.widget("ibi.ibxEditable", $.Widget,
 	{
 		if(!this.isEditing())
 		{
-			var evt = this.element.dispatchEvent("ibx_startediting", this.element.text(), true, true);
+			var evt = this.element.dispatchEvent("ibx_startediting", this.text(), true, true);
 			if(evt.isDefaultPrevented())
 				return;
 
@@ -469,7 +469,7 @@ $.widget("ibi.ibxEditable", $.Widget,
 	{
 		if(this.isEditing())
 		{
-			var evt = this.element.dispatchEvent("ibx_stopediting", this.element.text(), true, true);
+			var evt = this.element.dispatchEvent("ibx_stopediting", this.text(), true, true);
 			if(evt.isDefaultPrevented())
 				return;
 
@@ -484,11 +484,11 @@ $.widget("ibi.ibxEditable", $.Widget,
 			if(revertToOriginal)
 			{
 				this.element.html(this._preEditValue);
-				this.element.dispatchEvent("ibx_canceledit", this.element.text(), true, false);
+				this.element.dispatchEvent("ibx_canceledit", this.text(), true, false);
 			}
 			else
 			{
-				var event = this.element.dispatchEvent("ibx_changed", this.element.text(), true, true);
+				var event = this.element.dispatchEvent("ibx_changed", this.text(), true, true);
 				if(event.isDefaultPrevented())
 					this.element.html(this._preEditValue);
 			}
@@ -503,6 +503,8 @@ $.widget("ibi.ibxEditable", $.Widget,
 	 */
 	text:function(text)
 	{
+		if(text === undefined)
+			return this.element.text().replace(/\u00A0/g, " ");//have to replace &nbsp; with real spaces.
 		this.element.text(text);
 		this.element.dispatchEvent("ibx_changed", text, true, false);
 	},
