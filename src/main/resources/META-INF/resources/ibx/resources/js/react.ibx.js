@@ -2,6 +2,7 @@ $.widget("ibi.ibxReactContainer", $.Widget,
 {
 	options:
 	{
+		autoCreate:true,
 		autoRender:true,
 	},
 	_widgetClass:"ibx-react-container",
@@ -13,15 +14,16 @@ $.widget("ibi.ibxReactContainer", $.Widget,
 	_init:function()
 	{
 		this._super();
-		if(this.options.autoRender)
-			this.createReactComponent(this.options.autoRender);
+		this.option(ibx.getIbxMarkupOptions(this.element));
+		if(this.options.autoCreate)
+			this.createComponent(this.options.autoRender);
 	},
 	_component:null,
 	component:function()
 	{
 		return this._component;
 	},
-	createReactComponent:function(andRender)
+	createComponent:function(andRender)
 	{
 		var reactComponent = this._bindComponents( this.element.children("[data-ibx-react-type]").first());
 		if(andRender)
@@ -34,20 +36,20 @@ $.widget("ibi.ibxReactContainer", $.Widget,
 		for(var i = 0; i < elements.length; ++i)
 		{
 			var element = $(elements[i]);
-			var reactType = element.attr('data-ibx-react-type');
-			if(reactType)
+			if(element.prop('nodeType') === 1)
 			{
 				var args = [];
-				args.push((reactType[0] === reactType[0].toUpperCase()) ? eval(reactType) :  reactType)
-				
+				var reactType = element.attr('data-ibx-react-type');
+				args.push((reactType && (reactType[0] === reactType[0].toUpperCase())) ? eval(reactType) :  element.prop('nodeName').toLowerCase());
+		
 				var reactOptions = ibx.getIbxMarkupOptions(element);
 				reactOptions.className = element.attr('class');
 				args.push(reactOptions);
-			
+
 				var childComponents = this._bindComponents(element.contents());
 				for(var j = 0; j < childComponents.length; ++j)
 					args.push(childComponents[j]);
-			
+
 				this._component = React.createElement.apply(null, args);
 				retComponents.push(this._component);
 			}
@@ -76,7 +78,7 @@ $.widget("ibi.ibxReactComponent", $.Widget,
 		this._super();
 		this.reactOptions = ibx.getIbxMarkupOptions(this.element);
 	},
-	createReactComponent:function()
+	createComponent:function()
 	{
 	}
 });
