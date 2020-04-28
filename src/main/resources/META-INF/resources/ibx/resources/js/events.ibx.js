@@ -81,7 +81,10 @@ ibxEventManager._onTouchEvent = function(e)
 		ibxEventManager._eLastClick = e;
 		ibxEventManager._eLastTouch = null;
 		ibxEventManager._hasSwiped = false;
-		e.preventDefault();
+
+		//HOME-2663 - seems IOS now needs the touchend to actually focus the input control...so don't prevent def on that
+		if(!e.target.nodeType == 'input')
+			e.preventDefault();
 	}
 	else
 	if(eType == "touchmove")
