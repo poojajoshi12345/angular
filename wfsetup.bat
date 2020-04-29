@@ -17,17 +17,28 @@ MKLINK /D %wfpath%\ibx_testing %CD%\..\ibx_testing\src\test\resources\META-INF\r
 
 REM make the new homepage and ibxtools link
 rename %wfpath%\WEB-INF\lib\webfocus-webjars-ibxtools-HEAD-SNAPSHOT.jar webfocus-webjars-ibxtools-HEAD-SNAPSHOT.jar_
-rd /S /Q %wfpath%\homepage
 git clone http://wfbucket.ibi.com:7990/scm/wp/webfocus-webjars-projects.git ..\ibxtools
+rd /S /Q %wfpath%\homepage
 MKLINK /D %wfpath%\homepage %CD%\..\ibxtools\webfocus-webjars-ibxtools\src\main\resources\META-INF\resources\homepage
 rd /S /Q %wfpath%\ibxtools
 MKLINK /D %wfpath%\ibxtools %CD%\..\ibxtools\webfocus-webjars-ibxtools\src\main\resources\META-INF\resources\ibxtools
 
-REM make the new 3rd party resources link
-rename %wfpath%\WEB-INF\lib\webfocus-webjars-3rdparty-resources-HEAD-SNAPSHOT.jar webfocus-webjars-3rdparty-resources-HEAD-SNAPSHOT.jar_
-rd /S /Q %wfpath%\3rdparty_resources
-git clone http://wfbucket.ibi.com:7990/scm/wp/webfocus-webjars-3rdparty-resources.git ..\3rdparty_resources
-MKLINK /D %wfpath%\3rdparty_resources %CD%\..\3rdparty_resources\src\main\resources\META-INF\resources\3rdparty_resources
+REM make the new tools, caster, and component links
+REM rename %wfpath%\WEB-INF\lib\webfocus-webjars-tools-HEAD-SNAPSHOT.jar webfocus-webjars-tools-HEAD-SNAPSHOT.jar_
+REM git clone http://wfbucket.ibi.com:7990/scm/wp/webfocus-webjars-tools.git ..\tools
+REM rd /S /Q %wfpath%\tools
+REM MKLINK /D %wfpath%\tools %CD%\..\tools\src\main\resources\META-INF\resources\tools
+REM rd /S /Q %wfpath%\caster
+REM MKLINK /D %wfpath%\caster %CD%\..\tools\src\main\resources\META-INF\resources\caster
+REM rd /S /Q %wfpath%\component
+REM MKLINK /D %wfpath%\component %CD%\..\tools\src\main\resources\META-INF\resources\component
+
+
+REM REM make the new 3rd party resources link
+REM rename %wfpath%\WEB-INF\lib\webfocus-webjars-3rdparty-resources-HEAD-SNAPSHOT.jar webfocus-webjars-3rdparty-resources-HEAD-SNAPSHOT.jar_
+REM git clone http://wfbucket.ibi.com:7990/scm/wp/webfocus-webjars-3rdparty-resources.git ..\3rdparty_resources
+REM rd /S /Q %wfpath%\3rdparty_resources
+REM MKLINK /D %wfpath%\3rdparty_resources %CD%\..\3rdparty_resources\src\main\resources\META-INF\resources\3rdparty_resources
 
 REM make the new intl properties/strings resources link
 rename %wfpath%\WEB-INF\lib\webfocus-intl-HEAD-SNAPSHOT.jar webfocus-intl-HEAD-SNAPSHOT.jar_
