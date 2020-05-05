@@ -451,8 +451,9 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 	},
 	_anchor:function(el)
 	{
+		//if we don't own the current anchor item (possible removed) then null;
 		if(el === undefined)
-			return this._elAnchor[0];
+			return $.contains(this.element[0], this._elAnchor[0]) ? this._elAnchor[0] : this._elAnchor = null;
 
 		if(!this._elAnchor.is(el))
 		{
@@ -473,8 +474,9 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 	},
 	_focus:function(el)
 	{
+		//if we don't own the current focus item (possible removed) then null;
 		if(el === undefined)
-			return this._elFocus[0];
+			return $.contains(this.element[0], this._elFocus[0]) ? this._elFocus[0] : this.elFocus = null;
 
 		if(!this._elFocus.is(el))
 		{
