@@ -26,7 +26,13 @@ $.widget("ibi.ibxNavMap", $.ibi.ibxMenu,
 	_onMenuItemClick:function(e)
 	{
 		if(this._navToParentItem.is(e.target))
-			$(this.options.navParent).ibxWidget("open");
+		{
+			//have to chain the previously active element so it can be focused if the parent is closed via escape.
+			//then open the new parent navmap.
+			var parentMap = $(this.options.navParent);
+			parentMap.ibxWidget("open").ibxWidget('instance')._elPrevActive = this._elPrevActive;
+
+		}
 		else
 		{
 			var navTarget = $(e.target).ibxWidget("option", "navTarget");
