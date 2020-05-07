@@ -193,7 +193,7 @@ ibxBusy.defaultConfig =
 		"</div>"+
 		"",
 	"css":"",
-	"imageClass":"svg-purple-rings",
+	"imageClass":"svg-gray-rings",
 	"image":"",
 	"message":"",
 	"buttons":[]
