@@ -413,9 +413,15 @@ _p.getResource = function(selector, ibxBind, forceCreate)
 
 	//get the xml out of the resource bundle as a string (essentially making a clone/copy)
 	var markup = "";
+
+	// [IBX-503] jQuery.htmlPrefilter changed in 3.5.1
+	// See https://github.com/eslint/eslint/issues/3229
+	var rxhtmlTag = /<(?!area|br|col|embed|hr|img|input|link|meta|param)(([a-z][^\/\0>\x20\t\r\n\f]*)[^>]*)\/>/gi;
+
 	resource.each(function(idx, res)
 	{
-		markup += (new XMLSerializer()).serializeToString(res);
+		var strRes = new XMLSerializer().serializeToString(res);
+		markup += strRes.replace( rxhtmlTag, "<$1></$2>" );//[IBX-503]
 		markup = this.preProcessResource(markup);
 	}.bind(this));
 	if(!markup.length)
