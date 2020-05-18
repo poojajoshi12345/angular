@@ -48,7 +48,7 @@ function sformat()
 		"isFirefox": (ua.match(".*Firefox.*") != null),
 		"isAndroid": (ua.match(".*Android.*") != null),
 		"isChrome": (ua.match(".*Chrome.*") != null),
-		"isiPad": (ua.match(".*iPad.*") != null),
+		"isiPad": (ua.match(".*\(Macintosh; Intel Mac OS X 10_15\).*") != null) || ((ua.match(".*iPad.*") != null)),
 		"isiPhone": (ua.match(".*iPhone.*") != null)
 	};
 	$.extend(pc, 
