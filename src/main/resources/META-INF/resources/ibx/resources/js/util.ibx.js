@@ -43,17 +43,17 @@ function sformat()
 	var ua = navigator.userAgent;
 	var pc = window.ibxPlatformCheck = 
 	{
-		"isEdge": ((ua.match(".*Windows NT 10.0.*") != null) && (ua.match(".*Edge*.") != null)),
-		"isIE": (ua.match(".*Trident.*") != null),
-		"isFirefox": (ua.match(".*Firefox.*") != null),
-		"isAndroid": (ua.match(".*Android.*") != null),
-		"isChrome": (ua.match(".*Chrome.*") != null),
-		"isiPad": (ua.match(".*\(Macintosh; Intel Mac OS X 10_15\).*") != null) || ((ua.match(".*iPad.*") != null)),
-		"isiPhone": (ua.match(".*iPhone.*") != null)
+		"isEdge": ((ua.match(/.*Windows NT 10.0.*/) != null) && (ua.match(".*Edge*.") != null)),
+		"isIE": (ua.match(/.*Trident.*/) != null),
+		"isFirefox": (ua.match(/.*Firefox.*/) != null),
+		"isAndroid": (ua.match(/.*Android.*/) != null),
+		"isChrome": (ua.match(/.*Chrome.*/) != null),
+		"isiPad": (ua.match(/.*\(Macintosh; Intel Mac OS X 10_15\).*/) != null) || ((ua.match(/.*iPad.*/) != null)),
+		"isiPhone": (ua.match(/.*iPhone.*/) != null)
 	};
 	$.extend(pc, 
 	{
-		"isSafari":(ua.match(".*Safari.*") && !pc.isChrome),
+		"isSafari":(ua.match(/.*Safari.*/) && !pc.isChrome),
 		"isIOS": (pc.isiPad || pc.isiPhone),
 		"isMobile": (pc.isiPad || pc.isiPhone || pc.isAndroid)
 	});
