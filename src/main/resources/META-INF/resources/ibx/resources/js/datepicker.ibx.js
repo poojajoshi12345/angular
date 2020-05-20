@@ -110,7 +110,7 @@ $.widget("ibi.ibxDatePicker", $.ibi.ibxVBox,
 
 		//this._datePicker.find("a").attr("tabindex", 0);
 
-		var curDate = this._datePicker.datepicker('getDate');
+		var curDate = this._datePicker.datepicker('getDate') || (new Date());
 		var newDate = curDate;
 		newDate.setMonth(month-1);
 		newDate.setYear(year);
