@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'ibi-design-system';
-  src:  url('fonts/ibi-design-system.eot?o2d29n');
-  src:  url('fonts/ibi-design-system.eot?o2d29n#iefix') format('embedded-opentype'),
-    url('fonts/ibi-design-system.ttf?o2d29n') format('truetype'),
-    url('fonts/ibi-design-system.woff?o2d29n') format('woff'),
-    url('fonts/ibi-design-system.svg?o2d29n#ibi-design-system') format('svg');
+  src:  url('fonts/ibi-design-system.eot?pdu54k');
+  src:  url('fonts/ibi-design-system.eot?pdu54k#iefix') format('embedded-opentype'),
+    url('fonts/ibi-design-system.ttf?pdu54k') format('truetype'),
+    url('fonts/ibi-design-system.woff?pdu54k') format('woff'),
+    url('fonts/ibi-design-system.svg?pdu54k#ibi-design-system') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -25,6 +25,21 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.ds-icon-procedure:before {
+  content: "\eade";
+}
+.ds-icon-work-flow:before {
+  content: "\eada";
+}
+.ds-icon-set-variable:before {
+  content: "\eadb";
+}
+.ds-icon-hour-glass:before {
+  content: "\eadc";
+}
+.ds-icon-parallel-group:before {
+  content: "\eadd";
+}
 .ds-icon-drag-drop:before {
   content: "\ead4";
 }
