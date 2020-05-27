@@ -104,6 +104,7 @@
 
 .ibx-label-overlay
 {
+	position:relative;
 }
 
 .ibx-overlay-image

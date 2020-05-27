@@ -99,7 +99,6 @@
 			.overlay-alert
 			{
 				color:red;
-				background-color:white;
 			}
 			.font-listing
 			{
@@ -113,7 +112,6 @@
 
 			.font-list
 			{
-				xbackground-color:#f5f5f5;
 				border:1px solid #ccc;
 				border-radius:3px;
 			}
@@ -176,15 +174,15 @@
 			<!--ICON OVERLAYS-->
 			<div class="grid-cell" data-ibx-row="5/span 1" data-ibx-col="1/span 1" data-ibx-type="ibxLabel" data-ibxp-text="Icon Overlays"></div>
 			<div class="grid-cell" data-ibx-row="5/span 1" data-ibx-col="2/span 1" data-ibx-type="ibxHBox" data-ibxp-align="center" data-ibxp-justify="spaceAround">
-				<div data-ibx-type="ibxLabel" data-ibxp-text="Overlay tl" data-ibxp-overlays="[{position:'tl', glyphClasses:'overlay-alert material-icons md-18', glyph:'info'}]" data-ibxp-glyph="email" data-ibxp-glyph-classes="material-icons md-36" data-ibxp-icon-position="top"></div>
-				<div data-ibx-type="ibxLabel" data-ibxp-text="Overlay tc" data-ibxp-overlays="[{position:'tc', glyphClasses:'overlay-alert material-icons md-18', glyph:'info'}]" data-ibxp-glyph="email" data-ibxp-glyph-classes="material-icons md-36" data-ibxp-icon-position="top"></div>
-				<div data-ibx-type="ibxLabel" data-ibxp-text="Overlay tr" data-ibxp-overlays="[{position:'tr', glyphClasses:'overlay-alert material-icons md-18', glyph:'info'}]" data-ibxp-glyph="email" data-ibxp-glyph-classes="material-icons md-36" data-ibxp-icon-position="top"></div>
-				<div data-ibx-type="ibxLabel" data-ibxp-text="Overlay rc" data-ibxp-overlays="[{position:'rc', glyphClasses:'overlay-alert material-icons md-18', glyph:'info'}]" data-ibxp-glyph="email" data-ibxp-glyph-classes="material-icons md-36" data-ibxp-icon-position="top"></div>
-				<div data-ibx-type="ibxLabel" data-ibxp-text="Overlay rb" data-ibxp-overlays="[{position:'br', glyphClasses:'overlay-alert material-icons md-18', glyph:'info'}]" data-ibxp-glyph="email" data-ibxp-glyph-classes="material-icons md-36" data-ibxp-icon-position="top"></div>
-				<div data-ibx-type="ibxLabel" data-ibxp-text="Overlay bc" data-ibxp-overlays="[{position:'bc', glyphClasses:'overlay-alert material-icons md-18', glyph:'info'}]" data-ibxp-glyph="email" data-ibxp-glyph-classes="material-icons md-36" data-ibxp-icon-position="top"></div>
-				<div data-ibx-type="ibxLabel" data-ibxp-text="Overlay bl" data-ibxp-overlays="[{position:'bl', glyphClasses:'overlay-alert material-icons md-18', glyph:'info'}]" data-ibxp-glyph="email" data-ibxp-glyph-classes="material-icons md-36" data-ibxp-icon-position="top"></div>
-				<div data-ibx-type="ibxLabel" data-ibxp-text="Overlay lc" data-ibxp-overlays="[{position:'lc', glyphClasses:'overlay-alert material-icons md-18', glyph:'info'}]" data-ibxp-glyph="email" data-ibxp-glyph-classes="material-icons md-36" data-ibxp-icon-position="top"></div>
-				<div data-ibx-type="ibxLabel" data-ibxp-text="Overlay cc" data-ibxp-overlays="[{position:'cc', glyphClasses:'overlay-alert material-icons md-18', glyph:'info'}]" data-ibxp-glyph="email" data-ibxp-glyph-classes="material-icons md-36" data-ibxp-icon-position="top"></div>
+				<div data-ibx-type="ibxLabel" data-ibxp-text="Overlay tl" data-ibxp-overlays="[{position:'tl', offsetX:'-.5em', offsetY:'-.5em', glyphClasses:'overlay-alert material-icons md-18', glyph:'info'}]" data-ibxp-glyph="email" data-ibxp-glyph-classes="material-icons md-36" data-ibxp-icon-position="top"></div>
+				<div data-ibx-type="ibxLabel" data-ibxp-text="Overlay tc" data-ibxp-overlays="[{position:'tc', offsetX:'', offsetY:'-.5em', glyphClasses:'overlay-alert material-icons md-18', glyph:'info'}]" data-ibxp-glyph="email" data-ibxp-glyph-classes="material-icons md-36" data-ibxp-icon-position="top"></div>
+				<div data-ibx-type="ibxLabel" data-ibxp-text="Overlay tr" data-ibxp-overlays="[{position:'tr', offsetX:'.5em', offsetY:'-.5em', glyphClasses:'overlay-alert material-icons md-18', glyph:'info'}]" data-ibxp-glyph="email" data-ibxp-glyph-classes="material-icons md-36" data-ibxp-icon-position="top"></div>
+				<div data-ibx-type="ibxLabel" data-ibxp-text="Overlay rc" data-ibxp-overlays="[{position:'rc', offsetX:'.5em', offsetY:'', glyphClasses:'overlay-alert material-icons md-18', glyph:'info'}]" data-ibxp-glyph="email" data-ibxp-glyph-classes="material-icons md-36" data-ibxp-icon-position="top"></div>
+				<div data-ibx-type="ibxLabel" data-ibxp-text="Overlay rb" data-ibxp-overlays="[{position:'br', offsetX:'.5em', offsetY:'.5em', glyphClasses:'overlay-alert material-icons md-18', glyph:'info'}]" data-ibxp-glyph="email" data-ibxp-glyph-classes="material-icons md-36" data-ibxp-icon-position="top"></div>
+				<div data-ibx-type="ibxLabel" data-ibxp-text="Overlay bc" data-ibxp-overlays="[{position:'bc', offsetX:'', offsetY:'.5em', glyphClasses:'overlay-alert material-icons md-18', glyph:'info'}]" data-ibxp-glyph="email" data-ibxp-glyph-classes="material-icons md-36" data-ibxp-icon-position="top"></div>
+				<div data-ibx-type="ibxLabel" data-ibxp-text="Overlay bl" data-ibxp-overlays="[{position:'bl', offsetX:'-.5em', offsetY:'.5em', glyphClasses:'overlay-alert material-icons md-18', glyph:'info'}]" data-ibxp-glyph="email" data-ibxp-glyph-classes="material-icons md-36" data-ibxp-icon-position="top"></div>
+				<div data-ibx-type="ibxLabel" data-ibxp-text="Overlay lc" data-ibxp-overlays="[{position:'lc', offsetX:'-.5em', offsetY:'', glyphClasses:'overlay-alert material-icons md-18', glyph:'info'}]" data-ibxp-glyph="email" data-ibxp-glyph-classes="material-icons md-36" data-ibxp-icon-position="top"></div>
+				<div data-ibx-type="ibxLabel" data-ibxp-text="Overlay cc" data-ibxp-overlays="[{position:'cc', offsetX:'', offsetY:'', glyphClasses:'overlay-alert material-icons md-18', glyph:'info'}]" data-ibxp-glyph="email" data-ibxp-glyph-classes="material-icons md-36" data-ibxp-icon-position="top"></div>
 			</div>
 			<!--ICON OVERLAYS-->
 

@@ -20,7 +20,7 @@ $.widget("ibi.ibxLabel", $.ibi.ibxFlexBox,
 
 		"for":null, //make labels work like <label>...focus target on click.
 
-		/*label overlays...array of objects: {"position":"xx", "glyph":"xx", "glyphClasses":"xx", "icon":"xx", "iconClasses":"xx"}*/
+		/*label overlays...array of objects: {"position":"xx", offsetX:"xxpx", offsetY:"yypx", "glyph":"xx", "glyphClasses":"xx", "icon":"xx", "iconClasses":"xx"}*/
 		"overlays":[],
 
 		/*ibxFlexBox default options*/
@@ -144,8 +144,11 @@ $.widget("ibi.ibxLabel", $.ibi.ibxFlexBox,
 			var elOverlay = null;
 			if(overlay.icon)
 				elOverlay = $(sformat("<img class='ibx-label-overlay {1}' src='{2}'/>", overlay.iconClasses || "ibx-overlay-image", overlay.icon));
-			else	
+			else{	
 				elOverlay = $("<span class='ibx-label-overlay'>").ibxAddClass(overlay.glyphClasses).text(overlay.glyph);
+					this.element.css('overflow', (overlay.offsetX || overlay.offsetY) ? 'visible' : "");
+					elOverlay.css({left:overlay.offsetX, top:overlay.offsetY});
+			}
 
 			elFrame.append(elOverlay);
 		}
