@@ -96,6 +96,11 @@
 				height:48px;
 			}
 
+			.overlay-alert
+			{
+				color:red;
+				background-color:white;
+			}
 			.font-listing
 			{
 				margin-top:25px;
@@ -127,7 +132,7 @@
 		</style>
 	</head>
 	<body class="ibx-root">
-		<div  class="main-grid" data-ibx-type="ibxGrid" data-ibxp-rows="auto auto auto auto auto" data-ibxp-cols="175px 1fr">
+		<div  class="main-grid" data-ibx-type="ibxGrid" data-ibxp-rows="auto auto auto auto auto auto" data-ibxp-cols="175px 1fr">
 			<!--MATERIAL ICONS-->
 			<div class="grid-cell" data-ibx-row="1/span 1" data-ibx-col="1/span 1" data-ibx-type="ibxLabel" data-ibxp-text="Material Icons Glyphs"></div>
 			<div class="grid-cell" data-ibx-row="1/span 1" data-ibx-col="2/span 1" data-ibx-type="ibxHBox" data-ibxp-align="center" data-ibxp-justify="spaceAround">
@@ -168,13 +173,28 @@
 			</div>
 			<!--IMAGE ICONS-->
 
+			<!--ICON OVERLAYS-->
+			<div class="grid-cell" data-ibx-row="5/span 1" data-ibx-col="1/span 1" data-ibx-type="ibxLabel" data-ibxp-text="Icon Overlays"></div>
+			<div class="grid-cell" data-ibx-row="5/span 1" data-ibx-col="2/span 1" data-ibx-type="ibxHBox" data-ibxp-align="center" data-ibxp-justify="spaceAround">
+				<div data-ibx-type="ibxLabel" data-ibxp-text="Overlay tl" data-ibxp-overlays="[{position:'tl', glyphClasses:'overlay-alert material-icons md-18', glyph:'info'}]" data-ibxp-glyph="email" data-ibxp-glyph-classes="material-icons md-36" data-ibxp-icon-position="top"></div>
+				<div data-ibx-type="ibxLabel" data-ibxp-text="Overlay tc" data-ibxp-overlays="[{position:'tc', glyphClasses:'overlay-alert material-icons md-18', glyph:'info'}]" data-ibxp-glyph="email" data-ibxp-glyph-classes="material-icons md-36" data-ibxp-icon-position="top"></div>
+				<div data-ibx-type="ibxLabel" data-ibxp-text="Overlay tr" data-ibxp-overlays="[{position:'tr', glyphClasses:'overlay-alert material-icons md-18', glyph:'info'}]" data-ibxp-glyph="email" data-ibxp-glyph-classes="material-icons md-36" data-ibxp-icon-position="top"></div>
+				<div data-ibx-type="ibxLabel" data-ibxp-text="Overlay rc" data-ibxp-overlays="[{position:'rc', glyphClasses:'overlay-alert material-icons md-18', glyph:'info'}]" data-ibxp-glyph="email" data-ibxp-glyph-classes="material-icons md-36" data-ibxp-icon-position="top"></div>
+				<div data-ibx-type="ibxLabel" data-ibxp-text="Overlay rb" data-ibxp-overlays="[{position:'br', glyphClasses:'overlay-alert material-icons md-18', glyph:'info'}]" data-ibxp-glyph="email" data-ibxp-glyph-classes="material-icons md-36" data-ibxp-icon-position="top"></div>
+				<div data-ibx-type="ibxLabel" data-ibxp-text="Overlay bc" data-ibxp-overlays="[{position:'bc', glyphClasses:'overlay-alert material-icons md-18', glyph:'info'}]" data-ibxp-glyph="email" data-ibxp-glyph-classes="material-icons md-36" data-ibxp-icon-position="top"></div>
+				<div data-ibx-type="ibxLabel" data-ibxp-text="Overlay bl" data-ibxp-overlays="[{position:'bl', glyphClasses:'overlay-alert material-icons md-18', glyph:'info'}]" data-ibxp-glyph="email" data-ibxp-glyph-classes="material-icons md-36" data-ibxp-icon-position="top"></div>
+				<div data-ibx-type="ibxLabel" data-ibxp-text="Overlay lc" data-ibxp-overlays="[{position:'lc', glyphClasses:'overlay-alert material-icons md-18', glyph:'info'}]" data-ibxp-glyph="email" data-ibxp-glyph-classes="material-icons md-36" data-ibxp-icon-position="top"></div>
+				<div data-ibx-type="ibxLabel" data-ibxp-text="Overlay cc" data-ibxp-overlays="[{position:'cc', glyphClasses:'overlay-alert material-icons md-18', glyph:'info'}]" data-ibxp-glyph="email" data-ibxp-glyph-classes="material-icons md-36" data-ibxp-icon-position="top"></div>
+			</div>
+			<!--ICON OVERLAYS-->
+
 			<!--FONT LISTING-->
-			<div class="font-listing font-select grid-cell" data-ibx-type="ibxSelect" data-ibx-row="5/span 1" data-ibx-col="1/span 1" data-ibx-align="start">
+			<div class="font-listing font-select grid-cell" data-ibx-type="ibxSelect" data-ibx-row="6/span 1" data-ibx-col="1/span 1" data-ibx-align="start">
 				<div data-ibx-type="ibxSelectItem" data-ibxp-text="Ibx Glyphs" data-ibxp-user-value="ibxglyphs" data-ibxp-selected="true"></div>
 				<div data-ibx-type="ibxSelectItem" data-ibxp-text="Font Awesome Glyphs" data-ibxp-user-value="faglyphs"></div>
 				<div data-ibx-type="ibxSelectItem" data-ibxp-text="Material Icons" data-ibxp-user-value="materialicons"></div>
 			</div>
-			<div class="font-listing font-list grid-cell" data-ibx-row="5/span 1" data-ibx-col="2/span 1" data-ibx-align="start" data-ibx-type="ibxHBox" data-ibxp-wrap="true" data-ibxp-align="start" data-ibxp-justify="spaceAround">
+			<div class="font-listing font-list grid-cell" data-ibx-row="6/span 1" data-ibx-col="2/span 1" data-ibx-align="start" data-ibx-type="ibxHBox" data-ibxp-wrap="true" data-ibxp-align="start" data-ibxp-justify="spaceAround">
 			</div>
 		</div>
 
