@@ -28,20 +28,6 @@ $.widget("ibi.ibxGridStack", $.ibi.ibxWidget,
 		this.element.on('resize', function (event) { event.stopPropagation(); });
 		this.element.on('drag', function (event) { event.stopPropagation(); });
 		this.element.on('drop', function (event) { event.stopPropagation(); });
-	},
-	addCell: function (cell, x, y, width, height)
-	{
-		width = width || this.options.defaultCellWidth;
-		height = height || this.options.defaultCellHeight;
-		this.element.css('min-height', "");
-		var grid = this.element.data('gridstack');
-		var outercell = $("<div class='grid-stack-item'>");
-		var innercell = $("<div class='grid-stack-item-content'>");
-		outercell.append(innercell);
-		innercell.append(cell);
-		//outercell.attr('data-gs-locked', true);
-		grid.addWidget(outercell, x, y, width, height, false);
-		//outercell.data('_gridstack_node').locked = false;
 		this.element.on('resizestart', function (event, ui)
 		{
 			$("iframe").css("pointer-events", "none");
@@ -50,6 +36,19 @@ $.widget("ibi.ibxGridStack", $.ibi.ibxWidget,
 		{
 			$("iframe").css("pointer-events", "");
 		});
+	},
+	addCell: function (cell, x, y, width, height)
+	{
+		if (this.element.children('.grid-stack-item').length == 0)
+			this.element.css('min-height', "");
+		width = width || this.options.defaultCellWidth;
+		height = height || this.options.defaultCellHeight;
+		var grid = this.element.data('gridstack');
+		var outercell = $("<div class='grid-stack-item'>");
+		var innercell = $("<div class='grid-stack-item-content'>");
+		outercell.append(innercell);
+		innercell.append(cell);
+		grid.addWidget(outercell, x, y, width, height, false);
 	},
 	removeCell: function (cell, detachNode)
 	{
