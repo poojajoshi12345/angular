@@ -21,6 +21,13 @@ $.widget("ibi.ibxButton", $.ibi.ibxLabel,
 	{
 		this._super();
 	},
+	_setAccessibility:function(accessible, aria)
+	{
+		this._super(accessible, aria);
+		var options = this.options;
+		aria.label = this.element.attr('title');
+		return aria;
+	},
 	_onButtonClickEvent:function(e)
 	{
 		if(ibxPlatformCheck.isIE || (e.detail === 1 || (e.detail === 2 && this.options.triggerCmdOnDblClick)))
