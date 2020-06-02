@@ -77,10 +77,8 @@ $.widget("ibi.ibxMenu", $.ibi.ibxPopup,
 	},
 	open:function(openInfo)
 	{
-		//IBX-505 - if menu is too big to fit on screen, then adjust it to fit with scrollbar.
-		var height = this.element.outerHeight();
-		if(height >= window.innerHeight)
-			this.element.css({height:window.innerHeight - 30});
+		//IBX-505 - make sure the menu can't be bigger than the window it's in.
+		this.element.css({maxHeight:window.innerHeight - 30});
 		this._super(openInfo);
 	},
 	close:function(closeData)
