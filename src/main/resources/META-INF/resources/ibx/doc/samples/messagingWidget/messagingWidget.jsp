@@ -128,19 +128,19 @@
 		</style>
 	</head>
 	<body class="ibx-root">
-		<div data-ibx-type="ibxButton" class="button open-test-dialog" title="Open Test Dialog">Open Test Dialog</div>
+		<div tabindex='0' data-ibx-type="ibxButton" class="button open-test-dialog" title="Open Test Dialog">Open Test Dialog</div>
 		<div data-ibx-type="ibxDialog" class="test-dialog" title="Messaging Widget Test Dialog" style="width:800px;">
 			<div data-ibx-type="ibxVBox" data-ibxp-align="stretch"> 
 			    <div data-ibx-type="ibxHBox" class="messaging-widget-container" data-ibxp-align="stretch"></div>
-				<div data-ibx-type="ibxLabel" data-ibx-name="testDialogTextFieldLabel1" data-ibxp-for="testDialogTextField1" style="width:90%; margin: 10px;" data-ibxp-text="Field 1"></div>
-				<div data-ibx-type="ibxTextField" data-ibx-name="testDialogText1" data-ibxp-for="testDialogText1" style="width:90%; margin: 10px;"></div>
-				<div data-ibx-type="ibxLabel" data-ibx-name="testDialogTextFieldLabel2" data-ibxp-for="testDialogTextField2" style="width:90%; margin: 10px;" data-ibxp-text="Field 2"></div>
-				<div data-ibx-type="ibxTextField" data-ibx-name="testDialogText2" data-ibxp-for="testDialogText2" style="width:90%; margin: 10px;"></div>
+				<div tabindex='0' data-ibx-type="ibxLabel" data-ibx-name="testDialogTextFieldLabel1" data-ibxp-for="testDialogTextField1" style="width:90%; margin: 10px;" data-ibxp-text="Field 1"></div>
+				<div tabindex='0' data-ibx-type="ibxTextField" data-ibx-name="testDialogText1" data-ibxp-for="testDialogText1" style="width:90%; margin: 10px;"></div>
+				<div tabindex='0' data-ibx-type="ibxLabel" data-ibx-name="testDialogTextFieldLabel2" data-ibxp-for="testDialogTextField2" style="width:90%; margin: 10px;" data-ibxp-text="Field 2"></div>
+				<div tabindex='0' data-ibx-type="ibxTextField" data-ibx-name="testDialogText2" data-ibxp-for="testDialogText2" style="width:90%; margin: 10px;"></div>
 				<div data-ibx-type="ibxHBox" class="group-btns-hbox" data-ibxp-align="stretch">
-					<div data-ibx-type="ibxButton" class="button show-single-message">Single Message</div>
-					<div data-ibx-type="ibxButton" class="button show-single-message-with-close">Closable Single Message</div>
-					<div data-ibx-type="ibxButton" class="button show-multi-message">Multiple Messages</div>
-					<div data-ibx-type="ibxButton" class="button show-multi-with-details">Multiple Detailed Messages</div>
+					<div tabindex='0' data-ibx-type="ibxButton" class="button show-single-message">Single Message</div>
+					<div tabindex='0' data-ibx-type="ibxButton" class="button show-single-message-with-close">Closable Single Message</div>
+					<div tabindex='0' data-ibx-type="ibxButton" class="button show-multi-message">Multiple Messages</div>
+					<div tabindex='0' data-ibx-type="ibxButton" class="button show-multi-with-details">Multiple Detailed Messages</div>
 				</div>
 			</div>
 		</div>
