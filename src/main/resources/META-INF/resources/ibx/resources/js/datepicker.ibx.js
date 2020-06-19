@@ -119,6 +119,11 @@ $.widget("ibi.ibxDatePicker", $.ibi.ibxVBox,
 		if(!defaultPrevented && this.options.adjustForMonthYear)
 			this.option("date", data.newDate);
 		this._inChange = false;
+
+		//DF1268 - as usual IE has a problem after the native year/month popup closes nothing has focus..have to focus something
+		//for selection manager to work properly.
+		if(ibxPlatformCheck.isIE)
+			this._popup.focus();
 	},
 	_onFocusKeyEvent:function(e)
 	{
