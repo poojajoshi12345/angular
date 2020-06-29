@@ -7,3 +7,4 @@
 .classpath
 /cypresscache/
 **/out
+*.DS_Store

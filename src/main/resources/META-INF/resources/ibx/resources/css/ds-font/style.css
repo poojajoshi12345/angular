@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'ibi-design-system';
-  src:  url('fonts/ibi-design-system.eot?ulbneq');
-  src:  url('fonts/ibi-design-system.eot?ulbneq#iefix') format('embedded-opentype'),
-    url('fonts/ibi-design-system.ttf?ulbneq') format('truetype'),
-    url('fonts/ibi-design-system.woff?ulbneq') format('woff'),
-    url('fonts/ibi-design-system.svg?ulbneq#ibi-design-system') format('svg');
+  src:  url('fonts/ibi-design-system.eot?o2ezfj');
+  src:  url('fonts/ibi-design-system.eot?o2ezfj#iefix') format('embedded-opentype'),
+    url('fonts/ibi-design-system.ttf?o2ezfj') format('truetype'),
+    url('fonts/ibi-design-system.woff?o2ezfj') format('woff'),
+    url('fonts/ibi-design-system.svg?o2ezfj#ibi-design-system') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -13,7 +13,7 @@
 [class^="ds-icon-"], [class*=" ds-icon-"] {
   /* use !important to prevent issues with browser extensions that change fonts */
   font-family: 'ibi-design-system' !important;
-  speak: none;
+  speak: never;
   font-style: normal;
   font-weight: normal;
   font-variant: normal;
@@ -25,6 +25,12 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.ds-icon-move-to-target:before {
+  content: "\eae1";
+}
+.ds-icon-map-legend:before {
+  content: "\eae2";
+}
 .ds-icon-pending:before {
   content: "\eadf";
 }
@@ -1173,6 +1179,15 @@
 }
 .ds-icon-selection:before {
   content: "\ea2c";
+}
+.ds-icon-pan-selection:before {
+  content: "\eae3";
+}
+.ds-icon-selection-square1:before {
+  content: "\eae4";
+}
+.ds-icon-selection-marquee:before {
+  content: "\eae5";
 }
 .ds-icon-selection-circular:before {
   content: "\ea2d";
