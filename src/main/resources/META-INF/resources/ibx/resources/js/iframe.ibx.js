@@ -13,7 +13,8 @@ $.widget("ibi.ibxIFrame", $.ibi.ibxWidget,
 	{
 		"focusDefault":true,
 		"name":"",
-		"src":""
+		"src":"",
+		"closeOpenMenusOnBlur":true,
 	},
 	_widgetClass:"ibx-iframe",
 	_create:function()
@@ -37,8 +38,13 @@ $.widget("ibi.ibxIFrame", $.ibi.ibxWidget,
 	},
 	_onIFrameEvent:function(e)
 	{
-		if(e.type == "load")
+		//HOME-3317: when iframe gets blurred close all open menus
+		if(e.type == "load"){
+			this.contentWindow().addEventListener('blur', function(e){
+				this.onWindowBlur(e);
+			}.bind(this));
 			this._loadPromise.resolve(this.element[0]);
+		}
 
 
 		if(e.originalEvent)
@@ -51,6 +57,11 @@ $.widget("ibi.ibxIFrame", $.ibi.ibxWidget,
 	ready:function(fnReady)
 	{
 		this._loadPromise.then(fnReady);
+	},
+	onWindowBlur:function(e)
+	{
+		if(this.options.closeOpenMenusOnBlur)
+			this.contentWindow().ibxPopupManager.closeOpenPopups('.ibx-menu');
 	},
 	contentDocument:function()
 	{
