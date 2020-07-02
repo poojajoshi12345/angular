@@ -60,8 +60,11 @@ $.widget("ibi.ibxIFrame", $.ibi.ibxWidget,
 	},
 	onWindowBlur:function(e)
 	{
-		if(this.options.closeOpenMenusOnBlur)
-			this.contentWindow().ibxPopupManager.closeOpenPopups('.ibx-menu');
+		if(this.options.closeOpenMenusOnBlur){
+			var cw = this.contentWindow();
+			if(cw.ibxPopupManager)
+				cw.ibxPopupManager.closeOpenPopups('.ibx-menu');
+		}
 	},
 	contentDocument:function()
 	{
