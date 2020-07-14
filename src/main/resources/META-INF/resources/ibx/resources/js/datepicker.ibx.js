@@ -120,7 +120,7 @@ $.widget("ibi.ibxDatePicker", $.ibi.ibxVBox,
 			this.option("date", data.newDate);
 		this._inChange = false;
 
-		//DF1268 - as usual IE has a problem after the native year/month popup closes nothing has focus..have to focus something
+		//CD-2510/DF1268 - as usual IE has a problem after the native year/month popup closes nothing has focus..have to focus something
 		window.setTimeout(function(){
 			this._datePicker.ibxSelectionManager('selectableChildren');
 			this._datePicker.ibxSelectionManager('selected', '.ui-datepicker-current-day', true, true, true);
@@ -140,8 +140,7 @@ $.widget("ibi.ibxDatePicker", $.ibi.ibxVBox,
 		{
 			case 'popup':
 				if (!this._popup.ibxWidget('isOpen'))
-					//this._popup.ibxWidget('open').find("a").attr("tabindex", 0);
-					this._popup.ibxWidget('open').find("a");
+					this._popup.ibxWidget('open');
 				break;
 			default:
 				break;
