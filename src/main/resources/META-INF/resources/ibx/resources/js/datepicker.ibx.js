@@ -48,11 +48,13 @@ $.widget("ibi.ibxDatePicker", $.ibi.ibxVBox,
 		});
 
 		//Need this because teh datepicker is not accessible by default...only uses anchors...and the selection manager won't tab/move between them by default.
-		this._datePicker.ibxSelectionManager({type:"single", navKeyRoot:true, focusDefault:".ui-datepicker-current-day", focusResetOnBlur:false}).on("ibx_selectablechildren", function(e)
+		//this._datePicker.ibxAddClass('xxx').ibxSelectionManager({type:"single", navKeyRoot:true, focusDefault:".ui-datepicker-current-day", focusResetOnBlur:false});
+		this._datePicker.ibxSelectionManager({type:"single", navKeyRoot:true, focusDefault:true, focusResetOnBlur:true}).on("ibx_selectablechildren", function(e)
 		{
 			var dp = $(e.target);
 			e.originalEvent.data.items = dp.find("a").attr("tabindex", 0);
 		});
+
 
 		//setup the strings.
 		this._pickerOptions = {
@@ -108,8 +110,6 @@ $.widget("ibi.ibxDatePicker", $.ibi.ibxVBox,
 			return;
 		this._inChange = true;
 
-		//this._datePicker.find("a").attr("tabindex", 0);
-
 		var curDate = this._datePicker.datepicker('getDate') || (new Date());
 		var newDate = curDate;
 		newDate.setMonth(month-1);
@@ -120,10 +120,11 @@ $.widget("ibi.ibxDatePicker", $.ibi.ibxVBox,
 			this.option("date", data.newDate);
 		this._inChange = false;
 
-		//DF1268 - as usual IE has a problem after the native year/month popup closes nothing has focus..have to focus something
-		//for selection manager to work properly.
-		if(ibxPlatformCheck.isIE)
-			picker.dpDiv.focus();
+		//CD-2510/DF1268 - as usual IE has a problem after the native year/month popup closes nothing has focus..have to focus something
+		window.setTimeout(function(){
+			this._datePicker.ibxSelectionManager('selectableChildren');
+			this._datePicker.ibxSelectionManager('selected', '.ui-datepicker-current-day', true, true, true);
+		}.bind(this), 10);
 	},
 	_onFocusKeyEvent:function(e)
 	{
@@ -139,7 +140,7 @@ $.widget("ibi.ibxDatePicker", $.ibi.ibxVBox,
 		{
 			case 'popup':
 				if (!this._popup.ibxWidget('isOpen'))
-					this._popup.ibxWidget('open');//.find("a").attr("tabindex", 0);
+					this._popup.ibxWidget('open');
 				break;
 			default:
 				break;
