@@ -123,7 +123,7 @@ $.widget("ibi.ibxDatePicker", $.ibi.ibxVBox,
 		//CD-2510/DF1268 - as usual IE has a problem after the native year/month popup closes nothing has focus..have to focus something
 		window.setTimeout(function(){
 			this._datePicker.ibxSelectionManager('selectableChildren');
-			this._datePicker.ibxSelectionManager('selected', '.ui-datepicker-current-day', true, true, true);
+			this._datePicker.ibxSelectionManager('selected', 'td a', true, true, true);
 		}.bind(this), 10);
 	},
 	_onFocusKeyEvent:function(e)
@@ -216,7 +216,6 @@ $.widget("ibi.ibxDateRange", $.ibi.ibxDatePicker,
 		this._input2 = $('<div class="ibx-datepicker-input">').ibxLabel({ glyphClasses: "fa fa-calendar", 'align': 'stretch' }).on('click', this._showPopup.bind(this));
 		this._clear2 = $('<div class="ibx-datepicker-clear">').ibxButtonSimple({glyphClasses:"fa fa-times"}).on('click', this._onClear2.bind(this)).hide();
 		this._inputWrapper.append(this._input2, this._clear2);
-		this._datePicker.datepicker('option', 'onChangeMonthYear', this._onChangeMonthYear.bind(this));
 		window.setTimeout(function () { this._highlightRange(); }.bind(this), 10);
 	},
 	_init: function ()
@@ -231,6 +230,10 @@ $.widget("ibi.ibxDateRange", $.ibi.ibxDatePicker,
 	_onChangeMonthYear: function (year, month, inst)
 	{
 		window.setTimeout(function () { this._highlightRange(); }.bind(this), 10);
+		window.setTimeout(function(){
+			this._datePicker.ibxSelectionManager('selectableChildren');
+			this._datePicker.ibxSelectionManager('selected', 'td a', true, true, true);
+		}.bind(this), 10);
 	},
 	_onClear: function ()
 	{
