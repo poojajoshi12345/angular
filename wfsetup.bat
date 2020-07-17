@@ -1,8 +1,3 @@
-REM recreate ibx_testing worktree
-git worktree remove %CD%\..\ibx_testing
-rd /S /Q %CD%\..\ibx_testing
-git worktree add %CD%\..\ibx_testing _testing
-
 REM path to where webfocus is
 set wfpath=C:\ibi\WebFOCUS82\webapps\webfocus
 
@@ -11,8 +6,14 @@ rename %wfpath%\WEB-INF\lib\webfocus-webjars-ibx-HEAD-SNAPSHOT.jar webfocus-webj
 rd /S /Q %wfpath%\ibx
 MKLINK /D %wfpath%\ibx %CD%\src\main\resources\META-INF\resources\ibx
 
-REM make the new ibx_testing link
+REM recreate ibx_testing worktree
 rd /S /Q %wfpath%\ibx_testing
+git worktree remove %CD%\..\ibx_testing
+rd /S /Q %CD%\..\ibx_testing
+git worktree add %CD%\..\ibx_testing _testing
+
+REM make the new ibx_testing link
+REM rd /S /Q %wfpath%\ibx_testing
 MKLINK /D %wfpath%\ibx_testing %CD%\..\ibx_testing\src\test\resources\META-INF\resources\ibx\testing
 
 REM make the new homepage and ibxtools link
@@ -35,10 +36,10 @@ REM MKLINK /D %wfpath%\component %CD%\..\tools\src\main\resources\META-INF\resou
 
 
 REM REM make the new 3rd party resources link
-REM rename %wfpath%\WEB-INF\lib\webfocus-webjars-3rdparty-resources-HEAD-SNAPSHOT.jar webfocus-webjars-3rdparty-resources-HEAD-SNAPSHOT.jar_
-REM git clone http://wfbucket.ibi.com:7990/scm/wp/webfocus-webjars-3rdparty-resources.git ..\3rdparty_resources
-REM rd /S /Q %wfpath%\3rdparty_resources
-REM MKLINK /D %wfpath%\3rdparty_resources %CD%\..\3rdparty_resources\src\main\resources\META-INF\resources\3rdparty_resources
+rename %wfpath%\WEB-INF\lib\webfocus-webjars-3rdparty-resources-HEAD-SNAPSHOT.jar webfocus-webjars-3rdparty-resources-HEAD-SNAPSHOT.jar_
+git clone http://wfbucket.ibi.com:7990/scm/wp/webfocus-webjars-3rdparty-resources.git ..\3rdparty_resources
+rd /S /Q %wfpath%\3rdparty_resources
+MKLINK /D %wfpath%\3rdparty_resources %CD%\..\3rdparty_resources\src\main\resources\META-INF\resources\3rdparty_resources
 
 REM make the new intl properties/strings resources link
 rename %wfpath%\WEB-INF\lib\webfocus-intl-HEAD-SNAPSHOT.jar webfocus-intl-HEAD-SNAPSHOT.jar_
