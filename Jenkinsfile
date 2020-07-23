@@ -17,8 +17,15 @@ try {
         node {
             echo "NODE_NAME = ${env.NODE_NAME}"
             checkout scm
+            if(checkIfSkipBuild(true)) {
+                return
+            }
             stash name: 'sources', includes: '*.*,src/'
         }
+    }
+
+    if(checkIfSkipBuild(false)) {
+    	return
     }
 
     parallel build: {
@@ -119,6 +126,10 @@ try {
     currentBuild.result = 'FAILED: deploys'
     throw e
 } finally {
+	if(checkIfSkipBuild(false)) {
+    	return
+    }
+    
     def buildStatus = currentBuild.result
     def buildNotSuccess =  !SUCCESS.equals(buildStatus)
     def lastBuildNotSuccess = !SUCCESS.equals(currentBuild.previousBuild?.result)
@@ -155,6 +166,31 @@ def publishMavenReports() {
         reportFiles: 'index.html',
         reportName: "WebFOCUS Maven Reports"
     ])        
+}
+
+def checkIfSkipBuild(deleteWs) {
+    def isStartedByUser = checkIfBuildStartedByUser()
+    def changeSize = currentBuild.changeSets.size()
+    
+    echo "isStartedByUser: ${isStartedByUser} changeSize: ${changeSize}"
+
+    if(changeSize == 0 && !isStartedByUser) {
+        echo "There is no change in Git. Skip the build"
+        if(deleteWs) {
+            cleanWs cleanWhenAborted: false, cleanWhenFailure: false, cleanWhenNotBuilt: false, cleanWhenUnstable: false
+        }
+ 		return true
+    }
+    return false
+}
+
+
+def checkIfBuildStartedByUser() {
+     def tmp = currentBuild.getBuildCauses('hudson.model.Cause$UserIdCause')
+     if(tmp != null && tmp.size() > 0) {
+          return true;                              
+     }
+     return false;
 }
 
 
