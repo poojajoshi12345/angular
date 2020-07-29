@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'ibi-design-system';
-  src:  url('fonts/ibi-design-system.eot?o2ezfj');
-  src:  url('fonts/ibi-design-system.eot?o2ezfj#iefix') format('embedded-opentype'),
-    url('fonts/ibi-design-system.ttf?o2ezfj') format('truetype'),
-    url('fonts/ibi-design-system.woff?o2ezfj') format('woff'),
-    url('fonts/ibi-design-system.svg?o2ezfj#ibi-design-system') format('svg');
+  src:  url('fonts/ibi-design-system.eot?kdmgd2');
+  src:  url('fonts/ibi-design-system.eot?kdmgd2#iefix') format('embedded-opentype'),
+    url('fonts/ibi-design-system.ttf?kdmgd2') format('truetype'),
+    url('fonts/ibi-design-system.woff?kdmgd2') format('woff'),
+    url('fonts/ibi-design-system.svg?kdmgd2#ibi-design-system') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -25,6 +25,15 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.ds-icon-integration:before {
+  content: "\eae9";
+}
+.ds-icon-account:before {
+  content: "\eaea";
+}
+.ds-icon-offline:before {
+  content: "\eae6";
+}
 .ds-icon-move-to-target:before {
   content: "\eae1";
 }
@@ -894,6 +903,12 @@
 }
 .ds-icon-x-axis:before {
   content: "\e9ce";
+}
+.ds-icon-right-left:before {
+  content: "\eae7";
+}
+.ds-icon-top-bottom:before {
+  content: "\eae8";
 }
 .ds-icon-y-axis:before {
   content: "\e9cf";
