@@ -234,7 +234,7 @@ $.widget("ibi.ibxPopup", $.ibi.ibxWidget,
 		{
 			//[IBX-78] make resize/move work when content has iframes...stop pointer events so they don't eat the events.
 			var frames = this.element.find("iframe");
-			frames.css("pointerEvents", (e.type == "resizestart" || e.type == "dragstart") ? "none" : "NONE");
+			frames.css("pointerEvents", (e.type == "resizestart" || e.type == "dragstart") ? "none" : "");
 		}.bind(this));
 	}
 });
