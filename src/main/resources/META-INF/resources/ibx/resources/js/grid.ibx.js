@@ -820,7 +820,7 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 			cell.classList.add(options.classes.gridCell);
 
 			//set visibility based on column visibility.
-			cell.classList.toggle("dgrid-col-hidden", !cInfo.visible);
+			cInfo.visible ? cell.classList.remove("dgrid-col-hidden") : cell.classList.add("dgrid-col-hidden");
 
 			//if the tabindex hasn't been set outside, then default to -1 (navkey/click access only...no tabbing between cells).
 			if(!cell.getAttribute("tabindex"))
