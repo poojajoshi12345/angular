@@ -26,7 +26,7 @@ $.widget("ibi.ibxPropertyGrid", $.ibi.ibxDataGrid,
 		this.options.colMap[1].title = ibx.resourceMgr.getString("IBX_PGRID_COL_VALUE");
 		
 		this.element.data("ibiIbxDataGrid", this);
-		this._sm.option({focusResetOnBlur:true, rubberBand:false, rubberBandPartialSelect:false});
+		this._sm.option({navKeyRoot:false, focusResetOnBlur:true, rubberBand:false, rubberBandPartialSelect:false});
 	},
 	_setAccessibility:function(accessible, aria)
 	{
