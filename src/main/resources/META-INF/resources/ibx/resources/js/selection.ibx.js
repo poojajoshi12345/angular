@@ -102,11 +102,10 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 		//back tabbing with focus default means find outer prev sibling that's tabbable
 		if(!options.focusRoot && options.focusDefault && e.keyCode == $.ui.keyCode.TAB && e.shiftKey)
 		{
-			var isFirstChild = $(e.target).is(":first-child");
-			var prev = this.element.prevAll("[tabindex]:ibxVisible").first();
-			if(isFirstChild && prev.length)
-			{
-				prev.focus();
+			var focusKids = this.element.logicalChildren(".ibx-sm-focus-default", ":ibxFocusable").toArray();
+			var idxTarget = focusKids.indexOf(e.target);
+			if(idxTarget > 0){
+				focusKids[idxTarget-1].focus();
 				e.preventDefault();
 			}
 		}
