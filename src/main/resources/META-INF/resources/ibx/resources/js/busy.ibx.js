@@ -128,6 +128,14 @@ function ibxBusy(config)
 	{
 		bShow = (bShow === undefined) ? true : bShow;
 
+		//clear out old parent info.
+		if(this._element.parentElement)
+		{
+			document.head.removeChild(document.querySelector(".ibx-busy-styles"));
+			this._element.parentElement.classList.remove("ibx-busy-parent");
+			this._element.parentElement.removeChild(this._element);
+		}
+
 		//overloaded so elParent can be config and elParent defaults to documentElement.
 		config = (config === undefined && !(elParent instanceof HTMLElement)) ? elParent : config
 		elParent = (elParent instanceof HTMLElement) ? elParent : document.body;
@@ -139,13 +147,7 @@ function ibxBusy(config)
 			elParent.appendChild(this._element);
 			elParent.classList.add("ibx-busy-parent");
 		}
-		else
-		if(this._element.parentElement)
-		{
-			document.head.removeChild(document.querySelector(".ibx-busy-styles"));
-			this._element.parentElement.classList.remove("ibx-busy-parent");
-			this._element.parentElement.removeChild(this._element);
-		}
+
 		return this._element;
 	};
 
