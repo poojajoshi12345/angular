@@ -56,6 +56,8 @@ $.widget("ibi.ibxSplitter", $.ibi.ibxWidget,
 			el2.ibxRemoveClass("ibx-splitter-sizing");
 			$(document.body).ibxRemoveClass("ibx-body-splitter-v ibx-body-splitter-h").css("pointerEvents", "");
 			$(document).off("mouseup mousemove", this._fnSplitterMouseEvent);
+			el1.css("flex", "");
+			el2.css("flex", "");
 			delete this._eLast;
 			this._trigger("resizeend", null, { "el1":el1, "el2":el2});
 		}
