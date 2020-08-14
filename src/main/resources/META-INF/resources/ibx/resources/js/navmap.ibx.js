@@ -35,8 +35,15 @@ $.widget("ibi.ibxNavMap", $.ibi.ibxMenu,
 		}
 		else
 		{
-			var navTarget = $(e.target).ibxWidget("option", "navTarget");
-			$(navTarget).focus();
+			var target = $(e.target).ibxWidget("option", "navTarget");
+			if(target)
+				$(target).focus();
+
+			target = $(e.target).ibxWidget("option", "evalTarget");
+			if(target){
+				target = eval(target);
+				$(target).focus();
+			}
 		}
 		this._super(e);
 	},
