@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'ibi-design-system';
-  src:  url('fonts/ibi-design-system.eot?rcdgjo');
-  src:  url('fonts/ibi-design-system.eot?rcdgjo#iefix') format('embedded-opentype'),
-    url('fonts/ibi-design-system.ttf?rcdgjo') format('truetype'),
-    url('fonts/ibi-design-system.woff?rcdgjo') format('woff'),
-    url('fonts/ibi-design-system.svg?rcdgjo#ibi-design-system') format('svg');
+  src:  url('fonts/ibi-design-system.eot?p5pzue');
+  src:  url('fonts/ibi-design-system.eot?p5pzue#iefix') format('embedded-opentype'),
+    url('fonts/ibi-design-system.ttf?p5pzue') format('truetype'),
+    url('fonts/ibi-design-system.woff?p5pzue') format('woff'),
+    url('fonts/ibi-design-system.svg?p5pzue#ibi-design-system') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -25,14 +25,23 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.ds-icon-circle-plus:before {
+  content: "\eaec";
+}
+.ds-icon-list-view:before {
+  content: "\eaed";
+}
+.ds-icon-star-half:before {
+  content: "\eaee";
+}
+.ds-icon-accounts:before {
+  content: "\eaef";
+}
 .ds-icon-role:before {
   content: "\eaeb";
 }
 .ds-icon-integration:before {
   content: "\eae9";
-}
-.ds-icon-account:before {
-  content: "\eaea";
 }
 .ds-icon-offline:before {
   content: "\eae6";
@@ -816,6 +825,9 @@
 }
 .ds-icon-map:before {
   content: "\e9b8";
+}
+.ds-icon-pinned:before {
+  content: "\eaf0";
 }
 .ds-icon-pin:before {
   content: "\e9b9";
