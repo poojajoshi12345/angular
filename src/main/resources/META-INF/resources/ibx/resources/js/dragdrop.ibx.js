@@ -194,8 +194,9 @@ ibxDragDropManager._onMouseEvent = function(e)
 
 		if(isDragging)
 		{
-			//find the element under the mouse.
-			var elTarget = document.elementFromPoint(e.clientX, e.clientY);
+			//find the element under the mouse.  The isIE is to try and fix CD-2586, but this can be a problem if pointer-events:none is on
+			//for the element being dragged...so, this is just an ATTEMPT at fixing it - remove if it causes problems.
+			var elTarget = ibxPlatformChecks.isIE ? e.target : document.elementFromPoint(e.clientX, e.clientY);
 
 			//new drop target so reset the effect.
 			this._dataTransfer.dropEffect = "not-allowed";
