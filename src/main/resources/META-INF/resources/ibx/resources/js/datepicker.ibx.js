@@ -118,10 +118,18 @@ $.widget("ibi.ibxDatePicker", $.ibi.ibxVBox,
 		var defaultPrevented = !this._trigger("changemonthyear", null, data);
 		if(!defaultPrevented && this.options.adjustForMonthYear)
 			this.option("date", data.newDate);
-		this._inChange = false;
 
+		this._onRefreshSelection();
+
+		this._inChange = false;
+	},
+	_onRefreshSelection:function(e)
+	{
 		//CD-2510/DF1268 - as usual IE has a problem after the native year/month popup closes nothing has focus..have to focus something
 		window.setTimeout(function(){
+			if(this.destroyed())
+				return;
+
 			this._datePicker.ibxSelectionManager('selectableChildren');
 			this._datePicker.ibxSelectionManager('selected', 'td a', true, true, true);
 		}.bind(this), 10);
@@ -230,10 +238,7 @@ $.widget("ibi.ibxDateRange", $.ibi.ibxDatePicker,
 	_onChangeMonthYear: function (year, month, inst)
 	{
 		window.setTimeout(function () { this._highlightRange(); }.bind(this), 10);
-		window.setTimeout(function(){
-			this._datePicker.ibxSelectionManager('selectableChildren');
-			this._datePicker.ibxSelectionManager('selected', 'td a', true, true, true);
-		}.bind(this), 10);
+		this._onRefreshSelection();
 	},
 	_onClear: function ()
 	{
