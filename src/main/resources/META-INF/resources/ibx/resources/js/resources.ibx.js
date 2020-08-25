@@ -176,10 +176,15 @@ _p.loadExternalResFile = function(elFile, bundle)
 				{
 					if(fileType == "string-file")
 					{
-						content = content.replace(/^[^{][\s|\S][^{]*/, "");//strip off any possible header (copyright, etc.)
-						content = JSON.parse(content);
-						this.addStringBundle(content, elFile.attr("default") == "true");
-						eType = "stringfileloaded";
+						try{
+							content = content.replace(/^[^{][\s|\S][^{]*/, "");//strip off any possible header (copyright, etc.)
+							content = JSON.parse(content);
+							this.addStringBundle(content, elFile.attr("default") == "true");
+							eType = "stringfileloaded";
+						}catch(ex){
+							console.error("[ibxResourceManager] Error parsing string bundle: " + src);
+							throw(ex);
+						}
 					}
 					else
 					if(fileType == "markup-file")
@@ -316,10 +321,15 @@ _p.loadBundle = function(xResDoc)
 			var content = stringBundle.text().trim();
 			if(content)
 			{
-				content = this.preProcessResource(content);//precompile the content...string substitutions, etc.
-				var strBundle = JSON.parse(content);
-				this.addStringBundle(strBundle);
-				$(window).dispatchEvent("ibx_ibxresmgr", {"hint":"stringinlineloaded", "loadDepth":this._loadDepth, "resMgr":this, "bundle":bundle[0]});
+				try{
+					content = this.preProcessResource(content);//precompile the content...string substitutions, etc.
+					var strBundle = JSON.parse(content);
+					this.addStringBundle(strBundle);
+					$(window).dispatchEvent("ibx_ibxresmgr", {"hint":"stringinlineloaded", "loadDepth":this._loadDepth, "resMgr":this, "bundle":bundle[0]});
+				}catch(ex){
+					console.error("[ibxResourceManager] Error parsing string bundle: " + xResDoc.src);
+					throw(ex);
+				}
 			}
 		}.bind(this));
 
