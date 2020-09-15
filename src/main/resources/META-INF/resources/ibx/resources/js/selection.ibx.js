@@ -93,7 +93,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 	_onKeyDown:function(e)
 	{
 		var options = this.options;
-		var ownsTarget = $.contains(this.element[0], e.target) && $(e.target.parentElement).closest(".ibx-selection-manager").is(this.element); //is there a deeper selection manager?!
+		var ownsTarget = $.contains(this.element[0], e.target) && $(e.target.parentElement).closest(".ibx-sm-focus-root,.ibx-sm-nav-key-root").is(this.element); //is there a deeper selection manager?!
 
 		//this aint the selectionmanager you're looking for...get out of Dodge!
 		if(!ownsTarget)
