@@ -105,8 +105,8 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 			}
 		}
 
-		//manage circular tabbing if desired.
-		var ownsTarget = $.contains(this.element[0], e.target) && $(e.target.parentElement).closest(".ibx-selection-manager.ibx-sm-focus-root").is(this.element); //is there a deeper selection manager?!
+		//manage circular tabbing if desired. (circular focusing can look above for any focus root)
+		var ownsTarget = $(e.target.parentElement).closest(".ibx-selection-manager.ibx-sm-focus-root").is(this.element);
 		if(ownsTarget && options.focusRoot && e.keyCode == $.ui.keyCode.TAB)
 		{
 			var focusKids = this.element.logicalChildren(".ibx-sm-focus-root", ":ibxFocusable");
@@ -133,8 +133,9 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 			}
 		}
 
-		//manage arrow navigation if desired.
-		ownsTarget = $.contains(this.element[0], e.target) && $(e.target.parentElement).closest(".ibx-selection-manager.ibx-sm-nav-key-root").is(this.element); //is there a deeper selection manager?!
+		//manage arrow navigation if desired. (arrow key navigation has to be with the direct parent selection manager)
+		var closestSelMgr = $(e.target.parentElement).closest(".ibx-selection-manager")
+		ownsTarget = closestSelMgr.is(this.element) && closestSelMgr.is('.ibx-sm-nav-key-root');
 		if(ownsTarget && options.navKeyRoot && [$.ui.keyCode.LEFT, $.ui.keyCode.RIGHT, $.ui.keyCode.UP, $.ui.keyCode.DOWN].indexOf(e.keyCode) != -1)
 		{
 			var navKids = this.selectableChildren(":ibxVisible");
