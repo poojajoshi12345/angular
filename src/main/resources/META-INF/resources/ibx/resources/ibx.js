@@ -203,9 +203,9 @@ ibx._bootstrap = function(isEmbedded)
 
 		// //[IBX-122] don't load jQuery/jQueryUI if already loaded
 		if(window.jQuery)
-			scripts[1] = null;
+			preLoadScript[1] = null;
 		if(window.jQuery && window.jQuery.ui)
-			scripts[2] = null;
+			preLoadScript[2] = null;
 
 		//add the css files to the document.
 		preLoadCss.forEach(function(css)
