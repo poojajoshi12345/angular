@@ -125,7 +125,18 @@
 			{
 				flex:1 1 auto;
 			}
-
+			.dlg-item-list
+			{
+				margin-top:5px;
+				border:1px solid black;
+			}
+			.dlg-item-list-item
+			{
+				width:25px;
+				height:25px;
+				border:1px solid #ccc;
+				margin:5px;
+			}
 			.test-r-slider, .test-h-slider
 			{
 				width:200px;
@@ -347,6 +358,11 @@
 				<div tabindex="0" class="txt-title" data-ibx-type="ibxTextField" data-ibxp-placeholder="Enter one line of text" data-ibxp-aria.labelled-By="txtTitleLabel"></div>
 				<div id="txtBodyLabel" class="dlg-ctl-label" data-ibx-type="ibxLabel">Enter Text Here:</div>
 				<div tabindex="0" class="dlg-txt-body" data-ibx-type="ibxTextArea"  data-ibxp-placeholder="Enter multiple line of text" data-ibxp-aria.labelled-by="txtBodyLabel" data-ibxp-aria.described-by="txtBodyLabel"></div>
+				<div tabindex='0' class='dlg-item-list' data-ibx-type='ibxHBox' data-ibxp-nav-key-root='true' data-ibxp-focus-default='true'>
+					<div tabindex='-1' class='dlg-item-list-item'></div>
+					<div tabindex='-1' class='dlg-item-list-item'></div>
+					<div tabindex='-1' class='dlg-item-list-item'></div>
+				</div>
 			</div>
 		</div>
 		<div class="test-ctrl split-menu-button" tabIndex="0" data-ibx-type="ibxHSplitMenuButton" data-ibxp-default-menu-item=".def-item" data-ibxp-glyph-classes="fa fa-12 fa-gears">

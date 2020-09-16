@@ -93,11 +93,6 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 	_onKeyDown:function(e)
 	{
 		var options = this.options;
-		var ownsTarget = $.contains(this.element[0], e.target) && $(e.target.parentElement).closest(".ibx-sm-focus-root,.ibx-sm-nav-key-root").is(this.element); //is there a deeper selection manager?!
-
-		//this aint the selectionmanager you're looking for...get out of Dodge!
-		if(!ownsTarget)
-			return;
 
 		//back tabbing with focus default means find outer prev sibling that's tabbable
 		if(!options.focusRoot && options.focusDefault && e.keyCode == $.ui.keyCode.TAB && e.shiftKey)
@@ -111,7 +106,8 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 		}
 
 		//manage circular tabbing if desired.
-		if(options.focusRoot && e.keyCode == $.ui.keyCode.TAB)
+		var ownsTarget = $.contains(this.element[0], e.target) && $(e.target.parentElement).closest(".ibx-selection-manager.ibx-sm-focus-root").is(this.element); //is there a deeper selection manager?!
+		if(ownsTarget && options.focusRoot && e.keyCode == $.ui.keyCode.TAB)
 		{
 			var focusKids = this.element.logicalChildren(".ibx-sm-focus-root", ":ibxFocusable");
 			var target = null;
@@ -138,7 +134,8 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 		}
 
 		//manage arrow navigation if desired.
-		if(options.navKeyRoot && [$.ui.keyCode.LEFT, $.ui.keyCode.RIGHT, $.ui.keyCode.UP, $.ui.keyCode.DOWN].indexOf(e.keyCode) != -1)
+		ownsTarget = $.contains(this.element[0], e.target) && $(e.target.parentElement).closest(".ibx-selection-manager.ibx-sm-nav-key-root").is(this.element); //is there a deeper selection manager?!
+		if(ownsTarget && options.navKeyRoot && [$.ui.keyCode.LEFT, $.ui.keyCode.RIGHT, $.ui.keyCode.UP, $.ui.keyCode.DOWN].indexOf(e.keyCode) != -1)
 		{
 			var navKids = this.selectableChildren(":ibxVisible");
 			var focusedItem = this._focus();
