@@ -19,13 +19,15 @@
 
 .ibx-select-open-btn
 {
-    flex: 0 0 auto;
+	flex: 0 0 auto;
+	padding:.2em .4em;
 }
 
 .ibx-select-open-btn::before {
-	font-family:"FontAwesome", "Font Awesome 5 Free";
+	font-family:"Material Icons";
+	font-size:14pt;
     font-weight:900;
-	content:"\f0d7";
+	content:"arrow_drop_down";
 }
 
 .ibx-select > input {
@@ -279,7 +281,9 @@
 
 .ibx-page-list-page-box-left
 {
-    flex: 0 0 auto;
+	flex: 0 0 auto;
+	font-size:24px;
+	transform:rotate(90deg);
     margin-right: 10px;
 }
 
@@ -290,7 +294,9 @@
 
 .ibx-page-list-page-box-right
 {
-    flex: 0 0 auto;
+	flex: 0 0 auto;
+	font-size:24px;
+	transform:rotate(-90deg);
     margin-left: 10px;
 }
 
