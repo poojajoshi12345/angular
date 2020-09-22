@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'ibi-design-system';
-  src:  url('fonts/ibi-design-system.eot?s8tdqt');
-  src:  url('fonts/ibi-design-system.eot?s8tdqt#iefix') format('embedded-opentype'),
-    url('fonts/ibi-design-system.ttf?s8tdqt') format('truetype'),
-    url('fonts/ibi-design-system.woff?s8tdqt') format('woff'),
-    url('fonts/ibi-design-system.svg?s8tdqt#ibi-design-system') format('svg');
+  src:  url('fonts/ibi-design-system.eot?dvivyl');
+  src:  url('fonts/ibi-design-system.eot?dvivyl#iefix') format('embedded-opentype'),
+    url('fonts/ibi-design-system.ttf?dvivyl') format('truetype'),
+    url('fonts/ibi-design-system.woff?dvivyl') format('woff'),
+    url('fonts/ibi-design-system.svg?dvivyl#ibi-design-system') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -355,6 +355,9 @@
 .ds-icon-star:before {
   content: "\e92c";
 }
+.ds-icon-processes:before {
+  content: "\eaf3";
+}
 .ds-icon-hierarchy:before {
   content: "\e92f";
 }
@@ -423,6 +426,9 @@
 }
 .ds-icon-export-file:before {
   content: "\e941";
+}
+.ds-icon-reply:before {
+  content: "\eaf1";
 }
 .ds-icon-comment-empty:before {
   content: "\e942";
@@ -862,6 +868,9 @@
 .ds-icon-selection-square:before {
   content: "\eac3";
 }
+.ds-icon-outline-slider:before {
+  content: "\eaf2";
+}
 .ds-icon-selection-square-pan:before {
   content: "\eac4";
 }
@@ -1009,7 +1018,7 @@
 .ds-icon-preview:before {
   content: "\e9e9";
 }
-.ds-icon-Refresh:before {
+.ds-icon-refresh:before {
   content: "\e9ea";
 }
 .ds-icon-view-flatten:before {
