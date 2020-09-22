@@ -532,7 +532,7 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 		var corner = this._corner = $("<div>").ibxAddClass("dgrid-corner").data({ibxCol:1, ibxRow:1});
 		var grid = this._grid = $("<div tabindex='0'>").ibxVBox({align:"start", selType:"custom"}).ibxAddClass(classes.gridClass).data({ibxCol:"2", ibxRow:"2"});
 		grid.on("ibx_beforeselchange", this._onGridSelChange.bind(this));
-		grid.on("scroll", this._onGridScroll.bind(this));
+		grid.on("scroll", this._onGridDataScroll.bind(this));
 
 		this._sm = grid.ibxDataGridSelectionManager({grid:this});
 		this._sm = grid.ibxDataGridSelectionManager("instance");
@@ -540,6 +540,9 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 		var colHeaderBar = this._colHeaderBar = $("<div tabindex='0'>").ibxHBox({navKeyRoot:true, focusDefault:true}).ibxAddClass(classes.colHeaderBarClass);
 		var colHeaderBarGroup = this._colHeaderBarGroup = $("<div class='dgrid-header-col-bar-group'>").append(colHeaderBar).data({ibxCol:"2", ibxRow:"1"});
 		var rowHeaderBar = this._rowHeaderBar = $("<div tabindex='0'>").ibxVBox({navKeyRoot:true, focusDefault:true, align:"stretch"}).ibxAddClass(classes.rowHeaderBarClass).data({ibxCol:"1", ibxRow:"2"});
+
+		colHeaderBar.on("scroll", this._onGridColHeaderScroll.bind(this));
+		rowHeaderBar.on("scroll", this._onGridRowHeaderScroll.bind(this));
 
 		this.add([corner[0], colHeaderBarGroup[0], rowHeaderBar[0], grid[0]]);
 		this._super();
@@ -873,7 +876,17 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 		if(cInfo)
 			this.setColumnWidth(cInfo._ui.idx, el1Width);
 	},
-	_onGridScroll:function(e)
+	_onGridColHeaderScroll:function(e)
+	{
+		var scrollX = this._colHeaderBar.prop("scrollLeft");
+		this._grid.prop("scrollLeft", scrollX);
+	},
+	_onGridRowHeaderScroll:function(e)
+	{
+		var scrollY = this._rowHeaderBar.prop("scrollTop");
+		this._grid.prop("scrollTop", scrollY);
+	},
+	_onGridDataScroll:function(e)
 	{
 		var scrollX = this._grid.prop("scrollLeft");
 		var scrollY = this._grid.prop("scrollTop");
