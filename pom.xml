@@ -5,7 +5,7 @@
 
 	<groupId>com.ibi</groupId>
 	<artifactId>webfocus-webjars-ibx</artifactId>
-	<version>HEAD-SNAPSHOT</version>
+	<version>8207.19-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
 	<name>webfocus-webjars-ibx</name>
@@ -851,7 +851,7 @@
 		<connection>scm:git:http://wfbucket.ibi.com:7990/scm/wp/${project.artifactId}.git</connection>
 		<developerConnection>scm:git:http://wfbucket.ibi.com:7990/scm/wp/${project.artifactId}.git</developerConnection>
 		<url>http://wfbucket.ibi.com:7990/scm/wp/${project.artifactId}.git</url>
-		<tag>HEAD</tag>
+		<tag>release/branch8207.19</tag>
 	</scm>
 
     <organization>
