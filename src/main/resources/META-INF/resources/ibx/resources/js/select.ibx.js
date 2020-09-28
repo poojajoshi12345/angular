@@ -1263,8 +1263,8 @@ $.widget("ibi.ibxSelectItemListPaged", $.ibi.ibxVBox,
 		this._clearAll.on("click", this._onClearAll.bind(this));
 
 		this._pageBox = $("<div class='ibx-page-list-page-box'>").ibxHBox({"align": "stretch"});
-		this._pageLeft = $("<div tabindex='0' class='ibx-page-list-page-box-left'>").ibxButtonSimple({glyphClasses:"fa fa-chevron-left"}).on("click", this._onPageLeft.bind(this));
-		this._pageRight = $("<div tabindex='0' class='ibx-page-list-page-box-right'>").ibxButtonSimple({glyphClasses:"fa fa-chevron-right"}).on("click", this._onPageRight.bind(this));
+		this._pageLeft = $("<div tabindex='0' class='ibx-page-list-page-box-left'>").ibxButtonSimple({glyphClasses:"material-icons","glyph":"arrow_drop_down"}).on("click", this._onPageLeft.bind(this));
+		this._pageRight = $("<div tabindex='0' class='ibx-page-list-page-box-right'>").ibxButtonSimple({glyphClasses:"material-icons", "glyph":"arrow_drop_down"}).on("click", this._onPageRight.bind(this));
 		this._pageLabel = $("<div class='ibx-page-list-page-box-label'>").ibxLabel({"justify": "center"});
 		this._pageBox.append(this._pageLeft, this._pageLabel, this._pageRight);
 

@@ -26,8 +26,8 @@ $.widget("ibi.ibxDatePicker", $.ibi.ibxVBox,
 		this.options.date = this.options.date || $.datepicker.formatDate($.ibi.ibxDatePicker.statics.defaultDateFormat, new Date());
 		this._super();
 		this.element.on("focus keydown", this._onFocusKeyEvent.bind(this));
-		this._input = $('<div class="ibx-datepicker-input">').ibxLabel({glyphClasses:"fa fa-calendar", 'align': 'stretch'}).on('click', this._showPopup.bind(this));
-		this._clear = $('<div class="ibx-datepicker-clear">').ibxButtonSimple({glyphClasses:"fa fa-times"}).on('click', this._onClear.bind(this)).hide();
+		this._input = $('<div class="ibx-datepicker-input">').ibxLabel({glyphClasses:"material-icons", glyph:'date_range', 'align': 'stretch'}).on('click', this._showPopup.bind(this));
+		this._clear = $('<div class="ibx-datepicker-clear">').ibxButtonSimple({glyphClasses:"material-icons", glyph:'clear'}).on('click', this._onClear.bind(this)).hide();
 		this._inputWrapper = $('<div>').ibxHBox({align: 'center'}).ibxAddClass('ibx-datepicker-input-wrapper');
 		this._inputWrapper.append(this._input, this._clear);
 		this._dateWrapper = $('<div>').ibxFlexBox({ 'wrap': false });
@@ -221,8 +221,8 @@ $.widget("ibi.ibxDateRange", $.ibi.ibxDatePicker,
 		this.options.dateFrom = this.options.dateFrom || $.datepicker.formatDate($.ibi.ibxDatePicker.statics.defaultDateFormat, new Date());
 		this._super();
 
-		this._input2 = $('<div class="ibx-datepicker-input">').ibxLabel({ glyphClasses: "fa fa-calendar", 'align': 'stretch' }).on('click', this._showPopup.bind(this));
-		this._clear2 = $('<div class="ibx-datepicker-clear">').ibxButtonSimple({glyphClasses:"fa fa-times"}).on('click', this._onClear2.bind(this)).hide();
+		this._input2 = $('<div class="ibx-datepicker-input">').ibxLabel({glyphClasses:"material-icons", glyph:'date_range', 'align': 'stretch'}).on('click', this._showPopup.bind(this));
+		this._clear2 = $('<div class="ibx-datepicker-clear">').ibxButtonSimple({glyphClasses:"material-icons", glyph:'clear'}).on('click', this._onClear2.bind(this)).hide();
 		this._inputWrapper.append(this._input2, this._clear2);
 		window.setTimeout(function () { this._highlightRange(); }.bind(this), 10);
 	},
