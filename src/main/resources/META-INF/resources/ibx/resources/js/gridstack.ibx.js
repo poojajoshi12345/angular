@@ -20,7 +20,6 @@ $.widget("ibi.ibxGridStack", $.ibi.ibxWidget,
 	_widgetClass: "ibx-grid-stack",
 	_create: function ()
 	{
-		this.element.gridstack(this.options);
 		this.element.ibxAddClass("grid-stack");
 		this.element.css('min-height', this._getMinHeight());
 		this._super();
@@ -36,6 +35,10 @@ $.widget("ibi.ibxGridStack", $.ibi.ibxWidget,
 		{
 			$("iframe").css("pointer-events", "");
 		});
+	},
+	_init: function (){
+		this.element.gridstack(this.options);
+		this._super();
 	},
 	addCell: function (cell, x, y, width, height)
 	{
