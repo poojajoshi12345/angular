@@ -1839,13 +1839,14 @@
 	GridStack.prototype.setGridWidth = function (gridWidth, doNotPropagate)
 	{
 		this.container.removeClass('grid-stack-' + this.opts.width);
-		if (doNotPropagate !== true)
-		{
-			this._updateNodeWidths(this.opts.width, gridWidth);
-		}
+		var oldWidth = this.opts.width;
 		this.opts.width = gridWidth;
 		this.grid.width = gridWidth;
 		this.container.addClass('grid-stack-' + gridWidth);
+		if (doNotPropagate !== true)
+		{
+			this._updateNodeWidths(oldWidth, gridWidth);
+		}
 	};
 
 	// jscs:disable requireCamelCaseOrUpperCaseIdentifiers
