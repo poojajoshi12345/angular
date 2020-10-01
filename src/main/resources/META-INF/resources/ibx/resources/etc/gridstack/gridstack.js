@@ -514,7 +514,8 @@
 
 		node = this._prepareNode(node, resizing);
 
-		this._fixCollisions(node);
+		if (!this.noPack)
+			this._fixCollisions(node);
 		if (!noPack)
 		{
 			this._packNodes();
@@ -1714,7 +1715,7 @@
 			width = (width !== null && typeof width != 'undefined') ? width : node.width;
 			height = (height !== null && typeof height != 'undefined') ? height : node.height;
 
-			this.grid.moveNode(node, x, y, width, height);
+			this.grid.moveNode(node, x, y, width, height, this.grid.noPack);
 		});
 	};
 
@@ -1838,6 +1839,7 @@
 
 	GridStack.prototype.setGridWidth = function (gridWidth, doNotPropagate)
 	{
+		this.grid.noPack = gridWidth > this.opts.width;
 		this.container.removeClass('grid-stack-' + this.opts.width);
 		var oldWidth = this.opts.width;
 		this.opts.width = gridWidth;
@@ -1847,6 +1849,7 @@
 		{
 			this._updateNodeWidths(oldWidth, gridWidth);
 		}
+		this.grid.noPack = false;
 	};
 
 	// jscs:disable requireCamelCaseOrUpperCaseIdentifiers
