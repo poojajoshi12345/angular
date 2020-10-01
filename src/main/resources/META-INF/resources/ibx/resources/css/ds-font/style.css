@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'ibi-design-system';
-  src:  url('fonts/ibi-design-system.eot?dvivyl');
-  src:  url('fonts/ibi-design-system.eot?dvivyl#iefix') format('embedded-opentype'),
-    url('fonts/ibi-design-system.ttf?dvivyl') format('truetype'),
-    url('fonts/ibi-design-system.woff?dvivyl') format('woff'),
-    url('fonts/ibi-design-system.svg?dvivyl#ibi-design-system') format('svg');
+  src:  url('fonts/ibi-design-system.eot?fecd2j');
+  src:  url('fonts/ibi-design-system.eot?fecd2j#iefix') format('embedded-opentype'),
+    url('fonts/ibi-design-system.ttf?fecd2j') format('truetype'),
+    url('fonts/ibi-design-system.woff?fecd2j') format('woff'),
+    url('fonts/ibi-design-system.svg?fecd2j#ibi-design-system') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -25,6 +25,18 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.ds-icon-columns-12:before {
+  content: "\e957";
+}
+.ds-icon-columns-28:before {
+  content: "\eaf4";
+}
+.ds-icon-columns-45:before {
+  content: "\eaf5";
+}
+.ds-icon-columns-80:before {
+  content: "\eaf6";
+}
 .ds-icon-circle-plus:before {
   content: "\eaec";
 }
@@ -708,9 +720,6 @@
 }
 .ds-icon-fx-program:before {
   content: "\e98e";
-}
-.ds-icon-grid:before {
-  content: "\e957";
 }
 .ds-icon-ellipse:before {
   content: "\e995";
