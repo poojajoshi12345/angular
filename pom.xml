@@ -12,6 +12,9 @@
 	<url>https://www.informationbuilders.com</url>
 
 	<properties>
+		<argLine>${argLine_CICD} ${argLine_JDK}</argLine>
+		<argLine_CICD/>
+		<argLine_JDK/>
 		<derby.version>10.14.2.0</derby.version>
         <ibi.doc.root>${project.build.directory}/ibi-doc-root</ibi.doc.root>
 		<jacoco.maven.plugin.version>0.8.4</jacoco.maven.plugin.version>
