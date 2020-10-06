@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'ibi-design-system';
-  src:  url('fonts/ibi-design-system.eot?6wtx0u');
-  src:  url('fonts/ibi-design-system.eot?6wtx0u#iefix') format('embedded-opentype'),
-    url('fonts/ibi-design-system.ttf?6wtx0u') format('truetype'),
-    url('fonts/ibi-design-system.woff?6wtx0u') format('woff'),
-    url('fonts/ibi-design-system.svg?6wtx0u#ibi-design-system') format('svg');
+  src:  url('fonts/ibi-design-system.eot?12prx7');
+  src:  url('fonts/ibi-design-system.eot?12prx7#iefix') format('embedded-opentype'),
+    url('fonts/ibi-design-system.ttf?12prx7') format('truetype'),
+    url('fonts/ibi-design-system.woff?12prx7') format('woff'),
+    url('fonts/ibi-design-system.svg?12prx7#ibi-design-system') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -35,8 +35,491 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-.ds-icon-analytic-functions:before {
+.ds-icon-allmfdtools-bv-flatten-view:before {
+  content: "\e957";
+}
+.ds-icon-alpha-datatype-derived-v2:before {
   content: "\eaf8";
+}
+.ds-icon-alpha-datatype-key-v2:before {
+  content: "\eafd";
+}
+.ds-icon-analytic-functions-advanced:before {
+  content: "\eb00";
+}
+.ds-icon-change-source:before {
+  content: "\eb02";
+}
+.ds-icon-change-target:before {
+  content: "\eb03";
+}
+.ds-icon-data-except-all2:before {
+  content: "\eb06";
+}
+.ds-icon-data-file:before {
+  content: "\eb07";
+}
+.ds-icon-data-intersect-all2:before {
+  content: "\eb08";
+}
+.ds-icon-data-union-all2:before {
+  content: "\eb09";
+}
+.ds-icon-database-automap:before {
+  content: "\eb0d";
+}
+.ds-icon-database-join:before {
+  content: "\eb0e";
+}
+.ds-icon-database-source-keyed:before {
+  content: "\eb0f";
+}
+.ds-icon-database-source:before {
+  content: "\eb10";
+}
+.ds-icon-database-target-keyed:before {
+  content: "\eb11";
+}
+.ds-icon-database-target-new-keyed:before {
+  content: "\eb12";
+}
+.ds-icon-database-target-new:before {
+  content: "\eb13";
+}
+.ds-icon-database-view-joins:before {
+  content: "\eb14";
+}
+.ds-icon-datatype-date-derived:before {
+  content: "\eb19";
+}
+.ds-icon-datatype-date-key:before {
+  content: "\eb1a";
+}
+.ds-icon-datatype-geo-derived:before {
+  content: "\eb1b";
+}
+.ds-icon-datatype-geo-key:before {
+  content: "\eb1c";
+}
+.ds-icon-datatype-time-derived:before {
+  content: "\eb1d";
+}
+.ds-icon-datatype-time-key:before {
+  content: "\eb1e";
+}
+.ds-icon-datatype-timestamp-derived:before {
+  content: "\eb1f";
+}
+.ds-icon-datatype-timestamp-key:before {
+  content: "\eb20";
+}
+.ds-icon-decompose_date:before {
+  content: "\eb21";
+}
+.ds-icon-dmc-from-data-source-keyed:before {
+  content: "\eb26";
+}
+.ds-icon-dmc-rom-data-source:before {
+  content: "\eb27";
+}
+.ds-icon-dmc-sql-filtered-data:before {
+  content: "\eb28";
+}
+.ds-icon-dmc-sql-fltr-and-fltrd-data:before {
+  content: "\eb29";
+}
+.ds-icon-dmc-sql-fltr-srtd-fltrd-data:before {
+  content: "\eb2a";
+}
+.ds-icon-dmc-sql-gear:before {
+  content: "\eb2b";
+}
+.ds-icon-dmc-sql-sorted:before {
+  content: "\eb2c";
+}
+.ds-icon-dmc-sql-srtd-fltrd-data:before {
+  content: "\eb2d";
+}
+.ds-icon-dmc-sql-with-filter-sorted:before {
+  content: "\eb32";
+}
+.ds-icon-dmc-sql-with-filter:before {
+  content: "\eb33";
+}
+.ds-icon-editor-foldlines:before {
+  content: "\eb34";
+}
+.ds-icon-filtered-data:before {
+  content: "\eb35";
+}
+.ds-icon-from-data-source:before {
+  content: "\eb36";
+}
+.ds-icon-join-profiler:before {
+  content: "\eb37";
+}
+.ds-icon-numeric-datatype-decimal-derived-v2:before {
+  content: "\eb38";
+}
+.ds-icon-numeric-datatype-decimal-hash:before {
+  content: "\eb39";
+}
+.ds-icon-numeric-datatype-decimal-key-hash:before {
+  content: "\eb3a";
+}
+.ds-icon-numeric-datatype-decimal-key-v2:before {
+  content: "\eb3b";
+}
+.ds-icon-numeric-datatype-derived-v2:before {
+  content: "\eb3c";
+}
+.ds-icon-numeric-datatype-key-hash:before {
+  content: "\eb3d";
+}
+.ds-icon-numeric-datatype-key-v2:before {
+  content: "\eb46";
+}
+.ds-icon-parameters-add-default-parm:before {
+  content: "\eb47";
+}
+.ds-icon-parameters-add-set-parm:before {
+  content: "\eb48";
+}
+.ds-icon-parameters-edit-set-parm:before {
+  content: "\eb49";
+}
+.ds-icon-sql-filtered-data:before {
+  content: "\eb4a";
+}
+.ds-icon-sql-gear:before {
+  content: "\eb4b";
+}
+.ds-icon-sql-sorted:before {
+  content: "\eb4c";
+}
+.ds-icon-sql-with-filter-and-filtered-data:before {
+  content: "\eb4d";
+}
+.ds-icon-sql-with-filter-and-sorted-filtered-data:before {
+  content: "\eb4e";
+}
+.ds-icon-sql-with-filter-sorted:before {
+  content: "\eb4f";
+}
+.ds-icon-sql-with-filter:before {
+  content: "\eb50";
+}
+.ds-icon-sql-with-sorted-filtered-data:before {
+  content: "\eb51";
+}
+.ds-icon-start-email-and-scheduler:before {
+  content: "\eb52";
+}
+.ds-icon-start-email:before {
+  content: "\eb53";
+}
+.ds-icon-start-procedure-flow:before {
+  content: "\eb54";
+}
+.ds-icon-start-scheduler:before {
+  content: "\eb5d";
+}
+.ds-icon-target-transformations:before {
+  content: "\eb5e";
+}
+.ds-icon-use-data:before {
+  content: "\eb5f";
+}
+.ds-icon-wc-dt-database-add:before {
+  content: "\eb60";
+}
+.ds-icon-wc-dt-join-add:before {
+  content: "\eb61";
+}
+.ds-icon-wc-dt-join-remove:before {
+  content: "\eb62";
+}
+.ds-icon-wc-dt-join:before {
+  content: "\eb63";
+}
+.ds-icon-wc-dt-tree-remove:before {
+  content: "\eb64";
+}
+.ds-icon-layers-geographic:before {
+  content: "\eb65";
+}
+.ds-icon-invert-case:before {
+  content: "\eb66";
+}
+.ds-icon-format-conversion:before {
+  content: "\eb67";
+}
+.ds-icon-manage-sql-repository:before {
+  content: "\eb68";
+}
+.ds-icon-measure-rulers-cascaded:before {
+  content: "\eb69";
+}
+.ds-icon-mfd-bv-flatten-view:before {
+  content: "\eb6a";
+}
+.ds-icon-migration:before {
+  content: "\eb6b";
+}
+.ds-icon-object-caption:before {
+  content: "\eb6c";
+}
+.ds-icon-procedure-flow-scheduled:before {
+  content: "\eb6d";
+}
+.ds-icon-remove-from-hierarchy:before {
+  content: "\eb6e";
+}
+.ds-icon-replace:before {
+  content: "\eb6f";
+}
+.ds-icon-repository-management:before {
+  content: "\eb70";
+}
+.ds-icon-task-email:before {
+  content: "\eb71";
+}
+.ds-icon-variable-size-large:before {
+  content: "\eb72";
+}
+.ds-icon-wc-dbms-prerequisites:before {
+  content: "\eb73";
+}
+.ds-icon-where-total:before {
+  content: "\eb74";
+}
+.ds-icon-write-in-calender:before {
+  content: "\eb75";
+}
+.ds-icon-flow-procedure-c:before {
+  content: "\eb76";
+}
+.ds-icon-flow-procedure-cc:before {
+  content: "\eb77";
+}
+.ds-icon-flow-procedure-directload-d:before {
+  content: "\eb78";
+}
+.ds-icon-flow-procedure-directload-file-export:before {
+  content: "\eb79";
+}
+.ds-icon-flow-procedure-directload-star:before {
+  content: "\eb7a";
+}
+.ds-icon-flow-procedure-q:before {
+  content: "\eb7b";
+}
+.ds-icon-flow-procedure-qc:before {
+  content: "\eb7c";
+}
+.ds-icon-cascaded-windows:before {
+  content: "\eb7d";
+}
+.ds-icon-dimension-time:before {
+  content: "\eb7e";
+}
+.ds-icon-timestamp:before {
+  content: "\eb7f";
+}
+.ds-icon-focexec-procedure-scheduled:before {
+  content: "\eb80";
+}
+.ds-icon-flow-procedure-scheduled:before {
+  content: "\eb81";
+}
+.ds-icon-fex-procedure-scheduled:before {
+  content: "\eb82";
+}
+.ds-icon-cogs:before {
+  content: "\eb83";
+}
+.ds-icon-dimension-squares:before {
+  content: "\eb84";
+}
+.ds-icon-dimension-square:before {
+  content: "\eb85";
+}
+.ds-icon-folder-closed-delete-outline:before {
+  content: "\eb86";
+}
+.ds-icon-folder-closed-outline:before {
+  content: "\eb87";
+}
+.ds-icon-folder-minus-outline:before {
+  content: "\eb88";
+}
+.ds-icon-page-with-check:before {
+  content: "\eb89";
+}
+.ds-icon-page-with-plus-sign:before {
+  content: "\eb8a";
+}
+.ds-icon-page-with-times-sign:before {
+  content: "\eb8b";
+}
+.ds-icon-set-options-and-run:before {
+  content: "\eb8c";
+}
+.ds-icon-resource-management:before {
+  content: "\eb8d";
+}
+.ds-icon-find-next:before {
+  content: "\eb8e";
+}
+.ds-icon-find-previous:before {
+  content: "\eb8f";
+}
+.ds-icon-geomarker-check:before {
+  content: "\eb90";
+}
+.ds-icon-geomarker-delete:before {
+  content: "\eb91";
+}
+.ds-icon-geo-marker-edit:before {
+  content: "\eb92";
+}
+.ds-icon-geo-marker-exclamation:before {
+  content: "\eb93";
+}
+.ds-icon-geo-marker-minus:before {
+  content: "\eb94";
+}
+.ds-icon-flow-procedure:before {
+  content: "\eb95";
+}
+.ds-icon-dmc:before {
+  content: "\eb96";
+}
+.ds-icon-direct-load-flow:before {
+  content: "\eb97";
+}
+.ds-icon-sql-box:before {
+  content: "\eb98";
+}
+.ds-icon-dmc-sql-basic:before {
+  content: "\eb99";
+}
+.ds-icon-dimension-dot:before {
+  content: "\eb9a";
+}
+.ds-icon-dimension-triangle:before {
+  content: "\eb9b";
+}
+.ds-icon-dimension-numeric-decimal-2:before {
+  content: "\eb9c";
+}
+.ds-icon-dimension-numeric-2:before {
+  content: "\eb9d";
+}
+.ds-icon-dimension-alpha-2:before {
+  content: "\eb9e";
+}
+.ds-icon-bulb-exclamation-mark:before {
+  content: "\eb9f";
+}
+.ds-icon-analytic-functions:before {
+  content: "\eba0";
+}
+.ds-icon-rm-reconfigure:before {
+  content: "\eb3e";
+}
+.ds-icon-row-total:before {
+  content: "\eb3f";
+}
+.ds-icon-scheduled-listener-job:before {
+  content: "\eb40";
+}
+.ds-icon-sidebar-close:before {
+  content: "\eb41";
+}
+.ds-icon-sidebar-open:before {
+  content: "\eb42";
+}
+.ds-icon-snowflake:before {
+  content: "\eb43";
+}
+.ds-icon-tab-navigate-mode-off:before {
+  content: "\eb44";
+}
+.ds-icon-tab-navigate-mode-on:before {
+  content: "\eb45";
+}
+.ds-icon-flow-procedure-square-scheduled:before {
+  content: "\eb55";
+}
+.ds-icon-flow-procedure-square-startflow:before {
+  content: "\eb56";
+}
+.ds-icon-flow-procedure-square:before {
+  content: "\eb57";
+}
+.ds-icon-data-except:before {
+  content: "\eb58";
+}
+.ds-icon-data-intersect:before {
+  content: "\eb59";
+}
+.ds-icon-dbms-passthrough:before {
+  content: "\eb5a";
+}
+.ds-icon-fex-scheduled:before {
+  content: "\eb5b";
+}
+.ds-icon-fex-start:before {
+  content: "\eb5c";
+}
+.ds-icon-folder-open-outline:before {
+  content: "\eb2e";
+}
+.ds-icon-folder-plus-outline:before {
+  content: "\eb2f";
+}
+.ds-icon-folders-closed-outline:before {
+  content: "\eb30";
+}
+.ds-icon-question:before {
+  content: "\eb0b";
+}
+.ds-icon-wc-connector-logo-raw-data-file:before {
+  content: "\eafe";
+}
+.ds-icon-grid-2x2:before {
+  content: "\eaff";
+}
+.ds-icon-procedure-flow:before {
+  content: "\eb0a";
+}
+.ds-icon-math-symbol-function:before {
+  content: "\eb05";
+}
+.ds-icon-geo-marker-plus-outline:before {
+  content: "\eb15";
+}
+.ds-icon-geo-marker-plus:before {
+  content: "\eb16";
+}
+.ds-icon-geo-marker-question:before {
+  content: "\eb17";
+}
+.ds-icon-source-control:before {
+  content: "\eafb";
+}
+.ds-icon-etl-custom-copy:before {
+  content: "\eb18";
+}
+.ds-icon-profile-count:before {
+  content: "\eb0c";
+}
+.ds-icon-literal-constant:before {
+  content: "\eb01";
+}
+.ds-icon-flow-direct-load-procedure:before {
+  content: "\eafc";
 }
 .ds-icon-columns-12:before {
   content: "\eaf4";
@@ -292,6 +775,9 @@
 }
 .ds-icon-access-list:before {
   content: "\e90e";
+}
+.ds-icon-security-shield-checked:before {
+  content: "\eb04";
 }
 .ds-icon-un-scure:before {
   content: "\ea8a";
@@ -1370,6 +1856,9 @@
 .ds-icon-trace:before {
   content: "\ea4e";
 }
+.ds-icon-stop-octagon-outline:before {
+  content: "\eb31";
+}
 .ds-icon-sign-empty:before {
   content: "\ea4f";
 }
@@ -1486,6 +1975,18 @@
 }
 .ds-icon-arrow-left:before {
   content: "\ea72";
+}
+.ds-icon-goto-bottom:before {
+  content: "\eb22";
+}
+.ds-icon-goto-top:before {
+  content: "\eb23";
+}
+.ds-icon-goto-end:before {
+  content: "\eb24";
+}
+.ds-icon-goto-start:before {
+  content: "\eb25";
 }
 .ds-icon-caret-down:before {
   content: "\ea73";
