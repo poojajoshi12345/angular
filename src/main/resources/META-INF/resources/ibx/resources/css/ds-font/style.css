@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'ibi-design-system';
-  src:  url('fonts/ibi-design-system.eot?12prx7');
-  src:  url('fonts/ibi-design-system.eot?12prx7#iefix') format('embedded-opentype'),
-    url('fonts/ibi-design-system.ttf?12prx7') format('truetype'),
-    url('fonts/ibi-design-system.woff?12prx7') format('woff'),
-    url('fonts/ibi-design-system.svg?12prx7#ibi-design-system') format('svg');
+  src:  url('fonts/ibi-design-system.eot?rjkvpm');
+  src:  url('fonts/ibi-design-system.eot?rjkvpm#iefix') format('embedded-opentype'),
+    url('fonts/ibi-design-system.ttf?rjkvpm') format('truetype'),
+    url('fonts/ibi-design-system.woff?rjkvpm') format('woff'),
+    url('fonts/ibi-design-system.svg?rjkvpm#ibi-design-system') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -520,6 +520,30 @@
 }
 .ds-icon-flow-direct-load-procedure:before {
   content: "\eafc";
+}
+.ds-icon-verb-print:before {
+  content: "\eba1";
+}
+.ds-icon-query-1:before {
+  content: "\eba2";
+}
+.ds-icon-query-2:before {
+  content: "\eba3";
+}
+.ds-icon-query-3:before {
+  content: "\eba4";
+}
+.ds-icon-union-1:before {
+  content: "\eba5";
+}
+.ds-icon-union-2:before {
+  content: "\eba6";
+}
+.ds-icon-connect:before {
+  content: "\eba7";
+}
+.ds-icon-hilite-tip:before {
+  content: "\eba8";
 }
 .ds-icon-columns-12:before {
   content: "\eaf4";
