@@ -388,6 +388,7 @@
             'checkbox': '&#xe951;',
             'checkbox-checked': '&#xe951;',
             'dimension-square-hollow-shadowed': '&#xe952;',
+            'checkbox-unchecked': '&#xe953;',
             'maximize': '&#xe953;',
             'view-presentation': '&#xe953;',
             'panel-no-header': '&#xe953;',
