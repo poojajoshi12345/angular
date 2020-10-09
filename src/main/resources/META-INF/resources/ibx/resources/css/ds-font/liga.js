@@ -749,6 +749,7 @@
             'tools': '&#xea57;',
             'all-settings': '&#xea58;',
             'maintenance': '&#xea59;',
+            'configure': '&#xea5a;',
             'properties': '&#xea5a;',
             'configuration': '&#xea5a;',
             'images': '&#xea5b;',
