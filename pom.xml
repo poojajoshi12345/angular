@@ -274,7 +274,7 @@
 									<target>
 										<taskdef resource="net/sf/antcontrib/antlib.xml" />
 										<property name="fileset.dir" value="${project.build.directory}/classes/META-INF/resources" />
-										<property name="closure.class" value="com.ibi.testing.utils.WFJSClosureCompilerRunner" />
+										<property name="closure.class" value="com.ibi.build.utils.WFJSClosureCompilerRunner" />
 										<property name="compilation.level" value="WHITESPACE_ONLY" />
 										<echo message="fileset.dir: ${fileset.dir}" />
 										<echo message="closure.class: ${closure.class}" />
@@ -345,9 +345,9 @@
 								<version>1.8.1</version>
 							</dependency>
 							<dependency>
-								<groupId>com.ibi</groupId>
-								<artifactId>webfocus-testing</artifactId>
-								<version>${project.version}</version>
+								<groupId>com.ibi.build</groupId>
+								<artifactId>webfocus-build-utils</artifactId>
+								<version>8207.20</version>
 							</dependency>
 						</dependencies>
 					</plugin>
