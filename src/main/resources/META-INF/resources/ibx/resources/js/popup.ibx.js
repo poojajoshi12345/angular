@@ -332,7 +332,8 @@ ibxPopupManager.onWindowEvent = function(e)
 			}
 
 			//finally, close all open autoClose popups
-			ibxPopupManager.closeOpenPopups(null, null, null, false, e);
+			//[IBX-527] don't close popups that are opening.
+			ibxPopupManager.closeOpenPopups(":not(.pop-opening)", null, null, false, e);
 		}
 		else
 		if(e.type == "keydown")
