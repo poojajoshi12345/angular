@@ -56,7 +56,7 @@
 		<sonar.java.pmd.reportPaths>${project.build.directory}/pmd.xml</sonar.java.pmd.reportPaths>
 		<sonar.java.spotbugs.reportPaths>${project.build.directory}/spotbugsXml.xml</sonar.java.spotbugs.reportPaths>
 		<sonar.junit.reportPaths>${project.build.directory}/surefire-reports</sonar.junit.reportPaths>
-		<spotbugs.maven.plugin.version>4.0.4</spotbugs.maven.plugin.version>
+		<spotbugs.maven.plugin.version>4.1.4</spotbugs.maven.plugin.version>
 		<testFailureIgnore>true</testFailureIgnore>
 	</properties>
 
