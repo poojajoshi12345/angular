@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'ibi-design-system';
-  src:  url('fonts/ibi-design-system.eot?5nuq53');
-  src:  url('fonts/ibi-design-system.eot?5nuq53#iefix') format('embedded-opentype'),
-    url('fonts/ibi-design-system.ttf?5nuq53') format('truetype'),
-    url('fonts/ibi-design-system.woff?5nuq53') format('woff'),
-    url('fonts/ibi-design-system.svg?5nuq53#ibi-design-system') format('svg');
+  src:  url('fonts/ibi-design-system.eot?bwzofz');
+  src:  url('fonts/ibi-design-system.eot?bwzofz#iefix') format('embedded-opentype'),
+    url('fonts/ibi-design-system.ttf?bwzofz') format('truetype'),
+    url('fonts/ibi-design-system.woff?bwzofz') format('woff'),
+    url('fonts/ibi-design-system.svg?bwzofz#ibi-design-system') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -287,6 +287,9 @@
 .ds-icon-variable-size-large:before {
   content: "\eb72";
 }
+.ds-icon-v-variable:before {
+  content: "\eba9";
+}
 .ds-icon-wc-dbms-prerequisites:before {
   content: "\eb73";
 }
@@ -338,7 +341,7 @@
 .ds-icon-cogs:before {
   content: "\eb83";
 }
-.ds-icon-dimension-squares:before {
+.ds-icon-dimension-square-shadowed:before {
   content: "\eb84";
 }
 .ds-icon-dimension-square:before {
@@ -374,10 +377,10 @@
 .ds-icon-find-previous:before {
   content: "\eb8f";
 }
-.ds-icon-geomarker-check:before {
+.ds-icon-geo-marker-check:before {
   content: "\eb90";
 }
-.ds-icon-geomarker-delete:before {
+.ds-icon-geo-marker-delete:before {
   content: "\eb91";
 }
 .ds-icon-geo-marker-edit:before {
@@ -744,6 +747,9 @@
   content: "\e907";
 }
 .ds-icon-Terminal:before {
+  content: "\eabb";
+}
+.ds-icon-terminal:before {
   content: "\eabb";
 }
 .ds-icon-inspect:before {
@@ -1143,6 +1149,9 @@
   content: "\e974";
 }
 .ds-icon-user-male:before {
+  content: "\e976";
+}
+.ds-icon-user:before {
   content: "\e976";
 }
 .ds-icon-group-users:before {
@@ -1568,6 +1577,9 @@
 .ds-icon-ahtml:before {
   content: "\eaf9";
 }
+.ds-icon-html:before {
+  content: "\eafa";
+}
 .ds-icon-html1:before {
   content: "\eafa";
 }
@@ -1586,7 +1598,7 @@
 .ds-icon-json:before {
   content: "\e9fb";
 }
-.ds-icon-html:before {
+.ds-icon-html5:before {
   content: "\ea19";
 }
 .ds-icon-txt:before {
