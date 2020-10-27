@@ -27,7 +27,7 @@
 	font-family:"Material Icons";
 	font-size:14pt;
     font-weight:900;
-	content:"arrow_drop_down";
+	content:"\e5c5"; /*down arrow*/
 }
 
 .ibx-select > input {
