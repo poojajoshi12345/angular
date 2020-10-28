@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'ibi-design-system';
-  src:  url('fonts/ibi-design-system.eot?bwzofz');
-  src:  url('fonts/ibi-design-system.eot?bwzofz#iefix') format('embedded-opentype'),
-    url('fonts/ibi-design-system.ttf?bwzofz') format('truetype'),
-    url('fonts/ibi-design-system.woff?bwzofz') format('woff'),
-    url('fonts/ibi-design-system.svg?bwzofz#ibi-design-system') format('svg');
+  src:  url('fonts/ibi-design-system.eot?zcpuod');
+  src:  url('fonts/ibi-design-system.eot?zcpuod#iefix') format('embedded-opentype'),
+    url('fonts/ibi-design-system.ttf?zcpuod') format('truetype'),
+    url('fonts/ibi-design-system.woff?zcpuod') format('woff'),
+    url('fonts/ibi-design-system.svg?zcpuod#ibi-design-system') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -283,9 +283,6 @@
 }
 .ds-icon-task-email:before {
   content: "\eb71";
-}
-.ds-icon-variable-size-large:before {
-  content: "\eb72";
 }
 .ds-icon-v-variable:before {
   content: "\eba9";
@@ -1577,10 +1574,10 @@
 .ds-icon-ahtml:before {
   content: "\eaf9";
 }
-.ds-icon-html:before {
+.ds-icon-html1:before {
   content: "\eafa";
 }
-.ds-icon-html1:before {
+.ds-icon-html:before {
   content: "\eafa";
 }
 .ds-icon-r-file:before {
