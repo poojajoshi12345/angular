@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'ibi-design-system';
-  src:  url('fonts/ibi-design-system.eot?zcpuod');
-  src:  url('fonts/ibi-design-system.eot?zcpuod#iefix') format('embedded-opentype'),
-    url('fonts/ibi-design-system.ttf?zcpuod') format('truetype'),
-    url('fonts/ibi-design-system.woff?zcpuod') format('woff'),
-    url('fonts/ibi-design-system.svg?zcpuod#ibi-design-system') format('svg');
+  src:  url('fonts/ibi-design-system.eot?gxsvke');
+  src:  url('fonts/ibi-design-system.eot?gxsvke#iefix') format('embedded-opentype'),
+    url('fonts/ibi-design-system.ttf?gxsvke') format('truetype'),
+    url('fonts/ibi-design-system.woff?gxsvke') format('woff'),
+    url('fonts/ibi-design-system.svg?gxsvke#ibi-design-system') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -113,7 +113,7 @@
 .ds-icon-datatype-timestamp-key:before {
   content: "\eb20";
 }
-.ds-icon-decompose_date:before {
+.ds-icon-decompose-date:before {
   content: "\eb21";
 }
 .ds-icon-dmc-from-data-source-keyed:before {
@@ -746,9 +746,6 @@
 .ds-icon-Terminal:before {
   content: "\eabb";
 }
-.ds-icon-terminal:before {
-  content: "\eabb";
-}
 .ds-icon-inspect:before {
   content: "\e903";
 }
@@ -760,9 +757,6 @@
 }
 .ds-icon-inspect-performance:before {
   content: "\ea89";
-}
-.ds-icon-blub:before {
-  content: "\e901";
 }
 .ds-icon-bulb:before {
   content: "\e901";
@@ -1144,9 +1138,6 @@
 }
 .ds-icon-switch:before {
   content: "\e974";
-}
-.ds-icon-user-male:before {
-  content: "\e976";
 }
 .ds-icon-user:before {
   content: "\e976";
