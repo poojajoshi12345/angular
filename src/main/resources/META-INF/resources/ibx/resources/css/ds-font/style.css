@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'ibi-design-system';
-  src:  url('fonts/ibi-design-system.eot?gxsvke');
-  src:  url('fonts/ibi-design-system.eot?gxsvke#iefix') format('embedded-opentype'),
-    url('fonts/ibi-design-system.ttf?gxsvke') format('truetype'),
-    url('fonts/ibi-design-system.woff?gxsvke') format('woff'),
-    url('fonts/ibi-design-system.svg?gxsvke#ibi-design-system') format('svg');
+  src:  url('fonts/ibi-design-system.eot?touyoy');
+  src:  url('fonts/ibi-design-system.eot?touyoy#iefix') format('embedded-opentype'),
+    url('fonts/ibi-design-system.ttf?touyoy') format('truetype'),
+    url('fonts/ibi-design-system.woff?touyoy') format('woff'),
+    url('fonts/ibi-design-system.svg?touyoy#ibi-design-system') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -1037,9 +1037,6 @@
 .ds-icon-upload:before {
   content: "\e956";
 }
-.ds-icon-chart-grid:before {
-  content: "\eabd";
-}
 .ds-icon-grid:before {
   content: "\eabd";
 }
@@ -1048,6 +1045,9 @@
 }
 .ds-icon-chart-pie:before {
   content: "\e959";
+}
+.ds-icon-chart-grid:before {
+  content: "\ebac";
 }
 .ds-icon-chart-area:before {
   content: "\e958";
@@ -1140,6 +1140,9 @@
   content: "\e974";
 }
 .ds-icon-user:before {
+  content: "\eb72";
+}
+.ds-icon-user-male:before {
   content: "\e976";
 }
 .ds-icon-group-users:before {
@@ -1562,11 +1565,11 @@
 .ds-icon-file-no-type:before {
   content: "\ea16";
 }
+.ds-icon-html1:before {
+  content: "\ebaa";
+}
 .ds-icon-ahtml:before {
   content: "\eaf9";
-}
-.ds-icon-html1:before {
-  content: "\eafa";
 }
 .ds-icon-html:before {
   content: "\eafa";
@@ -1916,10 +1919,10 @@
 .ds-icon-wrench:before {
   content: "\ea59";
 }
-.ds-icon-configure:before {
-  content: "\ea5a";
-}
 .ds-icon-properties:before {
+  content: "\ebab";
+}
+.ds-icon-configure:before {
   content: "\ea5a";
 }
 .ds-icon-images:before {
