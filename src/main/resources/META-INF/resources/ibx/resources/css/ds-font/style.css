@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'ibi-design-system';
-  src:  url('fonts/ibi-design-system.eot?touyoy');
-  src:  url('fonts/ibi-design-system.eot?touyoy#iefix') format('embedded-opentype'),
-    url('fonts/ibi-design-system.ttf?touyoy') format('truetype'),
-    url('fonts/ibi-design-system.woff?touyoy') format('woff'),
-    url('fonts/ibi-design-system.svg?touyoy#ibi-design-system') format('svg');
+  src:  url('fonts/ibi-design-system.eot?htz450');
+  src:  url('fonts/ibi-design-system.eot?htz450#iefix') format('embedded-opentype'),
+    url('fonts/ibi-design-system.ttf?htz450') format('truetype'),
+    url('fonts/ibi-design-system.woff?htz450') format('woff'),
+    url('fonts/ibi-design-system.svg?htz450#ibi-design-system') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
