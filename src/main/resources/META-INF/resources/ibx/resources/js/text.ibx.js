@@ -158,6 +158,8 @@ $.widget("ibi.ibxTextField", $.ibi.ibxFlexBox,
 		this._textInput.attr("type", this.options.ctrlType);
 		this._textInput.val(this.options.text);
 		this._textInput.prop("readonly", this.options.readonly ? 'true' : '');
+		this.element.ibxToggleClass('ibx-text-field-read-only', this.options.readonly);
+		
 		if (this.options.size != 0)
 			this._textInput.attr("size", this.options.size);
 		else
