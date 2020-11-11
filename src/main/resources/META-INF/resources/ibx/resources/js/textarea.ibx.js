@@ -1,4 +1,4 @@
-/*Copyright 1996-2016 Information Builders, Inc. All rights reserved.*/
+3/*Copyright 1996-2016 Information Builders, Inc. All rights reserved.*/
 // $Revision: 1.55 $:
 $.widget("ibi.ibxTextArea", $.ibi.ibxFlexBox,
 {
@@ -154,6 +154,8 @@ $.widget("ibi.ibxTextArea", $.ibi.ibxFlexBox,
 
 		this._textArea.val(this.options.text);
 		this._textArea.prop("readonly", this.options.readonly ? 'true' : '');
+		this.element.ibxToggleClass('ibx-text-area-read-only', this.options.readonly);
+
 		if (this.options.maxLength)
 			this._textArea.attr("maxlength", this.options.maxLength);
 		else
