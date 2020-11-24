@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'ibi-design-system';
-  src:  url('fonts/ibi-design-system.eot?8frbd7');
-  src:  url('fonts/ibi-design-system.eot?8frbd7#iefix') format('embedded-opentype'),
-    url('fonts/ibi-design-system.ttf?8frbd7') format('truetype'),
-    url('fonts/ibi-design-system.woff?8frbd7') format('woff'),
-    url('fonts/ibi-design-system.svg?8frbd7#ibi-design-system') format('svg');
+  src:  url('fonts/ibi-design-system.eot?xz85b7');
+  src:  url('fonts/ibi-design-system.eot?xz85b7#iefix') format('embedded-opentype'),
+    url('fonts/ibi-design-system.ttf?xz85b7') format('truetype'),
+    url('fonts/ibi-design-system.woff?xz85b7') format('woff'),
+    url('fonts/ibi-design-system.svg?xz85b7#ibi-design-system') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -35,6 +35,42 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.ds-icon-satellite:before {
+  content: "\ebae";
+}
+.ds-icon-laptop:before {
+  content: "\ebaf";
+}
+.ds-icon-cloud-upload:before {
+  content: "\ebb0";
+}
+.ds-icon-cloud-download:before {
+  content: "\ebb1";
+}
+.ds-icon-ticket:before {
+  content: "\ebb2";
+}
+.ds-icon-rss:before {
+  content: "\ebb3";
+}
+.ds-icon-microchip:before {
+  content: "\ebb4";
+}
+.ds-icon-location-arrow:before {
+  content: "\ebb5";
+}
+.ds-icon-graduation-cap:before {
+  content: "\ebb6";
+}
+.ds-icon-bug:before {
+  content: "\ebb7";
+}
+.ds-icon-archive:before {
+  content: "\ebb8";
+}
+.ds-icon-geometrical-shapes:before {
+  content: "\ebb9";
+}
 .ds-icon-allmfdtools-bv-flatten-view:before {
   content: "\e957";
 }
@@ -520,6 +556,45 @@
 }
 .ds-icon-flow-direct-load-procedure:before {
   content: "\eafc";
+}
+.ds-icon-Return:before {
+  content: "\ebc5";
+}
+.ds-icon-child:before {
+  content: "\ebc6";
+}
+.ds-icon-bar-chart-horizontal:before {
+  content: "\ebba";
+}
+.ds-icon-circle-arrow:before {
+  content: "\ebbb";
+}
+.ds-icon-color-swatch:before {
+  content: "\ebbc";
+}
+.ds-icon-no-fill:before {
+  content: "\ebbd";
+}
+.ds-icon-chevron-double-down:before {
+  content: "\ebbe";
+}
+.ds-icon-chevron-double-left:before {
+  content: "\ebbf";
+}
+.ds-icon-chevron-double-right:before {
+  content: "\ebc0";
+}
+.ds-icon-chevron-double-up:before {
+  content: "\ebc1";
+}
+.ds-icon-fill:before {
+  content: "\ebc2";
+}
+.ds-icon-text-color:before {
+  content: "\ebc3";
+}
+.ds-icon-toc:before {
+  content: "\ebc4";
 }
 .ds-icon-verb-print:before {
   content: "\eba1";
