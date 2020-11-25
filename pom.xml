@@ -851,9 +851,9 @@
 	</profiles>
 
 	<scm>
-		<connection>scm:git:http://wfbucket.ibi.com:7990/scm/wp/${project.artifactId}.git</connection>
-		<developerConnection>scm:git:http://wfbucket.ibi.com:7990/scm/wp/${project.artifactId}.git</developerConnection>
-		<url>http://wfbucket.ibi.com:7990/scm/wp/${project.artifactId}.git</url>
+		<connection>scm:git:https://wfbucket.ibi.com:8443/scm/wp/${project.artifactId}.git</connection>
+		<developerConnection>scm:git:https://wfbucket.ibi.com:8443/scm/wp/${project.artifactId}.git</developerConnection>
+		<url>https://wfbucket.ibi.com:8443/scm/wp/${project.artifactId}.git</url>
 		<tag>HEAD</tag>
 	</scm>
 
