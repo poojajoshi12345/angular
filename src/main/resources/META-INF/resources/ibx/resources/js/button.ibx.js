@@ -30,7 +30,7 @@ $.widget("ibi.ibxButton", $.ibi.ibxLabel,
 	},
 	_onButtonClickEvent:function(e)
 	{
-		if(ibxPlatformCheck.isIE || (e.detail === 2 && this.options.triggerCmdOnDblClick))
+		if(ibxPlatformCheck.isIE || (!e.detail || e.detail === 1) || (e.detail === 2 && this.options.triggerCmdOnDblClick))
 			this.doCommandAction("trigger");
 	},
 	_onKeyEvent: function (e)
