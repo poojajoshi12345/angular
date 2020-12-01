@@ -280,7 +280,7 @@ $.widget("ibi.ibxTimePicker", $.ibi.ibxHBox, {
 
             //Check if value changed
             var prev = this.options.second;
-            this.options.second = this._milliSecondSpinner.ibxWidget("option", "value");
+            this.options.milliSecond = this._milliSecondSpinner.ibxWidget("option", "value");
             changed = prev === this.options.milliSecond ? false : true;
 
             if (this.options.synchronizedStepping) {
@@ -351,13 +351,15 @@ $.widget("ibi.ibxTimePicker", $.ibi.ibxHBox, {
                 "minute": this.options.minute,
 				"second": this.options.second,
 				"milliSecond": this.options.milliSecond,
-                "meridian": this.options.meridian
+				"meridian": this.options.meridian,
             };
-
+			ret.date =new Date(null, null, null, ret.hour, ret.minute, ret.second, ret.milliSecond);
             return ret;
         }
 
-        var hourOffset = 0;
+		date = (date instanceof Date) ? {hour:date.getHours(), minute:date.getMinutes(), second:date.getSeconds(), milliSecond: date.getMilliseconds()} : date;
+	
+		var hourOffset = 0;
 
         //Consideration for hour and meridian
         if (this.options["24hour"]) {
