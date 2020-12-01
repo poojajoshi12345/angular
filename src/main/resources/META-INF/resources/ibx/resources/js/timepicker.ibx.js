@@ -55,9 +55,8 @@ $.widget("ibi.ibxTimePicker", $.ibi.ibxHBox, {
         this.element.ibxWidget("add", this._minuteSpinner);
         this.element.ibxWidget("add", this._secondColon);
         this.element.ibxWidget("add", this._secondSpinner);
-        this.element.ibxWidget("add", this._colonDivSecond);
+        this.element.ibxWidget("add", this._milliSecondColon);
         this.element.ibxWidget("add", this._milliSecondSpinner);
-        this.element.ibxWidget("add", this._colonDivMilliSecond);
         this.element.ibxWidget("add", this._meridianSpinner);
     },
 
@@ -161,7 +160,7 @@ $.widget("ibi.ibxTimePicker", $.ibi.ibxHBox, {
 
 			//MilliSecond
 			this.options.showMilliSecond ? this._milliSecondSpinner.css("display", "") : this._milliSecondSpinner.css("display", "none");
-			this.options.showMilliSecond && (this.options.showMeridian || this.options.showSecond) && this.options.showColon ? this._milliSecondColon.css("display", "") : this._milliSecondColon.css("display", "none");
+			this.options.showMilliSecond && (this.options.showSecond || this.options.showMinute || this.options.showHour) && this.options.showColon ? this._milliSecondColon.css("display", "") : this._milliSecondColon.css("display", "none");
 			
             //Second
             this.options.showSecond ? this._secondSpinner.css("display", "") : this._secondSpinner.css("display", "none");
@@ -172,7 +171,7 @@ $.widget("ibi.ibxTimePicker", $.ibi.ibxHBox, {
             this.options.showMinute && this.options.showHour && this.options.showColon ? this._minuteColon.css("display", "") : this._minuteColon.css("display", "none");
 
             //Hour
-            this.options.showHour ? this._hourSpinner.css("display", "") && this.options.showColon : this._hourSpinner.css("display", "none");
+            this.options.showHour ? this._hourSpinner.css("display", "") : this._hourSpinner.css("display", "none");
         }
         else if(key === "enableHour"){
             this._hourSpinner.ibxWidget("option","disabled", !value);
