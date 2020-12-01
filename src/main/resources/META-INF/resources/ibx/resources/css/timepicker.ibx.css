@@ -12,6 +12,10 @@
     flex: 0 0 auto;
 }
 
+.ibx-timepicker-spinner-milli-second > .ibx-spinner-text-input{
+	width:1.75em;
+}
+
 .ibx-timepicker-spinner-meridian > .ibx-spinner-text-input{
     width: 1.6em;
 }

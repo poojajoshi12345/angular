@@ -46,6 +46,7 @@
             $(".hour").ibxWidget("option", "checked", timepicker.ibxWidget("option", "showHour"));
             $(".minute").ibxWidget("option", "checked", timepicker.ibxWidget("option", "showMinute"));
             $(".second").ibxWidget("option", "checked", timepicker.ibxWidget("option", "showSecond"));
+            $(".millisecond").ibxWidget("option", "checked", timepicker.ibxWidget("option", "showMilliSecond"));
             $(".meridian").ibxWidget("option", "checked", timepicker.ibxWidget("option", "showMeridian"));
 
             $(".colon").ibxWidget("option", "checked", timepicker.ibxWidget("option", "showColon"));
@@ -53,6 +54,7 @@
             $(".enable-hour").ibxWidget("option", "checked", timepicker.ibxWidget("option", "enableHour"));
             $(".enable-minute").ibxWidget("option", "checked", timepicker.ibxWidget("option", "enableMinute"));
             $(".enable-second").ibxWidget("option", "checked", timepicker.ibxWidget("option", "enableSecond"));
+			$(".enable-millisecond").ibxWidget("option", "checked", timepicker.ibxWidget("option", "enableMilliSecond"));
             $(".enable-meridian").ibxWidget("option", "checked", timepicker.ibxWidget("option", "enableMeridian"));
 
 
@@ -65,6 +67,7 @@
             $(".hour").on("ibx_change", settingChange.bind(this));
             $(".minute").on("ibx_change", settingChange.bind(this));
             $(".second").on("ibx_change", settingChange.bind(this));
+            $(".millisecond").on("ibx_change", settingChange.bind(this));
             $(".meridian").on("ibx_change", settingChange.bind(this));
 
             $(".colon").on("ibx_change", settingChange.bind(this));
@@ -72,19 +75,22 @@
             $(".enable-hour").on("ibx_change", settingChange.bind(this));
             $(".enable-minute").on("ibx_change", settingChange.bind(this));
             $(".enable-second").on("ibx_change", settingChange.bind(this));
+			$(".enable-millisecond").on("ibx_change", settingChange.bind(this));
             $(".enable-meridian").on("ibx_change", settingChange.bind(this));
 
             $(".default").on("click", function(event){
                 var date = new Date();
                 var hour = date.getHours();
                 var minute = date.getMinutes();
-                var second = date.getSeconds();
+				var second = date.getSeconds();
+				var milliSecond = date.getMilliseconds();
                 var meridian = (hour >= 12) ? "PM" : "AM";
 
                 var dateJSON = {
                     "hour": hour,
                     "minute": minute,
-                    "second": second,
+					"second": second,
+					"milliSecond": milliSecond,
                     "meridian": meridian
                 };
 
@@ -112,6 +118,9 @@
                 else if (ctrl.is(".second")) {
                     timepicker.ibxWidget("option", "showSecond", ctrl.ibxWidget("option", "checked"));
                 }
+                else if (ctrl.is(".millisecond")) {
+                    timepicker.ibxWidget("option", "showMilliSecond", ctrl.ibxWidget("option", "checked"));
+                }
                 else if (ctrl.is(".meridian")) {
                     timepicker.ibxWidget("option", "showMeridian", ctrl.ibxWidget("option", "checked"));
                 }
@@ -127,6 +136,9 @@
                 }
                 else if (ctrl.is(".enable-second")) {
                     timepicker.ibxWidget("option", "enableSecond", ctrl.ibxWidget("option", "checked"));
+                }
+				else if (ctrl.is(".enable-millisecond")) {
+                    timepicker.ibxWidget("option", "enableMilliSecond", ctrl.ibxWidget("option", "checked"));
                 }
                 else if (ctrl.is(".enable-meridian")) {
                     timepicker.ibxWidget("option", "enableMeridian", ctrl.ibxWidget("option", "checked"));
@@ -155,6 +167,7 @@
             <div class="timepicker-demo-checkbox hour" data-ibx-type="ibxCheckBoxSimple">Show Hour</div>
             <div class="timepicker-demo-checkbox minute" data-ibx-type="ibxCheckBoxSimple">Show Minute</div>
             <div class="timepicker-demo-checkbox second" data-ibx-type="ibxCheckBoxSimple">Show Second</div>
+            <div class="timepicker-demo-checkbox millisecond" data-ibx-type="ibxCheckBoxSimple">Show Millisecond</div>
             <div class="timepicker-demo-checkbox meridian" data-ibx-type="ibxCheckBoxSimple">Show Meridian</div>
 
             <div class="timepicker-demo-checkbox colon" data-ibx-type="ibxCheckBoxSimple">Show Colon</div>
@@ -162,6 +175,7 @@
             <div class="timepicker-demo-checkbox enable-hour" data-ibx-type="ibxCheckBoxSimple">Enable Hour</div>
             <div class="timepicker-demo-checkbox enable-minute" data-ibx-type="ibxCheckBoxSimple">Enable Minute</div>
             <div class="timepicker-demo-checkbox enable-second" data-ibx-type="ibxCheckBoxSimple">Enable Second</div>
+			<div class="timepicker-demo-checkbox enable-millisecond" data-ibx-type="ibxCheckBoxSimple">Enable Millisecond</div>
             <div class="timepicker-demo-checkbox enable-meridian" data-ibx-type="ibxCheckBoxSimple">Enable Meridian</div>
 
             <div class="timepicker-demo-button default" data-ibx-type="ibxButton">Set Current Time</div>
