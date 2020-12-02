@@ -183,6 +183,7 @@ $.widget("ibi.ibxDatePicker", $.ibi.ibxVBox,
 		this._datePicker.datepicker('option', this.options);
 		var dateObj = $.datepicker.parseDate(this.options.dateFormat, this.options.date) || new Date();
 		this._datePicker.datepicker('setDate', dateObj);
+		this._timePicker.ibxTimePicker('option', this.options.timeOptions).ibxWidget('time', this.options.time);
 		this._input.ibxWidget('option', 'text', $.datepicker.formatDate(this.options.outDateFormat, this._datePicker.datepicker('getDate'), this._pickerOptions));
 		this._super();
 
