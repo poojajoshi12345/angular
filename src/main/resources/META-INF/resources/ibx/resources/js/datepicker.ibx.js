@@ -184,13 +184,13 @@ $.widget("ibi.ibxDatePicker", $.ibi.ibxVBox,
 		var dateObj = $.datepicker.parseDate(this.options.dateFormat, this.options.date) || new Date();
 		this._datePicker.datepicker('setDate', dateObj);
 		this._timePicker.ibxTimePicker('option', this.options.timeOptions).ibxWidget('time', this.options.time);
+		this._timeWrapper.css('display', this.options.showTime ? '' : 'none');
 		this._input.ibxWidget('option', 'text', $.datepicker.formatDate(this.options.outDateFormat, this._datePicker.datepicker('getDate'), this._pickerOptions));
 		this._super();
 
 		//[IBX-434] don't see why we close the popup on the refresh...take out and see what happens!
 		//if (this._popup.ibxWidget('isOpen'))
 		//	this._popup.ibxWidget('close');
-
 
 		switch (this.options.type)
 		{
