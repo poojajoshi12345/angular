@@ -30,8 +30,13 @@
     border-bottom: none;
 }
 
+.ibx-datepicker-date-wrapper {
+	padding:2.4px;
+}
+
 .ibx-datepicker-date-wrapper .ui-datepicker {
-    border: none;
+	border: none;
+	padding:unset;
 }
 
 .ibx-datepicker-date-wrapper td[data-range=true] > a {
@@ -47,5 +52,14 @@
 .ibx-datepicker-date-wrapper .ui-datepicker-current-day > a {
     background-color: #357ebd;
     color: white;
+}
+
+.ibx-datepicker-time-wrapper{
+	border:1px solid red;
+}
+
+.ibx-datepicker .ibx-datepicker-timepicker {
+	align-self:'center';
+	border:none;
 }
 

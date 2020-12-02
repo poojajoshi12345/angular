@@ -16,7 +16,10 @@ $.widget("ibi.ibxDatePicker", $.ibi.ibxVBox,
 			"date": '',
 			"numberOfMonths": 1,
 			"initDate": true, // set date to the current date
-			"adjustForMonthYear":false
+			"adjustForMonthYear":false,
+
+			"time":null,
+			"showTime":false
 	},
 	_widgetClass: "ibx-datepicker",
 	_create: function ()
@@ -30,7 +33,7 @@ $.widget("ibi.ibxDatePicker", $.ibi.ibxVBox,
 		this._clear = $('<div class="ibx-datepicker-clear">').ibxButtonSimple({glyphClasses:"material-icons", glyph:'clear'}).on('click', this._onClear.bind(this)).hide();
 		this._inputWrapper = $('<div>').ibxHBox({align: 'center'}).ibxAddClass('ibx-datepicker-input-wrapper');
 		this._inputWrapper.append(this._input, this._clear);
-		this._dateWrapper = $('<div>').ibxFlexBox({ 'wrap': false });
+		this._dateWrapper = $('<div class="ibx-datepicker-date-wrapper">').ibxVBox({ 'wrap': false, 'align':'stretch' });
 		this._datePicker = $('<div tabindex="-1">').datepicker({
 			"closeText" : ibx.resourceMgr.getString("IBX_DP_CLOSE_TEXT"),
 			"prevText" : ibx.resourceMgr.getString("IBX_DP_PREV_TEXT"),
@@ -55,7 +58,6 @@ $.widget("ibi.ibxDatePicker", $.ibi.ibxVBox,
 			e.originalEvent.data.items = dp.find("a").attr("tabindex", 0);
 		});
 
-
 		//setup the strings.
 		this._pickerOptions = {
 			"closeText" : ibx.resourceMgr.getString("IBX_DP_CLOSE_TEXT"),
@@ -70,6 +72,12 @@ $.widget("ibi.ibxDatePicker", $.ibi.ibxVBox,
 			"dayNamesMin" : (eval(ibx.resourceMgr.getString("IBX_DP_DAYS_MIN"))),
 			"buttonText" : ibx.resourceMgr.getString("IBX_DP_BUTTON_TEXT")};
 		this._dateWrapper.append(this._datePicker).ibxAddClass('ibx-datepicker-date-wrapper');
+
+		//setup the timepicker.
+		this._timePicker = $("<div class='ibx-datepicker-timepicker'>").ibxTimePicker();
+		this._timeWrapper = $("<div class='ibx-datepicker-time-wrapper'>").ibxVBox().append([this._timePicker]);
+		this._dateWrapper.append([this._timePickerLabel, this._timeWrapper]);
+
 		this.element.append(this._inputWrapper, this._dateWrapper);
 		this._popup = $('<div class="ibx-datepicker-popup">').ibxPopup({'focusDefault':true, 'focusRoot':true, 'destroyOnClose': false});
 	},
