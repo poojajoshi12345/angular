@@ -18,8 +18,9 @@ $.widget("ibi.ibxDatePicker", $.ibi.ibxVBox,
 			"initDate": true, // set date to the current date
 			"adjustForMonthYear":false,
 
+			"timeOptions":{},
 			"time":null,
-			"showTime":false
+			"showTime":false,
 	},
 	_widgetClass: "ibx-datepicker",
 	_create: function ()
@@ -74,7 +75,10 @@ $.widget("ibi.ibxDatePicker", $.ibi.ibxVBox,
 		this._dateWrapper.append(this._datePicker).ibxAddClass('ibx-datepicker-date-wrapper');
 
 		//setup the timepicker.
-		this._timePicker = $("<div class='ibx-datepicker-timepicker'>").ibxTimePicker({showColon:false});
+		this.options.time = new Date(this.options.time || new Date());
+		this.options.timeOptions = $.extend({}, {showColon:false, showMillisecond:false}, this.options.timeOptions)
+		this._timePicker = $("<div class='ibx-datepicker-timepicker'>").ibxTimePicker(this.options.timeOptions).ibxWidget('time', this.options.time)
+			.on('ibx_change', this._onTimePickerChange.bind(this));
 		this._timeWrapper = $("<div class='ibx-datepicker-time-wrapper'>").ibxVBox({align:'stretch'}).append([this._timePicker]);
 		this._dateWrapper.append([this._timePickerLabel, this._timeWrapper]);
 
@@ -107,10 +111,15 @@ $.widget("ibi.ibxDatePicker", $.ibi.ibxVBox,
 			default:
 				break;
 		}
-		var value = $.datepicker.formatDate(this.options.dateFormat, this._datePicker.datepicker('getDate'));
-		this.options.date = value;
-		this._trigger("change", null, { 'date': value });
+
+		this.options.date = $.datepicker.formatDate(this.options.dateFormat, this._datePicker.datepicker('getDate'));
+		this.options.time = this._timePicker.ibxWidget('time');
+		this._trigger("change", null, { 'date': this.options.date, 'time': this.options.time });
 		this._input.ibxWidget('option', 'text', $.datepicker.formatDate(this.options.outDateFormat, this._datePicker.datepicker('getDate'), this._pickerOptions));
+	},
+	_onTimePickerChange:function(e){
+		this._onSelect()
+		e.stopPropagation();
 	},
 	_onChangeMonthYear:function(year, month, picker)
 	{

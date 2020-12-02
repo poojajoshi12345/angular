@@ -35,6 +35,8 @@
 }
 
 .ibx-datepicker-date-wrapper .ui-datepicker {
+	width:auto;
+	min-width:17em;
 	border: none;
 	padding:unset;
 }
@@ -54,7 +56,9 @@
     color: white;
 }
 
+/*Time picker classes*/
 .ibx-datepicker-time-wrapper{
+	margin-top:.5em;
 }
 
 .ibx-datepicker .ibx-datepicker-timepicker {

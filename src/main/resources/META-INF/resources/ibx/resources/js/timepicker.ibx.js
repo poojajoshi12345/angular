@@ -21,7 +21,7 @@ $.widget("ibi.ibxTimePicker", $.ibi.ibxHBox, {
         "showHour": true,
         "showMinute": true,
         "showSecond": true,
-		"showMilliSecond": true,
+		"showMillisecond": true,
         "showMeridian": true,
         "showColon": true,
 
@@ -153,14 +153,14 @@ $.widget("ibi.ibxTimePicker", $.ibi.ibxHBox, {
             this.options.hour += hourOffset;
             this._hourSpinner.ibxWidget("setValue", this.options.hour);
         }
-        else if (key === "showHour" || key === "showMinute" || key === "showSecond" || key === "showMilliSecond" || key === "showMeridian" || key === "showColon") {
+        else if (key === "showHour" || key === "showMinute" || key === "showSecond" || key === "showMillisecond" || key === "showMeridian" || key === "showColon") {
 
             //Meridian
             this.options.showMeridian ? this._meridianSpinner.css("display", "") : this._meridianSpinner.css("display", "none");
 
 			//MilliSecond
-			this.options.showMilliSecond ? this._milliSecondSpinner.css("display", "") : this._milliSecondSpinner.css("display", "none");
-			this.options.showMilliSecond && (this.options.showSecond || this.options.showMinute || this.options.showHour) && this.options.showColon ? this._milliSecondColon.css("display", "") : this._milliSecondColon.css("display", "none");
+			this.options.showMillisecond ? this._milliSecondSpinner.css("display", "") : this._milliSecondSpinner.css("display", "none");
+			this.options.showMillisecond && (this.options.showSecond || this.options.showMinute || this.options.showHour) && this.options.showColon ? this._milliSecondColon.css("display", "") : this._milliSecondColon.css("display", "none");
 			
             //Second
             this.options.showSecond ? this._secondSpinner.css("display", "") : this._secondSpinner.css("display", "none");
