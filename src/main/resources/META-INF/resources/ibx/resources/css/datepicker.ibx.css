@@ -55,11 +55,13 @@
 }
 
 .ibx-datepicker-time-wrapper{
-	border:1px solid red;
 }
 
 .ibx-datepicker .ibx-datepicker-timepicker {
 	align-self:'center';
-	border:none;
 }
 
+.ibx-datepicker .ibx-timepicker-spinner {
+	border-right:inherit;
+	flex: 1 1 auto;
+}

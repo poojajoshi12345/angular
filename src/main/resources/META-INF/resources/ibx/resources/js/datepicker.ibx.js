@@ -74,8 +74,8 @@ $.widget("ibi.ibxDatePicker", $.ibi.ibxVBox,
 		this._dateWrapper.append(this._datePicker).ibxAddClass('ibx-datepicker-date-wrapper');
 
 		//setup the timepicker.
-		this._timePicker = $("<div class='ibx-datepicker-timepicker'>").ibxTimePicker();
-		this._timeWrapper = $("<div class='ibx-datepicker-time-wrapper'>").ibxVBox().append([this._timePicker]);
+		this._timePicker = $("<div class='ibx-datepicker-timepicker'>").ibxTimePicker({showColon:false});
+		this._timeWrapper = $("<div class='ibx-datepicker-time-wrapper'>").ibxVBox({align:'stretch'}).append([this._timePicker]);
 		this._dateWrapper.append([this._timePickerLabel, this._timeWrapper]);
 
 		this.element.append(this._inputWrapper, this._dateWrapper);
