@@ -62,6 +62,10 @@
 }
 
 .ibx-datepicker .ibx-timepicker-spinner {
-	border-right:inherit;
 	flex: 1 1 auto;
+	min-width:1px;
+}
+
+.ibx-datepicker .ibx-timepicker-spinner:not(:last-of-type) {
+	border-right:inherit;
 }
