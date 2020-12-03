@@ -65,6 +65,10 @@
 	align-self:'center';
 }
 
+.ibx-datepicker-hide-spinner{
+	display:none;
+}
+
 .ibx-datepicker .ibx-timepicker-spinner {
 	flex: 1 1 auto;
 	min-width:1px;
@@ -73,3 +77,4 @@
 .ibx-datepicker .ibx-timepicker-spinner:not(:last-of-type) {
 	border-right:inherit;
 }
+

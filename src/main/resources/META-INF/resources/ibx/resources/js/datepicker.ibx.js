@@ -18,9 +18,9 @@ $.widget("ibi.ibxDatePicker", $.ibi.ibxVBox,
 			"initDate": true, // set date to the current date
 			"adjustForMonthYear":false,
 
-			"timeOptions":{},
-			"time":null,
-			"showTime":false,
+			"dateTime":null, //combined javascript Date object with the selected day/time
+			"timeOptions":{}, //options passed to the ibxTimePicker control
+			"showTime":false, //should the time picker be visible.
 	},
 	_widgetClass: "ibx-datepicker",
 	_create: function ()
@@ -112,11 +112,14 @@ $.widget("ibi.ibxDatePicker", $.ibi.ibxVBox,
 				break;
 		}
 
-		this.options.date = $.datepicker.formatDate(this.options.dateFormat, this._datePicker.datepicker('getDate'));
-		this.options.time = this._timePicker.ibxWidget('time');
-		this._trigger("change", null, { 'date': this.options.date, 'time': this.options.time });
+		var date = this._datePicker.datepicker('getDate');
+		this.options.date = $.datepicker.formatDate(this.options.dateFormat, date);
+		var time = this._timePicker.ibxWidget('time');
+		this.options.dateTime = new Date(date.getFullYear(), date.getMonth(), date.getDate(), time.hour24, time.minute, time.second, time.milliSecond);
+		this._trigger("change", null, { 'date': this.options.date, 'dateTime': this.options.dateTime });
 		this._input.ibxWidget('option', 'text', $.datepicker.formatDate(this.options.outDateFormat, this._datePicker.datepicker('getDate'), this._pickerOptions));
 	},
+
 	_onTimePickerChange:function(e){
 		this._onSelect()
 		e.stopPropagation();
