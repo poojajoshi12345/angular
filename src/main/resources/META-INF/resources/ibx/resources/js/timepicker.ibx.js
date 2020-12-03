@@ -24,6 +24,7 @@ $.widget("ibi.ibxTimePicker", $.ibi.ibxHBox, {
 		"showMillisecond": true,
         "showMeridian": true,
         "showColon": true,
+		"showUnit":true,
 
         "enableHour": true,
         "enableMinute": true,
@@ -38,10 +39,10 @@ $.widget("ibi.ibxTimePicker", $.ibi.ibxHBox, {
         this._super();
 
         //Create Spinners
-        this._hourSpinner = $('<div class="ibx-timepicker-spinner ibx-timepicker-spinner-hour" tabindex="0">').ibxSpinner();
+		this._hourSpinner = $('<div class="ibx-timepicker-spinner ibx-timepicker-spinner-hour" tabindex="0">').ibxSpinner();
         this._minuteSpinner = $('<div class="ibx-timepicker-spinner ibx-timepicker-spinner-minute" tabindex="0">').ibxSpinner();
-        this._secondSpinner = $('<div class="ibx-timepicker-spinner ibx-timepicker-spinner-second" tabindex="0">').ibxSpinner();
-        this._milliSecondSpinner = $('<div class="ibx-timepicker-spinner ibx-timepicker-spinner-milli-second" tabindex="0">').ibxSpinner();
+		this._secondSpinner = $('<div class="ibx-timepicker-spinner ibx-timepicker-spinner-second" tabindex="0">').ibxSpinner();
+		this._milliSecondSpinner = $('<div class="ibx-timepicker-spinner ibx-timepicker-spinner-milli-second" tabindex="0">').ibxSpinner();
         this._meridianSpinner = $('<div class="ibx-timepicker-spinner ibx-timepicker-spinner-meridian" tabindex="0">').ibxSpinner();
 
         //Create Colon Divs
@@ -65,28 +66,28 @@ $.widget("ibi.ibxTimePicker", $.ibi.ibxHBox, {
         this._super();
 
         //Hour Set Up
-        this._hourSpinner.ibxWidget("option", "fnFormat", this._formatTime.bind(this));
+        this._hourSpinner.ibxWidget("option", "fnFormat", this._formatTime.bind(this, $.ibi.ibxTimePicker.units.HOUR));
         this._hourSpinner.ibxWidget("setValue", this.options.hour);
         this._hourSpinner.on("ibx_change", this._timeChange.bind(this));
 
         //Minute Set Up
         this._minuteSpinner.ibxWidget("option", "min", 0);
         this._minuteSpinner.ibxWidget("option", "max", 59);
-        this._minuteSpinner.ibxWidget("option", "fnFormat", this._formatTime.bind(this));
+        this._minuteSpinner.ibxWidget("option", "fnFormat", this._formatTime.bind(this, $.ibi.ibxTimePicker.units.MINUTE));
         this._minuteSpinner.ibxWidget("setValue", this.options.minute);
         this._minuteSpinner.on("ibx_change", this._timeChange.bind(this));
 
         //Second Set Up
         this._secondSpinner.ibxWidget("option", "min", 0);
         this._secondSpinner.ibxWidget("option", "max", 59);
-        this._secondSpinner.ibxWidget("option", "fnFormat", this._formatTime.bind(this));
+        this._secondSpinner.ibxWidget("option", "fnFormat", this._formatTime.bind(this, $.ibi.ibxTimePicker.units.SECOND));
         this._secondSpinner.ibxWidget("setValue", this.options.second);
         this._secondSpinner.on("ibx_change", this._timeChange.bind(this));
 
         //MilliSecond Set Up
         this._milliSecondSpinner.ibxWidget("option", "min", 0);
         this._milliSecondSpinner.ibxWidget("option", "max", 999);
-        this._milliSecondSpinner.ibxWidget("option", "fnFormat", this._formatMilliSecond.bind(this));
+        this._milliSecondSpinner.ibxWidget("option", "fnFormat", this._formatTime.bind(this, $.ibi.ibxTimePicker.units.MILLISECOND));
         this._milliSecondSpinner.ibxWidget("setValue", this.options.milliSecond);
         this._milliSecondSpinner.on("ibx_change", this._timeChange.bind(this));
 
@@ -105,7 +106,7 @@ $.widget("ibi.ibxTimePicker", $.ibi.ibxHBox, {
         this._meridianSpinner.ibxWidget("option", "min", 0); //0 = AM
         this._meridianSpinner.ibxWidget("option", "max", 1); //1 = PM
         this._meridianSpinner.ibxWidget("option", "fnUnformat", this._unformatMeridian.bind(this)); // Meridian to number
-        this._meridianSpinner.ibxWidget("option", "fnFormat", this._formatMeridian.bind(this)); //Number to meridian
+        this._meridianSpinner.ibxWidget("option", "fnFormat", this._formatTime.bind(this, $.ibi.ibxTimePicker.units.MERIDIAN)); //Number to meridian
         this._meridianSpinner.on("ibx_change", this._timeChange.bind(this));
 
     },
@@ -312,35 +313,38 @@ $.widget("ibi.ibxTimePicker", $.ibi.ibxHBox, {
 
 
     //------- Formatting -------//
-    _formatTime: function (value) {
-        if (value < 10) {
+    _formatTime: function (unit, value) {
+		
+		if(unit === $.ibi.ibxTimePicker.units.MERIDIAN)
+			value = (value === 0) ? "AM" : "PM";
+		else
+		if(unit === $.ibi.ibxTimePicker.units.MILLISECOND){
+			if(value < 10)
+				value = "00" + value;
+			else
+			if(value < 100)
+				value = "0" + value;
+		}
+		else
+        if(value < 10) {
             value = "0" + value;
         }
 
-        return value;
+		var unitString = '';
+		switch(unit)
+		{
+			case $.ibi.ibxTimePicker.units.HOUR: unitString = 'h';break;
+			case $.ibi.ibxTimePicker.units.MINUTE: unitString = 'm';break;
+			case $.ibi.ibxTimePicker.units.SECOND: unitString = 's';break;
+			case $.ibi.ibxTimePicker.units.MILLISECOND: unitString = 'ms';break;
+		}
+        return value + unitString;
     },
-	_formatMilliSecond: function(value){
-		if(value < 10)
-			value = "00" + value;
-		else
-		if(value < 100)
-			value = "0" + value;
-		return value;
-	},
-
-    _formatMeridian: function (value) {
-        if (value === 0) {
-            return "AM";
-        }
-
-        return "PM";
-    },
-
+ 
     _unformatMeridian: function (value) {
         if (value === "AM" || value === 0) {
             return 0;
         }
-
         return 1;
     },
 
@@ -387,3 +391,10 @@ $.widget("ibi.ibxTimePicker", $.ibi.ibxHBox, {
         this._milliSecondSpinner.ibxWidget("setValue", date.milliSecond);
     }
 });
+
+$.ibi.ibxTimePicker.units = {
+	HOUR:1,
+	MINUTE:2,
+	SECOND:3,
+	MILLISECOND:4
+}
