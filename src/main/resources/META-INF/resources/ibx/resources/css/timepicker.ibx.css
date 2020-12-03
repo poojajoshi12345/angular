@@ -28,3 +28,7 @@
 .ibx-timepicker-spinner-meridian{
     margin-left: 0.25em;
 }
+
+.ibx-timepicker-spinner.ibx-timepicker-hide-spinner{
+	display:none;
+}
