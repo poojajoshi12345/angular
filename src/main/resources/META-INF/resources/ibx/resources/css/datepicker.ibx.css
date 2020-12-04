@@ -58,7 +58,7 @@
 
 /*Time picker classes*/
 .ibx-datepicker-time-wrapper{
-	margin-top:.5em;
+	margin-top:1em;
 }
 
 .ibx-datepicker .ibx-datepicker-timepicker {
@@ -69,12 +69,19 @@
 	display:none;
 }
 
-.ibx-datepicker .ibx-timepicker-spinner {
+.ibx-datepicker .ibx-timepicker .ibx-timepicker-spinner {
 	flex: 1 1 auto;
 	min-width:1px;
 }
 
-.ibx-datepicker .ibx-timepicker-spinner:not(:last-of-type) {
+.ibx-datepicker .ibx-timepicker .ibx-timepicker-spinner:not(:last-child) {
 	border-right:inherit;
 }
 
+.ibx-timezone-label {
+	margin-top: .5em;
+}
+
+.ibx-timezonepicker {
+	margin-top: .5em;
+}
