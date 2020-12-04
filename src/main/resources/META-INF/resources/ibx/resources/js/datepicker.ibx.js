@@ -49,11 +49,11 @@ $.widget("ibi.ibxDatePicker", $.ibi.ibxVBox,
 				"dayNamesMin": (eval(ibx.resourceMgr.getString("IBX_DP_DAYS_MIN"))),
 				"buttonText": ibx.resourceMgr.getString("IBX_DP_BUTTON_TEXT"),
 				"onSelect": this._onSelect.bind(this),
-				"onChangeMonthYear": this._onChangeMonthYear.bind(this)
+				"onChangeMonthYear": this._onChangeMonthYear.bind(this),
+				"showOn":"dont_show_when_input_gets_focus____AND_DONT_REMOVE_THIS",
 			});
 
-			//Need this because teh datepicker is not accessible by default...only uses anchors...and the selection manager won't tab/move between them by default.
-			//this._datePicker.ibxAddClass('xxx').ibxSelectionManager({type:"single", navKeyRoot:true, focusDefault:".ui-datepicker-current-day", focusResetOnBlur:false});
+			//Need this because the datepicker is not accessible by default...only uses anchors...and the selection manager won't tab/move between them by default.
 			this._datePicker.ibxSelectionManager({ type: "single", navKeyRoot: true, focusDefault: true, focusResetOnBlur: true }).on("ibx_selectablechildren", function (e) {
 				var dp = $(e.target);
 				e.originalEvent.data.items = dp.find("a").attr("tabindex", 0);
@@ -83,11 +83,12 @@ $.widget("ibi.ibxDatePicker", $.ibi.ibxVBox,
 			this._timeZoneLabel = $("<div class='ibx-timezone-label'>").ibxLabel({ text: ibx.resourceMgr.getString('IBX_DP_TIME_ZONE_SELECT') })
 			this._timeZonePicker = $("<div tabindex='0' class='ibx-timezonepicker'>").ibxSelect({readonly:true})
 				.on('ibx_change', this._onTimePickerChange.bind(this));
-			this._timeWrapper = $("<div class='ibx-datepicker-time-wrapper'>").ibxVBox({ align: 'stretch' }).append([this._timePicker, this._timeZoneLabel, this._timeZonePicker]);
+			this._timeWrapper = $("<div class='ibx-datepicker-time-wrapper'>").ibxVBox({ align: 'stretch' })
+				.append([this._timePicker, this._timeZoneLabel, this._timeZonePicker]);
 			this._dateWrapper.append([this._timePickerLabel, this._timeWrapper]);
 
 			this.element.append(this._inputWrapper, this._dateWrapper);
-			this._popup = $('<div class="ibx-datepicker-popup">').ibxPopup({ 'focusDefault': true, 'focusRoot': true, 'destroyOnClose': false });
+			this._popup = $('<div class="ibx-datepicker-popup">').ibxPopup({ 'focusDefault': true, 'destroyOnClose': false });
 		},
 		_init: function () {
 			this._super();
