@@ -81,8 +81,9 @@ $.widget("ibi.ibxDatePicker", $.ibi.ibxVBox,
 			this._timePicker = $("<div class='ibx-datepicker-timepicker'>").ibxTimePicker(this.options.timeOptions).ibxWidget('time', this.options.time)
 				.on('ibx_change', this._onTimePickerChange.bind(this));
 			this._timeZoneLabel = $("<div class='ibx-timezone-label'>").ibxLabel({ text: 'Select Time Zone' })
-			this._timeZonePicker = $("<div tabindex='0' class='ibx-timezonepicker'>").ibxSelect({readonly:true}).on('ibx_change', function(e){e.stopPropagation();});
-			this._timeWrapper = $("<div class='ibx-datepicker-time-wrapper'>").ibxVBox({ align: 'stretch' }).append([this._timeZonePicker, this._timeZoneLabel, this._timeZone]);
+			this._timeZonePicker = $("<div tabindex='0' class='ibx-timezonepicker'>").ibxSelect({readonly:true})
+				.on('ibx_change', this._onTimePickerChange.bind(this));
+			this._timeWrapper = $("<div class='ibx-datepicker-time-wrapper'>").ibxVBox({ align: 'stretch' }).append([this._timePicker, this._timeZoneLabel, this._timeZonePicker]);
 			this._dateWrapper.append([this._timePickerLabel, this._timeWrapper]);
 
 			this.element.append(this._inputWrapper, this._dateWrapper);
