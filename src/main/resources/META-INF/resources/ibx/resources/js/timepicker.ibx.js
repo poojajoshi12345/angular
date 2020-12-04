@@ -318,7 +318,7 @@ $.widget("ibi.ibxTimePicker", $.ibi.ibxHBox, {
 	_formatTime: function (unit, value) {
 
 		if (unit === $.ibi.ibxTimePicker.units.MERIDIAN)
-			value = (value === $.ibi.ibxTimePicker.AM) ? "AM" : "PM"; //MUST CHANGE TO LOCALIZED STRINGS
+			value = ibx.resourceMgr.getString((value === $.ibi.ibxTimePicker.AM) ? "IBX_TP_UNIT_AM" : "IBX_TP_UNIT_PM")
 		else
 			if (unit === $.ibi.ibxTimePicker.units.MILLISECOND) {
 				if (value < 10)
@@ -334,10 +334,10 @@ $.widget("ibi.ibxTimePicker", $.ibi.ibxHBox, {
 
 		var unitString = '';
 		switch (unit) {
-			case $.ibi.ibxTimePicker.units.HOUR: unitString = 'h'; break;
-			case $.ibi.ibxTimePicker.units.MINUTE: unitString = 'm'; break;
-			case $.ibi.ibxTimePicker.units.SECOND: unitString = 's'; break;
-			case $.ibi.ibxTimePicker.units.MILLISECOND: unitString = 'ms'; break;
+			case $.ibi.ibxTimePicker.units.HOUR: unitString = ibx.resourceMgr.getString("IBX_TP_UNIT_HOUR"); break;
+			case $.ibi.ibxTimePicker.units.MINUTE: unitString = ibx.resourceMgr.getString("IBX_TP_UNIT_MINUTE"); break;
+			case $.ibi.ibxTimePicker.units.SECOND: unitString = ibx.resourceMgr.getString("IBX_TP_UNIT_SECOND"); break;
+			case $.ibi.ibxTimePicker.units.MILLISECOND: unitString = ibx.resourceMgr.getString("IBX_TP_UNIT_MILLISECOND"); break;
 		}
 		return value + unitString;
 	},

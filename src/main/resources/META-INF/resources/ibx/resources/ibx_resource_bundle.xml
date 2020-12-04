@@ -72,6 +72,15 @@ $Revision: 1.123 $:-->
 				"IBX_DP_NEXT_TEXT":"Next",
 				"IBX_DP_CUR_TEXT":"Today",
 				"IBX_DP_WEEK_HEADER":"Wk",
+				"IBX_DP_FORMAT":"MM d, yy",
+				"IBX_DP_TIME_ZONE_SELECT":"Select Time Zone",
+
+				"IBX_TP_UNIT_HOUR":"h",
+				"IBX_TP_UNIT_MINUTE":"m",
+				"IBX_TP_UNIT_SECOND":"s",
+				"IBX_TP_UNIT_MILLISECOND":"ms",
+				"IBX_TP_UNIT_AM":"AM",
+				"IBX_TP_UNIT_PM":"PM",
 
 				"IBX_PAGE_LIST_SELECT_ALL":"Select all",
 				"IBX_PAGE_LIST_SELECT_NONE":"Clear",
