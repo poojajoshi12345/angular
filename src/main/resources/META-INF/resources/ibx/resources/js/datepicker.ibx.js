@@ -18,11 +18,11 @@ $.widget("ibi.ibxDatePicker", $.ibi.ibxVBox,
 			"initDate": true, // set date to the current date
 			"adjustForMonthYear": false,
 
+			"showTime": false, //should the time picker be visible.
 			"dateTime": null, //combined javascript Date object with the selected day/time
 			"timeOptions": {}, //options passed to the ibxTimePicker control
-			"showTime": false, //should the time picker be visible.
 			"showTimeZone":false, //should the timezone picker be visible
-			"timeZoneOptions":{} //values fo the timezone picker.
+			"timeZones":[] //values fo the timezone picker.
 		},
 		_widgetClass: "ibx-datepicker",
 		_create: function () {
@@ -81,8 +81,8 @@ $.widget("ibi.ibxDatePicker", $.ibi.ibxVBox,
 			this._timePicker = $("<div class='ibx-datepicker-timepicker'>").ibxTimePicker(this.options.timeOptions).ibxWidget('time', this.options.time)
 				.on('ibx_change', this._onTimePickerChange.bind(this));
 			this._timeZoneLabel = $("<div class='ibx-timezone-label'>").ibxLabel({ text: 'Select Time Zone' })
-			this._timeZone = $("<div class='ibx-timezonepicker'>").ibxSelect()
-			this._timeWrapper = $("<div class='ibx-datepicker-time-wrapper'>").ibxVBox({ align: 'stretch' }).append([this._timePicker, this._timeZoneLabel, this._timeZone]);
+			this._timeZonePicker = $("<div tabindex='0' class='ibx-timezonepicker'>").ibxSelect({readonly:true}).on('ibx_change', function(e){e.stopPropagation();});
+			this._timeWrapper = $("<div class='ibx-datepicker-time-wrapper'>").ibxVBox({ align: 'stretch' }).append([this._timeZonePicker, this._timeZoneLabel, this._timeZone]);
 			this._dateWrapper.append([this._timePickerLabel, this._timeWrapper]);
 
 			this.element.append(this._inputWrapper, this._dateWrapper);
@@ -112,9 +112,10 @@ $.widget("ibi.ibxDatePicker", $.ibi.ibxVBox,
 
 			var date = this._datePicker.datepicker('getDate');
 			this.options.date = $.datepicker.formatDate(this.options.dateFormat, date);
+			var timeZone = this._timeZonePicker.ibxWidget('userValue');
 			var time = this._timePicker.ibxWidget('time');
 			this.options.dateTime = new Date(date.getFullYear(), date.getMonth(), date.getDate(), time.hour24, time.minute, time.second, time.milliSecond);
-			this._trigger("change", null, { 'date': this.options.date, 'dateTime': this.options.dateTime });
+			this._trigger("change", null, { 'date': this.options.date, 'dateTime': this.options.dateTime, timeZone:timeZone });
 			this._input.ibxWidget('option', 'text', $.datepicker.formatDate(this.options.outDateFormat, this._datePicker.datepicker('getDate'), this._pickerOptions));
 		},
 
@@ -178,7 +179,16 @@ $.widget("ibi.ibxDatePicker", $.ibi.ibxVBox,
 			this._datePicker.datepicker('option', this.options);
 			var dateObj = $.datepicker.parseDate(this.options.dateFormat, this.options.date) || new Date();
 			this._datePicker.datepicker('setDate', dateObj);
+			
+			//Setup the time/zones picker
 			this._timePicker.ibxTimePicker('option', this.options.timeOptions).ibxWidget('time', this.options.time);
+			this._timeZonePicker.ibxWidget('removeControlItem');
+			this.options.timeZones = this.options.timeZones || [{title:'GMT', value:0}]
+			for(var i = 0; i < this.options.timeZones.length; ++i){
+				var tz = this.options.timeZones[i];
+				this._timeZonePicker.ibxWidget('addControlItem', $("<div>").ibxSelectItem({text:tz.title, userValue:tz.value, selected:tz.selected}))
+			}
+
 			this._timeWrapper.css('display', this.options.showTime ? '' : 'none');
 			this._input.ibxWidget('option', 'text', $.datepicker.formatDate(this.options.outDateFormat, this._datePicker.datepicker('getDate'), this._pickerOptions));
 			this._super();
