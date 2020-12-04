@@ -30,8 +30,15 @@
     border-bottom: none;
 }
 
+.ibx-datepicker-date-wrapper {
+	padding:2.4px;
+}
+
 .ibx-datepicker-date-wrapper .ui-datepicker {
-    border: none;
+	width:auto;
+	min-width:17em;
+	border: none;
+	padding:unset;
 }
 
 .ibx-datepicker-date-wrapper td[data-range=true] > a {
@@ -49,3 +56,32 @@
     color: white;
 }
 
+/*Time picker classes*/
+.ibx-datepicker-time-wrapper{
+	margin-top:1em;
+}
+
+.ibx-datepicker .ibx-datepicker-timepicker {
+	align-self:'center';
+}
+
+.ibx-datepicker-hide-spinner{
+	display:none;
+}
+
+.ibx-datepicker .ibx-timepicker .ibx-timepicker-spinner {
+	flex: 1 1 auto;
+	min-width:1px;
+}
+
+.ibx-datepicker .ibx-timepicker .ibx-timepicker-spinner:not(:last-child) {
+	border-right:inherit;
+}
+
+.ibx-timezone-label {
+	margin-top: .5em;
+}
+
+.ibx-timezonepicker {
+	margin-top: .5em;
+}

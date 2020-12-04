@@ -8,7 +8,7 @@ $.widget("ibi.ibxSpinner", $.ibi.ibxTextField,
 {
 	options:
 	{
-		"align":"stretch",
+		"align":"center",
 		"value": 0,
 		"min" :0,
 		"max" :100,
