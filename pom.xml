@@ -39,7 +39,7 @@
 		<maven.jar.plugin.version>3.1.1</maven.jar.plugin.version>
 		<maven.jxr.plugin.version>3.0.0</maven.jxr.plugin.version>
 		<maven.pmd.plugin.version>3.12.0</maven.pmd.plugin.version>
-		<maven.project.info.reports.plugin.version>3.0.0</maven.project.info.reports.plugin.version>
+		<maven.project.info.reports.plugin.version>2.9</maven.project.info.reports.plugin.version>
 		<maven.release.plugin.version>2.5.3</maven.release.plugin.version>
 		<maven.site.plugin.version>3.7.1</maven.site.plugin.version>
 		<maven.source.plugin.version>3.1.0</maven.source.plugin.version>
