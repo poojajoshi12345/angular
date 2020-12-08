@@ -105,7 +105,7 @@ $.widget("ibi.ibxDatePicker", $.ibi.ibxVBox,
 		_onSelect: function (dateText, inst) {
 			switch (this.options.type) {
 				case 'popup':
-					if (this._popup.ibxWidget('isOpen'))
+					if (this._popup.ibxWidget('isOpen') && !this.options.showTime) //don't hide on selection when also setting time.
 						this._popup.ibxWidget('close');
 					break;
 				default:
