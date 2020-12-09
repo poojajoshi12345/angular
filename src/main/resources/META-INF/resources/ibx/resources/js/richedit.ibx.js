@@ -470,7 +470,7 @@ $.widget("ibi.ibxEditable", $.Widget,
 		if(this.isEditing())
 		{
 			var evt = this.element.dispatchEvent("ibx_stopediting", this.text(), true, true);
-			if(evt.isDefaultPrevented())
+			if(!revertToOriginal && evt.isDefaultPrevented())
 				return;
 
 			this.element.ibxMutationObserver("option", {listen:false});
