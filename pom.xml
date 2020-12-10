@@ -397,7 +397,7 @@
 									<environmentVariables>
 										<CYPRESS_baseUrl>${cypress.baseurl}</CYPRESS_baseUrl>
 									</environmentVariables>
-									<maven.test.failure.ignore>true</maven.test.failure.ignore>
+									<testFailureIgnore>true</testFailureIgnore>
 								</configuration>
 							</execution>
 						</executions>
