@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'ibi-design-system';
-  src:  url('fonts/ibi-design-system.eot?41wll');
-  src:  url('fonts/ibi-design-system.eot?41wll#iefix') format('embedded-opentype'),
-    url('fonts/ibi-design-system.ttf?41wll') format('truetype'),
-    url('fonts/ibi-design-system.woff?41wll') format('woff'),
-    url('fonts/ibi-design-system.svg?41wll#ibi-design-system') format('svg');
+  src:  url('fonts/ibi-design-system.eot?t2b20q');
+  src:  url('fonts/ibi-design-system.eot?t2b20q#iefix') format('embedded-opentype'),
+    url('fonts/ibi-design-system.ttf?t2b20q') format('truetype'),
+    url('fonts/ibi-design-system.woff?t2b20q') format('woff'),
+    url('fonts/ibi-design-system.svg?t2b20q#ibi-design-system') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -556,6 +556,60 @@
 }
 .ds-icon-flow-direct-load-procedure:before {
   content: "\eafc";
+}
+.ds-icon-add-user:before {
+  content: "\ebc9";
+}
+.ds-icon-bacon:before {
+  content: "\ebca";
+}
+.ds-icon-add-graph:before {
+  content: "\ebcb";
+}
+.ds-icon-calendar-blocked:before {
+  content: "\ebcc";
+}
+.ds-icon-circle-x:before {
+  content: "\ebcd";
+}
+.ds-icon-new-database:before {
+  content: "\ebce";
+}
+.ds-icon-equalizer:before {
+  content: "\ebcf";
+}
+.ds-icon-add-flow:before {
+  content: "\ebd0";
+}
+.ds-icon-hand:before {
+  content: "\ebd1";
+}
+.ds-icon-border-horizontal:before {
+  content: "\ebd2";
+}
+.ds-icon-keyboard:before {
+  content: "\ebd3";
+}
+.ds-icon-circle-minus:before {
+  content: "\ebd4";
+}
+.ds-icon-add-Portal:before {
+  content: "\ebd5";
+}
+.ds-icon-add-filter:before {
+  content: "\ebd6";
+}
+.ds-icon-add-table:before {
+  content: "\ebd7";
+}
+.ds-icon-border-vertical:before {
+  content: "\ebd8";
+}
+.ds-icon-zoom-in:before {
+  content: "\ebd9";
+}
+.ds-icon-zoom-out:before {
+  content: "\ebda";
 }
 .ds-icon-workbench:before {
   content: "\ebc7";
