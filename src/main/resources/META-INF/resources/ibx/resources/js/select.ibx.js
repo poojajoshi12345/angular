@@ -127,6 +127,7 @@ $.widget("ibi.ibxSelectBase", $.ibi.ibxTextField,
 				"modal":false,
 				"destroyOnClose":false,
 				"effect":"fade",
+				"focusDefault":".sel-selected",
 				"position":{ my: "left top", at: "left bottom+1px", of: this.element, collision: "none", using: this._boundPopupPosition },
 			});
 			this._popup.on("ibx_open ibx_close", function(e)
