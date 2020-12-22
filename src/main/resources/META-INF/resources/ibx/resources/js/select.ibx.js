@@ -1202,6 +1202,12 @@ $.widget("ibi.ibxSelectPaged", $.ibi.ibxSelectBase, {
 			this._popup.css(pos);
 		}
 	},
+	_destroy: function ()
+	{
+		if (this._popup)
+			this._popup.off("ibx_close");
+		this._super();
+	},
 	_refresh: function ()
 	{
 		this._super();
