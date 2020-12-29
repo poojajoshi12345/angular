@@ -138,6 +138,7 @@ $.widget("ibi.ibxMenuItem", $.ibi.ibxHBox,
 		this.element.on(
 		{
 			"keydown":this._onMenuItemKeyEvent.bind(this),
+			"keyup":this._onMenuItemKeyEvent.bind(this),
 			"click":this._onMenuItemClick.bind(this),
 			"mouseenter":this._onMenuItemMouseEvent.bind(this),
 			"mouseleave": this._onMenuItemMouseEvent.bind(this)
@@ -176,8 +177,14 @@ $.widget("ibi.ibxMenuItem", $.ibi.ibxHBox,
 		else
 		if(e.keyCode == $.ui.keyCode.ENTER || e.keyCode == $.ui.keyCode.SPACE)//activate
 		{
-			this.element.trigger("click");
-			e.preventDefault();//stops body from doing weird scrolling
+			//[IBX-535]Have to change this to click on keyup because the navmap was changing focus on keydown
+			//and that was causing an issue with checkboxes where they will process the keyup event and think
+			//you clicked on it....changing its state.
+			if(e.type === 'keyup')
+				this.element.trigger("click");
+			else
+			if(e.type === 'keydown')
+				e.preventDefault();//stops body from doing weird scrolling
 		}
 	},
 	_onMenuItemClick:function (e)
@@ -200,8 +207,9 @@ $.widget("ibi.ibxMenuItem", $.ibi.ibxHBox,
 
 		//stop this from bubbling, as menus can be stored under other objects, and a click on the menu item should not be
 		//confused with a click on the parent...have to check for 'e' because this can be called directly without an event.
-		if(e)
+		if(e){
 			e.stopPropagation();
+		}
 	},
 	_subTimer:null,
 	_onMenuItemMouseEvent:function(e)
