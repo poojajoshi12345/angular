@@ -38,6 +38,9 @@ $.widget("ibi.ibxIFrame", $.ibi.ibxWidget,
 	},
 	_onIFrameEvent:function(e)
 	{
+		if(!this.isSameDomain())
+			return;
+
 		//HOME-3317: when iframe gets blurred close all open menus
 		if(e.type == "load"){
 			this.contentWindow().addEventListener('blur', function(e){
@@ -60,11 +63,25 @@ $.widget("ibi.ibxIFrame", $.ibi.ibxWidget,
 	},
 	onWindowBlur:function(e)
 	{
+		if(!this.isSameDomain())
+			return;
+
 		if(this.options.closeOpenMenusOnBlur){
 			var cw = this.contentWindow();
 			if(cw.ibxPopupManager)
 				cw.ibxPopupManager.closeOpenPopups('.ibx-menu');
 		}
+	},
+	isSameDomain:function(){
+		var html = null;
+		try {
+			// deal with older browsers
+			var doc = this.contentDocument();
+			html = doc.body.innerHTML;
+		} catch (err) {
+			// do nothing
+		}
+		return (html !== null);
 	},
 	contentDocument:function()
 	{
@@ -76,12 +93,16 @@ $.widget("ibi.ibxIFrame", $.ibi.ibxWidget,
 	},
 	text:function(txt)
 	{
+		if(!this.isSameDomain())
+			return;
 		if(txt === undefined)
 			return this.contentDocument().body.innerText;
 		this.contentDocument().body.innerText = txt;
 	},
 	html:function(html)
 	{
+		if(!this.isSameDomain())
+			return;
 		if(html === undefined)
 			return this.contentDocument().body.innerHTML;
 		this.contentDocument().body.innerHTML = html;
