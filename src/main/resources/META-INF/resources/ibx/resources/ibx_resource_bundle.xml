@@ -297,6 +297,7 @@ $Revision: 1.123 $:-->
 		<script-file src="./etc/jquery-minicolors/jquery.minicolors.js"/>
 
 		<!--IBX JS ASSETS-->
+		<script-file src="./js/wndinterop.ibx.js"/>
 		<script-file src="./js/events.ibx.js"/>
 		<script-file src="./js/selection.ibx.js"/>
 		<script-file src="./js/dragdrop.ibx.js"/>
