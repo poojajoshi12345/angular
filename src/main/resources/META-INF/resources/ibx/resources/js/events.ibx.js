@@ -61,31 +61,37 @@ ibxEventManager._onTouchEvent = function(e)
 	else
 	if(eType == "touchend")
 	{
-		//do mouseup
-		var me = ibxEventManager.createMouseEvent("mouseup", e);
-		e.target.dispatchEvent(me);
-
-		//do click
-		var me = ibxEventManager.createMouseEvent("click", e);
-		e.target.dispatchEvent(me);
-
-		//do double click
-		var dt = ibxEventManager._eLastClick ? (e.timeStamp - ibxEventManager._eLastClick.timeStamp) : Infinity;
-		if(dt < ibxEventManager.msDblClick)
-		{
-			var me = ibxEventManager.createMouseEvent("dblclick", e);
+		//[FAVES-434]if touch moved (scroll), then don't do mouse events.
+		if(!ibxEventManager._cancelClick){
+			//do mouseup
+			var me = ibxEventManager.createMouseEvent("mouseup", e);
 			e.target.dispatchEvent(me);
+
+			//do click
+			var me = ibxEventManager.createMouseEvent("click", e);
+			e.target.dispatchEvent(me);
+
+			//do double click
+			var dt = ibxEventManager._eLastClick ? (e.timeStamp - ibxEventManager._eLastClick.timeStamp) : Infinity;
+			if(dt < ibxEventManager.msDblClick)
+			{
+				var me = ibxEventManager.createMouseEvent("dblclick", e);
+				e.target.dispatchEvent(me);
+			}
+
+			//save info, and prevent default so browser won't generate its own native mouse events.
+			ibxEventManager._eLastClick = e;
+			ibxEventManager._eLastTouch = null;
+			ibxEventManager._hasSwiped = false;
+
+			//HOME-2663 - seems IOS now needs the touchend to actually focus the input control...so don't prevent def on that.
+			//The problem is preventDefault stops the input from getting focus and bring up the keyboard on IOS.
+			if(ibxPlatformCheck.isIOS && e.cancelable && (e.target.nodeType != 'input'))
+				e.preventDefault();
 		}
 
-		//save info, and prevent default so browser won't generate its own native mouse events.
-		ibxEventManager._eLastClick = e;
-		ibxEventManager._eLastTouch = null;
-		ibxEventManager._hasSwiped = false;
-
-		//HOME-2663 - seems IOS now needs the touchend to actually focus the input control...so don't prevent def on that.
-		//The problem is preventDefault stops the input from getting focus and bring up the keyboard on IOS.
-		if(ibxPlatformCheck.isIOS && (e.target.nodeType != 'input'))
-			e.preventDefault();
+		//reset flag for next possible touch event.
+		ibxEventManager._cancelClick = false;
 	}
 	else
 	if(eType == "touchmove")
@@ -115,6 +121,9 @@ ibxEventManager._onTouchEvent = function(e)
 				e.target.dispatchEvent(se);
 			}
 		}
+
+		//[FAVES-434] if the touch moves, then we are scrolling or swiping, but not clicking...so cancel it.
+		ibxEventManager._cancelClick = true;
 
 		//do mouse move
 		var me = ibxEventManager.createMouseEvent("mousemove", e);
