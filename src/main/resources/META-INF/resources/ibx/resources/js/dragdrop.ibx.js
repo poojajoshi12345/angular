@@ -81,6 +81,7 @@ ibxDragDropManager.dragTargetClass = "ibx-drop-target";
 ibxDragDropManager.dragImageClass = "ibx-drag-image";
 ibxDragDropManager.dragStartDistanceX = 5;
 ibxDragDropManager.dragStartDistanceY = 5;
+ibxDragDropManager.noMobileDragDrop = true;
 
 ibxDragDropManager.getDefaultDragImage = function(el)
 {
@@ -146,6 +147,10 @@ ibxDragDropManager.isDragging = function()
 };
 ibxDragDropManager._onMouseEvent = function(e)
 {
+	//can't drag/drop on mobile devices.
+	if(ibxDragDropManager.noMobileDragDrop && ibxPlatformCheck.isMobile)
+		return;
+
 	var eType = e.type;
 	if(eType == "mousedown" && !this.isDragging())
 	{
