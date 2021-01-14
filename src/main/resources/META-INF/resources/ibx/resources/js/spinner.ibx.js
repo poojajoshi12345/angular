@@ -17,7 +17,7 @@ $.widget("ibi.ibxSpinner", $.ibi.ibxTextField,
 		"circularStep" : true,
 		"fnFormat":null,
 		"fnUnformat":null,
-		"validKeys":[9, 37, 38, 39, 40, 8, 46, 187, 189, 190],
+		"validKeys":[9, 37, 38, 39, 40, 8, 46, 110, 187, 189, 190],
 		"btnGroupClass":"ibx-spinner-btn-grp",
 		"btnUpClass":"ibx-spinner-btn-up",
 		"btnUpOptions":
