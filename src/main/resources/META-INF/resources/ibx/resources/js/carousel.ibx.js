@@ -170,8 +170,11 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 						this.scroll(scrollInfo.steps, scrollInfo.scrollType, scrollInfo.scrollTime);
 					else
 					{
+						//emit the endscroll message after a short delay, so the screen will be updated.
 						scrollInfo.pageInfo = this.getPageInfo();
-						this.element.dispatchEvent("ibx_endscroll", scrollInfo, false, false);
+						window.setTimeout(function(scrollInfo){
+							this.element.dispatchEvent("ibx_endscroll", scrollInfo, false, false);
+						}.bind(this, scrollInfo), 100);
 					}
 					this.element.ibxRemoveClass("ibx-csl-scrolling");
 				}.bind(this, scrollInfo),
@@ -284,6 +287,14 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 	{
 		var markerInfo = $(e.currentTarget).data("ibxPageMarkerInfo");
 		this.page(markerInfo.pageNo);
+		this._pageMarkers.offsetHeight;
+
+		//[IBX-537] focus the page marker after jumping to page.
+		this.element.on('ibx_endscroll', function(pageNo, e){
+			this.element.off('ibx_endscroll');
+			var page = this._pageMarkers.find(':nth-child(' + (pageNo) + ')');
+			page.focus();
+		}.bind(this, ++markerInfo.pageNo));
 	},
 	_adjustPageMarkers:function()
 	{
