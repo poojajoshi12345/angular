@@ -174,7 +174,7 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 						scrollInfo.pageInfo = this.getPageInfo();
 						window.setTimeout(function(scrollInfo){
 							this.element.dispatchEvent("ibx_endscroll", scrollInfo, false, false);
-						}.bind(this, scrollInfo), 100);
+						}.bind(this, scrollInfo), 25);
 					}
 					this.element.ibxRemoveClass("ibx-csl-scrolling");
 				}.bind(this, scrollInfo),
