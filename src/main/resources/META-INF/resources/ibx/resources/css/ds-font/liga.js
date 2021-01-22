@@ -218,7 +218,6 @@
             'zoom-in': '&#xebd9;',
             'zoom-out': '&#xebda;',
             'workbench': '&#xebc7;',
-            'data-quality': '&#xebc8;',
             'return': '&#xebc5;',
             'child': '&#xebc6;',
             'bar-chart-horizontal': '&#xebba;',
