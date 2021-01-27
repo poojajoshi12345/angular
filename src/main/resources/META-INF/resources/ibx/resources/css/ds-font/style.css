@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'ibi-design-system';
-  src:  url('fonts/ibi-design-system.eot?eyst0');
-  src:  url('fonts/ibi-design-system.eot?eyst0#iefix') format('embedded-opentype'),
-    url('fonts/ibi-design-system.ttf?eyst0') format('truetype'),
-    url('fonts/ibi-design-system.woff?eyst0') format('woff'),
-    url('fonts/ibi-design-system.svg?eyst0#ibi-design-system') format('svg');
+  src:  url('fonts/ibi-design-system.eot?q36z1q');
+  src:  url('fonts/ibi-design-system.eot?q36z1q#iefix') format('embedded-opentype'),
+    url('fonts/ibi-design-system.ttf?q36z1q') format('truetype'),
+    url('fonts/ibi-design-system.woff?q36z1q') format('woff'),
+    url('fonts/ibi-design-system.svg?q36z1q#ibi-design-system') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -35,8 +35,14 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-.ds-icon-data-quality:before {
-  content: "\e900";
+.ds-icon-reorder:before {
+  content: "\ebdb";
+}
+.ds-icon-satellite:before {
+  content: "\ebae";
+}
+.ds-icon-laptop:before {
+  content: "\ebaf";
 }
 .ds-icon-cloud-upload:before {
   content: "\ebb0";
@@ -64,12 +70,6 @@
 }
 .ds-icon-archive:before {
   content: "\ebb8";
-}
-.ds-icon-satellite:before {
-  content: "\ebae";
-}
-.ds-icon-laptop:before {
-  content: "\ebaf";
 }
 .ds-icon-geometrical-shapes:before {
   content: "\ebb9";
@@ -617,6 +617,9 @@
 .ds-icon-workbench:before {
   content: "\ebc7";
 }
+.ds-icon-data-quality:before {
+  content: "\ebc8";
+}
 .ds-icon-Return:before {
   content: "\ebc5";
 }
@@ -888,49 +891,49 @@
   content: "\e90f";
 }
 .ds-icon-search:before {
-  content: "\e901";
+  content: "\e900";
 }
 .ds-icon-inspect-performance:before {
   content: "\ea89";
 }
 .ds-icon-bulb:before {
-  content: "\e902";
+  content: "\e901";
 }
 .ds-icon-earth:before {
-  content: "\e904";
+  content: "\e902";
 }
 .ds-icon-tag:before {
-  content: "\e905";
+  content: "\e904";
 }
 .ds-icon-group:before {
-  content: "\e906";
+  content: "\e905";
 }
 .ds-icon-fields:before {
-  content: "\e908";
+  content: "\e906";
 }
 .ds-icon-pyramid:before {
-  content: "\e909";
+  content: "\e908";
 }
 .ds-icon-funnel:before {
   content: "\e90a";
 }
 .ds-icon-wallet:before {
-  content: "\e90b";
+  content: "\e909";
 }
 .ds-icon-check:before {
-  content: "\e90c";
+  content: "\e90b";
 }
 .ds-icon-reporting-object:before {
-  content: "\e90d";
+  content: "\e90c";
 }
 .ds-icon-scale:before {
-  content: "\e90e";
+  content: "\e90d";
 }
 .ds-icon-permissions:before {
   content: "\eacc";
 }
 .ds-icon-access-list:before {
-  content: "\e910";
+  content: "\e90e";
 }
 .ds-icon-security-shield-checked:before {
   content: "\eb04";
@@ -939,91 +942,91 @@
   content: "\ea8a";
 }
 .ds-icon-security:before {
-  content: "\e911";
+  content: "\e910";
 }
 .ds-icon-remove:before {
-  content: "\e912";
+  content: "\e911";
 }
 .ds-icon-asterisk:before {
-  content: "\e913";
+  content: "\e912";
 }
 .ds-icon-calculator:before {
-  content: "\e914";
+  content: "\e913";
 }
 .ds-icon-block:before {
-  content: "\e915";
+  content: "\e914";
 }
 .ds-icon-layout:before {
-  content: "\e916";
+  content: "\e915";
 }
 .ds-icon-branch:before {
-  content: "\e917";
+  content: "\e916";
 }
 .ds-icon-swap:before {
-  content: "\e918";
+  content: "\e917";
 }
 .ds-icon-side-by-side:before {
-  content: "\e919";
+  content: "\e918";
 }
 .ds-icon-percent:before {
-  content: "\e91a";
+  content: "\e919";
 }
 .ds-icon-stacked:before {
-  content: "\e91b";
+  content: "\e91a";
 }
 .ds-icon-absolute:before {
-  content: "\e91d";
+  content: "\e91b";
 }
 .ds-icon-visualization:before {
-  content: "\e91e";
+  content: "\e91d";
 }
 .ds-icon-portal:before {
-  content: "\e91f";
+  content: "\e91e";
 }
 .ds-icon-bell:before {
-  content: "\e920";
+  content: "\e91f";
 }
 .ds-icon-announcement:before {
-  content: "\e921";
+  content: "\e920";
 }
 .ds-icon-clock:before {
-  content: "\e922";
+  content: "\e921";
 }
 .ds-icon-schedule:before {
-  content: "\e923";
+  content: "\e922";
 }
 .ds-icon-tap:before {
-  content: "\e924";
+  content: "\e923";
 }
 .ds-icon-cursor-default:before {
-  content: "\e925";
+  content: "\e924";
 }
 .ds-icon-cursor:before {
-  content: "\e926";
+  content: "\e925";
 }
 .ds-icon-shape-circle:before {
-  content: "\e927";
+  content: "\e926";
 }
 .ds-icon-shape-cube:before {
-  content: "\e928";
+  content: "\e927";
 }
 .ds-icon-shape-square:before {
-  content: "\e929";
+  content: "\e928";
 }
 .ds-icon-shape-molecule:before {
-  content: "\e92a";
+  content: "\e929";
 }
 .ds-icon-shape-fill:before {
-  content: "\e92b";
+  content: "\e92a";
 }
 .ds-icon-star-half:before {
   content: "\eaee";
 }
 .ds-icon-star-empty:before {
-  content: "\e92c";
+  content: "\e92b";
 }
 .ds-icon-star:before {
-  content: "\e92d";
+  content: "\e92c";
 }
 .ds-icon-processes:before {
   content: "\eaf3";
@@ -1152,25 +1155,25 @@
   content: "\e92e";
 }
 .ds-icon-radio-checked:before {
-  content: "\e951";
+  content: "\e92d";
 }
 .ds-icon-checkbox-checked:before {
-  content: "\e952";
+  content: "\e951";
 }
 .ds-icon-checkbox-uncheck-all:before {
-  content: "\e953";
+  content: "\e952";
 }
 .ds-icon-checkbox-unchecked:before {
-  content: "\e954";
+  content: "\e953";
 }
 .ds-icon-checkbox-all-checked:before {
-  content: "\e955";
+  content: "\e954";
 }
 .ds-icon-download:before {
-  content: "\e956";
+  content: "\e955";
 }
 .ds-icon-upload:before {
-  content: "\e958";
+  content: "\e956";
 }
 .ds-icon-grid:before {
   content: "\eabd";
@@ -1185,40 +1188,40 @@
   content: "\ebac";
 }
 .ds-icon-chart-area:before {
-  content: "\e95a";
+  content: "\e958";
 }
 .ds-icon-chart-treemap:before {
-  content: "\e95b";
+  content: "\e95a";
 }
 .ds-icon-chart-bar:before {
-  content: "\e95c";
+  content: "\e95b";
 }
 .ds-icon-chart-line:before {
-  content: "\e95d";
+  content: "\e95c";
 }
 .ds-icon-chart-scatter:before {
-  content: "\e95e";
+  content: "\e95d";
 }
 .ds-icon-chart-log:before {
-  content: "\e95f";
+  content: "\e95e";
 }
 .ds-icon-chart-box-plot:before {
-  content: "\e960";
+  content: "\e95f";
 }
 .ds-icon-chart-other:before {
-  content: "\e961";
+  content: "\e960";
 }
 .ds-icon-chart-ring:before {
-  content: "\e962";
+  content: "\e961";
 }
 .ds-icon-ga:before {
-  content: "\e963";
+  content: "\e962";
 }
 .ds-icon-logo-data-assist:before {
-  content: "\e964";
+  content: "\e963";
 }
 .ds-icon-logo-version-control:before {
-  content: "\e965";
+  content: "\e964";
 }
 .ds-icon-twitter-square:before {
   content: "\eabf";
@@ -1227,52 +1230,52 @@
   content: "\eac0";
 }
 .ds-icon-logo-information-builders:before {
-  content: "\e966";
+  content: "\e965";
 }
 .ds-icon-logo-python:before {
-  content: "\e967";
+  content: "\e966";
 }
 .ds-icon-logo-webfocus:before {
-  content: "\e968";
+  content: "\e967";
 }
 .ds-icon-logo-infoassist:before {
-  content: "\e969";
+  content: "\e968";
 }
 .ds-icon-logo-r:before {
-  content: "\e96a";
+  content: "\e969";
 }
 .ds-icon-Abc:before {
-  content: "\e96b";
+  content: "\e96a";
 }
 .ds-icon-123:before {
   content: "\e96c";
 }
 .ds-icon-sort-none:before {
-  content: "\e96d";
+  content: "\e96b";
 }
 .ds-icon-summary:before {
-  content: "\e96e";
+  content: "\e96d";
 }
 .ds-icon-bulleted-summary:before {
-  content: "\e96f";
+  content: "\e96e";
 }
 .ds-icon-content:before {
-  content: "\e970";
+  content: "\e96f";
 }
 .ds-icon-content-box:before {
-  content: "\e971";
+  content: "\e970";
 }
 .ds-icon-content-add:before {
-  content: "\e972";
+  content: "\e971";
 }
 .ds-icon-content-remove:before {
-  content: "\e973";
+  content: "\e972";
 }
 .ds-icon-draggable:before {
-  content: "\e974";
+  content: "\e973";
 }
 .ds-icon-switch:before {
-  content: "\e975";
+  content: "\e974";
 }
 .ds-icon-user:before {
   content: "\eb72";
@@ -1959,7 +1962,7 @@
   content: "\ea8b";
 }
 .ds-icon-to-uppercase:before {
-  content: "\ea39";
+  content: "\e975";
 }
 .ds-icon-decrease-indentation:before {
   content: "\ea8c";
@@ -1968,7 +1971,7 @@
   content: "\ea3c";
 }
 .ds-icon-case-sensitive:before {
-  content: "\ea3a";
+  content: "\ea39";
 }
 .ds-icon-filter:before {
   content: "\ea40";
@@ -1989,7 +1992,7 @@
   content: "\ea46";
 }
 .ds-icon-save-as:before {
-  content: "\ea3f";
+  content: "\ea3a";
 }
 .ds-icon-save-all:before {
   content: "\ea44";
@@ -2094,22 +2097,22 @@
   content: "\ea64";
 }
 .ds-icon-alpha-ascending:before {
-  content: "\ea65";
+  content: "\ea3f";
 }
 .ds-icon-alpha-descending:before {
-  content: "\ea66";
+  content: "\ea65";
 }
 .ds-icon-sort-alternate:before {
   content: "\eaea";
 }
 .ds-icon-move-horizontal:before {
-  content: "\ea67";
+  content: "\ea66";
 }
 .ds-icon-move-vertical:before {
-  content: "\ea68";
+  content: "\ea67";
 }
 .ds-icon-move-freeform:before {
-  content: "\ea69";
+  content: "\ea68";
 }
 .ds-icon-chevron-down:before {
   content: "\ea6a";
@@ -2127,19 +2130,19 @@
   content: "\ea6d";
 }
 .ds-icon-chevron-last:before {
-  content: "\ea6f";
+  content: "\ea69";
 }
 .ds-icon-arrow-down:before {
-  content: "\ea70";
+  content: "\ea6f";
 }
 .ds-icon-arrow-up:before {
-  content: "\ea71";
+  content: "\ea70";
 }
 .ds-icon-arrow-right:before {
-  content: "\ea72";
+  content: "\ea71";
 }
 .ds-icon-arrow-left:before {
-  content: "\ea73";
+  content: "\ea72";
 }
 .ds-icon-goto-bottom:before {
   content: "\eb22";
@@ -2154,77 +2157,77 @@
   content: "\eb25";
 }
 .ds-icon-caret-down:before {
-  content: "\ea74";
+  content: "\ea73";
 }
 .ds-icon-caret-up:before {
-  content: "\ea75";
+  content: "\ea74";
 }
 .ds-icon-caret-left:before {
   content: "\ea76";
 }
 .ds-icon-caret-right:before {
-  content: "\ea77";
+  content: "\ea75";
 }
 .ds-icon-expand:before {
-  content: "\ea78";
+  content: "\ea77";
 }
 .ds-icon-collapse:before {
-  content: "\ea7a";
+  content: "\ea78";
 }
 .ds-icon-resize:before {
   content: "\ea97";
 }
 .ds-icon-label-on-right:before {
-  content: "\ea7b";
+  content: "\ea7a";
 }
 .ds-icon-label-none:before {
-  content: "\ea7c";
+  content: "\ea7b";
 }
 .ds-icon-label-on-top:before {
-  content: "\ea7d";
+  content: "\ea7c";
 }
 .ds-icon-label-on-left:before {
-  content: "\ea7e";
+  content: "\ea7d";
 }
 .ds-icon-table:before {
   content: "\eaaa";
 }
 .ds-icon-insert-before:before {
-  content: "\ea7f";
+  content: "\ea7e";
 }
 .ds-icon-insert-after:before {
-  content: "\ea80";
+  content: "\ea7f";
 }
 .ds-icon-insert-right:before {
-  content: "\ea81";
+  content: "\ea80";
 }
 .ds-icon-insert-left:before {
-  content: "\ea82";
+  content: "\ea81";
 }
 .ds-icon-filterbar-off:before {
-  content: "\ea83";
+  content: "\ea82";
 }
 .ds-icon-filterbar-on:before {
-  content: "\ea84";
+  content: "\ea83";
 }
 .ds-icon-join-inner:before {
-  content: "\ea85";
+  content: "\ea84";
 }
 .ds-icon-profile-join:before {
   content: "\eacb";
 }
 .ds-icon-join-full:before {
-  content: "\ea86";
+  content: "\ea85";
 }
 .ds-icon-union-edit:before {
   content: "\ebad";
 }
 .ds-icon-join-right:before {
-  content: "\ea87";
+  content: "\ea86";
 }
 .ds-icon-join-none:before {
-  content: "\ea88";
+  content: "\ea87";
 }
 .ds-icon-join-left:before {
-  content: "\ebdb";
+  content: "\ea88";
 }
