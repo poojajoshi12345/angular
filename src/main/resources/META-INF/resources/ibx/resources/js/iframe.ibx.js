@@ -94,7 +94,7 @@ $.widget("ibi.ibxIFrame", $.ibi.ibxWidget,
 	text:function(txt)
 	{
 		if(!this.isSameDomain())
-			return;
+			return '';
 		if(txt === undefined)
 			return this.contentDocument().body.innerText;
 		this.contentDocument().body.innerText = txt;
@@ -102,7 +102,7 @@ $.widget("ibi.ibxIFrame", $.ibi.ibxWidget,
 	html:function(html)
 	{
 		if(!this.isSameDomain())
-			return;
+			return '';
 		if(html === undefined)
 			return this.contentDocument().body.innerHTML;
 		this.contentDocument().body.innerHTML = html;
