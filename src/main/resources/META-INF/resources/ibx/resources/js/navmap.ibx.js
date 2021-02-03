@@ -9,7 +9,6 @@ $.widget("ibi.ibxNavMap", $.ibi.ibxMenu,
 	{
 		"navParent":null,
 		"navTarget":null,
-		"refocusLastActiveOnClose":false,
 		"aria":
 		{
 			"role":"list",
@@ -49,7 +48,7 @@ $.widget("ibi.ibxNavMap", $.ibi.ibxMenu,
 	},
 	close:function(closeInfo)
 	{
-		this.options.refocusLastActiveOnClose = (closeInfo == "cancel");
+		this.options.refocusLastActiveOnClose = (closeInfo !==  "menu_item_click");
 		this._super(closeInfo);
 	},
 	_refresh:function()
