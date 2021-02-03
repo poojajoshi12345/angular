@@ -67,7 +67,7 @@ $.widget("ibi.ibxMenu", $.ibi.ibxPopup,
 		{
 			//close if desired.
 			if(this.options.autoClose && !this.options.multiSelect)
-				this.close();
+				this.close('menu_item_click');
 		
 			//bubble event up owner chain.
 			var parentMenu = this.parentMenu();
