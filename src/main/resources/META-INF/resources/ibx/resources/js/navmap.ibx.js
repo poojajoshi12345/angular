@@ -30,15 +30,26 @@ $.widget("ibi.ibxNavMap", $.ibi.ibxMenu,
 			//then open the new parent navmap.
 			var parentMap = $(this.options.navParent);
 			parentMap.ibxWidget("open").ibxWidget('instance')._elPrevActive = this._elPrevActive;
-
 		}
 		else
 		{
-			var target = $(e.target).ibxWidget("option", "navTarget");
-			if(target)
-				$(target).focus();
+			//figure out the proper document (for iframes), and target to navigate to.
+			var target = $(e.target);
+			var navTarget = target.ibxWidget("option", "navTarget");
+			var navFrame = $(target.ibxWidget('option', 'navFrame'));
+			var navDoc = null;
+			if(navFrame){
+				if(navFrame.is('.ibx-iframe'))
+					navDoc = navFrame.ibxWidget('contentDocument');
+				else
+				if(navFrame.is('iframe'))
+					navDoc = navFrame.prop('contentDocument');
+			}
 
-			target = $(e.target).ibxWidget("option", "evalTarget");
+			$(navTarget, navDoc).focus(); //do the focusing
+
+			//now, if requested, evaluate the runtime target for focusing.
+			target = target.ibxWidget("option", "evalTarget");
 			if(target){
 				target = eval(target);
 				$(target).focus();
