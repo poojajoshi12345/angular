@@ -8,7 +8,6 @@ $.widget("ibi.ibxNavMap", $.ibi.ibxMenu,
 	options:
 	{
 		"navParent":null,
-		"navTarget":null,
 		"aria":
 		{
 			"role":"list",
@@ -37,14 +36,18 @@ $.widget("ibi.ibxNavMap", $.ibi.ibxMenu,
 			var target = $(e.target);
 			var navTarget = target.ibxWidget("option", "navTarget");
 			var navFrame = $(target.ibxWidget('option', 'navFrame'));
-			var navDoc = null;
+			var navWnd = window;
+			var navDoc = document;
 			if(navFrame){
-				try{
-					if(navFrame.is('.ibx-iframe'))
+				try{ 
+					if(navFrame.is('.ibx-iframe')){
 						navDoc = navFrame.ibxWidget('contentDocument');
-					else
-					if(navFrame.is('iframe'))
+						navWnd = navFrame.ibxWidget('contentWindow');
+					}
+					else if(navFrame.is('iframe')){
 						navDoc = navFrame.prop('contentDocument');
+						navWnd = navFrame.prop('contentWindow');
+					}
 				}catch(ex){
 					console.warn('[ibxNavMap] ' + ex.message);
 				}
@@ -54,9 +57,9 @@ $.widget("ibi.ibxNavMap", $.ibi.ibxMenu,
 
 			//now, if requested, evaluate the runtime target for focusing.
 			target = target.ibxWidget("option", "evalTarget");
-			if(target){
-				target = eval(target);
-				$(target).focus();
+			if(target && navWnd){
+				target = navWnd.eval(target);
+				$(target, navDoc).focus();
 			}
 		}
 		this._super(e);
