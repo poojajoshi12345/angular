@@ -39,11 +39,15 @@ $.widget("ibi.ibxNavMap", $.ibi.ibxMenu,
 			var navFrame = $(target.ibxWidget('option', 'navFrame'));
 			var navDoc = null;
 			if(navFrame){
-				if(navFrame.is('.ibx-iframe'))
-					navDoc = navFrame.ibxWidget('contentDocument');
-				else
-				if(navFrame.is('iframe'))
-					navDoc = navFrame.prop('contentDocument');
+				try{
+					if(navFrame.is('.ibx-iframe'))
+						navDoc = navFrame.ibxWidget('contentDocument');
+					else
+					if(navFrame.is('iframe'))
+						navDoc = navFrame.prop('contentDocument');
+				}catch(ex){
+					console.warn('[ibxNavMap] ' + ex.message);
+				}
 			}
 
 			$(navTarget, navDoc).focus(); //do the focusing
