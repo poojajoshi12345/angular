@@ -55,7 +55,7 @@ $.widget("ibi.ibxNavMap", $.ibi.ibxMenu,
 
 			$(navTarget, navDoc).focus(); //do the focusing
 
-			//now, if requested, evaluate the runtime target for focusing.
+			//now, if requested, evaluate the runtime target for focusing in context of the proper frame.
 			target = target.ibxWidget("option", "evalTarget");
 			if(target && navWnd){
 				target = navWnd.eval(target);
