@@ -85,8 +85,9 @@ ibxEventManager._onTouchEvent = function(e)
 			ibxEventManager._hasSwiped = false;
 
 			//HOME-2663 - seems IOS now needs the touchend to actually focus the input control...so don't prevent def on that.
-			//The problem is preventDefault stops the input from getting focus and bring up the keyboard on IOS.
-			if(ibxPlatformCheck.isIOS && e.cancelable && (e.target.nodeType != 'input'))
+			//			  The problem is preventDefault stops the input from getting focus and bring up the keyboard on IOS.
+			//IBX-527 -   Actually, it seems all mobile devices need to prevent default in these circumstances (not just ios).
+			if(ibxPlatformCheck.isMobile && e.cancelable && (e.target.nodeType != 'input'))
 				e.preventDefault();
 		}
 
