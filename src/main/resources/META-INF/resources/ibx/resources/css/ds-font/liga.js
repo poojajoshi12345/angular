@@ -25,8 +25,7 @@
     var icons;
     if (!supportsProperty('fontFeatureSettings')) {
         icons = {
-            'satellite': '&#xebae;',
-            'laptop': '&#xebaf;',
+            'classify': '&#xebdc;',
             'cloud-upload': '&#xebb0;',
             'cloud-download': '&#xebb1;',
             'ticket': '&#xebb2;',
@@ -36,6 +35,8 @@
             'graduation-cap': '&#xebb6;',
             'bug': '&#xebb7;',
             'archive': '&#xebb8;',
+            'satellite': '&#xebae;',
+            'laptop': '&#xebaf;',
             'geometrical-shapes': '&#xebb9;',
             'allmfdtools-bv-flatten-view': '&#xe957;',
             'alpha-datatype-derived-v2': '&#xeaf8;',
