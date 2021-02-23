@@ -54,7 +54,7 @@ $Revision: 1.123 $:-->
 				"IBX_CAROUSEL_NEXT":"Next carousel items",
 				"IBX_CAROUSEL_ITEMS":"Carousel Items",
 				"IBX_CAROUSEL_PAGES":"Carousel Pages",
-				"IBX_CAROUSEL_PAGE":"Go to Page",
+				"IBX_CAROUSEL_PAGE":"Go to Page {1} of {2}",
 
 				"IBX_SELECT_SEARCH_VALUES":"Enter Search String",
 				"IBX_SELECT_PAGE_PREV":"Previous Page of Values",
