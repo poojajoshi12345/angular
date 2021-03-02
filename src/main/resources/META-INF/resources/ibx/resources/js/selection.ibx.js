@@ -5,20 +5,21 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 {
 	options:
 	{
-		"type":"none",						//none - no selection, single - single selection, multi - multiple selection
-		"toggleSelection":false,			//clicking on an item will select/deselect.
-		"escClearSelection":true,			//clear the selection on the escape key
-		"selectButtons":[0, 2],				//which buttons trigger a select 0 = left, 1 = middle, 2 = right
-		"selectKeys":[13, 32],				//which keys trigger a select 13 = ENTER, 32 = SPACE
-		"focusRoot":false,					//keep focus circular within this element
-		"focusDefault":false,				//focus the first item in root. (can be a select pattern).
-		"focusResetOnBlur":true,			//when widget loses focus, reset the current active navKey child.
-		"navKeyRoot":false,					//arrow keys will move you circularly through the items.
-		"navKeyDir":"both",					//horizontal = left/right, vertical = up/down, or both
-		"rubberBand":false,					//selection by rubberband
-		"rubberBandPartialSelect":false,	//rubberband must fully enclose the item for selection
-		"selectableChildren":null,			//class for what children are selectable.
-		"cacheSelectableChildren":false,	//when true, save last retreived to save time
+		"type":"none",							//none - no selection, single - single selection, multi - multiple selection
+		"toggleSelection":false,				//clicking on an item will select/deselect.
+		"escClearSelection":true,				//clear the selection on the escape key
+		"selectButtons":[0, 2],					//which buttons trigger a select 0 = left, 1 = middle, 2 = right
+		"selectKeys":[13, 32],					//which keys trigger a select 13 = ENTER, 32 = SPACE
+		"focusRoot":false,						//keep focus circular within this element
+		"focusDefault":false,					//focus the first item in root. (can be a select pattern).
+		"focusResetOnBlur":true,				//when widget loses focus, reset the current active navKey child.
+		"navKeyRoot":false,						//arrow keys will move you circularly through the items.
+		"navKeyDir":"both",						//horizontal = left/right, vertical = up/down, or both
+		"navKeyActivate":$.ui.keyCode.ENTER,	//if focusDefault isn't on, and you want to do navKey, then you have to activate the children.
+		"rubberBand":false,						//selection by rubberband
+		"rubberBandPartialSelect":false,		//rubberband must fully enclose the item for selection
+		"selectableChildren":null,				//class for what children are selectable.
+		"cacheSelectableChildren":false,		//when true, save last retreived to save time
 	},
 	_create:function()
 	{
@@ -32,7 +33,8 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 		this.element[0].addEventListener("focusout", this._focusOutBound = this._onFocusOut.bind(this), true);
 		this.element[0].addEventListener("mousedown", this._onMouseEventBound = this._onMouseEvent.bind(this), true);
 		this.element[0].addEventListener("mouseup", this._onMouseEventBound, true);
-		this.element[0].addEventListener("keydown", this._onKeyDownBound = this._onKeyDown.bind(this), true);
+		this.element[0].addEventListener("keydown", this._onKeyEventBound = this._onKeyEvent.bind(this), true);
+		this.element[0].addEventListener("keyup", this._onKeyEventBound = this._onKeyEvent.bind(this), true);
 		this.element[0].addEventListener("ibx_rubberbandchange", this._onRubberBandEventBound = this._onRubberBandEvent.bind(this), true);
 
 	},
@@ -47,7 +49,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 		this.element[0].removeEventListener("mousedown", this._onMouseEventBound, true);
 		this.element[0].removeEventListener("mouseup", this._onMouseEventBound, true);
 		this.element[0].removeEventListener("mouseup", this._onMouseUpBound, true);
-		this.element[0].removeEventListener("keydown", this._onKeyDownBound, true);
+		this.element[0].removeEventListener("keydown", this._onKeyEventBound, true);
 		this.element[0].removeEventListener("ibx_rubberbandchange", this._onRubberBandEventBound, true);
 		this._super();
 	},
@@ -90,9 +92,18 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 		if(!isTarget && !ownsRelTarget)
 			this._activate(false);
 	},
-	_onKeyDown:function(e)
+	_onKeyEvent:function(e)
 	{
 		var options = this.options;
+
+		//if the selection manager is the target, and focusDefault is false, and the key is the activation key, then focus the default item.
+		if(e.type === 'keyup' && this.element.is(e.target) && e.keyCode === this.options.navKeyActivate){
+			var defItem = this.element.find(options.focusDefault);
+			defItem = defItem.length ? defItem : this.selectableChildren(":ibxNavFocusable()").first();
+			if(defItem)
+				defItem.focus();
+			return;
+		}
 
 		//back tabbing with focus default means find outer prev sibling that's tabbable
 		if(!options.focusRoot && options.focusDefault && e.keyCode == $.ui.keyCode.TAB && e.shiftKey)
