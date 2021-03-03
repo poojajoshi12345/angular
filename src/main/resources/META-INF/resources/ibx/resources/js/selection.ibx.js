@@ -97,11 +97,13 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 		var options = this.options;
 
 		//if the selection manager is the target, and focusDefault is false, and the key is the activation key, then focus the default item.
-		if(e.type === 'keyup' && this.element.is(e.target) && e.keyCode === this.options.navKeyActivate){
-			var defItem = this.element.find(options.focusDefault);
-			defItem = defItem.length ? defItem : this.selectableChildren(":ibxNavFocusable()").first();
-			if(defItem)
-				defItem.focus();
+		if(e.type === 'keyup'){
+			if(this.element.is(e.target) && e.keyCode === this.options.navKeyActivate){		
+				var defItem = this.element.find(options.focusDefault);
+				defItem = defItem.length ? defItem : this.selectableChildren(":ibxNavFocusable()").first();
+				if(defItem)
+					defItem.focus();
+			}
 			return;
 		}
 
