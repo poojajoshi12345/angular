@@ -66,13 +66,14 @@ $.widget("ibi.ibxMenu", $.ibi.ibxPopup,
 		if(this._trigger("select", e, menuItem))
 		{
 			//close if desired.
-			if(this.options.autoClose && !this.options.multiSelect)
+			if(this.options.autoClose && !this.options.multiSelect){
 				this.close('menu_item_click');
 		
-			//bubble event up owner chain.
-			var parentMenu = this.parentMenu();
-			if(parentMenu)
-				parentMenu.trigger(e, menuItem);
+				//bubble event up owner chain.
+				var parentMenu = this.parentMenu();
+				if(parentMenu)
+					parentMenu.trigger(e, menuItem);
+			}
 		}
 	},
 	open:function(openInfo)
