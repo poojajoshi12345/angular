@@ -214,7 +214,7 @@
 		<profile>
 			<id>compile-css-javascript</id>
 			<properties>
-				<frontend.maven.plugin.version>1.9.1</frontend.maven.plugin.version>
+				<frontend.maven.plugin.version>1.11.2</frontend.maven.plugin.version>
 			</properties>
 			<build>
 				<plugins>
@@ -251,8 +251,8 @@
 							</execution>
 						</executions>
 						<configuration>
-							<nodeVersion>v12.16.2</nodeVersion>
-							<npmVersion>6.14.4</npmVersion>
+							<nodeVersion>v15.9.0</nodeVersion>
+							<npmVersion>7.6.1</npmVersion>
 							<installDirectory>${basedir}</installDirectory>
 							<workingDirectory>${basedir}</workingDirectory>
 							<nodeDownloadRoot>http://wfmaven.ibi.com:8081/repository/nodejs-org/</nodeDownloadRoot>
@@ -361,7 +361,7 @@
 				<http.context>/ibi_apps</http.context>
 				<cypress.baseurl>http://localhost:${http.port}${http.context}</cypress.baseurl>
 				<cypress.action>run</cypress.action>
-				<frontend.maven.plugin.version>1.9.1</frontend.maven.plugin.version>
+				<frontend.maven.plugin.version>1.11.2</frontend.maven.plugin.version>
 			</properties>
 			<build>
 				<plugins>
@@ -402,8 +402,8 @@
 							</execution>
 						</executions>
 						<configuration>
-							<nodeVersion>v12.16.2</nodeVersion>
-							<npmVersion>6.14.4</npmVersion>
+							<nodeVersion>v15.9.0</nodeVersion>
+							<npmVersion>7.6.1</npmVersion>
 							<installDirectory>${basedir}</installDirectory>
 							<workingDirectory>${basedir}</workingDirectory>
 							<nodeDownloadRoot>http://wfmaven.ibi.com:8081/repository/nodejs-org/</nodeDownloadRoot>
