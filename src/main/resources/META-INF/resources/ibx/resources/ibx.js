@@ -332,8 +332,7 @@ ibx._setAccessibility = function(accessible)
 	$(".ibx-root").each(function(idx, el)
 	{
 		var root = $(el);
-		var title = root.attr("aria-label") || "Application " + document.title;
-		accessible ? root.attr({"role":"application", "aria-label":title}) : root.removeAttr("role aria-label tabindex");
+		accessible ? root.attr({"role":"application"}) : root.removeAttr("role");
 	}.bind(this));
 };
 
