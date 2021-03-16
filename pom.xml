@@ -848,6 +848,63 @@
 				</plugins>
 			</build>
 		</profile>
+		<profile>
+			<id>whitesource-js</id>
+			<properties>
+				<whitesource.configFile>${project.basedir}/wss-unified-agent.config</whitesource.configFile>
+				<whitesource.scanFolder>${project.basedir}/src/main/resources/META-INF/resources</whitesource.scanFolder>
+				<whitesource.project>${project.artifactId}_${project.version}</whitesource.project>
+				<whitesource.product>WebFOCUS_Maven</whitesource.product>
+				<wss.unified.agent.main.version>19.3.1</wss.unified.agent.main.version>
+			</properties>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>exec-maven-plugin</artifactId>
+						<version>3.0.0</version>
+						<executions>
+							<execution>
+								<phase>verify</phase>
+								<goals>
+									<goal>java</goal>
+								</goals>
+							</execution>
+						</executions>
+						<configuration>
+							<includeProjectDependencies>false</includeProjectDependencies>
+							<includePluginDependencies>true</includePluginDependencies>
+							<mainClass>org.whitesource.fs.Main</mainClass>
+							<arguments>
+								<argument>-apiKey</argument>
+								<!-- set from user settings xml -->
+								<argument>${whitesource.apiKey}</argument>
+								<argument>-c</argument>
+								<argument>${whitesource.configFile}</argument>
+								<argument>-d</argument>
+								<argument>${whitesource.scanFolder}</argument>
+								<argument>-project</argument>
+								<argument>${whitesource.project}</argument>
+								<argument>-product</argument>
+								<argument>${whitesource.product}</argument>
+							</arguments>
+						</configuration>
+						<dependencies>
+							<dependency>
+								<groupId>org.whitesource</groupId>
+								<artifactId>wss-unified-agent-main</artifactId>
+								<version>19.7.3</version>
+							</dependency>
+							<dependency>
+								<groupId>org.slf4j</groupId>
+								<artifactId>jcl-over-slf4j</artifactId>
+								<version>1.7.2</version>
+							</dependency>
+						</dependencies>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
 	</profiles>
 
 	<scm>
