@@ -33,7 +33,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 		this.element[0].addEventListener("focusout", this._focusOutBound = this._onFocusOut.bind(this), true);
 		this.element[0].addEventListener("mousedown", this._onMouseEventBound = this._onMouseEvent.bind(this), true);
 		this.element[0].addEventListener("mouseup", this._onMouseEventBound, true);
-		this.element[0].addEventListener("keydown", this._onKeyEventBound = this._onKeyEvent.bind(this), true);
+		this.element[0].addEventListener("keydown", this._onKeyEventBound = this._onKeyEvent.bind(this), false); //needs to be during bubble so prevent default doesn't stop deeper nodes from getting message.
 		this.element[0].addEventListener("keyup", this._onKeyEventBound = this._onKeyEvent.bind(this), true);
 		this.element[0].addEventListener("ibx_rubberbandchange", this._onRubberBandEventBound = this._onRubberBandEvent.bind(this), true);
 
@@ -49,7 +49,7 @@ $.widget("ibi.ibxSelectionManager", $.Widget,
 		this.element[0].removeEventListener("mousedown", this._onMouseEventBound, true);
 		this.element[0].removeEventListener("mouseup", this._onMouseEventBound, true);
 		this.element[0].removeEventListener("mouseup", this._onMouseUpBound, true);
-		this.element[0].removeEventListener("keydown", this._onKeyEventBound, true);
+		this.element[0].removeEventListener("keydown", this._onKeyEventBound, false);
 		this.element[0].removeEventListener("ibx_rubberbandchange", this._onRubberBandEventBound, true);
 		this._super();
 	},
