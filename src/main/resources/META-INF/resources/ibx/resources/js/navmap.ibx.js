@@ -74,8 +74,9 @@ $.widget("ibi.ibxNavMap", $.ibi.ibxMenu,
 		var options = this.options;
 		this._super();
 
+		var modal = $(options.navRoot).closest(".pop-modal"); //modal's can't navigate to parent navMap.
 		var navParent = options.navParent = $(options.navRoot).parents("[data-ibx-nav-map]").first().attr("data-ibx-nav-map");
-		if(navParent)
+		if(!modal.length && navParent)
 			this._box.prepend(this._navToParentItem, this._sep);
 		else
 		{
@@ -99,7 +100,8 @@ ibxNavManager._onKeyEvent = function(e)
 	if(eventMatchesShortcut(ibxNavManager.options.triggerKey, e))
 	{
 		var target = $(e.target);
-		var navRoot = target.closest("[data-ibx-nav-map]");
+		var modal = $(e.target).closest('.pop-modal');//find closest modal popup and stop there.
+		var navRoot = target.closest("[data-ibx-nav-map]", modal[0]);
 		$(navRoot.attr("data-ibx-nav-map")).ibxWidget("option", {"navRoot":navRoot}).ibxWidget("open");
 	}
 };
