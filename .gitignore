@@ -8,3 +8,4 @@
 /cypresscache/
 **/out
 *.DS_Store
+/whitesource/
