@@ -855,7 +855,7 @@
 				<whitesource.scanFolder>${project.basedir}/src/main/resources/META-INF/resources</whitesource.scanFolder>
 				<whitesource.project>${project.artifactId}_${project.version}</whitesource.project>
 				<whitesource.product>WebFOCUS_Maven</whitesource.product>
-				<wss.unified.agent.main.version>19.3.1</wss.unified.agent.main.version>
+				<wss.unified.agent.version>21.2.2</wss.unified.agent.version>
 			</properties>
 			<build>
 				<plugins>
@@ -892,13 +892,8 @@
 						<dependencies>
 							<dependency>
 								<groupId>org.whitesource</groupId>
-								<artifactId>wss-unified-agent-main</artifactId>
-								<version>19.7.3</version>
-							</dependency>
-							<dependency>
-								<groupId>org.slf4j</groupId>
-								<artifactId>jcl-over-slf4j</artifactId>
-								<version>1.7.2</version>
+								<artifactId>wss-unified-agent</artifactId>
+								<version>${wss.unified.agent.version}</version>
 							</dependency>
 						</dependencies>
 					</plugin>
