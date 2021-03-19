@@ -2,7 +2,7 @@
 // $Revision: 1.8 $:
 
 //sub classes of menu things to use for navigation mapping
-$.widget("ibi.ibxNavMapItem", $.ibi.ibxMenuItem,{options:{navTarget:null}, _widgetClass: "ibx-nav-map-item"});
+$.widget("ibi.ibxNavMapItem", $.ibi.ibxMenuItem,{options:{navTarget:null, aria:{role:"listitem"}}, _widgetClass: "ibx-nav-map-item"});
 $.widget("ibi.ibxNavMap", $.ibi.ibxMenu,
 {
 	options:
@@ -10,7 +10,7 @@ $.widget("ibi.ibxNavMap", $.ibi.ibxMenu,
 		"navParent":null,
 		"aria":
 		{
-			"label":ibx.resourceMgr.getString("IBX_NAV_MAP_LABEL")
+			"role":"list",
 		}
 	},
 	_widgetClass: "ibx-nav-map",
@@ -19,6 +19,12 @@ $.widget("ibi.ibxNavMap", $.ibi.ibxMenu,
 		this._super();
 		this._sep = $("<div>").ibxMenuSeparator();
 		this._navToParentItem = $("<div>").ibxNavMapItem({labelOptions:{text:ibx.resourceMgr.getString("IBX_NAV_MAP_UP_ON_LEVEL")}});
+	},
+	_setAccessibility:function(accessible, aria)
+	{
+		aria = this._super(accessible, aria);
+		aria.label = !this.parentMenu() ? ibx.resourceMgr.getString("IBX_NAV_MAP_LABEL") : null;
+		return aria;
 	},
 	_onMenuItemClick:function(e)
 	{

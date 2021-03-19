@@ -152,8 +152,9 @@ $.widget("ibi.ibxMenuItem", $.ibi.ibxHBox,
 
 		var subMenu = this.subMenu();
 		aria.haspopup = !!subMenu;
+		aria.owns = subMenu ? subMenu.attr('id') : null;
 		aria.expanded = subMenu ? subMenu.ibxWidget("isOpen") : null;
-
+		
 		(accessible) ? this._startMarker.attr("aria-hidden", true) : this._startMarker.removeAttr("aria-hidden");
 		(accessible) ? this._endMarker.attr("aria-hidden", true) : this._endMarker.removeAttr("aria-hidden");
 		return aria;
