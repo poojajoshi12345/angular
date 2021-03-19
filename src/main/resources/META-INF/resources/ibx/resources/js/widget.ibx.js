@@ -412,7 +412,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 			if(!this.element.children(".ibx-opaque-frame").length)
 			{
 				var path = sformat("{1}{2}", ibx.getPath(), "markup/blank.html");
-				var iframe = $("<iframe tabindex='-1' class='ibx-opaque-frame' aria-hidden='true' allowTransparency='false'>").prop("src", path);
+				var iframe = $("<iframe class='ibx-opaque-frame' aria-hidden='true' allowTransparency='false'>").prop("src", path);
 				this.element.ibxAddClass("ibx-opaque").append(iframe);
 			}
 		}
