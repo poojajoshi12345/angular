@@ -2,7 +2,7 @@
 // $Revision: 1.8 $:
 
 //sub classes of menu things to use for navigation mapping
-$.widget("ibi.ibxNavMapItem", $.ibi.ibxMenuItem,{options:{navTarget:null, aria:{role:"listitem"}}, _widgetClass: "ibx-nav-map-item"});
+$.widget("ibi.ibxNavMapItem", $.ibi.ibxMenuItem,{options:{navTarget:null}, _widgetClass: "ibx-nav-map-item"});
 $.widget("ibi.ibxNavMap", $.ibi.ibxMenu,
 {
 	options:
@@ -10,7 +10,6 @@ $.widget("ibi.ibxNavMap", $.ibi.ibxMenu,
 		"navParent":null,
 		"aria":
 		{
-			"role":"list",
 			"label":ibx.resourceMgr.getString("IBX_NAV_MAP_LABEL")
 		}
 	},
