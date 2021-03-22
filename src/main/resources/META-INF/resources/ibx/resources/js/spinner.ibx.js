@@ -9,12 +9,13 @@ $.widget("ibi.ibxSpinner", $.ibi.ibxTextField,
 	options:
 	{
 		"align":"center",
-		"value": 0,
 		"min" :0,
 		"max" :100,
+		"value": 0,
 		"step" :1,
 		"precision":3,
 		"circularStep" : true,
+		"forceAlignStep": false,
 		"fnFormat":null,
 		"fnUnformat":null,
 		"validKeys":[9, 37, 38, 39, 40, 8, 46, 110, 187, 189, 190],
@@ -182,7 +183,8 @@ $.widget("ibi.ibxSpinner", $.ibi.ibxTextField,
 
 		value = Math.max(value, options.min);
 		value = Math.min(value, options.max);
-		var value = this._adjustStep(value, options.min, options.max, options.step);
+		if(stepped || options.forceAlignStep)
+			value = this._adjustStep(value, options.min, options.max, options.step);
 
 		var isFloat = !!(options.step % 1) 
 		this.options.value = value = (isFloat ? Number(value.toFixed(options.precision)) : value);
