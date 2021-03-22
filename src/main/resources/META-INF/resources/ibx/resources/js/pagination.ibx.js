@@ -11,17 +11,19 @@ $.widget("ibi.ibxPagination", $.ibi.ibxHBox,
 		'count':0,
 		'current':0,
 		'wrap':false,
+		'align':'center',
 		'aria':{}
 	},
 	_widgetClass:"ibx-pagination",
 	_create:function()
 	{
 		this._super();
-		this._btnFirst = $('<div>').ibxButtonSimple({glyph:'first_page', glyphClasses:'material-icons'}).on('click', this._onFirstPage.bind(this));
-		this._btnPrev = $('<div>').ibxButtonSimple({glyph:'chevron_left', glyphClasses:'material-icons'}).on('click', this._onPrevPage.bind(this));;
-		this._btnNext = $('<div>').ibxButtonSimple({glyph:'chevron_right', glyphClasses:'material-icons'}).on('click', this._onNextPage.bind(this));;
-		this._btnLast = $('<div>').ibxButtonSimple({glyph:'last_page', glyphClasses:'material-icons'}).on('click', this._onLastPage.bind(this));;
-		this.element.append([this._btnFirst, this._btnPrev, this._btnNext, this._btnLast]);
+		this._btnFirst = $('<div class="ibx-pagination-btn-first">').ibxButtonSimple({glyph:'first_page', glyphClasses:'material-icons'}).on('click', this._onFirstPage.bind(this));
+		this._btnPrev = $('<div class="ibx-pagination-btn-previous">').ibxButtonSimple({glyph:'chevron_left', glyphClasses:'material-icons'}).on('click', this._onPrevPage.bind(this));
+		this._btnNext = $('<div class="ibx-pagination-btn-next">').ibxButtonSimple({glyph:'chevron_right', glyphClasses:'material-icons'}).on('click', this._onNextPage.bind(this));
+		this._btnLast = $('<div class="ibx-pagination-btn-last">').ibxButtonSimple({glyph:'last_page', glyphClasses:'material-icons'}).on('click', this._onLastPage.bind(this));
+		this._pageInfo = $('<div class="ibx-pagination-page-info">').ibxLabel({iconPosition:'top'}).ibxWidget('startEditing');
+		this.element.append([this._btnFirst, this._btnPrev, this._pageInfo, this._btnNext, this._btnLast]);
 	},
 	_setAccessibility:function(accessible, aria)
 	{
@@ -74,11 +76,12 @@ $.widget("ibi.ibxPagination", $.ibi.ibxHBox,
 	{
 		var options = this.options;
 		this._super();
+		this._pageInfo.ibxWidget({text:sformat('{1}/{2}', options.current, options.count)})
 	}
 });
-ibi.ibxPagination.GO_FIRST = 0;
-ibi.ibxPagination.GO_PREVIOUS = 1;
-ibi.ibxPagination.GO_NEXT = 2;
-ibi.ibxPagination.GO_LAST = 3;
+$.ibi.ibxPagination.GO_FIRST = 0;
+$.ibi.ibxPagination.GO_PREVIOUS = 1;
+$.ibi.ibxPagination.GO_NEXT = 2;
+$.ibi.ibxPagination.GO_LAST = 3;
 
 //# sourceURL=pagination.ibx.js
