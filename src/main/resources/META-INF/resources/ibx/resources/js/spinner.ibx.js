@@ -143,7 +143,8 @@ $.widget("ibi.ibxSpinner", $.ibi.ibxTextField,
 		var info = this._getInfo();
 		info.value += bUp ? info.step*nSteps : -info.step*nSteps;
 	
-		var setValue = info.value;
+		var options = this.options;
+		var setValue = this._adjustStep(info.value, options.min, options.max, options.step);
 		if(this.options.circularStep){
 			if(info.value > this.options.max)
 				setValue = this.options.min;
@@ -183,7 +184,7 @@ $.widget("ibi.ibxSpinner", $.ibi.ibxTextField,
 
 		value = Math.max(value, options.min);
 		value = Math.min(value, options.max);
-		if(stepped || options.forceAlignStep)
+		if(options.forceAlignStep)
 			value = this._adjustStep(value, options.min, options.max, options.step);
 
 		var isFloat = !!(options.step % 1) 
