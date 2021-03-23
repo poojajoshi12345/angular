@@ -418,7 +418,19 @@ $.widget("ibi.ibxEditable", $.Widget,
 					//let people know the value is changing...they can stop it from happening.
 					var event = this.element.dispatchEvent("ibx_textchanging", {"value":value, "newValue":newValue}, true, true);
 					if(event.isDefaultPrevented())
+					{
+						var range = document.createRange();
+						var selection = window.getSelection();
+						var anchor = selection.anchorNode;
+						var offset = selection.anchorOffset - 1;
+						range.collapse();
+						selection.removeAllRanges();
+
 						mr.target.textContent = value;
+						range.setStart(anchor, offset);
+						range.setEnd(anchor, offset);
+						selection.addRange(range);
+					}
 				}
 			}
 		}

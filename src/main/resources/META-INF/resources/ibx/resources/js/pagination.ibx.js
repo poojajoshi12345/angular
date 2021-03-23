@@ -81,8 +81,9 @@ $.widget("ibi.ibxPagination", $.ibi.ibxHBox,
 		if(e.type === 'ibx_textchanging')
 		{
 			var info  = e.originalEvent.data;
-			var newValue = parseInt(info.newValue, 10);
-			if(isNaN(newValue))
+			var value = Number(info.newValue);
+			var isValid = (/^[0-9]*$/).test(value);
+			if(!isValid)
 				e.preventDefault();
 		}
 	},
