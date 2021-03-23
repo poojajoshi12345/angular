@@ -112,6 +112,10 @@ $.widget("ibi.ibxPagination", $.ibi.ibxHBox,
 	{
 		var options = this.options;
 		this._super();
+		this._btnFirst.ibxWidget('option', 'disabled', options.page === 0);
+		this._btnPrev.ibxWidget('option', 'disabled', options.page === 0);
+		this._btnLast.ibxWidget('option', 'disabled', options.page === options.pages);
+		this._btnNext.ibxWidget('option', 'disabled', options.page === options.pages);
 		this._pageInfo.ibxWidget({text:sformat('{1}/{2}', options.page + 1, options.pages + 1)})
 	}
 });
