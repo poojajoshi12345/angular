@@ -10,6 +10,8 @@ $.widget("ibi.ibxPagination", $.ibi.ibxHBox,
 	{
 		'count':0,
 		'current':0,
+		'navKeyRoot':true,
+		'focusDefault':true,
 		'wrap':false,
 		'align':'center',
 		'aria':{}
@@ -18,11 +20,12 @@ $.widget("ibi.ibxPagination", $.ibi.ibxHBox,
 	_create:function()
 	{
 		this._super();
-		this._btnFirst = $('<div class="ibx-pagination-btn-first">').ibxButtonSimple({glyph:'first_page', glyphClasses:'material-icons'}).on('click', this._onFirstPage.bind(this));
-		this._btnPrev = $('<div class="ibx-pagination-btn-previous">').ibxButtonSimple({glyph:'chevron_left', glyphClasses:'material-icons'}).on('click', this._onPrevPage.bind(this));
-		this._btnNext = $('<div class="ibx-pagination-btn-next">').ibxButtonSimple({glyph:'chevron_right', glyphClasses:'material-icons'}).on('click', this._onNextPage.bind(this));
-		this._btnLast = $('<div class="ibx-pagination-btn-last">').ibxButtonSimple({glyph:'last_page', glyphClasses:'material-icons'}).on('click', this._onLastPage.bind(this));
-		this._pageInfo = $('<div class="ibx-pagination-page-info">').ibxLabel({iconPosition:'top'}).ibxWidget('startEditing');
+		this._btnFirst = $('<div tabindex="-1" class="ibx-pagination-btn-first">').ibxButtonSimple({glyph:'first_page', glyphClasses:'material-icons'}).on('click', this._onFirstPage.bind(this));
+		this._btnPrev = $('<div tabindex="-1" class="ibx-pagination-btn-previous">').ibxButtonSimple({glyph:'chevron_left', glyphClasses:'material-icons'}).on('click', this._onPrevPage.bind(this));
+		this._btnNext = $('<div tabindex="-1" class="ibx-pagination-btn-next">').ibxButtonSimple({glyph:'chevron_right', glyphClasses:'material-icons'}).on('click', this._onNextPage.bind(this));
+		this._btnLast = $('<div tabindex="-1" class="ibx-pagination-btn-last">').ibxButtonSimple({glyph:'last_page', glyphClasses:'material-icons'}).on('click', this._onLastPage.bind(this));
+		this._pageInfo = $('<div tabindex="-1" class="ibx-pagination-page-info">').ibxButtonSimple();
+		this._pageInfo.on('click', this._onPageInfoClick.bind(this)).on('ibx_startediting ibx_stopediting ibx_textchanging', this._onPageInfoEditEvent.bind(this));
 		this.element.append([this._btnFirst, this._btnPrev, this._pageInfo, this._btnNext, this._btnLast]);
 	},
 	_setAccessibility:function(accessible, aria)
@@ -58,6 +61,30 @@ $.widget("ibi.ibxPagination", $.ibi.ibxHBox,
 	_onLastPage:function(e)
 	{
 
+	},
+	_onPageInfoClick:function(e)
+	{
+		this._pageInfo.ibxWidget('startEditing');
+	},
+	_onPageInfoEditEvent:function(e)
+	{
+		if(e.type === 'ibx_startediting')
+			this._pageInfo.ibxWidget('option', 'text', this.options.current);
+		else
+		if(e.type === 'ibx_stopediting')
+		{
+			this.options.current = e.originalEvent.data;
+			this.element.ibxSelectionManager('focus', this._pageInfo);
+			this.refresh();
+		}
+		else
+		if(e.type === 'ibx_textchanging')
+		{
+			var info  = e.originalEvent.data;
+			var newValue = parseInt(info.newValue, 10);
+			if(isNaN(newValue))
+				e.preventDefault();
+		}
 	},
 	pageInfo:function()
 	{

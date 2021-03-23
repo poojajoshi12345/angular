@@ -393,8 +393,12 @@ $.widget("ibi.ibxEditable", $.Widget,
 					e.preventDefault();
 					e.stopPropagation();
 				}
+				else
 				if(!options.multiLine && e.keyCode === $.ui.keyCode.ENTER)
 					e.preventDefault();
+				else
+				if([$.ui.keyCode.LEFT, $.ui.keyCode.RIGHT, $.ui.keyCode.UP, $.ui.keyCode.DOWN].indexOf(e.keyCode) !== -1)
+					e.stopPropagation(); //let user navigate value with arrow keys.
 			}
 			else
 			if(e.type == "blur")
@@ -414,7 +418,7 @@ $.widget("ibi.ibxEditable", $.Widget,
 					//let people know the value is changing...they can stop it from happening.
 					var event = this.element.dispatchEvent("ibx_textchanging", {"value":value, "newValue":newValue}, true, true);
 					if(event.isDefaultPrevented())
-						mr.target.textContent = value;//revert to current value
+						mr.target.textContent = value;
 				}
 			}
 		}
@@ -467,6 +471,7 @@ $.widget("ibi.ibxEditable", $.Widget,
 	 */
 	stopEditing:function(revertToOriginal)
 	{
+		var origElement = this.element[0];
 		if(this.isEditing())
 		{
 			var evt = this.element.dispatchEvent("ibx_stopediting", this.text(), true, true);
