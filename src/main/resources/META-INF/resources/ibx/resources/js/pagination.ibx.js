@@ -8,8 +8,8 @@ $.widget("ibi.ibxPagination", $.ibi.ibxHBox,
 {
 	options:
 	{
-		'count':0,
-		'current':0,
+		'pages':0,
+		'page':0,
 		'navKeyRoot':true,
 		'focusDefault':true,
 		'wrap':false,
@@ -44,15 +44,21 @@ $.widget("ibi.ibxPagination", $.ibi.ibxHBox,
 	},
 	_onFirstPage:function(e)
 	{
-		var pageInfo = this.pageInfo();
-		pageInfo.hint = ibi.ibxPagination.GO_FIRST;
+		var pageInfo = this.pageInfo(0);
+		pageInfo.hint = $.ibi.ibxPagination.GO_FIRST;
 		var evt = this.element.dispatchEvent('ibx_page_change', this._pageInfo, true, true);
 		if(!evt.defaultPrevented)
-			console.log('go first');
+			this.option('page', 0);
 	},
 	_onPrevPage:function(e)
 	{
-
+		var options = this.options;
+		var newPage = Math.max(0, options.page - 1);
+		var pageInfo = this.pageInfo(newPage);
+		pageInfo.hint = $.ibi.ibxPagination.GO_PREVIOUS;
+		var evt = this.element.dispatchEvent('ibx_page_change', this._pageInfo, true, true);
+		if(!evt.defaultPrevented)
+			this.option('page', newPage);
 	},
 	_onNextPage:function(e)
 	{
@@ -68,12 +74,13 @@ $.widget("ibi.ibxPagination", $.ibi.ibxHBox,
 	},
 	_onPageInfoEditEvent:function(e)
 	{
+		var options = this.options;
 		if(e.type === 'ibx_startediting')
-			this._pageInfo.ibxWidget('option', 'text', this.options.current);
+			this._pageInfo.ibxWidget('option', 'text', options.page + 1);
 		else
 		if(e.type === 'ibx_stopediting')
 		{
-			this.options.current = e.originalEvent.data;
+			options.page = Number(e.originalEvent.data - 1);
 			this.element.ibxSelectionManager('focus', this._pageInfo);
 			this.refresh();
 		}
@@ -83,15 +90,16 @@ $.widget("ibi.ibxPagination", $.ibi.ibxHBox,
 			var info  = e.originalEvent.data;
 			var value = Number(info.newValue);
 			var isValid = (/^[0-9]*$/).test(value);
-			if(!isValid)
+			if(!isValid || (value > options.pages))
 				e.preventDefault();
 		}
 	},
-	pageInfo:function()
+	pageInfo:function(newPage)
 	{
 		var options = this.options;
 		var info = {
-			curPage: options.current,
+			page: options.page,
+			newPage:newPage,
 			pageCount:options.pages,
 		}
 		return info;
@@ -104,7 +112,7 @@ $.widget("ibi.ibxPagination", $.ibi.ibxHBox,
 	{
 		var options = this.options;
 		this._super();
-		this._pageInfo.ibxWidget({text:sformat('{1}/{2}', options.current, options.count)})
+		this._pageInfo.ibxWidget({text:sformat('{1}/{2}', options.page + 1, options.pages + 1)})
 	}
 });
 $.ibi.ibxPagination.GO_FIRST = 0;
