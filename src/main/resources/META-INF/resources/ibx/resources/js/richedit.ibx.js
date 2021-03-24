@@ -487,7 +487,7 @@ $.widget("ibi.ibxEditable", $.Widget,
 		if(this.isEditing() && !this._stoppingEdit)
 		{
 			this._stoppingEdit = true;//can recurse if focus is changed during stop, and commmitOnBlur is on.
-			var evt = this.element.dispatchEvent("ibx_stopediting", this.text(), true, true);
+			var evt = this.element.dispatchEvent("ibx_stopediting", revertToOriginal ? this._preEditValue : this.text(), true, true);
 			if(!revertToOriginal && evt.isDefaultPrevented())
 				return;
 

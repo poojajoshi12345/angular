@@ -28,7 +28,7 @@ $.widget("ibi.ibxPagination", $.ibi.ibxHBox,
 		this._btnNext = $('<div tabindex="-1" class="ibx-pagination-ctrl ibx-pagination-btn-next">').ibxButtonSimple({glyph:'chevron_right', glyphClasses:'material-icons'}).on('click', this._onNextPage.bind(this));
 		this._btnLast = $('<div tabindex="-1" class="ibx-pagination-ctrl ibx-pagination-btn-last">').ibxButtonSimple({glyph:'last_page', glyphClasses:'material-icons'}).on('click', this._onLastPage.bind(this));
 		this._pageInfo = $('<div tabindex="-1" class="ibx-pagination-ctrl ibx-pagination-page-info">').ibxButtonSimple();
-		this._pageInfo.on('click', this._onPageInfoClick.bind(this)).on('ibx_startediting ibx_stopediting ibx_textchanging', this._onPageInfoEditEvent.bind(this));
+		this._pageInfo.on('click', this._onPageInfoClick.bind(this)).on('ibx_startediting ibx_stopediting ibx_canceledit ibx_textchanging', this._onPageInfoEditEvent.bind(this));
 		this.element.append([this._btnFirst, this._btnPrev, this._pageInfo, this._btnNext, this._btnLast]);
 	},
 	_setAccessibility:function(accessible, aria)
@@ -97,6 +97,9 @@ $.widget("ibi.ibxPagination", $.ibi.ibxHBox,
 				this.option('page', pageInfo.newPage);
 			this.element.ibxSelectionManager('focus', this._pageInfo);
 		}
+		else
+		if(e.type === 'ibx_canceledit')
+			this.refresh();
 		else
 		if(e.type === 'ibx_textchanging')
 		{
