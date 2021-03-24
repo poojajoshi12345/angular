@@ -1,0 +1,8 @@
+.ibx-pagination{
+	font-size:1.5em;
+}
+
+.ibx-pagination-page-info{
+	flex:1 1 auto;
+	margin:0 .5em;
+}

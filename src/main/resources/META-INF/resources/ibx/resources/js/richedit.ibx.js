@@ -393,8 +393,12 @@ $.widget("ibi.ibxEditable", $.Widget,
 					e.preventDefault();
 					e.stopPropagation();
 				}
+				else
 				if(!options.multiLine && e.keyCode === $.ui.keyCode.ENTER)
 					e.preventDefault();
+				else
+				if([$.ui.keyCode.LEFT, $.ui.keyCode.RIGHT, $.ui.keyCode.UP, $.ui.keyCode.DOWN].indexOf(e.keyCode) !== -1)
+					e.stopPropagation(); //let user navigate value with arrow keys.
 			}
 			else
 			if(e.type == "blur")
@@ -414,7 +418,19 @@ $.widget("ibi.ibxEditable", $.Widget,
 					//let people know the value is changing...they can stop it from happening.
 					var event = this.element.dispatchEvent("ibx_textchanging", {"value":value, "newValue":newValue}, true, true);
 					if(event.isDefaultPrevented())
-						mr.target.textContent = value;//revert to current value
+					{
+						var range = document.createRange();
+						var selection = window.getSelection();
+						var anchor = selection.anchorNode;
+						var offset = selection.anchorOffset - 1;
+						range.collapse();
+						selection.removeAllRanges();
+
+						mr.target.textContent = value;
+						range.setStart(anchor, offset);
+						range.setEnd(anchor, offset);
+						selection.addRange(range);
+					}
 				}
 			}
 		}
@@ -467,9 +483,11 @@ $.widget("ibi.ibxEditable", $.Widget,
 	 */
 	stopEditing:function(revertToOriginal)
 	{
-		if(this.isEditing())
+		var origElement = this.element[0];
+		if(this.isEditing() && !this._stoppingEdit)
 		{
-			var evt = this.element.dispatchEvent("ibx_stopediting", this.text(), true, true);
+			this._stoppingEdit = true;//can recurse if focus is changed during stop, and commmitOnBlur is on.
+			var evt = this.element.dispatchEvent("ibx_stopediting", revertToOriginal ? this._preEditValue : this.text(), true, true);
 			if(!revertToOriginal && evt.isDefaultPrevented())
 				return;
 
@@ -493,6 +511,7 @@ $.widget("ibi.ibxEditable", $.Widget,
 					this.element.html(this._preEditValue);
 			}
 			this.refresh();
+			this._stoppingEdit = false;
 		}
 	},
 	/**
