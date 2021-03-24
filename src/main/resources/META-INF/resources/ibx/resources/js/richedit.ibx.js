@@ -484,8 +484,9 @@ $.widget("ibi.ibxEditable", $.Widget,
 	stopEditing:function(revertToOriginal)
 	{
 		var origElement = this.element[0];
-		if(this.isEditing())
+		if(this.isEditing() && !this._stoppingEdit)
 		{
+			this._stoppingEdit = true;//can recurse if focus is changed during stop, and commmitOnBlur is on.
 			var evt = this.element.dispatchEvent("ibx_stopediting", this.text(), true, true);
 			if(!revertToOriginal && evt.isDefaultPrevented())
 				return;
@@ -510,6 +511,7 @@ $.widget("ibi.ibxEditable", $.Widget,
 					this.element.html(this._preEditValue);
 			}
 			this.refresh();
+			this._stoppingEdit = false;
 		}
 	},
 	/**

@@ -48,9 +48,8 @@ $.widget("ibi.ibxPagination", $.ibi.ibxHBox,
 	_onFirstPage:function(e)
 	{
 		var options = this.options;
-		var pageInfo = this.pageInfo(0);
-		pageInfo.hint = $.ibi.ibxPagination.GO_FIRST;
-		var evt = this.element.dispatchEvent('ibx_page_change', this._pageInfo, true, true);
+		var pageInfo = this.pageInfo($.ibi.ibxPagination.GO_FIRST, 0);
+		var evt = this.element.dispatchEvent('ibx_pagination_change', pageInfo, true, true);
 		if(!evt.defaultPrevented)
 			this.option('page', pageInfo.newPage);
 	},
@@ -58,9 +57,8 @@ $.widget("ibi.ibxPagination", $.ibi.ibxHBox,
 	{
 		var options = this.options;
 		var newPage = Math.max(0, options.page - 1);
-		var pageInfo = this.pageInfo(newPage);
-		pageInfo.hint = $.ibi.ibxPagination.GO_PREVIOUS;
-		var evt = this.element.dispatchEvent('ibx_page_change', this._pageInfo, true, true);
+		var pageInfo = this.pageInfo($.ibi.ibxPagination.GO_PREVIOUS, newPage);
+		var evt = this.element.dispatchEvent('ibx_pagination_change', pageInfo, true, true);
 		if(!evt.defaultPrevented)
 			this.option('page', pageInfo.newPage);
 	},
@@ -68,18 +66,16 @@ $.widget("ibi.ibxPagination", $.ibi.ibxHBox,
 	{
 		var options = this.options;
 		var newPage = Math.min(options.pages, options.page + 1);
-		var pageInfo = this.pageInfo(newPage);
-		pageInfo.hint = $.ibi.ibxPagination.GO_NEXT;
-		var evt = this.element.dispatchEvent('ibx_page_change', this._pageInfo, true, true);
+		var pageInfo = this.pageInfo($.ibi.ibxPagination.GO_NEXT, newPage);
+		var evt = this.element.dispatchEvent('ibx_pagination_change', pageInfo, true, true);
 		if(!evt.defaultPrevented)
 			this.option('page', pageInfo.newPage);
 	},
 	_onLastPage:function(e)
 	{
 		var options = this.options;
-		var pageInfo = this.pageInfo(options.pages);
-		pageInfo.hint = $.ibi.ibxPagination.GO_LAST;
-		var evt = this.element.dispatchEvent('ibx_page_change', this._pageInfo, true, true);
+		var pageInfo = this.pageInfo($.ibi.ibxPagination.GO_LAST, options.pages);
+		var evt = this.element.dispatchEvent('ibx_pagination_change', pageInfo, true, true);
 		if(!evt.defaultPrevented)
 			this.option('page', pageInfo.newPage);
 	},
@@ -95,9 +91,11 @@ $.widget("ibi.ibxPagination", $.ibi.ibxHBox,
 		else
 		if(e.type === 'ibx_stopediting')
 		{
-			options.page = Number(e.originalEvent.data - 1);
-			this.element.ibxSelectionManager('focus', this._pageInfo[0]);
-			this.refresh();
+			var pageInfo = this.pageInfo($.ibi.ibxPagination.GO_PAGE, Number(e.originalEvent.data - 1));
+			var evt = this.element.dispatchEvent('ibx_pagination_change', pageInfo, true, true);
+			if(!evt.defaultPrevented)
+				this.option('page', pageInfo.newPage);
+			this.element.ibxSelectionManager('focus', this._pageInfo);
 		}
 		else
 		if(e.type === 'ibx_textchanging')
@@ -109,10 +107,11 @@ $.widget("ibi.ibxPagination", $.ibi.ibxHBox,
 				e.preventDefault();
 		}
 	},
-	pageInfo:function(newPage)
+	pageInfo:function(hint, newPage)
 	{
 		var options = this.options;
 		var info = {
+			hint: hint,
 			page: options.page,
 			newPage:newPage,
 			pageCount:options.pages,
@@ -134,6 +133,7 @@ $.widget("ibi.ibxPagination", $.ibi.ibxHBox,
 		this._pageInfo.ibxWidget({text:sformat('{1}/{2}', options.page + 1, options.pages + 1)})
 	}
 });
+$.ibi.ibxPagination.GO_PAGE = -1;
 $.ibi.ibxPagination.GO_FIRST = 0;
 $.ibi.ibxPagination.GO_PREVIOUS = 1;
 $.ibi.ibxPagination.GO_NEXT = 2;
