@@ -25,7 +25,7 @@ $.widget("ibi.ibxButton", $.ibi.ibxLabel,
 	{
 		this._super(accessible, aria);
 		var options = this.options;
-		aria.label = options.aria.label || this.element.attr('title'); //default to title if no label.
+		//aria.label = options.aria.label || this.element.attr('title'); //default to title if no label.
 		return aria;
 	},
 	_onButtonClickEvent:function(e)
