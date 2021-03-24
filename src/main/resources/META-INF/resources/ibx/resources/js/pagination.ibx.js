@@ -14,17 +14,20 @@ $.widget("ibi.ibxPagination", $.ibi.ibxHBox,
 		'focusDefault':true,
 		'wrap':false,
 		'align':'center',
+		'selMgrOpts':{
+			'selectableChildren':'.ibx-pagination-ctrl',
+		},
 		'aria':{}
 	},
 	_widgetClass:"ibx-pagination",
 	_create:function()
 	{
 		this._super();
-		this._btnFirst = $('<div tabindex="-1" class="ibx-pagination-btn-first">').ibxButtonSimple({glyph:'first_page', glyphClasses:'material-icons'}).on('click', this._onFirstPage.bind(this));
-		this._btnPrev = $('<div tabindex="-1" class="ibx-pagination-btn-previous">').ibxButtonSimple({glyph:'chevron_left', glyphClasses:'material-icons'}).on('click', this._onPrevPage.bind(this));
-		this._btnNext = $('<div tabindex="-1" class="ibx-pagination-btn-next">').ibxButtonSimple({glyph:'chevron_right', glyphClasses:'material-icons'}).on('click', this._onNextPage.bind(this));
-		this._btnLast = $('<div tabindex="-1" class="ibx-pagination-btn-last">').ibxButtonSimple({glyph:'last_page', glyphClasses:'material-icons'}).on('click', this._onLastPage.bind(this));
-		this._pageInfo = $('<div tabindex="-1" class="ibx-pagination-page-info">').ibxButtonSimple();
+		this._btnFirst = $('<div tabindex="-1" class="ibx-pagination-ctrl ibx-pagination-btn-first">').ibxButtonSimple({glyph:'first_page', glyphClasses:'material-icons'}).on('click', this._onFirstPage.bind(this));
+		this._btnPrev = $('<div tabindex="-1" class="ibx-pagination-ctrl ibx-pagination-btn-previous">').ibxButtonSimple({glyph:'chevron_left', glyphClasses:'material-icons'}).on('click', this._onPrevPage.bind(this));
+		this._btnNext = $('<div tabindex="-1" class="ibx-pagination-ctrl ibx-pagination-btn-next">').ibxButtonSimple({glyph:'chevron_right', glyphClasses:'material-icons'}).on('click', this._onNextPage.bind(this));
+		this._btnLast = $('<div tabindex="-1" class="ibx-pagination-ctrl ibx-pagination-btn-last">').ibxButtonSimple({glyph:'last_page', glyphClasses:'material-icons'}).on('click', this._onLastPage.bind(this));
+		this._pageInfo = $('<div tabindex="-1" class="ibx-pagination-ctrl ibx-pagination-page-info">').ibxButtonSimple();
 		this._pageInfo.on('click', this._onPageInfoClick.bind(this)).on('ibx_startediting ibx_stopediting ibx_textchanging', this._onPageInfoEditEvent.bind(this));
 		this.element.append([this._btnFirst, this._btnPrev, this._pageInfo, this._btnNext, this._btnLast]);
 	},
@@ -44,11 +47,12 @@ $.widget("ibi.ibxPagination", $.ibi.ibxHBox,
 	},
 	_onFirstPage:function(e)
 	{
+		var options = this.options;
 		var pageInfo = this.pageInfo(0);
 		pageInfo.hint = $.ibi.ibxPagination.GO_FIRST;
 		var evt = this.element.dispatchEvent('ibx_page_change', this._pageInfo, true, true);
 		if(!evt.defaultPrevented)
-			this.option('page', 0);
+			this.option('page', pageInfo.newPage);
 	},
 	_onPrevPage:function(e)
 	{
@@ -58,15 +62,26 @@ $.widget("ibi.ibxPagination", $.ibi.ibxHBox,
 		pageInfo.hint = $.ibi.ibxPagination.GO_PREVIOUS;
 		var evt = this.element.dispatchEvent('ibx_page_change', this._pageInfo, true, true);
 		if(!evt.defaultPrevented)
-			this.option('page', newPage);
+			this.option('page', pageInfo.newPage);
 	},
 	_onNextPage:function(e)
 	{
-
+		var options = this.options;
+		var newPage = Math.min(options.pages, options.page + 1);
+		var pageInfo = this.pageInfo(newPage);
+		pageInfo.hint = $.ibi.ibxPagination.GO_NEXT;
+		var evt = this.element.dispatchEvent('ibx_page_change', this._pageInfo, true, true);
+		if(!evt.defaultPrevented)
+			this.option('page', pageInfo.newPage);
 	},
 	_onLastPage:function(e)
 	{
-
+		var options = this.options;
+		var pageInfo = this.pageInfo(options.pages);
+		pageInfo.hint = $.ibi.ibxPagination.GO_LAST;
+		var evt = this.element.dispatchEvent('ibx_page_change', this._pageInfo, true, true);
+		if(!evt.defaultPrevented)
+			this.option('page', pageInfo.newPage);
 	},
 	_onPageInfoClick:function(e)
 	{
@@ -81,7 +96,7 @@ $.widget("ibi.ibxPagination", $.ibi.ibxHBox,
 		if(e.type === 'ibx_stopediting')
 		{
 			options.page = Number(e.originalEvent.data - 1);
-			this.element.ibxSelectionManager('focus', this._pageInfo);
+			this.element.ibxSelectionManager('focus', this._pageInfo[0]);
 			this.refresh();
 		}
 		else
