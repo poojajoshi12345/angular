@@ -105,6 +105,13 @@ $Revision: 1.123 $:-->
 				"IBX_WIZ_BTN_NEXT":"Next",
 				"IBX_WIZ_BTN_FINISH":"Finish",
 
+				"IBX_PAGINATION_PAGE_FIRST":"First Page",
+				"IBX_PAGINATION_PAGE_PREV":"Previous Page",
+				"IBX_PAGINATION_PAGE_NEXT":"Next Page",
+				"IBX_PAGINATION_PAGE_LAST":"Last Page",
+				"IBX_PAGINATION_PAGE_GOTO":"Go to Specific Page",
+
+
 				"IBX_TERMINATING_STRING":""
 			}
 		}
