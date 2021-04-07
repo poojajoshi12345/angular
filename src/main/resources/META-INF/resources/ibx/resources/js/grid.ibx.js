@@ -852,6 +852,7 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 	},
 	addRows:function(rows, sibling, before)
 	{
+		rows = before ? rows : rows.reverse();
 		for(var i = 0; i < rows.length; ++i)
 			this.addRow(rows[i], sibling, before, false);
 	},
