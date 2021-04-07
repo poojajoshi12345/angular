@@ -852,9 +852,16 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 	},
 	addRows:function(rows, sibling, before)
 	{
-		rows = before ? rows : rows.reverse();
-		for(var i = 0; i < rows.length; ++i)
-			this.addRow(rows[i], sibling, before, false);
+		//IBX-557: has to be done like this because we can't reverse the 'rows' array...as that happens in place
+		//and will change the passed in parm to the outside caller.
+		if (!before && sibling){
+			for(var i = rows.length - 1; i >= 0;  i--)
+				this.addRow(rows[i], sibling, before, false);
+		}
+		else{
+			for(var i = 0; i < rows.length; i++)
+				this.addRow(rows[i], sibling, before, false);
+		}
 	},
 	removeRow:function(row)
 	{
