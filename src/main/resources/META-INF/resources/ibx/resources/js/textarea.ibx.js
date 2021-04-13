@@ -1,4 +1,4 @@
-3/*Copyright 1996-2016 Information Builders, Inc. All rights reserved.*/
+3/*Copyright (c) 1996-2021 TIBCO Software Inc. All Rights Reserved.*/
 // $Revision: 1.55 $:
 $.widget("ibi.ibxTextArea", $.ibi.ibxFlexBox,
 {

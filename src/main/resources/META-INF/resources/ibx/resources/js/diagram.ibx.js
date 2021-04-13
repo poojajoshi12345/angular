@@ -1,5 +1,5 @@
 /*global window: false, document: false, Element: false, jQuery: false, $: false */
-/*Copyright 1996-2016 Information Builders, Inc. All rights reserved.*/
+/*Copyright (c) 1996-2021 TIBCO Software Inc. All Rights Reserved.*/
 // $Revision: 1.11 $:
 
 // TODO: dispatch more events
