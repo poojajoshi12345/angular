@@ -240,6 +240,7 @@ $Revision: 1.123 $:-->
 		<style-file src="./etc/google/css/hind.css" pkg-nopackage="true"/>
 		<style-file src="./etc/google/css/lato.css" pkg-nopackage="true"/>
 		<style-file src="./etc/google/css/open-sans.css" pkg-nopackage="true"/>
+		<style-file src="./etc/google/css/source-sans-pro.css" pkg-nopackage="true"/>
 		<style-file src="./etc/google/css/roboto-v20.css" pkg-nopackage="true"/>
 
 		<!--IBX FONT ASSETS-->
