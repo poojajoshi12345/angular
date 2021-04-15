@@ -34,8 +34,8 @@ $.widget("ibi.ibxCommand", $.ibi.ibxWidget,
 		//_setOption relies on id being set first.
 		var markupOpts = ibx.getIbxMarkupOptions(this.element);
 		var id = markupOpts.id || this.options.id || ('autoCommandId' + $.ibi.ibxCommand.defIDSeed++);
-		if($.ibi.ibxCommand.cmds[id])
-			console.error('[ibxCommand] command with id "' + id + '" is being replaced!!');
+		// if($.ibi.ibxCommand.cmds[id])
+		// 	console.warn('[ibxCommand] command with id "' + id + '" is being replaced!!');
 		this.option("id", id);
 		this._super();
 	},
