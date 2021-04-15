@@ -9,7 +9,7 @@
 	<packaging>jar</packaging>
 
 	<name>webfocus-webjars-ibx</name>
-	<url>https://www.informationbuilders.com</url>
+	<url>https://www.tibco.com</url>
 
 	<properties>
 		<argLine>${argLine_CICD} ${argLine_JDK}</argLine>
@@ -206,7 +206,7 @@
 		</snapshotRepository>
 		<site>
 			<id>www.informationbuilders.com</id>
-			<url>https://www.informationbuilders.com/www/docs/projects/</url>
+			<url>https://www.tibco.com/www/docs/projects/</url>
 		</site>
 	</distributionManagement>
 
@@ -910,7 +910,7 @@
 	</scm>
 
     <organization>
-        <name>Information Builder Inc.</name>
-        <url>https://www.informationbuilders.com/</url>
+        <name>TIBCO Software Inc.</name>
+        <url>https://www.tibco.com/</url>
     </organization>
 </project>
