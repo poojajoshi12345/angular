@@ -33,8 +33,10 @@ $.widget("ibi.ibxCommand", $.ibi.ibxWidget,
 		//need to do this so that if created from markup the id will be set first so userValue/etc will correctly be set on associated widgets.
 		//_setOption relies on id being set first.
 		var markupOpts = ibx.getIbxMarkupOptions(this.element);
-		if(markupOpts.id !== undefined)
-			this.option("id", markupOpts.id);
+		var id = markupOpts.id || this.options.id || ('autoCommandId' + $.ibi.ibxCommand.defIDSeed++);
+		if($.ibi.ibxCommand.cmds[id])
+			console.error('[ibxCommand] command with id "' + id + '" is being replaced!!');
+		this.option("id", id);
 		this._super();
 	},
 	doAction:function(action, data, src)
@@ -109,6 +111,7 @@ $.widget("ibi.ibxCommand", $.ibi.ibxWidget,
 		}
 	}
 });
+$.ibi.ibxCommand.defIDSeed = 0;
 $.ibi.ibxCommand.cmds = {};
 
 //# sourceURL=commands.ibx.js
