@@ -149,7 +149,7 @@ try {
                 emailext (
 	            	mimeType: 'text/html',
 	                subject: subject,
-	                body: '''${SCRIPT, template="groovy-html.template"}''',
+	                body: '''${SCRIPT, template="wf-groovy-html.template"}''',
 	                recipientProviders: RECIPIENTS
 	            )
             }
