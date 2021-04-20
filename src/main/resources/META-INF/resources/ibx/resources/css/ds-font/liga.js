@@ -25,6 +25,11 @@
     var icons;
     if (!supportsProperty('fontFeatureSettings')) {
         icons = {
+            'application-directory': '&#xebde;',
+            'map-multi-Layer-alternate': '&#xebdf;',
+            'toggle-on-left': '&#xebe0;',
+            'single-Layer': '&#xebe1;',
+            'tibco': '&#xebdd;',
             'classify': '&#xebdc;',
             'cloud-upload': '&#xebb0;',
             'cloud-download': '&#xebb1;',
