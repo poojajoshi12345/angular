@@ -8,7 +8,7 @@
     "cypress:open": "cypress open",
     "cypress:run": "cypress run"
   },
-  "author": "Information Builders, Inc.",
+  "author": "TIBCO Software Inc.",
   "license": "EULA",
   "devDependencies": {
     "cypress": "^3.1.4"
