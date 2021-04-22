@@ -245,8 +245,7 @@ module.exports = function(grunt) {
 		var label = 
 			  '/*!\n'
 			+ ' * WebFOCUS <%= pkg.name %> v<%= pkg.version %>\n'
-			+ ' * Copyright 2018-2019 <%= pkg.author %>\n'
-			+ ' * Licensed under <%= pkg.license %>\n'
+			+ ' * Copyright (c) 2018-2021 <%= pkg.author %> All Rights Reserved.\n'
 			+ ' */';
 		return label;
 	};
