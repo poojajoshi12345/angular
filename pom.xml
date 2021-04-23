@@ -709,18 +709,6 @@
 				</plugins>
 			</build>
 		</profile>
-		<profile>
-      		<id>jdk10</id>
-      		<activation>
-        		<property>
-          			<name>jdk.version</name>
-          			<value>10</value>
-        		</property>
-      		</activation>
-      		<properties>
-        		<bytecode.version>6</bytecode.version>
-      		</properties>
-    	</profile>
     	<profile>
       		<id>jdk11</id>
       		<activation>
@@ -730,19 +718,19 @@
         		</property>
       		</activation>
       		<properties>
-        		<bytecode.version>6</bytecode.version>
+        		<bytecode.version>8</bytecode.version>
       		</properties>
     	</profile>
     	<profile>
-      		<id>jdk12</id>
+      		<id>jdk16</id>
       		<activation>
         		<property>
           			<name>jdk.version</name>
-          			<value>12</value>
+          			<value>16</value>
         		</property>
       		</activation>
       		<properties>
-        		<bytecode.version>7</bytecode.version>
+        		<bytecode.version>8</bytecode.version>
       		</properties>
     	</profile>
 		<profile>
