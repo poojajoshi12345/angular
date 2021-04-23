@@ -25,6 +25,9 @@
     var icons;
     if (!supportsProperty('fontFeatureSettings')) {
         icons = {
+            'binary-classification': '&#xebe2;',
+            'cluster': '&#xebe3;',
+            'outlier': '&#xebe4;',
             'application-directory': '&#xebde;',
             'map-multi-Layer-alternate': '&#xebdf;',
             'toggle-on-left': '&#xebe0;',

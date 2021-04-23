@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'ibi-design-system';
-  src:  url('fonts/ibi-design-system.eot?t72f2j');
-  src:  url('fonts/ibi-design-system.eot?t72f2j#iefix') format('embedded-opentype'),
-    url('fonts/ibi-design-system.ttf?t72f2j') format('truetype'),
-    url('fonts/ibi-design-system.woff?t72f2j') format('woff'),
-    url('fonts/ibi-design-system.svg?t72f2j#ibi-design-system') format('svg');
+  src:  url('fonts/ibi-design-system.eot?b0n3ga');
+  src:  url('fonts/ibi-design-system.eot?b0n3ga#iefix') format('embedded-opentype'),
+    url('fonts/ibi-design-system.ttf?b0n3ga') format('truetype'),
+    url('fonts/ibi-design-system.woff?b0n3ga') format('woff'),
+    url('fonts/ibi-design-system.svg?b0n3ga#ibi-design-system') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -35,6 +35,15 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.ds-icon-binary-classification:before {
+  content: "\ebe2";
+}
+.ds-icon-cluster:before {
+  content: "\ebe3";
+}
+.ds-icon-outlier:before {
+  content: "\ebe4";
+}
 .ds-icon-application-directory:before {
   content: "\ebde";
 }
