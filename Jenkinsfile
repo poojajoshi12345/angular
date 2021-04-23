@@ -91,8 +91,8 @@ try {
 //            }
 //        }
 //    },
-    jdk16: {
-        stage("JDK 16") {
+    jdk10: {
+        stage("JDK 10") {
             echo 'Not implemented yet!'                      
         }
     },
