@@ -47,7 +47,7 @@ function ibxStateManager()
 		var stateCopy = (state instanceof Object) ? Object.assign({}, state) : state;
 		var subscribers = this._subscriberMap[stateName];
 		for(var subscriber of subscribers)
-			subscriber.dispatchEvent('ibx_statechange', stateCopy, false, false);
+			$(subscriber).dispatchEvent('ibx_statechange', stateCopy, false, false);
 	};
 
 	this.subscribe = function(stateName, elSubscriber){
