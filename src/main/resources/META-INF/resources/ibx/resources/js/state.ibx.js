@@ -12,20 +12,27 @@ function ibxStateManager()
 	};
 
 	this._stateMap = {};
+	this._subscriberMap = {}
+
 	this._stateCheck = function(stateName){
 		if(!this._stateMap[stateName])
 			throw('[ibxStateManager] No such state: ' + stateName);
 	}
-
-	this.addState = function(name, state){
+	this._copyState = function(stateName){
+		return (state instanceof Object) ? Object.assign({}, state) : state;
+	}
+	this.createState = function(name, state){
 		if(!this._options.replaceState && this._stateMap[name])
-			console.warn('[ibxStateMap] Attempting to replace state: ' + stateName);
+			throw('[ibxStateManager] Attempting to replace state: ' + stateName);
 		else
-			this._stateMap[name] = {
-				state: state,
-				subscribers: []
-		};
+			this._stateMap[name] = {state: state};
+		return state;
 	};
+
+	this.getState = function(stateName){
+		this._stateCheck(stateName);
+		return this._copyState(this._stateMap[stateName]);
+	}
 
 	this.deleteState = function(stateName){
 		delete this._stateMap[stateName];
@@ -38,20 +45,23 @@ function ibxStateManager()
 		
 		//copy for distribution.
 		var stateCopy = (state instanceof Object) ? Object.assign({}, state) : state;
-		for(var subscriber of theState.subscribers)
-			subscriber.dispatchEvent('ibx_state_change', stateCopy, false, false);
+		var subscribers = this._subscriberMap[stateName];
+		for(var subscriber of subscribers)
+			subscriber.dispatchEvent('ibx_statechange', stateCopy, false, false);
 	};
 
 	this.subscribe = function(stateName, elSubscriber){
-		this._stateCheck(stateName);
-		this._stateMap[stateName].subscribers.push(elSubscriber);
+		var map = this._subscriberMap[stateName]  || (this._subscriberMap[stateName] = []);
+		if(-1 === map.indexOf(elSubscriber))
+			map.push(elSubscriber);
 	}
 
 	this.unSubscribe = function(stateName, elSubscriber){
-		this._stateCheck(stateName);
-		var state = this._stateMap[stateName];
-		var idx = state.subscribers.indexOf(elSubscriber);
-		state.subscribers.splice(idx, 1);
+		var subscribers = this._subscriberMap[stateName];
+		if(subscribers){
+			var idx = subscribers.indexOf(elSubscriber);
+			subscribers.splice(idx, 1);
+		}
 	}
 };
 ibx.stateMgr = new ibxStateManager();
