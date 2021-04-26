@@ -49,7 +49,7 @@ function ibxStateManager()
 
 		//copy for distribution.
 		var stateCopy = this._copyState(stateName);
-		theState.setter = setter;
+		stateCopy.setter = setter;
 
 		//tell subscribers state has changed.
 		var subscribers = this._subscriberMap[stateName];
