@@ -34,7 +34,7 @@
 		<bytecode.version>1.8</bytecode.version>
 		<maven.compiler.source>${bytecode.version}</maven.compiler.source>
 		<maven.compiler.target>${bytecode.version}</maven.compiler.target>
-		<maven.dependency.plugin.version>3.1.1</maven.dependency.plugin.version>
+		<maven.dependency.plugin.version>3.1.2</maven.dependency.plugin.version>
 		<maven.deploy.plugin.version>3.0.0-M1</maven.deploy.plugin.version>
 		<maven.jar.plugin.version>3.2.0</maven.jar.plugin.version>
 		<maven.jxr.plugin.version>3.0.0</maven.jxr.plugin.version>
