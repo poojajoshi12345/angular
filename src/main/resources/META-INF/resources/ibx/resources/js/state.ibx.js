@@ -18,36 +18,42 @@ function ibxStateManager()
 		if(!this._stateMap[stateName])
 			throw('[ibxStateManager] No such state: ' + stateName);
 	}
+	
 	this._copyState = function(stateName){
-		return (state instanceof Object) ? Object.assign({}, state) : state;
-	}
-	this.createState = function(name, state){
+		this._stateCheck(stateName);
+		var state = this._stateMap[stateName];
+		return state ? Object.assign({}, state) : null;
+	},
+
+	this.createState = function(name, state, elSubscribe){
 		if(!this._options.replaceState && this._stateMap[name])
 			throw('[ibxStateManager] Attempting to replace state: ' + stateName);
 		else
-			this._stateMap[name] = {state: state};
+			this._stateMap[name] = {name:name, state: state};
+		
+		this.subscribe(name, elSubscribe)
 		return state;
 	};
 
 	this.getState = function(stateName){
-		this._stateCheck(stateName);
-		return this._copyState(this._stateMap[stateName]);
+		return this._copyState(stateName);
 	}
 
 	this.deleteState = function(stateName){
 		delete this._stateMap[stateName];
 	};
 
-	this.setState = function(stateName, state){
-		this._stateCheck(stateName);
+	this.setState = function(stateName, state, setter){
 		var theState = this._stateMap[stateName];
-		theState.state = (state instanceof Object) ? Object.assign({}, state) : state;
-		
+		theState.state = state;
+		theState.setter = setter;
+
 		//copy for distribution.
-		var stateCopy = (state instanceof Object) ? Object.assign({}, state) : state;
+		var stateCopy = this._copyState(stateName);
 		var subscribers = this._subscriberMap[stateName];
-		for(var subscriber of subscribers)
+		for(var subscriber of subscribers){
 			$(subscriber).dispatchEvent('ibx_statechange', stateCopy, false, false);
+		}	
 	};
 
 	this.subscribe = function(stateName, elSubscriber){
