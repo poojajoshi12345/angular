@@ -81,7 +81,6 @@ $.widget("ibi.ibxCollapsible", $.Widget,
 		{
 			//close all open auto close collapsible and then let body get pointer events again.
 			this.close();
-			$("body").ibxRemoveClass("body-collapsible-auto-close");
 		}
 	},
 	_onMouseEvent: function (e)
@@ -101,6 +100,7 @@ $.widget("ibi.ibxCollapsible", $.Widget,
 			{
 				this.element.ibxAddClass("ibx-collapsed");
 				$(window).off("click", this._boundWindowMouseEvent);
+				$("body").ibxRemoveClass("body-collapsible-auto-close");
 				this._trigger("close");
 			}
 		}
