@@ -44,6 +44,9 @@ function ibxStateManager()
 	};
 
 	this.setState = function(stateName, state, setter){
+		this._stateCheck(stateName);
+
+		//copy for saving
 		var theState = this._stateMap[stateName];
 		theState.state = state;
 		this._stateMap[stateName] = this._copyState(stateName);
