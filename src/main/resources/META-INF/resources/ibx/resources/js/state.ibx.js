@@ -44,18 +44,24 @@ function ibxStateManager()
 	};
 
 	this.setState = function(stateName, state, setter){
+		this._stateCheck(stateName);
+
+		//copy for saving
 		var theState = this._stateMap[stateName];
 		theState.state = state;
+		this._stateMap[stateName] = this._copyState(stateName);
 
 		//copy for distribution.
 		var stateCopy = this._copyState(stateName);
-		theState.setter = setter;
+		stateCopy.setter = setter;
 
 		//tell subscribers state has changed.
 		var subscribers = this._subscriberMap[stateName];
 		for(var subscriber of subscribers){
 			$(subscriber).dispatchEvent('ibx_statechange', stateCopy, false, false);
 		}	
+
+		return theState;
 	};
 
 	this.subscribe = function(stateName, elSubscriber){
