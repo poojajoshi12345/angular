@@ -1,4 +1,4 @@
-/*Copyright (c) 1996-2021 TIBCO Software Inc. All Rights Reserved.*/
+/*Copyright 1996-2017 Information Builders, Inc. All rights reserved.*/
 // $Revision: 1.136 $:
 
 $.widget("ibi.ibxSelectBase", $.ibi.ibxTextField,

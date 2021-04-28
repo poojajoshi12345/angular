@@ -1,4 +1,4 @@
-<%-- Copyright (c) 1996-2021 TIBCO Software Inc. All Rights Reserved. 
+<%-- Copyright 1996-2019 Information Builders, Inc. All rights reserved. 
  $Revision: 1.1 $:
 --%><%
 	response.addHeader("Pragma", "no-cache");
