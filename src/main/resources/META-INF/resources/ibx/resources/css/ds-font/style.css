@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'ibi-design-system';
-  src:  url('fonts/ibi-design-system.eot?b0n3ga');
-  src:  url('fonts/ibi-design-system.eot?b0n3ga#iefix') format('embedded-opentype'),
-    url('fonts/ibi-design-system.ttf?b0n3ga') format('truetype'),
-    url('fonts/ibi-design-system.woff?b0n3ga') format('woff'),
-    url('fonts/ibi-design-system.svg?b0n3ga#ibi-design-system') format('svg');
+  src:  url('fonts/ibi-design-system.eot?lrk46x');
+  src:  url('fonts/ibi-design-system.eot?lrk46x#iefix') format('embedded-opentype'),
+    url('fonts/ibi-design-system.ttf?lrk46x') format('truetype'),
+    url('fonts/ibi-design-system.woff?lrk46x') format('woff'),
+    url('fonts/ibi-design-system.svg?lrk46x#ibi-design-system') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -47,13 +47,13 @@
 .ds-icon-application-directory:before {
   content: "\ebde";
 }
-.ds-icon-map-multi-Layer-alternate:before {
+.ds-icon-map-multi-layer-alternate:before {
   content: "\ebdf";
 }
 .ds-icon-toggle-on-left:before {
   content: "\ebe0";
 }
-.ds-icon-single-Layer:before {
+.ds-icon-single-layer:before {
   content: "\ebe1";
 }
 .ds-icon-tibco:before {
