@@ -64,10 +64,14 @@ function ibxStateManager()
 		return theState;
 	};
 
-	this.subscribe = function(stateName, elSubscriber){
-		var map = this._subscriberMap[stateName]  || (this._subscriberMap[stateName] = []);
-		if(-1 === map.indexOf(elSubscriber))
-			map.push(elSubscriber);
+	this.subscribe = function (stateName, elSubscriber, state) {
+		if (!this._stateMap[stateName])
+			this.createState(stateName, state, elSubscriber);
+		else {
+			var map = this._subscriberMap[stateName] || (this._subscriberMap[stateName] = []);
+			if (-1 === map.indexOf(elSubscriber))
+				map.push(elSubscriber);
+		}
 	}
 
 	this.unSubscribe = function(stateName, elSubscriber){
