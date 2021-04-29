@@ -64,7 +64,8 @@ function ibxStateManager()
 		return theState;
 	};
 
-	this.subscribe = function(stateName, elSubscriber){
+	this.subscribe = function(stateName, elSubscriber, state){
+		this._stateMap[stateName] || this.createState(stateName, state, elSubscriber);
 		var map = this._subscriberMap[stateName]  || (this._subscriberMap[stateName] = []);
 		if(-1 === map.indexOf(elSubscriber))
 			map.push(elSubscriber);
