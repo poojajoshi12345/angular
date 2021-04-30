@@ -26,12 +26,13 @@ function ibxStateManager()
 	},
 
 	this.createState = function(name, state, elSubscribe){
-		if(!this._options.replaceState && this._stateMap[name])
-			throw('[ibxStateManager] Attempting to replace state: ' + stateName);
-		else
-			this._stateMap[name] = {name:name, state: state};
-		
-		this.subscribe(name, elSubscribe)
+		if(name){
+			if(!this._options.replaceState && this._stateMap[name])
+				throw('[ibxStateManager] Attempting to replace state: ' + stateName);
+			else
+				this._stateMap[name] = {name:name, state: state};
+			this.subscribe(name, elSubscribe);
+		}
 		return state;
 	};
 
@@ -64,21 +65,18 @@ function ibxStateManager()
 		return theState;
 	};
 
-	this.subscribe = function (stateName, elSubscriber, state) {
-		if (!this._stateMap[stateName])
-			this.createState(stateName, state, elSubscriber);
-		else {
-			var map = this._subscriberMap[stateName] || (this._subscriberMap[stateName] = []);
-			if (-1 === map.indexOf(elSubscriber))
-				map.push(elSubscriber);
-		}
+	this.subscribe = function (stateName, elSubscriber) {
+		var map = this._subscriberMap[stateName] || (this._subscriberMap[stateName] = []);
+		if (-1 === map.indexOf(elSubscriber))
+			map.push(elSubscriber);
 	}
 
-	this.unSubscribe = function(stateName, elSubscriber){
+	this.unsubscribe = function(stateName, elSubscriber){
 		var subscribers = this._subscriberMap[stateName];
 		if(subscribers){
 			var idx = subscribers.indexOf(elSubscriber);
-			subscribers.splice(idx, 1);
+			if(idx != -1)
+				subscribers.splice(idx, 1);
 		}
 	}
 };
