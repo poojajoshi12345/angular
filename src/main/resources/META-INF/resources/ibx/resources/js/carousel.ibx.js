@@ -290,11 +290,14 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 		this._pageMarkers.offsetHeight;
 
 		//[IBX-537] focus the page marker after jumping to page.
-		this.element.on('ibx_endscroll', function(pageNo, e){
-			this.element.off('ibx_endscroll');
+		//[IBX-5]
+		var boundEndScroll = function endScroll(pageNo, e){
+			this.element.off('ibx_endscroll', boundEndScroll);
 			var page = this._pageMarkers.find(':nth-child(' + (pageNo) + ')');
 			page.focus();
-		}.bind(this, ++markerInfo.pageNo));
+
+		}.bind(this, ++markerInfo.pageNo);
+		this.element.on('ibx_endscroll', boundEndScroll);
 	},
 	_adjustPageMarkers:function()
 	{
