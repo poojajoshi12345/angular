@@ -28,6 +28,7 @@
 		<javax.servlet.api.version>3.1.0</javax.servlet.api.version>
 		<javax.servlet.jsp.api.version>2.3.3</javax.servlet.jsp.api.version>
 		<junit.version>4.12</junit.version>
+		<maven.antrun.plugin.version>3.0.0</maven.antrun.plugin.version>
 		<maven.assembly.plugin.version>3.1.0</maven.assembly.plugin.version>
 		<maven.checkstyle.plugin.version>3.1.0</maven.checkstyle.plugin.version>
 		<maven.compiler.plugin.version>3.8.0</maven.compiler.plugin.version>
@@ -150,6 +151,7 @@
 				<configuration>
 					<excludes>
 						<exclude>**/*.js_closure</exclude>
+						<exclude>**/*.js_closure.gz</exclude>
 					</excludes>
 					<archive>
             			<manifest>
@@ -262,7 +264,7 @@
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-antrun-plugin</artifactId>
-						<version>1.8</version>
+						<version>${maven.antrun.plugin.version}</version>
 						<executions>
 							<execution>
 								<id>closure-compile</id>
@@ -307,10 +309,9 @@
 										<for param="file" parallel="false">
 											<path>
 												<fileset dir="${fileset.dir}">
-													<include name="**/*.min.js" />
-													<include name="**/*-min.js" />
-													<include name="**/*_min.js" />
+													<include name="**/*.js" />
 													<include name="**/*.css" />
+													<include name="**/*.svg" />
 													<include name="**/*.xml" />
 												</fileset>
 											</path>
@@ -347,7 +348,7 @@
 							<dependency>
 								<groupId>com.ibi.build</groupId>
 								<artifactId>webfocus-build-utils</artifactId>
-								<version>8207.20</version>
+								<version>8207.27.01</version>
 							</dependency>
 						</dependencies>
 					</plugin>
