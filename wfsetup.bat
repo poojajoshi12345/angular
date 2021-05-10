@@ -25,14 +25,14 @@ rd /S /Q %wfpath%\ibxtools
 MKLINK /D %wfpath%\ibxtools %CD%\..\ibxtools\webfocus-webjars-ibxtools\src\main\resources\META-INF\resources\ibxtools
 
 REM make the new tools, caster, and component links
-REM rename %wfpath%\WEB-INF\lib\webfocus-webjars-tools*.jar webfocus-webjars-tools*.jar_
-REM git clone http://wfbucket.ibi.com:7990/scm/wp/webfocus-webjars-tools.git ..\tools
-REM rd /S /Q %wfpath%\tools
-REM MKLINK /D %wfpath%\tools %CD%\..\tools\src\main\resources\META-INF\resources\tools
-REM rd /S /Q %wfpath%\caster
-REM MKLINK /D %wfpath%\caster %CD%\..\tools\src\main\resources\META-INF\resources\caster
-REM rd /S /Q %wfpath%\component
-REM MKLINK /D %wfpath%\component %CD%\..\tools\src\main\resources\META-INF\resources\component
+rename %wfpath%\WEB-INF\lib\webfocus-webjars-tools*.jar webfocus-webjars-tools*.jar_
+git clone http://wfbucket.ibi.com:7990/scm/wp/webfocus-webjars-tools.git ..\tools
+rd /S /Q %wfpath%\tools
+MKLINK /D %wfpath%\tools %CD%\..\tools\src\main\resources\META-INF\resources\tools
+rd /S /Q %wfpath%\caster
+MKLINK /D %wfpath%\caster %CD%\..\tools\src\main\resources\META-INF\resources\caster
+rd /S /Q %wfpath%\component
+MKLINK /D %wfpath%\component %CD%\..\tools\src\main\resources\META-INF\resources\component
 
 
 REM REM make the new 3rd party resources link

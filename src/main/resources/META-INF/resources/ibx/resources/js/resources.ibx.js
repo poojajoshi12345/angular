@@ -67,8 +67,10 @@ _p.addStringBundle = function(bundle, defLang)
 };
 
 //daisy chain the loading of the bundles so their dependencies are honored.
-_p.addBundles = function(bundles)
+_p.addBundles = function(bundles, loadDepth)
 {
+	loadDepth = loadDepth || 0;
+
 	if(!bundles._allLoaded)
 		bundles._allLoaded = allLoaded || $.Deferred();
 
@@ -81,9 +83,9 @@ _p.addBundles = function(bundles)
 		else
 		{
 			bundleInfo = (typeof(bundleInfo) == "string") ? {"src":bundleInfo, "loadContext":""} : bundleInfo;
-			this.addBundle(bundleInfo.src, bundleInfo.loadContext).done(function(bundles)
+			this.addBundle(bundleInfo.src, bundleInfo.loadContext, null, loadDepth).done(function(bundles)
 			{
-				this.addBundles(bundles);
+				this.addBundles(bundles, loadDepth);
 			}.bind(this, bundles));
 		}
 	}
@@ -93,7 +95,7 @@ _p.addBundles = function(bundles)
 };
 
 //can pass a string or jQuery.ajax settings object.
-_p.addBundle = function(ajaxSettings, loadContext, data)
+_p.addBundle = function(ajaxSettings, loadContext, data, loadDepth)
 {
 	//resolve bundle's uri
 	ajaxSettings = (typeof(ajaxSettings) === "string") ? {url:ajaxSettings} : ajaxSettings;
@@ -110,6 +112,7 @@ _p.addBundle = function(ajaxSettings, loadContext, data)
 	var xhr = $.get(ajaxSettings, data);
 	xhr.resLoaded = resLoaded;
 	xhr.src = ajaxSettings.url;
+	xhr.loadDepth = loadDepth;
 	xhr.done(this._onBundleFileLoaded.bind(this));
 	xhr.fail(this._onBundleFileLoadError.bind(this));
 	xhr.progress(this._onBundleFileProgress.bind(this));
@@ -119,6 +122,7 @@ _p._onBundleFileLoaded = function(xDoc, status, xhr)
 {
 	//successfully loaded...move needed stuff to the xDoc for loading.
 	xDoc.resLoaded = xhr.resLoaded;
+	xDoc.loadDepth = xhr.loadDepth;
 	xDoc.src = xhr.src;
 	xDoc.path = xDoc.src.substring(0, xDoc.src.lastIndexOf("/") + 1).replace(/\.[\/\\]/g, "");
 	this.loadBundle(xDoc);
@@ -128,7 +132,7 @@ _p._onBundleFileProgress = function()
 };
 _p._onBundleFileLoadError = function(xhr, status, msg)
 {
-	$(window).dispatchEvent("ibx_ibxresmgr", {"hint":"load_error", "loadDepth":this._loadDepth, "resMgr":this, "bundle":null, "xhr":xhr, "status":status, "msg":msg});
+	$(window).dispatchEvent("ibx_ibxresmgr", {"hint":"load_error", "loadDepth":xhr.loadDepth, "resMgr":this, "bundle":null, "xhr":xhr, "status":status, "msg":msg});
 	console.error(sformat("[ibx Error] {1}\n{2}", xhr.statusText, msg));
 	xhr.resLoaded.resolve();
 };
@@ -168,7 +172,7 @@ _p.loadExternalResFile = function(elFile, bundle)
 
 		if(ibx.forceInlineResLoading || (elFile.attr("inline") == "true"))
 		{
-			$(window).dispatchEvent("ibx_ibxresmgr", {"hint":"fileloading", "loadDepth":this._loadDepth, "resMgr":this, "fileType":fileType, "fileNode":elFile[0], "src":src});
+			$(window).dispatchEvent("ibx_ibxresmgr", {"hint":"fileloading", "loadDepth":bundle.loadDepth, "resMgr":this, "fileType":fileType, "fileNode":elFile[0], "src":src});
 			$.get({async:false, url:src, dataType:"text", error:this._resFileRetrievalError.bind(this, elFile, src, fileType)}).done(function(elFile, src, fileType, content, status, xhr)
 			{
 				content = this.preProcessResource(content);//precompile the content...string substitutions, etc.
@@ -210,7 +214,7 @@ _p.loadExternalResFile = function(elFile, bundle)
 						eType = "scriptfileinlineloaded";
 					}
 					this.loadedFiles[src] = true;
-					$(window).dispatchEvent("ibx_ibxresmgr", {"hint":"fileloaded", "loadDepth":this._loadDepth, "resMgr":this, "fileType":fileType, "fileNode":elFile[0], "src":src});
+					$(window).dispatchEvent("ibx_ibxresmgr", {"hint":"fileloaded", "loadDepth":bundle.loadDepth, "resMgr":this, "fileType":fileType, "fileNode":elFile[0], "src":src});
 				}
 			}.bind(this, elFile, src, fileType));
 		}
@@ -236,7 +240,7 @@ _p.loadExternalResFile = function(elFile, bundle)
 			//need to resolve promise when file is actually loaded...also used for profile timings/counts.
 			el.addEventListener("load", function(isStyle, e)
 			{
-				$(window).dispatchEvent("ibx_ibxresmgr", {"hint":"fileloaded", "loadDepth":this._loadDepth, "resMgr":this, "fileType":fileType, "fileNode":elFile[0], "src":src});
+				$(window).dispatchEvent("ibx_ibxresmgr", {"hint":"fileloaded", "loadDepth":bundle.loadDepth, "resMgr":this, "fileType":fileType, "fileNode":elFile[0], "src":src});
 				if(e.target._loadPromise)
 					e.target._loadPromise.resolve();
 			}.bind(this, isStyle));
@@ -244,7 +248,7 @@ _p.loadExternalResFile = function(elFile, bundle)
 
 			$("head")[0].appendChild(el);
 			this.loadedFiles[src] = true;
-			$(window).dispatchEvent("ibx_ibxresmgr", {"hint":"fileloading", "loadDepth":this._loadDepth, "resMgr":this, "fileType":fileType, "fileNode":elFile[0], "src":src});
+			$(window).dispatchEvent("ibx_ibxresmgr", {"hint":"fileloading", "loadDepth":bundle.loadDepth, "resMgr":this, "fileType":fileType, "fileNode":elFile[0], "src":src});
 		}
 	}.bind(this, bundle));
 	return elFile;
@@ -253,7 +257,7 @@ _p.loadExternalResFile = function(elFile, bundle)
 //if something bad happens while retrieving a source file in the bundle.
 _p._resFileRetrievalError = function(elFile, src, fileType, xhr, status, msg)
 {
-	$(window).dispatchEvent("ibx_ibxresmgr", {"hint":"fileloaderror", "loadDepth":this._loadDepth, "resMgr":this, "fileType":fileType, "fileNode":elFile[0], "bundle":null, "src":src, "xhr":xhr, "status":status, "msg":msg});
+	$(window).dispatchEvent("ibx_ibxresmgr", {"hint":"fileloaderror", "loadDepth":bundle.loadDepth, "resMgr":this, "fileType":fileType, "fileNode":elFile[0], "bundle":null, "src":src, "xhr":xhr, "status":status, "msg":msg});
 };
 
 _p.getResPath = function(src, loadContext)
@@ -280,12 +284,12 @@ _p.getResPath = function(src, loadContext)
 };
 
 //load the actual resource bundle here...can be called directly, or from an xhr load (promise/deferred fullfilled/done)
-_p._loadDepth = 0;
 _p.loadBundle = function(xResDoc)
 {
 	var head = $("head");
 	var bundle = $(xResDoc).find("ibx-res-bundle").first();
-
+	bundle.loadDepth = xResDoc.loadDepth;
+	
 	//switch the path for loading dependent files using this bundles's path.
 	this._bundlePath = xResDoc.path;
 
@@ -293,7 +297,7 @@ _p.loadBundle = function(xResDoc)
 	xResDoc.resLoaded = xResDoc.resLoaded || $.Deferred();
 
 	//let the loading begin!
-	$(window).dispatchEvent("ibx_ibxresmgr", {"hint":"bundleloading", "loadDepth":this._loadDepth, "resMgr":this, "bundle":bundle[0], src:xResDoc.src});
+	$(window).dispatchEvent("ibx_ibxresmgr", {"hint":"bundleloading", "loadDepth":bundle.loadDepth, "resMgr":this, "bundle":bundle[0], src:xResDoc.src});
 
 	//First load the dependency Resource Bundles...this will chain to any depth
 	var files = [];
@@ -305,10 +309,8 @@ _p.loadBundle = function(xResDoc)
 
 	this._bundlePath = xResDoc.path;
 
-	this.addBundles(files).done(function(curBundlePath, xResDoc, head, bundle)
+	this.addBundles(files, ++bundle.loadDepth).done(function(curBundlePath, xResDoc, head, bundle)
 	{
-		++this._loadDepth;
-
 		//now that dependent bundles are loaded, set back the correct path to this bundle.
 		this._bundlePath = curBundlePath;
 
@@ -325,7 +327,7 @@ _p.loadBundle = function(xResDoc)
 					content = this.preProcessResource(content);//precompile the content...string substitutions, etc.
 					var strBundle = JSON.parse(content);
 					this.addStringBundle(strBundle);
-					$(window).dispatchEvent("ibx_ibxresmgr", {"hint":"stringinlineloaded", "loadDepth":this._loadDepth, "resMgr":this, "bundle":bundle[0]});
+					$(window).dispatchEvent("ibx_ibxresmgr", {"hint":"stringinlineloaded", "loadDepth":bundle.loadDepth, "resMgr":this, "bundle":bundle[0]});
 				}catch(ex){
 					console.error("[ibxResourceManager] Error parsing string bundle: " + xResDoc.src);
 					throw(ex);
@@ -345,7 +347,7 @@ _p.loadBundle = function(xResDoc)
 				content = this.preProcessResource(content);//precompile the content...string substitutions, etc.
 				var styleNode = $("<style type='text/css'>").attr("data-ibx-src", src).text(content);
 				head.append(styleNode);
-				$(window).dispatchEvent("ibx_ibxresmgr", {"hint":"cssinlineloaded", "loadDepth":this._loadDepth, "resMgr":this, "bundle":bundle[0]});
+				$(window).dispatchEvent("ibx_ibxresmgr", {"hint":"cssinlineloaded", "loadDepth":bundle.loadDepth, "resMgr":this, "bundle":bundle[0]});
 				
 				styleBlock = styleBlock.clone().text(content);
 				this._resBundle.find("ibx-res-bundle > styles").first().append(styleBlock);//save sheet in res document
@@ -358,7 +360,7 @@ _p.loadBundle = function(xResDoc)
 		markupBlocks.each(function(idx, markup)
 		{
 			this._resBundle.find("ibx-res-bundle > markup").first().append($(markup).clone());
-			$(window).dispatchEvent("ibx_ibxresmgr", {"hint":"markupinlineloaded", "loadDepth":this._loadDepth, "resMgr":this, "bundle":bundle[0]});
+			$(window).dispatchEvent("ibx_ibxresmgr", {"hint":"markupinlineloaded", "loadDepth":bundle.loadDepth, "resMgr":this, "bundle":bundle[0]});
 		}.bind(this));
 
 		//load scripts...they will be loaded asynchronously, but processed synchronously...so we have to make sure all
@@ -385,7 +387,7 @@ _p.loadBundle = function(xResDoc)
 					content = this.preProcessResource(content);//precompile the content...string substitutions, etc.
 					script.text(content);
 					head.append(script);
-					$(window).dispatchEvent("ibx_ibxresmgr", {"hint":"scriptinlineloaded", "loadDepth":this._loadDepth, "resMgr":this, "bundle":bundle[0]});
+					$(window).dispatchEvent("ibx_ibxresmgr", {"hint":"scriptinlineloaded", "loadDepth":bundle.loadDepth, "resMgr":this, "bundle":bundle[0]});
 				}
 			}.bind(this));
 
@@ -399,8 +401,7 @@ _p.loadBundle = function(xResDoc)
 					this.loadedBundles[xResDoc.src] = xResDoc.resLoaded;
 			
 				document.body.offsetHeight;				
-				--this._loadDepth;
-				$(window).dispatchEvent("ibx_ibxresmgr", {"hint":"bundleloaded", "loadDepth":this._loadDepth, "resMgr":this, "bundle":bundle[0], src:xResDoc.src});
+				$(window).dispatchEvent("ibx_ibxresmgr", {"hint":"bundleloaded", "loadDepth":bundle.loadDepth, "resMgr":this, "bundle":bundle[0], src:xResDoc.src});
 				xResDoc.resLoaded.resolve(bundle, this);
 			}.bind(this, xResDoc, head, bundle));
 
