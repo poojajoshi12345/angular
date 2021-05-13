@@ -47,6 +47,9 @@ function ibxStateManager()
 	this.setState = function(stateName, state, setter){
 		this._stateCheck(stateName);
 
+		//copy for distribution
+		var oldState = this._copyState(stateName);
+
 		//copy for saving
 		var theState = this._stateMap[stateName];
 		theState.state = state;
@@ -54,6 +57,7 @@ function ibxStateManager()
 
 		//copy for distribution.
 		var stateCopy = this._copyState(stateName);
+		stateCopy.statePrev = oldState.state;
 		stateCopy.setter = setter;
 
 		//tell subscribers state has changed.
