@@ -27,7 +27,7 @@ $.widget("ibi.ibxMenu", $.ibi.ibxPopup,
 		this.element.on("keydown", this._onMenuKeyDown.bind(this));
 		this.element.on("ibx_menu_item_click", this._onMenuItemClick.bind(this));
 		this.element.on("ibx_close_sub_menus", this.closeSubMenus.bind(this));
-		this.element.children(".ibx-menu-item, .ibx-menu-separator").each(function(idx, el)
+		this.element.children(".ibx-menu-item, .ibx-menu-separator, .ibx-menu-item-custom").each(function(idx, el)
 		{
 			this.add(el);
 		}.bind(this));
@@ -44,7 +44,7 @@ $.widget("ibi.ibxMenu", $.ibi.ibxPopup,
 	parentMenu:function(){return this.element.data("ibxParentMenu") || null;},
 	children:function(selector)
 	{
-		selector = selector || ".ibx-menu-item, .ibx-menu-separator";
+		selector = selector || ".ibx-menu-item, .ibx-menu-separator, .ibx-menu-item-custom";
 		return this._box.children(selector);
 	},
 	add:function(menuItem, sibling, before, refresh)
@@ -630,7 +630,7 @@ $.widget("ibi.ibxMenuButton", $.ibi.ibxButtonSimple,
 $.widget("ibi.ibxHMenuButton", $.ibi.ibxMenuButton,{options:{},_widgetClass: "ibx-hmenu-button"});
 $.widget("ibi.ibxVMenuButton", $.ibi.ibxMenuButton,
 {
-	options:{position:{at:"right top"}},
+	options:{menuOptions:{position:{at:"right top"}}},
 	_widgetClass: "ibx-vmenu-button",
 	_onKeyEvent:function(e)
 	{
