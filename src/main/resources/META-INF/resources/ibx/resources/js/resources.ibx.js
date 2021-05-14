@@ -343,9 +343,9 @@ _p.loadBundle = function(xResDoc)
 			var content = styleBlock.text().trim();
 			if(content)
 			{
-				var src = styleBlock.attr("src") || "inline";
+				var src = styleBlock.attr("src") || styleBlock.attr("osrc") || "inline";
 				content = this.preProcessResource(content);//precompile the content...string substitutions, etc.
-				var styleNode = $("<style type='text/css'>").attr("data-ibx-src", src).text(content);
+				var styleNode = $(`<style type='text/css'>`).attr("data-ibx-src", src).text(content);
 				head.append(styleNode);
 				$(window).dispatchEvent("ibx_ibxresmgr", {"hint":"cssinlineloaded", "loadDepth":bundle.loadDepth, "resMgr":this, "bundle":bundle[0]});
 				
@@ -382,7 +382,7 @@ _p.loadBundle = function(xResDoc)
 				var content = scriptBlock.text().trim();
 				if(content)
 				{
-					var src = scriptBlock.attr("src") || "inline";
+					var src = scriptBlock.attr("src") || scriptBlock.attr("osrc") || "inline";
 					var script = $("<script type='text/javascript'>").attr("data-ibx-src", src);
 					content = this.preProcessResource(content);//precompile the content...string substitutions, etc.
 					script.text(content);
