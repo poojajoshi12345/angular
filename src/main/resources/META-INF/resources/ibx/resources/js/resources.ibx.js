@@ -336,7 +336,6 @@ _p.loadBundle = function(xResDoc)
 		}.bind(this));
 
 		//load css
-		var x = 0;
 		this.loadExternalResFile(bundle.find("style-file"), bundle);
 		styleBlocks = bundle.find("style-sheet").each(function(idx, styleBlock)
 		{
