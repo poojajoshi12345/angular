@@ -130,7 +130,7 @@ $Revision: 1.123 $:-->
 						<div class="ibx-title-bar-close-button" data-ibx-type="ibxButton" data-ibx-name="titleClose" title='@ibxString("IBX_STR_CLOSE")'></div>
 					</div>
 					<div class="ibx-dialog-content" data-ibx-type="ibxVBox" data-ibx-name="contentBox" data-ibxp-align="stretch"></div>
-					<div class='ibx-dialog-button-box' data-ibx-type='ibxHBox' data-ibx-name='btnBox' data-ibxp-align='stretch'>
+					<div class='ibx-dialog-button-box' data-ibx-type='ibxHBox' data-ibx-name='btnBox' data-ibxp-align='center'>
 						<div class='ibx-dialog-button ibx-dialog-custom-button' data-ibx-type='ibxButton' data-ibx-name='btnCustom' data-ibxp-text='@ibxString("IBX_STR_CUSTOM")' tabIndex='0'></div>
 						<div class="ibx-dialog-button-padding" data-ibx-type="ibxNull" data-ibx-name="btnPadding"></div>
 						<div class='ibx-dialog-button ibx-dialog-ok-button' data-ibx-type='ibxButton' data-ibx-name='btnOK' data-ibxp-text='@ibxString("IBX_STR_OK")' tabIndex='0'></div>

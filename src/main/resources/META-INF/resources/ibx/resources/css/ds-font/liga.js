@@ -25,6 +25,7 @@
     var icons;
     if (!supportsProperty('fontFeatureSettings')) {
         icons = {
+            'unpublished': '&#xebe5;',
             'binary-classification': '&#xebe2;',
             'cluster': '&#xebe3;',
             'outlier': '&#xebe4;',
