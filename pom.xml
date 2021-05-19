@@ -207,7 +207,7 @@
 			<url>http://wfmaven.ibi.com:8081/repository/maven-snapshots/</url>
 		</snapshotRepository>
 		<site>
-			<id>www.informationbuilders.com</id>
+			<id>www.tibco.com</id>
 			<url>https://www.tibco.com/www/docs/projects/</url>
 		</site>
 	</distributionManagement>
