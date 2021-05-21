@@ -14,13 +14,7 @@ function ibxStateManager()
 	this._stateMap = {};
 	this._subscriberMap = {}
 
-	this._stateCheck = function(stateName){
-		if(!this._stateMap[stateName])
-			throw('[ibxStateManager] No such state: ' + stateName);
-	}
-	
 	this._copyState = function(stateName){
-		this._stateCheck(stateName);
 		var state = this._stateMap[stateName];
 		return state ? Object.assign({}, state) : null;
 	},
@@ -28,7 +22,7 @@ function ibxStateManager()
 	this.createState = function(name, state, elSubscribe){
 		if(name){
 			if(!this._options.replaceState && this._stateMap[name])
-				throw('[ibxStateManager] Attempting to replace state: ' + stateName);
+				throw('[ibxStateManager] Attempting to recreate state: ' + stateName);
 			else
 				this._stateMap[name] = {name:name, state: state};
 			this.subscribe(name, elSubscribe);
@@ -45,8 +39,9 @@ function ibxStateManager()
 	};
 
 	this.setState = function(stateName, state, setter){
-		this._stateCheck(stateName);
-
+		if(!this._stateMap[stateName])
+			return null;
+			
 		//copy for distribution
 		var oldState = this._copyState(stateName);
 
@@ -85,4 +80,32 @@ function ibxStateManager()
 	}
 };
 ibx.stateMgr = new ibxStateManager();
+
+function ibxStateMap(arStateMap, stateMgr){
+	var map = this._map = arStateMap;
+	stateMgr = stateMgr || ibx.stateMgr;
+
+	map.client.addEventListener('ibx_statechange', function(e) {
+		var theState = e.data || e.originalEvent.data;
+		if(theState.setter === map.client)
+			return;
+		
+		var fnHandler = map.states[theState.name].fnHandler;
+		if(fnHandler)
+			fnHandler.call(map.client, theState);
+	}.bind(this));
+
+	for(var stateName in map.states){
+		var state = map.states[stateName].state;
+		var stateExists = stateMgr.getState(stateName);
+		if(!stateExists)
+			stateMgr.createState(stateName, null, map.client);
+		else
+			stateMgr.subscribe(stateName, map.client);
+
+		if(state)
+			stateMgr.setState(stateName, state, state.client);
+	}
+}
+
 //# sourceURL=state.ibx.js
