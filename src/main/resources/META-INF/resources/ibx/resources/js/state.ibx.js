@@ -81,20 +81,24 @@ function ibxStateManager()
 };
 ibx.stateMgr = new ibxStateManager();
 
-function ibxStateMap(arStateMap, stateMgr){
-	var map = this._map = arStateMap;
+function ibxStateMap(stateMap, stateMgr){
+	var map = this._map = stateMap;
 	stateMgr = stateMgr || ibx.stateMgr;
 
-	map.client.addEventListener('ibx_statechange', function(e) {
-		var theState = e.data || e.originalEvent.data;
-		if(theState.setter === map.client)
-			return;
-		
-		var fnHandler = map.states[theState.name].fnHandler;
-		if(fnHandler)
-			fnHandler.call(map.client, theState);
-	}.bind(this));
+	//add event listener to the client and redirect interested states to callback functions.
+	if(map.client) {
+		map.client.addEventListener('ibx_statechange', function(e) {
+			var theState = e.data || e.originalEvent.data;
+			if(theState.setter === map.client)
+				return;
+			
+			var fnHandler = map.states[theState.name].fnHandler;
+			if(fnHandler)
+				fnHandler.call(map.client, theState);
+		}.bind(this));
+	}
 
+	//go through the states and create them if not created...subscribe if created...then update if state is passed.
 	for(var stateName in map.states){
 		var state = map.states[stateName].state;
 		var stateExists = stateMgr.getState(stateName);
