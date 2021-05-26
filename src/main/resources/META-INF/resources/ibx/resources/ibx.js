@@ -373,7 +373,7 @@ ibx.bindElements = function(elements, bindInfo)
 		var memberName = element.attr("data-ibx-name");
 		if(memberName)
 		{
-			var nameRoot = element.closest(":ibxNameRoot");
+			var nameRoot = element.parents(":ibxNameRoot").first();
 			var nameRootWidget = nameRoot.data("ibxWidget");
 
 			if(nameRootWidget)
