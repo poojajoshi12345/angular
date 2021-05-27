@@ -7,7 +7,7 @@ $.widget("ibi.ibxNavMap", $.ibi.ibxMenu,
 {
 	options:
 	{
-		"navParent":null,
+		"navParentInfo":{doc:null, map:null},
 		"aria":
 		{
 			"role":"list",
@@ -32,7 +32,8 @@ $.widget("ibi.ibxNavMap", $.ibi.ibxMenu,
 		{
 			//have to chain the previously active element so it can be focused if the parent is closed via escape.
 			//then open the new parent navmap.
-			var parentMap = $(this.options.navParent);
+			var navParentInfo = this.options.navParentInfo;
+			var parentMap = navParentInfo.doc.defaultView.$(navParentInfo.map);
 			parentMap.ibxWidget("open").ibxWidget('instance')._elPrevActive = this._elPrevActive;
 		}
 		else
@@ -79,9 +80,18 @@ $.widget("ibi.ibxNavMap", $.ibi.ibxMenu,
 		var options = this.options;
 		this._super();
 
+		var navParentInfo = options.navParentInfo;
+		navParentInfo.map = $(options.navRoot).parents("[data-ibx-nav-map]").first().attr("data-ibx-nav-map");
+		
+		var frame = window.frameElement;
+		while(frame && !navParentInfo.map) {
+			navParentInfo.doc = frame.ownerDocument;
+			navParentInfo.map = $(frame, navParentInfo.doc).parents("[data-ibx-nav-map]").first().attr("data-ibx-nav-map");
+			frame = frame.contentWindow.frameElement;
+		}
+
 		var modal = $(options.navRoot).closest(".pop-modal"); //modal's can't navigate to parent navMap.
-		var navParent = options.navParent = $(options.navRoot).parents("[data-ibx-nav-map]").first().attr("data-ibx-nav-map");
-		if(!modal.length && navParent)
+		if(!modal.length && navParentInfo.map)
 			this._box.prepend(this._navToParentItem, this._sep);
 		else
 		{
