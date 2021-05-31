@@ -26,13 +26,19 @@ $.widget("ibi.ibxRanges", $.ibi.ibxHBox,
 	{
 		this._super();
 	},
+	removeRange:function(range) {
+		if(!range)
+			this._ranges.length = 0;
+		this.refresh();
+	},
 	_onClick:function(e){
-		this.addBoundary(e.offsetX);
+		var bounds = this.element[0].getBoundingClientRect();
+		this.addRange(e.clientX - bounds.left);
 		console.log(this.getRanges());
 	},
 	_ranges: [],
-	addBoundary:function(val) {
-		this._ranges.push({pct: val/this.element.width()});
+	addRange:function(val) {
+		this._ranges.push({pct: val/this.element.width(), color: `rgb(${Math.random() * 255}, 0, 0)`});
 		this.refresh();
 	},
 	getRanges: function() {
@@ -43,10 +49,11 @@ $.widget("ibi.ibxRanges", $.ibi.ibxHBox,
 			return (e1.pct < e2.pct ? -1 : 1);
 		});
 
+		var width = this.element.width();
 		for(var i = 0; i < ranges.length; ++i){
 			var range = ranges[i];
-			range.start = (i === 0) ? 0 : Math.round(100 * ranges[i-1].pct);
-			range.end = Math.round(100 * range.pct);
+			range.start = (i === 0) ? 0 : Math.round(width * ranges[i-1].pct);
+			range.end = Math.round(width * range.pct);
 		}
 		return this._ranges
 	},
@@ -60,7 +67,7 @@ $.widget("ibi.ibxRanges", $.ibi.ibxHBox,
 		var ranges = this.getRanges();
 		for(var i = 0; i < ranges.length; ++i) {
 			var range= ranges[i];
-			var elRange = $("<div class='ibx-ranges-range'>").css("width",  range.pct * size ).text(`${i}`);
+			var elRange = $("<div class='ibx-ranges-range'>").css({width: range.end - range.start, backgroundColor:range.color}).text(`${range.pct }`);
 			this.element.append(elRange);
 		}
 	}
