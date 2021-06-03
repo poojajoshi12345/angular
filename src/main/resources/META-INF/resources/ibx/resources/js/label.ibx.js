@@ -10,6 +10,7 @@ $.widget("ibi.ibxLabel", $.ibi.ibxFlexBox,
 		"textAlign":"",
 		"textIsHtml":false,
 		"textElClass":"ibx-label-text",
+		"customLabel":null,
 		"iconPosition":"left",
 		"icon":"",
 		"iconClasses":"ibx-label-icon",
@@ -43,6 +44,7 @@ $.widget("ibi.ibxLabel", $.ibi.ibxFlexBox,
 
 		//alternate to data-ibxp-text...direct text node children can be used to set the text.
 		options.text = options.text || this.element.textNodes().remove().text().replace(/^\s*|\s*$/g, "");
+		options.customLabel = this.element.children('.custom-label').detach();
 
 		//add the sub-elements
 		this._glyph = $("<div>").ibxAddClass(options.glyphElClass);
@@ -113,6 +115,9 @@ $.widget("ibi.ibxLabel", $.ibi.ibxFlexBox,
 		if(options.text != lastOptions.text)
 			options.textIsHtml ? this._text.html(options.text) : this._text.text(options.text);
 		this._text.ibxRemoveClass(lastOptions.textElClass).ibxAddClass(options.textElClass).css({"text-align":options.textAlign, "white-space":options.textWrap ? "" : "nowrap"});
+
+		if(options.customLabel)
+			this._text.append(options.customLabel);
 
 		//[IBX-131] flexbox align center doesn't work correctly in IE with text wrapping...must be set to stretch and then center text automatically.
 		//this causes an inconsistency with other browsers...ie will center text when wrapped other won't.  

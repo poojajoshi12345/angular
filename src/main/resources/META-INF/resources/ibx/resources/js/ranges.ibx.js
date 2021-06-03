@@ -5,6 +5,7 @@ $.widget("ibi.ibxRanges", $.ibi.ibxHBox,
 	{
 		min: 0,
 		max: 100,
+		clickToAdd: true,
 		align: "stretch"
 	},
 	_widgetClass:"ibx-ranges",
@@ -37,37 +38,37 @@ $.widget("ibi.ibxRanges", $.ibi.ibxHBox,
 	_onMouseDown:function(e) {
 		var target = $(e.target);
 		if(target.is('.ibx-ranges-range-resizing'))
-			this._resizeInfo = {elRange: target, lastX:e.clientX, lastY:e.clientY};
+			this._resizeInfo = {rangeInfo: target.data('ibxRangeInfo'), lastX:e.clientX, lastY:e.clientY};
 	},
 	_onMouseUp:function(e) {
 		var target = $(e.target);
-		if(target.is('.ibx-ranges-range-resizing')) {
-			delete this._resizeInfo;
-		}
+		delete this._resizeInfo;
 	},
 	_onMouseMove:function(e) {
-		var bounds = e.target.getBoundingClientRect();
 		var target = $(e.target);
 		if(target.is('.ibx-ranges-range'))
-			target.ibxToggleClass('ibx-ranges-range-resizing', e.clientX >= (bounds.right - 5));
+			target.ibxToggleClass('ibx-ranges-range-resizing', e.clientX >= (e.target.getBoundingClientRect().right - 8));
 
 		if(e.buttons === 1 && this._resizeInfo){
-			var dx = e.clientX - this._resizeInfo.lastX;
-			var elRange = this._resizeInfo.elRange;
-			var rangeInfo = elRange.data('ibxRangeInfo');
-			elRange.width(elRange.width() + dx);
-			this._resizeInfo.lastX = e.clientX;
+			var bounds = e.currentTarget.getBoundingClientRect();
+			var rangeInfo = this._resizeInfo.rangeInfo;
+			rangeInfo.pct = (e.clientX - bounds.left)/bounds.width;
+			this.refresh();
 		}
 	},
 	_onClick:function(e){
 		var bounds = this.element[0].getBoundingClientRect();
 		var target = $(e.target);
-		if(!target.is('ibx-ranges-range-risizing'))
-			this.addRange(e.clientX - bounds.left);
+		if(this.options.clickToAdd && !target.is('ibx-ranges-range-risizing'))
+			this.addRange({pct: (e.clientX - bounds.left)/bounds.width, color: `rgb(${Math.round(Math.random() * 255)}, ${Math.round(Math.random() * 255)}, ${Math.round(Math.random() * 255)})`});
 	},
 	_ranges: [],
-	addRange:function(val) {
-		this._ranges.push({pct: val/this.element.width(), color: `rgb(${Math.round(Math.random() * 255)}, ${Math.round(Math.random() * 255)}, ${Math.round(Math.random() * 255)})`});
+	addRange:function(ranges) {
+		ranges = (ranges instanceof Array) ? ranges : [ranges];
+		ranges.forEach(function(range){
+			range = (range instanceof Object) ? range : {pct: range, color: 'transparent'};
+			this._ranges.push(range);
+		}.bind(this));
 		this.refresh();
 	},
 	getRanges: function() {
@@ -81,7 +82,7 @@ $.widget("ibi.ibxRanges", $.ibi.ibxHBox,
 		var width = this.element.width();
 		for(var i = 0; i < ranges.length; ++i){
 			var range = ranges[i];
-			range.start = (i === 0) ? 0 : Math.round(width * ranges[i-1].pct);
+			range.start = (i === 0) ? 0 : Math.round(width * (ranges[i-1].pct));
 			range.end = Math.round(width * range.pct);
 		}
 		return this._ranges
@@ -96,10 +97,9 @@ $.widget("ibi.ibxRanges", $.ibi.ibxHBox,
 		var ranges = this.getRanges();
 		for(var i = 0; i < ranges.length; ++i) {
 			var range= ranges[i];
-			var elRange = $("<div class='ibx-ranges-range'>").data('ibxRangeInfo', range).css({
-				width: range.end - range.start,
-				backgroundColor:range.color
-			}).text(`${range.pct }`);
+			range.elRange = elRange = $("<div class='ibx-ranges-range'>").css({width: range.end - range.start, backgroundColor:range.color})
+				.text(`${parseInt(range.pct * 100)}%`);
+			elRange.data('ibxRangeInfo', range);
 			this.element.append(elRange);
 		}
 	}
