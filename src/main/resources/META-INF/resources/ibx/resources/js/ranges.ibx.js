@@ -97,8 +97,8 @@ $.widget("ibi.ibxRanges", $.ibi.ibxHBox,
 		var ranges = this.getRanges();
 		for(var i = 0; i < ranges.length; ++i) {
 			var range= ranges[i];
-			range.elRange = elRange = $("<div class='ibx-ranges-range'>").css({width: range.end - range.start, backgroundColor:range.color})
-				.text(`${parseInt(range.pct * 100)}%`);
+			range.elRange = elRange = $("<div class='ibx-ranges-range'>")
+				.css(Object.assign({width: range.end - range.start, background:`linear-gradient(${range.color})`}, range.css)).text(`${parseInt(range.pct * 100)}%`);
 			elRange.data('ibxRangeInfo', range);
 			this.element.append(elRange);
 		}
