@@ -1,6 +1,16 @@
 /*Copyright (c) 1996-2021 TIBCO Software Inc. All Rights Reserved.*/
 
+.ibx-range-body-resizing {
+	pointer-events: none;
+}
 
 .ibx-ranges-range {
 	border-right: 1px solid black;
+	box-sizing: border-box;
+}
+
+.ibx-ranges-range-resizing {
+	cursor: ew-resize;
+	pointer-events: all;
+
 }
