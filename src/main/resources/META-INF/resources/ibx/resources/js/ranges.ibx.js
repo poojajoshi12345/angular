@@ -37,7 +37,7 @@ $.widget("ibi.ibxRanges", $.ibi.ibxHBox,
 	_onMouseDown:function(e) {
 		var target = $(e.target);
 		if(target.is('.ibx-ranges-range-resizing'))
-			this._resizeInfo = {elRange: target, initX:e.clientX, initY:e.clientY};
+			this._resizeInfo = {elRange: target, lastX:e.clientX, lastY:e.clientY};
 	},
 	_onMouseUp:function(e) {
 		var target = $(e.target);
@@ -52,12 +52,11 @@ $.widget("ibi.ibxRanges", $.ibi.ibxHBox,
 			target.ibxToggleClass('ibx-ranges-range-resizing', e.clientX >= (bounds.right - 5));
 
 		if(e.buttons === 1 && this._resizeInfo){
-			var dx = e.clientX - this._resizeInfo.initX;
+			var dx = e.clientX - this._resizeInfo.lastX;
 			var elRange = this._resizeInfo.elRange;
 			var rangeInfo = elRange.data('ibxRangeInfo');
 			elRange.width(elRange.width() + dx);
-			this._resizeInfo.initX = e.clientX;
-			console.log(dx)
+			this._resizeInfo.lastX = e.clientX;
 		}
 	},
 	_onClick:function(e){
@@ -97,7 +96,10 @@ $.widget("ibi.ibxRanges", $.ibi.ibxHBox,
 		var ranges = this.getRanges();
 		for(var i = 0; i < ranges.length; ++i) {
 			var range= ranges[i];
-			var elRange = $("<div class='ibx-ranges-range'>").data('ibxRangeInfo', range).css({width: range.end - range.start, backgroundColor:range.color}).text(`${range.pct }`);
+			var elRange = $("<div class='ibx-ranges-range'>").data('ibxRangeInfo', range).css({
+				width: range.end - range.start,
+				backgroundColor:range.color
+			}).text(`${range.pct }`);
 			this.element.append(elRange);
 		}
 	}
