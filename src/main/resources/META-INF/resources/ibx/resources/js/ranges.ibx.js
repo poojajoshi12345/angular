@@ -60,7 +60,7 @@ $.widget("ibi.ibxRanges", $.ibi.ibxHBox,
 		var bounds = this.element[0].getBoundingClientRect();
 		var target = $(e.target);
 		if(this.options.clickToAdd && !target.is('ibx-ranges-range-risizing'))
-			this.addRange({pct: (e.clientX - bounds.left)/bounds.width, color: `rgb(${Math.round(Math.random() * 255)}, ${Math.round(Math.random() * 255)}, ${Math.round(Math.random() * 255)})`});
+			this.addRange({pct: (e.clientX - bounds.left)/bounds.width, color: "rgb(" + Math.round(Math.random() * 255) + "," + Math.round(Math.random() * 255) + "," + Math.round(Math.random() * 255) + ")"});
 	},
 	_ranges: [],
 	addRange:function(ranges) {
@@ -98,7 +98,7 @@ $.widget("ibi.ibxRanges", $.ibi.ibxHBox,
 		for(var i = 0; i < ranges.length; ++i) {
 			var range= ranges[i];
 			range.elRange = elRange = $("<div class='ibx-ranges-range'>")
-				.css(Object.assign({width: range.end - range.start, background:`linear-gradient(${range.color})`}, range.css)).text(`${parseInt(range.pct * 100)}%`);
+				.css(Object.assign({width: range.end - range.start}, range.css)).text(parseInt(range.pct * 100) + "%");
 			elRange.data('ibxRangeInfo', range);
 			this.element.append(elRange);
 		}

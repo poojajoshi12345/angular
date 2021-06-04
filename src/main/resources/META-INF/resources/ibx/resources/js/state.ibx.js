@@ -57,8 +57,8 @@ function ibxStateManager()
 
 		//tell subscribers state has changed.
 		var subscribers = this._subscriberMap[stateName];
-		for(var subscriber of subscribers){
-			$(subscriber).dispatchEvent('ibx_statechange', stateCopy, false, false);
+		for(var i = 0; i < subscribers.length; ++i){
+			$(subscribers[i]).dispatchEvent('ibx_statechange', stateCopy, false, false);
 		}	
 
 		return theState;
