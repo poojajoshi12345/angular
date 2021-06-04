@@ -47,7 +47,6 @@ _pwi._postMessage = function(type, isRequest, data){
 		"isRequest":isRequest,
 		"data":data
 	};
-	log(`${this._id} - SEND - ${JSON.stringify(pLoad)}`)
 	this._msgWnd.postMessage(pLoad, '*');
 };
 
@@ -56,7 +55,6 @@ _pwi._onMessage = function(e){
 	var cbs = this._cbObject;
 	var pLoad = e.data;
 
-	log(`${this._id} - RECEIVE - ${JSON.stringify(pLoad)}`)
 	this[pLoad.type](pLoad);
 };
 

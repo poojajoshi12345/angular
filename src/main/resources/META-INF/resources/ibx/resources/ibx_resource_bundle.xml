@@ -288,6 +288,7 @@ $Revision: 1.123 $:-->
 		<style-file src="./css/diagram.ibx.css"/>
 		<style-file src="./css/navmap.ibx.css"/>
 		<style-file src="./css/pagination.ibx.css"/>
+		<style-file src="./css/range.ibx.css"/>
 
 		<!--inline styles-->
 		<style-sheet name="ibx_inline_bundle_styles">
@@ -352,6 +353,7 @@ $Revision: 1.123 $:-->
 		<script-file src="./js/diagram.ibx.js"/>
 		<script-file src="./js/navmap.ibx.js"/>
 		<script-file src="./js/pagination.ibx.js"/>
+		<script-file src="./js/ranges.ibx.js"/>
 
 		<!--inline scripts-->
 		<script-block name="ibx_inline_bundle_scripts">

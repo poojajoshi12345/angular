@@ -345,7 +345,7 @@ _p.loadBundle = function(xResDoc)
 			{
 				var src = styleBlock.attr("src") || styleBlock.attr("osrc") || "inline";
 				content = this.preProcessResource(content);//precompile the content...string substitutions, etc.
-				var styleNode = $(`<style type='text/css'>`).attr("data-ibx-src", src).text(content);
+				var styleNode = $("<style type='text/css'>").attr("data-ibx-src", src).text(content);
 				head.append(styleNode);
 				$(window).dispatchEvent("ibx_ibxresmgr", {"hint":"cssinlineloaded", "loadDepth":bundle.loadDepth, "resMgr":this, "bundle":bundle[0]});
 				
