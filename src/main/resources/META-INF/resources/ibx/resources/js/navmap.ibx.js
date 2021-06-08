@@ -93,7 +93,7 @@ $.widget("ibi.ibxNavMap", $.ibi.ibxMenu,
 		var modal = $(options.navRoot).closest(".pop-modal"); //modal's can't navigate to parent navMap.
 		if(!modal.length && navParentInfo.map)
 			this._box.prepend(this._navToParentItem, this._sep);
-		else
+		else567
 		{
 			this._navToParentItem.detach();
 			this._sep.detach();
