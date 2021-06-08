@@ -87,7 +87,7 @@ $.widget("ibi.ibxNavMap", $.ibi.ibxMenu,
 		while(frame && !navParentInfo.map) {
 			navParentInfo.doc = frame.ownerDocument;
 			navParentInfo.map = $(frame, navParentInfo.doc).parents("[data-ibx-nav-map]").first().attr("data-ibx-nav-map");
-			frame = frame.contentWindow.frameElement;
+			frame = (frame !== frame.contentWindow.frameElement) ? frame.contentWindow.frameElement : null;
 		}
 
 		var modal = $(options.navRoot).closest(".pop-modal"); //modal's can't navigate to parent navMap.
