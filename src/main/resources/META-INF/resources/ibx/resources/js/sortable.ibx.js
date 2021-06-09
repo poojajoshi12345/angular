@@ -21,15 +21,23 @@ $.widget("ibi.ibxSortable", $.Widget,
 		var curPos = this.element.css("position");
 		this.element.ibxAddClass(this._widgetClass).ibxAutoScroll({"direction":options.direction});
 		var el = this.element[0];
-		el.addEventListener("mousedown", this._onDragEvent.bind(this), true);
-		el.addEventListener("mouseup", this._onDragEvent.bind(this), true);
-		el.addEventListener("mousemove", this._onDragEvent.bind(this), true);
-		el.addEventListener("mouseover", this._onDragEvent.bind(this), true);
-		el.addEventListener("mouseout", this._onDragEvent.bind(this), true);
-		el.addEventListener("scroll", this._onDragEvent.bind(this), true);
+		this._onDragEventBound = this._onDragEvent.bind(this);
+		el.addEventListener("mousedown", this._onDragEventBound, true);
+		el.addEventListener("mouseup", this._onDragEventBound, true);
+		el.addEventListener("mousemove", this._onDragEventBound, true);
+		el.addEventListener("mouseover", this._onDragEventBound, true);
+		el.addEventListener("mouseout", this._onDragEventBound, true);
+		el.addEventListener("scroll", this._onDragEventBound, true);
 	},
 	_destroy:function()
 	{
+		var el = this.element[0];
+		el.removeEventListener("mousedown", this._onDragEventBound, true);
+		el.removeEventListener("mouseup", this._onDragEventBound, true);
+		el.removeEventListener("mousemove", this._onDragEventBound, true);
+		el.removeEventListener("mouseover", this._onDragEventBound, true);
+		el.removeEventListener("mouseout", this._onDragEventBound, true);
+		el.removeEventListener("scroll", this._onDragEventBound, true);
 		this._super();
 		this.element.ibxRemoveClass(this._widgetClass);
 	},
