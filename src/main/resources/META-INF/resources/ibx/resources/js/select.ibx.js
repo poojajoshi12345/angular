@@ -282,7 +282,7 @@ $.widget("ibi.ibxSelect", $.ibi.ibxSelectBase,
 	},
 	_initControl: function ()
 	{
-		this._control.ibxWidget("add", this.element.children(".ibx-select-item, .ibx-select-group, .ibx-select-separator"));
+		this._control.ibxWidget("add", this.element.children(".ibx-select-item, .ibx-select-group, .ibx-select-separator, .ibx-select-separator-label"));
 	},
 	_setValue: function (value, bFormat, extra)
 	{
@@ -419,12 +419,12 @@ $.widget("ibi.ibxSelectItemList", $.ibi.ibxVBox,
 	_init: function ()
 	{
 		this._super();
-		this.add(this.element.children(".ibx-select-item, .ibx-select-group, .ibx-select-separator"));
+		this.add(this.element.children(".ibx-select-item, .ibx-select-group, .ibx-select-separator, .ibx-select-separator-label"));
 		this.element.on("click", this._onSelect.bind(this));
 	},
 	add: function (el, sibling, before, refresh)
 	{
-		el = $(el).filter(".ibx-select-group, .ibx-select-item, .ibx-select-separator");
+		el = $(el).filter(".ibx-select-group, .ibx-select-item, .ibx-select-separator, .ibx-select-separator-label");
 		this._super(el, sibling, before, false);
 
 		var selChildren = [];
@@ -443,7 +443,7 @@ $.widget("ibi.ibxSelectItemList", $.ibi.ibxVBox,
 						selChildren.push($(el));
 				}.bind(this));
 			}
-			else if (el.hasClass("ibx-select-separator"))
+			else if (el.is(".ibx-select-separator, .ibx-select-separator-label"))
 			{
 				;// do nothing for separators
 			}
@@ -923,6 +923,7 @@ $.widget("ibi.ibxSelectSeparator", $.ibi.ibxWidget,
 	},
 	_widgetClass: "ibx-select-separator",
 });
+$.widget("ibi.ibxSelectSeparatorLabel", $.ibi.ibxMenuSeparatorLabel, {_widgetClass:'ibx-select-separator-label'});
 
 $.widget("ibi.ibxSelectGroup", $.ibi.ibxLabel,
 {
