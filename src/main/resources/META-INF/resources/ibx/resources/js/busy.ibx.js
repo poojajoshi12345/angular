@@ -133,6 +133,8 @@ function ibxBusy(config)
 		{
 			document.head.removeChild(document.querySelector(".ibx-busy-styles"));
 			this._element.parentElement.classList.remove("ibx-busy-parent");
+			this._element.parentElement.style.position = this._element.parentElement.dataset.ibxBusySavedPos;
+			delete this._element.parentElement.dataset.ibxBusySavedPos;
 			this._element.parentElement.removeChild(this._element);
 		}
 
@@ -146,6 +148,11 @@ function ibxBusy(config)
 			document.head.appendChild(this._css);
 			elParent.appendChild(this._element);
 			elParent.classList.add("ibx-busy-parent");
+			var parentPos = window.getComputedStyle(elParent).position;
+			if(parentPos !== "absolute" && parentPos !== "relative") {
+				elParent.style.position = "relative";
+				elParent.dataset.ibxBusySavedPos = parentPos;
+			}
 		}
 
 		return this._element;
