@@ -151,7 +151,7 @@ function ibx()
 						
 						ibx._loaded = true;
 						ibx._isLoading = !ibx._loaded;
-						ibx._loadPromise.then(function ibx_loadPromiseDone()
+						ibx._loadFuns.unshift(function ibx_loadPromiseDone()
 						{
 							ibx._setAccessibility(ibx.isAccessible);//turn on/off default accessibility
 
