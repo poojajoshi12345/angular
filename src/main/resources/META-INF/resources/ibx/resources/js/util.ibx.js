@@ -1123,6 +1123,11 @@ WebApi.statics =
 		{
 			this.deferred.fail(fn);
 			return this;//support chaining.
+		},
+		always:function(fn)
+		{
+			this.deferred.always(fn);
+			return this;//support chaining.
 		}
 	}
 };
