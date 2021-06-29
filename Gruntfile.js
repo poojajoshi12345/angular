@@ -280,7 +280,7 @@ module.exports = function(grunt) {
 						strict_mode_input: false,
 						warningLevel: 'VERBOSE',
 						create_source_map: jsData.minfile + '.map',
-						output_wrapper: banner + '\n%output%\n//# sourceMappingURL=' + getFileName(jsData.minfile) + '.map'
+						output_wrapper: banner + '\n%output%'
 					}
 			};
 			jsTasks[jsData.minfile] = task;
