@@ -25,6 +25,8 @@
     var icons;
     if (!supportsProperty('fontFeatureSettings')) {
         icons = {
+            'workspaces': '&#xebe6;',
+            'application-directory-alt': '&#xebe7;',
             'unpublished': '&#xebe5;',
             'binary-classification': '&#xebe2;',
             'cluster': '&#xebe3;',
