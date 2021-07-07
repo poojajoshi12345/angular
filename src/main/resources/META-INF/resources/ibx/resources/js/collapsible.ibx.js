@@ -23,6 +23,7 @@ $.widget("ibi.ibxCollapsible", $.Widget,
 			"margin-bottom":this.element.css("margin-bottom"),
 		}
 		this.widgetEventPrefix = "ibx_";
+		this.element.data('ibiIbxWidget', this);
 		this.element.ibxAddClass("ibx-collapsible");
 		this.element.on("transitionend", this._onTransitionEnd.bind(this))
 		this.element.on("click", this._onMouseEvent.bind(this));
