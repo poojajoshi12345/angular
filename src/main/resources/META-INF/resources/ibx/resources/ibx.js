@@ -250,9 +250,9 @@ ibx._bootstrap = function(isEmbedded)
 
 		//[IBX-122] don't load jQuery/jQueryUI if already loaded
 		if(window.jQuery)
-			scripts[1] = "";
+			scripts[3] = "";
 		if(window.jQuery && window.jQuery.ui)
-			scripts[2] = "";
+			scripts[4] = "";
 
 		document.open();
 		document.write(scripts.join(""));
