@@ -34,12 +34,17 @@ MKLINK /D %wfpath%\caster %CD%\..\tools\src\main\resources\META-INF\resources\ca
 rd /S /Q %wfpath%\component
 MKLINK /D %wfpath%\component %CD%\..\tools\src\main\resources\META-INF\resources\component
 
-
 REM REM make the new 3rd party resources link
 rename %wfpath%\WEB-INF\lib\webfocus-webjars-3rdparty-resources-*.jar webfocus-webjars-3rdparty-resources-*.jar_
 git clone http://wfbucket.ibi.com:7990/scm/wp/webfocus-webjars-3rdparty-resources.git ..\3rdparty_resources
 rd /S /Q %wfpath%\3rdparty_resources
 MKLINK /D %wfpath%\3rdparty_resources %CD%\..\3rdparty_resources\src\main\resources\META-INF\resources\3rdparty_resources
+
+REM REM make the new Bindows
+@REM rename %wfpath%\WEB-INF\lib\webfocus-webjars-bindows-*.jar webfocus-webjars-bindows-*.jar_
+@REM git clone https://wfbucket.ibi.com:8443/scm/wp/webfocus-webjars-bindows.git ..\bindows
+@REM rd /S /Q %wfpath%\bindows
+@REM MKLINK /D %wfpath%\bindows %CD%\..\bindows\src\main\resources\META-INF\resources\bindows
 
 REM make the new intl properties/strings resources link
 rename %wfpath%\WEB-INF\lib\webfocus-intl-*.jar webfocus-intl-*.jar_
