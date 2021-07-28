@@ -46,6 +46,12 @@ REM REM make the new Bindows
 @REM rd /S /Q %wfpath%\bindows
 @REM MKLINK /D %wfpath%\bindows %CD%\..\bindows\src\main\resources\META-INF\resources\bindows
 
+REM REM make the new react link
+rename %wfpath%\WEB-INF\lib\webfocus-react-components-*.jar webfocus-react-components-*.jar_
+git clonehttps://wfbucket.ibi.com:8443/scm/wp/webfocus-react-projects.git ..\react
+rd /S /Q %wfpath%\react
+MKLINK /D %wfpath%\react %CD%\..\react\webfocus-react-components\dist\react
+
 REM make the new intl properties/strings resources link
 rename %wfpath%\WEB-INF\lib\webfocus-intl-*.jar webfocus-intl-*.jar_
 git clone http://wfbucket.ibi.com:7990/scm/wp/webfocus-intl.git ..\intl
