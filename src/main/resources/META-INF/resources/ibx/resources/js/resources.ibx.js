@@ -156,7 +156,6 @@ _p.loadExternalResFile = function(elFile, bundle)
 		}
 
 		var fileType = elFile.prop("tagName");
-		var isInline = elFile.attr("inline") == "true";
 
 		if(fileType == "style-file")
 			elFile.attr("inline", "false");
@@ -271,6 +270,9 @@ _p.getResPath = function(src, loadContext)
 	else
 	if(loadContext == "ibx")
 		loadContext = ibx.getPath();
+	else
+	if(loadContext == 'none')
+		loadContext = '';
 
 	//give interested parties the ability to modify the resource uri/loadContext info
 	evt = $(window).dispatchEvent("ibx_ibxresmgr_resolveuri", {"resourceMgr":this, "uri":src, "loadCtx":loadContext}, true, false);
