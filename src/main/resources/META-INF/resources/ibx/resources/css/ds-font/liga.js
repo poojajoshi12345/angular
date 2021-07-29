@@ -25,6 +25,8 @@
     var icons;
     if (!supportsProperty('fontFeatureSettings')) {
         icons = {
+            'choropleth-alternate': '&#xebe8;',
+            'proportional': '&#xebe9;',
             'workspaces': '&#xebe6;',
             'application-directory-alt': '&#xebe7;',
             'unpublished': '&#xebe5;',
