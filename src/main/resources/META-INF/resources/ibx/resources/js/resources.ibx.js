@@ -11,6 +11,7 @@ function ibxResourceManager(ctxPath)
 	
 	this.loadedBundles = {};
 	this.loadedFiles = {};
+	this._elPath = document.createElement('script');
 	this.language = document.documentElement.getAttribute("lang") || "ibx_default";//if no lang attribute default to ibx_default bundle
 	this.strings = {"ibx_default":{}};
 
@@ -20,7 +21,7 @@ var _p = jsDeriveClass(ibxResourceManager, Object);
 
 _p.loadedBundles = null;
 _p.loadedFiles = null;
-
+_p._elPath = null;
 _p._styleSheet = null;
 _p._resBundle = null;
 _p.getResBundle = function(){return this._resBundle;};
@@ -124,7 +125,7 @@ _p._onBundleFileLoaded = function(xDoc, status, xhr)
 	xDoc.resLoaded = xhr.resLoaded;
 	xDoc.loadDepth = xhr.loadDepth;
 	xDoc.src = xhr.src;
-	xDoc.path = xDoc.src.substring(0, xDoc.src.lastIndexOf("/") + 1).replace(/\.[\/\\]/g, "");
+	xDoc.path = xDoc.src.substring(0, xDoc.src.lastIndexOf("/") + 1);
 	this.loadBundle(xDoc);
 };
 _p._onBundleFileProgress = function()
@@ -282,7 +283,8 @@ _p.getResPath = function(src, loadContext)
 	//if the src is a root not a relative uri, then don't use the load context.
 	if(!(/^[/\\]/).test(src))
 		src = loadContext + src;
-	return src;
+	this._elPath.src = src; //let the browser canonicalize the path so we can find duplicates.
+	return this._elPath.src;
 };
 
 //load the actual resource bundle here...can be called directly, or from an xhr load (promise/deferred fullfilled/done)
