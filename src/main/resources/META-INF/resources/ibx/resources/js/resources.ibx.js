@@ -30,6 +30,14 @@ _p._contextPath = "";
 _p.setContextPath = function(ctxPath){this._contextPath = ctxPath;};
 _p.getContextPath = function(){return this._contextPath;};
 
+_p.getModuleInfo = function(path)
+{
+	for(var key in this.loadedFiles) {
+		if(key.search(path) != -1)
+			return this.loadedFiles[key];
+	}
+}
+
 _p.destroyed = false;
 _p.destroy = function()
 {
@@ -173,7 +181,7 @@ _p.loadExternalResFile = function(elFile, bundle)
 		if(ibx.forceInlineResLoading || (elFile.attr("inline") == "true"))
 		{
 			$(window).dispatchEvent("ibx_ibxresmgr", {"hint":"fileloading", "loadDepth":bundle.loadDepth, "resMgr":this, "fileType":fileType, "fileNode":elFile[0], "src":src});
-			$.get({async:false, url:src, dataType:"text", error:this._resFileRetrievalError.bind(this, elFile, src, fileType)}).done(function(elFile, src, fileType, content, status, xhr)
+			$.get({async:false, url:src, dataType:"text", error:this._resFileRetrievalError.bind(this, bundle, elFile, src, fileType)}).done(function(elFile, src, fileType, content, status, xhr)
 			{
 				content = this.preProcessResource(content);//precompile the content...string substitutions, etc.
 				if(content)
@@ -247,7 +255,7 @@ _p.loadExternalResFile = function(elFile, bundle)
 
 
 			$("head")[0].appendChild(el);
-			this.loadedFiles[src] = true;
+			this.loadedFiles[src] = {srcPath: src.substr(0, src.lastIndexOf('/') + 1), bundlePath: bundle[0].parentNode.path};
 			$(window).dispatchEvent("ibx_ibxresmgr", {"hint":"fileloading", "loadDepth":bundle.loadDepth, "resMgr":this, "fileType":fileType, "fileNode":elFile[0], "src":src});
 		}
 	}.bind(this, bundle));
@@ -255,7 +263,7 @@ _p.loadExternalResFile = function(elFile, bundle)
 };
 
 //if something bad happens while retrieving a source file in the bundle.
-_p._resFileRetrievalError = function(elFile, src, fileType, xhr, status, msg)
+_p._resFileRetrievalError = function(bundle, elFile, src, fileType, xhr, status, msg)
 {
 	$(window).dispatchEvent("ibx_ibxresmgr", {"hint":"fileloaderror", "loadDepth":bundle.loadDepth, "resMgr":this, "fileType":fileType, "fileNode":elFile[0], "bundle":null, "src":src, "xhr":xhr, "status":status, "msg":msg});
 };
@@ -281,7 +289,7 @@ _p.getResPath = function(src, loadContext)
 	loadContext = evt.data.loadCtx;
 
 	//if the src is a root not a relative uri, then don't use the load context.
-	if(!(/^[/\\]/).test(src))
+	if(!(/^[http|/|\\]/).test(src))
 		src = loadContext + src;
 	this._elPath.src = src; //let the browser canonicalize the path so we can find duplicates.
 	return this._elPath.src;
