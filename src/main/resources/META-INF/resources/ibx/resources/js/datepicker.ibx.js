@@ -184,6 +184,8 @@ $.widget("ibi.ibxDatePicker", $.ibi.ibxVBox,
 			
 			//Setup the time/zones picker
 			this._timePicker.ibxTimePicker('option', this.options.timeOptions).ibxWidget('time', this.options.time);
+			this._timeZoneLabel.css('display', this.options.showTimeZone ? '' : 'none');
+			this._timeZonePicker.css('display', this.options.showTimeZone ? '' : 'none');
 			this._timeZonePicker.ibxWidget('removeControlItem');
 			this.options.timeZones = this.options.timeZones || [{title:'GMT', value:0}]
 			for(var i = 0; i < this.options.timeZones.length; ++i){
