@@ -175,7 +175,7 @@ $.widget("ibi.ibxDatePicker", $.ibi.ibxVBox,
 			var minute = (time.minute < 10 ? "0" : "") + time.minute;
 			var second = (time.second < 10 ? "0" : "") + time.second
 			var milliSecond = (time.milliSecond < 10 ? "00" : (time.milliSecond < 100 ? "0" : "")) + time.milliSecond;
-			return "; " + time.hour + ":" + minute + ":" + second + (this.options.timeOptions.showMillisecond ? ":" + milliSecond : "") + time.meridian;
+			return "; " + time.hour + ":" + minute + ":" + second + (this.options.timeOptions.showMillisecond ? "." + milliSecond : "") + time.meridian;
 		},
 		_refresh: function () {
 			this.element.ibxRemoveClass('popup simple inline');
