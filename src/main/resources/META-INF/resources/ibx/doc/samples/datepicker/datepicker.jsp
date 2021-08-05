@@ -56,6 +56,21 @@
 				});
 
 				$(".ibx-datepicker").ibxWidget("option", {"changeYear":true, "changeMonth":true});
+
+				$("#date-time").on("ibx_change", (_, data) => $("#date-time-text").ibxWidget("option", "text", data.dateTime.toISOString()));
+				$("#date-time-show-time").on("ibx_change", (e)=> $("#date-time").ibxWidget("option", "showTime", $(e.target).ibxWidget("checked")));
+				$("#date-time-show-time-mil").on("ibx_change", (e)=> $("#date-time").ibxWidget("option", "timeOptions", {showMillisecond: $(e.target).ibxWidget("checked")}));
+				$("#date-time-show-time-zone").on("ibx_change", (e)=> $("#date-time").ibxWidget("option", "showTimeZone", $(e.target).ibxWidget("checked")));
+				$("#date-time-show-time-text").on("ibx_change", (e)=> $("#date-time").ibxWidget("option", "showTimeText", $(e.target).ibxWidget("checked")));
+
+				$("#date-range-time").on("ibx_change", (_, data) => {
+					$("#date-range-time-text").ibxWidget("option", "text", data.dateTimeFrom.toISOString());
+					$("#date-range-time-text2").ibxWidget("option", "text", data.dateTimeTo.toISOString());
+				});
+				$("#date-range-time-show-time").on("ibx_change", (e)=> $("#date-range-time").ibxWidget("option", "showTime", $(e.target).ibxWidget("checked")));
+				$("#date-range-time-show-time-mil").on("ibx_change", (e)=> $("#date-range-time").ibxWidget("option", "timeOptions", {showMillisecond: $(e.target).ibxWidget("checked")}));
+				$("#date-range-time-show-time-zone").on("ibx_change", (e)=> $("#date-range-time").ibxWidget("option", "showTimeZone", $(e.target).ibxWidget("checked")));
+				$("#date-range-time-show-time-text").on("ibx_change", (e)=> $("#date-range-time").ibxWidget("option", "showTimeText", $(e.target).ibxWidget("checked")));
 			};
 		</script>
 
@@ -80,6 +95,7 @@
 		{
 			border: 1px solid black;
 			border-radius: 3px;
+			padding: 4px;
 		}
 
 		.label
@@ -94,6 +110,36 @@
 			margin-top: 5px;
 		}
 
+		.date-time-options,
+		.date-range-time-options{
+			margin: 8px;
+			align-self: stretch;
+		}
+
+		.date-time-options > *,
+		.date-range-time-options > *{
+			padding-bottom: 4px;
+		}
+
+		#date-time-text,
+		.date-time-range-time-wrapper
+		{
+			align-self: stretch;
+		}
+
+		#date-range-time-text,
+		#date-range-time-text2{
+			flex: 1 1 auto;
+		}
+
+		/* .date-time-innerbox{
+			min-width: 400px;
+		}
+
+		.date-range-innerbox{
+			min-width: 700px;
+		} */
+
 		</style>
 	</head>
 	<body class="ibx-root">
@@ -107,6 +153,17 @@
 			</div>
 			<div class="control" data-ibx-type="ibxDatePickerSimple"></div>
 			<div id="mydate" class="test-picker control" data-ibx-type="ibxDatePicker" data-ibxp-adjust-for-month-year="true"></div>
+			<div class="innerbox date-time-innerbox" data-ibx-type="ibxVBox" data-ibxp-align="center">
+				<div id="date-time-label" class="label" data-ibx-type="ibxLabel">Date Picker Simple with time/time zone options.</div>
+				<div class="date-time-options" data-ibx-type="ibxVBox">
+					<div id="date-time-text" data-ibx-type="ibxTextField"></div>
+					<div id="date-time-show-time" data-ibx-type="ibxCheckBoxSimple">Show time</div>
+					<div id="date-time-show-time-mil" data-ibx-type="ibxCheckBoxSimple">Show milliseconds</div>
+					<div id="date-time-show-time-text" data-ibx-type="ibxCheckBoxSimple">Add time to label</div>
+					<div id="date-time-show-time-zone" data-ibx-type="ibxCheckBoxSimple">Show time zone</div>
+				</div>
+				<div id="date-time" class="inline" data-ibx-type="ibxDatePickerSimple"></div>
+			</div>
 		</div>
 
 		<div class="box" data-ibx-type="ibxHBox">
@@ -116,6 +173,20 @@
 			</div>
 			<div class="control" data-ibx-type="ibxDateRangeSimple" data-ibxp-date-from="May 5, 2017" data-ibxp-date-to="May 20, 2017"></div>
 			<div class="control" data-ibx-type="ibxDateRange"></div>
+			<div class="innerbox date-range-innerbox" data-ibx-type="ibxVBox" data-ibxp-align="center">
+				<div id="date-range-time-label" class="label" data-ibx-type="ibxLabel">Date Range Simple with time/time zone options.</div>
+				<div class="date-range-time-options" data-ibx-type="ibxVBox">
+					<div class="date-time-range-time-wrapper" data-ibx-type="ibxHBox" data-ibxp-justify="stretch">
+						<div id="date-range-time-text" data-ibx-type="ibxTextField"></div>
+						<div id="date-range-time-text2" data-ibx-type="ibxTextField"></div>
+					</div>
+					<div id="date-range-time-show-time" data-ibx-type="ibxCheckBoxSimple">Show time</div>
+					<div id="date-range-time-show-time-mil" data-ibx-type="ibxCheckBoxSimple">Show milliseconds</div>
+					<div id="date-range-time-show-time-text" data-ibx-type="ibxCheckBoxSimple">Add time to label</div>
+					<div id="date-range-time-show-time-zone" data-ibx-type="ibxCheckBoxSimple">Show time zone</div>
+				</div>
+				<div id="date-range-time" class="control" data-ibx-type="ibxDateRangeSimple" data-ibxp-date-from="May 5, 2017" data-ibxp-date-to="May 20, 2017" data-ibxp-time-from="1628136000000" data-ibxp-time-to="1628222399999"></div>
+			</div>
 		</div>
 	</body>
 </html>

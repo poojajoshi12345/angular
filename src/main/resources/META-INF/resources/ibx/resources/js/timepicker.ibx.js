@@ -13,7 +13,6 @@ $.widget("ibi.ibxTimePicker", $.ibi.ibxHBox, {
 		"minute": 0,
 		"second": 0,
 		"milliSecond": 0,
-		"meridian": "AM",
 		"meridianCode": 0, // 0 = am, 1 = pm
 
 		"circularStep": true, //ability to cycle through values in spinners
@@ -301,8 +300,9 @@ $.widget("ibi.ibxTimePicker", $.ibi.ibxHBox, {
 
 		//Meridian Change
 		else if (ctrl.is(".ibx-timepicker-spinner-meridian")) {
-			changed = this.options.meridianCode != this._meridianSpinner.ibxWidget("option", "value");
-			this.option('meridianCode', this._meridianSpinner.ibxWidget('option', 'value'));
+			var newMeridianCode = this._meridianSpinner.ibxWidget("option", "value");
+			changed = this.options.meridianCode != newMeridianCode;
+			this.option('meridianCode', newMeridianCode);
 		}
 
 		//Dispatch Event
@@ -354,7 +354,7 @@ $.widget("ibi.ibxTimePicker", $.ibi.ibxHBox, {
 				"minute": this.options.minute,
 				"second": this.options.second,
 				"milliSecond": this.options.milliSecond,
-				"meridian": this.options.meridian,
+				"meridian": this.options.meridianCode === $.ibi.ibxTimePicker.AM ? "AM" : "PM",
 				"meridianCode":this.options.meridianCode
 			};
 			ret.date = new Date(0, 0, 0, ret.hour24, ret.minute, ret.second, ret.milliSecond);
