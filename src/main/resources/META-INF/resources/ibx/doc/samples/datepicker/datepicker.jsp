@@ -146,7 +146,7 @@
 
 		<div style="font-weight: bold; font-size: 1.5em;" class="control" data-ibx-type="ibxLabel">Under construction: still working on styling and options.</div>
 
-		<div class="box" data-ibx-type="ibxHBox">
+		<!-- <div class="box" data-ibx-type="ibxHBox">
 			<div class="innerbox" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
 				<div id="mypickerlabel" class="label" data-ibx-type="ibxLabel"></div>
 				<div id="myinlinepicker" class="inline" data-ibx-type="ibxDatePickerInline" data-ibxp-date="February 5, 2017" data-ibxp-adjust-for-month-year="true"></div>
@@ -164,14 +164,14 @@
 				</div>
 				<div id="date-time" class="inline" data-ibx-type="ibxDatePickerSimple"></div>
 			</div>
-		</div>
+		</div> -->
 
 		<div class="box" data-ibx-type="ibxHBox">
 			<div class="innerbox" data-ibx-type="ibxVBox" data-ibxp-align="stretch">
 				<div id="myrangelabel" class="label" data-ibx-type="ibxLabel"></div>
 				<div id="myinlinerange" class="inline" data-ibx-type="ibxDateRangeInline"></div>
 			</div>
-			<div class="control" data-ibx-type="ibxDateRangeSimple" data-ibxp-date-from="May 5, 2017" data-ibxp-date-to="May 20, 2017"></div>
+			<!-- <div class="control" data-ibx-type="ibxDateRangeSimple" data-ibxp-date-from="May 5, 2017" data-ibxp-date-to="May 20, 2017"></div>
 			<div class="control" data-ibx-type="ibxDateRange"></div>
 			<div class="innerbox date-range-innerbox" data-ibx-type="ibxVBox" data-ibxp-align="center">
 				<div id="date-range-time-label" class="label" data-ibx-type="ibxLabel">Date Range Simple with time/time zone options.</div>
@@ -186,7 +186,7 @@
 					<div id="date-range-time-show-time-zone" data-ibx-type="ibxCheckBoxSimple">Show time zone</div>
 				</div>
 				<div id="date-range-time" class="control" data-ibx-type="ibxDateRangeSimple" data-ibxp-date-from="May 5, 2017" data-ibxp-date-to="May 20, 2017" data-ibxp-time-from="1628136000000" data-ibxp-time-to="1628222399999"></div>
-			</div>
+			</div> -->
 		</div>
 	</body>
 </html>

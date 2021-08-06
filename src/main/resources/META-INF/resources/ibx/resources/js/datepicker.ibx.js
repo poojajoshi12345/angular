@@ -193,6 +193,8 @@ $.widget("ibi.ibxDatePicker", $.ibi.ibxVBox,
 			
 			//Setup the time/zones picker
 			this._timePicker.ibxWidget('option', this.options.timeOptions);
+			if (this.options.time)
+				this._timePicker.ibxWidget('time', new Date(this.options.time));
 			this._timeZoneWrapper.css('display', this.options.showTimeZone ? '' : 'none');
 			this._timeZonePicker.ibxWidget('removeControlItem');
 			this.options.timeZones = this.options.timeZones || [{title:'GMT', value:0}]
@@ -451,8 +453,10 @@ $.widget("ibi.ibxDateRange", $.ibi.ibxDatePicker,
 				else
 					this._input2.ibxWidget('option', 'text', '');
 			}
-			this._timePicker.ibxWidget('option', this.options.timeOptions);
-			this._timePicker2.ibxWidget('option', this.options.timeOptions);
+			if (this.options.timeFrom)
+				this._timePicker.ibxWidget('option', this.options.timeOptions).ibxWidget('time', new Date(this.options.timeFrom));
+			if (this.options.timeTo)
+				this._timePicker2.ibxWidget('option', this.options.timeOptions).ibxWidget('time', new Date(this.options.timeTo));
 			window.setTimeout(function () { this._highlightRange(); }.bind(this), 10);
 		}
 	});
