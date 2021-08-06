@@ -48,7 +48,7 @@ REM REM make the new Bindows
 
 REM REM make the new react link
 rename %wfpath%\WEB-INF\lib\webfocus-react-components-*.jar webfocus-react-components-*.jar_
-git clonehttps://wfbucket.ibi.com:8443/scm/wp/webfocus-react-projects.git ..\react
+git clone https://wfbucket.ibi.com:8443/scm/wp/webfocus-react-projects.git ..\react
 rd /S /Q %wfpath%\react
 MKLINK /D %wfpath%\react %CD%\..\react\webfocus-react-components\dist\react
 
