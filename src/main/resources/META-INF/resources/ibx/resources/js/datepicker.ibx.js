@@ -79,7 +79,7 @@ $.widget("ibi.ibxDatePicker", $.ibi.ibxVBox,
 			//setup the timepicker.
 			this._onTimePickerChangeBound = this._onTimePickerChange.bind(this);
 			this.options.timeOptions = $.extend({}, { showColon: false, showMillisecond: false }, this.options.timeOptions)
-			this._timePicker = $("<div class='ibx-datepicker-timepicker'>").ibxTimePicker(this.options.timeOptions).on('ibx_change', this._onTimePickerChangeBound);
+			this._timePicker = $("<div class='ibx-datepicker-timepicker'>").ibxTimePicker(this.options.timeOptions);
 			this._timeWrapper = $("<div class='ibx-datepicker-time-wrapper'>").ibxHBox().append(this._timePicker);
 			this._timeZoneLabel = $("<div class='ibx-timezone-label'>").ibxLabel({ text: ibx.resourceMgr.getString('IBX_DP_TIME_ZONE_SELECT') });
 			this._timeZonePicker = $("<div tabindex='0' class='ibx-timezonepicker'>").ibxSelect({readonly:true}).on('ibx_change', this._onTimePickerChangeBound);
@@ -91,6 +91,8 @@ $.widget("ibi.ibxDatePicker", $.ibi.ibxVBox,
 		},
 		_init: function () {
 			this._super();
+			this._timePicker.ibxWidget('time', new Date(this.options.time || new Date()));
+			this._timePicker.on('ibx_change', this._onTimePickerChangeBound);
 		},
 		_destroy: function () {
 			this._super();
@@ -190,7 +192,9 @@ $.widget("ibi.ibxDatePicker", $.ibi.ibxVBox,
 			this._datePicker.datepicker('setDate', dateObj);
 			
 			//Setup the time/zones picker
-			this._timePicker.ibxWidget('option', this.options.timeOptions).ibxWidget('time', new Date(this.options.time || new Date()));
+			this._timePicker.ibxWidget('option', this.options.timeOptions);
+			if (this.options.time)
+				this._timePicker.ibxWidget('time', new Date(this.options.time));
 			this._timeZoneWrapper.css('display', this.options.showTimeZone ? '' : 'none');
 			this._timeZonePicker.ibxWidget('removeControlItem');
 			this.options.timeZones = this.options.timeZones || [{title:'GMT', value:0}]
@@ -255,15 +259,17 @@ $.widget("ibi.ibxDateRange", $.ibi.ibxDatePicker,
 			this._input2 = $('<div class="ibx-datepicker-input">').ibxLabel({ glyphClasses: "material-icons", glyph: 'date_range', 'align': 'stretch' }).on('click', this._showPopup.bind(this));
 			this._clear2 = $('<div class="ibx-datepicker-clear">').ibxButtonSimple({ glyphClasses: "material-icons", glyph: 'clear' }).on('click', this._onClear2.bind(this)).hide();
 			this._inputWrapper.append(this._input2, this._clear2);
-			this._timePicker.off("ibx_change", this._onTimePickerChangeBound);
-			this._timePicker.ibxWidget('time', this.options.timeFrom);
-			this._timePicker.on("ibx_change", this._onTimePickerChangeBound);
-			this._timePicker2 = $("<div class='ibx-datepicker-timepicker'>").ibxTimePicker(this.options.timeOptions).on('ibx_change', this._onTimePickerChangeBound);
+			this._timePicker2 = $("<div class='ibx-datepicker-timepicker'>").ibxTimePicker(this.options.timeOptions);
 			this._timeWrapper.append(this._timePicker2);
 			window.setTimeout(function () { this._highlightRange(); }.bind(this), 10);
 		},
 		_init: function () {
 			this._super();
+			this._timePicker.off("ibx_change", this._onTimePickerChangeBound);
+			this._timePicker.ibxWidget('time', new Date(this.options.timeFrom || new Date()));
+			this._timePicker.on("ibx_change", this._onTimePickerChangeBound);
+			this._timePicker2.ibxWidget('time', new Date(this.options.timeTo || new Date()));
+			this._timePicker2.on('ibx_change', this._onTimePickerChangeBound);
 			if (this.options.singleInput) {
 				this._input2.remove();
 				this._clear2.remove();
@@ -447,8 +453,10 @@ $.widget("ibi.ibxDateRange", $.ibi.ibxDatePicker,
 				else
 					this._input2.ibxWidget('option', 'text', '');
 			}
-			this._timePicker.ibxWidget('option', this.options.timeOptions).ibxWidget('time', new Date(this.options.timeFrom || new Date()));
-			this._timePicker2.ibxWidget('option', this.options.timeOptions).ibxWidget('time', new Date(this.options.timeTo || new Date()));
+			if (this.options.timeFrom)
+				this._timePicker.ibxWidget('option', this.options.timeOptions).ibxWidget('time', new Date(this.options.timeFrom));
+			if (this.options.timeTo)
+				this._timePicker2.ibxWidget('option', this.options.timeOptions).ibxWidget('time', new Date(this.options.timeTo));
 			window.setTimeout(function () { this._highlightRange(); }.bind(this), 10);
 		}
 	});
