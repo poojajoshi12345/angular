@@ -307,7 +307,7 @@ $.widget("ibi.ibxTimePicker", $.ibi.ibxHBox, {
 
 		//Dispatch Event
 		if (changed) {
-			this.element.dispatchEvent("ibx_change", this.time(), true, false);
+			this.element.dispatchEvent("ibx_change", this.time(), false, false);
 			event.stopPropagation();
 		}
 		this._inTimeChange = false;
