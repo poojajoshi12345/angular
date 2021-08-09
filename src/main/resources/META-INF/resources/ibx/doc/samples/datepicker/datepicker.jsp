@@ -64,8 +64,8 @@
 				$("#date-time-show-time-text").on("ibx_change", (e)=> $("#date-time").ibxWidget("option", "showTimeText", $(e.target).ibxWidget("checked")));
 
 				$("#date-range-time").on("ibx_change", (_, data) => {
-					$("#date-range-time-text").ibxWidget("option", "text", data.dateTimeFrom.toISOString());
-					$("#date-range-time-text2").ibxWidget("option", "text", data.dateTimeTo.toISOString());
+					$("#date-range-time-text").ibxWidget("option", "text", data.dateTimeFrom?.toISOString());
+					$("#date-range-time-text2").ibxWidget("option", "text", data.dateTimeTo?.toISOString());
 				});
 				$("#date-range-time-show-time").on("ibx_change", (e)=> $("#date-range-time").ibxWidget("option", "showTime", $(e.target).ibxWidget("checked")));
 				$("#date-range-time-show-time-mil").on("ibx_change", (e)=> $("#date-range-time").ibxWidget("option", "timeOptions", {showMillisecond: $(e.target).ibxWidget("checked")}));
@@ -162,7 +162,7 @@
 					<div id="date-time-show-time-text" data-ibx-type="ibxCheckBoxSimple">Add time to label</div>
 					<div id="date-time-show-time-zone" data-ibx-type="ibxCheckBoxSimple">Show time zone</div>
 				</div>
-				<div id="date-time" class="inline" data-ibx-type="ibxDatePickerSimple"></div>
+				<div id="date-time" class="inline" data-ibx-type="ibxDatePickerSimple" data-ibxp-show-clear="true"></div>
 			</div>
 		</div>
 
@@ -185,7 +185,7 @@
 					<div id="date-range-time-show-time-text" data-ibx-type="ibxCheckBoxSimple">Add time to label</div>
 					<div id="date-range-time-show-time-zone" data-ibx-type="ibxCheckBoxSimple">Show time zone</div>
 				</div>
-				<div id="date-range-time" class="control" data-ibx-type="ibxDateRangeSimple" data-ibxp-date-from="May 5, 2017" data-ibxp-date-to="May 20, 2017" data-ibxp-time-from="1628136000000" data-ibxp-time-to="1628222399999"></div>
+				<div id="date-range-time" class="control" data-ibx-type="ibxDateRangeSimple"  data-ibxp-show-clear="true" data-ibxp-date-from="May 5, 2017" data-ibxp-date-to="May 20, 2017" data-ibxp-time-from="1628136000000" data-ibxp-time-to="1628222399999"></div>
 			</div>
 		</div>
 	</body>
