@@ -123,7 +123,7 @@ $.widget("ibi.ibxDatePicker", $.ibi.ibxVBox,
 			this._input.ibxWidget('option', 'text', $.datepicker.formatDate(this.options.outDateFormat, this._datePicker.datepicker('getDate'), this._pickerOptions) + this._timeText(this._timePicker.ibxWidget("time")));
 		},
 		_onTimePickerChange: function (e) {
-			this._onSelect()
+			this._triggerChange();
 			e.stopPropagation();
 		},
 		_onChangeMonthYear: function (year, month, picker) {
