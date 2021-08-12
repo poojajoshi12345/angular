@@ -26,6 +26,10 @@
             margin: 1em 0 1em 0;
         }
 
+        .timepicker-result{
+            margin-top: 16px;
+        }
+
 
     </style>
 
@@ -95,6 +99,11 @@
                 };
 
                 timepicker.ibxWidget("time", dateJSON);
+            });
+
+            $(".timepicker-demo-control").on("ibx_change", (e)=>{
+                const data = e.originalEvent.data;
+                $(".timepicker-result").ibxWidget('option', 'text', data.date.toString());
             });
 
             function settingChange(event) {
@@ -182,6 +191,7 @@
         </div>
         <div class="line"></div>
         <div class="timepicker-demo-control" data-ibx-type="ibxTimePicker"></div>
+        <div class="timepicker-result" data-ibx-type="ibxLabel"></div>
     </div>
 
 </body>

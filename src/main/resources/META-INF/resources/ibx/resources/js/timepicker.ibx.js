@@ -346,11 +346,31 @@ $.widget("ibi.ibxTimePicker", $.ibi.ibxHBox, {
 		return (value === "AM" || value === 0) ? $.ibi.ibxTimePicker.AM : $.ibi.ibxTimePicker.PM;
 	},
 
+	_24hour: function (value){
+		if (this.options["24hour"]){
+			return this.options.hour;
+		}
+		else{
+			if (this.options.meridianCode === $.ibi.ibxTimePicker.PM){
+				if (this.options.hour === 12)
+					return this.options.hour;
+				else
+					return this.options.hour + 12;
+			}
+			else{
+				if (this.options.hour === 12)
+					return 0;
+				else
+					return this.options.hour;
+			}
+		}
+	},
+
 	time: function (date) {
 		if (date === undefined) {
 			var ret = {
 				"hour": this.options.hour,
-				"hour24": (!this.options["24hour"] && (this.options.meridianCode == $.ibi.ibxTimePicker.PM)) ? this.options.hour + 12 : this.options.hour,
+				"hour24": this._24hour(),
 				"minute": this.options.minute,
 				"second": this.options.second,
 				"milliSecond": this.options.milliSecond,
