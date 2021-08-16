@@ -150,7 +150,6 @@
 				</executions>
 				<configuration>
 					<excludes>
-						<exclude>**/*.js_closure</exclude>
 						<exclude>**/*.js_closure.gz</exclude>
 					</excludes>
 					<archive>
