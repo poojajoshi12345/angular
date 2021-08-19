@@ -190,19 +190,19 @@ $.widget("ibi.ibxTimePicker", $.ibi.ibxHBox, {
 		}
 		else if (key === "hour") {
 			this._hourSpinner.ibxWidget("setValue", value);
-			this.options.hour = this._hourSpinner.ibxWidget("option", "text");
+			this.options.hour = this._hourSpinner.ibxWidget("option", "value");
 		}
 		else if (key === "minute") {
 			this._minuteSpinner.ibxWidget("setValue", value);
-			this.options.minute = this._minuteSpinner.ibxWidget("option", "text");
+			this.options.minute = this._minuteSpinner.ibxWidget("option", "value");
 		}
 		else if (key === "second") {
 			this._secondSpinner.ibxWidget("setValue", value);
-			this.options.second = this._secondSpinner.ibxWidget("option", "text");
+			this.options.second = this._secondSpinner.ibxWidget("option", "value");
 		}
 		else if (key === "milliSecond") {
 			this._milliSecondSpinner.ibxWidget("setValue", value);
-			this.options.milliSecond = this._milliSecondSpinner.ibxWidget("option", "text");
+			this.options.milliSecond = this._milliSecondSpinner.ibxWidget("option", "value");
 		}
 		else if (key === "meridianCode") {
 			this._meridianSpinner.ibxWidget("option", "value", value);
