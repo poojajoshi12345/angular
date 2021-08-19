@@ -66,6 +66,7 @@ $.widget("ibi.ibxSpinner", $.ibi.ibxTextField,
 		this._btnDown.ibxAddClass(options.btnDownClass);
 		this._btnBox.ibxAddClass(options.btnGroupClass);
 		this._setValue(options.value);
+		this.element.on("ibx_change", function (e) {e.stopPropagation();});
 	},
 	_destroy: function ()
 	{
