@@ -66,6 +66,9 @@ $.widget("ibi.ibxSpinner", $.ibi.ibxTextField,
 		this._btnDown.ibxAddClass(options.btnDownClass);
 		this._btnBox.ibxAddClass(options.btnGroupClass);
 		this._setValue(options.value);
+		// ibx_change events are triggered via jQuery ui _trigget, which doesn't allow propagation stopping,
+		// so the following listener will intercept this instance's ibx_change events are stop the propagation
+		// before they can bubble up.
 		this.element.on("ibx_change", function (e) {e.stopPropagation();});
 	},
 	_destroy: function ()
