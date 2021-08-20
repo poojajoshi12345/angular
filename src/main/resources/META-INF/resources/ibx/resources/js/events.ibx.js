@@ -35,6 +35,7 @@ ibxEventManager.createMouseEvent = function(eType, e)
 	event.movementX = eInit.movementX;//for IOS...they don't allow arbitrary properties in new MouseEvent.
 	event.movementY = eInit.movementY;//for IOS...they don't allow arbitrary properties in new MouseEvent.
 	event.originalEvent = e;
+	event.ibxSynthEvent = true;
 	return event;
 };
 
