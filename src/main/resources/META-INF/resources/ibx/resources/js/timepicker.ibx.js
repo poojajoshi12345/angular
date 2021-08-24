@@ -281,7 +281,7 @@ $.widget("ibi.ibxTimePicker", $.ibi.ibxHBox, {
 		else if (ctrl.is(".ibx-timepicker-spinner-milli-second")) {
 
 			//Check if value changed
-			var prev = this.options.second;
+			var prev = this.options.milliSecond;
 			this.options.milliSecond = this._milliSecondSpinner.ibxWidget("option", "value");
 			changed = prev === this.options.milliSecond ? false : true;
 

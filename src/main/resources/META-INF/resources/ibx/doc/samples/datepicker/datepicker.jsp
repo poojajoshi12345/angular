@@ -71,6 +71,29 @@
 				$("#date-range-time-show-time-mil").on("ibx_change", (e)=> $("#date-range-time").ibxWidget("option", "timeOptions", {showMillisecond: $(e.target).ibxWidget("checked")}));
 				$("#date-range-time-show-time-zone").on("ibx_change", (e)=> $("#date-range-time").ibxWidget("option", "showTimeZone", $(e.target).ibxWidget("checked")));
 				$("#date-range-time-show-time-text").on("ibx_change", (e)=> $("#date-range-time").ibxWidget("option", "showTimeText", $(e.target).ibxWidget("checked")));
+
+				$("#dt-button1").on("click", () => $("#date-time").ibxWidget("time", "04 Dec 1995 13:30:30.333"));
+				$("#dt-button2").on("click", () => {
+					const time = $("#date-time").ibxWidget("time");
+					$("#dt-value1").ibxWidget("option", "text", formatTime(time));
+				});
+
+				$("#dt-button3").on("click", () => $("#date-range-time").ibxWidget("time", {timeFrom: "04 Dec 1995 13:30:30.333", timeTo: "04 Dec 1995 13:35:35.555"}));
+				$("#dt-button4").on("click", () => {
+					//const time = $("#date-range-time").ibxWidget("time");
+					const timeFrom = $("#date-range-time").ibxWidget("timeFrom");
+					const timeTo = $("#date-range-time").ibxWidget("timeTo");
+					// $("#dt-value2").ibxWidget("option", "text", formatTime(time.timeFrom) + " - " + formatTime(time.timeTo));
+					$("#dt-value2").ibxWidget("option", "text", formatTime(timeFrom) + " - " + formatTime(timeTo));
+				});
+
+			};
+
+			const formatTime = (time) => {
+				const minute = (time.minute < 10 ? "0" : "") + time.minute;
+				const second = (time.second < 10 ? "0" : "") + time.second
+				const milliSecond = (time.milliSecond < 10 ? "00" : (time.milliSecond < 100 ? "0" : "")) + time.milliSecond;
+				return time.hour + ":" + minute + ":" + second + "." + milliSecond + time.meridian;
 			};
 		</script>
 
@@ -140,6 +163,14 @@
 			min-width: 700px;
 		} */
 
+		.dt-controls{
+			padding: 16px;
+		}
+
+		.dt-control {
+			margin: 4px;
+		}
+
 		</style>
 	</head>
 	<body class="ibx-root">
@@ -164,6 +195,11 @@
 				</div>
 				<div id="date-time" class="inline" data-ibx-type="ibxDatePickerSimple" data-ibxp-show-clear="true"></div>
 			</div>
+			<div class="dt-controls" data-ibx-type="ibxVBox">
+				<div id="dt-button1" class="dt-control" data-ibx-type="ibxButton">Set time 1:30:30.333PM</div>
+				<div id="dt-button2" class="dt-control" data-ibx-type="ibxButton">Get current time</div>
+				<div id="dt-value1" class="dt-control" data-ibx-type="ibxLabel"></div>
+			</div>
 		</div>
 
 		<div class="box" data-ibx-type="ibxHBox">
@@ -186,6 +222,11 @@
 					<div id="date-range-time-show-time-zone" data-ibx-type="ibxCheckBoxSimple">Show time zone</div>
 				</div>
 				<div id="date-range-time" class="control" data-ibx-type="ibxDateRangeSimple"  data-ibxp-show-clear="true" data-ibxp-date-from="May 5, 2017" data-ibxp-date-to="May 20, 2017" data-ibxp-time-from="1628136000000" data-ibxp-time-to="1628222399999"></div>
+			</div>
+			<div class="dt-controls" data-ibx-type="ibxVBox">
+				<div id="dt-button3" class="dt-control" data-ibx-type="ibxButton">Set time range 1:30:30.333PM - 1:35:35.555PM</div>
+				<div id="dt-button4" class="dt-control" data-ibx-type="ibxButton">Get current time range</div>
+				<div id="dt-value2" class="dt-control" data-ibx-type="ibxLabel"></div>
 			</div>
 		</div>
 	</body>

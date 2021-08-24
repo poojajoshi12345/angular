@@ -179,6 +179,11 @@ $.widget("ibi.ibxDatePicker", $.ibi.ibxVBox,
 			var milliSecond = (time.milliSecond < 10 ? "00" : (time.milliSecond < 100 ? "0" : "")) + time.milliSecond;
 			return "; " + time.hour + ":" + minute + ":" + second + (this.options.timeOptions.showMillisecond ? "." + milliSecond : "") + time.meridian;
 		},
+		// get/set time. 'data' can be a string like "04 Dec 1995 13:30:30.333" or a Date object. Only the time part is gonna be used.
+		// If data is undefined it returns the time picker response object
+		time: function (data){
+			return this._timePicker.ibxWidget('time', data !== undefined ? new Date(data) : undefined);
+		},
 		_refresh: function () {
 			this.element.ibxRemoveClass('popup simple inline');
 			if (this.options.showClear)
@@ -428,6 +433,30 @@ $.widget("ibi.ibxDateRange", $.ibi.ibxDatePicker,
 				else
 					el.attr('data-range-to', '');
 			});
+		},
+		// get/set time. 'data' can be an object like this: {timeFrom: "04 Dec 1995 13:30:30.333", timeTo: "04 Dec 1995 15:35:35.555"} or
+		// {timeFrom: new Date(), timeTo: new Date()}
+		// Only the time part of 'timeFrom' or 'timeTo' will be used.
+		// If data is undefined, it returns an object like this: {timeFrom: <'from' response object>, timeTo: <'to' response object>}
+		time: function (data){
+			if (data === undefined)
+				return {timeFrom: this._timePicker.ibxWidget('time'), timeTo: this._timePicker2.ibxWidget('time')};
+			else{
+				if (data.timeFrom)
+					this._timePicker.ibxWidget('time', new Date(data.timeFrom));
+				if (data.timeTo)
+					this._timePicker2.ibxWidget('time', new Date(data.timeTo));
+			}
+		},
+		// get/set 'timeFrom' only. 'data' can be a string like "04 Dec 1995 13:30:30.333" or a Date object. Only the time part is gonna be used.
+		// If data is undefines, it returns the time picker 'from' response object
+		timeFrom: function (data){
+			return this._timePicker.ibxWidget('time', data !== undefined ? new Date(data) : undefined);
+		},
+		// get/set 'timeTo' only. 'data' can be a string like "04 Dec 1995 13:30:30.333" or a Date object. Only the time part is gonna be used.
+		// If data is undefined it returns the time picker 'to' response object
+		timeTo: function (data){
+			return this._timePicker2.ibxWidget('time', data !== undefined ? new Date(data) : undefined);
 		},
 		_refresh: function () {
 			this.options.date = this.options.dateTo;
