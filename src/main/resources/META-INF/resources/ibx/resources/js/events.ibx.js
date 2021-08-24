@@ -35,6 +35,7 @@ ibxEventManager.createMouseEvent = function(eType, e)
 	event.movementX = eInit.movementX;//for IOS...they don't allow arbitrary properties in new MouseEvent.
 	event.movementY = eInit.movementY;//for IOS...they don't allow arbitrary properties in new MouseEvent.
 	event.originalEvent = e;
+	event.ibxSynthEvent = true;
 	return event;
 };
 
@@ -87,7 +88,7 @@ ibxEventManager._onTouchEvent = function(e)
 			//HOME-2663 - seems IOS now needs the touchend to actually focus the input control...so don't prevent def on that.
 			//			  The problem is preventDefault stops the input from getting focus and bring up the keyboard on IOS.
 			//IBX-527 -   Actually, it seems all mobile devices need to prevent default in these circumstances (not just ios).
-			if(ibxPlatformCheck.isMobile && e.cancelable && (e.target.nodeType != 'input'))
+			if(e.cancelable && (e.target.nodeName != 'INPUT'))
 				e.preventDefault();
 		}
 
