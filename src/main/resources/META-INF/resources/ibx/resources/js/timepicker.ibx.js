@@ -380,7 +380,7 @@ $.widget("ibi.ibxTimePicker", $.ibi.ibxHBox, {
 			}
 			else {
 				hourOffset = (date.hour > 12) ? -12 : 0;
-				this._meridianSpinner.ibxWidget("setValue", (date.hour > 12) ? $.ibi.ibxTimePicker.PM : $.ibi.ibxTimePicker.AM);
+				this._meridianSpinner.ibxWidget("setValue", (date.hour >= 12) ? $.ibi.ibxTimePicker.PM : $.ibi.ibxTimePicker.AM);
 			}
 		}
 
