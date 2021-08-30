@@ -80,7 +80,7 @@ $.widget("ibi.ibxDatePicker", $.ibi.ibxVBox,
 			this._onTimePickerChangeBound = this._onTimePickerChange.bind(this);
 			this.options.timeOptions = $.extend({}, { showColon: false, showMillisecond: false }, this.options.timeOptions)
 			this._timePicker = $("<div class='ibx-datepicker-timepicker'>").ibxTimePicker(this.options.timeOptions);
-			this._timeWrapper = $("<div class='ibx-datepicker-time-wrapper'>").ibxHBox().append(this._timePicker);
+			this._timeWrapper = $("<div class='ibx-datepicker-time-wrapper'>").ibxHBox({justify: "spaceAround"}).append(this._timePicker);
 			this._timeZoneLabel = $("<div class='ibx-timezone-label'>").ibxLabel({ text: ibx.resourceMgr.getString('IBX_DP_TIME_ZONE_SELECT') });
 			this._timeZonePicker = $("<div tabindex='0' class='ibx-timezonepicker'>").ibxSelect({readonly:true}).on('ibx_change', this._onTimePickerChangeBound);
 			this._timeZoneWrapper = $("<div class='ibx-datepicker-time-zone-wrapper'>").ibxVBox({ align: 'stretch' }).append(this._timeZoneLabel, this._timeZonePicker);
@@ -171,6 +171,15 @@ $.widget("ibi.ibxDatePicker", $.ibi.ibxVBox,
 					break;
 			}
 		},
+		_parseDate: function (date){
+			if (date instanceof Date){
+				return new Date(date.getFullYear(), date.getMonth(), date.getDate());
+			}
+			else if (typeof(date) === "string")
+				return $.datepicker.parseDate(this.options.dateFormat, date);
+			else
+				return null;
+		},
 		_timeText: function (time){
 			if (!this.options.showTime || !this.options.showTimeText)
 				return "";
@@ -193,7 +202,7 @@ $.widget("ibi.ibxDatePicker", $.ibi.ibxVBox,
 			if (this.options.pickerClasses)
 				this._popup.ibxAddClass(this.options.pickerClasses);
 			this._datePicker.datepicker('option', this.options);
-			var dateObj = $.datepicker.parseDate(this.options.dateFormat, this.options.date) || new Date();
+			var dateObj = this._parseDate(this.options.date) || new Date();
 			this._datePicker.datepicker('setDate', dateObj);
 			
 			//Setup the time/zones picker
@@ -303,14 +312,14 @@ $.widget("ibi.ibxDateRange", $.ibi.ibxDatePicker,
 				var v = value.getTime();
 
 				var from;
-				var parseFrom = $.datepicker.parseDate(this.options.dateFormat, this.options.dateFrom);
+				var parseFrom = this._parseDate(this.options.dateFrom);
 				if (!parseFrom)
 					from = (new Date()).getTime();
 				else
 					from = parseFrom.getTime();
 
 				var to;
-				var parseTo = $.datepicker.parseDate(this.options.dateFormat, this.options.dateTo);
+				var parseTo = this._parseDate(this.options.dateTo);
 				if (!parseTo)
 					to = from;
 				else
@@ -348,24 +357,24 @@ $.widget("ibi.ibxDateRange", $.ibi.ibxDatePicker,
 				var fromText = '';
 				var toText = '';
 				if (this.options.dateFrom) {
-					var parseFrom = $.datepicker.parseDate(this.options.dateFormat, this.options.dateFrom) || $.datepicker.formatDate($.ibi.ibxDatePicker.statics.defaultDateFormat, new Date());
+					var parseFrom = this._parseDate(this.options.dateFrom) || $.datepicker.formatDate($.ibi.ibxDatePicker.statics.defaultDateFormat, new Date());
 					fromText = $.datepicker.formatDate(this.options.outDateFormat, parseFrom, this._pickerOptions) + this._timeText(this._timePicker.ibxWidget("time"));
 				}
 				if (this.options.dateTo) {
-					var parseTo = $.datepicker.parseDate(this.options.dateFormat, this.options.dateTo) || $.datepicker.formatDate($.ibi.ibxDatePicker.statics.defaultDateFormat, new Date());
+					var parseTo = this._parseDate(this.options.dateTo) || $.datepicker.formatDate($.ibi.ibxDatePicker.statics.defaultDateFormat, new Date());
 					toText = $.datepicker.formatDate(this.options.outDateFormat, parseTo, this._pickerOptions) + this._timeText(this._timePicker2.ibxWidget("time"));
 				}
 				this._input.ibxWidget('option', 'text', (fromText || toText) ? (fromText + ' - ' + toText) : '');
 			}
 			else {
 				if (this.options.dateFrom) {
-					var parseFrom = $.datepicker.parseDate(this.options.dateFormat, this.options.dateFrom) || $.datepicker.formatDate($.ibi.ibxDatePicker.statics.defaultDateFormat, new Date());
+					var parseFrom = this._parseDate(this.options.dateFrom) || $.datepicker.formatDate($.ibi.ibxDatePicker.statics.defaultDateFormat, new Date());
 					this._input.ibxWidget('option', 'text', $.datepicker.formatDate(this.options.outDateFormat, parseFrom, this._pickerOptions) + this._timeText(this._timePicker.ibxWidget("time")));
 				}
 				else
 					this._input.ibxWidget('option', 'text', '');
 				if (this.options.dateTo) {
-					var parseTo = $.datepicker.parseDate(this.options.dateFormat, this.options.dateTo) || $.datepicker.formatDate($.ibi.ibxDatePicker.statics.defaultDateFormat, new Date());
+					var parseTo = this._parseDate(this.options.dateTo) || $.datepicker.formatDate($.ibi.ibxDatePicker.statics.defaultDateFormat, new Date());
 					this._input2.ibxWidget('option', 'text', $.datepicker.formatDate(this.options.outDateFormat, parseTo, this._pickerOptions) + this._timeText(this._timePicker2.ibxWidget("time")));
 				}
 				else
@@ -374,14 +383,14 @@ $.widget("ibi.ibxDateRange", $.ibi.ibxDatePicker,
 		},
 		_triggerChange: function (){
 			var from;
-			var parseFrom = $.datepicker.parseDate(this.options.dateFormat, this.options.dateFrom);
+			var parseFrom = this._parseDate(this.options.dateFrom);
 			if (!parseFrom)
 				from = (new Date()).getTime();
 			else
 				from = parseFrom.getTime();
 
 			var to;
-			var parseTo = $.datepicker.parseDate(this.options.dateFormat, this.options.dateTo);
+			var parseTo = this._parseDate(this.options.dateTo);
 			if (!parseTo)
 				to = from;
 			else
@@ -405,8 +414,8 @@ $.widget("ibi.ibxDateRange", $.ibi.ibxDatePicker,
 			this._setInputText();
 		},
 		_highlightRange: function () {
-			var parseFrom = $.datepicker.parseDate(this.options.dateFormat, this.options.dateFrom);
-			var parseTo = $.datepicker.parseDate(this.options.dateFormat, this.options.dateTo);
+			var parseFrom = this._parseDate(this.options.dateFrom);
+			var parseTo = this._parseDate(this.options.dateTo);
 			if (!parseFrom || !parseTo)
 				return;
 
@@ -468,7 +477,7 @@ $.widget("ibi.ibxDateRange", $.ibi.ibxDatePicker,
 					this._clear2.hide();
 			}
 
-			var toDateObj = $.datepicker.parseDate(this.options.dateFormat, this.options.dateTo) || new Date();
+			var toDateObj = this._parseDate(this.options.dateTo) || new Date();
 			this._datePicker.datepicker('setDate', toDateObj);
 			this._setInputText();
 			if (this.options.timeFrom)
