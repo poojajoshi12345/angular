@@ -275,6 +275,12 @@ $.widget("ibi.ibxDateRange", $.ibi.ibxDatePicker,
 			this._inputWrapper.append(this._input2, this._clear2);
 			this._timePicker2 = $("<div class='ibx-datepicker-timepicker'>").ibxTimePicker(this.options.timeOptions);
 			this._timeWrapper.append(this._timePicker2);
+			this._timeLabelWrapper = $('<div class="ibx-datepicker-time-label-wrapper">').ibxHBox({align: "stretch", justify: "spaceAround"});
+			this._timeLabelWrapper.append(
+				$('<div class="ibx-datepicker-time-start-label">').ibxLabel({"text": ibx.resourceMgr.getString("IBX_DP_START_TIME")}), 
+				$('<div class="ibx-datepicker-time-end-label">').ibxLabel({"text": ibx.resourceMgr.getString("IBX_DP_END_TIME")})
+			);
+			this._timeWrapper.before(this._timeLabelWrapper);
 			window.setTimeout(function () { this._highlightRange(); }.bind(this), 10);
 		},
 		_init: function () {
@@ -476,6 +482,11 @@ $.widget("ibi.ibxDateRange", $.ibi.ibxDatePicker,
 				else
 					this._clear2.hide();
 			}
+
+			if (this.options.showTime)
+				this._timeLabelWrapper.show();
+			else
+				this._timeLabelWrapper.hide();
 
 			var toDateObj = this._parseDate(this.options.dateTo) || new Date();
 			this._datePicker.datepicker('setDate', toDateObj);
