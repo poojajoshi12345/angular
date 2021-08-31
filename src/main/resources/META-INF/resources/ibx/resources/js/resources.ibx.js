@@ -10,7 +10,6 @@ function ibxResourceManager(ctxPath)
 	this._styleSheet = $("<style type='text/css'>").ibxAddClass("ibxResourceManager_inline_styles").appendTo("head");
 	
 	this.loadedBundles = {};
-	this.loadedFiles = {};
 	this._elPath = document.createElement('script');
 	this.language = document.documentElement.getAttribute("lang") || "ibx_default";//if no lang attribute default to ibx_default bundle
 	this.strings = {"ibx_default":{}};
@@ -19,8 +18,8 @@ function ibxResourceManager(ctxPath)
 }
 var _p = jsDeriveClass(ibxResourceManager, Object);
 
+ibxResourceManager.loadedFiles = {};
 _p.loadedBundles = null;
-_p.loadedFiles = null;
 _p._elPath = null;
 _p._styleSheet = null;
 _p._resBundle = null;
@@ -32,9 +31,9 @@ _p.getContextPath = function(){return this._contextPath;};
 
 _p.getModuleInfo = function(path)
 {
-	for(var key in this.loadedFiles) {
+	for(var key in ibxResourceManager.loadedFiles) {
 		if(key.search(path) != -1)
-			return this.loadedFiles[key];
+			return ibxResourceManager.loadedFiles[key];
 	}
 }
 
@@ -155,8 +154,9 @@ _p.loadExternalResFile = function(elFile, bundle)
 		elFile = $(elFile);
 		var src = this.getResPath(elFile.attr("src"), elFile.closest("[loadContext]").attr("loadContext"));
 
-		if(this.loadedFiles[src])
+		if(ibxResourceManager.loadedFiles[src])
 		{
+			//console.log(`DUPLICATE: ${src}`)
 			//duplicate, just resolve and continue
 			var dfd = elFile[0]._loadPromise;
 			if(dfd)
@@ -221,7 +221,7 @@ _p.loadExternalResFile = function(elFile, bundle)
 						elFile[0]._loadPromise.resolve();
 						eType = "scriptfileinlineloaded";
 					}
-					this.loadedFiles[src] = true;
+					ibxResourceManager.loadedFiles[src] = {srcPath: src.substr(0, src.lastIndexOf('/') + 1), bundlePath: bundle[0].parentNode.path};
 					$(window).dispatchEvent("ibx_ibxresmgr", {"hint":"fileloaded", "loadDepth":bundle.loadDepth, "resMgr":this, "fileType":fileType, "fileNode":elFile[0], "src":src});
 				}
 			}.bind(this, elFile, src, fileType));
@@ -255,7 +255,7 @@ _p.loadExternalResFile = function(elFile, bundle)
 
 
 			$("head")[0].appendChild(el);
-			this.loadedFiles[src] = {srcPath: src.substr(0, src.lastIndexOf('/') + 1), bundlePath: bundle[0].parentNode.path};
+			ibxResourceManager.loadedFiles[src] = {srcPath: src.substr(0, src.lastIndexOf('/') + 1), bundlePath: bundle[0].parentNode.path};
 			$(window).dispatchEvent("ibx_ibxresmgr", {"hint":"fileloading", "loadDepth":bundle.loadDepth, "resMgr":this, "fileType":fileType, "fileNode":elFile[0], "src":src});
 		}
 	}.bind(this, bundle));
