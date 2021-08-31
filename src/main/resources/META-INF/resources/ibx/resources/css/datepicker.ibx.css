@@ -61,10 +61,14 @@
 }
 
 /*Time picker classes*/
-.ibx-datepicker-time-wrapper,
 .ibx-datepicker-time-zone-wrapper
 {
 	margin-top:1em;
+}
+
+.ibx-datepicker-time-wrapper
+{
+    margin-top:0.5em;
 }
 
 .ibx-datepicker-timepicker:nth-child(2){
@@ -88,6 +92,15 @@
 	border-right:inherit;
 }
 
+.ibx-datepicker-time-start-label,
+.ibx-datepicker-time-end-label {
+    margin-top: .5em;
+    font-family: Roboto;
+    font-size: 1em;
+    font-weight: 900;
+    color: #34515e;
+}
+
 .ibx-timezone-label {
 	margin-top: .5em;
 }
@@ -95,3 +108,4 @@
 .ibx-timezonepicker {
 	margin-top: .5em;
 }
+

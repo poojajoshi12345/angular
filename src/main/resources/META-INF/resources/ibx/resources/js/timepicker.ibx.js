@@ -41,10 +41,15 @@ $.widget("ibi.ibxTimePicker", $.ibi.ibxHBox, {
 
 		//Create Spinners
 		this._hourSpinner = $('<div class="ibx-timepicker-spinner ibx-timepicker-spinner-hour" tabindex="0">').ibxSpinner();
+		this._hourSpinner.find('.ibx-spinner-text-input').attr('title', ibx.resourceMgr.getString("IBX_TP_TT_HOUR"));
 		this._minuteSpinner = $('<div class="ibx-timepicker-spinner ibx-timepicker-spinner-minute" tabindex="0">').ibxSpinner();
+		this._minuteSpinner.find('.ibx-spinner-text-input').attr('title', ibx.resourceMgr.getString("IBX_TP_TT_MINUTE"));
 		this._secondSpinner = $('<div class="ibx-timepicker-spinner ibx-timepicker-spinner-second" tabindex="0">').ibxSpinner();
+		this._secondSpinner.find('.ibx-spinner-text-input').attr('title', ibx.resourceMgr.getString("IBX_TP_TT_SECOND"))
 		this._milliSecondSpinner = $('<div class="ibx-timepicker-spinner ibx-timepicker-spinner-milli-second" tabindex="0">').ibxSpinner();
+		this._milliSecondSpinner.find('.ibx-spinner-text-input').attr('title', ibx.resourceMgr.getString("IBX_TP_TT_MILLISECOND"))
 		this._meridianSpinner = $('<div class="ibx-timepicker-spinner ibx-timepicker-spinner-meridian" tabindex="0">').ibxSpinner();
+		this._meridianSpinner.find('.ibx-spinner-text-input').attr('title', ibx.resourceMgr.getString("IBX_TP_TT_MERIDIAN"))
 
 		//Create Colon Divs
 		this._minuteColon = $('<div class="ibx-timepicker-colon ibx-timepicker-colon-minute">:</div>');
@@ -400,7 +405,7 @@ $.widget("ibi.ibxTimePicker", $.ibi.ibxHBox, {
 			}
 			else {
 				hourOffset = (date.hour > 12) ? -12 : 0;
-				this._meridianSpinner.ibxWidget("setValue", (date.hour > 12) ? $.ibi.ibxTimePicker.PM : $.ibi.ibxTimePicker.AM);
+				this._meridianSpinner.ibxWidget("setValue", (date.hour >= 12) ? $.ibi.ibxTimePicker.PM : $.ibi.ibxTimePicker.AM);
 			}
 		}
 

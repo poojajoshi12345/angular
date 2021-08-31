@@ -74,6 +74,8 @@ $Revision: 1.123 $:-->
 				"IBX_DP_WEEK_HEADER":"Wk",
 				"IBX_DP_FORMAT":"MM d, yy",
 				"IBX_DP_TIME_ZONE_SELECT":"Select Time Zone",
+				"IBX_DP_START_TIME":"Start time",
+				"IBX_DP_END_TIME":"End time", 
 
 				"IBX_TP_UNIT_HOUR":"h",
 				"IBX_TP_UNIT_MINUTE":"m",
@@ -81,6 +83,11 @@ $Revision: 1.123 $:-->
 				"IBX_TP_UNIT_MILLISECOND":"ms",
 				"IBX_TP_UNIT_AM":"AM",
 				"IBX_TP_UNIT_PM":"PM",
+				"IBX_TP_TT_HOUR":"Hours",
+				"IBX_TP_TT_MINUTE":"Minutes",
+				"IBX_TP_TT_SECOND":"Seconds",
+				"IBX_TP_TT_MILLISECOND":"Milliseconds",
+				"IBX_TP_TT_MERIDIAN":"AM/PM",
 
 				"IBX_PAGE_LIST_SELECT_ALL":"Select all",
 				"IBX_PAGE_LIST_SELECT_NONE":"Clear",
