@@ -156,7 +156,7 @@ _p.loadExternalResFile = function(elFile, bundle)
 
 		if(ibxResourceManager.loadedFiles[src])
 		{
-			console.log(`DUPLICATE: ${src}`)
+			//console.log(`DUPLICATE: ${src}`)
 			//duplicate, just resolve and continue
 			var dfd = elFile[0]._loadPromise;
 			if(dfd)
