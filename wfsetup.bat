@@ -58,3 +58,8 @@ git clone http://wfbucket.ibi.com:7990/scm/wp/webfocus-intl.git ..\intl
 mkdir %wfpath%\WEB-INF\classes\com\ibi
 rd /S /Q %wfpath%\WEB-INF\classes\com\ibi\intl
 MKLINK /D %wfpath%\WEB-INF\classes\com\ibi\intl %CD%\..\intl\src\main\resources\com\ibi\intl
+
+
+REM just checkout WEB-INF for jsps/etc.
+git clone https://wfbucket.ibi.com:8443/scm/wp/webfocus-webapp.git ..\webapp
+
