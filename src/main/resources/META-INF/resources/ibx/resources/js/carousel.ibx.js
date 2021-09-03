@@ -97,6 +97,10 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 	},
 	_onResize:function()
 	{
+		this._sizeToFit();
+	},
+	_sizeToFit: function()
+	{
 		if(this.options.sizeToFit)
 		{
 			var options = this.options;
@@ -414,7 +418,7 @@ $.widget("ibi.ibxCarousel", $.ibi.ibxVBox,
 
 		//size to fit needs to adjust all elements for the current items box size...it'll adjust the page markers.
 		if(options.sizeToFit)
-			this._onResize()
+			this._sizeToFit();
 		else
 			this._adjustPageMarkers();
 	
