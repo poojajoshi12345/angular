@@ -75,7 +75,7 @@ _p.addStringBundle = function(bundle, defLang)
 };
 
 //daisy chain the loading of the bundles so their dependencies are honored.
-_p.addBundles = function(bundles, loadDepth)
+_p.addBundles = function(bundles, loadDepth, parentBundle)
 {
 	loadDepth = loadDepth || 0;
 
@@ -91,10 +91,10 @@ _p.addBundles = function(bundles, loadDepth)
 		else
 		{
 			bundleInfo = (typeof(bundleInfo) == "string") ? {"src":bundleInfo, "loadContext":""} : bundleInfo;
-			this.addBundle(bundleInfo.src, bundleInfo.loadContext, null, loadDepth).done(function(bundles)
+			this.addBundle(bundleInfo.src, bundleInfo.loadContext, null, loadDepth, parentBundle).done(function(bundles)
 			{
-				this.addBundles(bundles, loadDepth);
-			}.bind(this, bundles));
+				this.addBundles(bundles, loadDepth, parentBundle);
+			}.bind(this, bundles, parentBundle));
 		}
 	}
 	else
@@ -103,11 +103,11 @@ _p.addBundles = function(bundles, loadDepth)
 };
 
 //can pass a string or jQuery.ajax settings object.
-_p.addBundle = function(ajaxSettings, loadContext, data, loadDepth)
+_p.addBundle = function(ajaxSettings, loadContext, data, loadDepth, parentBundle)
 {
 	//resolve bundle's uri
 	ajaxSettings = (typeof(ajaxSettings) === "string") ? {url:ajaxSettings} : ajaxSettings;
-	ajaxSettings.url = this.getResPath(ajaxSettings.url, loadContext);
+	ajaxSettings.url = this.getResPath(ajaxSettings.url, loadContext, parentBundle);
 
 	//is it already loaded?
 	if(this.loadedBundles[ajaxSettings.url])
@@ -152,7 +152,7 @@ _p.loadExternalResFile = function(elFile, bundle)
 	{
 		elFile.ibxBundle = bundle[0];
 		elFile = $(elFile);
-		var src = this.getResPath(elFile.attr("src"), elFile.closest("[loadContext]").attr("loadContext"));
+		var src = this.getResPath(elFile.attr("src"), elFile.closest("[loadContext]").attr("loadContext"), bundle);
 
 		if(ibxResourceManager.loadedFiles[src])
 		{
@@ -255,7 +255,7 @@ _p.loadExternalResFile = function(elFile, bundle)
 
 
 			$("head")[0].appendChild(el);
-			ibxResourceManager.loadedFiles[src] = {srcPath: src.substr(0, src.lastIndexOf('/') + 1), bundlePath: bundle[0].parentNode.path};
+			ibxResourceManager.loadedFiles[src] = {srcPath: src.substr(0, src.lastIndexOf('/') + 1), bundlePath: bundle[0].ownerDocument.path};
 			$(window).dispatchEvent("ibx_ibxresmgr", {"hint":"fileloading", "loadDepth":bundle.loadDepth, "resMgr":this, "fileType":fileType, "fileNode":elFile[0], "src":src});
 		}
 	}.bind(this, bundle));
@@ -268,11 +268,11 @@ _p._resFileRetrievalError = function(bundle, elFile, src, fileType, xhr, status,
 	$(window).dispatchEvent("ibx_ibxresmgr", {"hint":"fileloaderror", "loadDepth":bundle.loadDepth, "resMgr":this, "fileType":fileType, "fileNode":elFile[0], "bundle":null, "src":src, "xhr":xhr, "status":status, "msg":msg});
 };
 
-_p.getResPath = function(src, loadContext)
+_p.getResPath = function(src, loadContext, bundle)
 {
 	var loadContext = loadContext || this.getContextPath();
-	if(loadContext == "bundle")
-		loadContext = this._bundlePath;
+	if(loadContext == "bundle" && bundle)
+		loadContext = bundle[0].ownerDocument.path;
 	else
 	if(loadContext == "app")
 		loadContext = ibx.getAppPath();
@@ -302,9 +302,6 @@ _p.loadBundle = function(xResDoc)
 	var bundle = $(xResDoc).find("ibx-res-bundle").first();
 	bundle.loadDepth = xResDoc.loadDepth;
 	
-	//switch the path for loading dependent files using this bundles's path.
-	this._bundlePath = xResDoc.path;
-
 	//make sure we have a promise to resolve when loaded
 	xResDoc.resLoaded = xResDoc.resLoaded || $.Deferred();
 
@@ -319,13 +316,8 @@ _p.loadBundle = function(xResDoc)
 		files.push({"src":el.attr("src"), "loadContext":el.closest("[loadContext]").attr("loadContext")});
 	});
 
-	this._bundlePath = xResDoc.path;
-
-	this.addBundles(files, ++bundle.loadDepth).done(function(curBundlePath, xResDoc, head, bundle)
+	this.addBundles(files, ++bundle.loadDepth, bundle).done(function(xResDoc, head, bundle)
 	{
-		//now that dependent bundles are loaded, set back the correct path to this bundle.
-		this._bundlePath = curBundlePath;
-
 		//load strings
 		this.loadExternalResFile(bundle.find("string-file"), bundle);
 		var stringBundles = bundle.find("string-bundle");
@@ -419,7 +411,7 @@ _p.loadBundle = function(xResDoc)
 
 		}.bind(this, bundle));
 
-	}.bind(this, this._bundlePath, xResDoc, head, bundle));
+	}.bind(this, xResDoc, head, bundle));
 	return xResDoc.resLoaded;
 };
 
