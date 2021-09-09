@@ -319,11 +319,14 @@ _p.loadBundle = function(xResDoc)
 	this.addBundles(files, ++bundle.loadDepth, bundle).done(function(xResDoc, head, bundle)
 	{
 		//load strings
-		this.loadExternalResFile(bundle.find("string-file"), bundle);
-		var stringBundles = bundle.find("string-bundle");
-		stringBundles.each(function(idx, stringBundle)
+		stringBundles = bundle.find("string-file, string-bundle").each(function(bundle, idx, stringBundle)
 		{
 			stringBundle = $(stringBundle);
+			if(stringBundle.prop("nodeName") === "string-file") {
+				this.loadExternalResFile(stringBundle, bundle);
+				return;
+			}
+
 			var content = stringBundle.text().trim();
 			if(content)
 			{
@@ -337,13 +340,17 @@ _p.loadBundle = function(xResDoc)
 					throw(ex);
 				}
 			}
-		}.bind(this));
+		}.bind(this, bundle));
 
 		//load css
-		this.loadExternalResFile(bundle.find("style-file"), bundle);
-		styleBlocks = bundle.find("style-sheet").each(function(idx, styleBlock)
+		styleBlocks = bundle.find("style-file, style-sheet").each(function(bundle, idx, styleBlock)
 		{
 			styleBlock = $(styleBlock);
+			if(styleBlock.prop("nodeName") === "style-file") {
+				this.loadExternalResFile(styleBlock, bundle);
+				return;
+			}
+
 			var content = styleBlock.text().trim();
 			if(content)
 			{
@@ -356,16 +363,21 @@ _p.loadBundle = function(xResDoc)
 				styleBlock = styleBlock.clone().text(content);
 				this._resBundle.find("ibx-res-bundle > styles").first().append(styleBlock);//save sheet in res document
 			}
-		}.bind(this));
+		}.bind(this, bundle));
 
 		//load markup
-		this.loadExternalResFile(bundle.find("markup-file"), bundle);
-		var markupBlocks = bundle.find("markup-block");
-		markupBlocks.each(function(idx, markup)
+		var markupBlocks = bundle.find("markup-file, markup-block");
+		markupBlocks.each(function(bundle, idx, markup)
 		{
-			this._resBundle.find("ibx-res-bundle > markup").first().append($(markup).clone());
+			markup = $(markup);
+			if(markup.prop("nodeName") === "markup-file") {
+				this.loadExternalResFile(markup, bundle);
+				return;
+			}
+
+			this._resBundle.find("ibx-res-bundle > markup").first().append(markup.clone());
 			$(window).dispatchEvent("ibx_ibxresmgr", {"hint":"markupinlineloaded", "loadDepth":bundle.loadDepth, "resMgr":this, "bundle":bundle[0]});
-		}.bind(this));
+		}.bind(this, bundle));
 
 		//load scripts...they will be loaded asynchronously, but processed synchronously...so we have to make sure all
 		//scripts are loaded before we continue with the blocks and subsequent resources.
