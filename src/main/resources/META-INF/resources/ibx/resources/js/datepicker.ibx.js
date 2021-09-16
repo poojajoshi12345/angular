@@ -513,9 +513,10 @@ $.widget("ibi.ibxDateRange", $.ibi.ibxDatePicker,
 			this._datePicker.datepicker('setDate', toDateObj);
 			this._setInputText();
 			this._timePicker.ibxWidget('option', this.options.timeOptions)
+			const timeTo = this.options.timeTo;
 			if (this.options.timeFrom) this._timePicker.ibxWidget('time', new Date(this.options.timeFrom));
 			this._timePicker2.ibxWidget('option', this.options.timeOptions);
-			if (this.options.timeTo) this._timePicker2.ibxWidget('time', new Date(this.options.timeTo));
+			if (timeTo) this._timePicker2.ibxWidget('time', new Date(timeTo));
 			window.setTimeout(function () { this._highlightRange(); }.bind(this), 10);
 		}
 	});
