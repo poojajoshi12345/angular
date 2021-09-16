@@ -192,7 +192,7 @@ $.widget("ibi.ibxDatePicker", $.ibi.ibxVBox,
 		// get/set time. 'data' can be a string like "04 Dec 1995 13:30:30.333" or a Date object. Only the time part is gonna be used.
 		// If data is undefined it returns the time picker response object
 		time: function (data){
-			if (date === undefined)
+			if (data === undefined)
 				return this._timePicker.ibxWidget('time');
 			else{
 				this.options.time = data;
