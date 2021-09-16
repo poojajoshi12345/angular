@@ -117,6 +117,7 @@ $.widget("ibi.ibxDatePicker", $.ibi.ibxVBox,
 			this.options.date = $.datepicker.formatDate(this.options.dateFormat, date); 
 			var timeZone = this._timeZonePicker.ibxWidget('userValue');
 			var time = this._timePicker.ibxWidget('time');
+			this.options.time = time.date;
 			var currentDate = date || new Date();  // date can be null if not date set
 			this.options.dateTime = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate(), time.hour24, time.minute, time.second, time.milliSecond);
 			this._trigger("change", null, { 'date': this.options.date, 'dateTime': this.options.dateTime, timeZone:timeZone });
@@ -191,7 +192,12 @@ $.widget("ibi.ibxDatePicker", $.ibi.ibxVBox,
 		// get/set time. 'data' can be a string like "04 Dec 1995 13:30:30.333" or a Date object. Only the time part is gonna be used.
 		// If data is undefined it returns the time picker response object
 		time: function (data){
-			return this._timePicker.ibxWidget('time', data !== undefined ? new Date(data) : undefined);
+			if (data === undefined)
+				return this._timePicker.ibxWidget('time');
+			else{
+				this.options.time = data;
+				this._timePicker.ibxWidget('time', new Date(data));
+			}
 		},
 		_refresh: function () {
 			this.element.ibxRemoveClass('popup simple inline');
@@ -207,8 +213,7 @@ $.widget("ibi.ibxDatePicker", $.ibi.ibxVBox,
 			
 			//Setup the time/zones picker
 			this._timePicker.ibxWidget('option', this.options.timeOptions);
-			if (this.options.time)
-				this._timePicker.ibxWidget('time', new Date(this.options.time));
+			if (this.options.time) this._timePicker.ibxWidget('time', new Date(this.options.time));
 			this._timeZoneWrapper.css('display', this.options.showTimeZone ? '' : 'none');
 			this._timeZonePicker.ibxWidget('removeControlItem');
 			this.options.timeZones = this.options.timeZones || [{title:'GMT', value:0}]
@@ -406,8 +411,10 @@ $.widget("ibi.ibxDateRange", $.ibi.ibxDatePicker,
 			var dateTo = new Date(to);
 			var timeZone = this._timeZonePicker.ibxWidget('userValue');
 			var timeFrom = this._timePicker.ibxWidget('time');
+			this.options.timeFrom = this.options.time = timeFrom.date;
 			this.options.dateTimeFrom = new Date(dateFrom.getFullYear(), dateFrom.getMonth(), dateFrom.getDate(), timeFrom.hour24, timeFrom.minute, timeFrom.second, timeFrom.milliSecond);
 			var timeTo = this._timePicker2.ibxWidget('time');
+			this.options.timeTo = timeTo.date;
 			this.options.dateTimeTo = new Date(dateTo.getFullYear(), dateTo.getMonth(), dateTo.getDate(), timeTo.hour24, timeTo.minute, timeTo.second, timeTo.milliSecond);
 			this._trigger("change", null, 
 			{
@@ -457,21 +464,35 @@ $.widget("ibi.ibxDateRange", $.ibi.ibxDatePicker,
 			if (data === undefined)
 				return {timeFrom: this._timePicker.ibxWidget('time'), timeTo: this._timePicker2.ibxWidget('time')};
 			else{
-				if (data.timeFrom)
+				if (data.timeFrom){
+					this.options.timeFrom = this.options.time = data.timeFrom;
 					this._timePicker.ibxWidget('time', new Date(data.timeFrom));
-				if (data.timeTo)
+				}
+				if (data.timeTo){
+					this.options.timeTo = data.timeTo;
 					this._timePicker2.ibxWidget('time', new Date(data.timeTo));
+				}
 			}
 		},
 		// get/set 'timeFrom' only. 'data' can be a string like "04 Dec 1995 13:30:30.333" or a Date object. Only the time part is gonna be used.
 		// If data is undefines, it returns the time picker 'from' response object
 		timeFrom: function (data){
-			return this._timePicker.ibxWidget('time', data !== undefined ? new Date(data) : undefined);
+			if (data === undefined)
+				return this._timePicker.ibxWidget('time');
+			else{
+				this.options.timeFrom = this.options.time = data;
+				this._timePicker.ibxWidget('time', new Date(data));
+			}
 		},
 		// get/set 'timeTo' only. 'data' can be a string like "04 Dec 1995 13:30:30.333" or a Date object. Only the time part is gonna be used.
 		// If data is undefined it returns the time picker 'to' response object
 		timeTo: function (data){
-			return this._timePicker2.ibxWidget('time', data !== undefined ? new Date(data) : undefined);
+			if (data === undefined)
+				return this._timePicker2.ibxWidget('time');
+			else{
+				this.options.timeTo = data;
+				this._timePicker2.ibxWidget('time', new Date(data));
+			}
 		},
 		_refresh: function () {
 			this.options.date = this.options.dateTo;
@@ -491,10 +512,11 @@ $.widget("ibi.ibxDateRange", $.ibi.ibxDatePicker,
 			var toDateObj = this._parseDate(this.options.dateTo) || new Date();
 			this._datePicker.datepicker('setDate', toDateObj);
 			this._setInputText();
-			if (this.options.timeFrom)
-				this._timePicker.ibxWidget('option', this.options.timeOptions).ibxWidget('time', new Date(this.options.timeFrom));
-			if (this.options.timeTo)
-				this._timePicker2.ibxWidget('option', this.options.timeOptions).ibxWidget('time', new Date(this.options.timeTo));
+			this._timePicker.ibxWidget('option', this.options.timeOptions)
+			const timeTo = this.options.timeTo;
+			if (this.options.timeFrom) this._timePicker.ibxWidget('time', new Date(this.options.timeFrom));
+			this._timePicker2.ibxWidget('option', this.options.timeOptions);
+			if (timeTo) this._timePicker2.ibxWidget('time', new Date(timeTo));
 			window.setTimeout(function () { this._highlightRange(); }.bind(this), 10);
 		}
 	});
