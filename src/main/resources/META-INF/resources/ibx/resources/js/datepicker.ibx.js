@@ -411,7 +411,7 @@ $.widget("ibi.ibxDateRange", $.ibi.ibxDatePicker,
 			var dateTo = new Date(to);
 			var timeZone = this._timeZonePicker.ibxWidget('userValue');
 			var timeFrom = this._timePicker.ibxWidget('time');
-			this.options.timeFrom = timeFrom.date;
+			this.options.timeFrom = this.options.time = timeFrom.date;
 			this.options.dateTimeFrom = new Date(dateFrom.getFullYear(), dateFrom.getMonth(), dateFrom.getDate(), timeFrom.hour24, timeFrom.minute, timeFrom.second, timeFrom.milliSecond);
 			var timeTo = this._timePicker2.ibxWidget('time');
 			this.options.timeTo = timeTo.date;
@@ -465,7 +465,7 @@ $.widget("ibi.ibxDateRange", $.ibi.ibxDatePicker,
 				return {timeFrom: this._timePicker.ibxWidget('time'), timeTo: this._timePicker2.ibxWidget('time')};
 			else{
 				if (data.timeFrom){
-					this.options.timeFrom = data.timeFrom;
+					this.options.timeFrom = this.options.time = data.timeFrom;
 					this._timePicker.ibxWidget('time', new Date(data.timeFrom));
 				}
 				if (data.timeTo){
@@ -480,7 +480,7 @@ $.widget("ibi.ibxDateRange", $.ibi.ibxDatePicker,
 			if (data === undefined)
 				return this._timePicker.ibxWidget('time');
 			else{
-				this.options.timeFrom = data;
+				this.options.timeFrom = this.options.time = data;
 				this._timePicker.ibxWidget('time', new Date(data));
 			}
 		},
