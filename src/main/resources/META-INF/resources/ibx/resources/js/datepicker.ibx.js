@@ -496,6 +496,7 @@ $.widget("ibi.ibxDateRange", $.ibi.ibxDatePicker,
 		},
 		_refresh: function () {
 			this.options.date = this.options.dateTo;
+			const timeTo = this.options.timeTo;
 			this._super();
 			if (!this.options.singleInput) {
 				if (this.options.showClear)
@@ -513,7 +514,6 @@ $.widget("ibi.ibxDateRange", $.ibi.ibxDatePicker,
 			this._datePicker.datepicker('setDate', toDateObj);
 			this._setInputText();
 			this._timePicker.ibxWidget('option', this.options.timeOptions)
-			const timeTo = this.options.timeTo;
 			if (this.options.timeFrom) this._timePicker.ibxWidget('time', new Date(this.options.timeFrom));
 			this._timePicker2.ibxWidget('option', this.options.timeOptions);
 			if (timeTo) this._timePicker2.ibxWidget('time', new Date(timeTo));
