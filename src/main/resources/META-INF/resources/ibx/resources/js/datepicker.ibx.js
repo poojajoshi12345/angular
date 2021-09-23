@@ -23,7 +23,8 @@ $.widget("ibi.ibxDatePicker", $.ibi.ibxVBox,
 			"dateTime": null, //combined javascript Date object with the selected day/time
 			"timeOptions": {}, //options passed to the ibxTimePicker control
 			"showTimeZone":false, //should the timezone picker be visible
-			"timeZones":[] //values fo the timezone picker.
+			"timeZones":[], //values fo the timezone picker.
+			"time": null, // set the initial time. Use string in the format "1995-12-05T15:35:35.555". If not set current time is used.
 		},
 		_widgetClass: "ibx-datepicker",
 		_create: function () {
@@ -189,7 +190,7 @@ $.widget("ibi.ibxDatePicker", $.ibi.ibxVBox,
 			var milliSecond = (time.milliSecond < 10 ? "00" : (time.milliSecond < 100 ? "0" : "")) + time.milliSecond;
 			return "; " + time.hour + ":" + minute + ":" + second + (this.options.timeOptions.showMillisecond ? "." + milliSecond : "") + time.meridian;
 		},
-		// get/set time. 'data' can be a string like "04 Dec 1995 13:30:30.333" or a Date object. Only the time part is gonna be used.
+		// get/set time. 'data' can be a string like "1995-12-04T13:30:30.333" or a Date object. Only the time part is gonna be used.
 		// If data is undefined it returns the time picker response object
 		time: function (data){
 			if (data === undefined)
@@ -269,6 +270,8 @@ $.widget("ibi.ibxDateRange", $.ibi.ibxDatePicker,
 			"dateFrom": '',
 			"numberOfMonths": 2,
 			"singleInput": false,
+			"timeFrom": null, // set the initial "from" time. Use string in the format "1995-12-05T15:35:35.555". If not set current time is used.
+			"timeTo": null, // set the initial "to" time. Use string in the format "1995-12-05T15:35:35.555". If not set current time is used.
 		},
 		_create: function () {
 			this.options.dateTo = this.options.dateTo || $.datepicker.formatDate($.ibi.ibxDatePicker.statics.defaultDateFormat, new Date());
@@ -456,7 +459,7 @@ $.widget("ibi.ibxDateRange", $.ibi.ibxDatePicker,
 					el.attr('data-range-to', '');
 			});
 		},
-		// get/set time. 'data' can be an object like this: {timeFrom: "04 Dec 1995 13:30:30.333", timeTo: "04 Dec 1995 15:35:35.555"} or
+		// get/set time. 'data' can be an object like this: {timeFrom: "1995-12-04T13:30:30.333", timeTo: "1995-12-05T15:35:35.555"} or
 		// {timeFrom: new Date(), timeTo: new Date()}
 		// Only the time part of 'timeFrom' or 'timeTo' will be used.
 		// If data is undefined, it returns an object like this: {timeFrom: <'from' response object>, timeTo: <'to' response object>}
@@ -474,7 +477,7 @@ $.widget("ibi.ibxDateRange", $.ibi.ibxDatePicker,
 				}
 			}
 		},
-		// get/set 'timeFrom' only. 'data' can be a string like "04 Dec 1995 13:30:30.333" or a Date object. Only the time part is gonna be used.
+		// get/set 'timeFrom' only. 'data' can be a string like "1995-12-04T13:30:30.333" or a Date object. Only the time part is gonna be used.
 		// If data is undefines, it returns the time picker 'from' response object
 		timeFrom: function (data){
 			if (data === undefined)
@@ -484,7 +487,7 @@ $.widget("ibi.ibxDateRange", $.ibi.ibxDatePicker,
 				this._timePicker.ibxWidget('time', new Date(data));
 			}
 		},
-		// get/set 'timeTo' only. 'data' can be a string like "04 Dec 1995 13:30:30.333" or a Date object. Only the time part is gonna be used.
+		// get/set 'timeTo' only. 'data' can be a string like "1995-12-05T15:35:35.555" or a Date object. Only the time part is gonna be used.
 		// If data is undefined it returns the time picker 'to' response object
 		timeTo: function (data){
 			if (data === undefined)
