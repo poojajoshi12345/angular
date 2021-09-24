@@ -19,7 +19,7 @@ $.widget("ibi.ibxDatePicker", $.ibi.ibxVBox,
 			"adjustForMonthYear": false,
 
 			"showTime": false, //should the time picker be visible.
-			"showTimeText": false, // show the selected time next to date in input
+			"showTimeText": true, // show the selected time next to date in input
 			"dateTime": null, //combined javascript Date object with the selected day/time
 			"timeOptions": {}, //options passed to the ibxTimePicker control
 			"showTimeZone":false, //should the timezone picker be visible
