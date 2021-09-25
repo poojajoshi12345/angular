@@ -183,14 +183,14 @@
 	<repositories>
 		<repository>
 			<id>maven-public</id>
-			<url>http://wfmaven.ibi.com:8081/repository/maven-public/</url>
+			<url>https://na1prdfocnxs01.tibco.com:8443/repository/maven-public/</url>
 		</repository>
 	</repositories>
 
 	<pluginRepositories>
 		<pluginRepository>
 			<id>maven-plugin-public</id>
-			<url>http://wfmaven.ibi.com:8081/repository/maven-public/</url>
+			<url>https://na1prdfocnxs01.tibco.com:8443/repository/maven-public/</url>
 		</pluginRepository>
 	</pluginRepositories>
 
@@ -198,12 +198,12 @@
 		<repository>
 			<id>maven-releases</id>
 			<name>IBI Internal Release Repository</name>
-			<url>http://wfmaven.ibi.com:8081/repository/maven-releases/</url>
+			<url>https://na1prdfocnxs01.tibco.com:8443/repository/maven-releases/</url>
 		</repository>
 		<snapshotRepository>
 			<id>maven-snapshots</id>
 			<name>IBI Internal Snapshot Repository</name>
-			<url>http://wfmaven.ibi.com:8081/repository/maven-snapshots/</url>
+			<url>https://na1prdfocnxs01.tibco.com:8443/repository/maven-snapshots/</url>
 		</snapshotRepository>
 		<site>
 			<id>www.tibco.com</id>
@@ -256,8 +256,8 @@
 							<npmVersion>7.6.1</npmVersion>
 							<installDirectory>${basedir}</installDirectory>
 							<workingDirectory>${basedir}</workingDirectory>
-							<nodeDownloadRoot>http://wfmaven.ibi.com:8081/repository/nodejs-org/</nodeDownloadRoot>
-							<npmDownloadRoot>http://wfmaven.ibi.com:8081/repository/npm-all/npm/-/</npmDownloadRoot>
+							<nodeDownloadRoot>https://na1prdfocnxs01.tibco.com:8443/repository/nodejs-org/</nodeDownloadRoot>
+							<npmDownloadRoot>https://na1prdfocnxs01.tibco.com:8443/repository/npm-all/npm/-/</npmDownloadRoot>
 						</configuration>
 					</plugin>
 					<plugin>
@@ -406,8 +406,8 @@
 							<npmVersion>7.6.1</npmVersion>
 							<installDirectory>${basedir}</installDirectory>
 							<workingDirectory>${basedir}</workingDirectory>
-							<nodeDownloadRoot>http://wfmaven.ibi.com:8081/repository/nodejs-org/</nodeDownloadRoot>
-							<npmDownloadRoot>http://wfmaven.ibi.com:8081/repository/npm-all/npm/-/</npmDownloadRoot>
+							<nodeDownloadRoot>https://na1prdfocnxs01.tibco.com:8443/repository/nodejs-org/</nodeDownloadRoot>
+							<npmDownloadRoot>https://na1prdfocnxs01.tibco.com:8443/repository/npm-all/npm/-/</npmDownloadRoot>
 						</configuration>
 					</plugin>
 				</plugins>
@@ -903,9 +903,9 @@
 	</profiles>
 
 	<scm>
-		<connection>scm:git:https://wfbucket.ibi.com:8443/scm/wp/${project.artifactId}.git</connection>
-		<developerConnection>scm:git:https://wfbucket.ibi.com:8443/scm/wp/${project.artifactId}.git</developerConnection>
-		<url>https://wfbucket.ibi.com:8443/scm/wp/${project.artifactId}.git</url>
+		<connection>scm:git:https://na1prdfocbb01.tibco.com:8443/scm/wp/${project.artifactId}.git</connection>
+		<developerConnection>scm:git:https://na1prdfocbb01.tibco.com:8443/scm/wp/${project.artifactId}.git</developerConnection>
+		<url>https://na1prdfocbb01.tibco.com:8443/scm/wp/${project.artifactId}.git</url>
 		<tag>HEAD</tag>
 	</scm>
 
