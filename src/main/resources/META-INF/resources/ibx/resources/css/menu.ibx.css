@@ -214,6 +214,10 @@
 	border:1px solid #aaa;
 }
 
+.ibx-split-menu-button > .split-menu {
+	flex: 0 0 auto;
+}
+
 .ibx-split-menu-button > .split-menu::before
 {
 	width:1em;
