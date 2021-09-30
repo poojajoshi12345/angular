@@ -25,6 +25,7 @@
     var icons;
     if (!supportsProperty('fontFeatureSettings')) {
         icons = {
+            'union-add': '&#xebea;',
             'choropleth-alternate': '&#xebe8;',
             'proportional': '&#xebe9;',
             'workspaces': '&#xebe6;',

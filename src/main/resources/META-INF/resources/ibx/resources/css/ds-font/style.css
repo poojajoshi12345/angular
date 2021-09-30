@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'ibi-design-system';
-  src:  url('fonts/ibi-design-system.eot?ax8zh9');
-  src:  url('fonts/ibi-design-system.eot?ax8zh9#iefix') format('embedded-opentype'),
-    url('fonts/ibi-design-system.ttf?ax8zh9') format('truetype'),
-    url('fonts/ibi-design-system.woff?ax8zh9') format('woff'),
-    url('fonts/ibi-design-system.svg?ax8zh9#ibi-design-system') format('svg');
+  src:  url('fonts/ibi-design-system.eot?8pgl7d');
+  src:  url('fonts/ibi-design-system.eot?8pgl7d#iefix') format('embedded-opentype'),
+    url('fonts/ibi-design-system.ttf?8pgl7d') format('truetype'),
+    url('fonts/ibi-design-system.woff?8pgl7d') format('woff'),
+    url('fonts/ibi-design-system.svg?8pgl7d#ibi-design-system') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -35,6 +35,9 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.ds-icon-union-add:before {
+  content: "\ebea";
+}
 .ds-icon-choropleth-alternate:before {
   content: "\ebe8";
 }
