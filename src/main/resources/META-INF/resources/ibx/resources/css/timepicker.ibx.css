@@ -8,7 +8,7 @@
 
 .ibx-timepicker-spinner > .ibx-spinner-text-input{
 	flex: 1 1 auto;
-	padding:0 0 0 .5em;
+	padding-right: .5rem;
 	width: 3em;
  }
 
