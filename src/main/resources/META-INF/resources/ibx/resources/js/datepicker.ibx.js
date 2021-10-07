@@ -200,6 +200,9 @@ $.widget("ibi.ibxDatePicker", $.ibi.ibxVBox,
 				this._timePicker.ibxWidget('time', new Date(data));
 			}
 		},
+		_setInputText: function (){
+			this._input.ibxWidget('option', 'text', $.datepicker.formatDate(this.options.outDateFormat, this._datePicker.datepicker('getDate'), this._pickerOptions) + this._timeText(this._timePicker.ibxWidget("time")));			
+		},
 		_refresh: function () {
 			this.element.ibxRemoveClass('popup simple inline');
 			if (this.options.showClear)
@@ -224,7 +227,7 @@ $.widget("ibi.ibxDatePicker", $.ibi.ibxVBox,
 			}
 
 			this._timeWrapper.css('display', this.options.showTime ? '' : 'none');
-			this._input.ibxWidget('option', 'text', $.datepicker.formatDate(this.options.outDateFormat, this._datePicker.datepicker('getDate'), this._pickerOptions) + this._timeText(this._timePicker.ibxWidget("time")));
+			this._setInputText();
 			this._super();
 
 			//[IBX-434] don't see why we close the popup on the refresh...take out and see what happens!
