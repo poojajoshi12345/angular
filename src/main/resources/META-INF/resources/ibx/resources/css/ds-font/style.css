@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'ibi-design-system';
-  src:  url('fonts/ibi-design-system.eot?8pgl7d');
-  src:  url('fonts/ibi-design-system.eot?8pgl7d#iefix') format('embedded-opentype'),
-    url('fonts/ibi-design-system.ttf?8pgl7d') format('truetype'),
-    url('fonts/ibi-design-system.woff?8pgl7d') format('woff'),
-    url('fonts/ibi-design-system.svg?8pgl7d#ibi-design-system') format('svg');
+  src:  url('fonts/ibi-design-system.eot?4izr9k');
+  src:  url('fonts/ibi-design-system.eot?4izr9k#iefix') format('embedded-opentype'),
+    url('fonts/ibi-design-system.ttf?4izr9k') format('truetype'),
+    url('fonts/ibi-design-system.woff?4izr9k') format('woff'),
+    url('fonts/ibi-design-system.svg?4izr9k#ibi-design-system') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -35,6 +35,21 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.ds-icon-1col:before {
+  content: "\ebeb";
+}
+.ds-icon-2col:before {
+  content: "\ebec";
+}
+.ds-icon-3col:before {
+  content: "\ebed";
+}
+.ds-icon-4col:before {
+  content: "\ebee";
+}
+.ds-icon-6col:before {
+  content: "\ebef";
+}
 .ds-icon-union-add:before {
   content: "\ebea";
 }
