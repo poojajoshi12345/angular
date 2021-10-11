@@ -25,6 +25,11 @@
     var icons;
     if (!supportsProperty('fontFeatureSettings')) {
         icons = {
+            '1col': '&#xebeb;',
+            '2col': '&#xebec;',
+            '3col': '&#xebed;',
+            '4col': '&#xebee;',
+            '6col': '&#xebef;',
             'union-add': '&#xebea;',
             'choropleth-alternate': '&#xebe8;',
             'proportional': '&#xebe9;',
