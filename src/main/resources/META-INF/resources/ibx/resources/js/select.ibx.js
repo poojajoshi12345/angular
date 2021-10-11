@@ -982,7 +982,7 @@ $.widget("ibi.ibxSelectPaged", $.ibi.ibxSelectBase, {
         "listClasses": "search-list ibx-menu-no-icons",
         */
 	},
-	_widgetClass: "ibx-select-paged",
+	_widgetClass: "ibx-select ibx-select-paged",
 	_create: function ()
 	{
 		this._super();
