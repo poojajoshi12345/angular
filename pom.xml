@@ -241,6 +241,16 @@
 								</configuration>
 							</execution>
 							<execution>
+								<id>grunt-npm-config-ssl</id>
+								<phase>generate-resources</phase>
+								<goals>
+									<goal>npm</goal>
+								</goals>
+								<configuration>
+									<arguments>config set strict-ssl false</arguments>
+								</configuration>
+							</execution>
+							<execution>
 								<id>grunt-npm-install</id>
 								<phase>generate-resources</phase>
 								<goals>
@@ -394,6 +404,16 @@
 								</goals>
 								<configuration>
 									<arguments>config set cache ${project.basedir}/npm-cache</arguments>
+								</configuration>
+							</execution>
+							<execution>
+								<id>npm-config-ssl</id>
+								<phase>generate-resources</phase>
+								<goals>
+									<goal>npm</goal>
+								</goals>
+								<configuration>
+									<arguments>config set strict-ssl false</arguments>
 								</configuration>
 							</execution>
 							<execution>
