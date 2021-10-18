@@ -678,8 +678,8 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 				this._colHeaderBar.ibxWidget("add", cHeading[0]);
 				if(cInfo.size == "flex")
 				{
-					cHeading.css("flex", "1 1 auto");
-					this.getColumn(i).css("flex", "1 1 auto");
+					cHeading.css("flex", "1 1 1px");
+					this.getColumn(i).css("flex", "1 1 1px");
 					splitter.detach(); //flex columns don't have splitters
 					flexing = true;
 				}
