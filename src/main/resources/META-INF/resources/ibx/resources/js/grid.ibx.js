@@ -593,6 +593,7 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 
 		//now visually clean up the grid.
 		this.refresh();
+		this.updateHeaders();
 	},
 	_buildTreeFromMarkup:function(parentRow)
 	{
