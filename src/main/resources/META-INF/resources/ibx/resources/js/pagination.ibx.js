@@ -8,6 +8,7 @@ $.widget("ibi.ibxPagination", $.ibi.ibxHBox,
 {
 	options:
 	{
+		'inline':true,
 		'pages':0,
 		'page':0,
 		'navKeyRoot':true,
@@ -17,7 +18,7 @@ $.widget("ibi.ibxPagination", $.ibi.ibxHBox,
 		'selMgrOpts':{
 			'selectableChildren':'.ibx-pagination-ctrl',
 		},
-		'aria':{}
+		'aria':{},
 	},
 	_widgetClass:"ibx-pagination",
 	_create:function()
@@ -29,7 +30,7 @@ $.widget("ibi.ibxPagination", $.ibi.ibxHBox,
 		this._btnLast = $('<div tabindex="-1" class="ibx-pagination-ctrl ibx-pagination-btn-last">').attr('title', ibx.resourceMgr.getString("IBX_PAGINATION_PAGE_LAST")).ibxButtonSimple({glyph:'last_page', glyphClasses:'material-icons'}).on('click', this._onLastPage.bind(this));
 		this._pageInfo = $('<div tabindex="-1" class="ibx-pagination-ctrl ibx-pagination-page-info">').ibxButtonSimple();
 		this._pageInfo.on('click', this._onPageInfoClick.bind(this)).on('ibx_startediting ibx_stopediting ibx_canceledit ibx_textchanging', this._onPageInfoEditEvent.bind(this));
-		this.element.append([this._btnFirst, this._btnPrev, this._pageInfo, this._btnNext, this._btnLast]);
+		this.element.append([this._btnFirst, this._btnPrev, $('<div class="ibx-pagination-spacer">'), this._pageInfo, $('<div class="ibx-pagination-spacer">'), this._btnNext, this._btnLast]);
 	},
 	_setAccessibility:function(accessible, aria)
 	{
