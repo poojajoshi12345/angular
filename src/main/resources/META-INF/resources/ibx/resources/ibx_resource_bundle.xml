@@ -117,7 +117,7 @@ $Revision: 1.123 $:-->
 				"IBX_PAGINATION_PAGE_NEXT":"Next Page",
 				"IBX_PAGINATION_PAGE_LAST":"Last Page",
 				"IBX_PAGINATION_PAGE_INFO":"Page {1} of {2}",
-
+				"IBX_PAGINATION_PAGE_INFO_DISPLAY": "Page {1}/{2}",
 
 				"IBX_TERMINATING_STRING":""
 			}
