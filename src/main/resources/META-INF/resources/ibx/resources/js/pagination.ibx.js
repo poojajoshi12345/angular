@@ -8,6 +8,7 @@ $.widget("ibi.ibxPagination", $.ibi.ibxHBox,
 {
 	options:
 	{
+		'inline':true,
 		'pages':0,
 		'page':0,
 		'navKeyRoot':true,
@@ -17,7 +18,7 @@ $.widget("ibi.ibxPagination", $.ibi.ibxHBox,
 		'selMgrOpts':{
 			'selectableChildren':'.ibx-pagination-ctrl',
 		},
-		'aria':{}
+		'aria':{},
 	},
 	_widgetClass:"ibx-pagination",
 	_create:function()
@@ -29,7 +30,7 @@ $.widget("ibi.ibxPagination", $.ibi.ibxHBox,
 		this._btnLast = $('<div tabindex="-1" class="ibx-pagination-ctrl ibx-pagination-btn-last">').attr('title', ibx.resourceMgr.getString("IBX_PAGINATION_PAGE_LAST")).ibxButtonSimple({glyph:'last_page', glyphClasses:'material-icons'}).on('click', this._onLastPage.bind(this));
 		this._pageInfo = $('<div tabindex="-1" class="ibx-pagination-ctrl ibx-pagination-page-info">').ibxButtonSimple();
 		this._pageInfo.on('click', this._onPageInfoClick.bind(this)).on('ibx_startediting ibx_stopediting ibx_canceledit ibx_textchanging', this._onPageInfoEditEvent.bind(this));
-		this.element.append([this._btnFirst, this._btnPrev, this._pageInfo, this._btnNext, this._btnLast]);
+		this.element.append([this._btnFirst, this._btnPrev, $('<div class="ibx-pagination-spacer">'), this._pageInfo, $('<div class="ibx-pagination-spacer">'), this._btnNext, this._btnLast]);
 	},
 	_setAccessibility:function(accessible, aria)
 	{
@@ -92,10 +93,12 @@ $.widget("ibi.ibxPagination", $.ibi.ibxHBox,
 		else
 		if(e.type === 'ibx_stopediting')
 		{
-			var pageInfo = this.pageInfo($.ibi.ibxPagination.GO_PAGE, Number(e.originalEvent.data - 1));
+			var newPage = Math.min(Math.max(0, e.originalEvent.data - 1), options.pages);
+			var pageInfo = this.pageInfo($.ibi.ibxPagination.GO_PAGE, newPage);
 			var evt = this.element.dispatchEvent('ibx_pagination_change', pageInfo, true, true);
 			if(!evt.defaultPrevented)
 				this.option('page', pageInfo.newPage);
+			this.refresh();
 			this.element.ibxSelectionManager('focus', this._pageInfo);
 		}
 		else
@@ -107,7 +110,7 @@ $.widget("ibi.ibxPagination", $.ibi.ibxHBox,
 			var info  = e.originalEvent.data;
 			var value = Number(info.newValue);
 			var isValid = (/^[0-9]*$/).test(value);
-			if(!isValid || (value > options.pages))
+			if(!isValid)
 				e.preventDefault();
 		}
 	},
@@ -116,7 +119,7 @@ $.widget("ibi.ibxPagination", $.ibi.ibxHBox,
 		var options = this.options;
 		var info = {
 			hint: hint,
-			page: options.page,
+			curPage: options.page,
 			newPage:newPage,
 			pageCount:options.pages,
 		}
