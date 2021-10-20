@@ -137,7 +137,7 @@ $.widget("ibi.ibxPagination", $.ibi.ibxHBox,
 		this._btnPrev.ibxWidget('option', 'disabled', options.page === 0);
 		this._btnLast.ibxWidget('option', 'disabled', options.page === options.pages);
 		this._btnNext.ibxWidget('option', 'disabled', options.page === options.pages);
-		this._pageInfo.ibxWidget({text:sformat('{1}/{2}', options.page + 1, options.pages + 1)})
+		this._pageInfo.ibxWidget({text:sformat(ibx.resourceMgr.getString('IBX_PAGINATION_PAGE_INFO_DISPLAY'), options.page + 1, options.pages + 1)})
 	}
 });
 $.ibi.ibxPagination.GO_PAGE = -1;
