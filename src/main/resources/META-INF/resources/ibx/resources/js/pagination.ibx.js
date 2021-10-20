@@ -98,6 +98,7 @@ $.widget("ibi.ibxPagination", $.ibi.ibxHBox,
 			var evt = this.element.dispatchEvent('ibx_pagination_change', pageInfo, true, true);
 			if(!evt.defaultPrevented)
 				this.option('page', pageInfo.newPage);
+			this.refresh();
 			this.element.ibxSelectionManager('focus', this._pageInfo);
 		}
 		else
