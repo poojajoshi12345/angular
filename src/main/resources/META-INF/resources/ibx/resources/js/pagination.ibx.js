@@ -92,7 +92,8 @@ $.widget("ibi.ibxPagination", $.ibi.ibxHBox,
 		else
 		if(e.type === 'ibx_stopediting')
 		{
-			var pageInfo = this.pageInfo($.ibi.ibxPagination.GO_PAGE, Number(e.originalEvent.data - 1));
+			var newPage = Math.min(Math.max(0, e.originalEvent.data - 1), options.pages);
+			var pageInfo = this.pageInfo($.ibi.ibxPagination.GO_PAGE, newPage);
 			var evt = this.element.dispatchEvent('ibx_pagination_change', pageInfo, true, true);
 			if(!evt.defaultPrevented)
 				this.option('page', pageInfo.newPage);
@@ -107,7 +108,7 @@ $.widget("ibi.ibxPagination", $.ibi.ibxHBox,
 			var info  = e.originalEvent.data;
 			var value = Number(info.newValue);
 			var isValid = (/^[0-9]*$/).test(value);
-			if(!isValid || (value > options.pages))
+			if(!isValid)
 				e.preventDefault();
 		}
 	},
@@ -116,7 +117,7 @@ $.widget("ibi.ibxPagination", $.ibi.ibxHBox,
 		var options = this.options;
 		var info = {
 			hint: hint,
-			page: options.page,
+			curPage: options.page,
 			newPage:newPage,
 			pageCount:options.pages,
 		}

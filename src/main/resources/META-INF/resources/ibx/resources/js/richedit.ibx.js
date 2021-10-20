@@ -412,13 +412,13 @@ $.widget("ibi.ibxEditable", $.Widget,
 				var mr = e.originalEvent.data[0];
 				var value = mr.oldValue;
 				var newValue = mr.target.textContent;
-
 				if(value != newValue)
 				{
 					//let people know the value is changing...they can stop it from happening.
 					var event = this.element.dispatchEvent("ibx_textchanging", {"value":value, "newValue":newValue}, true, true);
 					if(event.isDefaultPrevented())
 					{
+						this.element.ibxMutationObserver('option', 'listen', false);
 						var range = document.createRange();
 						var selection = window.getSelection();
 						var anchor = selection.anchorNode;
@@ -430,6 +430,7 @@ $.widget("ibi.ibxEditable", $.Widget,
 						range.setStart(anchor, offset);
 						range.setEnd(anchor, offset);
 						selection.addRange(range);
+						this.element.ibxMutationObserver('option', 'listen', true);
 					}
 				}
 			}

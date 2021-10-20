@@ -59,7 +59,6 @@ mkdir %wfpath%\WEB-INF\classes\com\ibi
 rd /S /Q %wfpath%\WEB-INF\classes\com\ibi\intl
 MKLINK /D %wfpath%\WEB-INF\classes\com\ibi\intl %CD%\..\intl\src\main\resources\com\ibi\intl
 
-
 REM just checkout WEB-INF for jsps/etc.
 git clone https://na1prdfocbb01.tibco.com:8443/scm/wp/webfocus-webapp.git ..\webapp
 
