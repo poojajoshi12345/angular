@@ -112,6 +112,8 @@ $Revision: 1.123 $:-->
 				"IBX_WIZ_BTN_NEXT":"Next",
 				"IBX_WIZ_BTN_FINISH":"Finish",
 
+				"IBX_PAGINATION_PAGE_LOC_INFO":"{1} - {2} of {3}",
+				"IBX_PAGINATION_PAGE_COUNT":"Items Per Page:",
 				"IBX_PAGINATION_PAGE_FIRST":"First Page",
 				"IBX_PAGINATION_PAGE_PREV":"Previous Page",
 				"IBX_PAGINATION_PAGE_NEXT":"Next Page",
@@ -234,6 +236,23 @@ $Revision: 1.123 $:-->
 			</div>
 		</markup-block>
 
+		<markup-block class='ibx-pagination-template'>
+			<div tabindex="-1" class="ibx-pagination-ctrl ibx-pagination-page-loc-info" data-ibx-name="_pageLocInfo" data-ibx-type="ibxLabel"></div>
+			<div class="ibx-pagination-spacer"></div>
+			<div tabindex="-1" class="ibx-pagination-ctrl ibx-pagination-items-per-page-label" data-ibx-name="_itemsPerPageLabel" data-ibx-type="ibxLabel" data-ibxp-for=".ibx-pagination-page-count">@ibxString(IBX_PAGINATION_PAGE_COUNT)</div>
+			<div tabindex="-1" class="ibx-pagination-ctrl ibx-pagination-items-per-page" data-ibx-name="_itemsPerPage" data-ibx-type="ibxSelect" data-ibxp-readonly="true">
+				<div data-ibx-type="ibxSelectItem" data-ibxp-user-value="25">25</div>
+				<div data-ibx-type="ibxSelectItem" data-ibxp-user-value="50">50</div>
+				<div data-ibx-type="ibxSelectItem" data-ibxp-user-value="75">75</div>
+				<div data-ibx-type="ibxSelectItem" data-ibxp-user-value="100">100</div>
+				<div data-ibx-type="ibxSelectItem" data-ibxp-user-value="200">200</div>
+			</div>
+			<div tabindex="-1" class="ibx-pagination-ctrl ibx-pagination-btn ibx-pagination-btn-first" data-ibx-name="_btnFirst" data-ibx-type='ibxButtonSimple' data-ibxp-glyph-classes="material-icons" data-ibxp-glyph="first_page" title="@ibxString(IBX_PAGINATION_PAGE_FIRST)"></div>
+			<div tabindex="-1" class="ibx-pagination-ctrl ibx-pagination-btn ibx-pagination-btn-prev" data-ibx-name="_btnPrev" data-ibx-type='ibxButtonSimple' data-ibxp-glyph-classes="material-icons" data-ibxp-glyph="chevron_left" title="@ibxString(IBX_PAGINATION_PAGE_PREV)"></div>
+			<div tabindex="-1" class="ibx-pagination-ctrl ibx-pagination-page-info" data-ibx-name="_pageInfo" data-ibx-type="ibxButtonSimple"></div>
+			<div tabindex="-1" class="ibx-pagination-ctrl ibx-pagination-btn ibx-pagination-btn-next" data-ibx-name="_btnNext" data-ibx-type='ibxButtonSimple' data-ibxp-glyph-classes="material-icons" data-ibxp-glyph="chevron_right" title="@ibxString(IBX_PAGINATION_PAGE_NEXT)"></div>
+			<div tabindex="-1" class="ibx-pagination-ctrl ibx-pagination-btn ibx-pagination-btn-last" data-ibx-name="_btnLast" data-ibx-type='ibxButtonSimple' data-ibxp-glyph-classes="material-icons" data-ibxp-glyph="last_page" title="@ibxString(IBX_PAGINATION_PAGE_LAST)"></div>
+		</markup-block>
 	</markup>
 
 	<!--styles-->
