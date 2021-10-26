@@ -35,6 +35,7 @@ $.widget("ibi.ibxPagination", $.ibi.ibxHBox,
 		this._btnPrev.on('click', this._onPrevPage.bind(this));
 		this._btnNext.on('click', this._onNextPage.bind(this));
 		this._btnLast.on('click', this._onLastPage.bind(this));
+		this._itemsPerPage.on('ibx_change', this._onItemsPerPageChange.bind(this));
 		this._pageInfo.on('click', this._onPageInfoClick.bind(this)).on('ibx_startediting ibx_stopediting ibx_canceledit ibx_textchanging', this._onPageInfoEditEvent.bind(this));
 	},
 	_setAccessibility:function(accessible, aria)
@@ -85,6 +86,10 @@ $.widget("ibi.ibxPagination", $.ibi.ibxHBox,
 		var evt = this.element.dispatchEvent('ibx_pagination_change', pageInfo, true, true);
 		if(!evt.defaultPrevented)
 			this.option('page', pageInfo.newPage);
+	},
+	_onItemsPerPageChange:function(e, val)
+	{
+		this.option('itemsPerPage', $(e.target).ibxWidget("userValue"));
 	},
 	_onPageInfoClick:function(e)
 	{
