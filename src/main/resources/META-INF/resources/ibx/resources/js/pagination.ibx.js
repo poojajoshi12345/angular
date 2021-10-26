@@ -8,13 +8,19 @@ $.widget("ibi.ibxPagination", $.ibi.ibxHBox,
 {
 	options:
 	{
-		'inline':true,
-		'pages':0,
-		'page':0,
+		'nameRoot': true,	
 		'navKeyRoot':true,
 		'focusDefault':true,
 		'wrap':false,
 		'align':'center',
+		'inline':true,
+		'pages':0,
+		'page':0,
+		'totalItems': 9999,
+		'pageJumping': true,
+		'showPageLocInfo': true,
+		'showItemsPerPage': true,
+		'itemsPerPage': 100,
 		'selMgrOpts':{
 			'selectableChildren':'.ibx-pagination-ctrl',
 		},
@@ -24,13 +30,12 @@ $.widget("ibi.ibxPagination", $.ibi.ibxHBox,
 	_create:function()
 	{
 		this._super();
-		this._btnFirst = $('<div tabindex="-1" class="ibx-pagination-ctrl ibx-pagination-btn ibx-pagination-btn-first">').attr('title', ibx.resourceMgr.getString("IBX_PAGINATION_PAGE_FIRST")).ibxButtonSimple({glyph:'first_page', glyphClasses:'material-icons'}).on('click', this._onFirstPage.bind(this));
-		this._btnPrev = $('<div tabindex="-1" class="ibx-pagination-ctrl ibx-pagination-btn ibx-pagination-btn-previous">').attr('title', ibx.resourceMgr.getString("IBX_PAGINATION_PAGE_PREV")).ibxButtonSimple({glyph:'chevron_left', glyphClasses:'material-icons'}).on('click', this._onPrevPage.bind(this));
-		this._btnNext = $('<div tabindex="-1" class="ibx-pagination-ctrl ibx-pagination-btn ibx-pagination-btn-next">').attr('title', ibx.resourceMgr.getString("IBX_PAGINATION_PAGE_NEXT")).ibxButtonSimple({glyph:'chevron_right', glyphClasses:'material-icons'}).on('click', this._onNextPage.bind(this));
-		this._btnLast = $('<div tabindex="-1" class="ibx-pagination-ctrl ibx-pagination-btn ibx-pagination-btn-last">').attr('title', ibx.resourceMgr.getString("IBX_PAGINATION_PAGE_LAST")).ibxButtonSimple({glyph:'last_page', glyphClasses:'material-icons'}).on('click', this._onLastPage.bind(this));
-		this._pageInfo = $('<div tabindex="-1" class="ibx-pagination-ctrl ibx-pagination-page-info">').ibxButtonSimple();
+		this._loadWidgetTemplate('.ibx-pagination-template');
+		this._btnFirst.on('click', this._onFirstPage.bind(this));
+		this._btnPrev.on('click', this._onPrevPage.bind(this));
+		this._btnNext.on('click', this._onNextPage.bind(this));
+		this._btnLast.on('click', this._onLastPage.bind(this));
 		this._pageInfo.on('click', this._onPageInfoClick.bind(this)).on('ibx_startediting ibx_stopediting ibx_canceledit ibx_textchanging', this._onPageInfoEditEvent.bind(this));
-		this.element.append([this._btnFirst, this._btnPrev, $('<div class="ibx-pagination-spacer">'), this._pageInfo, $('<div class="ibx-pagination-spacer">'), this._btnNext, this._btnLast]);
 	},
 	_setAccessibility:function(accessible, aria)
 	{
@@ -83,7 +88,8 @@ $.widget("ibi.ibxPagination", $.ibi.ibxHBox,
 	},
 	_onPageInfoClick:function(e)
 	{
-		this._pageInfo.ibxWidget('startEditing');
+		if(this.options.pageJumping)
+			this._pageInfo.ibxWidget('startEditing');
 	},
 	_onPageInfoEditEvent:function(e)
 	{
@@ -137,6 +143,13 @@ $.widget("ibi.ibxPagination", $.ibi.ibxHBox,
 		this._btnPrev.ibxWidget('option', 'disabled', options.page === 0);
 		this._btnLast.ibxWidget('option', 'disabled', options.page === options.pages);
 		this._btnNext.ibxWidget('option', 'disabled', options.page === options.pages);
+
+		var idxStart = options.itemsPerPage * options.page;
+		var idxEnd = idxStart + options.itemsPerPage;
+		this._pageLocInfo.ibxWidget('option', 'text', sformat(ibx.resourceMgr.getString('IBX_PAGINATION_PAGE_LOC_INFO'), idxStart, idxEnd, options.totalItems));
+
+		this._itemsPerPageLabel.css('display', options.showItemsPerPage ? '' : 'none');
+		this._itemsPerPage.ibxWidget('userValue', options.itemsPerPage).css('display', options.showItemsPerPage ? '' : 'none');
 		this._pageInfo.ibxWidget({text:sformat(ibx.resourceMgr.getString('IBX_PAGINATION_PAGE_INFO_DISPLAY'), options.page + 1, options.pages + 1)})
 	}
 });
