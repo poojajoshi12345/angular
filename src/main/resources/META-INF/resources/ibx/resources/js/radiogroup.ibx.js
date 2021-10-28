@@ -188,7 +188,7 @@ $.widget("ibi.ibxRadioGroup",$.ibi.ibxFlexBox,
 					el.ibxWidget('checked', true).ibxAddClass('radio-group-checked');
 			}.bind(this, value));
 
-			this.element.dispatchEvent("ibx_change", null, false);
+			this.element.dispatchEvent("ibx_change", value, false);
 		}
 
 		this._settingOption = false;
