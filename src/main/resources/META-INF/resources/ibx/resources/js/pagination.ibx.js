@@ -90,6 +90,9 @@ $.widget("ibi.ibxPagination", $.ibi.ibxHBox,
 	_onItemsPerPageChange:function(e, val)
 	{
 		this.option('itemsPerPage', $(e.target).ibxWidget("userValue"));
+		var options = this.options;
+		var pageInfo = this.pageInfo($.ibi.ibxPagination.ITEMS_PER_PAGE, options.pages);
+		this.element.dispatchEvent('ibx_pagination_change', pageInfo, true, false);
 	},
 	_onPageInfoClick:function(e)
 	{
@@ -130,6 +133,7 @@ $.widget("ibi.ibxPagination", $.ibi.ibxHBox,
 		var options = this.options;
 		var info = {
 			hint: hint,
+			itemsPerPage: options.itemsPerPage,
 			curPage: options.page,
 			newPage:newPage,
 			pageCount:options.pages,
@@ -158,6 +162,7 @@ $.widget("ibi.ibxPagination", $.ibi.ibxHBox,
 		this._pageInfo.ibxWidget({text:sformat(ibx.resourceMgr.getString('IBX_PAGINATION_PAGE_INFO_DISPLAY'), options.page + 1, options.pages + 1)})
 	}
 });
+$.ibi.ibxPagination.ITEMS_PER_PAGE = -2;
 $.ibi.ibxPagination.GO_PAGE = -1;
 $.ibi.ibxPagination.GO_FIRST = 0;
 $.ibi.ibxPagination.GO_PREVIOUS = 1;
