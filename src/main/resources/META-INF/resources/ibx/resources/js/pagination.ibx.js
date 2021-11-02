@@ -160,7 +160,7 @@ $.widget("ibi.ibxPagination", $.ibi.ibxHBox,
 
 		var idxStart = options.itemsPerPage * options.page;
 		var idxEnd = idxStart + options.itemsPerPage;
-		this._pageLocInfo.ibxWidget('option', 'text', sformat(ibx.resourceMgr.getString('IBX_PAGINATION_PAGE_LOC_INFO'), idxStart, idxEnd, options.totalItems));
+		this._pageLocInfo.ibxWidget('option', 'text', sformat(ibx.resourceMgr.getString('IBX_PAGINATION_PAGE_LOC_INFO'), idxStart, Math.min(idxEnd, options.totalItems), options.totalItems));
 
 		this._itemsPerPageLabel.css('display', options.showItemsPerPage ? '' : 'none');
 		this._itemsPerPage.css('display', options.showItemsPerPage ? '' : 'none');
