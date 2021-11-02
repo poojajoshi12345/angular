@@ -16,11 +16,11 @@ $.widget("ibi.ibxPagination", $.ibi.ibxHBox,
 		'inline':true,
 		'pages':0,
 		'page':0,
-		'totalItems': 9999,
+		'totalItems': 0,
 		'pageJumping': true,
 		'showPageLocInfo': true,
 		'showItemsPerPage': true,
-		'itemsPerPage': 100,
+		'itemsPerPage': 0,
 		'selMgrOpts':{
 			'selectableChildren':'.ibx-pagination-ctrl',
 		},
@@ -88,10 +88,9 @@ $.widget("ibi.ibxPagination", $.ibi.ibxHBox,
 			this.option('page', pageInfo.newPage);
 	},
 	_onItemsPerPageChange:function(e, val)
-	{
+	{	
 		this.option('itemsPerPage', $(e.target).ibxWidget("userValue"));
-		var options = this.options;
-		var pageInfo = this.pageInfo($.ibi.ibxPagination.ITEMS_PER_PAGE, options.pages);
+		var pageInfo = this.pageInfo($.ibi.ibxPagination.ITEMS_PER_PAGE, 0);
 		this.element.dispatchEvent('ibx_pagination_change', pageInfo, true, false);
 	},
 	_onPageInfoClick:function(e)
@@ -142,7 +141,13 @@ $.widget("ibi.ibxPagination", $.ibi.ibxHBox,
 	},
 	_setOption:function(key, value)
 	{
+		const options = this.options;
+		const bChanged = options[key] !== value;
 		this._super(key, value);
+
+		if(key === 'itemsPerPage' && bChanged) {
+			this._itemsPerPage.ibxWidget('userValue', options.itemsPerPage);
+		}
 	},
 	_refresh: function ()
 	{
@@ -155,10 +160,10 @@ $.widget("ibi.ibxPagination", $.ibi.ibxHBox,
 
 		var idxStart = options.itemsPerPage * options.page;
 		var idxEnd = idxStart + options.itemsPerPage;
-		this._pageLocInfo.ibxWidget('option', 'text', sformat(ibx.resourceMgr.getString('IBX_PAGINATION_PAGE_LOC_INFO'), idxStart, idxEnd, options.totalItems));
+		this._pageLocInfo.ibxWidget('option', 'text', sformat(ibx.resourceMgr.getString('IBX_PAGINATION_PAGE_LOC_INFO'), idxStart, Math.min(idxEnd, options.totalItems), options.totalItems));
 
 		this._itemsPerPageLabel.css('display', options.showItemsPerPage ? '' : 'none');
-		this._itemsPerPage.ibxWidget('userValue', options.itemsPerPage).css('display', options.showItemsPerPage ? '' : 'none');
+		this._itemsPerPage.css('display', options.showItemsPerPage ? '' : 'none');
 		this._pageInfo.ibxWidget({text:sformat(ibx.resourceMgr.getString('IBX_PAGINATION_PAGE_INFO_DISPLAY'), options.page + 1, options.pages + 1)})
 	}
 });
