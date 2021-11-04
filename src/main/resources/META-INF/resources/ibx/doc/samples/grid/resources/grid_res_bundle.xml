@@ -89,9 +89,9 @@
 					<div class="toolbar" data-ibx-type="ibxHBox" data-ibxp-align="center" data-ibxp-wrap="true">
 						<div tabindex="0" class="btn-load" data-ibx-type="ibxButton">Load Grid</div>
 						<div data-ibx-type="ibxLabel" data-ibxp-for=".num-cols">Cols:</div>
-						<div tabindex="0" class="text-entry num-cols" data-ibx-type="ibxLabel" data-ibxp-justify="center">10</div>
+						<div tabindex="0" class="text-entry num-cols" data-ibx-type="ibxLabel" data-ibxp-justify="center">5</div>
 						<div class="" data-ibx-type="ibxLabel" data-ibxp-for=".num-rows">Rows:</div>
-						<div tabindex="0" class="text-entry num-rows" data-ibx-type="ibxLabel" data-ibxp-justify="center">100</div>
+						<div tabindex="0" class="text-entry num-rows" data-ibx-type="ibxLabel" data-ibxp-justify="center">5</div>
 						<div tabindex="0" class="grid-option btn-multi-select" data-ibx-type="ibxCheckBoxSimple" data-ibxp-checked="false">Multi Select</div>
 						<div tabindex="0" class="grid-option btn-row-select" data-ibx-type="ibxCheckBoxSimple" data-ibxp-checked="false">Row Select</div>
 						<div tabindex="0" class="grid-option btn-toggle-select" data-ibx-type="ibxCheckBoxSimple" data-ibxp-checked="false">Toggle Select</div>

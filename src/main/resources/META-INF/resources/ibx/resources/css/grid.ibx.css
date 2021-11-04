@@ -60,6 +60,28 @@
 	padding:.5em;
 	border-right:1px solid #ccc;
 }
+
+.dgrid-header-col-sort-marker {
+	font-family: Material Icons;
+	display: none;
+	margin-left: .25em;
+	padding: 0 .25em;
+}
+
+.dgrid-header-col.sortable:hover .dgrid-header-col-sort-marker,
+.dgrid-header-col.sorting .dgrid-header-col-sort-marker {
+	display: inline-block;
+}
+
+.dgrid-header-col-sort-marker.ascending:after {
+	content: 'arrow_upward';
+}
+
+.dgrid-header-col-sort-marker.descending:after {
+	content: 'arrow_downward';
+}
+
+
 .dgrid-header-row
 {
 	flex:0 0 auto;

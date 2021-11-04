@@ -120,7 +120,7 @@
 					var colMap = [];
 					var nCols = parseInt($(".num-cols").text(), 10);
 					for(var i = 0; i < nCols; ++i)
-						colMap.push({"title":"Column " + i, "size":"100px"});
+						colMap.push({"sortable": i%2, "title":"Column " + i, "size":"100px"});
 
 					var grid = $(".ibx-data-grid").ibxWidget("option",
 					{

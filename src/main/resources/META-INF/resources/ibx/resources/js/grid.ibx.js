@@ -488,6 +488,9 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 			justify:"center",
 			resizable:true,
 			selectable:true,
+			sortable:false, 
+			sortOrder:'ascending',
+			sorting: false,
 			visible:true,
 			ui:null,
 		},
@@ -510,6 +513,11 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 			colHeaderBarClass:"dgrid-header-col-bar",
 			colHeaderClass:"dgrid-header-col",
 			colHeaderSplitterClass:"dgrid-header-col-splitter",
+			colHeaderSortMarkerClass: "dgrid-header-col-sort-marker",
+			colHeaderSortableClass: 'sortable',
+			colHeaderSortingClass: 'sorting',
+			colHeaderSortAscendingClass: 'ascending',
+			colHeaderSortDescendingClass: 'descending',
 			rowHeaderBarClass:"dgrid-header-row-bar",
 			rowHeaderClass:"dgrid-header-row",
 			rowHeaderSplitterClass:"dgrid-header-row-splitter",
@@ -667,6 +675,12 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 				if(!cHeading.length)
 					cHeading = $("<div>").ibxButtonSimple({justify:cInfo.justify, text:cInfo.title});
 				cHeading.ibxAddClass(classes.colHeaderClass).attr({tabindex:-1, role:"columnheader"});
+				cHeading.ibxToggleClass(classes.colHeaderSortableClass, cInfo.sortable);
+
+				//make sort marker
+				var sortMarker = $(sformat("<div class='{1}'>", classes.colHeaderSortMarkerClass));
+				sortMarker.ibxToggleClass(classes.colHeaderSortingClass, cInfo.sorting);
+				sortMarker.ibxAddClass( classes[cInfo.sortOrder === 'ascending' ? 'colHeaderSortAscendingClass' : 'colHeaderSortDescendingClass']);
 
 				//make splitter
 				var splitter = $(sformat("<div class='{1}'>", classes.colHeaderSplitterClass));
@@ -674,9 +688,11 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 				splitter.on("click", function(e){e.stopPropagation()});//click on splitter not click on header!
 
 				//now add the column header and set the size as everything is in the dom.
-				cInfo._ui = {"idx":i, "header":cHeading, "curSize":null};
-				cHeading.append(splitter).data("ibxDataGridCol", cInfo);
+				cInfo._ui = {"idx":i, "header":cHeading, "curSize": null};
+				cHeading.append([sortMarker, splitter]).data("ibxDataGridCol", cInfo);
 				this._colHeaderBar.ibxWidget("add", cHeading[0]);
+				
+				//set the column size
 				if(cInfo.size == "flex")
 				{
 					cHeading.css("flex", "1 1 1px");
