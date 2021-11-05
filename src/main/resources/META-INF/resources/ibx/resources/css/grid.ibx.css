@@ -63,6 +63,7 @@
 
 .dgrid-header-col-sort-marker {
 	font-family: Material Icons;
+	font-weight: bold;
 	display: none;
 	margin-left: .25em;
 	padding: 0 .25em;
@@ -71,6 +72,10 @@
 .dgrid-header-col.sortable:hover .dgrid-header-col-sort-marker,
 .dgrid-header-col.sorting .dgrid-header-col-sort-marker {
 	display: inline-block;
+}
+
+.dgrid-header-col.sortable:not(.sorting) .dgrid-header-col-sort-marker {
+	color: darkgray;
 }
 
 .dgrid-header-col-sort-marker.ascending:after {

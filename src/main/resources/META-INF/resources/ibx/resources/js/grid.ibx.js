@@ -681,6 +681,7 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 				var sortMarker = $(sformat("<div class='{1}'>", classes.colHeaderSortMarkerClass));
 				sortMarker.ibxToggleClass(classes.colHeaderSortingClass, cInfo.sorting);
 				sortMarker.ibxAddClass( classes[cInfo.sortOrder === 'ascending' ? 'colHeaderSortAscendingClass' : 'colHeaderSortDescendingClass']);
+				sortMarker.on('click', this._onSortColumn.bind(this));
 
 				//make splitter
 				var splitter = $(sformat("<div class='{1}'>", classes.colHeaderSplitterClass));
@@ -893,6 +894,10 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 	removeAll:function()
 	{
 		this.removeRow("*");
+	},
+	_onSortColumn:function(e)
+	{
+		console.log('sorting', e.originalEvent.data);
 	},
 	_onSplitterResize:function(e, resizeInfo)
 	{
