@@ -484,13 +484,14 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 		defaultColConfig:
 		{
 			title:"Column",
-			size:"100px", //the last column can have a size of 'flex' indicating that column should take up empty space at end.
+			size:"100px", //columns can have size 'flex' to share available space.
 			justify:"center",
 			resizable:true,
 			selectable:true,
 			sortable:false, 
 			sortOrder:'ascending',
 			sorting: false,
+			fnSort:null,
 			visible:true,
 			ui:null,
 		},
@@ -676,12 +677,12 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 					cHeading = $("<div>").ibxButtonSimple({justify:cInfo.justify, text:cInfo.title});
 				cHeading.ibxAddClass(classes.colHeaderClass).attr({tabindex:-1, role:"columnheader"});
 				cHeading.ibxToggleClass(classes.colHeaderSortableClass, cInfo.sortable);
-
+				cHeading.ibxToggleClass(classes.colHeaderSortingClass, cInfo.sorting);
+				cHeading.on('click', this._onHeaderClick.bind(this));
+				
 				//make sort marker
 				var sortMarker = $(sformat("<div class='{1}'>", classes.colHeaderSortMarkerClass));
-				sortMarker.ibxToggleClass(classes.colHeaderSortingClass, cInfo.sorting);
 				sortMarker.ibxAddClass( classes[cInfo.sortOrder === 'ascending' ? 'colHeaderSortAscendingClass' : 'colHeaderSortDescendingClass']);
-				sortMarker.on('click', this._onSortColumn.bind(this));
 
 				//make splitter
 				var splitter = $(sformat("<div class='{1}'>", classes.colHeaderSplitterClass));
@@ -895,9 +896,18 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 	{
 		this.removeRow("*");
 	},
-	_onSortColumn:function(e)
+	_onHeaderClick:function(e)
 	{
-		console.log('sorting', e.originalEvent.data);
+		clkInfo = $(e.currentTarget).data('ibxDataGridCol');
+		$.each(this.options.colMap, function(clkInfo, idx, cInfo) {
+			if(clkInfo === cInfo && cInfo.sorting)
+				cInfo.sortOrder = cInfo.sortOrder === 'ascending' ? 'descending' : 'ascending';
+			else {
+				cInfo.sorting = (clkInfo === cInfo);
+				cInfo.sortOrder = 'ascending';
+			}
+		}.bind(this,  clkInfo));
+		this.updateHeaders();
 	},
 	_onSplitterResize:function(e, resizeInfo)
 	{
