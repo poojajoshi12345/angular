@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'ibi-design-system';
-  src:  url('fonts/ibi-design-system.eot?4izr9k');
-  src:  url('fonts/ibi-design-system.eot?4izr9k#iefix') format('embedded-opentype'),
-    url('fonts/ibi-design-system.ttf?4izr9k') format('truetype'),
-    url('fonts/ibi-design-system.woff?4izr9k') format('woff'),
-    url('fonts/ibi-design-system.svg?4izr9k#ibi-design-system') format('svg');
+  src:  url('fonts/ibi-design-system.eot?6p0gmy');
+  src:  url('fonts/ibi-design-system.eot?6p0gmy#iefix') format('embedded-opentype'),
+    url('fonts/ibi-design-system.ttf?6p0gmy') format('truetype'),
+    url('fonts/ibi-design-system.woff?6p0gmy') format('woff'),
+    url('fonts/ibi-design-system.svg?6p0gmy#ibi-design-system') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -35,6 +35,12 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.ds-icon-caret-down:before {
+  content: "\ebf0";
+}
+.ds-icon-draggable-vertical:before {
+  content: "\ebf1";
+}
 .ds-icon-1col:before {
   content: "\ebeb";
 }
@@ -2216,7 +2222,7 @@
 .ds-icon-goto-start:before {
   content: "\eb25";
 }
-.ds-icon-caret-down:before {
+.ds-icon-caret-down1:before {
   content: "\ea73";
 }
 .ds-icon-caret-up:before {
