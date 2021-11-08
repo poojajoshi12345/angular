@@ -25,6 +25,7 @@
     var icons;
     if (!supportsProperty('fontFeatureSettings')) {
         icons = {
+            'draggable-vertical': '&#xebf1;',
             '1col': '&#xebeb;',
             '2col': '&#xebec;',
             '3col': '&#xebed;',
