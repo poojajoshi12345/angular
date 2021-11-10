@@ -60,6 +60,37 @@
 	padding:.5em;
 	border-right:1px solid #ccc;
 }
+
+.dgrid-header-col-sort-marker {
+	font-family: Material Icons;
+	font-weight: bold;
+	display: none;
+	margin-left: .25em;
+	padding: 0 .25em;
+	border:1px solid transparent;
+}
+
+.dgrid-header-col.sortable:hover .dgrid-header-col-sort-marker,
+.dgrid-header-col.sorting .dgrid-header-col-sort-marker {
+	display: inline-block;
+}
+
+.dgrid-header-col.sortable:not(.sorting) .dgrid-header-col-sort-marker {
+	color: darkgray;
+}
+
+.dgrid-header-col .dgrid-header-col-sort-marker:hover {
+}
+
+.dgrid-header-col-sort-marker.ascending:after {
+	content: 'arrow_upward';
+}
+
+.dgrid-header-col-sort-marker.descending:after {
+	content: 'arrow_downward';
+}
+
+
 .dgrid-header-row
 {
 	flex:0 0 auto;

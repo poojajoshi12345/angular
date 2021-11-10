@@ -484,10 +484,14 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 		defaultColConfig:
 		{
 			title:"Column",
-			size:"100px", //the last column can have a size of 'flex' indicating that column should take up empty space at end.
+			size:"100px", //columns can have size 'flex' to share available space.
 			justify:"center",
 			resizable:true,
 			selectable:true,
+			sortable:false, 
+			sortOrder:'ascending',
+			sorting: false,
+			fnSort:null,
 			visible:true,
 			ui:null,
 		},
@@ -510,6 +514,11 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 			colHeaderBarClass:"dgrid-header-col-bar",
 			colHeaderClass:"dgrid-header-col",
 			colHeaderSplitterClass:"dgrid-header-col-splitter",
+			colHeaderSortMarkerClass: "dgrid-header-col-sort-marker",
+			colHeaderSortableClass: 'sortable',
+			colHeaderSortingClass: 'sorting',
+			colHeaderSortAscendingClass: 'ascending',
+			colHeaderSortDescendingClass: 'descending',
 			rowHeaderBarClass:"dgrid-header-row-bar",
 			rowHeaderClass:"dgrid-header-row",
 			rowHeaderSplitterClass:"dgrid-header-row-splitter",
@@ -644,29 +653,37 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 	{
 		return this._sm;
 	},
-	updateHeaders:function(which)
+	updateDataLayout: function() {
+		this.updateHeaders(true);
+	},
+	updateHeaders:function(dataOnly)
 	{
-		which = which || "both";
-
 		var options = this.options;
 		var classes = options.classes;
 
-		if(which == "column" || which == "both")
-		{
-			//this._colHeaderBar.empty();
+		if(!dataOnly)
 			this._colHeaderBar.ibxWidget("remove");
 
-			var flexing = false;
-			var colMap = options.colMap;
-			for(var i = 0; i < colMap.length; ++i)
-			{
-				var cInfo = colMap[i];
-				
-				//make default header if one isn't supplied
-				var cHeading = $(cInfo.ui);
+		var flexing = false;
+		var colMap = options.colMap;
+		for(var i = 0; i < colMap.length; ++i)
+		{
+			var cInfo = colMap[i];
+	
+			//make default header if one isn't supplied
+			var cHeading = $(cInfo.ui);
+
+			if(!dataOnly || !cInfo._ui) {
 				if(!cHeading.length)
 					cHeading = $("<div>").ibxButtonSimple({justify:cInfo.justify, text:cInfo.title});
 				cHeading.ibxAddClass(classes.colHeaderClass).attr({tabindex:-1, role:"columnheader"});
+				cHeading.ibxToggleClass(classes.colHeaderSortableClass, cInfo.sortable);
+				cHeading.ibxToggleClass(classes.colHeaderSortingClass, cInfo.sorting);
+				cHeading.on('click', this._onHeaderClick.bind(this));
+				
+				//make sort marker
+				var sortMarker = $(sformat("<div class='{1}'>", classes.colHeaderSortMarkerClass));
+				sortMarker.ibxAddClass( classes[cInfo.sortOrder === 'ascending' ? 'colHeaderSortAscendingClass' : 'colHeaderSortDescendingClass']);
 
 				//make splitter
 				var splitter = $(sformat("<div class='{1}'>", classes.colHeaderSplitterClass));
@@ -674,32 +691,34 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 				splitter.on("click", function(e){e.stopPropagation()});//click on splitter not click on header!
 
 				//now add the column header and set the size as everything is in the dom.
-				cInfo._ui = {"idx":i, "header":cHeading, "curSize":null};
-				cHeading.append(splitter).data("ibxDataGridCol", cInfo);
+				cInfo._ui = {"idx":i, "header":cHeading, "curSize": (cInfo._ui && cInfo._ui.curSize) ? cInfo._ui.curSize : cInfo.size};
+				cHeading.append([sortMarker, splitter]).data("ibxDataGridCol", cInfo);
 				this._colHeaderBar.ibxWidget("add", cHeading[0]);
-				if(cInfo.size == "flex")
-				{
-					cHeading.css("flex", "1 1 1px");
-					this.getColumn(i).css("flex", "1 1 1px");
-					splitter.detach(); //flex columns don't have splitters
-					flexing = true;
-				}
-				else
-				{
-					cHeading.css("flex", "");
-					this.setColumnWidth(i, cInfo.size);
-				}
-
-				this.showColumn(i, cInfo.visible);
 			}
 
-			//adjust the grid options and padding based on flexing.
-			this._grid.ibxWidget("option", "align", flexing ? "stretch" : "start").ibxToggleClass("dgrid-grid-flexing", flexing);
-			if(!flexing)
+			//set the column size
+			if(cInfo.size == "flex")
 			{
-				var padding = $("<div>").css({"flex":"0 0 auto", "width":"50px", height:"1px"});
-				this._colHeaderBar.append(padding);
+				cHeading.css("flex", "1 1 1px");
+				this.getColumn(i).css("flex", "1 1 1px");
+				splitter.detach(); //flex columns don't have splitters
+				flexing = true;
 			}
+			else
+			{
+				cHeading.css("flex", "");
+				this.setColumnWidth(i, cInfo._ui.curSize);
+			}
+
+			this.showColumn(i, cInfo.visible);
+		}
+
+		//adjust the grid options and padding based on flexing.
+		this._grid.ibxWidget("option", "align", flexing ? "stretch" : "start").ibxToggleClass("dgrid-grid-flexing", flexing);
+		if(!flexing)
+		{
+			var padding = $("<div>").css({"flex":"0 0 auto", "width":"50px", height:"1px"});
+			this._colHeaderBar.append(padding);
 		}
 	},
 	getHeaders:function(row)
@@ -878,6 +897,21 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 	{
 		this.removeRow("*");
 	},
+	_onHeaderClick:function(e)
+	{
+		clkInfo = $(e.currentTarget).data('ibxDataGridCol');
+		$.each(this.options.colMap, function(clkInfo, idx, cInfo) {
+			if(clkInfo === cInfo && cInfo.sorting) {
+				cInfo.sortOrder = cInfo.sortOrder === 'ascending' ? 'descending' : 'ascending';
+				cInfo.fnSort ? cInfo.fnSort(cInfo, this) : null;
+			}
+			else {
+				cInfo.sorting = (clkInfo === cInfo);
+				cInfo.sortOrder = 'ascending';
+			}
+		}.bind(this, clkInfo));
+		this.updateHeaders();
+	},
 	_onSplitterResize:function(e, resizeInfo)
 	{
 		var el1Width = resizeInfo.el1.outerWidth();
@@ -939,10 +973,10 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 			$.each(value, function(idx, colConfig)
 			{
 				var curColConfig = options.colMap[idx];
-				colMap.push($.extend({}, options.defaultColConfig, curColConfig, colConfig));
+				colMap.push($.extend(true, {}, options.defaultColConfig, curColConfig, colConfig));
 			}.bind(this));
 			options.colMap = colMap;
-			this.updateHeaders("column");
+			this.updateHeaders();
 			return;
 		}
 		else
