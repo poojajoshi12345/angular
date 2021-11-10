@@ -653,26 +653,27 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 	{
 		return this._sm;
 	},
-	updateHeaders:function(which)
+	updateDataLayout: function() {
+		this.updateHeaders(true);
+	},
+	updateHeaders:function(dataOnly)
 	{
-		which = which || "both";
-
 		var options = this.options;
 		var classes = options.classes;
 
-		if(which == "column" || which == "both")
-		{
-			//this._colHeaderBar.empty();
+		if(!dataOnly)
 			this._colHeaderBar.ibxWidget("remove");
 
-			var flexing = false;
-			var colMap = options.colMap;
-			for(var i = 0; i < colMap.length; ++i)
-			{
-				var cInfo = colMap[i];
-				
-				//make default header if one isn't supplied
-				var cHeading = $(cInfo.ui);
+		var flexing = false;
+		var colMap = options.colMap;
+		for(var i = 0; i < colMap.length; ++i)
+		{
+			var cInfo = colMap[i];
+	
+			//make default header if one isn't supplied
+			var cHeading = $(cInfo.ui);
+
+			if(!dataOnly || !cInfo._ui) {
 				if(!cHeading.length)
 					cHeading = $("<div>").ibxButtonSimple({justify:cInfo.justify, text:cInfo.title});
 				cHeading.ibxAddClass(classes.colHeaderClass).attr({tabindex:-1, role:"columnheader"});
@@ -690,34 +691,34 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 				splitter.on("click", function(e){e.stopPropagation()});//click on splitter not click on header!
 
 				//now add the column header and set the size as everything is in the dom.
-				cInfo._ui = {"idx":i, "header":cHeading, "curSize": null};
+				cInfo._ui = {"idx":i, "header":cHeading, "curSize": (cInfo._ui && cInfo._ui.curSize) ? cInfo._ui.curSize : cInfo.size};
 				cHeading.append([sortMarker, splitter]).data("ibxDataGridCol", cInfo);
 				this._colHeaderBar.ibxWidget("add", cHeading[0]);
-				
-				//set the column size
-				if(cInfo.size == "flex")
-				{
-					cHeading.css("flex", "1 1 1px");
-					this.getColumn(i).css("flex", "1 1 1px");
-					splitter.detach(); //flex columns don't have splitters
-					flexing = true;
-				}
-				else
-				{
-					cHeading.css("flex", "");
-					this.setColumnWidth(i, cInfo.size);
-				}
-
-				this.showColumn(i, cInfo.visible);
 			}
 
-			//adjust the grid options and padding based on flexing.
-			this._grid.ibxWidget("option", "align", flexing ? "stretch" : "start").ibxToggleClass("dgrid-grid-flexing", flexing);
-			if(!flexing)
+			//set the column size
+			if(cInfo.size == "flex")
 			{
-				var padding = $("<div>").css({"flex":"0 0 auto", "width":"50px", height:"1px"});
-				this._colHeaderBar.append(padding);
+				cHeading.css("flex", "1 1 1px");
+				this.getColumn(i).css("flex", "1 1 1px");
+				splitter.detach(); //flex columns don't have splitters
+				flexing = true;
 			}
+			else
+			{
+				cHeading.css("flex", "");
+				this.setColumnWidth(i, cInfo._ui.curSize);
+			}
+
+			this.showColumn(i, cInfo.visible);
+		}
+
+		//adjust the grid options and padding based on flexing.
+		this._grid.ibxWidget("option", "align", flexing ? "stretch" : "start").ibxToggleClass("dgrid-grid-flexing", flexing);
+		if(!flexing)
+		{
+			var padding = $("<div>").css({"flex":"0 0 auto", "width":"50px", height:"1px"});
+			this._colHeaderBar.append(padding);
 		}
 	},
 	getHeaders:function(row)
@@ -972,10 +973,10 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 			$.each(value, function(idx, colConfig)
 			{
 				var curColConfig = options.colMap[idx];
-				colMap.push($.extend({}, options.defaultColConfig, curColConfig, colConfig));
+				colMap.push($.extend(true, {}, options.defaultColConfig, curColConfig, colConfig));
 			}.bind(this));
 			options.colMap = colMap;
-			this.updateHeaders("column");
+			this.updateHeaders();
 			return;
 		}
 		else
