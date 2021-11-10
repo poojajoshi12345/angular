@@ -148,7 +148,7 @@ function ibxBusy(config)
 			document.head.appendChild(this._css);
 			elParent.appendChild(this._element);
 			elParent.classList.add("ibx-busy-parent");
-			var parentPos = window.getComputedStyle(elParent).position;
+			var parentPos = elParent.style.position;//window.getComputedStyle(elParent).position;
 			if(parentPos !== "absolute" && parentPos !== "relative") {
 				elParent.style.position = "relative";
 				elParent.dataset.ibxBusySavedPos = parentPos;
