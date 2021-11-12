@@ -491,7 +491,7 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 			sortable:false, 
 			sortOrder:'ascending',
 			sorting: false,
-			fnSort:null,
+			sortFun:null,
 			visible:true,
 			ui:null,
 		},
@@ -903,12 +903,14 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 		$.each(this.options.colMap, function(clkInfo, idx, cInfo) {
 			if(clkInfo === cInfo && cInfo.sorting) {
 				cInfo.sortOrder = cInfo.sortOrder === 'ascending' ? 'descending' : 'ascending';
-				cInfo.fnSort ? cInfo.fnSort(cInfo, this) : null;
 			}
 			else {
 				cInfo.sorting = (clkInfo === cInfo);
 				cInfo.sortOrder = 'ascending';
 			}
+
+			if(cInfo.sorting)
+				cInfo.sortFun ? cInfo.sortFun(cInfo, this) : null;
 		}.bind(this, clkInfo));
 		this.updateHeaders();
 	},
