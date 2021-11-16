@@ -900,6 +900,9 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 	_onHeaderClick:function(e)
 	{
 		clkInfo = $(e.currentTarget).data('ibxDataGridCol');
+		if(!clkInfo.sortable)
+			return;
+
 		$.each(this.options.colMap, function(clkInfo, idx, cInfo) {
 			if(clkInfo === cInfo && cInfo.sorting) {
 				cInfo.sortOrder = cInfo.sortOrder === 'ascending' ? 'descending' : 'ascending';
