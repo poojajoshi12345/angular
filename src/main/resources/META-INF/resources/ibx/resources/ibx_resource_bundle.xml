@@ -113,7 +113,7 @@ $Revision: 1.123 $:-->
 				"IBX_WIZ_BTN_FINISH":"Finish",
 
 				"IBX_PAGINATION_PAGE_LOC_INFO":"{1} - {2} of {3}",
-				"IBX_PAGINATION_PAGE_COUNT":"Items Per Page:",
+				"IBX_PAGINATION_PAGE_COUNT":"Items per page",
 				"IBX_PAGINATION_PAGE_FIRST":"First Page",
 				"IBX_PAGINATION_PAGE_PREV":"Previous Page",
 				"IBX_PAGINATION_PAGE_NEXT":"Next Page",
