@@ -788,6 +788,29 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 			this._grid.ibxDataGridSelectionManager("deselectAll", true);
 		this._grid.ibxDataGridSelectionManager("selected", cells.toArray(), select);
 	},
+	sortColumn: function(idxCol, sortOrder)
+	{
+		const sortInfo = this.options.colMap[idxCol];
+		if(!sortInfo || !sortInfo.sortable)
+			return;
+
+		$.each(this.options.colMap, function(sortInfo, idx, cInfo) {
+			if(sortInfo === cInfo && cInfo.sorting) {
+				if(sortOrder === undefined) //toggle
+					cInfo.sortOrder = cInfo.sortOrder === 'ascending' ? 'descending' : 'ascending';
+				else
+					cInfo.sortOrder = sortOrder;
+			}
+			else {
+				cInfo.sorting = (sortInfo === cInfo);
+				cInfo.sortOrder = 'ascending';
+			}
+
+			if(cInfo.sorting)
+				cInfo.sortFun ? cInfo.sortFun(cInfo, this) : null;
+		}.bind(this, sortInfo));
+		this.updateHeaders();
+	},
 	getRowCount:function()
 	{
 		return this._grid.children("." + this.options.classes.gridRow).length;
@@ -899,23 +922,8 @@ $.widget("ibi.ibxDataGrid", $.ibi.ibxGrid,
 	},
 	_onHeaderClick:function(e)
 	{
-		clkInfo = $(e.currentTarget).data('ibxDataGridCol');
-		if(!clkInfo.sortable)
-			return;
-
-		$.each(this.options.colMap, function(clkInfo, idx, cInfo) {
-			if(clkInfo === cInfo && cInfo.sorting) {
-				cInfo.sortOrder = cInfo.sortOrder === 'ascending' ? 'descending' : 'ascending';
-			}
-			else {
-				cInfo.sorting = (clkInfo === cInfo);
-				cInfo.sortOrder = 'ascending';
-			}
-
-			if(cInfo.sorting)
-				cInfo.sortFun ? cInfo.sortFun(cInfo, this) : null;
-		}.bind(this, clkInfo));
-		this.updateHeaders();
+		var colInfo = $(e.currentTarget).data('ibxDataGridCol');
+		this.sortColumn(colInfo._ui.idx);		
 	},
 	_onSplitterResize:function(e, resizeInfo)
 	{
