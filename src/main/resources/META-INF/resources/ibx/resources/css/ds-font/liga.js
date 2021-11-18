@@ -25,6 +25,8 @@
     var icons;
     if (!supportsProperty('fontFeatureSettings')) {
         icons = {
+            'folder-add': '&#xebf2;',
+            'workspace-add': '&#xebf3;',
             'draggable-vertical': '&#xebf1;',
             '1col': '&#xebeb;',
             '2col': '&#xebec;',
