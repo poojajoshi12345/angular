@@ -227,6 +227,7 @@ $.widget("ibi.ibxWidget", $.Widget,
 	_onWidgetContextMenu:function(e)
 	{
 		var ctxEvent = $.Event(e.originalEvent);
+		ctxEvent.target = this.element[0];
 		ctxEvent.type = "ibx_ctxmenu";
 
 		var ret = this.element.trigger(ctxEvent);
