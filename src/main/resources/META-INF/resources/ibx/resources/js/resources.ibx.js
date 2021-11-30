@@ -152,9 +152,11 @@ _p.loadExternalResFile = function(elFile, bundle)
 	{
 		elFile.ibxBundle = bundle[0];
 		elFile = $(elFile);
+
+		var fileType = elFile.prop("tagName");
 		var src = this.getResPath(elFile.attr("src"), elFile.closest("[loadContext]").attr("loadContext"), bundle);
 
-		if(ibxResourceManager.loadedFiles[src])
+		if(ibxResourceManager.loadedFiles[src] && (fileType !== 'style-file'))
 		{
 			//console.log(`DUPLICATE: ${src}`)
 			//duplicate, just resolve and continue
@@ -163,8 +165,6 @@ _p.loadExternalResFile = function(elFile, bundle)
 				dfd.resolve();
 			return;
 		}
-
-		var fileType = elFile.prop("tagName");
 
 		if(fileType == "style-file")
 			elFile.attr("inline", "false");
