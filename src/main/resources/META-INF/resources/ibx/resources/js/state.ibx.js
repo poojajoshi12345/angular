@@ -2,6 +2,7 @@
 function ibxStateManager()
 {
 	this._options = {
+		setStateEvtName: 'ibx_statechange',
 		replaceState: true
 	};
 	this.setOption = function(key, value){
@@ -58,7 +59,7 @@ function ibxStateManager()
 		//tell subscribers state has changed.
 		var subscribers = this._subscriberMap[stateName];
 		for(var i = 0; i < subscribers.length; ++i){
-			$(subscribers[i]).dispatchEvent('ibx_statechange', stateCopy, false, false);
+			$(subscribers[i]).dispatchEvent(this._options.setStateEvtName, stateCopy, false, false);
 		}	
 
 		return theState;
@@ -87,9 +88,9 @@ function ibxStateMap(stateMap, stateMgr){
 
 	//add event listener to the client and redirect interested states to callback functions.
 	if(map.client) {
-		map.client.addEventListener('ibx_statechange', function(e) {
+		map.client.addEventListener(stateMgr._options.setStateEvtName, function(e) {
 			var theState = e.data || e.originalEvent.data;
-			if(theState.setter === map.client)
+			if((theState.setter === map.client) || !map.states[theState.name])
 				return;
 			
 			var fnHandler = map.states[theState.name].fnHandler;
