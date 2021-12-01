@@ -151,13 +151,8 @@ $.widget("ibi.ibxPagination", $.ibi.ibxHBox,
 		}
 		if (key === 'itemsPerPageArray' && bChanged) {
 			this._itemsPerPage.ibxWidget('removeControlItem');
-			options.itemsPerPageArray.forEach((pageSize, idx) => {
-				const selectItem = $('<div>').ibxSelectItem({
-					selected: idx === 0,
-					text: pageSize,
-					userValue: pageSize,
-				});
-
+			options.itemsPerPageArray.forEach(function(pageSize, idx) {
+				const selectItem = $('<div>').ibxSelectItem({selected: idx === 0, text: pageSize, userValue: pageSize});
 				this._itemsPerPage.ibxWidget('addControlItem', selectItem);
 			});
 			this._itemsPerPage.ibxWidget('userValue', options.itemsPerPage);
