@@ -64,12 +64,14 @@ $.widget("ibi.ibxButton", $.ibi.ibxLabel,
 //just a simple button...essentially a label with some event handling.
 $.widget("ibi.ibxButtonSimple", $.ibi.ibxButton,
 {
-	options:{},
-	_widgetClass:"ibx-button-simple",
-	_create:function()
+	options:
 	{
+		styleAsButton: false
+	},
+	_widgetClass:"ibx-button-simple",
+	_refresh: function() {
 		this._super();
-		this.element.ibxRemoveClass("ibx-button");
+		this.element.ibxToggleClass('ibx-button', this.options.styleAsButton);
 	}
 });
 
