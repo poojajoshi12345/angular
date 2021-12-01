@@ -241,11 +241,6 @@ $Revision: 1.123 $:-->
 			<div class="ibx-pagination-spacer"></div>
 			<div tabindex="-1" class="ibx-pagination-ctrl ibx-pagination-items-per-page-label" data-ibx-name="_itemsPerPageLabel" data-ibx-type="ibxLabel" data-ibxp-for=".ibx-pagination-page-count">@ibxString(IBX_PAGINATION_PAGE_COUNT)</div>
 			<div tabindex="-1" class="ibx-pagination-ctrl ibx-pagination-items-per-page" data-ibx-name="_itemsPerPage" data-ibx-type="ibxSelect" data-ibxp-readonly="true">
-				<div data-ibx-type="ibxSelectItem" data-ibxp-user-value="25">25</div>
-				<div data-ibx-type="ibxSelectItem" data-ibxp-user-value="50">50</div>
-				<div data-ibx-type="ibxSelectItem" data-ibxp-user-value="75">75</div>
-				<div data-ibx-type="ibxSelectItem" data-ibxp-user-value="100">100</div>
-				<div data-ibx-type="ibxSelectItem" data-ibxp-user-value="200">200</div>
 			</div>
 			<div tabindex="-1" class="ibx-pagination-ctrl ibx-pagination-btn ibx-pagination-btn-first" data-ibx-name="_btnFirst" data-ibx-type='ibxButtonSimple' data-ibxp-glyph-classes="material-icons" data-ibxp-glyph="first_page" title="@ibxString(IBX_PAGINATION_PAGE_FIRST)"></div>
 			<div tabindex="-1" class="ibx-pagination-ctrl ibx-pagination-btn ibx-pagination-btn-prev" data-ibx-name="_btnPrev" data-ibx-type='ibxButtonSimple' data-ibxp-glyph-classes="material-icons" data-ibxp-glyph="chevron_left" title="@ibxString(IBX_PAGINATION_PAGE_PREV)"></div>
