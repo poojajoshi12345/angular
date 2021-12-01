@@ -66,12 +66,12 @@ $.widget("ibi.ibxButtonSimple", $.ibi.ibxButton,
 {
 	options:
 	{
-		styleAsButton: false
+		defaultStyle: false
 	},
 	_widgetClass:"ibx-button-simple",
 	_refresh: function() {
 		this._super();
-		this.element.ibxToggleClass('ibx-button', this.options.styleAsButton);
+		this.element.ibxToggleClass('ibx-button', this.options.defaultStyle);
 	}
 });
 
