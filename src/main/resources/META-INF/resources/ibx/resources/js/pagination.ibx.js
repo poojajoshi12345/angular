@@ -154,7 +154,7 @@ $.widget("ibi.ibxPagination", $.ibi.ibxHBox,
 			options.itemsPerPageArray.forEach(function(pageSize, idx) {
 				const selectItem = $('<div>').ibxSelectItem({selected: idx === 0, text: pageSize, userValue: pageSize});
 				this._itemsPerPage.ibxWidget('addControlItem', selectItem);
-			});
+			}, this);
 			this._itemsPerPage.ibxWidget('userValue', options.itemsPerPage);
 			this.options.page = 0;
 		}
