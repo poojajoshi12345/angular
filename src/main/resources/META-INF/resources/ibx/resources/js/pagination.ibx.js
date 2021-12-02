@@ -176,11 +176,17 @@ $.widget("ibi.ibxPagination", $.ibi.ibxHBox,
 		this._itemsPerPage.css('display', options.showItemsPerPage ? '' : 'none');
 		this._pageInfo.ibxWidget({text:sformat(ibx.resourceMgr.getString('IBX_PAGINATION_PAGE_INFO_DISPLAY'), options.page + 1, options.pages + 1)})
 
-		this.options.itemsPerPageArray = (
-			Array.isArray(options.itemsPerPageArray) && options.itemsPerPageArray > 0
-			? this.options.itemsPerPageArray
-			: $.ibi.ibxPagination.DEFAULTS_ITEMS_PER_PAGE_ARRAY
-		);
+		if (Array.isArray(options.itemsPerPageArray)) {
+			const filteredPageSizeOptions = options.itemsPerPageArray.filter(function(pageSize) {
+				return !isNaN(pageSize) && pageSize > 0;
+			});
+
+			this.options.itemsPerPageArray =  filteredPageSizeOptions.length
+				? filteredPageSizeOptions
+				: $.ibi.ibxPagination.DEFAULTS_ITEMS_PER_PAGE_ARRAY;
+		} else {
+			this.options.itemsPerPageArray =  $.ibi.ibxPagination.DEFAULTS_ITEMS_PER_PAGE_ARRAY
+		}
 	}
 });
 $.ibi.ibxPagination.ITEMS_PER_PAGE = -2;
