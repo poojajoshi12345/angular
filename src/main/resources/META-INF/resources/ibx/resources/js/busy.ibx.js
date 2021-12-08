@@ -60,6 +60,7 @@ if (typeof Object.assign !== 'function')
 function ibxBusy(config)
 {
 	this._element = document.createElement("div");
+
 	this._element.classList.add("ibx-busy-container");
 
 	/**
@@ -69,9 +70,10 @@ function ibxBusy(config)
 	 */
 	this.init = function(config)
 	{
+
 		config = Object.assign({}, ibxBusy.defaultConfig, config);
 		this._element.innerHTML = config.template;
-
+		this._element.classList.add(config.semiTrans ? "ibx-busy-semi-trans" : '');
 		this._css = document.createElement("style");
 		this._css.setAttribute("type", "text/css");
 		this._css.classList.add("ibx-busy-styles");
@@ -202,6 +204,7 @@ ibxBusy.defaultConfig =
 		"</div>"+
 		"",
 	"css":"",
+	"semiTrans" : true,
 	"imageClass":"svg-gray-rings",
 	"image":"",
 	"message":"",
