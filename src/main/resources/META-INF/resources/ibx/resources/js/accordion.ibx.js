@@ -181,8 +181,8 @@ $.widget("ibi.ibxAccordionPage", $.ibi.ibxFlexBox,
 			textElClass:"ibx-label-text ibx-accordion-button-text",
 			justify:"start",
 			iconPosition:"right",
-			glyph:"chevron_right",
-			glyphClasses:"material-icons"
+			glyph:"",
+			glyphClasses:"ibx-acc-dummy-class"
 		},
 		btnOptionsOpen:
 		{

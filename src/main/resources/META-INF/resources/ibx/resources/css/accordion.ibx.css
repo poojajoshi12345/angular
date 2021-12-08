@@ -35,10 +35,17 @@
 	background-color:#ccc;
 }
 
+.ibx-accordion-button .ibx-label-glyph::before {
+	font-family: 'Material Icons';
+	font-weight: bold;
+	content: 'chevron_right';
+}
+
 .ibx-accordion-button.acc-btn-closed
 {
 	background-color: #eee;
 }
+
 .ibx-accordion-button.acc-btn-hide
 {
 	display:none;
