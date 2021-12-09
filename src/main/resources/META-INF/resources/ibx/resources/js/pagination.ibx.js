@@ -9,7 +9,7 @@ $.widget("ibi.ibxPagination", $.ibi.ibxHBox,
 	options:
 	{
 		'nameRoot': true,	
-		'navKeyRoot':true,
+		'navKeyRoot': false,
 		'focusDefault':true,
 		'wrap':false,
 		'align':'center',
@@ -21,12 +21,15 @@ $.widget("ibi.ibxPagination", $.ibi.ibxHBox,
 		'showPageLocInfo': true,
 		'showItemsPerPage': true,
 		'itemsPerPage': 0,
+		'itemsPerPageArray': [25, 50, 75, 100, 200],
 		'selMgrOpts':{
 			'selectableChildren':'.ibx-pagination-ctrl',
 		},
 		'aria':{},
 	},
+
 	_widgetClass:"ibx-pagination",
+
 	_create:function()
 	{
 		this._super();
@@ -148,6 +151,15 @@ $.widget("ibi.ibxPagination", $.ibi.ibxHBox,
 		if(key === 'itemsPerPage' && bChanged) {
 			this._itemsPerPage.ibxWidget('userValue', options.itemsPerPage);
 		}
+		if (key === 'itemsPerPageArray' && bChanged) {
+			this._itemsPerPage.ibxWidget('removeControlItem');
+			options.itemsPerPageArray.forEach(function(pageSize, idx) {
+				const selectItem = $('<div>').ibxSelectItem({selected: idx === 0, text: pageSize, userValue: pageSize});
+				this._itemsPerPage.ibxWidget('addControlItem', selectItem);
+			}, this);
+			this._itemsPerPage.ibxWidget('userValue', options.itemsPerPage);
+			this.options.page = 0;
+		}
 	},
 	_refresh: function ()
 	{
@@ -165,6 +177,22 @@ $.widget("ibi.ibxPagination", $.ibi.ibxHBox,
 		this._itemsPerPageLabel.css('display', options.showItemsPerPage ? '' : 'none');
 		this._itemsPerPage.css('display', options.showItemsPerPage ? '' : 'none');
 		this._pageInfo.ibxWidget({text:sformat(ibx.resourceMgr.getString('IBX_PAGINATION_PAGE_INFO_DISPLAY'), options.page + 1, options.pages + 1)})
+
+		if (Array.isArray(options.itemsPerPageArray)) {
+			const filteredPageSizeOptions = options.itemsPerPageArray.filter(function(pageSize) {
+				return !isNaN(pageSize) && pageSize > 0;
+			});
+
+			this.options.itemsPerPageArray =  filteredPageSizeOptions.length
+				? filteredPageSizeOptions
+				: $.ibi.ibxPagination.DEFAULTS_ITEMS_PER_PAGE_ARRAY;
+		} else {
+			this.options.itemsPerPageArray =  $.ibi.ibxPagination.DEFAULTS_ITEMS_PER_PAGE_ARRAY
+		}
+
+		this._pageLocInfo.css('display', options.showPageLocInfo ? '' : 'none');
+		this._itemsPerPageLabel.css('display', options.showItemsPerPage ? '' : 'none');
+		this._itemsPerPage.css('display', options.showItemsPerPage ? '' : 'none');
 	}
 });
 $.ibi.ibxPagination.ITEMS_PER_PAGE = -2;
@@ -173,5 +201,6 @@ $.ibi.ibxPagination.GO_FIRST = 0;
 $.ibi.ibxPagination.GO_PREVIOUS = 1;
 $.ibi.ibxPagination.GO_NEXT = 2;
 $.ibi.ibxPagination.GO_LAST = 3;
+$.ibi.ibxPagination.DEFAULTS_ITEMS_PER_PAGE_ARRAY = [25, 50, 75, 100, 200];
 
 //# sourceURL=pagination.ibx.js
