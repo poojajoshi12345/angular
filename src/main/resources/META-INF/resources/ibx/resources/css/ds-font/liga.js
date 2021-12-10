@@ -25,6 +25,7 @@
     var icons;
     if (!supportsProperty('fontFeatureSettings')) {
         icons = {
+            'caret-down': '&#xebf0;',
             'folder-add': '&#xebf2;',
             'workspace-add': '&#xebf3;',
             'draggable-vertical': '&#xebf1;',
@@ -755,7 +756,7 @@
             'goto-top': '&#xeb23;',
             'goto-end': '&#xeb24;',
             'goto-start': '&#xeb25;',
-            'caret-down': '&#xea73;',
+            'caret-down1': '&#xea73;',
             'caret-up': '&#xea74;',
             'caret-left': '&#xea76;',
             'caret-right': '&#xea75;',
