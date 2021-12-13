@@ -214,72 +214,8 @@
 	<profiles>
 		<profile>
 			<id>compile-css-javascript</id>
-			<properties>
-				<frontend.maven.plugin.version>1.11.2</frontend.maven.plugin.version>
-			</properties>
 			<build>
-				<plugins>
-					<plugin>
-						<groupId>com.github.eirslett</groupId>
-						<artifactId>frontend-maven-plugin</artifactId>
-						<version>${frontend.maven.plugin.version}</version>
-						<executions>
-							<execution>
-								<id>grunt-install-node-and-npm</id>
-								<goals>
-									<goal>install-node-and-npm</goal>
-								</goals>
-							</execution>
-							<execution>
-								<id>grunt-npm-config-cache</id>
-								<phase>generate-resources</phase>
-								<goals>
-									<goal>npm</goal>
-								</goals>
-								<configuration>
-									<arguments>config set cache ${project.basedir}/npm-cache</arguments>
-								</configuration>
-							</execution>
-							<execution>
-								<id>grunt-npm-config-ssl</id>
-								<phase>generate-resources</phase>
-								<goals>
-									<goal>npm</goal>
-								</goals>
-								<configuration>
-									<arguments>config set strict-ssl false</arguments>
-								</configuration>
-							</execution>
-							<execution>
-								<id>grunt-npm-install</id>
-								<phase>generate-resources</phase>
-								<goals>
-									<goal>npm</goal>
-								</goals>
-								<configuration>
-									<arguments>install --production</arguments>
-								</configuration>
-							</execution>
-							<execution>
-								<id>grunt-build</id>
-								<phase>compile</phase>
-								<goals>
-									<goal>grunt</goal>
-								</goals>
-								<configuration>
-									<arguments>--verbose</arguments>
-								</configuration>
-							</execution>
-						</executions>
-						<configuration>
-							<nodeVersion>v15.9.0</nodeVersion>
-							<npmVersion>7.6.1</npmVersion>
-							<installDirectory>${basedir}</installDirectory>
-							<workingDirectory>${basedir}</workingDirectory>
-							<nodeDownloadRoot>https://na1prdfocnxs01.tibco.com:8443/repository/nodejs-org/</nodeDownloadRoot>
-							<npmDownloadRoot>https://na1prdfocnxs01.tibco.com:8443/repository/npm-all/npm/-/</npmDownloadRoot>
-						</configuration>
-					</plugin>
+				<plugins>					
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-antrun-plugin</artifactId>
@@ -300,12 +236,18 @@
 										<echo message="fileset.dir: ${fileset.dir}" />
 										<echo message="closure.class: ${closure.class}" />
 										<echo message="compilation.level: ${compilation.level}" />
-
+										
 										<java classname="${closure.class}" classpathref="maven.plugin.classpath" fork="true" failonerror="true">
 											<sysproperty key="IBI_Log_Directory" value="${project.build.directory}" />
 											<sysproperty key="failonerror" value="true" />
 											<arg value="--compilation_level" />
 											<arg value="${compilation.level}" />
+											<arg value="--language_in" />
+											<arg value="ECMASCRIPT_NEXT" />
+											<arg value="--language_out" />
+											<arg value="ECMASCRIPT_NEXT" />
+											<arg value="--emit_use_strict" />
+											<arg value="false" />
 											<arg value="--warning_level" />
 											<arg value="VERBOSE" />
 											<arg value="--js_dir" />
@@ -313,7 +255,7 @@
 										</java>
 									</target>
 								</configuration>
-							</execution>							
+							</execution>														
 							<execution>
 								<id>ant-compress</id>
 								<phase>prepare-package</phase>
@@ -345,7 +287,7 @@
 										</for>
 									</target>
 								</configuration>
-							</execution>							
+							</execution>
 						</executions>
 						<dependencies>
 							<dependency>
