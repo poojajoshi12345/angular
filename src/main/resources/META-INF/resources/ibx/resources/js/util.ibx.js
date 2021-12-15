@@ -1213,6 +1213,7 @@ _p._onComplete = function(exInfo, xhr, status)
 	}
 	else
 	{
+		exInfo.result = res;
 		exInfo.deferred.reject(exInfo);
 		this._handleError(error, res, exInfo);
 	}
