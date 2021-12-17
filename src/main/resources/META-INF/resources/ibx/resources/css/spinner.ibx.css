@@ -1,27 +1,14 @@
 /*Copyright (c) 1996-2021 TIBCO Software Inc. All Rights Reserved.*/
 /* $Revision: 1.1 $: */
 
-.ibx-spinner
-{
-}
-
 input.ibx-spinner-text-input
 {
 	align-self:stretch;
 	border:1px solid #ccc;
 	border-right:none;
-	border-radius:.2em 0 0 .2em;
-	padding:0 .5em 0 .5em;
+	border-radius:.25rem 0 0 .25rem;
+	padding: .5rem;
 }
-
-
-.ibx-spinner-btn-grp .ibx-button-group-first
-{
-}
-.ibx-spinner-btn-grp .ibx-button-group-last
-{
-}
-
 
 input.ibx-spinner-text-input:hover
 {
