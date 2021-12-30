@@ -300,7 +300,7 @@ $.widget("ibi.ibxMenuItem", $.ibi.ibxHBox,
 		//setup the command shortcut key for the menu item
 		var cmd = this.getCommand();
 		var scut = cmd ? cmd.ibxWidget("option", "shortcut") : null;
-		this._endMarker.text(scut).ibxToggleClass("ibx-end-marker-cmd-shortcut", !!cmd);
+		this._endMarker.text(scut).ibxToggleClass("ibx-end-marker-cmd-shortcut", !!scut);
 
 		//set the label's options...if there's no start marker (not check or radio) and no glyph...add space for glyph.
 		var labelOptions = options.labelOptions;
