@@ -972,7 +972,7 @@ $.widget("ibi.ibxSelectPaged", $.ibi.ibxSelectBase, {
 	{
         "readonly": true,
         "autoHeight": true,
-		"autoHeightGap": 100,
+		"autoHeightGap": 50,
 		"search": false,
 		"selectionControls": false,
 		"enablePagingTrigger": 200,
@@ -1198,9 +1198,9 @@ $.widget("ibi.ibxSelectPaged", $.ibi.ibxSelectBase, {
 					*/
 					maxHeight = 100;
 				}
-				this._control.ibxWidget("listControl").css("max-height", maxHeight + "px");
+				this._control.css("max-height", maxHeight + "px");
 			}
-			this._control.ibxWidget("listControl").css("min-width", info.target.width + "px");
+			this._control.css("min-width", info.target.width + "px");
 			this._popup.css(pos);
 		}
 	},
@@ -1271,8 +1271,8 @@ $.widget("ibi.ibxSelectItemListPaged", $.ibi.ibxVBox,
 		this._clearAll.on("click", this._onClearAll.bind(this));
 
 		this._pageBox = $("<div class='ibx-page-list-page-box'>").ibxHBox({"align": "stretch"});
-		this._pageLeft = $("<div tabindex='0' class='ibx-page-list-page-box-left'>").ibxButtonSimple({glyphClasses:"material-icons","glyph":"arrow_drop_down"}).on("click", this._onPageLeft.bind(this));
-		this._pageRight = $("<div tabindex='0' class='ibx-page-list-page-box-right'>").ibxButtonSimple({glyphClasses:"material-icons", "glyph":"arrow_drop_down"}).on("click", this._onPageRight.bind(this));
+		this._pageLeft = $("<div tabindex='0' class='ibx-page-list-page-box-left'>").ibxButtonSimple({"glyphClasses":"ibx-icons ibx-glyph-chevron-left"}).on("click", this._onPageLeft.bind(this));
+		this._pageRight = $("<div tabindex='0' class='ibx-page-list-page-box-right'>").ibxButtonSimple({"glyphClasses":"ibx-icons ibx-glyph-chevron-right"}).on("click", this._onPageRight.bind(this));
 		this._pageLabel = $("<div class='ibx-page-list-page-box-label'>").ibxLabel({"justify": "center"});
 		this._pageBox.append(this._pageLeft, this._pageLabel, this._pageRight);
 

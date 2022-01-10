@@ -282,8 +282,6 @@
 .ibx-page-list-page-box-left
 {
 	flex: 0 0 auto;
-	font-size:24px;
-	transform:rotate(90deg);
     margin-right: 10px;
 }
 
@@ -295,8 +293,6 @@
 .ibx-page-list-page-box-right
 {
 	flex: 0 0 auto;
-	font-size:24px;
-	transform:rotate(-90deg);
     margin-left: 10px;
 }
 
