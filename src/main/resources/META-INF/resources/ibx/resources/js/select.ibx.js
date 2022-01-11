@@ -369,22 +369,19 @@ $.widget("ibi.ibxSelect", $.ibi.ibxSelectBase,
 				var maxHeight = $(window).height() + $(window).scrollTop() - info.target.top - info.target.height - this.options.autoHeightGap;
 				if (maxHeight < 100)
 				{
-					/*
+					// Flip it up
 					maxHeight = info.target.top - $(window).scrollTop() - this.options.autoHeightGap;
-					if (maxHeight > 100)
-					{
-						pos.top = info.target.top - maxHeight;
-					}
-					else
-					*/
-						maxHeight = 100;	
-				}	
+					pos.bottom = $(window).height() - info.target.top;
+					pos.top = "unset";
+				}
+				else
+					pos.bottom = "unset";
 				this._control.css("max-height", maxHeight + "px");
-			}	
+			}
 			this._control.css("min-width", info.target.width + "px");
 			this._popup.css(pos);
 		}
-	},	
+	},
 	_refresh: function ()
 	{
 		this._super();
@@ -1188,16 +1185,13 @@ $.widget("ibi.ibxSelectPaged", $.ibi.ibxSelectBase, {
 				var maxHeight = $(window).height() + $(window).scrollTop() - info.target.top - info.target.height - this.options.autoHeightGap;
 				if (maxHeight < 100)
 				{
-					/*
+					// Flip it up
 					maxHeight = info.target.top - $(window).scrollTop() - this.options.autoHeightGap;
-					if (maxHeight > 100)
-					{
-						pos.top = info.target.top - maxHeight;
-					}
-					else
-					*/
-					maxHeight = 100;
+					pos.bottom = $(window).height() - info.target.top;
+					pos.top = "unset";
 				}
+				else
+					pos.bottom = "unset";
 				this._control.css("max-height", maxHeight + "px");
 			}
 			this._control.css("min-width", info.target.width + "px");
