@@ -207,7 +207,7 @@
 		</snapshotRepository>
 		<site>
 			<id>www.tibco.com</id>
-			<url>https://www.tibco.com/www/docs/projects/</url>
+			<url>https://www.tibco.com/www/docs/projects/${project.artifactId}/</url>
 		</site>
 	</distributionManagement>
 
