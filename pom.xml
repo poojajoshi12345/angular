@@ -5,7 +5,7 @@
 
 	<groupId>com.ibi</groupId>
 	<artifactId>webfocus-webjars-ibx</artifactId>
-	<version>9.0.0-SNAPSHOT</version>
+	<version>HEAD-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
 	<name>webfocus-webjars-ibx</name>
@@ -888,7 +888,7 @@
 		<connection>scm:git:https://na1prdfocbb01.tibco.com:8443/scm/wp/${project.artifactId}.git</connection>
 		<developerConnection>scm:git:https://na1prdfocbb01.tibco.com:8443/scm/wp/${project.artifactId}.git</developerConnection>
 		<url>https://na1prdfocbb01.tibco.com:8443/scm/wp/${project.artifactId}.git</url>
-		<tag>release/branch9.0</tag>
+		<tag>HEAD</tag>
 	</scm>
 
     <organization>
