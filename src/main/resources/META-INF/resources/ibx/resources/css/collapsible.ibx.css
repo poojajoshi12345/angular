@@ -1,4 +1,4 @@
-﻿/*Copyright (c) 1996-2021 TIBCO Software Inc. All Rights Reserved.*/
+/*Copyright (c) 1996-2021 TIBCO Software Inc. All Rights Reserved.*/
 /* $Revision: 1.8 $: */
 
 /*for auto close you window has to catch all pointer events...EXCEPT those on the collapsible element itself.*/
