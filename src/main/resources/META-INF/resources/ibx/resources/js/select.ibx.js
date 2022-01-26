@@ -354,11 +354,17 @@ $.widget("ibi.ibxSelect", $.ibi.ibxSelectBase,
 	},
 	selected: function (element)
 	{
-		return this._control.ibxWidget("selected", element);
+		if(element === undefined)
+			return this._control.ibxWidget("selected");
+		this._control.ibxWidget("selected", element)
+		return this.element;
 	},
 	userValue: function (value)
 	{
-		return this._control.ibxWidget("userValue", value);
+		if(value === undefined)
+			return this._control.ibxWidget("userValue");
+		this._control.ibxWidget("userValue", value)
+		return this.element;
 	},
 	_popupPosition: function (pos, info)
 	{
