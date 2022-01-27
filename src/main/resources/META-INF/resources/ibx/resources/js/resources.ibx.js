@@ -87,7 +87,7 @@ _p.addBundles = function(bundles, loadDepth, parentBundle)
 	{
 		var bundleInfo = bundles.shift();
 		if(bundleInfo instanceof XMLDocument)
-			this.loadBundle(bundleInfo).done(this.addBundles.bind(this, bundles));
+			this.loadBundle(bundleInfo).done(this.addBundles.bind(this, bundles, loadDepth, parentBundle));
 		else
 		{
 			bundleInfo = (typeof(bundleInfo) == "string") ? {"src":bundleInfo, "loadContext":""} : bundleInfo;
@@ -156,7 +156,7 @@ _p.loadExternalResFile = function(elFile, bundle)
 		var fileType = elFile.prop("tagName");
 		var src = this.getResPath(elFile.attr("src"), elFile.closest("[loadContext]").attr("loadContext"), bundle);
 
-		if(ibxResourceManager.loadedFiles[src] && (fileType !== 'style-file'))
+		if(ibxResourceManager.loadedFiles[src])
 		{
 			//console.log(`DUPLICATE: ${src}`)
 			//duplicate, just resolve and continue
@@ -308,8 +308,24 @@ _p.loadBundle = function(xResDoc)
 	//let the loading begin!
 	$(window).dispatchEvent("ibx_ibxresmgr", {"hint":"bundleloading", "loadDepth":bundle.loadDepth, "resMgr":this, "bundle":bundle[0], src:xResDoc.src});
 
-	//First load the dependency Resource Bundles...this will chain to any depth
+	//Create a virtual bundle for preloads, and it first to the list of dependent bundles to load.
+	var preloads = bundle.find("[preload=true]")
 	var files = [];
+	if(preloads.length) {
+		var strPreloads = "";
+		preloads.each( function(xResDoc, idx, preLoad) {
+			preLoad.parentNode.removeChild(preLoad);
+			preLoad.removeAttribute('preload');//stop recursion
+			strPreloads += preLoad.outerHTML + "\n";
+		}.bind(this, xResDoc));
+		strPreloads = sformat("<ibx-res-bundle>\n{1}</ibx-res-bundle>", strPreloads);
+		var domParser = new DOMParser();
+		var docPreload = domParser.parseFromString(strPreloads, "text/xml");
+		docPreload.resLoaded = $.Deferred();
+		files.push(docPreload);
+	}
+
+	//First load the dependency Resource Bundles...this will chain to any depth
 	bundle.find("ibx-res-bundle").each(function(idx, el)
 	{
 		el = $(el);
