@@ -156,7 +156,7 @@ _p.loadExternalResFile = function(elFile, bundle)
 		var fileType = elFile.prop("tagName");
 		var src = this.getResPath(elFile.attr("src"), elFile.closest("[loadContext]").attr("loadContext"), bundle);
 
-		if(ibxResourceManager.loadedFiles[src] && (fileType !== 'style-file'))
+		if(ibxResourceManager.loadedFiles[src])
 		{
 			//console.log(`DUPLICATE: ${src}`)
 			//duplicate, just resolve and continue
