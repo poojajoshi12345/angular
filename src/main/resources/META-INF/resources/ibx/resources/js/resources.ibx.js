@@ -158,8 +158,8 @@ _p.loadExternalResFile = function(elFile, bundle)
 
 		if(ibxResourceManager.loadedFiles[src])
 		{
-			//console.log(`DUPLICATE: ${src}`)
 			//duplicate, just resolve and continue
+			//console.log(`DUPLICATE FILE: ${src.split('/').pop()} -> ${bundle[0].ownerDocument.src.split('/').pop()}`);
 			var dfd = elFile[0]._loadPromise;
 			if(dfd)
 				dfd.resolve();
@@ -301,7 +301,7 @@ _p.loadBundle = function(xResDoc)
 	var head = $("head");
 	var bundle = $(xResDoc).find("ibx-res-bundle").first();
 	bundle.loadDepth = xResDoc.loadDepth;
-	
+
 	//make sure we have a promise to resolve when loaded
 	xResDoc.resLoaded = xResDoc.resLoaded || $.Deferred();
 
