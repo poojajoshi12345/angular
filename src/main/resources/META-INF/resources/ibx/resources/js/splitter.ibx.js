@@ -45,6 +45,7 @@ $.widget("ibi.ibxSplitter", $.ibi.ibxWidget,
 			el1.ibxAddClass("ibx-splitter-sizing");
 			el2.ibxAddClass("ibx-splitter-sizing");
 			$(document.body).ibxAddClass(bVertical ? "ibx-body-splitter-v" : "ibx-body-splitter-h").css("pointerEvents", "none");
+			$('iframe').css('pointerEvents', 'none'); //iframes can eat mouse events...turn off while sizing.
 			$(document).on("mouseup mousemove", this._fnSplitterMouseEvent);
 			this._eLast = e;
 			this._trigger("resizestart", null, { "el1":el1, "el2":el2});
@@ -55,6 +56,7 @@ $.widget("ibi.ibxSplitter", $.ibi.ibxWidget,
 			el1.ibxRemoveClass("ibx-splitter-sizing");
 			el2.ibxRemoveClass("ibx-splitter-sizing");
 			$(document.body).ibxRemoveClass("ibx-body-splitter-v ibx-body-splitter-h").css("pointerEvents", "");
+			$('iframe').css('pointerEvents', ''); //turn on mouse events for iframes when done sizing.
 			$(document).off("mouseup mousemove", this._fnSplitterMouseEvent);
 			el1.css("flex", "");
 			el2.css("flex", "");
