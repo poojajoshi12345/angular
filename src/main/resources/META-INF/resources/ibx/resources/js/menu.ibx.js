@@ -912,6 +912,7 @@ $.widget("ibi.ibxSplitMenuButton", $.ibi.ibxButtonSimple,
 			{
 				"my":"left top",
 				"at":"left bottom",
+				"collision": "flipfit"
 			}
 		},
 		"aria":
