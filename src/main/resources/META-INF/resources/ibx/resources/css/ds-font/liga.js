@@ -26,6 +26,9 @@
     if (!supportsProperty('fontFeatureSettings')) {
         icons = {
             'caret-down': '&#xebf0;',
+            'index-create': '&#xebf5;',
+            'index-delete': '&#xebf6;',
+            'index-update': '&#xebf7;',
             'grid-summary': '&#xebf4;',
             'folder-add': '&#xebf2;',
             'workspace-add': '&#xebf3;',
