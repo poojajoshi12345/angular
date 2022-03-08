@@ -40,7 +40,7 @@ $.widget("ibi.ibxPopup", $.ibi.ibxWidget,
 	_create:function()
 	{
 		var options = this.options;
-		this.element.ibxAddClass("pop-closed").prop("tabIndex", -1).css("position", "absolute").on("keydown", this._onPopupKeyEvent.bind(this));
+		this.element.ibxAddClass("pop-closed").prop("tabIndex", -1).css("position", "absolute").on('click', this._onPopupMouseEvent.bind(this)).on("keydown", this._onPopupKeyEvent.bind(this));
 		this._onPopupWindowResizeBound = this._onPopupWindowResize.bind(this);
 		$(window).on("resize", this._onPopupWindowResizeBound);
 		this._super();
@@ -63,6 +63,11 @@ $.widget("ibi.ibxPopup", $.ibi.ibxWidget,
 			this.element.resizable("destroy");
 
 		$(window).off("resize", this._onPopupWindowResizeBound);
+	},
+	_onPopupMouseEvent:function(e)
+	{
+		if(e.type === 'click')
+			e.stopPropagation();//popup clicks shouldn't propagate.
 	},
 	_onPopupKeyEvent:function(e)
 	{
