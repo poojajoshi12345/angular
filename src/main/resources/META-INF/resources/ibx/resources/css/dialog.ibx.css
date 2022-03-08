@@ -112,6 +112,11 @@
 	margin:0 3px 0 3px;
 }
 
+.ibx-dialog-button.ibx-dialog-custom-button {
+	margin-left: 0px;	
+}
+
+
 .ibx-dialog-confirm-message
 {
 	color:black;
