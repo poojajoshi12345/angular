@@ -138,8 +138,8 @@
 .ibx-select-item-list-paged
 {
     border: 1px solid #ccc;
-	padding:5px;
-    border-radius:5px;
+	padding: 8px;
+    border-radius:4px;
     min-height: 1em;
     overflow: auto;
 }
@@ -231,7 +231,7 @@
 .ibx-page-list-search-wrapper
 {
     position: relative;
-    margin-bottom: 10px;
+    margin-bottom: 8px;
 }
 
 .ibx-page-list-options-search
@@ -254,35 +254,30 @@
 
 .ibx-page-list-select-options-buttons 
 {
-    margin-bottom: 10px;
+    margin-bottom: 8px;
+	justify-content: flex-end;
 }
 
 .ibx-page-list-select-options-all
 {
-    margin-right: 10px;
-    flex: 1 1 auto;
-    width: 1px;
-    font-size: 12px;
+    margin-right: 8px;
 }
 
 .ibx-page-list-select-options-none
 {
-    flex: 1 1 auto;
-    width: 1px;
-    font-size: 12px;
 }
 
 /* page controls */
 .ibx-page-list-page-box
 {
     flex: 0 0 auto;
-    margin-top: 10px;
+    margin-top: 8px;
 }
 
 .ibx-page-list-page-box-left
 {
 	flex: 0 0 auto;
-    margin-right: 10px;
+    margin-right: 8px;
 }
 
 .ibx-page-list-page-box-label
@@ -293,7 +288,7 @@
 .ibx-page-list-page-box-right
 {
 	flex: 0 0 auto;
-    margin-left: 10px;
+    margin-left: 8px;
 }
 
 .ibx-page-list-options-search.ibx-text-field > input,

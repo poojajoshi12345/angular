@@ -1256,7 +1256,7 @@ $.widget("ibi.ibxSelectItemListPaged", $.ibi.ibxVBox,
 		this._searchBoxWrapper = $("<div class='ibx-page-list-search-wrapper'>").ibxHBox({"align": "stretch"});
 		this._searchBox = $("<div tabindex='0' class='ibx-page-list-options-search'>").ibxTextField();
 		this._searchBoxWrapper.append(this._searchBox);
-		this._buttonsBox = $("<div class='ibx-page-list-select-options-buttons'>").ibxHBox();
+		this._buttonsBox = $("<div class='ibx-page-list-select-options-buttons'>").ibxHBox({justify: "end"});
 		this._selectAll = $("<div tabindex='0' class='ibx-page-list-select-options-all'>").ibxButton({"justify": "center", "text": ibx.resourceMgr.getString('IBX_PAGE_LIST_SELECT_ALL')});
 		this._clearAll = $("<div tabindex='0' class='ibx-page-list-select-options-none'>").ibxButton({"justify": "center", "text": ibx.resourceMgr.getString('IBX_PAGE_LIST_SELECT_NONE')});
 		this._buttonsBox.ibxWidget("add", this._selectAll);
