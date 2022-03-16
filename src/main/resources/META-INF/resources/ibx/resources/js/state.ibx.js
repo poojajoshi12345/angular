@@ -41,7 +41,7 @@ function ibxStateManager()
 
 	this.setState = function(stateName, state, setter){
 		if(!this._stateMap[stateName])
-			return null;
+			return this.createState(stateName, state);
 			
 		//copy for distribution
 		var oldState = this._copyState(stateName);
