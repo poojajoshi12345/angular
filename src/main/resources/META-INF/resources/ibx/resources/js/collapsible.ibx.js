@@ -7,7 +7,7 @@ $.widget("ibi.ibxCollapsible", $.Widget,
 	{
 		"direction": "left",
 		"mode": "push",
-		"escapeToClose":true,
+		"escapeToClose":false,
 		"startCollapsed": false,
 		"collapsedClass": "collapsed",
 		"autoClose": false,
