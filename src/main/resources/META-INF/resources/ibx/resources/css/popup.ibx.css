@@ -23,7 +23,6 @@
 	z-index:1000000;
 	pointer-events:all;
 	background-color:white;
-	box-shadow:0 0 10px 0 #5e5e5e;
 	border-radius:5px;
 	overflow:hidden;
 }
@@ -31,7 +30,6 @@
 .ibx-popup:focus
 {
 	outline:none;
-	box-shadow:0 0 10px 0 #5e5e5e;
 }
 
 iframe.ibx-popup-disabled-iframe
