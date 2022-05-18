@@ -9,13 +9,17 @@
 {
     padding: 0.3em 0.6em;
     border-radius: 0.2em;
+
     color: #373a3c;
     background-color: transparent;
+    xborder: 1px solid #ccc;
+
 }
 
 .ibx-button:hover {
     color: #373a3c;
     background-color: #eee;
+    xborder: 1px solid #aaa;
 }
 
 .ibx-button:active, .ibx-button-active
@@ -255,6 +259,7 @@
 .ibx-button-group-horizontal > .ibx-check-box:focus,
 .ibx-button-group-horizontal > .ibx-button:focus,
 .ibx-button-group-horizontal > .ibx-switch:focus,
+.ibx-button-group-horizontal > .ibx-check-box.checked.hide-check:focus,
 .ibx-button-group-vertical > .ibx-check-box:focus,
 .ibx-button-group-vertical > .ibx-button:focus,
 .ibx-button-group-vertical > .ibx-switch:focus,
